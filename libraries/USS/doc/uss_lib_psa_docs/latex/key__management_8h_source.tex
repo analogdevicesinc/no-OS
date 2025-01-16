@@ -1,0 +1,229 @@
+\doxysection{key\+\_\+management.\+h}
+\hypertarget{key__management_8h_source}{}\label{key__management_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/key\_management.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/key\_management.h}}
+\mbox{\hyperlink{key__management_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_KEY\_MANANGEMENT\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_KEY\_MANANGEMENT\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__config__def_8h}{psa/crypto\_config\_def.h}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__typedefs_8h}{psa/crypto\_typedefs.h}}"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{comment}{/*\ Initialize\ key\ attributes\ object\ according\ to\ specification\ */}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_ATTRIBUTES\_INIT\ (psa\_key\_attributes\_t)\ \{PSA\_KEY\_TYPE\_NONE,\ PSA\_KEY\_LIFETIME\_VOLATILE,\ 0,\ PSA\_ALG\_NONE,\ 0,\ 0\}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_NONE\ ((psa\_key\_type\_t)0x0000)}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_RAW\_DATA\ ((psa\_key\_type\_t)0x1001)}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_HMAC\ ((psa\_key\_type\_t)0x1100)}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_DERIVE\ ((psa\_key\_type\_t)0x1200)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_PASSWORD\ ((psa\_key\_type\_t)0x1203)}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_PASSWORD\_HASH\ ((psa\_key\_type\_t)0x1205)}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_PEPPER\ ((psa\_key\_type\_t)0x1206)}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_AES\ ((psa\_key\_type\_t)0x2400)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_ARIA\ ((psa\_key\_type\_t)0x2406)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_DES\ ((psa\_key\_type\_t)0x2301)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_CAMELLIA\ ((psa\_key\_type\_t)0x2403)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_SM4\ ((psa\_key\_type\_t)0x2405)}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_ARC4\ ((psa\_key\_type\_t)0x2002)}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_CHACHA20\ ((psa\_key\_type\_t)0x2004)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR\ ((psa\_key\_type\_t)0x7001)}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY\ ((psa\_key\_type\_t)0x4001)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_SECP\_K1\ ((psa\_ecc\_family\_t)\ 0x17)}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_SECP\_R1\ ((psa\_ecc\_family\_t)\ 0x12)}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_SECP\_R2\ ((psa\_ecc\_family\_t)\ 0x1b)}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_SECT\_K1\ ((psa\_ecc\_family\_t)\ 0x27)}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_SECT\_R1\ ((psa\_ecc\_family\_t)\ 0x22)}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_SECT\_R2\ ((psa\_ecc\_family\_t)\ 0x2b)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1\ ((psa\_ecc\_family\_t)\ 0x30)}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_FRP\ ((psa\_ecc\_family\_t)\ 0x33)}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_MONTGOMERY\ ((psa\_ecc\_family\_t)\ 0x41)}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS\ ((psa\_ecc\_family\_t)\ 0x42)}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_DH\_GET\_FAMILY(type)\ \(\backslash\)}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\ \ \ \ ((psa\_dh\_family\_t)\ ((type)\ \&\ 0x00ff))}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_DH\_KEY\_PAIR(group)\ \(\backslash\)}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_type\_t)\ (0x7200\ |\ (group)))}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY(group)\ \(\backslash\)}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_type\_t)\ (0x4200\ |\ (group)))}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY(type)\ \(\backslash\)}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \ ((psa\_ecc\_family\_t)\ ((type)\ \&\ 0x00ff))}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR(curve)\ \(\backslash\)}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_type\_t)\ (0x7100\ |\ (curve)))}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY(curve)\ \(\backslash\)}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_type\_t)\ (0x4100\ |\ (curve)))}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_ASYMMETRIC(type)\ \(\backslash\)}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0x4000)\ ==\ 0x4000)}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_DH(type)\ \(\backslash\)}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\ \ \ \ ((PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR(type)\ \&\ 0xff00)\ ==\ 0x4200)}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR(type)\ \(\backslash\)}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x7200)}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY(type)\ \(\backslash\)}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x4200)}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_ECC(type)\ \(\backslash\)}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\ \ \ \ ((PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR(type)\ \&\ 0xff00)\ ==\ 0x4100)}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR(type)\ \(\backslash\)}}
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x7100)}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY(type)\ \(\backslash\)}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x4100)}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_KEY\_PAIR(type)\ \(\backslash\)}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0x7000)\ ==\ 0x7000)}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY(type)\ \(\backslash\)}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0x7000)\ ==\ 0x4000)}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_RSA(type)\ \(\backslash\)}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\ \ \ \ (PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR(type)\ ==\ 0x4001)}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED(type)\ \(\backslash\)}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\ \ \ \ (((type)\ \&\ 0x7000)\ ==\ 0x1000\ ||\ ((type)\ \&\ 0x7000)\ ==\ 0x2000)}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY(type)\ \(\backslash\)}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_type\_t)\ ((type)\ |\ 0x3000))}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR(type)\ \(\backslash\)}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_type\_t)\ ((type)\ \&\ \string~0x3000))}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LIFETIME\_VOLATILE\ ((psa\_key\_lifetime\_t)\ 0x00000000)}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LIFETIME\_PERSISTENT\ ((psa\_key\_lifetime\_t)\ 0x00000001)}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_PERSISTENCE\_VOLATILE\ ((psa\_key\_persistence\_t)\ 0x00)}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_PERSISTENCE\_DEFAULT\ ((psa\_key\_persistence\_t)\ 0x01)}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_PERSISTENCE\_READ\_ONLY\ ((psa\_key\_persistence\_t)\ 0xff)}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LOCATION\_LOCAL\_STORAGE\ ((psa\_key\_location\_t)\ 0x000000)}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT\ ((psa\_key\_location\_t)\ 0x000001)}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE(lifetime)\ \(\backslash\)}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_persistence\_t)\ ((lifetime)\ \&\ 0x000000ff))}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LIFETIME\_GET\_LOCATION(lifetime)\ \(\backslash\)}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\ \ \ \ ((psa\_key\_location\_t)\ ((lifetime)\ >>\ 8))}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LIFETIME\_IS\_VOLATILE(lifetime)\ \(\backslash\)}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\ \ \ \ (PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE(lifetime)\ ==\ PSA\_KEY\_PERSISTENCE\_VOLATILE)}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION(persistence,\ location)\ \(\backslash\)}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\ \ \ \ ((location)\ <<\ 8\ |\ (persistence))}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{comment}{/*\ vendor\ specified\ lifetime\ */}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#define\ USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER\ ((psa\_key\_persistence\_t)\ 0x80)}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_ID\_NULL\ ((psa\_key\_id\_t)0)}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_ID\_USER\_MIN\ ((psa\_key\_id\_t)0x00000001)}}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_ID\_USER\_MAX\ ((psa\_key\_id\_t)0x3fffffff)}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_ID\_VENDOR\_MIN\ ((psa\_key\_id\_t)0x40000000)}}
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_ID\_VENDOR\_MAX\ ((psa\_key\_id\_t)0x7fffffff)}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_EXPORT\ ((psa\_key\_usage\_t)0x00000001)}}
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_COPY\ ((psa\_key\_usage\_t)0x00000002)}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_CACHE\ ((psa\_key\_usage\_t)0x00000004)}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_ENCRYPT\ ((psa\_key\_usage\_t)0x00000100)}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_DECRYPT\ ((psa\_key\_usage\_t)0x00000200)}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_SIGN\_MESSAGE\ ((psa\_key\_usage\_t)0x00000400)}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_VERIFY\_MESSAGE\ ((psa\_key\_usage\_t)0x00000800)}}
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_SIGN\_HASH\ ((psa\_key\_usage\_t)0x00001000)}}
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_VERIFY\_HASH\ ((psa\_key\_usage\_t)0x00002000)}}
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_DERIVE\ ((psa\_key\_usage\_t)0x00004000)}}
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#define\ PSA\_KEY\_USAGE\_VERIFY\_DERIVATION\ ((psa\_key\_usage\_t)0x00008000)}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#define\ PSA\_EXPORT\_KEY\_OUTPUT\_SIZE(key\_type,\ key\_bits)\ \(\backslash\)}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\ \ \ \ }\textcolor{comment}{/*\ implementation-\/defined\ value\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#define\ PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE(key\_type,\ key\_bits)\ \(\backslash\)}}
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\ \ \ \ }\textcolor{comment}{/*\ implementation-\/defined\ value\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#define\ PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE\ }\textcolor{comment}{/*\ implementation-\/defined\ value\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#define\ PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE\ }\textcolor{comment}{/*\ implementation-\/defined\ value\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{comment}{/*\ }}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ *\ The\ following\ simple\ accessor\ functions\ can\ be\ static\ inlined\ and\ need\ not\ }}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ *\ validate\ inputs\ }}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00164\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_aca2050f050a3b7edca597f2113cfb830}{psa\_set\_key\_id}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00166\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_ab4b6786a4c3b5615b6a4c0b0d7767a67}{key\_id}}\ =\ id;}
+\DoxyCodeLine{00168\ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00180\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aff8db4c667ae1035049750fc2be565c3}{psa\_get\_key\_id}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes)}
+\DoxyCodeLine{00181\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordflow}{return}\ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_ab4b6786a4c3b5615b6a4c0b0d7767a67}{key\_id}};}
+\DoxyCodeLine{00183\ \}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00194\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_abe05b493d2160f06f01f9c1487db9402}{psa\_set\_key\_lifetime}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}}\ lifetime)}
+\DoxyCodeLine{00196\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_aa475982feb2245d538aea7a6c98b97cf}{key\_lifetime}}\ =\ lifetime;}
+\DoxyCodeLine{00198\ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00210\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aa1b6cbdf4a575acca64ea394f96fc25b}{psa\_get\_key\_lifetime}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes)}
+\DoxyCodeLine{00211\ \{}
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordflow}{return}\ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_aa475982feb2245d538aea7a6c98b97cf}{key\_lifetime}};}
+\DoxyCodeLine{00213\ \}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00224\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a0d97f52b7d6507cfb68dfc0705fbfeb6}{psa\_set\_key\_type}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ type)}
+\DoxyCodeLine{00226\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_a56029c3c6cca13a0bc9e832487f6cd87}{key\_type}}\ =\ type;}
+\DoxyCodeLine{00228\ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00240\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a6dc6769fc90f5e4c1b5be3e18e7db031}{psa\_get\_key\_type}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes)}
+\DoxyCodeLine{00241\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordflow}{return}\ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_a56029c3c6cca13a0bc9e832487f6cd87}{key\_type}};\ }
+\DoxyCodeLine{00243\ \}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00254\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a99c0bf1dd7854db8365efa9d3c4e94a3}{psa\_set\_key\_bits}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ bits)}
+\DoxyCodeLine{00256\ \{}
+\DoxyCodeLine{00257\ \ \ \ \ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_a8319794b77e8bd79b2008b49ce9ec37f}{key\_bits}}\ =\ bits;}
+\DoxyCodeLine{00258\ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00270\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{psa__name__mangling_8h_a24f385862aef135526d6063c96a35532}{psa\_get\_key\_bits}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes)}
+\DoxyCodeLine{00271\ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordflow}{return}\ attributes\ -\/>\ key\_bits;}
+\DoxyCodeLine{00273\ \}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00284\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_ad7582fd437683b213b94af3fdf0c38f0}{psa\_set\_key\_usage\_flags}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ usage\_flags)}
+\DoxyCodeLine{00286\ \{}
+\DoxyCodeLine{00287\ \ \ \ \ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_a44b36ab489b927537af2a4a8ac8f2b38}{key\_use}}\ =\ usage\_flags;}
+\DoxyCodeLine{00288\ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00300\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a1eb5358a47872b3c41eac097abf2e3a1}{psa\_get\_key\_usage\_flags}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes)}
+\DoxyCodeLine{00301\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keywordflow}{return}\ attributes\ -\/>\ key\_use;}
+\DoxyCodeLine{00303\ \}}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00314\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a49df3796739c5190afaa598f3bcd6ead}{psa\_set\_key\_algorithm}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg)}
+\DoxyCodeLine{00316\ \{}
+\DoxyCodeLine{00317\ \ \ \ \ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_aaddf72c3cdda282b7c25fd2cb21926ae}{key\_algo}}\ =\ alg;}
+\DoxyCodeLine{00318\ \}}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00330\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a89bb887ca2430cf169438c3df4f16875}{psa\_get\_key\_algorithm}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes)}
+\DoxyCodeLine{00331\ \{}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keywordflow}{return}\ attributes-\/>\mbox{\hyperlink{structpsa__key__attributes__t_aaddf72c3cdda282b7c25fd2cb21926ae}{key\_algo}};}
+\DoxyCodeLine{00333\ \}}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00342\ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ \mbox{\hyperlink{key__management_8h_a478f298a3abd30e87fc0bf4c7547eb35}{generate\_key\_id}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\_KEY\_MANANGEMENT\_H\_}}
+
+\end{DoxyCode}

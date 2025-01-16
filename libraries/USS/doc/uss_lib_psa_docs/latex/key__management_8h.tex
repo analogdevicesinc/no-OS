@@ -1,0 +1,782 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/key\+\_\+management.h File Reference}
+\hypertarget{key__management_8h}{}\label{key__management_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/key\_management.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/key\_management.h}}
+{\ttfamily \#include "{}psa/crypto\+\_\+config\+\_\+def.\+h"{}}\newline
+{\ttfamily \#include "{}psa/crypto\+\_\+typedefs.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ac45b6c1e7228a1f425338279ee679c4e}{PSA\+\_\+\+KEY\+\_\+\+ATTRIBUTES\+\_\+\+INIT}}~(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\+\_\+key\+\_\+attributes\+\_\+t}}) \{\mbox{\hyperlink{key__management_8h_afce7ab2b54ce97ea5bff73f13a9f3e5b}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+NONE}}, \mbox{\hyperlink{key__management_8h_a8b438870ba69489b685730d346455108}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+VOLATILE}}, 0, \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\+\_\+\+ALG\+\_\+\+NONE}}, 0, 0\}
+\item 
+\#define \mbox{\hyperlink{key__management_8h_afce7ab2b54ce97ea5bff73f13a9f3e5b}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+NONE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x0000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_aa97f92025533102616b32d571c940d80}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RAW\+\_\+\+DATA}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a92d989f4ca64abd00f463defd773a6f8}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+HMAC}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1100)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ae871b2357b8593f33bfd51abbf93ebb1}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DERIVE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1200)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_aad682c8fe975aee537af922f9503d510}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PASSWORD}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1203)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ac41a0d5fdafc1c19ae73313613142723}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PASSWORD\+\_\+\+HASH}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1205)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ab47765c3f82af1b6a7d213f9881cb6d6}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PEPPER}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1206)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+AES}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2400)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a853d69f982740f4fd40cc964075c188f}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ARIA}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2406)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a577562bfbbc691c820d55ec308333138}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DES}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2301)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ad8e5da742343fd5519f9d8a630c2ed81}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+CAMELLIA}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2403)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a5b2b1f1434710f4ddbcea30919f08a2c}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+SM4}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2405)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ae4d46e83f910dcaa126000a8ed03cde9}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ARC4}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2002)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a901548883b3bce56cc21c3a22cf8d93c}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+CHACHA20}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2004)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a11745b110166e927e2abeabc7d532051}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RSA\+\_\+\+KEY\+\_\+\+PAIR}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x7001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a9ba0878f56c8bcd1995ac017a74f513b}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RSA\+\_\+\+PUBLIC\+\_\+\+KEY}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x4001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a5cf2405c6e23b93cea0aac092d1aa0f7}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECP\+\_\+\+K1}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x17)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a48bb340b5544ba617b0f5b89542665a7}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECP\+\_\+\+R1}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x12)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a95a662f6fa5a11f0b7b7050e24acf147}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECP\+\_\+\+R2}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x1b)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a31fb7fe7608708fa64bcec2eea92efbb}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECT\+\_\+\+K1}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x27)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a71544d130f52ad2afc7700779c44af19}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECT\+\_\+\+R1}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x22)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a40d07f0ac30b4bc7c93d65408ca31d00}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECT\+\_\+\+R2}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x2b)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ac1643f1baf38b30d07c20a6eac697f15}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+BRAINPOOL\+\_\+\+P\+\_\+\+R1}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x30)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_aaf7310c0eaed708f3199796d95b70633}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+FRP}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x33)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a1f624c5cdaf25b21287af33024e1aff8}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+MONTGOMERY}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x41)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_afe45f9fe29699f26795f6251f47eafd4}{PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+TWISTED\+\_\+\+EDWARDS}}~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x42)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a16c2e7d4bca4ed4587fb59002f14ddf5}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DH\+\_\+\+GET\+\_\+\+FAMILY}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ab4f857c4cd56f5fe65ded421e61bcc8c}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DH\+\_\+\+KEY\+\_\+\+PAIR}}(group)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_aa22f0f2ea89b929f2fadc19890cc5d5c}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DH\+\_\+\+PUBLIC\+\_\+\+KEY}}(group)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a30642b7e640a6e9e00871764afe0288d}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ECC\+\_\+\+GET\+\_\+\+FAMILY}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a0b6f5d4d5037c54ffa850d8059c32df0}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ECC\+\_\+\+KEY\+\_\+\+PAIR}}(curve)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ad54c03d3b47020e571a72cd01d978cf2}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ECC\+\_\+\+PUBLIC\+\_\+\+KEY}}(curve)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ab138ae2ebf2905dfbaf4154db2620939}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ASYMMETRIC}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a248ae35c0e2becaebbf479fc1c3a3b0e}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+DH}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_abb9dd614786fe328df4e485c1a61ed25}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+DH\+\_\+\+KEY\+\_\+\+PAIR}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a23627e047fa4b536f07d6f4796f879f5}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+DH\+\_\+\+PUBLIC\+\_\+\+KEY}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a88e01fa06b585654689a99bcc06bbe66}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ECC}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ab00289ec3d84a469950a4d8c10fb8cc6}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ECC\+\_\+\+KEY\+\_\+\+PAIR}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a5af146a173b0c84d7e737e2fb6a3c0a7}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ECC\+\_\+\+PUBLIC\+\_\+\+KEY}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ae977b8659473ca2ce7b93a01e9596581}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+KEY\+\_\+\+PAIR}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ac674a0f059bc0cb72b47f0c517b4f45b}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+PUBLIC\+\_\+\+KEY}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a0e1d8f241228e49c9cadadfb4579ef1a}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+RSA}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_aef86ce4e810e1c2c76068ac874bfef54}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+UNSTRUCTURED}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_adac23f233c110155ba2f0eb1ec1fe055}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+PAIR\+\_\+\+OF\+\_\+\+PUBLIC\+\_\+\+KEY}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a679be3d789cfa0c1fd8418764ff754b1}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+OF\+\_\+\+KEY\+\_\+\+PAIR}}(type)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a8b438870ba69489b685730d346455108}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+VOLATILE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\+\_\+key\+\_\+lifetime\+\_\+t}}) 0x00000000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a3713a01c5fcd5f7eae46ff22ceaf6d02}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+PERSISTENT}}~((\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\+\_\+key\+\_\+lifetime\+\_\+t}}) 0x00000001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_af3d1317436d19a15e7f2be1b9827edfc}{PSA\+\_\+\+KEY\+\_\+\+PERSISTENCE\+\_\+\+VOLATILE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0x00)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_afc5d5c94f98e885ae5a2bb789deb4d91}{PSA\+\_\+\+KEY\+\_\+\+PERSISTENCE\+\_\+\+DEFAULT}}~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0x01)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a6be0f97ba7fb86f626b3fd2b03a1ac79}{PSA\+\_\+\+KEY\+\_\+\+PERSISTENCE\+\_\+\+READ\+\_\+\+ONLY}}~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0xff)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a3fbfe4a4cf7430a51cf740fe05b2ab27}{PSA\+\_\+\+KEY\+\_\+\+LOCATION\+\_\+\+LOCAL\+\_\+\+STORAGE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a5e700601f686237a8d1e29363ae543d5}{psa\+\_\+key\+\_\+location\+\_\+t}}) 0x000000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a7159eb4b29fe3459a99e005efb32f38d}{PSA\+\_\+\+KEY\+\_\+\+LOCATION\+\_\+\+PRIMARY\+\_\+\+SECURE\+\_\+\+ELEMENT}}~((\mbox{\hyperlink{crypto__typedefs_8h_a5e700601f686237a8d1e29363ae543d5}{psa\+\_\+key\+\_\+location\+\_\+t}}) 0x000001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a1679b7e418ba86b312291d689153dd2a}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+GET\+\_\+\+PERSISTENCE}}(lifetime)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a4bd83feb0ca4853eee26d5394e69a5de}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+GET\+\_\+\+LOCATION}}(lifetime)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a63d63adbfc947cab4dee4f4b39e840a1}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+IS\+\_\+\+VOLATILE}}(lifetime)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_aef4d244b4d33ae7876ed87226b8112aa}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+FROM\+\_\+\+PERSISTENCE\+\_\+\+AND\+\_\+\+LOCATION}}(persistence,  location)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a46f37dc927d5d5ffdf22f7060f25b9d3}{USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+WIPE\+\_\+\+ON\+\_\+\+TAMPER}}~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0x80)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a650b5f7c553bf6f8db2076dbd9f4dd44}{PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+NULL}}~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a2b062011d930839695577138858ec136}{PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+USER\+\_\+\+MIN}}~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x00000001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a9cb2bf7c6f7abfacccff4fd31dcfd564}{PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+USER\+\_\+\+MAX}}~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x3fffffff)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a1f7e6d90f523bef964d207c1d3236e0b}{PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+VENDOR\+\_\+\+MIN}}~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x40000000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a3afb6bb4644c995cf95309a71e7baeb1}{PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+VENDOR\+\_\+\+MAX}}~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x7fffffff)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a7dddccdd1303176e87a4d20c87b589ed}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+EXPORT}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000001)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a4605d686020a6cb433c5d78bf7e91689}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+COPY}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000002)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ad0babcff38bd6afb43461197266fe073}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+CACHE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000004)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a75153b296d045d529d97203a6a995dad}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+ENCRYPT}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000100)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ac3f2d2e5983db1edde9f142ca9bf8e6a}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+DECRYPT}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000200)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a552117ac92b79500cae87d4e65a85c54}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+SIGN\+\_\+\+MESSAGE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000400)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_abea7ec4173f4f943110329ac2953b2b1}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+VERIFY\+\_\+\+MESSAGE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000800)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a181c73e00d9e95aa3a8366f26c4380b6}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+SIGN\+\_\+\+HASH}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00001000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_afadf131ef2182045e3483d03aadaa1bd}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+VERIFY\+\_\+\+HASH}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00002000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_af19022acc5ef23cf12477f632b48a0b2}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+DERIVE}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00004000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a25aece70be2b79afbdb4180f7c4e68ed}{PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+VERIFY\+\_\+\+DERIVATION}}~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00008000)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a2e3ff71b9f4e639c03c9e55c7774dc51}{PSA\+\_\+\+EXPORT\+\_\+\+KEY\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  key\+\_\+bits)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_adf475af5fd8eae67bc9cf524d38209f2}{PSA\+\_\+\+EXPORT\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  key\+\_\+bits)
+\item 
+\#define \mbox{\hyperlink{key__management_8h_a5aa21302f87f1e932c9a1daa092df7db}{PSA\+\_\+\+EXPORT\+\_\+\+KEY\+\_\+\+PAIR\+\_\+\+MAX\+\_\+\+SIZE}}~/\texorpdfstring{$\ast$}{*} implementation-\/defined value \texorpdfstring{$\ast$}{*}/
+\item 
+\#define \mbox{\hyperlink{key__management_8h_ad4463cb6edc2061338a88d1adc92b94c}{PSA\+\_\+\+EXPORT\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+MAX\+\_\+\+SIZE}}~/\texorpdfstring{$\ast$}{*} implementation-\/defined value \texorpdfstring{$\ast$}{*}/
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}} \mbox{\hyperlink{key__management_8h_a478f298a3abd30e87fc0bf4c7547eb35}{generate\+\_\+key\+\_\+id}} (void)
+\begin{DoxyCompactList}\small\item\em Generate a random key ID. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{key__management_8h_ac1643f1baf38b30d07c20a6eac697f15}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1@{PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1}}
+\index{PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1@{PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1}{PSA\_ECC\_FAMILY\_BRAINPOOL\_P\_R1}}
+{\footnotesize\ttfamily \label{key__management_8h_ac1643f1baf38b30d07c20a6eac697f15} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+BRAINPOOL\+\_\+\+P\+\_\+\+R1~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x30)}
+
+\Hypertarget{key__management_8h_aaf7310c0eaed708f3199796d95b70633}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_FRP@{PSA\_ECC\_FAMILY\_FRP}}
+\index{PSA\_ECC\_FAMILY\_FRP@{PSA\_ECC\_FAMILY\_FRP}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_FRP}{PSA\_ECC\_FAMILY\_FRP}}
+{\footnotesize\ttfamily \label{key__management_8h_aaf7310c0eaed708f3199796d95b70633} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+FRP~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x33)}
+
+\Hypertarget{key__management_8h_a1f624c5cdaf25b21287af33024e1aff8}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_MONTGOMERY@{PSA\_ECC\_FAMILY\_MONTGOMERY}}
+\index{PSA\_ECC\_FAMILY\_MONTGOMERY@{PSA\_ECC\_FAMILY\_MONTGOMERY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_MONTGOMERY}{PSA\_ECC\_FAMILY\_MONTGOMERY}}
+{\footnotesize\ttfamily \label{key__management_8h_a1f624c5cdaf25b21287af33024e1aff8} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+MONTGOMERY~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x41)}
+
+\Hypertarget{key__management_8h_a5cf2405c6e23b93cea0aac092d1aa0f7}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_SECP\_K1@{PSA\_ECC\_FAMILY\_SECP\_K1}}
+\index{PSA\_ECC\_FAMILY\_SECP\_K1@{PSA\_ECC\_FAMILY\_SECP\_K1}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_SECP\_K1}{PSA\_ECC\_FAMILY\_SECP\_K1}}
+{\footnotesize\ttfamily \label{key__management_8h_a5cf2405c6e23b93cea0aac092d1aa0f7} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECP\+\_\+\+K1~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x17)}
+
+\Hypertarget{key__management_8h_a48bb340b5544ba617b0f5b89542665a7}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_SECP\_R1@{PSA\_ECC\_FAMILY\_SECP\_R1}}
+\index{PSA\_ECC\_FAMILY\_SECP\_R1@{PSA\_ECC\_FAMILY\_SECP\_R1}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_SECP\_R1}{PSA\_ECC\_FAMILY\_SECP\_R1}}
+{\footnotesize\ttfamily \label{key__management_8h_a48bb340b5544ba617b0f5b89542665a7} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECP\+\_\+\+R1~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x12)}
+
+\Hypertarget{key__management_8h_a95a662f6fa5a11f0b7b7050e24acf147}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_SECP\_R2@{PSA\_ECC\_FAMILY\_SECP\_R2}}
+\index{PSA\_ECC\_FAMILY\_SECP\_R2@{PSA\_ECC\_FAMILY\_SECP\_R2}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_SECP\_R2}{PSA\_ECC\_FAMILY\_SECP\_R2}}
+{\footnotesize\ttfamily \label{key__management_8h_a95a662f6fa5a11f0b7b7050e24acf147} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECP\+\_\+\+R2~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x1b)}
+
+\Hypertarget{key__management_8h_a31fb7fe7608708fa64bcec2eea92efbb}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_SECT\_K1@{PSA\_ECC\_FAMILY\_SECT\_K1}}
+\index{PSA\_ECC\_FAMILY\_SECT\_K1@{PSA\_ECC\_FAMILY\_SECT\_K1}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_SECT\_K1}{PSA\_ECC\_FAMILY\_SECT\_K1}}
+{\footnotesize\ttfamily \label{key__management_8h_a31fb7fe7608708fa64bcec2eea92efbb} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECT\+\_\+\+K1~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x27)}
+
+\Hypertarget{key__management_8h_a71544d130f52ad2afc7700779c44af19}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_SECT\_R1@{PSA\_ECC\_FAMILY\_SECT\_R1}}
+\index{PSA\_ECC\_FAMILY\_SECT\_R1@{PSA\_ECC\_FAMILY\_SECT\_R1}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_SECT\_R1}{PSA\_ECC\_FAMILY\_SECT\_R1}}
+{\footnotesize\ttfamily \label{key__management_8h_a71544d130f52ad2afc7700779c44af19} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECT\+\_\+\+R1~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x22)}
+
+\Hypertarget{key__management_8h_a40d07f0ac30b4bc7c93d65408ca31d00}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_SECT\_R2@{PSA\_ECC\_FAMILY\_SECT\_R2}}
+\index{PSA\_ECC\_FAMILY\_SECT\_R2@{PSA\_ECC\_FAMILY\_SECT\_R2}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_SECT\_R2}{PSA\_ECC\_FAMILY\_SECT\_R2}}
+{\footnotesize\ttfamily \label{key__management_8h_a40d07f0ac30b4bc7c93d65408ca31d00} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+SECT\+\_\+\+R2~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x2b)}
+
+\Hypertarget{key__management_8h_afe45f9fe29699f26795f6251f47eafd4}\index{key\_management.h@{key\_management.h}!PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS@{PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS}}
+\index{PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS@{PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS}{PSA\_ECC\_FAMILY\_TWISTED\_EDWARDS}}
+{\footnotesize\ttfamily \label{key__management_8h_afe45f9fe29699f26795f6251f47eafd4} 
+\#define PSA\+\_\+\+ECC\+\_\+\+FAMILY\+\_\+\+TWISTED\+\_\+\+EDWARDS~((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\+\_\+ecc\+\_\+family\+\_\+t}}) 0x42)}
+
+\Hypertarget{key__management_8h_a2e3ff71b9f4e639c03c9e55c7774dc51}\index{key\_management.h@{key\_management.h}!PSA\_EXPORT\_KEY\_OUTPUT\_SIZE@{PSA\_EXPORT\_KEY\_OUTPUT\_SIZE}}
+\index{PSA\_EXPORT\_KEY\_OUTPUT\_SIZE@{PSA\_EXPORT\_KEY\_OUTPUT\_SIZE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_EXPORT\_KEY\_OUTPUT\_SIZE}{PSA\_EXPORT\_KEY\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{key__management_8h_a2e3ff71b9f4e639c03c9e55c7774dc51} 
+\#define PSA\+\_\+\+EXPORT\+\_\+\+KEY\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+bits}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{/*\ implementation-\/defined\ value\ */}}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a5aa21302f87f1e932c9a1daa092df7db}\index{key\_management.h@{key\_management.h}!PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE@{PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE}}
+\index{PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE@{PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE}{PSA\_EXPORT\_KEY\_PAIR\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{key__management_8h_a5aa21302f87f1e932c9a1daa092df7db} 
+\#define PSA\+\_\+\+EXPORT\+\_\+\+KEY\+\_\+\+PAIR\+\_\+\+MAX\+\_\+\+SIZE~/\texorpdfstring{$\ast$}{*} implementation-\/defined value \texorpdfstring{$\ast$}{*}/}
+
+\Hypertarget{key__management_8h_ad4463cb6edc2061338a88d1adc92b94c}\index{key\_management.h@{key\_management.h}!PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE@{PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE}}
+\index{PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE@{PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE}{PSA\_EXPORT\_PUBLIC\_KEY\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{key__management_8h_ad4463cb6edc2061338a88d1adc92b94c} 
+\#define PSA\+\_\+\+EXPORT\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+MAX\+\_\+\+SIZE~/\texorpdfstring{$\ast$}{*} implementation-\/defined value \texorpdfstring{$\ast$}{*}/}
+
+\Hypertarget{key__management_8h_adf475af5fd8eae67bc9cf524d38209f2}\index{key\_management.h@{key\_management.h}!PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE@{PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE}}
+\index{PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE@{PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE}{PSA\_EXPORT\_PUBLIC\_KEY\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{key__management_8h_adf475af5fd8eae67bc9cf524d38209f2} 
+\#define PSA\+\_\+\+EXPORT\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+bits}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \textcolor{comment}{/*\ implementation-\/defined\ value\ */}}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_ac45b6c1e7228a1f425338279ee679c4e}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_ATTRIBUTES\_INIT@{PSA\_KEY\_ATTRIBUTES\_INIT}}
+\index{PSA\_KEY\_ATTRIBUTES\_INIT@{PSA\_KEY\_ATTRIBUTES\_INIT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_ATTRIBUTES\_INIT}{PSA\_KEY\_ATTRIBUTES\_INIT}}
+{\footnotesize\ttfamily \label{key__management_8h_ac45b6c1e7228a1f425338279ee679c4e} 
+\#define PSA\+\_\+\+KEY\+\_\+\+ATTRIBUTES\+\_\+\+INIT~(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\+\_\+key\+\_\+attributes\+\_\+t}}) \{\mbox{\hyperlink{key__management_8h_afce7ab2b54ce97ea5bff73f13a9f3e5b}{PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+NONE}}, \mbox{\hyperlink{key__management_8h_a8b438870ba69489b685730d346455108}{PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+VOLATILE}}, 0, \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\+\_\+\+ALG\+\_\+\+NONE}}, 0, 0\}}
+
+\Hypertarget{key__management_8h_a650b5f7c553bf6f8db2076dbd9f4dd44}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_ID\_NULL@{PSA\_KEY\_ID\_NULL}}
+\index{PSA\_KEY\_ID\_NULL@{PSA\_KEY\_ID\_NULL}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_ID\_NULL}{PSA\_KEY\_ID\_NULL}}
+{\footnotesize\ttfamily \label{key__management_8h_a650b5f7c553bf6f8db2076dbd9f4dd44} 
+\#define PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+NULL~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0)}
+
+\Hypertarget{key__management_8h_a9cb2bf7c6f7abfacccff4fd31dcfd564}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_ID\_USER\_MAX@{PSA\_KEY\_ID\_USER\_MAX}}
+\index{PSA\_KEY\_ID\_USER\_MAX@{PSA\_KEY\_ID\_USER\_MAX}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_ID\_USER\_MAX}{PSA\_KEY\_ID\_USER\_MAX}}
+{\footnotesize\ttfamily \label{key__management_8h_a9cb2bf7c6f7abfacccff4fd31dcfd564} 
+\#define PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+USER\+\_\+\+MAX~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x3fffffff)}
+
+\Hypertarget{key__management_8h_a2b062011d930839695577138858ec136}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_ID\_USER\_MIN@{PSA\_KEY\_ID\_USER\_MIN}}
+\index{PSA\_KEY\_ID\_USER\_MIN@{PSA\_KEY\_ID\_USER\_MIN}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_ID\_USER\_MIN}{PSA\_KEY\_ID\_USER\_MIN}}
+{\footnotesize\ttfamily \label{key__management_8h_a2b062011d930839695577138858ec136} 
+\#define PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+USER\+\_\+\+MIN~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x00000001)}
+
+\Hypertarget{key__management_8h_a3afb6bb4644c995cf95309a71e7baeb1}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_ID\_VENDOR\_MAX@{PSA\_KEY\_ID\_VENDOR\_MAX}}
+\index{PSA\_KEY\_ID\_VENDOR\_MAX@{PSA\_KEY\_ID\_VENDOR\_MAX}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_ID\_VENDOR\_MAX}{PSA\_KEY\_ID\_VENDOR\_MAX}}
+{\footnotesize\ttfamily \label{key__management_8h_a3afb6bb4644c995cf95309a71e7baeb1} 
+\#define PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+VENDOR\+\_\+\+MAX~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x7fffffff)}
+
+\Hypertarget{key__management_8h_a1f7e6d90f523bef964d207c1d3236e0b}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_ID\_VENDOR\_MIN@{PSA\_KEY\_ID\_VENDOR\_MIN}}
+\index{PSA\_KEY\_ID\_VENDOR\_MIN@{PSA\_KEY\_ID\_VENDOR\_MIN}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_ID\_VENDOR\_MIN}{PSA\_KEY\_ID\_VENDOR\_MIN}}
+{\footnotesize\ttfamily \label{key__management_8h_a1f7e6d90f523bef964d207c1d3236e0b} 
+\#define PSA\+\_\+\+KEY\+\_\+\+ID\+\_\+\+VENDOR\+\_\+\+MIN~((\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}})0x40000000)}
+
+\Hypertarget{key__management_8h_aef4d244b4d33ae7876ed87226b8112aa}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION@{PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION}}
+\index{PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION@{PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION}{PSA\_KEY\_LIFETIME\_FROM\_PERSISTENCE\_AND\_LOCATION}}
+{\footnotesize\ttfamily \label{key__management_8h_aef4d244b4d33ae7876ed87226b8112aa} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+FROM\+\_\+\+PERSISTENCE\+\_\+\+AND\+\_\+\+LOCATION(\begin{DoxyParamCaption}\item[{}]{persistence}{, }\item[{}]{location}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((location)\ <<\ 8\ |\ (persistence))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a4bd83feb0ca4853eee26d5394e69a5de}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LIFETIME\_GET\_LOCATION@{PSA\_KEY\_LIFETIME\_GET\_LOCATION}}
+\index{PSA\_KEY\_LIFETIME\_GET\_LOCATION@{PSA\_KEY\_LIFETIME\_GET\_LOCATION}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LIFETIME\_GET\_LOCATION}{PSA\_KEY\_LIFETIME\_GET\_LOCATION}}
+{\footnotesize\ttfamily \label{key__management_8h_a4bd83feb0ca4853eee26d5394e69a5de} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+GET\+\_\+\+LOCATION(\begin{DoxyParamCaption}\item[{}]{lifetime}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a5e700601f686237a8d1e29363ae543d5}{psa\_key\_location\_t}})\ ((lifetime)\ >>\ 8))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a1679b7e418ba86b312291d689153dd2a}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE@{PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE}}
+\index{PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE@{PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE}{PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE}}
+{\footnotesize\ttfamily \label{key__management_8h_a1679b7e418ba86b312291d689153dd2a} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+GET\+\_\+\+PERSISTENCE(\begin{DoxyParamCaption}\item[{}]{lifetime}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\_key\_persistence\_t}})\ ((lifetime)\ \&\ 0x000000ff))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a63d63adbfc947cab4dee4f4b39e840a1}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LIFETIME\_IS\_VOLATILE@{PSA\_KEY\_LIFETIME\_IS\_VOLATILE}}
+\index{PSA\_KEY\_LIFETIME\_IS\_VOLATILE@{PSA\_KEY\_LIFETIME\_IS\_VOLATILE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LIFETIME\_IS\_VOLATILE}{PSA\_KEY\_LIFETIME\_IS\_VOLATILE}}
+{\footnotesize\ttfamily \label{key__management_8h_a63d63adbfc947cab4dee4f4b39e840a1} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+IS\+\_\+\+VOLATILE(\begin{DoxyParamCaption}\item[{}]{lifetime}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{key__management_8h_a1679b7e418ba86b312291d689153dd2a}{PSA\_KEY\_LIFETIME\_GET\_PERSISTENCE}}(lifetime)\ ==\ \mbox{\hyperlink{key__management_8h_af3d1317436d19a15e7f2be1b9827edfc}{PSA\_KEY\_PERSISTENCE\_VOLATILE}})}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a3713a01c5fcd5f7eae46ff22ceaf6d02}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LIFETIME\_PERSISTENT@{PSA\_KEY\_LIFETIME\_PERSISTENT}}
+\index{PSA\_KEY\_LIFETIME\_PERSISTENT@{PSA\_KEY\_LIFETIME\_PERSISTENT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LIFETIME\_PERSISTENT}{PSA\_KEY\_LIFETIME\_PERSISTENT}}
+{\footnotesize\ttfamily \label{key__management_8h_a3713a01c5fcd5f7eae46ff22ceaf6d02} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+PERSISTENT~((\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\+\_\+key\+\_\+lifetime\+\_\+t}}) 0x00000001)}
+
+\Hypertarget{key__management_8h_a8b438870ba69489b685730d346455108}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LIFETIME\_VOLATILE@{PSA\_KEY\_LIFETIME\_VOLATILE}}
+\index{PSA\_KEY\_LIFETIME\_VOLATILE@{PSA\_KEY\_LIFETIME\_VOLATILE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LIFETIME\_VOLATILE}{PSA\_KEY\_LIFETIME\_VOLATILE}}
+{\footnotesize\ttfamily \label{key__management_8h_a8b438870ba69489b685730d346455108} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+VOLATILE~((\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\+\_\+key\+\_\+lifetime\+\_\+t}}) 0x00000000)}
+
+\Hypertarget{key__management_8h_a3fbfe4a4cf7430a51cf740fe05b2ab27}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LOCATION\_LOCAL\_STORAGE@{PSA\_KEY\_LOCATION\_LOCAL\_STORAGE}}
+\index{PSA\_KEY\_LOCATION\_LOCAL\_STORAGE@{PSA\_KEY\_LOCATION\_LOCAL\_STORAGE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LOCATION\_LOCAL\_STORAGE}{PSA\_KEY\_LOCATION\_LOCAL\_STORAGE}}
+{\footnotesize\ttfamily \label{key__management_8h_a3fbfe4a4cf7430a51cf740fe05b2ab27} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LOCATION\+\_\+\+LOCAL\+\_\+\+STORAGE~((\mbox{\hyperlink{crypto__typedefs_8h_a5e700601f686237a8d1e29363ae543d5}{psa\+\_\+key\+\_\+location\+\_\+t}}) 0x000000)}
+
+\Hypertarget{key__management_8h_a7159eb4b29fe3459a99e005efb32f38d}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT@{PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT}}
+\index{PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT@{PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT}{PSA\_KEY\_LOCATION\_PRIMARY\_SECURE\_ELEMENT}}
+{\footnotesize\ttfamily \label{key__management_8h_a7159eb4b29fe3459a99e005efb32f38d} 
+\#define PSA\+\_\+\+KEY\+\_\+\+LOCATION\+\_\+\+PRIMARY\+\_\+\+SECURE\+\_\+\+ELEMENT~((\mbox{\hyperlink{crypto__typedefs_8h_a5e700601f686237a8d1e29363ae543d5}{psa\+\_\+key\+\_\+location\+\_\+t}}) 0x000001)}
+
+\Hypertarget{key__management_8h_afc5d5c94f98e885ae5a2bb789deb4d91}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_PERSISTENCE\_DEFAULT@{PSA\_KEY\_PERSISTENCE\_DEFAULT}}
+\index{PSA\_KEY\_PERSISTENCE\_DEFAULT@{PSA\_KEY\_PERSISTENCE\_DEFAULT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_PERSISTENCE\_DEFAULT}{PSA\_KEY\_PERSISTENCE\_DEFAULT}}
+{\footnotesize\ttfamily \label{key__management_8h_afc5d5c94f98e885ae5a2bb789deb4d91} 
+\#define PSA\+\_\+\+KEY\+\_\+\+PERSISTENCE\+\_\+\+DEFAULT~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0x01)}
+
+\Hypertarget{key__management_8h_a6be0f97ba7fb86f626b3fd2b03a1ac79}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_PERSISTENCE\_READ\_ONLY@{PSA\_KEY\_PERSISTENCE\_READ\_ONLY}}
+\index{PSA\_KEY\_PERSISTENCE\_READ\_ONLY@{PSA\_KEY\_PERSISTENCE\_READ\_ONLY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_PERSISTENCE\_READ\_ONLY}{PSA\_KEY\_PERSISTENCE\_READ\_ONLY}}
+{\footnotesize\ttfamily \label{key__management_8h_a6be0f97ba7fb86f626b3fd2b03a1ac79} 
+\#define PSA\+\_\+\+KEY\+\_\+\+PERSISTENCE\+\_\+\+READ\+\_\+\+ONLY~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0xff)}
+
+\Hypertarget{key__management_8h_af3d1317436d19a15e7f2be1b9827edfc}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_PERSISTENCE\_VOLATILE@{PSA\_KEY\_PERSISTENCE\_VOLATILE}}
+\index{PSA\_KEY\_PERSISTENCE\_VOLATILE@{PSA\_KEY\_PERSISTENCE\_VOLATILE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_PERSISTENCE\_VOLATILE}{PSA\_KEY\_PERSISTENCE\_VOLATILE}}
+{\footnotesize\ttfamily \label{key__management_8h_af3d1317436d19a15e7f2be1b9827edfc} 
+\#define PSA\+\_\+\+KEY\+\_\+\+PERSISTENCE\+\_\+\+VOLATILE~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0x00)}
+
+\Hypertarget{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_AES@{PSA\_KEY\_TYPE\_AES}}
+\index{PSA\_KEY\_TYPE\_AES@{PSA\_KEY\_TYPE\_AES}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_AES}{PSA\_KEY\_TYPE\_AES}}
+{\footnotesize\ttfamily \label{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+AES~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2400)}
+
+\Hypertarget{key__management_8h_ae4d46e83f910dcaa126000a8ed03cde9}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_ARC4@{PSA\_KEY\_TYPE\_ARC4}}
+\index{PSA\_KEY\_TYPE\_ARC4@{PSA\_KEY\_TYPE\_ARC4}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_ARC4}{PSA\_KEY\_TYPE\_ARC4}}
+{\footnotesize\ttfamily \label{key__management_8h_ae4d46e83f910dcaa126000a8ed03cde9} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ARC4~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2002)}
+
+\Hypertarget{key__management_8h_a853d69f982740f4fd40cc964075c188f}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_ARIA@{PSA\_KEY\_TYPE\_ARIA}}
+\index{PSA\_KEY\_TYPE\_ARIA@{PSA\_KEY\_TYPE\_ARIA}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_ARIA}{PSA\_KEY\_TYPE\_ARIA}}
+{\footnotesize\ttfamily \label{key__management_8h_a853d69f982740f4fd40cc964075c188f} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ARIA~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2406)}
+
+\Hypertarget{key__management_8h_ad8e5da742343fd5519f9d8a630c2ed81}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_CAMELLIA@{PSA\_KEY\_TYPE\_CAMELLIA}}
+\index{PSA\_KEY\_TYPE\_CAMELLIA@{PSA\_KEY\_TYPE\_CAMELLIA}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_CAMELLIA}{PSA\_KEY\_TYPE\_CAMELLIA}}
+{\footnotesize\ttfamily \label{key__management_8h_ad8e5da742343fd5519f9d8a630c2ed81} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+CAMELLIA~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2403)}
+
+\Hypertarget{key__management_8h_a901548883b3bce56cc21c3a22cf8d93c}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_CHACHA20@{PSA\_KEY\_TYPE\_CHACHA20}}
+\index{PSA\_KEY\_TYPE\_CHACHA20@{PSA\_KEY\_TYPE\_CHACHA20}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_CHACHA20}{PSA\_KEY\_TYPE\_CHACHA20}}
+{\footnotesize\ttfamily \label{key__management_8h_a901548883b3bce56cc21c3a22cf8d93c} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+CHACHA20~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2004)}
+
+\Hypertarget{key__management_8h_ae871b2357b8593f33bfd51abbf93ebb1}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_DERIVE@{PSA\_KEY\_TYPE\_DERIVE}}
+\index{PSA\_KEY\_TYPE\_DERIVE@{PSA\_KEY\_TYPE\_DERIVE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_DERIVE}{PSA\_KEY\_TYPE\_DERIVE}}
+{\footnotesize\ttfamily \label{key__management_8h_ae871b2357b8593f33bfd51abbf93ebb1} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DERIVE~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1200)}
+
+\Hypertarget{key__management_8h_a577562bfbbc691c820d55ec308333138}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_DES@{PSA\_KEY\_TYPE\_DES}}
+\index{PSA\_KEY\_TYPE\_DES@{PSA\_KEY\_TYPE\_DES}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_DES}{PSA\_KEY\_TYPE\_DES}}
+{\footnotesize\ttfamily \label{key__management_8h_a577562bfbbc691c820d55ec308333138} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DES~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2301)}
+
+\Hypertarget{key__management_8h_a16c2e7d4bca4ed4587fb59002f14ddf5}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_DH\_GET\_FAMILY@{PSA\_KEY\_TYPE\_DH\_GET\_FAMILY}}
+\index{PSA\_KEY\_TYPE\_DH\_GET\_FAMILY@{PSA\_KEY\_TYPE\_DH\_GET\_FAMILY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_DH\_GET\_FAMILY}{PSA\_KEY\_TYPE\_DH\_GET\_FAMILY}}
+{\footnotesize\ttfamily \label{key__management_8h_a16c2e7d4bca4ed4587fb59002f14ddf5} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DH\+\_\+\+GET\+\_\+\+FAMILY(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_af632c5b13aa19c98f8591d4beda8dd1a}{psa\_dh\_family\_t}})\ ((type)\ \&\ 0x00ff))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_ab4f857c4cd56f5fe65ded421e61bcc8c}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_DH\_KEY\_PAIR@{PSA\_KEY\_TYPE\_DH\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_DH\_KEY\_PAIR@{PSA\_KEY\_TYPE\_DH\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_DH\_KEY\_PAIR}{PSA\_KEY\_TYPE\_DH\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_ab4f857c4cd56f5fe65ded421e61bcc8c} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DH\+\_\+\+KEY\+\_\+\+PAIR(\begin{DoxyParamCaption}\item[{}]{group}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}})\ (0x7200\ |\ (group)))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_aa22f0f2ea89b929f2fadc19890cc5d5c}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_DH\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_aa22f0f2ea89b929f2fadc19890cc5d5c} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+DH\+\_\+\+PUBLIC\+\_\+\+KEY(\begin{DoxyParamCaption}\item[{}]{group}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}})\ (0x4200\ |\ (group)))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a30642b7e640a6e9e00871764afe0288d}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY@{PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY}}
+\index{PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY@{PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY}{PSA\_KEY\_TYPE\_ECC\_GET\_FAMILY}}
+{\footnotesize\ttfamily \label{key__management_8h_a30642b7e640a6e9e00871764afe0288d} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ECC\+\_\+\+GET\+\_\+\+FAMILY(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\_ecc\_family\_t}})\ ((type)\ \&\ 0x00ff))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a0b6f5d4d5037c54ffa850d8059c32df0}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR@{PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR@{PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR}{PSA\_KEY\_TYPE\_ECC\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_a0b6f5d4d5037c54ffa850d8059c32df0} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ECC\+\_\+\+KEY\+\_\+\+PAIR(\begin{DoxyParamCaption}\item[{}]{curve}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}})\ (0x7100\ |\ (curve)))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_ad54c03d3b47020e571a72cd01d978cf2}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_ECC\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_ad54c03d3b47020e571a72cd01d978cf2} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+ECC\+\_\+\+PUBLIC\+\_\+\+KEY(\begin{DoxyParamCaption}\item[{}]{curve}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}})\ (0x4100\ |\ (curve)))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a92d989f4ca64abd00f463defd773a6f8}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_HMAC@{PSA\_KEY\_TYPE\_HMAC}}
+\index{PSA\_KEY\_TYPE\_HMAC@{PSA\_KEY\_TYPE\_HMAC}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_HMAC}{PSA\_KEY\_TYPE\_HMAC}}
+{\footnotesize\ttfamily \label{key__management_8h_a92d989f4ca64abd00f463defd773a6f8} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+HMAC~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1100)}
+
+\Hypertarget{key__management_8h_ab138ae2ebf2905dfbaf4154db2620939}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_ASYMMETRIC@{PSA\_KEY\_TYPE\_IS\_ASYMMETRIC}}
+\index{PSA\_KEY\_TYPE\_IS\_ASYMMETRIC@{PSA\_KEY\_TYPE\_IS\_ASYMMETRIC}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_ASYMMETRIC}{PSA\_KEY\_TYPE\_IS\_ASYMMETRIC}}
+{\footnotesize\ttfamily \label{key__management_8h_ab138ae2ebf2905dfbaf4154db2620939} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ASYMMETRIC(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0x4000)\ ==\ 0x4000)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a248ae35c0e2becaebbf479fc1c3a3b0e}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_DH@{PSA\_KEY\_TYPE\_IS\_DH}}
+\index{PSA\_KEY\_TYPE\_IS\_DH@{PSA\_KEY\_TYPE\_IS\_DH}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_DH}{PSA\_KEY\_TYPE\_IS\_DH}}
+{\footnotesize\ttfamily \label{key__management_8h_a248ae35c0e2becaebbf479fc1c3a3b0e} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+DH(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{key__management_8h_a679be3d789cfa0c1fd8418764ff754b1}{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}}(type)\ \&\ 0xff00)\ ==\ 0x4200)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_abb9dd614786fe328df4e485c1a61ed25}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR@{PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR@{PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR}{PSA\_KEY\_TYPE\_IS\_DH\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_abb9dd614786fe328df4e485c1a61ed25} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+DH\+\_\+\+KEY\+\_\+\+PAIR(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x7200)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a23627e047fa4b536f07d6f4796f879f5}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_IS\_DH\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_a23627e047fa4b536f07d6f4796f879f5} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+DH\+\_\+\+PUBLIC\+\_\+\+KEY(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x4200)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a88e01fa06b585654689a99bcc06bbe66}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_ECC@{PSA\_KEY\_TYPE\_IS\_ECC}}
+\index{PSA\_KEY\_TYPE\_IS\_ECC@{PSA\_KEY\_TYPE\_IS\_ECC}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_ECC}{PSA\_KEY\_TYPE\_IS\_ECC}}
+{\footnotesize\ttfamily \label{key__management_8h_a88e01fa06b585654689a99bcc06bbe66} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ECC(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{key__management_8h_a679be3d789cfa0c1fd8418764ff754b1}{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}}(type)\ \&\ 0xff00)\ ==\ 0x4100)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_ab00289ec3d84a469950a4d8c10fb8cc6}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR@{PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR@{PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR}{PSA\_KEY\_TYPE\_IS\_ECC\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_ab00289ec3d84a469950a4d8c10fb8cc6} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ECC\+\_\+\+KEY\+\_\+\+PAIR(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x7100)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a5af146a173b0c84d7e737e2fb6a3c0a7}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_IS\_ECC\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_a5af146a173b0c84d7e737e2fb6a3c0a7} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+ECC\+\_\+\+PUBLIC\+\_\+\+KEY(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0xff00)\ ==\ 0x4100)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_ae977b8659473ca2ce7b93a01e9596581}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_KEY\_PAIR@{PSA\_KEY\_TYPE\_IS\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_IS\_KEY\_PAIR@{PSA\_KEY\_TYPE\_IS\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_KEY\_PAIR}{PSA\_KEY\_TYPE\_IS\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_ae977b8659473ca2ce7b93a01e9596581} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+KEY\+\_\+\+PAIR(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0x7000)\ ==\ 0x7000)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_ac674a0f059bc0cb72b47f0c517b4f45b}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_IS\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_ac674a0f059bc0cb72b47f0c517b4f45b} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+PUBLIC\+\_\+\+KEY(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0x7000)\ ==\ 0x4000)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_a0e1d8f241228e49c9cadadfb4579ef1a}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_RSA@{PSA\_KEY\_TYPE\_IS\_RSA}}
+\index{PSA\_KEY\_TYPE\_IS\_RSA@{PSA\_KEY\_TYPE\_IS\_RSA}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_RSA}{PSA\_KEY\_TYPE\_IS\_RSA}}
+{\footnotesize\ttfamily \label{key__management_8h_a0e1d8f241228e49c9cadadfb4579ef1a} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+RSA(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{key__management_8h_a679be3d789cfa0c1fd8418764ff754b1}{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}}(type)\ ==\ 0x4001)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_aef86ce4e810e1c2c76068ac874bfef54}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED@{PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED}}
+\index{PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED@{PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED}{PSA\_KEY\_TYPE\_IS\_UNSTRUCTURED}}
+{\footnotesize\ttfamily \label{key__management_8h_aef86ce4e810e1c2c76068ac874bfef54} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+IS\+\_\+\+UNSTRUCTURED(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((type)\ \&\ 0x7000)\ ==\ 0x1000\ ||\ ((type)\ \&\ 0x7000)\ ==\ 0x2000)}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_adac23f233c110155ba2f0eb1ec1fe055}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_KEY\_PAIR\_OF\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_adac23f233c110155ba2f0eb1ec1fe055} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+PAIR\+\_\+\+OF\+\_\+\+PUBLIC\+\_\+\+KEY(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}})\ ((type)\ |\ 0x3000))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_afce7ab2b54ce97ea5bff73f13a9f3e5b}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_NONE@{PSA\_KEY\_TYPE\_NONE}}
+\index{PSA\_KEY\_TYPE\_NONE@{PSA\_KEY\_TYPE\_NONE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_NONE}{PSA\_KEY\_TYPE\_NONE}}
+{\footnotesize\ttfamily \label{key__management_8h_afce7ab2b54ce97ea5bff73f13a9f3e5b} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+NONE~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x0000)}
+
+\Hypertarget{key__management_8h_aad682c8fe975aee537af922f9503d510}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_PASSWORD@{PSA\_KEY\_TYPE\_PASSWORD}}
+\index{PSA\_KEY\_TYPE\_PASSWORD@{PSA\_KEY\_TYPE\_PASSWORD}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_PASSWORD}{PSA\_KEY\_TYPE\_PASSWORD}}
+{\footnotesize\ttfamily \label{key__management_8h_aad682c8fe975aee537af922f9503d510} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PASSWORD~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1203)}
+
+\Hypertarget{key__management_8h_ac41a0d5fdafc1c19ae73313613142723}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_PASSWORD\_HASH@{PSA\_KEY\_TYPE\_PASSWORD\_HASH}}
+\index{PSA\_KEY\_TYPE\_PASSWORD\_HASH@{PSA\_KEY\_TYPE\_PASSWORD\_HASH}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_PASSWORD\_HASH}{PSA\_KEY\_TYPE\_PASSWORD\_HASH}}
+{\footnotesize\ttfamily \label{key__management_8h_ac41a0d5fdafc1c19ae73313613142723} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PASSWORD\+\_\+\+HASH~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1205)}
+
+\Hypertarget{key__management_8h_ab47765c3f82af1b6a7d213f9881cb6d6}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_PEPPER@{PSA\_KEY\_TYPE\_PEPPER}}
+\index{PSA\_KEY\_TYPE\_PEPPER@{PSA\_KEY\_TYPE\_PEPPER}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_PEPPER}{PSA\_KEY\_TYPE\_PEPPER}}
+{\footnotesize\ttfamily \label{key__management_8h_ab47765c3f82af1b6a7d213f9881cb6d6} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PEPPER~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1206)}
+
+\Hypertarget{key__management_8h_a679be3d789cfa0c1fd8418764ff754b1}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR@{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR@{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}{PSA\_KEY\_TYPE\_PUBLIC\_KEY\_OF\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_a679be3d789cfa0c1fd8418764ff754b1} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+OF\+\_\+\+KEY\+\_\+\+PAIR(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}})\ ((type)\ \&\ \string~0x3000))}
+
+\end{DoxyCode}
+\Hypertarget{key__management_8h_aa97f92025533102616b32d571c940d80}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_RAW\_DATA@{PSA\_KEY\_TYPE\_RAW\_DATA}}
+\index{PSA\_KEY\_TYPE\_RAW\_DATA@{PSA\_KEY\_TYPE\_RAW\_DATA}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_RAW\_DATA}{PSA\_KEY\_TYPE\_RAW\_DATA}}
+{\footnotesize\ttfamily \label{key__management_8h_aa97f92025533102616b32d571c940d80} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RAW\+\_\+\+DATA~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x1001)}
+
+\Hypertarget{key__management_8h_a11745b110166e927e2abeabc7d532051}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR@{PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR}}
+\index{PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR@{PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR}{PSA\_KEY\_TYPE\_RSA\_KEY\_PAIR}}
+{\footnotesize\ttfamily \label{key__management_8h_a11745b110166e927e2abeabc7d532051} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RSA\+\_\+\+KEY\+\_\+\+PAIR~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x7001)}
+
+\Hypertarget{key__management_8h_a9ba0878f56c8bcd1995ac017a74f513b}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY}}
+\index{PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY@{PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY}{PSA\_KEY\_TYPE\_RSA\_PUBLIC\_KEY}}
+{\footnotesize\ttfamily \label{key__management_8h_a9ba0878f56c8bcd1995ac017a74f513b} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RSA\+\_\+\+PUBLIC\+\_\+\+KEY~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x4001)}
+
+\Hypertarget{key__management_8h_a5b2b1f1434710f4ddbcea30919f08a2c}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_TYPE\_SM4@{PSA\_KEY\_TYPE\_SM4}}
+\index{PSA\_KEY\_TYPE\_SM4@{PSA\_KEY\_TYPE\_SM4}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_TYPE\_SM4}{PSA\_KEY\_TYPE\_SM4}}
+{\footnotesize\ttfamily \label{key__management_8h_a5b2b1f1434710f4ddbcea30919f08a2c} 
+\#define PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+SM4~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}})0x2405)}
+
+\Hypertarget{key__management_8h_ad0babcff38bd6afb43461197266fe073}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_CACHE@{PSA\_KEY\_USAGE\_CACHE}}
+\index{PSA\_KEY\_USAGE\_CACHE@{PSA\_KEY\_USAGE\_CACHE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_CACHE}{PSA\_KEY\_USAGE\_CACHE}}
+{\footnotesize\ttfamily \label{key__management_8h_ad0babcff38bd6afb43461197266fe073} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+CACHE~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000004)}
+
+\Hypertarget{key__management_8h_a4605d686020a6cb433c5d78bf7e91689}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_COPY@{PSA\_KEY\_USAGE\_COPY}}
+\index{PSA\_KEY\_USAGE\_COPY@{PSA\_KEY\_USAGE\_COPY}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_COPY}{PSA\_KEY\_USAGE\_COPY}}
+{\footnotesize\ttfamily \label{key__management_8h_a4605d686020a6cb433c5d78bf7e91689} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+COPY~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000002)}
+
+\Hypertarget{key__management_8h_ac3f2d2e5983db1edde9f142ca9bf8e6a}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_DECRYPT@{PSA\_KEY\_USAGE\_DECRYPT}}
+\index{PSA\_KEY\_USAGE\_DECRYPT@{PSA\_KEY\_USAGE\_DECRYPT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_DECRYPT}{PSA\_KEY\_USAGE\_DECRYPT}}
+{\footnotesize\ttfamily \label{key__management_8h_ac3f2d2e5983db1edde9f142ca9bf8e6a} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+DECRYPT~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000200)}
+
+\Hypertarget{key__management_8h_af19022acc5ef23cf12477f632b48a0b2}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_DERIVE@{PSA\_KEY\_USAGE\_DERIVE}}
+\index{PSA\_KEY\_USAGE\_DERIVE@{PSA\_KEY\_USAGE\_DERIVE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_DERIVE}{PSA\_KEY\_USAGE\_DERIVE}}
+{\footnotesize\ttfamily \label{key__management_8h_af19022acc5ef23cf12477f632b48a0b2} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+DERIVE~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00004000)}
+
+\Hypertarget{key__management_8h_a75153b296d045d529d97203a6a995dad}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_ENCRYPT@{PSA\_KEY\_USAGE\_ENCRYPT}}
+\index{PSA\_KEY\_USAGE\_ENCRYPT@{PSA\_KEY\_USAGE\_ENCRYPT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_ENCRYPT}{PSA\_KEY\_USAGE\_ENCRYPT}}
+{\footnotesize\ttfamily \label{key__management_8h_a75153b296d045d529d97203a6a995dad} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+ENCRYPT~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000100)}
+
+\Hypertarget{key__management_8h_a7dddccdd1303176e87a4d20c87b589ed}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_EXPORT@{PSA\_KEY\_USAGE\_EXPORT}}
+\index{PSA\_KEY\_USAGE\_EXPORT@{PSA\_KEY\_USAGE\_EXPORT}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_EXPORT}{PSA\_KEY\_USAGE\_EXPORT}}
+{\footnotesize\ttfamily \label{key__management_8h_a7dddccdd1303176e87a4d20c87b589ed} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+EXPORT~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000001)}
+
+\Hypertarget{key__management_8h_a181c73e00d9e95aa3a8366f26c4380b6}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_SIGN\_HASH@{PSA\_KEY\_USAGE\_SIGN\_HASH}}
+\index{PSA\_KEY\_USAGE\_SIGN\_HASH@{PSA\_KEY\_USAGE\_SIGN\_HASH}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_SIGN\_HASH}{PSA\_KEY\_USAGE\_SIGN\_HASH}}
+{\footnotesize\ttfamily \label{key__management_8h_a181c73e00d9e95aa3a8366f26c4380b6} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+SIGN\+\_\+\+HASH~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00001000)}
+
+\Hypertarget{key__management_8h_a552117ac92b79500cae87d4e65a85c54}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_SIGN\_MESSAGE@{PSA\_KEY\_USAGE\_SIGN\_MESSAGE}}
+\index{PSA\_KEY\_USAGE\_SIGN\_MESSAGE@{PSA\_KEY\_USAGE\_SIGN\_MESSAGE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_SIGN\_MESSAGE}{PSA\_KEY\_USAGE\_SIGN\_MESSAGE}}
+{\footnotesize\ttfamily \label{key__management_8h_a552117ac92b79500cae87d4e65a85c54} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+SIGN\+\_\+\+MESSAGE~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000400)}
+
+\Hypertarget{key__management_8h_a25aece70be2b79afbdb4180f7c4e68ed}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_VERIFY\_DERIVATION@{PSA\_KEY\_USAGE\_VERIFY\_DERIVATION}}
+\index{PSA\_KEY\_USAGE\_VERIFY\_DERIVATION@{PSA\_KEY\_USAGE\_VERIFY\_DERIVATION}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_VERIFY\_DERIVATION}{PSA\_KEY\_USAGE\_VERIFY\_DERIVATION}}
+{\footnotesize\ttfamily \label{key__management_8h_a25aece70be2b79afbdb4180f7c4e68ed} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+VERIFY\+\_\+\+DERIVATION~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00008000)}
+
+\Hypertarget{key__management_8h_afadf131ef2182045e3483d03aadaa1bd}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_VERIFY\_HASH@{PSA\_KEY\_USAGE\_VERIFY\_HASH}}
+\index{PSA\_KEY\_USAGE\_VERIFY\_HASH@{PSA\_KEY\_USAGE\_VERIFY\_HASH}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_VERIFY\_HASH}{PSA\_KEY\_USAGE\_VERIFY\_HASH}}
+{\footnotesize\ttfamily \label{key__management_8h_afadf131ef2182045e3483d03aadaa1bd} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+VERIFY\+\_\+\+HASH~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00002000)}
+
+\Hypertarget{key__management_8h_abea7ec4173f4f943110329ac2953b2b1}\index{key\_management.h@{key\_management.h}!PSA\_KEY\_USAGE\_VERIFY\_MESSAGE@{PSA\_KEY\_USAGE\_VERIFY\_MESSAGE}}
+\index{PSA\_KEY\_USAGE\_VERIFY\_MESSAGE@{PSA\_KEY\_USAGE\_VERIFY\_MESSAGE}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_KEY\_USAGE\_VERIFY\_MESSAGE}{PSA\_KEY\_USAGE\_VERIFY\_MESSAGE}}
+{\footnotesize\ttfamily \label{key__management_8h_abea7ec4173f4f943110329ac2953b2b1} 
+\#define PSA\+\_\+\+KEY\+\_\+\+USAGE\+\_\+\+VERIFY\+\_\+\+MESSAGE~((\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}})0x00000800)}
+
+\Hypertarget{key__management_8h_a46f37dc927d5d5ffdf22f7060f25b9d3}\index{key\_management.h@{key\_management.h}!USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER@{USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER}}
+\index{USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER@{USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER}{USS\_PSA\_KEY\_LIFETIME\_WIPE\_ON\_TAMPER}}
+{\footnotesize\ttfamily \label{key__management_8h_a46f37dc927d5d5ffdf22f7060f25b9d3} 
+\#define USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+LIFETIME\+\_\+\+WIPE\+\_\+\+ON\+\_\+\+TAMPER~((\mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\+\_\+key\+\_\+persistence\+\_\+t}}) 0x80)}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{key__management_8h_a478f298a3abd30e87fc0bf4c7547eb35}\index{key\_management.h@{key\_management.h}!generate\_key\_id@{generate\_key\_id}}
+\index{generate\_key\_id@{generate\_key\_id}!key\_management.h@{key\_management.h}}
+\doxysubsubsection{\texorpdfstring{generate\_key\_id()}{generate\_key\_id()}}
+{\footnotesize\ttfamily \label{key__management_8h_a478f298a3abd30e87fc0bf4c7547eb35} 
+\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\+\_\+key\+\_\+id\+\_\+t}} generate\+\_\+key\+\_\+id (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Generate a random key ID. 
+
+This function generates a random key ID.
+
+\begin{DoxyReturn}{Returns}
+A new key ID. 
+\end{DoxyReturn}

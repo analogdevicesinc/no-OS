@@ -1,0 +1,2680 @@
+Trivially needed symbols: mbedtls_cmac_self_test/62 mbedtls_aes_cmac_prf_128/36 mbedtls_cipher_cmac/35 mbedtls_cipher_cmac_reset/34 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_starts/31
+
+
+Initial Symbol table:
+
+memcmp/76 (memcmp) @062a8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+puts/75 (__builtin_puts) @062a8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+printf/74 (printf) @062a8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+  Calls: 
+putchar/73 (__builtin_putchar) @062a8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: 
+memset/72 (memset) @062a8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_info_from_type/71 (mbedtls_cipher_info_from_type) @062a89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_wth_cipher/60 cmac_test_subkeys/59 mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_free/70 (mbedtls_cipher_free) @062a8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_setup/69 (mbedtls_cipher_setup) @062a8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_init/68 (mbedtls_cipher_init) @062a87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_update/67 (mbedtls_cipher_update) @062a8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+memcpy/66 (memcpy) @062a8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @062a85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 mbedtls_cipher_cmac_reset/34 mbedtls_cipher_cmac_reset/34 cmac_generate_subkeys/29 cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_calloc/64 (mbedtls_calloc) @062a8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cipher_setkey/63 (mbedtls_cipher_setkey) @062a8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cmac_self_test/62 (mbedtls_cmac_self_test) @062a83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: aes_128_key/39 (addr) aes_128_subkeys/40 (addr) aes_128_key/39 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_128_expected_result/41 (addr) aes_192_key/42 (addr) aes_192_subkeys/43 (addr) aes_192_key/42 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_192_expected_result/44 (addr) aes_256_key/45 (addr) aes_256_subkeys/46 (addr) aes_256_key/45 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_256_expected_result/47 (addr) des3_2key_key/49 (addr) des3_2key_subkeys/50 (addr) des3_2key_key/49 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_2key_expected_result/51 (addr) des3_3key_key/52 (addr) des3_3key_subkeys/53 (addr) des3_3key_key/52 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_3key_expected_result/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/73 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+test_aes128_cmac_prf/61 (test_aes128_cmac_prf) @062a82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: PRFKlen/56 (read) PRFK/55 (addr) PRFM/57 (addr) PRFT/58 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 mbedtls_aes_cmac_prf_128/36 printf/74 
+cmac_test_wth_cipher/60 (cmac_test_wth_cipher) @062a8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a82a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 puts/75 puts/75 mbedtls_cipher_cmac/35 printf/74 mbedtls_cipher_info_from_type/71 
+cmac_test_subkeys/59 (cmac_test_subkeys) @062a8000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a8150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_free/70 puts/75 puts/75 memcmp/76 memcmp/76 puts/75 cmac_generate_subkeys/29 puts/75 puts/75 mbedtls_cipher_setkey/63 puts/75 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 printf/74 mbedtls_cipher_info_from_type/71 
+PRFT/58 (PRFT) @0627f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f480
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFM/57 (PRFM) @0627f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f4c8
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFKlen/56 (PRFKlen) @0627f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: test_aes128_cmac_prf/61 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFK/55 (PRFK) @0627f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f510
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_expected_result/54 (des3_3key_expected_result) @0627f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627ff78
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_subkeys/53 (des3_3key_subkeys) @0627ff78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627fea0
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_key/52 (des3_3key_key) @0627fea0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627fe10
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_expected_result/51 (des3_2key_expected_result) @0627fe10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627fb40
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_subkeys/50 (des3_2key_subkeys) @0627fca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627fbd0
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_key/49 (des3_2key_key) @0627fbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627faf8
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_message_lengths/48 (des3_message_lengths) @0627fb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627fca8
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_expected_result/47 (aes_256_expected_result) @0627faf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f990
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_subkeys/46 (aes_256_subkeys) @0627f990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f8b8
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_key/45 (aes_256_key) @0627f8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f828
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_expected_result/44 (aes_192_expected_result) @0627f828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f6c0
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_subkeys/43 (aes_192_subkeys) @0627f6c0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f5e8
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_key/42 (aes_192_key) @0627f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f558
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_expected_result/41 (aes_128_expected_result) @0627f558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f288
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_subkeys/40 (aes_128_subkeys) @0627f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f318
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_key/39 (aes_128_key) @0627f318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a8000
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_message_lengths/38 (aes_message_lengths) @0627f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f240
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_message/37 (test_message) @0627f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0627f3f0
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_cmac_prf_128/36 (mbedtls_aes_cmac_prf_128) @062880a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a83f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_aes128_cmac_prf/61 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_cmac/35 mbedtls_cipher_cmac/35 memset/72 mbedtls_cipher_info_from_type/71 
+mbedtls_cipher_cmac/35 (mbedtls_cipher_cmac) @06264498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062880a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_wth_cipher/60 mbedtls_aes_cmac_prf_128/36 mbedtls_aes_cmac_prf_128/36 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_starts/31 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 
+mbedtls_cipher_cmac_reset/34 (mbedtls_cipher_cmac_reset) @06264e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06264498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_finish/33 (mbedtls_cipher_cmac_finish) @06264d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06264e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 cmac_pad/30 cmac_generate_subkeys/29 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_update/32 (mbedtls_cipher_cmac_update) @06264bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06264d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_cipher_update/67 mbedtls_xor/8 memcpy/66 
+mbedtls_cipher_cmac_starts/31 (mbedtls_cipher_cmac_starts) @06264a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06264bd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_calloc/64 mbedtls_cipher_setkey/63 
+cmac_pad/30 (cmac_pad) @06264930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06264e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 
+  Calls: 
+cmac_generate_subkeys/29 (cmac_generate_subkeys) @062647e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06264930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_finish/33 
+  Calls: mbedtls_platform_zeroize/65 cmac_multiply_by_u/28 cmac_multiply_by_u/28 mbedtls_cipher_update/67 mbedtls_platform_zeroize/65 
+cmac_multiply_by_u/28 (cmac_multiply_by_u) @06264690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06264930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_generate_subkeys/29 cmac_generate_subkeys/29 
+  Calls: 
+_putchar_unlocked/27 (_putchar_unlocked) @06264348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/26 (_getchar_unlocked) @062641f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/25 (__sputc_r) @06264000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/24 (mbedtls_error_add) @06224a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/23 (mbedtls_cipher_get_operation) @06224738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/22 (mbedtls_cipher_get_key_bitlen) @062245e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/21 (mbedtls_cipher_get_name) @06224498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/20 (mbedtls_cipher_get_type) @06224348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/19 (mbedtls_cipher_get_iv_size) @062241f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/18 (mbedtls_cipher_get_cipher_mode) @062240a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/17 (mbedtls_cipher_get_block_size) @0621e690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/16 (mbedtls_cipher_info_has_variable_iv_size) @0621e540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/15 (mbedtls_cipher_info_has_variable_key_bitlen) @0621e3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/14 (mbedtls_cipher_info_get_block_size) @0621e0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/13 (mbedtls_cipher_info_get_iv_size) @0621ee70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/12 (mbedtls_cipher_info_get_name) @0621ed20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/11 (mbedtls_cipher_info_get_key_bitlen) @0621ebd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/10 (mbedtls_cipher_info_get_mode) @0621ea80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/9 (mbedtls_cipher_info_get_type) @0621e930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e8d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @06264d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @061e8bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @061e8a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @061e8690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @061e8540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @06264d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @061e83f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @061e8150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @061e8000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/27 _getchar_unlocked/26 __sputc_r/25 mbedtls_error_add/24 mbedtls_cipher_get_operation/23 mbedtls_cipher_get_key_bitlen/22 mbedtls_cipher_get_name/21 mbedtls_cipher_get_type/20 mbedtls_cipher_get_iv_size/19 mbedtls_cipher_get_cipher_mode/18 mbedtls_cipher_get_block_size/17 mbedtls_cipher_info_has_variable_iv_size/16 mbedtls_cipher_info_has_variable_key_bitlen/15 mbedtls_cipher_info_get_block_size/14 mbedtls_cipher_info_get_iv_size/13 mbedtls_cipher_info_get_name/12 mbedtls_cipher_info_get_key_bitlen/11 mbedtls_cipher_info_get_mode/10 mbedtls_cipher_info_get_type/9 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+memcmp/76 (memcmp) @062a8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+puts/75 (__builtin_puts) @062a8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+printf/74 (printf) @062a8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+  Calls: 
+putchar/73 (__builtin_putchar) @062a8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: 
+memset/72 (memset) @062a8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_info_from_type/71 (mbedtls_cipher_info_from_type) @062a89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_wth_cipher/60 cmac_test_subkeys/59 mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_free/70 (mbedtls_cipher_free) @062a8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_setup/69 (mbedtls_cipher_setup) @062a8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_init/68 (mbedtls_cipher_init) @062a87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_update/67 (mbedtls_cipher_update) @062a8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+memcpy/66 (memcpy) @062a8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @062a85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 mbedtls_cipher_cmac_reset/34 mbedtls_cipher_cmac_reset/34 cmac_generate_subkeys/29 cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_calloc/64 (mbedtls_calloc) @062a8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cipher_setkey/63 (mbedtls_cipher_setkey) @062a8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cmac_self_test/62 (mbedtls_cmac_self_test) @062a83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_128_key/39 (addr) aes_128_subkeys/40 (addr) aes_128_key/39 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_128_expected_result/41 (addr) aes_192_key/42 (addr) aes_192_subkeys/43 (addr) aes_192_key/42 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_192_expected_result/44 (addr) aes_256_key/45 (addr) aes_256_subkeys/46 (addr) aes_256_key/45 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_256_expected_result/47 (addr) des3_2key_key/49 (addr) des3_2key_subkeys/50 (addr) des3_2key_key/49 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_2key_expected_result/51 (addr) des3_3key_key/52 (addr) des3_3key_subkeys/53 (addr) des3_3key_key/52 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_3key_expected_result/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/73 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+test_aes128_cmac_prf/61 (test_aes128_cmac_prf) @062a82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: PRFKlen/56 (read) PRFK/55 (addr) PRFM/57 (addr) PRFT/58 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 mbedtls_aes_cmac_prf_128/36 printf/74 
+cmac_test_wth_cipher/60 (cmac_test_wth_cipher) @062a8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 puts/75 puts/75 mbedtls_cipher_cmac/35 printf/74 mbedtls_cipher_info_from_type/71 
+cmac_test_subkeys/59 (cmac_test_subkeys) @062a8000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_free/70 puts/75 puts/75 memcmp/76 memcmp/76 puts/75 cmac_generate_subkeys/29 puts/75 puts/75 mbedtls_cipher_setkey/63 puts/75 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 printf/74 mbedtls_cipher_info_from_type/71 
+PRFT/58 (PRFT) @0627f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFM/57 (PRFM) @0627f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFKlen/56 (PRFKlen) @0627f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFK/55 (PRFK) @0627f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_expected_result/54 (des3_3key_expected_result) @0627f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_subkeys/53 (des3_3key_subkeys) @0627ff78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_key/52 (des3_3key_key) @0627fea0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_expected_result/51 (des3_2key_expected_result) @0627fe10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_subkeys/50 (des3_2key_subkeys) @0627fca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_key/49 (des3_2key_key) @0627fbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_message_lengths/48 (des3_message_lengths) @0627fb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_expected_result/47 (aes_256_expected_result) @0627faf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_subkeys/46 (aes_256_subkeys) @0627f990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_key/45 (aes_256_key) @0627f8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_expected_result/44 (aes_192_expected_result) @0627f828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_subkeys/43 (aes_192_subkeys) @0627f6c0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_key/42 (aes_192_key) @0627f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_expected_result/41 (aes_128_expected_result) @0627f558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_subkeys/40 (aes_128_subkeys) @0627f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_key/39 (aes_128_key) @0627f318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_message_lengths/38 (aes_message_lengths) @0627f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_message/37 (test_message) @0627f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_cmac_prf_128/36 (mbedtls_aes_cmac_prf_128) @062880a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_aes128_cmac_prf/61 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_cmac/35 mbedtls_cipher_cmac/35 memset/72 mbedtls_cipher_info_from_type/71 
+mbedtls_cipher_cmac/35 (mbedtls_cipher_cmac) @06264498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_wth_cipher/60 mbedtls_aes_cmac_prf_128/36 mbedtls_aes_cmac_prf_128/36 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_starts/31 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 
+mbedtls_cipher_cmac_reset/34 (mbedtls_cipher_cmac_reset) @06264e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_finish/33 (mbedtls_cipher_cmac_finish) @06264d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 cmac_pad/30 cmac_generate_subkeys/29 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_update/32 (mbedtls_cipher_cmac_update) @06264bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_cipher_update/67 mbedtls_xor/8 memcpy/66 
+mbedtls_cipher_cmac_starts/31 (mbedtls_cipher_cmac_starts) @06264a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_calloc/64 mbedtls_cipher_setkey/63 
+cmac_pad/30 (cmac_pad) @06264930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 
+  Calls: 
+cmac_generate_subkeys/29 (cmac_generate_subkeys) @062647e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_finish/33 
+  Calls: mbedtls_platform_zeroize/65 cmac_multiply_by_u/28 cmac_multiply_by_u/28 mbedtls_cipher_update/67 mbedtls_platform_zeroize/65 
+cmac_multiply_by_u/28 (cmac_multiply_by_u) @06264690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_generate_subkeys/29 cmac_generate_subkeys/29 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e8d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+
+
+Initial Symbol table:
+
+memcmp/76 (memcmp) @062a8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+puts/75 (__builtin_puts) @062a8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+printf/74 (printf) @062a8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+  Calls: 
+putchar/73 (__builtin_putchar) @062a8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: 
+memset/72 (memset) @062a8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_info_from_type/71 (mbedtls_cipher_info_from_type) @062a89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_wth_cipher/60 cmac_test_subkeys/59 mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_free/70 (mbedtls_cipher_free) @062a8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_setup/69 (mbedtls_cipher_setup) @062a8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_init/68 (mbedtls_cipher_init) @062a87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_update/67 (mbedtls_cipher_update) @062a8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+memcpy/66 (memcpy) @062a8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @062a85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 mbedtls_cipher_cmac_reset/34 mbedtls_cipher_cmac_reset/34 cmac_generate_subkeys/29 cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_calloc/64 (mbedtls_calloc) @062a8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cipher_setkey/63 (mbedtls_cipher_setkey) @062a8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cmac_self_test/62 (mbedtls_cmac_self_test) @062a83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_128_key/39 (addr) aes_128_subkeys/40 (addr) aes_128_key/39 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_128_expected_result/41 (addr) aes_192_key/42 (addr) aes_192_subkeys/43 (addr) aes_192_key/42 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_192_expected_result/44 (addr) aes_256_key/45 (addr) aes_256_subkeys/46 (addr) aes_256_key/45 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_256_expected_result/47 (addr) des3_2key_key/49 (addr) des3_2key_subkeys/50 (addr) des3_2key_key/49 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_2key_expected_result/51 (addr) des3_3key_key/52 (addr) des3_3key_subkeys/53 (addr) des3_3key_key/52 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_3key_expected_result/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/73 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+test_aes128_cmac_prf/61 (test_aes128_cmac_prf) @062a82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: PRFKlen/56 (read) PRFK/55 (addr) PRFM/57 (addr) PRFT/58 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 mbedtls_aes_cmac_prf_128/36 printf/74 
+cmac_test_wth_cipher/60 (cmac_test_wth_cipher) @062a8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 puts/75 puts/75 mbedtls_cipher_cmac/35 printf/74 mbedtls_cipher_info_from_type/71 
+cmac_test_subkeys/59 (cmac_test_subkeys) @062a8000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_free/70 puts/75 puts/75 memcmp/76 memcmp/76 puts/75 cmac_generate_subkeys/29 puts/75 puts/75 mbedtls_cipher_setkey/63 puts/75 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 printf/74 mbedtls_cipher_info_from_type/71 
+PRFT/58 (PRFT) @0627f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFM/57 (PRFM) @0627f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFKlen/56 (PRFKlen) @0627f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFK/55 (PRFK) @0627f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_expected_result/54 (des3_3key_expected_result) @0627f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_subkeys/53 (des3_3key_subkeys) @0627ff78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_key/52 (des3_3key_key) @0627fea0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_expected_result/51 (des3_2key_expected_result) @0627fe10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_subkeys/50 (des3_2key_subkeys) @0627fca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_key/49 (des3_2key_key) @0627fbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_message_lengths/48 (des3_message_lengths) @0627fb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_expected_result/47 (aes_256_expected_result) @0627faf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_subkeys/46 (aes_256_subkeys) @0627f990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_key/45 (aes_256_key) @0627f8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_expected_result/44 (aes_192_expected_result) @0627f828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_subkeys/43 (aes_192_subkeys) @0627f6c0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_key/42 (aes_192_key) @0627f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_expected_result/41 (aes_128_expected_result) @0627f558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_subkeys/40 (aes_128_subkeys) @0627f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_key/39 (aes_128_key) @0627f318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_message_lengths/38 (aes_message_lengths) @0627f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_message/37 (test_message) @0627f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_cmac_prf_128/36 (mbedtls_aes_cmac_prf_128) @062880a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_aes128_cmac_prf/61 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_cmac/35 mbedtls_cipher_cmac/35 memset/72 mbedtls_cipher_info_from_type/71 
+mbedtls_cipher_cmac/35 (mbedtls_cipher_cmac) @06264498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_wth_cipher/60 mbedtls_aes_cmac_prf_128/36 mbedtls_aes_cmac_prf_128/36 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_starts/31 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 
+mbedtls_cipher_cmac_reset/34 (mbedtls_cipher_cmac_reset) @06264e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_finish/33 (mbedtls_cipher_cmac_finish) @06264d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 cmac_pad/30 cmac_generate_subkeys/29 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_update/32 (mbedtls_cipher_cmac_update) @06264bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_cipher_update/67 mbedtls_xor/8 memcpy/66 
+mbedtls_cipher_cmac_starts/31 (mbedtls_cipher_cmac_starts) @06264a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_calloc/64 mbedtls_cipher_setkey/63 
+cmac_pad/30 (cmac_pad) @06264930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 
+  Calls: 
+cmac_generate_subkeys/29 (cmac_generate_subkeys) @062647e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_finish/33 
+  Calls: mbedtls_platform_zeroize/65 cmac_multiply_by_u/28 cmac_multiply_by_u/28 mbedtls_cipher_update/67 mbedtls_platform_zeroize/65 
+cmac_multiply_by_u/28 (cmac_multiply_by_u) @06264690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_generate_subkeys/29 cmac_generate_subkeys/29 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e8d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memcmp/76 (memcmp) @062a8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+puts/75 (__builtin_puts) @062a8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 cmac_test_subkeys/59 
+  Calls: 
+printf/74 (printf) @062a8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+  Calls: 
+putchar/73 (__builtin_putchar) @062a8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: 
+memset/72 (memset) @062a8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_info_from_type/71 (mbedtls_cipher_info_from_type) @062a89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_wth_cipher/60 cmac_test_subkeys/59 mbedtls_aes_cmac_prf_128/36 
+  Calls: 
+mbedtls_cipher_free/70 (mbedtls_cipher_free) @062a8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_setup/69 (mbedtls_cipher_setup) @062a8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_init/68 (mbedtls_cipher_init) @062a87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac/35 
+  Calls: 
+mbedtls_cipher_update/67 (mbedtls_cipher_update) @062a8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+memcpy/66 (memcpy) @062a8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @062a85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 mbedtls_cipher_cmac_reset/34 mbedtls_cipher_cmac_reset/34 cmac_generate_subkeys/29 cmac_generate_subkeys/29 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_calloc/64 (mbedtls_calloc) @062a8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cipher_setkey/63 (mbedtls_cipher_setkey) @062a8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_starts/31 
+  Calls: 
+mbedtls_cmac_self_test/62 (mbedtls_cmac_self_test) @062a83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_128_key/39 (addr) aes_128_subkeys/40 (addr) aes_128_key/39 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_128_expected_result/41 (addr) aes_192_key/42 (addr) aes_192_subkeys/43 (addr) aes_192_key/42 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_192_expected_result/44 (addr) aes_256_key/45 (addr) aes_256_subkeys/46 (addr) aes_256_key/45 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_256_expected_result/47 (addr) des3_2key_key/49 (addr) des3_2key_subkeys/50 (addr) des3_2key_key/49 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_2key_expected_result/51 (addr) des3_3key_key/52 (addr) des3_3key_subkeys/53 (addr) des3_3key_key/52 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_3key_expected_result/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/73 test_aes128_cmac_prf/61 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 cmac_test_wth_cipher/60 cmac_test_subkeys/59 
+test_aes128_cmac_prf/61 (test_aes128_cmac_prf) @062a82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: PRFKlen/56 (read) PRFK/55 (addr) PRFM/57 (addr) PRFT/58 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 mbedtls_aes_cmac_prf_128/36 printf/74 
+cmac_test_wth_cipher/60 (cmac_test_wth_cipher) @062a8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: puts/75 puts/75 memcmp/76 puts/75 puts/75 mbedtls_cipher_cmac/35 printf/74 mbedtls_cipher_info_from_type/71 
+cmac_test_subkeys/59 (cmac_test_subkeys) @062a8000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 mbedtls_cmac_self_test/62 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_free/70 puts/75 puts/75 memcmp/76 memcmp/76 puts/75 cmac_generate_subkeys/29 puts/75 puts/75 mbedtls_cipher_setkey/63 puts/75 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 printf/74 mbedtls_cipher_info_from_type/71 
+PRFT/58 (PRFT) @0627f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFM/57 (PRFM) @0627f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFKlen/56 (PRFKlen) @0627f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+PRFK/55 (PRFK) @0627f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_expected_result/54 (des3_3key_expected_result) @0627f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_subkeys/53 (des3_3key_subkeys) @0627ff78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_3key_key/52 (des3_3key_key) @0627fea0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_expected_result/51 (des3_2key_expected_result) @0627fe10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_subkeys/50 (des3_2key_subkeys) @0627fca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_2key_key/49 (des3_2key_key) @0627fbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_message_lengths/48 (des3_message_lengths) @0627fb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_expected_result/47 (aes_256_expected_result) @0627faf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_subkeys/46 (aes_256_subkeys) @0627f990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_256_key/45 (aes_256_key) @0627f8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_expected_result/44 (aes_192_expected_result) @0627f828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_subkeys/43 (aes_192_subkeys) @0627f6c0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_192_key/42 (aes_192_key) @0627f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_expected_result/41 (aes_128_expected_result) @0627f558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_subkeys/40 (aes_128_subkeys) @0627f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_128_key/39 (aes_128_key) @0627f318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_message_lengths/38 (aes_message_lengths) @0627f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_message/37 (test_message) @0627f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_cmac_prf_128/36 (mbedtls_aes_cmac_prf_128) @062880a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_aes128_cmac_prf/61 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_cmac/35 mbedtls_cipher_cmac/35 memset/72 mbedtls_cipher_info_from_type/71 
+mbedtls_cipher_cmac/35 (mbedtls_cipher_cmac) @06264498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_wth_cipher/60 mbedtls_aes_cmac_prf_128/36 mbedtls_aes_cmac_prf_128/36 
+  Calls: mbedtls_cipher_free/70 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_starts/31 mbedtls_cipher_setup/69 mbedtls_cipher_init/68 
+mbedtls_cipher_cmac_reset/34 (mbedtls_cipher_cmac_reset) @06264e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_finish/33 (mbedtls_cipher_cmac_finish) @06264d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 cmac_pad/30 cmac_generate_subkeys/29 mbedtls_platform_zeroize/65 mbedtls_platform_zeroize/65 
+mbedtls_cipher_cmac_update/32 (mbedtls_cipher_cmac_update) @06264bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: memcpy/66 mbedtls_cipher_update/67 mbedtls_xor/8 mbedtls_cipher_update/67 mbedtls_xor/8 memcpy/66 
+mbedtls_cipher_cmac_starts/31 (mbedtls_cipher_cmac_starts) @06264a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac/35 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_calloc/64 mbedtls_cipher_setkey/63 
+cmac_pad/30 (cmac_pad) @06264930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 
+  Calls: 
+cmac_generate_subkeys/29 (cmac_generate_subkeys) @062647e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_test_subkeys/59 mbedtls_cipher_cmac_finish/33 
+  Calls: mbedtls_platform_zeroize/65 cmac_multiply_by_u/28 cmac_multiply_by_u/28 mbedtls_cipher_update/67 mbedtls_platform_zeroize/65 
+cmac_multiply_by_u/28 (cmac_multiply_by_u) @06264690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_generate_subkeys/29 cmac_generate_subkeys/29 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e8d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_finish/33 mbedtls_cipher_cmac_update/32 mbedtls_cipher_cmac_update/32 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memcmp/76 (memcmp) @062a8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 (775832156 (estimated locally),2.38 per call) cmac_test_wth_cipher/60 (522106961 (estimated locally),1.59 per call) cmac_test_subkeys/59 (326827133 (estimated locally),3.81 per call) cmac_test_subkeys/59 (333497076 (estimated locally),3.89 per call) 
+  Calls: 
+puts/75 (__builtin_puts) @062a8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 (246654109 (estimated locally),0.76 per call) test_aes128_cmac_prf/61 (19096992 (estimated locally),0.06 per call) cmac_test_wth_cipher/60 (167557175 (estimated locally),0.51 per call) cmac_test_wth_cipher/60 (4738121 (estimated locally),0.01 per call) cmac_test_wth_cipher/60 (93529259 (estimated locally),0.28 per call) cmac_test_wth_cipher/60 (78766037 (estimated locally),0.24 per call) cmac_test_subkeys/59 (105695894 (estimated locally),1.23 per call) cmac_test_subkeys/59 (4358140 (estimated locally),0.05 per call) cmac_test_subkeys/59 (2246001 (estimated locally),0.03 per call) cmac_test_subkeys/59 (7509511 (estimated locally),0.09 per call) cmac_test_subkeys/59 (220493593 (estimated locally),2.57 per call) cmac_test_subkeys/59 (6944963 (estimated locally),0.08 per call) 
+  Calls: 
+printf/74 (printf) @062a8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: test_aes128_cmac_prf/61 (805306370 (estimated locally),2.47 per call) cmac_test_wth_cipher/60 (344590592 (estimated locally),1.05 per call) cmac_test_subkeys/59 (347248103 (estimated locally),4.05 per call) 
+  Calls: 
+putchar/73 (__builtin_putchar) @062a8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cmac_self_test/62 (182083 (estimated locally),0.00 per call) 
+  Calls: 
+memset/72 (memset) @062a8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 (422163175 (estimated locally),0.39 per call) 
+  Calls: 
+mbedtls_cipher_info_from_type/71 (mbedtls_cipher_info_from_type) @062a89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 (1054416582 (estimated locally),0.98 per call) cmac_test_wth_cipher/60 (328787388 (estimated locally),1.00 per call) cmac_test_subkeys/59 (85674363 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_cipher_free/70 (mbedtls_cipher_free) @062a8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac/35 (1049671704 (estimated locally),0.98 per call) cmac_test_subkeys/59 (63813989 (estimated locally),0.74 per call) cmac_test_subkeys/59 (988452997 (estimated locally),11.54 per call) 
+  Calls: 
+mbedtls_cipher_setup/69 (mbedtls_cipher_setup) @062a8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac/35 (1049671703 (estimated locally),0.98 per call) cmac_test_subkeys/59 (1052266985 (estimated locally),12.28 per call) 
+  Calls: 
+mbedtls_cipher_init/68 (mbedtls_cipher_init) @062a87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac/35 (1049671703 (estimated locally),0.98 per call) cmac_test_subkeys/59 (1052266985 (estimated locally),12.28 per call) 
+  Calls: 
+mbedtls_cipher_update/67 (mbedtls_cipher_update) @062a8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_update/32 (1014686025 (estimated locally),8.19 per call) mbedtls_cipher_cmac_update/32 (20078909 (estimated locally),0.16 per call) cmac_generate_subkeys/29 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+memcpy/66 (memcpy) @062a8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac_finish/33 (513079526 (estimated locally),0.48 per call) mbedtls_cipher_cmac_update/32 (19488414 (estimated locally),0.16 per call) mbedtls_cipher_cmac_update/32 (20078909 (estimated locally),0.16 per call) 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @062a85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_cmac_prf_128/36 (1054416582 (estimated locally),0.98 per call) mbedtls_cipher_cmac_reset/34 (1054416582 (estimated locally),0.98 per call) mbedtls_cipher_cmac_reset/34 (1054416582 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_starts/31 (662136745 (estimated locally),0.62 per call) cmac_generate_subkeys/29 (1073741824 (estimated locally),1.00 per call) cmac_generate_subkeys/29 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_calloc/64 (mbedtls_calloc) @062a8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac_starts/31 (668217523 (estimated locally),0.62 per call) 
+  Calls: 
+mbedtls_cipher_setkey/63 (mbedtls_cipher_setkey) @062a8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_cipher_cmac_starts/31 (1054416580 (estimated locally),0.98 per call) cmac_test_subkeys/59 (1031221642 (estimated locally),12.04 per call) 
+  Calls: 
+mbedtls_cmac_self_test/62 (mbedtls_cmac_self_test) @062a83f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: aes_128_key/39 (addr) aes_128_subkeys/40 (addr) aes_128_key/39 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_128_expected_result/41 (addr) aes_192_key/42 (addr) aes_192_subkeys/43 (addr) aes_192_key/42 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_192_expected_result/44 (addr) aes_256_key/45 (addr) aes_256_subkeys/46 (addr) aes_256_key/45 (addr) test_message/37 (addr) aes_message_lengths/38 (addr) aes_256_expected_result/47 (addr) des3_2key_key/49 (addr) des3_2key_subkeys/50 (addr) des3_2key_key/49 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_2key_expected_result/51 (addr) des3_3key_key/52 (addr) des3_3key_subkeys/53 (addr) des3_3key_key/52 (addr) test_message/37 (addr) des3_message_lengths/48 (addr) des3_3key_expected_result/54 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: putchar/73 (182083 (estimated locally),0.00 per call) test_aes128_cmac_prf/61 (836011 (estimated locally),0.00 per call) cmac_test_wth_cipher/60 (1710333 (estimated locally),0.00 per call) cmac_test_subkeys/59 (3499044 (estimated locally),0.00 per call) cmac_test_wth_cipher/60 (7158437 (estimated locally),0.01 per call) cmac_test_subkeys/59 (14644921 (estimated locally),0.01 per call) cmac_test_wth_cipher/60 (29960968 (estimated locally),0.03 per call) cmac_test_subkeys/59 (61294943 (estimated locally),0.06 per call) cmac_test_wth_cipher/60 (125398821 (estimated locally),0.12 per call) cmac_test_subkeys/59 (256544234 (estimated locally),0.24 per call) cmac_test_wth_cipher/60 (524845000 (estimated locally),0.49 per call) cmac_test_subkeys/59 (1073741824 (estimated locally),1.00 per call) 
+test_aes128_cmac_prf/61 (test_aes128_cmac_prf) @062a82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: PRFKlen/56 (read) PRFK/55 (addr) PRFM/57 (addr) PRFT/58 (addr) 
+  Referring: 
+  Availability: local
+  Function flags: count:326305128 (estimated locally) body local
+  Called by: mbedtls_cmac_self_test/62 (836011 (estimated locally),0.00 per call) 
+  Calls: puts/75 (246654109 (estimated locally),0.76 per call) puts/75 (19096992 (estimated locally),0.06 per call) memcmp/76 (775832156 (estimated locally),2.38 per call) mbedtls_aes_cmac_prf_128/36 (805306370 (estimated locally),2.47 per call) printf/74 (805306370 (estimated locally),2.47 per call) 
+cmac_test_wth_cipher/60 (cmac_test_wth_cipher) @062a8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:328787388 (estimated locally) body local
+  Called by: mbedtls_cmac_self_test/62 (1710333 (estimated locally),0.00 per call) mbedtls_cmac_self_test/62 (7158437 (estimated locally),0.01 per call) mbedtls_cmac_self_test/62 (29960968 (estimated locally),0.03 per call) mbedtls_cmac_self_test/62 (125398821 (estimated locally),0.12 per call) mbedtls_cmac_self_test/62 (524845000 (estimated locally),0.49 per call) 
+  Calls: puts/75 (167557175 (estimated locally),0.51 per call) puts/75 (4738121 (estimated locally),0.01 per call) memcmp/76 (522106961 (estimated locally),1.59 per call) puts/75 (93529259 (estimated locally),0.28 per call) puts/75 (78766037 (estimated locally),0.24 per call) mbedtls_cipher_cmac/35 (1044213922 (estimated locally),3.18 per call) printf/74 (344590592 (estimated locally),1.05 per call) mbedtls_cipher_info_from_type/71 (328787388 (estimated locally),1.00 per call) 
+cmac_test_subkeys/59 (cmac_test_subkeys) @062a8000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:85674363 (estimated locally) body local
+  Called by: mbedtls_cmac_self_test/62 (3499044 (estimated locally),0.00 per call) mbedtls_cmac_self_test/62 (14644921 (estimated locally),0.01 per call) mbedtls_cmac_self_test/62 (61294943 (estimated locally),0.06 per call) mbedtls_cmac_self_test/62 (256544234 (estimated locally),0.24 per call) mbedtls_cmac_self_test/62 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_cipher_free/70 (63813989 (estimated locally),0.74 per call) mbedtls_cipher_free/70 (988452997 (estimated locally),11.54 per call) puts/75 (105695894 (estimated locally),1.23 per call) puts/75 (4358140 (estimated locally),0.05 per call) memcmp/76 (326827133 (estimated locally),3.81 per call) memcmp/76 (333497076 (estimated locally),3.89 per call) puts/75 (2246001 (estimated locally),0.03 per call) cmac_generate_subkeys/29 (340303140 (estimated locally),3.97 per call) puts/75 (7509511 (estimated locally),0.09 per call) puts/75 (220493593 (estimated locally),2.57 per call) mbedtls_cipher_setkey/63 (1031221642 (estimated locally),12.04 per call) puts/75 (6944963 (estimated locally),0.08 per call) mbedtls_cipher_setup/69 (1052266985 (estimated locally),12.28 per call) mbedtls_cipher_init/68 (1052266985 (estimated locally),12.28 per call) printf/74 (347248103 (estimated locally),4.05 per call) mbedtls_cipher_info_from_type/71 (85674363 (estimated locally),1.00 per call) 
+PRFT/58 (PRFT) @0627f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+PRFM/57 (PRFM) @0627f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+PRFKlen/56 (PRFKlen) @0627f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_aes128_cmac_prf/61 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+PRFK/55 (PRFK) @0627f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_aes128_cmac_prf/61 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_3key_expected_result/54 (des3_3key_expected_result) @0627f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_3key_subkeys/53 (des3_3key_subkeys) @0627ff78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_3key_key/52 (des3_3key_key) @0627fea0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_2key_expected_result/51 (des3_2key_expected_result) @0627fe10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_2key_subkeys/50 (des3_2key_subkeys) @0627fca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_2key_key/49 (des3_2key_key) @0627fbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_message_lengths/48 (des3_message_lengths) @0627fb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_256_expected_result/47 (aes_256_expected_result) @0627faf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_256_subkeys/46 (aes_256_subkeys) @0627f990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_256_key/45 (aes_256_key) @0627f8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_192_expected_result/44 (aes_192_expected_result) @0627f828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_192_subkeys/43 (aes_192_subkeys) @0627f6c0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_192_key/42 (aes_192_key) @0627f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_128_expected_result/41 (aes_128_expected_result) @0627f558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_128_subkeys/40 (aes_128_subkeys) @0627f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_128_key/39 (aes_128_key) @0627f318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_message_lengths/38 (aes_message_lengths) @0627f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_message/37 (test_message) @0627f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) mbedtls_cmac_self_test/62 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_aes_cmac_prf_128/36 (mbedtls_aes_cmac_prf_128) @062880a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_aes128_cmac_prf/61 (805306370 (estimated locally),2.47 per call) 
+  Calls: mbedtls_platform_zeroize/65 (1054416582 (estimated locally),0.98 per call) mbedtls_cipher_cmac/35 (720137141 (estimated locally),0.67 per call) mbedtls_cipher_cmac/35 (422163175 (estimated locally),0.39 per call) memset/72 (422163175 (estimated locally),0.39 per call) mbedtls_cipher_info_from_type/71 (1054416582 (estimated locally),0.98 per call) 
+mbedtls_cipher_cmac/35 (mbedtls_cipher_cmac) @06264498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_aes_cmac_prf_128/36 (720137141 (estimated locally),0.67 per call) mbedtls_aes_cmac_prf_128/36 (422163175 (estimated locally),0.39 per call) cmac_test_wth_cipher/60 (1044213922 (estimated locally),3.18 per call) 
+  Calls: mbedtls_cipher_free/70 (1049671704 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (122587749 (estimated locally),0.11 per call) mbedtls_cipher_cmac_update/32 (250793270 (estimated locally),0.23 per call) mbedtls_cipher_cmac_starts/31 (513079525 (estimated locally),0.48 per call) mbedtls_cipher_setup/69 (1049671703 (estimated locally),0.98 per call) mbedtls_cipher_init/68 (1049671703 (estimated locally),0.98 per call) 
+mbedtls_cipher_cmac_reset/34 (mbedtls_cipher_cmac_reset) @06264e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 (1054416582 (estimated locally),0.98 per call) mbedtls_platform_zeroize/65 (1054416582 (estimated locally),0.98 per call) 
+mbedtls_cipher_cmac_finish/33 (mbedtls_cipher_cmac_finish) @06264d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_cipher_cmac/35 (122587749 (estimated locally),0.11 per call) 
+  Calls: mbedtls_platform_zeroize/65 (1049671705 (estimated locally),0.98 per call) mbedtls_platform_zeroize/65 (1049671705 (estimated locally),0.98 per call) mbedtls_platform_zeroize/65 (1049671705 (estimated locally),0.98 per call) mbedtls_platform_zeroize/65 (1049671705 (estimated locally),0.98 per call) memcpy/66 (513079526 (estimated locally),0.48 per call) mbedtls_cipher_update/67 (1049671705 (estimated locally),0.98 per call) mbedtls_xor/8 (1049671705 (estimated locally),0.98 per call) mbedtls_xor/8 (524835852 (estimated locally),0.49 per call) mbedtls_xor/8 (524835852 (estimated locally),0.49 per call) cmac_pad/30 (524835852 (estimated locally),0.49 per call) cmac_generate_subkeys/29 (1049671705 (estimated locally),0.98 per call) mbedtls_platform_zeroize/65 (1049671705 (estimated locally),0.98 per call) mbedtls_platform_zeroize/65 (1049671705 (estimated locally),0.98 per call) 
+mbedtls_cipher_cmac_update/32 (mbedtls_cipher_cmac_update) @06264bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:123905652 (estimated locally) body
+  Called by: mbedtls_cipher_cmac/35 (250793270 (estimated locally),0.23 per call) 
+  Calls: memcpy/66 (19488414 (estimated locally),0.16 per call) mbedtls_cipher_update/67 (1014686025 (estimated locally),8.19 per call) mbedtls_xor/8 (1014686025 (estimated locally),8.19 per call) mbedtls_cipher_update/67 (20078909 (estimated locally),0.16 per call) mbedtls_xor/8 (20078909 (estimated locally),0.16 per call) memcpy/66 (20078909 (estimated locally),0.16 per call) 
+mbedtls_cipher_cmac_starts/31 (mbedtls_cipher_cmac_starts) @06264a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_cipher_cmac/35 (513079525 (estimated locally),0.48 per call) 
+  Calls: mbedtls_platform_zeroize/65 (662136745 (estimated locally),0.62 per call) mbedtls_calloc/64 (668217523 (estimated locally),0.62 per call) mbedtls_cipher_setkey/63 (1054416580 (estimated locally),0.98 per call) 
+cmac_pad/30 (cmac_pad) @06264930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:118111600 (estimated locally) body local nonfreeing_fn
+  Called by: mbedtls_cipher_cmac_finish/33 (524835852 (estimated locally),0.49 per call) 
+  Calls: 
+cmac_generate_subkeys/29 (cmac_generate_subkeys) @062647e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) cmac_test_subkeys/59 (340303140 (estimated locally),3.97 per call) 
+  Calls: mbedtls_platform_zeroize/65 (1073741824 (estimated locally),1.00 per call) cmac_multiply_by_u/28 (256544234 (estimated locally),0.24 per call) cmac_multiply_by_u/28 (524844999 (estimated locally),0.49 per call) mbedtls_cipher_update/67 (1073741823 (estimated locally),1.00 per call) mbedtls_platform_zeroize/65 (1073741823 (estimated locally),1.00 per call) 
+cmac_multiply_by_u/28 (cmac_multiply_by_u) @06264690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:119691529 (estimated locally) body local nonfreeing_fn
+  Called by: cmac_generate_subkeys/29 (256544234 (estimated locally),0.24 per call) cmac_generate_subkeys/29 (524844999 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e8d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: mbedtls_cipher_cmac_finish/33 (1049671705 (estimated locally),0.98 per call) mbedtls_cipher_cmac_finish/33 (524835852 (estimated locally),0.49 per call) mbedtls_cipher_cmac_finish/33 (524835852 (estimated locally),0.49 per call) mbedtls_cipher_cmac_update/32 (1014686025 (estimated locally),8.19 per call) mbedtls_cipher_cmac_update/32 (20078909 (estimated locally),0.16 per call) 
+  Calls: 
+Trivially needed variables: PRFT/58 PRFM/57 PRFKlen/56 PRFK/55 des3_3key_expected_result/54 des3_3key_subkeys/53 des3_3key_key/52 des3_2key_expected_result/51 des3_2key_subkeys/50 des3_2key_key/49 des3_message_lengths/48 aes_256_expected_result/47 aes_256_subkeys/46 aes_256_key/45 aes_192_expected_result/44 aes_192_subkeys/43 aes_192_key/42 aes_128_expected_result/41 aes_128_subkeys/40 aes_128_key/39 aes_message_lengths/38 test_message/37
+Removing variables:
+
+Final Symbol table:
+
+memcmp/76 (memcmp) @062a8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/75 (__builtin_puts) @062a8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/74 (printf) @062a8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+putchar/73 (__builtin_putchar) @062a8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/72 (memset) @062a8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_from_type/71 (mbedtls_cipher_info_from_type) @062a89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_free/70 (mbedtls_cipher_free) @062a8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setup/69 (mbedtls_cipher_setup) @062a8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_init/68 (mbedtls_cipher_init) @062a87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_update/67 (mbedtls_cipher_update) @062a8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/66 (memcpy) @062a8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @062a85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_calloc/64 (mbedtls_calloc) @062a8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setkey/63 (mbedtls_cipher_setkey) @062a8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cmac_self_test/62 (mbedtls_cmac_self_test) @062a83f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_cmac_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+test_aes128_cmac_prf/61 (test_aes128_cmac_prf) @062a82a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.test_aes128_cmac_prf (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:326305128 (estimated locally) local
+  Called by: 
+  Calls: 
+cmac_test_wth_cipher/60 (cmac_test_wth_cipher) @062a8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.cmac_test_wth_cipher (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:328787388 (estimated locally) local
+  Called by: 
+  Calls: 
+cmac_test_subkeys/59 (cmac_test_subkeys) @062a8000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.cmac_test_subkeys (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:85674363 (estimated locally) local
+  Called by: 
+  Calls: 
+PRFT/58 (PRFT) @0627f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.PRFT (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+PRFM/57 (PRFM) @0627f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.PRFM (implicit_section)
+  Aux: @0627f5a0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+PRFKlen/56 (PRFKlen) @0627f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.PRFKlen (implicit_section)
+  Aux: @0627f480
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+PRFK/55 (PRFK) @0627f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.PRFK (implicit_section)
+  Aux: @0627f510
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_3key_expected_result/54 (des3_3key_expected_result) @0627f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_3key_expected_result (implicit_section)
+  Aux: @0627f4c8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_3key_subkeys/53 (des3_3key_subkeys) @0627ff78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_3key_subkeys (implicit_section)
+  Aux: @0627f438
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_3key_key/52 (des3_3key_key) @0627fea0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_3key_key (implicit_section)
+  Aux: @0627ff78
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_2key_expected_result/51 (des3_2key_expected_result) @0627fe10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_2key_expected_result (implicit_section)
+  Aux: @0627fea0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_2key_subkeys/50 (des3_2key_subkeys) @0627fca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_2key_subkeys (implicit_section)
+  Aux: @0627fe10
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_2key_key/49 (des3_2key_key) @0627fbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_2key_key (implicit_section)
+  Aux: @0627fca8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_message_lengths/48 (des3_message_lengths) @0627fb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_message_lengths (implicit_section)
+  Aux: @0627fbd0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_256_expected_result/47 (aes_256_expected_result) @0627faf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_256_expected_result (implicit_section)
+  Aux: @0627fb40
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_256_subkeys/46 (aes_256_subkeys) @0627f990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_256_subkeys (implicit_section)
+  Aux: @0627faf8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_256_key/45 (aes_256_key) @0627f8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_256_key (implicit_section)
+  Aux: @0627f990
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_192_expected_result/44 (aes_192_expected_result) @0627f828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_192_expected_result (implicit_section)
+  Aux: @0627f8b8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_192_subkeys/43 (aes_192_subkeys) @0627f6c0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_192_subkeys (implicit_section)
+  Aux: @0627f828
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_192_key/42 (aes_192_key) @0627f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_192_key (implicit_section)
+  Aux: @0627f6c0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_128_expected_result/41 (aes_128_expected_result) @0627f558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_128_expected_result (implicit_section)
+  Aux: @0627f5e8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_128_subkeys/40 (aes_128_subkeys) @0627f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_128_subkeys (implicit_section)
+  Aux: @0627f558
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_128_key/39 (aes_128_key) @0627f318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_128_key (implicit_section)
+  Aux: @0627f3f0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_message_lengths/38 (aes_message_lengths) @0627f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_message_lengths (implicit_section)
+  Aux: @0627f318
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_message/37 (test_message) @0627f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_message (implicit_section)
+  Aux: @0627f288
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_aes_cmac_prf_128/36 (mbedtls_aes_cmac_prf_128) @062880a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_cmac_prf_128 (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac/35 (mbedtls_cipher_cmac) @06264498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_cipher_cmac (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_reset/34 (mbedtls_cipher_cmac_reset) @06264e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_cipher_cmac_reset (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_finish/33 (mbedtls_cipher_cmac_finish) @06264d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_cipher_cmac_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_update/32 (mbedtls_cipher_cmac_update) @06264bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_cipher_cmac_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:123905652 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_starts/31 (mbedtls_cipher_cmac_starts) @06264a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_cipher_cmac_starts (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+cmac_pad/30 (cmac_pad) @06264930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.cmac_pad (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:118111600 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+cmac_generate_subkeys/29 (cmac_generate_subkeys) @062647e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.cmac_generate_subkeys (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 
+cmac_multiply_by_u/28 (cmac_multiply_by_u) @06264690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.cmac_multiply_by_u (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:119691529 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e8d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 

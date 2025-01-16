@@ -1,0 +1,2506 @@
+Trivially needed symbols: mbedtls_des_self_test/52 mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_ecb/41 mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 mbedtls_des_setkey_dec/34 mbedtls_des_setkey_enc/33 mbedtls_des_setkey/32 mbedtls_des_key_check_weak/31 mbedtls_des_key_check_key_parity/29 mbedtls_des_key_set_parity/28 mbedtls_des3_free/26 mbedtls_des3_init/25 mbedtls_des_free/24 mbedtls_des_init/23
+
+
+Initial Symbol table:
+
+putchar/60 (__builtin_putchar) @063443f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+puts/59 (__builtin_puts) @06344348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+printf/58 (printf) @063442a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+memcpy/57 (memcpy) @063441f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @06344150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+memcmp/55 (memcmp) @063440a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_key_check_weak/31 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06344000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 mbedtls_des3_free/26 mbedtls_des_free/24 
+  Calls: 
+memset/53 (memset) @063192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_init/25 mbedtls_des_init/23 
+  Calls: 
+mbedtls_des_self_test/52 (mbedtls_des_self_test) @06319f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_ecb_dec/47 (addr) des3_test_ecb_enc/48 (addr) des3_test_iv/49 (read) des3_test_iv/49 (read) des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_cbc_dec/50 (addr) des3_test_cbc_enc/51 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_des3_free/26 mbedtls_des_free/24 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 mbedtls_des3_init/25 mbedtls_des_init/23 
+des3_test_cbc_enc/51 (des3_test_cbc_enc) @06327000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d7f30
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_cbc_dec/50 (des3_test_cbc_dec) @062d7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d7e10
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_iv/49 (des3_test_iv) @062d7e10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d7d80
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_enc/48 (des3_test_ecb_enc) @062d7d80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d7c60
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_dec/47 (des3_test_ecb_dec) @062d7c60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d7ab0
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_buf/46 (des3_test_buf) @062d7b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_keys/45 (des3_test_keys) @062d7ab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d7b40
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_crypt_cbc/44 (mbedtls_des3_crypt_cbc) @063191f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06319f18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des3_crypt_ecb/43 memcpy/57 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 
+mbedtls_des3_crypt_ecb/43 (mbedtls_des3_crypt_ecb) @063190a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063191f8
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_crypt_cbc/42 (mbedtls_des_crypt_cbc) @062d8f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063190a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des_crypt_ecb/41 memcpy/57 mbedtls_des_crypt_ecb/41 mbedtls_xor/8 
+mbedtls_des_crypt_ecb/41 (mbedtls_des_crypt_ecb) @062d8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8f18
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des3_set3key_dec/40 (mbedtls_des3_set3key_dec) @062d8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+mbedtls_des3_set3key_enc/39 (mbedtls_des3_set3key_enc) @062d8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+des3_set3key/38 (des3_set3key) @062d89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d8c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des3_set2key_dec/37 (mbedtls_des3_set2key_dec) @062d8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+mbedtls_des3_set2key_enc/36 (mbedtls_des3_set2key_enc) @062d8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+des3_set2key/35 (des3_set2key) @062d85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d8888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des_setkey_dec/34 (mbedtls_des_setkey_dec) @062d8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey_enc/33 (mbedtls_des_setkey_enc) @062d8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey/32 (mbedtls_des_setkey) @062d81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d8348
+  References: LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: des3_set3key/38 des3_set3key/38 des3_set3key/38 des3_set2key/35 des3_set2key/35 mbedtls_des_setkey_dec/34 mbedtls_des_setkey_enc/33 
+  Calls: __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_key_check_weak/31 (mbedtls_des_key_check_weak) @062d80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d81f8
+  References: weak_key_table/30 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/55 
+weak_key_table/30 (weak_key_table) @062d7318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062d81f8
+  References: 
+  Referring: mbedtls_des_key_check_weak/31 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des_key_check_key_parity/29 (mbedtls_des_key_check_key_parity) @062cfbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062d80a8
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_des_key_set_parity/28 (mbedtls_des_key_set_parity) @062cfa80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062cfbd0
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+odd_parity_table/27 (odd_parity_table) @05343990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062cfbd0
+  References: 
+  Referring: mbedtls_des_key_set_parity/28 (read) mbedtls_des_key_check_key_parity/29 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_free/26 (mbedtls_des3_free) @062cf498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062cfa80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des3_init/25 (mbedtls_des3_init) @062cf348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062cf498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+mbedtls_des_free/24 (mbedtls_des_free) @062cf1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062cf348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des_init/23 (mbedtls_des_init) @062cf0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062cf1f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+RHs/22 (RHs) @05343e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343dc8
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+LHs/21 (LHs) @05343dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062772a0
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB8/20 (SB8) @05343d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062773f0
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB7/19 (SB7) @05343ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @053439d8
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB6/18 (SB6) @05343c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343d38
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB5/17 (SB5) @05343b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343ca8
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB4/16 (SB4) @05343af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343c18
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB3/15 (SB3) @05343a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343b88
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB2/14 (SB2) @053439d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343af8
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB1/13 (SB1) @05343948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @05343a68
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+_putchar_unlocked/12 (_putchar_unlocked) @062c6150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/11 (_getchar_unlocked) @062c6000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/10 (__sputc_r) @06286f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/9 (mbedtls_error_add) @062867e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06277d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @063190a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06277bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06277a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06277690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06277540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062773f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062d8f18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062772a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062d8348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06277150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06277000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/12 _getchar_unlocked/11 __sputc_r/10 mbedtls_error_add/9 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+putchar/60 (__builtin_putchar) @063443f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+puts/59 (__builtin_puts) @06344348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+printf/58 (printf) @063442a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+memcpy/57 (memcpy) @063441f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @06344150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+memcmp/55 (memcmp) @063440a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_key_check_weak/31 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06344000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 mbedtls_des3_free/26 mbedtls_des_free/24 
+  Calls: 
+memset/53 (memset) @063192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_init/25 mbedtls_des_init/23 
+  Calls: 
+mbedtls_des_self_test/52 (mbedtls_des_self_test) @06319f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_ecb_dec/47 (addr) des3_test_ecb_enc/48 (addr) des3_test_iv/49 (read) des3_test_iv/49 (read) des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_cbc_dec/50 (addr) des3_test_cbc_enc/51 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_des3_free/26 mbedtls_des_free/24 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 mbedtls_des3_init/25 mbedtls_des_init/23 
+des3_test_cbc_enc/51 (des3_test_cbc_enc) @06327000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_cbc_dec/50 (des3_test_cbc_dec) @062d7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_iv/49 (des3_test_iv) @062d7e10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_enc/48 (des3_test_ecb_enc) @062d7d80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_dec/47 (des3_test_ecb_dec) @062d7c60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_buf/46 (des3_test_buf) @062d7b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_keys/45 (des3_test_keys) @062d7ab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_crypt_cbc/44 (mbedtls_des3_crypt_cbc) @063191f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des3_crypt_ecb/43 memcpy/57 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 
+mbedtls_des3_crypt_ecb/43 (mbedtls_des3_crypt_ecb) @063190a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_crypt_cbc/42 (mbedtls_des_crypt_cbc) @062d8f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des_crypt_ecb/41 memcpy/57 mbedtls_des_crypt_ecb/41 mbedtls_xor/8 
+mbedtls_des_crypt_ecb/41 (mbedtls_des_crypt_ecb) @062d8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des3_set3key_dec/40 (mbedtls_des3_set3key_dec) @062d8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+mbedtls_des3_set3key_enc/39 (mbedtls_des3_set3key_enc) @062d8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+des3_set3key/38 (des3_set3key) @062d89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des3_set2key_dec/37 (mbedtls_des3_set2key_dec) @062d8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+mbedtls_des3_set2key_enc/36 (mbedtls_des3_set2key_enc) @062d8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+des3_set2key/35 (des3_set2key) @062d85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des_setkey_dec/34 (mbedtls_des_setkey_dec) @062d8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey_enc/33 (mbedtls_des_setkey_enc) @062d8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey/32 (mbedtls_des_setkey) @062d81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: des3_set3key/38 des3_set3key/38 des3_set3key/38 des3_set2key/35 des3_set2key/35 mbedtls_des_setkey_dec/34 mbedtls_des_setkey_enc/33 
+  Calls: __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_key_check_weak/31 (mbedtls_des_key_check_weak) @062d80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: weak_key_table/30 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/55 
+weak_key_table/30 (weak_key_table) @062d7318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_key_check_weak/31 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des_key_check_key_parity/29 (mbedtls_des_key_check_key_parity) @062cfbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_des_key_set_parity/28 (mbedtls_des_key_set_parity) @062cfa80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+odd_parity_table/27 (odd_parity_table) @05343990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_key_set_parity/28 (read) mbedtls_des_key_check_key_parity/29 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_free/26 (mbedtls_des3_free) @062cf498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des3_init/25 (mbedtls_des3_init) @062cf348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+mbedtls_des_free/24 (mbedtls_des_free) @062cf1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des_init/23 (mbedtls_des_init) @062cf0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+RHs/22 (RHs) @05343e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+LHs/21 (LHs) @05343dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB8/20 (SB8) @05343d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB7/19 (SB7) @05343ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB6/18 (SB6) @05343c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB5/17 (SB5) @05343b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB4/16 (SB4) @05343af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB3/15 (SB3) @05343a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB2/14 (SB2) @053439d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB1/13 (SB1) @05343948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_xor/8 (mbedtls_xor) @06277d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062773f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062772a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+
+
+Initial Symbol table:
+
+putchar/60 (__builtin_putchar) @063443f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+puts/59 (__builtin_puts) @06344348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+printf/58 (printf) @063442a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+memcpy/57 (memcpy) @063441f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @06344150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+memcmp/55 (memcmp) @063440a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_key_check_weak/31 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06344000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 mbedtls_des3_free/26 mbedtls_des_free/24 
+  Calls: 
+memset/53 (memset) @063192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_init/25 mbedtls_des_init/23 
+  Calls: 
+mbedtls_des_self_test/52 (mbedtls_des_self_test) @06319f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_ecb_dec/47 (addr) des3_test_ecb_enc/48 (addr) des3_test_iv/49 (read) des3_test_iv/49 (read) des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_cbc_dec/50 (addr) des3_test_cbc_enc/51 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_des3_free/26 mbedtls_des_free/24 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 mbedtls_des3_init/25 mbedtls_des_init/23 
+des3_test_cbc_enc/51 (des3_test_cbc_enc) @06327000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_cbc_dec/50 (des3_test_cbc_dec) @062d7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_iv/49 (des3_test_iv) @062d7e10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_enc/48 (des3_test_ecb_enc) @062d7d80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_dec/47 (des3_test_ecb_dec) @062d7c60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_buf/46 (des3_test_buf) @062d7b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_keys/45 (des3_test_keys) @062d7ab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_crypt_cbc/44 (mbedtls_des3_crypt_cbc) @063191f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des3_crypt_ecb/43 memcpy/57 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 
+mbedtls_des3_crypt_ecb/43 (mbedtls_des3_crypt_ecb) @063190a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_crypt_cbc/42 (mbedtls_des_crypt_cbc) @062d8f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des_crypt_ecb/41 memcpy/57 mbedtls_des_crypt_ecb/41 mbedtls_xor/8 
+mbedtls_des_crypt_ecb/41 (mbedtls_des_crypt_ecb) @062d8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des3_set3key_dec/40 (mbedtls_des3_set3key_dec) @062d8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+mbedtls_des3_set3key_enc/39 (mbedtls_des3_set3key_enc) @062d8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+des3_set3key/38 (des3_set3key) @062d89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des3_set2key_dec/37 (mbedtls_des3_set2key_dec) @062d8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+mbedtls_des3_set2key_enc/36 (mbedtls_des3_set2key_enc) @062d8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+des3_set2key/35 (des3_set2key) @062d85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des_setkey_dec/34 (mbedtls_des_setkey_dec) @062d8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey_enc/33 (mbedtls_des_setkey_enc) @062d8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey/32 (mbedtls_des_setkey) @062d81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: des3_set3key/38 des3_set3key/38 des3_set3key/38 des3_set2key/35 des3_set2key/35 mbedtls_des_setkey_dec/34 mbedtls_des_setkey_enc/33 
+  Calls: __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_key_check_weak/31 (mbedtls_des_key_check_weak) @062d80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: weak_key_table/30 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/55 
+weak_key_table/30 (weak_key_table) @062d7318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_key_check_weak/31 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des_key_check_key_parity/29 (mbedtls_des_key_check_key_parity) @062cfbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_des_key_set_parity/28 (mbedtls_des_key_set_parity) @062cfa80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+odd_parity_table/27 (odd_parity_table) @05343990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_key_set_parity/28 (read) mbedtls_des_key_check_key_parity/29 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_free/26 (mbedtls_des3_free) @062cf498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des3_init/25 (mbedtls_des3_init) @062cf348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+mbedtls_des_free/24 (mbedtls_des_free) @062cf1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des_init/23 (mbedtls_des_init) @062cf0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+RHs/22 (RHs) @05343e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+LHs/21 (LHs) @05343dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB8/20 (SB8) @05343d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB7/19 (SB7) @05343ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB6/18 (SB6) @05343c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB5/17 (SB5) @05343b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB4/16 (SB4) @05343af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB3/15 (SB3) @05343a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB2/14 (SB2) @053439d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB1/13 (SB1) @05343948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_xor/8 (mbedtls_xor) @06277d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062773f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062772a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+putchar/60 (__builtin_putchar) @063443f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+puts/59 (__builtin_puts) @06344348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+printf/58 (printf) @063442a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: 
+memcpy/57 (memcpy) @063441f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @06344150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+memcmp/55 (memcmp) @063440a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_self_test/52 mbedtls_des_key_check_weak/31 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06344000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 mbedtls_des3_free/26 mbedtls_des_free/24 
+  Calls: 
+memset/53 (memset) @063192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_des3_init/25 mbedtls_des_init/23 
+  Calls: 
+mbedtls_des_self_test/52 (mbedtls_des_self_test) @06319f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_ecb_dec/47 (addr) des3_test_ecb_enc/48 (addr) des3_test_iv/49 (read) des3_test_iv/49 (read) des3_test_buf/46 (read) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_cbc_dec/50 (addr) des3_test_cbc_enc/51 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_des3_free/26 mbedtls_des_free/24 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 putchar/60 puts/59 puts/59 memcmp/55 memcmp/55 mbedtls_des3_crypt_ecb/43 mbedtls_des_crypt_ecb/41 mbedtls_des3_set3key_enc/39 mbedtls_des3_set3key_dec/40 mbedtls_des3_set2key_enc/36 mbedtls_des3_set2key_dec/37 mbedtls_des_setkey_enc/33 mbedtls_des_setkey_dec/34 printf/58 mbedtls_des3_init/25 mbedtls_des_init/23 
+des3_test_cbc_enc/51 (des3_test_cbc_enc) @06327000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_cbc_dec/50 (des3_test_cbc_dec) @062d7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_iv/49 (des3_test_iv) @062d7e10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_enc/48 (des3_test_ecb_enc) @062d7d80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_ecb_dec/47 (des3_test_ecb_dec) @062d7c60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_buf/46 (des3_test_buf) @062d7b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (read) mbedtls_des_self_test/52 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+des3_test_keys/45 (des3_test_keys) @062d7ab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_crypt_cbc/44 (mbedtls_des3_crypt_cbc) @063191f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des3_crypt_ecb/43 memcpy/57 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 
+mbedtls_des3_crypt_ecb/43 (mbedtls_des3_crypt_ecb) @063190a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_crypt_cbc/42 (mbedtls_des_crypt_cbc) @062d8f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_xor/8 mbedtls_des_crypt_ecb/41 memcpy/57 mbedtls_des_crypt_ecb/41 mbedtls_xor/8 
+mbedtls_des_crypt_ecb/41 (mbedtls_des_crypt_ecb) @062d8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des3_set3key_dec/40 (mbedtls_des3_set3key_dec) @062d8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+mbedtls_des3_set3key_enc/39 (mbedtls_des3_set3key_enc) @062d8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set3key/38 
+des3_set3key/38 (des3_set3key) @062d89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set3key_dec/40 mbedtls_des3_set3key_enc/39 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des3_set2key_dec/37 (mbedtls_des3_set2key_dec) @062d8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+mbedtls_des3_set2key_enc/36 (mbedtls_des3_set2key_enc) @062d8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 des3_set2key/35 
+des3_set2key/35 (des3_set2key) @062d85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_set2key_dec/37 mbedtls_des3_set2key_enc/36 
+  Calls: mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+mbedtls_des_setkey_dec/34 (mbedtls_des_setkey_dec) @062d8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey_enc/33 (mbedtls_des_setkey_enc) @062d8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 mbedtls_des_self_test/52 
+  Calls: mbedtls_des_setkey/32 
+mbedtls_des_setkey/32 (mbedtls_des_setkey) @062d81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: des3_set3key/38 des3_set3key/38 des3_set3key/38 des3_set2key/35 des3_set2key/35 mbedtls_des_setkey_dec/34 mbedtls_des_setkey_enc/33 
+  Calls: __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 
+mbedtls_des_key_check_weak/31 (mbedtls_des_key_check_weak) @062d80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: weak_key_table/30 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/55 
+weak_key_table/30 (weak_key_table) @062d7318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_key_check_weak/31 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des_key_check_key_parity/29 (mbedtls_des_key_check_key_parity) @062cfbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_des_key_set_parity/28 (mbedtls_des_key_set_parity) @062cfa80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+odd_parity_table/27 (odd_parity_table) @05343990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_key_set_parity/28 (read) mbedtls_des_key_check_key_parity/29 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_free/26 (mbedtls_des3_free) @062cf498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des3_init/25 (mbedtls_des3_init) @062cf348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+mbedtls_des_free/24 (mbedtls_des_free) @062cf1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: mbedtls_platform_zeroize/54 
+mbedtls_des_init/23 (mbedtls_des_init) @062cf0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des_self_test/52 
+  Calls: memset/53 
+RHs/22 (RHs) @05343e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+LHs/21 (LHs) @05343dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB8/20 (SB8) @05343d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB7/19 (SB7) @05343ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB6/18 (SB6) @05343c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB5/17 (SB5) @05343b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB4/16 (SB4) @05343af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB3/15 (SB3) @05343a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB2/14 (SB2) @053439d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+SB1/13 (SB1) @05343948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_xor/8 (mbedtls_xor) @06277d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_cbc/44 mbedtls_des3_crypt_cbc/44 mbedtls_des_crypt_cbc/42 mbedtls_des_crypt_cbc/42 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062773f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062772a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_des3_crypt_ecb/43 mbedtls_des3_crypt_ecb/43 mbedtls_xor/8 mbedtls_xor/8 mbedtls_des_crypt_ecb/41 mbedtls_des_crypt_ecb/41 mbedtls_des_setkey/32 mbedtls_des_setkey/32 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+putchar/60 (__builtin_putchar) @063443f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des_self_test/52 (727351 (estimated locally),0.01 per call) mbedtls_des_self_test/52 (4532712 (estimated locally),0.05 per call) 
+  Calls: 
+puts/59 (__builtin_puts) @06344348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des_self_test/52 (557219 (estimated locally),0.01 per call) mbedtls_des_self_test/52 (11372 (estimated locally),0.00 per call) mbedtls_des_self_test/52 (3472480 (estimated locally),0.04 per call) mbedtls_des_self_test/52 (70867 (estimated locally),0.00 per call) 
+  Calls: 
+printf/58 (printf) @063442a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des_self_test/52 (6609970 (estimated locally),0.08 per call) mbedtls_des_self_test/52 (41192059 (estimated locally),0.48 per call) 
+  Calls: 
+memcpy/57 (memcpy) @063441f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des3_crypt_cbc/44 (493967613 (estimated locally),2.81 per call) mbedtls_des_crypt_cbc/42 (493967613 (estimated locally),2.81 per call) 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @06344150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des3_crypt_ecb/43 (119292720 (estimated locally),1.00 per call) mbedtls_des3_crypt_ecb/43 (119292720 (estimated locally),1.00 per call) mbedtls_des3_crypt_ecb/43 (119292720 (estimated locally),1.00 per call) mbedtls_des3_crypt_ecb/43 (119292720 (estimated locally),1.00 per call) mbedtls_des_crypt_ecb/41 (119292720 (estimated locally),1.00 per call) mbedtls_des_crypt_ecb/41 (119292720 (estimated locally),1.00 per call) mbedtls_des_crypt_ecb/41 (119292720 (estimated locally),1.00 per call) mbedtls_des_crypt_ecb/41 (119292720 (estimated locally),1.00 per call) mbedtls_des_setkey/32 (63136014 (estimated locally),1.00 per call) mbedtls_des_setkey/32 (63136014 (estimated locally),1.00 per call) 
+  Calls: 
+memcmp/55 (memcmp) @063440a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des_self_test/52 (861501 (estimated locally),0.01 per call) mbedtls_des_self_test/52 (861501 (estimated locally),0.01 per call) mbedtls_des_self_test/52 (5368708 (estimated locally),0.06 per call) mbedtls_des_self_test/52 (5368708 (estimated locally),0.06 per call) mbedtls_des_key_check_weak/31 (1010605809 (estimated locally),8.51 per call) 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06344000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des3_set3key_dec/40 (1073741824 (estimated locally),1.00 per call) mbedtls_des3_set3key_enc/39 (1073741824 (estimated locally),1.00 per call) mbedtls_des3_set2key_dec/37 (1073741824 (estimated locally),1.00 per call) mbedtls_des3_set2key_enc/36 (1073741824 (estimated locally),1.00 per call) mbedtls_des3_free/26 (741418729 (estimated locally),0.69 per call) mbedtls_des_free/24 (741418729 (estimated locally),0.69 per call) 
+  Calls: 
+memset/53 (memset) @063192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_des3_init/25 (1073741824 (estimated locally),1.00 per call) mbedtls_des_init/23 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_des_self_test/52 (mbedtls_des_self_test) @06319f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_ecb_dec/47 (addr) des3_test_ecb_enc/48 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_keys/45 (addr) des3_test_cbc_dec/50 (addr) des3_test_cbc_enc/51 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:85596942 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_des3_free/26 (71939219 (estimated locally),0.84 per call) mbedtls_des_free/24 (71939219 (estimated locally),0.84 per call) putchar/60 (727351 (estimated locally),0.01 per call) puts/59 (557219 (estimated locally),0.01 per call) puts/59 (11372 (estimated locally),0.00 per call) memcmp/55 (861501 (estimated locally),0.01 per call) memcmp/55 (861501 (estimated locally),0.01 per call) mbedtls_des3_crypt_cbc/44 (42644305 (estimated locally),0.50 per call) mbedtls_des_crypt_cbc/42 (42644305 (estimated locally),0.50 per call) mbedtls_des3_crypt_cbc/44 (42644305 (estimated locally),0.50 per call) mbedtls_des_crypt_cbc/42 (42644305 (estimated locally),0.50 per call) mbedtls_des3_set3key_enc/39 (1888563 (estimated locally),0.02 per call) mbedtls_des3_set3key_dec/40 (1888563 (estimated locally),0.02 per call) mbedtls_des3_set2key_enc/36 (1888563 (estimated locally),0.02 per call) mbedtls_des3_set2key_dec/37 (1888563 (estimated locally),0.02 per call) mbedtls_des_setkey_enc/33 (1888563 (estimated locally),0.02 per call) mbedtls_des_setkey_dec/34 (1888563 (estimated locally),0.02 per call) printf/58 (6609970 (estimated locally),0.08 per call) putchar/60 (4532712 (estimated locally),0.05 per call) puts/59 (3472480 (estimated locally),0.04 per call) puts/59 (70867 (estimated locally),0.00 per call) memcmp/55 (5368708 (estimated locally),0.06 per call) memcmp/55 (5368708 (estimated locally),0.06 per call) mbedtls_des3_crypt_ecb/43 (531502205 (estimated locally),6.21 per call) mbedtls_des_crypt_ecb/41 (531502205 (estimated locally),6.21 per call) mbedtls_des3_set3key_enc/39 (11769160 (estimated locally),0.14 per call) mbedtls_des3_set3key_dec/40 (11769160 (estimated locally),0.14 per call) mbedtls_des3_set2key_enc/36 (11769160 (estimated locally),0.14 per call) mbedtls_des3_set2key_dec/37 (11769160 (estimated locally),0.14 per call) mbedtls_des_setkey_enc/33 (11769160 (estimated locally),0.14 per call) mbedtls_des_setkey_dec/34 (11769160 (estimated locally),0.14 per call) printf/58 (41192059 (estimated locally),0.48 per call) mbedtls_des3_init/25 (85596942 (estimated locally),1.00 per call) mbedtls_des_init/23 (85596942 (estimated locally),1.00 per call) 
+des3_test_cbc_enc/51 (des3_test_cbc_enc) @06327000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_cbc_dec/50 (des3_test_cbc_dec) @062d7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_ecb_enc/48 (des3_test_ecb_enc) @062d7d80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_ecb_dec/47 (des3_test_ecb_dec) @062d7c60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_keys/45 (des3_test_keys) @062d7ab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) mbedtls_des_self_test/52 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_des3_crypt_cbc/44 (mbedtls_des3_crypt_cbc) @063191f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:175864644 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (42644305 (estimated locally),0.50 per call) mbedtls_des_self_test/52 (42644305 (estimated locally),0.50 per call) 
+  Calls: mbedtls_xor/8 (958878294 (estimated locally),5.45 per call) mbedtls_des3_crypt_ecb/43 (1014686025 (estimated locally),5.77 per call) memcpy/57 (493967613 (estimated locally),2.81 per call) mbedtls_des3_crypt_ecb/43 (522717051 (estimated locally),2.97 per call) mbedtls_xor/8 (522717051 (estimated locally),2.97 per call) 
+mbedtls_des3_crypt_ecb/43 (mbedtls_des3_crypt_ecb) @063190a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (531502205 (estimated locally),6.21 per call) mbedtls_des3_crypt_cbc/44 (1014686025 (estimated locally),5.77 per call) mbedtls_des3_crypt_cbc/44 (522717051 (estimated locally),2.97 per call) 
+  Calls: __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) 
+mbedtls_des_crypt_cbc/42 (mbedtls_des_crypt_cbc) @062d8f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:175864644 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (42644305 (estimated locally),0.50 per call) mbedtls_des_self_test/52 (42644305 (estimated locally),0.50 per call) 
+  Calls: mbedtls_xor/8 (958878294 (estimated locally),5.45 per call) mbedtls_des_crypt_ecb/41 (1014686025 (estimated locally),5.77 per call) memcpy/57 (493967613 (estimated locally),2.81 per call) mbedtls_des_crypt_ecb/41 (522717051 (estimated locally),2.97 per call) mbedtls_xor/8 (522717051 (estimated locally),2.97 per call) 
+mbedtls_des_crypt_ecb/41 (mbedtls_des_crypt_ecb) @062d8dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) SB8/20 (read) SB6/18 (read) SB4/16 (read) SB2/14 (read) SB7/19 (read) SB5/17 (read) SB3/15 (read) SB1/13 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (531502205 (estimated locally),6.21 per call) mbedtls_des_crypt_cbc/42 (1014686025 (estimated locally),5.77 per call) mbedtls_des_crypt_cbc/42 (522717051 (estimated locally),2.97 per call) 
+  Calls: __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) __builtin_bswap32/56 (119292720 (estimated locally),1.00 per call) 
+mbedtls_des3_set3key_dec/40 (mbedtls_des3_set3key_dec) @062d8c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (1888563 (estimated locally),0.02 per call) mbedtls_des_self_test/52 (11769160 (estimated locally),0.14 per call) 
+  Calls: mbedtls_platform_zeroize/54 (1073741824 (estimated locally),1.00 per call) des3_set3key/38 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_des3_set3key_enc/39 (mbedtls_des3_set3key_enc) @062d8b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (1888563 (estimated locally),0.02 per call) mbedtls_des_self_test/52 (11769160 (estimated locally),0.14 per call) 
+  Calls: mbedtls_platform_zeroize/54 (1073741824 (estimated locally),1.00 per call) des3_set3key/38 (1073741824 (estimated locally),1.00 per call) 
+des3_set3key/38 (des3_set3key) @062d89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:63136016 (estimated locally) body local
+  Called by: mbedtls_des3_set3key_dec/40 (1073741824 (estimated locally),1.00 per call) mbedtls_des3_set3key_enc/39 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_des_setkey/32 (63136016 (estimated locally),1.00 per call) mbedtls_des_setkey/32 (63136016 (estimated locally),1.00 per call) mbedtls_des_setkey/32 (63136016 (estimated locally),1.00 per call) 
+mbedtls_des3_set2key_dec/37 (mbedtls_des3_set2key_dec) @062d8888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (1888563 (estimated locally),0.02 per call) mbedtls_des_self_test/52 (11769160 (estimated locally),0.14 per call) 
+  Calls: mbedtls_platform_zeroize/54 (1073741824 (estimated locally),1.00 per call) des3_set2key/35 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_des3_set2key_enc/36 (mbedtls_des3_set2key_enc) @062d8738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (1888563 (estimated locally),0.02 per call) mbedtls_des_self_test/52 (11769160 (estimated locally),0.14 per call) 
+  Calls: mbedtls_platform_zeroize/54 (1073741824 (estimated locally),1.00 per call) des3_set2key/35 (1073741824 (estimated locally),1.00 per call) 
+des3_set2key/35 (des3_set2key) @062d85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:63136016 (estimated locally) body local
+  Called by: mbedtls_des3_set2key_dec/37 (1073741824 (estimated locally),1.00 per call) mbedtls_des3_set2key_enc/36 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_des_setkey/32 (63136016 (estimated locally),1.00 per call) mbedtls_des_setkey/32 (63136016 (estimated locally),1.00 per call) 
+mbedtls_des_setkey_dec/34 (mbedtls_des_setkey_dec) @062d8498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (1888563 (estimated locally),0.02 per call) mbedtls_des_self_test/52 (11769160 (estimated locally),0.14 per call) 
+  Calls: mbedtls_des_setkey/32 (119292720 (estimated locally),1.00 per call) 
+mbedtls_des_setkey_enc/33 (mbedtls_des_setkey_enc) @062d8348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (1888563 (estimated locally),0.02 per call) mbedtls_des_self_test/52 (11769160 (estimated locally),0.14 per call) 
+  Calls: mbedtls_des_setkey/32 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_des_setkey/32 (mbedtls_des_setkey) @062d81f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) LHs/21 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) RHs/22 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:63136014 (estimated locally) body
+  Called by: mbedtls_des_setkey_dec/34 (119292720 (estimated locally),1.00 per call) mbedtls_des_setkey_enc/33 (1073741824 (estimated locally),1.00 per call) des3_set3key/38 (63136016 (estimated locally),1.00 per call) des3_set3key/38 (63136016 (estimated locally),1.00 per call) des3_set3key/38 (63136016 (estimated locally),1.00 per call) des3_set2key/35 (63136016 (estimated locally),1.00 per call) des3_set2key/35 (63136016 (estimated locally),1.00 per call) 
+  Calls: __builtin_bswap32/56 (63136014 (estimated locally),1.00 per call) __builtin_bswap32/56 (63136014 (estimated locally),1.00 per call) 
+mbedtls_des_key_check_weak/31 (mbedtls_des_key_check_weak) @062d80a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: weak_key_table/30 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:118719334 (estimated locally) body
+  Called by: 
+  Calls: memcmp/55 (1010605809 (estimated locally),8.51 per call) 
+weak_key_table/30 (weak_key_table) @062d7318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_key_check_weak/31 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_des_key_check_key_parity/29 (mbedtls_des_key_check_key_parity) @062cfbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:171787420 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_des_key_set_parity/28 (mbedtls_des_key_set_parity) @062cfa80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: odd_parity_table/27 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+odd_parity_table/27 (odd_parity_table) @05343990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_key_set_parity/28 (read) mbedtls_des_key_check_key_parity/29 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_free/26 (mbedtls_des3_free) @062cf498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (71939219 (estimated locally),0.84 per call) 
+  Calls: mbedtls_platform_zeroize/54 (741418729 (estimated locally),0.69 per call) 
+mbedtls_des3_init/25 (mbedtls_des3_init) @062cf348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (85596942 (estimated locally),1.00 per call) 
+  Calls: memset/53 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_des_free/24 (mbedtls_des_free) @062cf1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (71939219 (estimated locally),0.84 per call) 
+  Calls: mbedtls_platform_zeroize/54 (741418729 (estimated locally),0.69 per call) 
+mbedtls_des_init/23 (mbedtls_des_init) @062cf0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_des_self_test/52 (85596942 (estimated locally),1.00 per call) 
+  Calls: memset/53 (1073741824 (estimated locally),1.00 per call) 
+RHs/22 (RHs) @05343e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+LHs/21 (LHs) @05343dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) mbedtls_des_setkey/32 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+SB8/20 (SB8) @05343d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB7/19 (SB7) @05343ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB6/18 (SB6) @05343c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB5/17 (SB5) @05343b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB4/16 (SB4) @05343af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB3/15 (SB3) @05343a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB2/14 (SB2) @053439d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB1/13 (SB1) @05343948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_des_crypt_ecb/41 (read) mbedtls_des_crypt_ecb/41 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) mbedtls_des3_crypt_ecb/43 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+mbedtls_xor/8 (mbedtls_xor) @06277d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: mbedtls_des3_crypt_cbc/44 (958878294 (estimated locally),5.45 per call) mbedtls_des3_crypt_cbc/44 (522717051 (estimated locally),2.97 per call) mbedtls_des_crypt_cbc/42 (958878294 (estimated locally),5.45 per call) mbedtls_des_crypt_cbc/42 (522717051 (estimated locally),2.97 per call) 
+  Calls: 
+Trivially needed variables: des3_test_cbc_enc/51 des3_test_cbc_dec/50 des3_test_ecb_enc/48 des3_test_ecb_dec/47 des3_test_keys/45 weak_key_table/30 odd_parity_table/27 RHs/22 LHs/21 SB8/20 SB7/19 SB6/18 SB5/17 SB4/16 SB3/15 SB2/14 SB1/13
+Removing variables:
+
+Final Symbol table:
+
+putchar/60 (__builtin_putchar) @063443f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/59 (__builtin_puts) @06344348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/58 (printf) @063442a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/57 (memcpy) @063441f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @06344150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/55 (memcmp) @063440a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06344000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/53 (memset) @063192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_des_self_test/52 (mbedtls_des_self_test) @06319f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:85596942 (estimated locally)
+  Called by: 
+  Calls: 
+des3_test_cbc_enc/51 (des3_test_cbc_enc) @06327000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_test_cbc_enc (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_cbc_dec/50 (des3_test_cbc_dec) @062d7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_test_cbc_dec (implicit_section)
+  Aux: @06327000
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_ecb_enc/48 (des3_test_ecb_enc) @062d7d80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_test_ecb_enc (implicit_section)
+  Aux: @062d7f30
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_ecb_dec/47 (des3_test_ecb_dec) @062d7c60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_test_ecb_dec (implicit_section)
+  Aux: @062d7d80
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+des3_test_keys/45 (des3_test_keys) @062d7ab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.des3_test_keys (implicit_section)
+  Aux: @062d7c60
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_des3_crypt_cbc/44 (mbedtls_des3_crypt_cbc) @063191f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_crypt_cbc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:175864644 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des3_crypt_ecb/43 (mbedtls_des3_crypt_ecb) @063190a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_crypt_ecb (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_crypt_cbc/42 (mbedtls_des_crypt_cbc) @062d8f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_crypt_cbc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:175864644 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_crypt_ecb/41 (mbedtls_des_crypt_ecb) @062d8dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_crypt_ecb (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des3_set3key_dec/40 (mbedtls_des3_set3key_dec) @062d8c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_set3key_dec (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des3_set3key_enc/39 (mbedtls_des3_set3key_enc) @062d8b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_set3key_enc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+des3_set3key/38 (des3_set3key) @062d89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.des3_set3key (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:63136016 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_des3_set2key_dec/37 (mbedtls_des3_set2key_dec) @062d8888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_set2key_dec (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des3_set2key_enc/36 (mbedtls_des3_set2key_enc) @062d8738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_set2key_enc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+des3_set2key/35 (des3_set2key) @062d85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.des3_set2key (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:63136016 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_des_setkey_dec/34 (mbedtls_des_setkey_dec) @062d8498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_setkey_dec (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_setkey_enc/33 (mbedtls_des_setkey_enc) @062d8348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_setkey_enc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_setkey/32 (mbedtls_des_setkey) @062d81f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_setkey (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:63136014 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_key_check_weak/31 (mbedtls_des_key_check_weak) @062d80a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_key_check_weak (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118719334 (estimated locally)
+  Called by: 
+  Calls: 
+weak_key_table/30 (weak_key_table) @062d7318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.weak_key_table (implicit_section)
+  Aux: @062d7ab0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_des_key_check_key_parity/29 (mbedtls_des_key_check_key_parity) @062cfbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_key_check_key_parity (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:171787420 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_des_key_set_parity/28 (mbedtls_des_key_set_parity) @062cfa80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_key_set_parity (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:119292720 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+odd_parity_table/27 (odd_parity_table) @05343990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.odd_parity_table (implicit_section)
+  Aux: @062d7318
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+mbedtls_des3_free/26 (mbedtls_des3_free) @062cf498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des3_init/25 (mbedtls_des3_init) @062cf348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des3_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_free/24 (mbedtls_des_free) @062cf1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_des_init/23 (mbedtls_des_init) @062cf0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_des_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+RHs/22 (RHs) @05343e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.RHs (implicit_section)
+  Aux: @05343990
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+LHs/21 (LHs) @05343dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.LHs (implicit_section)
+  Aux: @05343e58
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+SB8/20 (SB8) @05343d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB8 (implicit_section)
+  Aux: @05343dc8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB7/19 (SB7) @05343ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB7 (implicit_section)
+  Aux: @05343d38
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB6/18 (SB6) @05343c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB6 (implicit_section)
+  Aux: @05343ca8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB5/17 (SB5) @05343b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB5 (implicit_section)
+  Aux: @05343c18
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB4/16 (SB4) @05343af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB4 (implicit_section)
+  Aux: @05343b88
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB3/15 (SB3) @05343a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB3 (implicit_section)
+  Aux: @05343af8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB2/14 (SB2) @053439d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB2 (implicit_section)
+  Aux: @05343a68
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+SB1/13 (SB1) @05343948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.SB1 (implicit_section)
+  Aux: @053439d8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+mbedtls_xor/8 (mbedtls_xor) @06277d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 

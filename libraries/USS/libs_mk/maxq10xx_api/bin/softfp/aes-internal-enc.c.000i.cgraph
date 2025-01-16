@@ -1,0 +1,659 @@
+Trivially needed symbols: aes_encrypt_deinit/35 mxq_aes_encrypt/34 aes_encrypt_init/33
+
+
+Initial Symbol table:
+
+memset/38 (memset) @0639f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_deinit/35 
+  Calls: 
+Te0/37 (Te0) @06377ca8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags: read-only
+rijndaelKeySetupEnc/36 (rijndaelKeySetupEnc) @0639f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_init/33 
+  Calls: 
+aes_encrypt_deinit/35 (aes_encrypt_deinit) @06393f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/38 
+mxq_aes_encrypt/34 (mxq_aes_encrypt) @06393dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06393f18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelEncrypt/32 
+aes_encrypt_init/33 (aes_encrypt_init) @06393c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06393dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelKeySetupEnc/36 
+rijndaelEncrypt/32 (rijndaelEncrypt) @06393b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06393f18
+  References: Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mxq_aes_encrypt/34 
+  Calls: rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 
+rotr/31 (rotr) @063840a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06393f18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 
+  Calls: 
+wpa_debug_close_linux_tracing/30 (wpa_debug_close_linux_tracing) @06378348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_linux_tracing/29 (wpa_debug_open_linux_tracing) @063781f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_close_syslog/28 (wpa_debug_close_syslog) @063780a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_syslog/27 (wpa_debug_open_syslog) @0636ebd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf_key/26 (wpa_hexdump_buf_key) @0636e738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf/25 (wpa_hexdump_buf) @0636e5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_str/24 (wpabuf_put_str) @06363f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_set/23 (wpabuf_set) @06363dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_buf/22 (wpabuf_put_buf) @06363c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_data/21 (wpabuf_put_data) @06363b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be32/20 (wpabuf_put_be32) @063639d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be24/19 (wpabuf_put_be24) @06363888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be16/18 (wpabuf_put_be16) @06363738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le32/17 (wpabuf_put_le32) @063635e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le16/16 (wpabuf_put_le16) @06363498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_u8/15 (wpabuf_put_u8) @06363348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead_u8/14 (wpabuf_mhead_u8) @063631f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead/13 (wpabuf_mhead) @063630a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head_u8/12 (wpabuf_head_u8) @06359a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head/11 (wpabuf_head) @06359888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_tailroom/10 (wpabuf_tailroom) @06359f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_len/9 (wpabuf_len) @06359dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_size/8 (wpabuf_size) @06359c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_broadcast_ether_addr/7 (is_broadcast_ether_addr) @063595e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_zero_ether_addr/6 (is_zero_ether_addr) @06359498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_realloc_array/5 (os_realloc_array) @0631df18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_calloc/4 (os_calloc) @0631dc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__locale_ctype_ptr_l/3 (__locale_ctype_ptr_l) @062f5738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @062b90a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @0624d930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @0624d150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: wpa_debug_close_linux_tracing/30 wpa_debug_open_linux_tracing/29 wpa_debug_close_syslog/28 wpa_debug_open_syslog/27 wpa_hexdump_buf_key/26 wpa_hexdump_buf/25 wpabuf_put_str/24 wpabuf_set/23 wpabuf_put_buf/22 wpabuf_put_data/21 wpabuf_put_be32/20 wpabuf_put_be24/19 wpabuf_put_be16/18 wpabuf_put_le32/17 wpabuf_put_le16/16 wpabuf_put_u8/15 wpabuf_mhead_u8/14 wpabuf_mhead/13 wpabuf_head_u8/12 wpabuf_head/11 wpabuf_tailroom/10 wpabuf_len/9 wpabuf_size/8 is_broadcast_ether_addr/7 is_zero_ether_addr/6 os_realloc_array/5 os_calloc/4 __locale_ctype_ptr_l/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+memset/38 (memset) @0639f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_deinit/35 
+  Calls: 
+Te0/37 (Te0) @06377ca8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags: read-only
+rijndaelKeySetupEnc/36 (rijndaelKeySetupEnc) @0639f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_init/33 
+  Calls: 
+aes_encrypt_deinit/35 (aes_encrypt_deinit) @06393f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/38 
+mxq_aes_encrypt/34 (mxq_aes_encrypt) @06393dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelEncrypt/32 
+aes_encrypt_init/33 (aes_encrypt_init) @06393c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelKeySetupEnc/36 
+rijndaelEncrypt/32 (rijndaelEncrypt) @06393b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mxq_aes_encrypt/34 
+  Calls: rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 
+rotr/31 (rotr) @063840a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 
+  Calls: 
+
+
+Initial Symbol table:
+
+memset/38 (memset) @0639f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_deinit/35 
+  Calls: 
+Te0/37 (Te0) @06377ca8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags: read-only
+rijndaelKeySetupEnc/36 (rijndaelKeySetupEnc) @0639f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_init/33 
+  Calls: 
+aes_encrypt_deinit/35 (aes_encrypt_deinit) @06393f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/38 
+mxq_aes_encrypt/34 (mxq_aes_encrypt) @06393dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelEncrypt/32 
+aes_encrypt_init/33 (aes_encrypt_init) @06393c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelKeySetupEnc/36 
+rijndaelEncrypt/32 (rijndaelEncrypt) @06393b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mxq_aes_encrypt/34 
+  Calls: rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 
+rotr/31 (rotr) @063840a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memset/38 (memset) @0639f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_deinit/35 
+  Calls: 
+Te0/37 (Te0) @06377ca8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags: read-only
+rijndaelKeySetupEnc/36 (rijndaelKeySetupEnc) @0639f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_encrypt_init/33 
+  Calls: 
+aes_encrypt_deinit/35 (aes_encrypt_deinit) @06393f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/38 
+mxq_aes_encrypt/34 (mxq_aes_encrypt) @06393dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelEncrypt/32 
+aes_encrypt_init/33 (aes_encrypt_init) @06393c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: rijndaelKeySetupEnc/36 
+rijndaelEncrypt/32 (rijndaelEncrypt) @06393b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mxq_aes_encrypt/34 
+  Calls: rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 rotr/31 
+rotr/31 (rotr) @063840a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 rijndaelEncrypt/32 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memset/38 (memset) @0639f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_encrypt_deinit/35 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+Te0/37 (Te0) @06377ca8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) rijndaelEncrypt/32 (read) 
+  Availability: not_available
+  Varpool flags: read-only
+rijndaelKeySetupEnc/36 (rijndaelKeySetupEnc) @0639f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_encrypt_init/33 (907633961 (estimated locally),0.85 per call) 
+  Calls: 
+aes_encrypt_deinit/35 (aes_encrypt_deinit) @06393f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memset/38 (1073741824 (estimated locally),1.00 per call) 
+mxq_aes_encrypt/34 (mxq_aes_encrypt) @06393dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: rijndaelEncrypt/32 (1073741824 (estimated locally),1.00 per call) 
+aes_encrypt_init/33 (aes_encrypt_init) @06393c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: rijndaelKeySetupEnc/36 (907633961 (estimated locally),0.85 per call) 
+rijndaelEncrypt/32 (rijndaelEncrypt) @06393b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) Te0/37 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:118111600 (estimated locally) body local nonfreeing_fn
+  Called by: mxq_aes_encrypt/34 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+memset/38 (memset) @0639f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+Te0/37 (Te0) @06377ca8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags: read-only
+rijndaelKeySetupEnc/36 (rijndaelKeySetupEnc) @0639f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+aes_encrypt_deinit/35 (aes_encrypt_deinit) @06393f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.aes_encrypt_deinit (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mxq_aes_encrypt/34 (mxq_aes_encrypt) @06393dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mxq_aes_encrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+aes_encrypt_init/33 (aes_encrypt_init) @06393c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.aes_encrypt_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+rijndaelEncrypt/32 (rijndaelEncrypt) @06393b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.rijndaelEncrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:118111600 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 

@@ -1,0 +1,4534 @@
+Trivially needed symbols: mbedtls_ssl_write_client_hello/291
+
+
+Initial Symbol table:
+
+mbedtls_ssl_write_handshake_msg_ext/319 (mbedtls_ssl_write_handshake_msg_ext) @067fe690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_handshake_msg/242 
+  Calls: 
+mbedtls_ssl_get_curve_name_from_tls_id/318 (mbedtls_ssl_get_curve_name_from_tls_id) @067fe5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (mbedtls_ssl_get_ecp_group_id_from_tls_id) @067fe540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_extension_mask/316 (mbedtls_ssl_get_extension_mask) @067fe498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 
+  Calls: 
+strlen/315 (strlen) @067fe3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ec/314 (mbedtls_ssl_ciphersuite_uses_ec) @067fe348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_validate_ciphersuite/313 (mbedtls_ssl_validate_ciphersuite) @067fe2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_ciphersuite_from_id/312 (mbedtls_ssl_ciphersuite_from_id) @067fe1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_print_extensions/311 (mbedtls_ssl_print_extensions) @067fe150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+__builtin_bswap16/310 (__builtin_bswap16) @067fe0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext) @067fe000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls12_write_client_hello_exts/308 (mbedtls_ssl_tls12_write_client_hello_exts) @067d8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_sig_alg_ext/307 (mbedtls_ssl_write_sig_alg_ext) @067d8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_client_hello_exts/306 (mbedtls_ssl_tls13_write_client_hello_exts) @067d8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_debug_print_buf/305 (mbedtls_debug_print_buf) @067d8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+memcpy/304 (memcpy) @067d8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_version/303 (mbedtls_ssl_write_version) @067d8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_session_set_hostname/302 (mbedtls_ssl_session_set_hostname) @067d8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+strcmp/301 (strcmp) @067d8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+mbedtls_ssl_tls13_finalize_client_hello/300 (mbedtls_ssl_tls13_finalize_client_hello) @067d89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_finish_handshake_msg/299 (mbedtls_ssl_finish_handshake_msg) @067d8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext) @067d8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_add_hs_hdr_to_checksum/297 (mbedtls_ssl_add_hs_hdr_to_checksum) @067d87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_flight_transmit/296 (mbedtls_ssl_flight_transmit) @067d8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_ret/295 (mbedtls_debug_print_ret) @067d8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_send_flight_completed/294 (mbedtls_ssl_send_flight_completed) @067d85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_start_handshake_msg/293 (mbedtls_ssl_start_handshake_msg) @067d8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_msg/292 (mbedtls_debug_print_msg) @067d8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_write_client_hello/291 (mbedtls_ssl_write_client_hello) @067d83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_ssl_tls13_finalize_client_hello/300 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_finish_handshake_msg/299 mbedtls_debug_print_ret/295 mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 mbedtls_ssl_add_hs_hdr_to_checksum/297 mbedtls_debug_print_ret/295 mbedtls_ssl_flight_transmit/296 mbedtls_debug_print_ret/295 mbedtls_ssl_write_handshake_msg/242 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_send_flight_completed/294 ssl_write_client_hello_body/288 mbedtls_ssl_start_handshake_msg/293 ssl_prepare_client_hello/290 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+ssl_prepare_client_hello/290 (ssl_prepare_client_hello) @067b8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @067b8888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_session_set_hostname/302 mbedtls_debug_print_msg/292 strcmp/301 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 ssl_generate_random/289 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+ssl_generate_random/289 (ssl_generate_random) @067b89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @067b8888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+ssl_write_client_hello_body/288 (ssl_write_client_hello_body) @067b8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0673bf18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_print_extensions/311 mbedtls_debug_print_buf/305 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_tls12_write_client_hello_exts/308 mbedtls_ssl_write_sig_alg_ext/307 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 ssl_write_supported_groups_ext/286 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 mbedtls_ssl_tls13_write_client_hello_exts/306 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_chk_buf_ptr/239 ssl_write_client_hello_cipher_suites/287 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_write_version/303 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_client_hello_cipher_suites/287 (ssl_write_client_hello_cipher_suites) @067b8690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0670e930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_ciphersuite_uses_ec/314 mbedtls_ssl_validate_ciphersuite/313 mbedtls_ssl_ciphersuite_from_id/312 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_supported_groups_ext/286 (ssl_write_supported_groups_ext) @067b83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0675fd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_debug_print_buf/305 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_debug_print_msg/292 mbedtls_debug_print_msg/292 mbedtls_ssl_get_curve_name_from_tls_id/318 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_get_ecp_group_id_from_tls_id/317 mbedtls_ssl_tls12_named_group_is_ecdhe/266 mbedtls_ssl_conf_is_tls12_enabled/253 mbedtls_ssl_tls13_named_group_is_ecdhe/267 mbedtls_ssl_conf_is_tls13_enabled/252 mbedtls_debug_print_msg/292 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_get_groups/265 
+ssl_write_alpn_ext/285 (ssl_write_alpn_ext) @067b8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0675fe70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 
+ssl_write_hostname_ext/284 (ssl_write_hostname_ext) @066ead20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @067b8150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 memcpy/304 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_debug_print_msg/292 
+mbedtls_ssl_session_clear_ticket_flags/283 (mbedtls_ssl_session_clear_ticket_flags) @067b01f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_session_set_ticket_flags/282 (mbedtls_ssl_session_set_ticket_flags) @067b00a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_session_get_ticket_flags/281 (mbedtls_ssl_session_get_ticket_flags) @067a59d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_cipher_suite_is_offered/280 (mbedtls_ssl_tls13_cipher_suite_is_offered) @067a5e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_ssl_status_to_mbedtls/279 (psa_ssl_status_to_mbedtls) @067a5930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_sig_alg_is_supported/278 (mbedtls_ssl_sig_alg_is_supported) @067a57e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls12_sig_alg_is_supported/277 (mbedtls_ssl_tls12_sig_alg_is_supported) @067a5690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_pk_type_and_md_alg_from_sig_alg/276 (mbedtls_ssl_get_pk_type_and_md_alg_from_sig_alg) @067a5498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_sig_alg_is_offered/275 (mbedtls_ssl_sig_alg_is_offered) @067a5348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_sig_alg_is_supported/274 (mbedtls_ssl_tls13_sig_alg_is_supported) @067a51f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_sig_alg_for_cert_verify_is_supported/273 (mbedtls_ssl_tls13_sig_alg_for_cert_verify_is_supported) @067a50a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_sig_alg_is_received/272 (mbedtls_ssl_sig_alg_is_received) @06799f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_sig_algs/271 (mbedtls_ssl_get_sig_algs) @06799dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_named_group_is_supported/270 (mbedtls_ssl_named_group_is_supported) @06799c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_named_group_is_offered/269 (mbedtls_ssl_named_group_is_offered) @06799b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_named_group_is_dhe/268 (mbedtls_ssl_tls13_named_group_is_dhe) @067999d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_named_group_is_ecdhe/267 (mbedtls_ssl_tls13_named_group_is_ecdhe) @06799888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0675f348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls12_named_group_is_ecdhe/266 (mbedtls_ssl_tls12_named_group_is_ecdhe) @06799738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0675fd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_groups/265 (mbedtls_ssl_get_groups) @067995e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0675f1f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls13_key_exchange_mode_with_ephemeral/264 (mbedtls_ssl_tls13_key_exchange_mode_with_ephemeral) @06799498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_key_exchange_mode_with_psk/263 (mbedtls_ssl_tls13_key_exchange_mode_with_psk) @06799348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_key_exchange_mode_check/262 (mbedtls_ssl_tls13_key_exchange_mode_check) @067991f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (mbedtls_ssl_tls13_set_hs_sent_ext_mask) @067990a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @067b8150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: mbedtls_ssl_get_extension_mask/316 
+mbedtls_ssl_conf_tls13_some_psk_enabled/260 (mbedtls_ssl_conf_tls13_some_psk_enabled) @0675f738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06212150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 (mbedtls_ssl_conf_tls13_some_ephemeral_enabled) @0675fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @067b83f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_ephemeral_enabled/258 (mbedtls_ssl_conf_tls13_ephemeral_enabled) @0675fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0675f738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_psk_ephemeral_enabled/257 (mbedtls_ssl_conf_tls13_psk_ephemeral_enabled) @0675fbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_tls13_psk_enabled/256 (mbedtls_ssl_conf_tls13_psk_enabled) @0675fa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_tls13_check_kex_modes/255 (mbedtls_ssl_conf_tls13_check_kex_modes) @0675f930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @067b83f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 
+  Calls: 
+mbedtls_ssl_conf_is_hybrid_tls12_tls13/254 (mbedtls_ssl_conf_is_hybrid_tls12_tls13) @0675f498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_is_tls12_enabled/253 (mbedtls_ssl_conf_is_tls12_enabled) @0675f348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06799738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_conf_is_tls13_enabled/252 (mbedtls_ssl_conf_is_tls13_enabled) @0675f1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06799888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_conf_is_tls12_only/251 (mbedtls_ssl_conf_is_tls12_only) @0675f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_is_tls13_only/250 (mbedtls_ssl_conf_is_tls13_only) @0673bc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ep_len/249 (mbedtls_ssl_ep_len) @0673bb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_hs_hdr_len/248 (mbedtls_ssl_hs_hdr_len) @0673b9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_out_hdr_len/247 (mbedtls_ssl_out_hdr_len) @0673b888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_in_hdr_len/246 (mbedtls_ssl_in_hdr_len) @0673b690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_own_cert/245 (mbedtls_ssl_own_cert) @0673b540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_own_key/244 (mbedtls_ssl_own_key) @0673b3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_psk/243 (mbedtls_ssl_get_psk) @0673b2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_write_handshake_msg/242 (mbedtls_ssl_write_handshake_msg) @0673bf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0673bdc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_write_handshake_msg_ext/319 
+mbedtls_ssl_handshake_set_state/241 (mbedtls_ssl_handshake_set_state) @0673bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_transform_uses_aead/240 (mbedtls_ssl_transform_uses_aead) @0672af18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_chk_buf_ptr/239 (mbedtls_ssl_chk_buf_ptr) @0670e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @066ead20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_psa_get_ecc_oid_from_id/238 (mbedtls_psa_get_ecc_oid_from_id) @066dac78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_md/237 (mbedtls_psa_translate_md) @066da9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_cipher_operation/236 (mbedtls_psa_translate_cipher_operation) @066da888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_cipher_mode/235 (mbedtls_psa_translate_cipher_mode) @066da738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_cipher_type/234 (mbedtls_psa_translate_cipher_type) @066da5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/233 (_putchar_unlocked) @06237f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/232 (_getchar_unlocked) @06237dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/231 (__sputc_r) @06237bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/230 (mbedtls_error_add) @06237498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_is_handshake_over/229 (mbedtls_ssl_is_handshake_over) @066acc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_version_number/228 (mbedtls_ssl_get_version_number) @066acb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_min_tls_version/227 (mbedtls_ssl_conf_min_tls_version) @066ac9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_max_tls_version/226 (mbedtls_ssl_conf_max_tls_version) @066ac888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_dn_hints/225 (mbedtls_ssl_conf_dn_hints) @066ac738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_user_data_n/224 (mbedtls_ssl_get_user_data_n) @066a7bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_user_data_p/223 (mbedtls_ssl_get_user_data_p) @066a7a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_set_user_data_n/222 (mbedtls_ssl_set_user_data_n) @066a7930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_set_user_data_p/221 (mbedtls_ssl_set_user_data_p) @066a77e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_get_user_data_n/220 (mbedtls_ssl_conf_get_user_data_n) @066a7690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_get_user_data_p/219 (mbedtls_ssl_conf_get_user_data_p) @066a7540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_set_user_data_n/218 (mbedtls_ssl_conf_set_user_data_n) @066a73f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_conf_set_user_data_p/217 (mbedtls_ssl_conf_set_user_data_p) @066a72a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_context_get_config/216 (mbedtls_ssl_context_get_config) @06697498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_x509_crt_has_ext_type/215 (mbedtls_x509_crt_has_ext_type) @064b0bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_x509_dn_get_next/214 (mbedtls_x509_dn_get_next) @065fc3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_operation_init/213 (psa_pake_operation_init) @06641bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cipher_suite_init/212 (psa_pake_cipher_suite_init) @066419d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_hash/211 (psa_pake_cs_set_hash) @0663a738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_hash/210 (psa_pake_cs_get_hash) @0663a5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_bits/209 (psa_pake_cs_get_bits) @0663a498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_family/208 (psa_pake_cs_get_family) @0663a348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_primitive/207 (psa_pake_cs_set_primitive) @0663a1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_primitive/206 (psa_pake_cs_get_primitive) @0663a0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_algorithm/205 (psa_pake_cs_set_algorithm) @0662fd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_algorithm/204 (psa_pake_cs_get_algorithm) @0662fe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecc_group_to_psa/203 (mbedtls_ecc_group_to_psa) @065e9540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_enrollment_algorithm/202 (psa_get_key_enrollment_algorithm) @065e93f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_enrollment_algorithm/201 (psa_set_key_enrollment_algorithm) @065e92a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_handle_is_null/200 (psa_key_handle_is_null) @065e9150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_verify_hash_interruptible_operation_init/199 (psa_verify_hash_interruptible_operation_init) @065e3f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_sign_hash_interruptible_operation_init/198 (psa_sign_hash_interruptible_operation_init) @065e3dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_bits/197 (psa_get_key_bits) @065e3c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_bits/196 (psa_set_key_bits) @065e3b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_type/195 (psa_get_key_type) @065e39d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_type/194 (psa_set_key_type) @065e3888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_algorithm/193 (psa_get_key_algorithm) @065e3738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_algorithm/192 (psa_set_key_algorithm) @065e35e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_usage_flags/191 (psa_get_key_usage_flags) @065e3498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_usage_flags/190 (psa_set_key_usage_flags) @065e3348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_extend_key_usage_flags/189 (psa_extend_key_usage_flags) @065e31f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_lifetime/188 (psa_get_key_lifetime) @065e30a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_lifetime/187 (psa_set_key_lifetime) @065adf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_id/186 (psa_get_key_id) @065addc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_id/185 (psa_set_key_id) @065ad690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_attributes_init/184 (psa_key_attributes_init) @065ad540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_policy_init/183 (psa_key_policy_init) @065ad930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_derivation_operation_init/182 (psa_key_derivation_operation_init) @065ad3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_aead_operation_init/181 (psa_aead_operation_init) @0657fc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_mac_operation_init/180 (psa_mac_operation_init) @0657f348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_cipher_operation_init/179 (psa_cipher_operation_init) @0656c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_operation_init/178 (psa_hash_operation_init) @0656c888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_is_null/177 (mbedtls_svc_key_id_is_null) @06506498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_equal/176 (mbedtls_svc_key_id_equal) @06506348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_make/175 (mbedtls_svc_key_id_make) @065061f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_server_signature/174 (mbedtls_ssl_ciphersuite_uses_server_signature) @0648c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ecdhe/173 (mbedtls_ssl_ciphersuite_uses_ecdhe) @0648c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_dhe/172 (mbedtls_ssl_ciphersuite_uses_dhe) @0648c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_srv_cert/171 (mbedtls_ssl_ciphersuite_uses_srv_cert) @0648c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_cert_req_allowed/170 (mbedtls_ssl_ciphersuite_cert_req_allowed) @0648c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ecdh/169 (mbedtls_ssl_ciphersuite_uses_ecdh) @0648c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_no_pfs/168 (mbedtls_ssl_ciphersuite_no_pfs) @0648c150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_has_pfs/167 (mbedtls_ssl_ciphersuite_has_pfs) @0648c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_get_name/166 (mbedtls_ssl_ciphersuite_get_name) @06478e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/165 (mbedtls_cipher_get_operation) @06478348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/164 (mbedtls_cipher_get_key_bitlen) @064781f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/163 (mbedtls_cipher_get_name) @064780a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/162 (mbedtls_cipher_get_type) @0646ff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/161 (mbedtls_cipher_get_iv_size) @0646fdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/160 (mbedtls_cipher_get_cipher_mode) @0646fc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/159 (mbedtls_cipher_get_block_size) @0646fb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/158 (mbedtls_cipher_info_has_variable_iv_size) @0646f9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/157 (mbedtls_cipher_info_has_variable_key_bitlen) @0646f888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/156 (mbedtls_cipher_info_get_block_size) @0646f738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/155 (mbedtls_cipher_info_get_iv_size) @0646f5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/154 (mbedtls_cipher_info_get_name) @0646f498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/153 (mbedtls_cipher_info_get_key_bitlen) @0646f348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/152 (mbedtls_cipher_info_get_mode) @0646f1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/151 (mbedtls_cipher_info_get_type) @0646f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pk_ec/150 (mbedtls_pk_ec) @062b6c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pk_rsa/149 (mbedtls_pk_rsa) @062b6b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pk_get_len/148 (mbedtls_pk_get_len) @062b69d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortSetBASEPRI/147 (vPortSetBASEPRI) @063b6d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ulPortRaiseBASEPRI/146 (ulPortRaiseBASEPRI) @063b6bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortRaiseBASEPRI/145 (vPortRaiseBASEPRI) @063b69d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+xPortIsInsideInterrupt/144 (xPortIsInsideInterrupt) @063b6888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ucPortCountLeadingZeros/143 (ucPortCountLeadingZeros) @063b65e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/142 (ITM_CheckChar) @06399930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/141 (ITM_ReceiveChar) @063997e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/140 (ITM_SendChar) @06399690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/139 (SysTick_Config) @06399348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/138 (SCB_GetFPUType) @063991f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/137 (ARM_MPU_Load) @063990a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/136 (ARM_MPU_OrderedMemcpy) @063897e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/135 (ARM_MPU_SetRegionEx) @06389f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/134 (ARM_MPU_SetRegion) @06389dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/133 (ARM_MPU_ClrRegion) @06389c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/132 (ARM_MPU_Disable) @06389b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/131 (ARM_MPU_Enable) @063899d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/130 (__NVIC_SystemReset) @063881f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/129 (__NVIC_GetVector) @063880a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/128 (__NVIC_SetVector) @0637df18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/127 (NVIC_DecodePriority) @0637ddc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/126 (NVIC_EncodePriority) @0637dc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/125 (__NVIC_GetPriority) @0637db28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/124 (__NVIC_SetPriority) @0637d9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/123 (__NVIC_GetActive) @0637d888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/122 (__NVIC_ClearPendingIRQ) @0637d738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/121 (__NVIC_SetPendingIRQ) @0637d5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/120 (__NVIC_GetPendingIRQ) @0637d498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/119 (__NVIC_DisableIRQ) @0637d348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/118 (__NVIC_GetEnableIRQ) @0637d1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/117 (__NVIC_EnableIRQ) @0637d0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/116 (__NVIC_GetPriorityGrouping) @06369dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/115 (__NVIC_SetPriorityGrouping) @06369c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/114 (__SMMLA) @06345000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/113 (__QSUB) @0633ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/112 (__QADD) @0633cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/111 (__SEL) @0633cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/110 (__SMLSLDX) @0633ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/109 (__SMLSLD) @0633c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/108 (__SMLSDX) @0633c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/107 (__SMLSD) @0633c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/106 (__SMUSDX) @0633c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/105 (__SMUSD) @0633c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/104 (__SMLALDX) @0633c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/103 (__SMLALD) @0633c150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/102 (__SMLADX) @0633c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/101 (__SMLAD) @06332e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/100 (__SMUADX) @06332d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/99 (__SMUAD) @06332bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/98 (__SXTAB16_RORn) @06332a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/97 (__SXTAB16) @06332930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/96 (__SXTB16_RORn) @063327e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/95 (__SXTB16) @06332690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/94 (__UXTAB16) @06332540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/93 (__UXTB16) @063323f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/92 (__USADA8) @06332150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/91 (__USAD8) @06332000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/90 (__UHSAX) @0632ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/89 (__UQSAX) @0632cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/88 (__USAX) @0632cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/87 (__SHSAX) @0632ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/86 (__QSAX) @0632c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/85 (__SSAX) @0632c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/84 (__UHASX) @0632c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/83 (__UQASX) @0632c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/82 (__UASX) @0632c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/81 (__SHASX) @0632c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/80 (__QASX) @0632c150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/79 (__SASX) @0632c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/78 (__UHSUB16) @06320e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/77 (__UQSUB16) @06320d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/76 (__USUB16) @06320bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/75 (__SHSUB16) @06320a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/74 (__QSUB16) @06320930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/73 (__SSUB16) @063207e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/72 (__UHADD16) @06320690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/71 (__UQADD16) @06320540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/70 (__UADD16) @063203f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/69 (__SHADD16) @063202a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/68 (__QADD16) @06320150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/67 (__SADD16) @06320000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/66 (__UHSUB8) @0631be70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/65 (__UQSUB8) @0631bd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/64 (__USUB8) @0631bbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/63 (__SHSUB8) @0631ba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/62 (__QSUB8) @0631b930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/61 (__SSUB8) @0631b7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/60 (__UHADD8) @0631b690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/59 (__UQADD8) @0631b540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/58 (__UADD8) @0631b3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/57 (__SHADD8) @0631b2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/56 (__QADD8) @0631b150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/55 (__SADD8) @0631b000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/54 (__set_FPSCR) @06314e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/53 (__get_FPSCR) @06314d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/52 (__set_FAULTMASK) @06314bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/51 (__get_FAULTMASK) @06314a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/50 (__set_BASEPRI_MAX) @06314930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/49 (__set_BASEPRI) @063147e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/48 (__get_BASEPRI) @06314690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/47 (__disable_fault_irq) @06314540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/46 (__enable_fault_irq) @063143f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/45 (__set_PRIMASK) @063142a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/44 (__get_PRIMASK) @06314150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/43 (__set_MSP) @06314000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/42 (__get_MSP) @06311e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/41 (__set_PSP) @06311d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/40 (__get_PSP) @06311bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/39 (__get_xPSR) @06311a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/38 (__get_APSR) @06311930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/37 (__get_IPSR) @063117e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/36 (__set_CONTROL) @06311690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/35 (__get_CONTROL) @06311540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/34 (__disable_irq) @063113f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/33 (__enable_irq) @063112a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/32 (__STRT) @06311150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/31 (__STRHT) @06311000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/30 (__STRBT) @06307e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/29 (__LDRT) @06307d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/28 (__LDRHT) @06307bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/27 (__LDRBT) @06307a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/26 (__RRX) @06307930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/25 (__CLREX) @06307690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/24 (__STREXW) @06307540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/23 (__STREXH) @063073f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/22 (__STREXB) @063072a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/21 (__LDREXW) @06307150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/20 (__LDREXH) @06307000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/19 (__LDREXB) @062ca498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/18 (__CLZ) @062ca348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/17 (__RBIT) @062ca1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/16 (__ROR) @062ca000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/15 (__REVSH) @062cae70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/14 (__REV16) @062cad20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/13 (__REV) @062cabd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/12 (__DMB) @062caa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/11 (__DSB) @062ca930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/10 (__ISB) @062ca7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/9 (__cmsis_start) @062ca690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06212d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06212bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06212a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06212690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06212540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062123f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062122a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06212150
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @0673bf18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06212000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: mbedtls_ssl_session_clear_ticket_flags/283 mbedtls_ssl_session_set_ticket_flags/282 mbedtls_ssl_session_get_ticket_flags/281 mbedtls_ssl_tls13_cipher_suite_is_offered/280 psa_ssl_status_to_mbedtls/279 mbedtls_ssl_sig_alg_is_supported/278 mbedtls_ssl_tls12_sig_alg_is_supported/277 mbedtls_ssl_get_pk_type_and_md_alg_from_sig_alg/276 mbedtls_ssl_sig_alg_is_offered/275 mbedtls_ssl_tls13_sig_alg_is_supported/274 mbedtls_ssl_tls13_sig_alg_for_cert_verify_is_supported/273 mbedtls_ssl_sig_alg_is_received/272 mbedtls_ssl_get_sig_algs/271 mbedtls_ssl_named_group_is_supported/270 mbedtls_ssl_named_group_is_offered/269 mbedtls_ssl_tls13_named_group_is_dhe/268 mbedtls_ssl_tls13_key_exchange_mode_with_ephemeral/264 mbedtls_ssl_tls13_key_exchange_mode_with_psk/263 mbedtls_ssl_tls13_key_exchange_mode_check/262 mbedtls_ssl_conf_tls13_psk_ephemeral_enabled/257 mbedtls_ssl_conf_tls13_psk_enabled/256 mbedtls_ssl_conf_is_hybrid_tls12_tls13/254 mbedtls_ssl_conf_is_tls12_only/251 mbedtls_ssl_conf_is_tls13_only/250 mbedtls_ssl_ep_len/249 mbedtls_ssl_hs_hdr_len/248 mbedtls_ssl_out_hdr_len/247 mbedtls_ssl_in_hdr_len/246 mbedtls_ssl_own_cert/245 mbedtls_ssl_own_key/244 mbedtls_ssl_get_psk/243 mbedtls_ssl_transform_uses_aead/240 mbedtls_psa_get_ecc_oid_from_id/238 mbedtls_psa_translate_md/237 mbedtls_psa_translate_cipher_operation/236 mbedtls_psa_translate_cipher_mode/235 mbedtls_psa_translate_cipher_type/234 _putchar_unlocked/233 _getchar_unlocked/232 __sputc_r/231 mbedtls_error_add/230 mbedtls_ssl_is_handshake_over/229 mbedtls_ssl_get_version_number/228 mbedtls_ssl_conf_min_tls_version/227 mbedtls_ssl_conf_max_tls_version/226 mbedtls_ssl_conf_dn_hints/225 mbedtls_ssl_get_user_data_n/224 mbedtls_ssl_get_user_data_p/223 mbedtls_ssl_set_user_data_n/222 mbedtls_ssl_set_user_data_p/221 mbedtls_ssl_conf_get_user_data_n/220 mbedtls_ssl_conf_get_user_data_p/219 mbedtls_ssl_conf_set_user_data_n/218 mbedtls_ssl_conf_set_user_data_p/217 mbedtls_ssl_context_get_config/216 mbedtls_x509_crt_has_ext_type/215 mbedtls_x509_dn_get_next/214 psa_pake_operation_init/213 psa_pake_cipher_suite_init/212 psa_pake_cs_set_hash/211 psa_pake_cs_get_hash/210 psa_pake_cs_get_bits/209 psa_pake_cs_get_family/208 psa_pake_cs_set_primitive/207 psa_pake_cs_get_primitive/206 psa_pake_cs_set_algorithm/205 psa_pake_cs_get_algorithm/204 mbedtls_ecc_group_to_psa/203 psa_get_key_enrollment_algorithm/202 psa_set_key_enrollment_algorithm/201 psa_key_handle_is_null/200 psa_verify_hash_interruptible_operation_init/199 psa_sign_hash_interruptible_operation_init/198 psa_get_key_bits/197 psa_set_key_bits/196 psa_get_key_type/195 psa_set_key_type/194 psa_get_key_algorithm/193 psa_set_key_algorithm/192 psa_get_key_usage_flags/191 psa_set_key_usage_flags/190 psa_extend_key_usage_flags/189 psa_get_key_lifetime/188 psa_set_key_lifetime/187 psa_get_key_id/186 psa_set_key_id/185 psa_key_attributes_init/184 psa_key_policy_init/183 psa_key_derivation_operation_init/182 psa_aead_operation_init/181 psa_mac_operation_init/180 psa_cipher_operation_init/179 psa_hash_operation_init/178 mbedtls_svc_key_id_is_null/177 mbedtls_svc_key_id_equal/176 mbedtls_svc_key_id_make/175 mbedtls_ssl_ciphersuite_uses_server_signature/174 mbedtls_ssl_ciphersuite_uses_ecdhe/173 mbedtls_ssl_ciphersuite_uses_dhe/172 mbedtls_ssl_ciphersuite_uses_srv_cert/171 mbedtls_ssl_ciphersuite_cert_req_allowed/170 mbedtls_ssl_ciphersuite_uses_ecdh/169 mbedtls_ssl_ciphersuite_no_pfs/168 mbedtls_ssl_ciphersuite_has_pfs/167 mbedtls_ssl_ciphersuite_get_name/166 mbedtls_cipher_get_operation/165 mbedtls_cipher_get_key_bitlen/164 mbedtls_cipher_get_name/163 mbedtls_cipher_get_type/162 mbedtls_cipher_get_iv_size/161 mbedtls_cipher_get_cipher_mode/160 mbedtls_cipher_get_block_size/159 mbedtls_cipher_info_has_variable_iv_size/158 mbedtls_cipher_info_has_variable_key_bitlen/157 mbedtls_cipher_info_get_block_size/156 mbedtls_cipher_info_get_iv_size/155 mbedtls_cipher_info_get_name/154 mbedtls_cipher_info_get_key_bitlen/153 mbedtls_cipher_info_get_mode/152 mbedtls_cipher_info_get_type/151 mbedtls_pk_ec/150 mbedtls_pk_rsa/149 mbedtls_pk_get_len/148 vPortSetBASEPRI/147 ulPortRaiseBASEPRI/146 vPortRaiseBASEPRI/145 xPortIsInsideInterrupt/144 ucPortCountLeadingZeros/143 ITM_CheckChar/142 ITM_ReceiveChar/141 ITM_SendChar/140 SysTick_Config/139 SCB_GetFPUType/138 ARM_MPU_Load/137 ARM_MPU_OrderedMemcpy/136 ARM_MPU_SetRegionEx/135 ARM_MPU_SetRegion/134 ARM_MPU_ClrRegion/133 ARM_MPU_Disable/132 ARM_MPU_Enable/131 __NVIC_SystemReset/130 __NVIC_GetVector/129 __NVIC_SetVector/128 NVIC_DecodePriority/127 NVIC_EncodePriority/126 __NVIC_GetPriority/125 __NVIC_SetPriority/124 __NVIC_GetActive/123 __NVIC_ClearPendingIRQ/122 __NVIC_SetPendingIRQ/121 __NVIC_GetPendingIRQ/120 __NVIC_DisableIRQ/119 __NVIC_GetEnableIRQ/118 __NVIC_EnableIRQ/117 __NVIC_GetPriorityGrouping/116 __NVIC_SetPriorityGrouping/115 __SMMLA/114 __QSUB/113 __QADD/112 __SEL/111 __SMLSLDX/110 __SMLSLD/109 __SMLSDX/108 __SMLSD/107 __SMUSDX/106 __SMUSD/105 __SMLALDX/104 __SMLALD/103 __SMLADX/102 __SMLAD/101 __SMUADX/100 __SMUAD/99 __SXTAB16_RORn/98 __SXTAB16/97 __SXTB16_RORn/96 __SXTB16/95 __UXTAB16/94 __UXTB16/93 __USADA8/92 __USAD8/91 __UHSAX/90 __UQSAX/89 __USAX/88 __SHSAX/87 __QSAX/86 __SSAX/85 __UHASX/84 __UQASX/83 __UASX/82 __SHASX/81 __QASX/80 __SASX/79 __UHSUB16/78 __UQSUB16/77 __USUB16/76 __SHSUB16/75 __QSUB16/74 __SSUB16/73 __UHADD16/72 __UQADD16/71 __UADD16/70 __SHADD16/69 __QADD16/68 __SADD16/67 __UHSUB8/66 __UQSUB8/65 __USUB8/64 __SHSUB8/63 __QSUB8/62 __SSUB8/61 __UHADD8/60 __UQADD8/59 __UADD8/58 __SHADD8/57 __QADD8/56 __SADD8/55 __set_FPSCR/54 __get_FPSCR/53 __set_FAULTMASK/52 __get_FAULTMASK/51 __set_BASEPRI_MAX/50 __set_BASEPRI/49 __get_BASEPRI/48 __disable_fault_irq/47 __enable_fault_irq/46 __set_PRIMASK/45 __get_PRIMASK/44 __set_MSP/43 __get_MSP/42 __set_PSP/41 __get_PSP/40 __get_xPSR/39 __get_APSR/38 __get_IPSR/37 __set_CONTROL/36 __get_CONTROL/35 __disable_irq/34 __enable_irq/33 __STRT/32 __STRHT/31 __STRBT/30 __LDRT/29 __LDRHT/28 __LDRBT/27 __RRX/26 __CLREX/25 __STREXW/24 __STREXH/23 __STREXB/22 __LDREXW/21 __LDREXH/20 __LDREXB/19 __CLZ/18 __RBIT/17 __ROR/16 __REVSH/15 __REV16/14 __REV/13 __DMB/12 __DSB/11 __ISB/10 __cmsis_start/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+mbedtls_ssl_write_handshake_msg_ext/319 (mbedtls_ssl_write_handshake_msg_ext) @067fe690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_handshake_msg/242 
+  Calls: 
+mbedtls_ssl_get_curve_name_from_tls_id/318 (mbedtls_ssl_get_curve_name_from_tls_id) @067fe5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (mbedtls_ssl_get_ecp_group_id_from_tls_id) @067fe540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_extension_mask/316 (mbedtls_ssl_get_extension_mask) @067fe498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 
+  Calls: 
+strlen/315 (strlen) @067fe3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ec/314 (mbedtls_ssl_ciphersuite_uses_ec) @067fe348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_validate_ciphersuite/313 (mbedtls_ssl_validate_ciphersuite) @067fe2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_ciphersuite_from_id/312 (mbedtls_ssl_ciphersuite_from_id) @067fe1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_print_extensions/311 (mbedtls_ssl_print_extensions) @067fe150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+__builtin_bswap16/310 (__builtin_bswap16) @067fe0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext) @067fe000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls12_write_client_hello_exts/308 (mbedtls_ssl_tls12_write_client_hello_exts) @067d8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_sig_alg_ext/307 (mbedtls_ssl_write_sig_alg_ext) @067d8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_client_hello_exts/306 (mbedtls_ssl_tls13_write_client_hello_exts) @067d8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_debug_print_buf/305 (mbedtls_debug_print_buf) @067d8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+memcpy/304 (memcpy) @067d8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_version/303 (mbedtls_ssl_write_version) @067d8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_session_set_hostname/302 (mbedtls_ssl_session_set_hostname) @067d8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+strcmp/301 (strcmp) @067d8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+mbedtls_ssl_tls13_finalize_client_hello/300 (mbedtls_ssl_tls13_finalize_client_hello) @067d89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_finish_handshake_msg/299 (mbedtls_ssl_finish_handshake_msg) @067d8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext) @067d8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_add_hs_hdr_to_checksum/297 (mbedtls_ssl_add_hs_hdr_to_checksum) @067d87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_flight_transmit/296 (mbedtls_ssl_flight_transmit) @067d8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_ret/295 (mbedtls_debug_print_ret) @067d8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_send_flight_completed/294 (mbedtls_ssl_send_flight_completed) @067d85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_start_handshake_msg/293 (mbedtls_ssl_start_handshake_msg) @067d8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_msg/292 (mbedtls_debug_print_msg) @067d8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_write_client_hello/291 (mbedtls_ssl_write_client_hello) @067d83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_ssl_tls13_finalize_client_hello/300 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_finish_handshake_msg/299 mbedtls_debug_print_ret/295 mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 mbedtls_ssl_add_hs_hdr_to_checksum/297 mbedtls_debug_print_ret/295 mbedtls_ssl_flight_transmit/296 mbedtls_debug_print_ret/295 mbedtls_ssl_write_handshake_msg/242 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_send_flight_completed/294 ssl_write_client_hello_body/288 mbedtls_ssl_start_handshake_msg/293 ssl_prepare_client_hello/290 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+ssl_prepare_client_hello/290 (ssl_prepare_client_hello) @067b8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_session_set_hostname/302 mbedtls_debug_print_msg/292 strcmp/301 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 ssl_generate_random/289 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+ssl_generate_random/289 (ssl_generate_random) @067b89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+ssl_write_client_hello_body/288 (ssl_write_client_hello_body) @067b8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_print_extensions/311 mbedtls_debug_print_buf/305 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_tls12_write_client_hello_exts/308 mbedtls_ssl_write_sig_alg_ext/307 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 ssl_write_supported_groups_ext/286 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 mbedtls_ssl_tls13_write_client_hello_exts/306 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_chk_buf_ptr/239 ssl_write_client_hello_cipher_suites/287 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_write_version/303 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_client_hello_cipher_suites/287 (ssl_write_client_hello_cipher_suites) @067b8690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_ciphersuite_uses_ec/314 mbedtls_ssl_validate_ciphersuite/313 mbedtls_ssl_ciphersuite_from_id/312 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_supported_groups_ext/286 (ssl_write_supported_groups_ext) @067b83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_debug_print_buf/305 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_debug_print_msg/292 mbedtls_debug_print_msg/292 mbedtls_ssl_get_curve_name_from_tls_id/318 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_get_ecp_group_id_from_tls_id/317 mbedtls_ssl_tls12_named_group_is_ecdhe/266 mbedtls_ssl_conf_is_tls12_enabled/253 mbedtls_ssl_tls13_named_group_is_ecdhe/267 mbedtls_ssl_conf_is_tls13_enabled/252 mbedtls_debug_print_msg/292 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_get_groups/265 
+ssl_write_alpn_ext/285 (ssl_write_alpn_ext) @067b8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 
+ssl_write_hostname_ext/284 (ssl_write_hostname_ext) @066ead20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 memcpy/304 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_debug_print_msg/292 
+mbedtls_ssl_tls13_named_group_is_ecdhe/267 (mbedtls_ssl_tls13_named_group_is_ecdhe) @06799888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls12_named_group_is_ecdhe/266 (mbedtls_ssl_tls12_named_group_is_ecdhe) @06799738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_groups/265 (mbedtls_ssl_get_groups) @067995e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (mbedtls_ssl_tls13_set_hs_sent_ext_mask) @067990a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: mbedtls_ssl_get_extension_mask/316 
+mbedtls_ssl_conf_tls13_some_psk_enabled/260 (mbedtls_ssl_conf_tls13_some_psk_enabled) @0675f738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 (mbedtls_ssl_conf_tls13_some_ephemeral_enabled) @0675fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_ephemeral_enabled/258 (mbedtls_ssl_conf_tls13_ephemeral_enabled) @0675fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_check_kex_modes/255 (mbedtls_ssl_conf_tls13_check_kex_modes) @0675f930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 
+  Calls: 
+mbedtls_ssl_conf_is_tls12_enabled/253 (mbedtls_ssl_conf_is_tls12_enabled) @0675f348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_conf_is_tls13_enabled/252 (mbedtls_ssl_conf_is_tls13_enabled) @0675f1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_write_handshake_msg/242 (mbedtls_ssl_write_handshake_msg) @0673bf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_write_handshake_msg_ext/319 
+mbedtls_ssl_handshake_set_state/241 (mbedtls_ssl_handshake_set_state) @0673bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_chk_buf_ptr/239 (mbedtls_ssl_chk_buf_ptr) @0670e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06212150
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+
+
+Initial Symbol table:
+
+mbedtls_ssl_write_handshake_msg_ext/319 (mbedtls_ssl_write_handshake_msg_ext) @067fe690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_handshake_msg/242 
+  Calls: 
+mbedtls_ssl_get_curve_name_from_tls_id/318 (mbedtls_ssl_get_curve_name_from_tls_id) @067fe5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (mbedtls_ssl_get_ecp_group_id_from_tls_id) @067fe540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_extension_mask/316 (mbedtls_ssl_get_extension_mask) @067fe498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 
+  Calls: 
+strlen/315 (strlen) @067fe3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ec/314 (mbedtls_ssl_ciphersuite_uses_ec) @067fe348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_validate_ciphersuite/313 (mbedtls_ssl_validate_ciphersuite) @067fe2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_ciphersuite_from_id/312 (mbedtls_ssl_ciphersuite_from_id) @067fe1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_print_extensions/311 (mbedtls_ssl_print_extensions) @067fe150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+__builtin_bswap16/310 (__builtin_bswap16) @067fe0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext) @067fe000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls12_write_client_hello_exts/308 (mbedtls_ssl_tls12_write_client_hello_exts) @067d8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_sig_alg_ext/307 (mbedtls_ssl_write_sig_alg_ext) @067d8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_client_hello_exts/306 (mbedtls_ssl_tls13_write_client_hello_exts) @067d8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_debug_print_buf/305 (mbedtls_debug_print_buf) @067d8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+memcpy/304 (memcpy) @067d8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_version/303 (mbedtls_ssl_write_version) @067d8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_session_set_hostname/302 (mbedtls_ssl_session_set_hostname) @067d8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+strcmp/301 (strcmp) @067d8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+mbedtls_ssl_tls13_finalize_client_hello/300 (mbedtls_ssl_tls13_finalize_client_hello) @067d89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_finish_handshake_msg/299 (mbedtls_ssl_finish_handshake_msg) @067d8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext) @067d8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_add_hs_hdr_to_checksum/297 (mbedtls_ssl_add_hs_hdr_to_checksum) @067d87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_flight_transmit/296 (mbedtls_ssl_flight_transmit) @067d8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_ret/295 (mbedtls_debug_print_ret) @067d8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_send_flight_completed/294 (mbedtls_ssl_send_flight_completed) @067d85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_start_handshake_msg/293 (mbedtls_ssl_start_handshake_msg) @067d8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_msg/292 (mbedtls_debug_print_msg) @067d8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_write_client_hello/291 (mbedtls_ssl_write_client_hello) @067d83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_ssl_tls13_finalize_client_hello/300 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_finish_handshake_msg/299 mbedtls_debug_print_ret/295 mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 mbedtls_ssl_add_hs_hdr_to_checksum/297 mbedtls_debug_print_ret/295 mbedtls_ssl_flight_transmit/296 mbedtls_debug_print_ret/295 mbedtls_ssl_write_handshake_msg/242 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_send_flight_completed/294 ssl_write_client_hello_body/288 mbedtls_ssl_start_handshake_msg/293 ssl_prepare_client_hello/290 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+ssl_prepare_client_hello/290 (ssl_prepare_client_hello) @067b8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_session_set_hostname/302 mbedtls_debug_print_msg/292 strcmp/301 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 ssl_generate_random/289 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+ssl_generate_random/289 (ssl_generate_random) @067b89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+ssl_write_client_hello_body/288 (ssl_write_client_hello_body) @067b8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_print_extensions/311 mbedtls_debug_print_buf/305 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_tls12_write_client_hello_exts/308 mbedtls_ssl_write_sig_alg_ext/307 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 ssl_write_supported_groups_ext/286 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 mbedtls_ssl_tls13_write_client_hello_exts/306 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_chk_buf_ptr/239 ssl_write_client_hello_cipher_suites/287 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_write_version/303 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_client_hello_cipher_suites/287 (ssl_write_client_hello_cipher_suites) @067b8690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_ciphersuite_uses_ec/314 mbedtls_ssl_validate_ciphersuite/313 mbedtls_ssl_ciphersuite_from_id/312 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_supported_groups_ext/286 (ssl_write_supported_groups_ext) @067b83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_debug_print_buf/305 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_debug_print_msg/292 mbedtls_debug_print_msg/292 mbedtls_ssl_get_curve_name_from_tls_id/318 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_get_ecp_group_id_from_tls_id/317 mbedtls_ssl_tls12_named_group_is_ecdhe/266 mbedtls_ssl_conf_is_tls12_enabled/253 mbedtls_ssl_tls13_named_group_is_ecdhe/267 mbedtls_ssl_conf_is_tls13_enabled/252 mbedtls_debug_print_msg/292 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_get_groups/265 
+ssl_write_alpn_ext/285 (ssl_write_alpn_ext) @067b8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 
+ssl_write_hostname_ext/284 (ssl_write_hostname_ext) @066ead20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 memcpy/304 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_debug_print_msg/292 
+mbedtls_ssl_tls13_named_group_is_ecdhe/267 (mbedtls_ssl_tls13_named_group_is_ecdhe) @06799888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls12_named_group_is_ecdhe/266 (mbedtls_ssl_tls12_named_group_is_ecdhe) @06799738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_groups/265 (mbedtls_ssl_get_groups) @067995e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (mbedtls_ssl_tls13_set_hs_sent_ext_mask) @067990a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: mbedtls_ssl_get_extension_mask/316 
+mbedtls_ssl_conf_tls13_some_psk_enabled/260 (mbedtls_ssl_conf_tls13_some_psk_enabled) @0675f738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 (mbedtls_ssl_conf_tls13_some_ephemeral_enabled) @0675fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_ephemeral_enabled/258 (mbedtls_ssl_conf_tls13_ephemeral_enabled) @0675fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_check_kex_modes/255 (mbedtls_ssl_conf_tls13_check_kex_modes) @0675f930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 
+  Calls: 
+mbedtls_ssl_conf_is_tls12_enabled/253 (mbedtls_ssl_conf_is_tls12_enabled) @0675f348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_conf_is_tls13_enabled/252 (mbedtls_ssl_conf_is_tls13_enabled) @0675f1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_write_handshake_msg/242 (mbedtls_ssl_write_handshake_msg) @0673bf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_write_handshake_msg_ext/319 
+mbedtls_ssl_handshake_set_state/241 (mbedtls_ssl_handshake_set_state) @0673bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_chk_buf_ptr/239 (mbedtls_ssl_chk_buf_ptr) @0670e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06212150
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+mbedtls_ssl_write_handshake_msg_ext/319 (mbedtls_ssl_write_handshake_msg_ext) @067fe690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_handshake_msg/242 
+  Calls: 
+mbedtls_ssl_get_curve_name_from_tls_id/318 (mbedtls_ssl_get_curve_name_from_tls_id) @067fe5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (mbedtls_ssl_get_ecp_group_id_from_tls_id) @067fe540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_extension_mask/316 (mbedtls_ssl_get_extension_mask) @067fe498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 
+  Calls: 
+strlen/315 (strlen) @067fe3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ec/314 (mbedtls_ssl_ciphersuite_uses_ec) @067fe348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_validate_ciphersuite/313 (mbedtls_ssl_validate_ciphersuite) @067fe2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_ciphersuite_from_id/312 (mbedtls_ssl_ciphersuite_from_id) @067fe1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 
+  Calls: 
+mbedtls_ssl_print_extensions/311 (mbedtls_ssl_print_extensions) @067fe150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+__builtin_bswap16/310 (__builtin_bswap16) @067fe0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext) @067fe000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls12_write_client_hello_exts/308 (mbedtls_ssl_tls12_write_client_hello_exts) @067d8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_sig_alg_ext/307 (mbedtls_ssl_write_sig_alg_ext) @067d8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_tls13_write_client_hello_exts/306 (mbedtls_ssl_tls13_write_client_hello_exts) @067d8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_debug_print_buf/305 (mbedtls_debug_print_buf) @067d8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+memcpy/304 (memcpy) @067d8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_write_version/303 (mbedtls_ssl_write_version) @067d8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_ssl_session_set_hostname/302 (mbedtls_ssl_session_set_hostname) @067d8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+strcmp/301 (strcmp) @067d8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+mbedtls_ssl_tls13_finalize_client_hello/300 (mbedtls_ssl_tls13_finalize_client_hello) @067d89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_finish_handshake_msg/299 (mbedtls_ssl_finish_handshake_msg) @067d8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext) @067d8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_add_hs_hdr_to_checksum/297 (mbedtls_ssl_add_hs_hdr_to_checksum) @067d87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_flight_transmit/296 (mbedtls_ssl_flight_transmit) @067d8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_ret/295 (mbedtls_debug_print_ret) @067d8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_send_flight_completed/294 (mbedtls_ssl_send_flight_completed) @067d85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_start_handshake_msg/293 (mbedtls_ssl_start_handshake_msg) @067d8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_debug_print_msg/292 (mbedtls_debug_print_msg) @067d8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_prepare_client_hello/290 ssl_prepare_client_hello/290 mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_write_client_hello/291 (mbedtls_ssl_write_client_hello) @067d83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_ssl_tls13_finalize_client_hello/300 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_finish_handshake_msg/299 mbedtls_debug_print_ret/295 mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 mbedtls_ssl_add_hs_hdr_to_checksum/297 mbedtls_debug_print_ret/295 mbedtls_ssl_flight_transmit/296 mbedtls_debug_print_ret/295 mbedtls_ssl_write_handshake_msg/242 mbedtls_ssl_handshake_set_state/241 mbedtls_ssl_send_flight_completed/294 ssl_write_client_hello_body/288 mbedtls_ssl_start_handshake_msg/293 ssl_prepare_client_hello/290 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+ssl_prepare_client_hello/290 (ssl_prepare_client_hello) @067b8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_session_set_hostname/302 mbedtls_debug_print_msg/292 strcmp/301 mbedtls_debug_print_ret/295 mbedtls_debug_print_ret/295 ssl_generate_random/289 mbedtls_debug_print_msg/292 
+   Indirect callnum speculative call targets: 0
+ssl_generate_random/289 (ssl_generate_random) @067b89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_prepare_client_hello/290 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+ssl_write_client_hello_body/288 (ssl_write_client_hello_body) @067b8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_print_extensions/311 mbedtls_debug_print_buf/305 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_tls12_write_client_hello_exts/308 mbedtls_ssl_write_sig_alg_ext/307 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 ssl_write_supported_groups_ext/286 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 mbedtls_ssl_tls13_write_client_hello_exts/306 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_chk_buf_ptr/239 ssl_write_client_hello_cipher_suites/287 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_buf/305 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_write_version/303 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_client_hello_cipher_suites/287 (ssl_write_client_hello_cipher_suites) @067b8690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_ciphersuite_uses_ec/314 mbedtls_ssl_validate_ciphersuite/313 mbedtls_ssl_ciphersuite_from_id/312 mbedtls_ssl_chk_buf_ptr/239 
+ssl_write_supported_groups_ext/286 (ssl_write_supported_groups_ext) @067b83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_debug_print_buf/305 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_debug_print_msg/292 mbedtls_debug_print_msg/292 mbedtls_ssl_get_curve_name_from_tls_id/318 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_ssl_chk_buf_ptr/239 mbedtls_ssl_get_ecp_group_id_from_tls_id/317 mbedtls_ssl_tls12_named_group_is_ecdhe/266 mbedtls_ssl_conf_is_tls12_enabled/253 mbedtls_ssl_tls13_named_group_is_ecdhe/267 mbedtls_ssl_conf_is_tls13_enabled/252 mbedtls_debug_print_msg/292 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 mbedtls_ssl_get_groups/265 
+ssl_write_alpn_ext/285 (ssl_write_alpn_ext) @067b8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 memcpy/304 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 mbedtls_debug_print_msg/292 
+ssl_write_hostname_ext/284 (ssl_write_hostname_ext) @066ead20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 memcpy/304 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 __builtin_bswap16/310 mbedtls_put_unaligned_uint16/1 mbedtls_ssl_chk_buf_ptr/239 strlen/315 mbedtls_debug_print_msg/292 
+mbedtls_ssl_tls13_named_group_is_ecdhe/267 (mbedtls_ssl_tls13_named_group_is_ecdhe) @06799888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls12_named_group_is_ecdhe/266 (mbedtls_ssl_tls12_named_group_is_ecdhe) @06799738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_get_groups/265 (mbedtls_ssl_get_groups) @067995e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (mbedtls_ssl_tls13_set_hs_sent_ext_mask) @067990a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 
+  Calls: mbedtls_ssl_get_extension_mask/316 
+mbedtls_ssl_conf_tls13_some_psk_enabled/260 (mbedtls_ssl_conf_tls13_some_psk_enabled) @0675f738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 (mbedtls_ssl_conf_tls13_some_ephemeral_enabled) @0675fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_ephemeral_enabled/258 (mbedtls_ssl_conf_tls13_ephemeral_enabled) @0675fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_client_hello_body/288 
+  Calls: mbedtls_ssl_conf_tls13_check_kex_modes/255 
+mbedtls_ssl_conf_tls13_check_kex_modes/255 (mbedtls_ssl_conf_tls13_check_kex_modes) @0675f930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_conf_tls13_some_psk_enabled/260 mbedtls_ssl_conf_tls13_ephemeral_enabled/258 mbedtls_ssl_conf_tls13_some_ephemeral_enabled/259 
+  Calls: 
+mbedtls_ssl_conf_is_tls12_enabled/253 (mbedtls_ssl_conf_is_tls12_enabled) @0675f348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_conf_is_tls13_enabled/252 (mbedtls_ssl_conf_is_tls13_enabled) @0675f1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 
+  Calls: 
+mbedtls_ssl_write_handshake_msg/242 (mbedtls_ssl_write_handshake_msg) @0673bf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 
+  Calls: mbedtls_ssl_write_handshake_msg_ext/319 
+mbedtls_ssl_handshake_set_state/241 (mbedtls_ssl_handshake_set_state) @0673bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ssl_write_client_hello/291 mbedtls_ssl_write_client_hello/291 
+  Calls: 
+mbedtls_ssl_chk_buf_ptr/239 (mbedtls_ssl_chk_buf_ptr) @0670e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 ssl_write_client_hello_body/288 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06212150
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_supported_groups_ext/286 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_alpn_ext/285 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_hostname_ext/284 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_cipher_suites/287 ssl_write_client_hello_body/288 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+mbedtls_ssl_write_handshake_msg_ext/319 (mbedtls_ssl_write_handshake_msg_ext) @067fe690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (57568527 (estimated locally),0.05 per call) 
+  Calls: 
+mbedtls_ssl_get_curve_name_from_tls_id/318 (mbedtls_ssl_get_curve_name_from_tls_id) @067fe5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 (40609964 (estimated locally),0.06 per call) 
+  Calls: 
+mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (mbedtls_ssl_get_ecp_group_id_from_tls_id) @067fe540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_supported_groups_ext/286 (242447548 (estimated locally),0.37 per call) 
+  Calls: 
+mbedtls_ssl_get_extension_mask/316 (mbedtls_ssl_get_extension_mask) @067fe498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+strlen/315 (strlen) @067fe3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_alpn_ext/285 (235224528 (estimated locally),0.22 per call) ssl_write_hostname_ext/284 (741418729 (estimated locally),0.69 per call) 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ec/314 (mbedtls_ssl_ciphersuite_uses_ec) @067fe348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 (324989906 (estimated locally),0.30 per call) 
+  Calls: 
+mbedtls_ssl_validate_ciphersuite/313 (mbedtls_ssl_validate_ciphersuite) @067fe2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 (649979813 (estimated locally),0.61 per call) 
+  Calls: 
+mbedtls_ssl_ciphersuite_from_id/312 (mbedtls_ssl_ciphersuite_from_id) @067fe1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_cipher_suites/287 (649979813 (estimated locally),0.61 per call) 
+  Calls: 
+mbedtls_ssl_print_extensions/311 (mbedtls_ssl_print_extensions) @067fe150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (71276 (estimated locally),0.00 per call) 
+  Calls: 
+__builtin_bswap16/310 (__builtin_bswap16) @067fe0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (23521 (estimated locally),0.00 per call) ssl_write_supported_groups_ext/286 (38890243 (estimated locally),0.06 per call) ssl_write_supported_groups_ext/286 (38890243 (estimated locally),0.06 per call) ssl_write_supported_groups_ext/286 (40609964 (estimated locally),0.06 per call) ssl_write_alpn_ext/285 (8936286 (estimated locally),0.01 per call) ssl_write_alpn_ext/285 (8936286 (estimated locally),0.01 per call) ssl_write_hostname_ext/284 (185354682 (estimated locally),0.17 per call) ssl_write_hostname_ext/284 (185354682 (estimated locally),0.17 per call) ssl_write_hostname_ext/284 (185354682 (estimated locally),0.17 per call) ssl_write_client_hello_cipher_suites/287 (15433142 (estimated locally),0.01 per call) ssl_write_client_hello_cipher_suites/287 (81247477 (estimated locally),0.08 per call) 
+  Calls: 
+mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext) @067fe000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (12460 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_ssl_tls12_write_client_hello_exts/308 (mbedtls_ssl_tls12_write_client_hello_exts) @067d8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (28068 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_ssl_write_sig_alg_ext/307 (mbedtls_ssl_write_sig_alg_ext) @067d8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (67505 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_ssl_tls13_write_client_hello_exts/306 (mbedtls_ssl_tls13_write_client_hello_exts) @067d8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (45429 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_debug_print_buf/305 (mbedtls_debug_print_buf) @067d8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (23521 (estimated locally),0.00 per call) ssl_write_client_hello_body/288 (4585861 (estimated locally),0.00 per call) ssl_write_client_hello_body/288 (16777216 (estimated locally),0.02 per call) ssl_write_client_hello_body/288 (67108864 (estimated locally),0.06 per call) ssl_write_supported_groups_ext/286 (38890243 (estimated locally),0.06 per call) 
+  Calls: 
+memcpy/304 (memcpy) @067d8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (707562 (estimated locally),0.00 per call) ssl_write_client_hello_body/288 (16777216 (estimated locally),0.02 per call) ssl_write_client_hello_body/288 (67108864 (estimated locally),0.06 per call) ssl_write_alpn_ext/285 (58806132 (estimated locally),0.05 per call) ssl_write_hostname_ext/284 (185354682 (estimated locally),0.17 per call) 
+  Calls: 
+mbedtls_ssl_write_version/303 (mbedtls_ssl_write_version) @067d8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_write_client_hello_body/288 (268435456 (estimated locally),0.25 per call) 
+  Calls: 
+mbedtls_ssl_session_set_hostname/302 (mbedtls_ssl_session_set_hostname) @067d8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 (483030147 (estimated locally),0.45 per call) 
+  Calls: 
+strcmp/301 (strcmp) @067d8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ssl_prepare_client_hello/290 (187633572 (estimated locally),0.17 per call) 
+  Calls: 
+mbedtls_ssl_tls13_finalize_client_hello/300 (mbedtls_ssl_tls13_finalize_client_hello) @067d89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (5908690 (estimated locally),0.01 per call) 
+  Calls: 
+mbedtls_ssl_finish_handshake_msg/299 (mbedtls_ssl_finish_handshake_msg) @067d8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (54257944 (estimated locally),0.05 per call) 
+  Calls: 
+mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext) @067d8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (35545974 (estimated locally),0.03 per call) 
+  Calls: 
+mbedtls_ssl_add_hs_hdr_to_checksum/297 (mbedtls_ssl_add_hs_hdr_to_checksum) @067d87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (111750667 (estimated locally),0.10 per call) 
+  Calls: 
+mbedtls_ssl_flight_transmit/296 (mbedtls_ssl_flight_transmit) @067d8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (37995227 (estimated locally),0.04 per call) 
+  Calls: 
+mbedtls_debug_print_ret/295 (mbedtls_debug_print_ret) @067d8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (4748373 (estimated locally),0.00 per call) mbedtls_ssl_write_client_hello/291 (18040384 (estimated locally),0.02 per call) mbedtls_ssl_write_client_hello/291 (22618335 (estimated locally),0.02 per call) mbedtls_ssl_write_client_hello/291 (7690234 (estimated locally),0.01 per call) mbedtls_ssl_write_client_hello/291 (19573299 (estimated locally),0.02 per call) ssl_prepare_client_hello/290 (61978593 (estimated locally),0.06 per call) ssl_prepare_client_hello/290 (138623987 (estimated locally),0.13 per call) 
+  Calls: 
+mbedtls_ssl_send_flight_completed/294 (mbedtls_ssl_send_flight_completed) @067d85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (57568527 (estimated locally),0.05 per call) 
+  Calls: 
+mbedtls_ssl_start_handshake_msg/293 (mbedtls_ssl_start_handshake_msg) @067d8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (524845000 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_debug_print_msg/292 (mbedtls_debug_print_msg) @067d8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ssl_write_client_hello/291 (1001071199 (estimated locally),0.93 per call) mbedtls_ssl_write_client_hello/291 (1073741824 (estimated locally),1.00 per call) ssl_write_client_hello_body/288 (23521 (estimated locally),0.00 per call) ssl_write_supported_groups_ext/286 (408709 (estimated locally),0.00 per call) ssl_write_supported_groups_ext/286 (40609964 (estimated locally),0.06 per call) ssl_write_supported_groups_ext/286 (1034442873 (estimated locally),1.60 per call) ssl_write_supported_groups_ext/286 (647428808 (estimated locally),1.00 per call) ssl_write_alpn_ext/285 (741418729 (estimated locally),0.69 per call) ssl_write_hostname_ext/284 (741418729 (estimated locally),0.69 per call) ssl_write_client_hello_cipher_suites/287 (15433142 (estimated locally),0.01 per call) ssl_write_client_hello_cipher_suites/287 (12346513 (estimated locally),0.01 per call) ssl_write_client_hello_cipher_suites/287 (324989906 (estimated locally),0.30 per call) ssl_prepare_client_hello/290 (1991213 (estimated locally),0.00 per call) ssl_prepare_client_hello/290 (2351602 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_ssl_write_client_hello/291 (mbedtls_ssl_write_client_hello) @067d83f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_debug_print_msg/292 (1001071199 (estimated locally),0.93 per call) mbedtls_ssl_tls13_finalize_client_hello/300 (5908690 (estimated locally),0.01 per call) mbedtls_ssl_finish_handshake_msg/299 (54257944 (estimated locally),0.05 per call) mbedtls_debug_print_ret/295 (4748373 (estimated locally),0.00 per call) mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (35545974 (estimated locally),0.03 per call) mbedtls_debug_print_ret/295 (18040384 (estimated locally),0.02 per call) mbedtls_debug_print_ret/295 (22618335 (estimated locally),0.02 per call) mbedtls_ssl_add_hs_hdr_to_checksum/297 (111750667 (estimated locally),0.10 per call) mbedtls_debug_print_ret/295 (7690234 (estimated locally),0.01 per call) mbedtls_ssl_flight_transmit/296 (37995227 (estimated locally),0.04 per call) mbedtls_debug_print_ret/295 (19573299 (estimated locally),0.02 per call) mbedtls_ssl_write_handshake_msg_ext/319 (57568527 (estimated locally),0.05 per call) mbedtls_ssl_send_flight_completed/294 (57568527 (estimated locally),0.05 per call) ssl_write_client_hello_body/288 (256544234 (estimated locally),0.24 per call) mbedtls_ssl_start_handshake_msg/293 (524845000 (estimated locally),0.49 per call) ssl_prepare_client_hello/290 (1073741824 (estimated locally),1.00 per call) mbedtls_debug_print_msg/292 (1073741824 (estimated locally),1.00 per call) 
+   Indirect call(23460343 (estimated locally),0.02 per call) num speculative call targets: 0
+   Indirect call(89132332 (estimated locally),0.08 per call) num speculative call targets: 0
+ssl_prepare_client_hello/290 (ssl_prepare_client_hello) @067b8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741821 (estimated locally) body local
+  Called by: mbedtls_ssl_write_client_hello/291 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_ssl_session_set_hostname/302 (483030147 (estimated locally),0.45 per call) mbedtls_debug_print_msg/292 (1991213 (estimated locally),0.00 per call) strcmp/301 (187633572 (estimated locally),0.17 per call) mbedtls_debug_print_ret/295 (61978593 (estimated locally),0.06 per call) mbedtls_debug_print_ret/295 (138623987 (estimated locally),0.13 per call) ssl_generate_random/289 (684901125 (estimated locally),0.64 per call) mbedtls_debug_print_msg/292 (2351602 (estimated locally),0.00 per call) 
+   Indirect call(306218349 (estimated locally),0.29 per call) num speculative call targets: 0
+ssl_generate_random/289 (ssl_generate_random) @067b89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: ssl_prepare_client_hello/290 (684901125 (estimated locally),0.64 per call) 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+ssl_write_client_hello_body/288 (ssl_write_client_hello_body) @067b8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_ssl_write_client_hello/291 (256544234 (estimated locally),0.24 per call) 
+  Calls: mbedtls_ssl_print_extensions/311 (71276 (estimated locally),0.00 per call) mbedtls_debug_print_buf/305 (23521 (estimated locally),0.00 per call) mbedtls_debug_print_msg/292 (23521 (estimated locally),0.00 per call) __builtin_bswap16/310 (23521 (estimated locally),0.00 per call) mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (12460 (estimated locally),0.00 per call) mbedtls_ssl_tls12_write_client_hello_exts/308 (28068 (estimated locally),0.00 per call) mbedtls_ssl_write_sig_alg_ext/307 (67505 (estimated locally),0.00 per call) ssl_write_supported_groups_ext/286 (41798 (estimated locally),0.00 per call) mbedtls_ssl_tls13_write_client_hello_exts/306 (45429 (estimated locally),0.00 per call) ssl_write_alpn_ext/285 (208583 (estimated locally),0.00 per call) ssl_write_hostname_ext/284 (426724 (estimated locally),0.00 per call) ssl_write_client_hello_cipher_suites/287 (10344831 (estimated locally),0.01 per call) memcpy/304 (707562 (estimated locally),0.00 per call) mbedtls_debug_print_buf/305 (4585861 (estimated locally),0.00 per call) mbedtls_debug_print_buf/305 (16777216 (estimated locally),0.02 per call) memcpy/304 (16777216 (estimated locally),0.02 per call) mbedtls_debug_print_buf/305 (67108864 (estimated locally),0.06 per call) memcpy/304 (67108864 (estimated locally),0.06 per call) mbedtls_ssl_write_version/303 (268435456 (estimated locally),0.25 per call) 
+ssl_write_client_hello_cipher_suites/287 (ssl_write_client_hello_cipher_suites) @067b8690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: ssl_write_client_hello_body/288 (10344831 (estimated locally),0.01 per call) 
+  Calls: mbedtls_debug_print_msg/292 (15433142 (estimated locally),0.01 per call) __builtin_bswap16/310 (15433142 (estimated locally),0.01 per call) mbedtls_debug_print_msg/292 (12346513 (estimated locally),0.01 per call) __builtin_bswap16/310 (81247477 (estimated locally),0.08 per call) mbedtls_debug_print_msg/292 (324989906 (estimated locally),0.30 per call) mbedtls_ssl_ciphersuite_uses_ec/314 (324989906 (estimated locally),0.30 per call) mbedtls_ssl_validate_ciphersuite/313 (649979813 (estimated locally),0.61 per call) mbedtls_ssl_ciphersuite_from_id/312 (649979813 (estimated locally),0.61 per call) 
+ssl_write_supported_groups_ext/286 (ssl_write_supported_groups_ext) @067b83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:647428808 (estimated locally) body local
+  Called by: ssl_write_client_hello_body/288 (41798 (estimated locally),0.00 per call) 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (38890243 (estimated locally),0.06 per call) mbedtls_debug_print_buf/305 (38890243 (estimated locally),0.06 per call) __builtin_bswap16/310 (38890243 (estimated locally),0.06 per call) __builtin_bswap16/310 (38890243 (estimated locally),0.06 per call) mbedtls_debug_print_msg/292 (408709 (estimated locally),0.00 per call) mbedtls_debug_print_msg/292 (40609964 (estimated locally),0.06 per call) mbedtls_ssl_get_curve_name_from_tls_id/318 (40609964 (estimated locally),0.06 per call) __builtin_bswap16/310 (40609964 (estimated locally),0.06 per call) mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (242447548 (estimated locally),0.37 per call) mbedtls_ssl_tls12_named_group_is_ecdhe/266 (226284379 (estimated locally),0.35 per call) mbedtls_ssl_tls13_named_group_is_ecdhe/267 (258610718 (estimated locally),0.40 per call) mbedtls_debug_print_msg/292 (1034442873 (estimated locally),1.60 per call) mbedtls_debug_print_msg/292 (647428808 (estimated locally),1.00 per call) 
+ssl_write_alpn_ext/285 (ssl_write_alpn_ext) @067b8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: ssl_write_client_hello_body/288 (208583 (estimated locally),0.00 per call) 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (8936286 (estimated locally),0.01 per call) __builtin_bswap16/310 (8936286 (estimated locally),0.01 per call) __builtin_bswap16/310 (8936286 (estimated locally),0.01 per call) memcpy/304 (58806132 (estimated locally),0.05 per call) strlen/315 (235224528 (estimated locally),0.22 per call) mbedtls_debug_print_msg/292 (741418729 (estimated locally),0.69 per call) 
+ssl_write_hostname_ext/284 (ssl_write_hostname_ext) @066ead20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: ssl_write_client_hello_body/288 (426724 (estimated locally),0.00 per call) 
+  Calls: mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (185354682 (estimated locally),0.17 per call) memcpy/304 (185354682 (estimated locally),0.17 per call) __builtin_bswap16/310 (185354682 (estimated locally),0.17 per call) __builtin_bswap16/310 (185354682 (estimated locally),0.17 per call) __builtin_bswap16/310 (185354682 (estimated locally),0.17 per call) strlen/315 (741418729 (estimated locally),0.69 per call) mbedtls_debug_print_msg/292 (741418729 (estimated locally),0.69 per call) 
+mbedtls_ssl_tls13_named_group_is_ecdhe/267 (mbedtls_ssl_tls13_named_group_is_ecdhe) @06799888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: ssl_write_supported_groups_ext/286 (258610718 (estimated locally),0.40 per call) 
+  Calls: 
+mbedtls_ssl_tls12_named_group_is_ecdhe/266 (mbedtls_ssl_tls12_named_group_is_ecdhe) @06799738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741777 (estimated locally) body local nonfreeing_fn
+  Called by: ssl_write_supported_groups_ext/286 (226284379 (estimated locally),0.35 per call) 
+  Calls: 
+mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (mbedtls_ssl_tls13_set_hs_sent_ext_mask) @067990a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: ssl_write_supported_groups_ext/286 (38890243 (estimated locally),0.06 per call) ssl_write_alpn_ext/285 (8936286 (estimated locally),0.01 per call) ssl_write_hostname_ext/284 (185354682 (estimated locally),0.17 per call) 
+  Calls: mbedtls_ssl_get_extension_mask/316 (1073741824 (estimated locally),1.00 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+mbedtls_ssl_write_handshake_msg_ext/319 (mbedtls_ssl_write_handshake_msg_ext) @067fe690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_curve_name_from_tls_id/318 (mbedtls_ssl_get_curve_name_from_tls_id) @067fe5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_ecp_group_id_from_tls_id/317 (mbedtls_ssl_get_ecp_group_id_from_tls_id) @067fe540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_get_extension_mask/316 (mbedtls_ssl_get_extension_mask) @067fe498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+strlen/315 (strlen) @067fe3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_uses_ec/314 (mbedtls_ssl_ciphersuite_uses_ec) @067fe348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_validate_ciphersuite/313 (mbedtls_ssl_validate_ciphersuite) @067fe2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_ciphersuite_from_id/312 (mbedtls_ssl_ciphersuite_from_id) @067fe1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_print_extensions/311 (mbedtls_ssl_print_extensions) @067fe150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap16/310 (__builtin_bswap16) @067fe0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext/309 (mbedtls_ssl_tls13_write_identities_of_pre_shared_key_ext) @067fe000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls12_write_client_hello_exts/308 (mbedtls_ssl_tls12_write_client_hello_exts) @067d8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_write_sig_alg_ext/307 (mbedtls_ssl_write_sig_alg_ext) @067d8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_write_client_hello_exts/306 (mbedtls_ssl_tls13_write_client_hello_exts) @067d8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_debug_print_buf/305 (mbedtls_debug_print_buf) @067d8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/304 (memcpy) @067d8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_write_version/303 (mbedtls_ssl_write_version) @067d8bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_session_set_hostname/302 (mbedtls_ssl_session_set_hostname) @067d8b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+strcmp/301 (strcmp) @067d8a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_finalize_client_hello/300 (mbedtls_ssl_tls13_finalize_client_hello) @067d89d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_finish_handshake_msg/299 (mbedtls_ssl_finish_handshake_msg) @067d8930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext/298 (mbedtls_ssl_tls13_write_binders_of_pre_shared_key_ext) @067d8888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_add_hs_hdr_to_checksum/297 (mbedtls_ssl_add_hs_hdr_to_checksum) @067d87e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_flight_transmit/296 (mbedtls_ssl_flight_transmit) @067d8738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_debug_print_ret/295 (mbedtls_debug_print_ret) @067d8690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_send_flight_completed/294 (mbedtls_ssl_send_flight_completed) @067d85e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_start_handshake_msg/293 (mbedtls_ssl_start_handshake_msg) @067d8540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_debug_print_msg/292 (mbedtls_debug_print_msg) @067d8498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ssl_write_client_hello/291 (mbedtls_ssl_write_client_hello) @067d83f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ssl_write_client_hello (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+ssl_prepare_client_hello/290 (ssl_prepare_client_hello) @067b8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_prepare_client_hello (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741821 (estimated locally) local
+  Called by: 
+  Calls: 
+ssl_generate_random/289 (ssl_generate_random) @067b89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_generate_random (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+ssl_write_client_hello_body/288 (ssl_write_client_hello_body) @067b8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_write_client_hello_body (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+ssl_write_client_hello_cipher_suites/287 (ssl_write_client_hello_cipher_suites) @067b8690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_write_client_hello_cipher_suites (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 
+ssl_write_supported_groups_ext/286 (ssl_write_supported_groups_ext) @067b83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_write_supported_groups_ext (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:647428808 (estimated locally) local
+  Called by: 
+  Calls: 
+ssl_write_alpn_ext/285 (ssl_write_alpn_ext) @067b8150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_write_alpn_ext (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+ssl_write_hostname_ext/284 (ssl_write_hostname_ext) @066ead20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ssl_write_hostname_ext (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_named_group_is_ecdhe/267 (mbedtls_ssl_tls13_named_group_is_ecdhe) @06799888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.mbedtls_ssl_tls13_named_group_is_ecdhe (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls12_named_group_is_ecdhe/266 (mbedtls_ssl_tls12_named_group_is_ecdhe) @06799738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.mbedtls_ssl_tls12_named_group_is_ecdhe (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741777 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_ssl_tls13_set_hs_sent_ext_mask/261 (mbedtls_ssl_tls13_set_hs_sent_ext_mask) @067990a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.mbedtls_ssl_tls13_set_hs_sent_ext_mask (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 

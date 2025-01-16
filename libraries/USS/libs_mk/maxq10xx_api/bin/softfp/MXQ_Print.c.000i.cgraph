@@ -1,0 +1,1047 @@
+Trivially needed symbols: stop_time_proc/15 start_time_proc/14 stop_time_all/13 start_time_all/12 MXQ_DisplayConfig/11 MXQ_DisplayStatus/10 cmd_print_array/9 cmd_print_gcu/8 cmd_print/7 cmd_print_seccmd/6 g_debugoutputlevel/4 g_dump_comm/3
+
+
+Initial Symbol table:
+
+puts/22 (__builtin_puts) @062d2150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 
+  Calls: 
+*.LC5/21 (*.LC5) @062ced80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition artificial
+  Aux: @062977e0
+  References: 
+  Referring: MXQ_DisplayStatus/10 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+__builtin_va_end/20 (__builtin_va_end) @062d20a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+vprintf/19 (vprintf) @062d2000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+__builtin_va_start/18 (__builtin_va_start) @06297f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+putchar/17 (__builtin_putchar) @06297e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 cmd_print_gcu/8 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 
+  Calls: 
+printf/16 (printf) @06297dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 cmd_print_array/9 cmd_print_gcu/8 cmd_print_gcu/8 printf_color/5 printf_color/5 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 cmd_print_seccmd/6 
+  Calls: 
+stop_time_proc/15 (stop_time_proc) @06297d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_proc/14 (start_time_proc) @06297bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+stop_time_all/13 (stop_time_all) @06297a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297bd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_all/12 (start_time_all) @06297930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MXQ_DisplayConfig/11 (MXQ_DisplayConfig) @062977e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 
+MXQ_DisplayStatus/10 (MXQ_DisplayStatus) @06297690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062977e0
+  References: *.LC5/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/22 puts/22 printf/16 printf/16 printf/16 printf/16 putchar/17 printf/16 printf/16 printf/16 
+cmd_print_array/9 (cmd_print_array) @062973f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 
+cmd_print_gcu/8 (cmd_print_gcu) @062972a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062973f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+cmd_print/7 (cmd_print) @06297150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062972a0
+  References: g_dump_comm/3 (read) g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf_color/5 printf_color/5 printf/16 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf/16 putchar/17 printf/16 printf/16 
+cmd_print_seccmd/6 (cmd_print_seccmd) @06297000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297150
+  References: g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+printf_color/5 (printf_color) @0622ee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062972a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 
+  Calls: printf/16 __builtin_va_end/20 vprintf/19 __builtin_va_start/18 printf/16 
+g_debugoutputlevel/4 (g_debugoutputlevel) @06230558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06297000
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+g_dump_comm/3 (g_dump_comm) @06230510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06230558
+  References: 
+  Referring: cmd_print_seccmd/6 (read) cmd_print/7 (read) cmd_print/7 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+_putchar_unlocked/2 (_putchar_unlocked) @061abc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061abb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061ab930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+puts/22 (__builtin_puts) @062d2150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 
+  Calls: 
+*.LC5/21 (*.LC5) @062ced80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition artificial
+  References: 
+  Referring: MXQ_DisplayStatus/10 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+__builtin_va_end/20 (__builtin_va_end) @062d20a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+vprintf/19 (vprintf) @062d2000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+__builtin_va_start/18 (__builtin_va_start) @06297f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+putchar/17 (__builtin_putchar) @06297e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 cmd_print_gcu/8 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 
+  Calls: 
+printf/16 (printf) @06297dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 cmd_print_array/9 cmd_print_gcu/8 cmd_print_gcu/8 printf_color/5 printf_color/5 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 cmd_print_seccmd/6 
+  Calls: 
+stop_time_proc/15 (stop_time_proc) @06297d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_proc/14 (start_time_proc) @06297bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+stop_time_all/13 (stop_time_all) @06297a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_all/12 (start_time_all) @06297930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MXQ_DisplayConfig/11 (MXQ_DisplayConfig) @062977e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 
+MXQ_DisplayStatus/10 (MXQ_DisplayStatus) @06297690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: *.LC5/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/22 puts/22 printf/16 printf/16 printf/16 printf/16 putchar/17 printf/16 printf/16 printf/16 
+cmd_print_array/9 (cmd_print_array) @062973f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 
+cmd_print_gcu/8 (cmd_print_gcu) @062972a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+cmd_print/7 (cmd_print) @06297150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/3 (read) g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf_color/5 printf_color/5 printf/16 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf/16 putchar/17 printf/16 printf/16 
+cmd_print_seccmd/6 (cmd_print_seccmd) @06297000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+printf_color/5 (printf_color) @0622ee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 
+  Calls: printf/16 __builtin_va_end/20 vprintf/19 __builtin_va_start/18 printf/16 
+g_debugoutputlevel/4 (g_debugoutputlevel) @06230558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+g_dump_comm/3 (g_dump_comm) @06230510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: cmd_print_seccmd/6 (read) cmd_print/7 (read) cmd_print/7 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+
+Initial Symbol table:
+
+puts/22 (__builtin_puts) @062d2150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 
+  Calls: 
+*.LC5/21 (*.LC5) @062ced80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition artificial
+  References: 
+  Referring: MXQ_DisplayStatus/10 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+__builtin_va_end/20 (__builtin_va_end) @062d20a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+vprintf/19 (vprintf) @062d2000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+__builtin_va_start/18 (__builtin_va_start) @06297f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+putchar/17 (__builtin_putchar) @06297e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 cmd_print_gcu/8 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 
+  Calls: 
+printf/16 (printf) @06297dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 cmd_print_array/9 cmd_print_gcu/8 cmd_print_gcu/8 printf_color/5 printf_color/5 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 cmd_print_seccmd/6 
+  Calls: 
+stop_time_proc/15 (stop_time_proc) @06297d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_proc/14 (start_time_proc) @06297bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+stop_time_all/13 (stop_time_all) @06297a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_all/12 (start_time_all) @06297930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MXQ_DisplayConfig/11 (MXQ_DisplayConfig) @062977e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 
+MXQ_DisplayStatus/10 (MXQ_DisplayStatus) @06297690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: *.LC5/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/22 puts/22 printf/16 printf/16 printf/16 printf/16 putchar/17 printf/16 printf/16 printf/16 
+cmd_print_array/9 (cmd_print_array) @062973f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 
+cmd_print_gcu/8 (cmd_print_gcu) @062972a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+cmd_print/7 (cmd_print) @06297150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/3 (read) g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf_color/5 printf_color/5 printf/16 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf/16 putchar/17 printf/16 printf/16 
+cmd_print_seccmd/6 (cmd_print_seccmd) @06297000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+printf_color/5 (printf_color) @0622ee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 
+  Calls: printf/16 __builtin_va_end/20 vprintf/19 __builtin_va_start/18 printf/16 
+g_debugoutputlevel/4 (g_debugoutputlevel) @06230558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+g_dump_comm/3 (g_dump_comm) @06230510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: cmd_print_seccmd/6 (read) cmd_print/7 (read) cmd_print/7 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+puts/22 (__builtin_puts) @062d2150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 
+  Calls: 
+*.LC5/21 (*.LC5) @062ced80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition artificial
+  References: 
+  Referring: MXQ_DisplayStatus/10 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+__builtin_va_end/20 (__builtin_va_end) @062d20a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+vprintf/19 (vprintf) @062d2000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+__builtin_va_start/18 (__builtin_va_start) @06297f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: printf_color/5 
+  Calls: 
+putchar/17 (__builtin_putchar) @06297e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 cmd_print_gcu/8 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 
+  Calls: 
+printf/16 (printf) @06297dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayConfig/11 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 MXQ_DisplayStatus/10 cmd_print_array/9 cmd_print_gcu/8 cmd_print_gcu/8 printf_color/5 printf_color/5 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print_seccmd/6 cmd_print_seccmd/6 
+  Calls: 
+stop_time_proc/15 (stop_time_proc) @06297d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_proc/14 (start_time_proc) @06297bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+stop_time_all/13 (stop_time_all) @06297a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+start_time_all/12 (start_time_all) @06297930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MXQ_DisplayConfig/11 (MXQ_DisplayConfig) @062977e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 printf/16 
+MXQ_DisplayStatus/10 (MXQ_DisplayStatus) @06297690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: *.LC5/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/22 puts/22 printf/16 printf/16 printf/16 printf/16 putchar/17 printf/16 printf/16 printf/16 
+cmd_print_array/9 (cmd_print_array) @062973f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: printf/16 
+cmd_print_gcu/8 (cmd_print_gcu) @062972a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+cmd_print/7 (cmd_print) @06297150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/3 (read) g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf_color/5 printf_color/5 printf/16 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf_color/5 printf/16 putchar/17 printf/16 printf/16 
+cmd_print_seccmd/6 (cmd_print_seccmd) @06297000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/17 printf/16 printf/16 
+printf_color/5 (printf_color) @0622ee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 cmd_print/7 
+  Calls: printf/16 __builtin_va_end/20 vprintf/19 __builtin_va_start/18 printf/16 
+g_debugoutputlevel/4 (g_debugoutputlevel) @06230558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+g_dump_comm/3 (g_dump_comm) @06230510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: cmd_print_seccmd/6 (read) cmd_print/7 (read) cmd_print/7 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+puts/22 (__builtin_puts) @062d2150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 (28346783 (estimated locally),0.66 per call) MXQ_DisplayStatus/10 (14602889 (estimated locally),0.34 per call) 
+  Calls: 
+*.LC5/21 (*.LC5) @062ced80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly artificial
+  References: 
+  Referring: MXQ_DisplayStatus/10 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+__builtin_va_end/20 (__builtin_va_end) @062d20a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: printf_color/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+vprintf/19 (vprintf) @062d2000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: printf_color/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+__builtin_va_start/18 (__builtin_va_start) @06297f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: printf_color/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+putchar/17 (__builtin_putchar) @06297e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) cmd_print_gcu/8 (118111600 (estimated locally),1.00 per call) cmd_print/7 (94205812 (estimated locally),0.16 per call) cmd_print/7 (118111600 (estimated locally),0.20 per call) cmd_print_seccmd/6 (118111600 (estimated locally),0.33 per call) 
+  Calls: 
+printf/16 (printf) @06297dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayConfig/11 (1073741824 (estimated locally),1.00 per call) MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) MXQ_DisplayStatus/10 (1030792153 (estimated locally),24.00 per call) MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) MXQ_DisplayStatus/10 (42949672 (estimated locally),1.00 per call) cmd_print_array/9 (955630225 (estimated locally),8.09 per call) cmd_print_gcu/8 (955630225 (estimated locally),8.09 per call) cmd_print_gcu/8 (118111600 (estimated locally),1.00 per call) cmd_print/7 (378574866 (estimated locally),0.65 per call) cmd_print/7 (251529519 (estimated locally),0.43 per call) cmd_print/7 (94205812 (estimated locally),0.16 per call) cmd_print/7 (955630225 (estimated locally),1.64 per call) cmd_print/7 (118111600 (estimated locally),0.20 per call) cmd_print_seccmd/6 (955630225 (estimated locally),2.67 per call) cmd_print_seccmd/6 (118111600 (estimated locally),0.33 per call) printf_color/5 (1073741824 (estimated locally),1.00 per call) printf_color/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+stop_time_proc/15 (stop_time_proc) @06297d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+start_time_proc/14 (start_time_proc) @06297bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+stop_time_all/13 (stop_time_all) @06297a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+start_time_all/12 (start_time_all) @06297930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+MXQ_DisplayConfig/11 (MXQ_DisplayConfig) @062977e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) 
+MXQ_DisplayStatus/10 (MXQ_DisplayStatus) @06297690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: *.LC5/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:42949672 (estimated locally) body
+  Called by: 
+  Calls: puts/22 (28346783 (estimated locally),0.66 per call) puts/22 (14602889 (estimated locally),0.34 per call) printf/16 (42949672 (estimated locally),1.00 per call) printf/16 (42949672 (estimated locally),1.00 per call) printf/16 (42949672 (estimated locally),1.00 per call) printf/16 (42949672 (estimated locally),1.00 per call) putchar/17 (42949672 (estimated locally),1.00 per call) printf/16 (1030792153 (estimated locally),24.00 per call) printf/16 (42949672 (estimated locally),1.00 per call) printf/16 (42949672 (estimated locally),1.00 per call) 
+cmd_print_array/9 (cmd_print_array) @062973f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:118111600 (estimated locally) body
+  Called by: 
+  Calls: printf/16 (955630225 (estimated locally),8.09 per call) 
+cmd_print_gcu/8 (cmd_print_gcu) @062972a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:118111600 (estimated locally) body
+  Called by: 
+  Calls: putchar/17 (118111600 (estimated locally),1.00 per call) printf/16 (955630225 (estimated locally),8.09 per call) printf/16 (118111600 (estimated locally),1.00 per call) 
+cmd_print/7 (cmd_print) @06297150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_dump_comm/3 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:583555340 (estimated locally) body
+  Called by: 
+  Calls: putchar/17 (94205812 (estimated locally),0.16 per call) printf/16 (378574866 (estimated locally),0.65 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf/16 (251529519 (estimated locally),0.43 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf_color/5 (31087918 (estimated locally),0.05 per call) printf/16 (94205812 (estimated locally),0.16 per call) putchar/17 (118111600 (estimated locally),0.20 per call) printf/16 (955630225 (estimated locally),1.64 per call) printf/16 (118111600 (estimated locally),0.20 per call) 
+cmd_print_seccmd/6 (cmd_print_seccmd) @06297000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_dump_comm/3 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:357913942 (estimated locally) body
+  Called by: 
+  Calls: putchar/17 (118111600 (estimated locally),0.33 per call) printf/16 (955630225 (estimated locally),2.67 per call) printf/16 (118111600 (estimated locally),0.33 per call) 
+printf_color/5 (printf_color) @0622ee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: cmd_print/7 (31087918 (estimated locally),0.05 per call) cmd_print/7 (31087918 (estimated locally),0.05 per call) cmd_print/7 (31087918 (estimated locally),0.05 per call) cmd_print/7 (31087918 (estimated locally),0.05 per call) cmd_print/7 (31087918 (estimated locally),0.05 per call) cmd_print/7 (31087918 (estimated locally),0.05 per call) cmd_print/7 (31087918 (estimated locally),0.05 per call) 
+  Calls: printf/16 (1073741824 (estimated locally),1.00 per call) __builtin_va_end/20 (1073741824 (estimated locally),1.00 per call) vprintf/19 (1073741824 (estimated locally),1.00 per call) __builtin_va_start/18 (1073741824 (estimated locally),1.00 per call) printf/16 (1073741824 (estimated locally),1.00 per call) 
+g_debugoutputlevel/4 (g_debugoutputlevel) @06230558
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+g_dump_comm/3 (g_dump_comm) @06230510
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: cmd_print_seccmd/6 (read) cmd_print/7 (read) 
+  Availability: overwritable
+  Varpool flags: initialized
+Trivially needed variables: *.LC5/21 g_debugoutputlevel/4 g_dump_comm/3
+Removing variables:
+
+Final Symbol table:
+
+puts/22 (__builtin_puts) @062d2150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+*.LC5/21 (*.LC5) @062ced80
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written artificial
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+__builtin_va_end/20 (__builtin_va_end) @062d20a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+vprintf/19 (vprintf) @062d2000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_va_start/18 (__builtin_va_start) @06297f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+putchar/17 (__builtin_putchar) @06297e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/16 (printf) @06297dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+stop_time_proc/15 (stop_time_proc) @06297d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.stop_time_proc (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+start_time_proc/14 (start_time_proc) @06297bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.start_time_proc (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+stop_time_all/13 (stop_time_all) @06297a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.stop_time_all (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+start_time_all/12 (start_time_all) @06297930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.start_time_all (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MXQ_DisplayConfig/11 (MXQ_DisplayConfig) @062977e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MXQ_DisplayConfig (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MXQ_DisplayStatus/10 (MXQ_DisplayStatus) @06297690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MXQ_DisplayStatus (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:42949672 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_print_array/9 (cmd_print_array) @062973f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_print_array (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_print_gcu/8 (cmd_print_gcu) @062972a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_print_gcu (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_print/7 (cmd_print) @06297150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_print (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:583555340 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_print_seccmd/6 (cmd_print_seccmd) @06297000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_print_seccmd (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:357913942 (estimated locally)
+  Called by: 
+  Calls: 
+printf_color/5 (printf_color) @0622ee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.printf_color (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+g_debugoutputlevel/4 (g_debugoutputlevel) @06230558
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.g_debugoutputlevel (implicit_section)
+  Aux: @062ced80
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+g_dump_comm/3 (g_dump_comm) @06230510
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.g_dump_comm (implicit_section)
+  Aux: @06230558
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized

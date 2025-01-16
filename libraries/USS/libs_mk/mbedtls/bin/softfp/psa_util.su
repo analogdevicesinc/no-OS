@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_util.c:95:5:psa_generic_status_to_mbedtls	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_util.c:113:5:psa_status_to_mbedtls	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_util.c:126:5:psa_pk_status_to_mbedtls	8	static

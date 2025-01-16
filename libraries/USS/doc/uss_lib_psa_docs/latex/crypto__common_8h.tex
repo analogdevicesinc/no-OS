@@ -1,0 +1,1029 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\+\_\+common.h File Reference}
+\hypertarget{crypto__common_8h}{}\label{crypto__common_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_common.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_common.h}}
+{\ttfamily \#include "{}crypto\+\_\+typedefs.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\+\_\+\+ALG\+\_\+\+NONE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0)
+\begin{DoxyCompactList}\small\item\em An invalid algorithm ID. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a0ebbb6f93a05b6511e6f108ffd2d1eb4}{PSA\+\_\+\+ALG\+\_\+\+FFDH}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x09010000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ab2dbcf71b63785e7dd7b54a100edee43}{PSA\+\_\+\+ALG\+\_\+\+ECDH}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x09020000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ae917f201db1efaaf668edd85ac8fb87f}{PSA\+\_\+\+ALG\+\_\+\+PBKDF2\+\_\+\+AES\+\_\+\+CMAC\+\_\+\+PRF\+\_\+128}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x08800200)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ad98c105198f7428f7d1dffcb2cd398cd}{PSA\+\_\+\+ALG\+\_\+\+STREAM\+\_\+\+CIPHER}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04800100)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ad318309706a769cffdc64e4c7e06b2e9}{PSA\+\_\+\+ALG\+\_\+\+CTR}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04c01000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a0088c933e01d671f263a9a1f177cb5bc}{PSA\+\_\+\+ALG\+\_\+\+CFB}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04c01100)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ae96bb421fa634c6fa8f571f0112f1ddb}{PSA\+\_\+\+ALG\+\_\+\+OFB}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04c01200)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa722c0e426a797fd6d99623f59748125}{PSA\+\_\+\+ALG\+\_\+\+XTS}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x0440ff00)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ab8f0609cd0f12cccc9c950fd5a81a0e3}{PSA\+\_\+\+ALG\+\_\+\+ECB\+\_\+\+NO\+\_\+\+PADDING}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04404400)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_acb332d72716958880ee7f97d8365ae66}{PSA\+\_\+\+ALG\+\_\+\+CBC\+\_\+\+NO\+\_\+\+PADDING}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04404000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aef50d2e9716eb6d476046608e4e0c78c}{PSA\+\_\+\+ALG\+\_\+\+CBC\+\_\+\+PKCS7}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04404100)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ae917f201db1efaaf668edd85ac8fb87f}{PSA\+\_\+\+ALG\+\_\+\+PBKDF2\+\_\+\+AES\+\_\+\+CMAC\+\_\+\+PRF\+\_\+128}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x08800200)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a4c540d3abe43fb9abcb94f2bc51acef9}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+CRYPT}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x07000200)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a32a888fb360e6e25cab8a343772c4a82}{PSA\+\_\+\+ALG\+\_\+\+HKDF}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a8cd4f3b42f09bbed3f215ca17565138f}{PSA\+\_\+\+ALG\+\_\+\+HKDF\+\_\+\+EXPAND}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa6ed42995d7714568c2925e2c4d1da83}{PSA\+\_\+\+ALG\+\_\+\+HKDF\+\_\+\+EXTRACT}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a41d2ee937d54efd76bd54a97b2ebc08a}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+ASYMMETRIC\+\_\+\+ENCRYPTION}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a1d1a5a402ad89a2e68f12bfb535490eb}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+CIPHER}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a9d9b6533d2a6bea7bac7ae01facb820d}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+ECDH}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa3cf76164cd9375af4fb8a291078a19e}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+FFDH}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a1979d0a76fcee6164cf2e65960f38db2}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HKDF}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_af697a4b8e100ce5c8fffbb4366e0615c}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HKDF\+\_\+\+EXPAND}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a04f15d32fce74dc726a2267b4c8bddbe}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HKDF\+\_\+\+EXTRACT}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a59753742cb06553bd22751bbef472b6f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+KEY\+\_\+\+AGREEMENT}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_af8b90c648aa53dbd06c236695e300cd0}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+KEY\+\_\+\+DERIVATION}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a15266fcb8ef4b3830f51d0b513eee926}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+KEY\+\_\+\+DERIVATION\+\_\+\+STRETCHING}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a61201c116f22f0a2bd1ec206d8efd0bf}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+PBKDF2\+\_\+\+HMAC}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa40ab362ce141ce541d69b2eb1f41438}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RAW\+\_\+\+KEY\+\_\+\+AGREEMENT}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a9a85c05fd5c39ca63bbc47fb0755da39}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+OAEP}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_acfec68e0c6175e02e1b2ebc97df383c0}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+STREAM\+\_\+\+CIPHER}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa3c18890c50222e5219f40ade8927e66}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+TLS12\+\_\+\+PRF}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ab25ecc074a93fd11069bedfbba5a287b}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+TLS12\+\_\+\+PSK\+\_\+\+TO\+\_\+\+MS}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_acf83d7430e82b97cecb8b26ca6fa1426}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+WILDCARD}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a78bb81cffb87a635c247725eeb2a2682}{PSA\+\_\+\+ALG\+\_\+\+KEY\+\_\+\+AGREEMENT}}(ka\+\_\+alg,  kdf\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_af837c55ba698b488b6e63300e3470abf}{PSA\+\_\+\+ALG\+\_\+\+KEY\+\_\+\+AGREEMENT\+\_\+\+GET\+\_\+\+BASE}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a56c1189add62b59e8e6a28a809b57037}{PSA\+\_\+\+ALG\+\_\+\+KEY\+\_\+\+AGREEMENT\+\_\+\+GET\+\_\+\+KDF}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a67ad00bf6421d52f2905b7ef860d6e99}{PSA\+\_\+\+ALG\+\_\+\+PBKDF2\+\_\+\+HMAC}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa1235dc3fdd9839c6c1b1a9857344c76}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+OAEP}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a6d5623c2ccda1d4a84e34351af8382d5}{PSA\+\_\+\+ALG\+\_\+\+TLS12\+\_\+\+PRF}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a039ec797f15d1635d9b2e09a611f8a68}{PSA\+\_\+\+ALG\+\_\+\+TLS12\+\_\+\+PSK\+\_\+\+TO\+\_\+\+MS}}(hash\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x7f000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ae9c74a64521c7b00fd93d9b5263b8155}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+HASH}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+MAC}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x03000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a3434172b122ed656ab0eaf80e963aed6}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+CIPHER}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x04000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a7c57a3f75ab4ffc0534782a0a2f2a3a0}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+AEAD}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x05000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a97e82f369d65ae46d77d64ad58963231}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+SIGN}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_acbe1cce61079226933e390b0c229573e}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+ASYMMETRIC\+\_\+\+ENCRYPTION}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x07000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_ae842e90d0c38737e651717a7ad9543c2}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+DERIVATION}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x08000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a2bc0d291f42ebc44d71295e946e7257e}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+AGREEMENT}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x09000000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+HASH\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x000000ff)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a86bb99c0147c64d98d29c08b2be08854}{USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x7000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a2bb9994377fe44723d328c3cc74960bc}{USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RAW\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x1000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a9016695ac323fd10decb5be92a960d85}{USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+SYMMETRIC\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x2000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a7763d2cd11137cf46249b604f8cb8c2a}{USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x4000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a97caa31896c3af7b3b8f8c3b99b65faf}{USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+PAIR\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x7000)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_aa11e5b792e282e888a492bf5dfca685f}{USS\+\_\+\+PSA\+\_\+\+BITS\+\_\+\+TO\+\_\+\+BYTES}}(bits)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a6bb123eba0bc847bf0501d0bb8ebdc58}{USS\+\_\+\+PSA\+\_\+\+BYTES\+\_\+\+TO\+\_\+\+BITS}}(bytes)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_adf2f47b64b42de8ccbb72f39c7bbaba3}{USS\+\_\+\+PSA\+\_\+\+ROUND\+\_\+\+UP\+\_\+\+TO\+\_\+\+MULTIPLE}}(block\+\_\+size,  length)
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_af0b96e51cb57a3d2f77ffec2c97f5804}{USS\+\_\+\+ENCRYPT}}~1u
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_acf6581989c3d64d8ae1cf91ac38da85f}{USS\+\_\+\+DECRYPT}}~0u
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a2febb44d5ae5a05cdb6ad6ede7ea8fe7}{USS\+\_\+\+TRUE}}~1u
+\item 
+\#define \mbox{\hyperlink{crypto__common_8h_a3269a169193ebcbfc674e8dd13374c83}{USS\+\_\+\+FALSE}}~0u
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+mxq\+\_\+keytype\+\_\+id\+\_\+t \mbox{\hyperlink{crypto__common_8h_a1145d7449ac43bb1629f00322a98ee33}{uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+key\+\_\+type}} (\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}} psa\+\_\+key\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Converts a PSA key type to a MAXQ key type. \end{DoxyCompactList}\item 
+mxq\+\_\+object\+\_\+prop\+\_\+t \mbox{\hyperlink{crypto__common_8h_a245523fc5592d7df72f0595370c4c2c6}{uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+key\+\_\+lifetime}} (\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\+\_\+key\+\_\+lifetime\+\_\+t}} psa\+\_\+key\+\_\+lifetime)
+\begin{DoxyCompactList}\small\item\em Converts a PSA key lifetime to a MAXQ key lifetime. \end{DoxyCompactList}\item 
+mxq\+\_\+keyuse\+\_\+t \mbox{\hyperlink{crypto__common_8h_a951d0c2701107a1c46d886700acc0bac}{uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+keyuse}} (\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}} psa\+\_\+key\+\_\+use)
+\begin{DoxyCompactList}\small\item\em Converts a PSA key usage to a MAXQ key usage. \end{DoxyCompactList}\item 
+mxq\+\_\+objecttype\+\_\+t \mbox{\hyperlink{crypto__common_8h_a087ea319183ebba3b83e7259920da430}{uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+object\+\_\+type}} (\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}} psa\+\_\+key\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Converts a PSA key type to a MAXQ object type. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}} \mbox{\hyperlink{crypto__common_8h_a8299472b91aec45b6053d5f21d586a7f}{uss\+\_\+maxq\+\_\+to\+\_\+psa\+\_\+algo\+\_\+id}} (mxq\+\_\+algo\+\_\+id\+\_\+t mxq\+\_\+algo\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Converts a MAXQ algorithm ID to a PSA algorithm ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}} \mbox{\hyperlink{crypto__common_8h_a09fe68476ec7e563da884bf10eb3d46a}{uss\+\_\+maxq\+\_\+to\+\_\+psa\+\_\+keyuse}} (mxq\+\_\+keyuse\+\_\+t mxq\+\_\+key\+\_\+use)
+\begin{DoxyCompactList}\small\item\em Converts a MAXQ key usage to a PSA key usage. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}} \mbox{\hyperlink{crypto__common_8h_aa27d249927c1a1948ef09bf642f06e29}{uss\+\_\+maxq\+\_\+to\+\_\+psa\+\_\+key\+\_\+type}} (mxq\+\_\+keytype\+\_\+id\+\_\+t mxq\+\_\+key\+\_\+type, mxq\+\_\+keyparam\+\_\+id\+\_\+t params, mxq\+\_\+objecttype\+\_\+t mxq\+\_\+object\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Converts a MAXQ key type, along with additional parameters and object type, to a PSA key type. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\+\_\+status\+\_\+t}} \mbox{\hyperlink{crypto__common_8h_a26b6230dea08ad1af4360cd6d24b871b}{uss\+\_\+to\+\_\+psa\+\_\+error\+\_\+code}} (mxq\+\_\+err\+\_\+t maxq\+Code)
+\begin{DoxyCompactList}\small\item\em Helper function that translates the MAXQ status codes to PSA status codes. \end{DoxyCompactList}\item 
+mxq\+\_\+algo\+\_\+id\+\_\+t \mbox{\hyperlink{crypto__common_8h_a6395efbc108363540729474eae81ab93}{uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+algo\+\_\+id}} (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}} psa\+\_\+algo\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Helper function that translates the PSA algo IDs to MAXQ algo IDs. \end{DoxyCompactList}\item 
+mxq\+\_\+algo\+\_\+id\+\_\+t \mbox{\hyperlink{crypto__common_8h_a41ff05919383dfddb564699d33f21953}{uss\+\_\+sign\+\_\+algo\+\_\+from\+\_\+psa}} (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}} psa\+\_\+algo, bool is\+Msg)
+\begin{DoxyCompactList}\small\item\em Helper function that translates the PSA MD algos to MAXQ algos during signing (verifying) operation. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{crypto__common_8h_ae797a4ade4285f2ca15a1994a222fddb}{check\+\_\+key\+\_\+policy}} (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}} psa\+\_\+algo, \mbox{\hyperlink{structpsa__key__attributes__t}{psa\+\_\+key\+\_\+attributes\+\_\+t}} \texorpdfstring{$\ast$}{*}attr)
+\begin{DoxyCompactList}\small\item\em Helper function to check if the key has required algorithm set for performing the requested operation. \end{DoxyCompactList}\item 
+mxq\+\_\+u2 \mbox{\hyperlink{crypto__common_8h_abab502be9b7137f4d71ea695b6e8ab5f}{get\+\_\+u2}} (mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}psrc, mxq\+\_\+length \texorpdfstring{$\ast$}{*}offset)
+\begin{DoxyCompactList}\small\item\em Helper function to retrieve data from a pointer to memory. \end{DoxyCompactList}\item 
+mxq\+\_\+u1 \mbox{\hyperlink{crypto__common_8h_a38c7d6dc320b37fe8cbb054d4dcbcfae}{get\+\_\+u1}} (mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}psrc, mxq\+\_\+length \texorpdfstring{$\ast$}{*}offset)
+\begin{DoxyCompactList}\small\item\em Helper function to retrieve data from a pointer to memory. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{crypto__common_8h_a8d5641bdd36c663e66203d25034e7011}{if\+Crypto\+Init\+Done}} (void)
+\begin{DoxyCompactList}\small\item\em Helper function to check if \doxylink{psa__name__mangling_8h_acc249283d938c05e57c318cc941089d4}{psa\+\_\+crypto\+\_\+init()} was invoked and if it successfully returned. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{crypto__common_8h_ae99ac9494acfc4b11415c67c4a07854f}{ct\+\_\+memcmp}} (const void \texorpdfstring{$\ast$}{*}s1, const void \texorpdfstring{$\ast$}{*}s2, size\+\_\+t n)
+\begin{DoxyCompactList}\small\item\em Constant time memcmp. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{crypto__common_8h_a0160269195d668774bfc08a4b08d8327}{check\+\_\+aead\+\_\+tag\+\_\+len}} (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}} psa\+\_\+algo)
+\begin{DoxyCompactList}\small\item\em Helper function to check if the tag length is valid for the given algorithm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{crypto__common_8h_acb332d72716958880ee7f97d8365ae66}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_CBC\_NO\_PADDING@{PSA\_ALG\_CBC\_NO\_PADDING}}
+\index{PSA\_ALG\_CBC\_NO\_PADDING@{PSA\_ALG\_CBC\_NO\_PADDING}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_CBC\_NO\_PADDING}{PSA\_ALG\_CBC\_NO\_PADDING}}
+{\footnotesize\ttfamily \label{crypto__common_8h_acb332d72716958880ee7f97d8365ae66} 
+\#define PSA\+\_\+\+ALG\+\_\+\+CBC\+\_\+\+NO\+\_\+\+PADDING~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04404000)}
+
+\Hypertarget{crypto__common_8h_aef50d2e9716eb6d476046608e4e0c78c}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_CBC\_PKCS7@{PSA\_ALG\_CBC\_PKCS7}}
+\index{PSA\_ALG\_CBC\_PKCS7@{PSA\_ALG\_CBC\_PKCS7}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_CBC\_PKCS7}{PSA\_ALG\_CBC\_PKCS7}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aef50d2e9716eb6d476046608e4e0c78c} 
+\#define PSA\+\_\+\+ALG\+\_\+\+CBC\+\_\+\+PKCS7~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04404100)}
+
+\Hypertarget{crypto__common_8h_a0088c933e01d671f263a9a1f177cb5bc}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_CFB@{PSA\_ALG\_CFB}}
+\index{PSA\_ALG\_CFB@{PSA\_ALG\_CFB}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_CFB}{PSA\_ALG\_CFB}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a0088c933e01d671f263a9a1f177cb5bc} 
+\#define PSA\+\_\+\+ALG\+\_\+\+CFB~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04c01100)}
+
+\Hypertarget{crypto__common_8h_ad318309706a769cffdc64e4c7e06b2e9}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_CTR@{PSA\_ALG\_CTR}}
+\index{PSA\_ALG\_CTR@{PSA\_ALG\_CTR}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_CTR}{PSA\_ALG\_CTR}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ad318309706a769cffdc64e4c7e06b2e9} 
+\#define PSA\+\_\+\+ALG\+\_\+\+CTR~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04c01000)}
+
+\Hypertarget{crypto__common_8h_ab8f0609cd0f12cccc9c950fd5a81a0e3}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_ECB\_NO\_PADDING@{PSA\_ALG\_ECB\_NO\_PADDING}}
+\index{PSA\_ALG\_ECB\_NO\_PADDING@{PSA\_ALG\_ECB\_NO\_PADDING}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ECB\_NO\_PADDING}{PSA\_ALG\_ECB\_NO\_PADDING}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ab8f0609cd0f12cccc9c950fd5a81a0e3} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ECB\+\_\+\+NO\+\_\+\+PADDING~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04404400)}
+
+\Hypertarget{crypto__common_8h_ab2dbcf71b63785e7dd7b54a100edee43}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_ECDH@{PSA\_ALG\_ECDH}}
+\index{PSA\_ALG\_ECDH@{PSA\_ALG\_ECDH}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ECDH}{PSA\_ALG\_ECDH}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ab2dbcf71b63785e7dd7b54a100edee43} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ECDH~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x09020000)}
+
+\Hypertarget{crypto__common_8h_a0ebbb6f93a05b6511e6f108ffd2d1eb4}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_FFDH@{PSA\_ALG\_FFDH}}
+\index{PSA\_ALG\_FFDH@{PSA\_ALG\_FFDH}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_FFDH}{PSA\_ALG\_FFDH}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a0ebbb6f93a05b6511e6f108ffd2d1eb4} 
+\#define PSA\+\_\+\+ALG\+\_\+\+FFDH~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x09010000)}
+
+\Hypertarget{crypto__common_8h_a32a888fb360e6e25cab8a343772c4a82}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_HKDF@{PSA\_ALG\_HKDF}}
+\index{PSA\_ALG\_HKDF@{PSA\_ALG\_HKDF}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_HKDF}{PSA\_ALG\_HKDF}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a32a888fb360e6e25cab8a343772c4a82} 
+\#define PSA\+\_\+\+ALG\+\_\+\+HKDF(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})\ (0x08000100\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a8cd4f3b42f09bbed3f215ca17565138f}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_HKDF\_EXPAND@{PSA\_ALG\_HKDF\_EXPAND}}
+\index{PSA\_ALG\_HKDF\_EXPAND@{PSA\_ALG\_HKDF\_EXPAND}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_HKDF\_EXPAND}{PSA\_ALG\_HKDF\_EXPAND}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a8cd4f3b42f09bbed3f215ca17565138f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+HKDF\+\_\+\+EXPAND(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})\ (0x08000500\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_aa6ed42995d7714568c2925e2c4d1da83}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_HKDF\_EXTRACT@{PSA\_ALG\_HKDF\_EXTRACT}}
+\index{PSA\_ALG\_HKDF\_EXTRACT@{PSA\_ALG\_HKDF\_EXTRACT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_HKDF\_EXTRACT}{PSA\_ALG\_HKDF\_EXTRACT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa6ed42995d7714568c2925e2c4d1da83} 
+\#define PSA\+\_\+\+ALG\+\_\+\+HKDF\+\_\+\+EXTRACT(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})\ (0x08000400\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a41d2ee937d54efd76bd54a97b2ebc08a}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION@{PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION}}
+\index{PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION@{PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION}{PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a41d2ee937d54efd76bd54a97b2ebc08a} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+ASYMMETRIC\+\_\+\+ENCRYPTION(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x07000000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a1d1a5a402ad89a2e68f12bfb535490eb}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_CIPHER@{PSA\_ALG\_IS\_CIPHER}}
+\index{PSA\_ALG\_IS\_CIPHER@{PSA\_ALG\_IS\_CIPHER}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_CIPHER}{PSA\_ALG\_IS\_CIPHER}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a1d1a5a402ad89a2e68f12bfb535490eb} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+CIPHER(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x04000000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a9d9b6533d2a6bea7bac7ae01facb820d}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_ECDH@{PSA\_ALG\_IS\_ECDH}}
+\index{PSA\_ALG\_IS\_ECDH@{PSA\_ALG\_IS\_ECDH}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_ECDH}{PSA\_ALG\_IS\_ECDH}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a9d9b6533d2a6bea7bac7ae01facb820d} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+ECDH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7fff0000)\ ==\ 0x09020000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_aa3cf76164cd9375af4fb8a291078a19e}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_FFDH@{PSA\_ALG\_IS\_FFDH}}
+\index{PSA\_ALG\_IS\_FFDH@{PSA\_ALG\_IS\_FFDH}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_FFDH}{PSA\_ALG\_IS\_FFDH}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa3cf76164cd9375af4fb8a291078a19e} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+FFDH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7fff0000)\ ==\ 0x09010000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a1979d0a76fcee6164cf2e65960f38db2}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_HKDF@{PSA\_ALG\_IS\_HKDF}}
+\index{PSA\_ALG\_IS\_HKDF@{PSA\_ALG\_IS\_HKDF}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HKDF}{PSA\_ALG\_IS\_HKDF}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a1979d0a76fcee6164cf2e65960f38db2} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HKDF(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000100)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_af697a4b8e100ce5c8fffbb4366e0615c}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_HKDF\_EXPAND@{PSA\_ALG\_IS\_HKDF\_EXPAND}}
+\index{PSA\_ALG\_IS\_HKDF\_EXPAND@{PSA\_ALG\_IS\_HKDF\_EXPAND}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HKDF\_EXPAND}{PSA\_ALG\_IS\_HKDF\_EXPAND}}
+{\footnotesize\ttfamily \label{crypto__common_8h_af697a4b8e100ce5c8fffbb4366e0615c} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HKDF\+\_\+\+EXPAND(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000500)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a04f15d32fce74dc726a2267b4c8bddbe}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_HKDF\_EXTRACT@{PSA\_ALG\_IS\_HKDF\_EXTRACT}}
+\index{PSA\_ALG\_IS\_HKDF\_EXTRACT@{PSA\_ALG\_IS\_HKDF\_EXTRACT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HKDF\_EXTRACT}{PSA\_ALG\_IS\_HKDF\_EXTRACT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a04f15d32fce74dc726a2267b4c8bddbe} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HKDF\+\_\+\+EXTRACT(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000400)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a59753742cb06553bd22751bbef472b6f}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_KEY\_AGREEMENT@{PSA\_ALG\_IS\_KEY\_AGREEMENT}}
+\index{PSA\_ALG\_IS\_KEY\_AGREEMENT@{PSA\_ALG\_IS\_KEY\_AGREEMENT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_KEY\_AGREEMENT}{PSA\_ALG\_IS\_KEY\_AGREEMENT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a59753742cb06553bd22751bbef472b6f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+KEY\+\_\+\+AGREEMENT(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x09000000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_af8b90c648aa53dbd06c236695e300cd0}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_KEY\_DERIVATION@{PSA\_ALG\_IS\_KEY\_DERIVATION}}
+\index{PSA\_ALG\_IS\_KEY\_DERIVATION@{PSA\_ALG\_IS\_KEY\_DERIVATION}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_KEY\_DERIVATION}{PSA\_ALG\_IS\_KEY\_DERIVATION}}
+{\footnotesize\ttfamily \label{crypto__common_8h_af8b90c648aa53dbd06c236695e300cd0} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+KEY\+\_\+\+DERIVATION(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x08000000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a15266fcb8ef4b3830f51d0b513eee926}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING@{PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING}}
+\index{PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING@{PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING}{PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a15266fcb8ef4b3830f51d0b513eee926} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+KEY\+\_\+\+DERIVATION\+\_\+\+STRETCHING(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f800000)\ ==\ 0x08800000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a61201c116f22f0a2bd1ec206d8efd0bf}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_PBKDF2\_HMAC@{PSA\_ALG\_IS\_PBKDF2\_HMAC}}
+\index{PSA\_ALG\_IS\_PBKDF2\_HMAC@{PSA\_ALG\_IS\_PBKDF2\_HMAC}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_PBKDF2\_HMAC}{PSA\_ALG\_IS\_PBKDF2\_HMAC}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a61201c116f22f0a2bd1ec206d8efd0bf} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+PBKDF2\+\_\+\+HMAC(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08800100)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_aa40ab362ce141ce541d69b2eb1f41438}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT@{PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT}}
+\index{PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT@{PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT}{PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa40ab362ce141ce541d69b2eb1f41438} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RAW\+\_\+\+KEY\+\_\+\+AGREEMENT(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f00ffff)\ ==\ 0x09000000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a9a85c05fd5c39ca63bbc47fb0755da39}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_RSA\_OAEP@{PSA\_ALG\_IS\_RSA\_OAEP}}
+\index{PSA\_ALG\_IS\_RSA\_OAEP@{PSA\_ALG\_IS\_RSA\_OAEP}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RSA\_OAEP}{PSA\_ALG\_IS\_RSA\_OAEP}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a9a85c05fd5c39ca63bbc47fb0755da39} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+OAEP(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x07000300)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_acfec68e0c6175e02e1b2ebc97df383c0}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_STREAM\_CIPHER@{PSA\_ALG\_IS\_STREAM\_CIPHER}}
+\index{PSA\_ALG\_IS\_STREAM\_CIPHER@{PSA\_ALG\_IS\_STREAM\_CIPHER}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_STREAM\_CIPHER}{PSA\_ALG\_IS\_STREAM\_CIPHER}}
+{\footnotesize\ttfamily \label{crypto__common_8h_acfec68e0c6175e02e1b2ebc97df383c0} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+STREAM\+\_\+\+CIPHER(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ 0x7f800000)\ ==\ 0x04800000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_aa3c18890c50222e5219f40ade8927e66}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_TLS12\_PRF@{PSA\_ALG\_IS\_TLS12\_PRF}}
+\index{PSA\_ALG\_IS\_TLS12\_PRF@{PSA\_ALG\_IS\_TLS12\_PRF}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_TLS12\_PRF}{PSA\_ALG\_IS\_TLS12\_PRF}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa3c18890c50222e5219f40ade8927e66} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+TLS12\+\_\+\+PRF(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000200)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_ab25ecc074a93fd11069bedfbba5a287b}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS@{PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS}}
+\index{PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS@{PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS}{PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ab25ecc074a93fd11069bedfbba5a287b} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+TLS12\+\_\+\+PSK\+\_\+\+TO\+\_\+\+MS(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000300)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_acf83d7430e82b97cecb8b26ca6fa1426}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_IS\_WILDCARD@{PSA\_ALG\_IS\_WILDCARD}}
+\index{PSA\_ALG\_IS\_WILDCARD@{PSA\_ALG\_IS\_WILDCARD}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_WILDCARD}{PSA\_ALG\_IS\_WILDCARD}}
+{\footnotesize\ttfamily \label{crypto__common_8h_acf83d7430e82b97cecb8b26ca6fa1426} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+WILDCARD(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__hash_8h_a181b0fe4619c1a70c5ef82f28eea09f5}{PSA\_ALG\_GET\_HASH}}(alg)\ ==\ \mbox{\hyperlink{crypto__hash_8h_aa1288ea8bd397a8a3f5e19e94110f2e4}{PSA\_ALG\_ANY\_HASH}})\ ||\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (((alg)\ \&\ 0x7f008000)\ ==\ 0x03008000)\ ||\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (((alg)\ \&\ 0x7f008000)\ ==\ 0x05008000))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a78bb81cffb87a635c247725eeb2a2682}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_KEY\_AGREEMENT@{PSA\_ALG\_KEY\_AGREEMENT}}
+\index{PSA\_ALG\_KEY\_AGREEMENT@{PSA\_ALG\_KEY\_AGREEMENT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_KEY\_AGREEMENT}{PSA\_ALG\_KEY\_AGREEMENT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a78bb81cffb87a635c247725eeb2a2682} 
+\#define PSA\+\_\+\+ALG\+\_\+\+KEY\+\_\+\+AGREEMENT(\begin{DoxyParamCaption}\item[{}]{ka\+\_\+alg}{, }\item[{}]{kdf\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((ka\_alg)\ |\ (kdf\_alg))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_af837c55ba698b488b6e63300e3470abf}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE@{PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE}}
+\index{PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE@{PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE}{PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE}}
+{\footnotesize\ttfamily \label{crypto__common_8h_af837c55ba698b488b6e63300e3470abf} 
+\#define PSA\+\_\+\+ALG\+\_\+\+KEY\+\_\+\+AGREEMENT\+\_\+\+GET\+\_\+\+BASE(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})((alg)\ \&\ 0xffff0000))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a56c1189add62b59e8e6a28a809b57037}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF@{PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF}}
+\index{PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF@{PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF}{PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a56c1189add62b59e8e6a28a809b57037} 
+\#define PSA\+\_\+\+ALG\+\_\+\+KEY\+\_\+\+AGREEMENT\+\_\+\+GET\+\_\+\+KDF(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})((alg)\ \&\ 0xfe00ffff))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_NONE@{PSA\_ALG\_NONE}}
+\index{PSA\_ALG\_NONE@{PSA\_ALG\_NONE}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_NONE}{PSA\_ALG\_NONE}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+NONE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0)}
+
+
+
+An invalid algorithm ID. 
+
+\Hypertarget{crypto__common_8h_ae96bb421fa634c6fa8f571f0112f1ddb}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_OFB@{PSA\_ALG\_OFB}}
+\index{PSA\_ALG\_OFB@{PSA\_ALG\_OFB}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_OFB}{PSA\_ALG\_OFB}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae96bb421fa634c6fa8f571f0112f1ddb} 
+\#define PSA\+\_\+\+ALG\+\_\+\+OFB~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04c01200)}
+
+\Hypertarget{crypto__common_8h_ae917f201db1efaaf668edd85ac8fb87f}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128@{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}}
+\index{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128@{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae917f201db1efaaf668edd85ac8fb87f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+PBKDF2\+\_\+\+AES\+\_\+\+CMAC\+\_\+\+PRF\+\_\+128~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x08800200)}
+
+\Hypertarget{crypto__common_8h_ae917f201db1efaaf668edd85ac8fb87f}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128@{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}}
+\index{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128@{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}{PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae917f201db1efaaf668edd85ac8fb87f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+PBKDF2\+\_\+\+AES\+\_\+\+CMAC\+\_\+\+PRF\+\_\+128~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x08800200)}
+
+\Hypertarget{crypto__common_8h_a67ad00bf6421d52f2905b7ef860d6e99}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_PBKDF2\_HMAC@{PSA\_ALG\_PBKDF2\_HMAC}}
+\index{PSA\_ALG\_PBKDF2\_HMAC@{PSA\_ALG\_PBKDF2\_HMAC}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_PBKDF2\_HMAC}{PSA\_ALG\_PBKDF2\_HMAC}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a67ad00bf6421d52f2905b7ef860d6e99} 
+\#define PSA\+\_\+\+ALG\+\_\+\+PBKDF2\+\_\+\+HMAC(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})(0x08800100\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_aa1235dc3fdd9839c6c1b1a9857344c76}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_RSA\_OAEP@{PSA\_ALG\_RSA\_OAEP}}
+\index{PSA\_ALG\_RSA\_OAEP@{PSA\_ALG\_RSA\_OAEP}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_OAEP}{PSA\_ALG\_RSA\_OAEP}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa1235dc3fdd9839c6c1b1a9857344c76} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+OAEP(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})(0x07000300\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a4c540d3abe43fb9abcb94f2bc51acef9}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_RSA\_PKCS1V15\_CRYPT@{PSA\_ALG\_RSA\_PKCS1V15\_CRYPT}}
+\index{PSA\_ALG\_RSA\_PKCS1V15\_CRYPT@{PSA\_ALG\_RSA\_PKCS1V15\_CRYPT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PKCS1V15\_CRYPT}{PSA\_ALG\_RSA\_PKCS1V15\_CRYPT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a4c540d3abe43fb9abcb94f2bc51acef9} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+CRYPT~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x07000200)}
+
+\Hypertarget{crypto__common_8h_ad98c105198f7428f7d1dffcb2cd398cd}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_STREAM\_CIPHER@{PSA\_ALG\_STREAM\_CIPHER}}
+\index{PSA\_ALG\_STREAM\_CIPHER@{PSA\_ALG\_STREAM\_CIPHER}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_STREAM\_CIPHER}{PSA\_ALG\_STREAM\_CIPHER}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ad98c105198f7428f7d1dffcb2cd398cd} 
+\#define PSA\+\_\+\+ALG\+\_\+\+STREAM\+\_\+\+CIPHER~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x04800100)}
+
+\Hypertarget{crypto__common_8h_a6d5623c2ccda1d4a84e34351af8382d5}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_TLS12\_PRF@{PSA\_ALG\_TLS12\_PRF}}
+\index{PSA\_ALG\_TLS12\_PRF@{PSA\_ALG\_TLS12\_PRF}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_TLS12\_PRF}{PSA\_ALG\_TLS12\_PRF}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a6d5623c2ccda1d4a84e34351af8382d5} 
+\#define PSA\+\_\+\+ALG\+\_\+\+TLS12\+\_\+\+PRF(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})\ (0x08000200\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a039ec797f15d1635d9b2e09a611f8a68}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_TLS12\_PSK\_TO\_MS@{PSA\_ALG\_TLS12\_PSK\_TO\_MS}}
+\index{PSA\_ALG\_TLS12\_PSK\_TO\_MS@{PSA\_ALG\_TLS12\_PSK\_TO\_MS}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_TLS12\_PSK\_TO\_MS}{PSA\_ALG\_TLS12\_PSK\_TO\_MS}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a039ec797f15d1635d9b2e09a611f8a68} 
+\#define PSA\+\_\+\+ALG\+\_\+\+TLS12\+\_\+\+PSK\+\_\+\+TO\+\_\+\+MS(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})\ (0x08000300\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_aa722c0e426a797fd6d99623f59748125}\index{crypto\_common.h@{crypto\_common.h}!PSA\_ALG\_XTS@{PSA\_ALG\_XTS}}
+\index{PSA\_ALG\_XTS@{PSA\_ALG\_XTS}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_XTS}{PSA\_ALG\_XTS}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa722c0e426a797fd6d99623f59748125} 
+\#define PSA\+\_\+\+ALG\+\_\+\+XTS~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x0440ff00)}
+
+\Hypertarget{crypto__common_8h_acf6581989c3d64d8ae1cf91ac38da85f}\index{crypto\_common.h@{crypto\_common.h}!USS\_DECRYPT@{USS\_DECRYPT}}
+\index{USS\_DECRYPT@{USS\_DECRYPT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_DECRYPT}{USS\_DECRYPT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_acf6581989c3d64d8ae1cf91ac38da85f} 
+\#define USS\+\_\+\+DECRYPT~0u}
+
+\Hypertarget{crypto__common_8h_af0b96e51cb57a3d2f77ffec2c97f5804}\index{crypto\_common.h@{crypto\_common.h}!USS\_ENCRYPT@{USS\_ENCRYPT}}
+\index{USS\_ENCRYPT@{USS\_ENCRYPT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ENCRYPT}{USS\_ENCRYPT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_af0b96e51cb57a3d2f77ffec2c97f5804} 
+\#define USS\+\_\+\+ENCRYPT~1u}
+
+\Hypertarget{crypto__common_8h_a3269a169193ebcbfc674e8dd13374c83}\index{crypto\_common.h@{crypto\_common.h}!USS\_FALSE@{USS\_FALSE}}
+\index{USS\_FALSE@{USS\_FALSE}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_FALSE}{USS\_FALSE}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a3269a169193ebcbfc674e8dd13374c83} 
+\#define USS\+\_\+\+FALSE~0u}
+
+\Hypertarget{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_HASH\_MASK@{USS\_PSA\_ALG\_HASH\_MASK}}
+\index{USS\_PSA\_ALG\_HASH\_MASK@{USS\_PSA\_ALG\_HASH\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_HASH\_MASK}{USS\_PSA\_ALG\_HASH\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+HASH\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x000000ff)}
+
+\Hypertarget{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_MASK@{USS\_PSA\_ALG\_MASK}}
+\index{USS\_PSA\_ALG\_MASK@{USS\_PSA\_ALG\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_MASK}{USS\_PSA\_ALG\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x7f000000)}
+
+\Hypertarget{crypto__common_8h_a7c57a3f75ab4ffc0534782a0a2f2a3a0}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_AEAD@{USS\_PSA\_ALG\_TYPE\_AEAD}}
+\index{USS\_PSA\_ALG\_TYPE\_AEAD@{USS\_PSA\_ALG\_TYPE\_AEAD}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_AEAD}{USS\_PSA\_ALG\_TYPE\_AEAD}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a7c57a3f75ab4ffc0534782a0a2f2a3a0} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+AEAD~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x05000000)}
+
+\Hypertarget{crypto__common_8h_acbe1cce61079226933e390b0c229573e}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION@{USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION}}
+\index{USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION@{USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION}{USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION}}
+{\footnotesize\ttfamily \label{crypto__common_8h_acbe1cce61079226933e390b0c229573e} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+ASYMMETRIC\+\_\+\+ENCRYPTION~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x07000000)}
+
+\Hypertarget{crypto__common_8h_a3434172b122ed656ab0eaf80e963aed6}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_CIPHER@{USS\_PSA\_ALG\_TYPE\_CIPHER}}
+\index{USS\_PSA\_ALG\_TYPE\_CIPHER@{USS\_PSA\_ALG\_TYPE\_CIPHER}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_CIPHER}{USS\_PSA\_ALG\_TYPE\_CIPHER}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a3434172b122ed656ab0eaf80e963aed6} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+CIPHER~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x04000000)}
+
+\Hypertarget{crypto__common_8h_ae9c74a64521c7b00fd93d9b5263b8155}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_HASH@{USS\_PSA\_ALG\_TYPE\_HASH}}
+\index{USS\_PSA\_ALG\_TYPE\_HASH@{USS\_PSA\_ALG\_TYPE\_HASH}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_HASH}{USS\_PSA\_ALG\_TYPE\_HASH}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae9c74a64521c7b00fd93d9b5263b8155} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+HASH~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000000)}
+
+\Hypertarget{crypto__common_8h_a2bc0d291f42ebc44d71295e946e7257e}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT@{USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT}}
+\index{USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT@{USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT}{USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a2bc0d291f42ebc44d71295e946e7257e} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+AGREEMENT~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x09000000)}
+
+\Hypertarget{crypto__common_8h_ae842e90d0c38737e651717a7ad9543c2}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION@{USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION}}
+\index{USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION@{USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION}{USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae842e90d0c38737e651717a7ad9543c2} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+DERIVATION~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x08000000)}
+
+\Hypertarget{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_MAC@{USS\_PSA\_ALG\_TYPE\_MAC}}
+\index{USS\_PSA\_ALG\_TYPE\_MAC@{USS\_PSA\_ALG\_TYPE\_MAC}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_MAC}{USS\_PSA\_ALG\_TYPE\_MAC}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+MAC~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x03000000)}
+
+\Hypertarget{crypto__common_8h_a97e82f369d65ae46d77d64ad58963231}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ALG\_TYPE\_SIGN@{USS\_PSA\_ALG\_TYPE\_SIGN}}
+\index{USS\_PSA\_ALG\_TYPE\_SIGN@{USS\_PSA\_ALG\_TYPE\_SIGN}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_TYPE\_SIGN}{USS\_PSA\_ALG\_TYPE\_SIGN}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a97e82f369d65ae46d77d64ad58963231} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+SIGN~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000000)}
+
+\Hypertarget{crypto__common_8h_aa11e5b792e282e888a492bf5dfca685f}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_BITS\_TO\_BYTES@{USS\_PSA\_BITS\_TO\_BYTES}}
+\index{USS\_PSA\_BITS\_TO\_BYTES@{USS\_PSA\_BITS\_TO\_BYTES}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_BITS\_TO\_BYTES}{USS\_PSA\_BITS\_TO\_BYTES}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa11e5b792e282e888a492bf5dfca685f} 
+\#define USS\+\_\+\+PSA\+\_\+\+BITS\+\_\+\+TO\+\_\+\+BYTES(\begin{DoxyParamCaption}\item[{}]{bits}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((bits\ +\ 7u)\ /\ 8u)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a6bb123eba0bc847bf0501d0bb8ebdc58}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_BYTES\_TO\_BITS@{USS\_PSA\_BYTES\_TO\_BITS}}
+\index{USS\_PSA\_BYTES\_TO\_BITS@{USS\_PSA\_BYTES\_TO\_BITS}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_BYTES\_TO\_BITS}{USS\_PSA\_BYTES\_TO\_BITS}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a6bb123eba0bc847bf0501d0bb8ebdc58} 
+\#define USS\+\_\+\+PSA\+\_\+\+BYTES\+\_\+\+TO\+\_\+\+BITS(\begin{DoxyParamCaption}\item[{}]{bytes}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(bytes\ *\ 8u)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a97caa31896c3af7b3b8f8c3b99b65faf}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK@{USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK}}
+\index{USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK@{USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK}{USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a97caa31896c3af7b3b8f8c3b99b65faf} 
+\#define USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+KEY\+\_\+\+PAIR\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x7000)}
+
+\Hypertarget{crypto__common_8h_a86bb99c0147c64d98d29c08b2be08854}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_KEY\_TYPE\_MASK@{USS\_PSA\_KEY\_TYPE\_MASK}}
+\index{USS\_PSA\_KEY\_TYPE\_MASK@{USS\_PSA\_KEY\_TYPE\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_KEY\_TYPE\_MASK}{USS\_PSA\_KEY\_TYPE\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a86bb99c0147c64d98d29c08b2be08854} 
+\#define USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x7000)}
+
+\Hypertarget{crypto__common_8h_a7763d2cd11137cf46249b604f8cb8c2a}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK@{USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK}}
+\index{USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK@{USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK}{USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a7763d2cd11137cf46249b604f8cb8c2a} 
+\#define USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+PUBLIC\+\_\+\+KEY\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x4000)}
+
+\Hypertarget{crypto__common_8h_a2bb9994377fe44723d328c3cc74960bc}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_KEY\_TYPE\_RAW\_MASK@{USS\_PSA\_KEY\_TYPE\_RAW\_MASK}}
+\index{USS\_PSA\_KEY\_TYPE\_RAW\_MASK@{USS\_PSA\_KEY\_TYPE\_RAW\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_KEY\_TYPE\_RAW\_MASK}{USS\_PSA\_KEY\_TYPE\_RAW\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a2bb9994377fe44723d328c3cc74960bc} 
+\#define USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+RAW\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x1000)}
+
+\Hypertarget{crypto__common_8h_a9016695ac323fd10decb5be92a960d85}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK@{USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK}}
+\index{USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK@{USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK}{USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a9016695ac323fd10decb5be92a960d85} 
+\#define USS\+\_\+\+PSA\+\_\+\+KEY\+\_\+\+TYPE\+\_\+\+SYMMETRIC\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}) 0x2000)}
+
+\Hypertarget{crypto__common_8h_adf2f47b64b42de8ccbb72f39c7bbaba3}\index{crypto\_common.h@{crypto\_common.h}!USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE@{USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE}}
+\index{USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE@{USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE}{USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE}}
+{\footnotesize\ttfamily \label{crypto__common_8h_adf2f47b64b42de8ccbb72f39c7bbaba3} 
+\#define USS\+\_\+\+PSA\+\_\+\+ROUND\+\_\+\+UP\+\_\+\+TO\+\_\+\+MULTIPLE(\begin{DoxyParamCaption}\item[{}]{block\+\_\+size}{, }\item[{}]{length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((length\ +\ (block\_size\ -\/\ 1))\ /\ block\_size)\ *\ block\_size)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__common_8h_a2febb44d5ae5a05cdb6ad6ede7ea8fe7}\index{crypto\_common.h@{crypto\_common.h}!USS\_TRUE@{USS\_TRUE}}
+\index{USS\_TRUE@{USS\_TRUE}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TRUE}{USS\_TRUE}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a2febb44d5ae5a05cdb6ad6ede7ea8fe7} 
+\#define USS\+\_\+\+TRUE~1u}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{crypto__common_8h_a0160269195d668774bfc08a4b08d8327}\index{crypto\_common.h@{crypto\_common.h}!check\_aead\_tag\_len@{check\_aead\_tag\_len}}
+\index{check\_aead\_tag\_len@{check\_aead\_tag\_len}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{check\_aead\_tag\_len()}{check\_aead\_tag\_len()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a0160269195d668774bfc08a4b08d8327} 
+bool check\+\_\+aead\+\_\+tag\+\_\+len (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}}]{psa\+\_\+algo}{}\end{DoxyParamCaption})}
+
+
+
+Helper function to check if the tag length is valid for the given algorithm. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+algo} & PSA AEAD algo\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If the tag length is valid 
+
+false If not 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_ae797a4ade4285f2ca15a1994a222fddb}\index{crypto\_common.h@{crypto\_common.h}!check\_key\_policy@{check\_key\_policy}}
+\index{check\_key\_policy@{check\_key\_policy}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{check\_key\_policy()}{check\_key\_policy()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae797a4ade4285f2ca15a1994a222fddb} 
+bool check\+\_\+key\+\_\+policy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}}]{psa\+\_\+algo}{, }\item[{\mbox{\hyperlink{structpsa__key__attributes__t}{psa\+\_\+key\+\_\+attributes\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{attr}{}\end{DoxyParamCaption})}
+
+
+
+Helper function to check if the key has required algorithm set for performing the requested operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em psa\+\_\+algo} & PSA algo \\
+\hline
+{\em attr} & Attribute of key, which will be used to perform the operation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If key can be used for the operation 
+
+false If not 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_ae99ac9494acfc4b11415c67c4a07854f}\index{crypto\_common.h@{crypto\_common.h}!ct\_memcmp@{ct\_memcmp}}
+\index{ct\_memcmp@{ct\_memcmp}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{ct\_memcmp()}{ct\_memcmp()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_ae99ac9494acfc4b11415c67c4a07854f} 
+uint8\+\_\+t ct\+\_\+memcmp (\begin{DoxyParamCaption}\item[{const void \texorpdfstring{$\ast$}{*}}]{s1}{, }\item[{const void \texorpdfstring{$\ast$}{*}}]{s2}{, }\item[{size\+\_\+t}]{n}{}\end{DoxyParamCaption})}
+
+
+
+Constant time memcmp. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em s1} & First buffer \\
+\hline
+\mbox{\texttt{ in}}  & {\em s2} & Second buffer \\
+\hline
+\mbox{\texttt{ in}}  & {\em n} & Size of the buffer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 If the buffers are equal 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a38c7d6dc320b37fe8cbb054d4dcbcfae}\index{crypto\_common.h@{crypto\_common.h}!get\_u1@{get\_u1}}
+\index{get\_u1@{get\_u1}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{get\_u1()}{get\_u1()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a38c7d6dc320b37fe8cbb054d4dcbcfae} 
+mxq\+\_\+u1 get\+\_\+u1 (\begin{DoxyParamCaption}\item[{mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}}]{psrc}{, }\item[{mxq\+\_\+length \texorpdfstring{$\ast$}{*}}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+Helper function to retrieve data from a pointer to memory. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psrc} & Pointer to input buffer from which data will be retrieved \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em offset} & Offset from begining of psrc where data is located\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+One byte of data located at specified offset within psrc 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_abab502be9b7137f4d71ea695b6e8ab5f}\index{crypto\_common.h@{crypto\_common.h}!get\_u2@{get\_u2}}
+\index{get\_u2@{get\_u2}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{get\_u2()}{get\_u2()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_abab502be9b7137f4d71ea695b6e8ab5f} 
+mxq\+\_\+u2 get\+\_\+u2 (\begin{DoxyParamCaption}\item[{mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}}]{psrc}{, }\item[{mxq\+\_\+length \texorpdfstring{$\ast$}{*}}]{offset}{}\end{DoxyParamCaption})}
+
+
+
+Helper function to retrieve data from a pointer to memory. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psrc} & Pointer to input buffer from which data will be retrieved \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em offset} & Offset from begining of psrc where data is located\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Two bytes of data located at specified offset within psrc 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a8d5641bdd36c663e66203d25034e7011}\index{crypto\_common.h@{crypto\_common.h}!ifCryptoInitDone@{ifCryptoInitDone}}
+\index{ifCryptoInitDone@{ifCryptoInitDone}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{ifCryptoInitDone()}{ifCryptoInitDone()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a8d5641bdd36c663e66203d25034e7011} 
+bool if\+Crypto\+Init\+Done (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Helper function to check if \doxylink{psa__name__mangling_8h_acc249283d938c05e57c318cc941089d4}{psa\+\_\+crypto\+\_\+init()} was invoked and if it successfully returned. 
+
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a8299472b91aec45b6053d5f21d586a7f}\index{crypto\_common.h@{crypto\_common.h}!uss\_maxq\_to\_psa\_algo\_id@{uss\_maxq\_to\_psa\_algo\_id}}
+\index{uss\_maxq\_to\_psa\_algo\_id@{uss\_maxq\_to\_psa\_algo\_id}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_maxq\_to\_psa\_algo\_id()}{uss\_maxq\_to\_psa\_algo\_id()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a8299472b91aec45b6053d5f21d586a7f} 
+\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}} uss\+\_\+maxq\+\_\+to\+\_\+psa\+\_\+algo\+\_\+id (\begin{DoxyParamCaption}\item[{mxq\+\_\+algo\+\_\+id\+\_\+t}]{mxq\+\_\+algo\+\_\+type}{}\end{DoxyParamCaption})}
+
+
+
+Converts a MAXQ algorithm ID to a PSA algorithm ID. 
+
+This function takes a MAXQ algorithm ID as input and converts it to the corresponding PSA algorithm ID.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em mxq\+\_\+algo\+\_\+type} & The MAXQ algorithm ID to be converted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding PSA algorithm ID. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_aa27d249927c1a1948ef09bf642f06e29}\index{crypto\_common.h@{crypto\_common.h}!uss\_maxq\_to\_psa\_key\_type@{uss\_maxq\_to\_psa\_key\_type}}
+\index{uss\_maxq\_to\_psa\_key\_type@{uss\_maxq\_to\_psa\_key\_type}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_maxq\_to\_psa\_key\_type()}{uss\_maxq\_to\_psa\_key\_type()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_aa27d249927c1a1948ef09bf642f06e29} 
+\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}} uss\+\_\+maxq\+\_\+to\+\_\+psa\+\_\+key\+\_\+type (\begin{DoxyParamCaption}\item[{mxq\+\_\+keytype\+\_\+id\+\_\+t}]{mxq\+\_\+key\+\_\+type}{, }\item[{mxq\+\_\+keyparam\+\_\+id\+\_\+t}]{params}{, }\item[{mxq\+\_\+objecttype\+\_\+t}]{mxq\+\_\+object\+\_\+type}{}\end{DoxyParamCaption})}
+
+
+
+Converts a MAXQ key type, along with additional parameters and object type, to a PSA key type. 
+
+This function takes a MAXQ key type, additional parameters, and the MAXQ object type as input, and converts them to the corresponding PSA key type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em mxq\+\_\+key\+\_\+type} & The MAXQ key type to be converted. \\
+\hline
+\mbox{\texttt{ in}}  & {\em params} & Additional parameters for the conversion. \\
+\hline
+\mbox{\texttt{ in}}  & {\em mxq\+\_\+object\+\_\+type} & The MAXQ object type to be considered in the conversion.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding PSA key type. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a09fe68476ec7e563da884bf10eb3d46a}\index{crypto\_common.h@{crypto\_common.h}!uss\_maxq\_to\_psa\_keyuse@{uss\_maxq\_to\_psa\_keyuse}}
+\index{uss\_maxq\_to\_psa\_keyuse@{uss\_maxq\_to\_psa\_keyuse}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_maxq\_to\_psa\_keyuse()}{uss\_maxq\_to\_psa\_keyuse()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a09fe68476ec7e563da884bf10eb3d46a} 
+\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}} uss\+\_\+maxq\+\_\+to\+\_\+psa\+\_\+keyuse (\begin{DoxyParamCaption}\item[{mxq\+\_\+keyuse\+\_\+t}]{mxq\+\_\+key\+\_\+use}{}\end{DoxyParamCaption})}
+
+
+
+Converts a MAXQ key usage to a PSA key usage. 
+
+This function takes a MAXQ key usage as input and converts it to the corresponding PSA key usage.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em mxq\+\_\+key\+\_\+use} & The MAXQ key usage to be converted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding PSA key usage. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a6395efbc108363540729474eae81ab93}\index{crypto\_common.h@{crypto\_common.h}!uss\_psa\_to\_maxq\_algo\_id@{uss\_psa\_to\_maxq\_algo\_id}}
+\index{uss\_psa\_to\_maxq\_algo\_id@{uss\_psa\_to\_maxq\_algo\_id}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_psa\_to\_maxq\_algo\_id()}{uss\_psa\_to\_maxq\_algo\_id()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a6395efbc108363540729474eae81ab93} 
+mxq\+\_\+algo\+\_\+id\+\_\+t uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+algo\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}}]{psa\+\_\+algo\+\_\+type}{}\end{DoxyParamCaption})}
+
+
+
+Helper function that translates the PSA algo IDs to MAXQ algo IDs. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+algo\+\_\+type} & PSA algo ID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mxq\+\_\+algo\+\_\+id\+\_\+t MAXQ algo ID 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a245523fc5592d7df72f0595370c4c2c6}\index{crypto\_common.h@{crypto\_common.h}!uss\_psa\_to\_maxq\_key\_lifetime@{uss\_psa\_to\_maxq\_key\_lifetime}}
+\index{uss\_psa\_to\_maxq\_key\_lifetime@{uss\_psa\_to\_maxq\_key\_lifetime}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_psa\_to\_maxq\_key\_lifetime()}{uss\_psa\_to\_maxq\_key\_lifetime()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a245523fc5592d7df72f0595370c4c2c6} 
+mxq\+\_\+object\+\_\+prop\+\_\+t uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+key\+\_\+lifetime (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\+\_\+key\+\_\+lifetime\+\_\+t}}}]{psa\+\_\+key\+\_\+lifetime}{}\end{DoxyParamCaption})}
+
+
+
+Converts a PSA key lifetime to a MAXQ key lifetime. 
+
+This function takes a PSA key lifetime as input and converts it to the corresponding MAXQ key lifetime.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+key\+\_\+lifetime} & The PSA key lifetime to be converted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding MAXQ key lifetime. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a1145d7449ac43bb1629f00322a98ee33}\index{crypto\_common.h@{crypto\_common.h}!uss\_psa\_to\_maxq\_key\_type@{uss\_psa\_to\_maxq\_key\_type}}
+\index{uss\_psa\_to\_maxq\_key\_type@{uss\_psa\_to\_maxq\_key\_type}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_psa\_to\_maxq\_key\_type()}{uss\_psa\_to\_maxq\_key\_type()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a1145d7449ac43bb1629f00322a98ee33} 
+mxq\+\_\+keytype\+\_\+id\+\_\+t uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+key\+\_\+type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}}]{psa\+\_\+key\+\_\+type}{}\end{DoxyParamCaption})}
+
+
+
+Converts a PSA key type to a MAXQ key type. 
+
+This function takes a PSA key type as input and converts it to the corresponding MAXQ key type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+key\+\_\+type} & The PSA key type to be converted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding MAXQ key type. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a951d0c2701107a1c46d886700acc0bac}\index{crypto\_common.h@{crypto\_common.h}!uss\_psa\_to\_maxq\_keyuse@{uss\_psa\_to\_maxq\_keyuse}}
+\index{uss\_psa\_to\_maxq\_keyuse@{uss\_psa\_to\_maxq\_keyuse}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_psa\_to\_maxq\_keyuse()}{uss\_psa\_to\_maxq\_keyuse()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a951d0c2701107a1c46d886700acc0bac} 
+mxq\+\_\+keyuse\+\_\+t uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+keyuse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\+\_\+key\+\_\+usage\+\_\+t}}}]{psa\+\_\+key\+\_\+use}{}\end{DoxyParamCaption})}
+
+
+
+Converts a PSA key usage to a MAXQ key usage. 
+
+This function takes a PSA key usage as input and converts it to the corresponding MAXQ key usage.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+key\+\_\+use} & The PSA key usage to be converted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding MAXQ key usage. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a087ea319183ebba3b83e7259920da430}\index{crypto\_common.h@{crypto\_common.h}!uss\_psa\_to\_maxq\_object\_type@{uss\_psa\_to\_maxq\_object\_type}}
+\index{uss\_psa\_to\_maxq\_object\_type@{uss\_psa\_to\_maxq\_object\_type}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_psa\_to\_maxq\_object\_type()}{uss\_psa\_to\_maxq\_object\_type()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a087ea319183ebba3b83e7259920da430} 
+mxq\+\_\+objecttype\+\_\+t uss\+\_\+psa\+\_\+to\+\_\+maxq\+\_\+object\+\_\+type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\+\_\+key\+\_\+type\+\_\+t}}}]{psa\+\_\+key\+\_\+type}{}\end{DoxyParamCaption})}
+
+
+
+Converts a PSA key type to a MAXQ object type. 
+
+This function takes a PSA key type as input and converts it to the corresponding MAXQ object type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+key\+\_\+type} & The PSA key type to be converted.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding MAXQ object type. 
+\end{DoxyReturn}
+\Hypertarget{crypto__common_8h_a41ff05919383dfddb564699d33f21953}\index{crypto\_common.h@{crypto\_common.h}!uss\_sign\_algo\_from\_psa@{uss\_sign\_algo\_from\_psa}}
+\index{uss\_sign\_algo\_from\_psa@{uss\_sign\_algo\_from\_psa}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_sign\_algo\_from\_psa()}{uss\_sign\_algo\_from\_psa()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a41ff05919383dfddb564699d33f21953} 
+mxq\+\_\+algo\+\_\+id\+\_\+t uss\+\_\+sign\+\_\+algo\+\_\+from\+\_\+psa (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}}]{psa\+\_\+algo}{, }\item[{bool}]{is\+Msg}{}\end{DoxyParamCaption})}
+
+
+
+Helper function that translates the PSA MD algos to MAXQ algos during signing (verifying) operation. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em psa\+\_\+algo} & PSA MD algo ID\\
+\hline
+\mbox{\texttt{ in}}  & {\em is\+Msg} & If this function is called from message signing/verifying or hash signing/verifying True\+: For message False\+: For hash\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mxq\+\_\+algo\+\_\+id\+\_\+t MAXQ algo ID
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Only invoked from psa\+\_\+sign\+\_\+\texorpdfstring{$\ast$}{*} or psa\+\_\+verify\+\_\+\texorpdfstring{$\ast$}{*} 
+\end{DoxyNote}
+\Hypertarget{crypto__common_8h_a26b6230dea08ad1af4360cd6d24b871b}\index{crypto\_common.h@{crypto\_common.h}!uss\_to\_psa\_error\_code@{uss\_to\_psa\_error\_code}}
+\index{uss\_to\_psa\_error\_code@{uss\_to\_psa\_error\_code}!crypto\_common.h@{crypto\_common.h}}
+\doxysubsubsection{\texorpdfstring{uss\_to\_psa\_error\_code()}{uss\_to\_psa\_error\_code()}}
+{\footnotesize\ttfamily \label{crypto__common_8h_a26b6230dea08ad1af4360cd6d24b871b} 
+\mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\+\_\+status\+\_\+t}} uss\+\_\+to\+\_\+psa\+\_\+error\+\_\+code (\begin{DoxyParamCaption}\item[{mxq\+\_\+err\+\_\+t}]{maxq\+Code}{}\end{DoxyParamCaption})}
+
+
+
+Helper function that translates the MAXQ status codes to PSA status codes. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em maxq\+Code} & Status code from underlying MAXQ driver code\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+psa\+\_\+status\+\_\+t Corresponding PSA status code 
+\end{DoxyReturn}

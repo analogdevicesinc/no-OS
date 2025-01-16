@@ -1,0 +1,97 @@
+\doxysection{uss\+\_\+aead\+\_\+ctx\+\_\+t Struct Reference}
+\hypertarget{structuss__aead__ctx__t}{}\label{structuss__aead__ctx__t}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+
+
+{\ttfamily \#include $<$crypto\+\_\+typedefs.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a28744059091d6059386f6004ebf766e2}{nonce}} \mbox{[}16\mbox{]}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a3ea9c5e5ba56701212102cb9bd154ce6}{body\+\_\+available}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_ad15d80a0634428a4b258156849504984}{aad\+\_\+available}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a6880762566086b68869bcd9e27ea186e}{is\+Active}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a838cb4bd181e176b5559477e0939beb9}{encrypt\+\_\+decrypt}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a6a34cdb3b7f6a8c26d4a390da7dac13d}{is\+Nonce\+Set}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_acc86e732582a569e202b086f1b8d9d7e}{is\+Len\+Set}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a500f6199fb70cb8b0f51e6de33cb0ff7}{is\+AADBegin}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a4d25fde8adabb93498e46fcc4f09c67a}{is\+Body\+Begin}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__aead__ctx__t_a7e79f53d441b824f351eac908f2fb86e}{is\+Cipher\+Init\+Done}}\+: 1
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structuss__aead__ctx__t_ad15d80a0634428a4b258156849504984}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!aad\_available@{aad\_available}}
+\index{aad\_available@{aad\_available}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{aad\_available}{aad\_available}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_ad15d80a0634428a4b258156849504984} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::aad\+\_\+available}
+
+\Hypertarget{structuss__aead__ctx__t_a3ea9c5e5ba56701212102cb9bd154ce6}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!body\_available@{body\_available}}
+\index{body\_available@{body\_available}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{body\_available}{body\_available}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a3ea9c5e5ba56701212102cb9bd154ce6} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::body\+\_\+available}
+
+\Hypertarget{structuss__aead__ctx__t_a838cb4bd181e176b5559477e0939beb9}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!encrypt\_decrypt@{encrypt\_decrypt}}
+\index{encrypt\_decrypt@{encrypt\_decrypt}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{encrypt\_decrypt}{encrypt\_decrypt}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a838cb4bd181e176b5559477e0939beb9} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::encrypt\+\_\+decrypt}
+
+\Hypertarget{structuss__aead__ctx__t_a500f6199fb70cb8b0f51e6de33cb0ff7}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!isAADBegin@{isAADBegin}}
+\index{isAADBegin@{isAADBegin}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isAADBegin}{isAADBegin}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a500f6199fb70cb8b0f51e6de33cb0ff7} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::is\+AADBegin}
+
+\Hypertarget{structuss__aead__ctx__t_a6880762566086b68869bcd9e27ea186e}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!isActive@{isActive}}
+\index{isActive@{isActive}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isActive}{isActive}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a6880762566086b68869bcd9e27ea186e} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::is\+Active}
+
+\Hypertarget{structuss__aead__ctx__t_a4d25fde8adabb93498e46fcc4f09c67a}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!isBodyBegin@{isBodyBegin}}
+\index{isBodyBegin@{isBodyBegin}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isBodyBegin}{isBodyBegin}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a4d25fde8adabb93498e46fcc4f09c67a} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::is\+Body\+Begin}
+
+\Hypertarget{structuss__aead__ctx__t_a7e79f53d441b824f351eac908f2fb86e}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!isCipherInitDone@{isCipherInitDone}}
+\index{isCipherInitDone@{isCipherInitDone}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isCipherInitDone}{isCipherInitDone}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a7e79f53d441b824f351eac908f2fb86e} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::is\+Cipher\+Init\+Done}
+
+\Hypertarget{structuss__aead__ctx__t_acc86e732582a569e202b086f1b8d9d7e}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!isLenSet@{isLenSet}}
+\index{isLenSet@{isLenSet}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isLenSet}{isLenSet}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_acc86e732582a569e202b086f1b8d9d7e} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::is\+Len\+Set}
+
+\Hypertarget{structuss__aead__ctx__t_a6a34cdb3b7f6a8c26d4a390da7dac13d}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!isNonceSet@{isNonceSet}}
+\index{isNonceSet@{isNonceSet}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isNonceSet}{isNonceSet}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a6a34cdb3b7f6a8c26d4a390da7dac13d} 
+uint32\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::is\+Nonce\+Set}
+
+\Hypertarget{structuss__aead__ctx__t_a28744059091d6059386f6004ebf766e2}\index{uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}!nonce@{nonce}}
+\index{nonce@{nonce}!uss\_aead\_ctx\_t@{uss\_aead\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{nonce}{nonce}}
+{\footnotesize\ttfamily \label{structuss__aead__ctx__t_a28744059091d6059386f6004ebf766e2} 
+uint8\+\_\+t uss\+\_\+aead\+\_\+ctx\+\_\+t\+::nonce\mbox{[}16\mbox{]}}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/\mbox{\hyperlink{crypto__typedefs_8h}{crypto\+\_\+typedefs.\+h}}\end{DoxyCompactItemize}

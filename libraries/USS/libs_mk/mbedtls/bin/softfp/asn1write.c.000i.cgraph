@@ -1,0 +1,1505 @@
+Trivially needed symbols: mbedtls_asn1_store_named_data/33 mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_named_bitstring/28 mbedtls_asn1_write_ia5_string/27 mbedtls_asn1_write_printable_string/26 mbedtls_asn1_write_utf8_string/25 mbedtls_asn1_write_tagged_string/24 mbedtls_asn1_write_enum/23 mbedtls_asn1_write_int/22 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 mbedtls_asn1_write_raw_buffer/15 mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13
+
+
+Initial Symbol table:
+
+memcmp/39 (memcmp) @062d1000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: asn1_find_named_data/32 
+  Calls: 
+mbedtls_free/38 (mbedtls_free) @06267f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_calloc/37 (mbedtls_calloc) @06267e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_mpi_write_binary/36 (mbedtls_mpi_write_binary) @06267dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_mpi_size/35 (mbedtls_mpi_size) @06267d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+memcpy/34 (memcpy) @06267c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_raw_buffer/15 
+  Calls: 
+mbedtls_asn1_store_named_data/33 (mbedtls_asn1_store_named_data) @06267bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_free/38 mbedtls_free/38 mbedtls_free/38 mbedtls_calloc/37 memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_calloc/37 asn1_find_named_data/32 
+asn1_find_named_data/32 (asn1_find_named_data) @06267a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_store_named_data/33 
+  Calls: memcmp/39 
+mbedtls_asn1_write_octet_string/31 (mbedtls_asn1_write_octet_string) @06267930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06267bd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_longint/30 (mbedtls_asn1_write_longint) @062677e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06267930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_bitstring/29 (mbedtls_asn1_write_bitstring) @06267690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062677e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_named_bitstring/28 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 memcpy/34 
+mbedtls_asn1_write_named_bitstring/28 (mbedtls_asn1_write_named_bitstring) @06267540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06267690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_bitstring/29 
+mbedtls_asn1_write_ia5_string/27 (mbedtls_asn1_write_ia5_string) @062673f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06267540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_printable_string/26 (mbedtls_asn1_write_printable_string) @062672a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062673f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_utf8_string/25 (mbedtls_asn1_write_utf8_string) @06267150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062672a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_tagged_string/24 (mbedtls_asn1_write_tagged_string) @06267000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06267150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_ia5_string/27 mbedtls_asn1_write_printable_string/26 mbedtls_asn1_write_utf8_string/25 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_enum/23 (mbedtls_asn1_write_enum) @06259e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06267000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+mbedtls_asn1_write_int/22 (mbedtls_asn1_write_int) @06259d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06259e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+asn1_write_tagged_int/21 (asn1_write_tagged_int) @06259bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06259e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_enum/23 mbedtls_asn1_write_int/22 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_bool/20 (mbedtls_asn1_write_bool) @06259a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06259d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_algorithm_identifier/19 (mbedtls_asn1_write_algorithm_identifier) @06259930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06259a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 
+mbedtls_asn1_write_oid/18 (mbedtls_asn1_write_oid) @062597e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06259930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_null/17 (mbedtls_asn1_write_null) @06259690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062597e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_mpi/16 (mbedtls_asn1_write_mpi) @06259540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06259690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_mpi_write_binary/36 mbedtls_mpi_size/35 
+mbedtls_asn1_write_raw_buffer/15 (mbedtls_asn1_write_raw_buffer) @062593f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06259540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_tagged_string/24 mbedtls_asn1_write_oid/18 
+  Calls: memcpy/34 
+mbedtls_asn1_write_tag/14 (mbedtls_asn1_write_tag) @062592a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062593f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_asn1_write_len/13 (mbedtls_asn1_write_len) @06259150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062592a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+_putchar_unlocked/12 (_putchar_unlocked) @0621ba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/11 (_getchar_unlocked) @0621b930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/10 (__sputc_r) @0621b738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/9 (mbedtls_error_add) @0621b000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061dfd20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @061dfbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @061dfa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @061df690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @061df540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061df3f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061df2a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @061df150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @061df000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/12 _getchar_unlocked/11 __sputc_r/10 mbedtls_error_add/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+memcmp/39 (memcmp) @062d1000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: asn1_find_named_data/32 
+  Calls: 
+mbedtls_free/38 (mbedtls_free) @06267f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_calloc/37 (mbedtls_calloc) @06267e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_mpi_write_binary/36 (mbedtls_mpi_write_binary) @06267dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_mpi_size/35 (mbedtls_mpi_size) @06267d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+memcpy/34 (memcpy) @06267c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_raw_buffer/15 
+  Calls: 
+mbedtls_asn1_store_named_data/33 (mbedtls_asn1_store_named_data) @06267bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_free/38 mbedtls_free/38 mbedtls_free/38 mbedtls_calloc/37 memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_calloc/37 asn1_find_named_data/32 
+asn1_find_named_data/32 (asn1_find_named_data) @06267a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_store_named_data/33 
+  Calls: memcmp/39 
+mbedtls_asn1_write_octet_string/31 (mbedtls_asn1_write_octet_string) @06267930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_longint/30 (mbedtls_asn1_write_longint) @062677e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_bitstring/29 (mbedtls_asn1_write_bitstring) @06267690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_named_bitstring/28 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 memcpy/34 
+mbedtls_asn1_write_named_bitstring/28 (mbedtls_asn1_write_named_bitstring) @06267540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_bitstring/29 
+mbedtls_asn1_write_ia5_string/27 (mbedtls_asn1_write_ia5_string) @062673f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_printable_string/26 (mbedtls_asn1_write_printable_string) @062672a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_utf8_string/25 (mbedtls_asn1_write_utf8_string) @06267150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_tagged_string/24 (mbedtls_asn1_write_tagged_string) @06267000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_ia5_string/27 mbedtls_asn1_write_printable_string/26 mbedtls_asn1_write_utf8_string/25 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_enum/23 (mbedtls_asn1_write_enum) @06259e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+mbedtls_asn1_write_int/22 (mbedtls_asn1_write_int) @06259d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+asn1_write_tagged_int/21 (asn1_write_tagged_int) @06259bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_enum/23 mbedtls_asn1_write_int/22 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_bool/20 (mbedtls_asn1_write_bool) @06259a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_algorithm_identifier/19 (mbedtls_asn1_write_algorithm_identifier) @06259930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 
+mbedtls_asn1_write_oid/18 (mbedtls_asn1_write_oid) @062597e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_null/17 (mbedtls_asn1_write_null) @06259690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_mpi/16 (mbedtls_asn1_write_mpi) @06259540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_mpi_write_binary/36 mbedtls_mpi_size/35 
+mbedtls_asn1_write_raw_buffer/15 (mbedtls_asn1_write_raw_buffer) @062593f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_tagged_string/24 mbedtls_asn1_write_oid/18 
+  Calls: memcpy/34 
+mbedtls_asn1_write_tag/14 (mbedtls_asn1_write_tag) @062592a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_asn1_write_len/13 (mbedtls_asn1_write_len) @06259150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+
+
+Initial Symbol table:
+
+memcmp/39 (memcmp) @062d1000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: asn1_find_named_data/32 
+  Calls: 
+mbedtls_free/38 (mbedtls_free) @06267f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_calloc/37 (mbedtls_calloc) @06267e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_mpi_write_binary/36 (mbedtls_mpi_write_binary) @06267dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_mpi_size/35 (mbedtls_mpi_size) @06267d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+memcpy/34 (memcpy) @06267c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_raw_buffer/15 
+  Calls: 
+mbedtls_asn1_store_named_data/33 (mbedtls_asn1_store_named_data) @06267bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_free/38 mbedtls_free/38 mbedtls_free/38 mbedtls_calloc/37 memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_calloc/37 asn1_find_named_data/32 
+asn1_find_named_data/32 (asn1_find_named_data) @06267a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_store_named_data/33 
+  Calls: memcmp/39 
+mbedtls_asn1_write_octet_string/31 (mbedtls_asn1_write_octet_string) @06267930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_longint/30 (mbedtls_asn1_write_longint) @062677e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_bitstring/29 (mbedtls_asn1_write_bitstring) @06267690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_named_bitstring/28 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 memcpy/34 
+mbedtls_asn1_write_named_bitstring/28 (mbedtls_asn1_write_named_bitstring) @06267540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_bitstring/29 
+mbedtls_asn1_write_ia5_string/27 (mbedtls_asn1_write_ia5_string) @062673f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_printable_string/26 (mbedtls_asn1_write_printable_string) @062672a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_utf8_string/25 (mbedtls_asn1_write_utf8_string) @06267150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_tagged_string/24 (mbedtls_asn1_write_tagged_string) @06267000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_ia5_string/27 mbedtls_asn1_write_printable_string/26 mbedtls_asn1_write_utf8_string/25 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_enum/23 (mbedtls_asn1_write_enum) @06259e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+mbedtls_asn1_write_int/22 (mbedtls_asn1_write_int) @06259d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+asn1_write_tagged_int/21 (asn1_write_tagged_int) @06259bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_enum/23 mbedtls_asn1_write_int/22 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_bool/20 (mbedtls_asn1_write_bool) @06259a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_algorithm_identifier/19 (mbedtls_asn1_write_algorithm_identifier) @06259930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 
+mbedtls_asn1_write_oid/18 (mbedtls_asn1_write_oid) @062597e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_null/17 (mbedtls_asn1_write_null) @06259690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_mpi/16 (mbedtls_asn1_write_mpi) @06259540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_mpi_write_binary/36 mbedtls_mpi_size/35 
+mbedtls_asn1_write_raw_buffer/15 (mbedtls_asn1_write_raw_buffer) @062593f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_tagged_string/24 mbedtls_asn1_write_oid/18 
+  Calls: memcpy/34 
+mbedtls_asn1_write_tag/14 (mbedtls_asn1_write_tag) @062592a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_asn1_write_len/13 (mbedtls_asn1_write_len) @06259150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memcmp/39 (memcmp) @062d1000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: asn1_find_named_data/32 
+  Calls: 
+mbedtls_free/38 (mbedtls_free) @06267f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_calloc/37 (mbedtls_calloc) @06267e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 
+  Calls: 
+mbedtls_mpi_write_binary/36 (mbedtls_mpi_write_binary) @06267dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_mpi_size/35 (mbedtls_mpi_size) @06267d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 
+  Calls: 
+memcpy/34 (memcpy) @06267c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 mbedtls_asn1_store_named_data/33 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_raw_buffer/15 
+  Calls: 
+mbedtls_asn1_store_named_data/33 (mbedtls_asn1_store_named_data) @06267bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_free/38 mbedtls_free/38 mbedtls_free/38 mbedtls_calloc/37 memcpy/34 mbedtls_free/38 mbedtls_calloc/37 mbedtls_calloc/37 asn1_find_named_data/32 
+asn1_find_named_data/32 (asn1_find_named_data) @06267a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_store_named_data/33 
+  Calls: memcmp/39 
+mbedtls_asn1_write_octet_string/31 (mbedtls_asn1_write_octet_string) @06267930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_longint/30 (mbedtls_asn1_write_longint) @062677e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_bitstring/29 (mbedtls_asn1_write_bitstring) @06267690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_named_bitstring/28 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 memcpy/34 
+mbedtls_asn1_write_named_bitstring/28 (mbedtls_asn1_write_named_bitstring) @06267540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_bitstring/29 
+mbedtls_asn1_write_ia5_string/27 (mbedtls_asn1_write_ia5_string) @062673f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_printable_string/26 (mbedtls_asn1_write_printable_string) @062672a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_utf8_string/25 (mbedtls_asn1_write_utf8_string) @06267150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 
+mbedtls_asn1_write_tagged_string/24 (mbedtls_asn1_write_tagged_string) @06267000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_ia5_string/27 mbedtls_asn1_write_printable_string/26 mbedtls_asn1_write_utf8_string/25 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_enum/23 (mbedtls_asn1_write_enum) @06259e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+mbedtls_asn1_write_int/22 (mbedtls_asn1_write_int) @06259d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: asn1_write_tagged_int/21 
+asn1_write_tagged_int/21 (asn1_write_tagged_int) @06259bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_enum/23 mbedtls_asn1_write_int/22 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_bool/20 (mbedtls_asn1_write_bool) @06259a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_algorithm_identifier/19 (mbedtls_asn1_write_algorithm_identifier) @06259930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 
+mbedtls_asn1_write_oid/18 (mbedtls_asn1_write_oid) @062597e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_asn1_write_raw_buffer/15 
+mbedtls_asn1_write_null/17 (mbedtls_asn1_write_null) @06259690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 
+mbedtls_asn1_write_mpi/16 (mbedtls_asn1_write_mpi) @06259540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 mbedtls_asn1_write_len/13 mbedtls_mpi_write_binary/36 mbedtls_mpi_size/35 
+mbedtls_asn1_write_raw_buffer/15 (mbedtls_asn1_write_raw_buffer) @062593f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_tagged_string/24 mbedtls_asn1_write_oid/18 
+  Calls: memcpy/34 
+mbedtls_asn1_write_tag/14 (mbedtls_asn1_write_tag) @062592a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+mbedtls_asn1_write_len/13 (mbedtls_asn1_write_len) @06259150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_asn1_write_octet_string/31 mbedtls_asn1_write_longint/30 mbedtls_asn1_write_bitstring/29 mbedtls_asn1_write_tagged_string/24 asn1_write_tagged_int/21 mbedtls_asn1_write_bool/20 mbedtls_asn1_write_algorithm_identifier/19 mbedtls_asn1_write_oid/18 mbedtls_asn1_write_null/17 mbedtls_asn1_write_mpi/16 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memcmp/39 (memcmp) @062d1000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: asn1_find_named_data/32 (344993252 (estimated locally),4.42 per call) 
+  Calls: 
+mbedtls_free/38 (mbedtls_free) @06267f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 (245436427 (estimated locally),0.23 per call) mbedtls_asn1_store_named_data/33 (292574244 (estimated locally),0.27 per call) mbedtls_asn1_store_named_data/33 (2035271 (estimated locally),0.00 per call) mbedtls_asn1_store_named_data/33 (2035271 (estimated locally),0.00 per call) mbedtls_asn1_store_named_data/33 (13083189 (estimated locally),0.01 per call) 
+  Calls: 
+mbedtls_calloc/37 (mbedtls_calloc) @06267e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 (290354227 (estimated locally),0.27 per call) mbedtls_asn1_store_named_data/33 (47888745 (estimated locally),0.04 per call) mbedtls_asn1_store_named_data/33 (158200599 (estimated locally),0.15 per call) mbedtls_asn1_store_named_data/33 (187153200 (estimated locally),0.17 per call) 
+  Calls: 
+mbedtls_mpi_write_binary/36 (mbedtls_mpi_write_binary) @06267dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 (1040367092 (estimated locally),0.97 per call) 
+  Calls: 
+mbedtls_mpi_size/35 (mbedtls_mpi_size) @06267d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_asn1_write_mpi/16 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+memcpy/34 (memcpy) @06267c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_asn1_store_named_data/33 (227477934 (estimated locally),0.21 per call) mbedtls_asn1_store_named_data/33 (145117410 (estimated locally),0.14 per call) mbedtls_asn1_write_bitstring/29 (347002963 (estimated locally),0.32 per call) mbedtls_asn1_write_raw_buffer/15 (1040367092 (estimated locally),0.97 per call) 
+  Calls: 
+mbedtls_asn1_store_named_data/33 (mbedtls_asn1_store_named_data) @06267bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: memcpy/34 (227477934 (estimated locally),0.21 per call) mbedtls_free/38 (245436427 (estimated locally),0.23 per call) mbedtls_calloc/37 (290354227 (estimated locally),0.27 per call) mbedtls_free/38 (292574244 (estimated locally),0.27 per call) mbedtls_free/38 (2035271 (estimated locally),0.00 per call) mbedtls_free/38 (2035271 (estimated locally),0.00 per call) mbedtls_calloc/37 (47888745 (estimated locally),0.04 per call) memcpy/34 (145117410 (estimated locally),0.14 per call) mbedtls_free/38 (13083189 (estimated locally),0.01 per call) mbedtls_calloc/37 (158200599 (estimated locally),0.15 per call) mbedtls_calloc/37 (187153200 (estimated locally),0.17 per call) asn1_find_named_data/32 (1073741823 (estimated locally),1.00 per call) 
+asn1_find_named_data/32 (asn1_find_named_data) @06267a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:78030428 (estimated locally) body local
+  Called by: mbedtls_asn1_store_named_data/33 (1073741823 (estimated locally),1.00 per call) 
+  Calls: memcmp/39 (344993252 (estimated locally),4.42 per call) 
+mbedtls_asn1_write_octet_string/31 (mbedtls_asn1_write_octet_string) @06267930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_len/13 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_raw_buffer/15 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_longint/30 (mbedtls_asn1_write_longint) @062677e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_len/13 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_raw_buffer/15 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_bitstring/29 (mbedtls_asn1_write_bitstring) @06267690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_asn1_write_named_bitstring/28 (229727061 (estimated locally),1.00 per call) 
+  Calls: mbedtls_asn1_write_tag/14 (608937625 (estimated locally),0.57 per call) mbedtls_asn1_write_len/13 (1051524135 (estimated locally),0.98 per call) memcpy/34 (347002963 (estimated locally),0.32 per call) 
+mbedtls_asn1_write_named_bitstring/28 (mbedtls_asn1_write_named_bitstring) @06267540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:229727060 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_bitstring/29 (229727061 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_ia5_string/27 (mbedtls_asn1_write_ia5_string) @062673f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_printable_string/26 (mbedtls_asn1_write_printable_string) @062672a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_utf8_string/25 (mbedtls_asn1_write_utf8_string) @06267150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tagged_string/24 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_tagged_string/24 (mbedtls_asn1_write_tagged_string) @06267000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_asn1_write_ia5_string/27 (1073741824 (estimated locally),1.00 per call) mbedtls_asn1_write_printable_string/26 (1073741824 (estimated locally),1.00 per call) mbedtls_asn1_write_utf8_string/25 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_asn1_write_tag/14 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_len/13 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_raw_buffer/15 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_enum/23 (mbedtls_asn1_write_enum) @06259e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: asn1_write_tagged_int/21 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_int/22 (mbedtls_asn1_write_int) @06259d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: asn1_write_tagged_int/21 (1073741824 (estimated locally),1.00 per call) 
+asn1_write_tagged_int/21 (asn1_write_tagged_int) @06259bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:114863530 (estimated locally) body local nonfreeing_fn
+  Called by: mbedtls_asn1_write_enum/23 (1073741824 (estimated locally),1.00 per call) mbedtls_asn1_write_int/22 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_asn1_write_tag/14 (32180195 (estimated locally),0.28 per call) mbedtls_asn1_write_len/13 (55569323 (estimated locally),0.48 per call) 
+mbedtls_asn1_write_bool/20 (mbedtls_asn1_write_bool) @06259a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 (617264722 (estimated locally),0.57 per call) mbedtls_asn1_write_len/13 (1065903511 (estimated locally),0.99 per call) 
+mbedtls_asn1_write_algorithm_identifier/19 (mbedtls_asn1_write_algorithm_identifier) @06259930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 (312627212 (estimated locally),0.29 per call) mbedtls_asn1_write_len/13 (539850136 (estimated locally),0.50 per call) mbedtls_asn1_write_oid/18 (932222651 (estimated locally),0.87 per call) mbedtls_asn1_write_null/17 (536870911 (estimated locally),0.50 per call) 
+mbedtls_asn1_write_oid/18 (mbedtls_asn1_write_oid) @062597e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 (932222651 (estimated locally),0.87 per call) 
+  Calls: mbedtls_asn1_write_tag/14 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_len/13 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_raw_buffer/15 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_null/17 (mbedtls_asn1_write_null) @06259690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_asn1_write_algorithm_identifier/19 (536870911 (estimated locally),0.50 per call) 
+  Calls: mbedtls_asn1_write_tag/14 (621803888 (estimated locally),0.58 per call) mbedtls_asn1_write_len/13 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_mpi/16 (mbedtls_asn1_write_mpi) @06259540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_asn1_write_tag/14 (397026152 (estimated locally),0.37 per call) mbedtls_asn1_write_len/13 (685591701 (estimated locally),0.64 per call) mbedtls_mpi_write_binary/36 (1040367092 (estimated locally),0.97 per call) mbedtls_mpi_size/35 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_asn1_write_raw_buffer/15 (mbedtls_asn1_write_raw_buffer) @062593f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_asn1_write_octet_string/31 (1073741824 (estimated locally),1.00 per call) mbedtls_asn1_write_longint/30 (1073741824 (estimated locally),1.00 per call) mbedtls_asn1_write_tagged_string/24 (1073741824 (estimated locally),1.00 per call) mbedtls_asn1_write_oid/18 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memcpy/34 (1040367092 (estimated locally),0.97 per call) 
+mbedtls_asn1_write_tag/14 (mbedtls_asn1_write_tag) @062592a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_asn1_write_octet_string/31 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_longint/30 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_bitstring/29 (608937625 (estimated locally),0.57 per call) mbedtls_asn1_write_tagged_string/24 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_bool/20 (617264722 (estimated locally),0.57 per call) mbedtls_asn1_write_algorithm_identifier/19 (312627212 (estimated locally),0.29 per call) mbedtls_asn1_write_oid/18 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_null/17 (621803888 (estimated locally),0.58 per call) mbedtls_asn1_write_mpi/16 (397026152 (estimated locally),0.37 per call) asn1_write_tagged_int/21 (32180195 (estimated locally),0.28 per call) 
+  Calls: 
+mbedtls_asn1_write_len/13 (mbedtls_asn1_write_len) @06259150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_asn1_write_octet_string/31 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_longint/30 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_bitstring/29 (1051524135 (estimated locally),0.98 per call) mbedtls_asn1_write_tagged_string/24 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_bool/20 (1065903511 (estimated locally),0.99 per call) mbedtls_asn1_write_algorithm_identifier/19 (539850136 (estimated locally),0.50 per call) mbedtls_asn1_write_oid/18 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_null/17 (1073741823 (estimated locally),1.00 per call) mbedtls_asn1_write_mpi/16 (685591701 (estimated locally),0.64 per call) asn1_write_tagged_int/21 (55569323 (estimated locally),0.48 per call) 
+  Calls: 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+memcmp/39 (memcmp) @062d1000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_free/38 (mbedtls_free) @06267f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_calloc/37 (mbedtls_calloc) @06267e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_write_binary/36 (mbedtls_mpi_write_binary) @06267dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_size/35 (mbedtls_mpi_size) @06267d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/34 (memcpy) @06267c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_store_named_data/33 (mbedtls_asn1_store_named_data) @06267bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_store_named_data (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+asn1_find_named_data/32 (asn1_find_named_data) @06267a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.asn1_find_named_data (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:78030428 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_octet_string/31 (mbedtls_asn1_write_octet_string) @06267930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_octet_string (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_longint/30 (mbedtls_asn1_write_longint) @062677e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_longint (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_bitstring/29 (mbedtls_asn1_write_bitstring) @06267690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_bitstring (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_named_bitstring/28 (mbedtls_asn1_write_named_bitstring) @06267540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_named_bitstring (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:229727060 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_ia5_string/27 (mbedtls_asn1_write_ia5_string) @062673f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_ia5_string (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_printable_string/26 (mbedtls_asn1_write_printable_string) @062672a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_printable_string (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_utf8_string/25 (mbedtls_asn1_write_utf8_string) @06267150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_utf8_string (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_tagged_string/24 (mbedtls_asn1_write_tagged_string) @06267000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_tagged_string (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_enum/23 (mbedtls_asn1_write_enum) @06259e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_enum (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_int/22 (mbedtls_asn1_write_int) @06259d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_int (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+asn1_write_tagged_int/21 (asn1_write_tagged_int) @06259bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.asn1_write_tagged_int (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:114863530 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_bool/20 (mbedtls_asn1_write_bool) @06259a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_bool (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_algorithm_identifier/19 (mbedtls_asn1_write_algorithm_identifier) @06259930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_algorithm_identifier (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_oid/18 (mbedtls_asn1_write_oid) @062597e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_oid (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_null/17 (mbedtls_asn1_write_null) @06259690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_null (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_mpi/16 (mbedtls_asn1_write_mpi) @06259540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_mpi (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_raw_buffer/15 (mbedtls_asn1_write_raw_buffer) @062593f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_raw_buffer (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_tag/14 (mbedtls_asn1_write_tag) @062592a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_tag (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_len/13 (mbedtls_asn1_write_len) @06259150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_asn1_write_len (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 

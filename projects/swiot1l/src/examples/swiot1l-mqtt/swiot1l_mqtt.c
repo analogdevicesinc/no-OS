@@ -51,6 +51,9 @@
 #include "maxim_trng.h"
 #include "mbedtls/debug.h"
 
+#include "MXQ_API.h"
+#include "USS_API.h"
+
 static void message_handler(struct mqtt_message_data *msg)
 {
 	msg->message.payload[msg->message.len] = 0;
@@ -180,9 +183,44 @@ int swiot1l_mqtt()
 
 	};
 	
-	char my_ca_cert[] = CA_CERT;
-	char my_cli_cert[] = DEVICE_CERT;
-	char my_cli_pk[] = DEVICE_PRIVATE_KEY;
+
+	//char my_ca_cert[] = CA_CERT;
+	//char my_cli_cert[] = DEVICE_CERT;
+	//char my_cli_pk[] = DEVICE_PRIVATE_KEY;
+
+	USS_Module_Init();
+    if(USS_Ping(4) == USS_OK )
+        printf("\nSuccessfully initialize.\n");
+    else
+        printf("\n initialize failed. \n");
+
+    // enable MAXQ106x
+    MXQ_Module_Init();
+
+    // reset the MAXQ106x
+    MXQ_Reset();
+
+    printf("MQTT client example\r\n\r\n");
+
+
+	mxq_u1 my_cli_cert[1024];
+    mxq_length certlen=1024;
+    printf("Device certificate\r\n\r\n");
+    MXQ_ReadObject(0x1002,0,(mxq_u1*)&my_cli_cert,&certlen);
+    //print_buffer(my_cli_cert,certlen);
+
+	mxq_u1 my_ca_cert[1024];
+    mxq_length ca_certlen=1024;
+    printf("Device certificate\r\n\r\n");
+    MXQ_ReadObject(0x1002,0,(mxq_u1*)&my_ca_cert,&ca_certlen);
+    //print_buffer(my_ca_cert,ca_certlen);
+
+	mxq_u1 my_cli_pk[1024];
+    mxq_length my_cli_pk_len=1024;
+    printf("Device certificate\r\n\r\n");
+    MXQ_ReadObject(0x1002,0,(mxq_u1*)&my_cli_pk,&my_cli_pk_len);
+    //print_buffer(my_cli_pk,my_cli_pk_len);
+
 
 	struct no_os_trng_init_param trng_ip = {
 		.platform_ops = &max_trng_ops

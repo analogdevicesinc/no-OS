@@ -1,0 +1,15 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:103:12:set_mont_const_square	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:222:12:mbedtls_mpi_mod_inv_mont	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:37:5:mbedtls_mpi_mod_residue_setup	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:52:6:mbedtls_mpi_mod_residue_release	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:62:6:mbedtls_mpi_mod_modulus_init	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:74:6:mbedtls_mpi_mod_modulus_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:139:5:mbedtls_mpi_mod_modulus_setup	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:235:12:mbedtls_mpi_mod_inv_non_mont	64	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:180:5:mbedtls_mpi_mod_mul	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:208:5:mbedtls_mpi_mod_sub	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:270:5:mbedtls_mpi_mod_inv	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:319:5:mbedtls_mpi_mod_add	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:336:5:mbedtls_mpi_mod_random	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:351:5:mbedtls_mpi_mod_read	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod.c:380:5:mbedtls_mpi_mod_write	32	static

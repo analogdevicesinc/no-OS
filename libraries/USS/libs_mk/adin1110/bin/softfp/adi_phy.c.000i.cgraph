@@ -1,0 +1,3800 @@
+Trivially needed symbols: phyDriverEntry/180
+
+
+Initial Symbol table:
+
+HAL_RegisterCallback/185 (HAL_RegisterCallback) @0645d150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+memset/184 (memset) @0645d0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+HAL_EnableIrq/183 (HAL_EnableIrq) @0645d000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_DisableIrq/182 (HAL_DisableIrq) @06407dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_UnInit/140 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_GetEnableIrq/181 (HAL_GetEnableIrq) @06407f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Read/164 PHY_Write/163 
+  Calls: 
+phyDriverEntry/180 (phyDriverEntry) @063ee870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: PHY_Init/139 (addr) PHY_UnInit/140 (addr) PHY_ReInitPhy/141 (addr) PHY_RegisterCallback/143 (addr) PHY_ReadIrqStatus/145 (addr) PHY_EnterSoftwarePowerdown/153 (addr) PHY_ExitSoftwarePowerdown/154 (addr) PHY_GetSoftwarePowerdown/155 (addr) PHY_GetLinkStatus/156 (addr) PHY_AnAdvTxMode/146 (addr) PHY_AnAdvMstSlvCfg/147 (addr) PHY_AnEnable/148 (addr) PHY_Renegotiate/149 (addr) PHY_GetAnStatus/150 (addr) PHY_Reset/158 (addr) PHY_SetLoopbackMode/159 (addr) PHY_SetTestMode/160 (addr) PHY_LedEn/161 (addr) PHY_LedBlinkTime/162 (addr) PHY_GetCapabilities/151 (addr) PHY_Read/164 (addr) PHY_Write/163 (addr) PHY_GetMseLinkQuality/165 (addr) PHY_FrameGenEn/166 (addr) PHY_FrameGenSetMode/167 (addr) PHY_FrameGenSetFrameCnt/168 (addr) PHY_FrameGenSetFramePayload/169 (addr) PHY_FrameGenSetFrameLen/170 (addr) PHY_FrameGenSetIfgLen/171 (addr) PHY_FrameGenRestart/172 (addr) PHY_FrameGenDone/173 (addr) PHY_FrameChkEn/174 (addr) PHY_FrameChkSourceSelect/175 (addr) PHY_FrameChkReadFrameCnt/176 (addr) PHY_FrameChkReadRxErrCnt/177 (addr) PHY_FrameChkReadErrorCnt/178 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+checkIdentity/179 (checkIdentity) @06407d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063f4000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadErrorCnt/178 (PHY_FrameChkReadErrorCnt) @06407bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @06407a80
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadRxErrCnt/177 (PHY_FrameChkReadRxErrCnt) @06407a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @06407930
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_FrameChkReadFrameCnt/176 (PHY_FrameChkReadFrameCnt) @06407930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064077e0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkSourceSelect/175 (PHY_FrameChkSourceSelect) @064077e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @06407690
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameChkEn/174 (PHY_FrameChkEn) @06407690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @06407540
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenDone/173 (PHY_FrameGenDone) @06407540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064073f0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenRestart/172 
+  Calls: PHY_Read/164 
+PHY_FrameGenRestart/172 (PHY_FrameGenRestart) @064073f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064072a0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_FrameGenDone/173 
+PHY_FrameGenSetIfgLen/171 (PHY_FrameGenSetIfgLen) @064072a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @06407150
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameLen/170 (PHY_FrameGenSetFrameLen) @06407150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @06407000
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFramePayload/169 (PHY_FrameGenSetFramePayload) @06407000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4e70
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameCnt/168 (PHY_FrameGenSetFrameCnt) @063f4e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4d20
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_FrameGenSetMode/167 (PHY_FrameGenSetMode) @063f4d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4bd0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenEn/166 (PHY_FrameGenEn) @063f4bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4a80
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_FrameGenSetFramePayload/169 PHY_Read/164 PHY_Write/163 PHY_FrameGenSetFrameCnt/168 
+PHY_GetMseLinkQuality/165 (PHY_GetMseLinkQuality) @063f4a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f47e0
+  References: convMseToSqi/138 (read) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_Read/164 (PHY_Read) @063f4930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e37e0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_ReadIrqStatus/145 PHY_ReadIrqStatus/145 PHY_GetSoftwarePowerdown/155 PHY_GetLinkStatus/156 PHY_GetLinkStatus/156 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_GetAnStatus/150 PHY_GetAnStatus/150 checkIdentity/179 checkIdentity/179 phyInit/142 phyInit/142 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_LedEn/161 PHY_GetCapabilities/151 PHY_GetMseLinkQuality/165 PHY_FrameGenEn/166 PHY_FrameGenRestart/172 PHY_FrameGenDone/173 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadRxErrCnt/177 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_Write/163 (PHY_Write) @063f47e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4930
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_RegisterCallback/143 PHY_RegisterCallback/143 setSoftwarePowerdown/152 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_AnEnable/148 PHY_Renegotiate/149 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyInit/142 phyInit/142 phyInit/142 PHY_Reset/158 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_LedEn/161 PHY_LedBlinkTime/162 PHY_LedBlinkTime/162 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenSetMode/167 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFramePayload/169 PHY_FrameGenSetFrameLen/170 PHY_FrameGenSetIfgLen/171 PHY_FrameGenRestart/172 PHY_FrameChkEn/174 PHY_FrameChkSourceSelect/175 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_LedBlinkTime/162 (PHY_LedBlinkTime) @063f4690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4540
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_LedEn/161 (PHY_LedEn) @063f4540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f43f0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_SetTestMode/160 (PHY_SetTestMode) @063f43f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f42a0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Read/164 PHY_EnterSoftwarePowerdown/153 
+PHY_SetLoopbackMode/159 (PHY_SetLoopbackMode) @063f42a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4150
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_EnterSoftwarePowerdown/153 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_Reset/158 (PHY_Reset) @063f4150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3690
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 PHY_Write/163 
+phyStaticConfig/157 (phyStaticConfig) @063f4000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063e3690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 
+PHY_GetLinkStatus/156 (PHY_GetLinkStatus) @063e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3d20
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_GetSoftwarePowerdown/155 (PHY_GetSoftwarePowerdown) @063e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3bd0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: setSoftwarePowerdown/152 phyInit/142 
+  Calls: PHY_Read/164 
+PHY_ExitSoftwarePowerdown/154 (PHY_ExitSoftwarePowerdown) @063e3bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3a80
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+PHY_EnterSoftwarePowerdown/153 (PHY_EnterSoftwarePowerdown) @063e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3000
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+setSoftwarePowerdown/152 (setSoftwarePowerdown) @063e3930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063e3a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_EnterSoftwarePowerdown/153 PHY_ExitSoftwarePowerdown/154 
+  Calls: PHY_GetSoftwarePowerdown/155 PHY_Write/163 
+PHY_GetCapabilities/151 (PHY_GetCapabilities) @063e37e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063f4690
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_GetAnStatus/150 (PHY_GetAnStatus) @063e3690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3540
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_Renegotiate/149 (PHY_Renegotiate) @063e3540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e33f0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_AnEnable/148 (PHY_AnEnable) @063e33f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e32a0
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 
+PHY_AnAdvMstSlvCfg/147 (PHY_AnAdvMstSlvCfg) @063e32a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3150
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_Write/163 PHY_Read/164 
+PHY_AnAdvTxMode/146 (PHY_AnAdvTxMode) @063e3150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063e3e70
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_ReadIrqStatus/145 (PHY_ReadIrqStatus) @063e3000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063d5150
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+irqCb/144 (irqCb) @063d5690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @01c61e00
+  References: 
+  Referring: PHY_Init/139 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PHY_RegisterCallback/143 (PHY_RegisterCallback) @063d5150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063d5dc8
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+phyInit/142 (phyInit) @063d5f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063e3690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_Init/139 PHY_ReInitPhy/141 PHY_Reset/158 
+  Calls: PHY_AnEnable/148 phyStaticConfig/157 PHY_Read/164 PHY_Read/164 PHY_Write/163 PHY_Write/163 PHY_GetSoftwarePowerdown/155 PHY_Write/163 checkIdentity/179 
+PHY_ReInitPhy/141 (PHY_ReInitPhy) @063d5dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063d5c78
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 
+PHY_UnInit/140 (PHY_UnInit) @063d5c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @063d5b28
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/182 
+PHY_Init/139 (PHY_Init) @063d5b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @01c61e00
+  References: irqCb/144 (addr) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/183 phyInit/142 HAL_RegisterCallback/185 HAL_DisableIrq/182 memset/184 
+convMseToSqi/138 (convMseToSqi) @063b1af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063f47e0
+  References: 
+  Referring: PHY_GetMseLinkQuality/165 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+print_hex/137 (print_hex) @063a70a8
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/136 (ITM_CheckChar) @063547e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/135 (ITM_ReceiveChar) @06354690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/134 (ITM_SendChar) @06354540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/133 (SysTick_Config) @063541f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/132 (SCB_GetFPUType) @063540a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/131 (ARM_MPU_Load) @0634b690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/130 (ARM_MPU_OrderedMemcpy) @0634bf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/129 (ARM_MPU_SetRegionEx) @0634bdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/128 (ARM_MPU_SetRegion) @0634bc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/127 (ARM_MPU_ClrRegion) @0634bb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/126 (ARM_MPU_Disable) @0634b9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/125 (ARM_MPU_Enable) @0634b888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/124 (__NVIC_SystemReset) @0634a0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/123 (__NVIC_GetVector) @0633ff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/122 (__NVIC_SetVector) @0633fdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/121 (NVIC_DecodePriority) @0633fc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/120 (NVIC_EncodePriority) @0633fb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/119 (__NVIC_GetPriority) @0633f9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/118 (__NVIC_SetPriority) @0633f888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/117 (__NVIC_GetActive) @0633f738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/116 (__NVIC_ClearPendingIRQ) @0633f5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/115 (__NVIC_SetPendingIRQ) @0633f498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/114 (__NVIC_GetPendingIRQ) @0633f348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/113 (__NVIC_DisableIRQ) @0633f1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/112 (__NVIC_GetEnableIRQ) @0633f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/111 (__NVIC_EnableIRQ) @0630bf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/110 (__NVIC_GetPriorityGrouping) @0630bdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/109 (__NVIC_SetPriorityGrouping) @0630bc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/108 (__SMMLA) @062cde70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/107 (__QSUB) @062cdd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/106 (__QADD) @062cdbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/105 (__SEL) @062cda80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/104 (__SMLSLDX) @062cd930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/103 (__SMLSLD) @062cd7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/102 (__SMLSDX) @062cd690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/101 (__SMLSD) @062cd540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/100 (__SMUSDX) @062cd3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/99 (__SMUSD) @062cd2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/98 (__SMLALDX) @062cd150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/97 (__SMLALD) @062cd000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/96 (__SMLADX) @062c8e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/95 (__SMLAD) @062c8d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/94 (__SMUADX) @062c8bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/93 (__SMUAD) @062c8a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/92 (__SXTAB16_RORn) @062c8930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/91 (__SXTAB16) @062c87e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/90 (__SXTB16_RORn) @062c8690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/89 (__SXTB16) @062c8540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/88 (__UXTAB16) @062c83f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/87 (__UXTB16) @062c82a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/86 (__USADA8) @062c8000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/85 (__USAD8) @062c2e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/84 (__UHSAX) @062c2d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/83 (__UQSAX) @062c2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/82 (__USAX) @062c2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/81 (__SHSAX) @062c2930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/80 (__QSAX) @062c27e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/79 (__SSAX) @062c2690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/78 (__UHASX) @062c2540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/77 (__UQASX) @062c23f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/76 (__UASX) @062c22a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/75 (__SHASX) @062c2150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/74 (__QASX) @062c2000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/73 (__SASX) @062b9e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/72 (__UHSUB16) @062b9d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/71 (__UQSUB16) @062b9bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/70 (__USUB16) @062b9a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/69 (__SHSUB16) @062b9930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/68 (__QSUB16) @062b97e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/67 (__SSUB16) @062b9690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/66 (__UHADD16) @062b9540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/65 (__UQADD16) @062b93f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/64 (__UADD16) @062b92a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/63 (__SHADD16) @062b9150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/62 (__QADD16) @062b9000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/61 (__SADD16) @062b3e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/60 (__UHSUB8) @062b3d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/59 (__UQSUB8) @062b3bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/58 (__USUB8) @062b3a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/57 (__SHSUB8) @062b3930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/56 (__QSUB8) @062b37e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/55 (__SSUB8) @062b3690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/54 (__UHADD8) @062b3540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/53 (__UQADD8) @062b33f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/52 (__UADD8) @062b32a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/51 (__SHADD8) @062b3150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/50 (__QADD8) @062b3000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/49 (__SADD8) @062ace70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/48 (__set_FPSCR) @062acd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/47 (__get_FPSCR) @062acbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/46 (__set_FAULTMASK) @062aca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/45 (__get_FAULTMASK) @062ac930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/44 (__set_BASEPRI_MAX) @062ac7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/43 (__set_BASEPRI) @062ac690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/42 (__get_BASEPRI) @062ac540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/41 (__disable_fault_irq) @062ac3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/40 (__enable_fault_irq) @062ac2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/39 (__set_PRIMASK) @062ac150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/38 (__get_PRIMASK) @062ac000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/37 (__set_MSP) @062a9e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/36 (__get_MSP) @062a9d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/35 (__set_PSP) @062a9bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/34 (__get_PSP) @062a9a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/33 (__get_xPSR) @062a9930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/32 (__get_APSR) @062a97e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/31 (__get_IPSR) @062a9690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/30 (__set_CONTROL) @062a9540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/29 (__get_CONTROL) @062a93f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/28 (__disable_irq) @062a92a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/27 (__enable_irq) @062a9150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/26 (__STRT) @062a9000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/25 (__STRHT) @06293e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/24 (__STRBT) @06293d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/23 (__LDRT) @06293bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/22 (__LDRHT) @06293a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/21 (__LDRBT) @06293930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/20 (__RRX) @062937e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/19 (__CLREX) @06293540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/18 (__STREXW) @062933f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/17 (__STREXH) @062932a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/16 (__STREXB) @06293150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/15 (__LDREXW) @06293000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/14 (__LDREXH) @0628ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/13 (__LDREXB) @0628cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/12 (__CLZ) @0628cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/11 (__RBIT) @0628ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/10 (__ROR) @0628c888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/9 (__REVSH) @0628c738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/8 (__REV16) @0628c5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/7 (__REV) @0628c498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/6 (__DMB) @0628c348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/5 (__DSB) @0628c1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/4 (__ISB) @0628c0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/3 (__cmsis_start) @06253e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @06196dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06196c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06196a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: print_hex/137 ITM_CheckChar/136 ITM_ReceiveChar/135 ITM_SendChar/134 SysTick_Config/133 SCB_GetFPUType/132 ARM_MPU_Load/131 ARM_MPU_OrderedMemcpy/130 ARM_MPU_SetRegionEx/129 ARM_MPU_SetRegion/128 ARM_MPU_ClrRegion/127 ARM_MPU_Disable/126 ARM_MPU_Enable/125 __NVIC_SystemReset/124 __NVIC_GetVector/123 __NVIC_SetVector/122 NVIC_DecodePriority/121 NVIC_EncodePriority/120 __NVIC_GetPriority/119 __NVIC_SetPriority/118 __NVIC_GetActive/117 __NVIC_ClearPendingIRQ/116 __NVIC_SetPendingIRQ/115 __NVIC_GetPendingIRQ/114 __NVIC_DisableIRQ/113 __NVIC_GetEnableIRQ/112 __NVIC_EnableIRQ/111 __NVIC_GetPriorityGrouping/110 __NVIC_SetPriorityGrouping/109 __SMMLA/108 __QSUB/107 __QADD/106 __SEL/105 __SMLSLDX/104 __SMLSLD/103 __SMLSDX/102 __SMLSD/101 __SMUSDX/100 __SMUSD/99 __SMLALDX/98 __SMLALD/97 __SMLADX/96 __SMLAD/95 __SMUADX/94 __SMUAD/93 __SXTAB16_RORn/92 __SXTAB16/91 __SXTB16_RORn/90 __SXTB16/89 __UXTAB16/88 __UXTB16/87 __USADA8/86 __USAD8/85 __UHSAX/84 __UQSAX/83 __USAX/82 __SHSAX/81 __QSAX/80 __SSAX/79 __UHASX/78 __UQASX/77 __UASX/76 __SHASX/75 __QASX/74 __SASX/73 __UHSUB16/72 __UQSUB16/71 __USUB16/70 __SHSUB16/69 __QSUB16/68 __SSUB16/67 __UHADD16/66 __UQADD16/65 __UADD16/64 __SHADD16/63 __QADD16/62 __SADD16/61 __UHSUB8/60 __UQSUB8/59 __USUB8/58 __SHSUB8/57 __QSUB8/56 __SSUB8/55 __UHADD8/54 __UQADD8/53 __UADD8/52 __SHADD8/51 __QADD8/50 __SADD8/49 __set_FPSCR/48 __get_FPSCR/47 __set_FAULTMASK/46 __get_FAULTMASK/45 __set_BASEPRI_MAX/44 __set_BASEPRI/43 __get_BASEPRI/42 __disable_fault_irq/41 __enable_fault_irq/40 __set_PRIMASK/39 __get_PRIMASK/38 __set_MSP/37 __get_MSP/36 __set_PSP/35 __get_PSP/34 __get_xPSR/33 __get_APSR/32 __get_IPSR/31 __set_CONTROL/30 __get_CONTROL/29 __disable_irq/28 __enable_irq/27 __STRT/26 __STRHT/25 __STRBT/24 __LDRT/23 __LDRHT/22 __LDRBT/21 __RRX/20 __CLREX/19 __STREXW/18 __STREXH/17 __STREXB/16 __LDREXW/15 __LDREXH/14 __LDREXB/13 __CLZ/12 __RBIT/11 __ROR/10 __REVSH/9 __REV16/8 __REV/7 __DMB/6 __DSB/5 __ISB/4 __cmsis_start/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+HAL_RegisterCallback/185 (HAL_RegisterCallback) @0645d150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+memset/184 (memset) @0645d0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+HAL_EnableIrq/183 (HAL_EnableIrq) @0645d000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_DisableIrq/182 (HAL_DisableIrq) @06407dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_UnInit/140 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_GetEnableIrq/181 (HAL_GetEnableIrq) @06407f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Read/164 PHY_Write/163 
+  Calls: 
+phyDriverEntry/180 (phyDriverEntry) @063ee870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: PHY_Init/139 (addr) PHY_UnInit/140 (addr) PHY_ReInitPhy/141 (addr) PHY_RegisterCallback/143 (addr) PHY_ReadIrqStatus/145 (addr) PHY_EnterSoftwarePowerdown/153 (addr) PHY_ExitSoftwarePowerdown/154 (addr) PHY_GetSoftwarePowerdown/155 (addr) PHY_GetLinkStatus/156 (addr) PHY_AnAdvTxMode/146 (addr) PHY_AnAdvMstSlvCfg/147 (addr) PHY_AnEnable/148 (addr) PHY_Renegotiate/149 (addr) PHY_GetAnStatus/150 (addr) PHY_Reset/158 (addr) PHY_SetLoopbackMode/159 (addr) PHY_SetTestMode/160 (addr) PHY_LedEn/161 (addr) PHY_LedBlinkTime/162 (addr) PHY_GetCapabilities/151 (addr) PHY_Read/164 (addr) PHY_Write/163 (addr) PHY_GetMseLinkQuality/165 (addr) PHY_FrameGenEn/166 (addr) PHY_FrameGenSetMode/167 (addr) PHY_FrameGenSetFrameCnt/168 (addr) PHY_FrameGenSetFramePayload/169 (addr) PHY_FrameGenSetFrameLen/170 (addr) PHY_FrameGenSetIfgLen/171 (addr) PHY_FrameGenRestart/172 (addr) PHY_FrameGenDone/173 (addr) PHY_FrameChkEn/174 (addr) PHY_FrameChkSourceSelect/175 (addr) PHY_FrameChkReadFrameCnt/176 (addr) PHY_FrameChkReadRxErrCnt/177 (addr) PHY_FrameChkReadErrorCnt/178 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+checkIdentity/179 (checkIdentity) @06407d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadErrorCnt/178 (PHY_FrameChkReadErrorCnt) @06407bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadRxErrCnt/177 (PHY_FrameChkReadRxErrCnt) @06407a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_FrameChkReadFrameCnt/176 (PHY_FrameChkReadFrameCnt) @06407930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkSourceSelect/175 (PHY_FrameChkSourceSelect) @064077e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameChkEn/174 (PHY_FrameChkEn) @06407690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenDone/173 (PHY_FrameGenDone) @06407540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenRestart/172 
+  Calls: PHY_Read/164 
+PHY_FrameGenRestart/172 (PHY_FrameGenRestart) @064073f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_FrameGenDone/173 
+PHY_FrameGenSetIfgLen/171 (PHY_FrameGenSetIfgLen) @064072a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameLen/170 (PHY_FrameGenSetFrameLen) @06407150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFramePayload/169 (PHY_FrameGenSetFramePayload) @06407000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameCnt/168 (PHY_FrameGenSetFrameCnt) @063f4e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_FrameGenSetMode/167 (PHY_FrameGenSetMode) @063f4d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenEn/166 (PHY_FrameGenEn) @063f4bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_FrameGenSetFramePayload/169 PHY_Read/164 PHY_Write/163 PHY_FrameGenSetFrameCnt/168 
+PHY_GetMseLinkQuality/165 (PHY_GetMseLinkQuality) @063f4a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: convMseToSqi/138 (read) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_Read/164 (PHY_Read) @063f4930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_ReadIrqStatus/145 PHY_ReadIrqStatus/145 PHY_GetSoftwarePowerdown/155 PHY_GetLinkStatus/156 PHY_GetLinkStatus/156 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_GetAnStatus/150 PHY_GetAnStatus/150 checkIdentity/179 checkIdentity/179 phyInit/142 phyInit/142 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_LedEn/161 PHY_GetCapabilities/151 PHY_GetMseLinkQuality/165 PHY_FrameGenEn/166 PHY_FrameGenRestart/172 PHY_FrameGenDone/173 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadRxErrCnt/177 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_Write/163 (PHY_Write) @063f47e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_RegisterCallback/143 PHY_RegisterCallback/143 setSoftwarePowerdown/152 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_AnEnable/148 PHY_Renegotiate/149 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyInit/142 phyInit/142 phyInit/142 PHY_Reset/158 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_LedEn/161 PHY_LedBlinkTime/162 PHY_LedBlinkTime/162 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenSetMode/167 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFramePayload/169 PHY_FrameGenSetFrameLen/170 PHY_FrameGenSetIfgLen/171 PHY_FrameGenRestart/172 PHY_FrameChkEn/174 PHY_FrameChkSourceSelect/175 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_LedBlinkTime/162 (PHY_LedBlinkTime) @063f4690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_LedEn/161 (PHY_LedEn) @063f4540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_SetTestMode/160 (PHY_SetTestMode) @063f43f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Read/164 PHY_EnterSoftwarePowerdown/153 
+PHY_SetLoopbackMode/159 (PHY_SetLoopbackMode) @063f42a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_EnterSoftwarePowerdown/153 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_Reset/158 (PHY_Reset) @063f4150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 PHY_Write/163 
+phyStaticConfig/157 (phyStaticConfig) @063f4000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 
+PHY_GetLinkStatus/156 (PHY_GetLinkStatus) @063e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_GetSoftwarePowerdown/155 (PHY_GetSoftwarePowerdown) @063e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: setSoftwarePowerdown/152 phyInit/142 
+  Calls: PHY_Read/164 
+PHY_ExitSoftwarePowerdown/154 (PHY_ExitSoftwarePowerdown) @063e3bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+PHY_EnterSoftwarePowerdown/153 (PHY_EnterSoftwarePowerdown) @063e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+setSoftwarePowerdown/152 (setSoftwarePowerdown) @063e3930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_EnterSoftwarePowerdown/153 PHY_ExitSoftwarePowerdown/154 
+  Calls: PHY_GetSoftwarePowerdown/155 PHY_Write/163 
+PHY_GetCapabilities/151 (PHY_GetCapabilities) @063e37e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_GetAnStatus/150 (PHY_GetAnStatus) @063e3690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_Renegotiate/149 (PHY_Renegotiate) @063e3540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_AnEnable/148 (PHY_AnEnable) @063e33f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 
+PHY_AnAdvMstSlvCfg/147 (PHY_AnAdvMstSlvCfg) @063e32a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_Write/163 PHY_Read/164 
+PHY_AnAdvTxMode/146 (PHY_AnAdvTxMode) @063e3150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_ReadIrqStatus/145 (PHY_ReadIrqStatus) @063e3000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+irqCb/144 (irqCb) @063d5690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: PHY_Init/139 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PHY_RegisterCallback/143 (PHY_RegisterCallback) @063d5150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+phyInit/142 (phyInit) @063d5f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_Init/139 PHY_ReInitPhy/141 PHY_Reset/158 
+  Calls: PHY_AnEnable/148 phyStaticConfig/157 PHY_Read/164 PHY_Read/164 PHY_Write/163 PHY_Write/163 PHY_GetSoftwarePowerdown/155 PHY_Write/163 checkIdentity/179 
+PHY_ReInitPhy/141 (PHY_ReInitPhy) @063d5dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 
+PHY_UnInit/140 (PHY_UnInit) @063d5c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/182 
+PHY_Init/139 (PHY_Init) @063d5b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: irqCb/144 (addr) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/183 phyInit/142 HAL_RegisterCallback/185 HAL_DisableIrq/182 memset/184 
+convMseToSqi/138 (convMseToSqi) @063b1af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: PHY_GetMseLinkQuality/165 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+
+
+Initial Symbol table:
+
+HAL_RegisterCallback/185 (HAL_RegisterCallback) @0645d150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+memset/184 (memset) @0645d0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+HAL_EnableIrq/183 (HAL_EnableIrq) @0645d000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_DisableIrq/182 (HAL_DisableIrq) @06407dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_UnInit/140 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_GetEnableIrq/181 (HAL_GetEnableIrq) @06407f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Read/164 PHY_Write/163 
+  Calls: 
+phyDriverEntry/180 (phyDriverEntry) @063ee870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: PHY_Init/139 (addr) PHY_UnInit/140 (addr) PHY_ReInitPhy/141 (addr) PHY_RegisterCallback/143 (addr) PHY_ReadIrqStatus/145 (addr) PHY_EnterSoftwarePowerdown/153 (addr) PHY_ExitSoftwarePowerdown/154 (addr) PHY_GetSoftwarePowerdown/155 (addr) PHY_GetLinkStatus/156 (addr) PHY_AnAdvTxMode/146 (addr) PHY_AnAdvMstSlvCfg/147 (addr) PHY_AnEnable/148 (addr) PHY_Renegotiate/149 (addr) PHY_GetAnStatus/150 (addr) PHY_Reset/158 (addr) PHY_SetLoopbackMode/159 (addr) PHY_SetTestMode/160 (addr) PHY_LedEn/161 (addr) PHY_LedBlinkTime/162 (addr) PHY_GetCapabilities/151 (addr) PHY_Read/164 (addr) PHY_Write/163 (addr) PHY_GetMseLinkQuality/165 (addr) PHY_FrameGenEn/166 (addr) PHY_FrameGenSetMode/167 (addr) PHY_FrameGenSetFrameCnt/168 (addr) PHY_FrameGenSetFramePayload/169 (addr) PHY_FrameGenSetFrameLen/170 (addr) PHY_FrameGenSetIfgLen/171 (addr) PHY_FrameGenRestart/172 (addr) PHY_FrameGenDone/173 (addr) PHY_FrameChkEn/174 (addr) PHY_FrameChkSourceSelect/175 (addr) PHY_FrameChkReadFrameCnt/176 (addr) PHY_FrameChkReadRxErrCnt/177 (addr) PHY_FrameChkReadErrorCnt/178 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+checkIdentity/179 (checkIdentity) @06407d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadErrorCnt/178 (PHY_FrameChkReadErrorCnt) @06407bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadRxErrCnt/177 (PHY_FrameChkReadRxErrCnt) @06407a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_FrameChkReadFrameCnt/176 (PHY_FrameChkReadFrameCnt) @06407930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkSourceSelect/175 (PHY_FrameChkSourceSelect) @064077e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameChkEn/174 (PHY_FrameChkEn) @06407690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenDone/173 (PHY_FrameGenDone) @06407540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenRestart/172 
+  Calls: PHY_Read/164 
+PHY_FrameGenRestart/172 (PHY_FrameGenRestart) @064073f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_FrameGenDone/173 
+PHY_FrameGenSetIfgLen/171 (PHY_FrameGenSetIfgLen) @064072a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameLen/170 (PHY_FrameGenSetFrameLen) @06407150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFramePayload/169 (PHY_FrameGenSetFramePayload) @06407000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameCnt/168 (PHY_FrameGenSetFrameCnt) @063f4e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_FrameGenSetMode/167 (PHY_FrameGenSetMode) @063f4d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenEn/166 (PHY_FrameGenEn) @063f4bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_FrameGenSetFramePayload/169 PHY_Read/164 PHY_Write/163 PHY_FrameGenSetFrameCnt/168 
+PHY_GetMseLinkQuality/165 (PHY_GetMseLinkQuality) @063f4a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: convMseToSqi/138 (read) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_Read/164 (PHY_Read) @063f4930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_ReadIrqStatus/145 PHY_ReadIrqStatus/145 PHY_GetSoftwarePowerdown/155 PHY_GetLinkStatus/156 PHY_GetLinkStatus/156 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_GetAnStatus/150 PHY_GetAnStatus/150 checkIdentity/179 checkIdentity/179 phyInit/142 phyInit/142 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_LedEn/161 PHY_GetCapabilities/151 PHY_GetMseLinkQuality/165 PHY_FrameGenEn/166 PHY_FrameGenRestart/172 PHY_FrameGenDone/173 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadRxErrCnt/177 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_Write/163 (PHY_Write) @063f47e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_RegisterCallback/143 PHY_RegisterCallback/143 setSoftwarePowerdown/152 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_AnEnable/148 PHY_Renegotiate/149 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyInit/142 phyInit/142 phyInit/142 PHY_Reset/158 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_LedEn/161 PHY_LedBlinkTime/162 PHY_LedBlinkTime/162 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenSetMode/167 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFramePayload/169 PHY_FrameGenSetFrameLen/170 PHY_FrameGenSetIfgLen/171 PHY_FrameGenRestart/172 PHY_FrameChkEn/174 PHY_FrameChkSourceSelect/175 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_LedBlinkTime/162 (PHY_LedBlinkTime) @063f4690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_LedEn/161 (PHY_LedEn) @063f4540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_SetTestMode/160 (PHY_SetTestMode) @063f43f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Read/164 PHY_EnterSoftwarePowerdown/153 
+PHY_SetLoopbackMode/159 (PHY_SetLoopbackMode) @063f42a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_EnterSoftwarePowerdown/153 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_Reset/158 (PHY_Reset) @063f4150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 PHY_Write/163 
+phyStaticConfig/157 (phyStaticConfig) @063f4000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 
+PHY_GetLinkStatus/156 (PHY_GetLinkStatus) @063e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_GetSoftwarePowerdown/155 (PHY_GetSoftwarePowerdown) @063e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: setSoftwarePowerdown/152 phyInit/142 
+  Calls: PHY_Read/164 
+PHY_ExitSoftwarePowerdown/154 (PHY_ExitSoftwarePowerdown) @063e3bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+PHY_EnterSoftwarePowerdown/153 (PHY_EnterSoftwarePowerdown) @063e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+setSoftwarePowerdown/152 (setSoftwarePowerdown) @063e3930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_EnterSoftwarePowerdown/153 PHY_ExitSoftwarePowerdown/154 
+  Calls: PHY_GetSoftwarePowerdown/155 PHY_Write/163 
+PHY_GetCapabilities/151 (PHY_GetCapabilities) @063e37e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_GetAnStatus/150 (PHY_GetAnStatus) @063e3690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_Renegotiate/149 (PHY_Renegotiate) @063e3540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_AnEnable/148 (PHY_AnEnable) @063e33f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 
+PHY_AnAdvMstSlvCfg/147 (PHY_AnAdvMstSlvCfg) @063e32a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_Write/163 PHY_Read/164 
+PHY_AnAdvTxMode/146 (PHY_AnAdvTxMode) @063e3150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_ReadIrqStatus/145 (PHY_ReadIrqStatus) @063e3000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+irqCb/144 (irqCb) @063d5690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: PHY_Init/139 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PHY_RegisterCallback/143 (PHY_RegisterCallback) @063d5150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+phyInit/142 (phyInit) @063d5f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_Init/139 PHY_ReInitPhy/141 PHY_Reset/158 
+  Calls: PHY_AnEnable/148 phyStaticConfig/157 PHY_Read/164 PHY_Read/164 PHY_Write/163 PHY_Write/163 PHY_GetSoftwarePowerdown/155 PHY_Write/163 checkIdentity/179 
+PHY_ReInitPhy/141 (PHY_ReInitPhy) @063d5dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 
+PHY_UnInit/140 (PHY_UnInit) @063d5c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/182 
+PHY_Init/139 (PHY_Init) @063d5b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: irqCb/144 (addr) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/183 phyInit/142 HAL_RegisterCallback/185 HAL_DisableIrq/182 memset/184 
+convMseToSqi/138 (convMseToSqi) @063b1af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: PHY_GetMseLinkQuality/165 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+HAL_RegisterCallback/185 (HAL_RegisterCallback) @0645d150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+memset/184 (memset) @0645d0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 
+  Calls: 
+HAL_EnableIrq/183 (HAL_EnableIrq) @0645d000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_DisableIrq/182 (HAL_DisableIrq) @06407dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Init/139 PHY_UnInit/140 PHY_Read/164 PHY_Write/163 
+  Calls: 
+HAL_GetEnableIrq/181 (HAL_GetEnableIrq) @06407f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: PHY_Read/164 PHY_Write/163 
+  Calls: 
+phyDriverEntry/180 (phyDriverEntry) @063ee870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: PHY_Init/139 (addr) PHY_UnInit/140 (addr) PHY_ReInitPhy/141 (addr) PHY_RegisterCallback/143 (addr) PHY_ReadIrqStatus/145 (addr) PHY_EnterSoftwarePowerdown/153 (addr) PHY_ExitSoftwarePowerdown/154 (addr) PHY_GetSoftwarePowerdown/155 (addr) PHY_GetLinkStatus/156 (addr) PHY_AnAdvTxMode/146 (addr) PHY_AnAdvMstSlvCfg/147 (addr) PHY_AnEnable/148 (addr) PHY_Renegotiate/149 (addr) PHY_GetAnStatus/150 (addr) PHY_Reset/158 (addr) PHY_SetLoopbackMode/159 (addr) PHY_SetTestMode/160 (addr) PHY_LedEn/161 (addr) PHY_LedBlinkTime/162 (addr) PHY_GetCapabilities/151 (addr) PHY_Read/164 (addr) PHY_Write/163 (addr) PHY_GetMseLinkQuality/165 (addr) PHY_FrameGenEn/166 (addr) PHY_FrameGenSetMode/167 (addr) PHY_FrameGenSetFrameCnt/168 (addr) PHY_FrameGenSetFramePayload/169 (addr) PHY_FrameGenSetFrameLen/170 (addr) PHY_FrameGenSetIfgLen/171 (addr) PHY_FrameGenRestart/172 (addr) PHY_FrameGenDone/173 (addr) PHY_FrameChkEn/174 (addr) PHY_FrameChkSourceSelect/175 (addr) PHY_FrameChkReadFrameCnt/176 (addr) PHY_FrameChkReadRxErrCnt/177 (addr) PHY_FrameChkReadErrorCnt/178 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+checkIdentity/179 (checkIdentity) @06407d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadErrorCnt/178 (PHY_FrameChkReadErrorCnt) @06407bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_FrameChkReadRxErrCnt/177 (PHY_FrameChkReadRxErrCnt) @06407a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_FrameChkReadFrameCnt/176 (PHY_FrameChkReadFrameCnt) @06407930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_FrameChkSourceSelect/175 (PHY_FrameChkSourceSelect) @064077e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameChkEn/174 (PHY_FrameChkEn) @06407690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenDone/173 (PHY_FrameGenDone) @06407540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenRestart/172 
+  Calls: PHY_Read/164 
+PHY_FrameGenRestart/172 (PHY_FrameGenRestart) @064073f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_FrameGenDone/173 
+PHY_FrameGenSetIfgLen/171 (PHY_FrameGenSetIfgLen) @064072a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameLen/170 (PHY_FrameGenSetFrameLen) @06407150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFramePayload/169 (PHY_FrameGenSetFramePayload) @06407000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 
+PHY_FrameGenSetFrameCnt/168 (PHY_FrameGenSetFrameCnt) @063f4e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_FrameGenEn/166 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_FrameGenSetMode/167 (PHY_FrameGenSetMode) @063f4d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_FrameGenEn/166 (PHY_FrameGenEn) @063f4bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_FrameGenSetFramePayload/169 PHY_Read/164 PHY_Write/163 PHY_FrameGenSetFrameCnt/168 
+PHY_GetMseLinkQuality/165 (PHY_GetMseLinkQuality) @063f4a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: convMseToSqi/138 (read) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_Read/164 (PHY_Read) @063f4930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_ReadIrqStatus/145 PHY_ReadIrqStatus/145 PHY_GetSoftwarePowerdown/155 PHY_GetLinkStatus/156 PHY_GetLinkStatus/156 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_GetAnStatus/150 PHY_GetAnStatus/150 checkIdentity/179 checkIdentity/179 phyInit/142 phyInit/142 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_LedEn/161 PHY_GetCapabilities/151 PHY_GetMseLinkQuality/165 PHY_FrameGenEn/166 PHY_FrameGenRestart/172 PHY_FrameGenDone/173 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadFrameCnt/176 PHY_FrameChkReadRxErrCnt/177 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 PHY_FrameChkReadErrorCnt/178 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_Write/163 (PHY_Write) @063f47e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_RegisterCallback/143 PHY_RegisterCallback/143 setSoftwarePowerdown/152 PHY_AnAdvTxMode/146 PHY_AnAdvMstSlvCfg/147 PHY_AnAdvMstSlvCfg/147 PHY_AnEnable/148 PHY_Renegotiate/149 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyStaticConfig/157 phyInit/142 phyInit/142 phyInit/142 PHY_Reset/158 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetLoopbackMode/159 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_SetTestMode/160 PHY_LedEn/161 PHY_LedBlinkTime/162 PHY_LedBlinkTime/162 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenEn/166 PHY_FrameGenSetMode/167 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFrameCnt/168 PHY_FrameGenSetFramePayload/169 PHY_FrameGenSetFrameLen/170 PHY_FrameGenSetIfgLen/171 PHY_FrameGenRestart/172 PHY_FrameChkEn/174 PHY_FrameChkSourceSelect/175 
+  Calls: HAL_EnableIrq/183 HAL_DisableIrq/182 HAL_GetEnableIrq/181 
+   Indirect callnum speculative call targets: 0
+PHY_LedBlinkTime/162 (PHY_LedBlinkTime) @063f4690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+PHY_LedEn/161 (PHY_LedEn) @063f4540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_SetTestMode/160 (PHY_SetTestMode) @063f43f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Read/164 PHY_EnterSoftwarePowerdown/153 
+PHY_SetLoopbackMode/159 (PHY_SetLoopbackMode) @063f42a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_EnterSoftwarePowerdown/153 PHY_Read/164 PHY_Read/164 PHY_Read/164 
+PHY_Reset/158 (PHY_Reset) @063f4150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 PHY_Write/163 
+phyStaticConfig/157 (phyStaticConfig) @063f4000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 PHY_Write/163 
+PHY_GetLinkStatus/156 (PHY_GetLinkStatus) @063e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_GetSoftwarePowerdown/155 (PHY_GetSoftwarePowerdown) @063e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: setSoftwarePowerdown/152 phyInit/142 
+  Calls: PHY_Read/164 
+PHY_ExitSoftwarePowerdown/154 (PHY_ExitSoftwarePowerdown) @063e3bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+PHY_EnterSoftwarePowerdown/153 (PHY_EnterSoftwarePowerdown) @063e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: PHY_SetLoopbackMode/159 PHY_SetTestMode/160 
+  Calls: setSoftwarePowerdown/152 
+setSoftwarePowerdown/152 (setSoftwarePowerdown) @063e3930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_EnterSoftwarePowerdown/153 PHY_ExitSoftwarePowerdown/154 
+  Calls: PHY_GetSoftwarePowerdown/155 PHY_Write/163 
+PHY_GetCapabilities/151 (PHY_GetCapabilities) @063e37e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 
+PHY_GetAnStatus/150 (PHY_GetAnStatus) @063e3690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+PHY_Renegotiate/149 (PHY_Renegotiate) @063e3540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 
+PHY_AnEnable/148 (PHY_AnEnable) @063e33f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: phyInit/142 
+  Calls: PHY_Write/163 
+PHY_AnAdvMstSlvCfg/147 (PHY_AnAdvMstSlvCfg) @063e32a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 PHY_Write/163 PHY_Read/164 
+PHY_AnAdvTxMode/146 (PHY_AnAdvTxMode) @063e3150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Read/164 
+PHY_ReadIrqStatus/145 (PHY_ReadIrqStatus) @063e3000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Read/164 PHY_Read/164 
+irqCb/144 (irqCb) @063d5690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: PHY_Init/139 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PHY_RegisterCallback/143 (PHY_RegisterCallback) @063d5150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: PHY_Write/163 PHY_Write/163 
+phyInit/142 (phyInit) @063d5f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: PHY_Init/139 PHY_ReInitPhy/141 PHY_Reset/158 
+  Calls: PHY_AnEnable/148 phyStaticConfig/157 PHY_Read/164 PHY_Read/164 PHY_Write/163 PHY_Write/163 PHY_GetSoftwarePowerdown/155 PHY_Write/163 checkIdentity/179 
+PHY_ReInitPhy/141 (PHY_ReInitPhy) @063d5dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: phyInit/142 
+PHY_UnInit/140 (PHY_UnInit) @063d5c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/182 
+PHY_Init/139 (PHY_Init) @063d5b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: irqCb/144 (addr) 
+  Referring: phyDriverEntry/180 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/183 phyInit/142 HAL_RegisterCallback/185 HAL_DisableIrq/182 memset/184 
+convMseToSqi/138 (convMseToSqi) @063b1af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: PHY_GetMseLinkQuality/165 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+HAL_RegisterCallback/185 (HAL_RegisterCallback) @0645d150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: PHY_Init/139 (226667973 (estimated locally),0.21 per call) 
+  Calls: 
+memset/184 (memset) @0645d0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: PHY_Init/139 (686872649 (estimated locally),0.64 per call) 
+  Calls: 
+HAL_EnableIrq/183 (HAL_EnableIrq) @0645d000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: PHY_Init/139 (149600861 (estimated locally),0.14 per call) PHY_Read/164 (354334800 (estimated locally),0.33 per call) PHY_Write/163 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+HAL_DisableIrq/182 (HAL_DisableIrq) @06407dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: PHY_Init/139 (686872649 (estimated locally),0.64 per call) PHY_Read/164 (1073741824 (estimated locally),1.00 per call) PHY_Write/163 (1073741824 (estimated locally),1.00 per call) PHY_UnInit/140 (865006417 (estimated locally),0.81 per call) 
+  Calls: 
+HAL_GetEnableIrq/181 (HAL_GetEnableIrq) @06407f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: PHY_Read/164 (1073741824 (estimated locally),1.00 per call) PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+phyDriverEntry/180 (phyDriverEntry) @063ee870
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: PHY_Init/139 (addr) PHY_UnInit/140 (addr) PHY_ReInitPhy/141 (addr) PHY_RegisterCallback/143 (addr) PHY_ReadIrqStatus/145 (addr) PHY_EnterSoftwarePowerdown/153 (addr) PHY_ExitSoftwarePowerdown/154 (addr) PHY_GetSoftwarePowerdown/155 (addr) PHY_GetLinkStatus/156 (addr) PHY_AnAdvTxMode/146 (addr) PHY_AnAdvMstSlvCfg/147 (addr) PHY_AnEnable/148 (addr) PHY_Renegotiate/149 (addr) PHY_GetAnStatus/150 (addr) PHY_Reset/158 (addr) PHY_SetLoopbackMode/159 (addr) PHY_SetTestMode/160 (addr) PHY_LedEn/161 (addr) PHY_LedBlinkTime/162 (addr) PHY_GetCapabilities/151 (addr) PHY_Read/164 (addr) PHY_Write/163 (addr) PHY_GetMseLinkQuality/165 (addr) PHY_FrameGenEn/166 (addr) PHY_FrameGenSetMode/167 (addr) PHY_FrameGenSetFrameCnt/168 (addr) PHY_FrameGenSetFramePayload/169 (addr) PHY_FrameGenSetFrameLen/170 (addr) PHY_FrameGenSetIfgLen/171 (addr) PHY_FrameGenRestart/172 (addr) PHY_FrameGenDone/173 (addr) PHY_FrameChkEn/174 (addr) PHY_FrameChkSourceSelect/175 (addr) PHY_FrameChkReadFrameCnt/176 (addr) PHY_FrameChkReadRxErrCnt/177 (addr) PHY_FrameChkReadErrorCnt/178 (addr) 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized
+checkIdentity/179 (checkIdentity) @06407d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: phyInit/142 (270065786 (estimated locally),1.00 per call) 
+  Calls: PHY_Read/164 (338531470 (estimated locally),0.32 per call) PHY_Read/164 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameChkReadErrorCnt/178 (PHY_FrameChkReadErrorCnt) @06407bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (7158437 (estimated locally),0.01 per call) PHY_Read/164 (14644921 (estimated locally),0.01 per call) PHY_Read/164 (29960968 (estimated locally),0.03 per call) PHY_Read/164 (61294943 (estimated locally),0.06 per call) PHY_Read/164 (125398821 (estimated locally),0.12 per call) PHY_Read/164 (256544234 (estimated locally),0.24 per call) PHY_Read/164 (524844999 (estimated locally),0.49 per call) PHY_Read/164 (1073741823 (estimated locally),1.00 per call) 
+PHY_FrameChkReadRxErrCnt/177 (PHY_FrameChkReadRxErrCnt) @06407a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameChkReadFrameCnt/176 (PHY_FrameChkReadFrameCnt) @06407930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (524845000 (estimated locally),0.49 per call) PHY_Read/164 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameChkSourceSelect/175 (PHY_FrameChkSourceSelect) @064077e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameChkEn/174 (PHY_FrameChkEn) @06407690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenDone/173 (PHY_FrameGenDone) @06407540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_FrameGenRestart/172 (1073741823 (estimated locally),1.00 per call) 
+  Calls: PHY_Read/164 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenRestart/172 (PHY_FrameGenRestart) @064073f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (256544234 (estimated locally),0.24 per call) PHY_Read/164 (524844999 (estimated locally),0.49 per call) PHY_FrameGenDone/173 (1073741823 (estimated locally),1.00 per call) 
+PHY_FrameGenSetIfgLen/171 (PHY_FrameGenSetIfgLen) @064072a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenSetFrameLen/170 (PHY_FrameGenSetFrameLen) @06407150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenSetFramePayload/169 (PHY_FrameGenSetFramePayload) @06407000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_FrameGenEn/166 (262422500 (estimated locally),0.24 per call) 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenSetFrameCnt/168 (PHY_FrameGenSetFrameCnt) @063f4e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_FrameGenEn/166 (536870911 (estimated locally),0.50 per call) 
+  Calls: PHY_Write/163 (524845000 (estimated locally),0.49 per call) PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenSetMode/167 (PHY_FrameGenSetMode) @063f4d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+PHY_FrameGenEn/166 (PHY_FrameGenEn) @063f4bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (62699410 (estimated locally),0.06 per call) PHY_Write/163 (128272117 (estimated locally),0.12 per call) PHY_FrameGenSetFramePayload/169 (262422500 (estimated locally),0.24 per call) PHY_Read/164 (536870911 (estimated locally),0.50 per call) PHY_Write/163 (262422500 (estimated locally),0.24 per call) PHY_FrameGenSetFrameCnt/168 (536870911 (estimated locally),0.50 per call) 
+PHY_GetMseLinkQuality/165 (PHY_GetMseLinkQuality) @063f4a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: convMseToSqi/138 (read) 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:174035653 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (174035653 (estimated locally),1.00 per call) 
+PHY_Read/164 (PHY_Read) @063f4930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_ReadIrqStatus/145 (524845000 (estimated locally),0.49 per call) PHY_ReadIrqStatus/145 (1073741824 (estimated locally),1.00 per call) PHY_SetLoopbackMode/159 (346397697 (estimated locally),0.32 per call) PHY_SetLoopbackMode/159 (524844998 (estimated locally),0.49 per call) PHY_SetLoopbackMode/159 (1073741821 (estimated locally),1.00 per call) PHY_SetTestMode/160 (335743348 (estimated locally),0.31 per call) phyInit/142 (4824482 (estimated locally),0.02 per call) phyInit/142 (11426951 (estimated locally),0.04 per call) PHY_GetSoftwarePowerdown/155 (686872649 (estimated locally),0.64 per call) PHY_GetLinkStatus/156 (113333986 (estimated locally),0.11 per call) PHY_GetLinkStatus/156 (686872649 (estimated locally),0.64 per call) PHY_AnAdvTxMode/146 (686872649 (estimated locally),0.64 per call) PHY_AnAdvMstSlvCfg/147 (221590608 (estimated locally),0.21 per call) PHY_AnAdvMstSlvCfg/147 (686872648 (estimated locally),0.64 per call) PHY_GetAnStatus/150 (346397696 (estimated locally),0.32 per call) PHY_GetAnStatus/150 (1073741819 (estimated locally),1.00 per call) checkIdentity/179 (338531470 (estimated locally),0.32 per call) checkIdentity/179 (1073741824 (estimated locally),1.00 per call) PHY_LedEn/161 (1073741824 (estimated locally),1.00 per call) PHY_GetCapabilities/151 (686872649 (estimated locally),0.64 per call) PHY_GetMseLinkQuality/165 (174035653 (estimated locally),1.00 per call) PHY_FrameGenEn/166 (536870911 (estimated locally),0.50 per call) PHY_FrameGenRestart/172 (524844999 (estimated locally),0.49 per call) PHY_FrameGenDone/173 (1073741824 (estimated locally),1.00 per call) PHY_FrameChkReadFrameCnt/176 (524845000 (estimated locally),0.49 per call) PHY_FrameChkReadFrameCnt/176 (1073741824 (estimated locally),1.00 per call) PHY_FrameChkReadRxErrCnt/177 (1073741824 (estimated locally),1.00 per call) PHY_FrameChkReadErrorCnt/178 (7158437 (estimated locally),0.01 per call) PHY_FrameChkReadErrorCnt/178 (14644921 (estimated locally),0.01 per call) PHY_FrameChkReadErrorCnt/178 (29960968 (estimated locally),0.03 per call) PHY_FrameChkReadErrorCnt/178 (61294943 (estimated locally),0.06 per call) PHY_FrameChkReadErrorCnt/178 (125398821 (estimated locally),0.12 per call) PHY_FrameChkReadErrorCnt/178 (256544234 (estimated locally),0.24 per call) PHY_FrameChkReadErrorCnt/178 (524844999 (estimated locally),0.49 per call) PHY_FrameChkReadErrorCnt/178 (1073741823 (estimated locally),1.00 per call) 
+  Calls: HAL_EnableIrq/183 (354334800 (estimated locally),0.33 per call) HAL_DisableIrq/182 (1073741824 (estimated locally),1.00 per call) HAL_GetEnableIrq/181 (1073741824 (estimated locally),1.00 per call) 
+   Indirect call(1073741824 (estimated locally),1.00 per call) of param:0 loaded from aggregate passed by reference at offset 64 (vptr maybe changed) num speculative call targets: 0
+PHY_Write/163 (PHY_Write) @063f47e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_SetLoopbackMode/159 (21155922 (estimated locally),0.02 per call) PHY_SetLoopbackMode/159 (43281347 (estimated locally),0.04 per call) PHY_SetLoopbackMode/159 (88546127 (estimated locally),0.08 per call) PHY_SetLoopbackMode/159 (30815563 (estimated locally),0.03 per call) PHY_SetLoopbackMode/159 (63043296 (estimated locally),0.06 per call) PHY_SetLoopbackMode/159 (21414204 (estimated locally),0.02 per call) PHY_SetLoopbackMode/159 (43809748 (estimated locally),0.04 per call) PHY_SetTestMode/160 (45194019 (estimated locally),0.04 per call) PHY_SetTestMode/160 (23590678 (estimated locally),0.02 per call) PHY_SetTestMode/160 (54156744 (estimated locally),0.05 per call) PHY_SetTestMode/160 (110795304 (estimated locally),0.10 per call) PHY_SetTestMode/160 (26471816 (estimated locally),0.02 per call) PHY_SetTestMode/160 (54156744 (estimated locally),0.05 per call) PHY_SetTestMode/160 (110795304 (estimated locally),0.10 per call) PHY_Reset/158 (401518840 (estimated locally),0.37 per call) phyInit/142 (23377559 (estimated locally),0.09 per call) phyInit/142 (47826431 (estimated locally),0.18 per call) phyInit/142 (132008155 (estimated locally),0.49 per call) setSoftwarePowerdown/152 (243218796 (estimated locally),0.64 per call) PHY_AnAdvTxMode/146 (453335945 (estimated locally),0.42 per call) PHY_AnAdvMstSlvCfg/147 (146249801 (estimated locally),0.14 per call) PHY_AnAdvMstSlvCfg/147 (453335944 (estimated locally),0.42 per call) PHY_LedEn/161 (1073741824 (estimated locally),1.00 per call) PHY_FrameGenEn/166 (62699410 (estimated locally),0.06 per call) PHY_FrameGenEn/166 (128272117 (estimated locally),0.12 per call) PHY_FrameGenEn/166 (262422500 (estimated locally),0.24 per call) PHY_FrameGenRestart/172 (256544234 (estimated locally),0.24 per call) PHY_RegisterCallback/143 (524845000 (estimated locally),0.49 per call) PHY_RegisterCallback/143 (1073741824 (estimated locally),1.00 per call) PHY_AnEnable/148 (840525097 (estimated locally),0.78 per call) PHY_Renegotiate/149 (686872649 (estimated locally),0.64 per call) phyStaticConfig/157 (162 (estimated locally),0.00 per call) phyStaticConfig/157 (332 (estimated locally),0.00 per call) phyStaticConfig/157 (2483 (estimated locally),0.00 per call) phyStaticConfig/157 (5081 (estimated locally),0.00 per call) phyStaticConfig/157 (10394 (estimated locally),0.00 per call) phyStaticConfig/157 (21265 (estimated locally),0.00 per call) phyStaticConfig/157 (43504 (estimated locally),0.00 per call) phyStaticConfig/157 (89002 (estimated locally),0.00 per call) phyStaticConfig/157 (182083 (estimated locally),0.00 per call) phyStaticConfig/157 (372510 (estimated locally),0.00 per call) phyStaticConfig/157 (762092 (estimated locally),0.00 per call) phyStaticConfig/157 (1559108 (estimated locally),0.00 per call) phyStaticConfig/157 (3189664 (estimated locally),0.00 per call) phyStaticConfig/157 (6525499 (estimated locally),0.01 per call) phyStaticConfig/157 (13350038 (estimated locally),0.01 per call) phyStaticConfig/157 (27311863 (estimated locally),0.03 per call) phyStaticConfig/157 (55875334 (estimated locally),0.05 per call) phyStaticConfig/157 (114311240 (estimated locally),0.11 per call) phyStaticConfig/157 (154348237 (estimated locally),0.14 per call) phyStaticConfig/157 (79512730 (estimated locally),0.07 per call) phyStaticConfig/157 (354334800 (estimated locally),0.33 per call) PHY_LedBlinkTime/162 (217127802 (estimated locally),0.20 per call) PHY_LedBlinkTime/162 (217127802 (estimated locally),0.20 per call) PHY_FrameGenSetMode/167 (1073741824 (estimated locally),1.00 per call) PHY_FrameGenSetFrameCnt/168 (524845000 (estimated locally),0.49 per call) PHY_FrameGenSetFrameCnt/168 (1073741824 (estimated locally),1.00 per call) PHY_FrameGenSetFramePayload/169 (1073741824 (estimated locally),1.00 per call) PHY_FrameGenSetFrameLen/170 (1073741824 (estimated locally),1.00 per call) PHY_FrameGenSetIfgLen/171 (1073741824 (estimated locally),1.00 per call) PHY_FrameChkEn/174 (1073741824 (estimated locally),1.00 per call) PHY_FrameChkSourceSelect/175 (1073741824 (estimated locally),1.00 per call) 
+  Calls: HAL_EnableIrq/183 (354334800 (estimated locally),0.33 per call) HAL_DisableIrq/182 (1073741824 (estimated locally),1.00 per call) HAL_GetEnableIrq/181 (1073741824 (estimated locally),1.00 per call) 
+   Indirect call(1073741824 (estimated locally),1.00 per call) of param:0 loaded from aggregate passed by reference at offset 96 (vptr maybe changed) num speculative call targets: 0
+PHY_LedBlinkTime/162 (PHY_LedBlinkTime) @063f4690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (217127802 (estimated locally),0.20 per call) PHY_Write/163 (217127802 (estimated locally),0.20 per call) 
+PHY_LedEn/161 (PHY_LedEn) @063f4540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (1073741824 (estimated locally),1.00 per call) PHY_Read/164 (1073741824 (estimated locally),1.00 per call) 
+PHY_SetTestMode/160 (PHY_SetTestMode) @063f43f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 (22090837 (estimated locally),0.02 per call) PHY_Write/163 (45194019 (estimated locally),0.04 per call) PHY_Write/163 (23590678 (estimated locally),0.02 per call) PHY_Write/163 (54156744 (estimated locally),0.05 per call) PHY_Write/163 (110795304 (estimated locally),0.10 per call) PHY_Write/163 (26471816 (estimated locally),0.02 per call) PHY_Write/163 (54156744 (estimated locally),0.05 per call) PHY_Write/163 (110795304 (estimated locally),0.10 per call) PHY_Read/164 (335743348 (estimated locally),0.31 per call) PHY_EnterSoftwarePowerdown/153 (686872648 (estimated locally),0.64 per call) 
+PHY_SetLoopbackMode/159 (PHY_SetLoopbackMode) @063f42a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741821 (estimated locally) body
+  Called by: 
+  Calls: PHY_ExitSoftwarePowerdown/154 (9887806 (estimated locally),0.01 per call) PHY_Write/163 (21155922 (estimated locally),0.02 per call) PHY_Write/163 (43281347 (estimated locally),0.04 per call) PHY_Write/163 (88546127 (estimated locally),0.08 per call) PHY_Write/163 (30815563 (estimated locally),0.03 per call) PHY_Write/163 (63043296 (estimated locally),0.06 per call) PHY_Write/163 (21414204 (estimated locally),0.02 per call) PHY_Write/163 (43809748 (estimated locally),0.04 per call) PHY_EnterSoftwarePowerdown/153 (161898552 (estimated locally),0.15 per call) PHY_Read/164 (346397697 (estimated locally),0.32 per call) PHY_Read/164 (524844998 (estimated locally),0.49 per call) PHY_Read/164 (1073741821 (estimated locally),1.00 per call) 
+PHY_Reset/158 (PHY_Reset) @063f4150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: phyInit/142 (191805551 (estimated locally),0.18 per call) PHY_Write/163 (401518840 (estimated locally),0.37 per call) 
+phyStaticConfig/157 (phyStaticConfig) @063f4000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: phyInit/142 (2358207 (estimated locally),0.01 per call) 
+  Calls: PHY_Write/163 (162 (estimated locally),0.00 per call) PHY_Write/163 (332 (estimated locally),0.00 per call) PHY_Write/163 (2483 (estimated locally),0.00 per call) PHY_Write/163 (5081 (estimated locally),0.00 per call) PHY_Write/163 (10394 (estimated locally),0.00 per call) PHY_Write/163 (21265 (estimated locally),0.00 per call) PHY_Write/163 (43504 (estimated locally),0.00 per call) PHY_Write/163 (89002 (estimated locally),0.00 per call) PHY_Write/163 (182083 (estimated locally),0.00 per call) PHY_Write/163 (372510 (estimated locally),0.00 per call) PHY_Write/163 (762092 (estimated locally),0.00 per call) PHY_Write/163 (1559108 (estimated locally),0.00 per call) PHY_Write/163 (3189664 (estimated locally),0.00 per call) PHY_Write/163 (6525499 (estimated locally),0.01 per call) PHY_Write/163 (13350038 (estimated locally),0.01 per call) PHY_Write/163 (27311863 (estimated locally),0.03 per call) PHY_Write/163 (55875334 (estimated locally),0.05 per call) PHY_Write/163 (114311240 (estimated locally),0.11 per call) PHY_Write/163 (154348237 (estimated locally),0.14 per call) PHY_Write/163 (79512730 (estimated locally),0.07 per call) PHY_Write/163 (354334800 (estimated locally),0.33 per call) 
+PHY_GetLinkStatus/156 (PHY_GetLinkStatus) @063e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (113333986 (estimated locally),0.11 per call) PHY_Read/164 (686872649 (estimated locally),0.64 per call) 
+PHY_GetSoftwarePowerdown/155 (PHY_GetSoftwarePowerdown) @063e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: phyInit/142 (1073741824 (estimated locally),3.98 per call) setSoftwarePowerdown/152 (1073741824 (estimated locally),2.82 per call) 
+  Calls: PHY_Read/164 (686872649 (estimated locally),0.64 per call) 
+PHY_ExitSoftwarePowerdown/154 (PHY_ExitSoftwarePowerdown) @063e3bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_SetLoopbackMode/159 (9887806 (estimated locally),0.01 per call) PHY_SetTestMode/160 (22090837 (estimated locally),0.02 per call) 
+  Calls: setSoftwarePowerdown/152 (1073741824 (estimated locally),1.00 per call) 
+PHY_EnterSoftwarePowerdown/153 (PHY_EnterSoftwarePowerdown) @063e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: PHY_SetLoopbackMode/159 (161898552 (estimated locally),0.15 per call) PHY_SetTestMode/160 (686872648 (estimated locally),0.64 per call) 
+  Calls: setSoftwarePowerdown/152 (1073741824 (estimated locally),1.00 per call) 
+setSoftwarePowerdown/152 (setSoftwarePowerdown) @063e3930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:380207589 (estimated locally) body local
+  Called by: PHY_EnterSoftwarePowerdown/153 (1073741824 (estimated locally),1.00 per call) PHY_ExitSoftwarePowerdown/154 (1073741824 (estimated locally),1.00 per call) 
+  Calls: PHY_GetSoftwarePowerdown/155 (1073741824 (estimated locally),2.82 per call) PHY_Write/163 (243218796 (estimated locally),0.64 per call) 
+PHY_GetCapabilities/151 (PHY_GetCapabilities) @063e37e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (686872649 (estimated locally),0.64 per call) 
+PHY_GetAnStatus/150 (PHY_GetAnStatus) @063e3690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741819 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (346397696 (estimated locally),0.32 per call) PHY_Read/164 (1073741819 (estimated locally),1.00 per call) 
+PHY_Renegotiate/149 (PHY_Renegotiate) @063e3540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (686872649 (estimated locally),0.64 per call) 
+PHY_AnEnable/148 (PHY_AnEnable) @063e33f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: phyInit/142 (1508545 (estimated locally),0.01 per call) 
+  Calls: PHY_Write/163 (840525097 (estimated locally),0.78 per call) 
+PHY_AnAdvMstSlvCfg/147 (PHY_AnAdvMstSlvCfg) @063e32a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (146249801 (estimated locally),0.14 per call) PHY_Read/164 (221590608 (estimated locally),0.21 per call) PHY_Write/163 (453335944 (estimated locally),0.42 per call) PHY_Read/164 (686872648 (estimated locally),0.64 per call) 
+PHY_AnAdvTxMode/146 (PHY_AnAdvTxMode) @063e3150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (453335945 (estimated locally),0.42 per call) PHY_Read/164 (686872649 (estimated locally),0.64 per call) 
+PHY_ReadIrqStatus/145 (PHY_ReadIrqStatus) @063e3000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Read/164 (524845000 (estimated locally),0.49 per call) PHY_Read/164 (1073741824 (estimated locally),1.00 per call) 
+irqCb/144 (irqCb) @063d5690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: PHY_Init/139 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(751619281 (estimated locally),0.70 per call) of param:0 loaded from aggregate passed by reference at offset 160 (vptr maybe changed) num speculative call targets: 0
+PHY_RegisterCallback/143 (PHY_RegisterCallback) @063d5150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: PHY_Write/163 (524845000 (estimated locally),0.49 per call) PHY_Write/163 (1073741824 (estimated locally),1.00 per call) 
+phyInit/142 (phyInit) @063d5f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:270065786 (estimated locally) body local
+  Called by: PHY_Init/139 (686872649 (estimated locally),0.64 per call) PHY_ReInitPhy/141 (1073741824 (estimated locally),1.00 per call) PHY_Reset/158 (191805551 (estimated locally),0.18 per call) 
+  Calls: PHY_AnEnable/148 (1508545 (estimated locally),0.01 per call) phyStaticConfig/157 (2358207 (estimated locally),0.01 per call) PHY_Read/164 (4824482 (estimated locally),0.02 per call) PHY_Read/164 (11426951 (estimated locally),0.04 per call) PHY_Write/163 (23377559 (estimated locally),0.09 per call) PHY_Write/163 (47826431 (estimated locally),0.18 per call) PHY_GetSoftwarePowerdown/155 (1073741824 (estimated locally),3.98 per call) PHY_Write/163 (132008155 (estimated locally),0.49 per call) checkIdentity/179 (270065786 (estimated locally),1.00 per call) 
+PHY_ReInitPhy/141 (PHY_ReInitPhy) @063d5dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: phyInit/142 (1073741824 (estimated locally),1.00 per call) 
+PHY_UnInit/140 (PHY_UnInit) @063d5c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_DisableIrq/182 (865006417 (estimated locally),0.81 per call) 
+PHY_Init/139 (PHY_Init) @063d5b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: irqCb/144 (addr) 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_EnableIrq/183 (149600861 (estimated locally),0.14 per call) phyInit/142 (686872649 (estimated locally),0.64 per call) HAL_RegisterCallback/185 (226667973 (estimated locally),0.21 per call) HAL_DisableIrq/182 (686872649 (estimated locally),0.64 per call) memset/184 (686872649 (estimated locally),0.64 per call) 
+convMseToSqi/138 (convMseToSqi) @063b1af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: PHY_GetMseLinkQuality/165 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+Trivially needed variables: phyDriverEntry/180 convMseToSqi/138
+Removing variables:
+
+Final Symbol table:
+
+HAL_RegisterCallback/185 (HAL_RegisterCallback) @0645d150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/184 (memset) @0645d0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_EnableIrq/183 (HAL_EnableIrq) @0645d000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_DisableIrq/182 (HAL_DisableIrq) @06407dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_GetEnableIrq/181 (HAL_GetEnableIrq) @06407f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+phyDriverEntry/180 (phyDriverEntry) @063ee870
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.phyDriverEntry (implicit_section)
+  Aux: @00000001
+  References: PHY_Init/139 (addr) PHY_UnInit/140 (addr) PHY_ReInitPhy/141 (addr) PHY_RegisterCallback/143 (addr) PHY_ReadIrqStatus/145 (addr) PHY_EnterSoftwarePowerdown/153 (addr) PHY_ExitSoftwarePowerdown/154 (addr) PHY_GetSoftwarePowerdown/155 (addr) PHY_GetLinkStatus/156 (addr) PHY_AnAdvTxMode/146 (addr) PHY_AnAdvMstSlvCfg/147 (addr) PHY_AnEnable/148 (addr) PHY_Renegotiate/149 (addr) PHY_GetAnStatus/150 (addr) PHY_Reset/158 (addr) PHY_SetLoopbackMode/159 (addr) PHY_SetTestMode/160 (addr) PHY_LedEn/161 (addr) PHY_LedBlinkTime/162 (addr) PHY_GetCapabilities/151 (addr) PHY_Read/164 (addr) PHY_Write/163 (addr) PHY_GetMseLinkQuality/165 (addr) PHY_FrameGenEn/166 (addr) PHY_FrameGenSetMode/167 (addr) PHY_FrameGenSetFrameCnt/168 (addr) PHY_FrameGenSetFramePayload/169 (addr) PHY_FrameGenSetFrameLen/170 (addr) PHY_FrameGenSetIfgLen/171 (addr) PHY_FrameGenRestart/172 (addr) PHY_FrameGenDone/173 (addr) PHY_FrameChkEn/174 (addr) PHY_FrameChkSourceSelect/175 (addr) PHY_FrameChkReadFrameCnt/176 (addr) PHY_FrameChkReadRxErrCnt/177 (addr) PHY_FrameChkReadErrorCnt/178 (addr) 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized
+checkIdentity/179 (checkIdentity) @06407d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.checkIdentity (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+PHY_FrameChkReadErrorCnt/178 (PHY_FrameChkReadErrorCnt) @06407bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameChkReadErrorCnt (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameChkReadRxErrCnt/177 (PHY_FrameChkReadRxErrCnt) @06407a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameChkReadRxErrCnt (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameChkReadFrameCnt/176 (PHY_FrameChkReadFrameCnt) @06407930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameChkReadFrameCnt (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameChkSourceSelect/175 (PHY_FrameChkSourceSelect) @064077e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameChkSourceSelect (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameChkEn/174 (PHY_FrameChkEn) @06407690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameChkEn (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenDone/173 (PHY_FrameGenDone) @06407540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenDone (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenRestart/172 (PHY_FrameGenRestart) @064073f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenRestart (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenSetIfgLen/171 (PHY_FrameGenSetIfgLen) @064072a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenSetIfgLen (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenSetFrameLen/170 (PHY_FrameGenSetFrameLen) @06407150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenSetFrameLen (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenSetFramePayload/169 (PHY_FrameGenSetFramePayload) @06407000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenSetFramePayload (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenSetFrameCnt/168 (PHY_FrameGenSetFrameCnt) @063f4e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenSetFrameCnt (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenSetMode/167 (PHY_FrameGenSetMode) @063f4d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenSetMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_FrameGenEn/166 (PHY_FrameGenEn) @063f4bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_FrameGenEn (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_GetMseLinkQuality/165 (PHY_GetMseLinkQuality) @063f4a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_GetMseLinkQuality (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:174035653 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_Read/164 (PHY_Read) @063f4930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_Read (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_Write/163 (PHY_Write) @063f47e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_Write (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_LedBlinkTime/162 (PHY_LedBlinkTime) @063f4690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_LedBlinkTime (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_LedEn/161 (PHY_LedEn) @063f4540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_LedEn (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_SetTestMode/160 (PHY_SetTestMode) @063f43f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_SetTestMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_SetLoopbackMode/159 (PHY_SetLoopbackMode) @063f42a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_SetLoopbackMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741821 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_Reset/158 (PHY_Reset) @063f4150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_Reset (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+phyStaticConfig/157 (phyStaticConfig) @063f4000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.phyStaticConfig (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+PHY_GetLinkStatus/156 (PHY_GetLinkStatus) @063e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_GetLinkStatus (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_GetSoftwarePowerdown/155 (PHY_GetSoftwarePowerdown) @063e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_GetSoftwarePowerdown (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_ExitSoftwarePowerdown/154 (PHY_ExitSoftwarePowerdown) @063e3bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_ExitSoftwarePowerdown (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_EnterSoftwarePowerdown/153 (PHY_EnterSoftwarePowerdown) @063e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_EnterSoftwarePowerdown (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+setSoftwarePowerdown/152 (setSoftwarePowerdown) @063e3930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.setSoftwarePowerdown (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:380207589 (estimated locally) local
+  Called by: 
+  Calls: 
+PHY_GetCapabilities/151 (PHY_GetCapabilities) @063e37e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_GetCapabilities (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_GetAnStatus/150 (PHY_GetAnStatus) @063e3690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_GetAnStatus (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741819 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_Renegotiate/149 (PHY_Renegotiate) @063e3540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_Renegotiate (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_AnEnable/148 (PHY_AnEnable) @063e33f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_AnEnable (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_AnAdvMstSlvCfg/147 (PHY_AnAdvMstSlvCfg) @063e32a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_AnAdvMstSlvCfg (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_AnAdvTxMode/146 (PHY_AnAdvTxMode) @063e3150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_AnAdvTxMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_ReadIrqStatus/145 (PHY_ReadIrqStatus) @063e3000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_ReadIrqStatus (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+irqCb/144 (irqCb) @063d5690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.irqCb (implicit_section)
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_RegisterCallback/143 (PHY_RegisterCallback) @063d5150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_RegisterCallback (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+phyInit/142 (phyInit) @063d5f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.phyInit (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:270065786 (estimated locally) local
+  Called by: 
+  Calls: 
+PHY_ReInitPhy/141 (PHY_ReInitPhy) @063d5dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_ReInitPhy (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_UnInit/140 (PHY_UnInit) @063d5c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_UnInit (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PHY_Init/139 (PHY_Init) @063d5b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PHY_Init (implicit_section)
+  Address is taken.
+  References: 
+  Referring: phyDriverEntry/180 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+convMseToSqi/138 (convMseToSqi) @063b1af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.convMseToSqi (implicit_section)
+  Aux: @063ee870
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known

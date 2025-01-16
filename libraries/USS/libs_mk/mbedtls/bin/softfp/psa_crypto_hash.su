@@ -1,0 +1,6 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_hash.c:33:14:mbedtls_psa_hash_abort	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_hash.c:84:14:mbedtls_psa_hash_setup	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_hash.c:151:14:mbedtls_psa_hash_clone	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_hash.c:210:14:mbedtls_psa_hash_update	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_hash.c:269:14:mbedtls_psa_hash_finish	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_hash.c:343:14:mbedtls_psa_hash_compute	144	static

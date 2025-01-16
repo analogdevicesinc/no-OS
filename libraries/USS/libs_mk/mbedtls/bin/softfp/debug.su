@@ -1,0 +1,12 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:45:20:debug_send_line	568	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:286:13:debug_print_line_by_line	552	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:37:6:mbedtls_debug_set_threshold	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:64:6:mbedtls_debug_print_msg	552	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:91:6:mbedtls_debug_print_ret	544	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:119:6:mbedtls_debug_print_buf	592	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:198:6:mbedtls_debug_print_mpi	560	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:176:6:mbedtls_debug_print_ecp	544	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:249:13:debug_print_pk	96	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:342:13:mbedtls_debug_printf_ecdh_internal	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:310:6:mbedtls_debug_print_crt	1584	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/debug.c:372:6:mbedtls_debug_printf_ecdh	16	static

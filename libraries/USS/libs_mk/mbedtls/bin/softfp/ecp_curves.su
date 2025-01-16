@@ -1,0 +1,8 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:5119:5:mbedtls_ecp_mod_p256_raw	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:5295:6:mbedtls_ecp_fix_negative	12	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:5329:12:ecp_mod_p384	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:5108:12:ecp_mod_p256	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:5406:5:mbedtls_ecp_mod_p521_raw	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:5395:12:ecp_mod_p521	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:4534:12:ecp_group_load	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecp_curves.c:4757:5:mbedtls_ecp_group_load	56	static

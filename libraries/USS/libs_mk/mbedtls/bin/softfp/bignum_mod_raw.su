@@ -1,0 +1,15 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:38:6:mbedtls_mpi_mod_raw_cond_assign	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:46:6:mbedtls_mpi_mod_raw_cond_swap	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:54:5:mbedtls_mpi_mod_raw_read	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:89:5:mbedtls_mpi_mod_raw_write	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:113:6:mbedtls_mpi_mod_raw_sub	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:136:6:mbedtls_mpi_mod_raw_mul	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:150:8:mbedtls_mpi_mod_raw_inv_prime_working_limbs	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:159:6:mbedtls_mpi_mod_raw_inv_prime	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:188:6:mbedtls_mpi_mod_raw_add	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:246:5:mbedtls_mpi_mod_raw_to_mont_rep	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:202:5:mbedtls_mpi_mod_raw_canonical_to_modulus_rep	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:230:5:mbedtls_mpi_mod_raw_random	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:264:5:mbedtls_mpi_mod_raw_from_mont_rep	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:216:5:mbedtls_mpi_mod_raw_modulus_to_canonical_rep	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/bignum_mod_raw.c:281:6:mbedtls_mpi_mod_raw_neg	16	static

@@ -1,0 +1,10 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1807:12:mbedtls_ssl_list_ciphersuites	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1853:34:mbedtls_ssl_ciphersuite_from_string	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1873:34:mbedtls_ssl_ciphersuite_from_id	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1888:13:mbedtls_ssl_get_ciphersuite_name	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1901:5:mbedtls_ssl_get_ciphersuite_id	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1914:8:mbedtls_ssl_ciphersuite_get_cipher_key_bitlen	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:1940:19:mbedtls_ssl_get_ciphersuite_sig_pk_alg	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:2006:19:mbedtls_ssl_get_ciphersuite_sig_alg	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:2025:5:mbedtls_ssl_ciphersuite_uses_ec	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ciphersuites.c:2043:5:mbedtls_ssl_ciphersuite_uses_psk	0	static

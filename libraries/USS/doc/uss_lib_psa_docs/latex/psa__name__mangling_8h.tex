@@ -1,0 +1,764 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/psa\+\_\+name\+\_\+mangling.h File Reference}
+\hypertarget{psa__name__mangling_8h}{}\label{psa__name__mangling_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/psa\_name\_mangling.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/psa\_name\_mangling.h}}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a23e7d500d4c8da60a608323ec13fb0cf}{PSA\+\_\+\+NAME\+\_\+\+MANGLING\+\_\+H}}
+\begin{DoxyCompactList}\small\item\em This file contains the name mangling macros for the PSA Crypto API. This avoids duplication of symbols between TF-\/M and USS Crypto. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(x)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_acc249283d938c05e57c318cc941089d4}{psa\+\_\+crypto\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_af1459851b1809faef849958f9d253d22}{psa\+\_\+key\+\_\+attributes\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a0437fe9a181dd2667b62f063f377ac0f}{psa\+\_\+get\+\_\+key\+\_\+attributes}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+attributes)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a74d46b380ac1e0c993b9fe14a7abef0e}{psa\+\_\+reset\+\_\+key\+\_\+attributes}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+reset\+\_\+key\+\_\+attributes)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a0d97f52b7d6507cfb68dfc0705fbfeb6}{psa\+\_\+set\+\_\+key\+\_\+type}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+type)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a6dc6769fc90f5e4c1b5be3e18e7db031}{psa\+\_\+get\+\_\+key\+\_\+type}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+type)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a99c0bf1dd7854db8365efa9d3c4e94a3}{psa\+\_\+set\+\_\+key\+\_\+bits}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+bits)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a24f385862aef135526d6063c96a35532}{psa\+\_\+get\+\_\+key\+\_\+bits}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+bits)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_abe05b493d2160f06f01f9c1487db9402}{psa\+\_\+set\+\_\+key\+\_\+lifetime}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+lifetime)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aa1b6cbdf4a575acca64ea394f96fc25b}{psa\+\_\+get\+\_\+key\+\_\+lifetime}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+lifetime)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aca2050f050a3b7edca597f2113cfb830}{psa\+\_\+set\+\_\+key\+\_\+id}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+id)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aff8db4c667ae1035049750fc2be565c3}{psa\+\_\+get\+\_\+key\+\_\+id}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+id)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a49df3796739c5190afaa598f3bcd6ead}{psa\+\_\+set\+\_\+key\+\_\+algorithm}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+algorithm)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a89bb887ca2430cf169438c3df4f16875}{psa\+\_\+get\+\_\+key\+\_\+algorithm}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+algorithm)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ad7582fd437683b213b94af3fdf0c38f0}{psa\+\_\+set\+\_\+key\+\_\+usage\+\_\+flags}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+usage\+\_\+flags)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a1eb5358a47872b3c41eac097abf2e3a1}{psa\+\_\+get\+\_\+key\+\_\+usage\+\_\+flags}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+usage\+\_\+flags)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a60d170807ab234052c01612005b77f98}{psa\+\_\+import\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+import\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a5100b4b72a0ae53887294df7bdbbe2f6}{psa\+\_\+generate\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+generate\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a92916bc98478a407d27a061a52c6eef5}{psa\+\_\+copy\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+copy\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a4159111c5629867ea30c09b076efcf58}{psa\+\_\+destroy\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+destroy\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a2b48643c3889ddc197de876f4246e1e0}{psa\+\_\+purge\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+purge\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a4923eb02ff4847a3a3336bc6c2362015}{psa\+\_\+export\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+export\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a0baed840186cfe483b432e634e4f3a09}{psa\+\_\+export\+\_\+public\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+export\+\_\+public\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_acce17bac13b7fd86c5adc649611783af}{psa\+\_\+hash\+\_\+operation\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aa0f1f434be7b57bf24d9011bb5956089}{psa\+\_\+hash\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a7e56a5acc07df193205bce7eb310050d}{psa\+\_\+hash\+\_\+update}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+update)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a15b0d26fce0e9ad450031138080abf31}{psa\+\_\+hash\+\_\+finish}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+finish)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aaa6192b7c3f18374499fe5f6466e440e}{psa\+\_\+hash\+\_\+verify}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+verify)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a0ed69b3a0db43a897a192a4ea0a913df}{psa\+\_\+hash\+\_\+abort}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+abort)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a906a3125d30e58bacb23e55198b20db8}{psa\+\_\+hash\+\_\+clone}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+clone)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ae89727b45894128850eb25891fd831ee}{psa\+\_\+hash\+\_\+compute}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+compute)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ad30cc3803ef830aced0194b7b7f1264c}{psa\+\_\+hash\+\_\+compare}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+compare)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_afcf830be6fb20b9e1b3bc94ab77607fe}{psa\+\_\+hash\+\_\+suspend}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+suspend)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ac31d14938a54beb886a45a2173aeafa6}{psa\+\_\+hash\+\_\+resume}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+resume)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_afd656b4929db333da8ef69abbaaa00d6}{psa\+\_\+mac\+\_\+operation\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a909d6a79ef0a46f5d6250fb04d457466}{psa\+\_\+mac\+\_\+sign\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+sign\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_acfb46cff6c4c0cf3902db96bc0cec5a1}{psa\+\_\+mac\+\_\+verify\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+verify\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_abbd2b43e249b19f2fa84a28da925acc0}{psa\+\_\+mac\+\_\+update}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+update)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a56727df19d84a59628d01bc856aef3f6}{psa\+\_\+mac\+\_\+sign\+\_\+finish}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+sign\+\_\+finish)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a272e00da7cf6da4cad75d04019bf3ccd}{psa\+\_\+mac\+\_\+verify\+\_\+finish}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+verify\+\_\+finish)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aac150dfa949b5e9539933c4421f7afe3}{psa\+\_\+mac\+\_\+compute}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+compute)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ac82e96e9eedc1d17c2d0d5ddece465ef}{psa\+\_\+mac\+\_\+verify}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+verify)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a16c98b062c0403d519c8667da8631da1}{psa\+\_\+mac\+\_\+abort}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+abort)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a291baf4db9aef280783f6081ca608447}{psa\+\_\+cipher\+\_\+encrypt}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+encrypt)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a119cfc7f87542fdeba218223d3058ab5}{psa\+\_\+cipher\+\_\+decrypt}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+decrypt)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a2af0c6cf5d97435194c23c3012102008}{psa\+\_\+cipher\+\_\+operation\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a516d27d7e5b47bcefb6586ddacabb301}{psa\+\_\+cipher\+\_\+encrypt\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+encrypt\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a2e69680e667207664975db23b42a4984}{psa\+\_\+cipher\+\_\+decrypt\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+decrypt\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a3c53a694cac0e7239afe6cb622ab2157}{psa\+\_\+cipher\+\_\+generate\+\_\+iv}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+generate\+\_\+iv)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a58df2268eab79e0ac29c345df8cbe71b}{psa\+\_\+cipher\+\_\+set\+\_\+iv}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+set\+\_\+iv)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a9e7b0a523b83efd6ba611d3db6a76372}{psa\+\_\+cipher\+\_\+update}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+update)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a43d7abc90a57574cf603908f6243e7e6}{psa\+\_\+cipher\+\_\+finish}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+finish)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a2abd9b71bf9b77a011330d2066865874}{psa\+\_\+cipher\+\_\+abort}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+abort)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a873c33300f40b545044fbc4ac448a952}{psa\+\_\+aead\+\_\+encrypt}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+encrypt)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a80d237e39b2803b22ad57821ba9aa9d9}{psa\+\_\+aead\+\_\+decrypt}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+decrypt)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aae24a00282111d64c7a99ff851859281}{psa\+\_\+aead\+\_\+operation\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ab3e30830b14bbf6fdd16872b6b83c1d8}{psa\+\_\+aead\+\_\+encrypt\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+encrypt\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a9a43b25b12dea43001b4a4d92916f085}{psa\+\_\+aead\+\_\+decrypt\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+decrypt\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a2d2b998e55a00f6abe1417e574a8dcb1}{psa\+\_\+aead\+\_\+generate\+\_\+nonce}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+generate\+\_\+nonce)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aa7ddb1980095c0074f1406100eda0e22}{psa\+\_\+aead\+\_\+set\+\_\+nonce}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+set\+\_\+nonce)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a997a9fdf99ced2ed01233158e834d729}{psa\+\_\+aead\+\_\+set\+\_\+lengths}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+set\+\_\+lengths)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ac240ea8a75487730de512bab40fc504c}{psa\+\_\+aead\+\_\+update\+\_\+ad}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+update\+\_\+ad)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aa2974a9c13db2be1141cdc81b7e946b1}{psa\+\_\+aead\+\_\+update}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+update)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a7334830b1871b32b6b71e74f674e0371}{psa\+\_\+aead\+\_\+finish}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+finish)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_af5d609c2a360ed13e870f181b51e96d2}{psa\+\_\+aead\+\_\+verify}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+verify)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a15d3a5af0761aa621e7abd004c8f803a}{psa\+\_\+aead\+\_\+abort}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+abort)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a50c031c495c433f6502e679bb23d1c36}{psa\+\_\+key\+\_\+derivation\+\_\+operation\+\_\+init}}
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a060846ac906dd6e572cae41f4c4e31a3}{psa\+\_\+key\+\_\+derivation\+\_\+setup}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+setup)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a0ed2767767caa530d0e48ea17b38e468}{psa\+\_\+key\+\_\+derivation\+\_\+get\+\_\+capacity}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+get\+\_\+capacity)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_aab05f54d1c35c4c65bd09ec8e68f9e46}{psa\+\_\+key\+\_\+derivation\+\_\+set\+\_\+capacity}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+set\+\_\+capacity)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a970fe623d21acf9f045c4e2593f20f2e}{psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+bytes}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+bytes)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ae8807d367bd70ad4a2e78027d9156ee6}{psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+integer}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+integer)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a1382705ac086a97719472e690243ba32}{psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ad8c018075c1f53a24210019895db48be}{psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+bytes}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+bytes)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a8ba0284182af53b034425528cdb7dc79}{psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a67e8f0aa38040df7cfa5dcf19940beb7}{psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+bytes}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+bytes)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a6ed9c3f80ef87431f6062f5559af3ab8}{psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+key}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_af41632ffbbeed3a021312b21657d9d47}{psa\+\_\+key\+\_\+derivation\+\_\+abort}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+abort)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+sign\+\_\+message)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}{psa\+\_\+verify\+\_\+message}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+verify\+\_\+message)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+sign\+\_\+hash)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+verify\+\_\+hash)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a6ed38070e4f7442ab93f056e4863cd64}{psa\+\_\+asymmetric\+\_\+encrypt}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+asymmetric\+\_\+encrypt)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ac0a20970956d36fe8b9666f7c73c70ae}{psa\+\_\+asymmetric\+\_\+decrypt}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+asymmetric\+\_\+decrypt)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a708ae105643e920cc33a3b43cea5ddbd}{psa\+\_\+key\+\_\+derivation\+\_\+key\+\_\+agreement}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+key\+\_\+agreement)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_ab21bf63ae4cfb50ac2cad13113e98bef}{psa\+\_\+raw\+\_\+key\+\_\+agreement}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+raw\+\_\+key\+\_\+agreement)
+\item 
+\#define \mbox{\hyperlink{psa__name__mangling_8h_a3c145c63feb142fe90c752caf0c5e889}{psa\+\_\+generate\+\_\+random}}~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+generate\+\_\+random)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{psa__name__mangling_8h_a15d3a5af0761aa621e7abd004c8f803a}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_abort@{psa\_aead\_abort}}
+\index{psa\_aead\_abort@{psa\_aead\_abort}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_abort}{psa\_aead\_abort}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a15d3a5af0761aa621e7abd004c8f803a} 
+\#define psa\+\_\+aead\+\_\+abort~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+abort)}
+
+\Hypertarget{psa__name__mangling_8h_a80d237e39b2803b22ad57821ba9aa9d9}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_decrypt@{psa\_aead\_decrypt}}
+\index{psa\_aead\_decrypt@{psa\_aead\_decrypt}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_decrypt}{psa\_aead\_decrypt}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a80d237e39b2803b22ad57821ba9aa9d9} 
+\#define psa\+\_\+aead\+\_\+decrypt~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+decrypt)}
+
+\Hypertarget{psa__name__mangling_8h_a9a43b25b12dea43001b4a4d92916f085}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_decrypt\_setup@{psa\_aead\_decrypt\_setup}}
+\index{psa\_aead\_decrypt\_setup@{psa\_aead\_decrypt\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_decrypt\_setup}{psa\_aead\_decrypt\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a9a43b25b12dea43001b4a4d92916f085} 
+\#define psa\+\_\+aead\+\_\+decrypt\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+decrypt\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_a873c33300f40b545044fbc4ac448a952}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_encrypt@{psa\_aead\_encrypt}}
+\index{psa\_aead\_encrypt@{psa\_aead\_encrypt}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_encrypt}{psa\_aead\_encrypt}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a873c33300f40b545044fbc4ac448a952} 
+\#define psa\+\_\+aead\+\_\+encrypt~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+encrypt)}
+
+\Hypertarget{psa__name__mangling_8h_ab3e30830b14bbf6fdd16872b6b83c1d8}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_encrypt\_setup@{psa\_aead\_encrypt\_setup}}
+\index{psa\_aead\_encrypt\_setup@{psa\_aead\_encrypt\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_encrypt\_setup}{psa\_aead\_encrypt\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ab3e30830b14bbf6fdd16872b6b83c1d8} 
+\#define psa\+\_\+aead\+\_\+encrypt\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+encrypt\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_a7334830b1871b32b6b71e74f674e0371}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_finish@{psa\_aead\_finish}}
+\index{psa\_aead\_finish@{psa\_aead\_finish}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_finish}{psa\_aead\_finish}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a7334830b1871b32b6b71e74f674e0371} 
+\#define psa\+\_\+aead\+\_\+finish~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+finish)}
+
+\Hypertarget{psa__name__mangling_8h_a2d2b998e55a00f6abe1417e574a8dcb1}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_generate\_nonce@{psa\_aead\_generate\_nonce}}
+\index{psa\_aead\_generate\_nonce@{psa\_aead\_generate\_nonce}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_generate\_nonce}{psa\_aead\_generate\_nonce}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a2d2b998e55a00f6abe1417e574a8dcb1} 
+\#define psa\+\_\+aead\+\_\+generate\+\_\+nonce~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+generate\+\_\+nonce)}
+
+\Hypertarget{psa__name__mangling_8h_aae24a00282111d64c7a99ff851859281}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_operation\_init@{psa\_aead\_operation\_init}}
+\index{psa\_aead\_operation\_init@{psa\_aead\_operation\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_operation\_init}{psa\_aead\_operation\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aae24a00282111d64c7a99ff851859281} 
+\#define psa\+\_\+aead\+\_\+operation\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_aae24a00282111d64c7a99ff851859281}{psa\_aead\_operation\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_a997a9fdf99ced2ed01233158e834d729}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_set\_lengths@{psa\_aead\_set\_lengths}}
+\index{psa\_aead\_set\_lengths@{psa\_aead\_set\_lengths}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_set\_lengths}{psa\_aead\_set\_lengths}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a997a9fdf99ced2ed01233158e834d729} 
+\#define psa\+\_\+aead\+\_\+set\+\_\+lengths~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+set\+\_\+lengths)}
+
+\Hypertarget{psa__name__mangling_8h_aa7ddb1980095c0074f1406100eda0e22}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_set\_nonce@{psa\_aead\_set\_nonce}}
+\index{psa\_aead\_set\_nonce@{psa\_aead\_set\_nonce}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_set\_nonce}{psa\_aead\_set\_nonce}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aa7ddb1980095c0074f1406100eda0e22} 
+\#define psa\+\_\+aead\+\_\+set\+\_\+nonce~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+set\+\_\+nonce)}
+
+\Hypertarget{psa__name__mangling_8h_aa2974a9c13db2be1141cdc81b7e946b1}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_update@{psa\_aead\_update}}
+\index{psa\_aead\_update@{psa\_aead\_update}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_update}{psa\_aead\_update}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aa2974a9c13db2be1141cdc81b7e946b1} 
+\#define psa\+\_\+aead\+\_\+update~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+update)}
+
+\Hypertarget{psa__name__mangling_8h_ac240ea8a75487730de512bab40fc504c}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_update\_ad@{psa\_aead\_update\_ad}}
+\index{psa\_aead\_update\_ad@{psa\_aead\_update\_ad}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_update\_ad}{psa\_aead\_update\_ad}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ac240ea8a75487730de512bab40fc504c} 
+\#define psa\+\_\+aead\+\_\+update\+\_\+ad~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+update\+\_\+ad)}
+
+\Hypertarget{psa__name__mangling_8h_af5d609c2a360ed13e870f181b51e96d2}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_aead\_verify@{psa\_aead\_verify}}
+\index{psa\_aead\_verify@{psa\_aead\_verify}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_aead\_verify}{psa\_aead\_verify}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_af5d609c2a360ed13e870f181b51e96d2} 
+\#define psa\+\_\+aead\+\_\+verify~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+aead\+\_\+verify)}
+
+\Hypertarget{psa__name__mangling_8h_ac0a20970956d36fe8b9666f7c73c70ae}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_asymmetric\_decrypt@{psa\_asymmetric\_decrypt}}
+\index{psa\_asymmetric\_decrypt@{psa\_asymmetric\_decrypt}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_asymmetric\_decrypt}{psa\_asymmetric\_decrypt}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ac0a20970956d36fe8b9666f7c73c70ae} 
+\#define psa\+\_\+asymmetric\+\_\+decrypt~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+asymmetric\+\_\+decrypt)}
+
+\Hypertarget{psa__name__mangling_8h_a6ed38070e4f7442ab93f056e4863cd64}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_asymmetric\_encrypt@{psa\_asymmetric\_encrypt}}
+\index{psa\_asymmetric\_encrypt@{psa\_asymmetric\_encrypt}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_asymmetric\_encrypt}{psa\_asymmetric\_encrypt}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a6ed38070e4f7442ab93f056e4863cd64} 
+\#define psa\+\_\+asymmetric\+\_\+encrypt~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+asymmetric\+\_\+encrypt)}
+
+\Hypertarget{psa__name__mangling_8h_a2abd9b71bf9b77a011330d2066865874}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_abort@{psa\_cipher\_abort}}
+\index{psa\_cipher\_abort@{psa\_cipher\_abort}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_abort}{psa\_cipher\_abort}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a2abd9b71bf9b77a011330d2066865874} 
+\#define psa\+\_\+cipher\+\_\+abort~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+abort)}
+
+\Hypertarget{psa__name__mangling_8h_a119cfc7f87542fdeba218223d3058ab5}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_decrypt@{psa\_cipher\_decrypt}}
+\index{psa\_cipher\_decrypt@{psa\_cipher\_decrypt}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_decrypt}{psa\_cipher\_decrypt}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a119cfc7f87542fdeba218223d3058ab5} 
+\#define psa\+\_\+cipher\+\_\+decrypt~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+decrypt)}
+
+\Hypertarget{psa__name__mangling_8h_a2e69680e667207664975db23b42a4984}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_decrypt\_setup@{psa\_cipher\_decrypt\_setup}}
+\index{psa\_cipher\_decrypt\_setup@{psa\_cipher\_decrypt\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_decrypt\_setup}{psa\_cipher\_decrypt\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a2e69680e667207664975db23b42a4984} 
+\#define psa\+\_\+cipher\+\_\+decrypt\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+decrypt\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_a291baf4db9aef280783f6081ca608447}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_encrypt@{psa\_cipher\_encrypt}}
+\index{psa\_cipher\_encrypt@{psa\_cipher\_encrypt}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_encrypt}{psa\_cipher\_encrypt}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a291baf4db9aef280783f6081ca608447} 
+\#define psa\+\_\+cipher\+\_\+encrypt~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+encrypt)}
+
+\Hypertarget{psa__name__mangling_8h_a516d27d7e5b47bcefb6586ddacabb301}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_encrypt\_setup@{psa\_cipher\_encrypt\_setup}}
+\index{psa\_cipher\_encrypt\_setup@{psa\_cipher\_encrypt\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_encrypt\_setup}{psa\_cipher\_encrypt\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a516d27d7e5b47bcefb6586ddacabb301} 
+\#define psa\+\_\+cipher\+\_\+encrypt\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+encrypt\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_a43d7abc90a57574cf603908f6243e7e6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_finish@{psa\_cipher\_finish}}
+\index{psa\_cipher\_finish@{psa\_cipher\_finish}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_finish}{psa\_cipher\_finish}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a43d7abc90a57574cf603908f6243e7e6} 
+\#define psa\+\_\+cipher\+\_\+finish~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+finish)}
+
+\Hypertarget{psa__name__mangling_8h_a3c53a694cac0e7239afe6cb622ab2157}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_generate\_iv@{psa\_cipher\_generate\_iv}}
+\index{psa\_cipher\_generate\_iv@{psa\_cipher\_generate\_iv}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_generate\_iv}{psa\_cipher\_generate\_iv}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a3c53a694cac0e7239afe6cb622ab2157} 
+\#define psa\+\_\+cipher\+\_\+generate\+\_\+iv~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+generate\+\_\+iv)}
+
+\Hypertarget{psa__name__mangling_8h_a2af0c6cf5d97435194c23c3012102008}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_operation\_init@{psa\_cipher\_operation\_init}}
+\index{psa\_cipher\_operation\_init@{psa\_cipher\_operation\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_operation\_init}{psa\_cipher\_operation\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a2af0c6cf5d97435194c23c3012102008} 
+\#define psa\+\_\+cipher\+\_\+operation\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_a2af0c6cf5d97435194c23c3012102008}{psa\_cipher\_operation\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_a58df2268eab79e0ac29c345df8cbe71b}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_set\_iv@{psa\_cipher\_set\_iv}}
+\index{psa\_cipher\_set\_iv@{psa\_cipher\_set\_iv}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_set\_iv}{psa\_cipher\_set\_iv}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a58df2268eab79e0ac29c345df8cbe71b} 
+\#define psa\+\_\+cipher\+\_\+set\+\_\+iv~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+set\+\_\+iv)}
+
+\Hypertarget{psa__name__mangling_8h_a9e7b0a523b83efd6ba611d3db6a76372}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_cipher\_update@{psa\_cipher\_update}}
+\index{psa\_cipher\_update@{psa\_cipher\_update}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_cipher\_update}{psa\_cipher\_update}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a9e7b0a523b83efd6ba611d3db6a76372} 
+\#define psa\+\_\+cipher\+\_\+update~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+cipher\+\_\+update)}
+
+\Hypertarget{psa__name__mangling_8h_a92916bc98478a407d27a061a52c6eef5}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_copy\_key@{psa\_copy\_key}}
+\index{psa\_copy\_key@{psa\_copy\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_copy\_key}{psa\_copy\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a92916bc98478a407d27a061a52c6eef5} 
+\#define psa\+\_\+copy\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+copy\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_acc249283d938c05e57c318cc941089d4}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_crypto\_init@{psa\_crypto\_init}}
+\index{psa\_crypto\_init@{psa\_crypto\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_crypto\_init}{psa\_crypto\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_acc249283d938c05e57c318cc941089d4} 
+\#define psa\+\_\+crypto\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_acc249283d938c05e57c318cc941089d4}{psa\_crypto\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_a4159111c5629867ea30c09b076efcf58}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_destroy\_key@{psa\_destroy\_key}}
+\index{psa\_destroy\_key@{psa\_destroy\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_destroy\_key}{psa\_destroy\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a4159111c5629867ea30c09b076efcf58} 
+\#define psa\+\_\+destroy\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+destroy\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_a4923eb02ff4847a3a3336bc6c2362015}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_export\_key@{psa\_export\_key}}
+\index{psa\_export\_key@{psa\_export\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_export\_key}{psa\_export\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a4923eb02ff4847a3a3336bc6c2362015} 
+\#define psa\+\_\+export\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+export\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_a0baed840186cfe483b432e634e4f3a09}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_export\_public\_key@{psa\_export\_public\_key}}
+\index{psa\_export\_public\_key@{psa\_export\_public\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_export\_public\_key}{psa\_export\_public\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a0baed840186cfe483b432e634e4f3a09} 
+\#define psa\+\_\+export\+\_\+public\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+export\+\_\+public\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!PSA\_FUNCTION\_NAME@{PSA\_FUNCTION\_NAME}}
+\index{PSA\_FUNCTION\_NAME@{PSA\_FUNCTION\_NAME}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_FUNCTION\_NAME}{PSA\_FUNCTION\_NAME}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c} 
+\#define PSA\+\_\+\+FUNCTION\+\_\+\+NAME(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uss\_\ \#\#\ x}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_a5100b4b72a0ae53887294df7bdbbe2f6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_generate\_key@{psa\_generate\_key}}
+\index{psa\_generate\_key@{psa\_generate\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_generate\_key}{psa\_generate\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a5100b4b72a0ae53887294df7bdbbe2f6} 
+\#define psa\+\_\+generate\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+generate\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_a3c145c63feb142fe90c752caf0c5e889}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_generate\_random@{psa\_generate\_random}}
+\index{psa\_generate\_random@{psa\_generate\_random}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_generate\_random}{psa\_generate\_random}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a3c145c63feb142fe90c752caf0c5e889} 
+\#define psa\+\_\+generate\+\_\+random~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+generate\+\_\+random)}
+
+\Hypertarget{psa__name__mangling_8h_a89bb887ca2430cf169438c3df4f16875}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_algorithm@{psa\_get\_key\_algorithm}}
+\index{psa\_get\_key\_algorithm@{psa\_get\_key\_algorithm}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_algorithm}{psa\_get\_key\_algorithm}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a89bb887ca2430cf169438c3df4f16875} 
+\#define psa\+\_\+get\+\_\+key\+\_\+algorithm~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+algorithm)}
+
+\Hypertarget{psa__name__mangling_8h_a0437fe9a181dd2667b62f063f377ac0f}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_attributes@{psa\_get\_key\_attributes}}
+\index{psa\_get\_key\_attributes@{psa\_get\_key\_attributes}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_attributes}{psa\_get\_key\_attributes}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a0437fe9a181dd2667b62f063f377ac0f} 
+\#define psa\+\_\+get\+\_\+key\+\_\+attributes~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+attributes)}
+
+\Hypertarget{psa__name__mangling_8h_a24f385862aef135526d6063c96a35532}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_bits@{psa\_get\_key\_bits}}
+\index{psa\_get\_key\_bits@{psa\_get\_key\_bits}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_bits}{psa\_get\_key\_bits}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a24f385862aef135526d6063c96a35532} 
+\#define psa\+\_\+get\+\_\+key\+\_\+bits~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+bits)}
+
+\Hypertarget{psa__name__mangling_8h_aff8db4c667ae1035049750fc2be565c3}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_id@{psa\_get\_key\_id}}
+\index{psa\_get\_key\_id@{psa\_get\_key\_id}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_id}{psa\_get\_key\_id}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aff8db4c667ae1035049750fc2be565c3} 
+\#define psa\+\_\+get\+\_\+key\+\_\+id~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+id)}
+
+\Hypertarget{psa__name__mangling_8h_aa1b6cbdf4a575acca64ea394f96fc25b}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_lifetime@{psa\_get\_key\_lifetime}}
+\index{psa\_get\_key\_lifetime@{psa\_get\_key\_lifetime}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_lifetime}{psa\_get\_key\_lifetime}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aa1b6cbdf4a575acca64ea394f96fc25b} 
+\#define psa\+\_\+get\+\_\+key\+\_\+lifetime~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+lifetime)}
+
+\Hypertarget{psa__name__mangling_8h_a6dc6769fc90f5e4c1b5be3e18e7db031}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_type@{psa\_get\_key\_type}}
+\index{psa\_get\_key\_type@{psa\_get\_key\_type}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_type}{psa\_get\_key\_type}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a6dc6769fc90f5e4c1b5be3e18e7db031} 
+\#define psa\+\_\+get\+\_\+key\+\_\+type~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+type)}
+
+\Hypertarget{psa__name__mangling_8h_a1eb5358a47872b3c41eac097abf2e3a1}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_get\_key\_usage\_flags@{psa\_get\_key\_usage\_flags}}
+\index{psa\_get\_key\_usage\_flags@{psa\_get\_key\_usage\_flags}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_get\_key\_usage\_flags}{psa\_get\_key\_usage\_flags}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a1eb5358a47872b3c41eac097abf2e3a1} 
+\#define psa\+\_\+get\+\_\+key\+\_\+usage\+\_\+flags~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+get\+\_\+key\+\_\+usage\+\_\+flags)}
+
+\Hypertarget{psa__name__mangling_8h_a0ed69b3a0db43a897a192a4ea0a913df}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_abort@{psa\_hash\_abort}}
+\index{psa\_hash\_abort@{psa\_hash\_abort}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_abort}{psa\_hash\_abort}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a0ed69b3a0db43a897a192a4ea0a913df} 
+\#define psa\+\_\+hash\+\_\+abort~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+abort)}
+
+\Hypertarget{psa__name__mangling_8h_a906a3125d30e58bacb23e55198b20db8}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_clone@{psa\_hash\_clone}}
+\index{psa\_hash\_clone@{psa\_hash\_clone}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_clone}{psa\_hash\_clone}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a906a3125d30e58bacb23e55198b20db8} 
+\#define psa\+\_\+hash\+\_\+clone~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+clone)}
+
+\Hypertarget{psa__name__mangling_8h_ad30cc3803ef830aced0194b7b7f1264c}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_compare@{psa\_hash\_compare}}
+\index{psa\_hash\_compare@{psa\_hash\_compare}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_compare}{psa\_hash\_compare}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ad30cc3803ef830aced0194b7b7f1264c} 
+\#define psa\+\_\+hash\+\_\+compare~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+compare)}
+
+\Hypertarget{psa__name__mangling_8h_ae89727b45894128850eb25891fd831ee}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_compute@{psa\_hash\_compute}}
+\index{psa\_hash\_compute@{psa\_hash\_compute}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_compute}{psa\_hash\_compute}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ae89727b45894128850eb25891fd831ee} 
+\#define psa\+\_\+hash\+\_\+compute~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+compute)}
+
+\Hypertarget{psa__name__mangling_8h_a15b0d26fce0e9ad450031138080abf31}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_finish@{psa\_hash\_finish}}
+\index{psa\_hash\_finish@{psa\_hash\_finish}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_finish}{psa\_hash\_finish}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a15b0d26fce0e9ad450031138080abf31} 
+\#define psa\+\_\+hash\+\_\+finish~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+finish)}
+
+\Hypertarget{psa__name__mangling_8h_acce17bac13b7fd86c5adc649611783af}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_operation\_init@{psa\_hash\_operation\_init}}
+\index{psa\_hash\_operation\_init@{psa\_hash\_operation\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_operation\_init}{psa\_hash\_operation\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_acce17bac13b7fd86c5adc649611783af} 
+\#define psa\+\_\+hash\+\_\+operation\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_acce17bac13b7fd86c5adc649611783af}{psa\_hash\_operation\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_ac31d14938a54beb886a45a2173aeafa6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_resume@{psa\_hash\_resume}}
+\index{psa\_hash\_resume@{psa\_hash\_resume}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_resume}{psa\_hash\_resume}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ac31d14938a54beb886a45a2173aeafa6} 
+\#define psa\+\_\+hash\+\_\+resume~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+resume)}
+
+\Hypertarget{psa__name__mangling_8h_aa0f1f434be7b57bf24d9011bb5956089}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_setup@{psa\_hash\_setup}}
+\index{psa\_hash\_setup@{psa\_hash\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_setup}{psa\_hash\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aa0f1f434be7b57bf24d9011bb5956089} 
+\#define psa\+\_\+hash\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_afcf830be6fb20b9e1b3bc94ab77607fe}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_suspend@{psa\_hash\_suspend}}
+\index{psa\_hash\_suspend@{psa\_hash\_suspend}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_suspend}{psa\_hash\_suspend}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_afcf830be6fb20b9e1b3bc94ab77607fe} 
+\#define psa\+\_\+hash\+\_\+suspend~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+suspend)}
+
+\Hypertarget{psa__name__mangling_8h_a7e56a5acc07df193205bce7eb310050d}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_update@{psa\_hash\_update}}
+\index{psa\_hash\_update@{psa\_hash\_update}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_update}{psa\_hash\_update}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a7e56a5acc07df193205bce7eb310050d} 
+\#define psa\+\_\+hash\+\_\+update~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+update)}
+
+\Hypertarget{psa__name__mangling_8h_aaa6192b7c3f18374499fe5f6466e440e}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_hash\_verify@{psa\_hash\_verify}}
+\index{psa\_hash\_verify@{psa\_hash\_verify}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_hash\_verify}{psa\_hash\_verify}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aaa6192b7c3f18374499fe5f6466e440e} 
+\#define psa\+\_\+hash\+\_\+verify~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+hash\+\_\+verify)}
+
+\Hypertarget{psa__name__mangling_8h_a60d170807ab234052c01612005b77f98}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_import\_key@{psa\_import\_key}}
+\index{psa\_import\_key@{psa\_import\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_import\_key}{psa\_import\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a60d170807ab234052c01612005b77f98} 
+\#define psa\+\_\+import\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+import\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_af1459851b1809faef849958f9d253d22}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_attributes\_init@{psa\_key\_attributes\_init}}
+\index{psa\_key\_attributes\_init@{psa\_key\_attributes\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_attributes\_init}{psa\_key\_attributes\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_af1459851b1809faef849958f9d253d22} 
+\#define psa\+\_\+key\+\_\+attributes\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_af1459851b1809faef849958f9d253d22}{psa\_key\_attributes\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_af41632ffbbeed3a021312b21657d9d47}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_abort@{psa\_key\_derivation\_abort}}
+\index{psa\_key\_derivation\_abort@{psa\_key\_derivation\_abort}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_abort}{psa\_key\_derivation\_abort}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_af41632ffbbeed3a021312b21657d9d47} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+abort~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+abort)}
+
+\Hypertarget{psa__name__mangling_8h_a0ed2767767caa530d0e48ea17b38e468}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_get\_capacity@{psa\_key\_derivation\_get\_capacity}}
+\index{psa\_key\_derivation\_get\_capacity@{psa\_key\_derivation\_get\_capacity}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_get\_capacity}{psa\_key\_derivation\_get\_capacity}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a0ed2767767caa530d0e48ea17b38e468} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+get\+\_\+capacity~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+get\+\_\+capacity)}
+
+\Hypertarget{psa__name__mangling_8h_a970fe623d21acf9f045c4e2593f20f2e}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_input\_bytes@{psa\_key\_derivation\_input\_bytes}}
+\index{psa\_key\_derivation\_input\_bytes@{psa\_key\_derivation\_input\_bytes}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_input\_bytes}{psa\_key\_derivation\_input\_bytes}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a970fe623d21acf9f045c4e2593f20f2e} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+bytes~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+bytes)}
+
+\Hypertarget{psa__name__mangling_8h_ae8807d367bd70ad4a2e78027d9156ee6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_input\_integer@{psa\_key\_derivation\_input\_integer}}
+\index{psa\_key\_derivation\_input\_integer@{psa\_key\_derivation\_input\_integer}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_input\_integer}{psa\_key\_derivation\_input\_integer}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ae8807d367bd70ad4a2e78027d9156ee6} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+integer~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+integer)}
+
+\Hypertarget{psa__name__mangling_8h_a1382705ac086a97719472e690243ba32}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_input\_key@{psa\_key\_derivation\_input\_key}}
+\index{psa\_key\_derivation\_input\_key@{psa\_key\_derivation\_input\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_input\_key}{psa\_key\_derivation\_input\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a1382705ac086a97719472e690243ba32} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+input\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_a708ae105643e920cc33a3b43cea5ddbd}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_key\_agreement@{psa\_key\_derivation\_key\_agreement}}
+\index{psa\_key\_derivation\_key\_agreement@{psa\_key\_derivation\_key\_agreement}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_key\_agreement}{psa\_key\_derivation\_key\_agreement}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a708ae105643e920cc33a3b43cea5ddbd} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+key\+\_\+agreement~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+key\+\_\+agreement)}
+
+\Hypertarget{psa__name__mangling_8h_a50c031c495c433f6502e679bb23d1c36}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_operation\_init@{psa\_key\_derivation\_operation\_init}}
+\index{psa\_key\_derivation\_operation\_init@{psa\_key\_derivation\_operation\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_operation\_init}{psa\_key\_derivation\_operation\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a50c031c495c433f6502e679bb23d1c36} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+operation\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_a50c031c495c433f6502e679bb23d1c36}{psa\_key\_derivation\_operation\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_ad8c018075c1f53a24210019895db48be}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_output\_bytes@{psa\_key\_derivation\_output\_bytes}}
+\index{psa\_key\_derivation\_output\_bytes@{psa\_key\_derivation\_output\_bytes}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_output\_bytes}{psa\_key\_derivation\_output\_bytes}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ad8c018075c1f53a24210019895db48be} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+bytes~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+bytes)}
+
+\Hypertarget{psa__name__mangling_8h_a8ba0284182af53b034425528cdb7dc79}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_output\_key@{psa\_key\_derivation\_output\_key}}
+\index{psa\_key\_derivation\_output\_key@{psa\_key\_derivation\_output\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_output\_key}{psa\_key\_derivation\_output\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a8ba0284182af53b034425528cdb7dc79} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+output\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_aab05f54d1c35c4c65bd09ec8e68f9e46}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_set\_capacity@{psa\_key\_derivation\_set\_capacity}}
+\index{psa\_key\_derivation\_set\_capacity@{psa\_key\_derivation\_set\_capacity}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_set\_capacity}{psa\_key\_derivation\_set\_capacity}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aab05f54d1c35c4c65bd09ec8e68f9e46} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+set\+\_\+capacity~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+set\+\_\+capacity)}
+
+\Hypertarget{psa__name__mangling_8h_a060846ac906dd6e572cae41f4c4e31a3}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_setup@{psa\_key\_derivation\_setup}}
+\index{psa\_key\_derivation\_setup@{psa\_key\_derivation\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_setup}{psa\_key\_derivation\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a060846ac906dd6e572cae41f4c4e31a3} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_a67e8f0aa38040df7cfa5dcf19940beb7}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_verify\_bytes@{psa\_key\_derivation\_verify\_bytes}}
+\index{psa\_key\_derivation\_verify\_bytes@{psa\_key\_derivation\_verify\_bytes}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_verify\_bytes}{psa\_key\_derivation\_verify\_bytes}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a67e8f0aa38040df7cfa5dcf19940beb7} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+bytes~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+bytes)}
+
+\Hypertarget{psa__name__mangling_8h_a6ed9c3f80ef87431f6062f5559af3ab8}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_key\_derivation\_verify\_key@{psa\_key\_derivation\_verify\_key}}
+\index{psa\_key\_derivation\_verify\_key@{psa\_key\_derivation\_verify\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_key\_derivation\_verify\_key}{psa\_key\_derivation\_verify\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a6ed9c3f80ef87431f6062f5559af3ab8} 
+\#define psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+key\+\_\+derivation\+\_\+verify\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_a16c98b062c0403d519c8667da8631da1}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_abort@{psa\_mac\_abort}}
+\index{psa\_mac\_abort@{psa\_mac\_abort}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_abort}{psa\_mac\_abort}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a16c98b062c0403d519c8667da8631da1} 
+\#define psa\+\_\+mac\+\_\+abort~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+abort)}
+
+\Hypertarget{psa__name__mangling_8h_aac150dfa949b5e9539933c4421f7afe3}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_compute@{psa\_mac\_compute}}
+\index{psa\_mac\_compute@{psa\_mac\_compute}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_compute}{psa\_mac\_compute}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aac150dfa949b5e9539933c4421f7afe3} 
+\#define psa\+\_\+mac\+\_\+compute~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+compute)}
+
+\Hypertarget{psa__name__mangling_8h_afd656b4929db333da8ef69abbaaa00d6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_operation\_init@{psa\_mac\_operation\_init}}
+\index{psa\_mac\_operation\_init@{psa\_mac\_operation\_init}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_operation\_init}{psa\_mac\_operation\_init}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_afd656b4929db333da8ef69abbaaa00d6} 
+\#define psa\+\_\+mac\+\_\+operation\+\_\+init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\_FUNCTION\_NAME}}(\mbox{\hyperlink{psa__name__mangling_8h_afd656b4929db333da8ef69abbaaa00d6}{psa\_mac\_operation\_init}})}
+
+\end{DoxyCode}
+\Hypertarget{psa__name__mangling_8h_a56727df19d84a59628d01bc856aef3f6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_sign\_finish@{psa\_mac\_sign\_finish}}
+\index{psa\_mac\_sign\_finish@{psa\_mac\_sign\_finish}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_sign\_finish}{psa\_mac\_sign\_finish}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a56727df19d84a59628d01bc856aef3f6} 
+\#define psa\+\_\+mac\+\_\+sign\+\_\+finish~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+sign\+\_\+finish)}
+
+\Hypertarget{psa__name__mangling_8h_a909d6a79ef0a46f5d6250fb04d457466}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_sign\_setup@{psa\_mac\_sign\_setup}}
+\index{psa\_mac\_sign\_setup@{psa\_mac\_sign\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_sign\_setup}{psa\_mac\_sign\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a909d6a79ef0a46f5d6250fb04d457466} 
+\#define psa\+\_\+mac\+\_\+sign\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+sign\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_abbd2b43e249b19f2fa84a28da925acc0}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_update@{psa\_mac\_update}}
+\index{psa\_mac\_update@{psa\_mac\_update}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_update}{psa\_mac\_update}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_abbd2b43e249b19f2fa84a28da925acc0} 
+\#define psa\+\_\+mac\+\_\+update~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+update)}
+
+\Hypertarget{psa__name__mangling_8h_ac82e96e9eedc1d17c2d0d5ddece465ef}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_verify@{psa\_mac\_verify}}
+\index{psa\_mac\_verify@{psa\_mac\_verify}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_verify}{psa\_mac\_verify}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ac82e96e9eedc1d17c2d0d5ddece465ef} 
+\#define psa\+\_\+mac\+\_\+verify~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+verify)}
+
+\Hypertarget{psa__name__mangling_8h_a272e00da7cf6da4cad75d04019bf3ccd}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_verify\_finish@{psa\_mac\_verify\_finish}}
+\index{psa\_mac\_verify\_finish@{psa\_mac\_verify\_finish}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_verify\_finish}{psa\_mac\_verify\_finish}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a272e00da7cf6da4cad75d04019bf3ccd} 
+\#define psa\+\_\+mac\+\_\+verify\+\_\+finish~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+verify\+\_\+finish)}
+
+\Hypertarget{psa__name__mangling_8h_acfb46cff6c4c0cf3902db96bc0cec5a1}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_mac\_verify\_setup@{psa\_mac\_verify\_setup}}
+\index{psa\_mac\_verify\_setup@{psa\_mac\_verify\_setup}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_mac\_verify\_setup}{psa\_mac\_verify\_setup}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_acfb46cff6c4c0cf3902db96bc0cec5a1} 
+\#define psa\+\_\+mac\+\_\+verify\+\_\+setup~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+mac\+\_\+verify\+\_\+setup)}
+
+\Hypertarget{psa__name__mangling_8h_a23e7d500d4c8da60a608323ec13fb0cf}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!PSA\_NAME\_MANGLING\_H@{PSA\_NAME\_MANGLING\_H}}
+\index{PSA\_NAME\_MANGLING\_H@{PSA\_NAME\_MANGLING\_H}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_NAME\_MANGLING\_H}{PSA\_NAME\_MANGLING\_H}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a23e7d500d4c8da60a608323ec13fb0cf} 
+\#define PSA\+\_\+\+NAME\+\_\+\+MANGLING\+\_\+H}
+
+
+
+This file contains the name mangling macros for the PSA Crypto API. This avoids duplication of symbols between TF-\/M and USS Crypto. 
+
+\Hypertarget{psa__name__mangling_8h_a2b48643c3889ddc197de876f4246e1e0}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_purge\_key@{psa\_purge\_key}}
+\index{psa\_purge\_key@{psa\_purge\_key}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_purge\_key}{psa\_purge\_key}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a2b48643c3889ddc197de876f4246e1e0} 
+\#define psa\+\_\+purge\+\_\+key~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+purge\+\_\+key)}
+
+\Hypertarget{psa__name__mangling_8h_ab21bf63ae4cfb50ac2cad13113e98bef}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_raw\_key\_agreement@{psa\_raw\_key\_agreement}}
+\index{psa\_raw\_key\_agreement@{psa\_raw\_key\_agreement}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_raw\_key\_agreement}{psa\_raw\_key\_agreement}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ab21bf63ae4cfb50ac2cad13113e98bef} 
+\#define psa\+\_\+raw\+\_\+key\+\_\+agreement~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+raw\+\_\+key\+\_\+agreement)}
+
+\Hypertarget{psa__name__mangling_8h_a74d46b380ac1e0c993b9fe14a7abef0e}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_reset\_key\_attributes@{psa\_reset\_key\_attributes}}
+\index{psa\_reset\_key\_attributes@{psa\_reset\_key\_attributes}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_reset\_key\_attributes}{psa\_reset\_key\_attributes}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a74d46b380ac1e0c993b9fe14a7abef0e} 
+\#define psa\+\_\+reset\+\_\+key\+\_\+attributes~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+reset\+\_\+key\+\_\+attributes)}
+
+\Hypertarget{psa__name__mangling_8h_a49df3796739c5190afaa598f3bcd6ead}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_set\_key\_algorithm@{psa\_set\_key\_algorithm}}
+\index{psa\_set\_key\_algorithm@{psa\_set\_key\_algorithm}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_set\_key\_algorithm}{psa\_set\_key\_algorithm}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a49df3796739c5190afaa598f3bcd6ead} 
+\#define psa\+\_\+set\+\_\+key\+\_\+algorithm~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+algorithm)}
+
+\Hypertarget{psa__name__mangling_8h_a99c0bf1dd7854db8365efa9d3c4e94a3}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_set\_key\_bits@{psa\_set\_key\_bits}}
+\index{psa\_set\_key\_bits@{psa\_set\_key\_bits}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_set\_key\_bits}{psa\_set\_key\_bits}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a99c0bf1dd7854db8365efa9d3c4e94a3} 
+\#define psa\+\_\+set\+\_\+key\+\_\+bits~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+bits)}
+
+\Hypertarget{psa__name__mangling_8h_aca2050f050a3b7edca597f2113cfb830}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_set\_key\_id@{psa\_set\_key\_id}}
+\index{psa\_set\_key\_id@{psa\_set\_key\_id}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_set\_key\_id}{psa\_set\_key\_id}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_aca2050f050a3b7edca597f2113cfb830} 
+\#define psa\+\_\+set\+\_\+key\+\_\+id~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+id)}
+
+\Hypertarget{psa__name__mangling_8h_abe05b493d2160f06f01f9c1487db9402}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_set\_key\_lifetime@{psa\_set\_key\_lifetime}}
+\index{psa\_set\_key\_lifetime@{psa\_set\_key\_lifetime}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_set\_key\_lifetime}{psa\_set\_key\_lifetime}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_abe05b493d2160f06f01f9c1487db9402} 
+\#define psa\+\_\+set\+\_\+key\+\_\+lifetime~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+lifetime)}
+
+\Hypertarget{psa__name__mangling_8h_a0d97f52b7d6507cfb68dfc0705fbfeb6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_set\_key\_type@{psa\_set\_key\_type}}
+\index{psa\_set\_key\_type@{psa\_set\_key\_type}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_set\_key\_type}{psa\_set\_key\_type}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a0d97f52b7d6507cfb68dfc0705fbfeb6} 
+\#define psa\+\_\+set\+\_\+key\+\_\+type~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+type)}
+
+\Hypertarget{psa__name__mangling_8h_ad7582fd437683b213b94af3fdf0c38f0}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_set\_key\_usage\_flags@{psa\_set\_key\_usage\_flags}}
+\index{psa\_set\_key\_usage\_flags@{psa\_set\_key\_usage\_flags}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_set\_key\_usage\_flags}{psa\_set\_key\_usage\_flags}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_ad7582fd437683b213b94af3fdf0c38f0} 
+\#define psa\+\_\+set\+\_\+key\+\_\+usage\+\_\+flags~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+set\+\_\+key\+\_\+usage\+\_\+flags)}
+
+\Hypertarget{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_sign\_hash@{psa\_sign\_hash}}
+\index{psa\_sign\_hash@{psa\_sign\_hash}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_sign\_hash}{psa\_sign\_hash}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1} 
+\#define psa\+\_\+sign\+\_\+hash~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+sign\+\_\+hash)}
+
+\Hypertarget{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_sign\_message@{psa\_sign\_message}}
+\index{psa\_sign\_message@{psa\_sign\_message}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_sign\_message}{psa\_sign\_message}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6} 
+\#define psa\+\_\+sign\+\_\+message~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+sign\+\_\+message)}
+
+\Hypertarget{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_verify\_hash@{psa\_verify\_hash}}
+\index{psa\_verify\_hash@{psa\_verify\_hash}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_verify\_hash}{psa\_verify\_hash}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252} 
+\#define psa\+\_\+verify\+\_\+hash~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+verify\+\_\+hash)}
+
+\Hypertarget{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}\index{psa\_name\_mangling.h@{psa\_name\_mangling.h}!psa\_verify\_message@{psa\_verify\_message}}
+\index{psa\_verify\_message@{psa\_verify\_message}!psa\_name\_mangling.h@{psa\_name\_mangling.h}}
+\doxysubsubsection{\texorpdfstring{psa\_verify\_message}{psa\_verify\_message}}
+{\footnotesize\ttfamily \label{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f} 
+\#define psa\+\_\+verify\+\_\+message~\mbox{\hyperlink{psa__name__mangling_8h_a792448b61a20377e803abbf47e74109c}{PSA\+\_\+\+FUNCTION\+\_\+\+NAME}}(psa\+\_\+verify\+\_\+message)}
+

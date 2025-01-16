@@ -1,0 +1,1005 @@
+\doxysection{MXQ\+\_\+\+API.\+h}
+\hypertarget{_m_x_q___a_p_i_8h_source}{}\label{_m_x_q___a_p_i_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_API.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_API.h}}
+\mbox{\hyperlink{_m_x_q___a_p_i_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*******************************************************************************}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright\ (C)\ 2018\ Maxim\ Integrated\ Products,\ Inc.\ (now\ owned\ by\ Analog\ Devices,\ Inc.),}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*\ 2024\ Analog\ Devices,\ Inc.\ This\ software\ is\ proprietary\ and}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.\ ,\ All\ rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ This\ software\ is\ protected\ by\ copyright\ laws\ of\ the\ United\ States\ and}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*\ of\ foreign\ countries.\ This\ material\ may\ also\ be\ protected\ by\ patent\ laws}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ and\ technology\ transfer\ regulations\ of\ the\ United\ States\ and\ of\ foreign}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*\ countries.\ This\ software\ is\ furnished\ under\ a\ license\ agreement\ and/or\ a}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ nondisclosure\ agreement\ and\ may\ only\ be\ used\ or\ reproduced\ in\ accordance}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*\ with\ the\ terms\ of\ those\ agreements.\ Dissemination\ of\ this\ information\ to}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ any\ party\ or\ parties\ not\ specified\ in\ the\ license\ agreement\ and/or}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ nondisclosure\ agreement\ is\ expressly\ prohibited.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ The\ above\ copyright\ notice\ and\ this\ permission\ notice\ shall\ be\ included}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*\ in\ all\ copies\ or\ substantial\ portions\ of\ the\ Software.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,\ EXPRESS}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*\ OR\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ MERCHANTABILITY,\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\ AND\ NONINFRINGEMENT.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*\ IN\ NO\ EVENT\ SHALL\ MAXIM\ INTEGRATED\ BE\ LIABLE\ FOR\ ANY\ CLAIM,\ DAMAGES}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*\ OR\ OTHER\ LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF\ CONTRACT,\ TORT\ OR\ OTHERWISE,}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*\ ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*\ OTHER\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{*}}
+\DoxyCodeLine{00026\ \textcolor{comment}{*\ Except\ as\ contained\ in\ this\ notice,\ the\ name\ of\ Maxim\ Integrated}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*\ Products,\ Inc.\ shall\ not\ be\ used\ except\ as\ stated\ in\ the\ Maxim\ Integrated}}
+\DoxyCodeLine{00028\ \textcolor{comment}{*\ Products,\ Inc.\ Branding\ Policy.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{*}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*\ The\ mere\ transfer\ of\ this\ software\ does\ not\ imply\ any\ licenses}}
+\DoxyCodeLine{00031\ \textcolor{comment}{*\ of\ trade\ secrets,\ proprietary\ technology,\ copyrights,\ patents,}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*\ trademarks,\ maskwork\ rights,\ or\ any\ other\ form\ of\ intellectual}}
+\DoxyCodeLine{00033\ \textcolor{comment}{*\ property\ whatsoever.\ Maxim\ Integrated\ Products,\ Inc.\ retains\ all}}
+\DoxyCodeLine{00034\ \textcolor{comment}{*\ ownership\ rights.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{******************************************************************************/}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#ifndef\ \_\_MXQ\_API\_H\_INCLUDED\_\_}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ \_\_MXQ\_API\_H\_INCLUDED\_\_}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#ifndef\ NO\_INC\_TYPES}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_m_x_q___types_8h}{MXQ\_Types.h}}"{}}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_m_x_q___config_8h}{MXQ\_Config.h}}"{}}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_m_x_q___error_8h}{MXQ\_Error.h}}"{}}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ \_\_API\_\_}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ \_\_API\_VERSION\_\_\ \ \ \ \ 5\_4\_0}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{/*\ Sanity\ checks\ */}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{/*\ The\ below\ test\ is\ GCC\ specific.\ I\ fnot\ using\ GCC,\ make\ sure\ your\ compiler\ is\ little\ endian\ */}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#if\ (!defined(\_\_BYTE\_ORDER\_\_))||((\_\_BYTE\_ORDER\_\_!=\_\_ORDER\_LITTLE\_ENDIAN\_\_))}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#error\ Your\ target\ must\ be\ little\ endian.}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00071\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00078\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a30b330a593186e86b4596ac14248dd59aa73da1b36456b4347357569e8d7e043d}{MXQ\_MODE\_TLS}},\ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a30b330a593186e86b4596ac14248dd59a22240528179c2a00e70ec9d205d4397c}{MXQ\_MODE\_GCU}}\ \ \ }
+\DoxyCodeLine{00081\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a30b330a593186e86b4596ac14248dd59}{mxq\_mode\_t}};}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00086\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00087\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a9906dedcdd94b6912fed4f2f8176a445ad9e26b43c94df1119a7f038103752860}{IN\_ONE\_SEND}}\ =\ 0,}
+\DoxyCodeLine{00089\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a9906dedcdd94b6912fed4f2f8176a445a636cc8c4e67ca15e0f7b59d4a925823e}{IS\_FIRST\_SEND}},}
+\DoxyCodeLine{00090\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a9906dedcdd94b6912fed4f2f8176a445a6100caeb4e6510fe41ef1b4631aab98d}{IS\_NOT\_FIRST\_SEND}}}
+\DoxyCodeLine{00091\ \}\mbox{\hyperlink{_m_x_q___a_p_i_8h_a9906dedcdd94b6912fed4f2f8176a445}{send\_flag\_t}};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00096\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00097\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3caafeccc2881a0034a2afb3de13a5f23f7}{PSK\_FIRST}}\ =\ \ 0,}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3ca785c133f2db80f062aa3be01138119ea}{PSK\_LAST}},\ \ \ \ \ \ }
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3ca7211cf6d3dc2a29386b2470dc5e64b86}{ECDHE\_SECRET}},\ \ }
+\DoxyCodeLine{00101\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3ca277217fb1026376b9b1329c70b903e60}{ECDHE\_IMPORT}},\ \ \ }
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3ca25dc8488e06d32f435217cbf0cb08703}{RSA\_PMS}}\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00103\ \}\mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3c}{key\_exchange\_case\_t}};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00108\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00109\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a390e7829b61523713cd76935b03caafdaf7911d209d85c1338e2ab888c0408d08}{GEN\_KEY}}\ =\ \ 0,}
+\DoxyCodeLine{00111\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a390e7829b61523713cd76935b03caafdae628bbb0d64b2a9f4b766e905177d44c}{CREATE\_SECRET}},\ \ \ \textcolor{comment}{//1}}
+\DoxyCodeLine{00112\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a390e7829b61523713cd76935b03caafda59fb8e4674cd98fda7d1c84f09aebc61}{EXTRACT\_SECRET}},\ \ \textcolor{comment}{//2}}
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a390e7829b61523713cd76935b03caafda3cb6dc72763d0676574ec78686cc9ab3}{EXPAND\_SECRET}},\ \ \ \textcolor{comment}{//3}}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a390e7829b61523713cd76935b03caafda449273e4a3e6ecc07169dea99b1d74b4}{UPDATE\_IV}}\ \ \ \ \ \ \ \ \textcolor{comment}{//4}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \}\mbox{\hyperlink{_m_x_q___a_p_i_8h_a390e7829b61523713cd76935b03caafd}{tls13\_key\_exchange\_case\_t}};}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00121\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}}
+\DoxyCodeLine{00122\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca75afe53d95b283a44750db5798636983}{PASS\_NB\_1}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00124\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca376e48130f213b10e5b62932d4d8f253}{PASS\_ENABLE\_SECUREBOOT}}\ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00125\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca7068199bb1caf42cc322cec1e1bfb01a}{PASS\_KEY\_IMPORT\_GEN}}\ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00126\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca27cceca10089d464cdb9b7d2a6a4de98}{PASS\_KEY\_IMPORT\_ENC}}\ \ \ \ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00127\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca035477a86c85aef4c79f78be91170cf8}{PASS\_OPEN\_CHANNEL}}\ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00128\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca2fb362d4311adf9577d3360713c7a95f}{PASS\_OPEN\_ADMIN}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca9bbc14212a443cc3499b71a460efa8a1}{PASS\_VERIFY\_SIGN}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00130\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca0cf0e952d0188b4a4439b9f6a7b3e8e0}{PASS\_NB\_2}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca94cd7c537b044431237c36f5b8f3fe6e}{PASS\_COMPUTE\_SIGN}}\ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00132\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca4820856a42154a77fbc2834d044e7465}{PASS\_NB\_3}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdecaae1c9321d2072191bf86158080600834}{PASS\_CANCEL\_SECUREBOOT}}\ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00134\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdecaad1a5a6d038d66ef809ff2cd6924a129}{PASS\_CLOSE\_CHANNEL}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00135\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca1dc44d6d90ea9d0a32c0c2dee5cd3724}{PASS\_CLOSE\_ADMIN}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00136\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdecabe6b2e0ca407ce2efbe2fdd616dc728b}{PASS\_CLOSE\_TLS}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00137\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca3a96dc0b7891f163569fdd907498c516}{PASS\_SAVE\_TLS}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 5,}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdeca64f4614958a8e8001f1bd3e56ff2a8ca}{PASS\_RESTORE\_TLS}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 6}
+\DoxyCodeLine{00139\ \}\mbox{\hyperlink{_m_x_q___a_p_i_8h_a7ca786627f6fcea2c710dfc51f57cdec}{pass\_t}};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00144\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71a9c5d39b5d0369c794fdcf7c9891b7cd5}{MXQ\_OP\_NONE}}\ \ \ \ =\ -\/1,\ \ }
+\DoxyCodeLine{00146\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71af66e0afe5f1a7cc2e18217ceac781760}{MXQ\_OP\_ENCRYPT}}\ =\ \ 0,\ \ }
+\DoxyCodeLine{00147\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71ac0cd700147b3a542904a772a83ab85ed}{MXQ\_OP\_DECRYPT}}\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00148\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71}{mxq\_operation\_t}};}
+\DoxyCodeLine{00149\ \textcolor{comment}{/******************************************************/}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00155\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00156\ \{}
+\DoxyCodeLine{00157\ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2c3f280f491548bb4a7a9ad3263f6a9f}{LC\_DELIVERY}}\ \ \ \ \ =\ 3,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00158\ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae187a9e1fbcab98d32c24ecf6426edc1}{LC\_INITIALIZED}}\ \ =\ 4,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00159\ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8edf726b1270a06d80c3ae9bd4f447e1}{LC\_OPERATIONAL}}\ \ =\ 5,\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00160\ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0e7b2195b91124d2bb915f1184c81a2c}{LC\_TERMINATED}}\ \ \ =\ 6\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00161\ \}\ \mbox{\hyperlink{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}{mxq\_state\_t}};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{comment}{/*\ \ Definitions\ for\ the\ MXQ\_MAXQ106x\_Info\_t\ */}}
+\DoxyCodeLine{00168\ \textcolor{preprocessor}{\#define\ MXQ\_MAXQ106x\_CHIP\_NAME\_LENGTH\ \ \ \ (16)}}
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#define\ MXQ\_MAXQ106x\_FW\_VERSION\_LENGTH\ \ \ (3)}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#define\ MXQ\_MAXQ106x\_USN\_LENGTH\ \ \ \ \ \ \ \ \ \ (24)}}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \textcolor{preprocessor}{\#define\ MAXQ1080\_BOOTLOADER\_PRODUCT\_NAME\ \ \ \ "{}MAXQ1080Btldr"{}}}
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\#define\ MAXQ1065\_BOOTLOADER\_PRODUCT\_NAME\ \ \ \ "{}MAXQ1065Btldr"{}}}
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#define\ KEYCOMPLEN256\ 32}}
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\#define\ KEYCOMPLEN384\ 48}}
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#define\ KEYCOMPLEN521\ 66}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00192\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00193\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_ae17f90011cfc0ffc1e0db35289e1c0c8}{i2cslaveaddr}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a420d1b171b0184a9edb704b943289ed9}{i2cchartimeout}};\ \ \ \ \ }
+\DoxyCodeLine{00196\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a71a54758b12708998f235f231e5fafde}{spichartimeout}};\ \ \ \ \ }
+\DoxyCodeLine{00197\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a1620f18a592c754e00fef36217836682}{blocktimeout}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00198\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)}}
+\DoxyCodeLine{00199\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aa3066bf44c150561853d89e735a7bf88}{rfu1}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00200\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ en\_factory\_reset;\ \ \ }
+\DoxyCodeLine{00201\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00202\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_afd71f1c4bcabe0ee0186fc5b7ae8e181}{ext\_sensors}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00203\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a8e6647abf9bff6d5ab7a3d15e057e621}{int\_sensors}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a33ed2bebbbb6a44fa08e8df9ec81e30c}{secpol\_needhost}};\ \ \ \ }
+\DoxyCodeLine{00208\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a78a6491e2f9cc4162ac2dc670e5fa776}{tamper\_action}};\ \ \ \ \ \ }
+\DoxyCodeLine{00209\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)}}
+\DoxyCodeLine{00210\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ sleep\_restore\_enable;}
+\DoxyCodeLine{00211\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00212\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_afdc31479c8dc7ccd1b742b42ac92ac14}{rfu2}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00214\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_abf8cadfdfb6388c707b9464759ddb49d}{terminated\_enable}};\ \ }
+\DoxyCodeLine{00215\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a2407c2d2804a7c1658a02555e0d3b7c2}{wd\_period\_initial}};\ \ }
+\DoxyCodeLine{00216\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aedda2506ff67c04b31c733e7e2ed6387}{wd\_period\_normal}};\ \ \ }
+\DoxyCodeLine{00217\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a0914bd12c702258cbac5dd6d41538693}{reset\_pulse\_width}};\ \ }
+\DoxyCodeLine{00218\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a094383c672643e91d4b5051c2b79fe5e}{reset\_pulse\_pol}};\ \ \ \ }
+\DoxyCodeLine{00220\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aafc11c9bbbb448c7bb1164842a941431}{reset\_events}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{00222\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_ac88b73daa3503200e51abde2deac8b54}{tlsmastersecretallowoutput}};\ }
+\DoxyCodeLine{00223\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a6018c6481d7b05d9afb6785c72ff7107}{rfu4}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00224\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aa49aa76138ad97b8120c6663ae5e314a}{rfu5}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00226\ \}\ \mbox{\hyperlink{group___administration_ga01aeab3d3980bad129ce4b2350507889}{mxq\_config\_t}};}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00231\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)}}
+\DoxyCodeLine{00232\ \textcolor{preprocessor}{\#define\ RST\_EV\_HOST\_SECURE\_BOOT\_FAILURE\ \ \ \ \ \ 0x0001\ }}
+\DoxyCodeLine{00233\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00234\ \textcolor{preprocessor}{\#define\ RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR\ \ \ \ \ 0x0002\ }}
+\DoxyCodeLine{00235\ \textcolor{preprocessor}{\#define\ RST\_EV\_HOST\_EXTERNAL\_TAMPER\ \ \ \ \ \ \ \ \ \ 0x0004\ }}
+\DoxyCodeLine{00237\ \textcolor{preprocessor}{\#define\ RST\_EV\_HOST\_POR\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x0008\ }}
+\DoxyCodeLine{00238\ \textcolor{preprocessor}{\#define\ RST\_EV\_HOST\_WD\_TIMEOUT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x0010\ }}
+\DoxyCodeLine{00240\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)}}
+\DoxyCodeLine{00241\ \textcolor{preprocessor}{\#define\ RST\_EV\_MAXQ106x\_SECURE\_BOOT\_FAILURE\ \ \ \ \ \ 0x0001\ }}
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\#define\ RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR\ 0x0200\ }}
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\#define\ RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER\ \ \ \ \ \ 0x0400\ }}
+\DoxyCodeLine{00245\ \textcolor{preprocessor}{\#define\ RST\_EV\_MAXQ106x\_WD\_TIMEOUT\ \ \ \ \ \ \ \ \ \ \ 0x1000\ }}
+\DoxyCodeLine{00247\ \textcolor{preprocessor}{\#ifndef\ NO\_INC\_TYPES}}
+\DoxyCodeLine{00248\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00249\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a10c3fbe859408f27dd8b4438db050188}{eSCInit}}\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00250\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a797e4240e832e3cd41b8b99cbe40f994}{eSCAesCbcInit}}\ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00251\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478ac5edd83199e2f51eb59f8960ccd4504d}{eSCFinish}}\ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00252\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478addf77541ab9180cc539d21fe6163fc14}{eSCAesGcmInit}}\ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00253\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478acc9aec29507c8d1585b0281ec85eb4ed}{eSCPreSharedKeyMode}}\ =\ 5,}
+\DoxyCodeLine{00254\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a2cca86daaff8977cd24ac9ee804ca34b}{eSCEcdhe}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x10,}
+\DoxyCodeLine{00255\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478abc6d5081372a62b58a713839fe8b748f}{eSCAuthEcdhe}}\ \ \ \ \ \ \ \ =\ 0x13,}
+\DoxyCodeLine{00256\ \ \ \ \ \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a01f164d047e813d13d8b769a07c9f170}{eSCEcdheMode1065}}\ \ \ \ =\ 0x15}
+\DoxyCodeLine{00257\ \}\ \mbox{\hyperlink{group___administration_gad521792437d1978c72fcfc81155b7478}{teSCProcessState}};}
+\DoxyCodeLine{00258\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00267\ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00268\ \ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aa3066bf44c150561853d89e735a7bf88}{rfu1}};\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_afdc31479c8dc7ccd1b742b42ac92ac14}{rfu2}};\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_adb79c22ae2a036fd3d70b789dbdda788}{rfu3}};\ }
+\DoxyCodeLine{00273\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a658ef930821299a62a748d482bae59be}{allowfactoryreset}};\ }
+\DoxyCodeLine{00274\ \ \ \}\ \mbox{\hyperlink{group___administration_gac7110632d93bde6ce1a81e0078c6f9e5}{mxq\_sysconfig\_t}};}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00278\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a0b831941fffdb576136bbf61ec4c3fb1}{product\_name}}[\mbox{\hyperlink{_m_x_q___a_p_i_8h_a39fd3f88ae029600fa4eeb0c7bc60cd7}{MXQ\_MAXQ106x\_CHIP\_NAME\_LENGTH}}];\ \ \ \ }
+\DoxyCodeLine{00281\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a7b8848359ea177ca03e78d4f55ddb2d4}{v\_fw\_maj}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00282\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a2c18351e82d8850829513c2d514a6ce2}{v\_fw\_min}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00283\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_acc9c64d79686d25e198b8b38c193508f}{v\_fw\_rev}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00285\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a5e088183e47da9b4c8fef276ee0c479a}{v\_hw\_cod}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00287\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_ad1a923e39e9121760a91f3d95dada92b}{serial\_num}}[\mbox{\hyperlink{_m_x_q___a_p_i_8h_ad8ec8f4a5e5caf32335585c134c17d2a}{MXQ\_MAXQ106x\_USN\_LENGTH}}];\ }
+\DoxyCodeLine{00289\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aa2b2888eb105fd4bebd78af44bef0651}{lifecycle\_state}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00290\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ H;}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ L;}
+\DoxyCodeLine{00294\ \ \ \ \ \}\ freemem;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ H;}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ L;}
+\DoxyCodeLine{00298\ \ \ \ \ \}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a43f8587995c1a82427b5ea7e750b886a}{totalmem}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00299\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a9f4b4db3e0f0070351f7a3cac751661f}{mem\_byte3}};}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_ad7cd689ca3f6cb26073bf2c32a04a41c}{mem\_byte2}};}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a81d245a6dfb525baaa1f16903233b622}{mem\_byte1}};}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a8eb0e70ce14a05777fc0d0ad16a60138}{mem\_byte0}};}
+\DoxyCodeLine{00305\ \ \ \ \ \}\ freemem;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ mem\_byte3;}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ mem\_byte2;}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ mem\_byte1;}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ mem\_byte0;}
+\DoxyCodeLine{00311\ \ \ \ \ \}\ totalmem;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00312\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00313\ \ \ \ \ \mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_config\_t}}\ \ \ \ \mbox{\hyperlink{struct___p_a_c_k_e_d_a6b855a1e151d9e243681a5379675effa}{config}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00314\ \ \ \ \ \mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_sysconfig\_t}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a45621752cfa1dbe8eb511ba75045b00f}{sysconfig}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00316\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_abc2f7f6023125ec48437ac8251e1dc30}{mxq\_status\_raw\_t}};}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00322\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00323\ \{}
+\DoxyCodeLine{00324\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a0b831941fffdb576136bbf61ec4c3fb1}{product\_name}}[\mbox{\hyperlink{_m_x_q___a_p_i_8h_a39fd3f88ae029600fa4eeb0c7bc60cd7}{MXQ\_MAXQ106x\_CHIP\_NAME\_LENGTH}}];\ \ \ \ }
+\DoxyCodeLine{00326\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a7b8848359ea177ca03e78d4f55ddb2d4}{v\_fw\_maj}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00327\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a2c18351e82d8850829513c2d514a6ce2}{v\_fw\_min}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00328\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_acc9c64d79686d25e198b8b38c193508f}{v\_fw\_rev}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00330\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a5e088183e47da9b4c8fef276ee0c479a}{v\_hw\_cod}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00332\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_ad1a923e39e9121760a91f3d95dada92b}{serial\_num}}[\mbox{\hyperlink{_m_x_q___a_p_i_8h_ad8ec8f4a5e5caf32335585c134c17d2a}{MXQ\_MAXQ106x\_USN\_LENGTH}}];\ }
+\DoxyCodeLine{00334\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aa2b2888eb105fd4bebd78af44bef0651}{lifecycle\_state}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00335\ \textcolor{preprocessor}{\ \ \ \ \#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{00336\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_aee746fa0fb32dd7a3b9221478e544d90}{freemem}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00337\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a43f8587995c1a82427b5ea7e750b886a}{totalmem}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00338\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00339\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_ab9031f25205f79b2c7e8279c0ea2a4b8}{freemem}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00340\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a3b420837fddb9c8158d050d03e88efa7}{totalmem}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00341\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00342\ \ }
+\DoxyCodeLine{00343\ \ \ \ \ \mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_config\_t}}\ \ \ \ \mbox{\hyperlink{struct___p_a_c_k_e_d_a6b855a1e151d9e243681a5379675effa}{config}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00344\ \ \ \ \ \mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_sysconfig\_t}}\ \mbox{\hyperlink{struct___p_a_c_k_e_d_a45621752cfa1dbe8eb511ba75045b00f}{sysconfig}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00346\ \}\ \mbox{\hyperlink{group___administration_ga4fcc3e535da1b5652e898e13f9392131}{mxq\_status\_t}};}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00351\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00352\ \{}
+\DoxyCodeLine{00353\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structciph__params__t_a91497ac6310706d22b90a446a584968a}{aead\_tag\_len}};\ }
+\DoxyCodeLine{00354\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ aead\_tag[16];\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00355\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structciph__params__t_a8ebf723eab5311cfffddb846dc69f4fa}{aad\_length}};\ \ }
+\DoxyCodeLine{00356\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \mbox{\hyperlink{structciph__params__t_af4b086ba705e4490e6f1f134c98835f6}{p\_aad}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00357\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structciph__params__t_a50ee6fbd73ef6a159010506ad4ce5c6d}{key\_length}};\ \ }
+\DoxyCodeLine{00358\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \mbox{\hyperlink{structciph__params__t_a1806159402ec2d9ac106aa049afe1b15}{p\_key}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00359\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structciph__params__t_a453d7d1fafc65b7a9af671d4ba581ea3}{iv\_length}};\ \ \ \ }
+\DoxyCodeLine{00360\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \mbox{\hyperlink{structciph__params__t_a46b7bdb693e798be8ac8a1fa328385dd}{p\_iv}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00361\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structciph__params__t_a48d94228ee6d95b66b038d9c7f924c4b}{data\_length}};\ \ \ \ }
+\DoxyCodeLine{00362\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \mbox{\hyperlink{structciph__params__t_af42706c5cdba40fca3290f051ba2342c}{R}};}
+\DoxyCodeLine{00363\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structciph__params__t_a9f5d928bfd60b2fb43d0c258cb7185a5}{Rlen}};}
+\DoxyCodeLine{00364\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{structciph__params__t_a4bbe7778091fcf2e752744851086b7d9}{ecies\_cipher\_algo}};}
+\DoxyCodeLine{00365\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{structciph__params__t_ab1b195ab38058499147f3d720c7d2865}{ecies\_keylen}};}
+\DoxyCodeLine{00366\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \mbox{\hyperlink{structciph__params__t_a000e5dbde0625b1e1bd2f40efc8aeccc}{ecies\_hmac\_algo}};}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \}\ \mbox{\hyperlink{structciph__params__t}{ciph\_params\_t}};}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00374\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00375\ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae0e3e531cfae26ebb78b0852e39949e0}{ALGO\_NONE}},\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ \(\backslash\)internal\ ALGO\_NONE\ */}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \ \ \ \ \textcolor{comment}{/*\ \ HASH\ */}}
+\DoxyCodeLine{00379\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a25df7092a863d64d85c3218448bc92c0}{ALGO\_MD\_FIRST}},\ \ \ \ \ \ }
+\DoxyCodeLine{00380\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a53697fe9de4fa6c5eddafc277db81926}{ALGO\_MD\_SHA256}},\ \ \ \ \ \ }
+\DoxyCodeLine{00381\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab5325289df76ed61f1d9e0e5ece0e467}{ALGO\_MD\_SHA384}},\ \ \ \ \ \ }
+\DoxyCodeLine{00382\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8ebf204de93a6b2e7aa53b8b598aefaf}{ALGO\_MD\_SHA512}},\ \ \ \ \ \ }
+\DoxyCodeLine{00383\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a31928540766a5691cc2ac6013d0a806c}{ALGO\_MD\_LAST}},\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \ \ \ \ \textcolor{comment}{/*\ \ SIGNATURE\ */}}
+\DoxyCodeLine{00386\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2e1996c5f1fac19d7d985ac04a9b65c6}{ALGO\_SIGN\_FIRST}},\ \ \ \ \ }
+\DoxyCodeLine{00387\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a548babb5a1916debd387424720ba4c18}{ALGO\_ECDSA\_SHA\_any}},\ \ }
+\DoxyCodeLine{00388\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad040ae36ff3f3279a1aadcbca82bd5a0}{ALGO\_ECDSA\_PLAIN}},\ \ \ \ }
+\DoxyCodeLine{00389\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a001a422be43f39cb920ea7419c000c9a}{ALGO\_ECDSA\_INNER\_MD}},\ }
+\DoxyCodeLine{00390\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0b9d94302f765d1b9363f8de02b3bf03}{ALGO\_ECDSA\_SHA\_256}},\ \ }
+\DoxyCodeLine{00391\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa7bd3e3370953c7a741ce04e5df672de}{ALGO\_ECDSA\_SHA\_384}},\ \ }
+\DoxyCodeLine{00392\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ada343db9d3f5314dbac8121adda71f74}{ALGO\_ECDSA\_SHA\_512}},\ \ }
+\DoxyCodeLine{00393\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aaa89fb8347c9e5e0fa1b717d9eb1c5b2}{ALGO\_SIGN\_LAST}},}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00396\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab29903f5f725c251ed761af5340a7dc4}{ALGO\_MAC\_FIRST}},\ \ \ \ \ \ }
+\DoxyCodeLine{00397\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a685df8721ae7db5bd8a3c6477b5f677b}{ALGO\_MAC\_NULL}},\ \ \ \ \ \ \ }
+\DoxyCodeLine{00398\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae88a78f911db968153cf68b1505c8350}{ALGO\_HMAC\_SHA\_any}},\ \ \ }
+\DoxyCodeLine{00399\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa853c82a8df66c712da0d7b7767c1dd3}{ALGO\_HMAC\_SHA256}},\ \ \ \ }
+\DoxyCodeLine{00400\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abed04333242d09960c25b7b3a4fc9436}{ALGO\_HMAC\_SHA384}},\ \ \ \ }
+\DoxyCodeLine{00401\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a81f8859a42c64ee85292f32a0153dcfb}{ALGO\_HMAC\_SHA512}},\ \ \ \ }
+\DoxyCodeLine{00403\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae65a5968651d3836e50721edcd4c0918}{ALGO\_MAC\_AES\_CMAC}},\ \ \ }
+\DoxyCodeLine{00404\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc6c163d63038281e1b1148fccd310c6}{ALGO\_MAC\_AES\_GMAC}},\ \ \ }
+\DoxyCodeLine{00405\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aabbccee790775799d25cd267fa04a62e}{ALGO\_MAC\_AES\_CBC\_MAC}},}
+\DoxyCodeLine{00406\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6aaf3ad697dec1f938484ee3714209ad}{ALGO\_MAC\_LAST}},\ \ \ \ \ \ \ }
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ \textcolor{comment}{/*\ Ciphers\ */}}
+\DoxyCodeLine{00409\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a577ba58551daad5a72d348bc3e101bf4}{ALGO\_CIPHER\_FIRST}},\ \ \ }
+\DoxyCodeLine{00410\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a306284605d440d06b71b524024e34164}{ALGO\_CIPHER\_NULL}},\ \ \ \ }
+\DoxyCodeLine{00411\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a937188f581530072b11c3ef2d2f2d7dc}{ALGO\_CIPHER\_AES\_any}},\ }
+\DoxyCodeLine{00412\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afd88e1fc3edbf8445a30df47462f37ce}{ALGO\_CIPHER\_AES\_ECB}},\ }
+\DoxyCodeLine{00413\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7bd438d5eea67309eefcf65238af0c61}{ALGO\_CIPHER\_AES\_CBC}},\ }
+\DoxyCodeLine{00414\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af38bd6c676b7dfe36a6b22da51a345a5}{ALGO\_CIPHER\_AES\_CCM}},\ }
+\DoxyCodeLine{00415\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7ccc685557625790188a4470566ba431}{ALGO\_CIPHER\_AES\_GCM}},\ \textcolor{comment}{/*\ \ */}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aff077002d9bc3679156f463a437e7183}{ALGO\_CIPHER\_AES\_GCU}},\ }
+\DoxyCodeLine{00418\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8ad82b2a48827136c4c282bf8c403319}{ALGO\_CIPHER\_ECIES\_AES\_HMAC}},\ }
+\DoxyCodeLine{00420\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac77af1573af532a9d85fcb4cfa036be8}{ALGO\_CIPHER\_AES\_CTR}}\ =\ 0x22,}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a51097c15df2757d9988d864f99ff4ece}{ALGO\_CIPHER\_LAST}},\ \ \ \ \textcolor{comment}{/*\ ALGO\_CIPHER\_LAST\ */}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a42d0bf18b3988bde92e678498b13ba3f}{ALGO\_MD\_SHA1}}=0x81,}
+\DoxyCodeLine{00425\ \ \ \ \ }
+\DoxyCodeLine{00426\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a49d9245b8a588a8589a4c24b029be986}{ALGO\_RSASIGN\_FIRST}}\ =\ 0XA0,}
+\DoxyCodeLine{00427\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abc6210602166aa7ca35e4960079b1cd7}{ALGO\_RSASSAPSSPKCS1\_V2\_1\_PLAIN}}\ =\ 0xA1,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PSS\ with\ already\ hashed\ value\ as\ input}}
+\DoxyCodeLine{00428\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9fc456527efd4967b70e25ffa0544de3}{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA256}}\ =\ 0xA2,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PSS\ with\ SHA-\/256}}
+\DoxyCodeLine{00429\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4902ffc8cb58823eeb5de671b51aba24}{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA384}}\ =\ 0xA3,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PSS\ with\ SHA-\/384}}
+\DoxyCodeLine{00430\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af017dde8f52cc0b5ee8e16b0384713f1}{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA512}}\ =\ 0xA4,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PSS\ with\ SHA-\/512}}
+\DoxyCodeLine{00431\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6482454063b74c454a64704b281a7096}{ALGO\_RSASSAPSSPKCS1\_V2\_1\_INNERMD}}\ =\ 0xA5,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PSS\ with\ already\ hashed\ value\ using\ COMPUTE\ MD\ command}}
+\DoxyCodeLine{00432\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa7ffbeea81bc60385f4e79c0eff38b39}{ALGO\_RSASSAPSSPKCS1\_V1\_5\_PLAIN}}\ =\ 0xA6,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PKCS1V15\ with\ already\ hashed\ value\ as\ input}}
+\DoxyCodeLine{00433\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab4f07bde5ee62fbd63459936a8d57318}{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA256}}\ =\ 0xA7,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PKCS1V15\ with\ SHA-\/256}}
+\DoxyCodeLine{00434\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad974e2f4d3d97484bd12bf9df3e7238c}{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA384}}\ =\ 0xA8,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PKCS1V15\ with\ SHA-\/384}}
+\DoxyCodeLine{00435\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa3776f00774041229ca60b85f43efd51}{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA512}}\ =\ 0xA9,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PKCS1V15\ with\ SHA-\/512}}
+\DoxyCodeLine{00436\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a95d1536b26f954394008331c097fcb30}{ALGO\_RSASSAPSSPKCS1\_V1\_5\_INNERMD}}\ =\ 0xAA,\ \ \textcolor{comment}{//\ PKCS\#1\ V2.1\ RSASSA-\/PKCS1V15\ with\ already\ hashed\ value\ using\ COMPUTE\ MD\ command}}
+\DoxyCodeLine{00437\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afff75dfba52a5ecfb14f831f516e1eca}{ALGO\_RSASIGN\_ANY}}\ =\ 0XAB,}
+\DoxyCodeLine{00438\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af1200acbcc1a1906683f9ceaacff3260}{ALGO\_RSASIGN\_LAST}}\ =\ 0XAC,}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5be0273ebb28adf4880f7d58eb64c785}{ALGO\_INVALID}}=0xFF}
+\DoxyCodeLine{00441\ \ \ \ \ }
+\DoxyCodeLine{00442\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}};}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00450\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00451\ \{}
+\DoxyCodeLine{00452\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afdb6d80ba180c52391792f2d27d539eb}{MXQ\_KEYUSE\_SECURECHANNEL}}\ \ \ \ =0x00U,\ }
+\DoxyCodeLine{00453\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa427d536d6239f3fd3880bc93b2de10d}{MXQ\_KEYUSE\_DATASIGNATURE}}\ \ \ \ =0x01U,\ }
+\DoxyCodeLine{00454\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9ba5f0e6b2591311cf81b14a0046230c}{MXQ\_KEYUSE\_ATTESTATION}}\ \ \ \ \ \ \ \ =0x11U,\ }
+\DoxyCodeLine{00455\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4096277587575c1b6113f0280ffe2548}{MXQ\_KEYUSE\_INTERNALENCRYPTION}}\ =0xA2U,\ }
+\DoxyCodeLine{00456\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa6b61c08025edb63125f1d324fcc09c5}{MXQ\_KEYUSE\_INTERNALMAC}}\ \ \ \ \ \ \ \ =0xA1U,\ }
+\DoxyCodeLine{00457\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a85296ac325e5d180fdf1d71fcd38610a}{MXQ\_KEYUSE\_ENCRYPTION}}\ \ \ \ \ \ =0x02U,\ }
+\DoxyCodeLine{00458\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af8a6521c70ce89bd12cd33bbe98750ee}{MXQ\_KEYUSE\_TLSAUTH}}\ \ \ \ \ \ \ \ \ \ \ \ =0x04U,\ }
+\DoxyCodeLine{00459\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a307727a87e2ac5b19eb573104db672bf}{MXQ\_KEYUSE\_ADMINAUTH}}\ \ \ \ \ \ \ \ =0x08U,\ }
+\DoxyCodeLine{00460\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a63b00a180bf13651825f132f9800ad0d}{MXQ\_KEYUSE\_ENDCUSTOMERAUTH}}\ \ \ \ =0x18U,\ }
+\DoxyCodeLine{00461\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad69f535c2865bceca30a1863aa748c67}{MXQ\_KEYUSE\_VERIFY\_KEY\_CERT}}\ \ \ \ =0x10U,\ }
+\DoxyCodeLine{00462\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aed6bb3d15313da494e4f0570958ac939}{MXQ\_KEYUSE\_VERIFY\_FW}}\ \ \ \ \ \ \ \ =0x20U,\ }
+\DoxyCodeLine{00463\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7c51c10e15b571a68e424bc77cfdfa89}{MXQ\_KEYUSE\_RFU}}\ \ \ \ \ \ \ \ \ \ \ \ =0x40U,\ }
+\DoxyCodeLine{00464\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a11acb19fcefb364d35c9ed5b7ec0ff3c}{MXQ\_KEYUSE\_KEY\_IMPORT}}\ \ \ \ \ \ =0x80U,\ }
+\DoxyCodeLine{00465\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a61bf66983fb5f75ea44b049c04b91e2e}{MXQ\_KEYUSE\_GPIO\_CONTROL}}\ \ =0x8AU,\ }
+\DoxyCodeLine{00466\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1f97ff56fe4d2b51b3bdd6ab47a00012}{MXQ\_KEYUSE\_KEY\_EXCHAGE}}\ \ \ \ \ \ \ \ =0xD1U,\ }
+\DoxyCodeLine{00467\ \textcolor{preprocessor}{\#ifdef\ MXQ\_FW\_UPDATE\_CAP}}
+\DoxyCodeLine{00468\ \ \ \ \ MXQ\_KEYUSE\_FIRMWARE\_UPDATE\ \ =0xA0U,\ }
+\DoxyCodeLine{00469\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00470\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ada0f5b42c7f5387de945c83b460b986a}{MXQ\_KEYUSE\_NONE}}\ \ \ \ \ \ \ \ \ \ =0xFFU\ \ }
+\DoxyCodeLine{00472\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}};}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00479\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00480\ \{}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{comment}{/*\ \ For\ MXQ\_KEYTYPE\_ECC:\ */}}
+\DoxyCodeLine{00482\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad25fa5d533341bebd0e5218ef968fcbb}{MXQ\_KEYPARAM\_EC\_P256R1}},\ }
+\DoxyCodeLine{00483\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5575f5368cbdc2df20811f44a5ad2837}{MXQ\_KEYPARAM\_EC\_P384R1}},\ }
+\DoxyCodeLine{00484\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a60fa624f6387e53150822bcf4ccde801}{MXQ\_KEYPARAM\_EC\_P521R1}},\ }
+\DoxyCodeLine{00485\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a418fdb744bae9506a3424c4772d4e575}{MXQ\_KEYPARAM\_EC\_BP256R1}},\ }
+\DoxyCodeLine{00486\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60acf33dea726dca1dc5486b4dcd6df78e9}{MXQ\_KEYPARAM\_EC\_BP384R1}},\ }
+\DoxyCodeLine{00487\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a45e01b87021f01760a0e84d6774dcf66}{MXQ\_KEYPARAM\_EC\_BP512R1}},\ }
+\DoxyCodeLine{00488\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0940ca44ba5abe3c81bbede44ba7906e}{MXQ\_KEYPARAM\_EDWARD\_TBD}},}
+\DoxyCodeLine{00489\ \textcolor{preprocessor}{\#ifdef\ ENABLE\_RSA}}
+\DoxyCodeLine{00490\ \ \ \ \ MXQ\_KEYPARAM\_RSA\_PUB3,}
+\DoxyCodeLine{00491\ \ \ \ \ MXQ\_KEYPARAM\_RSA\_CRT\_PUB3,}
+\DoxyCodeLine{00492\ \ \ \ \ MXQ\_KEYPARAM\_RSA\_PUB65537,}
+\DoxyCodeLine{00493\ \ \ \ \ MXQ\_KEYPARAM\_RSA\_CRT\_PUB65537,}
+\DoxyCodeLine{00494\ \ \ \ \ MXQ\_KEYPARAM\_DHE\ =\ 0xAA,}
+\DoxyCodeLine{00495\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00496\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac1e1d539d340ebb34c7d75c030d98bb4}{MXQ\_UNKNOWN\_CURVE}}}
+\DoxyCodeLine{00497\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}};}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00504\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00505\ \{}
+\DoxyCodeLine{00506\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a93d7c4538c10896ffce554929a3d681d}{MXQ\_KEYTYPE\_AES}},\ \ \ \ \ }
+\DoxyCodeLine{00507\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae7c60c4d0441f87c2e70ce8e113fd0fc}{MXQ\_KEYTYPE\_PSK}},\ \ \ \ \ }
+\DoxyCodeLine{00508\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a46b6cae82ddaa655f36db34d97fa0572}{MXQ\_KEYTYPE\_HMAC}},\ \ \ \ }
+\DoxyCodeLine{00509\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4b1731ad78143bd6d34f75d7051af057}{MXQ\_KEYTYPE\_ECC}},\ \ \ \ \ }
+\DoxyCodeLine{00510\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa6db8f208910a40168d6133e9f43789b}{MXQ\_KEYTYPE\_IKM}},\ \ \ \ \ }
+\DoxyCodeLine{00511\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9494ca508f20c30b7e27c9660e960d65}{MXQ\_KEYTYPE\_RSA}},\ \ \ \ \ }
+\DoxyCodeLine{00512\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1aec682ad2d97ddc8bddbabceeab3e5a}{MXQ\_KEYTYPE\_UNKNOWN}},\ }
+\DoxyCodeLine{00513\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}};}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00518\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00519\ \{}
+\DoxyCodeLine{00520\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2ea56e36113a9c4c5bb4052cbffce384}{S\_ERASE\_SELECTED}}\ =\ 0x01,}
+\DoxyCodeLine{00521\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a56e62b8d198b5e695f9ae8289366b07f}{S\_ERASE\_ALL}}\ =\ 0x02}
+\DoxyCodeLine{00522\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2d9cbb4de9ed1a8103ec2a338d873306}{mxq\_tamper\_cmd\_t}};}
+\DoxyCodeLine{00523\ }
+\DoxyCodeLine{00528\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00529\ \{}
+\DoxyCodeLine{00530\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a760c06755743198ad8ece23b777e7823}{SHARE\_SECRET}}=\ 1,}
+\DoxyCodeLine{00531\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a01c5170e3321214ba8a511cdaaeab944}{GENERATE\_M}}\ =\ 2,}
+\DoxyCodeLine{00532\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a05b545cd67ecc775dea54fcb4c992af4}{IS\_AUTH\_ENABLED}}\ =\ 8}
+\DoxyCodeLine{00533\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a569dee984cc0cee9e04f6e6eb487266c}{mxq\_export\_key\_flag}};}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00539\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}\{}
+\DoxyCodeLine{00540\ }
+\DoxyCodeLine{00541\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a3686ae382b7b7c868b911fefb93bc909}{CMDNUM\_CREATE\_OBJECT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x10U,\ }
+\DoxyCodeLine{00542\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2a2936dfd4ba6ae83d1cb87bd23a3349}{CMDNUM\_DELETE\_OBJECT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x11U,\ }
+\DoxyCodeLine{00543\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af23d472d01b5a446475cf1da5dee4867}{CMDNUM\_READ\_OBJECT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x12U,\ }
+\DoxyCodeLine{00544\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a65f74cf2ae4e8443c40757b95cc48cfa}{CMDNUM\_WRITE\_OBJECT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x13U,\ }
+\DoxyCodeLine{00545\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2ce4a3a20a7187a1fd1f96fd43c66673}{CMDNUM\_UPDATE\_COUNTER}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x14U,\ }
+\DoxyCodeLine{00546\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a483ac26ee85b9b8dbe3c605a7916d3a9}{CMDNUM\_LIST\_OBJECTS}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x15U,\ }
+\DoxyCodeLine{00547\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4c8f0274b22baa635ab152f39694b8e8}{CMDNUM\_TAMPER}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x17U,\ }
+\DoxyCodeLine{00549\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af31a3d18d7dd099883b5d1723c9804b1}{CMDNUM\_IMPORT\_KEY\_ENC}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x20U,\ }
+\DoxyCodeLine{00551\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab3536e54a1beef1cc0760471f44e80ef}{CMDNUM\_TLS13\_KEY\_EXCHANGE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xB0U,\ }
+\DoxyCodeLine{00553\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2cd3752465cfbd860534dc07cb71b185}{CMDNUM\_ENCRYPT\_DECRYPT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC0U,}
+\DoxyCodeLine{00554\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4e4266306ef9cef63e4f4b0dac9b80d4}{CMDNUM\_MANAGE\_SECURE\_CHANNEL}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC1U,\ }
+\DoxyCodeLine{00555\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6e170c72d97a1fb7c5028075d6fa55b6}{CMDNUM\_ADMIN\_AUTHENTICATE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC2U,}
+\DoxyCodeLine{00556\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af9099f7ffcbefb8a0203d8e4798205fc}{CMDNUM\_KEY\_EXCHANGE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC3U,\ }
+\DoxyCodeLine{00557\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7fd3f89d5d4556f211468807a0554c32}{CMDNUM\_TLS\_RECORD}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC4U,\ }
+\DoxyCodeLine{00558\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae8d4c534f579a579e84f0de7348f0912}{CMDNUM\_ESTABLISH\_KEY\_DH}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC6U,\ }
+\DoxyCodeLine{00559\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1b114855f50354b7800edb403f19590a}{CMDNUM\_GET\_CHALLENGE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC7U,\ }
+\DoxyCodeLine{00560\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a92e6a3dd68b84f9de891a2aff8b83eb8}{CMDNUM\_COMPUTE\_VERIFY\_DIGITAL\_SIGNATURE}}\ =\ 0xC8U,}
+\DoxyCodeLine{00561\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0c92ffe0722ce3f39cbb5d08e7b6b3b9}{CMDNUM\_GET\_RANDOM}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xC9U,\ }
+\DoxyCodeLine{00562\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a23decfd9aaca579084115b6f57f40a11}{CMDNUM\_IMPORT\_KEY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xCAU,\ }
+\DoxyCodeLine{00563\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab6ad69cbe8a15ba68af2b158f5471221}{CMDNUM\_IMPORT\_ROOTCERT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xCBU,\ }
+\DoxyCodeLine{00564\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a92bbb04f8379f6fd86ddcc7b8ebbf559}{CMDNUM\_VERIFY\_BOOT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xCCU,}
+\DoxyCodeLine{00565\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5297d11276ffba61f9c988622229ead6}{CMDNUM\_ATTESTATION}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xCDU,\ }
+\DoxyCodeLine{00566\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4f16a094c01307682456d872170b3ab0}{CMDNUM\_ESTABLISH\_KEY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xCEU,\ }
+\DoxyCodeLine{00567\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad6d16e05b16e5f55ded3425f82f148f4}{CMDNUM\_IMPORT\_CHILDCERT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xCFU,\ }
+\DoxyCodeLine{00569\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4dc9757997803d46e04d091c936ca943}{CMDNUM\_COMPUTE\_MESSAGE\_DIGEST}}\ \ \ \ \ \ \ \ \ \ =\ 0xD0U,}
+\DoxyCodeLine{00570\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af8a7abf1ae76e0e6b3576a5790add4dd}{CMDNUM\_COMPUTE\_MAC}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xD1U,}
+\DoxyCodeLine{00572\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a03aa6ed828c46eb7c260da3e8f298f49}{CMDNUM\_SLEEP}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF1U,\ }
+\DoxyCodeLine{00573\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a868408eb09f94a8477efe61c95af4cdd}{CMDNUM\_GETSTATUS}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF2U,\ }
+\DoxyCodeLine{00574\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af97c0c81d3b9c30b0a9415e00c59f666}{CMDNUM\_SET\_LIFE\_CYCLE\_STATE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF3U,}
+\DoxyCodeLine{00575\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8dd2186b1d1bce29659aea26fa9749ba}{CMDNUM\_SETCONFIG}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF4U,}
+\DoxyCodeLine{00576\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa06b85431f13bc1428258d5c5ae3f9fd}{CMDNUM\_RESET\_FACTORY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF5U,}
+\DoxyCodeLine{00577\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8147a99dd667abee59046d58ad60f422}{CMDNUM\_RESTORE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF6U,}
+\DoxyCodeLine{00578\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aee67216fbc1b8318acdb1e76f339550c}{CMDNUM\_DUMP}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF6U,}
+\DoxyCodeLine{00579\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac05f14ab22b40279408f7e09cdf37b5c}{CMDNUM\_PING}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF7U,}
+\DoxyCodeLine{00580\ \textcolor{preprocessor}{\#ifdef\ LCOV\_REPORT}}
+\DoxyCodeLine{00581\ \ \ \ \ CMDNUM\_LCOV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xF9U,}
+\DoxyCodeLine{00582\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00583\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abda42cbb95f2e417969a285ef4c15659}{CMDNUM\_GPIO\_CONTROL}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xFBU,}
+\DoxyCodeLine{00584\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aee30b2b9bad4e6b1df6bc32328e3b47d}{CMDNUM\_GPIO\_READ}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xFCU,}
+\DoxyCodeLine{00586\ \textcolor{preprocessor}{\#ifdef\ MXQ\_FW\_UPDATE\_CAP}}
+\DoxyCodeLine{00587\ \ \ \ \ CMDNUM\_START\_UPDATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xE0U,\ }
+\DoxyCodeLine{00588\ \ \ \ \ CMDNUM\_PROCESS\_UPDATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xE1U,\ }
+\DoxyCodeLine{00589\ \ \ \ \ CMDNUM\_FINISH\_UPDATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xE2U,\ }
+\DoxyCodeLine{00590\ \ \ \ \ CMDNUM\_ENTER\_BOOTLOADER\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0xE3U,\ }
+\DoxyCodeLine{00591\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00592\ \textcolor{preprocessor}{\#ifdef\ USS\_ST}}
+\DoxyCodeLine{00593\ \ \ \ \ CMDNUM\_BYPASS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x16U,\ \textcolor{comment}{/*\ Bypass\ command\ */}}
+\DoxyCodeLine{00594\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00595\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4e0b217617d2de3b27e6000053e1126b}{cmd\_num\_t}};}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00602\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_128\_CBC\_SHA\ \ \ \ \ \ \ \ \ 0x0090\ }}
+\DoxyCodeLine{00603\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_256\_CBC\_SHA\ \ \ \ \ \ \ \ \ 0x0091\ }}
+\DoxyCodeLine{00605\ \textcolor{preprocessor}{\#ifndef\ NO\_INC\_TYPES}}
+\DoxyCodeLine{00606\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_128\_GCM\_SHA256\ \ \ \ \ \ \ \ \ \ 0x00A8\ }}
+\DoxyCodeLine{00607\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_256\_GCM\_SHA384\ \ \ \ \ \ \ \ \ \ 0x00A9\ }}
+\DoxyCodeLine{00608\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_128\_GCM\_SHA256\ \ \ \ \ \ 0x00AA\ }}
+\DoxyCodeLine{00609\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_256\_GCM\_SHA384\ \ \ \ \ \ 0x00AB\ }}
+\DoxyCodeLine{00611\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_128\_CBC\_SHA256\ \ \ \ \ \ \ \ \ \ 0x00AE\ }}
+\DoxyCodeLine{00612\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_256\_CBC\_SHA384\ \ \ \ \ \ \ \ \ \ 0x00AF\ }}
+\DoxyCodeLine{00613\ \textcolor{preprocessor}{\#endif\ }}
+\DoxyCodeLine{00614\ }
+\DoxyCodeLine{00615\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_128\_CBC\_SHA256\ \ \ \ \ \ 0x00B2\ }}
+\DoxyCodeLine{00616\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_256\_CBC\_SHA384\ \ \ \ \ \ 0x00B3\ }}
+\DoxyCodeLine{00618\ \textcolor{preprocessor}{\#define\ TLS\_ECDH\_ECDSA\_WITH\_AES\_128\_CBC\_SHA\ \ \ \ \ \ 0xC004\ }}
+\DoxyCodeLine{00619\ \textcolor{preprocessor}{\#define\ TLS\_ECDH\_ECDSA\_WITH\_AES\_256\_CBC\_SHA\ \ \ \ \ \ 0xC005\ }}
+\DoxyCodeLine{00621\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA\ \ \ \ \ 0xC009\ }}
+\DoxyCodeLine{00622\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA\ \ \ \ \ 0xC00A\ }}
+\DoxyCodeLine{00624\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256\ \ 0xC023\ }}
+\DoxyCodeLine{00625\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384\ \ 0xC024\ }}
+\DoxyCodeLine{00626\ \textcolor{preprocessor}{\#define\ TLS\_ECDH\_ECDSA\_WITH\_AES\_128\_CBC\_SHA256\ \ \ 0xC025\ }}
+\DoxyCodeLine{00627\ \textcolor{preprocessor}{\#define\ TLS\_ECDH\_ECDSA\_WITH\_AES\_256\_CBC\_SHA384\ \ \ 0xC026\ }}
+\DoxyCodeLine{00629\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256\ \ 0xC02B\ }}
+\DoxyCodeLine{00630\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384\ \ 0xC02C\ }}
+\DoxyCodeLine{00631\ \textcolor{preprocessor}{\#define\ TLS\_ECDH\_ECDSA\_WITH\_AES\_128\_GCM\_SHA256\ \ \ 0xC02D\ }}
+\DoxyCodeLine{00632\ \textcolor{preprocessor}{\#define\ TLS\_ECDH\_ECDSA\_WITH\_AES\_256\_GCM\_SHA384\ \ \ 0xC02E\ }}
+\DoxyCodeLine{00634\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_PSK\_WITH\_AES\_128\_CBC\_SHA\ \ \ \ \ \ \ 0xC035\ }}
+\DoxyCodeLine{00635\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_PSK\_WITH\_AES\_256\_CBC\_SHA\ \ \ \ \ \ \ 0xC036\ }}
+\DoxyCodeLine{00636\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_PSK\_WITH\_AES\_128\_CBC\_SHA256\ \ \ \ 0xC037\ }}
+\DoxyCodeLine{00637\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_PSK\_WITH\_AES\_256\_CBC\_SHA384\ \ \ \ 0xC038\ }}
+\DoxyCodeLine{00639\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_128\_CCM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xC0A4\ \ }}
+\DoxyCodeLine{00640\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_256\_CCM\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xC0A5\ \ }}
+\DoxyCodeLine{00641\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_128\_CCM\ \ \ \ \ \ \ \ \ \ \ \ \ 0xC0A6\ \ }}
+\DoxyCodeLine{00642\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_256\_CCM\ \ \ \ \ \ \ \ \ \ \ \ \ 0xC0A7\ \ }}
+\DoxyCodeLine{00643\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_128\_CCM\_8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xC0A8\ \ }}
+\DoxyCodeLine{00644\ \textcolor{preprocessor}{\#define\ TLS\_PSK\_WITH\_AES\_256\_CCM\_8\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0xC0A9\ \ }}
+\DoxyCodeLine{00645\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_128\_CCM\_8\ \ \ \ \ \ \ \ \ \ \ 0xC0AA\ \ }}
+\DoxyCodeLine{00646\ \textcolor{preprocessor}{\#define\ TLS\_DHE\_PSK\_WITH\_AES\_256\_CCM\_8\ \ \ \ \ \ \ \ \ \ \ 0xC0AB\ \ }}
+\DoxyCodeLine{00648\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\ \ \ \ \ \ \ \ \ 0xC0AC\ \ }}
+\DoxyCodeLine{00649\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CCM\ \ \ \ \ \ \ \ \ 0xC0AD\ \ }}
+\DoxyCodeLine{00650\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8\ \ \ \ \ \ \ 0xC0AE\ \ }}
+\DoxyCodeLine{00651\ \textcolor{preprocessor}{\#define\ TLS\_ECDHE\_ECDSA\_WITH\_AES\_256\_CCM\_8\ \ \ \ \ \ \ 0xC0AF\ \ }}
+\DoxyCodeLine{00656\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00657\ \textcolor{comment}{\ *Defines.\ Do\ not\ modify.}}
+\DoxyCodeLine{00658\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00659\ }
+\DoxyCodeLine{00660\ \textcolor{preprocessor}{\#define\ MAX\_RANDOM\_NUMBER\_SIZE\ \ \ \ \ \ 1024}}
+\DoxyCodeLine{00661\ \textcolor{preprocessor}{\#define\ LEN\_KEY\_BLOCK\ \ \ \ \ \ \ \ \ \ \ 256}}
+\DoxyCodeLine{00662\ \textcolor{preprocessor}{\#define\ KEY\_EXCHANGE\_BUFF\_SIZE\ \ \ \ \ \ 10}}
+\DoxyCodeLine{00663\ \textcolor{preprocessor}{\#define\ SERVER\_RANDOM\_SIZE\ \ \ \ \ \ 256}}
+\DoxyCodeLine{00664\ \textcolor{preprocessor}{\#define\ BID\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ 16}}
+\DoxyCodeLine{00665\ \textcolor{preprocessor}{\#define\ MAC\_LEN\_SHA256\ \ \ \ \ \ \ \ \ \ 32}}
+\DoxyCodeLine{00666\ \textcolor{preprocessor}{\#define\ MAX\_PAD\_LEN\ \ \ \ \ \ \ \ \ 17}}
+\DoxyCodeLine{00667\ \textcolor{preprocessor}{\#define\ MAX\_ECDH\_KEY\_SIZE\ \ \ \ \ \ \ 256\ }\textcolor{comment}{/*\ 2\ *\ Max\ key\ size\ (521\ bits)\ +\ 0x04\ +\ margin\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00668\ \textcolor{preprocessor}{\#define\ MAX\_EC\_KEY\_SIZE\ \ \ \ \ \ \ \ \ (66\ *\ 2)}}
+\DoxyCodeLine{00669\ \textcolor{preprocessor}{\#define\ MAX\_DH\_KEY\_SIZE\ \ \ \ \ \ \ \ \ (512*3)\ }\textcolor{comment}{//\ RSA4096\ Key\ Size\ *\ 3}}
+\DoxyCodeLine{00670\ \textcolor{preprocessor}{\#define\ MAX\_CCM\_PACKET\_LENGTH\ \ \ \ \ \ \ 1920}}
+\DoxyCodeLine{00671\ \textcolor{preprocessor}{\#define\ MAX\_TLS\_PACKET\_SIZE\ \ \ \ \ 16384}}
+\DoxyCodeLine{00672\ \textcolor{preprocessor}{\#define\ MAX\_AAD\_CCM\_LENGTH\ \ \ \ \ \ 64}}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \textcolor{preprocessor}{\#define\ MAX\_COMM\_BUFFER\ \ \ \ \ \ \ \ \ 2048\ \ \ \ }\textcolor{comment}{/*\ if\ change,\ update\ MXQ\_API.h\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00675\ \textcolor{preprocessor}{\#define\ MAX\_COMM\_DATA\_LEN\ \ \ \ \ \ \ (MAX\_COMM\_BUFFER-\/128)}}
+\DoxyCodeLine{00676\ }
+\DoxyCodeLine{00677\ \textcolor{preprocessor}{\#ifdef\ \_\_MAXQ106x\_C2\_\_}}
+\DoxyCodeLine{00678\ \textcolor{preprocessor}{\#define\ CHALLENGE\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ \ \ 80}}
+\DoxyCodeLine{00679\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00680\ \textcolor{preprocessor}{\#define\ CHALLENGE\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ \ \ 96}}
+\DoxyCodeLine{00681\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00682\ }
+\DoxyCodeLine{00683\ }
+\DoxyCodeLine{00688\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00689\ \{}
+\DoxyCodeLine{00690\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a111371425ae7dfcadbdca07dad8aaa94}{COND\_NA}}\ \ \ \ \ \ \ \ \ \ =0x00U,\ }
+\DoxyCodeLine{00691\ \textcolor{preprocessor}{\#if\ !defined(MAXQ106x)}}
+\DoxyCodeLine{00692\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aade4e49d5a78d205dcc4dffa1cc0d8a5}{COND\_ENDUSER}}\ \ \ \ =0x01U,\ }
+\DoxyCodeLine{00693\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00694\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a27a0619db66b70a5a8dc7be8b9d0bd3d}{COND\_ADMIN}}\ \ \ \ \ \ \ \ =0x02U,\ }
+\DoxyCodeLine{00695\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc1fb34929b3748ca316437188836122}{COND\_SECUREBOOT}}\ \ =0x04U,\ }
+\DoxyCodeLine{00696\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4868e285eb000e6afe697c480c05908c}{COND\_HOST}}\ \ \ \ \ \ =0x08U,\ }
+\DoxyCodeLine{00697\ \textcolor{preprocessor}{\#if\ !defined(MAXQ106x)}}
+\DoxyCodeLine{00698\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0d68bd3315d163a7a9673bb01dcc6032}{COND\_NONE}}\ \ \ \ \ \ =\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aade4e49d5a78d205dcc4dffa1cc0d8a5}{COND\_ENDUSER}}+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4868e285eb000e6afe697c480c05908c}{COND\_HOST}}+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a27a0619db66b70a5a8dc7be8b9d0bd3d}{COND\_ADMIN}}+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc1fb34929b3748ca316437188836122}{COND\_SECUREBOOT}}\ }
+\DoxyCodeLine{00699\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00700\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0d68bd3315d163a7a9673bb01dcc6032}{COND\_NONE}}\ \ \ \ \ \ =\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4868e285eb000e6afe697c480c05908c}{COND\_HOST}}+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a27a0619db66b70a5a8dc7be8b9d0bd3d}{COND\_ADMIN}}+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc1fb34929b3748ca316437188836122}{COND\_SECUREBOOT}}\ }
+\DoxyCodeLine{00701\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00702\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a6508ad2320eb8766c9a9e2214eb98878}{access\_cond\_t}};}
+\DoxyCodeLine{00703\ }
+\DoxyCodeLine{00704\ \textcolor{preprocessor}{\#define\ NUM\_ACC\_COND\_BITS\ 4}}
+\DoxyCodeLine{00705\ }
+\DoxyCodeLine{00710\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00711\ \{}
+\DoxyCodeLine{00712\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad5e940ad9b11ceecf775ca8a4c13cafa}{MXQ\_OBJTYPE\_SECRETKEY}}\ \ \ \ \ =\ 0x01U,\ }
+\DoxyCodeLine{00713\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7dd78f1345b87e498752669230adc6c8}{MXQ\_OBJTYPE\_PUBKEY}}\ \ \ \ \ \ \ \ =\ 0x02U,\ }
+\DoxyCodeLine{00714\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab537da9cc9d6197c8043235526d64699}{MXQ\_OBJTYPE\_KEYPAIR}}\ \ \ \ \ \ \ =\ 0x03U,\ }
+\DoxyCodeLine{00715\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac934d92de2d7d5d8a9b1eaba78de3cbb}{MXQ\_OBJTYPE\_TRANSPARENT}}\ \ \ =\ 0x04U,\ }
+\DoxyCodeLine{00716\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a59ce378bc7afc88836ee7791e37e85ec}{MXQ\_OBJTYPE\_COUNTER\_UP}}\ \ \ \ =\ 0x05U,\ }
+\DoxyCodeLine{00717\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a771cefd227d187ac3cc844510eb4f15e}{MXQ\_OBJTYPE\_X509}}\ \ \ \ \ \ \ \ \ \ =\ 0x06U,\ }
+\DoxyCodeLine{00718\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8362ad8531d301bfae0e4fdc5b5fe55a}{MXQ\_OBJTYPE\_COUNTER\_DOWN}}\ \ =\ 0x07U,\ }
+\DoxyCodeLine{00719\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a76473f19c3eeeeba3d12d13164f1940f}{MXQ\_OBJTYPE\_UNKNOWN}}\ \ \ \ \ \ \ =\ 0x80U\ \ }
+\DoxyCodeLine{00720\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a90991e5b89ada129ddd3a6160e48f54a}{mxq\_objecttype\_t}};}
+\DoxyCodeLine{00721\ }
+\DoxyCodeLine{00726\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00727\ \{}
+\DoxyCodeLine{00728\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a3d04dd740ff2d0826890f47f232621a5}{OBJPROP\_TEMPORARY}}\ \ \ \ \ \ =\ 0x01,\ \ \ }
+\DoxyCodeLine{00729\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60adf5eba7e6b1833b779209142f2985a3f}{OBJPROP\_PERSISTENT}}\ \ \ \ \ \ \ \ =\ 0x02,\ \ }
+\DoxyCodeLine{00730\ \ \ \ \ \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a89c75fe29f6e2fc75e0602139a58f61e}{OBJPROP\_WIPE\_ON\_TAMPER}}\ \ \ \ \ \ \ \ =\ 0x04\ \ }
+\DoxyCodeLine{00732\ \}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e5bd4d199413bbcaa302419ebfd7e1f}{mxq\_object\_prop\_t}};}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ }
+\DoxyCodeLine{00739\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00740\ \{}
+\DoxyCodeLine{00741\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{structpsk__id__t_a3a8a34eb1dad0e64114db26726a13ab6}{psk\_id}};}
+\DoxyCodeLine{00742\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ psk\_key\_bloc[\mbox{\hyperlink{_m_x_q___a_p_i_8h_a065ff17f766c3b4c15302afb5da3fdbd}{LEN\_KEY\_BLOCK}}];}
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \}\ \mbox{\hyperlink{structpsk__id__t}{psk\_id\_t}};}
+\DoxyCodeLine{00745\ }
+\DoxyCodeLine{00746\ }
+\DoxyCodeLine{00751\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00752\ \{}
+\DoxyCodeLine{00753\ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa487c1237ce361229679a48be4c0eb3c}{key\_exchange\_case\_t}}\ \ \mbox{\hyperlink{structmxq__secret__context__api__t_ad18218173388485c67396f691f4eb83b}{pass}};}
+\DoxyCodeLine{00754\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{structmxq__secret__context__api__t_a81ba8ba94bae066414e7907184a7456e}{CSID}};}
+\DoxyCodeLine{00755\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \ \ \mbox{\hyperlink{structmxq__secret__context__api__t_a1db80b47c71a4365dec9b84df27dbe37}{Random}};}
+\DoxyCodeLine{00756\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ \ \ \mbox{\hyperlink{structmxq__secret__context__api__t_a3286f9049323ec450a9f37f2de69b14e}{Random\_size}};}
+\DoxyCodeLine{00757\ \ \ \ \ \mbox{\hyperlink{structpsk__id__t}{psk\_id\_t}}\ \ \ \ \mbox{\hyperlink{structmxq__secret__context__api__t_a4825e63b08a53369098f5b0acdf704b3}{PSK\_info}};}
+\DoxyCodeLine{00758\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{structmxq__secret__context__api__t_a2e6f75848fab11d0d3bf818d505e17fd}{is\_session\_key\_secret}};}
+\DoxyCodeLine{00759\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \ \ \ \ \mbox{\hyperlink{structmxq__secret__context__api__t_acf9d67b95572d2d1f4b3cc269fd29dd5}{master\_key}};\ \textcolor{comment}{//\ unused\ placeholder}}
+\DoxyCodeLine{00760\ \}\mbox{\hyperlink{structmxq__secret__context__api__t}{mxq\_secret\_context\_api\_t}};}
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ }
+\DoxyCodeLine{00778\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\_Module\_Init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00779\ }
+\DoxyCodeLine{00793\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_ga0ead3d761114495e89a6fe863e87e835}{MXQ\_Module\_Deinit}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00794\ }
+\DoxyCodeLine{00795\ \textcolor{keywordtype}{void}*\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4fe908c3ccc906ff1e37f71534ca7f1e}{MXQ\_Module\_Interface}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00796\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad454926461779415f2b908875889dcaa}{MXQ\_Module\_SetInterface}}(\textcolor{keywordtype}{void}*\ i)\ ;}
+\DoxyCodeLine{00797\ }
+\DoxyCodeLine{00814\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_ga6ae1b5bd52046253eb5f67afdb11939e}{MXQ\_ResetFactory}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00815\ }
+\DoxyCodeLine{00816\ }
+\DoxyCodeLine{00830\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_ga1b2dd60e215c446702935401c5ee66c8}{MXQ\_Reset}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00831\ }
+\DoxyCodeLine{00849\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4f156d2a6ecc5d91fa0822bd3412d589}{MXQ\_DisplayObjectDetails}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ pOption,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pObjDetails,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ pDetailsLen);}
+\DoxyCodeLine{00850\ }
+\DoxyCodeLine{00873\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af04bbbec55e3fc93de25053943ed160e}{MXQ\_ListObject}}(\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ option,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ pmaxlen\_readlen\ );}
+\DoxyCodeLine{00874\ }
+\DoxyCodeLine{00911\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a6f51b8ede40571ba955c1b65bc373089}{MXQ\_CreateObject}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ objectlen,}
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a90991e5b89ada129ddd3a6160e48f54a}{mxq\_objecttype\_t}}\ objtype,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e5bd4d199413bbcaa302419ebfd7e1f}{mxq\_object\_prop\_t}}\ objprops,\ \textcolor{keywordtype}{char}*\ accessrules);}
+\DoxyCodeLine{00913\ }
+\DoxyCodeLine{00940\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a0bf456e6424db96a2f9b0784939a3c91}{MXQ\_CreateCounter}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a90991e5b89ada129ddd3a6160e48f54a}{mxq\_objecttype\_t}}\ objtype,}
+\DoxyCodeLine{00941\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e5bd4d199413bbcaa302419ebfd7e1f}{mxq\_object\_prop\_t}}\ objprops,\ \textcolor{keywordtype}{char}*\ accessrules,\ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ init\_max\_val);}
+\DoxyCodeLine{00942\ }
+\DoxyCodeLine{00960\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad64934a0c33084935317c915f627aec6}{MXQ\_DeleteObject}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid);}
+\DoxyCodeLine{00961\ }
+\DoxyCodeLine{00983\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7d7d2e83699f29dd133a8ca2492ac074}{MXQ\_WriteObject}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ dest\_offset,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ len);}
+\DoxyCodeLine{00984\ }
+\DoxyCodeLine{01010\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3255e9a963d7cae514590f07ba7974b9}{MXQ\_WriteObjectV2}}(}
+\DoxyCodeLine{01011\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,}
+\DoxyCodeLine{01012\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ dest\_offset,}
+\DoxyCodeLine{01013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc,}
+\DoxyCodeLine{01014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ len,}
+\DoxyCodeLine{01015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ keyid,}
+\DoxyCodeLine{01016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ algoid,}
+\DoxyCodeLine{01017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pIv,}
+\DoxyCodeLine{01018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pTag);}
+\DoxyCodeLine{01019\ }
+\DoxyCodeLine{01038\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a76a395ea8c71bb293de115a0ff509414}{MXQ\_UpdateCounter}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,\ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}*\ countval);}
+\DoxyCodeLine{01039\ }
+\DoxyCodeLine{01040\ }
+\DoxyCodeLine{01063\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a40c80b14c09ff22c99534efab5c58ddc}{MXQ\_ReadObject}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid\ ,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ src\_offset,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ pmaxlen\_readlen);}
+\DoxyCodeLine{01064\ }
+\DoxyCodeLine{01083\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af7cc751ce2d1dc4847e6e5e4f9ad44c1}{MXQ\_ReadCounter}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objectid,\ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}*\ countval);}
+\DoxyCodeLine{01084\ }
+\DoxyCodeLine{01099\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a6c83b94ff24f92edd69a4324b196b27a}{MXQ\_Lcov}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{01100\ }
+\DoxyCodeLine{01118\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4240b6e958eddd080e3f91fb18ac781f}{MXQ\_Ping}}(\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ l);}
+\DoxyCodeLine{01119\ }
+\DoxyCodeLine{01142\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1794b9eca6d5ceee7b8d2781cfeb7a4a}{MXQ\_Get\_Challenge}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ p\_buff\_out,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ len);}
+\DoxyCodeLine{01143\ }
+\DoxyCodeLine{01144\ }
+\DoxyCodeLine{01167\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa92227444a321f2d537f4165bf67962f}{MXQ\_Get\_Random\_Ext}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ p\_buff\_out,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ len,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ option);}
+\DoxyCodeLine{01168\ }
+\DoxyCodeLine{01186\ \textcolor{preprocessor}{\#ifdef\ MAXQ106x}}
+\DoxyCodeLine{01187\ \textcolor{preprocessor}{\#define\ MXQ\_Get\_Random(p,l)\ MXQ\_Get\_Challenge(p,l)}}
+\DoxyCodeLine{01188\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{01189\ \textcolor{preprocessor}{\#define\ MXQ\_Get\_Random(p,l)\ MXQ\_Get\_Random\_Ext(p,l,0)}}
+\DoxyCodeLine{01190\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01191\ }
+\DoxyCodeLine{01195\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a25b562198a8f70915967485eeacff1e9}{MXQ\_Attestation}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ p\_buff\_out,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ len,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ option,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_id,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ alg\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ objid);}
+\DoxyCodeLine{01196\ }
+\DoxyCodeLine{01197\ \textcolor{preprocessor}{\#ifdef\ MAXQ108x}}
+\DoxyCodeLine{01221\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_GPIO\_Ctrl(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ pSecGpioId,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ pSecGpioMode,}
+\DoxyCodeLine{01222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pPulseDuration,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pOutputCond,}
+\DoxyCodeLine{01223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ pSignAlgo,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pKeyId,}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pSignature,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pSignLen);}
+\DoxyCodeLine{01225\ }
+\DoxyCodeLine{01247\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_GPIO\_Read(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ pSecGpioId,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ pSignAlgo,\ }
+\DoxyCodeLine{01248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pKeyId,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ output,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ olen,}
+\DoxyCodeLine{01249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pChallenge);}
+\DoxyCodeLine{01286\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_EstablishKey\_DH(}
+\DoxyCodeLine{01287\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ option\_flag,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ rsa\_ssa\_algo,}
+\DoxyCodeLine{01288\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ moduluslen,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ modulus,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ generator,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ message,}
+\DoxyCodeLine{01289\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ server\_rand\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ server\_rand\_buf,}
+\DoxyCodeLine{01290\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ keyusage,}
+\DoxyCodeLine{01291\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ dst\_Aes1\_kid,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ dst1\_key\_len,}
+\DoxyCodeLine{01292\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ dst\_Aes2\_kid,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ dst2\_key\_len,}
+\DoxyCodeLine{01293\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ fixed\_info\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ fixed\_info,}
+\DoxyCodeLine{01294\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ sign\_verif\_key\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ signing\_key\_pair\_id,}
+\DoxyCodeLine{01295\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ signature\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ signature,}
+\DoxyCodeLine{01296\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ out\_buf,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ out\_buf\_len);}
+\DoxyCodeLine{01297\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01298\ }
+\DoxyCodeLine{01333\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3cf865a2b082f461c4c24f35acc42ca0}{MXQ\_EstablishKey}}(}
+\DoxyCodeLine{01334\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ option\_flag,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ ec\_type,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_pair\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pub\_key\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pub\_key,}
+\DoxyCodeLine{01335\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ server\_rand\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ server\_rand\_buf,}
+\DoxyCodeLine{01336\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ dst\_Aes1\_kid,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ dst1\_key\_len,}
+\DoxyCodeLine{01337\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ dst\_Aes2\_kid,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ dst2\_key\_len,}
+\DoxyCodeLine{01338\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ fixed\_info\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ fixed\_info,}
+\DoxyCodeLine{01339\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ sign\_verif\_key\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ signing\_key\_pair\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ signature,}
+\DoxyCodeLine{01340\ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ out\_buf,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ out\_buf\_len);}
+\DoxyCodeLine{01341\ }
+\DoxyCodeLine{01363\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e3832e0abe653099303dc65c1fd0f65}{MXQ\_Perform\_Key\_Exchange}}(\ \mbox{\hyperlink{structmxq__secret__context__api__t}{mxq\_secret\_context\_api\_t}}\ *key\_Exchange\_Session\ );}
+\DoxyCodeLine{01364\ }
+\DoxyCodeLine{01388\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7860ca04aa7ac35d12098eb8caf9e836}{MXQ\_TLS13\_Generate\_Key}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ key,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_id,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}}\ key\_type,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ key\_param\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_size,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ p,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ g\_size,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ g);}
+\DoxyCodeLine{01413\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a568c54ba349825a6100093457db4718f}{MXQ\_TLS13\_Create\_Secret}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ peer\_key,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ peer\_key\_size,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_id,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}}\ key\_type,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ key\_param\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ CSID,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ shared\_secret\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ secret,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ *secret\_size);}
+\DoxyCodeLine{01414\ }
+\DoxyCodeLine{01433\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a07636e84713a47a2d2b751e4b5d8a054}{MXQ\_TLS13\_Update\_IV}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_id,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ iv,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ iv\_len);}
+\DoxyCodeLine{01437\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a906b06827d7ef0f091e553bad56659c0}{MXQ\_TLS13\_Extract\_Secret}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ digest\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ ret\_kid,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ prk,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ prk\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ salt\_kid,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ salt,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ salt\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ ikm\_kid,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ ikm,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ ikm\_len);}
+\DoxyCodeLine{01438\ }
+\DoxyCodeLine{01442\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af84949c33eab77a06783708b32038b1c}{MXQ\_TLS13\_Expand\_Secret}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ digest\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ ret\_kid,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}}\ ret\_keytype,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ ret\_isiv,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ okm,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ okm\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ prk\_kid,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ prk,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ prk\_len,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ info,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ info\_len);}
+\DoxyCodeLine{01443\ }
+\DoxyCodeLine{01464\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad72327caf01204bad1ca5f6f145b01bc}{MXQ\_Encrypt\_PMS\_with\_RSA}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ data,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ encrypted\_pms,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ data\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ cert\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ CSID);}
+\DoxyCodeLine{01465\ }
+\DoxyCodeLine{01490\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a997b198ecf74f31e10955610dfd863f0}{MXQ\_Ecdh\_Compute\_Shared}}(}
+\DoxyCodeLine{01491\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ \ curve\_id,}
+\DoxyCodeLine{01492\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ server\_public\_key,}
+\DoxyCodeLine{01493\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ client\_public\_key,}
+\DoxyCodeLine{01494\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ key\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ CSID);}
+\DoxyCodeLine{01495\ }
+\DoxyCodeLine{01528\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7857200b3d898684dc2a3e76fcfb36db}{MXQ\_SetECDHEKey}}(}
+\DoxyCodeLine{01529\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ algoid,}
+\DoxyCodeLine{01530\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ curveID,}
+\DoxyCodeLine{01531\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ na,}
+\DoxyCodeLine{01532\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ random,\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ randomlen,}
+\DoxyCodeLine{01533\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*ecdheparams,\ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ecdheparamslen,}
+\DoxyCodeLine{01534\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*signature,\ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ signaturelen);}
+\DoxyCodeLine{01535\ }
+\DoxyCodeLine{01558\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a80dde83488b109033d6a38b83183b06a}{MXQ\_tls\_prf\_sha\_256}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_ID,}
+\DoxyCodeLine{01559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ label,\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ llen,}
+\DoxyCodeLine{01560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ rand,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ rlen,}
+\DoxyCodeLine{01561\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ destbuf,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ dlen);}
+\DoxyCodeLine{01562\ }
+\DoxyCodeLine{01588\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a0cc2177f02bb299a05860ff933d7471e}{MXQ\_tls\_records}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71}{mxq\_operation\_t}}\ direction,}
+\DoxyCodeLine{01589\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_ID,}
+\DoxyCodeLine{01590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *iv,\ \textcolor{keywordtype}{size\_t}\ iv\_len,}
+\DoxyCodeLine{01591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ input,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ilen,}
+\DoxyCodeLine{01592\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ output,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ *olen,}
+\DoxyCodeLine{01593\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ hdr\_msg,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ hdr\_msg\_len);}
+\DoxyCodeLine{01594\ }
+\DoxyCodeLine{01595\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a225456ac6d79f3cf68cd949c6c4d612a}{MXQ\_cipher\_auth\_ccm}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_ID,}
+\DoxyCodeLine{01596\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ direction,}
+\DoxyCodeLine{01597\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *iv,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ iv\_len,}
+\DoxyCodeLine{01598\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *ad,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ad\_len,}
+\DoxyCodeLine{01599\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *input,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ilen,}
+\DoxyCodeLine{01600\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *output,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ *olen,}
+\DoxyCodeLine{01601\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *tag,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ tag\_len);}
+\DoxyCodeLine{01602\ }
+\DoxyCodeLine{01603\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4eb2e59e54a92fb9a20d675bce7942bd}{MXQ\_tls\_cipher\_cbc}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71}{mxq\_operation\_t}}\ direction,}
+\DoxyCodeLine{01604\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_ID,}
+\DoxyCodeLine{01605\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *iv,\ \textcolor{keywordtype}{size\_t}\ iv\_len,}
+\DoxyCodeLine{01606\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ input,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ilen,}
+\DoxyCodeLine{01607\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ output,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ *olen,}
+\DoxyCodeLine{01608\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ hdr\_msg,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ hdr\_msg\_len,}
+\DoxyCodeLine{01609\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ maclen);}
+\DoxyCodeLine{01610\ }
+\DoxyCodeLine{01639\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ae46f2986ffe50f73680ae1bf774f60c5}{MXQ\_tls\_cipher\_aead}}(}
+\DoxyCodeLine{01640\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_ID,}
+\DoxyCodeLine{01641\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1ddaf5c9e60e2585a4d81d0f111b0e71}{mxq\_operation\_t}}\ direction,\ \textcolor{comment}{//\ 1:\ encrypt\ (TX\ packets,\ outbound),\ 0:\ decrypt\ (RX\ packets,\ inbound)}}
+\DoxyCodeLine{01642\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ algo,}
+\DoxyCodeLine{01643\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *iv,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ iv\_len,\ \ \ \ \textcolor{comment}{//\ IV/nonce}}
+\DoxyCodeLine{01644\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *aad,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ aad\_len,\ \ \textcolor{comment}{//\ AAD}}
+\DoxyCodeLine{01645\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *input,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ilen,\ \ \ \textcolor{comment}{//\ Payload}}
+\DoxyCodeLine{01646\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *output,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ *olen,\ \textcolor{comment}{//\ output}}
+\DoxyCodeLine{01647\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *tag,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ tag\_len);\ \ \textcolor{comment}{//\ input\ or\ output\ tag\ (depends\ on\ direction)}}
+\DoxyCodeLine{01648\ }
+\DoxyCodeLine{01649\ }
+\DoxyCodeLine{01650\ }
+\DoxyCodeLine{01651\ \textcolor{preprocessor}{\#define\ SIZE\_RND\_BYTES\ 32}}
+\DoxyCodeLine{01652\ }
+\DoxyCodeLine{01656\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{01657\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ \mbox{\hyperlink{structmxq__cert_a6c41935a639649ac121823068345d351}{der}};\ \textcolor{comment}{/*<\ Array\ of\ bytes\ containing\ the\ ASN.1\ DER\ encoding\ of\ the\ certificate\ */}}
+\DoxyCodeLine{01658\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structmxq__cert_a2fb4dfd40b899edf8bd847230966e8d8}{len}};\ \textcolor{comment}{/*\ Lengh\ of\ DER\ encoding\ */}}
+\DoxyCodeLine{01659\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ \mbox{\hyperlink{structmxq__cert_afbfc8ea207f4369bdc622ed74332faa2}{curve}};\ \textcolor{comment}{/*\ EC\ Curve\ of\ the\ public\ key\ of\ this\ certificate\ */}}
+\DoxyCodeLine{01660\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structmxq__cert_a6efd1cb0054f61dd078c0b2e4ead394d}{pk\_offset}};\ \textcolor{comment}{/*\ Offset\ of\ the\ SubjectPublicKey\ field\ in\ this\ certificate\ */}}
+\DoxyCodeLine{01661\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ \mbox{\hyperlink{structmxq__cert_a3be235deb3f22972dc173b2abdb8c626}{tbslen}};\ \textcolor{comment}{/*\ Length\ of\ the\ signed\ section\ of\ this\ certificate*/}}
+\DoxyCodeLine{01662\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \mbox{\hyperlink{structmxq__cert_a64841d5259ab615456c30df89d02cc0e}{parent\_id}};\ \textcolor{comment}{/*\ Object\ ID\ of\ the\ root\ certificate\ in\ the\ MAXQ\ */}}
+\DoxyCodeLine{01663\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ \mbox{\hyperlink{structmxq__cert_aeb4f9eb3731885a715ccfa8b04ce9aa7}{parent\_curve}};\ \textcolor{comment}{/*\ Curve\ of\ the\ root\ certificate\ pub\ key\ in\ the\ MAXQ\ */}}
+\DoxyCodeLine{01664\ \}\ \ \ \ \mbox{\hyperlink{structmxq__cert}{mxq\_cert}};}
+\DoxyCodeLine{01665\ }
+\DoxyCodeLine{01666\ }
+\DoxyCodeLine{01695\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ace01157156054d71dfc89697da86acbe}{MXQ\_client\_key\_exchange}}(}
+\DoxyCodeLine{01696\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ remote\_random,\ \textcolor{comment}{//in}}
+\DoxyCodeLine{01697\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmxq__cert}{mxq\_cert}}*\ srvcert,}
+\DoxyCodeLine{01698\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ client\_ecdhe\_key,\ \textcolor{comment}{//\ out.\ format\ 0x04\ X\ Y}}
+\DoxyCodeLine{01699\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ client\_random,\ \textcolor{comment}{//\ out}}
+\DoxyCodeLine{01700\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ client\_signkey,}
+\DoxyCodeLine{01701\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ client\_ecdsa\_sign,}
+\DoxyCodeLine{01702\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ aeskey[]\ \textcolor{comment}{//out}}
+\DoxyCodeLine{01703\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01704\ }
+\DoxyCodeLine{01722\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ab4deb874ebe751175c142c6eabecf830}{MXQ\_client\_decrypt}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ cleartext,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ ciphertext,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ciphertext\_len,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ IV[16]);}
+\DoxyCodeLine{01723\ }
+\DoxyCodeLine{01741\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_afb7869b266c760c7315550f5ceb5df4b}{MXQ\_client\_encrypt}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ ciphertext,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ cleartext,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ cleartext\_len,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ IV[16]);}
+\DoxyCodeLine{01742\ }
+\DoxyCodeLine{01743\ }
+\DoxyCodeLine{01771\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a48aa9a4f45d0d7cac6803902d41ae8d5}{MXQ\_client\_key\_exchange\_psk}}(}
+\DoxyCodeLine{01772\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ remote\_ecdhe\_pubkey,}
+\DoxyCodeLine{01773\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ remote\_random,\ \textcolor{comment}{//in}}
+\DoxyCodeLine{01774\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ out.\ format\ 0x04\ X\ Y}}
+\DoxyCodeLine{01775\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ client\_ecdhe\_key,\ \textcolor{comment}{//\ out.\ format\ 0x04\ X\ Y}}
+\DoxyCodeLine{01776\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ client\_random[\mbox{\hyperlink{_m_x_q___a_p_i_8h_aec0b92b70523e2d25839cfb1c728537c}{SIZE\_RND\_BYTES}}],\ \textcolor{comment}{//\ out}}
+\DoxyCodeLine{01777\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ curve\_id,}
+\DoxyCodeLine{01778\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ PSK\_ID,\ }
+\DoxyCodeLine{01779\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ aeskey[32]\ \textcolor{comment}{//out}}
+\DoxyCodeLine{01780\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{01781\ }
+\DoxyCodeLine{01812\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ae1c630d6a5613e92956d567168985060}{MXQ\_Cipher\_Init}}(}
+\DoxyCodeLine{01813\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \_1encrypt\_0decrypt,}
+\DoxyCodeLine{01814\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ cipher\_algo\_id,}
+\DoxyCodeLine{01815\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ \ \ key\_object\_id,}
+\DoxyCodeLine{01816\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structciph__params__t}{ciph\_params\_t}}\ *\ param,}
+\DoxyCodeLine{01817\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ doSwitchAesSpi);}
+\DoxyCodeLine{01818\ }
+\DoxyCodeLine{01851\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3b982b6279593c0f21af6abef390f324}{MXQ\_Cipher\_Update}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}**\ pdest,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ len);}
+\DoxyCodeLine{01852\ }
+\DoxyCodeLine{01876\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_afe016baa4e6d9619bf580f0e9d2869f5}{MXQ\_Cipher\_Finish}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}**\ additional\_data,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ additional\_data\_len);}
+\DoxyCodeLine{01877\ }
+\DoxyCodeLine{01901\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a472263dcb099fb9ac15641e8d29769cb}{MXQ\_MAC\_Init}}(}
+\DoxyCodeLine{01902\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ \_1compute\_0verify,}
+\DoxyCodeLine{01903\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ mac\_algo\_id,}
+\DoxyCodeLine{01904\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ \ \ key\_object\_id,}
+\DoxyCodeLine{01905\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ IV,}
+\DoxyCodeLine{01906\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ ivlen);}
+\DoxyCodeLine{01907\ }
+\DoxyCodeLine{01929\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a86b2a73a969c5efd1707b5273b1d41e4}{MXQ\_MAC\_Update}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ inlen);}
+\DoxyCodeLine{01930\ }
+\DoxyCodeLine{01949\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8478cada32f2c86d1b091b06883c1ac9}{MXQ\_MAC\_Finish}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ destlen);}
+\DoxyCodeLine{01950\ }
+\DoxyCodeLine{01969\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a49c3bdadb5fbc61432a2c60b3ac4b6a9}{MXQ\_MAC\_Verify}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *pmac,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ maclen);}
+\DoxyCodeLine{01970\ }
+\DoxyCodeLine{01971\ }
+\DoxyCodeLine{01991\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a21e39bb7b98fe99d9a2eb25069c0c429}{MXQ\_MD\_Init}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ md\_algo\_id);}
+\DoxyCodeLine{01992\ }
+\DoxyCodeLine{02015\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ed709bee0df2e524a0962facca544cc}{MXQ\_MD\_Update}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ inlen);}
+\DoxyCodeLine{02016\ }
+\DoxyCodeLine{02017\ }
+\DoxyCodeLine{02037\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ab5e5cb75cd1c50cf052d276f1e4c7df6}{MXQ\_MD\_Finish}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ destlen);}
+\DoxyCodeLine{02038\ }
+\DoxyCodeLine{02051\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a21dbda123de2516bd010311227a54dcb}{MXQ\_Get\_MD\_OutputSize}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ md\_algo\_id);}
+\DoxyCodeLine{02052\ }
+\DoxyCodeLine{02053\ }
+\DoxyCodeLine{02054\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a692e50bd614f7e6d48937970ae8d9c92}{MXQ\_get\_curve\_bytelen}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ curve\_id);}
+\DoxyCodeLine{02055\ }
+\DoxyCodeLine{02056\ }
+\DoxyCodeLine{02057\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4a3ad466c77b1842882cb15850c2a18b}{MXQ\_get\_sign\_alg\_from\_curve}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ maxq\_id);}
+\DoxyCodeLine{02058\ }
+\DoxyCodeLine{02059\ }
+\DoxyCodeLine{02091\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a19af6a95741eeb1ef2344389640fa68f}{MXQ\_Sign}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ signalgo,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ privkey\_objectid,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdata,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ datalen,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psignout,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ signlen);}
+\DoxyCodeLine{02092\ }
+\DoxyCodeLine{02124\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa4363131acca126168655621bce9788b}{MXQ\_Verify}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ signalgo,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pubkey\_objectid,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdata,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ datalen,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ signature,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ signlen);}
+\DoxyCodeLine{02125\ }
+\DoxyCodeLine{02126\ }
+\DoxyCodeLine{02154\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_acb9013d0370b733f7c0de53d2ceec25b}{MXQ\_BuildKey}}(}
+\DoxyCodeLine{02155\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ destlen,}
+\DoxyCodeLine{02156\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}}\ keytype,}
+\DoxyCodeLine{02157\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ keyparam,}
+\DoxyCodeLine{02158\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ keycomplen,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ total\_keylen,}
+\DoxyCodeLine{02159\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}}\ uu1,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ a1,}
+\DoxyCodeLine{02160\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}}\ uu2,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ a2,}
+\DoxyCodeLine{02161\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc\ );}
+\DoxyCodeLine{02162\ }
+\DoxyCodeLine{02191\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad11bed1700025258f0bd0a7957fb05fc}{MXQ\_BuildKey\_Ex}}(}
+\DoxyCodeLine{02192\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ destlen,}
+\DoxyCodeLine{02193\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}}\ keytype,}
+\DoxyCodeLine{02194\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ keyparam,}
+\DoxyCodeLine{02195\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ keycomplen,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ total\_keylen,}
+\DoxyCodeLine{02196\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}}\ uu1,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ a1,}
+\DoxyCodeLine{02197\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}}\ uu2,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ a2,}
+\DoxyCodeLine{02198\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ psrc,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ len\ );}
+\DoxyCodeLine{02199\ }
+\DoxyCodeLine{02200\ }
+\DoxyCodeLine{02201\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a63b09cf9eaef6b56412f3a8d36574bbf}{MXQ\_BuildEK\_Material}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ *destlen,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *psrc,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ srclen,\ }
+\DoxyCodeLine{02202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ kek\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *pIV,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *pTag);}
+\DoxyCodeLine{02234\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ae289ae08c94baf886df649817a38ca6b}{MXQ\_Build\_EC\_Cert}}(}
+\DoxyCodeLine{02235\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdest,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}*\ destlen,}
+\DoxyCodeLine{02236\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_adc7b5dcdee711afa42ecb5e294741ce5}{mxq\_keytype\_id\_t}}\ keytype,}
+\DoxyCodeLine{02237\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ keyparam,}
+\DoxyCodeLine{02238\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ keycomplen,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ total\_keylen,}
+\DoxyCodeLine{02239\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ pubkeyoffset,}
+\DoxyCodeLine{02240\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ tbs\_start,}
+\DoxyCodeLine{02241\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ tbs\_len,}
+\DoxyCodeLine{02242\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ total\_certlen,}
+\DoxyCodeLine{02243\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ verifalgo,}
+\DoxyCodeLine{02244\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ verifkeyobjid,}
+\DoxyCodeLine{02245\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}}\ uu1,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ a1,}
+\DoxyCodeLine{02246\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa3a6f2a9aa7168095f2a9e986d77ef4b}{mxq\_keyuse\_t}}\ uu2,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ a2,}
+\DoxyCodeLine{02247\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pcertbody\ );}
+\DoxyCodeLine{02248\ }
+\DoxyCodeLine{02249\ }
+\DoxyCodeLine{02285\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_afeb420a59d7081bbba4b488900541f03}{MXQ\_ImportKeyCert}}(}
+\DoxyCodeLine{02286\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ destobj\_id,}
+\DoxyCodeLine{02287\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ verifalgo,}
+\DoxyCodeLine{02288\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ verifkey\_id,}
+\DoxyCodeLine{02289\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdata,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ datalen,}
+\DoxyCodeLine{02290\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ sign,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ signlen,}
+\DoxyCodeLine{02291\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4e0b217617d2de3b27e6000053e1126b}{cmd\_num\_t}}\ cmd}
+\DoxyCodeLine{02292\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{02293\ }
+\DoxyCodeLine{02315\ \textcolor{preprocessor}{\#define\ MXQ\_ImportKey(destid,valg,vkid,data,datalen,sign,signlen)\ \(\backslash\)}}
+\DoxyCodeLine{02316\ \textcolor{preprocessor}{\ \ \ \ MXQ\_ImportKeyCert(destid,valg,vkid,data,datalen,sign,signlen,\(\backslash\)}}
+\DoxyCodeLine{02317\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ CMDNUM\_IMPORT\_KEY)}}
+\DoxyCodeLine{02318\ }
+\DoxyCodeLine{02340\ \textcolor{preprocessor}{\#define\ MXQ\_ImportKeyEnc(destid,valg,vkid,data,datalen,sign,signlen)\ \(\backslash\)}}
+\DoxyCodeLine{02341\ \textcolor{preprocessor}{\ \ \ \ MXQ\_ImportKeyCert(destid,valg,vkid,data,datalen,sign,signlen,\(\backslash\)}}
+\DoxyCodeLine{02342\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ CMDNUM\_IMPORT\_KEY\_ENC)}}
+\DoxyCodeLine{02343\ }
+\DoxyCodeLine{02365\ \textcolor{preprocessor}{\#define\ MXQ\_ImportRootCert(destid,valg,vkid,data,datalen,sign,signlen)\ \(\backslash\)}}
+\DoxyCodeLine{02366\ \textcolor{preprocessor}{\ \ \ \ MXQ\_ImportKeyCert(destid,valg,vkid,data,datalen,sign,signlen,\(\backslash\)}}
+\DoxyCodeLine{02367\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ CMDNUM\_IMPORT\_ROOTCERT)}}
+\DoxyCodeLine{02368\ }
+\DoxyCodeLine{02388\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4f64deea673029d925df3e877816a109}{MXQ\_ImportChildCert}}(}
+\DoxyCodeLine{02389\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ \ destobj\_id,}
+\DoxyCodeLine{02390\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ pdata,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ datalen}
+\DoxyCodeLine{02391\ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{02392\ }
+\DoxyCodeLine{02393\ }
+\DoxyCodeLine{02422\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ab901970a5bb939b011c3dcdc7afd6ad0}{MXQ\_AdminAuth}}(}
+\DoxyCodeLine{02423\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ verifkey\_id,}
+\DoxyCodeLine{02424\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ algo,}
+\DoxyCodeLine{02425\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ sign,}
+\DoxyCodeLine{02426\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ signlen);}
+\DoxyCodeLine{02427\ }
+\DoxyCodeLine{02441\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1896df824aed1552294a265ac39a8cc0}{MXQ\_AdminAuthReset}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02442\ }
+\DoxyCodeLine{02443\ }
+\DoxyCodeLine{02472\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a13bc851cd8dbaa3824e0326974762b3f}{MXQ\_VerifyBoot}}(}
+\DoxyCodeLine{02473\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ verifkey\_id,}
+\DoxyCodeLine{02474\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ algo,}
+\DoxyCodeLine{02475\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ sign,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ signlen);}
+\DoxyCodeLine{02476\ }
+\DoxyCodeLine{02490\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ac41fd6e95a1a8847494d73706f98aa44}{MXQ\_VerifyBootReset}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02491\ }
+\DoxyCodeLine{02492\ \textcolor{preprocessor}{\#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{02523\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1bffa9209eb502aebeacc3618dda9302}{MXQ\_OpenSecureChannel}}(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ channel\_key\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ local\_key);}
+\DoxyCodeLine{02524\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_OpenSecureChannel2(\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ channel\_key\_id,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ local\_key);}
+\DoxyCodeLine{02525\ \textcolor{preprocessor}{\#elif\ defined(MAXQ1065)}}
+\DoxyCodeLine{02560\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1bffa9209eb502aebeacc3618dda9302}{MXQ\_OpenSecureChannel}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ pMode,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pSCKeyId,\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ pPrivateKey,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pHostPubId,\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ pDevicePubKey,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ local\_key);}
+\DoxyCodeLine{02561\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{02594\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1bffa9209eb502aebeacc3618dda9302}{MXQ\_OpenSecureChannel}}(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ pMode,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ pSCKeyId,\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ pPrivateKey,\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}*\ local\_key);}
+\DoxyCodeLine{02595\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02609\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af91f4e68bcbc41690153ff1054846ece}{MXQ\_CloseSecureChannel}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02610\ }
+\DoxyCodeLine{02611\ }
+\DoxyCodeLine{02629\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_gabc8600c9e34d7e5e1e8fbe7b6df3747f}{MXQ\_SetConfig}}(\mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_config\_t}}*\ s);}
+\DoxyCodeLine{02630\ }
+\DoxyCodeLine{02649\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_ga382f514ebc4771e09d4f7a42cefb71a2}{MXQ\_SetState}}(\mbox{\hyperlink{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}{mxq\_state\_t}}\ newstate);}
+\DoxyCodeLine{02650\ }
+\DoxyCodeLine{02651\ }
+\DoxyCodeLine{02667\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e}{MXQ\_GetStatus}}(\mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_status\_t}}*\ status);}
+\DoxyCodeLine{02668\ }
+\DoxyCodeLine{02669\ \textcolor{preprocessor}{\ \#if\ defined(MAXQ106x)\ ||\ defined(MAXQ108x)}}
+\DoxyCodeLine{02687\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_Sleep(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02688\ \ }
+\DoxyCodeLine{02701\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_Wakeup(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02702\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02703\ }
+\DoxyCodeLine{02704\ \textcolor{preprocessor}{\#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{02722\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \ MXQ\_GCU\_Enable(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02723\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_GCU\_Direct(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02724\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02725\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)}}
+\DoxyCodeLine{02745\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_1065\_Sleep(\mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ p\_buff\_out);}
+\DoxyCodeLine{02746\ }
+\DoxyCodeLine{02766\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_1065\_Restore(\mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ p\_restore\_data,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ data\_len);}
+\DoxyCodeLine{02767\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02768\ }
+\DoxyCodeLine{02769\ }
+\DoxyCodeLine{02787\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \ \mbox{\hyperlink{group___administration_gabc2576c517e1ee1c3bd6baf25f7ae355}{MXQ\_TLS\_Enable}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02788\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a9fb4dc9201428f63c97aa7f80088a64d}{MXQ\_TLS\_Direct}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02789\ }
+\DoxyCodeLine{02804\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a6c912ddf378e0598b3de19b7a29bd511}{MXQ\_TLS\_Restore}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02805\ }
+\DoxyCodeLine{02820\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a90ebbd357982744e319b772d1f2800f7}{MXQ\_TLS\_Save}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02821\ }
+\DoxyCodeLine{02822\ }
+\DoxyCodeLine{02828\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1c73cbffd2f419cd3e19238d36412673}{MXQ\_DisplayStatus}}(\mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_status\_t}}*\ s);}
+\DoxyCodeLine{02829\ }
+\DoxyCodeLine{02836\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8142a25ad3def79e3efe56fd03418c37}{MXQ\_DisplayConfig}}(\mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_config\_t}}*\ c);}
+\DoxyCodeLine{02837\ }
+\DoxyCodeLine{02843\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a02a66f339fa6b414d8dc11e9010304b7}{MXQ\_DisplaySysConfig}}(\mbox{\hyperlink{struct___p_a_c_k_e_d}{mxq\_sysconfig\_t}}*\ c);}
+\DoxyCodeLine{02844\ }
+\DoxyCodeLine{02845\ \textcolor{preprocessor}{\#ifdef\ MXQ\_FW\_UPDATE\_CAP}}
+\DoxyCodeLine{02869\ \textcolor{preprocessor}{\#if\ defined(MAXQ108x)}}
+\DoxyCodeLine{02870\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MAXQ\_FW\_Update(\mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ fw\_img,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ fw\_len,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ key\_ID,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ signature,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\_algo\_id\_t}}\ algo,\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a62d506757aab8985c3bbf26c6d1d4752}{mxq\_keyparam\_id\_t}}\ keyparam);}
+\DoxyCodeLine{02871\ \textcolor{preprocessor}{\#elif\ defined(MAXQ1065)}}
+\DoxyCodeLine{02872\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MAXQ\_FW\_Update(\mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}}\ fw\_img,\ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}}\ fw\_len);}
+\DoxyCodeLine{02873\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02874\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02875\ }
+\DoxyCodeLine{02876\ \textcolor{preprocessor}{\#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{02883\ \textcolor{keywordtype}{void}\ HOST\_wait\_usec(\mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ duration\_usec);}
+\DoxyCodeLine{02884\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02885\ }
+\DoxyCodeLine{02895\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8d73639886a41aa0324681eccf83d7c0}{MXQ\_Tamper}}(\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2d9cbb4de9ed1a8103ec2a338d873306}{mxq\_tamper\_cmd\_t}}\ cmd);}
+\DoxyCodeLine{02896\ }
+\DoxyCodeLine{02897\ \textcolor{preprocessor}{\#if\ defined(USS\_ST)\ }}
+\DoxyCodeLine{02909\ \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\_err\_t}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ MXQ\_Bypass(\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}**\ in\_out\_buf\_p,\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}*\ int\_out\_buf\_len);}
+\DoxyCodeLine{02910\ \textcolor{preprocessor}{\#endif\ }}
+\DoxyCodeLine{02911\ }
+\DoxyCodeLine{02912\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\_\_API\_\_}}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8940dc5f3914fd29e6c7e4aa53e24d7e}{MXQ\_get\_str\_code}}(\textcolor{keywordtype}{int}\ error\_code);}
+\DoxyCodeLine{02913\ }
+\DoxyCodeLine{02914\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aab606aad16fab13795b966451d778314}{start\_time}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02915\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a5ac60d08bd8e440f217558cb51768950}{stop\_time}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{02916\ }
+\DoxyCodeLine{02917\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{02918\ \}}
+\DoxyCodeLine{02919\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{02920\ }
+\DoxyCodeLine{02921\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \ \_\_MXQ\_API\_H\_INCLUDED\_\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

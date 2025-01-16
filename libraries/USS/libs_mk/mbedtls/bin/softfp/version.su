@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/version.c:27:14:mbedtls_version_get_number	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/version.c:32:6:mbedtls_version_get_string	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/version.c:38:6:mbedtls_version_get_string_full	4	static

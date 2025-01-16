@@ -1,0 +1,4514 @@
+Trivially needed symbols: adin1110_FrameChkReadErrorCnt/194 adin1110_FrameChkReadRxErrCnt/193 adin1110_FrameChkReadFrameCnt/192 adin1110_FrameChkSourceSelect/191 adin1110_FrameChkEn/190 adin1110_FrameGenDone/189 adin1110_FrameGenRestart/188 adin1110_FrameGenSetIfgLen/187 adin1110_FrameGenSetFrameLen/186 adin1110_FrameGenSetFramePayload/185 adin1110_FrameGenSetFrameCnt/184 adin1110_FrameGenSetMode/183 adin1110_FrameGenEn/182 adin1110_GetMseLinkQuality/181 adin1110_PhyRead/180 adin1110_PhyWrite/179 adin1110_ReadRegister/178 adin1110_WriteRegister/177 adin1110_GetUserContext/176 adin1110_SetUserContext/175 adin1110_RegisterCallback/174 adin1110_TsSubtract/173 adin1110_TsConvert/172 adin1110_TsGetEgressTimestamp/171 adin1110_TsGetExtCaptTimestamp/170 adin1110_TsSyncClock/169 adin1110_TsSetTimerAbsolute/168 adin1110_TsTimerStop/167 adin1110_TsTimerStart/166 adin1110_TsClear/165 adin1110_TsEnable/164 adin1110_GetPromiscuousMode/163 adin1110_SetPromiscuousMode/162 adin1110_ClearFifos/161 adin1110_GetFifoSizes/160 adin1110_SetFifoSizes/159 adin1110_GetCutThroughMode/158 adin1110_SetCutThroughMode/157 adin1110_SubmitRxBuffer/156 adin1110_SubmitTxBuffer/155 adin1110_ClearAddressFilter/154 adin1110_AddAddressFilter/153 adin1110_SetTestMode/152 adin1110_SetLoopbackMode/151 adin1110_LedEn/150 adin1110_GetStatCounters/149 adin1110_GetLinkStatus/148 adin1110_SyncConfig/147 adin1110_Reset/146 adin1110_GetDeviceId/145 adin1110_Disable/144 adin1110_Enable/143 adin1110_UnInit/142 adin1110_Init/141 pDeviceHandle/138
+
+
+Initial Symbol table:
+
+HAL_UnInit_Hook/198 (HAL_UnInit_Hook) @06511738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_UnInit/142 
+  Calls: 
+phyDriverEntry/197 (phyDriverEntry) @065079d8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) adin1110_UnInit/142 (read) adin1110_Enable/143 (read) adin1110_Disable/144 (read) adin1110_Reset/146 (read) adin1110_LedEn/150 (read) adin1110_SetLoopbackMode/151 (read) adin1110_SetTestMode/152 (read) adin1110_GetMseLinkQuality/181 (read) adin1110_FrameGenEn/182 (read) adin1110_FrameGenSetMode/183 (read) adin1110_FrameGenSetFrameCnt/184 (read) adin1110_FrameGenSetFramePayload/185 (read) adin1110_FrameGenSetFrameLen/186 (read) adin1110_FrameGenSetIfgLen/187 (read) adin1110_FrameGenRestart/188 (read) adin1110_FrameGenDone/189 (read) adin1110_FrameChkEn/190 (read) adin1110_FrameChkSourceSelect/191 (read) adin1110_FrameChkReadFrameCnt/192 (read) adin1110_FrameChkReadRxErrCnt/193 (read) adin1110_FrameChkReadErrorCnt/194 (read) 
+  Availability: not-ready
+  Varpool flags:
+macDriverEntry/196 (macDriverEntry) @06507948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) PhyWrite/139 (read) PhyRead/140 (read) adin1110_UnInit/142 (read) adin1110_Reset/146 (read) adin1110_SyncConfig/147 (read) adin1110_GetLinkStatus/148 (read) adin1110_GetStatCounters/149 (read) adin1110_AddAddressFilter/153 (read) adin1110_ClearAddressFilter/154 (read) adin1110_SubmitTxBuffer/155 (read) adin1110_SubmitRxBuffer/156 (read) adin1110_SetCutThroughMode/157 (read) adin1110_GetCutThroughMode/158 (read) adin1110_SetFifoSizes/159 (read) adin1110_GetFifoSizes/160 (read) adin1110_ClearFifos/161 (read) adin1110_SetPromiscuousMode/162 (read) adin1110_GetPromiscuousMode/163 (read) adin1110_TsEnable/164 (read) adin1110_TsClear/165 (read) adin1110_TsTimerStart/166 (read) adin1110_TsTimerStop/167 (read) adin1110_TsSetTimerAbsolute/168 (read) adin1110_TsSyncClock/169 (read) adin1110_TsGetExtCaptTimestamp/170 (read) adin1110_TsGetEgressTimestamp/171 (read) adin1110_TsConvert/172 (read) adin1110_TsSubtract/173 (read) adin1110_RegisterCallback/174 (read) adin1110_WriteRegister/177 (read) adin1110_ReadRegister/178 (read) adin1110_PhyWrite/179 (read) adin1110_PhyRead/180 (read) 
+  Availability: not-ready
+  Varpool flags:
+HAL_Init_Hook/195 (HAL_Init_Hook) @06511690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_Init/141 
+  Calls: 
+adin1110_FrameChkReadErrorCnt/194 (adin1110_FrameChkReadErrorCnt) @065115e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadRxErrCnt/193 (adin1110_FrameChkReadRxErrCnt) @06511498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065115e8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadFrameCnt/192 (adin1110_FrameChkReadFrameCnt) @06511348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06511498
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkSourceSelect/191 (adin1110_FrameChkSourceSelect) @065111f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06511348
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkEn/190 (adin1110_FrameChkEn) @065110a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065111f8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenDone/189 (adin1110_FrameGenDone) @06509f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065110a8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenRestart/188 (adin1110_FrameGenRestart) @06509dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509f18
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetIfgLen/187 (adin1110_FrameGenSetIfgLen) @06509c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509dc8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameLen/186 (adin1110_FrameGenSetFrameLen) @06509b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509c78
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFramePayload/185 (adin1110_FrameGenSetFramePayload) @065099d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509b28
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameCnt/184 (adin1110_FrameGenSetFrameCnt) @06509888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065099d8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetMode/183 (adin1110_FrameGenSetMode) @06509738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509888
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenEn/182 (adin1110_FrameGenEn) @065095e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509738
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetMseLinkQuality/181 (adin1110_GetMseLinkQuality) @06509498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065095e8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyRead/180 (adin1110_PhyRead) @06509348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509498
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyWrite/179 (adin1110_PhyWrite) @065091f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06509348
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ReadRegister/178 (adin1110_ReadRegister) @065090a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065091f8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_WriteRegister/177 (adin1110_WriteRegister) @06503f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065090a8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetUserContext/176 (adin1110_GetUserContext) @06503dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503f18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_SetUserContext/175 (adin1110_SetUserContext) @06503c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_RegisterCallback/174 (adin1110_RegisterCallback) @06503b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503c78
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSubtract/173 (adin1110_TsSubtract) @065039d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503b28
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsConvert/172 (adin1110_TsConvert) @06503888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065039d8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetEgressTimestamp/171 (adin1110_TsGetEgressTimestamp) @06503738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503888
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetExtCaptTimestamp/170 (adin1110_TsGetExtCaptTimestamp) @065035e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503738
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSyncClock/169 (adin1110_TsSyncClock) @06503498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065035e8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSetTimerAbsolute/168 (adin1110_TsSetTimerAbsolute) @06503348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503498
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStop/167 (adin1110_TsTimerStop) @065031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06503348
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStart/166 (adin1110_TsTimerStart) @065030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065031f8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsClear/165 (adin1110_TsClear) @064fff18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065030a8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsEnable/164 (adin1110_TsEnable) @064ffdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064fff18
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetPromiscuousMode/163 (adin1110_GetPromiscuousMode) @064ffc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ffdc8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetPromiscuousMode/162 (adin1110_SetPromiscuousMode) @064ffb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ffc78
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearFifos/161 (adin1110_ClearFifos) @064ff9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ffb28
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetFifoSizes/160 (adin1110_GetFifoSizes) @064ff888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff9d8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetFifoSizes/159 (adin1110_SetFifoSizes) @064ff738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff888
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetCutThroughMode/158 (adin1110_GetCutThroughMode) @064ff5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff738
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetCutThroughMode/157 (adin1110_SetCutThroughMode) @064ff498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff5e8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitRxBuffer/156 (adin1110_SubmitRxBuffer) @064ff348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff498
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitTxBuffer/155 (adin1110_SubmitTxBuffer) @064ff1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff348
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearAddressFilter/154 (adin1110_ClearAddressFilter) @064ff0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff1f8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_AddAddressFilter/153 (adin1110_AddAddressFilter) @064f6f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064ff0a8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetTestMode/152 (adin1110_SetTestMode) @064f6dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6f18
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetLoopbackMode/151 (adin1110_SetLoopbackMode) @064f6c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6dc8
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_LedEn/150 (adin1110_LedEn) @064f6b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6c78
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetStatCounters/149 (adin1110_GetStatCounters) @064f69d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6b28
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetLinkStatus/148 (adin1110_GetLinkStatus) @064f6888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f69d8
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SyncConfig/147 (adin1110_SyncConfig) @064f6738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6888
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Reset/146 (adin1110_Reset) @064f65e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6738
+  References: macDriverEntry/196 (read) phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_GetDeviceId/145 (adin1110_GetDeviceId) @064f6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f65e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 
+adin1110_Disable/144 (adin1110_Disable) @064f6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6498
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Enable/143 (adin1110_Enable) @064f61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f6348
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_UnInit/142 (adin1110_UnInit) @064f60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f61f8
+  References: phyDriverEntry/197 (read) macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_UnInit_Hook/198 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_Init/141 (adin1110_Init) @064e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064f60a8
+  References: pDeviceHandle/138 (write) macDriverEntry/196 (read) phyDriverEntry/197 (read) PhyRead/140 (addr) PhyWrite/139 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_Init_Hook/195 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+PhyRead/140 (PhyRead) @064e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064f60a8
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PhyWrite/139 (PhyWrite) @064e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064e3d20
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+pDeviceHandle/138 (pDeviceHandle) @064bf5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064e3e70
+  References: 
+  Referring: adin1110_Init/141 (write) PhyWrite/139 (read) PhyRead/140 (read) 
+  Availability: not-ready
+  Varpool flags:
+print_hex/137 (print_hex) @063b60a8
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/136 (ITM_CheckChar) @063607e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/135 (ITM_ReceiveChar) @06360690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/134 (ITM_SendChar) @06360540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/133 (SysTick_Config) @063601f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/132 (SCB_GetFPUType) @063600a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/131 (ARM_MPU_Load) @06357690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/130 (ARM_MPU_OrderedMemcpy) @06357f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/129 (ARM_MPU_SetRegionEx) @06357dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/128 (ARM_MPU_SetRegion) @06357c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/127 (ARM_MPU_ClrRegion) @06357b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/126 (ARM_MPU_Disable) @063579d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/125 (ARM_MPU_Enable) @06357888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/124 (__NVIC_SystemReset) @063560a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/123 (__NVIC_GetVector) @0634bf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/122 (__NVIC_SetVector) @0634bdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/121 (NVIC_DecodePriority) @0634bc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/120 (NVIC_EncodePriority) @0634bb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/119 (__NVIC_GetPriority) @0634b9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/118 (__NVIC_SetPriority) @0634b888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/117 (__NVIC_GetActive) @0634b738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/116 (__NVIC_ClearPendingIRQ) @0634b5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/115 (__NVIC_SetPendingIRQ) @0634b498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/114 (__NVIC_GetPendingIRQ) @0634b348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/113 (__NVIC_DisableIRQ) @0634b1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/112 (__NVIC_GetEnableIRQ) @0634b0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/111 (__NVIC_EnableIRQ) @06317f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/110 (__NVIC_GetPriorityGrouping) @06317dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/109 (__NVIC_SetPriorityGrouping) @06317c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/108 (__SMMLA) @062e7e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/107 (__QSUB) @062e7d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/106 (__QADD) @062e7bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/105 (__SEL) @062e7a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/104 (__SMLSLDX) @062e7930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/103 (__SMLSLD) @062e77e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/102 (__SMLSDX) @062e7690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/101 (__SMLSD) @062e7540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/100 (__SMUSDX) @062e73f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/99 (__SMUSD) @062e72a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/98 (__SMLALDX) @062e7150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/97 (__SMLALD) @062e7000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/96 (__SMLADX) @062e2e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/95 (__SMLAD) @062e2d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/94 (__SMUADX) @062e2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/93 (__SMUAD) @062e2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/92 (__SXTAB16_RORn) @062e2930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/91 (__SXTAB16) @062e27e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/90 (__SXTB16_RORn) @062e2690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/89 (__SXTB16) @062e2540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/88 (__UXTAB16) @062e23f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/87 (__UXTB16) @062e22a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/86 (__USADA8) @062e2000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/85 (__USAD8) @062dce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/84 (__UHSAX) @062dcd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/83 (__UQSAX) @062dcbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/82 (__USAX) @062dca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/81 (__SHSAX) @062dc930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/80 (__QSAX) @062dc7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/79 (__SSAX) @062dc690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/78 (__UHASX) @062dc540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/77 (__UQASX) @062dc3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/76 (__UASX) @062dc2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/75 (__SHASX) @062dc150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/74 (__QASX) @062dc000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/73 (__SASX) @062d3e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/72 (__UHSUB16) @062d3d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/71 (__UQSUB16) @062d3bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/70 (__USUB16) @062d3a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/69 (__SHSUB16) @062d3930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/68 (__QSUB16) @062d37e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/67 (__SSUB16) @062d3690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/66 (__UHADD16) @062d3540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/65 (__UQADD16) @062d33f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/64 (__UADD16) @062d32a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/63 (__SHADD16) @062d3150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/62 (__QADD16) @062d3000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/61 (__SADD16) @062cde70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/60 (__UHSUB8) @062cdd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/59 (__UQSUB8) @062cdbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/58 (__USUB8) @062cda80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/57 (__SHSUB8) @062cd930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/56 (__QSUB8) @062cd7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/55 (__SSUB8) @062cd690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/54 (__UHADD8) @062cd540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/53 (__UQADD8) @062cd3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/52 (__UADD8) @062cd2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/51 (__SHADD8) @062cd150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/50 (__QADD8) @062cd000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/49 (__SADD8) @062c6e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/48 (__set_FPSCR) @062c6d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/47 (__get_FPSCR) @062c6bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/46 (__set_FAULTMASK) @062c6a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/45 (__get_FAULTMASK) @062c6930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/44 (__set_BASEPRI_MAX) @062c67e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/43 (__set_BASEPRI) @062c6690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/42 (__get_BASEPRI) @062c6540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/41 (__disable_fault_irq) @062c63f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/40 (__enable_fault_irq) @062c62a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/39 (__set_PRIMASK) @062c6150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/38 (__get_PRIMASK) @062c6000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/37 (__set_MSP) @062c3e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/36 (__get_MSP) @062c3d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/35 (__set_PSP) @062c3bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/34 (__get_PSP) @062c3a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/33 (__get_xPSR) @062c3930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/32 (__get_APSR) @062c37e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/31 (__get_IPSR) @062c3690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/30 (__set_CONTROL) @062c3540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/29 (__get_CONTROL) @062c33f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/28 (__disable_irq) @062c32a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/27 (__enable_irq) @062c3150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/26 (__STRT) @062c3000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/25 (__STRHT) @062b2e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/24 (__STRBT) @062b2d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/23 (__LDRT) @062b2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/22 (__LDRHT) @062b2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/21 (__LDRBT) @062b2930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/20 (__RRX) @062b27e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/19 (__CLREX) @062b2540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/18 (__STREXW) @062b23f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/17 (__STREXH) @062b22a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/16 (__STREXB) @062b2150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/15 (__LDREXW) @062b2000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/14 (__LDREXH) @062abe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/13 (__LDREXB) @062abd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/12 (__CLZ) @062abbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/11 (__RBIT) @062aba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/10 (__ROR) @062ab888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/9 (__REVSH) @062ab738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/8 (__REV16) @062ab5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/7 (__REV) @062ab498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/6 (__DMB) @062ab348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/5 (__DSB) @062ab1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/4 (__ISB) @062ab0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/3 (__cmsis_start) @0626ee70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @061b6dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061b6c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061b6a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: print_hex/137 ITM_CheckChar/136 ITM_ReceiveChar/135 ITM_SendChar/134 SysTick_Config/133 SCB_GetFPUType/132 ARM_MPU_Load/131 ARM_MPU_OrderedMemcpy/130 ARM_MPU_SetRegionEx/129 ARM_MPU_SetRegion/128 ARM_MPU_ClrRegion/127 ARM_MPU_Disable/126 ARM_MPU_Enable/125 __NVIC_SystemReset/124 __NVIC_GetVector/123 __NVIC_SetVector/122 NVIC_DecodePriority/121 NVIC_EncodePriority/120 __NVIC_GetPriority/119 __NVIC_SetPriority/118 __NVIC_GetActive/117 __NVIC_ClearPendingIRQ/116 __NVIC_SetPendingIRQ/115 __NVIC_GetPendingIRQ/114 __NVIC_DisableIRQ/113 __NVIC_GetEnableIRQ/112 __NVIC_EnableIRQ/111 __NVIC_GetPriorityGrouping/110 __NVIC_SetPriorityGrouping/109 __SMMLA/108 __QSUB/107 __QADD/106 __SEL/105 __SMLSLDX/104 __SMLSLD/103 __SMLSDX/102 __SMLSD/101 __SMUSDX/100 __SMUSD/99 __SMLALDX/98 __SMLALD/97 __SMLADX/96 __SMLAD/95 __SMUADX/94 __SMUAD/93 __SXTAB16_RORn/92 __SXTAB16/91 __SXTB16_RORn/90 __SXTB16/89 __UXTAB16/88 __UXTB16/87 __USADA8/86 __USAD8/85 __UHSAX/84 __UQSAX/83 __USAX/82 __SHSAX/81 __QSAX/80 __SSAX/79 __UHASX/78 __UQASX/77 __UASX/76 __SHASX/75 __QASX/74 __SASX/73 __UHSUB16/72 __UQSUB16/71 __USUB16/70 __SHSUB16/69 __QSUB16/68 __SSUB16/67 __UHADD16/66 __UQADD16/65 __UADD16/64 __SHADD16/63 __QADD16/62 __SADD16/61 __UHSUB8/60 __UQSUB8/59 __USUB8/58 __SHSUB8/57 __QSUB8/56 __SSUB8/55 __UHADD8/54 __UQADD8/53 __UADD8/52 __SHADD8/51 __QADD8/50 __SADD8/49 __set_FPSCR/48 __get_FPSCR/47 __set_FAULTMASK/46 __get_FAULTMASK/45 __set_BASEPRI_MAX/44 __set_BASEPRI/43 __get_BASEPRI/42 __disable_fault_irq/41 __enable_fault_irq/40 __set_PRIMASK/39 __get_PRIMASK/38 __set_MSP/37 __get_MSP/36 __set_PSP/35 __get_PSP/34 __get_xPSR/33 __get_APSR/32 __get_IPSR/31 __set_CONTROL/30 __get_CONTROL/29 __disable_irq/28 __enable_irq/27 __STRT/26 __STRHT/25 __STRBT/24 __LDRT/23 __LDRHT/22 __LDRBT/21 __RRX/20 __CLREX/19 __STREXW/18 __STREXH/17 __STREXB/16 __LDREXW/15 __LDREXH/14 __LDREXB/13 __CLZ/12 __RBIT/11 __ROR/10 __REVSH/9 __REV16/8 __REV/7 __DMB/6 __DSB/5 __ISB/4 __cmsis_start/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+HAL_UnInit_Hook/198 (HAL_UnInit_Hook) @06511738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_UnInit/142 
+  Calls: 
+phyDriverEntry/197 (phyDriverEntry) @065079d8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) adin1110_UnInit/142 (read) adin1110_Enable/143 (read) adin1110_Disable/144 (read) adin1110_Reset/146 (read) adin1110_LedEn/150 (read) adin1110_SetLoopbackMode/151 (read) adin1110_SetTestMode/152 (read) adin1110_GetMseLinkQuality/181 (read) adin1110_FrameGenEn/182 (read) adin1110_FrameGenSetMode/183 (read) adin1110_FrameGenSetFrameCnt/184 (read) adin1110_FrameGenSetFramePayload/185 (read) adin1110_FrameGenSetFrameLen/186 (read) adin1110_FrameGenSetIfgLen/187 (read) adin1110_FrameGenRestart/188 (read) adin1110_FrameGenDone/189 (read) adin1110_FrameChkEn/190 (read) adin1110_FrameChkSourceSelect/191 (read) adin1110_FrameChkReadFrameCnt/192 (read) adin1110_FrameChkReadRxErrCnt/193 (read) adin1110_FrameChkReadErrorCnt/194 (read) 
+  Availability: not-ready
+  Varpool flags:
+macDriverEntry/196 (macDriverEntry) @06507948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) PhyWrite/139 (read) PhyRead/140 (read) adin1110_UnInit/142 (read) adin1110_Reset/146 (read) adin1110_SyncConfig/147 (read) adin1110_GetLinkStatus/148 (read) adin1110_GetStatCounters/149 (read) adin1110_AddAddressFilter/153 (read) adin1110_ClearAddressFilter/154 (read) adin1110_SubmitTxBuffer/155 (read) adin1110_SubmitRxBuffer/156 (read) adin1110_SetCutThroughMode/157 (read) adin1110_GetCutThroughMode/158 (read) adin1110_SetFifoSizes/159 (read) adin1110_GetFifoSizes/160 (read) adin1110_ClearFifos/161 (read) adin1110_SetPromiscuousMode/162 (read) adin1110_GetPromiscuousMode/163 (read) adin1110_TsEnable/164 (read) adin1110_TsClear/165 (read) adin1110_TsTimerStart/166 (read) adin1110_TsTimerStop/167 (read) adin1110_TsSetTimerAbsolute/168 (read) adin1110_TsSyncClock/169 (read) adin1110_TsGetExtCaptTimestamp/170 (read) adin1110_TsGetEgressTimestamp/171 (read) adin1110_TsConvert/172 (read) adin1110_TsSubtract/173 (read) adin1110_RegisterCallback/174 (read) adin1110_WriteRegister/177 (read) adin1110_ReadRegister/178 (read) adin1110_PhyWrite/179 (read) adin1110_PhyRead/180 (read) 
+  Availability: not-ready
+  Varpool flags:
+HAL_Init_Hook/195 (HAL_Init_Hook) @06511690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_Init/141 
+  Calls: 
+adin1110_FrameChkReadErrorCnt/194 (adin1110_FrameChkReadErrorCnt) @065115e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadRxErrCnt/193 (adin1110_FrameChkReadRxErrCnt) @06511498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadFrameCnt/192 (adin1110_FrameChkReadFrameCnt) @06511348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkSourceSelect/191 (adin1110_FrameChkSourceSelect) @065111f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkEn/190 (adin1110_FrameChkEn) @065110a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenDone/189 (adin1110_FrameGenDone) @06509f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenRestart/188 (adin1110_FrameGenRestart) @06509dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetIfgLen/187 (adin1110_FrameGenSetIfgLen) @06509c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameLen/186 (adin1110_FrameGenSetFrameLen) @06509b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFramePayload/185 (adin1110_FrameGenSetFramePayload) @065099d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameCnt/184 (adin1110_FrameGenSetFrameCnt) @06509888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetMode/183 (adin1110_FrameGenSetMode) @06509738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenEn/182 (adin1110_FrameGenEn) @065095e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetMseLinkQuality/181 (adin1110_GetMseLinkQuality) @06509498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyRead/180 (adin1110_PhyRead) @06509348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyWrite/179 (adin1110_PhyWrite) @065091f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ReadRegister/178 (adin1110_ReadRegister) @065090a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_WriteRegister/177 (adin1110_WriteRegister) @06503f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetUserContext/176 (adin1110_GetUserContext) @06503dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_SetUserContext/175 (adin1110_SetUserContext) @06503c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_RegisterCallback/174 (adin1110_RegisterCallback) @06503b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSubtract/173 (adin1110_TsSubtract) @065039d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsConvert/172 (adin1110_TsConvert) @06503888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetEgressTimestamp/171 (adin1110_TsGetEgressTimestamp) @06503738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetExtCaptTimestamp/170 (adin1110_TsGetExtCaptTimestamp) @065035e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSyncClock/169 (adin1110_TsSyncClock) @06503498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSetTimerAbsolute/168 (adin1110_TsSetTimerAbsolute) @06503348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStop/167 (adin1110_TsTimerStop) @065031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStart/166 (adin1110_TsTimerStart) @065030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsClear/165 (adin1110_TsClear) @064fff18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsEnable/164 (adin1110_TsEnable) @064ffdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetPromiscuousMode/163 (adin1110_GetPromiscuousMode) @064ffc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetPromiscuousMode/162 (adin1110_SetPromiscuousMode) @064ffb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearFifos/161 (adin1110_ClearFifos) @064ff9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetFifoSizes/160 (adin1110_GetFifoSizes) @064ff888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetFifoSizes/159 (adin1110_SetFifoSizes) @064ff738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetCutThroughMode/158 (adin1110_GetCutThroughMode) @064ff5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetCutThroughMode/157 (adin1110_SetCutThroughMode) @064ff498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitRxBuffer/156 (adin1110_SubmitRxBuffer) @064ff348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitTxBuffer/155 (adin1110_SubmitTxBuffer) @064ff1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearAddressFilter/154 (adin1110_ClearAddressFilter) @064ff0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_AddAddressFilter/153 (adin1110_AddAddressFilter) @064f6f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetTestMode/152 (adin1110_SetTestMode) @064f6dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetLoopbackMode/151 (adin1110_SetLoopbackMode) @064f6c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_LedEn/150 (adin1110_LedEn) @064f6b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetStatCounters/149 (adin1110_GetStatCounters) @064f69d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetLinkStatus/148 (adin1110_GetLinkStatus) @064f6888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SyncConfig/147 (adin1110_SyncConfig) @064f6738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Reset/146 (adin1110_Reset) @064f65e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_GetDeviceId/145 (adin1110_GetDeviceId) @064f6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 
+adin1110_Disable/144 (adin1110_Disable) @064f6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Enable/143 (adin1110_Enable) @064f61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_UnInit/142 (adin1110_UnInit) @064f60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_UnInit_Hook/198 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_Init/141 (adin1110_Init) @064e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: pDeviceHandle/138 (write) macDriverEntry/196 (read) phyDriverEntry/197 (read) PhyRead/140 (addr) PhyWrite/139 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_Init_Hook/195 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+PhyRead/140 (PhyRead) @064e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PhyWrite/139 (PhyWrite) @064e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+pDeviceHandle/138 (pDeviceHandle) @064bf5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: adin1110_Init/141 (write) PhyWrite/139 (read) PhyRead/140 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+
+Initial Symbol table:
+
+HAL_UnInit_Hook/198 (HAL_UnInit_Hook) @06511738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_UnInit/142 
+  Calls: 
+phyDriverEntry/197 (phyDriverEntry) @065079d8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) adin1110_UnInit/142 (read) adin1110_Enable/143 (read) adin1110_Disable/144 (read) adin1110_Reset/146 (read) adin1110_LedEn/150 (read) adin1110_SetLoopbackMode/151 (read) adin1110_SetTestMode/152 (read) adin1110_GetMseLinkQuality/181 (read) adin1110_FrameGenEn/182 (read) adin1110_FrameGenSetMode/183 (read) adin1110_FrameGenSetFrameCnt/184 (read) adin1110_FrameGenSetFramePayload/185 (read) adin1110_FrameGenSetFrameLen/186 (read) adin1110_FrameGenSetIfgLen/187 (read) adin1110_FrameGenRestart/188 (read) adin1110_FrameGenDone/189 (read) adin1110_FrameChkEn/190 (read) adin1110_FrameChkSourceSelect/191 (read) adin1110_FrameChkReadFrameCnt/192 (read) adin1110_FrameChkReadRxErrCnt/193 (read) adin1110_FrameChkReadErrorCnt/194 (read) 
+  Availability: not-ready
+  Varpool flags:
+macDriverEntry/196 (macDriverEntry) @06507948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) PhyWrite/139 (read) PhyRead/140 (read) adin1110_UnInit/142 (read) adin1110_Reset/146 (read) adin1110_SyncConfig/147 (read) adin1110_GetLinkStatus/148 (read) adin1110_GetStatCounters/149 (read) adin1110_AddAddressFilter/153 (read) adin1110_ClearAddressFilter/154 (read) adin1110_SubmitTxBuffer/155 (read) adin1110_SubmitRxBuffer/156 (read) adin1110_SetCutThroughMode/157 (read) adin1110_GetCutThroughMode/158 (read) adin1110_SetFifoSizes/159 (read) adin1110_GetFifoSizes/160 (read) adin1110_ClearFifos/161 (read) adin1110_SetPromiscuousMode/162 (read) adin1110_GetPromiscuousMode/163 (read) adin1110_TsEnable/164 (read) adin1110_TsClear/165 (read) adin1110_TsTimerStart/166 (read) adin1110_TsTimerStop/167 (read) adin1110_TsSetTimerAbsolute/168 (read) adin1110_TsSyncClock/169 (read) adin1110_TsGetExtCaptTimestamp/170 (read) adin1110_TsGetEgressTimestamp/171 (read) adin1110_TsConvert/172 (read) adin1110_TsSubtract/173 (read) adin1110_RegisterCallback/174 (read) adin1110_WriteRegister/177 (read) adin1110_ReadRegister/178 (read) adin1110_PhyWrite/179 (read) adin1110_PhyRead/180 (read) 
+  Availability: not-ready
+  Varpool flags:
+HAL_Init_Hook/195 (HAL_Init_Hook) @06511690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_Init/141 
+  Calls: 
+adin1110_FrameChkReadErrorCnt/194 (adin1110_FrameChkReadErrorCnt) @065115e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadRxErrCnt/193 (adin1110_FrameChkReadRxErrCnt) @06511498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadFrameCnt/192 (adin1110_FrameChkReadFrameCnt) @06511348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkSourceSelect/191 (adin1110_FrameChkSourceSelect) @065111f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkEn/190 (adin1110_FrameChkEn) @065110a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenDone/189 (adin1110_FrameGenDone) @06509f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenRestart/188 (adin1110_FrameGenRestart) @06509dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetIfgLen/187 (adin1110_FrameGenSetIfgLen) @06509c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameLen/186 (adin1110_FrameGenSetFrameLen) @06509b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFramePayload/185 (adin1110_FrameGenSetFramePayload) @065099d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameCnt/184 (adin1110_FrameGenSetFrameCnt) @06509888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetMode/183 (adin1110_FrameGenSetMode) @06509738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenEn/182 (adin1110_FrameGenEn) @065095e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetMseLinkQuality/181 (adin1110_GetMseLinkQuality) @06509498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyRead/180 (adin1110_PhyRead) @06509348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyWrite/179 (adin1110_PhyWrite) @065091f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ReadRegister/178 (adin1110_ReadRegister) @065090a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_WriteRegister/177 (adin1110_WriteRegister) @06503f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetUserContext/176 (adin1110_GetUserContext) @06503dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_SetUserContext/175 (adin1110_SetUserContext) @06503c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_RegisterCallback/174 (adin1110_RegisterCallback) @06503b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSubtract/173 (adin1110_TsSubtract) @065039d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsConvert/172 (adin1110_TsConvert) @06503888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetEgressTimestamp/171 (adin1110_TsGetEgressTimestamp) @06503738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetExtCaptTimestamp/170 (adin1110_TsGetExtCaptTimestamp) @065035e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSyncClock/169 (adin1110_TsSyncClock) @06503498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSetTimerAbsolute/168 (adin1110_TsSetTimerAbsolute) @06503348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStop/167 (adin1110_TsTimerStop) @065031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStart/166 (adin1110_TsTimerStart) @065030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsClear/165 (adin1110_TsClear) @064fff18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsEnable/164 (adin1110_TsEnable) @064ffdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetPromiscuousMode/163 (adin1110_GetPromiscuousMode) @064ffc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetPromiscuousMode/162 (adin1110_SetPromiscuousMode) @064ffb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearFifos/161 (adin1110_ClearFifos) @064ff9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetFifoSizes/160 (adin1110_GetFifoSizes) @064ff888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetFifoSizes/159 (adin1110_SetFifoSizes) @064ff738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetCutThroughMode/158 (adin1110_GetCutThroughMode) @064ff5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetCutThroughMode/157 (adin1110_SetCutThroughMode) @064ff498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitRxBuffer/156 (adin1110_SubmitRxBuffer) @064ff348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitTxBuffer/155 (adin1110_SubmitTxBuffer) @064ff1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearAddressFilter/154 (adin1110_ClearAddressFilter) @064ff0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_AddAddressFilter/153 (adin1110_AddAddressFilter) @064f6f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetTestMode/152 (adin1110_SetTestMode) @064f6dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetLoopbackMode/151 (adin1110_SetLoopbackMode) @064f6c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_LedEn/150 (adin1110_LedEn) @064f6b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetStatCounters/149 (adin1110_GetStatCounters) @064f69d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetLinkStatus/148 (adin1110_GetLinkStatus) @064f6888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SyncConfig/147 (adin1110_SyncConfig) @064f6738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Reset/146 (adin1110_Reset) @064f65e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_GetDeviceId/145 (adin1110_GetDeviceId) @064f6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 
+adin1110_Disable/144 (adin1110_Disable) @064f6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Enable/143 (adin1110_Enable) @064f61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_UnInit/142 (adin1110_UnInit) @064f60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_UnInit_Hook/198 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_Init/141 (adin1110_Init) @064e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: pDeviceHandle/138 (write) macDriverEntry/196 (read) phyDriverEntry/197 (read) PhyRead/140 (addr) PhyWrite/139 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_Init_Hook/195 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+PhyRead/140 (PhyRead) @064e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PhyWrite/139 (PhyWrite) @064e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+pDeviceHandle/138 (pDeviceHandle) @064bf5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: adin1110_Init/141 (write) PhyWrite/139 (read) PhyRead/140 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+HAL_UnInit_Hook/198 (HAL_UnInit_Hook) @06511738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_UnInit/142 
+  Calls: 
+phyDriverEntry/197 (phyDriverEntry) @065079d8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) adin1110_UnInit/142 (read) adin1110_Enable/143 (read) adin1110_Disable/144 (read) adin1110_Reset/146 (read) adin1110_LedEn/150 (read) adin1110_SetLoopbackMode/151 (read) adin1110_SetTestMode/152 (read) adin1110_GetMseLinkQuality/181 (read) adin1110_FrameGenEn/182 (read) adin1110_FrameGenSetMode/183 (read) adin1110_FrameGenSetFrameCnt/184 (read) adin1110_FrameGenSetFramePayload/185 (read) adin1110_FrameGenSetFrameLen/186 (read) adin1110_FrameGenSetIfgLen/187 (read) adin1110_FrameGenRestart/188 (read) adin1110_FrameGenDone/189 (read) adin1110_FrameChkEn/190 (read) adin1110_FrameChkSourceSelect/191 (read) adin1110_FrameChkReadFrameCnt/192 (read) adin1110_FrameChkReadRxErrCnt/193 (read) adin1110_FrameChkReadErrorCnt/194 (read) 
+  Availability: not-ready
+  Varpool flags:
+macDriverEntry/196 (macDriverEntry) @06507948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_Init/141 (read) PhyWrite/139 (read) PhyRead/140 (read) adin1110_UnInit/142 (read) adin1110_Reset/146 (read) adin1110_SyncConfig/147 (read) adin1110_GetLinkStatus/148 (read) adin1110_GetStatCounters/149 (read) adin1110_AddAddressFilter/153 (read) adin1110_ClearAddressFilter/154 (read) adin1110_SubmitTxBuffer/155 (read) adin1110_SubmitRxBuffer/156 (read) adin1110_SetCutThroughMode/157 (read) adin1110_GetCutThroughMode/158 (read) adin1110_SetFifoSizes/159 (read) adin1110_GetFifoSizes/160 (read) adin1110_ClearFifos/161 (read) adin1110_SetPromiscuousMode/162 (read) adin1110_GetPromiscuousMode/163 (read) adin1110_TsEnable/164 (read) adin1110_TsClear/165 (read) adin1110_TsTimerStart/166 (read) adin1110_TsTimerStop/167 (read) adin1110_TsSetTimerAbsolute/168 (read) adin1110_TsSyncClock/169 (read) adin1110_TsGetExtCaptTimestamp/170 (read) adin1110_TsGetEgressTimestamp/171 (read) adin1110_TsConvert/172 (read) adin1110_TsSubtract/173 (read) adin1110_RegisterCallback/174 (read) adin1110_WriteRegister/177 (read) adin1110_ReadRegister/178 (read) adin1110_PhyWrite/179 (read) adin1110_PhyRead/180 (read) 
+  Availability: not-ready
+  Varpool flags:
+HAL_Init_Hook/195 (HAL_Init_Hook) @06511690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: adin1110_Init/141 
+  Calls: 
+adin1110_FrameChkReadErrorCnt/194 (adin1110_FrameChkReadErrorCnt) @065115e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadRxErrCnt/193 (adin1110_FrameChkReadRxErrCnt) @06511498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkReadFrameCnt/192 (adin1110_FrameChkReadFrameCnt) @06511348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkSourceSelect/191 (adin1110_FrameChkSourceSelect) @065111f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameChkEn/190 (adin1110_FrameChkEn) @065110a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenDone/189 (adin1110_FrameGenDone) @06509f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenRestart/188 (adin1110_FrameGenRestart) @06509dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetIfgLen/187 (adin1110_FrameGenSetIfgLen) @06509c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameLen/186 (adin1110_FrameGenSetFrameLen) @06509b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFramePayload/185 (adin1110_FrameGenSetFramePayload) @065099d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetFrameCnt/184 (adin1110_FrameGenSetFrameCnt) @06509888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenSetMode/183 (adin1110_FrameGenSetMode) @06509738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_FrameGenEn/182 (adin1110_FrameGenEn) @065095e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetMseLinkQuality/181 (adin1110_GetMseLinkQuality) @06509498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyRead/180 (adin1110_PhyRead) @06509348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 adin1110_GetDeviceId/145 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_PhyWrite/179 (adin1110_PhyWrite) @065091f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ReadRegister/178 (adin1110_ReadRegister) @065090a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_WriteRegister/177 (adin1110_WriteRegister) @06503f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetUserContext/176 (adin1110_GetUserContext) @06503dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_SetUserContext/175 (adin1110_SetUserContext) @06503c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+adin1110_RegisterCallback/174 (adin1110_RegisterCallback) @06503b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSubtract/173 (adin1110_TsSubtract) @065039d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsConvert/172 (adin1110_TsConvert) @06503888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetEgressTimestamp/171 (adin1110_TsGetEgressTimestamp) @06503738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsGetExtCaptTimestamp/170 (adin1110_TsGetExtCaptTimestamp) @065035e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSyncClock/169 (adin1110_TsSyncClock) @06503498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsSetTimerAbsolute/168 (adin1110_TsSetTimerAbsolute) @06503348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStop/167 (adin1110_TsTimerStop) @065031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsTimerStart/166 (adin1110_TsTimerStart) @065030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsClear/165 (adin1110_TsClear) @064fff18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_TsEnable/164 (adin1110_TsEnable) @064ffdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetPromiscuousMode/163 (adin1110_GetPromiscuousMode) @064ffc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetPromiscuousMode/162 (adin1110_SetPromiscuousMode) @064ffb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearFifos/161 (adin1110_ClearFifos) @064ff9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetFifoSizes/160 (adin1110_GetFifoSizes) @064ff888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetFifoSizes/159 (adin1110_SetFifoSizes) @064ff738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetCutThroughMode/158 (adin1110_GetCutThroughMode) @064ff5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetCutThroughMode/157 (adin1110_SetCutThroughMode) @064ff498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitRxBuffer/156 (adin1110_SubmitRxBuffer) @064ff348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SubmitTxBuffer/155 (adin1110_SubmitTxBuffer) @064ff1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_ClearAddressFilter/154 (adin1110_ClearAddressFilter) @064ff0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_AddAddressFilter/153 (adin1110_AddAddressFilter) @064f6f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetTestMode/152 (adin1110_SetTestMode) @064f6dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SetLoopbackMode/151 (adin1110_SetLoopbackMode) @064f6c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_LedEn/150 (adin1110_LedEn) @064f6b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetStatCounters/149 (adin1110_GetStatCounters) @064f69d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_GetLinkStatus/148 (adin1110_GetLinkStatus) @064f6888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_SyncConfig/147 (adin1110_SyncConfig) @064f6738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Reset/146 (adin1110_Reset) @064f65e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: macDriverEntry/196 (read) phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_GetDeviceId/145 (adin1110_GetDeviceId) @064f6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 adin1110_PhyRead/180 
+adin1110_Disable/144 (adin1110_Disable) @064f6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_Enable/143 (adin1110_Enable) @064f61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+adin1110_UnInit/142 (adin1110_UnInit) @064f60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: phyDriverEntry/197 (read) macDriverEntry/196 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_UnInit_Hook/198 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+adin1110_Init/141 (adin1110_Init) @064e3e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: pDeviceHandle/138 (write) macDriverEntry/196 (read) phyDriverEntry/197 (read) PhyRead/140 (addr) PhyWrite/139 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_Init_Hook/195 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+PhyRead/140 (PhyRead) @064e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+PhyWrite/139 (PhyWrite) @064e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+   Indirect callnum speculative call targets: 0
+pDeviceHandle/138 (pDeviceHandle) @064bf5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: adin1110_Init/141 (write) PhyWrite/139 (read) PhyRead/140 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+HAL_UnInit_Hook/198 (HAL_UnInit_Hook) @06511738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: adin1110_UnInit/142 (346397698 (estimated locally),0.32 per call) 
+  Calls: 
+phyDriverEntry/197 (phyDriverEntry) @065079d8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: adin1110_FrameChkReadFrameCnt/192 (read) adin1110_FrameChkReadRxErrCnt/193 (read) adin1110_Init/141 (read) adin1110_UnInit/142 (read) adin1110_Enable/143 (read) adin1110_Disable/144 (read) adin1110_Reset/146 (read) adin1110_LedEn/150 (read) adin1110_SetLoopbackMode/151 (read) adin1110_SetTestMode/152 (read) adin1110_GetMseLinkQuality/181 (read) adin1110_FrameGenEn/182 (read) adin1110_FrameGenSetMode/183 (read) adin1110_FrameGenSetFrameCnt/184 (read) adin1110_FrameGenSetFramePayload/185 (read) adin1110_FrameGenSetFrameLen/186 (read) adin1110_FrameGenSetIfgLen/187 (read) adin1110_FrameGenRestart/188 (read) adin1110_FrameGenDone/189 (read) adin1110_FrameChkEn/190 (read) adin1110_FrameChkSourceSelect/191 (read) adin1110_FrameChkReadErrorCnt/194 (read) 
+  Availability: not_available
+  Varpool flags:
+macDriverEntry/196 (macDriverEntry) @06507948
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: PhyWrite/139 (read) adin1110_ReadRegister/178 (read) adin1110_PhyWrite/179 (read) PhyRead/140 (read) adin1110_Init/141 (read) adin1110_UnInit/142 (read) adin1110_Reset/146 (read) adin1110_SyncConfig/147 (read) adin1110_GetLinkStatus/148 (read) adin1110_GetStatCounters/149 (read) adin1110_AddAddressFilter/153 (read) adin1110_ClearAddressFilter/154 (read) adin1110_SubmitTxBuffer/155 (read) adin1110_SubmitRxBuffer/156 (read) adin1110_SetCutThroughMode/157 (read) adin1110_GetCutThroughMode/158 (read) adin1110_SetFifoSizes/159 (read) adin1110_GetFifoSizes/160 (read) adin1110_ClearFifos/161 (read) adin1110_SetPromiscuousMode/162 (read) adin1110_GetPromiscuousMode/163 (read) adin1110_TsEnable/164 (read) adin1110_TsClear/165 (read) adin1110_TsTimerStart/166 (read) adin1110_TsTimerStop/167 (read) adin1110_TsSetTimerAbsolute/168 (read) adin1110_TsSyncClock/169 (read) adin1110_TsGetExtCaptTimestamp/170 (read) adin1110_TsGetEgressTimestamp/171 (read) adin1110_TsConvert/172 (read) adin1110_TsSubtract/173 (read) adin1110_RegisterCallback/174 (read) adin1110_WriteRegister/177 (read) adin1110_PhyRead/180 (read) 
+  Availability: not_available
+  Varpool flags:
+HAL_Init_Hook/195 (HAL_Init_Hook) @06511690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: adin1110_Init/141 (686872649 (estimated locally),0.64 per call) 
+  Calls: 
+adin1110_FrameChkReadErrorCnt/194 (adin1110_FrameChkReadErrorCnt) @065115e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameChkReadRxErrCnt/193 (adin1110_FrameChkReadRxErrCnt) @06511498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameChkReadFrameCnt/192 (adin1110_FrameChkReadFrameCnt) @06511348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameChkSourceSelect/191 (adin1110_FrameChkSourceSelect) @065111f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameChkEn/190 (adin1110_FrameChkEn) @065110a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenDone/189 (adin1110_FrameGenDone) @06509f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenRestart/188 (adin1110_FrameGenRestart) @06509dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenSetIfgLen/187 (adin1110_FrameGenSetIfgLen) @06509c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenSetFrameLen/186 (adin1110_FrameGenSetFrameLen) @06509b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenSetFramePayload/185 (adin1110_FrameGenSetFramePayload) @065099d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenSetFrameCnt/184 (adin1110_FrameGenSetFrameCnt) @06509888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenSetMode/183 (adin1110_FrameGenSetMode) @06509738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_FrameGenEn/182 (adin1110_FrameGenEn) @065095e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetMseLinkQuality/181 (adin1110_GetMseLinkQuality) @06509498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_PhyRead/180 (adin1110_PhyRead) @06509348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: adin1110_GetDeviceId/145 (125398821 (estimated locally),0.12 per call) adin1110_GetDeviceId/145 (256544234 (estimated locally),0.24 per call) adin1110_GetDeviceId/145 (524845000 (estimated locally),0.49 per call) adin1110_GetDeviceId/145 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_PhyWrite/179 (adin1110_PhyWrite) @065091f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_ReadRegister/178 (adin1110_ReadRegister) @065090a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_WriteRegister/177 (adin1110_WriteRegister) @06503f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetUserContext/176 (adin1110_GetUserContext) @06503dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+adin1110_SetUserContext/175 (adin1110_SetUserContext) @06503c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+adin1110_RegisterCallback/174 (adin1110_RegisterCallback) @06503b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsSubtract/173 (adin1110_TsSubtract) @065039d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsConvert/172 (adin1110_TsConvert) @06503888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsGetEgressTimestamp/171 (adin1110_TsGetEgressTimestamp) @06503738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsGetExtCaptTimestamp/170 (adin1110_TsGetExtCaptTimestamp) @065035e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsSyncClock/169 (adin1110_TsSyncClock) @06503498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsSetTimerAbsolute/168 (adin1110_TsSetTimerAbsolute) @06503348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsTimerStop/167 (adin1110_TsTimerStop) @065031f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsTimerStart/166 (adin1110_TsTimerStart) @065030a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsClear/165 (adin1110_TsClear) @064fff18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_TsEnable/164 (adin1110_TsEnable) @064ffdc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetPromiscuousMode/163 (adin1110_GetPromiscuousMode) @064ffc78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SetPromiscuousMode/162 (adin1110_SetPromiscuousMode) @064ffb28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_ClearFifos/161 (adin1110_ClearFifos) @064ff9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetFifoSizes/160 (adin1110_GetFifoSizes) @064ff888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SetFifoSizes/159 (adin1110_SetFifoSizes) @064ff738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(697932185 (estimated locally),0.65 per call) num speculative call targets: 0
+adin1110_GetCutThroughMode/158 (adin1110_GetCutThroughMode) @064ff5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SetCutThroughMode/157 (adin1110_SetCutThroughMode) @064ff498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SubmitRxBuffer/156 (adin1110_SubmitRxBuffer) @064ff348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SubmitTxBuffer/155 (adin1110_SubmitTxBuffer) @064ff1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_ClearAddressFilter/154 (adin1110_ClearAddressFilter) @064ff0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_AddAddressFilter/153 (adin1110_AddAddressFilter) @064f6f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SetTestMode/152 (adin1110_SetTestMode) @064f6dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SetLoopbackMode/151 (adin1110_SetLoopbackMode) @064f6c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_LedEn/150 (adin1110_LedEn) @064f6b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetStatCounters/149 (adin1110_GetStatCounters) @064f69d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetLinkStatus/148 (adin1110_GetLinkStatus) @064f6888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_SyncConfig/147 (adin1110_SyncConfig) @064f6738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_Reset/146 (adin1110_Reset) @064f65e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: macDriverEntry/196 (read) phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(182536112 (estimated locally),0.17 per call) num speculative call targets: 0
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_GetDeviceId/145 (adin1110_GetDeviceId) @064f6498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: adin1110_PhyRead/180 (125398821 (estimated locally),0.12 per call) adin1110_PhyRead/180 (256544234 (estimated locally),0.24 per call) adin1110_PhyRead/180 (524845000 (estimated locally),0.49 per call) adin1110_PhyRead/180 (1073741824 (estimated locally),1.00 per call) 
+adin1110_Disable/144 (adin1110_Disable) @064f6348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_Enable/143 (adin1110_Enable) @064f61f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_UnInit/142 (adin1110_UnInit) @064f60a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: phyDriverEntry/197 (read) macDriverEntry/196 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_UnInit_Hook/198 (346397698 (estimated locally),0.32 per call) 
+   Indirect call(708669601 (estimated locally),0.66 per call) num speculative call targets: 0
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+adin1110_Init/141 (adin1110_Init) @064e3e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: pDeviceHandle/138 (write) macDriverEntry/196 (read) phyDriverEntry/197 (read) PhyRead/140 (addr) PhyWrite/139 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_Init_Hook/195 (686872649 (estimated locally),0.64 per call) 
+   Indirect call(343436324 (estimated locally),0.32 per call) num speculative call targets: 0
+   Indirect call(686872649 (estimated locally),0.64 per call) num speculative call targets: 0
+PhyRead/140 (PhyRead) @064e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+PhyWrite/139 (PhyWrite) @064e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: macDriverEntry/196 (read) pDeviceHandle/138 (read) 
+  Referring: adin1110_Init/141 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+   Indirect call(1073741824 (estimated locally),1.00 per call) num speculative call targets: 0
+pDeviceHandle/138 (pDeviceHandle) @064bf5a0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: PhyWrite/139 (read) PhyRead/140 (read) adin1110_Init/141 (write) 
+  Availability: available
+  Varpool flags:
+Trivially needed variables: pDeviceHandle/138
+Removing variables:
+
+Final Symbol table:
+
+HAL_UnInit_Hook/198 (HAL_UnInit_Hook) @06511738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+phyDriverEntry/197 (phyDriverEntry) @065079d8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+macDriverEntry/196 (macDriverEntry) @06507948
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+HAL_Init_Hook/195 (HAL_Init_Hook) @06511690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+adin1110_FrameChkReadErrorCnt/194 (adin1110_FrameChkReadErrorCnt) @065115e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameChkReadErrorCnt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameChkReadRxErrCnt/193 (adin1110_FrameChkReadRxErrCnt) @06511498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameChkReadRxErrCnt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameChkReadFrameCnt/192 (adin1110_FrameChkReadFrameCnt) @06511348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameChkReadFrameCnt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameChkSourceSelect/191 (adin1110_FrameChkSourceSelect) @065111f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameChkSourceSelect (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameChkEn/190 (adin1110_FrameChkEn) @065110a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameChkEn (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenDone/189 (adin1110_FrameGenDone) @06509f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenDone (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenRestart/188 (adin1110_FrameGenRestart) @06509dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenRestart (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenSetIfgLen/187 (adin1110_FrameGenSetIfgLen) @06509c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenSetIfgLen (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenSetFrameLen/186 (adin1110_FrameGenSetFrameLen) @06509b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenSetFrameLen (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenSetFramePayload/185 (adin1110_FrameGenSetFramePayload) @065099d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenSetFramePayload (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenSetFrameCnt/184 (adin1110_FrameGenSetFrameCnt) @06509888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenSetFrameCnt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenSetMode/183 (adin1110_FrameGenSetMode) @06509738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenSetMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_FrameGenEn/182 (adin1110_FrameGenEn) @065095e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_FrameGenEn (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetMseLinkQuality/181 (adin1110_GetMseLinkQuality) @06509498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetMseLinkQuality (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_PhyRead/180 (adin1110_PhyRead) @06509348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_PhyRead (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_PhyWrite/179 (adin1110_PhyWrite) @065091f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_PhyWrite (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_ReadRegister/178 (adin1110_ReadRegister) @065090a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_ReadRegister (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_WriteRegister/177 (adin1110_WriteRegister) @06503f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_WriteRegister (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetUserContext/176 (adin1110_GetUserContext) @06503dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetUserContext (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+adin1110_SetUserContext/175 (adin1110_SetUserContext) @06503c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SetUserContext (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+adin1110_RegisterCallback/174 (adin1110_RegisterCallback) @06503b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_RegisterCallback (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsSubtract/173 (adin1110_TsSubtract) @065039d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsSubtract (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsConvert/172 (adin1110_TsConvert) @06503888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsConvert (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsGetEgressTimestamp/171 (adin1110_TsGetEgressTimestamp) @06503738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsGetEgressTimestamp (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsGetExtCaptTimestamp/170 (adin1110_TsGetExtCaptTimestamp) @065035e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsGetExtCaptTimestamp (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsSyncClock/169 (adin1110_TsSyncClock) @06503498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsSyncClock (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsSetTimerAbsolute/168 (adin1110_TsSetTimerAbsolute) @06503348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsSetTimerAbsolute (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsTimerStop/167 (adin1110_TsTimerStop) @065031f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsTimerStop (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsTimerStart/166 (adin1110_TsTimerStart) @065030a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsTimerStart (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsClear/165 (adin1110_TsClear) @064fff18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsClear (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_TsEnable/164 (adin1110_TsEnable) @064ffdc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_TsEnable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetPromiscuousMode/163 (adin1110_GetPromiscuousMode) @064ffc78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetPromiscuousMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SetPromiscuousMode/162 (adin1110_SetPromiscuousMode) @064ffb28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SetPromiscuousMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_ClearFifos/161 (adin1110_ClearFifos) @064ff9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_ClearFifos (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetFifoSizes/160 (adin1110_GetFifoSizes) @064ff888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetFifoSizes (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SetFifoSizes/159 (adin1110_SetFifoSizes) @064ff738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SetFifoSizes (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetCutThroughMode/158 (adin1110_GetCutThroughMode) @064ff5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetCutThroughMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SetCutThroughMode/157 (adin1110_SetCutThroughMode) @064ff498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SetCutThroughMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SubmitRxBuffer/156 (adin1110_SubmitRxBuffer) @064ff348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SubmitRxBuffer (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SubmitTxBuffer/155 (adin1110_SubmitTxBuffer) @064ff1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SubmitTxBuffer (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_ClearAddressFilter/154 (adin1110_ClearAddressFilter) @064ff0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_ClearAddressFilter (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_AddAddressFilter/153 (adin1110_AddAddressFilter) @064f6f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_AddAddressFilter (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SetTestMode/152 (adin1110_SetTestMode) @064f6dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SetTestMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SetLoopbackMode/151 (adin1110_SetLoopbackMode) @064f6c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SetLoopbackMode (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_LedEn/150 (adin1110_LedEn) @064f6b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_LedEn (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetStatCounters/149 (adin1110_GetStatCounters) @064f69d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetStatCounters (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetLinkStatus/148 (adin1110_GetLinkStatus) @064f6888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetLinkStatus (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_SyncConfig/147 (adin1110_SyncConfig) @064f6738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_SyncConfig (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_Reset/146 (adin1110_Reset) @064f65e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_Reset (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_GetDeviceId/145 (adin1110_GetDeviceId) @064f6498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_GetDeviceId (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_Disable/144 (adin1110_Disable) @064f6348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_Disable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_Enable/143 (adin1110_Enable) @064f61f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_Enable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_UnInit/142 (adin1110_UnInit) @064f60a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_UnInit (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+adin1110_Init/141 (adin1110_Init) @064e3e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.adin1110_Init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PhyRead/140 (PhyRead) @064e3d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PhyRead (implicit_section)
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+PhyWrite/139 (PhyWrite) @064e3a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.PhyWrite (implicit_section)
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+pDeviceHandle/138 (pDeviceHandle) @064bf5a0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.pDeviceHandle (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:

@@ -1,0 +1,9 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:39:6:mbedtls_sha1_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:44:6:mbedtls_sha1_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:53:6:mbedtls_sha1_clone	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:62:5:mbedtls_sha1_starts	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:77:5:mbedtls_internal_sha1_process	192	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:250:5:mbedtls_sha1_update	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:303:5:mbedtls_sha1_finish	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:362:5:mbedtls_sha1	120	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/sha1.c:418:5:mbedtls_sha1_self_test	1160	static

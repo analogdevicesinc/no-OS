@@ -1,0 +1,5 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hmac_sha2.c:41:6:hmac_sha256_init	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hmac_sha2.c:88:6:hmac_sha256_reinit	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hmac_sha2.c:96:6:hmac_sha256_update	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hmac_sha2.c:102:6:hmac_sha256_final	88	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hmac_sha2.c:114:6:hmac_sha256	816	static

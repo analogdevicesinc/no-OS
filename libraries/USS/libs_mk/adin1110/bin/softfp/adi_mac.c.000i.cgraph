@@ -1,0 +1,4449 @@
+Trivially needed symbols: macDriverEntry/183 MAC_CalculateParity/182 MAC_TsSubtract/180 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsConvert/175 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_ClearFifos/168 MAC_GetFifoSizes/167 MAC_SetFifoSizes/166 MAC_GetCutThroughMode/165 MAC_SetCutThroughMode/164 MAC_WriteRegister/152 MAC_ReadRegister/151 queueRemove/144 queueAdd/143 queueIsEmpty/142 queueIsFull/141 queueAvailable/140 queueInit/138
+
+
+Initial Symbol table:
+
+spiCallback/198 (spiCallback) @0652de70
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: MAC_Init/146 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiRegisterCallback/197 (HAL_SpiRegisterCallback) @0652ddc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+memset/196 (memset) @0652dd20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+HAL_SetPendingIrq/195 (HAL_SetPendingIrq) @0652dc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+MAC_RecvFrame/194 (MAC_RecvFrame) @0652dbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+HAL_FcsInit/193 (HAL_FcsInit) @0652db28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+HAL_RegisterCallback/192 (HAL_RegisterCallback) @0652da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+MAC_SendFrame/191 (MAC_SendFrame) @0652d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 
+  Calls: 
+HAL_FcsCalculate/190 (HAL_FcsCalculate) @0652d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SubmitTxBuffer/157 
+  Calls: 
+MAC_Write/189 (MAC_Write) @0652d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteRegister/152 
+  Calls: 
+__builtin_bswap32/188 (__builtin_bswap32) @0652d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: __REV/7 
+  Calls: 
+HAL_EnableIrq/187 (HAL_EnableIrq) @0652d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SyncConfig/181 MAC_ProcessTxQueue/159 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+MAC_Read/186 (MAC_Read) @0652d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_GetStatCounters/160 MAC_ReadRegister/151 
+  Calls: 
+HAL_DisableIrq/185 (HAL_DisableIrq) @0652d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 MAC_UnInit/148 macCallback/145 macCallback/145 MAC_Reset/149 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+HAL_GetEnableIrq/184 (HAL_GetEnableIrq) @0652d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+macDriverEntry/183 (macDriverEntry) @06526240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: MAC_Init/146 (addr) MAC_UnInit/148 (addr) MAC_Reset/149 (addr) MAC_SyncConfig/181 (addr) MAC_RegisterCallback/150 (addr) MAC_GetLinkStatus/163 (addr) MAC_GetStatCounters/160 (addr) MAC_AddAddressFilter/161 (addr) MAC_ClearAddressFilter/162 (addr) MAC_SubmitTxBuffer/157 (addr) MAC_SubmitRxBuffer/158 (addr) MAC_SetPromiscuousMode/169 (addr) MAC_GetPromiscuousMode/170 (addr) MAC_SetCutThroughMode/164 (addr) MAC_GetCutThroughMode/165 (addr) MAC_SetFifoSizes/166 (addr) MAC_GetFifoSizes/167 (addr) MAC_ClearFifos/168 (addr) MAC_TsEnable/171 (addr) MAC_TsClear/172 (addr) MAC_TsTimerStart/173 (addr) MAC_TsTimerStop/174 (addr) MAC_TsSetTimerAbsolute/178 (addr) MAC_TsSyncClock/179 (addr) MAC_TsGetExtCaptTimestamp/176 (addr) MAC_TsGetEgressTimestamp/177 (addr) MAC_TsConvert/175 (addr) MAC_TsSubtract/180 (addr) MAC_ReadRegister/151 (addr) MAC_WriteRegister/152 (addr) MAC_PhyRead/155 (addr) MAC_PhyWrite/156 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+MAC_CalculateParity/182 (MAC_CalculateParity) @0652d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06526240
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_SyncConfig/181 (MAC_SyncConfig) @0652d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064cc738
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/187 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSubtract/180 (MAC_TsSubtract) @0652d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0652d348
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_TsSyncClock/179 (MAC_TsSyncClock) @0651af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0652d0a8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSetTimerAbsolute/178 (MAC_TsSetTimerAbsolute) @0651adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651af18
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsGetEgressTimestamp/177 (MAC_TsGetEgressTimestamp) @0651ac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651adc8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsGetExtCaptTimestamp/176 (MAC_TsGetExtCaptTimestamp) @0651ab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651ac78
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsConvert/175 (MAC_TsConvert) @0651a9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651ab28
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 
+  Calls: 
+MAC_TsTimerStop/174 (MAC_TsTimerStop) @0651a888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651a9d8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsTimerStart/173 (MAC_TsTimerStart) @0651a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651a888
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsClear/172 (MAC_TsClear) @0651a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651a738
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsEnable/171 (MAC_TsEnable) @0651a498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651a5e8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_GetPromiscuousMode/170 (MAC_GetPromiscuousMode) @0651a348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @0651a1f8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetPromiscuousMode/169 (MAC_SetPromiscuousMode) @0651a1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ea348
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_ClearFifos/168 (MAC_ClearFifos) @0651a0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651a498
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetFifoSizes/167 (MAC_GetFifoSizes) @064eaf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @0651a0a8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetFifoSizes/166 (MAC_SetFifoSizes) @064eadc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @064eaf18
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetCutThroughMode/165 (MAC_GetCutThroughMode) @064eac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @064eadc8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetCutThroughMode/164 (MAC_SetCutThroughMode) @064eab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @064eac78
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_GetLinkStatus/163 (MAC_GetLinkStatus) @064ea9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064cc888
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_ClearAddressFilter/162 (MAC_ClearAddressFilter) @064ea888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ea738
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_AddAddressFilter/161 (MAC_AddAddressFilter) @064ea738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ea5e8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_GetStatCounters/160 (MAC_GetStatCounters) @064ea5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ea9d8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 MAC_Read/186 
+MAC_ProcessTxQueue/159 (MAC_ProcessTxQueue) @064ea498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064ea888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_SubmitTxBuffer/157 
+  Calls: HAL_EnableIrq/187 HAL_EnableIrq/187 MAC_SendFrame/191 queueIsEmpty/142 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_SubmitRxBuffer/158 (MAC_SubmitRxBuffer) @064ea348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ea1f8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: queueAdd/143 queueIsFull/141 
+MAC_SubmitTxBuffer/157 (MAC_SubmitTxBuffer) @064ea1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ea888
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 queueAdd/143 HAL_FcsCalculate/190 queueIsFull/141 
+MAC_PhyWrite/156 (MAC_PhyWrite) @064ea0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064ccf18
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_PhyRead/155 (MAC_PhyRead) @064ccf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @0651a348
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 
+  Calls: MAC_ReadRegister/151 waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+waitDeviceReady/154 (waitDeviceReady) @064ccdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064cc498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+waitMdioReady/153 (waitMdioReady) @064ccc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064ccf18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_PhyRead/155 MAC_PhyWrite/156 
+  Calls: MAC_ReadRegister/151 
+MAC_WriteRegister/152 (MAC_WriteRegister) @064ccb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @064eab28
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 MAC_Reset/149 MAC_Reset/149 MAC_Reset/149 MAC_SyncConfig/181 MAC_RegisterCallback/150 MAC_RegisterCallback/150 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_ClearAddressFilter/162 MAC_SetPromiscuousMode/169 MAC_PhyRead/155 MAC_PhyRead/155 MAC_PhyWrite/156 MAC_PhyWrite/156 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_ClearFifos/168 MAC_SetFifoSizes/166 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 MAC_Write/189 __REV/7 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_ReadRegister/151 (MAC_ReadRegister) @064cc9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  Aux: @064ccb28
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 waitDeviceReady/154 MAC_SyncConfig/181 MAC_GetLinkStatus/163 MAC_SetPromiscuousMode/169 MAC_GetPromiscuousMode/170 MAC_PhyRead/155 waitMdioReady/153 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsGetEgressTimestamp/177 MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_GetFifoSizes/167 MAC_GetCutThroughMode/165 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 __REV/7 MAC_Read/186 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_RegisterCallback/150 (MAC_RegisterCallback) @064cc888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @0652d1f8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Reset/149 (MAC_Reset) @064cc738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064cc5e8
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_Init/146 
+  Calls: macInit/147 waitDeviceReady/154 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 HAL_DisableIrq/185 
+MAC_UnInit/148 (MAC_UnInit) @064cc5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064cc348
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/185 
+macInit/147 (macInit) @064cc498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064cc5e8
+  References: macCallback/145 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 HAL_FcsInit/193 MAC_ReadRegister/151 MAC_ReadRegister/151 HAL_RegisterCallback/192 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Init/146 (MAC_Init) @064cc348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @01c61e00
+  References: spiCallback/198 (addr) 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_Reset/149 HAL_SpiRegisterCallback/197 queueInit/138 queueInit/138 memset/196 HAL_DisableIrq/185 
+macCallback/145 (macCallback) @064cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @064cc5e8
+  References: 
+  Referring: macInit/147 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 HAL_SetPendingIrq/195 MAC_ProcessTxQueue/159 MAC_RecvFrame/194 HAL_DisableIrq/185 queueIsEmpty/142 HAL_DisableIrq/185 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_PhyRead/155 MAC_PhyRead/155 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+queueRemove/144 (queueRemove) @064cc0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064cc9d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+queueAdd/143 (queueAdd) @064be738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064cc0a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: 
+queueIsEmpty/142 (queueIsEmpty) @064be5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064be738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_ProcessTxQueue/159 MAC_SubmitTxBuffer/157 
+  Calls: 
+queueIsFull/141 (queueIsFull) @064be3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064be5e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: queueCount/139 
+queueAvailable/140 (queueAvailable) @064bef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064be3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueCount/139 
+queueCount/139 (queueCount) @064bedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064be3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: queueIsFull/141 queueAvailable/140 
+  Calls: 
+queueInit/138 (queueInit) @064bec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064bef18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Init/146 MAC_Init/146 
+  Calls: 
+print_hex/137 (print_hex) @064577e0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/136 (ITM_CheckChar) @0641cf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/135 (ITM_ReceiveChar) @0641cdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/134 (ITM_SendChar) @0641cc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/133 (SysTick_Config) @0641c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/132 (SCB_GetFPUType) @0641c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/131 (ARM_MPU_Load) @0641c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/130 (ARM_MPU_OrderedMemcpy) @0641c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/129 (ARM_MPU_SetRegionEx) @0641c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/128 (ARM_MPU_SetRegion) @0641c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/127 (ARM_MPU_ClrRegion) @0641c150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/126 (ARM_MPU_Disable) @0641c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/125 (ARM_MPU_Enable) @06418d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/124 (__NVIC_SystemReset) @064107e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/123 (__NVIC_GetVector) @06410690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/122 (__NVIC_SetVector) @06410540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/121 (NVIC_DecodePriority) @064103f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/120 (NVIC_EncodePriority) @064102a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/119 (__NVIC_GetPriority) @06410150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/118 (__NVIC_SetPriority) @06410000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/117 (__NVIC_GetActive) @06409e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/116 (__NVIC_ClearPendingIRQ) @06409d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/115 (__NVIC_SetPendingIRQ) @06409bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/114 (__NVIC_GetPendingIRQ) @06409a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/113 (__NVIC_DisableIRQ) @06409930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/112 (__NVIC_GetEnableIRQ) @064097e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/111 (__NVIC_EnableIRQ) @06409690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/110 (__NVIC_GetPriorityGrouping) @06409540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/109 (__NVIC_SetPriorityGrouping) @064093f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/108 (__SMMLA) @063d15e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/107 (__QSUB) @063d1498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/106 (__QADD) @063d1348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/105 (__SEL) @063d11f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/104 (__SMLSLDX) @063d10a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/103 (__SMLSLD) @063cbf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/102 (__SMLSDX) @063cbdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/101 (__SMLSD) @063cbc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/100 (__SMUSDX) @063cbb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/99 (__SMUSD) @063cb9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/98 (__SMLALDX) @063cb888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/97 (__SMLALD) @063cb738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/96 (__SMLADX) @063cb5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/95 (__SMLAD) @063cb498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/94 (__SMUADX) @063cb348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/93 (__SMUAD) @063cb1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/92 (__SXTAB16_RORn) @063cb0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/91 (__SXTAB16) @063c6f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/90 (__SXTB16_RORn) @063c6dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/89 (__SXTB16) @063c6c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/88 (__UXTAB16) @063c6b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/87 (__UXTB16) @063c69d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/86 (__USADA8) @063c6738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/85 (__USAD8) @063c65e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/84 (__UHSAX) @063c6498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/83 (__UQSAX) @063c6348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/82 (__USAX) @063c61f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/81 (__SHSAX) @063c60a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/80 (__QSAX) @063bbf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/79 (__SSAX) @063bbdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/78 (__UHASX) @063bbc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/77 (__UQASX) @063bbb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/76 (__UASX) @063bb9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/75 (__SHASX) @063bb888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/74 (__QASX) @063bb738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/73 (__SASX) @063bb5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/72 (__UHSUB16) @063bb498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/71 (__UQSUB16) @063bb348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/70 (__USUB16) @063bb1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/69 (__SHSUB16) @063bb0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/68 (__QSUB16) @063b6f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/67 (__SSUB16) @063b6dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/66 (__UHADD16) @063b6c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/65 (__UQADD16) @063b6b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/64 (__UADD16) @063b69d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/63 (__SHADD16) @063b6888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/62 (__QADD16) @063b6738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/61 (__SADD16) @063b65e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/60 (__UHSUB8) @063b6498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/59 (__UQSUB8) @063b6348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/58 (__USUB8) @063b61f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/57 (__SHSUB8) @063b60a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/56 (__QSUB8) @063aff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/55 (__SSUB8) @063afdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/54 (__UHADD8) @063afc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/53 (__UQADD8) @063afb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/52 (__UADD8) @063af9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/51 (__SHADD8) @063af888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/50 (__QADD8) @063af738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/49 (__SADD8) @063af5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/48 (__set_FPSCR) @063af498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/47 (__get_FPSCR) @063af348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/46 (__set_FAULTMASK) @063af1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/45 (__get_FAULTMASK) @063af0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/44 (__set_BASEPRI_MAX) @063aaf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/43 (__set_BASEPRI) @063aadc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/42 (__get_BASEPRI) @063aac78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/41 (__disable_fault_irq) @063aab28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/40 (__enable_fault_irq) @063aa9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/39 (__set_PRIMASK) @063aa888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/38 (__get_PRIMASK) @063aa738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/37 (__set_MSP) @063aa5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/36 (__get_MSP) @063aa498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/35 (__set_PSP) @063aa348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/34 (__get_PSP) @063aa1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/33 (__get_xPSR) @063aa0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/32 (__get_APSR) @0639ff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/31 (__get_IPSR) @0639fdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/30 (__set_CONTROL) @0639fc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/29 (__get_CONTROL) @0639fb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/28 (__disable_irq) @0639f9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/27 (__enable_irq) @0639f888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/26 (__STRT) @0639f738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/25 (__STRHT) @0639f5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/24 (__STRBT) @0639f498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/23 (__LDRT) @0639f348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/22 (__LDRHT) @0639f1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/21 (__LDRBT) @0639f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/20 (__RRX) @06398f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/19 (__CLREX) @06398c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/18 (__STREXW) @06398b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/17 (__STREXH) @063989d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/16 (__STREXB) @06398888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/15 (__LDREXW) @06398738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/14 (__LDREXH) @063985e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/13 (__LDREXB) @06398498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/12 (__CLZ) @06398348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/11 (__RBIT) @063981f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/10 (__ROR) @06398000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/9 (__REVSH) @0635aa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/8 (__REV16) @0635a930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/7 (__REV) @0635a7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064ccb28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: __builtin_bswap32/188 
+__DMB/6 (__DMB) @0635a690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/5 (__DSB) @0635af18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/4 (__ISB) @0635adc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/3 (__cmsis_start) @0635ac78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @06345498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06345348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06345150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: print_hex/137 ITM_CheckChar/136 ITM_ReceiveChar/135 ITM_SendChar/134 SysTick_Config/133 SCB_GetFPUType/132 ARM_MPU_Load/131 ARM_MPU_OrderedMemcpy/130 ARM_MPU_SetRegionEx/129 ARM_MPU_SetRegion/128 ARM_MPU_ClrRegion/127 ARM_MPU_Disable/126 ARM_MPU_Enable/125 __NVIC_SystemReset/124 __NVIC_GetVector/123 __NVIC_SetVector/122 NVIC_DecodePriority/121 NVIC_EncodePriority/120 __NVIC_GetPriority/119 __NVIC_SetPriority/118 __NVIC_GetActive/117 __NVIC_ClearPendingIRQ/116 __NVIC_SetPendingIRQ/115 __NVIC_GetPendingIRQ/114 __NVIC_DisableIRQ/113 __NVIC_GetEnableIRQ/112 __NVIC_EnableIRQ/111 __NVIC_GetPriorityGrouping/110 __NVIC_SetPriorityGrouping/109 __SMMLA/108 __QSUB/107 __QADD/106 __SEL/105 __SMLSLDX/104 __SMLSLD/103 __SMLSDX/102 __SMLSD/101 __SMUSDX/100 __SMUSD/99 __SMLALDX/98 __SMLALD/97 __SMLADX/96 __SMLAD/95 __SMUADX/94 __SMUAD/93 __SXTAB16_RORn/92 __SXTAB16/91 __SXTB16_RORn/90 __SXTB16/89 __UXTAB16/88 __UXTB16/87 __USADA8/86 __USAD8/85 __UHSAX/84 __UQSAX/83 __USAX/82 __SHSAX/81 __QSAX/80 __SSAX/79 __UHASX/78 __UQASX/77 __UASX/76 __SHASX/75 __QASX/74 __SASX/73 __UHSUB16/72 __UQSUB16/71 __USUB16/70 __SHSUB16/69 __QSUB16/68 __SSUB16/67 __UHADD16/66 __UQADD16/65 __UADD16/64 __SHADD16/63 __QADD16/62 __SADD16/61 __UHSUB8/60 __UQSUB8/59 __USUB8/58 __SHSUB8/57 __QSUB8/56 __SSUB8/55 __UHADD8/54 __UQADD8/53 __UADD8/52 __SHADD8/51 __QADD8/50 __SADD8/49 __set_FPSCR/48 __get_FPSCR/47 __set_FAULTMASK/46 __get_FAULTMASK/45 __set_BASEPRI_MAX/44 __set_BASEPRI/43 __get_BASEPRI/42 __disable_fault_irq/41 __enable_fault_irq/40 __set_PRIMASK/39 __get_PRIMASK/38 __set_MSP/37 __get_MSP/36 __set_PSP/35 __get_PSP/34 __get_xPSR/33 __get_APSR/32 __get_IPSR/31 __set_CONTROL/30 __get_CONTROL/29 __disable_irq/28 __enable_irq/27 __STRT/26 __STRHT/25 __STRBT/24 __LDRT/23 __LDRHT/22 __LDRBT/21 __RRX/20 __CLREX/19 __STREXW/18 __STREXH/17 __STREXB/16 __LDREXW/15 __LDREXH/14 __LDREXB/13 __CLZ/12 __RBIT/11 __ROR/10 __REVSH/9 __REV16/8 __DMB/6 __DSB/5 __ISB/4 __cmsis_start/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+spiCallback/198 (spiCallback) @0652de70
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: MAC_Init/146 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiRegisterCallback/197 (HAL_SpiRegisterCallback) @0652ddc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+memset/196 (memset) @0652dd20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+HAL_SetPendingIrq/195 (HAL_SetPendingIrq) @0652dc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+MAC_RecvFrame/194 (MAC_RecvFrame) @0652dbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+HAL_FcsInit/193 (HAL_FcsInit) @0652db28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+HAL_RegisterCallback/192 (HAL_RegisterCallback) @0652da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+MAC_SendFrame/191 (MAC_SendFrame) @0652d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 
+  Calls: 
+HAL_FcsCalculate/190 (HAL_FcsCalculate) @0652d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SubmitTxBuffer/157 
+  Calls: 
+MAC_Write/189 (MAC_Write) @0652d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteRegister/152 
+  Calls: 
+__builtin_bswap32/188 (__builtin_bswap32) @0652d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: __REV/7 
+  Calls: 
+HAL_EnableIrq/187 (HAL_EnableIrq) @0652d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SyncConfig/181 MAC_ProcessTxQueue/159 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+MAC_Read/186 (MAC_Read) @0652d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_GetStatCounters/160 MAC_ReadRegister/151 
+  Calls: 
+HAL_DisableIrq/185 (HAL_DisableIrq) @0652d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 MAC_UnInit/148 macCallback/145 macCallback/145 MAC_Reset/149 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+HAL_GetEnableIrq/184 (HAL_GetEnableIrq) @0652d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+macDriverEntry/183 (macDriverEntry) @06526240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: MAC_Init/146 (addr) MAC_UnInit/148 (addr) MAC_Reset/149 (addr) MAC_SyncConfig/181 (addr) MAC_RegisterCallback/150 (addr) MAC_GetLinkStatus/163 (addr) MAC_GetStatCounters/160 (addr) MAC_AddAddressFilter/161 (addr) MAC_ClearAddressFilter/162 (addr) MAC_SubmitTxBuffer/157 (addr) MAC_SubmitRxBuffer/158 (addr) MAC_SetPromiscuousMode/169 (addr) MAC_GetPromiscuousMode/170 (addr) MAC_SetCutThroughMode/164 (addr) MAC_GetCutThroughMode/165 (addr) MAC_SetFifoSizes/166 (addr) MAC_GetFifoSizes/167 (addr) MAC_ClearFifos/168 (addr) MAC_TsEnable/171 (addr) MAC_TsClear/172 (addr) MAC_TsTimerStart/173 (addr) MAC_TsTimerStop/174 (addr) MAC_TsSetTimerAbsolute/178 (addr) MAC_TsSyncClock/179 (addr) MAC_TsGetExtCaptTimestamp/176 (addr) MAC_TsGetEgressTimestamp/177 (addr) MAC_TsConvert/175 (addr) MAC_TsSubtract/180 (addr) MAC_ReadRegister/151 (addr) MAC_WriteRegister/152 (addr) MAC_PhyRead/155 (addr) MAC_PhyWrite/156 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+MAC_CalculateParity/182 (MAC_CalculateParity) @0652d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_SyncConfig/181 (MAC_SyncConfig) @0652d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/187 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSubtract/180 (MAC_TsSubtract) @0652d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_TsSyncClock/179 (MAC_TsSyncClock) @0651af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSetTimerAbsolute/178 (MAC_TsSetTimerAbsolute) @0651adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsGetEgressTimestamp/177 (MAC_TsGetEgressTimestamp) @0651ac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsGetExtCaptTimestamp/176 (MAC_TsGetExtCaptTimestamp) @0651ab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsConvert/175 (MAC_TsConvert) @0651a9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 
+  Calls: 
+MAC_TsTimerStop/174 (MAC_TsTimerStop) @0651a888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsTimerStart/173 (MAC_TsTimerStart) @0651a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsClear/172 (MAC_TsClear) @0651a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsEnable/171 (MAC_TsEnable) @0651a498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_GetPromiscuousMode/170 (MAC_GetPromiscuousMode) @0651a348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetPromiscuousMode/169 (MAC_SetPromiscuousMode) @0651a1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_ClearFifos/168 (MAC_ClearFifos) @0651a0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetFifoSizes/167 (MAC_GetFifoSizes) @064eaf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetFifoSizes/166 (MAC_SetFifoSizes) @064eadc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetCutThroughMode/165 (MAC_GetCutThroughMode) @064eac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetCutThroughMode/164 (MAC_SetCutThroughMode) @064eab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_GetLinkStatus/163 (MAC_GetLinkStatus) @064ea9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_ClearAddressFilter/162 (MAC_ClearAddressFilter) @064ea888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_AddAddressFilter/161 (MAC_AddAddressFilter) @064ea738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_GetStatCounters/160 (MAC_GetStatCounters) @064ea5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 MAC_Read/186 
+MAC_ProcessTxQueue/159 (MAC_ProcessTxQueue) @064ea498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_SubmitTxBuffer/157 
+  Calls: HAL_EnableIrq/187 HAL_EnableIrq/187 MAC_SendFrame/191 queueIsEmpty/142 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_SubmitRxBuffer/158 (MAC_SubmitRxBuffer) @064ea348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: queueAdd/143 queueIsFull/141 
+MAC_SubmitTxBuffer/157 (MAC_SubmitTxBuffer) @064ea1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 queueAdd/143 HAL_FcsCalculate/190 queueIsFull/141 
+MAC_PhyWrite/156 (MAC_PhyWrite) @064ea0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_PhyRead/155 (MAC_PhyRead) @064ccf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 
+  Calls: MAC_ReadRegister/151 waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+waitDeviceReady/154 (waitDeviceReady) @064ccdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+waitMdioReady/153 (waitMdioReady) @064ccc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_PhyRead/155 MAC_PhyWrite/156 
+  Calls: MAC_ReadRegister/151 
+MAC_WriteRegister/152 (MAC_WriteRegister) @064ccb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 MAC_Reset/149 MAC_Reset/149 MAC_Reset/149 MAC_SyncConfig/181 MAC_RegisterCallback/150 MAC_RegisterCallback/150 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_ClearAddressFilter/162 MAC_SetPromiscuousMode/169 MAC_PhyRead/155 MAC_PhyRead/155 MAC_PhyWrite/156 MAC_PhyWrite/156 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_ClearFifos/168 MAC_SetFifoSizes/166 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 MAC_Write/189 __REV/7 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_ReadRegister/151 (MAC_ReadRegister) @064cc9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 waitDeviceReady/154 MAC_SyncConfig/181 MAC_GetLinkStatus/163 MAC_SetPromiscuousMode/169 MAC_GetPromiscuousMode/170 MAC_PhyRead/155 waitMdioReady/153 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsGetEgressTimestamp/177 MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_GetFifoSizes/167 MAC_GetCutThroughMode/165 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 __REV/7 MAC_Read/186 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_RegisterCallback/150 (MAC_RegisterCallback) @064cc888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Reset/149 (MAC_Reset) @064cc738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_Init/146 
+  Calls: macInit/147 waitDeviceReady/154 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 HAL_DisableIrq/185 
+MAC_UnInit/148 (MAC_UnInit) @064cc5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/185 
+macInit/147 (macInit) @064cc498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: macCallback/145 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 HAL_FcsInit/193 MAC_ReadRegister/151 MAC_ReadRegister/151 HAL_RegisterCallback/192 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Init/146 (MAC_Init) @064cc348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: spiCallback/198 (addr) 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_Reset/149 HAL_SpiRegisterCallback/197 queueInit/138 queueInit/138 memset/196 HAL_DisableIrq/185 
+macCallback/145 (macCallback) @064cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macInit/147 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 HAL_SetPendingIrq/195 MAC_ProcessTxQueue/159 MAC_RecvFrame/194 HAL_DisableIrq/185 queueIsEmpty/142 HAL_DisableIrq/185 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_PhyRead/155 MAC_PhyRead/155 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+queueRemove/144 (queueRemove) @064cc0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+queueAdd/143 (queueAdd) @064be738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: 
+queueIsEmpty/142 (queueIsEmpty) @064be5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_ProcessTxQueue/159 MAC_SubmitTxBuffer/157 
+  Calls: 
+queueIsFull/141 (queueIsFull) @064be3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: queueCount/139 
+queueAvailable/140 (queueAvailable) @064bef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueCount/139 
+queueCount/139 (queueCount) @064bedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: queueIsFull/141 queueAvailable/140 
+  Calls: 
+queueInit/138 (queueInit) @064bec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Init/146 MAC_Init/146 
+  Calls: 
+__REV/7 (__REV) @0635a7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: __builtin_bswap32/188 
+
+
+Initial Symbol table:
+
+spiCallback/198 (spiCallback) @0652de70
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: MAC_Init/146 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiRegisterCallback/197 (HAL_SpiRegisterCallback) @0652ddc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+memset/196 (memset) @0652dd20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+HAL_SetPendingIrq/195 (HAL_SetPendingIrq) @0652dc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+MAC_RecvFrame/194 (MAC_RecvFrame) @0652dbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+HAL_FcsInit/193 (HAL_FcsInit) @0652db28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+HAL_RegisterCallback/192 (HAL_RegisterCallback) @0652da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+MAC_SendFrame/191 (MAC_SendFrame) @0652d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 
+  Calls: 
+HAL_FcsCalculate/190 (HAL_FcsCalculate) @0652d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SubmitTxBuffer/157 
+  Calls: 
+MAC_Write/189 (MAC_Write) @0652d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteRegister/152 
+  Calls: 
+__builtin_bswap32/188 (__builtin_bswap32) @0652d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: __REV/7 
+  Calls: 
+HAL_EnableIrq/187 (HAL_EnableIrq) @0652d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SyncConfig/181 MAC_ProcessTxQueue/159 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+MAC_Read/186 (MAC_Read) @0652d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_GetStatCounters/160 MAC_ReadRegister/151 
+  Calls: 
+HAL_DisableIrq/185 (HAL_DisableIrq) @0652d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 MAC_UnInit/148 macCallback/145 macCallback/145 MAC_Reset/149 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+HAL_GetEnableIrq/184 (HAL_GetEnableIrq) @0652d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+macDriverEntry/183 (macDriverEntry) @06526240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: MAC_Init/146 (addr) MAC_UnInit/148 (addr) MAC_Reset/149 (addr) MAC_SyncConfig/181 (addr) MAC_RegisterCallback/150 (addr) MAC_GetLinkStatus/163 (addr) MAC_GetStatCounters/160 (addr) MAC_AddAddressFilter/161 (addr) MAC_ClearAddressFilter/162 (addr) MAC_SubmitTxBuffer/157 (addr) MAC_SubmitRxBuffer/158 (addr) MAC_SetPromiscuousMode/169 (addr) MAC_GetPromiscuousMode/170 (addr) MAC_SetCutThroughMode/164 (addr) MAC_GetCutThroughMode/165 (addr) MAC_SetFifoSizes/166 (addr) MAC_GetFifoSizes/167 (addr) MAC_ClearFifos/168 (addr) MAC_TsEnable/171 (addr) MAC_TsClear/172 (addr) MAC_TsTimerStart/173 (addr) MAC_TsTimerStop/174 (addr) MAC_TsSetTimerAbsolute/178 (addr) MAC_TsSyncClock/179 (addr) MAC_TsGetExtCaptTimestamp/176 (addr) MAC_TsGetEgressTimestamp/177 (addr) MAC_TsConvert/175 (addr) MAC_TsSubtract/180 (addr) MAC_ReadRegister/151 (addr) MAC_WriteRegister/152 (addr) MAC_PhyRead/155 (addr) MAC_PhyWrite/156 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+MAC_CalculateParity/182 (MAC_CalculateParity) @0652d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_SyncConfig/181 (MAC_SyncConfig) @0652d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/187 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSubtract/180 (MAC_TsSubtract) @0652d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_TsSyncClock/179 (MAC_TsSyncClock) @0651af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSetTimerAbsolute/178 (MAC_TsSetTimerAbsolute) @0651adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsGetEgressTimestamp/177 (MAC_TsGetEgressTimestamp) @0651ac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsGetExtCaptTimestamp/176 (MAC_TsGetExtCaptTimestamp) @0651ab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsConvert/175 (MAC_TsConvert) @0651a9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 
+  Calls: 
+MAC_TsTimerStop/174 (MAC_TsTimerStop) @0651a888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsTimerStart/173 (MAC_TsTimerStart) @0651a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsClear/172 (MAC_TsClear) @0651a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsEnable/171 (MAC_TsEnable) @0651a498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_GetPromiscuousMode/170 (MAC_GetPromiscuousMode) @0651a348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetPromiscuousMode/169 (MAC_SetPromiscuousMode) @0651a1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_ClearFifos/168 (MAC_ClearFifos) @0651a0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetFifoSizes/167 (MAC_GetFifoSizes) @064eaf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetFifoSizes/166 (MAC_SetFifoSizes) @064eadc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetCutThroughMode/165 (MAC_GetCutThroughMode) @064eac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetCutThroughMode/164 (MAC_SetCutThroughMode) @064eab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_GetLinkStatus/163 (MAC_GetLinkStatus) @064ea9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_ClearAddressFilter/162 (MAC_ClearAddressFilter) @064ea888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_AddAddressFilter/161 (MAC_AddAddressFilter) @064ea738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_GetStatCounters/160 (MAC_GetStatCounters) @064ea5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 MAC_Read/186 
+MAC_ProcessTxQueue/159 (MAC_ProcessTxQueue) @064ea498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_SubmitTxBuffer/157 
+  Calls: HAL_EnableIrq/187 HAL_EnableIrq/187 MAC_SendFrame/191 queueIsEmpty/142 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_SubmitRxBuffer/158 (MAC_SubmitRxBuffer) @064ea348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: queueAdd/143 queueIsFull/141 
+MAC_SubmitTxBuffer/157 (MAC_SubmitTxBuffer) @064ea1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 queueAdd/143 HAL_FcsCalculate/190 queueIsFull/141 
+MAC_PhyWrite/156 (MAC_PhyWrite) @064ea0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_PhyRead/155 (MAC_PhyRead) @064ccf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 
+  Calls: MAC_ReadRegister/151 waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+waitDeviceReady/154 (waitDeviceReady) @064ccdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+waitMdioReady/153 (waitMdioReady) @064ccc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_PhyRead/155 MAC_PhyWrite/156 
+  Calls: MAC_ReadRegister/151 
+MAC_WriteRegister/152 (MAC_WriteRegister) @064ccb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 MAC_Reset/149 MAC_Reset/149 MAC_Reset/149 MAC_SyncConfig/181 MAC_RegisterCallback/150 MAC_RegisterCallback/150 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_ClearAddressFilter/162 MAC_SetPromiscuousMode/169 MAC_PhyRead/155 MAC_PhyRead/155 MAC_PhyWrite/156 MAC_PhyWrite/156 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_ClearFifos/168 MAC_SetFifoSizes/166 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 MAC_Write/189 __REV/7 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_ReadRegister/151 (MAC_ReadRegister) @064cc9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 waitDeviceReady/154 MAC_SyncConfig/181 MAC_GetLinkStatus/163 MAC_SetPromiscuousMode/169 MAC_GetPromiscuousMode/170 MAC_PhyRead/155 waitMdioReady/153 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsGetEgressTimestamp/177 MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_GetFifoSizes/167 MAC_GetCutThroughMode/165 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 __REV/7 MAC_Read/186 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_RegisterCallback/150 (MAC_RegisterCallback) @064cc888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Reset/149 (MAC_Reset) @064cc738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_Init/146 
+  Calls: macInit/147 waitDeviceReady/154 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 HAL_DisableIrq/185 
+MAC_UnInit/148 (MAC_UnInit) @064cc5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/185 
+macInit/147 (macInit) @064cc498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: macCallback/145 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 HAL_FcsInit/193 MAC_ReadRegister/151 MAC_ReadRegister/151 HAL_RegisterCallback/192 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Init/146 (MAC_Init) @064cc348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: spiCallback/198 (addr) 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_Reset/149 HAL_SpiRegisterCallback/197 queueInit/138 queueInit/138 memset/196 HAL_DisableIrq/185 
+macCallback/145 (macCallback) @064cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macInit/147 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 HAL_SetPendingIrq/195 MAC_ProcessTxQueue/159 MAC_RecvFrame/194 HAL_DisableIrq/185 queueIsEmpty/142 HAL_DisableIrq/185 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_PhyRead/155 MAC_PhyRead/155 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+queueRemove/144 (queueRemove) @064cc0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+queueAdd/143 (queueAdd) @064be738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: 
+queueIsEmpty/142 (queueIsEmpty) @064be5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_ProcessTxQueue/159 MAC_SubmitTxBuffer/157 
+  Calls: 
+queueIsFull/141 (queueIsFull) @064be3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: queueCount/139 
+queueAvailable/140 (queueAvailable) @064bef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueCount/139 
+queueCount/139 (queueCount) @064bedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: queueIsFull/141 queueAvailable/140 
+  Calls: 
+queueInit/138 (queueInit) @064bec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Init/146 MAC_Init/146 
+  Calls: 
+__REV/7 (__REV) @0635a7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: __builtin_bswap32/188 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+spiCallback/198 (spiCallback) @0652de70
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: MAC_Init/146 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiRegisterCallback/197 (HAL_SpiRegisterCallback) @0652ddc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+memset/196 (memset) @0652dd20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 
+  Calls: 
+HAL_SetPendingIrq/195 (HAL_SetPendingIrq) @0652dc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+MAC_RecvFrame/194 (MAC_RecvFrame) @0652dbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macCallback/145 
+  Calls: 
+HAL_FcsInit/193 (HAL_FcsInit) @0652db28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+HAL_RegisterCallback/192 (HAL_RegisterCallback) @0652da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: macInit/147 
+  Calls: 
+MAC_SendFrame/191 (MAC_SendFrame) @0652d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 
+  Calls: 
+HAL_FcsCalculate/190 (HAL_FcsCalculate) @0652d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SubmitTxBuffer/157 
+  Calls: 
+MAC_Write/189 (MAC_Write) @0652d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteRegister/152 
+  Calls: 
+__builtin_bswap32/188 (__builtin_bswap32) @0652d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: __REV/7 
+  Calls: 
+HAL_EnableIrq/187 (HAL_EnableIrq) @0652d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SyncConfig/181 MAC_ProcessTxQueue/159 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+MAC_Read/186 (MAC_Read) @0652d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_GetStatCounters/160 MAC_ReadRegister/151 
+  Calls: 
+HAL_DisableIrq/185 (HAL_DisableIrq) @0652d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Init/146 MAC_UnInit/148 macCallback/145 macCallback/145 MAC_Reset/149 MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+HAL_GetEnableIrq/184 (HAL_GetEnableIrq) @0652d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: 
+macDriverEntry/183 (macDriverEntry) @06526240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: MAC_Init/146 (addr) MAC_UnInit/148 (addr) MAC_Reset/149 (addr) MAC_SyncConfig/181 (addr) MAC_RegisterCallback/150 (addr) MAC_GetLinkStatus/163 (addr) MAC_GetStatCounters/160 (addr) MAC_AddAddressFilter/161 (addr) MAC_ClearAddressFilter/162 (addr) MAC_SubmitTxBuffer/157 (addr) MAC_SubmitRxBuffer/158 (addr) MAC_SetPromiscuousMode/169 (addr) MAC_GetPromiscuousMode/170 (addr) MAC_SetCutThroughMode/164 (addr) MAC_GetCutThroughMode/165 (addr) MAC_SetFifoSizes/166 (addr) MAC_GetFifoSizes/167 (addr) MAC_ClearFifos/168 (addr) MAC_TsEnable/171 (addr) MAC_TsClear/172 (addr) MAC_TsTimerStart/173 (addr) MAC_TsTimerStop/174 (addr) MAC_TsSetTimerAbsolute/178 (addr) MAC_TsSyncClock/179 (addr) MAC_TsGetExtCaptTimestamp/176 (addr) MAC_TsGetEgressTimestamp/177 (addr) MAC_TsConvert/175 (addr) MAC_TsSubtract/180 (addr) MAC_ReadRegister/151 (addr) MAC_WriteRegister/152 (addr) MAC_PhyRead/155 (addr) MAC_PhyWrite/156 (addr) 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+MAC_CalculateParity/182 (MAC_CalculateParity) @0652d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_SyncConfig/181 (MAC_SyncConfig) @0652d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/187 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSubtract/180 (MAC_TsSubtract) @0652d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: 
+MAC_TsSyncClock/179 (MAC_TsSyncClock) @0651af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsSetTimerAbsolute/178 (MAC_TsSetTimerAbsolute) @0651adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsGetEgressTimestamp/177 (MAC_TsGetEgressTimestamp) @0651ac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsGetExtCaptTimestamp/176 (MAC_TsGetExtCaptTimestamp) @0651ab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_TsConvert/175 MAC_ReadRegister/151 MAC_TsConvert/175 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_TsConvert/175 (MAC_TsConvert) @0651a9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 
+  Calls: 
+MAC_TsTimerStop/174 (MAC_TsTimerStop) @0651a888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsTimerStart/173 (MAC_TsTimerStart) @0651a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsClear/172 (MAC_TsClear) @0651a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_TsEnable/171 (MAC_TsEnable) @0651a498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+MAC_GetPromiscuousMode/170 (MAC_GetPromiscuousMode) @0651a348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetPromiscuousMode/169 (MAC_SetPromiscuousMode) @0651a1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_ClearFifos/168 (MAC_ClearFifos) @0651a0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetFifoSizes/167 (MAC_GetFifoSizes) @064eaf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetFifoSizes/166 (MAC_SetFifoSizes) @064eadc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_GetCutThroughMode/165 (MAC_GetCutThroughMode) @064eac78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_SetCutThroughMode/164 (MAC_SetCutThroughMode) @064eab28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 
+MAC_GetLinkStatus/163 (MAC_GetLinkStatus) @064ea9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ReadRegister/151 
+MAC_ClearAddressFilter/162 (MAC_ClearAddressFilter) @064ea888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 
+MAC_AddAddressFilter/161 (MAC_AddAddressFilter) @064ea738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_GetStatCounters/160 (MAC_GetStatCounters) @064ea5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 __REV/7 MAC_Read/186 
+MAC_ProcessTxQueue/159 (MAC_ProcessTxQueue) @064ea498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_SubmitTxBuffer/157 
+  Calls: HAL_EnableIrq/187 HAL_EnableIrq/187 MAC_SendFrame/191 queueIsEmpty/142 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_SubmitRxBuffer/158 (MAC_SubmitRxBuffer) @064ea348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: queueAdd/143 queueIsFull/141 
+MAC_SubmitTxBuffer/157 (MAC_SubmitTxBuffer) @064ea1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 queueAdd/143 HAL_FcsCalculate/190 queueIsFull/141 
+MAC_PhyWrite/156 (MAC_PhyWrite) @064ea0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_PhyRead/155 (MAC_PhyRead) @064ccf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 
+  Calls: MAC_ReadRegister/151 waitMdioReady/153 MAC_WriteRegister/152 MAC_WriteRegister/152 
+waitDeviceReady/154 (waitDeviceReady) @064ccdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_ReadRegister/151 
+waitMdioReady/153 (waitMdioReady) @064ccc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_PhyRead/155 MAC_PhyWrite/156 
+  Calls: MAC_ReadRegister/151 
+MAC_WriteRegister/152 (MAC_WriteRegister) @064ccb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 MAC_Reset/149 MAC_Reset/149 MAC_Reset/149 MAC_SyncConfig/181 MAC_RegisterCallback/150 MAC_RegisterCallback/150 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_AddAddressFilter/161 MAC_ClearAddressFilter/162 MAC_SetPromiscuousMode/169 MAC_PhyRead/155 MAC_PhyRead/155 MAC_PhyWrite/156 MAC_PhyWrite/156 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsSetTimerAbsolute/178 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_ClearFifos/168 MAC_SetFifoSizes/166 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 MAC_Write/189 __REV/7 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_ReadRegister/151 (MAC_ReadRegister) @064cc9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 macInit/147 macInit/147 macInit/147 macInit/147 waitDeviceReady/154 waitDeviceReady/154 MAC_SyncConfig/181 MAC_GetLinkStatus/163 MAC_SetPromiscuousMode/169 MAC_GetPromiscuousMode/170 MAC_PhyRead/155 waitMdioReady/153 MAC_TsSyncClock/179 MAC_TsSetTimerAbsolute/178 MAC_TsGetEgressTimestamp/177 MAC_TsGetEgressTimestamp/177 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsGetExtCaptTimestamp/176 MAC_TsTimerStop/174 MAC_TsTimerStart/173 MAC_TsClear/172 MAC_TsEnable/171 MAC_TsEnable/171 MAC_GetFifoSizes/167 MAC_GetCutThroughMode/165 MAC_SetCutThroughMode/164 
+  Calls: HAL_EnableIrq/187 __REV/7 MAC_Read/186 HAL_DisableIrq/185 HAL_GetEnableIrq/184 
+MAC_RegisterCallback/150 (MAC_RegisterCallback) @064cc888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Reset/149 (MAC_Reset) @064cc738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: MAC_Init/146 
+  Calls: macInit/147 waitDeviceReady/154 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 HAL_DisableIrq/185 
+MAC_UnInit/148 (MAC_UnInit) @064cc5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: HAL_DisableIrq/185 
+macInit/147 (macInit) @064cc498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: macCallback/145 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Reset/149 
+  Calls: MAC_WriteRegister/152 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 HAL_FcsInit/193 MAC_ReadRegister/151 MAC_ReadRegister/151 HAL_RegisterCallback/192 MAC_WriteRegister/152 MAC_WriteRegister/152 
+MAC_Init/146 (MAC_Init) @064cc348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: spiCallback/198 (addr) 
+  Referring: macDriverEntry/183 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_Reset/149 HAL_SpiRegisterCallback/197 queueInit/138 queueInit/138 memset/196 HAL_DisableIrq/185 
+macCallback/145 (macCallback) @064cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: 
+  Referring: macInit/147 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 queueIsEmpty/142 HAL_SetPendingIrq/195 MAC_ProcessTxQueue/159 MAC_RecvFrame/194 HAL_DisableIrq/185 queueIsEmpty/142 HAL_DisableIrq/185 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_WriteRegister/152 MAC_PhyRead/155 MAC_PhyRead/155 MAC_ReadRegister/151 MAC_WriteRegister/152 MAC_ReadRegister/151 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+queueRemove/144 (queueRemove) @064cc0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+queueAdd/143 (queueAdd) @064be738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: 
+queueIsEmpty/142 (queueIsEmpty) @064be5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: macCallback/145 macCallback/145 MAC_ProcessTxQueue/159 MAC_SubmitTxBuffer/157 
+  Calls: 
+queueIsFull/141 (queueIsFull) @064be3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SubmitTxBuffer/157 MAC_SubmitRxBuffer/158 
+  Calls: queueCount/139 
+queueAvailable/140 (queueAvailable) @064bef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueCount/139 
+queueCount/139 (queueCount) @064bedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: queueIsFull/141 queueAvailable/140 
+  Calls: 
+queueInit/138 (queueInit) @064bec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_Init/146 MAC_Init/146 
+  Calls: 
+__REV/7 (__REV) @0635a7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_GetStatCounters/160 MAC_WriteRegister/152 MAC_ReadRegister/151 
+  Calls: __builtin_bswap32/188 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+spiCallback/198 (spiCallback) @0652de70
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: MAC_Init/146 (addr) 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiRegisterCallback/197 (HAL_SpiRegisterCallback) @0652ddc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_Init/146 (153437704 (estimated locally),0.64 per call) 
+  Calls: 
+memset/196 (memset) @0652dd20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_Init/146 (153437704 (estimated locally),0.64 per call) 
+  Calls: 
+HAL_SetPendingIrq/195 (HAL_SetPendingIrq) @0652dc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: macCallback/145 (3770303 (estimated locally),0.00 per call) 
+  Calls: 
+MAC_RecvFrame/194 (MAC_RecvFrame) @0652dbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: macCallback/145 (2257667 (estimated locally),0.00 per call) 
+  Calls: 
+HAL_FcsInit/193 (HAL_FcsInit) @0652db28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: macInit/147 (41381611 (estimated locally),0.04 per call) 
+  Calls: 
+HAL_RegisterCallback/192 (HAL_RegisterCallback) @0652da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: macInit/147 (524844999 (estimated locally),0.49 per call) 
+  Calls: 
+MAC_SendFrame/191 (MAC_SendFrame) @0652d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 (108662672 (estimated locally),0.10 per call) 
+  Calls: 
+HAL_FcsCalculate/190 (HAL_FcsCalculate) @0652d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_SubmitTxBuffer/157 (100533293 (estimated locally),0.09 per call) 
+  Calls: 
+MAC_Write/189 (MAC_Write) @0652d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_WriteRegister/152 (751177282 (estimated locally),0.70 per call) 
+  Calls: 
+__builtin_bswap32/188 (__builtin_bswap32) @0652d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_WriteRegister/152 (751177282 (estimated locally),0.70 per call) MAC_ReadRegister/151 (751177282 (estimated locally),0.70 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) 
+  Calls: 
+HAL_EnableIrq/187 (HAL_EnableIrq) @0652d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 (177167400 (estimated locally),0.16 per call) MAC_ProcessTxQueue/159 (35858682 (estimated locally),0.03 per call) MAC_SyncConfig/181 (256544234 (estimated locally),0.24 per call) MAC_WriteRegister/152 (354334800 (estimated locally),0.33 per call) MAC_ReadRegister/151 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+MAC_Read/186 (MAC_Read) @0652d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_ReadRegister/151 (751177282 (estimated locally),0.70 per call) MAC_GetStatCounters/160 (613858089 (estimated locally),0.57 per call) 
+  Calls: 
+HAL_DisableIrq/185 (HAL_DisableIrq) @0652d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: macCallback/145 (2257667 (estimated locally),0.00 per call) macCallback/145 (7048730 (estimated locally),0.01 per call) MAC_ProcessTxQueue/159 (1073741824 (estimated locally),1.00 per call) MAC_Init/146 (153437704 (estimated locally),0.64 per call) MAC_Reset/149 (382320523 (estimated locally),0.57 per call) MAC_WriteRegister/152 (751177282 (estimated locally),0.70 per call) MAC_ReadRegister/151 (751177282 (estimated locally),0.70 per call) MAC_UnInit/148 (865006417 (estimated locally),0.81 per call) 
+  Calls: 
+HAL_GetEnableIrq/184 (HAL_GetEnableIrq) @0652d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_ProcessTxQueue/159 (1073741824 (estimated locally),1.00 per call) MAC_WriteRegister/152 (247888502 (estimated locally),0.23 per call) MAC_ReadRegister/151 (247888502 (estimated locally),0.23 per call) 
+  Calls: 
+macDriverEntry/183 (macDriverEntry) @06526240
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: MAC_Init/146 (addr) MAC_UnInit/148 (addr) MAC_Reset/149 (addr) MAC_SyncConfig/181 (addr) MAC_RegisterCallback/150 (addr) MAC_GetLinkStatus/163 (addr) MAC_GetStatCounters/160 (addr) MAC_AddAddressFilter/161 (addr) MAC_ClearAddressFilter/162 (addr) MAC_SubmitTxBuffer/157 (addr) MAC_SubmitRxBuffer/158 (addr) MAC_SetPromiscuousMode/169 (addr) MAC_GetPromiscuousMode/170 (addr) MAC_SetCutThroughMode/164 (addr) MAC_GetCutThroughMode/165 (addr) MAC_SetFifoSizes/166 (addr) MAC_GetFifoSizes/167 (addr) MAC_ClearFifos/168 (addr) MAC_TsEnable/171 (addr) MAC_TsClear/172 (addr) MAC_TsTimerStart/173 (addr) MAC_TsTimerStop/174 (addr) MAC_TsSetTimerAbsolute/178 (addr) MAC_TsSyncClock/179 (addr) MAC_TsGetExtCaptTimestamp/176 (addr) MAC_TsGetEgressTimestamp/177 (addr) MAC_TsConvert/175 (addr) MAC_TsSubtract/180 (addr) MAC_ReadRegister/151 (addr) MAC_WriteRegister/152 (addr) MAC_PhyRead/155 (addr) MAC_PhyWrite/156 (addr) 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized
+MAC_CalculateParity/182 (MAC_CalculateParity) @0652d348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+MAC_SyncConfig/181 (MAC_SyncConfig) @0652d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_EnableIrq/187 (256544234 (estimated locally),0.24 per call) MAC_WriteRegister/152 (524845000 (estimated locally),0.49 per call) MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_TsSubtract/180 (MAC_TsSubtract) @0652d0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+MAC_TsSyncClock/179 (MAC_TsSyncClock) @0651af18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (77953656 (estimated locally),0.66 per call) MAC_ReadRegister/151 (118111600 (estimated locally),1.00 per call) 
+MAC_TsSetTimerAbsolute/178 (MAC_TsSetTimerAbsolute) @0651adc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (82763221 (estimated locally),0.08 per call) MAC_WriteRegister/152 (169319194 (estimated locally),0.16 per call) MAC_WriteRegister/152 (256544234 (estimated locally),0.24 per call) MAC_WriteRegister/152 (524845000 (estimated locally),0.49 per call) MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_TsGetEgressTimestamp/177 (MAC_TsGetEgressTimestamp) @0651ac78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_TsConvert/175 (84659597 (estimated locally),0.08 per call) MAC_ReadRegister/151 (173198849 (estimated locally),0.16 per call) MAC_ReadRegister/151 (354334800 (estimated locally),0.33 per call) 
+MAC_TsGetExtCaptTimestamp/176 (MAC_TsGetExtCaptTimestamp) @0651ab28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_TsConvert/175 (125240350 (estimated locally),0.12 per call) MAC_ReadRegister/151 (256220030 (estimated locally),0.24 per call) MAC_TsConvert/175 (65418780 (estimated locally),0.06 per call) MAC_ReadRegister/151 (133835476 (estimated locally),0.12 per call) MAC_ReadRegister/151 (273804168 (estimated locally),0.26 per call) 
+MAC_TsConvert/175 (MAC_TsConvert) @0651a9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: MAC_TsGetEgressTimestamp/177 (84659597 (estimated locally),0.08 per call) MAC_TsGetExtCaptTimestamp/176 (125240350 (estimated locally),0.12 per call) MAC_TsGetExtCaptTimestamp/176 (65418780 (estimated locally),0.06 per call) 
+  Calls: 
+MAC_TsTimerStop/174 (MAC_TsTimerStop) @0651a888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (524845000 (estimated locally),0.49 per call) MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_TsTimerStart/173 (MAC_TsTimerStart) @0651a738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (59334129 (estimated locally),0.06 per call) MAC_WriteRegister/152 (121387334 (estimated locally),0.11 per call) MAC_WriteRegister/152 (248337429 (estimated locally),0.23 per call) MAC_WriteRegister/152 (149600861 (estimated locally),0.14 per call) MAC_WriteRegister/152 (453335945 (estimated locally),0.42 per call) MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_TsClear/172 (MAC_TsClear) @0651a5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (524845000 (estimated locally),0.49 per call) MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_TsEnable/171 (MAC_TsEnable) @0651a498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741821 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (86650792 (estimated locally),0.08 per call) MAC_WriteRegister/152 (177272489 (estimated locally),0.17 per call) MAC_ReadRegister/151 (335743347 (estimated locally),0.31 per call) MAC_ReadRegister/151 (686872646 (estimated locally),0.64 per call) 
+MAC_GetPromiscuousMode/170 (MAC_GetPromiscuousMode) @0651a348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_SetPromiscuousMode/169 (MAC_SetPromiscuousMode) @0651a1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (708669600 (estimated locally),0.66 per call) MAC_ReadRegister/151 (1073741823 (estimated locally),1.00 per call) 
+MAC_ClearFifos/168 (MAC_ClearFifos) @0651a0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (1073741824 (estimated locally),1.00 per call) 
+MAC_GetFifoSizes/167 (MAC_GetFifoSizes) @064eaf18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_SetFifoSizes/166 (MAC_SetFifoSizes) @064eadc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (686872649 (estimated locally),0.64 per call) 
+MAC_GetCutThroughMode/165 (MAC_GetCutThroughMode) @064eac78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_SetCutThroughMode/164 (MAC_SetCutThroughMode) @064eab28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (262819892 (estimated locally),0.24 per call) MAC_ReadRegister/151 (537683907 (estimated locally),0.50 per call) 
+MAC_GetLinkStatus/163 (MAC_GetLinkStatus) @064ea9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+MAC_ClearAddressFilter/162 (MAC_ClearAddressFilter) @064ea888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (480528109 (estimated locally),0.45 per call) 
+MAC_AddAddressFilter/161 (MAC_AddAddressFilter) @064ea738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:164187309 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (18958981 (estimated locally),0.12 per call) MAC_WriteRegister/152 (28725729 (estimated locally),0.17 per call) MAC_WriteRegister/152 (43523832 (estimated locally),0.27 per call) MAC_WriteRegister/152 (89042210 (estimated locally),0.54 per call) 
+MAC_GetStatCounters/160 (MAC_GetStatCounters) @064ea5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) __builtin_bswap32/188 (613858089 (estimated locally),0.57 per call) MAC_Read/186 (613858089 (estimated locally),0.57 per call) 
+MAC_ProcessTxQueue/159 (MAC_ProcessTxQueue) @064ea498
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: MAC_SubmitTxBuffer/157 (108662672 (estimated locally),0.10 per call) macCallback/145 (4297410 (estimated locally),0.00 per call) macCallback/145 (1942278 (estimated locally),0.00 per call) 
+  Calls: HAL_EnableIrq/187 (177167400 (estimated locally),0.16 per call) HAL_EnableIrq/187 (35858682 (estimated locally),0.03 per call) MAC_SendFrame/191 (108662672 (estimated locally),0.10 per call) queueIsEmpty/142 (1073741824 (estimated locally),1.00 per call) HAL_DisableIrq/185 (1073741824 (estimated locally),1.00 per call) HAL_GetEnableIrq/184 (1073741824 (estimated locally),1.00 per call) 
+MAC_SubmitRxBuffer/158 (MAC_SubmitRxBuffer) @064ea348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: queueAdd/143 (307393833 (estimated locally),0.29 per call) queueIsFull/141 (480528109 (estimated locally),0.45 per call) 
+MAC_SubmitTxBuffer/157 (MAC_SubmitTxBuffer) @064ea1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 (108662672 (estimated locally),0.10 per call) queueIsEmpty/142 (1073741824 (estimated locally),1.00 per call) queueAdd/143 (304646345 (estimated locally),0.28 per call) HAL_FcsCalculate/190 (100533293 (estimated locally),0.09 per call) queueIsFull/141 (389175200 (estimated locally),0.36 per call) 
+MAC_PhyWrite/156 (MAC_PhyWrite) @064ea0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: waitMdioReady/153 (256544234 (estimated locally),0.24 per call) MAC_WriteRegister/152 (524844999 (estimated locally),0.49 per call) MAC_WriteRegister/152 (1073741823 (estimated locally),1.00 per call) 
+MAC_PhyRead/155 (MAC_PhyRead) @064ccf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: macCallback/145 (27311863 (estimated locally),0.03 per call) macCallback/145 (55875334 (estimated locally),0.05 per call) 
+  Calls: MAC_ReadRegister/151 (125398821 (estimated locally),0.12 per call) waitMdioReady/153 (256544234 (estimated locally),0.24 per call) MAC_WriteRegister/152 (524845000 (estimated locally),0.49 per call) MAC_WriteRegister/152 (1073741824 (estimated locally),1.00 per call) 
+waitDeviceReady/154 (waitDeviceReady) @064ccdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:69202658 (estimated locally) body local
+  Called by: MAC_Reset/149 (10553865 (estimated locally),0.02 per call) 
+  Calls: MAC_WriteRegister/152 (74617185 (estimated locally),1.08 per call) MAC_ReadRegister/151 (452225368 (estimated locally),6.53 per call) MAC_ReadRegister/151 (1004539167 (estimated locally),14.52 per call) 
+waitMdioReady/153 (waitMdioReady) @064ccc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:167748886 (estimated locally) body local
+  Called by: MAC_PhyRead/155 (256544234 (estimated locally),0.24 per call) MAC_PhyWrite/156 (256544234 (estimated locally),0.24 per call) 
+  Calls: MAC_ReadRegister/151 (1073741824 (estimated locally),6.40 per call) 
+MAC_WriteRegister/152 (MAC_WriteRegister) @064ccb28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: macCallback/145 (31411453 (estimated locally),0.03 per call) macCallback/145 (64262384 (estimated locally),0.06 per call) macCallback/145 (131469690 (estimated locally),0.12 per call) macCallback/145 (524845000 (estimated locally),0.49 per call) MAC_Reset/149 (357913944 (estimated locally),0.54 per call) MAC_Reset/149 (118111601 (estimated locally),0.18 per call) MAC_Reset/149 (357913944 (estimated locally),0.54 per call) macInit/147 (14626302 (estimated locally),0.01 per call) macInit/147 (45337692 (estimated locally),0.04 per call) macInit/147 (1073741823 (estimated locally),1.00 per call) macInit/147 (1073741823 (estimated locally),1.00 per call) waitDeviceReady/154 (74617185 (estimated locally),1.08 per call) MAC_SyncConfig/181 (524845000 (estimated locally),0.49 per call) MAC_RegisterCallback/150 (155948944 (estimated locally),0.15 per call) MAC_RegisterCallback/150 (319044487 (estimated locally),0.30 per call) MAC_AddAddressFilter/161 (18958981 (estimated locally),0.12 per call) MAC_AddAddressFilter/161 (28725729 (estimated locally),0.17 per call) MAC_AddAddressFilter/161 (43523832 (estimated locally),0.27 per call) MAC_AddAddressFilter/161 (89042210 (estimated locally),0.54 per call) MAC_ClearAddressFilter/162 (480528109 (estimated locally),0.45 per call) MAC_SetPromiscuousMode/169 (708669600 (estimated locally),0.66 per call) MAC_PhyRead/155 (524845000 (estimated locally),0.49 per call) MAC_PhyRead/155 (1073741824 (estimated locally),1.00 per call) MAC_PhyWrite/156 (524844999 (estimated locally),0.49 per call) MAC_PhyWrite/156 (1073741823 (estimated locally),1.00 per call) MAC_TsSyncClock/179 (77953656 (estimated locally),0.66 per call) MAC_TsSetTimerAbsolute/178 (82763221 (estimated locally),0.08 per call) MAC_TsSetTimerAbsolute/178 (169319194 (estimated locally),0.16 per call) MAC_TsSetTimerAbsolute/178 (256544234 (estimated locally),0.24 per call) MAC_TsSetTimerAbsolute/178 (524845000 (estimated locally),0.49 per call) MAC_TsTimerStop/174 (524845000 (estimated locally),0.49 per call) MAC_TsTimerStart/173 (59334129 (estimated locally),0.06 per call) MAC_TsTimerStart/173 (121387334 (estimated locally),0.11 per call) MAC_TsTimerStart/173 (248337429 (estimated locally),0.23 per call) MAC_TsTimerStart/173 (149600861 (estimated locally),0.14 per call) MAC_TsTimerStart/173 (453335945 (estimated locally),0.42 per call) MAC_TsClear/172 (524845000 (estimated locally),0.49 per call) MAC_TsEnable/171 (86650792 (estimated locally),0.08 per call) MAC_TsEnable/171 (177272489 (estimated locally),0.17 per call) MAC_ClearFifos/168 (1073741824 (estimated locally),1.00 per call) MAC_SetFifoSizes/166 (686872649 (estimated locally),0.64 per call) MAC_SetCutThroughMode/164 (262819892 (estimated locally),0.24 per call) 
+  Calls: HAL_EnableIrq/187 (354334800 (estimated locally),0.33 per call) MAC_Write/189 (751177282 (estimated locally),0.70 per call) __builtin_bswap32/188 (751177282 (estimated locally),0.70 per call) HAL_DisableIrq/185 (751177282 (estimated locally),0.70 per call) HAL_GetEnableIrq/184 (247888502 (estimated locally),0.23 per call) 
+MAC_ReadRegister/151 (MAC_ReadRegister) @064cc9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: macCallback/145 (256544234 (estimated locally),0.24 per call) macCallback/145 (1073741824 (estimated locally),1.00 per call) macInit/147 (22161064 (estimated locally),0.02 per call) macInit/147 (68693474 (estimated locally),0.06 per call) macInit/147 (125398821 (estimated locally),0.12 per call) macInit/147 (256544234 (estimated locally),0.24 per call) waitDeviceReady/154 (452225368 (estimated locally),6.53 per call) waitDeviceReady/154 (1004539167 (estimated locally),14.52 per call) MAC_SyncConfig/181 (1073741824 (estimated locally),1.00 per call) MAC_SetPromiscuousMode/169 (1073741823 (estimated locally),1.00 per call) MAC_PhyRead/155 (125398821 (estimated locally),0.12 per call) MAC_TsSyncClock/179 (118111600 (estimated locally),1.00 per call) MAC_TsSetTimerAbsolute/178 (1073741824 (estimated locally),1.00 per call) MAC_TsTimerStop/174 (1073741824 (estimated locally),1.00 per call) MAC_TsTimerStart/173 (1073741824 (estimated locally),1.00 per call) MAC_TsClear/172 (1073741824 (estimated locally),1.00 per call) MAC_TsEnable/171 (335743347 (estimated locally),0.31 per call) MAC_TsEnable/171 (686872646 (estimated locally),0.64 per call) MAC_SetCutThroughMode/164 (537683907 (estimated locally),0.50 per call) MAC_GetLinkStatus/163 (1073741824 (estimated locally),1.00 per call) MAC_GetPromiscuousMode/170 (1073741824 (estimated locally),1.00 per call) waitMdioReady/153 (1073741824 (estimated locally),6.40 per call) MAC_TsGetEgressTimestamp/177 (173198849 (estimated locally),0.16 per call) MAC_TsGetEgressTimestamp/177 (354334800 (estimated locally),0.33 per call) MAC_TsGetExtCaptTimestamp/176 (256220030 (estimated locally),0.24 per call) MAC_TsGetExtCaptTimestamp/176 (133835476 (estimated locally),0.12 per call) MAC_TsGetExtCaptTimestamp/176 (273804168 (estimated locally),0.26 per call) MAC_GetFifoSizes/167 (1073741824 (estimated locally),1.00 per call) MAC_GetCutThroughMode/165 (1073741824 (estimated locally),1.00 per call) 
+  Calls: HAL_EnableIrq/187 (354334800 (estimated locally),0.33 per call) __builtin_bswap32/188 (751177282 (estimated locally),0.70 per call) MAC_Read/186 (751177282 (estimated locally),0.70 per call) HAL_DisableIrq/185 (751177282 (estimated locally),0.70 per call) HAL_GetEnableIrq/184 (247888502 (estimated locally),0.23 per call) 
+MAC_RegisterCallback/150 (MAC_RegisterCallback) @064cc888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741817 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteRegister/152 (155948944 (estimated locally),0.15 per call) MAC_WriteRegister/152 (319044487 (estimated locally),0.30 per call) 
+MAC_Reset/149 (MAC_Reset) @064cc738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:668743385 (estimated locally) body
+  Called by: MAC_Init/146 (75000349 (estimated locally),0.31 per call) 
+  Calls: macInit/147 (5158729 (estimated locally),0.01 per call) waitDeviceReady/154 (10553865 (estimated locally),0.02 per call) MAC_WriteRegister/152 (357913944 (estimated locally),0.54 per call) MAC_WriteRegister/152 (118111601 (estimated locally),0.18 per call) MAC_WriteRegister/152 (357913944 (estimated locally),0.54 per call) HAL_DisableIrq/185 (382320523 (estimated locally),0.57 per call) 
+MAC_UnInit/148 (MAC_UnInit) @064cc5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_DisableIrq/185 (865006417 (estimated locally),0.81 per call) 
+macInit/147 (macInit) @064cc498
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: macCallback/145 (addr) 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: MAC_Reset/149 (5158729 (estimated locally),0.01 per call) 
+  Calls: MAC_WriteRegister/152 (14626302 (estimated locally),0.01 per call) MAC_ReadRegister/151 (22161064 (estimated locally),0.02 per call) MAC_WriteRegister/152 (45337692 (estimated locally),0.04 per call) MAC_ReadRegister/151 (68693474 (estimated locally),0.06 per call) HAL_FcsInit/193 (41381611 (estimated locally),0.04 per call) MAC_ReadRegister/151 (125398821 (estimated locally),0.12 per call) MAC_ReadRegister/151 (256544234 (estimated locally),0.24 per call) HAL_RegisterCallback/192 (524844999 (estimated locally),0.49 per call) MAC_WriteRegister/152 (1073741823 (estimated locally),1.00 per call) MAC_WriteRegister/152 (1073741823 (estimated locally),1.00 per call) 
+MAC_Init/146 (MAC_Init) @064cc348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: spiCallback/198 (addr) 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:239858845 (estimated locally) body
+  Called by: 
+  Calls: MAC_Reset/149 (75000349 (estimated locally),0.31 per call) HAL_SpiRegisterCallback/197 (153437704 (estimated locally),0.64 per call) queueInit/138 (153437704 (estimated locally),0.64 per call) queueInit/138 (153437704 (estimated locally),0.64 per call) memset/196 (153437704 (estimated locally),0.64 per call) HAL_DisableIrq/185 (153437704 (estimated locally),0.64 per call) 
+macCallback/145 (macCallback) @064cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: 
+  Referring: macInit/147 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_ProcessTxQueue/159 (4297410 (estimated locally),0.00 per call) queueIsEmpty/142 (13022454 (estimated locally),0.01 per call) HAL_SetPendingIrq/195 (3770303 (estimated locally),0.00 per call) MAC_ProcessTxQueue/159 (1942278 (estimated locally),0.00 per call) MAC_RecvFrame/194 (2257667 (estimated locally),0.00 per call) HAL_DisableIrq/185 (2257667 (estimated locally),0.00 per call) queueIsEmpty/142 (13682829 (estimated locally),0.01 per call) HAL_DisableIrq/185 (7048730 (estimated locally),0.01 per call) MAC_WriteRegister/152 (31411453 (estimated locally),0.03 per call) MAC_WriteRegister/152 (64262384 (estimated locally),0.06 per call) MAC_WriteRegister/152 (131469690 (estimated locally),0.12 per call) MAC_PhyRead/155 (27311863 (estimated locally),0.03 per call) MAC_PhyRead/155 (55875334 (estimated locally),0.05 per call) MAC_ReadRegister/151 (256544234 (estimated locally),0.24 per call) MAC_WriteRegister/152 (524845000 (estimated locally),0.49 per call) MAC_ReadRegister/151 (1073741824 (estimated locally),1.00 per call) 
+   Indirect call(69021587 (estimated locally),0.06 per call) of param:0 loaded from aggregate passed by reference at offset 160 (vptr maybe changed) num speculative call targets: 0
+   Indirect call(46014392 (estimated locally),0.04 per call) of param:0 loaded from aggregate passed by reference at offset 224 (vptr maybe changed) num speculative call targets: 0
+   Indirect call(46014392 (estimated locally),0.04 per call) of param:0 loaded from aggregate passed by reference at offset 64 (vptr maybe changed) num speculative call targets: 0
+queueRemove/144 (queueRemove) @064cc0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+queueAdd/143 (queueAdd) @064be738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: MAC_SubmitTxBuffer/157 (304646345 (estimated locally),0.28 per call) MAC_SubmitRxBuffer/158 (307393833 (estimated locally),0.29 per call) 
+  Calls: 
+queueIsEmpty/142 (queueIsEmpty) @064be5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: MAC_SubmitTxBuffer/157 (1073741824 (estimated locally),1.00 per call) macCallback/145 (13022454 (estimated locally),0.01 per call) macCallback/145 (13682829 (estimated locally),0.01 per call) MAC_ProcessTxQueue/159 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+queueIsFull/141 (queueIsFull) @064be3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: MAC_SubmitTxBuffer/157 (389175200 (estimated locally),0.36 per call) MAC_SubmitRxBuffer/158 (480528109 (estimated locally),0.45 per call) 
+  Calls: 
+queueAvailable/140 (queueAvailable) @064bef18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+queueInit/138 (queueInit) @064bec78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body nonfreeing_fn
+  Called by: MAC_Init/146 (153437704 (estimated locally),0.64 per call) MAC_Init/146 (153437704 (estimated locally),0.64 per call) 
+  Calls: 
+Trivially needed variables: macDriverEntry/183
+Removing variables:
+
+Final Symbol table:
+
+spiCallback/198 (spiCallback) @0652de70
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiRegisterCallback/197 (HAL_SpiRegisterCallback) @0652ddc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/196 (memset) @0652dd20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SetPendingIrq/195 (HAL_SetPendingIrq) @0652dc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_RecvFrame/194 (MAC_RecvFrame) @0652dbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_FcsInit/193 (HAL_FcsInit) @0652db28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_RegisterCallback/192 (HAL_RegisterCallback) @0652da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_SendFrame/191 (MAC_SendFrame) @0652d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_FcsCalculate/190 (HAL_FcsCalculate) @0652d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_Write/189 (MAC_Write) @0652d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap32/188 (__builtin_bswap32) @0652d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_EnableIrq/187 (HAL_EnableIrq) @0652d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_Read/186 (MAC_Read) @0652d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_DisableIrq/185 (HAL_DisableIrq) @0652d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_GetEnableIrq/184 (HAL_GetEnableIrq) @0652d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+macDriverEntry/183 (macDriverEntry) @06526240
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.macDriverEntry (implicit_section)
+  Aux: @00000001
+  References: MAC_Init/146 (addr) MAC_UnInit/148 (addr) MAC_Reset/149 (addr) MAC_SyncConfig/181 (addr) MAC_RegisterCallback/150 (addr) MAC_GetLinkStatus/163 (addr) MAC_GetStatCounters/160 (addr) MAC_AddAddressFilter/161 (addr) MAC_ClearAddressFilter/162 (addr) MAC_SubmitTxBuffer/157 (addr) MAC_SubmitRxBuffer/158 (addr) MAC_SetPromiscuousMode/169 (addr) MAC_GetPromiscuousMode/170 (addr) MAC_SetCutThroughMode/164 (addr) MAC_GetCutThroughMode/165 (addr) MAC_SetFifoSizes/166 (addr) MAC_GetFifoSizes/167 (addr) MAC_ClearFifos/168 (addr) MAC_TsEnable/171 (addr) MAC_TsClear/172 (addr) MAC_TsTimerStart/173 (addr) MAC_TsTimerStop/174 (addr) MAC_TsSetTimerAbsolute/178 (addr) MAC_TsSyncClock/179 (addr) MAC_TsGetExtCaptTimestamp/176 (addr) MAC_TsGetEgressTimestamp/177 (addr) MAC_TsConvert/175 (addr) MAC_TsSubtract/180 (addr) MAC_ReadRegister/151 (addr) MAC_WriteRegister/152 (addr) MAC_PhyRead/155 (addr) MAC_PhyWrite/156 (addr) 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized
+MAC_CalculateParity/182 (MAC_CalculateParity) @0652d348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_CalculateParity (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+MAC_SyncConfig/181 (MAC_SyncConfig) @0652d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_SyncConfig (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsSubtract/180 (MAC_TsSubtract) @0652d0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsSubtract (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+MAC_TsSyncClock/179 (MAC_TsSyncClock) @0651af18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsSyncClock (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsSetTimerAbsolute/178 (MAC_TsSetTimerAbsolute) @0651adc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsSetTimerAbsolute (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsGetEgressTimestamp/177 (MAC_TsGetEgressTimestamp) @0651ac78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsGetEgressTimestamp (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsGetExtCaptTimestamp/176 (MAC_TsGetExtCaptTimestamp) @0651ab28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsGetExtCaptTimestamp (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsConvert/175 (MAC_TsConvert) @0651a9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsConvert (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+MAC_TsTimerStop/174 (MAC_TsTimerStop) @0651a888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsTimerStop (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsTimerStart/173 (MAC_TsTimerStart) @0651a738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsTimerStart (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsClear/172 (MAC_TsClear) @0651a5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsClear (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_TsEnable/171 (MAC_TsEnable) @0651a498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_TsEnable (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741821 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_GetPromiscuousMode/170 (MAC_GetPromiscuousMode) @0651a348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_GetPromiscuousMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_SetPromiscuousMode/169 (MAC_SetPromiscuousMode) @0651a1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_SetPromiscuousMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_ClearFifos/168 (MAC_ClearFifos) @0651a0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_ClearFifos (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_GetFifoSizes/167 (MAC_GetFifoSizes) @064eaf18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_GetFifoSizes (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_SetFifoSizes/166 (MAC_SetFifoSizes) @064eadc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_SetFifoSizes (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_GetCutThroughMode/165 (MAC_GetCutThroughMode) @064eac78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_GetCutThroughMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_SetCutThroughMode/164 (MAC_SetCutThroughMode) @064eab28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_SetCutThroughMode (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_GetLinkStatus/163 (MAC_GetLinkStatus) @064ea9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_GetLinkStatus (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_ClearAddressFilter/162 (MAC_ClearAddressFilter) @064ea888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_ClearAddressFilter (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_AddAddressFilter/161 (MAC_AddAddressFilter) @064ea738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_AddAddressFilter (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:164187309 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_GetStatCounters/160 (MAC_GetStatCounters) @064ea5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_GetStatCounters (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_ProcessTxQueue/159 (MAC_ProcessTxQueue) @064ea498
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_ProcessTxQueue (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+MAC_SubmitRxBuffer/158 (MAC_SubmitRxBuffer) @064ea348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_SubmitRxBuffer (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+MAC_SubmitTxBuffer/157 (MAC_SubmitTxBuffer) @064ea1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_SubmitTxBuffer (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_PhyWrite/156 (MAC_PhyWrite) @064ea0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_PhyWrite (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_PhyRead/155 (MAC_PhyRead) @064ccf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_PhyRead (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+waitDeviceReady/154 (waitDeviceReady) @064ccdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.waitDeviceReady (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:69202658 (estimated locally) local
+  Called by: 
+  Calls: 
+waitMdioReady/153 (waitMdioReady) @064ccc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.waitMdioReady (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:167748886 (estimated locally) local
+  Called by: 
+  Calls: 
+MAC_WriteRegister/152 (MAC_WriteRegister) @064ccb28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_WriteRegister (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_ReadRegister/151 (MAC_ReadRegister) @064cc9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_ReadRegister (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_RegisterCallback/150 (MAC_RegisterCallback) @064cc888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_RegisterCallback (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741817 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_Reset/149 (MAC_Reset) @064cc738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_Reset (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:668743385 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_UnInit/148 (MAC_UnInit) @064cc5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_UnInit (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+macInit/147 (macInit) @064cc498
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.macInit (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 
+MAC_Init/146 (MAC_Init) @064cc348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_Init (implicit_section)
+  Address is taken.
+  References: 
+  Referring: macDriverEntry/183 (addr) 
+  Availability: available
+  Function flags: count:239858845 (estimated locally)
+  Called by: 
+  Calls: 
+macCallback/145 (macCallback) @064cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.macCallback (implicit_section)
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+queueRemove/144 (queueRemove) @064cc0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.queueRemove (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+queueAdd/143 (queueAdd) @064be738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.queueAdd (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+queueIsEmpty/142 (queueIsEmpty) @064be5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.queueIsEmpty (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+queueIsFull/141 (queueIsFull) @064be3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.queueIsFull (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+queueAvailable/140 (queueAvailable) @064bef18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.queueAvailable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+queueInit/138 (queueInit) @064bec78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.queueInit (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 

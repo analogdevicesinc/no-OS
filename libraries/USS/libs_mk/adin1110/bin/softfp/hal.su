@@ -1,0 +1,13 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:36:10:msgWrite	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:48:6:common_Fail	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:56:6:common_Perf	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:106:10:HAL_DisableIrq	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:113:10:HAL_EnableIrq	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:120:10:HAL_SetPendingIrq	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:127:10:HAL_GetPendingIrq	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:132:10:HAL_GetEnableIrq	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:149:10:HAL_RegisterCallback	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:168:10:HAL_SpiReadWrite	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:186:10:HAL_SpiRegisterCallback	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:192:10:HAL_Init_Hook	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/ports/maxim/hal.c:197:10:HAL_UnInit_Hook	0	static

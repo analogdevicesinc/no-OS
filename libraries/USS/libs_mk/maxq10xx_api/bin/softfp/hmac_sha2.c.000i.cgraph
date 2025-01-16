@@ -1,0 +1,585 @@
+Trivially needed symbols: hmac_sha256/4 hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_reinit/1 hmac_sha256_init/0
+
+
+Initial Symbol table:
+
+sha256_final/10 (sha256_final) @061f17e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_final/3 
+  Calls: 
+memcpy/9 (memcpy) @061f1738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_reinit/1 hmac_sha256_reinit/1 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_update/8 (sha256_update) @061f1690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_init/7 (sha256_init) @061f15e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+memset/6 (memset) @061f1540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256/5 (sha256) @061f1498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 
+  Calls: 
+hmac_sha256/4 (hmac_sha256) @061f13f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 
+hmac_sha256_final/3 (hmac_sha256_final) @061f12a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061f13f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 sha256_final/10 sha256_update/8 sha256_final/10 
+hmac_sha256_update/2 (hmac_sha256_update) @061f1150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061f12a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: sha256_update/8 
+hmac_sha256_reinit/1 (hmac_sha256_reinit) @061f1000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061f1150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/9 memcpy/9 
+hmac_sha256_init/0 (hmac_sha256_init) @061e6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061f1000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 memcpy/9 sha256_update/8 sha256_init/7 sha256_update/8 sha256_init/7 memset/6 memset/6 sha256/5 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+sha256_final/10 (sha256_final) @061f17e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_final/3 
+  Calls: 
+memcpy/9 (memcpy) @061f1738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_reinit/1 hmac_sha256_reinit/1 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_update/8 (sha256_update) @061f1690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_init/7 (sha256_init) @061f15e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+memset/6 (memset) @061f1540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256/5 (sha256) @061f1498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 
+  Calls: 
+hmac_sha256/4 (hmac_sha256) @061f13f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 
+hmac_sha256_final/3 (hmac_sha256_final) @061f12a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 sha256_final/10 sha256_update/8 sha256_final/10 
+hmac_sha256_update/2 (hmac_sha256_update) @061f1150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: sha256_update/8 
+hmac_sha256_reinit/1 (hmac_sha256_reinit) @061f1000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/9 memcpy/9 
+hmac_sha256_init/0 (hmac_sha256_init) @061e6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 memcpy/9 sha256_update/8 sha256_init/7 sha256_update/8 sha256_init/7 memset/6 memset/6 sha256/5 
+
+
+Initial Symbol table:
+
+sha256_final/10 (sha256_final) @061f17e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_final/3 
+  Calls: 
+memcpy/9 (memcpy) @061f1738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_reinit/1 hmac_sha256_reinit/1 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_update/8 (sha256_update) @061f1690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_init/7 (sha256_init) @061f15e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+memset/6 (memset) @061f1540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256/5 (sha256) @061f1498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 
+  Calls: 
+hmac_sha256/4 (hmac_sha256) @061f13f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 
+hmac_sha256_final/3 (hmac_sha256_final) @061f12a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 sha256_final/10 sha256_update/8 sha256_final/10 
+hmac_sha256_update/2 (hmac_sha256_update) @061f1150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: sha256_update/8 
+hmac_sha256_reinit/1 (hmac_sha256_reinit) @061f1000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/9 memcpy/9 
+hmac_sha256_init/0 (hmac_sha256_init) @061e6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 memcpy/9 sha256_update/8 sha256_init/7 sha256_update/8 sha256_init/7 memset/6 memset/6 sha256/5 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+sha256_final/10 (sha256_final) @061f17e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_final/3 
+  Calls: 
+memcpy/9 (memcpy) @061f1738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_reinit/1 hmac_sha256_reinit/1 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_update/8 (sha256_update) @061f1690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256_init/7 (sha256_init) @061f15e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+memset/6 (memset) @061f1540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 hmac_sha256_init/0 
+  Calls: 
+sha256/5 (sha256) @061f1498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_sha256_init/0 
+  Calls: 
+hmac_sha256/4 (hmac_sha256) @061f13f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: hmac_sha256_final/3 hmac_sha256_update/2 hmac_sha256_init/0 
+hmac_sha256_final/3 (hmac_sha256_final) @061f12a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 sha256_final/10 sha256_update/8 sha256_final/10 
+hmac_sha256_update/2 (hmac_sha256_update) @061f1150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: sha256_update/8 
+hmac_sha256_reinit/1 (hmac_sha256_reinit) @061f1000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/9 memcpy/9 
+hmac_sha256_init/0 (hmac_sha256_init) @061e6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hmac_sha256/4 
+  Calls: memcpy/9 memcpy/9 sha256_update/8 sha256_init/7 sha256_update/8 sha256_init/7 memset/6 memset/6 sha256/5 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+sha256_final/10 (sha256_final) @061f17e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hmac_sha256_final/3 (1073741824 (estimated locally),1.00 per call) hmac_sha256_final/3 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+memcpy/9 (memcpy) @061f1738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hmac_sha256_final/3 (1073741824 (estimated locally),1.00 per call) hmac_sha256_reinit/1 (1073741824 (estimated locally),1.00 per call) hmac_sha256_reinit/1 (1073741824 (estimated locally),1.00 per call) hmac_sha256_init/0 (118111600 (estimated locally),1.00 per call) hmac_sha256_init/0 (118111600 (estimated locally),1.00 per call) 
+  Calls: 
+sha256_update/8 (sha256_update) @061f1690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hmac_sha256_final/3 (1073741824 (estimated locally),1.00 per call) hmac_sha256_update/2 (1073741824 (estimated locally),1.00 per call) hmac_sha256_init/0 (118111600 (estimated locally),1.00 per call) hmac_sha256_init/0 (118111600 (estimated locally),1.00 per call) 
+  Calls: 
+sha256_init/7 (sha256_init) @061f15e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hmac_sha256_init/0 (118111600 (estimated locally),1.00 per call) hmac_sha256_init/0 (118111600 (estimated locally),1.00 per call) 
+  Calls: 
+memset/6 (memset) @061f1540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hmac_sha256_init/0 (77953656 (estimated locally),0.66 per call) hmac_sha256_init/0 (77953656 (estimated locally),0.66 per call) 
+  Calls: 
+sha256/5 (sha256) @061f1498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hmac_sha256_init/0 (25724706 (estimated locally),0.22 per call) 
+  Calls: 
+hmac_sha256/4 (hmac_sha256) @061f13f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: hmac_sha256_final/3 (1073741824 (estimated locally),1.00 per call) hmac_sha256_update/2 (1073741824 (estimated locally),1.00 per call) hmac_sha256_init/0 (1073741824 (estimated locally),1.00 per call) 
+hmac_sha256_final/3 (hmac_sha256_final) @061f12a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: hmac_sha256/4 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memcpy/9 (1073741824 (estimated locally),1.00 per call) sha256_final/10 (1073741824 (estimated locally),1.00 per call) sha256_update/8 (1073741824 (estimated locally),1.00 per call) sha256_final/10 (1073741824 (estimated locally),1.00 per call) 
+hmac_sha256_update/2 (hmac_sha256_update) @061f1150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: hmac_sha256/4 (1073741824 (estimated locally),1.00 per call) 
+  Calls: sha256_update/8 (1073741824 (estimated locally),1.00 per call) 
+hmac_sha256_reinit/1 (hmac_sha256_reinit) @061f1000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memcpy/9 (1073741824 (estimated locally),1.00 per call) memcpy/9 (1073741824 (estimated locally),1.00 per call) 
+hmac_sha256_init/0 (hmac_sha256_init) @061e6bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:118111600 (estimated locally) body
+  Called by: hmac_sha256/4 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memcpy/9 (118111600 (estimated locally),1.00 per call) memcpy/9 (118111600 (estimated locally),1.00 per call) sha256_update/8 (118111600 (estimated locally),1.00 per call) sha256_init/7 (118111600 (estimated locally),1.00 per call) sha256_update/8 (118111600 (estimated locally),1.00 per call) sha256_init/7 (118111600 (estimated locally),1.00 per call) memset/6 (77953656 (estimated locally),0.66 per call) memset/6 (77953656 (estimated locally),0.66 per call) sha256/5 (25724706 (estimated locally),0.22 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+sha256_final/10 (sha256_final) @061f17e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/9 (memcpy) @061f1738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256_update/8 (sha256_update) @061f1690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256_init/7 (sha256_init) @061f15e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/6 (memset) @061f1540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256/5 (sha256) @061f1498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256/4 (hmac_sha256) @061f13f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hmac_sha256 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hmac_sha256_final/3 (hmac_sha256_final) @061f12a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hmac_sha256_final (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hmac_sha256_update/2 (hmac_sha256_update) @061f1150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hmac_sha256_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hmac_sha256_reinit/1 (hmac_sha256_reinit) @061f1000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hmac_sha256_reinit (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hmac_sha256_init/0 (hmac_sha256_init) @061e6bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hmac_sha256_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 

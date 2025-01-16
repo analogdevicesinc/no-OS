@@ -1,0 +1,4 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/random.c:41:5:mbedtls_test_rnd_std_rand	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/random.c:66:5:mbedtls_test_rnd_zero_rand	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/random.c:79:5:mbedtls_test_rnd_buffer_rand	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/random.c:114:5:mbedtls_test_rnd_pseudo_rand	32	static

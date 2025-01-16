@@ -1,0 +1,15 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:35:21:psa_hmac_abort_internal	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:213:21:mac_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:168:21:cmac_setup	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:42:21:psa_hmac_setup_internal	104	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:114:21:psa_hmac_update_internal	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:122:21:psa_hmac_finish_internal	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:383:21:psa_mac_finish_internal	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:245:14:mbedtls_psa_mac_abort	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:282:21:psa_mac_setup	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:330:14:mbedtls_psa_mac_sign_setup	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:341:14:mbedtls_psa_mac_verify_setup	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:352:14:mbedtls_psa_mac_update	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:414:14:mbedtls_psa_mac_sign_finish	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:434:14:mbedtls_psa_mac_verify_finish	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_mac.c:466:14:mbedtls_psa_mac_compute	224	static

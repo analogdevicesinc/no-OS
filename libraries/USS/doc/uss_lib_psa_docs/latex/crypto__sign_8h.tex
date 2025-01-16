@@ -1,0 +1,659 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\+\_\+sign.h File Reference}
+\hypertarget{crypto__sign_8h}{}\label{crypto__sign_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_sign.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_sign.h}}
+{\ttfamily \#include "{}crypto\+\_\+typedefs.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+common.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+config\+\_\+def.\+h"{}}\newline
+{\ttfamily \#include "{}key\+\_\+management.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_aeb69b9e960ff0c8c963e87f97f3b27e7}{PSA\+\_\+\+ALG\+\_\+\+SIGN\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0000ff00)
+\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000200)
+\begin{DoxyCompactList}\small\item\em This macro serves as base for deriving other macros for RSA PKCS\#1 v1.\+5 message signature scheme, with hashing. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a702ff75385a6ae7d4247033f479439af}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN}}(hash\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em The RSA PKCS\#1 v1.\+5 message signature scheme, with hashing This algorithm can be used with both the message and hash signature functions. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a4215e2a78dcf834e9a625927faa2a817}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN\+\_\+\+RAW}}~\mbox{\hyperlink{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN\+\_\+\+BASE}}
+\begin{DoxyCompactList}\small\item\em The raw RSA PKCS\#1 v1.\+5 signature algorithm, without hashing This algorithm can be only used with the \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} and \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()} functions. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a49d39a343790971b7a74644f4faea0c0}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000300)
+\begin{DoxyCompactList}\small\item\em This macro serves as base for deriving other macros for RSA PSS message signature scheme, with hashing. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a62152bf4cb4bf6aace5e1be8f143564d}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS}}(hash\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em The RSA PSS message signature scheme, with hashing This algorithm can be used with both the message and hash signature functions. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a52fa2bc06342341aedf60205738dba84}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+ANY\+\_\+\+SALT\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06001300)
+\begin{DoxyCompactList}\small\item\em This macro serves as base for deriving other macros for RSA PSS message signature scheme, with hashing. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a9b7355a2cd6bde88177634d539127f2b}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+ANY\+\_\+\+SALT}}(hash\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em The RSA PSS message signature scheme, with hashing This variant permits any salt length for signature verification This algorithm can be used with both the message and hash signature functions. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}{PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000600)
+\begin{DoxyCompactList}\small\item\em This macro serves as base for deriving other macros for ECDSA signature scheme, with hashing. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a7e3ce9f514a227d5ba5d8318870452e3}{PSA\+\_\+\+ALG\+\_\+\+ECDSA}}(hash\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em The randomized ECDSA signature scheme, with hashing This algorithm can be used with both the message and hash signature functions. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a51d6b6044a62e33cae0cf64bfc3b22a4}{PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+ANY}}~\mbox{\hyperlink{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}{PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+BASE}}
+\begin{DoxyCompactList}\small\item\em The randomized ECDSA signature scheme, without hashing This algorithm can be only used with the \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} and \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()} functions This is the same signature scheme as \doxylink{crypto__sign_8h_a7e3ce9f514a227d5ba5d8318870452e3}{PSA\+\_\+\+ALG\+\_\+\+ECDSA()}, but without specifying a hash algorithm, and skipping the message hashing operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a6c08b65200140aeb46ee9db9c8ed878c}{PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000700)
+\begin{DoxyCompactList}\small\item\em This macro serves as base for deriving other macros for Deterministic ECDSA signature scheme, with hashing. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a11da566bcd341661c8de921e2ca5ed03}{PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA}}(hash\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em Deterministic ECDSA signature scheme, with hashing This algorithm can be used with both the message and hash signature functions When based on the same hash algorithm, the verification operations for PSA\+\_\+\+ALG\+\_\+\+ECDSA and PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA are identical. A signature created using PSA\+\_\+\+ALG\+\_\+\+ECDSA can be verified with the same key using either PSA\+\_\+\+ALG\+\_\+\+ECDSA or PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA. Similarly, a signature created using PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA can be verified with the same key using either PSA\+\_\+\+ALG\+\_\+\+ECDSA or PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a76d6053fb1867c2c46c5f8131c8a8cae}{PSA\+\_\+\+ALG\+\_\+\+PURE\+\_\+\+EDDSA}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000800)
+\begin{DoxyCompactList}\small\item\em The Edwards-\/curve digital signature algorithm without prehashing (Pure\+Ed\+DSA), using standard parameters This algorithm can be only used with the \doxylink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message()} and \doxylink{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}{psa\+\_\+verify\+\_\+message()} functions. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a9a689cd47452af6f5d6f71edd4b86d70}{PSA\+\_\+\+ALG\+\_\+\+HASH\+\_\+\+EDDSA\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000900)
+\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a3be20c4293031a8f32e7cb66d26f5c3d}{PSA\+\_\+\+ALG\+\_\+\+ED25519\+PH}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0600090B)
+\begin{DoxyCompactList}\small\item\em The Edwards-\/curve digital signature algorithm with prehashing (Hash\+Ed\+DSA), using the Edwards25519 curve This algorithm can be used with both the message and hash signature functions When used with \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} or \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()}, the provided hash parameter is the SHA-\/512 message digest. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a1c632df795535af4334d37a08a01481b}{PSA\+\_\+\+ALG\+\_\+\+ED448\+PH}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000915)
+\begin{DoxyCompactList}\small\item\em The Edwards-\/curve digital signature algorithm with prehashing (Hash\+Ed\+DSA), using the Edwards448 curve This algorithm can be used with both the message and hash signature functions When used with \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} or \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()}, the provided hash parameter is the truncated SHAKE256 message digest. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a6d490d0904e0698f6c1268a89d72ff31}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+SIGN}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is an asymmetric signature algorithm, also known as public-\/key signature algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_acd8b87e858614134de566edaa4d84db8}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+SIGN\+\_\+\+MESSAGE}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is a signature algorithm that can be used with \doxylink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message()} and \doxylink{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}{psa\+\_\+verify\+\_\+message()} \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a9d545279f23d43b1b2a744d0dd6826d0}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is an RSA PKCS\#1 v1.\+5 signature algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_ae93883052098a9a433251599be3e05e5}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+ANY\+\_\+\+SALT}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is an RSA PSS signature algorithm that permits any salt length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a3577ae16a2f607c3d4f894344258aa18}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+STANDARD\+\_\+\+SALT}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is an RSA PSS signature algorithm that requires the standard salt length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_afa04fae7393a76d5161558768cb82a78}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PSS}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is an RSA PSS signature algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a409294c965c3e28728f8cb9822e886d1}{PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+DETERMINISTIC\+\_\+\+FLAG}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00000100)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is ECDSA. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_afb92dc138c9d2388033ff5fc1dab7b48}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+ECDSA}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_acd8766fe0fb8c1e2d32644e0d092c43a}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is a deterministic ECDSA. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_ae7b0fafebd139f6f815285b7cad622ea}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RANDOMIZED\+\_\+\+ECDSA}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is randomized ECDSA. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_ada6b4732688e435a881f7771e3a63e16}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH\+\_\+\+EDDSA}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is Hash\+Ed\+DSA. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a7664f69c28b193cc6cb8368481fcda64}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+SIGN\+\_\+\+HASH}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is a signature algorithm that can be used with \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} and \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()} \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_ad8a8ea0536975363b66410cdeafe38b6}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH\+\_\+\+AND\+\_\+\+SIGN}}(alg)
+\begin{DoxyCompactList}\small\item\em To check whether the specified algorithm is a a hash-\/and-\/sign algorithm that signs exactly the hash value. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_ac571e52655fcd73528189a426c9c0bd8}{USS\+\_\+\+PSA\+\_\+\+ECDSA\+\_\+\+SIGNATURE\+\_\+\+SIZE}}(curve\+\_\+bits)
+\begin{DoxyCompactList}\small\item\em Helper macro to return minimum signature buffer size for ECDSA algo. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a31021bbd8bb365fc350532b5fd18a25a}{PSA\+\_\+\+SIGN\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  key\+\_\+bits,  alg)
+\begin{DoxyCompactList}\small\item\em Sufficient signature buffer size for \doxylink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message()} and \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__sign_8h_a687a317642db9486fda38ea553900a1e}{PSA\+\_\+\+SIGNATURE\+\_\+\+MAX\+\_\+\+SIZE}}~0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{crypto__sign_8h_a11da566bcd341661c8de921e2ca5ed03}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_DETERMINISTIC\_ECDSA@{PSA\_ALG\_DETERMINISTIC\_ECDSA}}
+\index{PSA\_ALG\_DETERMINISTIC\_ECDSA@{PSA\_ALG\_DETERMINISTIC\_ECDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_DETERMINISTIC\_ECDSA}{PSA\_ALG\_DETERMINISTIC\_ECDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a11da566bcd341661c8de921e2ca5ed03} 
+\#define PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_a6c08b65200140aeb46ee9db9c8ed878c}{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE}}\ |\ (\mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ \&\ hash\_alg))}
+
+\end{DoxyCode}
+
+
+Deterministic ECDSA signature scheme, with hashing This algorithm can be used with both the message and hash signature functions When based on the same hash algorithm, the verification operations for PSA\+\_\+\+ALG\+\_\+\+ECDSA and PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA are identical. A signature created using PSA\+\_\+\+ALG\+\_\+\+ECDSA can be verified with the same key using either PSA\+\_\+\+ALG\+\_\+\+ECDSA or PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA. Similarly, a signature created using PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA can be verified with the same key using either PSA\+\_\+\+ALG\+\_\+\+ECDSA or PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em hash\+\_\+alg} & A hash algorithm\+: a value of type psa\+\_\+algorithm\+\_\+t such that \doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(hash\+\_\+alg)} is true. This includes PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH when specifying the algorithm in a key policy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding deterministic ECDSA signature algorithm
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+It is recommended to check the hash\+\_\+alg for valid/supported algorithm before using this macro 
+\end{DoxyNote}
+\Hypertarget{crypto__sign_8h_a6c08b65200140aeb46ee9db9c8ed878c}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE@{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE}}
+\index{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE@{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE}{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a6c08b65200140aeb46ee9db9c8ed878c} 
+\#define PSA\+\_\+\+ALG\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000700)}
+
+
+
+This macro serves as base for deriving other macros for Deterministic ECDSA signature scheme, with hashing. 
+
+\Hypertarget{crypto__sign_8h_a7e3ce9f514a227d5ba5d8318870452e3}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_ECDSA@{PSA\_ALG\_ECDSA}}
+\index{PSA\_ALG\_ECDSA@{PSA\_ALG\_ECDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ECDSA}{PSA\_ALG\_ECDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a7e3ce9f514a227d5ba5d8318870452e3} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ECDSA(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}{PSA\_ALG\_ECDSA\_BASE}}\ |\ (\mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ \&\ hash\_alg))}
+
+\end{DoxyCode}
+
+
+The randomized ECDSA signature scheme, with hashing This algorithm can be used with both the message and hash signature functions. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em hash\+\_\+alg} & A hash algorithm\+: a value of type psa\+\_\+algorithm\+\_\+t such that \doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(hash\+\_\+alg)} is true. This includes PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH when specifying the algorithm in a key policy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding randomized ECDSA signature algorithm
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+It is recommended to check the hash\+\_\+alg for valid/supported algorithm before using this macro 
+\end{DoxyNote}
+\Hypertarget{crypto__sign_8h_a51d6b6044a62e33cae0cf64bfc3b22a4}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_ECDSA\_ANY@{PSA\_ALG\_ECDSA\_ANY}}
+\index{PSA\_ALG\_ECDSA\_ANY@{PSA\_ALG\_ECDSA\_ANY}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ECDSA\_ANY}{PSA\_ALG\_ECDSA\_ANY}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a51d6b6044a62e33cae0cf64bfc3b22a4} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+ANY~\mbox{\hyperlink{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}{PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+BASE}}}
+
+
+
+The randomized ECDSA signature scheme, without hashing This algorithm can be only used with the \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} and \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()} functions This is the same signature scheme as \doxylink{crypto__sign_8h_a7e3ce9f514a227d5ba5d8318870452e3}{PSA\+\_\+\+ALG\+\_\+\+ECDSA()}, but without specifying a hash algorithm, and skipping the message hashing operation. 
+
+\Hypertarget{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_ECDSA\_BASE@{PSA\_ALG\_ECDSA\_BASE}}
+\index{PSA\_ALG\_ECDSA\_BASE@{PSA\_ALG\_ECDSA\_BASE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ECDSA\_BASE}{PSA\_ALG\_ECDSA\_BASE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000600)}
+
+
+
+This macro serves as base for deriving other macros for ECDSA signature scheme, with hashing. 
+
+\Hypertarget{crypto__sign_8h_a409294c965c3e28728f8cb9822e886d1}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG@{PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG}}
+\index{PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG@{PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG}{PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a409294c965c3e28728f8cb9822e886d1} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ECDSA\+\_\+\+DETERMINISTIC\+\_\+\+FLAG~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00000100)}
+
+
+
+To check whether the specified algorithm is ECDSA. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is an ECDSA algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_a3be20c4293031a8f32e7cb66d26f5c3d}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_ED25519PH@{PSA\_ALG\_ED25519PH}}
+\index{PSA\_ALG\_ED25519PH@{PSA\_ALG\_ED25519PH}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ED25519PH}{PSA\_ALG\_ED25519PH}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a3be20c4293031a8f32e7cb66d26f5c3d} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ED25519\+PH~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0600090B)}
+
+
+
+The Edwards-\/curve digital signature algorithm with prehashing (Hash\+Ed\+DSA), using the Edwards25519 curve This algorithm can be used with both the message and hash signature functions When used with \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} or \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()}, the provided hash parameter is the SHA-\/512 message digest. 
+
+\Hypertarget{crypto__sign_8h_a1c632df795535af4334d37a08a01481b}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_ED448PH@{PSA\_ALG\_ED448PH}}
+\index{PSA\_ALG\_ED448PH@{PSA\_ALG\_ED448PH}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ED448PH}{PSA\_ALG\_ED448PH}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a1c632df795535af4334d37a08a01481b} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ED448\+PH~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000915)}
+
+
+
+The Edwards-\/curve digital signature algorithm with prehashing (Hash\+Ed\+DSA), using the Edwards448 curve This algorithm can be used with both the message and hash signature functions When used with \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} or \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()}, the provided hash parameter is the truncated SHAKE256 message digest. 
+
+\Hypertarget{crypto__sign_8h_a9a689cd47452af6f5d6f71edd4b86d70}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_HASH\_EDDSA\_BASE@{PSA\_ALG\_HASH\_EDDSA\_BASE}}
+\index{PSA\_ALG\_HASH\_EDDSA\_BASE@{PSA\_ALG\_HASH\_EDDSA\_BASE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_HASH\_EDDSA\_BASE}{PSA\_ALG\_HASH\_EDDSA\_BASE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a9a689cd47452af6f5d6f71edd4b86d70} 
+\#define PSA\+\_\+\+ALG\+\_\+\+HASH\+\_\+\+EDDSA\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000900)}
+
+\Hypertarget{crypto__sign_8h_acd8766fe0fb8c1e2d32644e0d092c43a}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_DETERMINISTIC\_ECDSA@{PSA\_ALG\_IS\_DETERMINISTIC\_ECDSA}}
+\index{PSA\_ALG\_IS\_DETERMINISTIC\_ECDSA@{PSA\_ALG\_IS\_DETERMINISTIC\_ECDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_DETERMINISTIC\_ECDSA}{PSA\_ALG\_IS\_DETERMINISTIC\_ECDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_acd8766fe0fb8c1e2d32644e0d092c43a} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+DETERMINISTIC\+\_\+\+ECDSA(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \string~USS\_PSA\_ALG\_HASH\_MASK)\ ==\ \mbox{\hyperlink{crypto__sign_8h_a6c08b65200140aeb46ee9db9c8ed878c}{PSA\_ALG\_DETERMINISTIC\_ECDSA\_BASE}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is a deterministic ECDSA. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a deterministic ECDSA algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_afb92dc138c9d2388033ff5fc1dab7b48}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_ECDSA@{PSA\_ALG\_IS\_ECDSA}}
+\index{PSA\_ALG\_IS\_ECDSA@{PSA\_ALG\_IS\_ECDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_ECDSA}{PSA\_ALG\_IS\_ECDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_afb92dc138c9d2388033ff5fc1dab7b48} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+ECDSA(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((alg\ \&\ \string~(\mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ |\ \mbox{\hyperlink{crypto__sign_8h_a409294c965c3e28728f8cb9822e886d1}{PSA\_ALG\_ECDSA\_DETERMINISTIC\_FLAG}}))\ ==\ \mbox{\hyperlink{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}{PSA\_ALG\_ECDSA\_BASE}})}
+
+\end{DoxyCode}
+\Hypertarget{crypto__sign_8h_ad8a8ea0536975363b66410cdeafe38b6}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_HASH\_AND\_SIGN@{PSA\_ALG\_IS\_HASH\_AND\_SIGN}}
+\index{PSA\_ALG\_IS\_HASH\_AND\_SIGN@{PSA\_ALG\_IS\_HASH\_AND\_SIGN}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HASH\_AND\_SIGN}{PSA\_ALG\_IS\_HASH\_AND\_SIGN}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_ad8a8ea0536975363b66410cdeafe38b6} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH\+\_\+\+AND\+\_\+\+SIGN(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_a7664f69c28b193cc6cb8368481fcda64}{PSA\_ALG\_IS\_SIGN\_HASH}}(alg)\ \&\&\ ((alg)\ \&\ \mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ !=\ 0))}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is a a hash-\/and-\/sign algorithm that signs exactly the hash value. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a signature algorithm that signs exactly the hash value, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_ada6b4732688e435a881f7771e3a63e16}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_HASH\_EDDSA@{PSA\_ALG\_IS\_HASH\_EDDSA}}
+\index{PSA\_ALG\_IS\_HASH\_EDDSA@{PSA\_ALG\_IS\_HASH\_EDDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HASH\_EDDSA}{PSA\_ALG\_IS\_HASH\_EDDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_ada6b4732688e435a881f7771e3a63e16} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH\+\_\+\+EDDSA(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \string~USS\_PSA\_ALG\_HASH\_MASK)\ ==\ \mbox{\hyperlink{crypto__sign_8h_a9a689cd47452af6f5d6f71edd4b86d70}{PSA\_ALG\_HASH\_EDDSA\_BASE}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is Hash\+Ed\+DSA. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a Hash\+Ed\+DSA algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_ae7b0fafebd139f6f815285b7cad622ea}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_RANDOMIZED\_ECDSA@{PSA\_ALG\_IS\_RANDOMIZED\_ECDSA}}
+\index{PSA\_ALG\_IS\_RANDOMIZED\_ECDSA@{PSA\_ALG\_IS\_RANDOMIZED\_ECDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RANDOMIZED\_ECDSA}{PSA\_ALG\_IS\_RANDOMIZED\_ECDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_ae7b0fafebd139f6f815285b7cad622ea} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RANDOMIZED\+\_\+\+ECDSA(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \string~USS\_PSA\_ALG\_HASH\_MASK)\ ==\ \mbox{\hyperlink{crypto__sign_8h_afd9800fdbe6ea881e0ac0ce03d145928}{PSA\_ALG\_ECDSA\_BASE}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is randomized ECDSA. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a randomized ECDSA algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_a9d545279f23d43b1b2a744d0dd6826d0}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN@{PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN}}
+\index{PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN@{PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN}{PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a9d545279f23d43b1b2a744d0dd6826d0} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \string~USS\_PSA\_ALG\_HASH\_MASK)\ ==\ \mbox{\hyperlink{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c}{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is an RSA PKCS\#1 v1.\+5 signature algorithm. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is an RSA PKCS\#1 v1.\+5 signature algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_afa04fae7393a76d5161558768cb82a78}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_RSA\_PSS@{PSA\_ALG\_IS\_RSA\_PSS}}
+\index{PSA\_ALG\_IS\_RSA\_PSS@{PSA\_ALG\_IS\_RSA\_PSS}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RSA\_PSS}{PSA\_ALG\_IS\_RSA\_PSS}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_afa04fae7393a76d5161558768cb82a78} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PSS(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_a3577ae16a2f607c3d4f894344258aa18}{PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT}}(alg)\ ||\ \mbox{\hyperlink{crypto__sign_8h_ae93883052098a9a433251599be3e05e5}{PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT}}(alg))}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is an RSA PSS signature algorithm. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is an RSA PSS signature algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_ae93883052098a9a433251599be3e05e5}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT@{PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT}}
+\index{PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT@{PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT}{PSA\_ALG\_IS\_RSA\_PSS\_ANY\_SALT}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_ae93883052098a9a433251599be3e05e5} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+ANY\+\_\+\+SALT(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \string~USS\_PSA\_ALG\_HASH\_MASK)\ ==\ \mbox{\hyperlink{crypto__sign_8h_a52fa2bc06342341aedf60205738dba84}{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is an RSA PSS signature algorithm that permits any salt length. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is an RSA PSS signature algorithm that permits any salt length, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_a3577ae16a2f607c3d4f894344258aa18}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT@{PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT}}
+\index{PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT@{PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT}{PSA\_ALG\_IS\_RSA\_PSS\_STANDARD\_SALT}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a3577ae16a2f607c3d4f894344258aa18} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+STANDARD\+\_\+\+SALT(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \string~USS\_PSA\_ALG\_HASH\_MASK)\ ==\ \mbox{\hyperlink{crypto__sign_8h_a49d39a343790971b7a74644f4faea0c0}{PSA\_ALG\_RSA\_PSS\_BASE}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is an RSA PSS signature algorithm that requires the standard salt length. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is an RSA PSS signature algorithm that requires the standard salt length, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_a6d490d0904e0698f6c1268a89d72ff31}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_SIGN@{PSA\_ALG\_IS\_SIGN}}
+\index{PSA\_ALG\_IS\_SIGN@{PSA\_ALG\_IS\_SIGN}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_SIGN}{PSA\_ALG\_IS\_SIGN}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a6d490d0904e0698f6c1268a89d72ff31} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+SIGN(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}})\ ==\ \mbox{\hyperlink{crypto__common_8h_a97e82f369d65ae46d77d64ad58963231}{USS\_PSA\_ALG\_TYPE\_SIGN}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is an asymmetric signature algorithm, also known as public-\/key signature algorithm. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is an asymmetric signature algorithm, 0 otherwise. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_a7664f69c28b193cc6cb8368481fcda64}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_SIGN\_HASH@{PSA\_ALG\_IS\_SIGN\_HASH}}
+\index{PSA\_ALG\_IS\_SIGN\_HASH@{PSA\_ALG\_IS\_SIGN\_HASH}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_SIGN\_HASH}{PSA\_ALG\_IS\_SIGN\_HASH}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a7664f69c28b193cc6cb8368481fcda64} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+SIGN\+\_\+\+HASH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{crypto__sign_8h_afa04fae7393a76d5161558768cb82a78}{PSA\_ALG\_IS\_RSA\_PSS}}(alg)\ ||\ \mbox{\hyperlink{crypto__sign_8h_a9d545279f23d43b1b2a744d0dd6826d0}{PSA\_ALG\_IS\_RSA\_PKCS1V15\_SIGN}}(alg)\ ||\ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_ALG\_IS\_ECDSA(alg)\ ||\ \mbox{\hyperlink{crypto__sign_8h_ada6b4732688e435a881f7771e3a63e16}{PSA\_ALG\_IS\_HASH\_EDDSA}}(alg))}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is a signature algorithm that can be used with \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} and \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()} 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a signature algorithm that can be used to sign a hash. 0 if alg is a signature algorithm that can only be used to sign a message. 0 if alg is not a signature algorithm. This macro can return either 0 or 1 if alg is not a supported algorithm identifier 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_acd8b87e858614134de566edaa4d84db8}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_IS\_SIGN\_MESSAGE@{PSA\_ALG\_IS\_SIGN\_MESSAGE}}
+\index{PSA\_ALG\_IS\_SIGN\_MESSAGE@{PSA\_ALG\_IS\_SIGN\_MESSAGE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_SIGN\_MESSAGE}{PSA\_ALG\_IS\_SIGN\_MESSAGE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_acd8b87e858614134de566edaa4d84db8} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+SIGN\+\_\+\+MESSAGE(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{crypto__sign_8h_a6d490d0904e0698f6c1268a89d72ff31}{PSA\_ALG\_IS\_SIGN}}(alg)\ \&\&\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (alg)\ !=\ \mbox{\hyperlink{crypto__sign_8h_a51d6b6044a62e33cae0cf64bfc3b22a4}{PSA\_ALG\_ECDSA\_ANY}}\ \&\&\ (alg)\ !=\ \mbox{\hyperlink{crypto__sign_8h_a4215e2a78dcf834e9a625927faa2a817}{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW}})}
+
+\end{DoxyCode}
+
+
+To check whether the specified algorithm is a signature algorithm that can be used with \doxylink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message()} and \doxylink{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}{psa\+\_\+verify\+\_\+message()} 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a signature algorithm that can be used to sign a message. 0 if alg is a signature algorithm that can only be used to sign an already-\/calculated hash. 0 if alg is not a signature algorithm 
+\end{DoxyReturn}
+\Hypertarget{crypto__sign_8h_a76d6053fb1867c2c46c5f8131c8a8cae}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_PURE\_EDDSA@{PSA\_ALG\_PURE\_EDDSA}}
+\index{PSA\_ALG\_PURE\_EDDSA@{PSA\_ALG\_PURE\_EDDSA}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_PURE\_EDDSA}{PSA\_ALG\_PURE\_EDDSA}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a76d6053fb1867c2c46c5f8131c8a8cae} 
+\#define PSA\+\_\+\+ALG\+\_\+\+PURE\+\_\+\+EDDSA~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000800)}
+
+
+
+The Edwards-\/curve digital signature algorithm without prehashing (Pure\+Ed\+DSA), using standard parameters This algorithm can be only used with the \doxylink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message()} and \doxylink{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}{psa\+\_\+verify\+\_\+message()} functions. 
+
+\Hypertarget{crypto__sign_8h_a702ff75385a6ae7d4247033f479439af}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PKCS1V15\_SIGN@{PSA\_ALG\_RSA\_PKCS1V15\_SIGN}}
+\index{PSA\_ALG\_RSA\_PKCS1V15\_SIGN@{PSA\_ALG\_RSA\_PKCS1V15\_SIGN}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PKCS1V15\_SIGN}{PSA\_ALG\_RSA\_PKCS1V15\_SIGN}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a702ff75385a6ae7d4247033f479439af} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c}{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE}}\ |\ (\mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ \&\ hash\_alg))}
+
+\end{DoxyCode}
+
+
+The RSA PKCS\#1 v1.\+5 message signature scheme, with hashing This algorithm can be used with both the message and hash signature functions. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em hash\+\_\+alg} & A hash algorithm\+: a value of type psa\+\_\+algorithm\+\_\+t such that \doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(hash\+\_\+alg)} is true. This includes PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH when specifying the algorithm in a key policy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding RSA PKCS\#1 v1.\+5 signature algorithm
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+It is recommended to check the hash\+\_\+alg for valid/supported algorithm before using this macro 
+\end{DoxyNote}
+\Hypertarget{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE@{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE}}
+\index{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE@{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE}{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_BASE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000200)}
+
+
+
+This macro serves as base for deriving other macros for RSA PKCS\#1 v1.\+5 message signature scheme, with hashing. 
+
+\Hypertarget{crypto__sign_8h_a4215e2a78dcf834e9a625927faa2a817}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW@{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW}}
+\index{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW@{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW}{PSA\_ALG\_RSA\_PKCS1V15\_SIGN\_RAW}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a4215e2a78dcf834e9a625927faa2a817} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN\+\_\+\+RAW~\mbox{\hyperlink{crypto__sign_8h_a819b23c9899e92e9f867c7b2ae8f264c}{PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PKCS1\+V15\+\_\+\+SIGN\+\_\+\+BASE}}}
+
+
+
+The raw RSA PKCS\#1 v1.\+5 signature algorithm, without hashing This algorithm can be only used with the \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} and \doxylink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\+\_\+verify\+\_\+hash()} functions. 
+
+\Hypertarget{crypto__sign_8h_a62152bf4cb4bf6aace5e1be8f143564d}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PSS@{PSA\_ALG\_RSA\_PSS}}
+\index{PSA\_ALG\_RSA\_PSS@{PSA\_ALG\_RSA\_PSS}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PSS}{PSA\_ALG\_RSA\_PSS}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a62152bf4cb4bf6aace5e1be8f143564d} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_a49d39a343790971b7a74644f4faea0c0}{PSA\_ALG\_RSA\_PSS\_BASE}}\ |\ (\mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ \&\ hash\_alg))}
+
+\end{DoxyCode}
+
+
+The RSA PSS message signature scheme, with hashing This algorithm can be used with both the message and hash signature functions. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em hash\+\_\+alg} & A hash algorithm\+: a value of type psa\+\_\+algorithm\+\_\+t such that \doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(hash\+\_\+alg)} is true. This includes PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH when specifying the algorithm in a key policy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding RSA PSS signature algorithm
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+It is recommended to check the hash\+\_\+alg for valid/supported algorithm before using this macro 
+\end{DoxyNote}
+\Hypertarget{crypto__sign_8h_a9b7355a2cd6bde88177634d539127f2b}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PSS\_ANY\_SALT@{PSA\_ALG\_RSA\_PSS\_ANY\_SALT}}
+\index{PSA\_ALG\_RSA\_PSS\_ANY\_SALT@{PSA\_ALG\_RSA\_PSS\_ANY\_SALT}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PSS\_ANY\_SALT}{PSA\_ALG\_RSA\_PSS\_ANY\_SALT}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a9b7355a2cd6bde88177634d539127f2b} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+ANY\+\_\+\+SALT(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__sign_8h_a52fa2bc06342341aedf60205738dba84}{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE}}\ |\ (\mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}\ \&\ hash\_alg))}
+
+\end{DoxyCode}
+
+
+The RSA PSS message signature scheme, with hashing This variant permits any salt length for signature verification This algorithm can be used with both the message and hash signature functions. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em hash\+\_\+alg} & A hash algorithm\+: a value of type psa\+\_\+algorithm\+\_\+t such that \doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(hash\+\_\+alg)} is true. This includes PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH when specifying the algorithm in a key policy.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The corresponding RSA PSS signature algorithm
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+It is recommended to check the hash\+\_\+alg for valid/supported algorithm before using this macro 
+\end{DoxyNote}
+\Hypertarget{crypto__sign_8h_a52fa2bc06342341aedf60205738dba84}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE@{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE}}
+\index{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE@{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE}{PSA\_ALG\_RSA\_PSS\_ANY\_SALT\_BASE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a52fa2bc06342341aedf60205738dba84} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+ANY\+\_\+\+SALT\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06001300)}
+
+
+
+This macro serves as base for deriving other macros for RSA PSS message signature scheme, with hashing. 
+
+\Hypertarget{crypto__sign_8h_a49d39a343790971b7a74644f4faea0c0}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_RSA\_PSS\_BASE@{PSA\_ALG\_RSA\_PSS\_BASE}}
+\index{PSA\_ALG\_RSA\_PSS\_BASE@{PSA\_ALG\_RSA\_PSS\_BASE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RSA\_PSS\_BASE}{PSA\_ALG\_RSA\_PSS\_BASE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a49d39a343790971b7a74644f4faea0c0} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RSA\+\_\+\+PSS\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x06000300)}
+
+
+
+This macro serves as base for deriving other macros for RSA PSS message signature scheme, with hashing. 
+
+\Hypertarget{crypto__sign_8h_aeb69b9e960ff0c8c963e87f97f3b27e7}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_ALG\_SIGN\_MASK@{PSA\_ALG\_SIGN\_MASK}}
+\index{PSA\_ALG\_SIGN\_MASK@{PSA\_ALG\_SIGN\_MASK}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SIGN\_MASK}{PSA\_ALG\_SIGN\_MASK}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_aeb69b9e960ff0c8c963e87f97f3b27e7} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SIGN\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0000ff00)}
+
+\Hypertarget{crypto__sign_8h_a31021bbd8bb365fc350532b5fd18a25a}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_SIGN\_OUTPUT\_SIZE@{PSA\_SIGN\_OUTPUT\_SIZE}}
+\index{PSA\_SIGN\_OUTPUT\_SIZE@{PSA\_SIGN\_OUTPUT\_SIZE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_SIGN\_OUTPUT\_SIZE}{PSA\_SIGN\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a31021bbd8bb365fc350532b5fd18a25a} 
+\#define PSA\+\_\+\+SIGN\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+bits}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{key__management_8h_a0e1d8f241228e49c9cadadfb4579ef1a}{PSA\_KEY\_TYPE\_IS\_RSA}}(key\_type)\ ?\ ((void)\ alg,\ \mbox{\hyperlink{crypto__common_8h_aa11e5b792e282e888a492bf5dfca685f}{USS\_PSA\_BITS\_TO\_BYTES}}(key\_bits))\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{key__management_8h_a88e01fa06b585654689a99bcc06bbe66}{PSA\_KEY\_TYPE\_IS\_ECC}}(key\_type)\ ?\ \mbox{\hyperlink{crypto__sign_8h_ac571e52655fcd73528189a426c9c0bd8}{USS\_PSA\_ECDSA\_SIGNATURE\_SIZE}}(key\_bits)\ :\ ((void)\ alg,\ 0u))}
+
+\end{DoxyCode}
+
+
+Sufficient signature buffer size for \doxylink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\+\_\+sign\+\_\+message()} and \doxylink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\+\_\+sign\+\_\+hash()} 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em key\+\_\+type} & An asymmetric key type. This can be a key pair type or a public key type ~\newline
+\\
+\hline
+\mbox{\texttt{ in}}  & {\em key\+\_\+bits} & The size of the key in bits\\
+\hline
+\mbox{\texttt{ in}}  & {\em alg} & The signature algorithm \\
+\hline
+\end{DoxyParams}
+\Hypertarget{crypto__sign_8h_a687a317642db9486fda38ea553900a1e}\index{crypto\_sign.h@{crypto\_sign.h}!PSA\_SIGNATURE\_MAX\_SIZE@{PSA\_SIGNATURE\_MAX\_SIZE}}
+\index{PSA\_SIGNATURE\_MAX\_SIZE@{PSA\_SIGNATURE\_MAX\_SIZE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_SIGNATURE\_MAX\_SIZE}{PSA\_SIGNATURE\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_a687a317642db9486fda38ea553900a1e} 
+\#define PSA\+\_\+\+SIGNATURE\+\_\+\+MAX\+\_\+\+SIZE~0}
+
+\Hypertarget{crypto__sign_8h_ac571e52655fcd73528189a426c9c0bd8}\index{crypto\_sign.h@{crypto\_sign.h}!USS\_PSA\_ECDSA\_SIGNATURE\_SIZE@{USS\_PSA\_ECDSA\_SIGNATURE\_SIZE}}
+\index{USS\_PSA\_ECDSA\_SIGNATURE\_SIZE@{USS\_PSA\_ECDSA\_SIGNATURE\_SIZE}!crypto\_sign.h@{crypto\_sign.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ECDSA\_SIGNATURE\_SIZE}{USS\_PSA\_ECDSA\_SIGNATURE\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__sign_8h_ac571e52655fcd73528189a426c9c0bd8} 
+\#define USS\+\_\+\+PSA\+\_\+\+ECDSA\+\_\+\+SIGNATURE\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{curve\+\_\+bits}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__common_8h_aa11e5b792e282e888a492bf5dfca685f}{USS\_PSA\_BITS\_TO\_BYTES}}(curve\_bits)\ *\ 2u)}
+
+\end{DoxyCode}
+
+
+Helper macro to return minimum signature buffer size for ECDSA algo. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em curve\+\_\+bits} & Curve size in bits\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Size of the buffer 
+\end{DoxyReturn}

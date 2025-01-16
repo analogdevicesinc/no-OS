@@ -1,0 +1,29 @@
+
+
+Initial Symbol table:
+
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+
+
+Initial Symbol table:
+
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+

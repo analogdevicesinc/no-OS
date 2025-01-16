@@ -1,0 +1,6 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/mps_reader.c:140:5:mbedtls_mps_reader_init	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/mps_reader.c:153:5:mbedtls_mps_reader_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/mps_reader.c:160:5:mbedtls_mps_reader_feed	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/mps_reader.c:229:5:mbedtls_mps_reader_get	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/mps_reader.c:397:5:mbedtls_mps_reader_commit	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/mps_reader.c:411:5:mbedtls_mps_reader_reclaim	48	static

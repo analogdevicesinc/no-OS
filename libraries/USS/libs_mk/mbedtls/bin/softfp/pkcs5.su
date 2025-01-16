@@ -1,0 +1,6 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkcs5.c:57:12:pkcs5_parse_pbkdf2_params	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkcs5.c:225:12:pkcs5_pbkdf2_hmac	104	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkcs5.c:315:5:mbedtls_pkcs5_pbkdf2_hmac	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkcs5.c:327:5:mbedtls_pkcs5_pbkdf2_hmac_ext	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkcs5.c:121:5:mbedtls_pkcs5_pbes2	256	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkcs5.c:468:5:mbedtls_pkcs5_self_test	8	static

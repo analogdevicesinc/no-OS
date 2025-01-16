@@ -1,0 +1,97 @@
+\doxysection{MXQ\+\_\+\+Types.\+h}
+\hypertarget{_m_x_q___types_8h_source}{}\label{_m_x_q___types_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Types.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Types.h}}
+\mbox{\hyperlink{_m_x_q___types_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*******************************************************************************}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright\ (C)\ 2018-\/2019\ Maxim\ Integrated\ Products,\ Inc.,\ All\ rights\ Reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ This\ software\ is\ protected\ by\ copyright\ laws\ of\ the\ United\ States\ and}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*\ of\ foreign\ countries.\ This\ material\ may\ also\ be\ protected\ by\ patent\ laws}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ and\ technology\ transfer\ regulations\ of\ the\ United\ States\ and\ of\ foreign}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*\ countries.\ This\ software\ is\ furnished\ under\ a\ license\ agreement\ and/or\ a}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ nondisclosure\ agreement\ and\ may\ only\ be\ used\ or\ reproduced\ in\ accordance}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*\ with\ the\ terms\ of\ those\ agreements.\ Dissemination\ of\ this\ information\ to}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ any\ party\ or\ parties\ not\ specified\ in\ the\ license\ agreement\ and/or}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*\ nondisclosure\ agreement\ is\ expressly\ prohibited.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ The\ above\ copyright\ notice\ and\ this\ permission\ notice\ shall\ be\ included}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*\ in\ all\ copies\ or\ substantial\ portions\ of\ the\ Software.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*\ THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,\ EXPRESS}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*\ OR\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ MERCHANTABILITY,\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\ AND\ NONINFRINGEMENT.}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*\ IN\ NO\ EVENT\ SHALL\ MAXIM\ INTEGRATED\ BE\ LIABLE\ FOR\ ANY\ CLAIM,\ DAMAGES}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ OR\ OTHER\ LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF\ CONTRACT,\ TORT\ OR\ OTHERWISE,}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*\ ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*\ OTHER\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*\ Except\ as\ contained\ in\ this\ notice,\ the\ name\ of\ Maxim\ Integrated}}
+\DoxyCodeLine{00025\ \textcolor{comment}{*\ Products,\ Inc.\ shall\ not\ be\ used\ except\ as\ stated\ in\ the\ Maxim\ Integrated}}
+\DoxyCodeLine{00026\ \textcolor{comment}{*\ Products,\ Inc.\ Branding\ Policy.}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*}}
+\DoxyCodeLine{00028\ \textcolor{comment}{*\ The\ mere\ transfer\ of\ this\ software\ does\ not\ imply\ any\ licenses}}
+\DoxyCodeLine{00029\ \textcolor{comment}{*\ of\ trade\ secrets,\ proprietary\ technology,\ copyrights,\ patents,}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*\ trademarks,\ maskwork\ rights,\ or\ any\ other\ form\ of\ intellectual}}
+\DoxyCodeLine{00031\ \textcolor{comment}{*\ property\ whatsoever.\ Maxim\ Integrated\ Products,\ Inc.\ retains\ all}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*\ ownership\ rights.}}
+\DoxyCodeLine{00033\ \textcolor{comment}{*******************************************************************************/}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#ifndef\ \_\_MXQ\_TYPES\_H\_INCLUDED\_\_}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ \_\_MXQ\_TYPES\_H\_INCLUDED\_\_}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ PRIVATE\ static}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}};}
+\DoxyCodeLine{00056\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a31ec310474ffc2bebf5796d1fdca8300}{uss\_u1}};}
+\DoxyCodeLine{00061\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{signed}\ \ \ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a93ef79df686b02a953750496dd76b98a}{mxq\_s1}};}
+\DoxyCodeLine{00062\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{signed}\ \ \ \ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_acd65c05bfea324116e536aa9260398e3}{uss\_s1}};}
+\DoxyCodeLine{00067\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\_u1}}\ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ae2773ccc3e61cf3bda5ca0c5e8f620c4}{mxq\_pu1}};}
+\DoxyCodeLine{00068\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{_m_x_q___types_8h_a31ec310474ffc2bebf5796d1fdca8300}{uss\_u1}}\ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a56d7f60d9981fdea50c5f9c932c1adf7}{uss\_pu1}};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \ \textcolor{keywordtype}{short}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}};}
+\DoxyCodeLine{00075\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \ \textcolor{keywordtype}{short}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a749967f230ab8169d7d24bf5a2498892}{uss\_u2}};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{signed}\ \ \ \ \textcolor{keywordtype}{short}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_adf74880d0c14076ff1f1f98d6c9f8b57}{mxq\_s2}};}
+\DoxyCodeLine{00082\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{signed}\ \ \ \ \textcolor{keywordtype}{short}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ab4d4796333b8954b5cdd33c31803108a}{uss\_s2}};}
+\DoxyCodeLine{00087\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\_u2}}\ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_af1f1097b0c5fe06e6331a88f5ed424ab}{mxq\_pu2}};}
+\DoxyCodeLine{00088\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{_m_x_q___types_8h_a749967f230ab8169d7d24bf5a2498892}{uss\_u2}}\ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a5e22779a7048423ad6cc88f92d726bb4}{uss\_pu2}};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00096\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}};}
+\DoxyCodeLine{00097\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a19ca6ba94c95c9ddad3da8f58d24b0da}{uss\_u4}};}
+\DoxyCodeLine{00102\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{signed}\ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a36638c8c9acbf8b54ceb2ed16e9ab8df}{mxq\_s4}};}
+\DoxyCodeLine{00103\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{signed}\ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac8c6246d722fd181cc113e1151c780ab}{uss\_s4}};}
+\DoxyCodeLine{00108\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ad768eef6fd76a558c7c614dc3b214035}{mxq\_pu4}};}
+\DoxyCodeLine{00109\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{_m_x_q___types_8h_a19ca6ba94c95c9ddad3da8f58d24b0da}{uss\_u4}}\ *\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a1046ce19d1d8f73e2685ca01b634da84}{uss\_pu4}};}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00116\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\_length}};}
+\DoxyCodeLine{00117\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a00d2f8107587d0ff47a2451a4f2d62d0}{uss\_length}};}
+\DoxyCodeLine{00122\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ *\ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a768c119fda9abe8495c42a8a7553f25a}{mxq\_plength}};}
+\DoxyCodeLine{00123\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ *\ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_a4195e2bcc1ef13ddeeca8edd550bf305}{uss\_plength}};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00129\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ad82f96fa0cb0bee8ec3fb9a515c9032f}{mxq\_bool}};}
+\DoxyCodeLine{00130\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_ab3f746e97e19afa04a0066ba6f883526}{uss\_bool}};}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#define\ MXQ\_FALSE\ \ \ (0)}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#define\ MXQ\_TRUE\ \ \ \ (1)}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00149\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ \mbox{\hyperlink{structcounter__t_a9e212debd3c796953dd6e81bab2e5efa}{countbound}};}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___types_8h_aebec1e79971aad82f6a7fb985c77243f}{mxq\_u4}}\ \mbox{\hyperlink{structcounter__t_a4606a1c6f4edd75065d27a52c100bd2c}{countval}};}
+\DoxyCodeLine{00152\ \}\ \mbox{\hyperlink{structcounter__t}{counter\_t}};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#ifdef\ \_\_GNUC\_\_}}
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#\ \ \ define\ \_PACKED\ \_\_attribute\_\_\ ((\_\_packed\_\_))\ \ \ \ \ }\textcolor{comment}{/*\ For\ structs\ mapped\ to\ the\ filesystem\ image\ and\ all\ enums\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\#\ \ \ define\ \_PACKED}}
+\DoxyCodeLine{00159\ \textcolor{preprocessor}{\#\ \ \ warning\ \_PACKED\ defined\ to\ NOTHING:\ structure\ alignment\ may\ be\ wrong}}
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_MXQ\_TYPES\_H\_INCLUDED\_\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

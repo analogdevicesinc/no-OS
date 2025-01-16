@@ -1,0 +1,3232 @@
+Trivially needed symbols: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendBypassCMD/60 SC_PacketVerify/59 SC_PacketSecure/58 SC_OTP_Encrypt_Decrypt/57 sc_otp_key_buffer/56 CMD_InitSecureChannel/55 CMD_CloseSecureChannel/54 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_GetScChallenge/51 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheKeyPair/49 incrementIV/48 cmd_reset_offset/47 cmd_put_buffer/46 cmd_put_u1/45 cmd_put_u2/44 cmd_put_u4/43 put_u2_lsb/42 proc_endian_2_cmd/41 cmd_2_proc_endian/40 gScChallenge/39 gScMaxqPubKey/38 gScEcdheKeyPair/37 gSecChannelStatus/36 ctx_securechannel/31
+
+
+Initial Symbol table:
+
+cmd_print/90 (cmd_print) @07013dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes/89 (receivebytes) @07013d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes_first/88 (receivebytes_first) @07013c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+sendbytes/87 (sendbytes) @07013bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+aes_gcm_ad/86 (aes_gcm_ad) @07013b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 
+  Calls: 
+memcmp/85 (memcmp) @07013a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 
+  Calls: 
+HOST_CRCGet/84 (HOST_CRCGet) @070139d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+HOST_aes_cbc_mac/83 (HOST_aes_cbc_mac) @07013930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+hmac_sha256_final/82 (hmac_sha256_final) @07013888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_update/81 (hmac_sha256_update) @070137e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_init/80 (hmac_sha256_init) @07013738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hkdf_sha256/79 (hkdf_sha256) @07013690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+sha256_final/78 (sha256_final) @070135e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_update/77 (sha256_update) @07013540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_init/76 (sha256_init) @07013498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+uECC_shared_secret/75 (uECC_shared_secret) @070133f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+aes_gcm_ae/74 (aes_gcm_ae) @07013348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: 
+HOST_aes_cbc/73 (HOST_aes_cbc) @070132a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+memset/72 (memset) @070131f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_CloseSecureChannel/54 
+  Calls: 
+uECC_sign/71 (uECC_sign) @07013150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+sha256/70 (sha256) @070130a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+MXQ_Get_Challenge/69 (MXQ_Get_Challenge) @07013000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_GetScChallenge/51 CMD_GetScChallenge/51 
+  Calls: 
+memcpy/68 (memcpy) @06fc82a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 SC_PacketVerify/59 SC_PacketSecure/58 CMD_SignSCParams1065/53 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_SignSCParams/52 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+putchar/67 (__builtin_putchar) @06fc8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+printf/66 (printf) @06fc8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+puts/65 (__builtin_puts) @06fc8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_OTP_Encrypt_Decrypt/57 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_make_key/64 (uECC_make_key) @06fc8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_secp256r1/63 (uECC_secp256r1) @06fc8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+CMD_SendRawCommand/62 (CMD_SendRawCommand) @06fc8bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: g_offset/34 (read) g_cmd_data/33 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/87 HOST_CRCGet/84 
+CMD_SendCommand/61 (CMD_SendCommand) @06fc8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc8bd0
+  References: g_offset/34 (read) g_cmd_data/33 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 HOST_CRCGet/84 cmd_print/90 SC_PacketVerify/59 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 cmd_print/90 SC_PacketSecure/58 cmd_print/90 HOST_CRCGet/84 
+CMD_SendBypassCMD/60 (CMD_SendBypassCMD) @06fc8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc8a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_CRCGet/84 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 
+SC_PacketVerify/59 (SC_PacketVerify) @06fc8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc8888
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 incrementIV/48 memcpy/68 aes_gcm_ad/86 SC_OTP_Encrypt_Decrypt/57 puts/65 memcmp/85 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc/73 memcmp/85 HOST_aes_cbc_mac/83 HOST_CRCGet/84 
+SC_PacketSecure/58 (SC_PacketSecure) @06fc8540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc8738
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 HOST_CRCGet/84 incrementIV/48 memcpy/68 aes_gcm_ae/74 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc_mac/83 HOST_aes_cbc/73 memset/72 
+SC_OTP_Encrypt_Decrypt/57 (SC_OTP_Encrypt_Decrypt) @06fc83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc8540
+  References: sc_otp_key_buffer/56 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: hmac_sha256_final/82 hmac_sha256_update/81 hmac_sha256_update/81 hmac_sha256_init/80 puts/65 hkdf_sha256/79 
+sc_otp_key_buffer/56 (sc_otp_key_buffer) @06f9ca20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc83f0
+  References: 
+  Referring: SC_OTP_Encrypt_Decrypt/57 (addr) 
+  Availability: not-ready
+  Varpool flags:
+CMD_InitSecureChannel/55 (CMD_InitSecureChannel) @06fc81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06f9ca20
+  References: gSecChannelStatus/36 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScMaxqPubKey/38 (addr) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: CMD_CloseSecureChannel/54 putchar/67 printf/66 puts/65 printf/66 puts/65 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 putchar/67 printf/66 puts/65 memset/72 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 putchar/67 printf/66 puts/65 aes_gcm_ae/74 putchar/67 printf/66 printf/66 memset/72 putchar/67 printf/66 printf/66 HOST_aes_cbc/73 HOST_aes_cbc/73 
+CMD_CloseSecureChannel/54 (CMD_CloseSecureChannel) @06fb2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fc81f8
+  References: gSecChannelStatus/36 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: memset/72 
+CMD_SignSCParams1065/53 (CMD_SignSCParams1065) @06fb2bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2d20
+  References: gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_SignSCParams/52 (CMD_SignSCParams) @06fb2a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2bd0
+  References: gScChallenge/39 (addr) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_GetScChallenge/51 (CMD_GetScChallenge) @06fb2930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2a80
+  References: ctx_securechannel/31 (write) gScChallenge/39 (addr) gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXQ_Get_Challenge/69 MXQ_Get_Challenge/69 
+CMD_PrepareEcdheMode1065Params/50 (CMD_PrepareEcdheMode1065Params) @06fb27e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2930
+  References: gScEcdheKeyPair/37 (addr) gScMaxqPubKey/38 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 memcpy/68 
+CMD_PrepareEcdheKeyPair/49 (CMD_PrepareEcdheKeyPair) @06fb2690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb27e0
+  References: gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 putchar/67 printf/66 puts/65 uECC_make_key/64 uECC_secp256r1/63 
+incrementIV/48 (incrementIV) @06fb2540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+cmd_reset_offset/47 (cmd_reset_offset) @06fb23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2540
+  References: g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_buffer/46 (cmd_put_buffer) @06fb22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb23f0
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u1/45 (cmd_put_u1) @06fb2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb22a0
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u2/44 (cmd_put_u2) @06fb2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2150
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u4/43 (cmd_put_u4) @06fadc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fb2000
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+put_u2_lsb/42 (put_u2_lsb) @06fad9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fadc78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+proc_endian_2_cmd/41 (proc_endian_2_cmd) @06fad498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fad9d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_2_proc_endian/40 (cmd_2_proc_endian) @06fad348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fad498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+gScChallenge/39 (gScChallenge) @06f9c360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06fad348
+  References: 
+  Referring: CMD_GetScChallenge/51 (addr) CMD_GetScChallenge/51 (addr) CMD_SignSCParams/52 (addr) CMD_SignSCParams1065/53 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) 
+  Availability: not-ready
+  Varpool flags:
+gScMaxqPubKey/38 (gScMaxqPubKey) @06f9c318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06f9c360
+  References: 
+  Referring: CMD_PrepareEcdheMode1065Params/50 (addr) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gScEcdheKeyPair/37 (gScEcdheKeyPair) @06f9c2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06f9c318
+  References: 
+  Referring: CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (read) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheMode1065Params/50 (addr) CMD_SignSCParams/52 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gSecChannelStatus/36 (gSecChannelStatus) @06f9c288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06f9c2d0
+  References: 
+  Referring: CMD_CloseSecureChannel/54 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) SC_PacketSecure/58 (read) SC_PacketVerify/59 (read) 
+  Availability: not-ready
+  Varpool flags:
+g_cmd_sc_buffer/35 (g_cmd_sc_buffer) @06f9c240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06fc8738
+  References: 
+  Referring: SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) 
+  Availability: not-ready
+  Varpool flags:
+g_offset/34 (g_offset) @06f9c1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06fb2000
+  References: 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (write) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (write) cmd_put_u1/45 (read) cmd_put_u1/45 (read) cmd_put_u1/45 (write) cmd_put_buffer/46 (read) cmd_put_buffer/46 (read) cmd_put_buffer/46 (write) cmd_reset_offset/47 (write) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_data/33 (g_cmd_data) @06f9c1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06f9c1f8
+  References: g_cmd_buffer/32 (addr) 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u1/45 (read) cmd_put_buffer/46 (read) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_buffer/32 (g_cmd_buffer) @06f9c168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06f9c1f8
+  References: 
+  Referring: g_cmd_data/33 (addr) 
+  Availability: not-ready
+  Varpool flags:
+ctx_securechannel/31 (ctx_securechannel) @06f9c120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06f9c288
+  References: 
+  Referring: CMD_GetScChallenge/51 (write) CMD_CloseSecureChannel/54 (addr) CMD_CloseSecureChannel/54 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) SC_PacketVerify/59 (write) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) CMD_SendCommand/61 (read) CMD_SendCommand/61 (read) 
+  Availability: not-ready
+  Varpool flags:
+wpa_debug_close_linux_tracing/30 (wpa_debug_close_linux_tracing) @06f9a690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_linux_tracing/29 (wpa_debug_open_linux_tracing) @06f9a540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_close_syslog/28 (wpa_debug_close_syslog) @06f9a3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_syslog/27 (wpa_debug_open_syslog) @06f9a2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf_key/26 (wpa_hexdump_buf_key) @06f95a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf/25 (wpa_hexdump_buf) @06f95930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_str/24 (wpabuf_put_str) @06f952a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_set/23 (wpabuf_set) @06f95150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_buf/22 (wpabuf_put_buf) @06f95000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_data/21 (wpabuf_put_data) @06f8ae70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be32/20 (wpabuf_put_be32) @06f8ad20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be24/19 (wpabuf_put_be24) @06f8abd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be16/18 (wpabuf_put_be16) @06f8aa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le32/17 (wpabuf_put_le32) @06f8a930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le16/16 (wpabuf_put_le16) @06f8a7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_u8/15 (wpabuf_put_u8) @06f8a690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead_u8/14 (wpabuf_mhead_u8) @06f8a540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead/13 (wpabuf_mhead) @06f8a3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head_u8/12 (wpabuf_head_u8) @06f8a2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head/11 (wpabuf_head) @06f8a150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_tailroom/10 (wpabuf_tailroom) @06f8a000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_len/9 (wpabuf_len) @06f81c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_size/8 (wpabuf_size) @06f81b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_broadcast_ether_addr/7 (is_broadcast_ether_addr) @06f81930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_zero_ether_addr/6 (is_zero_ether_addr) @06f817e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_realloc_array/5 (os_realloc_array) @06f4a7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_calloc/4 (os_calloc) @06f4a540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__locale_ctype_ptr_l/3 (__locale_ctype_ptr_l) @06f4a150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @06de99d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06de9888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06de9690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: wpa_debug_close_linux_tracing/30 wpa_debug_open_linux_tracing/29 wpa_debug_close_syslog/28 wpa_debug_open_syslog/27 wpa_hexdump_buf_key/26 wpa_hexdump_buf/25 wpabuf_put_str/24 wpabuf_set/23 wpabuf_put_buf/22 wpabuf_put_data/21 wpabuf_put_be32/20 wpabuf_put_be24/19 wpabuf_put_be16/18 wpabuf_put_le32/17 wpabuf_put_le16/16 wpabuf_put_u8/15 wpabuf_mhead_u8/14 wpabuf_mhead/13 wpabuf_head_u8/12 wpabuf_head/11 wpabuf_tailroom/10 wpabuf_len/9 wpabuf_size/8 is_broadcast_ether_addr/7 is_zero_ether_addr/6 os_realloc_array/5 os_calloc/4 __locale_ctype_ptr_l/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+cmd_print/90 (cmd_print) @07013dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes/89 (receivebytes) @07013d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes_first/88 (receivebytes_first) @07013c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+sendbytes/87 (sendbytes) @07013bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+aes_gcm_ad/86 (aes_gcm_ad) @07013b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 
+  Calls: 
+memcmp/85 (memcmp) @07013a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 
+  Calls: 
+HOST_CRCGet/84 (HOST_CRCGet) @070139d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+HOST_aes_cbc_mac/83 (HOST_aes_cbc_mac) @07013930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+hmac_sha256_final/82 (hmac_sha256_final) @07013888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_update/81 (hmac_sha256_update) @070137e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_init/80 (hmac_sha256_init) @07013738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hkdf_sha256/79 (hkdf_sha256) @07013690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+sha256_final/78 (sha256_final) @070135e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_update/77 (sha256_update) @07013540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_init/76 (sha256_init) @07013498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+uECC_shared_secret/75 (uECC_shared_secret) @070133f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+aes_gcm_ae/74 (aes_gcm_ae) @07013348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: 
+HOST_aes_cbc/73 (HOST_aes_cbc) @070132a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+memset/72 (memset) @070131f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_CloseSecureChannel/54 
+  Calls: 
+uECC_sign/71 (uECC_sign) @07013150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+sha256/70 (sha256) @070130a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+MXQ_Get_Challenge/69 (MXQ_Get_Challenge) @07013000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_GetScChallenge/51 CMD_GetScChallenge/51 
+  Calls: 
+memcpy/68 (memcpy) @06fc82a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 SC_PacketVerify/59 SC_PacketSecure/58 CMD_SignSCParams1065/53 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_SignSCParams/52 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+putchar/67 (__builtin_putchar) @06fc8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+printf/66 (printf) @06fc8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+puts/65 (__builtin_puts) @06fc8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_OTP_Encrypt_Decrypt/57 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_make_key/64 (uECC_make_key) @06fc8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_secp256r1/63 (uECC_secp256r1) @06fc8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+CMD_SendRawCommand/62 (CMD_SendRawCommand) @06fc8bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/87 HOST_CRCGet/84 
+CMD_SendCommand/61 (CMD_SendCommand) @06fc8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 HOST_CRCGet/84 cmd_print/90 SC_PacketVerify/59 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 cmd_print/90 SC_PacketSecure/58 cmd_print/90 HOST_CRCGet/84 
+CMD_SendBypassCMD/60 (CMD_SendBypassCMD) @06fc8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_CRCGet/84 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 
+SC_PacketVerify/59 (SC_PacketVerify) @06fc8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 incrementIV/48 memcpy/68 aes_gcm_ad/86 SC_OTP_Encrypt_Decrypt/57 puts/65 memcmp/85 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc/73 memcmp/85 HOST_aes_cbc_mac/83 HOST_CRCGet/84 
+SC_PacketSecure/58 (SC_PacketSecure) @06fc8540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 HOST_CRCGet/84 incrementIV/48 memcpy/68 aes_gcm_ae/74 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc_mac/83 HOST_aes_cbc/73 memset/72 
+SC_OTP_Encrypt_Decrypt/57 (SC_OTP_Encrypt_Decrypt) @06fc83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sc_otp_key_buffer/56 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: hmac_sha256_final/82 hmac_sha256_update/81 hmac_sha256_update/81 hmac_sha256_init/80 puts/65 hkdf_sha256/79 
+sc_otp_key_buffer/56 (sc_otp_key_buffer) @06f9ca20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: SC_OTP_Encrypt_Decrypt/57 (addr) 
+  Availability: not-ready
+  Varpool flags:
+CMD_InitSecureChannel/55 (CMD_InitSecureChannel) @06fc81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gSecChannelStatus/36 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScMaxqPubKey/38 (addr) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: CMD_CloseSecureChannel/54 putchar/67 printf/66 puts/65 printf/66 puts/65 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 putchar/67 printf/66 puts/65 memset/72 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 putchar/67 printf/66 puts/65 aes_gcm_ae/74 putchar/67 printf/66 printf/66 memset/72 putchar/67 printf/66 printf/66 HOST_aes_cbc/73 HOST_aes_cbc/73 
+CMD_CloseSecureChannel/54 (CMD_CloseSecureChannel) @06fb2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gSecChannelStatus/36 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: memset/72 
+CMD_SignSCParams1065/53 (CMD_SignSCParams1065) @06fb2bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_SignSCParams/52 (CMD_SignSCParams) @06fb2a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScChallenge/39 (addr) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_GetScChallenge/51 (CMD_GetScChallenge) @06fb2930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (write) gScChallenge/39 (addr) gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXQ_Get_Challenge/69 MXQ_Get_Challenge/69 
+CMD_PrepareEcdheMode1065Params/50 (CMD_PrepareEcdheMode1065Params) @06fb27e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScMaxqPubKey/38 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 memcpy/68 
+CMD_PrepareEcdheKeyPair/49 (CMD_PrepareEcdheKeyPair) @06fb2690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 putchar/67 printf/66 puts/65 uECC_make_key/64 uECC_secp256r1/63 
+incrementIV/48 (incrementIV) @06fb2540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+cmd_reset_offset/47 (cmd_reset_offset) @06fb23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_buffer/46 (cmd_put_buffer) @06fb22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u1/45 (cmd_put_u1) @06fb2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u2/44 (cmd_put_u2) @06fb2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u4/43 (cmd_put_u4) @06fadc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+put_u2_lsb/42 (put_u2_lsb) @06fad9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+proc_endian_2_cmd/41 (proc_endian_2_cmd) @06fad498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_2_proc_endian/40 (cmd_2_proc_endian) @06fad348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+gScChallenge/39 (gScChallenge) @06f9c360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (addr) CMD_GetScChallenge/51 (addr) CMD_SignSCParams/52 (addr) CMD_SignSCParams1065/53 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) 
+  Availability: not-ready
+  Varpool flags:
+gScMaxqPubKey/38 (gScMaxqPubKey) @06f9c318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheMode1065Params/50 (addr) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gScEcdheKeyPair/37 (gScEcdheKeyPair) @06f9c2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (read) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheMode1065Params/50 (addr) CMD_SignSCParams/52 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gSecChannelStatus/36 (gSecChannelStatus) @06f9c288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_CloseSecureChannel/54 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) SC_PacketSecure/58 (read) SC_PacketVerify/59 (read) 
+  Availability: not-ready
+  Varpool flags:
+g_cmd_sc_buffer/35 (g_cmd_sc_buffer) @06f9c240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) 
+  Availability: not-ready
+  Varpool flags:
+g_offset/34 (g_offset) @06f9c1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (write) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (write) cmd_put_u1/45 (read) cmd_put_u1/45 (read) cmd_put_u1/45 (write) cmd_put_buffer/46 (read) cmd_put_buffer/46 (read) cmd_put_buffer/46 (write) cmd_reset_offset/47 (write) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_data/33 (g_cmd_data) @06f9c1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: g_cmd_buffer/32 (addr) 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u1/45 (read) cmd_put_buffer/46 (read) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_buffer/32 (g_cmd_buffer) @06f9c168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: g_cmd_data/33 (addr) 
+  Availability: not-ready
+  Varpool flags:
+ctx_securechannel/31 (ctx_securechannel) @06f9c120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (write) CMD_CloseSecureChannel/54 (addr) CMD_CloseSecureChannel/54 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) SC_PacketVerify/59 (write) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) CMD_SendCommand/61 (read) CMD_SendCommand/61 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+
+Initial Symbol table:
+
+cmd_print/90 (cmd_print) @07013dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes/89 (receivebytes) @07013d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes_first/88 (receivebytes_first) @07013c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+sendbytes/87 (sendbytes) @07013bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+aes_gcm_ad/86 (aes_gcm_ad) @07013b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 
+  Calls: 
+memcmp/85 (memcmp) @07013a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 
+  Calls: 
+HOST_CRCGet/84 (HOST_CRCGet) @070139d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+HOST_aes_cbc_mac/83 (HOST_aes_cbc_mac) @07013930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+hmac_sha256_final/82 (hmac_sha256_final) @07013888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_update/81 (hmac_sha256_update) @070137e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_init/80 (hmac_sha256_init) @07013738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hkdf_sha256/79 (hkdf_sha256) @07013690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+sha256_final/78 (sha256_final) @070135e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_update/77 (sha256_update) @07013540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_init/76 (sha256_init) @07013498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+uECC_shared_secret/75 (uECC_shared_secret) @070133f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+aes_gcm_ae/74 (aes_gcm_ae) @07013348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: 
+HOST_aes_cbc/73 (HOST_aes_cbc) @070132a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+memset/72 (memset) @070131f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_CloseSecureChannel/54 
+  Calls: 
+uECC_sign/71 (uECC_sign) @07013150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+sha256/70 (sha256) @070130a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+MXQ_Get_Challenge/69 (MXQ_Get_Challenge) @07013000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_GetScChallenge/51 CMD_GetScChallenge/51 
+  Calls: 
+memcpy/68 (memcpy) @06fc82a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 SC_PacketVerify/59 SC_PacketSecure/58 CMD_SignSCParams1065/53 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_SignSCParams/52 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+putchar/67 (__builtin_putchar) @06fc8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+printf/66 (printf) @06fc8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+puts/65 (__builtin_puts) @06fc8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_OTP_Encrypt_Decrypt/57 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_make_key/64 (uECC_make_key) @06fc8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_secp256r1/63 (uECC_secp256r1) @06fc8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+CMD_SendRawCommand/62 (CMD_SendRawCommand) @06fc8bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/87 HOST_CRCGet/84 
+CMD_SendCommand/61 (CMD_SendCommand) @06fc8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 HOST_CRCGet/84 cmd_print/90 SC_PacketVerify/59 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 cmd_print/90 SC_PacketSecure/58 cmd_print/90 HOST_CRCGet/84 
+CMD_SendBypassCMD/60 (CMD_SendBypassCMD) @06fc8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_CRCGet/84 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 
+SC_PacketVerify/59 (SC_PacketVerify) @06fc8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 incrementIV/48 memcpy/68 aes_gcm_ad/86 SC_OTP_Encrypt_Decrypt/57 puts/65 memcmp/85 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc/73 memcmp/85 HOST_aes_cbc_mac/83 HOST_CRCGet/84 
+SC_PacketSecure/58 (SC_PacketSecure) @06fc8540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 HOST_CRCGet/84 incrementIV/48 memcpy/68 aes_gcm_ae/74 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc_mac/83 HOST_aes_cbc/73 memset/72 
+SC_OTP_Encrypt_Decrypt/57 (SC_OTP_Encrypt_Decrypt) @06fc83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sc_otp_key_buffer/56 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: hmac_sha256_final/82 hmac_sha256_update/81 hmac_sha256_update/81 hmac_sha256_init/80 puts/65 hkdf_sha256/79 
+sc_otp_key_buffer/56 (sc_otp_key_buffer) @06f9ca20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: SC_OTP_Encrypt_Decrypt/57 (addr) 
+  Availability: not-ready
+  Varpool flags:
+CMD_InitSecureChannel/55 (CMD_InitSecureChannel) @06fc81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gSecChannelStatus/36 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScMaxqPubKey/38 (addr) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: CMD_CloseSecureChannel/54 putchar/67 printf/66 puts/65 printf/66 puts/65 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 putchar/67 printf/66 puts/65 memset/72 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 putchar/67 printf/66 puts/65 aes_gcm_ae/74 putchar/67 printf/66 printf/66 memset/72 putchar/67 printf/66 printf/66 HOST_aes_cbc/73 HOST_aes_cbc/73 
+CMD_CloseSecureChannel/54 (CMD_CloseSecureChannel) @06fb2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gSecChannelStatus/36 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: memset/72 
+CMD_SignSCParams1065/53 (CMD_SignSCParams1065) @06fb2bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_SignSCParams/52 (CMD_SignSCParams) @06fb2a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScChallenge/39 (addr) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_GetScChallenge/51 (CMD_GetScChallenge) @06fb2930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (write) gScChallenge/39 (addr) gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXQ_Get_Challenge/69 MXQ_Get_Challenge/69 
+CMD_PrepareEcdheMode1065Params/50 (CMD_PrepareEcdheMode1065Params) @06fb27e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScMaxqPubKey/38 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 memcpy/68 
+CMD_PrepareEcdheKeyPair/49 (CMD_PrepareEcdheKeyPair) @06fb2690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 putchar/67 printf/66 puts/65 uECC_make_key/64 uECC_secp256r1/63 
+incrementIV/48 (incrementIV) @06fb2540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+cmd_reset_offset/47 (cmd_reset_offset) @06fb23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_buffer/46 (cmd_put_buffer) @06fb22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u1/45 (cmd_put_u1) @06fb2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u2/44 (cmd_put_u2) @06fb2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u4/43 (cmd_put_u4) @06fadc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+put_u2_lsb/42 (put_u2_lsb) @06fad9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+proc_endian_2_cmd/41 (proc_endian_2_cmd) @06fad498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_2_proc_endian/40 (cmd_2_proc_endian) @06fad348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+gScChallenge/39 (gScChallenge) @06f9c360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (addr) CMD_GetScChallenge/51 (addr) CMD_SignSCParams/52 (addr) CMD_SignSCParams1065/53 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) 
+  Availability: not-ready
+  Varpool flags:
+gScMaxqPubKey/38 (gScMaxqPubKey) @06f9c318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheMode1065Params/50 (addr) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gScEcdheKeyPair/37 (gScEcdheKeyPair) @06f9c2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (read) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheMode1065Params/50 (addr) CMD_SignSCParams/52 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gSecChannelStatus/36 (gSecChannelStatus) @06f9c288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_CloseSecureChannel/54 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) SC_PacketSecure/58 (read) SC_PacketVerify/59 (read) 
+  Availability: not-ready
+  Varpool flags:
+g_cmd_sc_buffer/35 (g_cmd_sc_buffer) @06f9c240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) 
+  Availability: not-ready
+  Varpool flags:
+g_offset/34 (g_offset) @06f9c1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (write) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (write) cmd_put_u1/45 (read) cmd_put_u1/45 (read) cmd_put_u1/45 (write) cmd_put_buffer/46 (read) cmd_put_buffer/46 (read) cmd_put_buffer/46 (write) cmd_reset_offset/47 (write) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_data/33 (g_cmd_data) @06f9c1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: g_cmd_buffer/32 (addr) 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u1/45 (read) cmd_put_buffer/46 (read) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_buffer/32 (g_cmd_buffer) @06f9c168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: g_cmd_data/33 (addr) 
+  Availability: not-ready
+  Varpool flags:
+ctx_securechannel/31 (ctx_securechannel) @06f9c120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (write) CMD_CloseSecureChannel/54 (addr) CMD_CloseSecureChannel/54 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) SC_PacketVerify/59 (write) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) CMD_SendCommand/61 (read) CMD_SendCommand/61 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+cmd_print/90 (cmd_print) @07013dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes/89 (receivebytes) @07013d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+receivebytes_first/88 (receivebytes_first) @07013c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+sendbytes/87 (sendbytes) @07013bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendBypassCMD/60 
+  Calls: 
+aes_gcm_ad/86 (aes_gcm_ad) @07013b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 
+  Calls: 
+memcmp/85 (memcmp) @07013a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 
+  Calls: 
+HOST_CRCGet/84 (HOST_CRCGet) @070139d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendRawCommand/62 CMD_SendCommand/61 CMD_SendCommand/61 CMD_SendBypassCMD/60 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+HOST_aes_cbc_mac/83 (HOST_aes_cbc_mac) @07013930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+hmac_sha256_final/82 (hmac_sha256_final) @07013888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_update/81 (hmac_sha256_update) @070137e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hmac_sha256_init/80 (hmac_sha256_init) @07013738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+hkdf_sha256/79 (hkdf_sha256) @07013690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 
+  Calls: 
+sha256_final/78 (sha256_final) @070135e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_update/77 (sha256_update) @07013540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+sha256_init/76 (sha256_init) @07013498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+uECC_shared_secret/75 (uECC_shared_secret) @070133f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+aes_gcm_ae/74 (aes_gcm_ae) @07013348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: 
+HOST_aes_cbc/73 (HOST_aes_cbc) @070132a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 
+  Calls: 
+memset/72 (memset) @070131f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketSecure/58 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_CloseSecureChannel/54 
+  Calls: 
+uECC_sign/71 (uECC_sign) @07013150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+sha256/70 (sha256) @070130a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 CMD_SignSCParams/52 
+  Calls: 
+MXQ_Get_Challenge/69 (MXQ_Get_Challenge) @07013000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_GetScChallenge/51 CMD_GetScChallenge/51 
+  Calls: 
+memcpy/68 (memcpy) @06fc82a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_SendCommand/61 SC_PacketVerify/59 SC_PacketSecure/58 CMD_SignSCParams1065/53 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_SignSCParams/52 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheMode1065Params/50 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+putchar/67 (__builtin_putchar) @06fc8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+printf/66 (printf) @06fc8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+puts/65 (__builtin_puts) @06fc8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: SC_PacketVerify/59 SC_OTP_Encrypt_Decrypt/57 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_make_key/64 (uECC_make_key) @06fc8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+uECC_secp256r1/63 (uECC_secp256r1) @06fc8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 CMD_InitSecureChannel/55 CMD_SignSCParams1065/53 CMD_SignSCParams/52 CMD_PrepareEcdheKeyPair/49 
+  Calls: 
+CMD_SendRawCommand/62 (CMD_SendRawCommand) @06fc8bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/87 HOST_CRCGet/84 
+CMD_SendCommand/61 (CMD_SendCommand) @06fc8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 HOST_CRCGet/84 cmd_print/90 SC_PacketVerify/59 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 cmd_print/90 SC_PacketSecure/58 cmd_print/90 HOST_CRCGet/84 
+CMD_SendBypassCMD/60 (CMD_SendBypassCMD) @06fc8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_CRCGet/84 cmd_print/90 receivebytes/89 receivebytes_first/88 sendbytes/87 
+SC_PacketVerify/59 (SC_PacketVerify) @06fc8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 incrementIV/48 memcpy/68 aes_gcm_ad/86 SC_OTP_Encrypt_Decrypt/57 puts/65 memcmp/85 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc/73 memcmp/85 HOST_aes_cbc_mac/83 HOST_CRCGet/84 
+SC_PacketSecure/58 (SC_PacketSecure) @06fc8540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: CMD_SendCommand/61 
+  Calls: CMD_CloseSecureChannel/54 HOST_CRCGet/84 incrementIV/48 memcpy/68 aes_gcm_ae/74 SC_OTP_Encrypt_Decrypt/57 HOST_aes_cbc_mac/83 HOST_aes_cbc/73 memset/72 
+SC_OTP_Encrypt_Decrypt/57 (SC_OTP_Encrypt_Decrypt) @06fc83f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sc_otp_key_buffer/56 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: hmac_sha256_final/82 hmac_sha256_update/81 hmac_sha256_update/81 hmac_sha256_init/80 puts/65 hkdf_sha256/79 
+sc_otp_key_buffer/56 (sc_otp_key_buffer) @06f9ca20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: SC_OTP_Encrypt_Decrypt/57 (addr) 
+  Availability: not-ready
+  Varpool flags:
+CMD_InitSecureChannel/55 (CMD_InitSecureChannel) @06fc81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gSecChannelStatus/36 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (read) gScEcdheKeyPair/37 (read) gScMaxqPubKey/38 (addr) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: CMD_CloseSecureChannel/54 putchar/67 printf/66 puts/65 printf/66 puts/65 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 sha256_final/78 sha256_update/77 sha256_update/77 sha256_update/77 sha256_init/76 putchar/67 printf/66 puts/65 memset/72 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 uECC_shared_secret/75 uECC_secp256r1/63 putchar/67 printf/66 puts/65 putchar/67 printf/66 puts/65 aes_gcm_ae/74 putchar/67 printf/66 printf/66 memset/72 putchar/67 printf/66 printf/66 HOST_aes_cbc/73 HOST_aes_cbc/73 
+CMD_CloseSecureChannel/54 (CMD_CloseSecureChannel) @06fb2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gSecChannelStatus/36 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 CMD_InitSecureChannel/55 
+  Calls: memset/72 
+CMD_SignSCParams1065/53 (CMD_SignSCParams1065) @06fb2bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_SignSCParams/52 (CMD_SignSCParams) @06fb2a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScChallenge/39 (addr) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: uECC_sign/71 uECC_secp256r1/63 sha256/70 memcpy/68 memcpy/68 
+CMD_GetScChallenge/51 (CMD_GetScChallenge) @06fb2930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: ctx_securechannel/31 (write) gScChallenge/39 (addr) gScChallenge/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXQ_Get_Challenge/69 MXQ_Get_Challenge/69 
+CMD_PrepareEcdheMode1065Params/50 (CMD_PrepareEcdheMode1065Params) @06fb27e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScMaxqPubKey/38 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 memcpy/68 
+CMD_PrepareEcdheKeyPair/49 (CMD_PrepareEcdheKeyPair) @06fb2690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/68 putchar/67 printf/66 puts/65 uECC_make_key/64 uECC_secp256r1/63 
+incrementIV/48 (incrementIV) @06fb2540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: SC_PacketVerify/59 SC_PacketSecure/58 
+  Calls: 
+cmd_reset_offset/47 (cmd_reset_offset) @06fb23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_buffer/46 (cmd_put_buffer) @06fb22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u1/45 (cmd_put_u1) @06fb2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u2/44 (cmd_put_u2) @06fb2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_put_u4/43 (cmd_put_u4) @06fadc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+put_u2_lsb/42 (put_u2_lsb) @06fad9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+proc_endian_2_cmd/41 (proc_endian_2_cmd) @06fad498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+cmd_2_proc_endian/40 (cmd_2_proc_endian) @06fad348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+gScChallenge/39 (gScChallenge) @06f9c360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (addr) CMD_GetScChallenge/51 (addr) CMD_SignSCParams/52 (addr) CMD_SignSCParams1065/53 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) 
+  Availability: not-ready
+  Varpool flags:
+gScMaxqPubKey/38 (gScMaxqPubKey) @06f9c318
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheMode1065Params/50 (addr) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gScEcdheKeyPair/37 (gScEcdheKeyPair) @06f9c2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (read) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheMode1065Params/50 (addr) CMD_SignSCParams/52 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) 
+  Availability: not-ready
+  Varpool flags:
+gSecChannelStatus/36 (gSecChannelStatus) @06f9c288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_CloseSecureChannel/54 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) SC_PacketSecure/58 (read) SC_PacketVerify/59 (read) 
+  Availability: not-ready
+  Varpool flags:
+g_cmd_sc_buffer/35 (g_cmd_sc_buffer) @06f9c240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) 
+  Availability: not-ready
+  Varpool flags:
+g_offset/34 (g_offset) @06f9c1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (write) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (write) cmd_put_u1/45 (read) cmd_put_u1/45 (read) cmd_put_u1/45 (write) cmd_put_buffer/46 (read) cmd_put_buffer/46 (read) cmd_put_buffer/46 (write) cmd_reset_offset/47 (write) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_data/33 (g_cmd_data) @06f9c1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: g_cmd_buffer/32 (addr) 
+  Referring: cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u4/43 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (read) cmd_put_u1/45 (read) cmd_put_buffer/46 (read) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+g_cmd_buffer/32 (g_cmd_buffer) @06f9c168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: g_cmd_data/33 (addr) 
+  Availability: not-ready
+  Varpool flags:
+ctx_securechannel/31 (ctx_securechannel) @06f9c120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (write) CMD_CloseSecureChannel/54 (addr) CMD_CloseSecureChannel/54 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketSecure/58 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) SC_PacketVerify/59 (write) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) CMD_SendCommand/61 (read) CMD_SendCommand/61 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+cmd_print/90 (cmd_print) @07013dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SendCommand/61 (230559596 (estimated locally),0.21 per call) CMD_SendCommand/61 (88636662 (estimated locally),0.08 per call) CMD_SendCommand/61 (177583774 (estimated locally),0.17 per call) CMD_SendCommand/61 (1068545859 (estimated locally),1.00 per call) CMD_SendBypassCMD/60 (310667496 (estimated locally),0.29 per call) 
+  Calls: 
+receivebytes/89 (receivebytes) @07013d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SendCommand/61 (361238987 (estimated locally),0.34 per call) CMD_SendBypassCMD/60 (439359819 (estimated locally),0.41 per call) 
+  Calls: 
+receivebytes_first/88 (receivebytes_first) @07013c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SendCommand/61 (511243398 (estimated locally),0.48 per call) CMD_SendBypassCMD/60 (621803889 (estimated locally),0.58 per call) 
+  Calls: 
+sendbytes/87 (sendbytes) @07013bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SendRawCommand/62 (1073741824 (estimated locally),1.00 per call) CMD_SendCommand/61 (882824037 (estimated locally),0.82 per call) CMD_SendBypassCMD/60 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+aes_gcm_ad/86 (aes_gcm_ad) @07013b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketVerify/59 (232410636 (estimated locally),0.22 per call) 
+  Calls: 
+memcmp/85 (memcmp) @07013a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketVerify/59 (181858777 (estimated locally),0.17 per call) SC_PacketVerify/59 (202800280 (estimated locally),0.19 per call) 
+  Calls: 
+HOST_CRCGet/84 (HOST_CRCGet) @070139d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SendRawCommand/62 (1073741824 (estimated locally),1.00 per call) CMD_SendCommand/61 (230559596 (estimated locally),0.21 per call) CMD_SendCommand/61 (1068545859 (estimated locally),1.00 per call) CMD_SendBypassCMD/60 (310667496 (estimated locally),0.29 per call) SC_PacketVerify/59 (1031006897 (estimated locally),0.96 per call) SC_PacketSecure/58 (347405251 (estimated locally),0.32 per call) 
+  Calls: 
+HOST_aes_cbc_mac/83 (HOST_aes_cbc_mac) @07013930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketVerify/59 (405600561 (estimated locally),0.38 per call) SC_PacketSecure/58 (145277267 (estimated locally),0.14 per call) 
+  Calls: 
+hmac_sha256_final/82 (hmac_sha256_final) @07013888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 (38976828 (estimated locally),0.29 per call) 
+  Calls: 
+hmac_sha256_update/81 (hmac_sha256_update) @070137e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 (38976828 (estimated locally),0.29 per call) SC_OTP_Encrypt_Decrypt/57 (38976828 (estimated locally),0.29 per call) 
+  Calls: 
+hmac_sha256_init/80 (hmac_sha256_init) @07013738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 (38976828 (estimated locally),0.29 per call) 
+  Calls: 
+hkdf_sha256/79 (hkdf_sha256) @07013690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_OTP_Encrypt_Decrypt/57 (134248236 (estimated locally),1.00 per call) 
+  Calls: 
+sha256_final/78 (sha256_final) @070135e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) 
+  Calls: 
+sha256_update/77 (sha256_update) @07013540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) 
+  Calls: 
+sha256_init/76 (sha256_init) @07013498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) 
+  Calls: 
+uECC_shared_secret/75 (uECC_shared_secret) @070133f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) 
+  Calls: 
+aes_gcm_ae/74 (aes_gcm_ae) @07013348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketSecure/58 (246983661 (estimated locally),0.23 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) 
+  Calls: 
+HOST_aes_cbc/73 (HOST_aes_cbc) @070132a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketVerify/59 (66924092 (estimated locally),0.06 per call) SC_PacketSecure/58 (440234144 (estimated locally),0.41 per call) CMD_InitSecureChannel/55 (25539648 (estimated locally),0.27 per call) CMD_InitSecureChannel/55 (13156789 (estimated locally),0.14 per call) 
+  Calls: 
+memset/72 (memset) @070131f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketSecure/58 (145277267 (estimated locally),0.14 per call) CMD_InitSecureChannel/55 (5568512 (estimated locally),0.06 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_CloseSecureChannel/54 (217325344 (estimated locally),0.20 per call) 
+  Calls: 
+uECC_sign/71 (uECC_sign) @07013150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 (1073741824 (estimated locally),1.00 per call) CMD_SignSCParams/52 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+sha256/70 (sha256) @070130a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SignSCParams1065/53 (1073741824 (estimated locally),1.00 per call) CMD_SignSCParams/52 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+MXQ_Get_Challenge/69 (MXQ_Get_Challenge) @07013000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_GetScChallenge/51 (876458967 (estimated locally),0.82 per call) CMD_GetScChallenge/51 (160953896 (estimated locally),0.15 per call) 
+  Calls: 
+memcpy/68 (memcpy) @06fc82a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_SendCommand/61 (221429435 (estimated locally),0.21 per call) SC_PacketVerify/59 (76695509 (estimated locally),0.07 per call) SC_PacketSecure/58 (81504608 (estimated locally),0.08 per call) CMD_SignSCParams1065/53 (1073741824 (estimated locally),1.00 per call) CMD_SignSCParams1065/53 (1073741824 (estimated locally),1.00 per call) CMD_SignSCParams/52 (1073741824 (estimated locally),1.00 per call) CMD_SignSCParams/52 (1073741824 (estimated locally),1.00 per call) CMD_PrepareEcdheMode1065Params/50 (1073741824 (estimated locally),1.00 per call) CMD_PrepareEcdheMode1065Params/50 (1073741824 (estimated locally),1.00 per call) CMD_PrepareEcdheKeyPair/49 (11059544 (estimated locally),1.00 per call) 
+  Calls: 
+putchar/67 (__builtin_putchar) @06fc8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (5568512 (estimated locally),0.06 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (3675218 (estimated locally),0.04 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (12769824 (estimated locally),0.14 per call) CMD_PrepareEcdheKeyPair/49 (11059544 (estimated locally),1.00 per call) 
+  Calls: 
+printf/66 (printf) @06fc8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (1041207449 (estimated locally),11.03 per call) CMD_InitSecureChannel/55 (1041207449 (estimated locally),11.03 per call) CMD_InitSecureChannel/55 (178210761 (estimated locally),1.89 per call) CMD_InitSecureChannel/55 (356421522 (estimated locally),3.78 per call) CMD_InitSecureChannel/55 (356421522 (estimated locally),3.78 per call) CMD_InitSecureChannel/55 (353141934 (estimated locally),3.74 per call) CMD_InitSecureChannel/55 (356421522 (estimated locally),3.78 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (1025427281 (estimated locally),10.86 per call) CMD_InitSecureChannel/55 (12769824 (estimated locally),0.14 per call) CMD_PrepareEcdheKeyPair/49 (1062682282 (estimated locally),96.09 per call) 
+  Calls: 
+puts/65 (__builtin_puts) @06fc8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: SC_PacketVerify/59 (90929388 (estimated locally),0.08 per call) SC_OTP_Encrypt_Decrypt/57 (16136638 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (32534376 (estimated locally),0.34 per call) CMD_InitSecureChannel/55 (5568512 (estimated locally),0.06 per call) CMD_InitSecureChannel/55 (5568512 (estimated locally),0.06 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (3675218 (estimated locally),0.04 per call) CMD_PrepareEcdheKeyPair/49 (11059544 (estimated locally),1.00 per call) 
+  Calls: 
+uECC_make_key/64 (uECC_make_key) @06fc8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_PrepareEcdheKeyPair/49 (11059544 (estimated locally),1.00 per call) 
+  Calls: 
+uECC_secp256r1/63 (uECC_secp256r1) @06fc8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_InitSecureChannel/55 (11137024 (estimated locally),0.12 per call) CMD_SignSCParams1065/53 (1073741824 (estimated locally),1.00 per call) CMD_SignSCParams/52 (1073741824 (estimated locally),1.00 per call) CMD_PrepareEcdheKeyPair/49 (11059544 (estimated locally),1.00 per call) 
+  Calls: 
+CMD_SendRawCommand/62 (CMD_SendRawCommand) @06fc8bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/87 (1073741824 (estimated locally),1.00 per call) HOST_CRCGet/84 (1073741824 (estimated locally),1.00 per call) 
+CMD_SendCommand/61 (CMD_SendCommand) @06fc8a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: memcpy/68 (221429435 (estimated locally),0.21 per call) HOST_CRCGet/84 (230559596 (estimated locally),0.21 per call) cmd_print/90 (230559596 (estimated locally),0.21 per call) SC_PacketVerify/59 (88636662 (estimated locally),0.08 per call) cmd_print/90 (88636662 (estimated locally),0.08 per call) receivebytes/89 (361238987 (estimated locally),0.34 per call) receivebytes_first/88 (511243398 (estimated locally),0.48 per call) sendbytes/87 (882824037 (estimated locally),0.82 per call) cmd_print/90 (177583774 (estimated locally),0.17 per call) SC_PacketSecure/58 (363305596 (estimated locally),0.34 per call) cmd_print/90 (1068545859 (estimated locally),1.00 per call) HOST_CRCGet/84 (1068545859 (estimated locally),1.00 per call) 
+CMD_SendBypassCMD/60 (CMD_SendBypassCMD) @06fc8888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_CRCGet/84 (310667496 (estimated locally),0.29 per call) cmd_print/90 (310667496 (estimated locally),0.29 per call) receivebytes/89 (439359819 (estimated locally),0.41 per call) receivebytes_first/88 (621803889 (estimated locally),0.58 per call) sendbytes/87 (1073741824 (estimated locally),1.00 per call) 
+SC_PacketVerify/59 (SC_PacketVerify) @06fc8738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: CMD_SendCommand/61 (88636662 (estimated locally),0.08 per call) 
+  Calls: CMD_CloseSecureChannel/54 (846106501 (estimated locally),0.79 per call) incrementIV/48 (76695509 (estimated locally),0.07 per call) memcpy/68 (76695509 (estimated locally),0.07 per call) aes_gcm_ad/86 (232410636 (estimated locally),0.22 per call) SC_OTP_Encrypt_Decrypt/57 (90929388 (estimated locally),0.08 per call) puts/65 (90929388 (estimated locally),0.08 per call) memcmp/85 (181858777 (estimated locally),0.17 per call) SC_OTP_Encrypt_Decrypt/57 (363717553 (estimated locally),0.34 per call) HOST_aes_cbc/73 (66924092 (estimated locally),0.06 per call) memcmp/85 (202800280 (estimated locally),0.19 per call) HOST_aes_cbc_mac/83 (405600561 (estimated locally),0.38 per call) HOST_CRCGet/84 (1031006897 (estimated locally),0.96 per call) 
+SC_PacketSecure/58 (SC_PacketSecure) @06fc8540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) g_cmd_sc_buffer/35 (addr) g_cmd_sc_buffer/35 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: CMD_SendCommand/61 (363305596 (estimated locally),0.34 per call) 
+  Calls: CMD_CloseSecureChannel/54 (726336575 (estimated locally),0.68 per call) HOST_CRCGet/84 (347405251 (estimated locally),0.32 per call) incrementIV/48 (81504608 (estimated locally),0.08 per call) memcpy/68 (81504608 (estimated locally),0.08 per call) aes_gcm_ae/74 (246983661 (estimated locally),0.23 per call) SC_OTP_Encrypt_Decrypt/57 (386524019 (estimated locally),0.36 per call) HOST_aes_cbc_mac/83 (145277267 (estimated locally),0.14 per call) HOST_aes_cbc/73 (440234144 (estimated locally),0.41 per call) memset/72 (145277267 (estimated locally),0.14 per call) 
+SC_OTP_Encrypt_Decrypt/57 (SC_OTP_Encrypt_Decrypt) @06fc83f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: ctx_securechannel/31 (read) ctx_securechannel/31 (read) sc_otp_key_buffer/56 (addr) ctx_securechannel/31 (addr) sc_otp_key_buffer/56 (addr) sc_otp_key_buffer/56 (addr) ctx_securechannel/31 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:134248236 (estimated locally) body
+  Called by: SC_PacketVerify/59 (90929388 (estimated locally),0.08 per call) SC_PacketVerify/59 (363717553 (estimated locally),0.34 per call) SC_PacketSecure/58 (386524019 (estimated locally),0.36 per call) 
+  Calls: hmac_sha256_final/82 (38976828 (estimated locally),0.29 per call) hmac_sha256_update/81 (38976828 (estimated locally),0.29 per call) hmac_sha256_update/81 (38976828 (estimated locally),0.29 per call) hmac_sha256_init/80 (38976828 (estimated locally),0.29 per call) puts/65 (16136638 (estimated locally),0.12 per call) hkdf_sha256/79 (134248236 (estimated locally),1.00 per call) 
+sc_otp_key_buffer/56 (sc_otp_key_buffer) @06f9ca20
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) 
+  Availability: overwritable
+  Varpool flags:
+CMD_InitSecureChannel/55 (CMD_InitSecureChannel) @06fc81f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: gSecChannelStatus/36 (write) ctx_securechannel/31 (read) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) gScChallenge/39 (addr) gScChallenge/39 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gScChallenge/39 (addr) gScChallenge/39 (addr) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (read) gScMaxqPubKey/38 (addr) gScEcdheKeyPair/37 (addr) ctx_securechannel/31 (write) gScChallenge/39 (read) ctx_securechannel/31 (write) ctx_securechannel/31 (write) ctx_securechannel/31 (addr) ctx_securechannel/31 (write) ctx_securechannel/31 (read) ctx_securechannel/31 (addr) ctx_securechannel/31 (addr) ctx_securechannel/31 (read) ctx_securechannel/31 (read) ctx_securechannel/31 (write) gSecChannelStatus/36 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:94381553 (estimated locally) body
+  Called by: 
+  Calls: CMD_CloseSecureChannel/54 (44525442 (estimated locally),0.47 per call) putchar/67 (32534376 (estimated locally),0.34 per call) printf/66 (1041207449 (estimated locally),11.03 per call) puts/65 (32534376 (estimated locally),0.34 per call) printf/66 (1041207449 (estimated locally),11.03 per call) puts/65 (32534376 (estimated locally),0.34 per call) sha256_final/78 (32534376 (estimated locally),0.34 per call) sha256_update/77 (32534376 (estimated locally),0.34 per call) sha256_update/77 (32534376 (estimated locally),0.34 per call) sha256_update/77 (32534376 (estimated locally),0.34 per call) sha256_init/76 (32534376 (estimated locally),0.34 per call) sha256_final/78 (32534376 (estimated locally),0.34 per call) sha256_update/77 (32534376 (estimated locally),0.34 per call) sha256_update/77 (32534376 (estimated locally),0.34 per call) sha256_update/77 (32534376 (estimated locally),0.34 per call) sha256_init/76 (32534376 (estimated locally),0.34 per call) putchar/67 (5568512 (estimated locally),0.06 per call) printf/66 (178210761 (estimated locally),1.89 per call) puts/65 (5568512 (estimated locally),0.06 per call) memset/72 (5568512 (estimated locally),0.06 per call) puts/65 (5568512 (estimated locally),0.06 per call) uECC_shared_secret/75 (11137024 (estimated locally),0.12 per call) uECC_secp256r1/63 (11137024 (estimated locally),0.12 per call) putchar/67 (11137024 (estimated locally),0.12 per call) printf/66 (356421522 (estimated locally),3.78 per call) puts/65 (11137024 (estimated locally),0.12 per call) uECC_shared_secret/75 (11137024 (estimated locally),0.12 per call) uECC_secp256r1/63 (11137024 (estimated locally),0.12 per call) putchar/67 (11137024 (estimated locally),0.12 per call) printf/66 (356421522 (estimated locally),3.78 per call) puts/65 (11137024 (estimated locally),0.12 per call) putchar/67 (3675218 (estimated locally),0.04 per call) printf/66 (353141934 (estimated locally),3.74 per call) puts/65 (3675218 (estimated locally),0.04 per call) aes_gcm_ae/74 (11137024 (estimated locally),0.12 per call) putchar/67 (11137024 (estimated locally),0.12 per call) printf/66 (356421522 (estimated locally),3.78 per call) printf/66 (11137024 (estimated locally),0.12 per call) memset/72 (11137024 (estimated locally),0.12 per call) putchar/67 (12769824 (estimated locally),0.14 per call) printf/66 (1025427281 (estimated locally),10.86 per call) printf/66 (12769824 (estimated locally),0.14 per call) HOST_aes_cbc/73 (25539648 (estimated locally),0.27 per call) HOST_aes_cbc/73 (13156789 (estimated locally),0.14 per call) 
+CMD_CloseSecureChannel/54 (CMD_CloseSecureChannel) @06fb2d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: gSecChannelStatus/36 (read) ctx_securechannel/31 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: SC_PacketVerify/59 (846106501 (estimated locally),0.79 per call) SC_PacketSecure/58 (726336575 (estimated locally),0.68 per call) CMD_InitSecureChannel/55 (44525442 (estimated locally),0.47 per call) 
+  Calls: memset/72 (217325344 (estimated locally),0.20 per call) 
+CMD_SignSCParams1065/53 (CMD_SignSCParams1065) @06fb2bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: gScChallenge/39 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: uECC_sign/71 (1073741824 (estimated locally),1.00 per call) uECC_secp256r1/63 (1073741824 (estimated locally),1.00 per call) sha256/70 (1073741824 (estimated locally),1.00 per call) memcpy/68 (1073741824 (estimated locally),1.00 per call) memcpy/68 (1073741824 (estimated locally),1.00 per call) 
+CMD_SignSCParams/52 (CMD_SignSCParams) @06fb2a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: gScChallenge/39 (addr) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: uECC_sign/71 (1073741824 (estimated locally),1.00 per call) uECC_secp256r1/63 (1073741824 (estimated locally),1.00 per call) sha256/70 (1073741824 (estimated locally),1.00 per call) memcpy/68 (1073741824 (estimated locally),1.00 per call) memcpy/68 (1073741824 (estimated locally),1.00 per call) 
+CMD_GetScChallenge/51 (CMD_GetScChallenge) @06fb2930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: ctx_securechannel/31 (write) gScChallenge/39 (addr) gScChallenge/39 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MXQ_Get_Challenge/69 (876458967 (estimated locally),0.82 per call) MXQ_Get_Challenge/69 (160953896 (estimated locally),0.15 per call) 
+CMD_PrepareEcdheMode1065Params/50 (CMD_PrepareEcdheMode1065Params) @06fb27e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScMaxqPubKey/38 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memcpy/68 (1073741824 (estimated locally),1.00 per call) memcpy/68 (1073741824 (estimated locally),1.00 per call) 
+CMD_PrepareEcdheKeyPair/49 (CMD_PrepareEcdheKeyPair) @06fb2690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (addr) gScEcdheKeyPair/37 (read) gScEcdheKeyPair/37 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:11059544 (estimated locally) body
+  Called by: 
+  Calls: memcpy/68 (11059544 (estimated locally),1.00 per call) putchar/67 (11059544 (estimated locally),1.00 per call) printf/66 (1062682282 (estimated locally),96.09 per call) puts/65 (11059544 (estimated locally),1.00 per call) uECC_make_key/64 (11059544 (estimated locally),1.00 per call) uECC_secp256r1/63 (11059544 (estimated locally),1.00 per call) 
+incrementIV/48 (incrementIV) @06fb2540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:137085152 (estimated locally) body
+  Called by: SC_PacketVerify/59 (76695509 (estimated locally),0.07 per call) SC_PacketSecure/58 (81504608 (estimated locally),0.08 per call) 
+  Calls: 
+cmd_reset_offset/47 (cmd_reset_offset) @06fb23f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+cmd_put_buffer/46 (cmd_put_buffer) @06fb22a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (read) g_offset/34 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:178956971 (estimated locally) body
+  Called by: 
+  Calls: 
+cmd_put_u1/45 (cmd_put_u1) @06fb2150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+cmd_put_u2/44 (cmd_put_u2) @06fb2000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+cmd_put_u4/43 (cmd_put_u4) @06fadc78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_offset/34 (read) g_cmd_data/33 (read) g_offset/34 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+put_u2_lsb/42 (put_u2_lsb) @06fad9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+proc_endian_2_cmd/41 (proc_endian_2_cmd) @06fad498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+cmd_2_proc_endian/40 (cmd_2_proc_endian) @06fad348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+gScChallenge/39 (gScChallenge) @06f9c360
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: CMD_GetScChallenge/51 (addr) CMD_SignSCParams/52 (addr) CMD_SignSCParams1065/53 (addr) CMD_GetScChallenge/51 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) 
+  Availability: overwritable
+  Varpool flags:
+gScMaxqPubKey/38 (gScMaxqPubKey) @06f9c318
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheMode1065Params/50 (addr) CMD_InitSecureChannel/55 (addr) 
+  Availability: overwritable
+  Varpool flags:
+gScEcdheKeyPair/37 (gScEcdheKeyPair) @06f9c2d0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (addr) CMD_PrepareEcdheKeyPair/49 (read) CMD_PrepareEcdheMode1065Params/50 (addr) CMD_SignSCParams/52 (addr) CMD_PrepareEcdheKeyPair/49 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) 
+  Availability: overwritable
+  Varpool flags:
+gSecChannelStatus/36 (gSecChannelStatus) @06f9c288
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: CMD_InitSecureChannel/55 (read) CMD_CloseSecureChannel/54 (read) SC_PacketSecure/58 (read) CMD_InitSecureChannel/55 (write) SC_PacketVerify/59 (read) 
+  Availability: overwritable
+  Varpool flags:
+g_cmd_sc_buffer/35 (g_cmd_sc_buffer) @06f9c240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) 
+  Availability: available
+  Varpool flags:
+g_offset/34 (g_offset) @06f9c1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: cmd_put_u4/43 (write) cmd_put_u1/45 (read) cmd_put_u2/44 (read) cmd_put_u2/44 (write) cmd_put_u1/45 (write) cmd_put_buffer/46 (write) cmd_reset_offset/47 (write) CMD_SendCommand/61 (read) cmd_put_u4/43 (read) cmd_put_buffer/46 (read) cmd_put_buffer/46 (read) CMD_SendRawCommand/62 (read) 
+  Availability: available
+  Varpool flags: initialized
+g_cmd_data/33 (g_cmd_data) @06f9c1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: g_cmd_buffer/32 (addr) 
+  Referring: cmd_put_u4/43 (read) cmd_put_u2/44 (read) cmd_put_u1/45 (read) cmd_put_buffer/46 (read) CMD_SendCommand/61 (read) CMD_SendRawCommand/62 (read) 
+  Availability: available
+  Varpool flags: initialized read-only const-value-known
+g_cmd_buffer/32 (g_cmd_buffer) @06f9c168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: g_cmd_data/33 (addr) 
+  Availability: available
+  Varpool flags:
+ctx_securechannel/31 (ctx_securechannel) @06f9c120
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: SC_PacketSecure/58 (write) SC_PacketSecure/58 (read) SC_PacketVerify/59 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (read) SC_PacketSecure/58 (read) SC_PacketSecure/58 (write) SC_PacketSecure/58 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (read) SC_OTP_Encrypt_Decrypt/57 (addr) SC_OTP_Encrypt_Decrypt/57 (addr) SC_PacketVerify/59 (read) CMD_GetScChallenge/51 (write) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) CMD_CloseSecureChannel/54 (addr) SC_PacketSecure/58 (addr) CMD_InitSecureChannel/55 (addr) CMD_InitSecureChannel/55 (write) SC_PacketSecure/58 (read) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (addr) SC_PacketSecure/58 (write) CMD_InitSecureChannel/55 (read) CMD_InitSecureChannel/55 (addr) SC_PacketVerify/59 (read) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (write) SC_PacketVerify/59 (read) SC_PacketVerify/59 (write) SC_PacketVerify/59 (write) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) SC_PacketVerify/59 (addr) CMD_SendCommand/61 (read) CMD_SendCommand/61 (read) 
+  Availability: overwritable
+  Varpool flags:
+Trivially needed variables: sc_otp_key_buffer/56 gScChallenge/39 gScMaxqPubKey/38 gScEcdheKeyPair/37 gSecChannelStatus/36 g_cmd_sc_buffer/35 g_offset/34 g_cmd_buffer/32 ctx_securechannel/31
+Removing variables: g_cmd_data/33
+
+Final Symbol table:
+
+cmd_print/90 (cmd_print) @07013dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+receivebytes/89 (receivebytes) @07013d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+receivebytes_first/88 (receivebytes_first) @07013c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sendbytes/87 (sendbytes) @07013bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+aes_gcm_ad/86 (aes_gcm_ad) @07013b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/85 (memcmp) @07013a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_CRCGet/84 (HOST_CRCGet) @070139d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_aes_cbc_mac/83 (HOST_aes_cbc_mac) @07013930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256_final/82 (hmac_sha256_final) @07013888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256_update/81 (hmac_sha256_update) @070137e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256_init/80 (hmac_sha256_init) @07013738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hkdf_sha256/79 (hkdf_sha256) @07013690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256_final/78 (sha256_final) @070135e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256_update/77 (sha256_update) @07013540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256_init/76 (sha256_init) @07013498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+uECC_shared_secret/75 (uECC_shared_secret) @070133f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+aes_gcm_ae/74 (aes_gcm_ae) @07013348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_aes_cbc/73 (HOST_aes_cbc) @070132a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/72 (memset) @070131f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+uECC_sign/71 (uECC_sign) @07013150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256/70 (sha256) @070130a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MXQ_Get_Challenge/69 (MXQ_Get_Challenge) @07013000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/68 (memcpy) @06fc82a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+putchar/67 (__builtin_putchar) @06fc8f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/66 (printf) @06fc8e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/65 (__builtin_puts) @06fc8dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+uECC_make_key/64 (uECC_make_key) @06fc8d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+uECC_secp256r1/63 (uECC_secp256r1) @06fc8c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+CMD_SendRawCommand/62 (CMD_SendRawCommand) @06fc8bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_SendRawCommand (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_SendCommand/61 (CMD_SendCommand) @06fc8a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_SendCommand (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_SendBypassCMD/60 (CMD_SendBypassCMD) @06fc8888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_SendBypassCMD (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+SC_PacketVerify/59 (SC_PacketVerify) @06fc8738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.SC_PacketVerify (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+SC_PacketSecure/58 (SC_PacketSecure) @06fc8540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.SC_PacketSecure (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+SC_OTP_Encrypt_Decrypt/57 (SC_OTP_Encrypt_Decrypt) @06fc83f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.SC_OTP_Encrypt_Decrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:134248236 (estimated locally)
+  Called by: 
+  Calls: 
+sc_otp_key_buffer/56 (sc_otp_key_buffer) @06f9ca20
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.sc_otp_key_buffer (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags:
+CMD_InitSecureChannel/55 (CMD_InitSecureChannel) @06fc81f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_InitSecureChannel (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:94381553 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_CloseSecureChannel/54 (CMD_CloseSecureChannel) @06fb2d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_CloseSecureChannel (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_SignSCParams1065/53 (CMD_SignSCParams1065) @06fb2bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_SignSCParams1065 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_SignSCParams/52 (CMD_SignSCParams) @06fb2a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_SignSCParams (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_GetScChallenge/51 (CMD_GetScChallenge) @06fb2930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_GetScChallenge (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_PrepareEcdheMode1065Params/50 (CMD_PrepareEcdheMode1065Params) @06fb27e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_PrepareEcdheMode1065Params (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CMD_PrepareEcdheKeyPair/49 (CMD_PrepareEcdheKeyPair) @06fb2690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CMD_PrepareEcdheKeyPair (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:11059544 (estimated locally)
+  Called by: 
+  Calls: 
+incrementIV/48 (incrementIV) @06fb2540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.incrementIV (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:137085152 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_reset_offset/47 (cmd_reset_offset) @06fb23f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_reset_offset (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_put_buffer/46 (cmd_put_buffer) @06fb22a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_put_buffer (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:178956971 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_put_u1/45 (cmd_put_u1) @06fb2150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_put_u1 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_put_u2/44 (cmd_put_u2) @06fb2000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_put_u2 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_put_u4/43 (cmd_put_u4) @06fadc78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_put_u4 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+put_u2_lsb/42 (put_u2_lsb) @06fad9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.put_u2_lsb (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+proc_endian_2_cmd/41 (proc_endian_2_cmd) @06fad498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.proc_endian_2_cmd (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+cmd_2_proc_endian/40 (cmd_2_proc_endian) @06fad348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.cmd_2_proc_endian (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+gScChallenge/39 (gScChallenge) @06f9c360
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.gScChallenge (implicit_section)
+  Aux: @06f9ca20
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags:
+gScMaxqPubKey/38 (gScMaxqPubKey) @06f9c318
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.gScMaxqPubKey (implicit_section)
+  Aux: @06f9c360
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags:
+gScEcdheKeyPair/37 (gScEcdheKeyPair) @06f9c2d0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.gScEcdheKeyPair (implicit_section)
+  Aux: @06f9c318
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags:
+gSecChannelStatus/36 (gSecChannelStatus) @06f9c288
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.gSecChannelStatus (implicit_section)
+  Aux: @06f9c2d0
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags:
+g_cmd_sc_buffer/35 (g_cmd_sc_buffer) @06f9c240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.g_cmd_sc_buffer (implicit_section)
+  Aux: @06f9c288
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+g_offset/34 (g_offset) @06f9c1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.g_offset (implicit_section)
+  Aux: @06f9c240
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized
+g_cmd_buffer/32 (g_cmd_buffer) @06f9c168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.g_cmd_buffer (implicit_section)
+  Aux: @06f9c1f8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+ctx_securechannel/31 (ctx_securechannel) @06f9c120
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.ctx_securechannel (implicit_section)
+  Aux: @06f9c168
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags:

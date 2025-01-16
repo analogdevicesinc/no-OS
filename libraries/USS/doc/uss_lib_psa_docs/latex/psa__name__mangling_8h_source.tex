@@ -1,0 +1,125 @@
+\doxysection{psa\+\_\+name\+\_\+mangling.\+h}
+\hypertarget{psa__name__mangling_8h_source}{}\label{psa__name__mangling_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/psa\_name\_mangling.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/psa\_name\_mangling.h}}
+\mbox{\hyperlink{psa__name__mangling_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00016\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ PSA\_NAME\_MANGLING\_H}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ PSA\_NAME\_MANGLING\_H}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ PSA\_FUNCTION\_NAME(x)\ uss\_\ \#\#\ x}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ psa\_crypto\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_crypto\_init)}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ psa\_key\_attributes\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_attributes\_init)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_attributes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_attributes)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ psa\_reset\_key\_attributes\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_reset\_key\_attributes)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ psa\_set\_key\_type\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_set\_key\_type)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_type\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_type)}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ psa\_set\_key\_bits\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_set\_key\_bits)}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_bits\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_bits)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ psa\_set\_key\_lifetime\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_set\_key\_lifetime)}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_lifetime\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_lifetime)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ psa\_set\_key\_id\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_set\_key\_id)}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_id\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_id)}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ psa\_set\_key\_algorithm\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_set\_key\_algorithm)}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_algorithm\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_algorithm)}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ psa\_set\_key\_usage\_flags\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_set\_key\_usage\_flags)}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ psa\_get\_key\_usage\_flags\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_get\_key\_usage\_flags)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ psa\_import\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_import\_key)}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ psa\_generate\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_generate\_key)}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ psa\_copy\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_copy\_key)}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ psa\_destroy\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_destroy\_key)}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ psa\_purge\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_purge\_key)}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ psa\_export\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_export\_key)}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ psa\_export\_public\_key\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_export\_public\_key)}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ psa\_hash\_operation\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_operation\_init)}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ psa\_hash\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_setup)}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ psa\_hash\_update\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_update)}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ psa\_hash\_finish\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_finish)}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ psa\_hash\_verify\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_verify)}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ psa\_hash\_abort\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_abort)}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ psa\_hash\_clone\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_clone)}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ psa\_hash\_compute\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_compute)}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ psa\_hash\_compare\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_compare)}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ psa\_hash\_suspend\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_suspend)}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#define\ psa\_hash\_resume\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_hash\_resume)}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ psa\_mac\_operation\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_operation\_init)}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ psa\_mac\_sign\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_sign\_setup)}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ psa\_mac\_verify\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_verify\_setup)}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ psa\_mac\_update\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_update)}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ psa\_mac\_sign\_finish\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_sign\_finish)}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ psa\_mac\_verify\_finish\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_verify\_finish)}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ psa\_mac\_compute\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_compute)}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ psa\_mac\_verify\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_verify)}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ psa\_mac\_abort\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_mac\_abort)}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ psa\_cipher\_encrypt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_encrypt)}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ psa\_cipher\_decrypt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_decrypt)}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ psa\_cipher\_operation\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_operation\_init)}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ psa\_cipher\_encrypt\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_encrypt\_setup)}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#define\ psa\_cipher\_decrypt\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_decrypt\_setup)}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#define\ psa\_cipher\_generate\_iv\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_generate\_iv)}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#define\ psa\_cipher\_set\_iv\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_set\_iv)}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#define\ psa\_cipher\_update\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_update)}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#define\ psa\_cipher\_finish\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_finish)}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#define\ psa\_cipher\_abort\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_cipher\_abort)}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#define\ psa\_aead\_encrypt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_encrypt)}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#define\ psa\_aead\_decrypt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_decrypt)}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#define\ psa\_aead\_operation\_init\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_operation\_init)}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ psa\_aead\_encrypt\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_encrypt\_setup)}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#define\ psa\_aead\_decrypt\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_decrypt\_setup)}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#define\ psa\_aead\_generate\_nonce\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_generate\_nonce)}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#define\ psa\_aead\_set\_nonce\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_set\_nonce)}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#define\ psa\_aead\_set\_lengths\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_set\_lengths)}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#define\ psa\_aead\_update\_ad\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_update\_ad)}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ psa\_aead\_update\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_update)}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ psa\_aead\_finish\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_finish)}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#define\ psa\_aead\_verify\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_verify)}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ psa\_aead\_abort\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_aead\_abort)}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_operation\_init\ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_operation\_init)}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_setup\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_setup)}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_get\_capacity\ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_get\_capacity)}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_set\_capacity\ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_set\_capacity)}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_input\_bytes\ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_input\_bytes)}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_input\_integer\ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_input\_integer)}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_input\_key\ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_input\_key)}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_output\_bytes\ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_output\_bytes)}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_output\_key\ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_output\_key)}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_verify\_bytes\ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_verify\_bytes)\ \ \ \ \ \ }}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_verify\_key\ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_verify\_key)}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_abort\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_abort)}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#define\ psa\_sign\_message\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_sign\_message)}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#define\ psa\_verify\_message\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_verify\_message)}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#define\ psa\_sign\_hash\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_sign\_hash)}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#define\ psa\_verify\_hash\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_verify\_hash)}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#define\ psa\_asymmetric\_encrypt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_asymmetric\_encrypt)}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#define\ psa\_asymmetric\_decrypt\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_asymmetric\_decrypt)}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#define\ psa\_key\_derivation\_key\_agreement\ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_key\_derivation\_key\_agreement)}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#define\ psa\_raw\_key\_agreement\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_raw\_key\_agreement)}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#define\ psa\_generate\_random\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_FUNCTION\_NAME(psa\_generate\_random)}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00122\ \}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ PSA\_NAME\_MANGLING\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

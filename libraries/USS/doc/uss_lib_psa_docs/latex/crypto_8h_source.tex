@@ -1,0 +1,434 @@
+\doxysection{crypto.\+h}
+\hypertarget{crypto_8h_source}{}\label{crypto_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto.h}}
+\mbox{\hyperlink{crypto_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#ifndef\ PSA\_CRYPTO\_H}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ PSA\_CRYPTO\_H}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00019\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__config__def_8h}{crypto\_config\_def.h}}"{}}\ \ \textcolor{comment}{//\ Include\ the\ configuration\ file\ as\ the\ fist\ include\ to\ handle\ function-\/mangling\ and\ other\ configurations}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__errors_8h}{crypto\_errors.h}}"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__typedefs_8h}{crypto\_typedefs.h}}"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__hash_8h}{crypto\_hash.h}}"{}}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__sign_8h}{crypto\_sign.h}}"{}}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{key__management_8h}{key\_management.h}}"{}}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__key__derivation_8h}{crypto\_key\_derivation.h}}"{}}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__cipher_8h}{crypto\_cipher.h}}"{}}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__aead_8h}{crypto\_aead.h}}"{}}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__mac_8h}{crypto\_mac.h}}"{}}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ PSA\_CRYPTO\_API\_VERSION\_MAJOR\ 1}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ PSA\_CRYPTO\_API\_VERSION\_MINOR\ 1}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00045\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{crypto_8h_a2de150803fc2f7dc6101d5af7e921dd9}{psa\_crypto\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00052\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ \mbox{\hyperlink{crypto_8h_a5b4ba3747b8080eb61c475e7f5a4af3a}{psa\_key\_attributes\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00065\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a0437fe9a181dd2667b62f063f377ac0f}{psa\_get\_key\_attributes}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00073\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a74d46b380ac1e0c993b9fe14a7abef0e}{psa\_reset\_key\_attributes}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00081\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a0d97f52b7d6507cfb68dfc0705fbfeb6}{psa\_set\_key\_type}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ type);}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00090\ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a6dc6769fc90f5e4c1b5be3e18e7db031}{psa\_get\_key\_type}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00098\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{psa__name__mangling_8h_a24f385862aef135526d6063c96a35532}{psa\_get\_key\_bits}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00106\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a99c0bf1dd7854db8365efa9d3c4e94a3}{psa\_set\_key\_bits}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ bits);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00117\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_abe05b493d2160f06f01f9c1487db9402}{psa\_set\_key\_lifetime}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}}\ lifetime);}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00126\ \mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aa1b6cbdf4a575acca64ea394f96fc25b}{psa\_get\_key\_lifetime}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00137\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_aca2050f050a3b7edca597f2113cfb830}{psa\_set\_key\_id}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00147\ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aff8db4c667ae1035049750fc2be565c3}{psa\_get\_key\_id}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00155\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_a49df3796739c5190afaa598f3bcd6ead}{psa\_set\_key\_algorithm}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00164\ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a89bb887ca2430cf169438c3df4f16875}{psa\_get\_key\_algorithm}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00172\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{psa__name__mangling_8h_ad7582fd437683b213b94af3fdf0c38f0}{psa\_set\_key\_usage\_flags}}(\mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ usage\_flags);}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00181\ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a1eb5358a47872b3c41eac097abf2e3a1}{psa\_get\_key\_usage\_flags}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes);}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00206\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a60d170807ab234052c01612005b77f98}{psa\_import\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ data,}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_length,}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ *\ key);}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00226\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a5100b4b72a0ae53887294df7bdbbe2f6}{psa\_generate\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ *\ key);}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00238\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a92916bc98478a407d27a061a52c6eef5}{psa\_copy\_key}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ source\_key,}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ *\ target\_key);}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00248\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a4159111c5629867ea30c09b076efcf58}{psa\_destroy\_key}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key);}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00256\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a2b48643c3889ddc197de876f4246e1e0}{psa\_purge\_key}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key);}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00267\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a4923eb02ff4847a3a3336bc6c2362015}{psa\_export\_key}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ data,}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_size,}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ data\_length);}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00281\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a0baed840186cfe483b432e634e4f3a09}{psa\_export\_public\_key}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ data,}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_size,}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ data\_length);}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00310\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ae89727b45894128850eb25891fd831ee}{psa\_hash\_compute}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ hash,}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_size,}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ hash\_length);}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00337\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ad30cc3803ef830aced0194b7b7f1264c}{psa\_hash\_compare}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ hash,}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_length);}
+\DoxyCodeLine{00347\ \mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ \mbox{\hyperlink{crypto_8h_a826a09991b0251aea5b5e4c879edd2eb}{psa\_hash\_operation\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00364\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aa0f1f434be7b57bf24d9011bb5956089}{psa\_hash\_setup}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00383\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a7e56a5acc07df193205bce7eb310050d}{psa\_hash\_update}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length);}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00406\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a15b0d26fce0e9ad450031138080abf31}{psa\_hash\_finish}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ hash,}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_size,}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ hash\_length);}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00428\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aaa6192b7c3f18374499fe5f6466e440e}{psa\_hash\_verify}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ hash,}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_length);}
+\DoxyCodeLine{00437\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a0ed69b3a0db43a897a192a4ea0a913df}{psa\_hash\_abort}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation);}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00448\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_afcf830be6fb20b9e1b3bc94ab77607fe}{psa\_hash\_suspend}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ hash\_state,}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_state\_size,}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ hash\_state\_length);}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00461\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ac31d14938a54beb886a45a2173aeafa6}{psa\_hash\_resume}}(\mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ hash\_state,}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_state\_length);}
+\DoxyCodeLine{00471\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a906a3125d30e58bacb23e55198b20db8}{psa\_hash\_clone}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ source\_operation,}
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__uss__hash__t}{psa\_hash\_operation\_t}}\ *\ target\_operation);}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00493\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aac150dfa949b5e9539933c4421f7afe3}{psa\_mac\_compute}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ mac,}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mac\_size,}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ mac\_length);}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00519\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ac82e96e9eedc1d17c2d0d5ddece465ef}{psa\_mac\_verify}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ mac,}
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mac\_length);}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00533\ \mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ \mbox{\hyperlink{crypto_8h_ae4aed389e7a768993cf7cac972767d15}{psa\_mac\_operation\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00551\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a909d6a79ef0a46f5d6250fb04d457466}{psa\_mac\_sign\_setup}}(\mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00570\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_acfb46cff6c4c0cf3902db96bc0cec5a1}{psa\_mac\_verify\_setup}}(\mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00588\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_abbd2b43e249b19f2fa84a28da925acc0}{psa\_mac\_update}}(\mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length);}
+\DoxyCodeLine{00591\ }
+\DoxyCodeLine{00608\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a56727df19d84a59628d01bc856aef3f6}{psa\_mac\_sign\_finish}}(\mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ mac,}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mac\_size,}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ mac\_length);}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00628\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a272e00da7cf6da4cad75d04019bf3ccd}{psa\_mac\_verify\_finish}}(\mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ mac,}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ mac\_length);}
+\DoxyCodeLine{00640\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a16c98b062c0403d519c8667da8631da1}{psa\_mac\_abort}}(\mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_t}}\ *\ operation);}
+\DoxyCodeLine{00641\ }
+\DoxyCodeLine{00658\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a291baf4db9aef280783f6081ca608447}{psa\_cipher\_encrypt}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{00664\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{00665\ }
+\DoxyCodeLine{00684\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a119cfc7f87542fdeba218223d3058ab5}{psa\_cipher\_decrypt}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{00691\ }
+\DoxyCodeLine{00700\ \mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ \mbox{\hyperlink{crypto_8h_a53b28da37f3d63aad32ab0d8fab6aa08}{psa\_cipher\_operation\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00701\ }
+\DoxyCodeLine{00717\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a516d27d7e5b47bcefb6586ddacabb301}{psa\_cipher\_encrypt\_setup}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00720\ }
+\DoxyCodeLine{00736\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a2e69680e667207664975db23b42a4984}{psa\_cipher\_decrypt\_setup}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00757\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a3c53a694cac0e7239afe6cb622ab2157}{psa\_cipher\_generate\_iv}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00758\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ iv,}
+\DoxyCodeLine{00759\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ iv\_size,}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ iv\_length);}
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00776\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a58df2268eab79e0ac29c345df8cbe71b}{psa\_cipher\_set\_iv}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ iv,}
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ iv\_length);}
+\DoxyCodeLine{00779\ }
+\DoxyCodeLine{00797\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a9e7b0a523b83efd6ba611d3db6a76372}{psa\_cipher\_update}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{00803\ }
+\DoxyCodeLine{00819\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a43d7abc90a57574cf603908f6243e7e6}{psa\_cipher\_finish}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00820\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{00833\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a2abd9b71bf9b77a011330d2066865874}{psa\_cipher\_abort}}(\mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_t}}\ *\ operation);}
+\DoxyCodeLine{00834\ }
+\DoxyCodeLine{00835\ }
+\DoxyCodeLine{00866\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a873c33300f40b545044fbc4ac448a952}{psa\_aead\_encrypt}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ nonce,}
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ nonce\_length,}
+\DoxyCodeLine{00870\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ additional\_data,}
+\DoxyCodeLine{00871\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ additional\_data\_length,}
+\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ plaintext,}
+\DoxyCodeLine{00873\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ plaintext\_length,}
+\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ ciphertext,}
+\DoxyCodeLine{00875\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ ciphertext\_size,}
+\DoxyCodeLine{00876\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ ciphertext\_length);}
+\DoxyCodeLine{00877\ }
+\DoxyCodeLine{00909\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a80d237e39b2803b22ad57821ba9aa9d9}{psa\_aead\_decrypt}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00910\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{00911\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ nonce,}
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ nonce\_length,}
+\DoxyCodeLine{00913\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ additional\_data,}
+\DoxyCodeLine{00914\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ additional\_data\_length,}
+\DoxyCodeLine{00915\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ ciphertext,}
+\DoxyCodeLine{00916\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ ciphertext\_length,}
+\DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ plaintext,}
+\DoxyCodeLine{00918\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ plaintext\_size,}
+\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ plaintext\_length);}
+\DoxyCodeLine{00920\ }
+\DoxyCodeLine{00921\ }
+\DoxyCodeLine{00929\ \mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ \mbox{\hyperlink{crypto_8h_a464e3bbd19095e13420599dc4cf11a5c}{psa\_aead\_operation\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00930\ }
+\DoxyCodeLine{00947\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ab3e30830b14bbf6fdd16872b6b83c1d8}{psa\_aead\_encrypt\_setup}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00948\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00949\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00950\ }
+\DoxyCodeLine{00951\ }
+\DoxyCodeLine{00968\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a9a43b25b12dea43001b4a4d92916f085}{psa\_aead\_decrypt\_setup}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00969\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{00970\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{00971\ }
+\DoxyCodeLine{00972\ }
+\DoxyCodeLine{00993\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a997a9fdf99ced2ed01233158e834d729}{psa\_aead\_set\_lengths}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{00994\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ ad\_length,}
+\DoxyCodeLine{00995\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ plaintext\_length);}
+\DoxyCodeLine{00996\ }
+\DoxyCodeLine{00997\ }
+\DoxyCodeLine{01018\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a2d2b998e55a00f6abe1417e574a8dcb1}{psa\_aead\_generate\_nonce}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ nonce,}
+\DoxyCodeLine{01020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ nonce\_size,}
+\DoxyCodeLine{01021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ nonce\_length);}
+\DoxyCodeLine{01022\ }
+\DoxyCodeLine{01023\ }
+\DoxyCodeLine{01047\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aa7ddb1980095c0074f1406100eda0e22}{psa\_aead\_set\_nonce}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ nonce,}
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ nonce\_length);}
+\DoxyCodeLine{01050\ }
+\DoxyCodeLine{01051\ }
+\DoxyCodeLine{01073\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ac240ea8a75487730de512bab40fc504c}{psa\_aead\_update\_ad}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{01075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length);}
+\DoxyCodeLine{01076\ }
+\DoxyCodeLine{01077\ }
+\DoxyCodeLine{01101\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aa2974a9c13db2be1141cdc81b7e946b1}{psa\_aead\_update}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{01103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{01104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{01105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{01106\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{01107\ }
+\DoxyCodeLine{01108\ }
+\DoxyCodeLine{01131\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a7334830b1871b32b6b71e74f674e0371}{psa\_aead\_finish}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ ciphertext,}
+\DoxyCodeLine{01133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ ciphertext\_size,}
+\DoxyCodeLine{01134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ ciphertext\_length,}
+\DoxyCodeLine{01135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ tag,}
+\DoxyCodeLine{01136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ tag\_size,}
+\DoxyCodeLine{01137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ tag\_length);}
+\DoxyCodeLine{01138\ }
+\DoxyCodeLine{01139\ }
+\DoxyCodeLine{01162\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_af5d609c2a360ed13e870f181b51e96d2}{psa\_aead\_verify}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ plaintext,}
+\DoxyCodeLine{01164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ plaintext\_size,}
+\DoxyCodeLine{01165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ plaintext\_length,}
+\DoxyCodeLine{01166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ tag,}
+\DoxyCodeLine{01167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ tag\_length);}
+\DoxyCodeLine{01168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01169\ }
+\DoxyCodeLine{01180\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a15d3a5af0761aa621e7abd004c8f803a}{psa\_aead\_abort}}(\mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_t}}\ *\ operation);}
+\DoxyCodeLine{01181\ }
+\DoxyCodeLine{01182\ \textcolor{comment}{/*\ Implement\ key\ derivation\ and\ uncomment\ */}}
+\DoxyCodeLine{01183\ }
+\DoxyCodeLine{01189\ \mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ \mbox{\hyperlink{crypto_8h_ae1808d5eab93ebf8fafc18cb02d899c4}{psa\_key\_derivation\_operation\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{01190\ }
+\DoxyCodeLine{01196\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a060846ac906dd6e572cae41f4c4e31a3}{psa\_key\_derivation\_setup}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg);}
+\DoxyCodeLine{01198\ }
+\DoxyCodeLine{01204\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a0ed2767767caa530d0e48ea17b38e468}{psa\_key\_derivation\_get\_capacity}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ capacity);}
+\DoxyCodeLine{01206\ }
+\DoxyCodeLine{01212\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_aab05f54d1c35c4c65bd09ec8e68f9e46}{psa\_key\_derivation\_set\_capacity}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ capacity);}
+\DoxyCodeLine{01214\ }
+\DoxyCodeLine{01220\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a970fe623d21acf9f045c4e2593f20f2e}{psa\_key\_derivation\_input\_bytes}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_aac4eeacd36596c548b3a48fc06c5048b}{psa\_key\_derivation\_step\_t}}\ step,}
+\DoxyCodeLine{01222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ data,}
+\DoxyCodeLine{01223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ data\_length);}
+\DoxyCodeLine{01224\ }
+\DoxyCodeLine{01230\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ae8807d367bd70ad4a2e78027d9156ee6}{psa\_key\_derivation\_input\_integer}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_aac4eeacd36596c548b3a48fc06c5048b}{psa\_key\_derivation\_step\_t}}\ step,}
+\DoxyCodeLine{01232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ value);}
+\DoxyCodeLine{01233\ }
+\DoxyCodeLine{01239\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a1382705ac086a97719472e690243ba32}{psa\_key\_derivation\_input\_key}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_aac4eeacd36596c548b3a48fc06c5048b}{psa\_key\_derivation\_step\_t}}\ step,}
+\DoxyCodeLine{01241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key);}
+\DoxyCodeLine{01242\ }
+\DoxyCodeLine{01248\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ad8c018075c1f53a24210019895db48be}{psa\_key\_derivation\_output\_bytes}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{01250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_length);}
+\DoxyCodeLine{01251\ }
+\DoxyCodeLine{01257\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a8ba0284182af53b034425528cdb7dc79}{psa\_key\_derivation\_output\_key}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *\ attributes,}
+\DoxyCodeLine{01258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ *\ key);}
+\DoxyCodeLine{01260\ }
+\DoxyCodeLine{01266\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a67e8f0aa38040df7cfa5dcf19940beb7}{psa\_key\_derivation\_verify\_bytes}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *expected\_output,}
+\DoxyCodeLine{01268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_length);}
+\DoxyCodeLine{01269\ }
+\DoxyCodeLine{01275\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a6ed9c3f80ef87431f6062f5559af3ab8}{psa\_key\_derivation\_verify\_key}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ expected);}
+\DoxyCodeLine{01277\ }
+\DoxyCodeLine{01283\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_af41632ffbbeed3a021312b21657d9d47}{psa\_key\_derivation\_abort}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation);}
+\DoxyCodeLine{01284\ }
+\DoxyCodeLine{01314\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a3e41af088e02e2fe6607b333a01e1ac6}{psa\_sign\_message}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{01315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{01317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{01318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ signature,}
+\DoxyCodeLine{01319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ signature\_size,}
+\DoxyCodeLine{01320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ signature\_length);}
+\DoxyCodeLine{01321\ }
+\DoxyCodeLine{01347\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a9c7abfaf4977c766057faac67e476a9f}{psa\_verify\_message}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{01348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{01350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{01351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ signature,}
+\DoxyCodeLine{01352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ signature\_length);}
+\DoxyCodeLine{01353\ }
+\DoxyCodeLine{01384\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a6dc00225231ab59c0b96adc0c16017e1}{psa\_sign\_hash}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{01385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ hash,}
+\DoxyCodeLine{01387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_length,}
+\DoxyCodeLine{01388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ signature,}
+\DoxyCodeLine{01389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ signature\_size,}
+\DoxyCodeLine{01390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ signature\_length);}
+\DoxyCodeLine{01391\ }
+\DoxyCodeLine{01417\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a9aac10cc29707d1f662b18e32c849252}{psa\_verify\_hash}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{01418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ hash,}
+\DoxyCodeLine{01420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ hash\_length,}
+\DoxyCodeLine{01421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ signature,}
+\DoxyCodeLine{01422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ signature\_length);}
+\DoxyCodeLine{01423\ }
+\DoxyCodeLine{01444\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a6ed38070e4f7442ab93f056e4863cd64}{psa\_asymmetric\_encrypt}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{01445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{01447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{01448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ salt,}
+\DoxyCodeLine{01449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ salt\_length,}
+\DoxyCodeLine{01450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{01451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{01452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{01453\ }
+\DoxyCodeLine{01454\ }
+\DoxyCodeLine{01475\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ac0a20970956d36fe8b9666f7c73c70ae}{psa\_asymmetric\_decrypt}}(\mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ key,}
+\DoxyCodeLine{01476\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01477\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ input,}
+\DoxyCodeLine{01478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ input\_length,}
+\DoxyCodeLine{01479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ salt,}
+\DoxyCodeLine{01480\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ salt\_length,}
+\DoxyCodeLine{01481\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{01482\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{01483\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{01484\ }
+\DoxyCodeLine{01504\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_ab21bf63ae4cfb50ac2cad13113e98bef}{psa\_raw\_key\_agreement}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ alg,}
+\DoxyCodeLine{01505\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ private\_key,}
+\DoxyCodeLine{01506\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ peer\_key,}
+\DoxyCodeLine{01507\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ peer\_key\_length,}
+\DoxyCodeLine{01508\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ *\ output,}
+\DoxyCodeLine{01509\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size,}
+\DoxyCodeLine{01510\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ *\ output\_length);}
+\DoxyCodeLine{01511\ }
+\DoxyCodeLine{01517\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a708ae105643e920cc33a3b43cea5ddbd}{psa\_key\_derivation\_key\_agreement}}(\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_t}}\ *\ operation,}
+\DoxyCodeLine{01518\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_aac4eeacd36596c548b3a48fc06c5048b}{psa\_key\_derivation\_step\_t}}\ step,}
+\DoxyCodeLine{01519\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ private\_key,}
+\DoxyCodeLine{01520\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uint8\_t\ *\ peer\_key,}
+\DoxyCodeLine{01521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ peer\_key\_length);}
+\DoxyCodeLine{01522\ }
+\DoxyCodeLine{01536\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{psa__name__mangling_8h_a3c145c63feb142fe90c752caf0c5e889}{psa\_generate\_random}}(uint8\_t\ *\ output,}
+\DoxyCodeLine{01537\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ output\_size);}
+\DoxyCodeLine{01538\ }
+\DoxyCodeLine{01539\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{01540\ \}}
+\DoxyCodeLine{01541\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01542\ }
+\DoxyCodeLine{01543\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PSA\_CRYPTO\_H}}
+
+\end{DoxyCode}

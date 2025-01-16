@@ -1,0 +1,151 @@
+\doxysection{crypto\+\_\+config\+\_\+def.\+h}
+\hypertarget{crypto__config__def_8h_source}{}\label{crypto__config__def_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_config\_def.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_config\_def.h}}
+\mbox{\hyperlink{crypto__config__def_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ CRYPTO\_CONFIG\_DEF\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ CRYPTO\_CONFIG\_DEF\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#if\ !defined(MAXQ1065)\ \&\&\ !defined(MAXQ1080)}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\ \ \ \ \#error\ "{}Missing\ valid\ authenticator!"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#elif\ defined(MAXQ1065)\ \&\&\ defined(MAXQ1080)}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\ \ \ \ \#error\ "{}Multiple\ authenticators\ defined!"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#if\ defined(TFM\_WITH\_USS\_DRIVER\_SUPPORT)}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}\mbox{\hyperlink{psa__name__mangling_8h}{psa\_name\_mangling.h}}"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//TFM\_WITH\_USS\_DRIVER\_SUPPORT}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#if\ defined(USE\_PROTOCOL\_MAILBOX)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_EMULATION}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//Algo\ configuration\ for\ Ciphering}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)\ ||\ defined(MAXQ1080)}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_AES\_CCM}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_AES\_GCM}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_AES\_ECB}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE\ 16u\ \ \ \ }}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ USS\_PSA\_AVAILABLE\_ALG\_CHACHA20\_POLY1305}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#undef\ USS\_PSA\_AVAILABLE\_ALG\_CHACHA20\_POLY1305}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\ \ \ \ \#endif\ }\textcolor{comment}{//USS\_PSA\_AVAILABLE\_ALG\_CHACHA20\_POLY1305}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#if\ defined(MAXQ1080)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_AES\_CTR}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//Algo\ configuration\ for\ Hashing}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)\ ||\ defined(MAXQ1080)}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_SHA256}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif\ }}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#if\ defined(MAXQ1080)}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_SHA384}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_SHA512}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{comment}{//Signing\ Algo}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)\ ||\ defined(MAXQ1080)}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_ECDSA}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#if\ defined(MAXQ1080)}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{comment}{//Elliptic\ curve\ configuration}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)\ ||\ defined(MAXQ1080)}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_SECP\_R1\_256}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#if\ defined(MAXQ1080)}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_SECP\_R1\_384}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_SECP\_R1\_521}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_BRAINPOOL\_P\_R1\_256}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_BRAINPOOL\_P\_R1\_384}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_BRAINPOOL\_P\_R1\_512}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{comment}{//RSA\ configuration}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA)}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PKCS1V15}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PSS\ \ \ \ }}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA4096}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA3072}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA2048}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MAXQ1080}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{comment}{//Algo\ configuration\ for\ ECDSA\ Signing}}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_ECDSA)\ \&\&\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA256)\ }}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_ECDSA\_SHA256}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_ECDSA)\ \&\&\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA384)}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_ECDSA\_SHA384}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_ECDSA)\ \&\&\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA512)}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_ECDSA\_SHA512}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{comment}{//Algo\ configuration\ for\ RSA\ signing}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA)\ \&\&\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA256)\ }}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PKCS1V15\_SHA256}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PSS\_SHA256}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA)\ \&\&\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA384)}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PKCS1V15\_SHA384}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PSS\_SHA384}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA)\ \&\&\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA512)}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PKCS1V15\_SHA512}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_AVAILABLE\_ALG\_RSA\_PSS\_SHA512}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{comment}{/*\ The\ maximum\ size\ of\ hash,\ in\ bits*/}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#ifdef\ USS\_PSA\_AVAILABLE\_ALG\_SHA512}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_MAX\_HASH\_BITS\ 512u}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA384)}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_MAX\_HASH\_BITS\ 384u}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_AVAILABLE\_ALG\_SHA256)}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_MAX\_HASH\_BITS\ 256u}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{comment}{/*\ The\ maximum\ size\ of\ an\ ECC\ key\ on\ this\ implementation,\ in\ bits.*/}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_ECC\_SECP\_R1\_521)}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_MAX\_CURVE\_BITS\ 521u}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_ECC\_BRAINPOOL\_P\_R1\_512)}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_MAX\_CURVE\_BITS\ 512u}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_ECC\_SECP\_R1\_384)\ ||\ defined(USS\_PSA\_ECC\_BRAINPOOL\_P\_R1\_384)}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_MAX\_CURVE\_BITS\ 384u}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_ECC\_SECP\_R1\_256)\ ||\ defined(USS\_PSA\_ECC\_BRAINPOOL\_P\_R1\_256)}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_MAX\_CURVE\_BITS\ 256u}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_ECC\_MAX\_CURVE\_BITS\ 0u}}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \textcolor{comment}{//RSA\ configuration}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#if\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA4096)}}
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_RSA\_MAX\_KEY\_BITS\ 4096u}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA3072)}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_RSA\_MAX\_KEY\_BITS\ 3072u}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#elif\ defined(USS\_PSA\_AVAILABLE\_ALG\_RSA2048)}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\ \ \ \ \#define\ USS\_PSA\_RSA\_MAX\_KEY\_BITS\ 2048u}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00140\ \}}
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//CRYPTO\_CONFIG\_DEF\_H}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ }
+
+\end{DoxyCode}

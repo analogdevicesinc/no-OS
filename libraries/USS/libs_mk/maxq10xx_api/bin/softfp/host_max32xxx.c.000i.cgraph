@@ -1,0 +1,2158 @@
+Trivially needed symbols: HOST_follow_tls/154 HOST_activate_gcu/153 HOST_activate_tls/152 HOST_toggle_wdi/151 HOST_reset_maxq106x/150 HOST_deinit_interface/149 HOST_set_interface/148 HOST_get_interface/147 HOST_maxq10xx_reset/146 HOST_block_until_pin/145 maxq_rdy/144 maxq1065_pwdn/143 HOST_wait_usec/3
+
+
+Initial Symbol table:
+
+MXC_Delay/161 (MXC_Delay) @066302a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutSet/160 (MXC_GPIO_OutSet) @066301f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutClr/159 (MXC_GPIO_OutClr) @06630150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_Config/158 (MXC_GPIO_Config) @066300a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+reset_set/157 (reset_set) @06662048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06625930
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+MXC_GPIO_InGet/156 (MXC_GPIO_InGet) @06630000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+MXC_TMR_Delay/155 (MXC_TMR_Delay) @06625540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+HOST_follow_tls/154 (HOST_follow_tls) @06625498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_gcu/153 (HOST_activate_gcu) @066251f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_tls/152 (HOST_activate_tls) @066250a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @066251f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_toggle_wdi/151 (HOST_toggle_wdi) @06625e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @066250a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_reset_maxq106x/150 (HOST_reset_maxq106x) @06625d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_deinit_interface/149 (HOST_deinit_interface) @06625bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_set_interface/148 (HOST_set_interface) @06625a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625bd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_get_interface/147 (HOST_get_interface) @06625930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_maxq10xx_reset/146 (HOST_maxq10xx_reset) @066257e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625930
+  References: maxq1065_pwdn/143 (addr) reset_set/157 (read) reset_set/157 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_Delay/161 MXC_GPIO_OutSet/160 MXC_GPIO_OutClr/159 MXC_GPIO_Config/158 
+HOST_block_until_pin/145 (HOST_block_until_pin) @06625690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @066257e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_GPIO_InGet/156 MXC_TMR_Delay/155 
+maxq_rdy/144 (maxq_rdy) @06622630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06625690
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+maxq1065_pwdn/143 (maxq1065_pwdn) @066225a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06622630
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+MXC_SYS_In_Crit_Section/142 (MXC_SYS_In_Crit_Section) @065e9738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+MXC_SYS_Crit_Exit/141 (MXC_SYS_Crit_Exit) @065e95e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+MXC_SYS_Crit_Enter/140 (MXC_SYS_Crit_Enter) @065e9498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_mxc_crit_get_state/139 (_mxc_crit_get_state) @065e9348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_state/138 (_state) @065e4360
+  Type: variable definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+ITM_CheckChar/137 (ITM_CheckChar) @0637f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/136 (ITM_ReceiveChar) @06373bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/135 (ITM_SendChar) @06373e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/134 (SysTick_Config) @06373b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/133 (SCB_GetFPUType) @063739d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/132 (ARM_MPU_Load) @06373888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/131 (ARM_MPU_OrderedMemcpy) @06373738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/130 (ARM_MPU_SetRegionEx) @063735e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/129 (ARM_MPU_SetRegion) @06373498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/128 (ARM_MPU_ClrRegion) @06373348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/127 (ARM_MPU_Disable) @063731f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/126 (ARM_MPU_Enable) @063730a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/125 (__NVIC_SystemReset) @063649d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/124 (__NVIC_GetVector) @06364888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/123 (__NVIC_SetVector) @06364738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/122 (NVIC_DecodePriority) @063645e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/121 (NVIC_EncodePriority) @06364498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/120 (__NVIC_GetPriority) @06364348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/119 (__NVIC_SetPriority) @063641f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/118 (__NVIC_GetActive) @063640a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/117 (__NVIC_ClearPendingIRQ) @0635ff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/116 (__NVIC_SetPendingIRQ) @0635fdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/115 (__NVIC_GetPendingIRQ) @0635fc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/114 (__NVIC_DisableIRQ) @0635fb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/113 (__NVIC_GetEnableIRQ) @0635f9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/112 (__NVIC_EnableIRQ) @0635f888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/111 (__NVIC_GetPriorityGrouping) @0635f738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/110 (__NVIC_SetPriorityGrouping) @0635f5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/109 (__SMMLA) @0631f930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/108 (__QSUB) @0631f7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/107 (__QADD) @0631f690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/106 (__SEL) @0631f540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/105 (__SMLSLDX) @0631f3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/104 (__SMLSLD) @0631f2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/103 (__SMLSDX) @0631f150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/102 (__SMLSD) @0631f000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/101 (__SMUSDX) @06319e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/100 (__SMUSD) @06319d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/99 (__SMLALDX) @06319bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/98 (__SMLALD) @06319a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/97 (__SMLADX) @06319930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/96 (__SMLAD) @063197e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/95 (__SMUADX) @06319690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/94 (__SMUAD) @06319540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/93 (__SXTAB16_RORn) @063193f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/92 (__SXTAB16) @063192a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/91 (__SXTB16_RORn) @06319150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/90 (__SXTB16) @06319000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/89 (__UXTAB16) @06313e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/88 (__UXTB16) @06313d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/87 (__USADA8) @06313a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/86 (__USAD8) @06313930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/85 (__UHSAX) @063137e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/84 (__UQSAX) @06313690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/83 (__USAX) @06313540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/82 (__SHSAX) @063133f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/81 (__QSAX) @063132a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/80 (__SSAX) @06313150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/79 (__UHASX) @06313000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/78 (__UQASX) @0630ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/77 (__UASX) @0630cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/76 (__SHASX) @0630cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/75 (__QASX) @0630ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/74 (__SASX) @0630c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/73 (__UHSUB16) @0630c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/72 (__UQSUB16) @0630c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/71 (__USUB16) @0630c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/70 (__SHSUB16) @0630c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/69 (__QSUB16) @0630c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/68 (__SSUB16) @0630c150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/67 (__UHADD16) @0630c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/66 (__UQADD16) @06303e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/65 (__UADD16) @06303d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/64 (__SHADD16) @06303bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/63 (__QADD16) @06303a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/62 (__SADD16) @06303930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/61 (__UHSUB8) @063037e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/60 (__UQSUB8) @06303690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/59 (__USUB8) @06303540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/58 (__SHSUB8) @063033f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/57 (__QSUB8) @063032a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/56 (__SSUB8) @06303150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/55 (__UHADD8) @06303000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/54 (__UQADD8) @062ffe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/53 (__UADD8) @062ffd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/52 (__SHADD8) @062ffbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/51 (__QADD8) @062ffa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/50 (__SADD8) @062ff930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/49 (__set_FPSCR) @062ff7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/48 (__get_FPSCR) @062ff690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/47 (__set_FAULTMASK) @062ff540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/46 (__get_FAULTMASK) @062ff3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/45 (__set_BASEPRI_MAX) @062ff2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/44 (__set_BASEPRI) @062ff150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/43 (__get_BASEPRI) @062ff000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/42 (__disable_fault_irq) @062fbe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/41 (__enable_fault_irq) @062fbd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/40 (__set_PRIMASK) @062fbbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/39 (__get_PRIMASK) @062fba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/38 (__set_MSP) @062fb930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/37 (__get_MSP) @062fb7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/36 (__set_PSP) @062fb690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/35 (__get_PSP) @062fb540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/34 (__get_xPSR) @062fb3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/33 (__get_APSR) @062fb2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/32 (__get_IPSR) @062fb150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/31 (__set_CONTROL) @062fb000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/30 (__get_CONTROL) @062f0e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/29 (__disable_irq) @062f0d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/28 (__enable_irq) @062f0bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/27 (__STRT) @062f0a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/26 (__STRHT) @062f0930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/25 (__STRBT) @062f07e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/24 (__LDRT) @062f0690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/23 (__LDRHT) @062f0540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/22 (__LDRBT) @062f03f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/21 (__RRX) @062f02a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/20 (__CLREX) @062f0000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/19 (__STREXW) @062e8e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/18 (__STREXH) @062e8d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/17 (__STREXB) @062e8bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/16 (__LDREXW) @062e8a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/15 (__LDREXH) @062e8930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/14 (__LDREXB) @062e87e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/13 (__CLZ) @062e8690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/12 (__RBIT) @062e8540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/11 (__ROR) @062e8348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/10 (__REVSH) @062e81f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/9 (__REV16) @062e80a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/8 (__REV) @062ace70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/7 (__DMB) @062acd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/6 (__DSB) @062acbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/5 (__ISB) @062aca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/4 (__cmsis_start) @062ac930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_wait_usec/3 (HOST_wait_usec) @0611a7e0
+  Type: function definition analyzed
+  Visibility: force_output semantic_interposition no_reorder public
+  Aux: @066225a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @062140a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @0619ef18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @0619ed20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: MXC_SYS_In_Crit_Section/142 MXC_SYS_Crit_Exit/141 MXC_SYS_Crit_Enter/140 _mxc_crit_get_state/139 _state/138 ITM_CheckChar/137 ITM_ReceiveChar/136 ITM_SendChar/135 SysTick_Config/134 SCB_GetFPUType/133 ARM_MPU_Load/132 ARM_MPU_OrderedMemcpy/131 ARM_MPU_SetRegionEx/130 ARM_MPU_SetRegion/129 ARM_MPU_ClrRegion/128 ARM_MPU_Disable/127 ARM_MPU_Enable/126 __NVIC_SystemReset/125 __NVIC_GetVector/124 __NVIC_SetVector/123 NVIC_DecodePriority/122 NVIC_EncodePriority/121 __NVIC_GetPriority/120 __NVIC_SetPriority/119 __NVIC_GetActive/118 __NVIC_ClearPendingIRQ/117 __NVIC_SetPendingIRQ/116 __NVIC_GetPendingIRQ/115 __NVIC_DisableIRQ/114 __NVIC_GetEnableIRQ/113 __NVIC_EnableIRQ/112 __NVIC_GetPriorityGrouping/111 __NVIC_SetPriorityGrouping/110 __SMMLA/109 __QSUB/108 __QADD/107 __SEL/106 __SMLSLDX/105 __SMLSLD/104 __SMLSDX/103 __SMLSD/102 __SMUSDX/101 __SMUSD/100 __SMLALDX/99 __SMLALD/98 __SMLADX/97 __SMLAD/96 __SMUADX/95 __SMUAD/94 __SXTAB16_RORn/93 __SXTAB16/92 __SXTB16_RORn/91 __SXTB16/90 __UXTAB16/89 __UXTB16/88 __USADA8/87 __USAD8/86 __UHSAX/85 __UQSAX/84 __USAX/83 __SHSAX/82 __QSAX/81 __SSAX/80 __UHASX/79 __UQASX/78 __UASX/77 __SHASX/76 __QASX/75 __SASX/74 __UHSUB16/73 __UQSUB16/72 __USUB16/71 __SHSUB16/70 __QSUB16/69 __SSUB16/68 __UHADD16/67 __UQADD16/66 __UADD16/65 __SHADD16/64 __QADD16/63 __SADD16/62 __UHSUB8/61 __UQSUB8/60 __USUB8/59 __SHSUB8/58 __QSUB8/57 __SSUB8/56 __UHADD8/55 __UQADD8/54 __UADD8/53 __SHADD8/52 __QADD8/51 __SADD8/50 __set_FPSCR/49 __get_FPSCR/48 __set_FAULTMASK/47 __get_FAULTMASK/46 __set_BASEPRI_MAX/45 __set_BASEPRI/44 __get_BASEPRI/43 __disable_fault_irq/42 __enable_fault_irq/41 __set_PRIMASK/40 __get_PRIMASK/39 __set_MSP/38 __get_MSP/37 __set_PSP/36 __get_PSP/35 __get_xPSR/34 __get_APSR/33 __get_IPSR/32 __set_CONTROL/31 __get_CONTROL/30 __disable_irq/29 __enable_irq/28 __STRT/27 __STRHT/26 __STRBT/25 __LDRT/24 __LDRHT/23 __LDRBT/22 __RRX/21 __CLREX/20 __STREXW/19 __STREXH/18 __STREXB/17 __LDREXW/16 __LDREXH/15 __LDREXB/14 __CLZ/13 __RBIT/12 __ROR/11 __REVSH/10 __REV16/9 __REV/8 __DMB/7 __DSB/6 __ISB/5 __cmsis_start/4 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+MXC_Delay/161 (MXC_Delay) @066302a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutSet/160 (MXC_GPIO_OutSet) @066301f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutClr/159 (MXC_GPIO_OutClr) @06630150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_Config/158 (MXC_GPIO_Config) @066300a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+reset_set/157 (reset_set) @06662048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+MXC_GPIO_InGet/156 (MXC_GPIO_InGet) @06630000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+MXC_TMR_Delay/155 (MXC_TMR_Delay) @06625540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+HOST_follow_tls/154 (HOST_follow_tls) @06625498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_gcu/153 (HOST_activate_gcu) @066251f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_tls/152 (HOST_activate_tls) @066250a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_toggle_wdi/151 (HOST_toggle_wdi) @06625e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_reset_maxq106x/150 (HOST_reset_maxq106x) @06625d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_deinit_interface/149 (HOST_deinit_interface) @06625bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_set_interface/148 (HOST_set_interface) @06625a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_get_interface/147 (HOST_get_interface) @06625930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_maxq10xx_reset/146 (HOST_maxq10xx_reset) @066257e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: maxq1065_pwdn/143 (addr) reset_set/157 (read) reset_set/157 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_Delay/161 MXC_GPIO_OutSet/160 MXC_GPIO_OutClr/159 MXC_GPIO_Config/158 
+HOST_block_until_pin/145 (HOST_block_until_pin) @06625690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_GPIO_InGet/156 MXC_TMR_Delay/155 
+maxq_rdy/144 (maxq_rdy) @06622630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+maxq1065_pwdn/143 (maxq1065_pwdn) @066225a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+HOST_wait_usec/3 (HOST_wait_usec) @0611a7e0
+  Type: function definition analyzed
+  Visibility: force_output semantic_interposition no_reorder public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+
+
+Initial Symbol table:
+
+MXC_Delay/161 (MXC_Delay) @066302a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutSet/160 (MXC_GPIO_OutSet) @066301f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutClr/159 (MXC_GPIO_OutClr) @06630150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_Config/158 (MXC_GPIO_Config) @066300a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+reset_set.0/157 (reset_set) @06662048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+MXC_GPIO_InGet/156 (MXC_GPIO_InGet) @06630000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+MXC_TMR_Delay/155 (MXC_TMR_Delay) @06625540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+HOST_follow_tls/154 (HOST_follow_tls) @06625498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_gcu/153 (HOST_activate_gcu) @066251f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_tls/152 (HOST_activate_tls) @066250a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_toggle_wdi/151 (HOST_toggle_wdi) @06625e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_reset_maxq106x/150 (HOST_reset_maxq106x) @06625d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_deinit_interface/149 (HOST_deinit_interface) @06625bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_set_interface/148 (HOST_set_interface) @06625a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_get_interface/147 (HOST_get_interface) @06625930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_maxq10xx_reset/146 (HOST_maxq10xx_reset) @066257e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: maxq1065_pwdn/143 (addr) reset_set.0/157 (read) reset_set.0/157 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_Delay/161 MXC_GPIO_OutSet/160 MXC_GPIO_OutClr/159 MXC_GPIO_Config/158 
+HOST_block_until_pin/145 (HOST_block_until_pin) @06625690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_GPIO_InGet/156 MXC_TMR_Delay/155 
+maxq_rdy/144 (maxq_rdy) @06622630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+maxq1065_pwdn/143 (maxq1065_pwdn) @066225a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+HOST_wait_usec/3 (HOST_wait_usec) @0611a7e0
+  Type: function definition analyzed
+  Visibility: force_output semantic_interposition no_reorder public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+MXC_Delay/161 (MXC_Delay) @066302a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutSet/160 (MXC_GPIO_OutSet) @066301f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_OutClr/159 (MXC_GPIO_OutClr) @06630150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+MXC_GPIO_Config/158 (MXC_GPIO_Config) @066300a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 
+  Calls: 
+reset_set.0/157 (reset_set) @06662048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+MXC_GPIO_InGet/156 (MXC_GPIO_InGet) @06630000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+MXC_TMR_Delay/155 (MXC_TMR_Delay) @06625540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_block_until_pin/145 
+  Calls: 
+HOST_follow_tls/154 (HOST_follow_tls) @06625498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_gcu/153 (HOST_activate_gcu) @066251f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_activate_tls/152 (HOST_activate_tls) @066250a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_toggle_wdi/151 (HOST_toggle_wdi) @06625e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_reset_maxq106x/150 (HOST_reset_maxq106x) @06625d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_deinit_interface/149 (HOST_deinit_interface) @06625bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_set_interface/148 (HOST_set_interface) @06625a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_get_interface/147 (HOST_get_interface) @06625930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_maxq10xx_reset/146 (HOST_maxq10xx_reset) @066257e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: maxq1065_pwdn/143 (addr) reset_set.0/157 (read) reset_set.0/157 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_Delay/161 MXC_GPIO_OutSet/160 MXC_GPIO_OutClr/159 MXC_GPIO_Config/158 
+HOST_block_until_pin/145 (HOST_block_until_pin) @06625690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MXC_GPIO_InGet/156 MXC_TMR_Delay/155 
+maxq_rdy/144 (maxq_rdy) @06622630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+maxq1065_pwdn/143 (maxq1065_pwdn) @066225a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+HOST_wait_usec/3 (HOST_wait_usec) @0611a7e0
+  Type: function definition analyzed
+  Visibility: force_output semantic_interposition no_reorder public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+MXC_Delay/161 (MXC_Delay) @066302a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 (10737416 (estimated locally),0.33 per call) 
+  Calls: 
+MXC_GPIO_OutSet/160 (MXC_GPIO_OutSet) @066301f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 (10737416 (estimated locally),0.33 per call) 
+  Calls: 
+MXC_GPIO_OutClr/159 (MXC_GPIO_OutClr) @06630150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 (10737416 (estimated locally),0.33 per call) 
+  Calls: 
+MXC_GPIO_Config/158 (MXC_GPIO_Config) @066300a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_maxq10xx_reset/146 (10737416 (estimated locally),0.33 per call) 
+  Calls: 
+reset_set.0/157 (reset_set) @06662048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (write) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function
+MXC_GPIO_InGet/156 (MXC_GPIO_InGet) @06630000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_block_until_pin/145 (1073741824 (estimated locally),9.35 per call) 
+  Calls: 
+MXC_TMR_Delay/155 (MXC_TMR_Delay) @06625540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_block_until_pin/145 (958878296 (estimated locally),8.35 per call) 
+  Calls: 
+HOST_follow_tls/154 (HOST_follow_tls) @06625498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_activate_gcu/153 (HOST_activate_gcu) @066251f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_activate_tls/152 (HOST_activate_tls) @066250a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_toggle_wdi/151 (HOST_toggle_wdi) @06625e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_reset_maxq106x/150 (HOST_reset_maxq106x) @06625d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_deinit_interface/149 (HOST_deinit_interface) @06625bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_set_interface/148 (HOST_set_interface) @06625a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_get_interface/147 (HOST_get_interface) @06625930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_maxq10xx_reset/146 (HOST_maxq10xx_reset) @066257e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: reset_set.0/157 (read) maxq1065_pwdn/143 (addr) maxq1065_pwdn/143 (read) maxq1065_pwdn/143 (read) maxq1065_pwdn/143 (read) maxq1065_pwdn/143 (read) reset_set.0/157 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:32537624 (estimated locally) body
+  Called by: 
+  Calls: MXC_Delay/161 (10737416 (estimated locally),0.33 per call) MXC_GPIO_OutSet/160 (10737416 (estimated locally),0.33 per call) MXC_GPIO_OutClr/159 (10737416 (estimated locally),0.33 per call) MXC_GPIO_Config/158 (10737416 (estimated locally),0.33 per call) 
+HOST_block_until_pin/145 (HOST_block_until_pin) @06625690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:114863530 (estimated locally) body
+  Called by: 
+  Calls: MXC_GPIO_InGet/156 (1073741824 (estimated locally),9.35 per call) MXC_TMR_Delay/155 (958878296 (estimated locally),8.35 per call) 
+maxq_rdy/144 (maxq_rdy) @06622630
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+maxq1065_pwdn/143 (maxq1065_pwdn) @066225a0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: HOST_maxq10xx_reset/146 (addr) HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (read) HOST_maxq10xx_reset/146 (read) 
+  Availability: overwritable
+  Varpool flags: initialized
+HOST_wait_usec/3 (HOST_wait_usec) @0611a7e0
+  Type: function definition analyzed
+  Visibility: force_output externally_visible semantic_interposition no_reorder public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: body
+  Called by: 
+  Calls: 
+Trivially needed variables: reset_set.0/157 maxq_rdy/144 maxq1065_pwdn/143
+Removing variables:
+
+Final Symbol table:
+
+MXC_Delay/161 (MXC_Delay) @066302a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MXC_GPIO_OutSet/160 (MXC_GPIO_OutSet) @066301f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MXC_GPIO_OutClr/159 (MXC_GPIO_OutClr) @06630150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MXC_GPIO_Config/158 (MXC_GPIO_Config) @066300a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+reset_set.0/157 (reset_set) @06662048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.reset_set.0 (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function
+MXC_GPIO_InGet/156 (MXC_GPIO_InGet) @06630000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MXC_TMR_Delay/155 (MXC_TMR_Delay) @06625540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_follow_tls/154 (HOST_follow_tls) @06625498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_follow_tls (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_activate_gcu/153 (HOST_activate_gcu) @066251f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_activate_gcu (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_activate_tls/152 (HOST_activate_tls) @066250a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_activate_tls (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_toggle_wdi/151 (HOST_toggle_wdi) @06625e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_toggle_wdi (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_reset_maxq106x/150 (HOST_reset_maxq106x) @06625d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_reset_maxq106x (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_deinit_interface/149 (HOST_deinit_interface) @06625bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_deinit_interface (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_set_interface/148 (HOST_set_interface) @06625a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_set_interface (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_get_interface/147 (HOST_get_interface) @06625930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_get_interface (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_maxq10xx_reset/146 (HOST_maxq10xx_reset) @066257e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_maxq10xx_reset (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:32537624 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_block_until_pin/145 (HOST_block_until_pin) @06625690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_block_until_pin (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:114863530 (estimated locally)
+  Called by: 
+  Calls: 
+maxq_rdy/144 (maxq_rdy) @06622630
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.maxq_rdy (implicit_section)
+  Aux: @06662048
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+maxq1065_pwdn/143 (maxq1065_pwdn) @066225a0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.maxq1065_pwdn (implicit_section)
+  Aux: @06622630
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+HOST_wait_usec/3 (HOST_wait_usec) @0611a7e0
+  Type: function definition analyzed
+  Visibility: force_output externally_visible semantic_interposition no_reorder asm_written public section:.text.HOST_wait_usec (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags:
+  Called by: 
+  Calls: 

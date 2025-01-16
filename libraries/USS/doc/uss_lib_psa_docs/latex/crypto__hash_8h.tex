@@ -1,0 +1,275 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\+\_\+hash.h File Reference}
+\hypertarget{crypto__hash_8h}{}\label{crypto__hash_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_hash.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_hash.h}}
+{\ttfamily \#include "{}crypto\+\_\+typedefs.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+common.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+config\+\_\+def.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_ade591d9286d23382eb5cec099c84180d}{PSA\+\_\+\+ALG\+\_\+\+MD5}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000003)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a6c5d3a32cda59086f07b85ef007033dd}{PSA\+\_\+\+ALG\+\_\+\+RIPEMD160}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000004)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a3fca4e9f9ad4a1158817d1850dee82e5}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+1}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000005)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a25d6a3244d10a7148fe6b026d1979f7b}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+224}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000008)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a619471f978e13cdd0a1e37145e4bf341}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+256}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000009)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a58af64dd9a86a287e8da9ed7739eead4}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+384}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000a)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_afba3ae409f46d3dd7f37a0910660c3e9}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+512}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000b)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a3fe2d7c3c80e3186ca78d16a35d5d931}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+512\+\_\+224}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000c)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a5910b3964c14e9613e8643a45b09c2d4}{PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+512\+\_\+256}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000d)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a16f5fe34ccce68c2fada1224c054a999}{PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+224}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000010)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_aace70d9515489bbe3c5e7ac1b7d9155b}{PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+256}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000011)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_ab0f079257ea75e2acfe2fc3b38c78cd8}{PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+384}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000012)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a37e5dbe936dddb155e76f2997de27188}{PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+512}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000013)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_aa90232ca70c2a6f1d4c59a1b4af16ae5}{PSA\+\_\+\+ALG\+\_\+\+SM3}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000014)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_aec67f81d5b80b765702efb4b3d6e202c}{PSA\+\_\+\+ALG\+\_\+\+SHAKE256\+\_\+512}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000015)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_aa1288ea8bd397a8a3f5e19e94110f2e4}{PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x020000\+FF)
+\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_ae0c23128dc05e9680d2c4c1b292bcc77}{PSA\+\_\+\+HASH\+\_\+\+LENGTH}}(alg)
+\begin{DoxyCompactList}\small\item\em Provides the output size of hash algorithm alg, in bytes. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_ab650de09f5b291b6dedaf15c346a2cfe}{PSA\+\_\+\+HASH\+\_\+\+BLOCK\+\_\+\+LENGTH}}(alg)
+\begin{DoxyCompactList}\small\item\em Provides the block size of hash algorithm alg, in bytes. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH}}(alg)
+\begin{DoxyCompactList}\small\item\em Check if the specified algorithm is a hash algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a181b0fe4619c1a70c5ef82f28eea09f5}{PSA\+\_\+\+ALG\+\_\+\+GET\+\_\+\+HASH}}(alg)
+\begin{DoxyCompactList}\small\item\em Get the hash used by a composite algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__hash_8h_a6ab7fe8d3500bc2f21be840b4f4f8d1d}{PSA\+\_\+\+HASH\+\_\+\+OPERATION\+\_\+\+INIT}}~(\mbox{\hyperlink{crypto__typedefs_8h_a4129eb40bd8b5100b6c6886b86a4ea4e}{psa\+\_\+hash\+\_\+operation\+\_\+t}})\{.alg = \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\+\_\+\+ALG\+\_\+\+NONE}}, .is\+Initialized = false \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{crypto__hash_8h_aa1288ea8bd397a8a3f5e19e94110f2e4}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_ANY\_HASH@{PSA\_ALG\_ANY\_HASH}}
+\index{PSA\_ALG\_ANY\_HASH@{PSA\_ALG\_ANY\_HASH}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_ANY\_HASH}{PSA\_ALG\_ANY\_HASH}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_aa1288ea8bd397a8a3f5e19e94110f2e4} 
+\#define PSA\+\_\+\+ALG\+\_\+\+ANY\+\_\+\+HASH~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x020000\+FF)}
+
+Wildcard hash \Hypertarget{crypto__hash_8h_a181b0fe4619c1a70c5ef82f28eea09f5}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_GET\_HASH@{PSA\_ALG\_GET\_HASH}}
+\index{PSA\_ALG\_GET\_HASH@{PSA\_ALG\_GET\_HASH}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_GET\_HASH}{PSA\_ALG\_GET\_HASH}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a181b0fe4619c1a70c5ef82f28eea09f5} 
+\#define PSA\+\_\+\+ALG\+\_\+\+GET\+\_\+\+HASH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\ ((alg\ \&\ \mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}})\ ==\ 0)\ ?\ \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\_ALG\_NONE}}\ :\ (\mbox{\hyperlink{crypto__common_8h_ae9c74a64521c7b00fd93d9b5263b8155}{USS\_PSA\_ALG\_TYPE\_HASH}}\ |\ (alg\ \&\ \mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}))\ )}
+
+\end{DoxyCode}
+
+
+Get the hash used by a composite algorithm. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The underlying hash algorithm if alg is a composite algorithm that uses a hash algorithm. PSA\+\_\+\+ALG\+\_\+\+NONE if alg is not a composite algorithm that uses a hash. 
+\end{DoxyReturn}
+\Hypertarget{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_IS\_HASH@{PSA\_ALG\_IS\_HASH}}
+\index{PSA\_ALG\_IS\_HASH@{PSA\_ALG\_IS\_HASH}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HASH}{PSA\_ALG\_IS\_HASH}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((alg\ \&\ \mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}})\ ==\ \mbox{\hyperlink{crypto__common_8h_ae9c74a64521c7b00fd93d9b5263b8155}{USS\_PSA\_ALG\_TYPE\_HASH}})}
+
+\end{DoxyCode}
+
+
+Check if the specified algorithm is a hash algorithm. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & An algorithm identifier\+: a value of type psa\+\_\+algorithm\+\_\+t\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if alg is a hash algorithm and is supported, 0 otherwise 
+\end{DoxyReturn}
+\Hypertarget{crypto__hash_8h_ade591d9286d23382eb5cec099c84180d}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_MD5@{PSA\_ALG\_MD5}}
+\index{PSA\_ALG\_MD5@{PSA\_ALG\_MD5}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_MD5}{PSA\_ALG\_MD5}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_ade591d9286d23382eb5cec099c84180d} 
+\#define PSA\+\_\+\+ALG\+\_\+\+MD5~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000003)}
+
+MD5 \Hypertarget{crypto__hash_8h_a6c5d3a32cda59086f07b85ef007033dd}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_RIPEMD160@{PSA\_ALG\_RIPEMD160}}
+\index{PSA\_ALG\_RIPEMD160@{PSA\_ALG\_RIPEMD160}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_RIPEMD160}{PSA\_ALG\_RIPEMD160}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a6c5d3a32cda59086f07b85ef007033dd} 
+\#define PSA\+\_\+\+ALG\+\_\+\+RIPEMD160~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000004)}
+
+PSA\+\_\+\+ALG\+\_\+\+RIPEMD160 \Hypertarget{crypto__hash_8h_a16f5fe34ccce68c2fada1224c054a999}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA3\_224@{PSA\_ALG\_SHA3\_224}}
+\index{PSA\_ALG\_SHA3\_224@{PSA\_ALG\_SHA3\_224}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA3\_224}{PSA\_ALG\_SHA3\_224}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a16f5fe34ccce68c2fada1224c054a999} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+224~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000010)}
+
+SHA3-\/224 \Hypertarget{crypto__hash_8h_aace70d9515489bbe3c5e7ac1b7d9155b}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA3\_256@{PSA\_ALG\_SHA3\_256}}
+\index{PSA\_ALG\_SHA3\_256@{PSA\_ALG\_SHA3\_256}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA3\_256}{PSA\_ALG\_SHA3\_256}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_aace70d9515489bbe3c5e7ac1b7d9155b} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+256~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000011)}
+
+SHA3-\/256 \Hypertarget{crypto__hash_8h_ab0f079257ea75e2acfe2fc3b38c78cd8}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA3\_384@{PSA\_ALG\_SHA3\_384}}
+\index{PSA\_ALG\_SHA3\_384@{PSA\_ALG\_SHA3\_384}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA3\_384}{PSA\_ALG\_SHA3\_384}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_ab0f079257ea75e2acfe2fc3b38c78cd8} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+384~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000012)}
+
+SHA3-\/384 \Hypertarget{crypto__hash_8h_a37e5dbe936dddb155e76f2997de27188}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA3\_512@{PSA\_ALG\_SHA3\_512}}
+\index{PSA\_ALG\_SHA3\_512@{PSA\_ALG\_SHA3\_512}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA3\_512}{PSA\_ALG\_SHA3\_512}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a37e5dbe936dddb155e76f2997de27188} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA3\+\_\+512~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000013)}
+
+SHA3-\/512 \Hypertarget{crypto__hash_8h_a3fca4e9f9ad4a1158817d1850dee82e5}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_1@{PSA\_ALG\_SHA\_1}}
+\index{PSA\_ALG\_SHA\_1@{PSA\_ALG\_SHA\_1}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_1}{PSA\_ALG\_SHA\_1}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a3fca4e9f9ad4a1158817d1850dee82e5} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+1~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000005)}
+
+SHA1 \Hypertarget{crypto__hash_8h_a25d6a3244d10a7148fe6b026d1979f7b}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_224@{PSA\_ALG\_SHA\_224}}
+\index{PSA\_ALG\_SHA\_224@{PSA\_ALG\_SHA\_224}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_224}{PSA\_ALG\_SHA\_224}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a25d6a3244d10a7148fe6b026d1979f7b} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+224~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000008)}
+
+SHA2-\/224 \Hypertarget{crypto__hash_8h_a619471f978e13cdd0a1e37145e4bf341}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_256@{PSA\_ALG\_SHA\_256}}
+\index{PSA\_ALG\_SHA\_256@{PSA\_ALG\_SHA\_256}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_256}{PSA\_ALG\_SHA\_256}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a619471f978e13cdd0a1e37145e4bf341} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+256~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000009)}
+
+SHA2-\/256 \Hypertarget{crypto__hash_8h_a58af64dd9a86a287e8da9ed7739eead4}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_384@{PSA\_ALG\_SHA\_384}}
+\index{PSA\_ALG\_SHA\_384@{PSA\_ALG\_SHA\_384}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_384}{PSA\_ALG\_SHA\_384}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a58af64dd9a86a287e8da9ed7739eead4} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+384~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000a)}
+
+SHA2-\/384 \Hypertarget{crypto__hash_8h_afba3ae409f46d3dd7f37a0910660c3e9}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_512@{PSA\_ALG\_SHA\_512}}
+\index{PSA\_ALG\_SHA\_512@{PSA\_ALG\_SHA\_512}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_512}{PSA\_ALG\_SHA\_512}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_afba3ae409f46d3dd7f37a0910660c3e9} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+512~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000b)}
+
+SHA2-\/512 \Hypertarget{crypto__hash_8h_a3fe2d7c3c80e3186ca78d16a35d5d931}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_512\_224@{PSA\_ALG\_SHA\_512\_224}}
+\index{PSA\_ALG\_SHA\_512\_224@{PSA\_ALG\_SHA\_512\_224}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_512\_224}{PSA\_ALG\_SHA\_512\_224}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a3fe2d7c3c80e3186ca78d16a35d5d931} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+512\+\_\+224~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000c)}
+
+SHA2-\/512/224 \Hypertarget{crypto__hash_8h_a5910b3964c14e9613e8643a45b09c2d4}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHA\_512\_256@{PSA\_ALG\_SHA\_512\_256}}
+\index{PSA\_ALG\_SHA\_512\_256@{PSA\_ALG\_SHA\_512\_256}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHA\_512\_256}{PSA\_ALG\_SHA\_512\_256}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a5910b3964c14e9613e8643a45b09c2d4} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHA\+\_\+512\+\_\+256~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x0200000d)}
+
+SHA2-\/512/256 \Hypertarget{crypto__hash_8h_aec67f81d5b80b765702efb4b3d6e202c}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SHAKE256\_512@{PSA\_ALG\_SHAKE256\_512}}
+\index{PSA\_ALG\_SHAKE256\_512@{PSA\_ALG\_SHAKE256\_512}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SHAKE256\_512}{PSA\_ALG\_SHAKE256\_512}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_aec67f81d5b80b765702efb4b3d6e202c} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SHAKE256\+\_\+512~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000015)}
+
+First 512 bits (64 bytes) of the SHAKE256 output \Hypertarget{crypto__hash_8h_aa90232ca70c2a6f1d4c59a1b4af16ae5}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_ALG\_SM3@{PSA\_ALG\_SM3}}
+\index{PSA\_ALG\_SM3@{PSA\_ALG\_SM3}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_SM3}{PSA\_ALG\_SM3}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_aa90232ca70c2a6f1d4c59a1b4af16ae5} 
+\#define PSA\+\_\+\+ALG\+\_\+\+SM3~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x02000014)}
+
+SM3 \Hypertarget{crypto__hash_8h_ab650de09f5b291b6dedaf15c346a2cfe}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_HASH\_BLOCK\_LENGTH@{PSA\_HASH\_BLOCK\_LENGTH}}
+\index{PSA\_HASH\_BLOCK\_LENGTH@{PSA\_HASH\_BLOCK\_LENGTH}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_HASH\_BLOCK\_LENGTH}{PSA\_HASH\_BLOCK\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_ab650de09f5b291b6dedaf15c346a2cfe} 
+\#define PSA\+\_\+\+HASH\+\_\+\+BLOCK\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_ade591d9286d23382eb5cec099c84180d}{PSA\_ALG\_MD5}})\ ?\ 64u\ :\ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a6c5d3a32cda59086f07b85ef007033dd}{PSA\_ALG\_RIPEMD160}})\ ?\ 64u\ :\ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a3fca4e9f9ad4a1158817d1850dee82e5}{PSA\_ALG\_SHA\_1}})\ ?\ 64u\ :\ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a25d6a3244d10a7148fe6b026d1979f7b}{PSA\_ALG\_SHA\_224}})\ ?\ 64u\ :\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a619471f978e13cdd0a1e37145e4bf341}{PSA\_ALG\_SHA\_256}})\ ?\ 64u\ :\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a58af64dd9a86a287e8da9ed7739eead4}{PSA\_ALG\_SHA\_384}})\ ?\ 128u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_afba3ae409f46d3dd7f37a0910660c3e9}{PSA\_ALG\_SHA\_512}})\ ?\ 128u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a3fe2d7c3c80e3186ca78d16a35d5d931}{PSA\_ALG\_SHA\_512\_224}})\ ?\ 128u\ :\ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a5910b3964c14e9613e8643a45b09c2d4}{PSA\_ALG\_SHA\_512\_256}})\ ?\ 128u\ :\ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a16f5fe34ccce68c2fada1224c054a999}{PSA\_ALG\_SHA3\_224}})\ ?\ 144u\ :\ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_aace70d9515489bbe3c5e7ac1b7d9155b}{PSA\_ALG\_SHA3\_256}})\ ?\ 136u\ :\ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_ab0f079257ea75e2acfe2fc3b38c78cd8}{PSA\_ALG\_SHA3\_384}})\ ?\ 104u\ :\ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a37e5dbe936dddb155e76f2997de27188}{PSA\_ALG\_SHA3\_512}})\ ?\ 72u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Provides the block size of hash algorithm alg, in bytes. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & A hash algorithm such that \doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(alg)} is true.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The block length for the specified hash algorithm. If the hash algorithm is not recognized, return 0. 
+\end{DoxyReturn}
+\Hypertarget{crypto__hash_8h_ae0c23128dc05e9680d2c4c1b292bcc77}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_HASH\_LENGTH@{PSA\_HASH\_LENGTH}}
+\index{PSA\_HASH\_LENGTH@{PSA\_HASH\_LENGTH}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_HASH\_LENGTH}{PSA\_HASH\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_ae0c23128dc05e9680d2c4c1b292bcc77} 
+\#define PSA\+\_\+\+HASH\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_ade591d9286d23382eb5cec099c84180d}{PSA\_ALG\_MD5}})\ ?\ 16u\ :\ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a6c5d3a32cda59086f07b85ef007033dd}{PSA\_ALG\_RIPEMD160}})\ ?\ 20u\ :\ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a3fca4e9f9ad4a1158817d1850dee82e5}{PSA\_ALG\_SHA\_1}})\ ?\ 20u\ :\ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a25d6a3244d10a7148fe6b026d1979f7b}{PSA\_ALG\_SHA\_224}})\ ?\ 28u\ :\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a619471f978e13cdd0a1e37145e4bf341}{PSA\_ALG\_SHA\_256}})\ ?\ 32u\ :\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a58af64dd9a86a287e8da9ed7739eead4}{PSA\_ALG\_SHA\_384}})\ ?\ 48u\ :\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_afba3ae409f46d3dd7f37a0910660c3e9}{PSA\_ALG\_SHA\_512}})\ ?\ 64u\ :\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a3fe2d7c3c80e3186ca78d16a35d5d931}{PSA\_ALG\_SHA\_512\_224}})\ ?\ 28u\ :\ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a5910b3964c14e9613e8643a45b09c2d4}{PSA\_ALG\_SHA\_512\_256}})\ ?\ 32u\ :\ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a16f5fe34ccce68c2fada1224c054a999}{PSA\_ALG\_SHA3\_224}})\ ?\ 28u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_aace70d9515489bbe3c5e7ac1b7d9155b}{PSA\_ALG\_SHA3\_256}})\ ?\ 32u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_ab0f079257ea75e2acfe2fc3b38c78cd8}{PSA\_ALG\_SHA3\_384}})\ ?\ 48u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (alg\ ==\ \mbox{\hyperlink{crypto__hash_8h_a37e5dbe936dddb155e76f2997de27188}{PSA\_ALG\_SHA3\_512}})\ ?\ 64u\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Provides the output size of hash algorithm alg, in bytes. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alg} & A hash algorithm or an HMAC algorithm\+: a value of type psa\+\_\+algorithm\+\_\+t such that (\doxylink{crypto__hash_8h_ac9280662bb482590b4b33d1dcd32930f}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HASH(alg)} \texorpdfstring{$\vert$}{|}\texorpdfstring{$\vert$}{|} \doxylink{crypto__mac_8h_a4a050c3c3cbc6eb96418f18847601c8a}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HMAC(alg)}) is true.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The hash length for the specified hash algorithm. If the hash algorithm is not recognized, return 0. 
+\end{DoxyReturn}
+\Hypertarget{crypto__hash_8h_a6ab7fe8d3500bc2f21be840b4f4f8d1d}\index{crypto\_hash.h@{crypto\_hash.h}!PSA\_HASH\_OPERATION\_INIT@{PSA\_HASH\_OPERATION\_INIT}}
+\index{PSA\_HASH\_OPERATION\_INIT@{PSA\_HASH\_OPERATION\_INIT}!crypto\_hash.h@{crypto\_hash.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_HASH\_OPERATION\_INIT}{PSA\_HASH\_OPERATION\_INIT}}
+{\footnotesize\ttfamily \label{crypto__hash_8h_a6ab7fe8d3500bc2f21be840b4f4f8d1d} 
+\#define PSA\+\_\+\+HASH\+\_\+\+OPERATION\+\_\+\+INIT~(\mbox{\hyperlink{crypto__typedefs_8h_a4129eb40bd8b5100b6c6886b86a4ea4e}{psa\+\_\+hash\+\_\+operation\+\_\+t}})\{.alg = \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\+\_\+\+ALG\+\_\+\+NONE}}, .is\+Initialized = false \}}
+

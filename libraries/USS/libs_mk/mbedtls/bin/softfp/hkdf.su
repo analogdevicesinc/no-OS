@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hkdf.c:48:5:mbedtls_hkdf_extract	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hkdf.c:75:5:mbedtls_hkdf_expand	96	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hkdf.c:28:5:mbedtls_hkdf	64	static

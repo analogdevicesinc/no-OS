@@ -1,0 +1,133 @@
+\doxysection{crypto\+\_\+typedefs.\+h}
+\hypertarget{crypto__typedefs_8h_source}{}\label{crypto__typedefs_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_typedefs.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_typedefs.h}}
+\mbox{\hyperlink{crypto__typedefs_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_CRYPTO\_TYPEDEFS\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_CRYPTO\_TYPEDEFS\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}MXQ\_API.h"{}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{typedef}\ uint32\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}};}
+\DoxyCodeLine{00023\ \textcolor{keyword}{typedef}\ int32\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}};}
+\DoxyCodeLine{00025\ \textcolor{keyword}{typedef}\ uint32\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ uint8\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a183689a3018896e1e2e4f2bcc57bcff3}{psa\_key\_persistence\_t}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ uint32\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a5e700601f686237a8d1e29363ae543d5}{psa\_key\_location\_t}};}
+\DoxyCodeLine{00031\ \textcolor{keyword}{typedef}\ uint16\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}};}
+\DoxyCodeLine{00033\ \textcolor{keyword}{typedef}\ uint8\_t\ \mbox{\hyperlink{crypto__typedefs_8h_ae7ad3569cb9c91b1ebe59a056edb2fc6}{psa\_ecc\_family\_t}};}
+\DoxyCodeLine{00035\ \textcolor{keyword}{typedef}\ uint8\_t\ \mbox{\hyperlink{crypto__typedefs_8h_af632c5b13aa19c98f8591d4beda8dd1a}{psa\_dh\_family\_t}};}
+\DoxyCodeLine{00037\ \textcolor{keyword}{typedef}\ uint32\_t\ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}};}
+\DoxyCodeLine{00039\ \textcolor{keyword}{typedef}\ uint32\_t\ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}};}
+\DoxyCodeLine{00041\ \textcolor{keyword}{typedef}\ uint16\_t\ \mbox{\hyperlink{crypto__typedefs_8h_aac4eeacd36596c548b3a48fc06c5048b}{psa\_key\_derivation\_step\_t}};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{/*\ TODO:\ Implement\ below\ tyepdefs*/}}
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00045\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structpsa__key__derivation__operation__s_a4a50e1098655de64043d42a3643d0adf}{handle}};}
+\DoxyCodeLine{00047\ \}\mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_s}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{//typedef\ of\ the\ state\ object\ for\ key\ derivation\ operations}}
+\DoxyCodeLine{00050\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structpsa__key__derivation__operation__s}{psa\_key\_derivation\_operation\_s}}\ \mbox{\hyperlink{crypto__typedefs_8h_aff8121df989d9a03cd8987845031111c}{psa\_key\_derivation\_operation\_t}};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00053\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structpsa__mac__operation__s_aff637dc5f839fac6059c193bcf94b484}{perform}};}
+\DoxyCodeLine{00055\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structpsa__mac__operation__s_a93bb74d30d69e94d4106791634d7f156}{key\_id}};}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{structpsa__mac__operation__s_a241f3e4508cd19df2753ebde36144b07}{alg}};}
+\DoxyCodeLine{00057\ \ \ \ \ mxq\_algo\_id\_t\ \mbox{\hyperlink{structpsa__mac__operation__s_a8773837dc0fab6cc4020b24b052712bf}{mxq\_algo}};}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structpsa__mac__operation__s_a88630a68300d74d7da8b5bd91eb57393}{mac\_length}};}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structpsa__mac__operation__s_a8461ccbcba56397185b40bb4cb6cec3b}{isActive}};}
+\DoxyCodeLine{00060\ \}\ \mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_s}};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{/*\ Implementation\ defined\ struct}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ \ \ Type\ of\ the\ state\ object\ for\ multi-\/part\ MAC\ operations\ */}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structpsa__mac__operation__s}{psa\_mac\_operation\_s}}\ \mbox{\hyperlink{crypto__typedefs_8h_a20738279df51a3977b974af686513b61}{psa\_mac\_operation\_t}};}
+\DoxyCodeLine{00065\ \ }
+\DoxyCodeLine{00066\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{structpsa__uss__hash__t_a62d924c8b04b7f6d9ae92eab41d94ceb}{alg}};\ \ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structpsa__uss__hash__t_a3c7ca000b07bebd6adf128c050c811a1}{isInitialized}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{comment}{//\ Additional\ attributes\ can\ be\ added\ if\ necessary}}
+\DoxyCodeLine{00070\ \}\ \mbox{\hyperlink{structpsa__uss__hash__t}{psa\_uss\_hash\_t}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structpsa__uss__hash__t}{psa\_uss\_hash\_t}}\ \mbox{\hyperlink{crypto__typedefs_8h_a4129eb40bd8b5100b6c6886b86a4ea4e}{psa\_hash\_operation\_t}};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00080\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ \mbox{\hyperlink{structpsa__key__attributes__t_a56029c3c6cca13a0bc9e832487f6cd87}{key\_type}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}}\ \mbox{\hyperlink{structpsa__key__attributes__t_aa475982feb2245d538aea7a6c98b97cf}{key\_lifetime}};\ \ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ \mbox{\hyperlink{structpsa__key__attributes__t_a44b36ab489b927537af2a4a8ac8f2b38}{key\_use}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{structpsa__key__attributes__t_aaddf72c3cdda282b7c25fd2cb21926ae}{key\_algo}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structpsa__key__attributes__t_a8319794b77e8bd79b2008b49ce9ec37f}{key\_bits}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_a11e986351c65bd3dc3c0fe2cd9926e4b}{psa\_key\_id\_t}}\ \mbox{\hyperlink{structpsa__key__attributes__t_ab4b6786a4c3b5615b6a4c0b0d7767a67}{key\_id}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00087\ \}\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}};}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00090\ \ \ \ \ uint8\_t\ nonce[16];}
+\DoxyCodeLine{00091\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a3ea9c5e5ba56701212102cb9bd154ce6}{body\_available}};}
+\DoxyCodeLine{00092\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_ad15d80a0634428a4b258156849504984}{aad\_available}};}
+\DoxyCodeLine{00093\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a6880762566086b68869bcd9e27ea186e}{isActive}}\ :\ 1;}
+\DoxyCodeLine{00094\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a838cb4bd181e176b5559477e0939beb9}{encrypt\_decrypt}}\ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//Encrypt:\ 1\ Decrypt:\ 0}}
+\DoxyCodeLine{00095\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a6a34cdb3b7f6a8c26d4a390da7dac13d}{isNonceSet}}\ :\ 1;}
+\DoxyCodeLine{00096\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_acc86e732582a569e202b086f1b8d9d7e}{isLenSet}}\ :\ 1;}
+\DoxyCodeLine{00097\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a500f6199fb70cb8b0f51e6de33cb0ff7}{isAADBegin}}\ :\ 1;}
+\DoxyCodeLine{00098\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a4d25fde8adabb93498e46fcc4f09c67a}{isBodyBegin}}\ :\ 1;}
+\DoxyCodeLine{00099\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__aead__ctx__t_a7e79f53d441b824f351eac908f2fb86e}{isCipherInitDone}}:\ 1;}
+\DoxyCodeLine{00100\ \}\mbox{\hyperlink{structuss__aead__ctx__t}{uss\_aead\_ctx\_t}};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00103\ \ \ \ \ uint8\_t\ nonce[16];}
+\DoxyCodeLine{00104\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__cipher__ctx__t_a00e5d5b8c141c06c3f398b75cb31ca7b}{isActive}}\ :\ 1;}
+\DoxyCodeLine{00105\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__cipher__ctx__t_a4a19c18c28a0f2816fcc070bb6645bcd}{encrypt\_decrypt}}\ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//Encrypt:\ 1\ Decrypt:\ 0}}
+\DoxyCodeLine{00106\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__cipher__ctx__t_a4d4cb4ed4e708c8b9f589748941cc8fe}{isIVSet}}\ :\ 1;}
+\DoxyCodeLine{00107\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__cipher__ctx__t_a312bf273a7fcef9af81d97c361f6cd5d}{isBodyBegin}}\ :\ 1;}
+\DoxyCodeLine{00108\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__cipher__ctx__t_a541765f8d3e9a66c661b22f742b11ffd}{isCipherInitDone}}:\ 1;}
+\DoxyCodeLine{00109\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{structuss__cipher__ctx__t_a00cb05b1f410895af2b0c7602a49f1a5}{processed\_input\_len}};}
+\DoxyCodeLine{00110\ \}\mbox{\hyperlink{structuss__cipher__ctx__t}{uss\_cipher\_ctx\_t}};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00113\ \{}
+\DoxyCodeLine{00114\ \ \ \ \ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{structpsa__aead__operation__s_aed4a6c71316b99e2bcf4f63932850ef5}{alg}};}
+\DoxyCodeLine{00115\ \ \ \ \ mxq\_algo\_id\_t\ \mbox{\hyperlink{structpsa__aead__operation__s_ae4857f28f8c1c3e4680699c2820a948b}{mxq\_algo}};}
+\DoxyCodeLine{00116\ \ \ \ \ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ \mbox{\hyperlink{structpsa__aead__operation__s_aec6152597d4309dd3f66e7b8c0bd4c4d}{key\_attr}};}
+\DoxyCodeLine{00117\ \ \ \ \ ciph\_params\_t\ \mbox{\hyperlink{structpsa__aead__operation__s_a8acee0696b720a87895f8e5307a9903d}{ciph\_params}};}
+\DoxyCodeLine{00118\ \ \ \ \ \mbox{\hyperlink{structuss__aead__ctx__t}{uss\_aead\_ctx\_t}}\ \mbox{\hyperlink{structpsa__aead__operation__s_aa429ca452fc4277618dbe08bf9e17c66}{ctx}};}
+\DoxyCodeLine{00119\ \}\ \mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_s}};}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00123\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structpsa__aead__operation__s}{psa\_aead\_operation\_s}}\ \mbox{\hyperlink{crypto__typedefs_8h_af481abcdf684845656cd130368d07fc9}{psa\_aead\_operation\_t}};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{00127\ \{}
+\DoxyCodeLine{00128\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__cipher__operation__s_af8669d67e83042b64df48e13f87de934}{handle}};}
+\DoxyCodeLine{00129\ \ \ \ \ uint32\_t\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__cipher__operation__s_a5f643e918966d59eee86adc253c74919}{num\_blocks\_processed}};}
+\DoxyCodeLine{00130\ \ \ \ \ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ \ \ \ \mbox{\hyperlink{structpsa__cipher__operation__s_a55ed41d3766b6e9087deace94a073d7d}{key\_attr}};}
+\DoxyCodeLine{00131\ \ \ \ \ mxq\_algo\_id\_t\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__cipher__operation__s_a99090a65212bca9ff397874a9e731cc8}{cipher\_algo}};}
+\DoxyCodeLine{00132\ \ \ \ \ ciph\_params\_t\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__cipher__operation__s_a3e974d6bd0eff665bb77a168f7d1a1ed}{ciph\_params}};}
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{structuss__cipher__ctx__t}{uss\_cipher\_ctx\_t}}\ \ \ \ \ \ \ \ \mbox{\hyperlink{structpsa__cipher__operation__s_a3242d9f0fd2bb8b522a944932eefd874}{ctx}};}
+\DoxyCodeLine{00134\ \}\ \mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_s}};}
+\DoxyCodeLine{00135\ \textcolor{comment}{/*\ Implementation\ defined\ struct}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ Type\ of\ the\ state\ object\ for\ multi-\/part\ cipher\ operations\ */}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{structpsa__cipher__operation__s}{psa\_cipher\_operation\_s}}\ \mbox{\hyperlink{crypto__typedefs_8h_ad7990e8fc7f2f225a3f4630e79db5332}{psa\_cipher\_operation\_t}};}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00141\ \}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\_CRYPTO\_TYPEDEFS\_H\_}}
+
+\end{DoxyCode}

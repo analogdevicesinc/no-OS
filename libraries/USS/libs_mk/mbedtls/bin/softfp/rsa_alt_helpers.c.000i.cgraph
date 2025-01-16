@@ -1,0 +1,2269 @@
+Trivially needed symbols: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148
+
+
+Initial Symbol table:
+
+mbedtls_mpi_sub_mpi/168 (mbedtls_mpi_sub_mpi) @063f37e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 
+  Calls: 
+mbedtls_mpi_inv_mod/167 (mbedtls_mpi_inv_mod) @063f3738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 
+  Calls: 
+mbedtls_mpi_free/166 (mbedtls_mpi_free) @063f3690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mod_mpi/165 (mbedtls_mpi_mod_mpi) @063f35e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_div_mpi/164 (mbedtls_mpi_div_mpi) @063f3540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_add_int/163 (mbedtls_mpi_add_int) @063f3498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_exp_mod/162 (mbedtls_mpi_exp_mod) @063f33f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_gcd/161 (mbedtls_mpi_gcd) @063f3348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lset/160 (mbedtls_mpi_lset) @063f32a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_shift_r/159 (mbedtls_mpi_shift_r) @063f31f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lsb/158 (mbedtls_mpi_lsb) @063f3150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_sub_int/157 (mbedtls_mpi_sub_int) @063f30a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mul_mpi/156 (mbedtls_mpi_mul_mpi) @063f3000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_init/155 (mbedtls_mpi_init) @0639ef18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_mpi/154 (mbedtls_mpi_cmp_mpi) @0639ee70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_int/153 (mbedtls_mpi_cmp_int) @0639edc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_rsa_validate_crt/152 (mbedtls_rsa_validate_crt) @0639ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_validate_params/151 (mbedtls_rsa_validate_params) @0639ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0639ed20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_crt/150 (mbedtls_rsa_deduce_crt) @0639ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0639ebd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_private_exponent/149 (mbedtls_rsa_deduce_private_exponent) @0639e888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0639ea80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_div_mpi/164 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_gcd/161 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+mbedtls_rsa_deduce_primes/148 (mbedtls_rsa_deduce_primes) @0639e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0639e888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_sub_int/157 mbedtls_mpi_div_mpi/164 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_add_int/163 mbedtls_mpi_cmp_int/153 mbedtls_mpi_exp_mod/162 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_lset/160 mbedtls_mpi_shift_r/159 mbedtls_mpi_lsb/158 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+vPortSetBASEPRI/147 (vPortSetBASEPRI) @0633e150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ulPortRaiseBASEPRI/146 (ulPortRaiseBASEPRI) @0633e000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortRaiseBASEPRI/145 (vPortRaiseBASEPRI) @06257dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+xPortIsInsideInterrupt/144 (xPortIsInsideInterrupt) @06257c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ucPortCountLeadingZeros/143 (ucPortCountLeadingZeros) @062579d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/142 (ITM_CheckChar) @0631bd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/141 (ITM_ReceiveChar) @0631bbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/140 (ITM_SendChar) @0631ba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/139 (SysTick_Config) @0631b738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/138 (SCB_GetFPUType) @0631b5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/137 (ARM_MPU_Load) @0631b498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/136 (ARM_MPU_OrderedMemcpy) @0631b348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/135 (ARM_MPU_SetRegionEx) @0631b1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/134 (ARM_MPU_SetRegion) @0631b0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/133 (ARM_MPU_ClrRegion) @06317bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/132 (ARM_MPU_Disable) @06317f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/131 (ARM_MPU_Enable) @06317dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/130 (__NVIC_SystemReset) @063115e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/129 (__NVIC_GetVector) @06311498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/128 (__NVIC_SetVector) @06311348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/127 (NVIC_DecodePriority) @063111f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/126 (NVIC_EncodePriority) @063110a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/125 (__NVIC_GetPriority) @06306f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/124 (__NVIC_SetPriority) @06306dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/123 (__NVIC_GetActive) @06306c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/122 (__NVIC_ClearPendingIRQ) @06306b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/121 (__NVIC_SetPendingIRQ) @063069d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/120 (__NVIC_GetPendingIRQ) @06306888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/119 (__NVIC_DisableIRQ) @06306738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/118 (__NVIC_GetEnableIRQ) @063065e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/117 (__NVIC_EnableIRQ) @06306498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/116 (__NVIC_GetPriorityGrouping) @06306348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/115 (__NVIC_SetPriorityGrouping) @063061f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/114 (__SMMLA) @062bf3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/113 (__QSUB) @062bf2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/112 (__QADD) @062bf150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/111 (__SEL) @062bf000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/110 (__SMLSLDX) @062b3e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/109 (__SMLSLD) @062b3d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/108 (__SMLSDX) @062b3bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/107 (__SMLSD) @062b3a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/106 (__SMUSDX) @062b3930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/105 (__SMUSD) @062b37e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/104 (__SMLALDX) @062b3690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/103 (__SMLALD) @062b3540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/102 (__SMLADX) @062b33f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/101 (__SMLAD) @062b32a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/100 (__SMUADX) @062b3150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/99 (__SMUAD) @062b3000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/98 (__SXTAB16_RORn) @062afe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/97 (__SXTAB16) @062afd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/96 (__SXTB16_RORn) @062afbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/95 (__SXTB16) @062afa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/94 (__UXTAB16) @062af930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/93 (__UXTB16) @062af7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/92 (__USADA8) @062af540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/91 (__USAD8) @062af3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/90 (__UHSAX) @062af2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/89 (__UQSAX) @062af150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/88 (__USAX) @062af000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/87 (__SHSAX) @062a5e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/86 (__QSAX) @062a5d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/85 (__SSAX) @062a5bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/84 (__UHASX) @062a5a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/83 (__UQASX) @062a5930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/82 (__UASX) @062a57e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/81 (__SHASX) @062a5690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/80 (__QASX) @062a5540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/79 (__SASX) @062a53f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/78 (__UHSUB16) @062a52a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/77 (__UQSUB16) @062a5150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/76 (__USUB16) @062a5000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/75 (__SHSUB16) @062a0e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/74 (__QSUB16) @062a0d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/73 (__SSUB16) @062a0bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/72 (__UHADD16) @062a0a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/71 (__UQADD16) @062a0930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/70 (__UADD16) @062a07e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/69 (__SHADD16) @062a0690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/68 (__QADD16) @062a0540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/67 (__SADD16) @062a03f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/66 (__UHSUB8) @062a02a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/65 (__UQSUB8) @062a0150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/64 (__USUB8) @062a0000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/63 (__SHSUB8) @06298e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/62 (__QSUB8) @06298d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/61 (__SSUB8) @06298bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/60 (__UHADD8) @06298a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/59 (__UQADD8) @06298930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/58 (__UADD8) @062987e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/57 (__SHADD8) @06298690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/56 (__QADD8) @06298540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/55 (__SADD8) @062983f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/54 (__set_FPSCR) @062982a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/53 (__get_FPSCR) @06298150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/52 (__set_FAULTMASK) @06298000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/51 (__get_FAULTMASK) @06292e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/50 (__set_BASEPRI_MAX) @06292d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/49 (__set_BASEPRI) @06292bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/48 (__get_BASEPRI) @06292a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/47 (__disable_fault_irq) @06292930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/46 (__enable_fault_irq) @062927e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/45 (__set_PRIMASK) @06292690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/44 (__get_PRIMASK) @06292540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/43 (__set_MSP) @062923f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/42 (__get_MSP) @062922a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/41 (__set_PSP) @06292150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/40 (__get_PSP) @06292000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/39 (__get_xPSR) @0628ee70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/38 (__get_APSR) @0628ed20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/37 (__get_IPSR) @0628ebd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/36 (__set_CONTROL) @0628ea80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/35 (__get_CONTROL) @0628e930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/34 (__disable_irq) @0628e7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/33 (__enable_irq) @0628e690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/32 (__STRT) @0628e540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/31 (__STRHT) @0628e3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/30 (__STRBT) @0628e2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/29 (__LDRT) @0628e150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/28 (__LDRHT) @0628e000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/27 (__LDRBT) @06285e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/26 (__RRX) @06285d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/25 (__CLREX) @06285a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/24 (__STREXW) @06285930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/23 (__STREXH) @062857e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/22 (__STREXB) @06285690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/21 (__LDREXW) @06285540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/20 (__LDREXH) @062853f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/19 (__LDREXB) @062852a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/18 (__CLZ) @06285150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/17 (__RBIT) @06285000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/16 (__ROR) @062457e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/15 (__REVSH) @06245690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/14 (__REV16) @06245540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/13 (__REV) @062453f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/12 (__DMB) @06245e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/11 (__DSB) @06245d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/10 (__ISB) @06245bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/9 (__cmsis_start) @06245a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06203d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06203bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06203a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06203690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06203540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062033f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062032a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06203150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06203000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: vPortSetBASEPRI/147 ulPortRaiseBASEPRI/146 vPortRaiseBASEPRI/145 xPortIsInsideInterrupt/144 ucPortCountLeadingZeros/143 ITM_CheckChar/142 ITM_ReceiveChar/141 ITM_SendChar/140 SysTick_Config/139 SCB_GetFPUType/138 ARM_MPU_Load/137 ARM_MPU_OrderedMemcpy/136 ARM_MPU_SetRegionEx/135 ARM_MPU_SetRegion/134 ARM_MPU_ClrRegion/133 ARM_MPU_Disable/132 ARM_MPU_Enable/131 __NVIC_SystemReset/130 __NVIC_GetVector/129 __NVIC_SetVector/128 NVIC_DecodePriority/127 NVIC_EncodePriority/126 __NVIC_GetPriority/125 __NVIC_SetPriority/124 __NVIC_GetActive/123 __NVIC_ClearPendingIRQ/122 __NVIC_SetPendingIRQ/121 __NVIC_GetPendingIRQ/120 __NVIC_DisableIRQ/119 __NVIC_GetEnableIRQ/118 __NVIC_EnableIRQ/117 __NVIC_GetPriorityGrouping/116 __NVIC_SetPriorityGrouping/115 __SMMLA/114 __QSUB/113 __QADD/112 __SEL/111 __SMLSLDX/110 __SMLSLD/109 __SMLSDX/108 __SMLSD/107 __SMUSDX/106 __SMUSD/105 __SMLALDX/104 __SMLALD/103 __SMLADX/102 __SMLAD/101 __SMUADX/100 __SMUAD/99 __SXTAB16_RORn/98 __SXTAB16/97 __SXTB16_RORn/96 __SXTB16/95 __UXTAB16/94 __UXTB16/93 __USADA8/92 __USAD8/91 __UHSAX/90 __UQSAX/89 __USAX/88 __SHSAX/87 __QSAX/86 __SSAX/85 __UHASX/84 __UQASX/83 __UASX/82 __SHASX/81 __QASX/80 __SASX/79 __UHSUB16/78 __UQSUB16/77 __USUB16/76 __SHSUB16/75 __QSUB16/74 __SSUB16/73 __UHADD16/72 __UQADD16/71 __UADD16/70 __SHADD16/69 __QADD16/68 __SADD16/67 __UHSUB8/66 __UQSUB8/65 __USUB8/64 __SHSUB8/63 __QSUB8/62 __SSUB8/61 __UHADD8/60 __UQADD8/59 __UADD8/58 __SHADD8/57 __QADD8/56 __SADD8/55 __set_FPSCR/54 __get_FPSCR/53 __set_FAULTMASK/52 __get_FAULTMASK/51 __set_BASEPRI_MAX/50 __set_BASEPRI/49 __get_BASEPRI/48 __disable_fault_irq/47 __enable_fault_irq/46 __set_PRIMASK/45 __get_PRIMASK/44 __set_MSP/43 __get_MSP/42 __set_PSP/41 __get_PSP/40 __get_xPSR/39 __get_APSR/38 __get_IPSR/37 __set_CONTROL/36 __get_CONTROL/35 __disable_irq/34 __enable_irq/33 __STRT/32 __STRHT/31 __STRBT/30 __LDRT/29 __LDRHT/28 __LDRBT/27 __RRX/26 __CLREX/25 __STREXW/24 __STREXH/23 __STREXB/22 __LDREXW/21 __LDREXH/20 __LDREXB/19 __CLZ/18 __RBIT/17 __ROR/16 __REVSH/15 __REV16/14 __REV/13 __DMB/12 __DSB/11 __ISB/10 __cmsis_start/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+mbedtls_mpi_sub_mpi/168 (mbedtls_mpi_sub_mpi) @063f37e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 
+  Calls: 
+mbedtls_mpi_inv_mod/167 (mbedtls_mpi_inv_mod) @063f3738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 
+  Calls: 
+mbedtls_mpi_free/166 (mbedtls_mpi_free) @063f3690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mod_mpi/165 (mbedtls_mpi_mod_mpi) @063f35e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_div_mpi/164 (mbedtls_mpi_div_mpi) @063f3540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_add_int/163 (mbedtls_mpi_add_int) @063f3498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_exp_mod/162 (mbedtls_mpi_exp_mod) @063f33f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_gcd/161 (mbedtls_mpi_gcd) @063f3348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lset/160 (mbedtls_mpi_lset) @063f32a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_shift_r/159 (mbedtls_mpi_shift_r) @063f31f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lsb/158 (mbedtls_mpi_lsb) @063f3150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_sub_int/157 (mbedtls_mpi_sub_int) @063f30a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mul_mpi/156 (mbedtls_mpi_mul_mpi) @063f3000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_init/155 (mbedtls_mpi_init) @0639ef18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_mpi/154 (mbedtls_mpi_cmp_mpi) @0639ee70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_int/153 (mbedtls_mpi_cmp_int) @0639edc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_rsa_validate_crt/152 (mbedtls_rsa_validate_crt) @0639ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_validate_params/151 (mbedtls_rsa_validate_params) @0639ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_crt/150 (mbedtls_rsa_deduce_crt) @0639ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_private_exponent/149 (mbedtls_rsa_deduce_private_exponent) @0639e888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_div_mpi/164 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_gcd/161 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+mbedtls_rsa_deduce_primes/148 (mbedtls_rsa_deduce_primes) @0639e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_sub_int/157 mbedtls_mpi_div_mpi/164 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_add_int/163 mbedtls_mpi_cmp_int/153 mbedtls_mpi_exp_mod/162 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_lset/160 mbedtls_mpi_shift_r/159 mbedtls_mpi_lsb/158 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+
+
+Initial Symbol table:
+
+mbedtls_mpi_sub_mpi/168 (mbedtls_mpi_sub_mpi) @063f37e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 
+  Calls: 
+mbedtls_mpi_inv_mod/167 (mbedtls_mpi_inv_mod) @063f3738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 
+  Calls: 
+mbedtls_mpi_free/166 (mbedtls_mpi_free) @063f3690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mod_mpi/165 (mbedtls_mpi_mod_mpi) @063f35e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_div_mpi/164 (mbedtls_mpi_div_mpi) @063f3540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_add_int/163 (mbedtls_mpi_add_int) @063f3498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_exp_mod/162 (mbedtls_mpi_exp_mod) @063f33f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_gcd/161 (mbedtls_mpi_gcd) @063f3348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lset/160 (mbedtls_mpi_lset) @063f32a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_shift_r/159 (mbedtls_mpi_shift_r) @063f31f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lsb/158 (mbedtls_mpi_lsb) @063f3150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_sub_int/157 (mbedtls_mpi_sub_int) @063f30a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mul_mpi/156 (mbedtls_mpi_mul_mpi) @063f3000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_init/155 (mbedtls_mpi_init) @0639ef18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_mpi/154 (mbedtls_mpi_cmp_mpi) @0639ee70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_int/153 (mbedtls_mpi_cmp_int) @0639edc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_rsa_validate_crt/152 (mbedtls_rsa_validate_crt) @0639ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_validate_params/151 (mbedtls_rsa_validate_params) @0639ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_crt/150 (mbedtls_rsa_deduce_crt) @0639ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_private_exponent/149 (mbedtls_rsa_deduce_private_exponent) @0639e888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_div_mpi/164 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_gcd/161 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+mbedtls_rsa_deduce_primes/148 (mbedtls_rsa_deduce_primes) @0639e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_sub_int/157 mbedtls_mpi_div_mpi/164 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_add_int/163 mbedtls_mpi_cmp_int/153 mbedtls_mpi_exp_mod/162 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_lset/160 mbedtls_mpi_shift_r/159 mbedtls_mpi_lsb/158 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+mbedtls_mpi_sub_mpi/168 (mbedtls_mpi_sub_mpi) @063f37e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 
+  Calls: 
+mbedtls_mpi_inv_mod/167 (mbedtls_mpi_inv_mod) @063f3738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 
+  Calls: 
+mbedtls_mpi_free/166 (mbedtls_mpi_free) @063f3690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mod_mpi/165 (mbedtls_mpi_mod_mpi) @063f35e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_div_mpi/164 (mbedtls_mpi_div_mpi) @063f3540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_add_int/163 (mbedtls_mpi_add_int) @063f3498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_exp_mod/162 (mbedtls_mpi_exp_mod) @063f33f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_gcd/161 (mbedtls_mpi_gcd) @063f3348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lset/160 (mbedtls_mpi_lset) @063f32a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_shift_r/159 (mbedtls_mpi_shift_r) @063f31f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_lsb/158 (mbedtls_mpi_lsb) @063f3150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_sub_int/157 (mbedtls_mpi_sub_int) @063f30a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_mul_mpi/156 (mbedtls_mpi_mul_mpi) @063f3000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_init/155 (mbedtls_mpi_init) @0639ef18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_crt/150 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_mpi/154 (mbedtls_mpi_cmp_mpi) @0639ee70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_mpi_cmp_int/153 (mbedtls_mpi_cmp_int) @0639edc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_crt/152 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_validate_params/151 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_private_exponent/149 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 mbedtls_rsa_deduce_primes/148 
+  Calls: 
+mbedtls_rsa_validate_crt/152 (mbedtls_rsa_validate_crt) @0639ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_mpi/168 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_validate_params/151 (mbedtls_rsa_validate_params) @0639ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_crt/150 (mbedtls_rsa_deduce_crt) @0639ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 
+mbedtls_rsa_deduce_private_exponent/149 (mbedtls_rsa_deduce_private_exponent) @0639e888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_inv_mod/167 mbedtls_mpi_div_mpi/164 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_gcd/161 mbedtls_mpi_sub_int/157 mbedtls_mpi_sub_int/157 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+mbedtls_rsa_deduce_primes/148 (mbedtls_rsa_deduce_primes) @0639e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 mbedtls_mpi_free/166 mbedtls_mpi_cmp_int/153 mbedtls_mpi_mod_mpi/165 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_sub_int/157 mbedtls_mpi_div_mpi/164 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_add_int/163 mbedtls_mpi_cmp_int/153 mbedtls_mpi_exp_mod/162 mbedtls_mpi_cmp_int/153 mbedtls_mpi_gcd/161 mbedtls_mpi_lset/160 mbedtls_mpi_shift_r/159 mbedtls_mpi_lsb/158 mbedtls_mpi_sub_int/157 mbedtls_mpi_mul_mpi/156 mbedtls_mpi_init/155 mbedtls_mpi_init/155 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_mpi/154 mbedtls_mpi_cmp_int/153 mbedtls_mpi_cmp_int/153 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+mbedtls_mpi_sub_mpi/168 (mbedtls_mpi_sub_mpi) @063f37e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (85556459 (estimated locally),0.08 per call) mbedtls_rsa_validate_crt/152 (253683831 (estimated locally),0.24 per call) 
+  Calls: 
+mbedtls_mpi_inv_mod/167 (mbedtls_mpi_inv_mod) @063f3738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_crt/150 (233548474 (estimated locally),0.22 per call) mbedtls_rsa_deduce_private_exponent/149 (27635345 (estimated locally),0.03 per call) 
+  Calls: 
+mbedtls_mpi_free/166 (mbedtls_mpi_free) @063f3690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_validate_crt/152 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_validate_params/151 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_validate_params/151 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_deduce_crt/150 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_deduce_private_exponent/149 (990396079 (estimated locally),0.92 per call) mbedtls_rsa_deduce_private_exponent/149 (990396079 (estimated locally),0.92 per call) mbedtls_rsa_deduce_primes/148 (891143210 (estimated locally),0.83 per call) mbedtls_rsa_deduce_primes/148 (891143210 (estimated locally),0.83 per call) 
+  Calls: 
+mbedtls_mpi_mod_mpi/165 (mbedtls_mpi_mod_mpi) @063f35e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (11552632 (estimated locally),0.01 per call) mbedtls_rsa_validate_crt/152 (41819997 (estimated locally),0.04 per call) mbedtls_rsa_validate_crt/152 (124000656 (estimated locally),0.12 per call) mbedtls_rsa_validate_params/151 (140264 (estimated locally),0.00 per call) mbedtls_rsa_validate_params/151 (5026798 (estimated locally),0.00 per call) mbedtls_rsa_deduce_crt/150 (178988339 (estimated locally),0.17 per call) mbedtls_rsa_deduce_crt/150 (280634621 (estimated locally),0.26 per call) mbedtls_rsa_deduce_primes/148 (490327018 (estimated locally),0.46 per call) 
+  Calls: 
+mbedtls_mpi_div_mpi/164 (mbedtls_mpi_div_mpi) @063f3540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 (56537121 (estimated locally),0.05 per call) mbedtls_rsa_deduce_primes/148 (3495473 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_mpi_add_int/163 (mbedtls_mpi_add_int) @063f3498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 (535235384 (estimated locally),0.50 per call) 
+  Calls: 
+mbedtls_mpi_exp_mod/162 (mbedtls_mpi_exp_mod) @063f33f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 (78351200 (estimated locally),0.07 per call) 
+  Calls: 
+mbedtls_mpi_gcd/161 (mbedtls_mpi_gcd) @063f3348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_private_exponent/149 (236630816 (estimated locally),0.22 per call) mbedtls_rsa_deduce_primes/148 (524530675 (estimated locally),0.49 per call) mbedtls_rsa_deduce_primes/148 (296111863 (estimated locally),0.28 per call) 
+  Calls: 
+mbedtls_mpi_lset/160 (mbedtls_mpi_lset) @063f32a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 (296111863 (estimated locally),0.28 per call) 
+  Calls: 
+mbedtls_mpi_shift_r/159 (mbedtls_mpi_shift_r) @063f31f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 (104073721 (estimated locally),0.10 per call) 
+  Calls: 
+mbedtls_mpi_lsb/158 (mbedtls_mpi_lsb) @063f3150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_deduce_primes/148 (212916780 (estimated locally),0.20 per call) 
+  Calls: 
+mbedtls_mpi_sub_int/157 (mbedtls_mpi_sub_int) @063f30a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (23634681 (estimated locally),0.02 per call) mbedtls_rsa_validate_crt/152 (175033673 (estimated locally),0.16 per call) mbedtls_rsa_validate_crt/152 (518993111 (estimated locally),0.48 per call) mbedtls_rsa_validate_params/151 (286957 (estimated locally),0.00 per call) mbedtls_rsa_validate_params/151 (587063 (estimated locally),0.00 per call) mbedtls_rsa_validate_params/151 (10283958 (estimated locally),0.01 per call) mbedtls_rsa_validate_params/151 (21039193 (estimated locally),0.02 per call) mbedtls_rsa_deduce_crt/150 (366179092 (estimated locally),0.34 per call) mbedtls_rsa_deduce_crt/150 (574129752 (estimated locally),0.53 per call) mbedtls_rsa_deduce_private_exponent/149 (484105600 (estimated locally),0.45 per call) mbedtls_rsa_deduce_private_exponent/149 (990396079 (estimated locally),0.92 per call) mbedtls_rsa_deduce_primes/148 (510544587 (estimated locally),0.48 per call) mbedtls_rsa_deduce_primes/148 (435590797 (estimated locally),0.41 per call) 
+  Calls: 
+mbedtls_mpi_mul_mpi/156 (mbedtls_mpi_mul_mpi) @063f3000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (48352457 (estimated locally),0.05 per call) mbedtls_rsa_validate_params/151 (1201030 (estimated locally),0.00 per call) mbedtls_rsa_validate_params/151 (43042540 (estimated locally),0.04 per call) mbedtls_rsa_validate_params/151 (281323581 (estimated locally),0.26 per call) mbedtls_rsa_deduce_private_exponent/149 (115665142 (estimated locally),0.11 per call) mbedtls_rsa_deduce_primes/148 (500333693 (estimated locally),0.47 per call) mbedtls_rsa_deduce_primes/148 (891143209 (estimated locally),0.83 per call) 
+  Calls: 
+mbedtls_mpi_init/155 (mbedtls_mpi_init) @0639ef18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (1073741823 (estimated locally),1.00 per call) mbedtls_rsa_validate_crt/152 (1073741823 (estimated locally),1.00 per call) mbedtls_rsa_validate_params/151 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_validate_params/151 (1073741824 (estimated locally),1.00 per call) mbedtls_rsa_deduce_crt/150 (1073741823 (estimated locally),1.00 per call) mbedtls_rsa_deduce_private_exponent/149 (990396079 (estimated locally),0.92 per call) mbedtls_rsa_deduce_private_exponent/149 (990396079 (estimated locally),0.92 per call) mbedtls_rsa_deduce_primes/148 (891143209 (estimated locally),0.83 per call) mbedtls_rsa_deduce_primes/148 (891143209 (estimated locally),0.83 per call) 
+  Calls: 
+mbedtls_mpi_cmp_mpi/154 (mbedtls_mpi_cmp_mpi) @0639ee70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_params/151 (21051120 (estimated locally),0.02 per call) mbedtls_rsa_validate_params/151 (52733266 (estimated locally),0.05 per call) mbedtls_rsa_validate_params/151 (79632600 (estimated locally),0.07 per call) mbedtls_rsa_deduce_primes/148 (174773622 (estimated locally),0.16 per call) mbedtls_rsa_deduce_primes/148 (918514953 (estimated locally),0.86 per call) mbedtls_rsa_deduce_primes/148 (960754444 (estimated locally),0.89 per call) 
+  Calls: 
+mbedtls_mpi_cmp_int/153 (mbedtls_mpi_cmp_int) @0639edc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_rsa_validate_crt/152 (5646926 (estimated locally),0.01 per call) mbedtls_rsa_validate_crt/152 (20441614 (estimated locally),0.02 per call) mbedtls_rsa_validate_crt/152 (60611520 (estimated locally),0.06 per call) mbedtls_rsa_validate_params/151 (68561 (estimated locally),0.00 per call) mbedtls_rsa_validate_params/151 (2457099 (estimated locally),0.00 per call) mbedtls_rsa_validate_params/151 (74326610 (estimated locally),0.07 per call) mbedtls_rsa_validate_params/151 (128348489 (estimated locally),0.12 per call) mbedtls_rsa_validate_params/151 (91060725 (estimated locally),0.08 per call) mbedtls_rsa_validate_params/151 (157245252 (estimated locally),0.15 per call) mbedtls_rsa_validate_params/151 (137510965 (estimated locally),0.13 per call) mbedtls_rsa_deduce_private_exponent/149 (1011537210 (estimated locally),0.94 per call) mbedtls_rsa_deduce_private_exponent/149 (1026524469 (estimated locally),0.96 per call) mbedtls_rsa_deduce_private_exponent/149 (1041733784 (estimated locally),0.97 per call) mbedtls_rsa_deduce_private_exponent/149 (1063970777 (estimated locally),0.99 per call) mbedtls_rsa_deduce_primes/148 (22069268 (estimated locally),0.02 per call) mbedtls_rsa_deduce_primes/148 (514040060 (estimated locally),0.48 per call) mbedtls_rsa_deduce_primes/148 (546158558 (estimated locally),0.51 per call) mbedtls_rsa_deduce_primes/148 (290189625 (estimated locally),0.27 per call) mbedtls_rsa_deduce_primes/148 (932123964 (estimated locally),0.87 per call) mbedtls_rsa_deduce_primes/148 (974989289 (estimated locally),0.91 per call) mbedtls_rsa_deduce_primes/148 (989435042 (estimated locally),0.92 per call) 
+  Calls: 
+mbedtls_rsa_validate_crt/152 (mbedtls_rsa_validate_crt) @0639ed20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_free/166 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_cmp_int/153 (5646926 (estimated locally),0.01 per call) mbedtls_mpi_mod_mpi/165 (11552632 (estimated locally),0.01 per call) mbedtls_mpi_sub_int/157 (23634681 (estimated locally),0.02 per call) mbedtls_mpi_mul_mpi/156 (48352457 (estimated locally),0.05 per call) mbedtls_mpi_cmp_int/153 (20441614 (estimated locally),0.02 per call) mbedtls_mpi_mod_mpi/165 (41819997 (estimated locally),0.04 per call) mbedtls_mpi_sub_mpi/168 (85556459 (estimated locally),0.08 per call) mbedtls_mpi_sub_int/157 (175033673 (estimated locally),0.16 per call) mbedtls_mpi_cmp_int/153 (60611520 (estimated locally),0.06 per call) mbedtls_mpi_mod_mpi/165 (124000656 (estimated locally),0.12 per call) mbedtls_mpi_sub_mpi/168 (253683831 (estimated locally),0.24 per call) mbedtls_mpi_sub_int/157 (518993111 (estimated locally),0.48 per call) mbedtls_mpi_init/155 (1073741823 (estimated locally),1.00 per call) mbedtls_mpi_init/155 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_rsa_validate_params/151 (mbedtls_rsa_validate_params) @0639ebd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_free/166 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_cmp_int/153 (68561 (estimated locally),0.00 per call) mbedtls_mpi_mod_mpi/165 (140264 (estimated locally),0.00 per call) mbedtls_mpi_sub_int/157 (286957 (estimated locally),0.00 per call) mbedtls_mpi_sub_int/157 (587063 (estimated locally),0.00 per call) mbedtls_mpi_mul_mpi/156 (1201030 (estimated locally),0.00 per call) mbedtls_mpi_cmp_int/153 (2457099 (estimated locally),0.00 per call) mbedtls_mpi_mod_mpi/165 (5026798 (estimated locally),0.00 per call) mbedtls_mpi_sub_int/157 (10283958 (estimated locally),0.01 per call) mbedtls_mpi_sub_int/157 (21039193 (estimated locally),0.02 per call) mbedtls_mpi_mul_mpi/156 (43042540 (estimated locally),0.04 per call) mbedtls_mpi_cmp_int/153 (74326610 (estimated locally),0.07 per call) mbedtls_mpi_cmp_int/153 (128348489 (estimated locally),0.12 per call) mbedtls_mpi_cmp_mpi/154 (21051120 (estimated locally),0.02 per call) mbedtls_mpi_cmp_mpi/154 (52733266 (estimated locally),0.05 per call) mbedtls_mpi_cmp_int/153 (91060725 (estimated locally),0.08 per call) mbedtls_mpi_cmp_int/153 (157245252 (estimated locally),0.15 per call) mbedtls_mpi_cmp_mpi/154 (79632600 (estimated locally),0.07 per call) mbedtls_mpi_cmp_int/153 (137510965 (estimated locally),0.13 per call) mbedtls_mpi_mul_mpi/156 (281323581 (estimated locally),0.26 per call) mbedtls_mpi_init/155 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/155 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_rsa_deduce_crt/150 (mbedtls_rsa_deduce_crt) @0639ea80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_inv_mod/167 (233548474 (estimated locally),0.22 per call) mbedtls_mpi_mod_mpi/165 (178988339 (estimated locally),0.17 per call) mbedtls_mpi_sub_int/157 (366179092 (estimated locally),0.34 per call) mbedtls_mpi_mod_mpi/165 (280634621 (estimated locally),0.26 per call) mbedtls_mpi_sub_int/157 (574129752 (estimated locally),0.53 per call) mbedtls_mpi_init/155 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_rsa_deduce_private_exponent/149 (mbedtls_rsa_deduce_private_exponent) @0639e888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 (990396079 (estimated locally),0.92 per call) mbedtls_mpi_free/166 (990396079 (estimated locally),0.92 per call) mbedtls_mpi_inv_mod/167 (27635345 (estimated locally),0.03 per call) mbedtls_mpi_div_mpi/164 (56537121 (estimated locally),0.05 per call) mbedtls_mpi_mul_mpi/156 (115665142 (estimated locally),0.11 per call) mbedtls_mpi_gcd/161 (236630816 (estimated locally),0.22 per call) mbedtls_mpi_sub_int/157 (484105600 (estimated locally),0.45 per call) mbedtls_mpi_sub_int/157 (990396079 (estimated locally),0.92 per call) mbedtls_mpi_init/155 (990396079 (estimated locally),0.92 per call) mbedtls_mpi_init/155 (990396079 (estimated locally),0.92 per call) mbedtls_mpi_cmp_int/153 (1011537210 (estimated locally),0.94 per call) mbedtls_mpi_cmp_int/153 (1026524469 (estimated locally),0.96 per call) mbedtls_mpi_cmp_int/153 (1041733784 (estimated locally),0.97 per call) mbedtls_mpi_cmp_int/153 (1063970777 (estimated locally),0.99 per call) 
+mbedtls_rsa_deduce_primes/148 (mbedtls_rsa_deduce_primes) @0639e540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_free/166 (891143210 (estimated locally),0.83 per call) mbedtls_mpi_free/166 (891143210 (estimated locally),0.83 per call) mbedtls_mpi_cmp_int/153 (22069268 (estimated locally),0.02 per call) mbedtls_mpi_mod_mpi/165 (490327018 (estimated locally),0.46 per call) mbedtls_mpi_mul_mpi/156 (500333693 (estimated locally),0.47 per call) mbedtls_mpi_sub_int/157 (510544587 (estimated locally),0.48 per call) mbedtls_mpi_div_mpi/164 (3495473 (estimated locally),0.00 per call) mbedtls_mpi_cmp_mpi/154 (174773622 (estimated locally),0.16 per call) mbedtls_mpi_cmp_int/153 (514040060 (estimated locally),0.48 per call) mbedtls_mpi_gcd/161 (524530675 (estimated locally),0.49 per call) mbedtls_mpi_add_int/163 (535235384 (estimated locally),0.50 per call) mbedtls_mpi_cmp_int/153 (546158558 (estimated locally),0.51 per call) mbedtls_mpi_exp_mod/162 (78351200 (estimated locally),0.07 per call) mbedtls_mpi_cmp_int/153 (290189625 (estimated locally),0.27 per call) mbedtls_mpi_gcd/161 (296111863 (estimated locally),0.28 per call) mbedtls_mpi_lset/160 (296111863 (estimated locally),0.28 per call) mbedtls_mpi_shift_r/159 (104073721 (estimated locally),0.10 per call) mbedtls_mpi_lsb/158 (212916780 (estimated locally),0.20 per call) mbedtls_mpi_sub_int/157 (435590797 (estimated locally),0.41 per call) mbedtls_mpi_mul_mpi/156 (891143209 (estimated locally),0.83 per call) mbedtls_mpi_init/155 (891143209 (estimated locally),0.83 per call) mbedtls_mpi_init/155 (891143209 (estimated locally),0.83 per call) mbedtls_mpi_cmp_mpi/154 (918514953 (estimated locally),0.86 per call) mbedtls_mpi_cmp_int/153 (932123964 (estimated locally),0.87 per call) mbedtls_mpi_cmp_mpi/154 (960754444 (estimated locally),0.89 per call) mbedtls_mpi_cmp_int/153 (974989289 (estimated locally),0.91 per call) mbedtls_mpi_cmp_int/153 (989435042 (estimated locally),0.92 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+mbedtls_mpi_sub_mpi/168 (mbedtls_mpi_sub_mpi) @063f37e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_inv_mod/167 (mbedtls_mpi_inv_mod) @063f3738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_free/166 (mbedtls_mpi_free) @063f3690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_mod_mpi/165 (mbedtls_mpi_mod_mpi) @063f35e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_div_mpi/164 (mbedtls_mpi_div_mpi) @063f3540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_add_int/163 (mbedtls_mpi_add_int) @063f3498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_exp_mod/162 (mbedtls_mpi_exp_mod) @063f33f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_gcd/161 (mbedtls_mpi_gcd) @063f3348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_lset/160 (mbedtls_mpi_lset) @063f32a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_shift_r/159 (mbedtls_mpi_shift_r) @063f31f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_lsb/158 (mbedtls_mpi_lsb) @063f3150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_sub_int/157 (mbedtls_mpi_sub_int) @063f30a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_mul_mpi/156 (mbedtls_mpi_mul_mpi) @063f3000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_init/155 (mbedtls_mpi_init) @0639ef18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_cmp_mpi/154 (mbedtls_mpi_cmp_mpi) @0639ee70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_cmp_int/153 (mbedtls_mpi_cmp_int) @0639edc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_rsa_validate_crt/152 (mbedtls_rsa_validate_crt) @0639ed20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_rsa_validate_crt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_rsa_validate_params/151 (mbedtls_rsa_validate_params) @0639ebd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_rsa_validate_params (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_rsa_deduce_crt/150 (mbedtls_rsa_deduce_crt) @0639ea80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_rsa_deduce_crt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_rsa_deduce_private_exponent/149 (mbedtls_rsa_deduce_private_exponent) @0639e888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_rsa_deduce_private_exponent (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_rsa_deduce_primes/148 (mbedtls_rsa_deduce_primes) @0639e540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_rsa_deduce_primes (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 

@@ -1,0 +1,2238 @@
+Trivially needed symbols: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_finish/84 mbedtls_psa_mac_sign_finish/83 mbedtls_psa_mac_update/81 mbedtls_psa_mac_verify_setup/80 mbedtls_psa_mac_sign_setup/79 mbedtls_psa_mac_abort/77
+
+
+Initial Symbol table:
+
+psa_hash_finish/101 (psa_hash_finish) @063ecc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 
+  Calls: 
+mbedtls_cipher_cmac_finish/100 (mbedtls_cipher_cmac_finish) @063ecbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 
+  Calls: 
+mbedtls_cipher_cmac_update/99 (mbedtls_cipher_cmac_update) @063ecb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: 
+psa_hash_update/98 (psa_hash_update) @063eca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 psa_hmac_update_internal/73 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_setup/97 (psa_hash_setup) @063ec9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_setup_internal/72 
+  Calls: 
+memcpy/96 (memcpy) @063ec930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_compute/95 (psa_hash_compute) @063ec888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 
+  Calls: 
+mbedtls_to_psa_error/94 (mbedtls_to_psa_error) @063ec738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 cmac_setup/75 
+  Calls: 
+mbedtls_cipher_cmac_starts/93 (mbedtls_cipher_cmac_starts) @063ec690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_setup/92 (mbedtls_cipher_setup) @063ec5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_info_from_psa/91 (mbedtls_cipher_info_from_psa) @063ec540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_init/90 (mbedtls_cipher_init) @063ec498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mac_init/76 
+  Calls: 
+psa_hash_abort/89 (psa_hash_abort) @063ec3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_abort_internal/71 
+  Calls: 
+mbedtls_platform_zeroize/88 (mbedtls_platform_zeroize) @063ec348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_verify_finish/84 psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 psa_hmac_abort_internal/71 
+  Calls: 
+memset/87 (memset) @063ec2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 psa_hmac_setup_internal/72 mac_init/76 mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_cipher_free/86 (mbedtls_cipher_free) @063ec1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_psa_mac_compute/85 (mbedtls_psa_mac_compute) @063ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_psa_mac_abort/77 psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 psa_mac_setup/78 
+mbedtls_psa_mac_verify_finish/84 (mbedtls_psa_mac_verify_finish) @063ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063ec150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/88 mbedtls_psa_safer_memcmp/63 psa_mac_finish_internal/82 
+mbedtls_psa_mac_sign_finish/83 (mbedtls_psa_mac_sign_finish) @06231e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063ec000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_finish_internal/82 
+psa_mac_finish_internal/82 (psa_mac_finish_internal) @06231d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063ec000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_finish/84 mbedtls_psa_mac_sign_finish/83 
+  Calls: psa_hmac_finish_internal/74 mbedtls_to_psa_error/94 mbedtls_platform_zeroize/88 memcpy/96 mbedtls_cipher_cmac_finish/100 
+mbedtls_psa_mac_update/81 (mbedtls_psa_mac_update) @06231b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06231e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 
+  Calls: psa_hmac_update_internal/73 mbedtls_to_psa_error/94 mbedtls_cipher_cmac_update/99 
+mbedtls_psa_mac_verify_setup/80 (mbedtls_psa_mac_verify_setup) @06231930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06231b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+mbedtls_psa_mac_sign_setup/79 (mbedtls_psa_mac_sign_setup) @062317e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06231930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+psa_mac_setup/78 (psa_mac_setup) @06231690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06231930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_setup/80 mbedtls_psa_mac_sign_setup/79 
+  Calls: mbedtls_psa_mac_abort/77 psa_hmac_setup_internal/72 cmac_setup/75 mac_init/76 
+mbedtls_psa_mac_abort/77 (mbedtls_psa_mac_abort) @06231498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062317e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 psa_mac_setup/78 
+  Calls: memset/87 psa_hmac_abort_internal/71 mbedtls_cipher_free/86 
+mac_init/76 (mac_init) @062312a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062310a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: memset/87 mbedtls_cipher_init/90 
+cmac_setup/75 (cmac_setup) @062310a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06223000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_to_psa_error/94 mbedtls_cipher_cmac_starts/93 psa_get_key_bits/46 mbedtls_cipher_setup/92 mbedtls_cipher_info_from_psa/91 psa_get_key_bits/46 psa_get_key_type/44 psa_get_key_bits/46 psa_get_key_bits/46 psa_get_key_type/44 
+psa_hmac_finish_internal/74 (psa_hmac_finish_internal) @06223348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063ec000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_finish_internal/82 
+  Calls: mbedtls_platform_zeroize/88 memcpy/96 psa_hash_finish/101 psa_hash_update/98 psa_hash_update/98 psa_hash_setup/97 psa_hash_finish/101 
+psa_hmac_update_internal/73 (psa_hmac_update_internal) @062231f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06231e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: psa_hash_update/98 
+psa_hmac_setup_internal/72 (psa_hmac_setup_internal) @06223000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06231930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_platform_zeroize/88 psa_hash_update/98 psa_hash_setup/97 memset/87 memset/87 memcpy/96 psa_hash_compute/95 
+psa_hmac_abort_internal/71 (psa_hmac_abort_internal) @06223e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062317e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: psa_hash_abort/89 mbedtls_platform_zeroize/88 
+mbedtls_error_add/70 (mbedtls_error_add) @06223d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_clear_bits/69 (psa_key_slot_clear_bits) @06223bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_set_bits_in_flags/68 (psa_key_slot_set_bits_in_flags) @06223a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_set_flags/67 (psa_key_slot_set_flags) @06223930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_get_flags/66 (psa_key_slot_get_flags) @062237e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_is_key_slot_locked/65 (psa_is_key_slot_locked) @06223690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_is_key_slot_occupied/64 (psa_is_key_slot_occupied) @06223540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_safer_memcmp/63 (mbedtls_psa_safer_memcmp) @0621dc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063ec150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_verify_finish/84 
+  Calls: 
+psa_pake_operation_init/62 (psa_pake_operation_init) @063cb3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cipher_suite_init/61 (psa_pake_cipher_suite_init) @063cbdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_hash/60 (psa_pake_cs_set_hash) @063bae70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_hash/59 (psa_pake_cs_get_hash) @063bad20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_bits/58 (psa_pake_cs_get_bits) @063babd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_family/57 (psa_pake_cs_get_family) @063baa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_primitive/56 (psa_pake_cs_set_primitive) @063ba930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_primitive/55 (psa_pake_cs_get_primitive) @063ba7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_algorithm/54 (psa_pake_cs_set_algorithm) @063ba690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_algorithm/53 (psa_pake_cs_get_algorithm) @063ba540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecc_group_to_psa/52 (mbedtls_ecc_group_to_psa) @06380738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_enrollment_algorithm/51 (psa_get_key_enrollment_algorithm) @06380d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_enrollment_algorithm/50 (psa_set_key_enrollment_algorithm) @06380bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_handle_is_null/49 (psa_key_handle_is_null) @06380a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_verify_hash_interruptible_operation_init/48 (psa_verify_hash_interruptible_operation_init) @06380888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_sign_hash_interruptible_operation_init/47 (psa_sign_hash_interruptible_operation_init) @06380498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_bits/46 (psa_get_key_bits) @063800a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06223000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 cmac_setup/75 cmac_setup/75 
+  Calls: 
+psa_set_key_bits/45 (psa_set_key_bits) @0637bf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_type/44 (psa_get_key_type) @0637bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063800a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 
+  Calls: 
+psa_set_key_type/43 (psa_set_key_type) @0637bc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_algorithm/42 (psa_get_key_algorithm) @0637bb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_algorithm/41 (psa_set_key_algorithm) @0637b9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_usage_flags/40 (psa_get_key_usage_flags) @0637b888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_usage_flags/39 (psa_set_key_usage_flags) @0637b738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_extend_key_usage_flags/38 (psa_extend_key_usage_flags) @0637b5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_lifetime/37 (psa_get_key_lifetime) @0637b498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_lifetime/36 (psa_set_key_lifetime) @0637b348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_id/35 (psa_get_key_id) @0637b1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_id/34 (psa_set_key_id) @0637b0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_attributes_init/33 (psa_key_attributes_init) @06374f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_policy_init/32 (psa_key_policy_init) @06374690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_derivation_operation_init/31 (psa_key_derivation_operation_init) @06374150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_aead_operation_init/30 (psa_aead_operation_init) @06369498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_mac_operation_init/29 (psa_mac_operation_init) @06369738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_cipher_operation_init/28 (psa_cipher_operation_init) @062f3738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_operation_init/27 (psa_hash_operation_init) @062f32a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/26 (mbedtls_cipher_get_operation) @062ba0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/25 (mbedtls_cipher_get_key_bitlen) @062aff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/24 (mbedtls_cipher_get_name) @062afdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/23 (mbedtls_cipher_get_type) @062afc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/22 (mbedtls_cipher_get_iv_size) @062afb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/21 (mbedtls_cipher_get_cipher_mode) @062af9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/20 (mbedtls_cipher_get_block_size) @062af888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/19 (mbedtls_cipher_info_has_variable_iv_size) @062af738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/18 (mbedtls_cipher_info_has_variable_key_bitlen) @062af5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/17 (mbedtls_cipher_info_get_block_size) @062af498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/16 (mbedtls_cipher_info_get_iv_size) @062af348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/15 (mbedtls_cipher_info_get_name) @062af1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/14 (mbedtls_cipher_info_get_key_bitlen) @062af0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/13 (mbedtls_cipher_info_get_mode) @062a5a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/12 (mbedtls_cipher_info_get_type) @062a8888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_is_null/11 (mbedtls_svc_key_id_is_null) @06276930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_equal/10 (mbedtls_svc_key_id_equal) @062767e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_make/9 (mbedtls_svc_key_id_make) @06276690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061f5d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @061f5bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @061f5a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @061f5690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @061f5540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061f53f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061f52a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @061f5150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @061f5000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: mbedtls_error_add/70 psa_key_slot_clear_bits/69 psa_key_slot_set_bits_in_flags/68 psa_key_slot_set_flags/67 psa_key_slot_get_flags/66 psa_is_key_slot_locked/65 psa_is_key_slot_occupied/64 psa_pake_operation_init/62 psa_pake_cipher_suite_init/61 psa_pake_cs_set_hash/60 psa_pake_cs_get_hash/59 psa_pake_cs_get_bits/58 psa_pake_cs_get_family/57 psa_pake_cs_set_primitive/56 psa_pake_cs_get_primitive/55 psa_pake_cs_set_algorithm/54 psa_pake_cs_get_algorithm/53 mbedtls_ecc_group_to_psa/52 psa_get_key_enrollment_algorithm/51 psa_set_key_enrollment_algorithm/50 psa_key_handle_is_null/49 psa_verify_hash_interruptible_operation_init/48 psa_sign_hash_interruptible_operation_init/47 psa_set_key_bits/45 psa_set_key_type/43 psa_get_key_algorithm/42 psa_set_key_algorithm/41 psa_get_key_usage_flags/40 psa_set_key_usage_flags/39 psa_extend_key_usage_flags/38 psa_get_key_lifetime/37 psa_set_key_lifetime/36 psa_get_key_id/35 psa_set_key_id/34 psa_key_attributes_init/33 psa_key_policy_init/32 psa_key_derivation_operation_init/31 psa_aead_operation_init/30 psa_mac_operation_init/29 psa_cipher_operation_init/28 psa_hash_operation_init/27 mbedtls_cipher_get_operation/26 mbedtls_cipher_get_key_bitlen/25 mbedtls_cipher_get_name/24 mbedtls_cipher_get_type/23 mbedtls_cipher_get_iv_size/22 mbedtls_cipher_get_cipher_mode/21 mbedtls_cipher_get_block_size/20 mbedtls_cipher_info_has_variable_iv_size/19 mbedtls_cipher_info_has_variable_key_bitlen/18 mbedtls_cipher_info_get_block_size/17 mbedtls_cipher_info_get_iv_size/16 mbedtls_cipher_info_get_name/15 mbedtls_cipher_info_get_key_bitlen/14 mbedtls_cipher_info_get_mode/13 mbedtls_cipher_info_get_type/12 mbedtls_svc_key_id_is_null/11 mbedtls_svc_key_id_equal/10 mbedtls_svc_key_id_make/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+psa_hash_finish/101 (psa_hash_finish) @063ecc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 
+  Calls: 
+mbedtls_cipher_cmac_finish/100 (mbedtls_cipher_cmac_finish) @063ecbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 
+  Calls: 
+mbedtls_cipher_cmac_update/99 (mbedtls_cipher_cmac_update) @063ecb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: 
+psa_hash_update/98 (psa_hash_update) @063eca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 psa_hmac_update_internal/73 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_setup/97 (psa_hash_setup) @063ec9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_setup_internal/72 
+  Calls: 
+memcpy/96 (memcpy) @063ec930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_compute/95 (psa_hash_compute) @063ec888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 
+  Calls: 
+mbedtls_to_psa_error/94 (mbedtls_to_psa_error) @063ec738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 cmac_setup/75 
+  Calls: 
+mbedtls_cipher_cmac_starts/93 (mbedtls_cipher_cmac_starts) @063ec690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_setup/92 (mbedtls_cipher_setup) @063ec5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_info_from_psa/91 (mbedtls_cipher_info_from_psa) @063ec540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_init/90 (mbedtls_cipher_init) @063ec498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mac_init/76 
+  Calls: 
+psa_hash_abort/89 (psa_hash_abort) @063ec3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_abort_internal/71 
+  Calls: 
+mbedtls_platform_zeroize/88 (mbedtls_platform_zeroize) @063ec348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_verify_finish/84 psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 psa_hmac_abort_internal/71 
+  Calls: 
+memset/87 (memset) @063ec2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 psa_hmac_setup_internal/72 mac_init/76 mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_cipher_free/86 (mbedtls_cipher_free) @063ec1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_psa_mac_compute/85 (mbedtls_psa_mac_compute) @063ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_psa_mac_abort/77 psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 psa_mac_setup/78 
+mbedtls_psa_mac_verify_finish/84 (mbedtls_psa_mac_verify_finish) @063ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/88 mbedtls_psa_safer_memcmp/63 psa_mac_finish_internal/82 
+mbedtls_psa_mac_sign_finish/83 (mbedtls_psa_mac_sign_finish) @06231e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_finish_internal/82 
+psa_mac_finish_internal/82 (psa_mac_finish_internal) @06231d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_finish/84 mbedtls_psa_mac_sign_finish/83 
+  Calls: psa_hmac_finish_internal/74 mbedtls_to_psa_error/94 mbedtls_platform_zeroize/88 memcpy/96 mbedtls_cipher_cmac_finish/100 
+mbedtls_psa_mac_update/81 (mbedtls_psa_mac_update) @06231b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 
+  Calls: psa_hmac_update_internal/73 mbedtls_to_psa_error/94 mbedtls_cipher_cmac_update/99 
+mbedtls_psa_mac_verify_setup/80 (mbedtls_psa_mac_verify_setup) @06231930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+mbedtls_psa_mac_sign_setup/79 (mbedtls_psa_mac_sign_setup) @062317e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+psa_mac_setup/78 (psa_mac_setup) @06231690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_setup/80 mbedtls_psa_mac_sign_setup/79 
+  Calls: mbedtls_psa_mac_abort/77 psa_hmac_setup_internal/72 cmac_setup/75 mac_init/76 
+mbedtls_psa_mac_abort/77 (mbedtls_psa_mac_abort) @06231498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 psa_mac_setup/78 
+  Calls: memset/87 psa_hmac_abort_internal/71 mbedtls_cipher_free/86 
+mac_init/76 (mac_init) @062312a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: memset/87 mbedtls_cipher_init/90 
+cmac_setup/75 (cmac_setup) @062310a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_to_psa_error/94 mbedtls_cipher_cmac_starts/93 psa_get_key_bits/46 mbedtls_cipher_setup/92 mbedtls_cipher_info_from_psa/91 psa_get_key_bits/46 psa_get_key_type/44 psa_get_key_bits/46 psa_get_key_bits/46 psa_get_key_type/44 
+psa_hmac_finish_internal/74 (psa_hmac_finish_internal) @06223348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_finish_internal/82 
+  Calls: mbedtls_platform_zeroize/88 memcpy/96 psa_hash_finish/101 psa_hash_update/98 psa_hash_update/98 psa_hash_setup/97 psa_hash_finish/101 
+psa_hmac_update_internal/73 (psa_hmac_update_internal) @062231f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: psa_hash_update/98 
+psa_hmac_setup_internal/72 (psa_hmac_setup_internal) @06223000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_platform_zeroize/88 psa_hash_update/98 psa_hash_setup/97 memset/87 memset/87 memcpy/96 psa_hash_compute/95 
+psa_hmac_abort_internal/71 (psa_hmac_abort_internal) @06223e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: psa_hash_abort/89 mbedtls_platform_zeroize/88 
+mbedtls_psa_safer_memcmp/63 (mbedtls_psa_safer_memcmp) @0621dc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_verify_finish/84 
+  Calls: 
+psa_get_key_bits/46 (psa_get_key_bits) @063800a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 cmac_setup/75 cmac_setup/75 
+  Calls: 
+psa_get_key_type/44 (psa_get_key_type) @0637bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 
+  Calls: 
+
+
+Initial Symbol table:
+
+psa_hash_finish/101 (psa_hash_finish) @063ecc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 
+  Calls: 
+mbedtls_cipher_cmac_finish/100 (mbedtls_cipher_cmac_finish) @063ecbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 
+  Calls: 
+mbedtls_cipher_cmac_update/99 (mbedtls_cipher_cmac_update) @063ecb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: 
+psa_hash_update/98 (psa_hash_update) @063eca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 psa_hmac_update_internal/73 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_setup/97 (psa_hash_setup) @063ec9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_setup_internal/72 
+  Calls: 
+memcpy/96 (memcpy) @063ec930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_compute/95 (psa_hash_compute) @063ec888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 
+  Calls: 
+mbedtls_to_psa_error/94 (mbedtls_to_psa_error) @063ec738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 cmac_setup/75 
+  Calls: 
+mbedtls_cipher_cmac_starts/93 (mbedtls_cipher_cmac_starts) @063ec690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_setup/92 (mbedtls_cipher_setup) @063ec5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_info_from_psa/91 (mbedtls_cipher_info_from_psa) @063ec540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_init/90 (mbedtls_cipher_init) @063ec498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mac_init/76 
+  Calls: 
+psa_hash_abort/89 (psa_hash_abort) @063ec3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_abort_internal/71 
+  Calls: 
+mbedtls_platform_zeroize/88 (mbedtls_platform_zeroize) @063ec348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_verify_finish/84 psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 psa_hmac_abort_internal/71 
+  Calls: 
+memset/87 (memset) @063ec2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 psa_hmac_setup_internal/72 mac_init/76 mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_cipher_free/86 (mbedtls_cipher_free) @063ec1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_psa_mac_compute/85 (mbedtls_psa_mac_compute) @063ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_psa_mac_abort/77 psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 psa_mac_setup/78 
+mbedtls_psa_mac_verify_finish/84 (mbedtls_psa_mac_verify_finish) @063ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/88 mbedtls_psa_safer_memcmp/63 psa_mac_finish_internal/82 
+mbedtls_psa_mac_sign_finish/83 (mbedtls_psa_mac_sign_finish) @06231e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_finish_internal/82 
+psa_mac_finish_internal/82 (psa_mac_finish_internal) @06231d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_finish/84 mbedtls_psa_mac_sign_finish/83 
+  Calls: psa_hmac_finish_internal/74 mbedtls_to_psa_error/94 mbedtls_platform_zeroize/88 memcpy/96 mbedtls_cipher_cmac_finish/100 
+mbedtls_psa_mac_update/81 (mbedtls_psa_mac_update) @06231b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 
+  Calls: psa_hmac_update_internal/73 mbedtls_to_psa_error/94 mbedtls_cipher_cmac_update/99 
+mbedtls_psa_mac_verify_setup/80 (mbedtls_psa_mac_verify_setup) @06231930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+mbedtls_psa_mac_sign_setup/79 (mbedtls_psa_mac_sign_setup) @062317e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+psa_mac_setup/78 (psa_mac_setup) @06231690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_setup/80 mbedtls_psa_mac_sign_setup/79 
+  Calls: mbedtls_psa_mac_abort/77 psa_hmac_setup_internal/72 cmac_setup/75 mac_init/76 
+mbedtls_psa_mac_abort/77 (mbedtls_psa_mac_abort) @06231498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 psa_mac_setup/78 
+  Calls: memset/87 psa_hmac_abort_internal/71 mbedtls_cipher_free/86 
+mac_init/76 (mac_init) @062312a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: memset/87 mbedtls_cipher_init/90 
+cmac_setup/75 (cmac_setup) @062310a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_to_psa_error/94 mbedtls_cipher_cmac_starts/93 psa_get_key_bits/46 mbedtls_cipher_setup/92 mbedtls_cipher_info_from_psa/91 psa_get_key_bits/46 psa_get_key_type/44 psa_get_key_bits/46 psa_get_key_bits/46 psa_get_key_type/44 
+psa_hmac_finish_internal/74 (psa_hmac_finish_internal) @06223348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_finish_internal/82 
+  Calls: mbedtls_platform_zeroize/88 memcpy/96 psa_hash_finish/101 psa_hash_update/98 psa_hash_update/98 psa_hash_setup/97 psa_hash_finish/101 
+psa_hmac_update_internal/73 (psa_hmac_update_internal) @062231f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: psa_hash_update/98 
+psa_hmac_setup_internal/72 (psa_hmac_setup_internal) @06223000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_platform_zeroize/88 psa_hash_update/98 psa_hash_setup/97 memset/87 memset/87 memcpy/96 psa_hash_compute/95 
+psa_hmac_abort_internal/71 (psa_hmac_abort_internal) @06223e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: psa_hash_abort/89 mbedtls_platform_zeroize/88 
+mbedtls_psa_safer_memcmp/63 (mbedtls_psa_safer_memcmp) @0621dc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_verify_finish/84 
+  Calls: 
+psa_get_key_bits/46 (psa_get_key_bits) @063800a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 cmac_setup/75 cmac_setup/75 
+  Calls: 
+psa_get_key_type/44 (psa_get_key_type) @0637bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+psa_hash_finish/101 (psa_hash_finish) @063ecc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 
+  Calls: 
+mbedtls_cipher_cmac_finish/100 (mbedtls_cipher_cmac_finish) @063ecbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 
+  Calls: 
+mbedtls_cipher_cmac_update/99 (mbedtls_cipher_cmac_update) @063ecb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: 
+psa_hash_update/98 (psa_hash_update) @063eca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_finish_internal/74 psa_hmac_update_internal/73 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_setup/97 (psa_hash_setup) @063ec9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_hmac_setup_internal/72 
+  Calls: 
+memcpy/96 (memcpy) @063ec930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 
+  Calls: 
+psa_hash_compute/95 (psa_hash_compute) @063ec888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 
+  Calls: 
+mbedtls_to_psa_error/94 (mbedtls_to_psa_error) @063ec738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 cmac_setup/75 
+  Calls: 
+mbedtls_cipher_cmac_starts/93 (mbedtls_cipher_cmac_starts) @063ec690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_setup/92 (mbedtls_cipher_setup) @063ec5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_info_from_psa/91 (mbedtls_cipher_info_from_psa) @063ec540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: cmac_setup/75 
+  Calls: 
+mbedtls_cipher_init/90 (mbedtls_cipher_init) @063ec498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mac_init/76 
+  Calls: 
+psa_hash_abort/89 (psa_hash_abort) @063ec3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_abort_internal/71 
+  Calls: 
+mbedtls_platform_zeroize/88 (mbedtls_platform_zeroize) @063ec348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_verify_finish/84 psa_hmac_finish_internal/74 psa_mac_finish_internal/82 psa_hmac_setup_internal/72 psa_hmac_abort_internal/71 
+  Calls: 
+memset/87 (memset) @063ec2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 psa_hmac_setup_internal/72 mac_init/76 mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_cipher_free/86 (mbedtls_cipher_free) @063ec1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: 
+mbedtls_psa_mac_compute/85 (mbedtls_psa_mac_compute) @063ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_psa_mac_abort/77 psa_mac_finish_internal/82 mbedtls_psa_mac_update/81 psa_mac_setup/78 
+mbedtls_psa_mac_verify_finish/84 (mbedtls_psa_mac_verify_finish) @063ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/88 mbedtls_psa_safer_memcmp/63 psa_mac_finish_internal/82 
+mbedtls_psa_mac_sign_finish/83 (mbedtls_psa_mac_sign_finish) @06231e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_finish_internal/82 
+psa_mac_finish_internal/82 (psa_mac_finish_internal) @06231d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_finish/84 mbedtls_psa_mac_sign_finish/83 
+  Calls: psa_hmac_finish_internal/74 mbedtls_to_psa_error/94 mbedtls_platform_zeroize/88 memcpy/96 mbedtls_cipher_cmac_finish/100 
+mbedtls_psa_mac_update/81 (mbedtls_psa_mac_update) @06231b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 
+  Calls: psa_hmac_update_internal/73 mbedtls_to_psa_error/94 mbedtls_cipher_cmac_update/99 
+mbedtls_psa_mac_verify_setup/80 (mbedtls_psa_mac_verify_setup) @06231930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+mbedtls_psa_mac_sign_setup/79 (mbedtls_psa_mac_sign_setup) @062317e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_mac_setup/78 
+psa_mac_setup/78 (psa_mac_setup) @06231690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 mbedtls_psa_mac_verify_setup/80 mbedtls_psa_mac_sign_setup/79 
+  Calls: mbedtls_psa_mac_abort/77 psa_hmac_setup_internal/72 cmac_setup/75 mac_init/76 
+mbedtls_psa_mac_abort/77 (mbedtls_psa_mac_abort) @06231498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_compute/85 psa_mac_setup/78 
+  Calls: memset/87 psa_hmac_abort_internal/71 mbedtls_cipher_free/86 
+mac_init/76 (mac_init) @062312a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: memset/87 mbedtls_cipher_init/90 
+cmac_setup/75 (cmac_setup) @062310a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_to_psa_error/94 mbedtls_cipher_cmac_starts/93 psa_get_key_bits/46 mbedtls_cipher_setup/92 mbedtls_cipher_info_from_psa/91 psa_get_key_bits/46 psa_get_key_type/44 psa_get_key_bits/46 psa_get_key_bits/46 psa_get_key_type/44 
+psa_hmac_finish_internal/74 (psa_hmac_finish_internal) @06223348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_finish_internal/82 
+  Calls: mbedtls_platform_zeroize/88 memcpy/96 psa_hash_finish/101 psa_hash_update/98 psa_hash_update/98 psa_hash_setup/97 psa_hash_finish/101 
+psa_hmac_update_internal/73 (psa_hmac_update_internal) @062231f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_update/81 
+  Calls: psa_hash_update/98 
+psa_hmac_setup_internal/72 (psa_hmac_setup_internal) @06223000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_mac_setup/78 
+  Calls: mbedtls_platform_zeroize/88 psa_hash_update/98 psa_hash_setup/97 memset/87 memset/87 memcpy/96 psa_hash_compute/95 
+psa_hmac_abort_internal/71 (psa_hmac_abort_internal) @06223e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_abort/77 
+  Calls: psa_hash_abort/89 mbedtls_platform_zeroize/88 
+mbedtls_psa_safer_memcmp/63 (mbedtls_psa_safer_memcmp) @0621dc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_mac_verify_finish/84 
+  Calls: 
+psa_get_key_bits/46 (psa_get_key_bits) @063800a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 cmac_setup/75 cmac_setup/75 
+  Calls: 
+psa_get_key_type/44 (psa_get_key_type) @0637bdc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: cmac_setup/75 cmac_setup/75 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+psa_hash_finish/101 (psa_hash_finish) @063ecc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 (61294943 (estimated locally),0.06 per call) psa_hmac_finish_internal/74 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_cipher_cmac_finish/100 (mbedtls_cipher_cmac_finish) @063ecbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_mac_finish_internal/82 (124124552 (estimated locally),0.12 per call) 
+  Calls: 
+mbedtls_cipher_cmac_update/99 (mbedtls_cipher_cmac_update) @063ecb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_psa_mac_update/81 (122833657 (estimated locally),0.11 per call) 
+  Calls: 
+psa_hash_update/98 (psa_hash_update) @063eca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 (125398821 (estimated locally),0.12 per call) psa_hmac_finish_internal/74 (256544234 (estimated locally),0.24 per call) psa_hmac_update_internal/73 (1073741824 (estimated locally),1.00 per call) psa_hmac_setup_internal/72 (57732950 (estimated locally),0.34 per call) 
+  Calls: 
+psa_hash_setup/97 (psa_hash_setup) @063ec9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_hmac_finish_internal/74 (524845000 (estimated locally),0.49 per call) psa_hmac_setup_internal/72 (118111600 (estimated locally),0.70 per call) 
+  Calls: 
+memcpy/96 (memcpy) @063ec930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_mac_finish_internal/82 (40961102 (estimated locally),0.04 per call) psa_hmac_finish_internal/74 (29960968 (estimated locally),0.03 per call) psa_hmac_setup_internal/72 (29414817 (estimated locally),0.17 per call) 
+  Calls: 
+psa_hash_compute/95 (psa_hash_compute) @063ec888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_hmac_setup_internal/72 (43902712 (estimated locally),0.26 per call) 
+  Calls: 
+mbedtls_to_psa_error/94 (mbedtls_to_psa_error) @063ec738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_psa_mac_update/81 (122833657 (estimated locally),0.11 per call) psa_mac_finish_internal/82 (124124552 (estimated locally),0.12 per call) cmac_setup/75 (1058112495 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_cipher_cmac_starts/93 (mbedtls_cipher_cmac_starts) @063ec690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: cmac_setup/75 (517205384 (estimated locally),0.48 per call) 
+  Calls: 
+mbedtls_cipher_setup/92 (mbedtls_cipher_setup) @063ec5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: cmac_setup/75 (1058112495 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_cipher_info_from_psa/91 (mbedtls_cipher_info_from_psa) @063ec540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: cmac_setup/75 (1067829743 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_cipher_init/90 (mbedtls_cipher_init) @063ec498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mac_init/76 (217325344 (estimated locally),0.20 per call) 
+  Calls: 
+psa_hash_abort/89 (psa_hash_abort) @063ec3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_hmac_abort_internal/71 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_zeroize/88 (mbedtls_platform_zeroize) @063ec348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_psa_mac_verify_finish/84 (178956971 (estimated locally),0.97 per call) psa_mac_finish_internal/82 (124124552 (estimated locally),0.12 per call) psa_hmac_finish_internal/74 (524845000 (estimated locally),0.49 per call) psa_hmac_setup_internal/72 (133038522 (estimated locally),0.79 per call) psa_hmac_abort_internal/71 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+memset/87 (memset) @063ec2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_psa_mac_abort/77 (11304699 (estimated locally),0.01 per call) psa_hmac_setup_internal/72 (118111600 (estimated locally),0.70 per call) psa_hmac_setup_internal/72 (118111600 (estimated locally),0.70 per call) mac_init/76 (16357557 (estimated locally),0.02 per call) 
+  Calls: 
+mbedtls_cipher_free/86 (mbedtls_cipher_free) @063ec1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_psa_mac_abort/77 (143434726 (estimated locally),0.13 per call) 
+  Calls: 
+mbedtls_psa_mac_compute/85 (mbedtls_psa_mac_compute) @063ec150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_psa_mac_abort/77 (1073741824 (estimated locally),1.00 per call) psa_mac_finish_internal/82 (588195767 (estimated locally),0.55 per call) mbedtls_psa_mac_update/81 (354334800 (estimated locally),0.33 per call) psa_mac_setup/78 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_psa_mac_verify_finish/84 (mbedtls_psa_mac_verify_finish) @063ec000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:184697868 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/88 (178956971 (estimated locally),0.97 per call) psa_mac_finish_internal/82 (178956971 (estimated locally),0.97 per call) 
+mbedtls_psa_mac_sign_finish/83 (mbedtls_psa_mac_sign_finish) @06231e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: psa_mac_finish_internal/82 (1051300617 (estimated locally),0.98 per call) 
+psa_mac_finish_internal/82 (psa_mac_finish_internal) @06231d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_psa_mac_compute/85 (588195767 (estimated locally),0.55 per call) mbedtls_psa_mac_verify_finish/84 (178956971 (estimated locally),0.97 per call) mbedtls_psa_mac_sign_finish/83 (1051300617 (estimated locally),0.98 per call) 
+  Calls: psa_hmac_finish_internal/74 (878965748 (estimated locally),0.82 per call) mbedtls_to_psa_error/94 (124124552 (estimated locally),0.12 per call) mbedtls_platform_zeroize/88 (124124552 (estimated locally),0.12 per call) memcpy/96 (40961102 (estimated locally),0.04 per call) mbedtls_cipher_cmac_finish/100 (124124552 (estimated locally),0.12 per call) 
+mbedtls_psa_mac_update/81 (mbedtls_psa_mac_update) @06231b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_psa_mac_compute/85 (354334800 (estimated locally),0.33 per call) 
+  Calls: psa_hmac_update_internal/73 (869824506 (estimated locally),0.81 per call) mbedtls_to_psa_error/94 (122833657 (estimated locally),0.11 per call) mbedtls_cipher_cmac_update/99 (122833657 (estimated locally),0.11 per call) 
+mbedtls_psa_mac_verify_setup/80 (mbedtls_psa_mac_verify_setup) @06231930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: psa_mac_setup/78 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_psa_mac_sign_setup/79 (mbedtls_psa_mac_sign_setup) @062317e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: psa_mac_setup/78 (1073741824 (estimated locally),1.00 per call) 
+psa_mac_setup/78 (psa_mac_setup) @06231690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: mbedtls_psa_mac_compute/85 (1073741823 (estimated locally),1.00 per call) mbedtls_psa_mac_verify_setup/80 (1073741824 (estimated locally),1.00 per call) mbedtls_psa_mac_sign_setup/79 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_psa_mac_abort/77 (567633682 (estimated locally),0.53 per call) psa_hmac_setup_internal/72 (112012503 (estimated locally),0.10 per call) cmac_setup/75 (140436940 (estimated locally),0.13 per call) mac_init/76 (1051300615 (estimated locally),0.98 per call) 
+mbedtls_psa_mac_abort/77 (mbedtls_psa_mac_abort) @06231498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_psa_mac_compute/85 (1073741824 (estimated locally),1.00 per call) psa_mac_setup/78 (567633682 (estimated locally),0.53 per call) 
+  Calls: memset/87 (11304699 (estimated locally),0.01 per call) psa_hmac_abort_internal/71 (553930176 (estimated locally),0.52 per call) mbedtls_cipher_free/86 (143434726 (estimated locally),0.13 per call) 
+mac_init/76 (mac_init) @062312a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: psa_mac_setup/78 (1051300615 (estimated locally),0.98 per call) 
+  Calls: memset/87 (16357557 (estimated locally),0.02 per call) mbedtls_cipher_init/90 (217325344 (estimated locally),0.20 per call) 
+cmac_setup/75 (cmac_setup) @062310a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: psa_mac_setup/78 (140436940 (estimated locally),0.13 per call) 
+  Calls: mbedtls_to_psa_error/94 (1058112495 (estimated locally),0.99 per call) mbedtls_cipher_cmac_starts/93 (517205384 (estimated locally),0.48 per call) mbedtls_cipher_setup/92 (1058112495 (estimated locally),0.99 per call) mbedtls_cipher_info_from_psa/91 (1067829743 (estimated locally),0.99 per call) 
+psa_hmac_finish_internal/74 (psa_hmac_finish_internal) @06223348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741801 (estimated locally) body local
+  Called by: psa_mac_finish_internal/82 (878965748 (estimated locally),0.82 per call) 
+  Calls: mbedtls_platform_zeroize/88 (524845000 (estimated locally),0.49 per call) memcpy/96 (29960968 (estimated locally),0.03 per call) psa_hash_finish/101 (61294943 (estimated locally),0.06 per call) psa_hash_update/98 (125398821 (estimated locally),0.12 per call) psa_hash_update/98 (256544234 (estimated locally),0.24 per call) psa_hash_setup/97 (524845000 (estimated locally),0.49 per call) psa_hash_finish/101 (1073741824 (estimated locally),1.00 per call) 
+psa_hmac_update_internal/73 (psa_hmac_update_internal) @062231f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_psa_mac_update/81 (869824506 (estimated locally),0.81 per call) 
+  Calls: psa_hash_update/98 (1073741824 (estimated locally),1.00 per call) 
+psa_hmac_setup_internal/72 (psa_hmac_setup_internal) @06223000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:169255346 (estimated locally) body local
+  Called by: psa_mac_setup/78 (112012503 (estimated locally),0.10 per call) 
+  Calls: mbedtls_platform_zeroize/88 (133038522 (estimated locally),0.79 per call) psa_hash_update/98 (57732950 (estimated locally),0.34 per call) psa_hash_setup/97 (118111600 (estimated locally),0.70 per call) memset/87 (118111600 (estimated locally),0.70 per call) memset/87 (118111600 (estimated locally),0.70 per call) memcpy/96 (29414817 (estimated locally),0.17 per call) psa_hash_compute/95 (43902712 (estimated locally),0.26 per call) 
+psa_hmac_abort_internal/71 (psa_hmac_abort_internal) @06223e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_psa_mac_abort/77 (553930176 (estimated locally),0.52 per call) 
+  Calls: psa_hash_abort/89 (1073741824 (estimated locally),1.00 per call) mbedtls_platform_zeroize/88 (1073741824 (estimated locally),1.00 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+psa_hash_finish/101 (psa_hash_finish) @063ecc78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_finish/100 (mbedtls_cipher_cmac_finish) @063ecbd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_update/99 (mbedtls_cipher_cmac_update) @063ecb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_update/98 (psa_hash_update) @063eca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_setup/97 (psa_hash_setup) @063ec9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/96 (memcpy) @063ec930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_compute/95 (psa_hash_compute) @063ec888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_to_psa_error/94 (mbedtls_to_psa_error) @063ec738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_cmac_starts/93 (mbedtls_cipher_cmac_starts) @063ec690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setup/92 (mbedtls_cipher_setup) @063ec5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_from_psa/91 (mbedtls_cipher_info_from_psa) @063ec540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_init/90 (mbedtls_cipher_init) @063ec498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_abort/89 (psa_hash_abort) @063ec3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/88 (mbedtls_platform_zeroize) @063ec348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/87 (memset) @063ec2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_free/86 (mbedtls_cipher_free) @063ec1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_compute/85 (mbedtls_psa_mac_compute) @063ec150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_compute (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_verify_finish/84 (mbedtls_psa_mac_verify_finish) @063ec000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_verify_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:184697868 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_sign_finish/83 (mbedtls_psa_mac_sign_finish) @06231e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_sign_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+psa_mac_finish_internal/82 (psa_mac_finish_internal) @06231d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_mac_finish_internal (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_update/81 (mbedtls_psa_mac_update) @06231b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_verify_setup/80 (mbedtls_psa_mac_verify_setup) @06231930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_verify_setup (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_sign_setup/79 (mbedtls_psa_mac_sign_setup) @062317e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_sign_setup (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+psa_mac_setup/78 (psa_mac_setup) @06231690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_mac_setup (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_psa_mac_abort/77 (mbedtls_psa_mac_abort) @06231498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_mac_abort (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mac_init/76 (mac_init) @062312a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.mac_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+cmac_setup/75 (cmac_setup) @062310a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.cmac_setup (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+psa_hmac_finish_internal/74 (psa_hmac_finish_internal) @06223348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_hmac_finish_internal (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741801 (estimated locally) local
+  Called by: 
+  Calls: 
+psa_hmac_update_internal/73 (psa_hmac_update_internal) @062231f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_hmac_update_internal (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+psa_hmac_setup_internal/72 (psa_hmac_setup_internal) @06223000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_hmac_setup_internal (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:169255346 (estimated locally) local
+  Called by: 
+  Calls: 
+psa_hmac_abort_internal/71 (psa_hmac_abort_internal) @06223e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_hmac_abort_internal (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 

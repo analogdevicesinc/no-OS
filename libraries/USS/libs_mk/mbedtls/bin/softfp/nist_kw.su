@@ -1,0 +1,8 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:124:13:calc_a_xor_t	12	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:267:12:unwrap	88	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:57:6:mbedtls_nist_kw_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:62:5:mbedtls_nist_kw_setkey	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:114:6:mbedtls_nist_kw_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:136:5:mbedtls_nist_kw_wrap	96	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:330:5:mbedtls_nist_kw_unwrap	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/nist_kw.c:556:5:mbedtls_nist_kw_self_test	168	static

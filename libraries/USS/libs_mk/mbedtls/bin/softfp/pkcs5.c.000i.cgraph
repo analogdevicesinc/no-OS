@@ -1,0 +1,3468 @@
+Trivially needed symbols: mbedtls_pkcs5_self_test/219 mbedtls_pkcs5_pbkdf2_hmac_ext/218 mbedtls_pkcs5_pbkdf2_hmac/217 mbedtls_pkcs5_pbes2/215
+
+
+Initial Symbol table:
+
+puts/245 (__builtin_puts) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_self_test/219 
+  Calls: 
+mbedtls_md_free/244 (mbedtls_md_free) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_setup/243 (mbedtls_md_setup) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_init/242 (mbedtls_md_init) @064e7540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_info_from_type/241 (mbedtls_md_info_from_type) @064e7498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_platform_zeroize/240 (mbedtls_platform_zeroize) @064e73f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_reset/239 (mbedtls_md_hmac_reset) @064e7348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_finish/238 (mbedtls_md_hmac_finish) @064e72a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_update/237 (mbedtls_md_hmac_update) @064e71f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_starts/236 (mbedtls_md_hmac_starts) @064e7150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+memset/235 (memset) @064e70a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_get_size/234 (mbedtls_md_get_size) @064e7000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_oid_get_md_hmac/233 (mbedtls_oid_get_md_hmac) @065f5f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_alg_null/232 (mbedtls_asn1_get_alg_null) @065f5e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_int/231 (mbedtls_asn1_get_int) @065f5dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_tag/230 (mbedtls_asn1_get_tag) @065f5d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_cipher_free/229 (mbedtls_cipher_free) @065f5c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_crypt/228 (mbedtls_cipher_crypt) @065f5bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setkey/227 (mbedtls_cipher_setkey) @065f5b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setup/226 (mbedtls_cipher_setup) @065f5a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcpy/225 (memcpy) @065f59d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_init/224 (mbedtls_cipher_init) @065f5930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_info_from_type/223 (mbedtls_cipher_info_from_type) @065f5888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_oid_get_cipher_alg/222 (mbedtls_oid_get_cipher_alg) @065f57e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcmp/221 (memcmp) @065f5738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_asn1_get_alg/220 (mbedtls_asn1_get_alg) @065f5690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_pkcs5_self_test/219 (mbedtls_pkcs5_self_test) @065f55e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/245 
+mbedtls_pkcs5_pbkdf2_hmac_ext/218 (mbedtls_pkcs5_pbkdf2_hmac_ext) @065f5498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065f55e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_md_free/244 pkcs5_pbkdf2_hmac/216 mbedtls_md_setup/243 mbedtls_md_init/242 mbedtls_md_info_from_type/241 
+mbedtls_pkcs5_pbkdf2_hmac/217 (mbedtls_pkcs5_pbkdf2_hmac) @065f5348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065f5498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: pkcs5_pbkdf2_hmac/216 
+pkcs5_pbkdf2_hmac/216 (pkcs5_pbkdf2_hmac) @065f51f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @065f5498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 mbedtls_pkcs5_pbkdf2_hmac/217 
+  Calls: mbedtls_platform_zeroize/240 mbedtls_platform_zeroize/240 memcpy/225 mbedtls_xor/8 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 memcpy/225 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 mbedtls_md_hmac_update/237 mbedtls_md_hmac_starts/236 memset/235 mbedtls_md_get_size/234 
+mbedtls_pkcs5_pbes2/215 (mbedtls_pkcs5_pbes2) @065f50a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @065f5348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_cipher_free/229 mbedtls_cipher_crypt/228 mbedtls_cipher_setkey/227 mbedtls_cipher_setup/226 mbedtls_pkcs5_pbkdf2_hmac_ext/218 memcpy/225 mbedtls_cipher_init/224 mbedtls_cipher_info_from_type/223 mbedtls_oid_get_cipher_alg/222 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 pkcs5_parse_pbkdf2_params/214 memcmp/221 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 mbedtls_error_add/9 
+pkcs5_parse_pbkdf2_params/214 (pkcs5_parse_pbkdf2_params) @065e9150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06218e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_error_add/9 mbedtls_oid_get_md_hmac/233 mbedtls_error_add/9 mbedtls_asn1_get_alg_null/232 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_tag/230 mbedtls_error_add/9 
+mbedtls_psa_get_ecc_oid_from_id/213 (mbedtls_psa_get_ecc_oid_from_id) @06615888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_md/212 (mbedtls_psa_translate_md) @066152a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_cipher_operation/211 (mbedtls_psa_translate_cipher_operation) @06615150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_cipher_mode/210 (mbedtls_psa_translate_cipher_mode) @06615f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_translate_cipher_type/209 (mbedtls_psa_translate_cipher_type) @06615dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_operation_init/208 (psa_pake_operation_init) @06615c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cipher_suite_init/207 (psa_pake_cipher_suite_init) @06615a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_hash/206 (psa_pake_cs_set_hash) @0660b7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_hash/205 (psa_pake_cs_get_hash) @0660b690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_bits/204 (psa_pake_cs_get_bits) @0660b540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_family/203 (psa_pake_cs_get_family) @0660b3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_primitive/202 (psa_pake_cs_set_primitive) @0660b2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_primitive/201 (psa_pake_cs_get_primitive) @0660b150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_algorithm/200 (psa_pake_cs_set_algorithm) @0660b000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_algorithm/199 (psa_pake_cs_get_algorithm) @065ffdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecc_group_to_psa/198 (mbedtls_ecc_group_to_psa) @065dc690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_enrollment_algorithm/197 (psa_get_key_enrollment_algorithm) @065dc498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_enrollment_algorithm/196 (psa_set_key_enrollment_algorithm) @065dc348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_handle_is_null/195 (psa_key_handle_is_null) @065dc1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_verify_hash_interruptible_operation_init/194 (psa_verify_hash_interruptible_operation_init) @065dc000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_sign_hash_interruptible_operation_init/193 (psa_sign_hash_interruptible_operation_init) @065a5f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_bits/192 (psa_get_key_bits) @065a5d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_bits/191 (psa_set_key_bits) @065a5bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_type/190 (psa_get_key_type) @065a5a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_type/189 (psa_set_key_type) @065a5930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_algorithm/188 (psa_get_key_algorithm) @065a57e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_algorithm/187 (psa_set_key_algorithm) @065a5690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_usage_flags/186 (psa_get_key_usage_flags) @065a5540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_usage_flags/185 (psa_set_key_usage_flags) @065a53f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_extend_key_usage_flags/184 (psa_extend_key_usage_flags) @065a52a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_lifetime/183 (psa_get_key_lifetime) @065a5150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_lifetime/182 (psa_set_key_lifetime) @065a5000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_id/181 (psa_get_key_id) @0659de70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_id/180 (psa_set_key_id) @0659d738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_attributes_init/179 (psa_key_attributes_init) @0659d5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_policy_init/178 (psa_key_policy_init) @0659d9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_derivation_operation_init/177 (psa_key_derivation_operation_init) @0659d498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_aead_operation_init/176 (psa_aead_operation_init) @06592d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_mac_operation_init/175 (psa_mac_operation_init) @065923f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_cipher_operation_init/174 (psa_cipher_operation_init) @06582000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_operation_init/173 (psa_hash_operation_init) @0657d888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_is_null/172 (mbedtls_svc_key_id_is_null) @0654b540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_equal/171 (mbedtls_svc_key_id_equal) @0654b3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_make/170 (mbedtls_svc_key_id_make) @0654b2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/169 (_putchar_unlocked) @06450888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/168 (_getchar_unlocked) @06450738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/167 (__sputc_r) @06450540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pk_ec/166 (mbedtls_pk_ec) @06434c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pk_rsa/165 (mbedtls_pk_rsa) @06434b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pk_get_len/164 (mbedtls_pk_get_len) @064349d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortSetBASEPRI/163 (vPortSetBASEPRI) @063661f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ulPortRaiseBASEPRI/162 (ulPortRaiseBASEPRI) @063660a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortRaiseBASEPRI/161 (vPortRaiseBASEPRI) @062a5e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+xPortIsInsideInterrupt/160 (xPortIsInsideInterrupt) @062a5d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ucPortCountLeadingZeros/159 (ucPortCountLeadingZeros) @062a5a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/158 (ITM_CheckChar) @06352dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/157 (ITM_ReceiveChar) @06352c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/156 (ITM_SendChar) @06352b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/155 (SysTick_Config) @063527e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/154 (SCB_GetFPUType) @06352690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/153 (ARM_MPU_Load) @06352540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/152 (ARM_MPU_OrderedMemcpy) @063523f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/151 (ARM_MPU_SetRegionEx) @063522a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/150 (ARM_MPU_SetRegion) @06352150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/149 (ARM_MPU_ClrRegion) @06352000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/148 (ARM_MPU_Disable) @06347bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/147 (ARM_MPU_Enable) @06347e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/146 (__NVIC_SystemReset) @06343690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/145 (__NVIC_GetVector) @06343540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/144 (__NVIC_SetVector) @063433f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/143 (NVIC_DecodePriority) @063432a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/142 (NVIC_EncodePriority) @06343150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/141 (__NVIC_GetPriority) @06343000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/140 (__NVIC_SetPriority) @06339e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/139 (__NVIC_GetActive) @06339d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/138 (__NVIC_ClearPendingIRQ) @06339bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/137 (__NVIC_SetPendingIRQ) @06339a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/136 (__NVIC_GetPendingIRQ) @06339930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/135 (__NVIC_DisableIRQ) @063397e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/134 (__NVIC_GetEnableIRQ) @06339690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/133 (__NVIC_EnableIRQ) @06339540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/132 (__NVIC_GetPriorityGrouping) @063393f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/131 (__NVIC_SetPriorityGrouping) @063392a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/130 (__SMMLA) @062ed498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/129 (__QSUB) @062ed348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/128 (__QADD) @062ed1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/127 (__SEL) @062ed0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/126 (__SMLSLDX) @062e4f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/125 (__SMLSLD) @062e4dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/124 (__SMLSDX) @062e4c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/123 (__SMLSD) @062e4b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/122 (__SMUSDX) @062e49d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/121 (__SMUSD) @062e4888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/120 (__SMLALDX) @062e4738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/119 (__SMLALD) @062e45e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/118 (__SMLADX) @062e4498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/117 (__SMLAD) @062e4348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/116 (__SMUADX) @062e41f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/115 (__SMUAD) @062e40a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/114 (__SXTAB16_RORn) @062dff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/113 (__SXTAB16) @062dfdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/112 (__SXTB16_RORn) @062dfc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/111 (__SXTB16) @062dfb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/110 (__UXTAB16) @062df9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/109 (__UXTB16) @062df888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/108 (__USADA8) @062df5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/107 (__USAD8) @062df498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/106 (__UHSAX) @062df348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/105 (__UQSAX) @062df1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/104 (__USAX) @062df0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/103 (__SHSAX) @062d5f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/102 (__QSAX) @062d5dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/101 (__SSAX) @062d5c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/100 (__UHASX) @062d5b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/99 (__UQASX) @062d59d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/98 (__UASX) @062d5888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/97 (__SHASX) @062d5738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/96 (__QASX) @062d55e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/95 (__SASX) @062d5498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/94 (__UHSUB16) @062d5348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/93 (__UQSUB16) @062d51f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/92 (__USUB16) @062d50a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/91 (__SHSUB16) @062cff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/90 (__QSUB16) @062cfdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/89 (__SSUB16) @062cfc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/88 (__UHADD16) @062cfb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/87 (__UQADD16) @062cf9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/86 (__UADD16) @062cf888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/85 (__SHADD16) @062cf738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/84 (__QADD16) @062cf5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/83 (__SADD16) @062cf498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/82 (__UHSUB8) @062cf348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/81 (__UQSUB8) @062cf1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/80 (__USUB8) @062cf0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/79 (__SHSUB8) @062cbf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/78 (__QSUB8) @062cbdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/77 (__SSUB8) @062cbc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/76 (__UHADD8) @062cbb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/75 (__UQADD8) @062cb9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/74 (__UADD8) @062cb888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/73 (__SHADD8) @062cb738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/72 (__QADD8) @062cb5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/71 (__SADD8) @062cb498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/70 (__set_FPSCR) @062cb348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/69 (__get_FPSCR) @062cb1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/68 (__set_FAULTMASK) @062cb0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/67 (__get_FAULTMASK) @062c2f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/66 (__set_BASEPRI_MAX) @062c2dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/65 (__set_BASEPRI) @062c2c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/64 (__get_BASEPRI) @062c2b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/63 (__disable_fault_irq) @062c29d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/62 (__enable_fault_irq) @062c2888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/61 (__set_PRIMASK) @062c2738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/60 (__get_PRIMASK) @062c25e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/59 (__set_MSP) @062c2498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/58 (__get_MSP) @062c2348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/57 (__set_PSP) @062c21f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/56 (__get_PSP) @062c20a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/55 (__get_xPSR) @062bff18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/54 (__get_APSR) @062bfdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/53 (__get_IPSR) @062bfc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/52 (__set_CONTROL) @062bfb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/51 (__get_CONTROL) @062bf9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/50 (__disable_irq) @062bf888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/49 (__enable_irq) @062bf738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/48 (__STRT) @062bf5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/47 (__STRHT) @062bf498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/46 (__STRBT) @062bf348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/45 (__LDRT) @062bf1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/44 (__LDRHT) @062bf0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/43 (__LDRBT) @06283f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/42 (__RRX) @06283dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/41 (__CLREX) @06283b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/40 (__STREXW) @062839d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/39 (__STREXH) @06283888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/38 (__STREXB) @06283738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/37 (__LDREXW) @062835e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/36 (__LDREXH) @06283498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/35 (__LDREXB) @06283348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/34 (__CLZ) @062831f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/33 (__RBIT) @062830a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/32 (__ROR) @0627b930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/31 (__REVSH) @0627b7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/30 (__REV16) @0627b690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/29 (__REV) @0627b540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/28 (__DMB) @0627bf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/27 (__DSB) @0627bdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/26 (__ISB) @0627bc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/25 (__cmsis_start) @0627bb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/24 (mbedtls_cipher_get_operation) @06251348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/23 (mbedtls_cipher_get_key_bitlen) @062511f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/22 (mbedtls_cipher_get_name) @062510a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/21 (mbedtls_cipher_get_type) @06246f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/20 (mbedtls_cipher_get_iv_size) @06246dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/19 (mbedtls_cipher_get_cipher_mode) @06246c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/18 (mbedtls_cipher_get_block_size) @06246b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/17 (mbedtls_cipher_info_has_variable_iv_size) @062469d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/16 (mbedtls_cipher_info_has_variable_key_bitlen) @06246888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/15 (mbedtls_cipher_info_get_block_size) @06246738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/14 (mbedtls_cipher_info_get_iv_size) @062465e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/13 (mbedtls_cipher_info_get_name) @06246498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/12 (mbedtls_cipher_info_get_key_bitlen) @06246348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/11 (mbedtls_cipher_info_get_mode) @062461f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/10 (mbedtls_cipher_info_get_type) @062460a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/9 (mbedtls_error_add) @06218e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @065f5348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @065f5498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @061e2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @061e2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @061e2690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @061e2540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @065f5498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @061e23f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @061e2150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @061e2000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: mbedtls_psa_get_ecc_oid_from_id/213 mbedtls_psa_translate_md/212 mbedtls_psa_translate_cipher_operation/211 mbedtls_psa_translate_cipher_mode/210 mbedtls_psa_translate_cipher_type/209 psa_pake_operation_init/208 psa_pake_cipher_suite_init/207 psa_pake_cs_set_hash/206 psa_pake_cs_get_hash/205 psa_pake_cs_get_bits/204 psa_pake_cs_get_family/203 psa_pake_cs_set_primitive/202 psa_pake_cs_get_primitive/201 psa_pake_cs_set_algorithm/200 psa_pake_cs_get_algorithm/199 mbedtls_ecc_group_to_psa/198 psa_get_key_enrollment_algorithm/197 psa_set_key_enrollment_algorithm/196 psa_key_handle_is_null/195 psa_verify_hash_interruptible_operation_init/194 psa_sign_hash_interruptible_operation_init/193 psa_get_key_bits/192 psa_set_key_bits/191 psa_get_key_type/190 psa_set_key_type/189 psa_get_key_algorithm/188 psa_set_key_algorithm/187 psa_get_key_usage_flags/186 psa_set_key_usage_flags/185 psa_extend_key_usage_flags/184 psa_get_key_lifetime/183 psa_set_key_lifetime/182 psa_get_key_id/181 psa_set_key_id/180 psa_key_attributes_init/179 psa_key_policy_init/178 psa_key_derivation_operation_init/177 psa_aead_operation_init/176 psa_mac_operation_init/175 psa_cipher_operation_init/174 psa_hash_operation_init/173 mbedtls_svc_key_id_is_null/172 mbedtls_svc_key_id_equal/171 mbedtls_svc_key_id_make/170 _putchar_unlocked/169 _getchar_unlocked/168 __sputc_r/167 mbedtls_pk_ec/166 mbedtls_pk_rsa/165 mbedtls_pk_get_len/164 vPortSetBASEPRI/163 ulPortRaiseBASEPRI/162 vPortRaiseBASEPRI/161 xPortIsInsideInterrupt/160 ucPortCountLeadingZeros/159 ITM_CheckChar/158 ITM_ReceiveChar/157 ITM_SendChar/156 SysTick_Config/155 SCB_GetFPUType/154 ARM_MPU_Load/153 ARM_MPU_OrderedMemcpy/152 ARM_MPU_SetRegionEx/151 ARM_MPU_SetRegion/150 ARM_MPU_ClrRegion/149 ARM_MPU_Disable/148 ARM_MPU_Enable/147 __NVIC_SystemReset/146 __NVIC_GetVector/145 __NVIC_SetVector/144 NVIC_DecodePriority/143 NVIC_EncodePriority/142 __NVIC_GetPriority/141 __NVIC_SetPriority/140 __NVIC_GetActive/139 __NVIC_ClearPendingIRQ/138 __NVIC_SetPendingIRQ/137 __NVIC_GetPendingIRQ/136 __NVIC_DisableIRQ/135 __NVIC_GetEnableIRQ/134 __NVIC_EnableIRQ/133 __NVIC_GetPriorityGrouping/132 __NVIC_SetPriorityGrouping/131 __SMMLA/130 __QSUB/129 __QADD/128 __SEL/127 __SMLSLDX/126 __SMLSLD/125 __SMLSDX/124 __SMLSD/123 __SMUSDX/122 __SMUSD/121 __SMLALDX/120 __SMLALD/119 __SMLADX/118 __SMLAD/117 __SMUADX/116 __SMUAD/115 __SXTAB16_RORn/114 __SXTAB16/113 __SXTB16_RORn/112 __SXTB16/111 __UXTAB16/110 __UXTB16/109 __USADA8/108 __USAD8/107 __UHSAX/106 __UQSAX/105 __USAX/104 __SHSAX/103 __QSAX/102 __SSAX/101 __UHASX/100 __UQASX/99 __UASX/98 __SHASX/97 __QASX/96 __SASX/95 __UHSUB16/94 __UQSUB16/93 __USUB16/92 __SHSUB16/91 __QSUB16/90 __SSUB16/89 __UHADD16/88 __UQADD16/87 __UADD16/86 __SHADD16/85 __QADD16/84 __SADD16/83 __UHSUB8/82 __UQSUB8/81 __USUB8/80 __SHSUB8/79 __QSUB8/78 __SSUB8/77 __UHADD8/76 __UQADD8/75 __UADD8/74 __SHADD8/73 __QADD8/72 __SADD8/71 __set_FPSCR/70 __get_FPSCR/69 __set_FAULTMASK/68 __get_FAULTMASK/67 __set_BASEPRI_MAX/66 __set_BASEPRI/65 __get_BASEPRI/64 __disable_fault_irq/63 __enable_fault_irq/62 __set_PRIMASK/61 __get_PRIMASK/60 __set_MSP/59 __get_MSP/58 __set_PSP/57 __get_PSP/56 __get_xPSR/55 __get_APSR/54 __get_IPSR/53 __set_CONTROL/52 __get_CONTROL/51 __disable_irq/50 __enable_irq/49 __STRT/48 __STRHT/47 __STRBT/46 __LDRT/45 __LDRHT/44 __LDRBT/43 __RRX/42 __CLREX/41 __STREXW/40 __STREXH/39 __STREXB/38 __LDREXW/37 __LDREXH/36 __LDREXB/35 __CLZ/34 __RBIT/33 __ROR/32 __REVSH/31 __REV16/30 __REV/29 __DMB/28 __DSB/27 __ISB/26 __cmsis_start/25 mbedtls_cipher_get_operation/24 mbedtls_cipher_get_key_bitlen/23 mbedtls_cipher_get_name/22 mbedtls_cipher_get_type/21 mbedtls_cipher_get_iv_size/20 mbedtls_cipher_get_cipher_mode/19 mbedtls_cipher_get_block_size/18 mbedtls_cipher_info_has_variable_iv_size/17 mbedtls_cipher_info_has_variable_key_bitlen/16 mbedtls_cipher_info_get_block_size/15 mbedtls_cipher_info_get_iv_size/14 mbedtls_cipher_info_get_name/13 mbedtls_cipher_info_get_key_bitlen/12 mbedtls_cipher_info_get_mode/11 mbedtls_cipher_info_get_type/10 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+puts/245 (__builtin_puts) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_self_test/219 
+  Calls: 
+mbedtls_md_free/244 (mbedtls_md_free) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_setup/243 (mbedtls_md_setup) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_init/242 (mbedtls_md_init) @064e7540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_info_from_type/241 (mbedtls_md_info_from_type) @064e7498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_platform_zeroize/240 (mbedtls_platform_zeroize) @064e73f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_reset/239 (mbedtls_md_hmac_reset) @064e7348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_finish/238 (mbedtls_md_hmac_finish) @064e72a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_update/237 (mbedtls_md_hmac_update) @064e71f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_starts/236 (mbedtls_md_hmac_starts) @064e7150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+memset/235 (memset) @064e70a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_get_size/234 (mbedtls_md_get_size) @064e7000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_oid_get_md_hmac/233 (mbedtls_oid_get_md_hmac) @065f5f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_alg_null/232 (mbedtls_asn1_get_alg_null) @065f5e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_int/231 (mbedtls_asn1_get_int) @065f5dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_tag/230 (mbedtls_asn1_get_tag) @065f5d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_cipher_free/229 (mbedtls_cipher_free) @065f5c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_crypt/228 (mbedtls_cipher_crypt) @065f5bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setkey/227 (mbedtls_cipher_setkey) @065f5b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setup/226 (mbedtls_cipher_setup) @065f5a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcpy/225 (memcpy) @065f59d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_init/224 (mbedtls_cipher_init) @065f5930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_info_from_type/223 (mbedtls_cipher_info_from_type) @065f5888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_oid_get_cipher_alg/222 (mbedtls_oid_get_cipher_alg) @065f57e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcmp/221 (memcmp) @065f5738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_asn1_get_alg/220 (mbedtls_asn1_get_alg) @065f5690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_pkcs5_self_test/219 (mbedtls_pkcs5_self_test) @065f55e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/245 
+mbedtls_pkcs5_pbkdf2_hmac_ext/218 (mbedtls_pkcs5_pbkdf2_hmac_ext) @065f5498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_md_free/244 pkcs5_pbkdf2_hmac/216 mbedtls_md_setup/243 mbedtls_md_init/242 mbedtls_md_info_from_type/241 
+mbedtls_pkcs5_pbkdf2_hmac/217 (mbedtls_pkcs5_pbkdf2_hmac) @065f5348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: pkcs5_pbkdf2_hmac/216 
+pkcs5_pbkdf2_hmac/216 (pkcs5_pbkdf2_hmac) @065f51f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 mbedtls_pkcs5_pbkdf2_hmac/217 
+  Calls: mbedtls_platform_zeroize/240 mbedtls_platform_zeroize/240 memcpy/225 mbedtls_xor/8 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 memcpy/225 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 mbedtls_md_hmac_update/237 mbedtls_md_hmac_starts/236 memset/235 mbedtls_md_get_size/234 
+mbedtls_pkcs5_pbes2/215 (mbedtls_pkcs5_pbes2) @065f50a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_cipher_free/229 mbedtls_cipher_crypt/228 mbedtls_cipher_setkey/227 mbedtls_cipher_setup/226 mbedtls_pkcs5_pbkdf2_hmac_ext/218 memcpy/225 mbedtls_cipher_init/224 mbedtls_cipher_info_from_type/223 mbedtls_oid_get_cipher_alg/222 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 pkcs5_parse_pbkdf2_params/214 memcmp/221 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 mbedtls_error_add/9 
+pkcs5_parse_pbkdf2_params/214 (pkcs5_parse_pbkdf2_params) @065e9150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_error_add/9 mbedtls_oid_get_md_hmac/233 mbedtls_error_add/9 mbedtls_asn1_get_alg_null/232 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_tag/230 mbedtls_error_add/9 
+mbedtls_error_add/9 (mbedtls_error_add) @06218e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+
+
+Initial Symbol table:
+
+puts/245 (__builtin_puts) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_self_test/219 
+  Calls: 
+mbedtls_md_free/244 (mbedtls_md_free) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_setup/243 (mbedtls_md_setup) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_init/242 (mbedtls_md_init) @064e7540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_info_from_type/241 (mbedtls_md_info_from_type) @064e7498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_platform_zeroize/240 (mbedtls_platform_zeroize) @064e73f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_reset/239 (mbedtls_md_hmac_reset) @064e7348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_finish/238 (mbedtls_md_hmac_finish) @064e72a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_update/237 (mbedtls_md_hmac_update) @064e71f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_starts/236 (mbedtls_md_hmac_starts) @064e7150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+memset/235 (memset) @064e70a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_get_size/234 (mbedtls_md_get_size) @064e7000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_oid_get_md_hmac/233 (mbedtls_oid_get_md_hmac) @065f5f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_alg_null/232 (mbedtls_asn1_get_alg_null) @065f5e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_int/231 (mbedtls_asn1_get_int) @065f5dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_tag/230 (mbedtls_asn1_get_tag) @065f5d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_cipher_free/229 (mbedtls_cipher_free) @065f5c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_crypt/228 (mbedtls_cipher_crypt) @065f5bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setkey/227 (mbedtls_cipher_setkey) @065f5b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setup/226 (mbedtls_cipher_setup) @065f5a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcpy/225 (memcpy) @065f59d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_init/224 (mbedtls_cipher_init) @065f5930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_info_from_type/223 (mbedtls_cipher_info_from_type) @065f5888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_oid_get_cipher_alg/222 (mbedtls_oid_get_cipher_alg) @065f57e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcmp/221 (memcmp) @065f5738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_asn1_get_alg/220 (mbedtls_asn1_get_alg) @065f5690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_pkcs5_self_test/219 (mbedtls_pkcs5_self_test) @065f55e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/245 
+mbedtls_pkcs5_pbkdf2_hmac_ext/218 (mbedtls_pkcs5_pbkdf2_hmac_ext) @065f5498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_md_free/244 pkcs5_pbkdf2_hmac/216 mbedtls_md_setup/243 mbedtls_md_init/242 mbedtls_md_info_from_type/241 
+mbedtls_pkcs5_pbkdf2_hmac/217 (mbedtls_pkcs5_pbkdf2_hmac) @065f5348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: pkcs5_pbkdf2_hmac/216 
+pkcs5_pbkdf2_hmac/216 (pkcs5_pbkdf2_hmac) @065f51f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 mbedtls_pkcs5_pbkdf2_hmac/217 
+  Calls: mbedtls_platform_zeroize/240 mbedtls_platform_zeroize/240 memcpy/225 mbedtls_xor/8 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 memcpy/225 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 mbedtls_md_hmac_update/237 mbedtls_md_hmac_starts/236 memset/235 mbedtls_md_get_size/234 
+mbedtls_pkcs5_pbes2/215 (mbedtls_pkcs5_pbes2) @065f50a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_cipher_free/229 mbedtls_cipher_crypt/228 mbedtls_cipher_setkey/227 mbedtls_cipher_setup/226 mbedtls_pkcs5_pbkdf2_hmac_ext/218 memcpy/225 mbedtls_cipher_init/224 mbedtls_cipher_info_from_type/223 mbedtls_oid_get_cipher_alg/222 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 pkcs5_parse_pbkdf2_params/214 memcmp/221 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 mbedtls_error_add/9 
+pkcs5_parse_pbkdf2_params/214 (pkcs5_parse_pbkdf2_params) @065e9150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_error_add/9 mbedtls_oid_get_md_hmac/233 mbedtls_error_add/9 mbedtls_asn1_get_alg_null/232 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_tag/230 mbedtls_error_add/9 
+mbedtls_error_add/9 (mbedtls_error_add) @06218e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+puts/245 (__builtin_puts) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_self_test/219 
+  Calls: 
+mbedtls_md_free/244 (mbedtls_md_free) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_setup/243 (mbedtls_md_setup) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_init/242 (mbedtls_md_init) @064e7540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_md_info_from_type/241 (mbedtls_md_info_from_type) @064e7498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 
+  Calls: 
+mbedtls_platform_zeroize/240 (mbedtls_platform_zeroize) @064e73f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_reset/239 (mbedtls_md_hmac_reset) @064e7348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_finish/238 (mbedtls_md_hmac_finish) @064e72a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_update/237 (mbedtls_md_hmac_update) @064e71f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_hmac_starts/236 (mbedtls_md_hmac_starts) @064e7150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+memset/235 (memset) @064e70a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_md_get_size/234 (mbedtls_md_get_size) @064e7000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: 
+mbedtls_oid_get_md_hmac/233 (mbedtls_oid_get_md_hmac) @065f5f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_alg_null/232 (mbedtls_asn1_get_alg_null) @065f5e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_int/231 (mbedtls_asn1_get_int) @065f5dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_asn1_get_tag/230 (mbedtls_asn1_get_tag) @065f5d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 
+  Calls: 
+mbedtls_cipher_free/229 (mbedtls_cipher_free) @065f5c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_crypt/228 (mbedtls_cipher_crypt) @065f5bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setkey/227 (mbedtls_cipher_setkey) @065f5b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_setup/226 (mbedtls_cipher_setup) @065f5a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcpy/225 (memcpy) @065f59d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 pkcs5_pbkdf2_hmac/216 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_init/224 (mbedtls_cipher_init) @065f5930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_cipher_info_from_type/223 (mbedtls_cipher_info_from_type) @065f5888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_oid_get_cipher_alg/222 (mbedtls_oid_get_cipher_alg) @065f57e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+memcmp/221 (memcmp) @065f5738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_asn1_get_alg/220 (mbedtls_asn1_get_alg) @065f5690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_pkcs5_self_test/219 (mbedtls_pkcs5_self_test) @065f55e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: puts/245 
+mbedtls_pkcs5_pbkdf2_hmac_ext/218 (mbedtls_pkcs5_pbkdf2_hmac_ext) @065f5498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_md_free/244 pkcs5_pbkdf2_hmac/216 mbedtls_md_setup/243 mbedtls_md_init/242 mbedtls_md_info_from_type/241 
+mbedtls_pkcs5_pbkdf2_hmac/217 (mbedtls_pkcs5_pbkdf2_hmac) @065f5348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: pkcs5_pbkdf2_hmac/216 
+pkcs5_pbkdf2_hmac/216 (pkcs5_pbkdf2_hmac) @065f51f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 mbedtls_pkcs5_pbkdf2_hmac/217 
+  Calls: mbedtls_platform_zeroize/240 mbedtls_platform_zeroize/240 memcpy/225 mbedtls_xor/8 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 memcpy/225 mbedtls_md_hmac_reset/239 mbedtls_md_hmac_finish/238 mbedtls_md_hmac_update/237 mbedtls_md_hmac_update/237 mbedtls_md_hmac_starts/236 memset/235 mbedtls_md_get_size/234 
+mbedtls_pkcs5_pbes2/215 (mbedtls_pkcs5_pbes2) @065f50a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_cipher_free/229 mbedtls_cipher_crypt/228 mbedtls_cipher_setkey/227 mbedtls_cipher_setup/226 mbedtls_pkcs5_pbkdf2_hmac_ext/218 memcpy/225 mbedtls_cipher_init/224 mbedtls_cipher_info_from_type/223 mbedtls_oid_get_cipher_alg/222 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 pkcs5_parse_pbkdf2_params/214 memcmp/221 mbedtls_error_add/9 mbedtls_asn1_get_alg/220 mbedtls_error_add/9 
+pkcs5_parse_pbkdf2_params/214 (pkcs5_parse_pbkdf2_params) @065e9150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_pkcs5_pbes2/215 
+  Calls: mbedtls_error_add/9 mbedtls_oid_get_md_hmac/233 mbedtls_error_add/9 mbedtls_asn1_get_alg_null/232 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_int/231 mbedtls_error_add/9 mbedtls_asn1_get_tag/230 mbedtls_error_add/9 
+mbedtls_error_add/9 (mbedtls_error_add) @06218e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 pkcs5_parse_pbkdf2_params/214 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 mbedtls_pkcs5_pbes2/215 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e2d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: pkcs5_pbkdf2_hmac/216 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061e23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061e22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+puts/245 (__builtin_puts) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_self_test/219 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+mbedtls_md_free/244 (mbedtls_md_free) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 (1063970777 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_md_setup/243 (mbedtls_md_setup) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 (1063970777 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_md_init/242 (mbedtls_md_init) @064e7540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 (1063970777 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_md_info_from_type/241 (mbedtls_md_info_from_type) @064e7498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_zeroize/240 (mbedtls_platform_zeroize) @064e73f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (95846157 (estimated locally),0.66 per call) pkcs5_pbkdf2_hmac/216 (95846157 (estimated locally),0.66 per call) 
+  Calls: 
+mbedtls_md_hmac_reset/239 (mbedtls_md_hmac_reset) @064e7348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (987571834 (estimated locally),6.80 per call) pkcs5_pbkdf2_hmac/216 (115641041 (estimated locally),0.80 per call) 
+  Calls: 
+mbedtls_md_hmac_finish/238 (mbedtls_md_hmac_finish) @064e72a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (1015498034 (estimated locally),6.99 per call) pkcs5_pbkdf2_hmac/216 (118001063 (estimated locally),0.81 per call) 
+  Calls: 
+mbedtls_md_hmac_update/237 (mbedtls_md_hmac_update) @064e71f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (1044213921 (estimated locally),7.19 per call) pkcs5_pbkdf2_hmac/216 (120409248 (estimated locally),0.83 per call) pkcs5_pbkdf2_hmac/216 (122866580 (estimated locally),0.85 per call) 
+  Calls: 
+mbedtls_md_hmac_starts/236 (mbedtls_md_hmac_starts) @064e7150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (145221452 (estimated locally),1.00 per call) 
+  Calls: 
+memset/235 (memset) @064e70a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (145221452 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_md_get_size/234 (mbedtls_md_get_size) @064e7000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_pbkdf2_hmac/216 (145221452 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_oid_get_md_hmac/233 (mbedtls_oid_get_md_hmac) @065f5f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 (58137522 (estimated locally),0.05 per call) 
+  Calls: 
+mbedtls_asn1_get_alg_null/232 (mbedtls_asn1_get_alg_null) @065f5e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 (118939285 (estimated locally),0.11 per call) 
+  Calls: 
+mbedtls_asn1_get_int/231 (mbedtls_asn1_get_int) @065f5dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 (229667942 (estimated locally),0.21 per call) pkcs5_parse_pbkdf2_params/214 (503956168 (estimated locally),0.47 per call) 
+  Calls: 
+mbedtls_asn1_get_tag/230 (mbedtls_asn1_get_tag) @065f5d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: pkcs5_parse_pbkdf2_params/214 (1031006897 (estimated locally),0.96 per call) 
+  Calls: 
+mbedtls_cipher_free/229 (mbedtls_cipher_free) @065f5c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (143079397 (estimated locally),0.13 per call) 
+  Calls: 
+mbedtls_cipher_crypt/228 (mbedtls_cipher_crypt) @065f5bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (16709778 (estimated locally),0.02 per call) 
+  Calls: 
+mbedtls_cipher_setkey/227 (mbedtls_cipher_setkey) @065f5b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (34185307 (estimated locally),0.03 per call) 
+  Calls: 
+mbedtls_cipher_setup/226 (mbedtls_cipher_setup) @065f5a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (69937209 (estimated locally),0.07 per call) 
+  Calls: 
+memcpy/225 (memcpy) @065f59d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (143079397 (estimated locally),0.13 per call) pkcs5_pbkdf2_hmac/216 (29527904 (estimated locally),0.20 per call) pkcs5_pbkdf2_hmac/216 (113328220 (estimated locally),0.78 per call) 
+  Calls: 
+mbedtls_cipher_init/224 (mbedtls_cipher_init) @065f5930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (143079397 (estimated locally),0.13 per call) 
+  Calls: 
+mbedtls_cipher_info_from_type/223 (mbedtls_cipher_info_from_type) @065f5888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (152738339 (estimated locally),0.14 per call) 
+  Calls: 
+mbedtls_oid_get_cipher_alg/222 (mbedtls_oid_get_cipher_alg) @065f57e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (155998713 (estimated locally),0.15 per call) 
+  Calls: 
+memcmp/221 (memcmp) @065f5738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (666855254 (estimated locally),0.62 per call) 
+  Calls: 
+mbedtls_asn1_get_alg/220 (mbedtls_asn1_get_alg) @065f5690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_pkcs5_pbes2/215 (319146305 (estimated locally),0.30 per call) mbedtls_pkcs5_pbes2/215 (1031006893 (estimated locally),0.96 per call) 
+  Calls: 
+mbedtls_pkcs5_self_test/219 (mbedtls_pkcs5_self_test) @065f55e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: puts/245 (354334800 (estimated locally),0.33 per call) 
+mbedtls_pkcs5_pbkdf2_hmac_ext/218 (mbedtls_pkcs5_pbkdf2_hmac_ext) @065f5498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_pkcs5_pbes2/215 (143079397 (estimated locally),0.13 per call) 
+  Calls: mbedtls_md_free/244 (1063970777 (estimated locally),0.99 per call) pkcs5_pbkdf2_hmac/216 (520068912 (estimated locally),0.48 per call) mbedtls_md_setup/243 (1063970777 (estimated locally),0.99 per call) mbedtls_md_init/242 (1063970777 (estimated locally),0.99 per call) mbedtls_md_info_from_type/241 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_pkcs5_pbkdf2_hmac/217 (mbedtls_pkcs5_pbkdf2_hmac) @065f5348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: pkcs5_pbkdf2_hmac/216 (1073741824 (estimated locally),1.00 per call) 
+pkcs5_pbkdf2_hmac/216 (pkcs5_pbkdf2_hmac) @065f51f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:145221452 (estimated locally) body local
+  Called by: mbedtls_pkcs5_pbkdf2_hmac_ext/218 (520068912 (estimated locally),0.48 per call) mbedtls_pkcs5_pbkdf2_hmac/217 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_platform_zeroize/240 (95846157 (estimated locally),0.66 per call) mbedtls_platform_zeroize/240 (95846157 (estimated locally),0.66 per call) memcpy/225 (29527904 (estimated locally),0.20 per call) mbedtls_xor/8 (960413605 (estimated locally),6.61 per call) mbedtls_md_hmac_reset/239 (987571834 (estimated locally),6.80 per call) mbedtls_md_hmac_finish/238 (1015498034 (estimated locally),6.99 per call) mbedtls_md_hmac_update/237 (1044213921 (estimated locally),7.19 per call) memcpy/225 (113328220 (estimated locally),0.78 per call) mbedtls_md_hmac_reset/239 (115641041 (estimated locally),0.80 per call) mbedtls_md_hmac_finish/238 (118001063 (estimated locally),0.81 per call) mbedtls_md_hmac_update/237 (120409248 (estimated locally),0.83 per call) mbedtls_md_hmac_update/237 (122866580 (estimated locally),0.85 per call) mbedtls_md_hmac_starts/236 (145221452 (estimated locally),1.00 per call) memset/235 (145221452 (estimated locally),1.00 per call) mbedtls_md_get_size/234 (145221452 (estimated locally),1.00 per call) 
+mbedtls_pkcs5_pbes2/215 (mbedtls_pkcs5_pbes2) @065f50a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741821 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_cipher_free/229 (143079397 (estimated locally),0.13 per call) mbedtls_cipher_crypt/228 (16709778 (estimated locally),0.02 per call) mbedtls_cipher_setkey/227 (34185307 (estimated locally),0.03 per call) mbedtls_cipher_setup/226 (69937209 (estimated locally),0.07 per call) mbedtls_pkcs5_pbkdf2_hmac_ext/218 (143079397 (estimated locally),0.13 per call) memcpy/225 (143079397 (estimated locally),0.13 per call) mbedtls_cipher_init/224 (143079397 (estimated locally),0.13 per call) mbedtls_cipher_info_from_type/223 (152738339 (estimated locally),0.14 per call) mbedtls_oid_get_cipher_alg/222 (155998713 (estimated locally),0.15 per call) mbedtls_asn1_get_alg/220 (319146305 (estimated locally),0.30 per call) pkcs5_parse_pbkdf2_params/214 (652917977 (estimated locally),0.61 per call) memcmp/221 (666855254 (estimated locally),0.62 per call) mbedtls_asn1_get_alg/220 (1031006893 (estimated locally),0.96 per call) 
+pkcs5_parse_pbkdf2_params/214 (pkcs5_parse_pbkdf2_params) @065e9150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_pkcs5_pbes2/215 (652917977 (estimated locally),0.61 per call) 
+  Calls: mbedtls_oid_get_md_hmac/233 (58137522 (estimated locally),0.05 per call) mbedtls_asn1_get_alg_null/232 (118939285 (estimated locally),0.11 per call) mbedtls_asn1_get_int/231 (229667942 (estimated locally),0.21 per call) mbedtls_asn1_get_int/231 (503956168 (estimated locally),0.47 per call) mbedtls_asn1_get_tag/230 (1031006897 (estimated locally),0.96 per call) 
+mbedtls_xor/8 (mbedtls_xor) @061e2d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: pkcs5_pbkdf2_hmac/216 (960413605 (estimated locally),6.61 per call) 
+  Calls: 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+puts/245 (__builtin_puts) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_free/244 (mbedtls_md_free) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_setup/243 (mbedtls_md_setup) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_init/242 (mbedtls_md_init) @064e7540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_info_from_type/241 (mbedtls_md_info_from_type) @064e7498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/240 (mbedtls_platform_zeroize) @064e73f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_reset/239 (mbedtls_md_hmac_reset) @064e7348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_finish/238 (mbedtls_md_hmac_finish) @064e72a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_update/237 (mbedtls_md_hmac_update) @064e71f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_starts/236 (mbedtls_md_hmac_starts) @064e7150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/235 (memset) @064e70a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_get_size/234 (mbedtls_md_get_size) @064e7000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_oid_get_md_hmac/233 (mbedtls_oid_get_md_hmac) @065f5f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_alg_null/232 (mbedtls_asn1_get_alg_null) @065f5e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_int/231 (mbedtls_asn1_get_int) @065f5dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_tag/230 (mbedtls_asn1_get_tag) @065f5d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_free/229 (mbedtls_cipher_free) @065f5c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_crypt/228 (mbedtls_cipher_crypt) @065f5bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setkey/227 (mbedtls_cipher_setkey) @065f5b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setup/226 (mbedtls_cipher_setup) @065f5a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/225 (memcpy) @065f59d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_init/224 (mbedtls_cipher_init) @065f5930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_from_type/223 (mbedtls_cipher_info_from_type) @065f5888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_oid_get_cipher_alg/222 (mbedtls_oid_get_cipher_alg) @065f57e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/221 (memcmp) @065f5738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_alg/220 (mbedtls_asn1_get_alg) @065f5690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pkcs5_self_test/219 (mbedtls_pkcs5_self_test) @065f55e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_pkcs5_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_pkcs5_pbkdf2_hmac_ext/218 (mbedtls_pkcs5_pbkdf2_hmac_ext) @065f5498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_pkcs5_pbkdf2_hmac_ext (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_pkcs5_pbkdf2_hmac/217 (mbedtls_pkcs5_pbkdf2_hmac) @065f5348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_pkcs5_pbkdf2_hmac (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+pkcs5_pbkdf2_hmac/216 (pkcs5_pbkdf2_hmac) @065f51f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.pkcs5_pbkdf2_hmac (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:145221452 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_pkcs5_pbes2/215 (mbedtls_pkcs5_pbes2) @065f50a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_pkcs5_pbes2 (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741821 (estimated locally)
+  Called by: 
+  Calls: 
+pkcs5_parse_pbkdf2_params/214 (pkcs5_parse_pbkdf2_params) @065e9150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.pkcs5_parse_pbkdf2_params (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061e2d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 

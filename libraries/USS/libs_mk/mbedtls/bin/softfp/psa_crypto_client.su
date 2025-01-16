@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_client.c:29:6:psa_reset_key_attributes	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_client.c:35:14:psa_set_key_domain_parameters	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_client.c:64:14:psa_get_key_domain_parameters	8	static

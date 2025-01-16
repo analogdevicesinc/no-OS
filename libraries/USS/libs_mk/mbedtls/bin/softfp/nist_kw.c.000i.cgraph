@@ -1,0 +1,2034 @@
+Trivially needed symbols: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_free/32 mbedtls_nist_kw_setkey/31 mbedtls_nist_kw_init/30
+
+
+Initial Symbol table:
+
+putchar/63 (__builtin_putchar) @06315e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: 
+puts/62 (__builtin_puts) @06315dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+memcmp/61 (memcmp) @06315d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+printf/60 (printf) @06315c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+mbedtls_ct_memcmp/59 (mbedtls_ct_memcmp) @06315bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: 
+mbedtls_cipher_update/58 (mbedtls_cipher_update) @06315b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memcpy/57 (memcpy) @06315a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 unwrap/35 unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @063159d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memmove/55 (memmove) @06315930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06315888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_free/32 
+  Calls: 
+mbedtls_cipher_setkey/53 (mbedtls_cipher_setkey) @063157e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_setup/52 (mbedtls_cipher_setup) @06315738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_free/51 (mbedtls_cipher_free) @06315690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_free/32 mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_info_from_values/50 (mbedtls_cipher_info_from_values) @063155e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+memset/49 (memset) @06315540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_init/30 
+  Calls: 
+mbedtls_nist_kw_self_test/48 (mbedtls_nist_kw_self_test) @06315498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: key_len/37 (read) kw_key/38 (addr) key_len/37 (read) kw_msg/39 (addr) kw_msg_len/40 (read) kw_out_len/41 (read) kw_res/42 (addr) kw_out_len/41 (read) kw_key/38 (addr) key_len/37 (read) kw_msg_len/40 (read) kw_msg/39 (addr) kw_msg_len/40 (read) key_len/37 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) kwp_out_len/47 (read) kwp_res/46 (addr) kwp_out_len/47 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg_len/45 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/63 mbedtls_nist_kw_free/32 puts/62 printf/60 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 puts/62 puts/62 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 mbedtls_nist_kw_init/30 
+kwp_out_len/47 (kwp_out_len) @062e4b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e49d8
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_res/46 (kwp_res) @062e4af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4b40
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg_len/45 (kwp_msg_len) @062e49d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4990
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg/44 (kwp_msg) @062e4990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e48b8
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_key/43 (kwp_key) @062e48b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4798
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_res/42 (kw_res) @062e4798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4630
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_out_len/41 (kw_out_len) @062e4630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e45e8
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg_len/40 (kw_msg_len) @062e45e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e45a0
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg/39 (kw_msg) @062e45a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4480
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_key/38 (kw_key) @062e4480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4360
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_len/37 (key_len) @062e4360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_nist_kw_unwrap/36 (mbedtls_nist_kw_unwrap) @062e7738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06315498
+  References: NIST_KW_ICV1/28 (addr) NIST_KW_ICV2/29 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memset/49 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 mbedtls_ct_memcmp/59 unwrap/35 mbedtls_platform_zeroize/54 memcpy/57 mbedtls_cipher_update/58 mbedtls_ct_memcmp/59 unwrap/35 
+unwrap/35 (unwrap) @062e75e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062652a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 calc_a_xor_t/33 memmove/55 memcpy/57 
+mbedtls_nist_kw_wrap/34 (mbedtls_nist_kw_wrap) @062e7498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062e7738
+  References: NIST_KW_ICV1/28 (read) NIST_KW_ICV2/29 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 calc_a_xor_t/33 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memset/49 memcpy/57 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 memmove/55 
+calc_a_xor_t/33 (calc_a_xor_t) @062e7348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e7738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_nist_kw_free/32 (mbedtls_nist_kw_free) @062e71f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062e7498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_cipher_free/51 
+mbedtls_nist_kw_setkey/31 (mbedtls_nist_kw_setkey) @062e70a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062e71f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_cipher_setkey/53 mbedtls_cipher_setup/52 mbedtls_cipher_free/51 mbedtls_cipher_info_from_values/50 
+mbedtls_nist_kw_init/30 (mbedtls_nist_kw_init) @062b17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062e70a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: memset/49 
+NIST_KW_ICV2/29 (NIST_KW_ICV2) @062e4048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062e4000
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+NIST_KW_ICV1/28 (NIST_KW_ICV1) @062e4000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062653f0
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+_putchar_unlocked/27 (_putchar_unlocked) @062b1690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/26 (_getchar_unlocked) @062b1540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/25 (__sputc_r) @062b1348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/24 (mbedtls_error_add) @062a3d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/23 (mbedtls_cipher_get_operation) @062a3738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/22 (mbedtls_cipher_get_key_bitlen) @062a35e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/21 (mbedtls_cipher_get_name) @062a3498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/20 (mbedtls_cipher_get_type) @062a3348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/19 (mbedtls_cipher_get_iv_size) @062a31f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/18 (mbedtls_cipher_get_cipher_mode) @062a30a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/17 (mbedtls_cipher_get_block_size) @0629c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/16 (mbedtls_cipher_info_has_variable_iv_size) @0629c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/15 (mbedtls_cipher_info_has_variable_key_bitlen) @0629c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/14 (mbedtls_cipher_info_get_block_size) @0629c0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/13 (mbedtls_cipher_info_get_iv_size) @0629ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/12 (mbedtls_cipher_info_get_name) @0629cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/11 (mbedtls_cipher_info_get_key_bitlen) @0629cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/10 (mbedtls_cipher_info_get_mode) @0629ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/9 (mbedtls_cipher_info_get_type) @0629c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06265d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06265bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06265a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06265690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06265540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062653f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062e7348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062652a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @06315498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06265150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06265000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/27 _getchar_unlocked/26 __sputc_r/25 mbedtls_error_add/24 mbedtls_cipher_get_operation/23 mbedtls_cipher_get_key_bitlen/22 mbedtls_cipher_get_name/21 mbedtls_cipher_get_type/20 mbedtls_cipher_get_iv_size/19 mbedtls_cipher_get_cipher_mode/18 mbedtls_cipher_get_block_size/17 mbedtls_cipher_info_has_variable_iv_size/16 mbedtls_cipher_info_has_variable_key_bitlen/15 mbedtls_cipher_info_get_block_size/14 mbedtls_cipher_info_get_iv_size/13 mbedtls_cipher_info_get_name/12 mbedtls_cipher_info_get_key_bitlen/11 mbedtls_cipher_info_get_mode/10 mbedtls_cipher_info_get_type/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+putchar/63 (__builtin_putchar) @06315e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: 
+puts/62 (__builtin_puts) @06315dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+memcmp/61 (memcmp) @06315d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+printf/60 (printf) @06315c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+mbedtls_ct_memcmp/59 (mbedtls_ct_memcmp) @06315bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: 
+mbedtls_cipher_update/58 (mbedtls_cipher_update) @06315b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memcpy/57 (memcpy) @06315a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 unwrap/35 unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @063159d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memmove/55 (memmove) @06315930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06315888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_free/32 
+  Calls: 
+mbedtls_cipher_setkey/53 (mbedtls_cipher_setkey) @063157e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_setup/52 (mbedtls_cipher_setup) @06315738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_free/51 (mbedtls_cipher_free) @06315690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_free/32 mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_info_from_values/50 (mbedtls_cipher_info_from_values) @063155e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+memset/49 (memset) @06315540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_init/30 
+  Calls: 
+mbedtls_nist_kw_self_test/48 (mbedtls_nist_kw_self_test) @06315498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: key_len/37 (read) kw_key/38 (addr) key_len/37 (read) kw_msg/39 (addr) kw_msg_len/40 (read) kw_out_len/41 (read) kw_res/42 (addr) kw_out_len/41 (read) kw_key/38 (addr) key_len/37 (read) kw_msg_len/40 (read) kw_msg/39 (addr) kw_msg_len/40 (read) key_len/37 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) kwp_out_len/47 (read) kwp_res/46 (addr) kwp_out_len/47 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg_len/45 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/63 mbedtls_nist_kw_free/32 puts/62 printf/60 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 puts/62 puts/62 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 mbedtls_nist_kw_init/30 
+kwp_out_len/47 (kwp_out_len) @062e4b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_res/46 (kwp_res) @062e4af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg_len/45 (kwp_msg_len) @062e49d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg/44 (kwp_msg) @062e4990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_key/43 (kwp_key) @062e48b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_res/42 (kw_res) @062e4798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_out_len/41 (kw_out_len) @062e4630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg_len/40 (kw_msg_len) @062e45e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg/39 (kw_msg) @062e45a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_key/38 (kw_key) @062e4480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_len/37 (key_len) @062e4360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_nist_kw_unwrap/36 (mbedtls_nist_kw_unwrap) @062e7738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: NIST_KW_ICV1/28 (addr) NIST_KW_ICV2/29 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memset/49 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 mbedtls_ct_memcmp/59 unwrap/35 mbedtls_platform_zeroize/54 memcpy/57 mbedtls_cipher_update/58 mbedtls_ct_memcmp/59 unwrap/35 
+unwrap/35 (unwrap) @062e75e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 calc_a_xor_t/33 memmove/55 memcpy/57 
+mbedtls_nist_kw_wrap/34 (mbedtls_nist_kw_wrap) @062e7498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: NIST_KW_ICV1/28 (read) NIST_KW_ICV2/29 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 calc_a_xor_t/33 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memset/49 memcpy/57 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 memmove/55 
+calc_a_xor_t/33 (calc_a_xor_t) @062e7348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_nist_kw_free/32 (mbedtls_nist_kw_free) @062e71f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_cipher_free/51 
+mbedtls_nist_kw_setkey/31 (mbedtls_nist_kw_setkey) @062e70a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_cipher_setkey/53 mbedtls_cipher_setup/52 mbedtls_cipher_free/51 mbedtls_cipher_info_from_values/50 
+mbedtls_nist_kw_init/30 (mbedtls_nist_kw_init) @062b17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: memset/49 
+NIST_KW_ICV2/29 (NIST_KW_ICV2) @062e4048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+NIST_KW_ICV1/28 (NIST_KW_ICV1) @062e4000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062653f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062652a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 
+  Calls: 
+
+
+Initial Symbol table:
+
+putchar/63 (__builtin_putchar) @06315e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: 
+puts/62 (__builtin_puts) @06315dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+memcmp/61 (memcmp) @06315d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+printf/60 (printf) @06315c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+mbedtls_ct_memcmp/59 (mbedtls_ct_memcmp) @06315bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: 
+mbedtls_cipher_update/58 (mbedtls_cipher_update) @06315b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memcpy/57 (memcpy) @06315a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 unwrap/35 unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @063159d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memmove/55 (memmove) @06315930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06315888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_free/32 
+  Calls: 
+mbedtls_cipher_setkey/53 (mbedtls_cipher_setkey) @063157e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_setup/52 (mbedtls_cipher_setup) @06315738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_free/51 (mbedtls_cipher_free) @06315690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_free/32 mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_info_from_values/50 (mbedtls_cipher_info_from_values) @063155e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+memset/49 (memset) @06315540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_init/30 
+  Calls: 
+mbedtls_nist_kw_self_test/48 (mbedtls_nist_kw_self_test) @06315498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: key_len/37 (read) kw_key/38 (addr) key_len/37 (read) kw_msg/39 (addr) kw_msg_len/40 (read) kw_out_len/41 (read) kw_res/42 (addr) kw_out_len/41 (read) kw_key/38 (addr) key_len/37 (read) kw_msg_len/40 (read) kw_msg/39 (addr) kw_msg_len/40 (read) key_len/37 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) kwp_out_len/47 (read) kwp_res/46 (addr) kwp_out_len/47 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg_len/45 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/63 mbedtls_nist_kw_free/32 puts/62 printf/60 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 puts/62 puts/62 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 mbedtls_nist_kw_init/30 
+kwp_out_len/47 (kwp_out_len) @062e4b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_res/46 (kwp_res) @062e4af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg_len/45 (kwp_msg_len) @062e49d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg/44 (kwp_msg) @062e4990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_key/43 (kwp_key) @062e48b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_res/42 (kw_res) @062e4798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_out_len/41 (kw_out_len) @062e4630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg_len/40 (kw_msg_len) @062e45e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg/39 (kw_msg) @062e45a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_key/38 (kw_key) @062e4480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_len/37 (key_len) @062e4360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_nist_kw_unwrap/36 (mbedtls_nist_kw_unwrap) @062e7738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: NIST_KW_ICV1/28 (addr) NIST_KW_ICV2/29 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memset/49 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 mbedtls_ct_memcmp/59 unwrap/35 mbedtls_platform_zeroize/54 memcpy/57 mbedtls_cipher_update/58 mbedtls_ct_memcmp/59 unwrap/35 
+unwrap/35 (unwrap) @062e75e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 calc_a_xor_t/33 memmove/55 memcpy/57 
+mbedtls_nist_kw_wrap/34 (mbedtls_nist_kw_wrap) @062e7498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: NIST_KW_ICV1/28 (read) NIST_KW_ICV2/29 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 calc_a_xor_t/33 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memset/49 memcpy/57 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 memmove/55 
+calc_a_xor_t/33 (calc_a_xor_t) @062e7348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_nist_kw_free/32 (mbedtls_nist_kw_free) @062e71f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_cipher_free/51 
+mbedtls_nist_kw_setkey/31 (mbedtls_nist_kw_setkey) @062e70a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_cipher_setkey/53 mbedtls_cipher_setup/52 mbedtls_cipher_free/51 mbedtls_cipher_info_from_values/50 
+mbedtls_nist_kw_init/30 (mbedtls_nist_kw_init) @062b17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: memset/49 
+NIST_KW_ICV2/29 (NIST_KW_ICV2) @062e4048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+NIST_KW_ICV1/28 (NIST_KW_ICV1) @062e4000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062653f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062652a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+putchar/63 (__builtin_putchar) @06315e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: 
+puts/62 (__builtin_puts) @06315dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+memcmp/61 (memcmp) @06315d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+printf/60 (printf) @06315c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: 
+mbedtls_ct_memcmp/59 (mbedtls_ct_memcmp) @06315bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: 
+mbedtls_cipher_update/58 (mbedtls_cipher_update) @06315b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memcpy/57 (memcpy) @06315a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 unwrap/35 unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @063159d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 
+  Calls: 
+memmove/55 (memmove) @06315930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06315888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_free/32 
+  Calls: 
+mbedtls_cipher_setkey/53 (mbedtls_cipher_setkey) @063157e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_setup/52 (mbedtls_cipher_setup) @06315738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_free/51 (mbedtls_cipher_free) @06315690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_free/32 mbedtls_nist_kw_setkey/31 
+  Calls: 
+mbedtls_cipher_info_from_values/50 (mbedtls_cipher_info_from_values) @063155e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 
+  Calls: 
+memset/49 (memset) @06315540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: unwrap/35 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_wrap/34 mbedtls_nist_kw_init/30 
+  Calls: 
+mbedtls_nist_kw_self_test/48 (mbedtls_nist_kw_self_test) @06315498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: key_len/37 (read) kw_key/38 (addr) key_len/37 (read) kw_msg/39 (addr) kw_msg_len/40 (read) kw_out_len/41 (read) kw_res/42 (addr) kw_out_len/41 (read) kw_key/38 (addr) key_len/37 (read) kw_msg_len/40 (read) kw_msg/39 (addr) kw_msg_len/40 (read) key_len/37 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) kwp_out_len/47 (read) kwp_res/46 (addr) kwp_out_len/47 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg_len/45 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/63 mbedtls_nist_kw_free/32 puts/62 printf/60 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 puts/62 puts/62 memcmp/61 mbedtls_nist_kw_unwrap/36 printf/60 mbedtls_nist_kw_setkey/31 printf/60 memcmp/61 mbedtls_nist_kw_wrap/34 printf/60 mbedtls_nist_kw_setkey/31 printf/60 mbedtls_nist_kw_init/30 
+kwp_out_len/47 (kwp_out_len) @062e4b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_res/46 (kwp_res) @062e4af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg_len/45 (kwp_msg_len) @062e49d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_msg/44 (kwp_msg) @062e4990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kwp_key/43 (kwp_key) @062e48b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_res/42 (kw_res) @062e4798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_out_len/41 (kw_out_len) @062e4630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg_len/40 (kw_msg_len) @062e45e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_msg/39 (kw_msg) @062e45a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+kw_key/38 (kw_key) @062e4480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_len/37 (key_len) @062e4360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_nist_kw_unwrap/36 (mbedtls_nist_kw_unwrap) @062e7738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: NIST_KW_ICV1/28 (addr) NIST_KW_ICV2/29 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memset/49 __builtin_bswap32/56 mbedtls_get_unaligned_uint32/2 mbedtls_ct_memcmp/59 unwrap/35 mbedtls_platform_zeroize/54 memcpy/57 mbedtls_cipher_update/58 mbedtls_ct_memcmp/59 unwrap/35 
+unwrap/35 (unwrap) @062e75e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 mbedtls_nist_kw_unwrap/36 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 calc_a_xor_t/33 memmove/55 memcpy/57 
+mbedtls_nist_kw_wrap/34 (mbedtls_nist_kw_wrap) @062e7498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: NIST_KW_ICV1/28 (read) NIST_KW_ICV2/29 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_platform_zeroize/54 memset/49 memcpy/57 calc_a_xor_t/33 memcpy/57 mbedtls_cipher_update/58 memcpy/57 memcpy/57 mbedtls_cipher_update/58 memset/49 memcpy/57 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/56 memmove/55 
+calc_a_xor_t/33 (calc_a_xor_t) @062e7348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: unwrap/35 mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_nist_kw_free/32 (mbedtls_nist_kw_free) @062e71f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_platform_zeroize/54 mbedtls_cipher_free/51 
+mbedtls_nist_kw_setkey/31 (mbedtls_nist_kw_setkey) @062e70a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 mbedtls_nist_kw_self_test/48 
+  Calls: mbedtls_cipher_setkey/53 mbedtls_cipher_setup/52 mbedtls_cipher_free/51 mbedtls_cipher_info_from_values/50 
+mbedtls_nist_kw_init/30 (mbedtls_nist_kw_init) @062b17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_self_test/48 
+  Calls: memset/49 
+NIST_KW_ICV2/29 (NIST_KW_ICV2) @062e4048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+NIST_KW_ICV1/28 (NIST_KW_ICV1) @062e4000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_nist_kw_wrap/34 (read) mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062653f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_wrap/34 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062652a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_nist_kw_unwrap/36 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+putchar/63 (__builtin_putchar) @06315e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 (128243598 (estimated locally),0.33 per call) 
+  Calls: 
+puts/62 (__builtin_puts) @06315dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 (156171504 (estimated locally),0.40 per call) mbedtls_nist_kw_self_test/48 (226091203 (estimated locally),0.58 per call) mbedtls_nist_kw_self_test/48 (14126739 (estimated locally),0.04 per call) 
+  Calls: 
+memcmp/61 (memcmp) @06315d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 (482905088 (estimated locally),1.24 per call) mbedtls_nist_kw_self_test/48 (523549181 (estimated locally),1.35 per call) mbedtls_nist_kw_self_test/48 (699107005 (estimated locally),1.80 per call) mbedtls_nist_kw_self_test/48 (757947905 (estimated locally),1.95 per call) 
+  Calls: 
+printf/60 (printf) @06315c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_self_test/48 (9757983 (estimated locally),0.03 per call) mbedtls_nist_kw_self_test/48 (3386317 (estimated locally),0.01 per call) mbedtls_nist_kw_self_test/48 (10579271 (estimated locally),0.03 per call) mbedtls_nist_kw_self_test/48 (3671329 (estimated locally),0.01 per call) mbedtls_nist_kw_self_test/48 (183566404 (estimated locally),0.47 per call) mbedtls_nist_kw_self_test/48 (4902408 (estimated locally),0.01 per call) mbedtls_nist_kw_self_test/48 (15315727 (estimated locally),0.04 per call) mbedtls_nist_kw_self_test/48 (5315023 (estimated locally),0.01 per call) mbedtls_nist_kw_self_test/48 (265751100 (estimated locally),0.68 per call) 
+  Calls: 
+mbedtls_ct_memcmp/59 (mbedtls_ct_memcmp) @06315bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 (119292720 (estimated locally),0.15 per call) mbedtls_nist_kw_unwrap/36 (191732654 (estimated locally),0.23 per call) 
+  Calls: 
+mbedtls_cipher_update/58 (mbedtls_cipher_update) @06315b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 (67397914 (estimated locally),0.08 per call) mbedtls_nist_kw_wrap/34 (1014686024 (estimated locally),4.99 per call) mbedtls_nist_kw_wrap/34 (21994594 (estimated locally),0.11 per call) unwrap/35 (1014686025 (estimated locally),8.65 per call) 
+  Calls: 
+memcpy/57 (memcpy) @06315a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 (32944100 (estimated locally),0.04 per call) mbedtls_nist_kw_wrap/34 (958878293 (estimated locally),4.71 per call) mbedtls_nist_kw_wrap/34 (958878293 (estimated locally),4.71 per call) mbedtls_nist_kw_wrap/34 (1014686024 (estimated locally),4.99 per call) mbedtls_nist_kw_wrap/34 (1014686024 (estimated locally),4.99 per call) mbedtls_nist_kw_wrap/34 (98527466 (estimated locally),0.48 per call) unwrap/35 (958878294 (estimated locally),8.17 per call) unwrap/35 (958878294 (estimated locally),8.17 per call) unwrap/35 (1014686025 (estimated locally),8.65 per call) unwrap/35 (1014686025 (estimated locally),8.65 per call) unwrap/35 (114863530 (estimated locally),0.98 per call) 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @063159d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 (119292720 (estimated locally),0.15 per call) mbedtls_nist_kw_wrap/34 (98527466 (estimated locally),0.48 per call) 
+  Calls: 
+memmove/55 (memmove) @06315930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_wrap/34 (97502780 (estimated locally),0.48 per call) unwrap/35 (114863530 (estimated locally),0.98 per call) 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06315888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 (792898456 (estimated locally),0.97 per call) mbedtls_nist_kw_unwrap/36 (792898456 (estimated locally),0.97 per call) mbedtls_nist_kw_unwrap/36 (792898456 (estimated locally),0.97 per call) mbedtls_nist_kw_unwrap/36 (32944100 (estimated locally),0.04 per call) mbedtls_nist_kw_wrap/34 (196030247 (estimated locally),0.96 per call) mbedtls_nist_kw_wrap/34 (196030247 (estimated locally),0.96 per call) mbedtls_nist_kw_free/32 (1073741824 (estimated locally),1.00 per call) unwrap/35 (114863531 (estimated locally),0.98 per call) unwrap/35 (114863531 (estimated locally),0.98 per call) 
+  Calls: 
+mbedtls_cipher_setkey/53 (mbedtls_cipher_setkey) @063157e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 (491654594 (estimated locally),0.46 per call) 
+  Calls: 
+mbedtls_cipher_setup/52 (mbedtls_cipher_setup) @06315738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 (1005840012 (estimated locally),0.94 per call) 
+  Calls: 
+mbedtls_cipher_free/51 (mbedtls_cipher_free) @06315690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_free/32 (1073741824 (estimated locally),1.00 per call) mbedtls_nist_kw_setkey/31 (1005840012 (estimated locally),0.94 per call) 
+  Calls: 
+mbedtls_cipher_info_from_values/50 (mbedtls_cipher_info_from_values) @063155e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_setkey/31 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+memset/49 (memset) @06315540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_nist_kw_unwrap/36 (690104525 (estimated locally),0.84 per call) mbedtls_nist_kw_unwrap/36 (38484785 (estimated locally),0.05 per call) mbedtls_nist_kw_wrap/34 (131340266 (estimated locally),0.65 per call) mbedtls_nist_kw_wrap/34 (98527466 (estimated locally),0.48 per call) mbedtls_nist_kw_init/30 (1073741824 (estimated locally),1.00 per call) unwrap/35 (37904965 (estimated locally),0.32 per call) 
+  Calls: 
+mbedtls_nist_kw_self_test/48 (mbedtls_nist_kw_self_test) @06315498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: key_len/37 (read) kw_key/38 (addr) key_len/37 (read) kw_msg/39 (addr) kw_msg_len/40 (read) kw_out_len/41 (read) kw_res/42 (addr) key_len/37 (read) kwp_key/43 (addr) key_len/37 (read) kwp_msg/44 (addr) kwp_msg_len/45 (read) kwp_out_len/47 (read) kwp_res/46 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:388616960 (estimated locally) body
+  Called by: 
+  Calls: putchar/63 (128243598 (estimated locally),0.33 per call) mbedtls_nist_kw_free/32 (388616965 (estimated locally),1.00 per call) puts/62 (156171504 (estimated locally),0.40 per call) printf/60 (9757983 (estimated locally),0.03 per call) memcmp/61 (482905088 (estimated locally),1.24 per call) mbedtls_nist_kw_unwrap/36 (502816630 (estimated locally),1.29 per call) printf/60 (3386317 (estimated locally),0.01 per call) mbedtls_nist_kw_setkey/31 (513078196 (estimated locally),1.32 per call) printf/60 (10579271 (estimated locally),0.03 per call) memcmp/61 (523549181 (estimated locally),1.35 per call) mbedtls_nist_kw_wrap/34 (545136595 (estimated locally),1.40 per call) printf/60 (3671329 (estimated locally),0.01 per call) mbedtls_nist_kw_setkey/31 (556261833 (estimated locally),1.43 per call) printf/60 (183566404 (estimated locally),0.47 per call) puts/62 (226091203 (estimated locally),0.58 per call) puts/62 (14126739 (estimated locally),0.04 per call) memcmp/61 (699107005 (estimated locally),1.80 per call) mbedtls_nist_kw_unwrap/36 (727933163 (estimated locally),1.87 per call) printf/60 (4902408 (estimated locally),0.01 per call) mbedtls_nist_kw_setkey/31 (742788945 (estimated locally),1.91 per call) printf/60 (15315727 (estimated locally),0.04 per call) memcmp/61 (757947905 (estimated locally),1.95 per call) mbedtls_nist_kw_wrap/34 (789200240 (estimated locally),2.03 per call) printf/60 (5315023 (estimated locally),0.01 per call) mbedtls_nist_kw_setkey/31 (805306369 (estimated locally),2.07 per call) printf/60 (265751100 (estimated locally),0.68 per call) mbedtls_nist_kw_init/30 (388616960 (estimated locally),1.00 per call) 
+kwp_out_len/47 (kwp_out_len) @062e4b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_res/46 (kwp_res) @062e4af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_msg_len/45 (kwp_msg_len) @062e49d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_msg/44 (kwp_msg) @062e4990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_key/43 (kwp_key) @062e48b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_res/42 (kw_res) @062e4798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_out_len/41 (kw_out_len) @062e4630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_msg_len/40 (kw_msg_len) @062e45e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_msg/39 (kw_msg) @062e45a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_key/38 (kw_key) @062e4480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+key_len/37 (key_len) @062e4360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) mbedtls_nist_kw_self_test/48 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_nist_kw_unwrap/36 (mbedtls_nist_kw_unwrap) @062e7738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: NIST_KW_ICV1/28 (addr) NIST_KW_ICV2/29 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:818179251 (estimated locally) body
+  Called by: mbedtls_nist_kw_self_test/48 (502816630 (estimated locally),1.29 per call) mbedtls_nist_kw_self_test/48 (727933163 (estimated locally),1.87 per call) 
+  Calls: mbedtls_platform_zeroize/54 (792898456 (estimated locally),0.97 per call) mbedtls_platform_zeroize/54 (792898456 (estimated locally),0.97 per call) mbedtls_platform_zeroize/54 (792898456 (estimated locally),0.97 per call) memset/49 (690104525 (estimated locally),0.84 per call) memset/49 (38484785 (estimated locally),0.05 per call) __builtin_bswap32/56 (119292720 (estimated locally),0.15 per call) mbedtls_ct_memcmp/59 (119292720 (estimated locally),0.15 per call) unwrap/35 (130831243 (estimated locally),0.16 per call) mbedtls_platform_zeroize/54 (32944100 (estimated locally),0.04 per call) memcpy/57 (32944100 (estimated locally),0.04 per call) mbedtls_cipher_update/58 (67397914 (estimated locally),0.08 per call) mbedtls_ct_memcmp/59 (191732654 (estimated locally),0.23 per call) unwrap/35 (392251751 (estimated locally),0.48 per call) 
+unwrap/35 (unwrap) @062e75e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:117315423 (estimated locally) body local
+  Called by: mbedtls_nist_kw_unwrap/36 (130831243 (estimated locally),0.16 per call) mbedtls_nist_kw_unwrap/36 (392251751 (estimated locally),0.48 per call) 
+  Calls: mbedtls_platform_zeroize/54 (114863531 (estimated locally),0.98 per call) mbedtls_platform_zeroize/54 (114863531 (estimated locally),0.98 per call) memset/49 (37904965 (estimated locally),0.32 per call) memcpy/57 (958878294 (estimated locally),8.17 per call) memcpy/57 (958878294 (estimated locally),8.17 per call) mbedtls_cipher_update/58 (1014686025 (estimated locally),8.65 per call) memcpy/57 (1014686025 (estimated locally),8.65 per call) memcpy/57 (1014686025 (estimated locally),8.65 per call) calc_a_xor_t/33 (1014686025 (estimated locally),8.65 per call) memmove/55 (114863530 (estimated locally),0.98 per call) memcpy/57 (114863530 (estimated locally),0.98 per call) 
+mbedtls_nist_kw_wrap/34 (mbedtls_nist_kw_wrap) @062e7498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:203376407 (estimated locally) body
+  Called by: mbedtls_nist_kw_self_test/48 (545136595 (estimated locally),1.40 per call) mbedtls_nist_kw_self_test/48 (789200240 (estimated locally),2.03 per call) 
+  Calls: mbedtls_platform_zeroize/54 (196030247 (estimated locally),0.96 per call) mbedtls_platform_zeroize/54 (196030247 (estimated locally),0.96 per call) memset/49 (131340266 (estimated locally),0.65 per call) memcpy/57 (958878293 (estimated locally),4.71 per call) calc_a_xor_t/33 (958878293 (estimated locally),4.71 per call) memcpy/57 (958878293 (estimated locally),4.71 per call) mbedtls_cipher_update/58 (1014686024 (estimated locally),4.99 per call) memcpy/57 (1014686024 (estimated locally),4.99 per call) memcpy/57 (1014686024 (estimated locally),4.99 per call) mbedtls_cipher_update/58 (21994594 (estimated locally),0.11 per call) memset/49 (98527466 (estimated locally),0.48 per call) memcpy/57 (98527466 (estimated locally),0.48 per call) __builtin_bswap32/56 (98527466 (estimated locally),0.48 per call) memmove/55 (97502780 (estimated locally),0.48 per call) 
+calc_a_xor_t/33 (calc_a_xor_t) @062e7348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:119292720 (estimated locally) body local nonfreeing_fn
+  Called by: mbedtls_nist_kw_wrap/34 (958878293 (estimated locally),4.71 per call) unwrap/35 (1014686025 (estimated locally),8.65 per call) 
+  Calls: 
+mbedtls_nist_kw_free/32 (mbedtls_nist_kw_free) @062e71f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_nist_kw_self_test/48 (388616965 (estimated locally),1.00 per call) 
+  Calls: mbedtls_platform_zeroize/54 (1073741824 (estimated locally),1.00 per call) mbedtls_cipher_free/51 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_nist_kw_setkey/31 (mbedtls_nist_kw_setkey) @062e70a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_nist_kw_self_test/48 (513078196 (estimated locally),1.32 per call) mbedtls_nist_kw_self_test/48 (556261833 (estimated locally),1.43 per call) mbedtls_nist_kw_self_test/48 (742788945 (estimated locally),1.91 per call) mbedtls_nist_kw_self_test/48 (805306369 (estimated locally),2.07 per call) 
+  Calls: mbedtls_cipher_setkey/53 (491654594 (estimated locally),0.46 per call) mbedtls_cipher_setup/52 (1005840012 (estimated locally),0.94 per call) mbedtls_cipher_free/51 (1005840012 (estimated locally),0.94 per call) mbedtls_cipher_info_from_values/50 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_nist_kw_init/30 (mbedtls_nist_kw_init) @062b17e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_nist_kw_self_test/48 (388616960 (estimated locally),1.00 per call) 
+  Calls: memset/49 (1073741824 (estimated locally),1.00 per call) 
+NIST_KW_ICV2/29 (NIST_KW_ICV2) @062e4048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+NIST_KW_ICV1/28 (NIST_KW_ICV1) @062e4000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_nist_kw_unwrap/36 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+Trivially needed variables: kwp_out_len/47 kwp_res/46 kwp_msg_len/45 kwp_msg/44 kwp_key/43 kw_res/42 kw_out_len/41 kw_msg_len/40 kw_msg/39 kw_key/38 key_len/37 NIST_KW_ICV2/29 NIST_KW_ICV1/28
+Removing variables:
+
+Final Symbol table:
+
+putchar/63 (__builtin_putchar) @06315e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/62 (__builtin_puts) @06315dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/61 (memcmp) @06315d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/60 (printf) @06315c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ct_memcmp/59 (mbedtls_ct_memcmp) @06315bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_update/58 (mbedtls_cipher_update) @06315b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/57 (memcpy) @06315a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap32/56 (__builtin_bswap32) @063159d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memmove/55 (memmove) @06315930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/54 (mbedtls_platform_zeroize) @06315888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setkey/53 (mbedtls_cipher_setkey) @063157e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setup/52 (mbedtls_cipher_setup) @06315738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_free/51 (mbedtls_cipher_free) @06315690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_from_values/50 (mbedtls_cipher_info_from_values) @063155e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/49 (memset) @06315540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_nist_kw_self_test/48 (mbedtls_nist_kw_self_test) @06315498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_nist_kw_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:388616960 (estimated locally)
+  Called by: 
+  Calls: 
+kwp_out_len/47 (kwp_out_len) @062e4b40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kwp_out_len (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_res/46 (kwp_res) @062e4af8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kwp_res (implicit_section)
+  Aux: @062e4b40
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_msg_len/45 (kwp_msg_len) @062e49d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kwp_msg_len (implicit_section)
+  Aux: @062e4af8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_msg/44 (kwp_msg) @062e4990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kwp_msg (implicit_section)
+  Aux: @062e49d8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kwp_key/43 (kwp_key) @062e48b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kwp_key (implicit_section)
+  Aux: @062e4990
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_res/42 (kw_res) @062e4798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kw_res (implicit_section)
+  Aux: @062e48b8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_out_len/41 (kw_out_len) @062e4630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kw_out_len (implicit_section)
+  Aux: @062e4798
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_msg_len/40 (kw_msg_len) @062e45e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kw_msg_len (implicit_section)
+  Aux: @062e4630
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_msg/39 (kw_msg) @062e45a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kw_msg (implicit_section)
+  Aux: @062e45e8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+kw_key/38 (kw_key) @062e4480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.kw_key (implicit_section)
+  Aux: @062e45a0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+key_len/37 (key_len) @062e4360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.key_len (implicit_section)
+  Aux: @062e4480
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_nist_kw_unwrap/36 (mbedtls_nist_kw_unwrap) @062e7738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_nist_kw_unwrap (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:818179251 (estimated locally)
+  Called by: 
+  Calls: 
+unwrap/35 (unwrap) @062e75e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.unwrap (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:117315423 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_nist_kw_wrap/34 (mbedtls_nist_kw_wrap) @062e7498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_nist_kw_wrap (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:203376407 (estimated locally)
+  Called by: 
+  Calls: 
+calc_a_xor_t/33 (calc_a_xor_t) @062e7348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.calc_a_xor_t (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:119292720 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_nist_kw_free/32 (mbedtls_nist_kw_free) @062e71f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_nist_kw_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_nist_kw_setkey/31 (mbedtls_nist_kw_setkey) @062e70a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_nist_kw_setkey (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_nist_kw_init/30 (mbedtls_nist_kw_init) @062b17e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_nist_kw_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+NIST_KW_ICV2/29 (NIST_KW_ICV2) @062e4048
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.NIST_KW_ICV2 (implicit_section)
+  Aux: @062e4360
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+NIST_KW_ICV1/28 (NIST_KW_ICV1) @062e4000
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.NIST_KW_ICV1 (implicit_section)
+  Aux: @062e4048
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known

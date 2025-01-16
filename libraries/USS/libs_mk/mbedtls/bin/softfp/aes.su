@@ -1,0 +1,12 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:365:13:aes_gen_tables	2064	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:517:17:mbedtls_aes_rk_offset	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:475:6:mbedtls_aes_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:480:6:mbedtls_aes_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:558:5:mbedtls_aes_setkey_enc	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:664:5:mbedtls_aes_setkey_dec	312	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:856:5:mbedtls_internal_aes_encrypt	80	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:918:5:mbedtls_internal_aes_decrypt	80	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:999:5:mbedtls_aes_crypt_ecb	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:1041:5:mbedtls_aes_crypt_cbc	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:1387:5:mbedtls_aes_crypt_ctr	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/aes.c:1748:5:mbedtls_aes_self_test	512	static

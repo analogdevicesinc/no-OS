@@ -1,0 +1,803 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/\+MXQ\+\_\+\+Error.h File Reference}
+\hypertarget{_m_x_q___error_8h}{}\label{_m_x_q___error_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Error.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Error.h}}
+{\ttfamily \#include "{}MXQ\+\_\+\+Types.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aaef2d18195c7c51666b6ca733017522f}{USS\+\_\+\+OK}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abcacd0ba5401f7c80caacc6bd3e79038}{MXQ\+\_\+\+OK}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a11af120d3b460fbcd3570137fbc749d1}{USS\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+OBJ\+\_\+\+ACCESS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ac0e4bb82378b9a107f6f2ac2bb0eaefa}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+OBJ\+\_\+\+ACCESS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a2eded9df7a313787a11c6cb84d13b8e4}{USS\+\_\+\+RSP\+\_\+\+ID\+\_\+\+ALREADY\+\_\+\+EXISTS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a44eb4df55b700b08539decbf20a58e86}{MXQ\+\_\+\+RSP\+\_\+\+ID\+\_\+\+ALREADY\+\_\+\+EXISTS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aad53ccf74d7922c7531e4e6842b90087}{USS\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+PARAM}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0ac7e2abe9e47e65a20d454d96fcfce0}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+PARAM}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a87899673172ef910956dce322416591a}{USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+PARAM\+\_\+\+ACCESS\+\_\+\+COND}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad96510773504adf01e82772ec60ea382}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+PARAM\+\_\+\+ACCESS\+\_\+\+COND}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aaefb915434559528a625140a5850229b}{USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+OBJECT\+\_\+\+TYPE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a7764684ef7d42b360696dc66b27330}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+OBJECT\+\_\+\+TYPE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ad6cc65f0531b7d54d91c077a32d29dc0}{USS\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+FOUND}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a26cba93a13797216b6c97e890b570967}{MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+FOUND}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ab584ad48dddbbdb49fa8daaeda8fd5c5}{USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+BOUNDS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abc6ca80d3ccdd6ceef191c254f6089ae}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+BOUNDS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a9f8824e56e275688d4f091bc6e23242d}{USS\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0c9eb0cd1bba2bf83fed6f3289921355}{MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a6df5c4fcff45dd690e332965235db2af}{USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+LENGTH}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e0da145e8a7cb7aa3d0b386d8031a9e}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+LENGTH}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a3c6b877360fbeb20ae53b77c3e99be2f}{USS\+\_\+\+RSP\+\_\+\+MEMORY\+\_\+\+FULL}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60acf4f66b5f98a75f1eb13ffcda81f1d06}{MXQ\+\_\+\+RSP\+\_\+\+MEMORY\+\_\+\+FULL}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a103d5568448f993a108a96d4ddc7ff72}{USS\+\_\+\+RSP\+\_\+\+OTHER\+\_\+\+UNKNOWN\+\_\+\+ERROR}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a7f7303e06990c7f439eedb5d27dc9db4}{MXQ\+\_\+\+RSP\+\_\+\+OTHER\+\_\+\+UNKNOWN\+\_\+\+ERROR}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aad372288c39c3fcb7081b10cfcf2dc7c}{USS\+\_\+\+RSP\+\_\+\+NO\+\_\+\+HASH\+\_\+\+AVAIL}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a585c5465eb647fd875a3a45f35aff06e}{MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+HASH\+\_\+\+AVAIL}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aaee8b07b3951da7c13208a30f20b6fa2}{USS\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a384c38b450fff910c71ea9ca5d8b551d}{MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a8d77fae19ec3b3e60f46b10417a614bd}{USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+MAC}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2677869fab2859f0f47879cf96213e69}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+MAC}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_afc1f1e6504ef26cc25c8da7727a3e464}{USS\+\_\+\+RSP\+\_\+\+NO\+\_\+\+RANDOM\+\_\+\+AVAIL}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5ed0642f0d87cf214c42b98cca4f2d3a}{MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+RANDOM\+\_\+\+AVAIL}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a73c961a3bd0f1801b82652db88fd3ab6}{USS\+\_\+\+RSP\+\_\+\+SIGNATURE\+\_\+\+IS\+\_\+\+WRONG}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ade31a6e2c1246c4e098548dd5adf11ba}{MXQ\+\_\+\+RSP\+\_\+\+SIGNATURE\+\_\+\+IS\+\_\+\+WRONG}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aeb725e0d1b402f44877738001a148440}{USS\+\_\+\+RSP\+\_\+\+SC\+\_\+\+ERROR}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae92434d128aee685a93eedde1981e482}{MXQ\+\_\+\+RSP\+\_\+\+SC\+\_\+\+ERROR}})             /\texorpdfstring{$\ast$}{*} Secure Channel error \texorpdfstring{$\ast$}{*}/
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aeec039e9c37cf48c619b8e85cf0ecbfc}{USS\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+NOT\+\_\+\+IMPLEMENTED}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a07b2cd417f17e4f9c20d8a26164be769}{MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+NOT\+\_\+\+IMPLEMENTED}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a8552646f2f6371bff703f9b6db3cacfe}{USS\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+ALLOWED}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0507c26377cd5ba52dcd0fe850909fc}{MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+ALLOWED}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a35376feb1c2783d499d50b20e593ffc5}{USS\+\_\+\+RSP\+\_\+\+CIPHER\+\_\+\+BAD\+\_\+\+INPUT\+\_\+\+DATA}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a350e4149553eb5c5c695553408b756b4}{MXQ\+\_\+\+RSP\+\_\+\+CIPHER\+\_\+\+BAD\+\_\+\+INPUT\+\_\+\+DATA}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a524f294dd04e9df3628f3ea57baef805}{USS\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+MODE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a9c66eebeb698e2caa38d493ee4ce96ea}{MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+MODE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a4100c63fcee75db0b4cae1672ea424cf}{USS\+\_\+\+RSP\+\_\+\+CR\+\_\+\+NOK}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a2a574372778cc1655d75ff942bd539}{MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+NOK}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_acdb8092cb5a92a18661bc71f610c5077}{USS\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+KEY\+\_\+\+TYPE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60adf9c323bedc5382f52ae83da0d196fdf}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+KEY\+\_\+\+TYPE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a01280e2918ef37a5b940869673b5d5fe}{USS\+\_\+\+RSP\+\_\+\+CRYPTO\+\_\+\+FAILURE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abdf616ed577caf7c60d40b1cc7296559}{MXQ\+\_\+\+RSP\+\_\+\+CRYPTO\+\_\+\+FAILURE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aac1950694b51914d4dc6a6baa841a2f0}{USS\+\_\+\+RSP\+\_\+\+ALGO\+\_\+\+NOT\+\_\+\+SUPPORTED}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a79a053b4e275f2400d012d053f8ebeaa}{MXQ\+\_\+\+RSP\+\_\+\+ALGO\+\_\+\+NOT\+\_\+\+SUPPORTED}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a884765b6a3d637d4db13727bcce0e938}{USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAMS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03fe2979cab37fdcfc2b41bb63bcc693}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAMS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a0d5778d7eaa01cde25299e5206757499}{USS\+\_\+\+RSP\+\_\+\+CR\+\_\+\+PADDING\+\_\+\+ERROR}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae15c09421d87d9ac2c6c663ba94a56c0}{MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+PADDING\+\_\+\+ERROR}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a1dc93fbc7d8acd9dab41f3aaa30eac6e}{USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+SIZE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a201b1d74ca6e59a433acbb2cadb4d417}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+SIZE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a384b50ef8faedca4cc3a09cd6c73d927}{USS\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+TOO\+\_\+\+SMALL}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af2c70e0f6c1fc241366c38370f6a1f9f}{MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+TOO\+\_\+\+SMALL}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ab775560e675fe74192fb0a13afe65d27}{USS\+\_\+\+RSP\+\_\+\+HASH\+\_\+\+OUTPUT\+\_\+\+LENGTH\+\_\+\+TOO\+\_\+\+SHORT}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a9f5060b0615d993ad9fbfc88db80c0}{MXQ\+\_\+\+RSP\+\_\+\+HASH\+\_\+\+OUTPUT\+\_\+\+LENGTH\+\_\+\+TOO\+\_\+\+SHORT}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a262e41518d77e0f7b9a274ccdbc5d39b}{USS\+\_\+\+RSP\+\_\+\+CURVE\+\_\+\+NOT\+\_\+\+SUPPORTED}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5fc6b55fa181bf7024ce72283110897c}{MXQ\+\_\+\+RSP\+\_\+\+CURVE\+\_\+\+NOT\+\_\+\+SUPPORTED}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a92fcef78e7493cbfff72903258e328ce}{USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+NAME\+\_\+\+ALREADY\+\_\+\+EXISTS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab39b2ba0bbf24574e998e7ae45baeca9}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+NAME\+\_\+\+ALREADY\+\_\+\+EXISTS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aa2e9e5f90e4722ff262b29df0c8e65e0}{USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+INVALID\+\_\+\+OBJECT}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a386af6f877b9990e670df307a40cda0c}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+INVALID\+\_\+\+OBJECT}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ade633656149c5453d9e854d5b02bffb9}{USS\+\_\+\+RSP\+\_\+\+COUNTER\+\_\+\+OVERFLOW}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad3918b6218aade8c3ba8a60b14e2abd0}{MXQ\+\_\+\+RSP\+\_\+\+COUNTER\+\_\+\+OVERFLOW}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_afbc4de58a24385b28ab499df18cc6c89}{USS\+\_\+\+RSP\+\_\+\+CONSISTENCY\+\_\+\+ERROR}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab842e45b83a1d15bd1956838826d1d4f}{MXQ\+\_\+\+RSP\+\_\+\+CONSISTENCY\+\_\+\+ERROR}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a1755f64dc0b7b71c7df8a772254e21a1}{USS\+\_\+\+RSP\+\_\+\+OBJECT\+\_\+\+EMPTY}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c85ca05efe1e1d417cbe2761fecb96e}{MXQ\+\_\+\+RSP\+\_\+\+OBJECT\+\_\+\+EMPTY}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ad763a8e5975a306fd76cf1cd421f904f}{USS\+\_\+\+RSP\+\_\+\+INTERNAL\+\_\+\+BUFFER\+\_\+\+OVERFLOW}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab43bec5e90d262edd1cd4f8a9fc29742}{MXQ\+\_\+\+RSP\+\_\+\+INTERNAL\+\_\+\+BUFFER\+\_\+\+OVERFLOW}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a024109cfa42e39e743013e01743a3cd8}{USS\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+OVERFLOW}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03ad78fa66bb3a15b26e7e93a2c8163a}{MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+OVERFLOW}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ad82cdafc60aede883f1ea5813d1d263a}{USS\+\_\+\+RSP\+\_\+\+INVALID\+\_\+\+SIZE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af5918c813120d44d2e89d0e12a23c3e5}{MXQ\+\_\+\+RSP\+\_\+\+INVALID\+\_\+\+SIZE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aa7e419d13158df1872b4b1e1dbf03dc2}{USS\+\_\+\+RSP\+\_\+\+ACC\+\_\+\+DENIED}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60aed3bc11c57d6c409a3f2f9791f998f0c}{MXQ\+\_\+\+RSP\+\_\+\+ACC\+\_\+\+DENIED}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_af433dcb17f343d560901f06369910b33}{USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAM}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a22e5985fe5cc96712a97f04066937f14}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAM}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ae2af17f9603cb0618f9c2ef82f94a88c}{USS\+\_\+\+ERR\+\_\+\+INTERNAL\+\_\+\+ERROR}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e76e6271718631e882a6f49f87c1c3a}{MXQ\+\_\+\+ERR\+\_\+\+INTERNAL\+\_\+\+ERROR}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ab55eb1d8a5f8c329de66f78b5881f324}{USS\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+PARAMETER}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab60c238e5dfaee9091f5099ac68d4382}{MXQ\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+PARAMETER}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a17d52c6aa9672af805fe96c725c4a717}{USS\+\_\+\+ERR\+\_\+\+BAD\+\_\+\+LENGTH}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a505f56a37c16ca5595867b8023a9e3e1}{MXQ\+\_\+\+ERR\+\_\+\+BAD\+\_\+\+LENGTH}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a82520b21a8af8313bed930774d57aa02}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+ERROR}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c9b513fe89c3a0b1763125ed4b85785}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+ERROR}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a966bba4bca18d463ed3900918d0728ef}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+UNSUPPORTED\+\_\+\+INTERFACE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab748d802875a6c703f5c0ea1c9173329}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+UNSUPPORTED\+\_\+\+INTERFACE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ad39def27afd7fb000b46f8b3af45186b}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BUFFER\+\_\+\+OVERFLOW}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4eefda026d355f6d38595b2622fe5971}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BUFFER\+\_\+\+OVERFLOW}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_abb7b9f526d887d29c7714d8acc9e0aa0}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+NOT\+\_\+\+ENOUGH\+\_\+\+DATA}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60afbd1a25cc2600a745df2a37f899677a8}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+NOT\+\_\+\+ENOUGH\+\_\+\+DATA}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a18bf63688a953bde945b9ad555c84449}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BAD\+\_\+\+CRC}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f74a50acc290448059dbbea055cfedb}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BAD\+\_\+\+CRC}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a8accf3f404f9c08da268a3885800b7ef}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+RX\+\_\+\+BAD\+\_\+\+FORMAT}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5e19bcb1e76a48fd6c87bc835bf91e57}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+RX\+\_\+\+BAD\+\_\+\+FORMAT}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ad83dcb5d80732d707d356c469e491d9d}{USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+TIMEOUT}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a1c1bf8f10318cb8e9872eb2eb8f59967}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+TIMEOUT}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a01a5bf8b8e30b3f258b3b859fea88920}{USS\+\_\+\+ERR\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+INTEGRITY}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8fb5ecb91efde944e131bc4979ed5fed}{MXQ\+\_\+\+ERR\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+INTEGRITY}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_ada80ba39153eddab184f10242c63dce8}{USS\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+TIMEOUT}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a38608b7d8152fbdb3fd2f012835d0482}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+TIMEOUT}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a3cd0b19762ec4bb940917fc8741eaa3e}{USS\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+ERROR\+\_\+\+STATUS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad24c1c4eb731f15f1bbb07a1dd0642f8}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+ERROR\+\_\+\+STATUS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a128e62f9abdc46be59cd2bc1a13437e6}{USS\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+UNKNOWN\+\_\+\+STATUS}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab93454ac0536d7526ef44ea5f4ddee0e}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+UNKNOWN\+\_\+\+STATUS}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_aabead28414d10100bcb3a9d1349e672a}{USS\+\_\+\+ERR\+\_\+\+MODE}}~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae71d1cb3939724cf7465c12375ab1894}{MXQ\+\_\+\+ERR\+\_\+\+MODE}})
+\item 
+\#define \mbox{\hyperlink{_m_x_q___error_8h_a4cfb0303fcf634533095d8656f8c902e}{uss\+\_\+err\+\_\+t}}~\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60}{\+\_\+\+PACKED}} \{ \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abcacd0ba5401f7c80caacc6bd3e79038}{MXQ\+\_\+\+OK}} = (int)0x000000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ac0e4bb82378b9a107f6f2ac2bb0eaefa}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+OBJ\+\_\+\+ACCESS}} = (mxq\+\_\+u2)-\/0x0800
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a44eb4df55b700b08539decbf20a58e86}{MXQ\+\_\+\+RSP\+\_\+\+ID\+\_\+\+ALREADY\+\_\+\+EXISTS}} = (mxq\+\_\+u2)-\/0x0001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0ac7e2abe9e47e65a20d454d96fcfce0}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+PARAM}} = (mxq\+\_\+u2)-\/0x0001
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad96510773504adf01e82772ec60ea382}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+PARAM\+\_\+\+ACCESS\+\_\+\+COND}} = (mxq\+\_\+u2)-\/0x0002
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a7764684ef7d42b360696dc66b27330}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+OBJECT\+\_\+\+TYPE}} = (mxq\+\_\+u2)-\/0x0003
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a26cba93a13797216b6c97e890b570967}{MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+FOUND}} = (mxq\+\_\+u2)-\/0x0004
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abc6ca80d3ccdd6ceef191c254f6089ae}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+BOUNDS}} = (mxq\+\_\+u2)-\/0x0005
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0c9eb0cd1bba2bf83fed6f3289921355}{MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN}} = (mxq\+\_\+u2)-\/0x1000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e0da145e8a7cb7aa3d0b386d8031a9e}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+LENGTH}} = (mxq\+\_\+u2)-\/0x1000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60acf4f66b5f98a75f1eb13ffcda81f1d06}{MXQ\+\_\+\+RSP\+\_\+\+MEMORY\+\_\+\+FULL}} = (mxq\+\_\+u2)-\/0x1001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a7f7303e06990c7f439eedb5d27dc9db4}{MXQ\+\_\+\+RSP\+\_\+\+OTHER\+\_\+\+UNKNOWN\+\_\+\+ERROR}} = (mxq\+\_\+u2)-\/0x2000
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a585c5465eb647fd875a3a45f35aff06e}{MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+HASH\+\_\+\+AVAIL}} = (mxq\+\_\+u2)-\/0x2001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a384c38b450fff910c71ea9ca5d8b551d}{MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED}} = (mxq\+\_\+u2)-\/0x2001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2677869fab2859f0f47879cf96213e69}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+MAC}} = (mxq\+\_\+u2)-\/0x2002
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5ed0642f0d87cf214c42b98cca4f2d3a}{MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+RANDOM\+\_\+\+AVAIL}} = (mxq\+\_\+u2)-\/0x2002
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ade31a6e2c1246c4e098548dd5adf11ba}{MXQ\+\_\+\+RSP\+\_\+\+SIGNATURE\+\_\+\+IS\+\_\+\+WRONG}} = (mxq\+\_\+u2)-\/0x3000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae92434d128aee685a93eedde1981e482}{MXQ\+\_\+\+RSP\+\_\+\+SC\+\_\+\+ERROR}} = (mxq\+\_\+u2)-\/0x4000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a07b2cd417f17e4f9c20d8a26164be769}{MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+NOT\+\_\+\+IMPLEMENTED}} = (mxq\+\_\+u2)-\/0x5000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0507c26377cd5ba52dcd0fe850909fc}{MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+ALLOWED}} = (mxq\+\_\+u2)-\/0x6000
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a350e4149553eb5c5c695553408b756b4}{MXQ\+\_\+\+RSP\+\_\+\+CIPHER\+\_\+\+BAD\+\_\+\+INPUT\+\_\+\+DATA}} = (mxq\+\_\+u2)-\/0x6100
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a9c66eebeb698e2caa38d493ee4ce96ea}{MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+MODE}} = (mxq\+\_\+u2)-\/0x7000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a2a574372778cc1655d75ff942bd539}{MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+NOK}} = (mxq\+\_\+u2)-\/0x8000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60adf9c323bedc5382f52ae83da0d196fdf}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+KEY\+\_\+\+TYPE}} = (mxq\+\_\+u2)-\/0x8001
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abdf616ed577caf7c60d40b1cc7296559}{MXQ\+\_\+\+RSP\+\_\+\+CRYPTO\+\_\+\+FAILURE}} = (mxq\+\_\+u2)-\/0x8002
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a79a053b4e275f2400d012d053f8ebeaa}{MXQ\+\_\+\+RSP\+\_\+\+ALGO\+\_\+\+NOT\+\_\+\+SUPPORTED}} = (mxq\+\_\+u2)-\/0x8004
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03fe2979cab37fdcfc2b41bb63bcc693}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAMS}} = (mxq\+\_\+u2)-\/0x8006
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae15c09421d87d9ac2c6c663ba94a56c0}{MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+PADDING\+\_\+\+ERROR}} = (mxq\+\_\+u2)-\/0x800A
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a201b1d74ca6e59a433acbb2cadb4d417}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+SIZE}} = (mxq\+\_\+u2)-\/0x800D
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af2c70e0f6c1fc241366c38370f6a1f9f}{MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+TOO\+\_\+\+SMALL}} = (mxq\+\_\+u2)-\/0x8011
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a9f5060b0615d993ad9fbfc88db80c0}{MXQ\+\_\+\+RSP\+\_\+\+HASH\+\_\+\+OUTPUT\+\_\+\+LENGTH\+\_\+\+TOO\+\_\+\+SHORT}} = (mxq\+\_\+u2)-\/0x8012
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5fc6b55fa181bf7024ce72283110897c}{MXQ\+\_\+\+RSP\+\_\+\+CURVE\+\_\+\+NOT\+\_\+\+SUPPORTED}} = (mxq\+\_\+u2)-\/0x8013
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab39b2ba0bbf24574e998e7ae45baeca9}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+NAME\+\_\+\+ALREADY\+\_\+\+EXISTS}} = (mxq\+\_\+u2)-\/0x8016
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a386af6f877b9990e670df307a40cda0c}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+INVALID\+\_\+\+OBJECT}} = (mxq\+\_\+u2)-\/0x8017
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad3918b6218aade8c3ba8a60b14e2abd0}{MXQ\+\_\+\+RSP\+\_\+\+COUNTER\+\_\+\+OVERFLOW}} = (mxq\+\_\+u2)-\/0x8030
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab842e45b83a1d15bd1956838826d1d4f}{MXQ\+\_\+\+RSP\+\_\+\+CONSISTENCY\+\_\+\+ERROR}} = (mxq\+\_\+u2)-\/0x9000
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c85ca05efe1e1d417cbe2761fecb96e}{MXQ\+\_\+\+RSP\+\_\+\+OBJECT\+\_\+\+EMPTY}} = (mxq\+\_\+u2)-\/0x9001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab43bec5e90d262edd1cd4f8a9fc29742}{MXQ\+\_\+\+RSP\+\_\+\+INTERNAL\+\_\+\+BUFFER\+\_\+\+OVERFLOW}} = (mxq\+\_\+u2)-\/0x\+A000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03ad78fa66bb3a15b26e7e93a2c8163a}{MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+OVERFLOW}} = (mxq\+\_\+u2)-\/0x\+C000
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af5918c813120d44d2e89d0e12a23c3e5}{MXQ\+\_\+\+RSP\+\_\+\+INVALID\+\_\+\+SIZE}} = (mxq\+\_\+u2)-\/0x\+C030
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60aed3bc11c57d6c409a3f2f9791f998f0c}{MXQ\+\_\+\+RSP\+\_\+\+ACC\+\_\+\+DENIED}} = (mxq\+\_\+u2)-\/0xfffa
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a22e5985fe5cc96712a97f04066937f14}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAM}} = (mxq\+\_\+u2)-\/0xfffb
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e76e6271718631e882a6f49f87c1c3a}{MXQ\+\_\+\+ERR\+\_\+\+INTERNAL\+\_\+\+ERROR}} = (int)-\/0x010001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab60c238e5dfaee9091f5099ac68d4382}{MXQ\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+PARAMETER}} = (int)-\/0x010002
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a505f56a37c16ca5595867b8023a9e3e1}{MXQ\+\_\+\+ERR\+\_\+\+BAD\+\_\+\+LENGTH}} = (int)-\/0x010010
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c9b513fe89c3a0b1763125ed4b85785}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+ERROR}} = (int)-\/0x020\+C01
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab748d802875a6c703f5c0ea1c9173329}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+UNSUPPORTED\+\_\+\+INTERFACE}} = (int)-\/0x020\+C01
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4eefda026d355f6d38595b2622fe5971}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BUFFER\+\_\+\+OVERFLOW}} = (int)-\/0x020\+C02
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60afbd1a25cc2600a745df2a37f899677a8}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+NOT\+\_\+\+ENOUGH\+\_\+\+DATA}} = (int)-\/0x020\+C03
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f74a50acc290448059dbbea055cfedb}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BAD\+\_\+\+CRC}} = (int)-\/0x020\+C04
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5e19bcb1e76a48fd6c87bc835bf91e57}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+RX\+\_\+\+BAD\+\_\+\+FORMAT}} = (int)-\/0x020\+C05
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a1c1bf8f10318cb8e9872eb2eb8f59967}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+TIMEOUT}} = (int)-\/0x020\+C06
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8fb5ecb91efde944e131bc4979ed5fed}{MXQ\+\_\+\+ERR\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+INTEGRITY}} = (int)-\/0x030001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a38608b7d8152fbdb3fd2f012835d0482}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+TIMEOUT}} = (int)-\/0x051001
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad24c1c4eb731f15f1bbb07a1dd0642f8}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+ERROR\+\_\+\+STATUS}} = (int)-\/0x051002
+, \mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab93454ac0536d7526ef44ea5f4ddee0e}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+UNKNOWN\+\_\+\+STATUS}} = (int)-\/0x051003
+, \newline
+\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae71d1cb3939724cf7465c12375ab1894}{MXQ\+\_\+\+ERR\+\_\+\+MODE}} = (int)-\/0x057000
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_m_x_q___error_8h_a17d52c6aa9672af805fe96c725c4a717}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_BAD\_LENGTH@{USS\_ERR\_BAD\_LENGTH}}
+\index{USS\_ERR\_BAD\_LENGTH@{USS\_ERR\_BAD\_LENGTH}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_BAD\_LENGTH}{USS\_ERR\_BAD\_LENGTH}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a17d52c6aa9672af805fe96c725c4a717} 
+\#define USS\+\_\+\+ERR\+\_\+\+BAD\+\_\+\+LENGTH~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a505f56a37c16ca5595867b8023a9e3e1}{MXQ\+\_\+\+ERR\+\_\+\+BAD\+\_\+\+LENGTH}})}
+
+Bad Length \Hypertarget{_m_x_q___error_8h_a3cd0b19762ec4bb940917fc8741eaa3e}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_GCU\_ERROR\_STATUS@{USS\_ERR\_GCU\_ERROR\_STATUS}}
+\index{USS\_ERR\_GCU\_ERROR\_STATUS@{USS\_ERR\_GCU\_ERROR\_STATUS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_GCU\_ERROR\_STATUS}{USS\_ERR\_GCU\_ERROR\_STATUS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a3cd0b19762ec4bb940917fc8741eaa3e} 
+\#define USS\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+ERROR\+\_\+\+STATUS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad24c1c4eb731f15f1bbb07a1dd0642f8}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+ERROR\+\_\+\+STATUS}})}
+
+Bad GCU status \Hypertarget{_m_x_q___error_8h_ada80ba39153eddab184f10242c63dce8}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_GCU\_TIMEOUT@{USS\_ERR\_GCU\_TIMEOUT}}
+\index{USS\_ERR\_GCU\_TIMEOUT@{USS\_ERR\_GCU\_TIMEOUT}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_GCU\_TIMEOUT}{USS\_ERR\_GCU\_TIMEOUT}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ada80ba39153eddab184f10242c63dce8} 
+\#define USS\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+TIMEOUT~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a38608b7d8152fbdb3fd2f012835d0482}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+TIMEOUT}})}
+
+Timeout during GCU communication \Hypertarget{_m_x_q___error_8h_a128e62f9abdc46be59cd2bc1a13437e6}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_GCU\_UNKNOWN\_STATUS@{USS\_ERR\_GCU\_UNKNOWN\_STATUS}}
+\index{USS\_ERR\_GCU\_UNKNOWN\_STATUS@{USS\_ERR\_GCU\_UNKNOWN\_STATUS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_GCU\_UNKNOWN\_STATUS}{USS\_ERR\_GCU\_UNKNOWN\_STATUS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a128e62f9abdc46be59cd2bc1a13437e6} 
+\#define USS\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+UNKNOWN\+\_\+\+STATUS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab93454ac0536d7526ef44ea5f4ddee0e}{MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+UNKNOWN\+\_\+\+STATUS}})}
+
+Unknown GCU status \Hypertarget{_m_x_q___error_8h_ae2af17f9603cb0618f9c2ef82f94a88c}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_INTERNAL\_ERROR@{USS\_ERR\_INTERNAL\_ERROR}}
+\index{USS\_ERR\_INTERNAL\_ERROR@{USS\_ERR\_INTERNAL\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_INTERNAL\_ERROR}{USS\_ERR\_INTERNAL\_ERROR}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ae2af17f9603cb0618f9c2ef82f94a88c} 
+\#define USS\+\_\+\+ERR\+\_\+\+INTERNAL\+\_\+\+ERROR~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e76e6271718631e882a6f49f87c1c3a}{MXQ\+\_\+\+ERR\+\_\+\+INTERNAL\+\_\+\+ERROR}})}
+
+Non specific internal error \Hypertarget{_m_x_q___error_8h_aabead28414d10100bcb3a9d1349e672a}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_MODE@{USS\_ERR\_MODE}}
+\index{USS\_ERR\_MODE@{USS\_ERR\_MODE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_MODE}{USS\_ERR\_MODE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aabead28414d10100bcb3a9d1349e672a} 
+\#define USS\+\_\+\+ERR\+\_\+\+MODE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae71d1cb3939724cf7465c12375ab1894}{MXQ\+\_\+\+ERR\+\_\+\+MODE}})}
+
+\Hypertarget{_m_x_q___error_8h_a01a5bf8b8e30b3f258b3b859fea88920}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_SECURE\_CHANNEL\_INTEGRITY@{USS\_ERR\_SECURE\_CHANNEL\_INTEGRITY}}
+\index{USS\_ERR\_SECURE\_CHANNEL\_INTEGRITY@{USS\_ERR\_SECURE\_CHANNEL\_INTEGRITY}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_SECURE\_CHANNEL\_INTEGRITY}{USS\_ERR\_SECURE\_CHANNEL\_INTEGRITY}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a01a5bf8b8e30b3f258b3b859fea88920} 
+\#define USS\+\_\+\+ERR\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+INTEGRITY~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8fb5ecb91efde944e131bc4979ed5fed}{MXQ\+\_\+\+ERR\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+INTEGRITY}})}
+
+Error when verifying SECURE CHANNEL integrity \Hypertarget{_m_x_q___error_8h_a4cfb0303fcf634533095d8656f8c902e}\index{MXQ\_Error.h@{MXQ\_Error.h}!uss\_err\_t@{uss\_err\_t}}
+\index{uss\_err\_t@{uss\_err\_t}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{uss\_err\_t}{uss\_err\_t}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a4cfb0303fcf634533095d8656f8c902e} 
+\#define uss\+\_\+err\+\_\+t~\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}}}
+
+\Hypertarget{_m_x_q___error_8h_a18bf63688a953bde945b9ad555c84449}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_BAD\_CRC@{USS\_ERR\_TRANS\_BAD\_CRC}}
+\index{USS\_ERR\_TRANS\_BAD\_CRC@{USS\_ERR\_TRANS\_BAD\_CRC}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_BAD\_CRC}{USS\_ERR\_TRANS\_BAD\_CRC}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a18bf63688a953bde945b9ad555c84449} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BAD\+\_\+\+CRC~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f74a50acc290448059dbbea055cfedb}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BAD\+\_\+\+CRC}})}
+
+Bad CRC \Hypertarget{_m_x_q___error_8h_ad39def27afd7fb000b46f8b3af45186b}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_BUFFER\_OVERFLOW@{USS\_ERR\_TRANS\_BUFFER\_OVERFLOW}}
+\index{USS\_ERR\_TRANS\_BUFFER\_OVERFLOW@{USS\_ERR\_TRANS\_BUFFER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_BUFFER\_OVERFLOW}{USS\_ERR\_TRANS\_BUFFER\_OVERFLOW}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ad39def27afd7fb000b46f8b3af45186b} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BUFFER\+\_\+\+OVERFLOW~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4eefda026d355f6d38595b2622fe5971}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BUFFER\+\_\+\+OVERFLOW}})}
+
+Buffer Overflow during reception \Hypertarget{_m_x_q___error_8h_a82520b21a8af8313bed930774d57aa02}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_ERROR@{USS\_ERR\_TRANS\_ERROR}}
+\index{USS\_ERR\_TRANS\_ERROR@{USS\_ERR\_TRANS\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_ERROR}{USS\_ERR\_TRANS\_ERROR}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a82520b21a8af8313bed930774d57aa02} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+ERROR~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c9b513fe89c3a0b1763125ed4b85785}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+ERROR}})}
+
+Generic Transmission error \Hypertarget{_m_x_q___error_8h_abb7b9f526d887d29c7714d8acc9e0aa0}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_NOT\_ENOUGH\_DATA@{USS\_ERR\_TRANS\_NOT\_ENOUGH\_DATA}}
+\index{USS\_ERR\_TRANS\_NOT\_ENOUGH\_DATA@{USS\_ERR\_TRANS\_NOT\_ENOUGH\_DATA}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_NOT\_ENOUGH\_DATA}{USS\_ERR\_TRANS\_NOT\_ENOUGH\_DATA}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_abb7b9f526d887d29c7714d8acc9e0aa0} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+NOT\+\_\+\+ENOUGH\+\_\+\+DATA~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60afbd1a25cc2600a745df2a37f899677a8}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+NOT\+\_\+\+ENOUGH\+\_\+\+DATA}})}
+
+Not enough data received \Hypertarget{_m_x_q___error_8h_a8accf3f404f9c08da268a3885800b7ef}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_RX\_BAD\_FORMAT@{USS\_ERR\_TRANS\_RX\_BAD\_FORMAT}}
+\index{USS\_ERR\_TRANS\_RX\_BAD\_FORMAT@{USS\_ERR\_TRANS\_RX\_BAD\_FORMAT}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_RX\_BAD\_FORMAT}{USS\_ERR\_TRANS\_RX\_BAD\_FORMAT}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a8accf3f404f9c08da268a3885800b7ef} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+RX\+\_\+\+BAD\+\_\+\+FORMAT~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5e19bcb1e76a48fd6c87bc835bf91e57}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+RX\+\_\+\+BAD\+\_\+\+FORMAT}})}
+
+Bad format of the received frame \Hypertarget{_m_x_q___error_8h_ad83dcb5d80732d707d356c469e491d9d}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_TIMEOUT@{USS\_ERR\_TRANS\_TIMEOUT}}
+\index{USS\_ERR\_TRANS\_TIMEOUT@{USS\_ERR\_TRANS\_TIMEOUT}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_TIMEOUT}{USS\_ERR\_TRANS\_TIMEOUT}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ad83dcb5d80732d707d356c469e491d9d} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+TIMEOUT~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a1c1bf8f10318cb8e9872eb2eb8f59967}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+TIMEOUT}})}
+
+Transmission Timeout \Hypertarget{_m_x_q___error_8h_a966bba4bca18d463ed3900918d0728ef}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE@{USS\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE}}
+\index{USS\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE@{USS\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE}{USS\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a966bba4bca18d463ed3900918d0728ef} 
+\#define USS\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+UNSUPPORTED\+\_\+\+INTERFACE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab748d802875a6c703f5c0ea1c9173329}{MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+UNSUPPORTED\+\_\+\+INTERFACE}})}
+
+Unsupported Interface (SPI,I2C) Interface not implemented \Hypertarget{_m_x_q___error_8h_ab55eb1d8a5f8c329de66f78b5881f324}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_ERR\_WRONG\_PARAMETER@{USS\_ERR\_WRONG\_PARAMETER}}
+\index{USS\_ERR\_WRONG\_PARAMETER@{USS\_ERR\_WRONG\_PARAMETER}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ERR\_WRONG\_PARAMETER}{USS\_ERR\_WRONG\_PARAMETER}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ab55eb1d8a5f8c329de66f78b5881f324} 
+\#define USS\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+PARAMETER~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab60c238e5dfaee9091f5099ac68d4382}{MXQ\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+PARAMETER}})}
+
+Wrong parameter provided to the function (bad pointer...) \Hypertarget{_m_x_q___error_8h_aaef2d18195c7c51666b6ca733017522f}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_OK@{USS\_OK}}
+\index{USS\_OK@{USS\_OK}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_OK}{USS\_OK}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aaef2d18195c7c51666b6ca733017522f} 
+\#define USS\+\_\+\+OK~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abcacd0ba5401f7c80caacc6bd3e79038}{MXQ\+\_\+\+OK}})}
+
+\Hypertarget{_m_x_q___error_8h_aa7e419d13158df1872b4b1e1dbf03dc2}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ACC\_DENIED@{USS\_RSP\_ACC\_DENIED}}
+\index{USS\_RSP\_ACC\_DENIED@{USS\_RSP\_ACC\_DENIED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ACC\_DENIED}{USS\_RSP\_ACC\_DENIED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aa7e419d13158df1872b4b1e1dbf03dc2} 
+\#define USS\+\_\+\+RSP\+\_\+\+ACC\+\_\+\+DENIED~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60aed3bc11c57d6c409a3f2f9791f998f0c}{MXQ\+\_\+\+RSP\+\_\+\+ACC\+\_\+\+DENIED}})}
+
+\Hypertarget{_m_x_q___error_8h_aaee8b07b3951da7c13208a30f20b6fa2}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ACCESS\_DENIED@{USS\_RSP\_ACCESS\_DENIED}}
+\index{USS\_RSP\_ACCESS\_DENIED@{USS\_RSP\_ACCESS\_DENIED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ACCESS\_DENIED}{USS\_RSP\_ACCESS\_DENIED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aaee8b07b3951da7c13208a30f20b6fa2} 
+\#define USS\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a384c38b450fff910c71ea9ca5d8b551d}{MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED}})}
+
+Access Denied \Hypertarget{_m_x_q___error_8h_aac1950694b51914d4dc6a6baa841a2f0}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ALGO\_NOT\_SUPPORTED@{USS\_RSP\_ALGO\_NOT\_SUPPORTED}}
+\index{USS\_RSP\_ALGO\_NOT\_SUPPORTED@{USS\_RSP\_ALGO\_NOT\_SUPPORTED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ALGO\_NOT\_SUPPORTED}{USS\_RSP\_ALGO\_NOT\_SUPPORTED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aac1950694b51914d4dc6a6baa841a2f0} 
+\#define USS\+\_\+\+RSP\+\_\+\+ALGO\+\_\+\+NOT\+\_\+\+SUPPORTED~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a79a053b4e275f2400d012d053f8ebeaa}{MXQ\+\_\+\+RSP\+\_\+\+ALGO\+\_\+\+NOT\+\_\+\+SUPPORTED}})}
+
+Algorithm not supported / mem alignment error or memory alignment error or memory access error \Hypertarget{_m_x_q___error_8h_acdb8092cb5a92a18661bc71f610c5077}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_BAD\_KEY\_TYPE@{USS\_RSP\_BAD\_KEY\_TYPE}}
+\index{USS\_RSP\_BAD\_KEY\_TYPE@{USS\_RSP\_BAD\_KEY\_TYPE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_BAD\_KEY\_TYPE}{USS\_RSP\_BAD\_KEY\_TYPE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_acdb8092cb5a92a18661bc71f610c5077} 
+\#define USS\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+KEY\+\_\+\+TYPE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60adf9c323bedc5382f52ae83da0d196fdf}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+KEY\+\_\+\+TYPE}})}
+
+Unsupported key Type \Hypertarget{_m_x_q___error_8h_a11af120d3b460fbcd3570137fbc749d1}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_BAD\_OBJ\_ACCESS@{USS\_RSP\_BAD\_OBJ\_ACCESS}}
+\index{USS\_RSP\_BAD\_OBJ\_ACCESS@{USS\_RSP\_BAD\_OBJ\_ACCESS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_BAD\_OBJ\_ACCESS}{USS\_RSP\_BAD\_OBJ\_ACCESS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a11af120d3b460fbcd3570137fbc749d1} 
+\#define USS\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+OBJ\+\_\+\+ACCESS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ac0e4bb82378b9a107f6f2ac2bb0eaefa}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+OBJ\+\_\+\+ACCESS}})}
+
+\Hypertarget{_m_x_q___error_8h_aad53ccf74d7922c7531e4e6842b90087}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_BAD\_PARAM@{USS\_RSP\_BAD\_PARAM}}
+\index{USS\_RSP\_BAD\_PARAM@{USS\_RSP\_BAD\_PARAM}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_BAD\_PARAM}{USS\_RSP\_BAD\_PARAM}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aad53ccf74d7922c7531e4e6842b90087} 
+\#define USS\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+PARAM~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0ac7e2abe9e47e65a20d454d96fcfce0}{MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+PARAM}})}
+
+Incorrect parameter \Hypertarget{_m_x_q___error_8h_a024109cfa42e39e743013e01743a3cd8}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_BUFFER\_OVERFLOW@{USS\_RSP\_BUFFER\_OVERFLOW}}
+\index{USS\_RSP\_BUFFER\_OVERFLOW@{USS\_RSP\_BUFFER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_BUFFER\_OVERFLOW}{USS\_RSP\_BUFFER\_OVERFLOW}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a024109cfa42e39e743013e01743a3cd8} 
+\#define USS\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+OVERFLOW~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03ad78fa66bb3a15b26e7e93a2c8163a}{MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+OVERFLOW}})}
+
+Memory overflow issue \Hypertarget{_m_x_q___error_8h_a384b50ef8faedca4cc3a09cd6c73d927}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_BUFFER\_TOO\_SMALL@{USS\_RSP\_BUFFER\_TOO\_SMALL}}
+\index{USS\_RSP\_BUFFER\_TOO\_SMALL@{USS\_RSP\_BUFFER\_TOO\_SMALL}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_BUFFER\_TOO\_SMALL}{USS\_RSP\_BUFFER\_TOO\_SMALL}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a384b50ef8faedca4cc3a09cd6c73d927} 
+\#define USS\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+TOO\+\_\+\+SMALL~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af2c70e0f6c1fc241366c38370f6a1f9f}{MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+TOO\+\_\+\+SMALL}})}
+
+Signature Length Invalid \Hypertarget{_m_x_q___error_8h_a35376feb1c2783d499d50b20e593ffc5}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_CIPHER\_BAD\_INPUT\_DATA@{USS\_RSP\_CIPHER\_BAD\_INPUT\_DATA}}
+\index{USS\_RSP\_CIPHER\_BAD\_INPUT\_DATA@{USS\_RSP\_CIPHER\_BAD\_INPUT\_DATA}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_CIPHER\_BAD\_INPUT\_DATA}{USS\_RSP\_CIPHER\_BAD\_INPUT\_DATA}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a35376feb1c2783d499d50b20e593ffc5} 
+\#define USS\+\_\+\+RSP\+\_\+\+CIPHER\+\_\+\+BAD\+\_\+\+INPUT\+\_\+\+DATA~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a350e4149553eb5c5c695553408b756b4}{MXQ\+\_\+\+RSP\+\_\+\+CIPHER\+\_\+\+BAD\+\_\+\+INPUT\+\_\+\+DATA}})}
+
+Encoding Error in Server Parameters \Hypertarget{_m_x_q___error_8h_afbc4de58a24385b28ab499df18cc6c89}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_CONSISTENCY\_ERROR@{USS\_RSP\_CONSISTENCY\_ERROR}}
+\index{USS\_RSP\_CONSISTENCY\_ERROR@{USS\_RSP\_CONSISTENCY\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_CONSISTENCY\_ERROR}{USS\_RSP\_CONSISTENCY\_ERROR}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_afbc4de58a24385b28ab499df18cc6c89} 
+\#define USS\+\_\+\+RSP\+\_\+\+CONSISTENCY\+\_\+\+ERROR~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab842e45b83a1d15bd1956838826d1d4f}{MXQ\+\_\+\+RSP\+\_\+\+CONSISTENCY\+\_\+\+ERROR}})}
+
+Bad format of certificate data \Hypertarget{_m_x_q___error_8h_ade633656149c5453d9e854d5b02bffb9}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_COUNTER\_OVERFLOW@{USS\_RSP\_COUNTER\_OVERFLOW}}
+\index{USS\_RSP\_COUNTER\_OVERFLOW@{USS\_RSP\_COUNTER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_COUNTER\_OVERFLOW}{USS\_RSP\_COUNTER\_OVERFLOW}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ade633656149c5453d9e854d5b02bffb9} 
+\#define USS\+\_\+\+RSP\+\_\+\+COUNTER\+\_\+\+OVERFLOW~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad3918b6218aade8c3ba8a60b14e2abd0}{MXQ\+\_\+\+RSP\+\_\+\+COUNTER\+\_\+\+OVERFLOW}})}
+
+Counter reach its limit \Hypertarget{_m_x_q___error_8h_a4100c63fcee75db0b4cae1672ea424cf}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_CR\_NOK@{USS\_RSP\_CR\_NOK}}
+\index{USS\_RSP\_CR\_NOK@{USS\_RSP\_CR\_NOK}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_CR\_NOK}{USS\_RSP\_CR\_NOK}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a4100c63fcee75db0b4cae1672ea424cf} 
+\#define USS\+\_\+\+RSP\+\_\+\+CR\+\_\+\+NOK~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a2a574372778cc1655d75ff942bd539}{MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+NOK}})}
+
+Crypto operation failed \Hypertarget{_m_x_q___error_8h_a0d5778d7eaa01cde25299e5206757499}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_CR\_PADDING\_ERROR@{USS\_RSP\_CR\_PADDING\_ERROR}}
+\index{USS\_RSP\_CR\_PADDING\_ERROR@{USS\_RSP\_CR\_PADDING\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_CR\_PADDING\_ERROR}{USS\_RSP\_CR\_PADDING\_ERROR}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a0d5778d7eaa01cde25299e5206757499} 
+\#define USS\+\_\+\+RSP\+\_\+\+CR\+\_\+\+PADDING\+\_\+\+ERROR~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae15c09421d87d9ac2c6c663ba94a56c0}{MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+PADDING\+\_\+\+ERROR}})}
+
+Padding error \Hypertarget{_m_x_q___error_8h_a01280e2918ef37a5b940869673b5d5fe}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_CRYPTO\_FAILURE@{USS\_RSP\_CRYPTO\_FAILURE}}
+\index{USS\_RSP\_CRYPTO\_FAILURE@{USS\_RSP\_CRYPTO\_FAILURE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_CRYPTO\_FAILURE}{USS\_RSP\_CRYPTO\_FAILURE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a01280e2918ef37a5b940869673b5d5fe} 
+\#define USS\+\_\+\+RSP\+\_\+\+CRYPTO\+\_\+\+FAILURE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abdf616ed577caf7c60d40b1cc7296559}{MXQ\+\_\+\+RSP\+\_\+\+CRYPTO\+\_\+\+FAILURE}})}
+
+Error during cryptographic operation (bad key length, bad sequence, or other error) \Hypertarget{_m_x_q___error_8h_a262e41518d77e0f7b9a274ccdbc5d39b}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_CURVE\_NOT\_SUPPORTED@{USS\_RSP\_CURVE\_NOT\_SUPPORTED}}
+\index{USS\_RSP\_CURVE\_NOT\_SUPPORTED@{USS\_RSP\_CURVE\_NOT\_SUPPORTED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_CURVE\_NOT\_SUPPORTED}{USS\_RSP\_CURVE\_NOT\_SUPPORTED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a262e41518d77e0f7b9a274ccdbc5d39b} 
+\#define USS\+\_\+\+RSP\+\_\+\+CURVE\+\_\+\+NOT\+\_\+\+SUPPORTED~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5fc6b55fa181bf7024ce72283110897c}{MXQ\+\_\+\+RSP\+\_\+\+CURVE\+\_\+\+NOT\+\_\+\+SUPPORTED}})}
+
+ECC Curve not supported \Hypertarget{_m_x_q___error_8h_aeec039e9c37cf48c619b8e85cf0ecbfc}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ERR\_NOT\_IMPLEMENTED@{USS\_RSP\_ERR\_NOT\_IMPLEMENTED}}
+\index{USS\_RSP\_ERR\_NOT\_IMPLEMENTED@{USS\_RSP\_ERR\_NOT\_IMPLEMENTED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ERR\_NOT\_IMPLEMENTED}{USS\_RSP\_ERR\_NOT\_IMPLEMENTED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aeec039e9c37cf48c619b8e85cf0ecbfc} 
+\#define USS\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+NOT\+\_\+\+IMPLEMENTED~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a07b2cd417f17e4f9c20d8a26164be769}{MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+NOT\+\_\+\+IMPLEMENTED}})}
+
+Function not implemented \Hypertarget{_m_x_q___error_8h_a524f294dd04e9df3628f3ea57baef805}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ERR\_WRONG\_MODE@{USS\_RSP\_ERR\_WRONG\_MODE}}
+\index{USS\_RSP\_ERR\_WRONG\_MODE@{USS\_RSP\_ERR\_WRONG\_MODE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ERR\_WRONG\_MODE}{USS\_RSP\_ERR\_WRONG\_MODE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a524f294dd04e9df3628f3ea57baef805} 
+\#define USS\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+MODE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a9c66eebeb698e2caa38d493ee4ce96ea}{MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+MODE}})}
+
+Wrong mode of operation (AES-\/\+SPI vs Crypto toolbox mode) \Hypertarget{_m_x_q___error_8h_a9f8824e56e275688d4f091bc6e23242d}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ERROR\_UNKNOWN@{USS\_RSP\_ERROR\_UNKNOWN}}
+\index{USS\_RSP\_ERROR\_UNKNOWN@{USS\_RSP\_ERROR\_UNKNOWN}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ERROR\_UNKNOWN}{USS\_RSP\_ERROR\_UNKNOWN}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a9f8824e56e275688d4f091bc6e23242d} 
+\#define USS\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0c9eb0cd1bba2bf83fed6f3289921355}{MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN}})}
+
+Unknown Error, or wrong length in parameters \Hypertarget{_m_x_q___error_8h_aa2e9e5f90e4722ff262b29df0c8e65e0}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_FS\_INVALID\_OBJECT@{USS\_RSP\_FS\_INVALID\_OBJECT}}
+\index{USS\_RSP\_FS\_INVALID\_OBJECT@{USS\_RSP\_FS\_INVALID\_OBJECT}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_FS\_INVALID\_OBJECT}{USS\_RSP\_FS\_INVALID\_OBJECT}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aa2e9e5f90e4722ff262b29df0c8e65e0} 
+\#define USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+INVALID\+\_\+\+OBJECT~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a386af6f877b9990e670df307a40cda0c}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+INVALID\+\_\+\+OBJECT}})}
+
+\Hypertarget{_m_x_q___error_8h_a92fcef78e7493cbfff72903258e328ce}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_FS\_NAME\_ALREADY\_EXISTS@{USS\_RSP\_FS\_NAME\_ALREADY\_EXISTS}}
+\index{USS\_RSP\_FS\_NAME\_ALREADY\_EXISTS@{USS\_RSP\_FS\_NAME\_ALREADY\_EXISTS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_FS\_NAME\_ALREADY\_EXISTS}{USS\_RSP\_FS\_NAME\_ALREADY\_EXISTS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a92fcef78e7493cbfff72903258e328ce} 
+\#define USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+NAME\+\_\+\+ALREADY\+\_\+\+EXISTS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab39b2ba0bbf24574e998e7ae45baeca9}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+NAME\+\_\+\+ALREADY\+\_\+\+EXISTS}})}
+
+Name already used \Hypertarget{_m_x_q___error_8h_ab584ad48dddbbdb49fa8daaeda8fd5c5}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_FS\_OUT\_OF\_BOUNDS@{USS\_RSP\_FS\_OUT\_OF\_BOUNDS}}
+\index{USS\_RSP\_FS\_OUT\_OF\_BOUNDS@{USS\_RSP\_FS\_OUT\_OF\_BOUNDS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_FS\_OUT\_OF\_BOUNDS}{USS\_RSP\_FS\_OUT\_OF\_BOUNDS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ab584ad48dddbbdb49fa8daaeda8fd5c5} 
+\#define USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+BOUNDS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abc6ca80d3ccdd6ceef191c254f6089ae}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+BOUNDS}})}
+
+Wrong offset or length \Hypertarget{_m_x_q___error_8h_aaefb915434559528a625140a5850229b}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_FS\_WRONG\_OBJECT\_TYPE@{USS\_RSP\_FS\_WRONG\_OBJECT\_TYPE}}
+\index{USS\_RSP\_FS\_WRONG\_OBJECT\_TYPE@{USS\_RSP\_FS\_WRONG\_OBJECT\_TYPE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_FS\_WRONG\_OBJECT\_TYPE}{USS\_RSP\_FS\_WRONG\_OBJECT\_TYPE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aaefb915434559528a625140a5850229b} 
+\#define USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+OBJECT\+\_\+\+TYPE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a7764684ef7d42b360696dc66b27330}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+OBJECT\+\_\+\+TYPE}})}
+
+\Hypertarget{_m_x_q___error_8h_a87899673172ef910956dce322416591a}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND@{USS\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND}}
+\index{USS\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND@{USS\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND}{USS\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a87899673172ef910956dce322416591a} 
+\#define USS\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+PARAM\+\_\+\+ACCESS\+\_\+\+COND~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad96510773504adf01e82772ec60ea382}{MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+PARAM\+\_\+\+ACCESS\+\_\+\+COND}})}
+
+\Hypertarget{_m_x_q___error_8h_ab775560e675fe74192fb0a13afe65d27}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT@{USS\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT}}
+\index{USS\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT@{USS\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT}{USS\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ab775560e675fe74192fb0a13afe65d27} 
+\#define USS\+\_\+\+RSP\+\_\+\+HASH\+\_\+\+OUTPUT\+\_\+\+LENGTH\+\_\+\+TOO\+\_\+\+SHORT~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a9f5060b0615d993ad9fbfc88db80c0}{MXQ\+\_\+\+RSP\+\_\+\+HASH\+\_\+\+OUTPUT\+\_\+\+LENGTH\+\_\+\+TOO\+\_\+\+SHORT}})}
+
+Invalid hash algo vs EC curve length \Hypertarget{_m_x_q___error_8h_a2eded9df7a313787a11c6cb84d13b8e4}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_ID\_ALREADY\_EXISTS@{USS\_RSP\_ID\_ALREADY\_EXISTS}}
+\index{USS\_RSP\_ID\_ALREADY\_EXISTS@{USS\_RSP\_ID\_ALREADY\_EXISTS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_ID\_ALREADY\_EXISTS}{USS\_RSP\_ID\_ALREADY\_EXISTS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a2eded9df7a313787a11c6cb84d13b8e4} 
+\#define USS\+\_\+\+RSP\+\_\+\+ID\+\_\+\+ALREADY\+\_\+\+EXISTS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a44eb4df55b700b08539decbf20a58e86}{MXQ\+\_\+\+RSP\+\_\+\+ID\+\_\+\+ALREADY\+\_\+\+EXISTS}})}
+
+ID already used \Hypertarget{_m_x_q___error_8h_ad763a8e5975a306fd76cf1cd421f904f}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_INTERNAL\_BUFFER\_OVERFLOW@{USS\_RSP\_INTERNAL\_BUFFER\_OVERFLOW}}
+\index{USS\_RSP\_INTERNAL\_BUFFER\_OVERFLOW@{USS\_RSP\_INTERNAL\_BUFFER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_INTERNAL\_BUFFER\_OVERFLOW}{USS\_RSP\_INTERNAL\_BUFFER\_OVERFLOW}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ad763a8e5975a306fd76cf1cd421f904f} 
+\#define USS\+\_\+\+RSP\+\_\+\+INTERNAL\+\_\+\+BUFFER\+\_\+\+OVERFLOW~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab43bec5e90d262edd1cd4f8a9fc29742}{MXQ\+\_\+\+RSP\+\_\+\+INTERNAL\+\_\+\+BUFFER\+\_\+\+OVERFLOW}})}
+
+Memory overflow issue \Hypertarget{_m_x_q___error_8h_ad82cdafc60aede883f1ea5813d1d263a}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_INVALID\_SIZE@{USS\_RSP\_INVALID\_SIZE}}
+\index{USS\_RSP\_INVALID\_SIZE@{USS\_RSP\_INVALID\_SIZE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_INVALID\_SIZE}{USS\_RSP\_INVALID\_SIZE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ad82cdafc60aede883f1ea5813d1d263a} 
+\#define USS\+\_\+\+RSP\+\_\+\+INVALID\+\_\+\+SIZE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af5918c813120d44d2e89d0e12a23c3e5}{MXQ\+\_\+\+RSP\+\_\+\+INVALID\+\_\+\+SIZE}})}
+
+Invalid size ( too big ), wrong param \Hypertarget{_m_x_q___error_8h_a3c6b877360fbeb20ae53b77c3e99be2f}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_MEMORY\_FULL@{USS\_RSP\_MEMORY\_FULL}}
+\index{USS\_RSP\_MEMORY\_FULL@{USS\_RSP\_MEMORY\_FULL}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_MEMORY\_FULL}{USS\_RSP\_MEMORY\_FULL}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a3c6b877360fbeb20ae53b77c3e99be2f} 
+\#define USS\+\_\+\+RSP\+\_\+\+MEMORY\+\_\+\+FULL~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60acf4f66b5f98a75f1eb13ffcda81f1d06}{MXQ\+\_\+\+RSP\+\_\+\+MEMORY\+\_\+\+FULL}})}
+
+Memory is Full \Hypertarget{_m_x_q___error_8h_aad372288c39c3fcb7081b10cfcf2dc7c}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_NO\_HASH\_AVAIL@{USS\_RSP\_NO\_HASH\_AVAIL}}
+\index{USS\_RSP\_NO\_HASH\_AVAIL@{USS\_RSP\_NO\_HASH\_AVAIL}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_NO\_HASH\_AVAIL}{USS\_RSP\_NO\_HASH\_AVAIL}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aad372288c39c3fcb7081b10cfcf2dc7c} 
+\#define USS\+\_\+\+RSP\+\_\+\+NO\+\_\+\+HASH\+\_\+\+AVAIL~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a585c5465eb647fd875a3a45f35aff06e}{MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+HASH\+\_\+\+AVAIL}})}
+
+No previously calculated Hash Available \Hypertarget{_m_x_q___error_8h_afc1f1e6504ef26cc25c8da7727a3e464}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_NO\_RANDOM\_AVAIL@{USS\_RSP\_NO\_RANDOM\_AVAIL}}
+\index{USS\_RSP\_NO\_RANDOM\_AVAIL@{USS\_RSP\_NO\_RANDOM\_AVAIL}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_NO\_RANDOM\_AVAIL}{USS\_RSP\_NO\_RANDOM\_AVAIL}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_afc1f1e6504ef26cc25c8da7727a3e464} 
+\#define USS\+\_\+\+RSP\+\_\+\+NO\+\_\+\+RANDOM\+\_\+\+AVAIL~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5ed0642f0d87cf214c42b98cca4f2d3a}{MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+RANDOM\+\_\+\+AVAIL}})}
+
+No previously generated random Available \Hypertarget{_m_x_q___error_8h_a8552646f2f6371bff703f9b6db3cacfe}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_NOT\_ALLOWED@{USS\_RSP\_NOT\_ALLOWED}}
+\index{USS\_RSP\_NOT\_ALLOWED@{USS\_RSP\_NOT\_ALLOWED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_NOT\_ALLOWED}{USS\_RSP\_NOT\_ALLOWED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a8552646f2f6371bff703f9b6db3cacfe} 
+\#define USS\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+ALLOWED~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0507c26377cd5ba52dcd0fe850909fc}{MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+ALLOWED}})}
+
+Command not allowed in this context \Hypertarget{_m_x_q___error_8h_ad6cc65f0531b7d54d91c077a32d29dc0}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_NOT\_FOUND@{USS\_RSP\_NOT\_FOUND}}
+\index{USS\_RSP\_NOT\_FOUND@{USS\_RSP\_NOT\_FOUND}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_NOT\_FOUND}{USS\_RSP\_NOT\_FOUND}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_ad6cc65f0531b7d54d91c077a32d29dc0} 
+\#define USS\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+FOUND~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a26cba93a13797216b6c97e890b570967}{MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+FOUND}})}
+
+Object not found \Hypertarget{_m_x_q___error_8h_a1755f64dc0b7b71c7df8a772254e21a1}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_OBJECT\_EMPTY@{USS\_RSP\_OBJECT\_EMPTY}}
+\index{USS\_RSP\_OBJECT\_EMPTY@{USS\_RSP\_OBJECT\_EMPTY}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_OBJECT\_EMPTY}{USS\_RSP\_OBJECT\_EMPTY}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a1755f64dc0b7b71c7df8a772254e21a1} 
+\#define USS\+\_\+\+RSP\+\_\+\+OBJECT\+\_\+\+EMPTY~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c85ca05efe1e1d417cbe2761fecb96e}{MXQ\+\_\+\+RSP\+\_\+\+OBJECT\+\_\+\+EMPTY}})}
+
+The Object is empty \Hypertarget{_m_x_q___error_8h_a103d5568448f993a108a96d4ddc7ff72}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_OTHER\_UNKNOWN\_ERROR@{USS\_RSP\_OTHER\_UNKNOWN\_ERROR}}
+\index{USS\_RSP\_OTHER\_UNKNOWN\_ERROR@{USS\_RSP\_OTHER\_UNKNOWN\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_OTHER\_UNKNOWN\_ERROR}{USS\_RSP\_OTHER\_UNKNOWN\_ERROR}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a103d5568448f993a108a96d4ddc7ff72} 
+\#define USS\+\_\+\+RSP\+\_\+\+OTHER\+\_\+\+UNKNOWN\+\_\+\+ERROR~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a7f7303e06990c7f439eedb5d27dc9db4}{MXQ\+\_\+\+RSP\+\_\+\+OTHER\+\_\+\+UNKNOWN\+\_\+\+ERROR}})}
+
+Security condition not satisfied, access denied \Hypertarget{_m_x_q___error_8h_aeb725e0d1b402f44877738001a148440}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_SC\_ERROR@{USS\_RSP\_SC\_ERROR}}
+\index{USS\_RSP\_SC\_ERROR@{USS\_RSP\_SC\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_SC\_ERROR}{USS\_RSP\_SC\_ERROR}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_aeb725e0d1b402f44877738001a148440} 
+\#define USS\+\_\+\+RSP\+\_\+\+SC\+\_\+\+ERROR~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae92434d128aee685a93eedde1981e482}{MXQ\+\_\+\+RSP\+\_\+\+SC\+\_\+\+ERROR}})             /\texorpdfstring{$\ast$}{*} Secure Channel error \texorpdfstring{$\ast$}{*}/}
+
+\Hypertarget{_m_x_q___error_8h_a73c961a3bd0f1801b82652db88fd3ab6}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_SIGNATURE\_IS\_WRONG@{USS\_RSP\_SIGNATURE\_IS\_WRONG}}
+\index{USS\_RSP\_SIGNATURE\_IS\_WRONG@{USS\_RSP\_SIGNATURE\_IS\_WRONG}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_SIGNATURE\_IS\_WRONG}{USS\_RSP\_SIGNATURE\_IS\_WRONG}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a73c961a3bd0f1801b82652db88fd3ab6} 
+\#define USS\+\_\+\+RSP\+\_\+\+SIGNATURE\+\_\+\+IS\+\_\+\+WRONG~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ade31a6e2c1246c4e098548dd5adf11ba}{MXQ\+\_\+\+RSP\+\_\+\+SIGNATURE\+\_\+\+IS\+\_\+\+WRONG}})}
+
+Signature is wrong / memory error \Hypertarget{_m_x_q___error_8h_a6df5c4fcff45dd690e332965235db2af}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_WRONG\_LENGTH@{USS\_RSP\_WRONG\_LENGTH}}
+\index{USS\_RSP\_WRONG\_LENGTH@{USS\_RSP\_WRONG\_LENGTH}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_WRONG\_LENGTH}{USS\_RSP\_WRONG\_LENGTH}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a6df5c4fcff45dd690e332965235db2af} 
+\#define USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+LENGTH~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e0da145e8a7cb7aa3d0b386d8031a9e}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+LENGTH}})}
+
+Unknown Error, or wrong length in parameters \Hypertarget{_m_x_q___error_8h_a8d77fae19ec3b3e60f46b10417a614bd}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_WRONG\_MAC@{USS\_RSP\_WRONG\_MAC}}
+\index{USS\_RSP\_WRONG\_MAC@{USS\_RSP\_WRONG\_MAC}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_WRONG\_MAC}{USS\_RSP\_WRONG\_MAC}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a8d77fae19ec3b3e60f46b10417a614bd} 
+\#define USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+MAC~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2677869fab2859f0f47879cf96213e69}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+MAC}})}
+
+Wrong MAC \Hypertarget{_m_x_q___error_8h_af433dcb17f343d560901f06369910b33}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_WRONG\_PARAM@{USS\_RSP\_WRONG\_PARAM}}
+\index{USS\_RSP\_WRONG\_PARAM@{USS\_RSP\_WRONG\_PARAM}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_WRONG\_PARAM}{USS\_RSP\_WRONG\_PARAM}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_af433dcb17f343d560901f06369910b33} 
+\#define USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAM~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a22e5985fe5cc96712a97f04066937f14}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAM}})}
+
+Wrong command parameter \Hypertarget{_m_x_q___error_8h_a884765b6a3d637d4db13727bcce0e938}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_WRONG\_PARAMS@{USS\_RSP\_WRONG\_PARAMS}}
+\index{USS\_RSP\_WRONG\_PARAMS@{USS\_RSP\_WRONG\_PARAMS}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_WRONG\_PARAMS}{USS\_RSP\_WRONG\_PARAMS}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a884765b6a3d637d4db13727bcce0e938} 
+\#define USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAMS~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03fe2979cab37fdcfc2b41bb63bcc693}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAMS}})}
+
+Invalid Object ID \Hypertarget{_m_x_q___error_8h_a1dc93fbc7d8acd9dab41f3aaa30eac6e}\index{MXQ\_Error.h@{MXQ\_Error.h}!USS\_RSP\_WRONG\_SIZE@{USS\_RSP\_WRONG\_SIZE}}
+\index{USS\_RSP\_WRONG\_SIZE@{USS\_RSP\_WRONG\_SIZE}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{USS\_RSP\_WRONG\_SIZE}{USS\_RSP\_WRONG\_SIZE}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a1dc93fbc7d8acd9dab41f3aaa30eac6e} 
+\#define USS\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+SIZE~(\mbox{\hyperlink{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a201b1d74ca6e59a433acbb2cadb4d417}{MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+SIZE}})}
+
+Inconsistent message length (crypto) 
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}\index{MXQ\_Error.h@{MXQ\_Error.h}!mxq\_err\_t@{mxq\_err\_t}}
+\index{mxq\_err\_t@{mxq\_err\_t}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{mxq\_err\_t}{mxq\_err\_t}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156} 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}}}
+
+Status of execution. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60}\index{MXQ\_Error.h@{MXQ\_Error.h}!\_PACKED@{\_PACKED}}
+\index{\_PACKED@{\_PACKED}!MXQ\_Error.h@{MXQ\_Error.h}}
+\doxysubsubsection{\texorpdfstring{\_PACKED}{\_PACKED}}
+{\footnotesize\ttfamily \label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+enum \+\_\+\+PACKED}
+
+Status of execution. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OK@{MXQ\_OK}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_OK@{MXQ\_OK}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abcacd0ba5401f7c80caacc6bd3e79038}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OK&Success, No Error \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_BAD\_OBJ\_ACCESS@{MXQ\_RSP\_BAD\_OBJ\_ACCESS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_BAD\_OBJ\_ACCESS@{MXQ\_RSP\_BAD\_OBJ\_ACCESS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ac0e4bb82378b9a107f6f2ac2bb0eaefa}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+OBJ\+\_\+\+ACCESS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ID\_ALREADY\_EXISTS@{MXQ\_RSP\_ID\_ALREADY\_EXISTS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ID\_ALREADY\_EXISTS@{MXQ\_RSP\_ID\_ALREADY\_EXISTS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a44eb4df55b700b08539decbf20a58e86}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ID\+\_\+\+ALREADY\+\_\+\+EXISTS&ID already used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_BAD\_PARAM@{MXQ\_RSP\_BAD\_PARAM}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_BAD\_PARAM@{MXQ\_RSP\_BAD\_PARAM}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0ac7e2abe9e47e65a20d454d96fcfce0}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+PARAM&Incorrect parameter \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND@{MXQ\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND@{MXQ\_RSP\_FS\_WRONG\_PARAM\_ACCESS\_COND}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad96510773504adf01e82772ec60ea382}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+PARAM\+\_\+\+ACCESS\+\_\+\+COND&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_FS\_WRONG\_OBJECT\_TYPE@{MXQ\_RSP\_FS\_WRONG\_OBJECT\_TYPE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_FS\_WRONG\_OBJECT\_TYPE@{MXQ\_RSP\_FS\_WRONG\_OBJECT\_TYPE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a7764684ef7d42b360696dc66b27330}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+WRONG\+\_\+\+OBJECT\+\_\+\+TYPE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_NOT\_FOUND@{MXQ\_RSP\_NOT\_FOUND}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_NOT\_FOUND@{MXQ\_RSP\_NOT\_FOUND}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a26cba93a13797216b6c97e890b570967}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+FOUND&Object not found \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_FS\_OUT\_OF\_BOUNDS@{MXQ\_RSP\_FS\_OUT\_OF\_BOUNDS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_FS\_OUT\_OF\_BOUNDS@{MXQ\_RSP\_FS\_OUT\_OF\_BOUNDS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abc6ca80d3ccdd6ceef191c254f6089ae}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+BOUNDS&Wrong offset or length \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ERROR\_UNKNOWN@{MXQ\_RSP\_ERROR\_UNKNOWN}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ERROR\_UNKNOWN@{MXQ\_RSP\_ERROR\_UNKNOWN}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0c9eb0cd1bba2bf83fed6f3289921355}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN&Unknown Error, or wrong length in parameters \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_WRONG\_LENGTH@{MXQ\_RSP\_WRONG\_LENGTH}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_WRONG\_LENGTH@{MXQ\_RSP\_WRONG\_LENGTH}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e0da145e8a7cb7aa3d0b386d8031a9e}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+LENGTH&Unknown Error, or wrong length in parameters \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_MEMORY\_FULL@{MXQ\_RSP\_MEMORY\_FULL}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_MEMORY\_FULL@{MXQ\_RSP\_MEMORY\_FULL}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60acf4f66b5f98a75f1eb13ffcda81f1d06}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+MEMORY\+\_\+\+FULL&Memory is Full \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_OTHER\_UNKNOWN\_ERROR@{MXQ\_RSP\_OTHER\_UNKNOWN\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_OTHER\_UNKNOWN\_ERROR@{MXQ\_RSP\_OTHER\_UNKNOWN\_ERROR}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a7f7303e06990c7f439eedb5d27dc9db4}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+OTHER\+\_\+\+UNKNOWN\+\_\+\+ERROR&Security condition not satisfied, access denied \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_NO\_HASH\_AVAIL@{MXQ\_RSP\_NO\_HASH\_AVAIL}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_NO\_HASH\_AVAIL@{MXQ\_RSP\_NO\_HASH\_AVAIL}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a585c5465eb647fd875a3a45f35aff06e}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+HASH\+\_\+\+AVAIL&No previously calculated Hash Available \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ACCESS\_DENIED@{MXQ\_RSP\_ACCESS\_DENIED}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ACCESS\_DENIED@{MXQ\_RSP\_ACCESS\_DENIED}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a384c38b450fff910c71ea9ca5d8b551d}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED&Access Denied \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_WRONG\_MAC@{MXQ\_RSP\_WRONG\_MAC}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_WRONG\_MAC@{MXQ\_RSP\_WRONG\_MAC}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2677869fab2859f0f47879cf96213e69}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+MAC&Wrong MAC \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_NO\_RANDOM\_AVAIL@{MXQ\_RSP\_NO\_RANDOM\_AVAIL}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_NO\_RANDOM\_AVAIL@{MXQ\_RSP\_NO\_RANDOM\_AVAIL}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5ed0642f0d87cf214c42b98cca4f2d3a}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+NO\+\_\+\+RANDOM\+\_\+\+AVAIL&No previously generated random Available \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_SIGNATURE\_IS\_WRONG@{MXQ\_RSP\_SIGNATURE\_IS\_WRONG}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_SIGNATURE\_IS\_WRONG@{MXQ\_RSP\_SIGNATURE\_IS\_WRONG}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ade31a6e2c1246c4e098548dd5adf11ba}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+SIGNATURE\+\_\+\+IS\+\_\+\+WRONG&Signature is wrong / memory error \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_SC\_ERROR@{MXQ\_RSP\_SC\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_SC\_ERROR@{MXQ\_RSP\_SC\_ERROR}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae92434d128aee685a93eedde1981e482}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+SC\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ERR\_NOT\_IMPLEMENTED@{MXQ\_RSP\_ERR\_NOT\_IMPLEMENTED}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ERR\_NOT\_IMPLEMENTED@{MXQ\_RSP\_ERR\_NOT\_IMPLEMENTED}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a07b2cd417f17e4f9c20d8a26164be769}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+NOT\+\_\+\+IMPLEMENTED&Function not implemented \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_NOT\_ALLOWED@{MXQ\_RSP\_NOT\_ALLOWED}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_NOT\_ALLOWED@{MXQ\_RSP\_NOT\_ALLOWED}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0507c26377cd5ba52dcd0fe850909fc}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+NOT\+\_\+\+ALLOWED&Command not allowed in this context \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_CIPHER\_BAD\_INPUT\_DATA@{MXQ\_RSP\_CIPHER\_BAD\_INPUT\_DATA}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_CIPHER\_BAD\_INPUT\_DATA@{MXQ\_RSP\_CIPHER\_BAD\_INPUT\_DATA}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a350e4149553eb5c5c695553408b756b4}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+CIPHER\+\_\+\+BAD\+\_\+\+INPUT\+\_\+\+DATA&Encoding Error in Server Parameters \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ERR\_WRONG\_MODE@{MXQ\_RSP\_ERR\_WRONG\_MODE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ERR\_WRONG\_MODE@{MXQ\_RSP\_ERR\_WRONG\_MODE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a9c66eebeb698e2caa38d493ee4ce96ea}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+MODE&Wrong mode of operation (AES-\/\+SPI vs Crypto toolbox mode) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_CR\_NOK@{MXQ\_RSP\_CR\_NOK}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_CR\_NOK@{MXQ\_RSP\_CR\_NOK}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a2a574372778cc1655d75ff942bd539}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+NOK&Crypto operation failed \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_BAD\_KEY\_TYPE@{MXQ\_RSP\_BAD\_KEY\_TYPE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_BAD\_KEY\_TYPE@{MXQ\_RSP\_BAD\_KEY\_TYPE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60adf9c323bedc5382f52ae83da0d196fdf}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+BAD\+\_\+\+KEY\+\_\+\+TYPE&Unsupported key Type \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_CRYPTO\_FAILURE@{MXQ\_RSP\_CRYPTO\_FAILURE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_CRYPTO\_FAILURE@{MXQ\_RSP\_CRYPTO\_FAILURE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60abdf616ed577caf7c60d40b1cc7296559}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+CRYPTO\+\_\+\+FAILURE&Error during cryptographic operation (bad key length, bad sequence, or other error) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ALGO\_NOT\_SUPPORTED@{MXQ\_RSP\_ALGO\_NOT\_SUPPORTED}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ALGO\_NOT\_SUPPORTED@{MXQ\_RSP\_ALGO\_NOT\_SUPPORTED}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a79a053b4e275f2400d012d053f8ebeaa}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ALGO\+\_\+\+NOT\+\_\+\+SUPPORTED&Algorithm not supported / mem alignment error or memory alignment error or memory access error \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_WRONG\_PARAMS@{MXQ\_RSP\_WRONG\_PARAMS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_WRONG\_PARAMS@{MXQ\_RSP\_WRONG\_PARAMS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03fe2979cab37fdcfc2b41bb63bcc693}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAMS&Invalid Object ID \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_CR\_PADDING\_ERROR@{MXQ\_RSP\_CR\_PADDING\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_CR\_PADDING\_ERROR@{MXQ\_RSP\_CR\_PADDING\_ERROR}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae15c09421d87d9ac2c6c663ba94a56c0}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+CR\+\_\+\+PADDING\+\_\+\+ERROR&Padding error \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_WRONG\_SIZE@{MXQ\_RSP\_WRONG\_SIZE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_WRONG\_SIZE@{MXQ\_RSP\_WRONG\_SIZE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a201b1d74ca6e59a433acbb2cadb4d417}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+SIZE&Inconsistent message length (crypto) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_BUFFER\_TOO\_SMALL@{MXQ\_RSP\_BUFFER\_TOO\_SMALL}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_BUFFER\_TOO\_SMALL@{MXQ\_RSP\_BUFFER\_TOO\_SMALL}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af2c70e0f6c1fc241366c38370f6a1f9f}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+TOO\+\_\+\+SMALL&Signature Length Invalid \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT@{MXQ\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT@{MXQ\_RSP\_HASH\_OUTPUT\_LENGTH\_TOO\_SHORT}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4a9f5060b0615d993ad9fbfc88db80c0}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+HASH\+\_\+\+OUTPUT\+\_\+\+LENGTH\+\_\+\+TOO\+\_\+\+SHORT&Invalid hash algo vs EC curve length \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_CURVE\_NOT\_SUPPORTED@{MXQ\_RSP\_CURVE\_NOT\_SUPPORTED}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_CURVE\_NOT\_SUPPORTED@{MXQ\_RSP\_CURVE\_NOT\_SUPPORTED}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5fc6b55fa181bf7024ce72283110897c}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+CURVE\+\_\+\+NOT\+\_\+\+SUPPORTED&ECC Curve not supported \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_FS\_NAME\_ALREADY\_EXISTS@{MXQ\_RSP\_FS\_NAME\_ALREADY\_EXISTS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_FS\_NAME\_ALREADY\_EXISTS@{MXQ\_RSP\_FS\_NAME\_ALREADY\_EXISTS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab39b2ba0bbf24574e998e7ae45baeca9}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+NAME\+\_\+\+ALREADY\+\_\+\+EXISTS&Name already used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_FS\_INVALID\_OBJECT@{MXQ\_RSP\_FS\_INVALID\_OBJECT}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_FS\_INVALID\_OBJECT@{MXQ\_RSP\_FS\_INVALID\_OBJECT}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a386af6f877b9990e670df307a40cda0c}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+FS\+\_\+\+INVALID\+\_\+\+OBJECT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_COUNTER\_OVERFLOW@{MXQ\_RSP\_COUNTER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_COUNTER\_OVERFLOW@{MXQ\_RSP\_COUNTER\_OVERFLOW}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad3918b6218aade8c3ba8a60b14e2abd0}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+COUNTER\+\_\+\+OVERFLOW&Counter reach its limit \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_CONSISTENCY\_ERROR@{MXQ\_RSP\_CONSISTENCY\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_CONSISTENCY\_ERROR@{MXQ\_RSP\_CONSISTENCY\_ERROR}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab842e45b83a1d15bd1956838826d1d4f}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+CONSISTENCY\+\_\+\+ERROR&Bad format of certificate data \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_OBJECT\_EMPTY@{MXQ\_RSP\_OBJECT\_EMPTY}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_OBJECT\_EMPTY@{MXQ\_RSP\_OBJECT\_EMPTY}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c85ca05efe1e1d417cbe2761fecb96e}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+OBJECT\+\_\+\+EMPTY&The Object is empty \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_INTERNAL\_BUFFER\_OVERFLOW@{MXQ\_RSP\_INTERNAL\_BUFFER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_INTERNAL\_BUFFER\_OVERFLOW@{MXQ\_RSP\_INTERNAL\_BUFFER\_OVERFLOW}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab43bec5e90d262edd1cd4f8a9fc29742}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+INTERNAL\+\_\+\+BUFFER\+\_\+\+OVERFLOW&Memory overflow issue \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_BUFFER\_OVERFLOW@{MXQ\_RSP\_BUFFER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_BUFFER\_OVERFLOW@{MXQ\_RSP\_BUFFER\_OVERFLOW}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a03ad78fa66bb3a15b26e7e93a2c8163a}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+BUFFER\+\_\+\+OVERFLOW&Memory overflow issue \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_INVALID\_SIZE@{MXQ\_RSP\_INVALID\_SIZE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_INVALID\_SIZE@{MXQ\_RSP\_INVALID\_SIZE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60af5918c813120d44d2e89d0e12a23c3e5}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+INVALID\+\_\+\+SIZE&Invalid size ( too big ), wrong param \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_ACC\_DENIED@{MXQ\_RSP\_ACC\_DENIED}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_ACC\_DENIED@{MXQ\_RSP\_ACC\_DENIED}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60aed3bc11c57d6c409a3f2f9791f998f0c}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+ACC\+\_\+\+DENIED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_RSP\_WRONG\_PARAM@{MXQ\_RSP\_WRONG\_PARAM}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_RSP\_WRONG\_PARAM@{MXQ\_RSP\_WRONG\_PARAM}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a22e5985fe5cc96712a97f04066937f14}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+RSP\+\_\+\+WRONG\+\_\+\+PARAM&Wrong command parameter \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_INTERNAL\_ERROR@{MXQ\_ERR\_INTERNAL\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_INTERNAL\_ERROR@{MXQ\_ERR\_INTERNAL\_ERROR}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a2e76e6271718631e882a6f49f87c1c3a}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+INTERNAL\+\_\+\+ERROR&Non specific internal error \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_WRONG\_PARAMETER@{MXQ\_ERR\_WRONG\_PARAMETER}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_WRONG\_PARAMETER@{MXQ\_ERR\_WRONG\_PARAMETER}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab60c238e5dfaee9091f5099ac68d4382}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+WRONG\+\_\+\+PARAMETER&Wrong parameter provided to the function (bad pointer...) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_BAD\_LENGTH@{MXQ\_ERR\_BAD\_LENGTH}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_BAD\_LENGTH@{MXQ\_ERR\_BAD\_LENGTH}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a505f56a37c16ca5595867b8023a9e3e1}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+BAD\+\_\+\+LENGTH&Bad Length \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_ERROR@{MXQ\_ERR\_TRANS\_ERROR}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_ERROR@{MXQ\_ERR\_TRANS\_ERROR}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5c9b513fe89c3a0b1763125ed4b85785}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+ERROR&Generic Transmission error \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE@{MXQ\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE@{MXQ\_ERR\_TRANS\_UNSUPPORTED\_INTERFACE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab748d802875a6c703f5c0ea1c9173329}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+UNSUPPORTED\+\_\+\+INTERFACE&Unsupported Interface (SPI,I2C) Interface not implemented \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_BUFFER\_OVERFLOW@{MXQ\_ERR\_TRANS\_BUFFER\_OVERFLOW}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_BUFFER\_OVERFLOW@{MXQ\_ERR\_TRANS\_BUFFER\_OVERFLOW}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a4eefda026d355f6d38595b2622fe5971}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BUFFER\+\_\+\+OVERFLOW&Buffer Overflow during reception \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_NOT\_ENOUGH\_DATA@{MXQ\_ERR\_TRANS\_NOT\_ENOUGH\_DATA}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_NOT\_ENOUGH\_DATA@{MXQ\_ERR\_TRANS\_NOT\_ENOUGH\_DATA}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60afbd1a25cc2600a745df2a37f899677a8}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+NOT\+\_\+\+ENOUGH\+\_\+\+DATA&Not enough data received \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_BAD\_CRC@{MXQ\_ERR\_TRANS\_BAD\_CRC}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_BAD\_CRC@{MXQ\_ERR\_TRANS\_BAD\_CRC}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f74a50acc290448059dbbea055cfedb}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+BAD\+\_\+\+CRC&Bad CRC \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_RX\_BAD\_FORMAT@{MXQ\_ERR\_TRANS\_RX\_BAD\_FORMAT}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_RX\_BAD\_FORMAT@{MXQ\_ERR\_TRANS\_RX\_BAD\_FORMAT}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a5e19bcb1e76a48fd6c87bc835bf91e57}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+RX\+\_\+\+BAD\+\_\+\+FORMAT&Bad format of the received frame \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_TRANS\_TIMEOUT@{MXQ\_ERR\_TRANS\_TIMEOUT}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_TRANS\_TIMEOUT@{MXQ\_ERR\_TRANS\_TIMEOUT}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a1c1bf8f10318cb8e9872eb2eb8f59967}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+TRANS\+\_\+\+TIMEOUT&Transmission Timeout \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_SECURE\_CHANNEL\_INTEGRITY@{MXQ\_ERR\_SECURE\_CHANNEL\_INTEGRITY}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_SECURE\_CHANNEL\_INTEGRITY@{MXQ\_ERR\_SECURE\_CHANNEL\_INTEGRITY}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a8fb5ecb91efde944e131bc4979ed5fed}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+INTEGRITY&Error when verifying SECURE CHANNEL integrity \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_GCU\_TIMEOUT@{MXQ\_ERR\_GCU\_TIMEOUT}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_GCU\_TIMEOUT@{MXQ\_ERR\_GCU\_TIMEOUT}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60a38608b7d8152fbdb3fd2f012835d0482}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+TIMEOUT&Timeout during GCU communication \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_GCU\_ERROR\_STATUS@{MXQ\_ERR\_GCU\_ERROR\_STATUS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_GCU\_ERROR\_STATUS@{MXQ\_ERR\_GCU\_ERROR\_STATUS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ad24c1c4eb731f15f1bbb07a1dd0642f8}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+ERROR\+\_\+\+STATUS&Bad GCU status \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_GCU\_UNKNOWN\_STATUS@{MXQ\_ERR\_GCU\_UNKNOWN\_STATUS}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_GCU\_UNKNOWN\_STATUS@{MXQ\_ERR\_GCU\_UNKNOWN\_STATUS}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ab93454ac0536d7526ef44ea5f4ddee0e}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+GCU\+\_\+\+UNKNOWN\+\_\+\+STATUS&Unknown GCU status \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_ERR\_MODE@{MXQ\_ERR\_MODE}!MXQ\_Error.h@{MXQ\_Error.h}}\index{MXQ\_Error.h@{MXQ\_Error.h}!MXQ\_ERR\_MODE@{MXQ\_ERR\_MODE}}}\Hypertarget{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60ae71d1cb3939724cf7465c12375ab1894}\label{_m_x_q___error_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+ERR\+\_\+\+MODE&Wrong mode (aes spi vs crypto toolbox) \\
+\hline
+
+\end{DoxyEnumFields}

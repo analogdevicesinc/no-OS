@@ -1,0 +1,6 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_Transport.c:54:11:init_interface	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_Transport.c:77:11:deinit_interface	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_Transport.c:84:11:sendbytes	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_Transport.c:108:11:receivebytes_first	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_Transport.c:132:11:exchangebytes	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_Transport.c:151:11:receivebytes	8	static

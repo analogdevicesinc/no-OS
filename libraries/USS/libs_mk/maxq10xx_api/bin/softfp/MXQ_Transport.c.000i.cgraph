@@ -1,0 +1,660 @@
+Trivially needed symbols: receivebytes/8 exchangebytes/7 receivebytes_first/6 sendbytes/5 deinit_interface/4 init_interface/3
+
+
+Initial Symbol table:
+
+HOST_receive_bytes_spi/14 (HOST_receive_bytes_spi) @06240540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes/8 
+  Calls: 
+HOST_exchange_bytes_spi/13 (HOST_exchange_bytes_spi) @06240498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: exchangebytes/7 
+  Calls: 
+HOST_receive_bytes_spi_first/12 (HOST_receive_bytes_spi_first) @062403f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes_first/6 
+  Calls: 
+HOST_send_bytes_spi/11 (HOST_send_bytes_spi) @06240348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sendbytes/5 
+  Calls: 
+HOST_deinit_interface/10 (HOST_deinit_interface) @062402a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: deinit_interface/4 
+  Calls: 
+HOST_init_spi/9 (HOST_init_spi) @062401f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: init_interface/3 
+  Calls: 
+receivebytes/8 (receivebytes) @06240150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi/14 
+exchangebytes/7 (exchangebytes) @06240000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06240150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_exchange_bytes_spi/13 
+receivebytes_first/6 (receivebytes_first) @0623cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06240000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi_first/12 
+sendbytes/5 (sendbytes) @0623ca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0623cbd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_send_bytes_spi/11 
+deinit_interface/4 (deinit_interface) @0623c930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0623ca80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_deinit_interface/10 
+init_interface/3 (init_interface) @0623ce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0623c930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_init_spi/9 
+_putchar_unlocked/2 (_putchar_unlocked) @061b89d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061b8888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061b8690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+HOST_receive_bytes_spi/14 (HOST_receive_bytes_spi) @06240540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes/8 
+  Calls: 
+HOST_exchange_bytes_spi/13 (HOST_exchange_bytes_spi) @06240498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: exchangebytes/7 
+  Calls: 
+HOST_receive_bytes_spi_first/12 (HOST_receive_bytes_spi_first) @062403f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes_first/6 
+  Calls: 
+HOST_send_bytes_spi/11 (HOST_send_bytes_spi) @06240348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sendbytes/5 
+  Calls: 
+HOST_deinit_interface/10 (HOST_deinit_interface) @062402a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: deinit_interface/4 
+  Calls: 
+HOST_init_spi/9 (HOST_init_spi) @062401f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: init_interface/3 
+  Calls: 
+receivebytes/8 (receivebytes) @06240150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi/14 
+exchangebytes/7 (exchangebytes) @06240000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_exchange_bytes_spi/13 
+receivebytes_first/6 (receivebytes_first) @0623cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi_first/12 
+sendbytes/5 (sendbytes) @0623ca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_send_bytes_spi/11 
+deinit_interface/4 (deinit_interface) @0623c930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_deinit_interface/10 
+init_interface/3 (init_interface) @0623ce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_init_spi/9 
+
+
+Initial Symbol table:
+
+HOST_receive_bytes_spi/14 (HOST_receive_bytes_spi) @06240540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes/8 
+  Calls: 
+HOST_exchange_bytes_spi/13 (HOST_exchange_bytes_spi) @06240498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: exchangebytes/7 
+  Calls: 
+HOST_receive_bytes_spi_first/12 (HOST_receive_bytes_spi_first) @062403f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes_first/6 
+  Calls: 
+HOST_send_bytes_spi/11 (HOST_send_bytes_spi) @06240348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sendbytes/5 
+  Calls: 
+HOST_deinit_interface/10 (HOST_deinit_interface) @062402a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: deinit_interface/4 
+  Calls: 
+HOST_init_spi/9 (HOST_init_spi) @062401f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: init_interface/3 
+  Calls: 
+receivebytes/8 (receivebytes) @06240150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi/14 
+exchangebytes/7 (exchangebytes) @06240000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_exchange_bytes_spi/13 
+receivebytes_first/6 (receivebytes_first) @0623cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi_first/12 
+sendbytes/5 (sendbytes) @0623ca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_send_bytes_spi/11 
+deinit_interface/4 (deinit_interface) @0623c930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_deinit_interface/10 
+init_interface/3 (init_interface) @0623ce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_init_spi/9 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+HOST_receive_bytes_spi/14 (HOST_receive_bytes_spi) @06240540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes/8 
+  Calls: 
+HOST_exchange_bytes_spi/13 (HOST_exchange_bytes_spi) @06240498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: exchangebytes/7 
+  Calls: 
+HOST_receive_bytes_spi_first/12 (HOST_receive_bytes_spi_first) @062403f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: receivebytes_first/6 
+  Calls: 
+HOST_send_bytes_spi/11 (HOST_send_bytes_spi) @06240348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sendbytes/5 
+  Calls: 
+HOST_deinit_interface/10 (HOST_deinit_interface) @062402a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: deinit_interface/4 
+  Calls: 
+HOST_init_spi/9 (HOST_init_spi) @062401f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: init_interface/3 
+  Calls: 
+receivebytes/8 (receivebytes) @06240150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi/14 
+exchangebytes/7 (exchangebytes) @06240000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_exchange_bytes_spi/13 
+receivebytes_first/6 (receivebytes_first) @0623cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_receive_bytes_spi_first/12 
+sendbytes/5 (sendbytes) @0623ca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_send_bytes_spi/11 
+deinit_interface/4 (deinit_interface) @0623c930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_deinit_interface/10 
+init_interface/3 (init_interface) @0623ce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HOST_init_spi/9 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+HOST_receive_bytes_spi/14 (HOST_receive_bytes_spi) @06240540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: receivebytes/8 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+HOST_exchange_bytes_spi/13 (HOST_exchange_bytes_spi) @06240498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: exchangebytes/7 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+HOST_receive_bytes_spi_first/12 (HOST_receive_bytes_spi_first) @062403f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: receivebytes_first/6 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+HOST_send_bytes_spi/11 (HOST_send_bytes_spi) @06240348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: sendbytes/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+HOST_deinit_interface/10 (HOST_deinit_interface) @062402a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: deinit_interface/4 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+HOST_init_spi/9 (HOST_init_spi) @062401f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: init_interface/3 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+receivebytes/8 (receivebytes) @06240150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_receive_bytes_spi/14 (1073741824 (estimated locally),1.00 per call) 
+exchangebytes/7 (exchangebytes) @06240000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_exchange_bytes_spi/13 (1073741824 (estimated locally),1.00 per call) 
+receivebytes_first/6 (receivebytes_first) @0623cbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_receive_bytes_spi_first/12 (1073741824 (estimated locally),1.00 per call) 
+sendbytes/5 (sendbytes) @0623ca80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_send_bytes_spi/11 (1073741824 (estimated locally),1.00 per call) 
+deinit_interface/4 (deinit_interface) @0623c930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_deinit_interface/10 (1073741824 (estimated locally),1.00 per call) 
+init_interface/3 (init_interface) @0623ce70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HOST_init_spi/9 (1073741824 (estimated locally),1.00 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+HOST_receive_bytes_spi/14 (HOST_receive_bytes_spi) @06240540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_exchange_bytes_spi/13 (HOST_exchange_bytes_spi) @06240498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_receive_bytes_spi_first/12 (HOST_receive_bytes_spi_first) @062403f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_send_bytes_spi/11 (HOST_send_bytes_spi) @06240348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_deinit_interface/10 (HOST_deinit_interface) @062402a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_init_spi/9 (HOST_init_spi) @062401f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+receivebytes/8 (receivebytes) @06240150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.receivebytes (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+exchangebytes/7 (exchangebytes) @06240000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.exchangebytes (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+receivebytes_first/6 (receivebytes_first) @0623cbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.receivebytes_first (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+sendbytes/5 (sendbytes) @0623ca80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.sendbytes (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+deinit_interface/4 (deinit_interface) @0623c930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.deinit_interface (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+init_interface/3 (init_interface) @0623ce70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.init_interface (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 

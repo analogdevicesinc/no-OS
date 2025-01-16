@@ -1,0 +1,14 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:49:11:GCU_SendCommand	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:87:11:GCU_LoadKey	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:106:11:GCU_LoadIV	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:127:11:GCU_Reset	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:148:11:GCU_Shutdown	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:169:11:GCU_Abort	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:176:11:GCU_LinkTest	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:183:11:GCU_SendBlock	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:200:11:GCU_RequestBlock	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:217:11:GCU_RequestTag	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:234:11:GCU_ECBEncDec	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:256:11:GCU_GCMEncDec	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:283:11:GCU_GMAC	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/MXQ_GCU.c:310:11:GCU_GCMAuthEncDec	48	static

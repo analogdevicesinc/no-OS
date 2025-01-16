@@ -51,6 +51,12 @@ else
 
 endif
 
+
+#MAXQ10_LIBS +=  $(NO-OS)/libraries/USS/libs_mk/maxq10xx_api/bin/softfp/libmaxq10xx_fw_softfp.a
+#MAXQ10_LIBS +=  $(NO-OS)/libraries/USS/maxq10xx_fw/lib/libmaxq10xx_fw_max32650.a
+#MAXQ10_LIBS +=  $(NO-OS)/libraries/USS/maxq10xx_fw/MAXQ10xxFW/maxq1080_hal/lib/libucl_2.8.0_max32650.a
+#EXTRA_LIBS	+= $(MAXQ10_LIBS)
+
 #	FATFS
 ifneq ($(if $(findstring fatfs, $(LIBRARIES)), 1),)
 # Generic part
@@ -72,8 +78,9 @@ endif
 
 #	MQTT
 ifneq ($(if $(findstring mqtt, $(LIBRARIES)), 1),)
-
+include $(NO-OS)/libraries/USS/uss.mk
 include $(NO-OS)/tools/scripts/mqtt_srcs.mk
+
 
 endif
 
@@ -117,7 +124,7 @@ INCS += $(NO-OS)/libraries/lwip/configs/lwipcfg.h
 INCS += $(NO-OS)/libraries/lwip/configs/lwipopts.h
 endif
 
-LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
+LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS) $(MAXQ10_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
 LIB_PATHS			+= $(addprefix -L,$(EXTRA_LIBS_PATHS))

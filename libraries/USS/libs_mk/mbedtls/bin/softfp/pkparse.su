@@ -1,0 +1,17 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:170:12:pk_get_ecparams	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:587:12:pk_get_pk_alg	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:526:12:pk_get_rsapubkey	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:226:12:pk_group_from_specified	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:377:12:pk_group_id_from_group	152	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:420:12:pk_group_id_from_specified	144	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:460:12:pk_use_ecparams	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:500:12:pk_get_ecpubkey	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:700:12:asn1_get_nonzero_mpi	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:721:12:pk_parse_key_pkcs1_der	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:882:12:pk_parse_key_sec1_der	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:1014:12:pk_parse_key_pkcs8_unencrypted_der	80	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:1116:12:pk_parse_key_pkcs8_encrypted_der	88	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:621:5:mbedtls_pk_parse_subpubkey	64	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:1223:5:mbedtls_pk_set_maxq10xx_key	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:1245:5:mbedtls_pk_parse_key	80	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkparse.c:1455:5:mbedtls_pk_parse_public_key	80	static

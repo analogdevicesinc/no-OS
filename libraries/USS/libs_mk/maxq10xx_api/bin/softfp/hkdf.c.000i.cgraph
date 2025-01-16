@@ -1,0 +1,1812 @@
+Trivially needed symbols: test_hkdf_vectors/16 test_hkdf_helper_sha256/15 hkdf_sha256_finish/14 hkdf_sha256_core/13 hkdf_sha256_init/12 hkdf_sha256_expand/11 hkdf_sha256_extract/10 hkdf_sha256/9 hkdf_abstract/8 hkdf_abstract_expand/7 hkdf_abstract_finish/6 hkdf_abstract_core/5 hkdf_abstract_init/4 hkdf_abstract_extract/3
+
+
+Initial Symbol table:
+
+test_sha256_2_OKM/39 (test_sha256_2_OKM) @0624f630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_PRK/38 (test_sha256_2_PRK) @0624f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f630
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_IKM/37 (test_sha256_2_IKM) @0624f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f4c8
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_INFO/36 (test_sha256_2_INFO) @0624f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f5e8
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_2_SALT/35 (test_sha256_2_SALT) @0624f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f510
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_1_OKM/34 (test_sha256_1_OKM) @0624f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f5a0
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_PRK/33 (test_sha256_1_PRK) @0624f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f480
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_INFO/32 (test_sha256_1_INFO) @0624f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f438
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_SALT/31 (test_sha256_1_SALT) @0624f3a8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f3f0
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_IKM/30 (test_sha256_1_IKM) @0624f360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f3a8
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_OKM/29 (test_sha256_0_OKM) @0624f2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f360
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_PRK/28 (test_sha256_0_PRK) @0624f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f2d0
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_INFO/27 (test_sha256_0_INFO) @0624f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f288
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_SALT/26 (test_sha256_0_SALT) @0624f1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f240
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_IKM/25 (test_sha256_0_IKM) @0624f1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0624f1f8
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+puts/24 (__builtin_puts) @0623f3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_vectors/16 
+  Calls: 
+memcmp/23 (memcmp) @0623f348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: 
+memset/22 (memset) @0623f2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 hkdf_abstract_finish/6 hkdf_abstract_finish/6 
+  Calls: 
+memcpy/21 (memcpy) @0623f1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_final/20 (hmac_sha256_final) @0623f150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_update/19 (hmac_sha256_update) @0623f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_init/18 (hmac_sha256_init) @0623f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256/17 (hmac_sha256) @061fdf18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_extract/3 hkdf_abstract_extract/3 
+  Calls: 
+test_hkdf_vectors/16 (test_hkdf_vectors) @061fdd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: test_sha256_0_IKM/25 (addr) test_sha256_0_SALT/26 (addr) test_sha256_0_INFO/27 (addr) test_sha256_0_PRK/28 (addr) test_sha256_0_OKM/29 (addr) test_sha256_1_IKM/30 (addr) test_sha256_1_SALT/31 (addr) test_sha256_1_INFO/32 (addr) test_sha256_1_PRK/33 (addr) test_sha256_1_OKM/34 (addr) test_sha256_2_SALT/35 (read) test_sha256_2_INFO/36 (read) test_sha256_2_IKM/37 (addr) test_sha256_2_PRK/38 (addr) test_sha256_2_OKM/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 puts/24 
+test_hkdf_helper_sha256/15 (test_hkdf_helper_sha256) @061fdbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fdd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_vectors/16 test_hkdf_vectors/16 test_hkdf_vectors/16 
+  Calls: memcmp/23 memcmp/23 hkdf_sha256_finish/14 memcmp/23 hkdf_sha256_core/13 hkdf_sha256_core/13 memset/22 hkdf_sha256_init/12 memcmp/23 hkdf_sha256/9 memcmp/23 hkdf_sha256_expand/11 memcmp/23 hkdf_sha256_extract/10 
+hkdf_sha256_finish/14 (hkdf_sha256_finish) @061fda80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fdbd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_finish/6 
+hkdf_sha256_core/13 (hkdf_sha256_core) @061fd930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fda80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_core/5 
+hkdf_sha256_init/12 (hkdf_sha256_init) @061fd7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_init/4 
+hkdf_sha256_expand/11 (hkdf_sha256_expand) @061fd690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd7e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_expand/7 
+hkdf_sha256_extract/10 (hkdf_sha256_extract) @061fd540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_extract/3 
+hkdf_sha256/9 (hkdf_sha256) @061fd3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract/8 
+hkdf_abstract/8 (hkdf_abstract) @061fd2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256/9 
+  Calls: hkdf_abstract_expand/7 hkdf_abstract_extract/3 
+hkdf_abstract_expand/7 (hkdf_abstract_expand) @061fd150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd2a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_expand/11 hkdf_abstract/8 
+  Calls: hkdf_abstract_core/5 
+hkdf_abstract_finish/6 (hkdf_abstract_finish) @061fd000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_finish/14 
+  Calls: memset/22 memset/22 
+hkdf_abstract_core/5 (hkdf_abstract_core) @061eedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061fd000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_core/13 hkdf_abstract_expand/7 
+  Calls: hmac_sha256_final/20 memcpy/21 hmac_sha256_final/20 hmac_sha256_final/20 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_init/18 
+hkdf_abstract_init/4 (hkdf_abstract_init) @061eeb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061eedc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_init/12 
+  Calls: hkdf_abstract_extract/3 
+hkdf_abstract_extract/3 (hkdf_abstract_extract) @061ee9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061eeb28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_extract/10 hkdf_abstract/8 hkdf_abstract_init/4 
+  Calls: hmac_sha256/17 hmac_sha256/17 
+_putchar_unlocked/2 (_putchar_unlocked) @061989d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06198888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06198690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+test_sha256_2_OKM/39 (test_sha256_2_OKM) @0624f630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_PRK/38 (test_sha256_2_PRK) @0624f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_IKM/37 (test_sha256_2_IKM) @0624f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_INFO/36 (test_sha256_2_INFO) @0624f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_2_SALT/35 (test_sha256_2_SALT) @0624f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_1_OKM/34 (test_sha256_1_OKM) @0624f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_PRK/33 (test_sha256_1_PRK) @0624f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_INFO/32 (test_sha256_1_INFO) @0624f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_SALT/31 (test_sha256_1_SALT) @0624f3a8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_IKM/30 (test_sha256_1_IKM) @0624f360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_OKM/29 (test_sha256_0_OKM) @0624f2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_PRK/28 (test_sha256_0_PRK) @0624f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_INFO/27 (test_sha256_0_INFO) @0624f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_SALT/26 (test_sha256_0_SALT) @0624f1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_IKM/25 (test_sha256_0_IKM) @0624f1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+puts/24 (__builtin_puts) @0623f3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_vectors/16 
+  Calls: 
+memcmp/23 (memcmp) @0623f348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: 
+memset/22 (memset) @0623f2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 hkdf_abstract_finish/6 hkdf_abstract_finish/6 
+  Calls: 
+memcpy/21 (memcpy) @0623f1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_final/20 (hmac_sha256_final) @0623f150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_update/19 (hmac_sha256_update) @0623f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_init/18 (hmac_sha256_init) @0623f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256/17 (hmac_sha256) @061fdf18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_extract/3 hkdf_abstract_extract/3 
+  Calls: 
+test_hkdf_vectors/16 (test_hkdf_vectors) @061fdd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: test_sha256_0_IKM/25 (addr) test_sha256_0_SALT/26 (addr) test_sha256_0_INFO/27 (addr) test_sha256_0_PRK/28 (addr) test_sha256_0_OKM/29 (addr) test_sha256_1_IKM/30 (addr) test_sha256_1_SALT/31 (addr) test_sha256_1_INFO/32 (addr) test_sha256_1_PRK/33 (addr) test_sha256_1_OKM/34 (addr) test_sha256_2_SALT/35 (read) test_sha256_2_INFO/36 (read) test_sha256_2_IKM/37 (addr) test_sha256_2_PRK/38 (addr) test_sha256_2_OKM/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 puts/24 
+test_hkdf_helper_sha256/15 (test_hkdf_helper_sha256) @061fdbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_vectors/16 test_hkdf_vectors/16 test_hkdf_vectors/16 
+  Calls: memcmp/23 memcmp/23 hkdf_sha256_finish/14 memcmp/23 hkdf_sha256_core/13 hkdf_sha256_core/13 memset/22 hkdf_sha256_init/12 memcmp/23 hkdf_sha256/9 memcmp/23 hkdf_sha256_expand/11 memcmp/23 hkdf_sha256_extract/10 
+hkdf_sha256_finish/14 (hkdf_sha256_finish) @061fda80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_finish/6 
+hkdf_sha256_core/13 (hkdf_sha256_core) @061fd930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_core/5 
+hkdf_sha256_init/12 (hkdf_sha256_init) @061fd7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_init/4 
+hkdf_sha256_expand/11 (hkdf_sha256_expand) @061fd690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_expand/7 
+hkdf_sha256_extract/10 (hkdf_sha256_extract) @061fd540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_extract/3 
+hkdf_sha256/9 (hkdf_sha256) @061fd3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract/8 
+hkdf_abstract/8 (hkdf_abstract) @061fd2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256/9 
+  Calls: hkdf_abstract_expand/7 hkdf_abstract_extract/3 
+hkdf_abstract_expand/7 (hkdf_abstract_expand) @061fd150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_expand/11 hkdf_abstract/8 
+  Calls: hkdf_abstract_core/5 
+hkdf_abstract_finish/6 (hkdf_abstract_finish) @061fd000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_finish/14 
+  Calls: memset/22 memset/22 
+hkdf_abstract_core/5 (hkdf_abstract_core) @061eedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_core/13 hkdf_abstract_expand/7 
+  Calls: hmac_sha256_final/20 memcpy/21 hmac_sha256_final/20 hmac_sha256_final/20 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_init/18 
+hkdf_abstract_init/4 (hkdf_abstract_init) @061eeb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_init/12 
+  Calls: hkdf_abstract_extract/3 
+hkdf_abstract_extract/3 (hkdf_abstract_extract) @061ee9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_extract/10 hkdf_abstract/8 hkdf_abstract_init/4 
+  Calls: hmac_sha256/17 hmac_sha256/17 
+
+
+Initial Symbol table:
+
+test_sha256_2_OKM.0/39 (test_sha256_2_OKM) @0624f630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_PRK.1/38 (test_sha256_2_PRK) @0624f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_IKM.2/37 (test_sha256_2_IKM) @0624f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_INFO.3/36 (test_sha256_2_INFO) @0624f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_2_SALT.4/35 (test_sha256_2_SALT) @0624f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_1_OKM.5/34 (test_sha256_1_OKM) @0624f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_PRK.6/33 (test_sha256_1_PRK) @0624f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_INFO.7/32 (test_sha256_1_INFO) @0624f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_SALT.8/31 (test_sha256_1_SALT) @0624f3a8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_IKM.9/30 (test_sha256_1_IKM) @0624f360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_OKM.10/29 (test_sha256_0_OKM) @0624f2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_PRK.11/28 (test_sha256_0_PRK) @0624f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_INFO.12/27 (test_sha256_0_INFO) @0624f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_SALT.13/26 (test_sha256_0_SALT) @0624f1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_IKM.14/25 (test_sha256_0_IKM) @0624f1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+puts/24 (__builtin_puts) @0623f3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_vectors/16 
+  Calls: 
+memcmp/23 (memcmp) @0623f348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: 
+memset/22 (memset) @0623f2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 hkdf_abstract_finish/6 hkdf_abstract_finish/6 
+  Calls: 
+memcpy/21 (memcpy) @0623f1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_final/20 (hmac_sha256_final) @0623f150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_update/19 (hmac_sha256_update) @0623f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_init/18 (hmac_sha256_init) @0623f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256/17 (hmac_sha256) @061fdf18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_extract/3 hkdf_abstract_extract/3 
+  Calls: 
+test_hkdf_vectors/16 (test_hkdf_vectors) @061fdd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: test_sha256_0_IKM.14/25 (addr) test_sha256_0_SALT.13/26 (addr) test_sha256_0_INFO.12/27 (addr) test_sha256_0_PRK.11/28 (addr) test_sha256_0_OKM.10/29 (addr) test_sha256_1_IKM.9/30 (addr) test_sha256_1_SALT.8/31 (addr) test_sha256_1_INFO.7/32 (addr) test_sha256_1_PRK.6/33 (addr) test_sha256_1_OKM.5/34 (addr) test_sha256_2_SALT.4/35 (read) test_sha256_2_INFO.3/36 (read) test_sha256_2_IKM.2/37 (addr) test_sha256_2_PRK.1/38 (addr) test_sha256_2_OKM.0/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 puts/24 
+test_hkdf_helper_sha256/15 (test_hkdf_helper_sha256) @061fdbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_vectors/16 test_hkdf_vectors/16 test_hkdf_vectors/16 
+  Calls: memcmp/23 memcmp/23 hkdf_sha256_finish/14 memcmp/23 hkdf_sha256_core/13 hkdf_sha256_core/13 memset/22 hkdf_sha256_init/12 memcmp/23 hkdf_sha256/9 memcmp/23 hkdf_sha256_expand/11 memcmp/23 hkdf_sha256_extract/10 
+hkdf_sha256_finish/14 (hkdf_sha256_finish) @061fda80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_finish/6 
+hkdf_sha256_core/13 (hkdf_sha256_core) @061fd930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_core/5 
+hkdf_sha256_init/12 (hkdf_sha256_init) @061fd7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_init/4 
+hkdf_sha256_expand/11 (hkdf_sha256_expand) @061fd690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_expand/7 
+hkdf_sha256_extract/10 (hkdf_sha256_extract) @061fd540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_extract/3 
+hkdf_sha256/9 (hkdf_sha256) @061fd3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract/8 
+hkdf_abstract/8 (hkdf_abstract) @061fd2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256/9 
+  Calls: hkdf_abstract_expand/7 hkdf_abstract_extract/3 
+hkdf_abstract_expand/7 (hkdf_abstract_expand) @061fd150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_expand/11 hkdf_abstract/8 
+  Calls: hkdf_abstract_core/5 
+hkdf_abstract_finish/6 (hkdf_abstract_finish) @061fd000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_finish/14 
+  Calls: memset/22 memset/22 
+hkdf_abstract_core/5 (hkdf_abstract_core) @061eedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_core/13 hkdf_abstract_expand/7 
+  Calls: hmac_sha256_final/20 memcpy/21 hmac_sha256_final/20 hmac_sha256_final/20 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_init/18 
+hkdf_abstract_init/4 (hkdf_abstract_init) @061eeb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_init/12 
+  Calls: hkdf_abstract_extract/3 
+hkdf_abstract_extract/3 (hkdf_abstract_extract) @061ee9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_extract/10 hkdf_abstract/8 hkdf_abstract_init/4 
+  Calls: hmac_sha256/17 hmac_sha256/17 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+test_sha256_2_OKM.0/39 (test_sha256_2_OKM) @0624f630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_PRK.1/38 (test_sha256_2_PRK) @0624f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_IKM.2/37 (test_sha256_2_IKM) @0624f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_2_INFO.3/36 (test_sha256_2_INFO) @0624f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_2_SALT.4/35 (test_sha256_2_SALT) @0624f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+test_sha256_1_OKM.5/34 (test_sha256_1_OKM) @0624f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_PRK.6/33 (test_sha256_1_PRK) @0624f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_INFO.7/32 (test_sha256_1_INFO) @0624f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_SALT.8/31 (test_sha256_1_SALT) @0624f3a8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_1_IKM.9/30 (test_sha256_1_IKM) @0624f360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_OKM.10/29 (test_sha256_0_OKM) @0624f2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_PRK.11/28 (test_sha256_0_PRK) @0624f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_INFO.12/27 (test_sha256_0_INFO) @0624f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_SALT.13/26 (test_sha256_0_SALT) @0624f1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+test_sha256_0_IKM.14/25 (test_sha256_0_IKM) @0624f1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+puts/24 (__builtin_puts) @0623f3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_vectors/16 
+  Calls: 
+memcmp/23 (memcmp) @0623f348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: 
+memset/22 (memset) @0623f2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 hkdf_abstract_finish/6 hkdf_abstract_finish/6 
+  Calls: 
+memcpy/21 (memcpy) @0623f1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_final/20 (hmac_sha256_final) @0623f150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_update/19 (hmac_sha256_update) @0623f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256_init/18 (hmac_sha256_init) @0623f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_core/5 
+  Calls: 
+hmac_sha256/17 (hmac_sha256) @061fdf18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hkdf_abstract_extract/3 hkdf_abstract_extract/3 
+  Calls: 
+test_hkdf_vectors/16 (test_hkdf_vectors) @061fdd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: test_sha256_0_IKM.14/25 (addr) test_sha256_0_SALT.13/26 (addr) test_sha256_0_INFO.12/27 (addr) test_sha256_0_PRK.11/28 (addr) test_sha256_0_OKM.10/29 (addr) test_sha256_1_IKM.9/30 (addr) test_sha256_1_SALT.8/31 (addr) test_sha256_1_INFO.7/32 (addr) test_sha256_1_PRK.6/33 (addr) test_sha256_1_OKM.5/34 (addr) test_sha256_2_SALT.4/35 (read) test_sha256_2_INFO.3/36 (read) test_sha256_2_IKM.2/37 (addr) test_sha256_2_PRK.1/38 (addr) test_sha256_2_OKM.0/39 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 puts/24 
+test_hkdf_helper_sha256/15 (test_hkdf_helper_sha256) @061fdbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_vectors/16 test_hkdf_vectors/16 test_hkdf_vectors/16 
+  Calls: memcmp/23 memcmp/23 hkdf_sha256_finish/14 memcmp/23 hkdf_sha256_core/13 hkdf_sha256_core/13 memset/22 hkdf_sha256_init/12 memcmp/23 hkdf_sha256/9 memcmp/23 hkdf_sha256_expand/11 memcmp/23 hkdf_sha256_extract/10 
+hkdf_sha256_finish/14 (hkdf_sha256_finish) @061fda80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_finish/6 
+hkdf_sha256_core/13 (hkdf_sha256_core) @061fd930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_core/5 
+hkdf_sha256_init/12 (hkdf_sha256_init) @061fd7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_init/4 
+hkdf_sha256_expand/11 (hkdf_sha256_expand) @061fd690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_expand/7 
+hkdf_sha256_extract/10 (hkdf_sha256_extract) @061fd540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract_extract/3 
+hkdf_sha256/9 (hkdf_sha256) @061fd3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: test_hkdf_helper_sha256/15 
+  Calls: hkdf_abstract/8 
+hkdf_abstract/8 (hkdf_abstract) @061fd2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256/9 
+  Calls: hkdf_abstract_expand/7 hkdf_abstract_extract/3 
+hkdf_abstract_expand/7 (hkdf_abstract_expand) @061fd150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_expand/11 hkdf_abstract/8 
+  Calls: hkdf_abstract_core/5 
+hkdf_abstract_finish/6 (hkdf_abstract_finish) @061fd000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_finish/14 
+  Calls: memset/22 memset/22 
+hkdf_abstract_core/5 (hkdf_abstract_core) @061eedc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_core/13 hkdf_abstract_expand/7 
+  Calls: hmac_sha256_final/20 memcpy/21 hmac_sha256_final/20 hmac_sha256_final/20 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_update/19 hmac_sha256_init/18 
+hkdf_abstract_init/4 (hkdf_abstract_init) @061eeb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_init/12 
+  Calls: hkdf_abstract_extract/3 
+hkdf_abstract_extract/3 (hkdf_abstract_extract) @061ee9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: hkdf_sha256_extract/10 hkdf_abstract/8 hkdf_abstract_init/4 
+  Calls: hmac_sha256/17 hmac_sha256/17 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+test_sha256_2_OKM.0/39 (test_sha256_2_OKM) @0624f630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_2_PRK.1/38 (test_sha256_2_PRK) @0624f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_2_IKM.2/37 (test_sha256_2_IKM) @0624f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_2_INFO.3/36 (test_sha256_2_INFO) @0624f510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_2_SALT.4/35 (test_sha256_2_SALT) @0624f4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_OKM.5/34 (test_sha256_1_OKM) @0624f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_PRK.6/33 (test_sha256_1_PRK) @0624f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_INFO.7/32 (test_sha256_1_INFO) @0624f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_SALT.8/31 (test_sha256_1_SALT) @0624f3a8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_IKM.9/30 (test_sha256_1_IKM) @0624f360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_OKM.10/29 (test_sha256_0_OKM) @0624f2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_PRK.11/28 (test_sha256_0_PRK) @0624f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_INFO.12/27 (test_sha256_0_INFO) @0624f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_SALT.13/26 (test_sha256_0_SALT) @0624f1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_IKM.14/25 (test_sha256_0_IKM) @0624f1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: test_hkdf_vectors/16 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+puts/24 (__builtin_puts) @0623f3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: test_hkdf_vectors/16 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+memcmp/23 (memcmp) @0623f348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 (57220190 (estimated locally),0.44 per call) test_hkdf_helper_sha256/15 (57821534 (estimated locally),0.45 per call) test_hkdf_helper_sha256/15 (59055800 (estimated locally),0.46 per call) test_hkdf_helper_sha256/15 (119819654 (estimated locally),0.93 per call) test_hkdf_helper_sha256/15 (123663440 (estimated locally),0.96 per call) test_hkdf_helper_sha256/15 (127630534 (estimated locally),0.99 per call) 
+  Calls: 
+memset/22 (memset) @0623f2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: test_hkdf_helper_sha256/15 (114863530 (estimated locally),0.89 per call) hkdf_abstract_finish/6 (1073741824 (estimated locally),1.00 per call) hkdf_abstract_finish/6 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+memcpy/21 (memcpy) @0623f1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hkdf_abstract_core/5 (247775804 (estimated locally),2.04 per call) 
+  Calls: 
+hmac_sha256_final/20 (hmac_sha256_final) @0623f150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hkdf_abstract_core/5 (601664794 (estimated locally),4.96 per call) hkdf_abstract_core/5 (247775804 (estimated locally),2.04 per call) hkdf_abstract_core/5 (106189629 (estimated locally),0.88 per call) 
+  Calls: 
+hmac_sha256_update/19 (hmac_sha256_update) @0623f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hkdf_abstract_core/5 (955630226 (estimated locally),7.88 per call) hkdf_abstract_core/5 (220750582 (estimated locally),1.82 per call) hkdf_abstract_core/5 (173018302 (estimated locally),1.43 per call) hkdf_abstract_core/5 (601664793 (estimated locally),4.96 per call) 
+  Calls: 
+hmac_sha256_init/18 (hmac_sha256_init) @0623f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hkdf_abstract_core/5 (955630225 (estimated locally),7.88 per call) 
+  Calls: 
+hmac_sha256/17 (hmac_sha256) @061fdf18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: hkdf_abstract_extract/3 (93155505 (estimated locally),0.09 per call) hkdf_abstract_extract/3 (973349430 (estimated locally),0.91 per call) 
+  Calls: 
+test_hkdf_vectors/16 (test_hkdf_vectors) @061fdd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: test_sha256_0_IKM.14/25 (addr) test_sha256_0_SALT.13/26 (addr) test_sha256_0_INFO.12/27 (addr) test_sha256_0_PRK.11/28 (addr) test_sha256_0_OKM.10/29 (addr) test_sha256_1_IKM.9/30 (addr) test_sha256_1_SALT.8/31 (addr) test_sha256_1_INFO.7/32 (addr) test_sha256_1_PRK.6/33 (addr) test_sha256_1_OKM.5/34 (addr) test_sha256_2_SALT.4/35 (read) test_sha256_2_INFO.3/36 (read) test_sha256_2_IKM.2/37 (addr) test_sha256_2_PRK.1/38 (addr) test_sha256_2_OKM.0/39 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: test_hkdf_helper_sha256/15 (1029328430 (estimated locally),0.96 per call) test_hkdf_helper_sha256/15 (1051300617 (estimated locally),0.98 per call) test_hkdf_helper_sha256/15 (1073741824 (estimated locally),1.00 per call) puts/24 (1073741824 (estimated locally),1.00 per call) 
+test_hkdf_helper_sha256/15 (test_hkdf_helper_sha256) @061fdbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:128971841 (estimated locally) body
+  Called by: test_hkdf_vectors/16 (1029328430 (estimated locally),0.96 per call) test_hkdf_vectors/16 (1051300617 (estimated locally),0.98 per call) test_hkdf_vectors/16 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memcmp/23 (57220190 (estimated locally),0.44 per call) memcmp/23 (57821534 (estimated locally),0.45 per call) hkdf_sha256_finish/14 (57821534 (estimated locally),0.45 per call) memcmp/23 (59055800 (estimated locally),0.46 per call) hkdf_sha256_core/13 (227999946 (estimated locally),1.77 per call) hkdf_sha256_core/13 (786686080 (estimated locally),6.10 per call) memset/22 (114863530 (estimated locally),0.89 per call) hkdf_sha256_init/12 (117315423 (estimated locally),0.91 per call) memcmp/23 (119819654 (estimated locally),0.93 per call) hkdf_sha256/9 (121078874 (estimated locally),0.94 per call) memcmp/23 (123663440 (estimated locally),0.96 per call) hkdf_sha256_expand/11 (124963056 (estimated locally),0.97 per call) memcmp/23 (127630534 (estimated locally),0.99 per call) hkdf_sha256_extract/10 (128971841 (estimated locally),1.00 per call) 
+hkdf_sha256_finish/14 (hkdf_sha256_finish) @061fda80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_hkdf_helper_sha256/15 (57821534 (estimated locally),0.45 per call) 
+  Calls: hkdf_abstract_finish/6 (1073741824 (estimated locally),1.00 per call) 
+hkdf_sha256_core/13 (hkdf_sha256_core) @061fd930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_hkdf_helper_sha256/15 (227999946 (estimated locally),1.77 per call) test_hkdf_helper_sha256/15 (786686080 (estimated locally),6.10 per call) 
+  Calls: hkdf_abstract_core/5 (1073741824 (estimated locally),1.00 per call) 
+hkdf_sha256_init/12 (hkdf_sha256_init) @061fd7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_hkdf_helper_sha256/15 (117315423 (estimated locally),0.91 per call) 
+  Calls: hkdf_abstract_init/4 (1073741824 (estimated locally),1.00 per call) 
+hkdf_sha256_expand/11 (hkdf_sha256_expand) @061fd690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_hkdf_helper_sha256/15 (124963056 (estimated locally),0.97 per call) 
+  Calls: hkdf_abstract_expand/7 (1073741824 (estimated locally),1.00 per call) 
+hkdf_sha256_extract/10 (hkdf_sha256_extract) @061fd540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_hkdf_helper_sha256/15 (128971841 (estimated locally),1.00 per call) 
+  Calls: hkdf_abstract_extract/3 (1073741824 (estimated locally),1.00 per call) 
+hkdf_sha256/9 (hkdf_sha256) @061fd3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: test_hkdf_helper_sha256/15 (121078874 (estimated locally),0.94 per call) 
+  Calls: hkdf_abstract/8 (1073741824 (estimated locally),1.00 per call) 
+hkdf_abstract/8 (hkdf_abstract) @061fd2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: hkdf_sha256/9 (1073741824 (estimated locally),1.00 per call) 
+  Calls: hkdf_abstract_expand/7 (621803888 (estimated locally),0.58 per call) hkdf_abstract_extract/3 (1073741823 (estimated locally),1.00 per call) 
+hkdf_abstract_expand/7 (hkdf_abstract_expand) @061fd150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: hkdf_sha256_expand/11 (1073741824 (estimated locally),1.00 per call) hkdf_abstract/8 (621803888 (estimated locally),0.58 per call) 
+  Calls: hkdf_abstract_core/5 (1073741824 (estimated locally),1.00 per call) 
+hkdf_abstract_finish/6 (hkdf_abstract_finish) @061fd000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: hkdf_sha256_finish/14 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memset/22 (1073741824 (estimated locally),1.00 per call) memset/22 (1073741824 (estimated locally),1.00 per call) 
+hkdf_abstract_core/5 (hkdf_abstract_core) @061eedc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:121257483 (estimated locally) body
+  Called by: hkdf_sha256_core/13 (1073741824 (estimated locally),1.00 per call) hkdf_abstract_expand/7 (1073741824 (estimated locally),1.00 per call) 
+  Calls: hmac_sha256_final/20 (601664794 (estimated locally),4.96 per call) memcpy/21 (247775804 (estimated locally),2.04 per call) hmac_sha256_final/20 (247775804 (estimated locally),2.04 per call) hmac_sha256_final/20 (106189629 (estimated locally),0.88 per call) hmac_sha256_update/19 (955630226 (estimated locally),7.88 per call) hmac_sha256_update/19 (220750582 (estimated locally),1.82 per call) hmac_sha256_update/19 (173018302 (estimated locally),1.43 per call) hmac_sha256_update/19 (601664793 (estimated locally),4.96 per call) hmac_sha256_init/18 (955630225 (estimated locally),7.88 per call) 
+hkdf_abstract_init/4 (hkdf_abstract_init) @061eeb28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: hkdf_sha256_init/12 (1073741824 (estimated locally),1.00 per call) 
+  Calls: hkdf_abstract_extract/3 (1073741824 (estimated locally),1.00 per call) 
+hkdf_abstract_extract/3 (hkdf_abstract_extract) @061ee9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: hkdf_sha256_extract/10 (1073741824 (estimated locally),1.00 per call) hkdf_abstract/8 (1073741823 (estimated locally),1.00 per call) hkdf_abstract_init/4 (1073741824 (estimated locally),1.00 per call) 
+  Calls: hmac_sha256/17 (93155505 (estimated locally),0.09 per call) hmac_sha256/17 (973349430 (estimated locally),0.91 per call) 
+Trivially needed variables: test_sha256_2_OKM.0/39 test_sha256_2_PRK.1/38 test_sha256_2_IKM.2/37 test_sha256_1_OKM.5/34 test_sha256_1_PRK.6/33 test_sha256_1_INFO.7/32 test_sha256_1_SALT.8/31 test_sha256_1_IKM.9/30 test_sha256_0_OKM.10/29 test_sha256_0_PRK.11/28 test_sha256_0_INFO.12/27 test_sha256_0_SALT.13/26 test_sha256_0_IKM.14/25
+Removing variables: test_sha256_2_INFO.3/36 test_sha256_2_SALT.4/35
+
+Final Symbol table:
+
+test_sha256_2_OKM.0/39 (test_sha256_2_OKM) @0624f630
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_2_OKM.0 (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_2_PRK.1/38 (test_sha256_2_PRK) @0624f5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_2_PRK.1 (implicit_section)
+  Aux: @0624f630
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_2_IKM.2/37 (test_sha256_2_IKM) @0624f5a0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_2_IKM.2 (implicit_section)
+  Aux: @0624f5e8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_OKM.5/34 (test_sha256_1_OKM) @0624f480
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_1_OKM.5 (implicit_section)
+  Aux: @0624f5a0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_PRK.6/33 (test_sha256_1_PRK) @0624f438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_1_PRK.6 (implicit_section)
+  Aux: @0624f480
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_INFO.7/32 (test_sha256_1_INFO) @0624f3f0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_1_INFO.7 (implicit_section)
+  Aux: @0624f438
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_SALT.8/31 (test_sha256_1_SALT) @0624f3a8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_1_SALT.8 (implicit_section)
+  Aux: @0624f3f0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_1_IKM.9/30 (test_sha256_1_IKM) @0624f360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_1_IKM.9 (implicit_section)
+  Aux: @0624f3a8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_OKM.10/29 (test_sha256_0_OKM) @0624f2d0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_0_OKM.10 (implicit_section)
+  Aux: @0624f360
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_PRK.11/28 (test_sha256_0_PRK) @0624f288
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_0_PRK.11 (implicit_section)
+  Aux: @0624f2d0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_INFO.12/27 (test_sha256_0_INFO) @0624f240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_0_INFO.12 (implicit_section)
+  Aux: @0624f288
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_SALT.13/26 (test_sha256_0_SALT) @0624f1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_0_SALT.13 (implicit_section)
+  Aux: @0624f240
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+test_sha256_0_IKM.14/25 (test_sha256_0_IKM) @0624f1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.test_sha256_0_IKM.14 (implicit_section)
+  Aux: @0624f1f8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+puts/24 (__builtin_puts) @0623f3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/23 (memcmp) @0623f348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/22 (memset) @0623f2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/21 (memcpy) @0623f1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256_final/20 (hmac_sha256_final) @0623f150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256_update/19 (hmac_sha256_update) @0623f0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256_init/18 (hmac_sha256_init) @0623f000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+hmac_sha256/17 (hmac_sha256) @061fdf18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+test_hkdf_vectors/16 (test_hkdf_vectors) @061fdd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.test_hkdf_vectors (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+test_hkdf_helper_sha256/15 (test_hkdf_helper_sha256) @061fdbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.test_hkdf_helper_sha256 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:128971841 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_sha256_finish/14 (hkdf_sha256_finish) @061fda80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_sha256_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_sha256_core/13 (hkdf_sha256_core) @061fd930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_sha256_core (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_sha256_init/12 (hkdf_sha256_init) @061fd7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_sha256_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_sha256_expand/11 (hkdf_sha256_expand) @061fd690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_sha256_expand (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_sha256_extract/10 (hkdf_sha256_extract) @061fd540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_sha256_extract (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_sha256/9 (hkdf_sha256) @061fd3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_sha256 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_abstract/8 (hkdf_abstract) @061fd2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_abstract (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_abstract_expand/7 (hkdf_abstract_expand) @061fd150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_abstract_expand (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_abstract_finish/6 (hkdf_abstract_finish) @061fd000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_abstract_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_abstract_core/5 (hkdf_abstract_core) @061eedc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_abstract_core (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:121257483 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_abstract_init/4 (hkdf_abstract_init) @061eeb28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_abstract_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hkdf_abstract_extract/3 (hkdf_abstract_extract) @061ee9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.hkdf_abstract_extract (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 

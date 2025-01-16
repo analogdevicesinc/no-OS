@@ -1,0 +1,2141 @@
+Trivially needed symbols: MAC_RecvFrame/148 MAC_SendFrame/147 MAC_Read/146 MAC_Write/144 spiCallback/143 CrcBlock8/142 spiTxBuf/139 spiRxBuf/138
+
+
+Initial Symbol table:
+
+puts/157 (__builtin_puts) @0649da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 
+  Calls: 
+printf/156 (printf) @0649d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 
+  Calls: 
+MAC_WriteRegister/155 (MAC_WriteRegister) @0649d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SendFrame/147 
+  Calls: 
+MAC_ReadRegister/154 (MAC_ReadRegister) @0649d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_SendFrame/147 
+  Calls: 
+memcpy/153 (memcpy) @0649d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 
+  Calls: 
+queueIsEmpty/152 (queueIsEmpty) @0649d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 
+  Calls: 
+HAL_SpiReadWrite/151 (HAL_SpiReadWrite) @0649d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Write/144 
+  Calls: 
+HAL_EnableIrq/150 (HAL_EnableIrq) @0649d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 spiCallback/143 
+  Calls: 
+queueRemove/149 (queueRemove) @0649d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 spiCallback/143 
+  Calls: 
+MAC_RecvFrame/148 (MAC_RecvFrame) @0649d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueRemove/149 printf/156 puts/157 printf/156 MAC_Read/146 printf/156 printf/156 printf/156 MAC_ReadRegister/154 
+   Indirect callnum speculative call targets: 0
+MAC_SendFrame/147 (MAC_SendFrame) @0649d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0649d498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteFrame/145 MAC_WriteRegister/155 MAC_ReadRegister/154 
+MAC_Read/146 (MAC_Read) @0649d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0649d348
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (read) spiRxBuf/138 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_RecvFrame/148 
+  Calls: HAL_EnableIrq/150 CrcBlock8/142 memcpy/153 HAL_SpiReadWrite/151 queueIsEmpty/152 CrcBlock8/142 
+MAC_WriteFrame/145 (MAC_WriteFrame) @0649d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0649d498
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SendFrame/147 
+  Calls: HAL_SpiReadWrite/151 memcpy/153 CrcBlock8/142 
+MAC_Write/144 (MAC_Write) @0648adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0649d1f8
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_SpiReadWrite/151 CrcBlock8/142 CrcBlock8/142 
+spiCallback/143 (spiCallback) @0648a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0648adc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/150 queueRemove/149 
+   Indirect callnum speculative call targets: 0
+CrcBlock8/142 (CrcBlock8) @0648a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0648a738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Read/146 MAC_Write/144 MAC_Write/144 
+  Calls: crc8_be/141 crc8_le/140 
+crc8_be/141 (crc8_be) @0648a3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0648a738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+crc8_le/140 (crc8_le) @0648af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0648a3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+spiTxBuf/139 (spiTxBuf) @064654c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0648a5e8
+  References: 
+  Referring: MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+spiRxBuf/138 (spiRxBuf) @06465438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064654c8
+  References: 
+  Referring: MAC_Write/144 (addr) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_Read/146 (read) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+print_hex/137 (print_hex) @064237e0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/136 (ITM_CheckChar) @063def18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/135 (ITM_ReceiveChar) @063dedc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/134 (ITM_SendChar) @063dec78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/133 (SysTick_Config) @063de930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/132 (SCB_GetFPUType) @063de7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/131 (ARM_MPU_Load) @063de690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/130 (ARM_MPU_OrderedMemcpy) @063de540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/129 (ARM_MPU_SetRegionEx) @063de3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/128 (ARM_MPU_SetRegion) @063de2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/127 (ARM_MPU_ClrRegion) @063de150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/126 (ARM_MPU_Disable) @063de000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/125 (ARM_MPU_Enable) @063d9d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/124 (__NVIC_SystemReset) @063cd7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/123 (__NVIC_GetVector) @063cd690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/122 (__NVIC_SetVector) @063cd540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/121 (NVIC_DecodePriority) @063cd3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/120 (NVIC_EncodePriority) @063cd2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/119 (__NVIC_GetPriority) @063cd150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/118 (__NVIC_SetPriority) @063cd000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/117 (__NVIC_GetActive) @063c7e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/116 (__NVIC_ClearPendingIRQ) @063c7d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/115 (__NVIC_SetPendingIRQ) @063c7bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/114 (__NVIC_GetPendingIRQ) @063c7a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/113 (__NVIC_DisableIRQ) @063c7930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/112 (__NVIC_GetEnableIRQ) @063c77e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/111 (__NVIC_EnableIRQ) @063c7690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/110 (__NVIC_GetPriorityGrouping) @063c7540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/109 (__NVIC_SetPriorityGrouping) @063c73f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/108 (__SMMLA) @0638e5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/107 (__QSUB) @0638e498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/106 (__QADD) @0638e348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/105 (__SEL) @0638e1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/104 (__SMLSLDX) @0638e0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/103 (__SMLSLD) @06387f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/102 (__SMLSDX) @06387dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/101 (__SMLSD) @06387c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/100 (__SMUSDX) @06387b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/99 (__SMUSD) @063879d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/98 (__SMLALDX) @06387888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/97 (__SMLALD) @06387738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/96 (__SMLADX) @063875e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/95 (__SMLAD) @06387498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/94 (__SMUADX) @06387348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/93 (__SMUAD) @063871f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/92 (__SXTAB16_RORn) @063870a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/91 (__SXTAB16) @06383f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/90 (__SXTB16_RORn) @06383dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/89 (__SXTB16) @06383c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/88 (__UXTAB16) @06383b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/87 (__UXTB16) @063839d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/86 (__USADA8) @06383738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/85 (__USAD8) @063835e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/84 (__UHSAX) @06383498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/83 (__UQSAX) @06383348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/82 (__USAX) @063831f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/81 (__SHSAX) @063830a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/80 (__QSAX) @06376f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/79 (__SSAX) @06376dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/78 (__UHASX) @06376c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/77 (__UQASX) @06376b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/76 (__UASX) @063769d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/75 (__SHASX) @06376888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/74 (__QASX) @06376738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/73 (__SASX) @063765e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/72 (__UHSUB16) @06376498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/71 (__UQSUB16) @06376348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/70 (__USUB16) @063761f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/69 (__SHSUB16) @063760a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/68 (__QSUB16) @06371f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/67 (__SSUB16) @06371dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/66 (__UHADD16) @06371c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/65 (__UQADD16) @06371b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/64 (__UADD16) @063719d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/63 (__SHADD16) @06371888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/62 (__QADD16) @06371738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/61 (__SADD16) @063715e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/60 (__UHSUB8) @06371498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/59 (__UQSUB8) @06371348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/58 (__USUB8) @063711f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/57 (__SHSUB8) @063710a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/56 (__QSUB8) @0636af18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/55 (__SSUB8) @0636adc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/54 (__UHADD8) @0636ac78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/53 (__UQADD8) @0636ab28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/52 (__UADD8) @0636a9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/51 (__SHADD8) @0636a888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/50 (__QADD8) @0636a738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/49 (__SADD8) @0636a5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/48 (__set_FPSCR) @0636a498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/47 (__get_FPSCR) @0636a348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/46 (__set_FAULTMASK) @0636a1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/45 (__get_FAULTMASK) @0636a0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/44 (__set_BASEPRI_MAX) @06365f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/43 (__set_BASEPRI) @06365dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/42 (__get_BASEPRI) @06365c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/41 (__disable_fault_irq) @06365b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/40 (__enable_fault_irq) @063659d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/39 (__set_PRIMASK) @06365888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/38 (__get_PRIMASK) @06365738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/37 (__set_MSP) @063655e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/36 (__get_MSP) @06365498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/35 (__set_PSP) @06365348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/34 (__get_PSP) @063651f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/33 (__get_xPSR) @063650a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/32 (__get_APSR) @0635df18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/31 (__get_IPSR) @0635ddc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/30 (__set_CONTROL) @0635dc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/29 (__get_CONTROL) @0635db28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/28 (__disable_irq) @0635d9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/27 (__enable_irq) @0635d888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/26 (__STRT) @0635d738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/25 (__STRHT) @0635d5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/24 (__STRBT) @0635d498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/23 (__LDRT) @0635d348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/22 (__LDRHT) @0635d1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/21 (__LDRBT) @0635d0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/20 (__RRX) @06356f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/19 (__CLREX) @06356c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/18 (__STREXW) @06356b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/17 (__STREXH) @063569d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/16 (__STREXB) @06356888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/15 (__LDREXW) @06356738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/14 (__LDREXH) @063565e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/13 (__LDREXB) @06356498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/12 (__CLZ) @06356348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/11 (__RBIT) @063561f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/10 (__ROR) @06356000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/9 (__REVSH) @06317a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/8 (__REV16) @06317930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/7 (__REV) @063177e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/6 (__DMB) @06317690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/5 (__DSB) @06317f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/4 (__ISB) @06317dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/3 (__cmsis_start) @06317c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @06309498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06309348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06309150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: print_hex/137 ITM_CheckChar/136 ITM_ReceiveChar/135 ITM_SendChar/134 SysTick_Config/133 SCB_GetFPUType/132 ARM_MPU_Load/131 ARM_MPU_OrderedMemcpy/130 ARM_MPU_SetRegionEx/129 ARM_MPU_SetRegion/128 ARM_MPU_ClrRegion/127 ARM_MPU_Disable/126 ARM_MPU_Enable/125 __NVIC_SystemReset/124 __NVIC_GetVector/123 __NVIC_SetVector/122 NVIC_DecodePriority/121 NVIC_EncodePriority/120 __NVIC_GetPriority/119 __NVIC_SetPriority/118 __NVIC_GetActive/117 __NVIC_ClearPendingIRQ/116 __NVIC_SetPendingIRQ/115 __NVIC_GetPendingIRQ/114 __NVIC_DisableIRQ/113 __NVIC_GetEnableIRQ/112 __NVIC_EnableIRQ/111 __NVIC_GetPriorityGrouping/110 __NVIC_SetPriorityGrouping/109 __SMMLA/108 __QSUB/107 __QADD/106 __SEL/105 __SMLSLDX/104 __SMLSLD/103 __SMLSDX/102 __SMLSD/101 __SMUSDX/100 __SMUSD/99 __SMLALDX/98 __SMLALD/97 __SMLADX/96 __SMLAD/95 __SMUADX/94 __SMUAD/93 __SXTAB16_RORn/92 __SXTAB16/91 __SXTB16_RORn/90 __SXTB16/89 __UXTAB16/88 __UXTB16/87 __USADA8/86 __USAD8/85 __UHSAX/84 __UQSAX/83 __USAX/82 __SHSAX/81 __QSAX/80 __SSAX/79 __UHASX/78 __UQASX/77 __UASX/76 __SHASX/75 __QASX/74 __SASX/73 __UHSUB16/72 __UQSUB16/71 __USUB16/70 __SHSUB16/69 __QSUB16/68 __SSUB16/67 __UHADD16/66 __UQADD16/65 __UADD16/64 __SHADD16/63 __QADD16/62 __SADD16/61 __UHSUB8/60 __UQSUB8/59 __USUB8/58 __SHSUB8/57 __QSUB8/56 __SSUB8/55 __UHADD8/54 __UQADD8/53 __UADD8/52 __SHADD8/51 __QADD8/50 __SADD8/49 __set_FPSCR/48 __get_FPSCR/47 __set_FAULTMASK/46 __get_FAULTMASK/45 __set_BASEPRI_MAX/44 __set_BASEPRI/43 __get_BASEPRI/42 __disable_fault_irq/41 __enable_fault_irq/40 __set_PRIMASK/39 __get_PRIMASK/38 __set_MSP/37 __get_MSP/36 __set_PSP/35 __get_PSP/34 __get_xPSR/33 __get_APSR/32 __get_IPSR/31 __set_CONTROL/30 __get_CONTROL/29 __disable_irq/28 __enable_irq/27 __STRT/26 __STRHT/25 __STRBT/24 __LDRT/23 __LDRHT/22 __LDRBT/21 __RRX/20 __CLREX/19 __STREXW/18 __STREXH/17 __STREXB/16 __LDREXW/15 __LDREXH/14 __LDREXB/13 __CLZ/12 __RBIT/11 __ROR/10 __REVSH/9 __REV16/8 __REV/7 __DMB/6 __DSB/5 __ISB/4 __cmsis_start/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+puts/157 (__builtin_puts) @0649da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 
+  Calls: 
+printf/156 (printf) @0649d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 
+  Calls: 
+MAC_WriteRegister/155 (MAC_WriteRegister) @0649d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SendFrame/147 
+  Calls: 
+MAC_ReadRegister/154 (MAC_ReadRegister) @0649d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_SendFrame/147 
+  Calls: 
+memcpy/153 (memcpy) @0649d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 
+  Calls: 
+queueIsEmpty/152 (queueIsEmpty) @0649d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 
+  Calls: 
+HAL_SpiReadWrite/151 (HAL_SpiReadWrite) @0649d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Write/144 
+  Calls: 
+HAL_EnableIrq/150 (HAL_EnableIrq) @0649d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 spiCallback/143 
+  Calls: 
+queueRemove/149 (queueRemove) @0649d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 spiCallback/143 
+  Calls: 
+MAC_RecvFrame/148 (MAC_RecvFrame) @0649d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueRemove/149 printf/156 puts/157 printf/156 MAC_Read/146 printf/156 printf/156 printf/156 MAC_ReadRegister/154 
+   Indirect callnum speculative call targets: 0
+MAC_SendFrame/147 (MAC_SendFrame) @0649d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteFrame/145 MAC_WriteRegister/155 MAC_ReadRegister/154 
+MAC_Read/146 (MAC_Read) @0649d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (read) spiRxBuf/138 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_RecvFrame/148 
+  Calls: HAL_EnableIrq/150 CrcBlock8/142 memcpy/153 HAL_SpiReadWrite/151 queueIsEmpty/152 CrcBlock8/142 
+MAC_WriteFrame/145 (MAC_WriteFrame) @0649d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SendFrame/147 
+  Calls: HAL_SpiReadWrite/151 memcpy/153 CrcBlock8/142 
+MAC_Write/144 (MAC_Write) @0648adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_SpiReadWrite/151 CrcBlock8/142 CrcBlock8/142 
+spiCallback/143 (spiCallback) @0648a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/150 queueRemove/149 
+   Indirect callnum speculative call targets: 0
+CrcBlock8/142 (CrcBlock8) @0648a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Read/146 MAC_Write/144 MAC_Write/144 
+  Calls: crc8_be/141 crc8_le/140 
+crc8_be/141 (crc8_be) @0648a3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+crc8_le/140 (crc8_le) @0648af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+spiTxBuf/139 (spiTxBuf) @064654c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+spiRxBuf/138 (spiRxBuf) @06465438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (addr) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_Read/146 (read) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+
+
+Initial Symbol table:
+
+puts/157 (__builtin_puts) @0649da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 
+  Calls: 
+printf/156 (printf) @0649d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 
+  Calls: 
+MAC_WriteRegister/155 (MAC_WriteRegister) @0649d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SendFrame/147 
+  Calls: 
+MAC_ReadRegister/154 (MAC_ReadRegister) @0649d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_SendFrame/147 
+  Calls: 
+memcpy/153 (memcpy) @0649d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 
+  Calls: 
+queueIsEmpty/152 (queueIsEmpty) @0649d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 
+  Calls: 
+HAL_SpiReadWrite/151 (HAL_SpiReadWrite) @0649d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Write/144 
+  Calls: 
+HAL_EnableIrq/150 (HAL_EnableIrq) @0649d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 spiCallback/143 
+  Calls: 
+queueRemove/149 (queueRemove) @0649d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 spiCallback/143 
+  Calls: 
+MAC_RecvFrame/148 (MAC_RecvFrame) @0649d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueRemove/149 printf/156 puts/157 printf/156 MAC_Read/146 printf/156 printf/156 printf/156 MAC_ReadRegister/154 
+   Indirect callnum speculative call targets: 0
+MAC_SendFrame/147 (MAC_SendFrame) @0649d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteFrame/145 MAC_WriteRegister/155 MAC_ReadRegister/154 
+MAC_Read/146 (MAC_Read) @0649d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (read) spiRxBuf/138 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_RecvFrame/148 
+  Calls: HAL_EnableIrq/150 CrcBlock8/142 memcpy/153 HAL_SpiReadWrite/151 queueIsEmpty/152 CrcBlock8/142 
+MAC_WriteFrame/145 (MAC_WriteFrame) @0649d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SendFrame/147 
+  Calls: HAL_SpiReadWrite/151 memcpy/153 CrcBlock8/142 
+MAC_Write/144 (MAC_Write) @0648adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_SpiReadWrite/151 CrcBlock8/142 CrcBlock8/142 
+spiCallback/143 (spiCallback) @0648a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/150 queueRemove/149 
+   Indirect callnum speculative call targets: 0
+CrcBlock8/142 (CrcBlock8) @0648a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Read/146 MAC_Write/144 MAC_Write/144 
+  Calls: crc8_be/141 crc8_le/140 
+crc8_be/141 (crc8_be) @0648a3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+crc8_le/140 (crc8_le) @0648af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+spiTxBuf/139 (spiTxBuf) @064654c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+spiRxBuf/138 (spiRxBuf) @06465438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (addr) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_Read/146 (read) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+puts/157 (__builtin_puts) @0649da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 
+  Calls: 
+printf/156 (printf) @0649d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 MAC_RecvFrame/148 
+  Calls: 
+MAC_WriteRegister/155 (MAC_WriteRegister) @0649d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_SendFrame/147 
+  Calls: 
+MAC_ReadRegister/154 (MAC_ReadRegister) @0649d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 MAC_SendFrame/147 
+  Calls: 
+memcpy/153 (memcpy) @0649d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 
+  Calls: 
+queueIsEmpty/152 (queueIsEmpty) @0649d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 
+  Calls: 
+HAL_SpiReadWrite/151 (HAL_SpiReadWrite) @0649d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Write/144 
+  Calls: 
+HAL_EnableIrq/150 (HAL_EnableIrq) @0649d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_Read/146 spiCallback/143 
+  Calls: 
+queueRemove/149 (queueRemove) @0649d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: MAC_RecvFrame/148 spiCallback/143 
+  Calls: 
+MAC_RecvFrame/148 (MAC_RecvFrame) @0649d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: queueRemove/149 printf/156 puts/157 printf/156 MAC_Read/146 printf/156 printf/156 printf/156 MAC_ReadRegister/154 
+   Indirect callnum speculative call targets: 0
+MAC_SendFrame/147 (MAC_SendFrame) @0649d348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: MAC_WriteFrame/145 MAC_WriteRegister/155 MAC_ReadRegister/154 
+MAC_Read/146 (MAC_Read) @0649d1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (read) spiRxBuf/138 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_RecvFrame/148 
+  Calls: HAL_EnableIrq/150 CrcBlock8/142 memcpy/153 HAL_SpiReadWrite/151 queueIsEmpty/152 CrcBlock8/142 
+MAC_WriteFrame/145 (MAC_WriteFrame) @0649d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: MAC_SendFrame/147 
+  Calls: HAL_SpiReadWrite/151 memcpy/153 CrcBlock8/142 
+MAC_Write/144 (MAC_Write) @0648adc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_SpiReadWrite/151 CrcBlock8/142 CrcBlock8/142 
+spiCallback/143 (spiCallback) @0648a738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: HAL_EnableIrq/150 queueRemove/149 
+   Indirect callnum speculative call targets: 0
+CrcBlock8/142 (CrcBlock8) @0648a5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: MAC_WriteFrame/145 MAC_Read/146 MAC_Read/146 MAC_Write/144 MAC_Write/144 
+  Calls: crc8_be/141 crc8_le/140 
+crc8_be/141 (crc8_be) @0648a3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+crc8_le/140 (crc8_le) @0648af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: CrcBlock8/142 
+  Calls: 
+spiTxBuf/139 (spiTxBuf) @064654c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+spiRxBuf/138 (spiRxBuf) @06465438
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (addr) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_Read/146 (read) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_WriteFrame/145 (addr) 
+  Availability: not-ready
+  Varpool flags:
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+puts/157 (__builtin_puts) @0649da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_RecvFrame/148 (23905788 (estimated locally),0.06 per call) 
+  Calls: 
+printf/156 (printf) @0649d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_RecvFrame/148 (23905788 (estimated locally),0.06 per call) MAC_RecvFrame/148 (23905788 (estimated locally),0.06 per call) MAC_RecvFrame/148 (29972151 (estimated locally),0.08 per call) MAC_RecvFrame/148 (29972151 (estimated locally),0.08 per call) MAC_RecvFrame/148 (29972151 (estimated locally),0.08 per call) 
+  Calls: 
+MAC_WriteRegister/155 (MAC_WriteRegister) @0649d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_SendFrame/147 (40786245 (estimated locally),0.04 per call) 
+  Calls: 
+MAC_ReadRegister/154 (MAC_ReadRegister) @0649d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_RecvFrame/148 (224369321 (estimated locally),0.57 per call) MAC_SendFrame/147 (126426641 (estimated locally),0.12 per call) 
+  Calls: 
+memcpy/153 (memcpy) @0649d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_Read/146 (10587460 (estimated locally),0.03 per call) MAC_WriteFrame/145 (376157402 (estimated locally),0.35 per call) 
+  Calls: 
+queueIsEmpty/152 (queueIsEmpty) @0649d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_Read/146 (23905788 (estimated locally),0.07 per call) 
+  Calls: 
+HAL_SpiReadWrite/151 (HAL_SpiReadWrite) @0649d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_Read/146 (104619173 (estimated locally),0.32 per call) MAC_Write/144 (118111600 (estimated locally),0.55 per call) MAC_WriteFrame/145 (376157402 (estimated locally),0.35 per call) 
+  Calls: 
+HAL_EnableIrq/150 (HAL_EnableIrq) @0649d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_Read/146 (246682299 (estimated locally),0.75 per call) spiCallback/143 (71717363 (estimated locally),0.07 per call) 
+  Calls: 
+queueRemove/149 (queueRemove) @0649d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: MAC_RecvFrame/148 (94205812 (estimated locally),0.24 per call) spiCallback/143 (217325344 (estimated locally),0.20 per call) 
+  Calls: 
+MAC_RecvFrame/148 (MAC_RecvFrame) @0649d498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:392459965 (estimated locally) body
+  Called by: 
+  Calls: queueRemove/149 (94205812 (estimated locally),0.24 per call) printf/156 (23905788 (estimated locally),0.06 per call) puts/157 (23905788 (estimated locally),0.06 per call) printf/156 (23905788 (estimated locally),0.06 per call) MAC_Read/146 (118111600 (estimated locally),0.30 per call) printf/156 (29972151 (estimated locally),0.08 per call) printf/156 (29972151 (estimated locally),0.08 per call) printf/156 (29972151 (estimated locally),0.08 per call) MAC_ReadRegister/154 (224369321 (estimated locally),0.57 per call) 
+   Indirect call(65944069 (estimated locally),0.17 per call) of param:0 loaded from aggregate passed by reference at offset 192 (vptr maybe changed) num speculative call targets: 0
+MAC_SendFrame/147 (MAC_SendFrame) @0649d348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: MAC_WriteFrame/145 (19936317 (estimated locally),0.02 per call) MAC_WriteRegister/155 (40786245 (estimated locally),0.04 per call) MAC_ReadRegister/154 (126426641 (estimated locally),0.12 per call) 
+MAC_Read/146 (MAC_Read) @0649d1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (addr) spiRxBuf/138 (read) spiRxBuf/138 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:331030310 (estimated locally) body
+  Called by: MAC_RecvFrame/148 (118111600 (estimated locally),0.30 per call) 
+  Calls: HAL_EnableIrq/150 (246682299 (estimated locally),0.75 per call) CrcBlock8/142 (368566581 (estimated locally),1.11 per call) memcpy/153 (10587460 (estimated locally),0.03 per call) HAL_SpiReadWrite/151 (104619173 (estimated locally),0.32 per call) queueIsEmpty/152 (23905788 (estimated locally),0.07 per call) CrcBlock8/142 (118111600 (estimated locally),0.36 per call) 
+MAC_WriteFrame/145 (MAC_WriteFrame) @0649d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: MAC_SendFrame/147 (19936317 (estimated locally),0.02 per call) 
+  Calls: HAL_SpiReadWrite/151 (376157402 (estimated locally),0.35 per call) memcpy/153 (376157402 (estimated locally),0.35 per call) CrcBlock8/142 (376157402 (estimated locally),0.35 per call) 
+MAC_Write/144 (MAC_Write) @0648adc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (write) spiTxBuf/139 (addr) spiRxBuf/138 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:215674680 (estimated locally) body
+  Called by: 
+  Calls: HAL_SpiReadWrite/151 (118111600 (estimated locally),0.55 per call) CrcBlock8/142 (201829102 (estimated locally),0.94 per call) CrcBlock8/142 (118111600 (estimated locally),0.55 per call) 
+spiCallback/143 (spiCallback) @0648a738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: HAL_EnableIrq/150 (71717363 (estimated locally),0.07 per call) queueRemove/149 (217325344 (estimated locally),0.20 per call) 
+   Indirect call(76063871 (estimated locally),0.07 per call) num speculative call targets: 0
+CrcBlock8/142 (CrcBlock8) @0648a5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: MAC_Read/146 (368566581 (estimated locally),1.11 per call) MAC_Read/146 (118111600 (estimated locally),0.36 per call) MAC_Write/144 (201829102 (estimated locally),0.94 per call) MAC_Write/144 (118111600 (estimated locally),0.55 per call) MAC_WriteFrame/145 (376157402 (estimated locally),0.35 per call) 
+  Calls: crc8_be/141 (536870913 (estimated locally),0.50 per call) crc8_le/140 (536870913 (estimated locally),0.50 per call) 
+crc8_be/141 (crc8_be) @0648a3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:14598061 (estimated locally) body local nonfreeing_fn
+  Called by: CrcBlock8/142 (536870913 (estimated locally),0.50 per call) 
+  Calls: 
+crc8_le/140 (crc8_le) @0648af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:14598063 (estimated locally) body local nonfreeing_fn
+  Called by: CrcBlock8/142 (536870913 (estimated locally),0.50 per call) 
+  Calls: 
+spiTxBuf/139 (spiTxBuf) @064654c8
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_Write/144 (addr) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Write/144 (addr) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (write) MAC_WriteFrame/145 (addr) MAC_WriteFrame/145 (addr) MAC_Write/144 (write) MAC_Write/144 (write) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) MAC_Read/146 (write) MAC_Read/146 (write) MAC_Read/146 (addr) 
+  Availability: available
+  Varpool flags:
+spiRxBuf/138 (spiRxBuf) @06465438
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: MAC_Write/144 (addr) MAC_WriteFrame/145 (addr) MAC_Read/146 (addr) MAC_Read/146 (addr) MAC_Read/146 (read) MAC_Read/146 (addr) 
+  Availability: available
+  Varpool flags:
+Trivially needed variables: spiTxBuf/139 spiRxBuf/138
+Removing variables:
+
+Final Symbol table:
+
+puts/157 (__builtin_puts) @0649da80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/156 (printf) @0649d9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_WriteRegister/155 (MAC_WriteRegister) @0649d930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_ReadRegister/154 (MAC_ReadRegister) @0649d888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/153 (memcpy) @0649d7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+queueIsEmpty/152 (queueIsEmpty) @0649d738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_SpiReadWrite/151 (HAL_SpiReadWrite) @0649d690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HAL_EnableIrq/150 (HAL_EnableIrq) @0649d5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+queueRemove/149 (queueRemove) @0649d540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+MAC_RecvFrame/148 (MAC_RecvFrame) @0649d498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_RecvFrame (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:392459965 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_SendFrame/147 (MAC_SendFrame) @0649d348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_SendFrame (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_Read/146 (MAC_Read) @0649d1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_Read (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:331030310 (estimated locally)
+  Called by: 
+  Calls: 
+MAC_WriteFrame/145 (MAC_WriteFrame) @0649d0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.MAC_WriteFrame (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+MAC_Write/144 (MAC_Write) @0648adc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.MAC_Write (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:215674680 (estimated locally)
+  Called by: 
+  Calls: 
+spiCallback/143 (spiCallback) @0648a738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.spiCallback (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+CrcBlock8/142 (CrcBlock8) @0648a5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.CrcBlock8 (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+crc8_be/141 (crc8_be) @0648a3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.crc8_be (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:14598061 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+crc8_le/140 (crc8_le) @0648af18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.crc8_le (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:14598063 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+spiTxBuf/139 (spiTxBuf) @064654c8
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.spiTxBuf (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+spiRxBuf/138 (spiRxBuf) @06465438
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.spiRxBuf (implicit_section)
+  Aux: @064654c8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:

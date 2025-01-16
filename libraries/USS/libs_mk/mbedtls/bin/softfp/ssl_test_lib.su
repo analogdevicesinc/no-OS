@@ -1,0 +1,10 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:60:12:dummy_entropy	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:33:6:my_debug	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:75:6:rng_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:94:5:rng_seed	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:153:6:rng_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:175:5:rng_get	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:195:5:key_opaque_alg_parse	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:341:5:delayed_recv	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:358:5:delayed_send	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/programs/ssl/ssl_test_lib.c:376:5:idle	16	static

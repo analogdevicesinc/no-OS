@@ -1,0 +1,9 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:63:12:pk_write_rsa_pubkey	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:105:12:pk_write_ec_pubkey	168	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:133:12:pk_write_ec_param	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:153:12:pk_write_ec_private	96	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:172:5:mbedtls_pk_write_pubkey	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:212:5:mbedtls_pk_write_pubkey_der	64	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:309:5:mbedtls_pk_write_key_der	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:483:5:mbedtls_pk_write_pubkey_pem	2128	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pkwrite.c:503:5:mbedtls_pk_write_key_pem	5728	static

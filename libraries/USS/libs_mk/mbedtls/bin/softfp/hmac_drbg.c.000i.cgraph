@@ -1,0 +1,3147 @@
+Trivially needed symbols: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_random/162 mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_set_reseed_interval/160 mbedtls_hmac_drbg_set_entropy_len/159 mbedtls_hmac_drbg_set_prediction_resistance/158 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_reseed/156 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_init/152
+
+
+Initial Symbol table:
+
+putchar/189 (__builtin_putchar) @06456888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+memcmp/188 (memcmp) @064567e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+puts/187 (__builtin_puts) @06456738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+printf/186 (printf) @06456690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_info_from_type/185 (mbedtls_md_info_from_type) @064565e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_free/184 (mbedtls_md_free) @06456540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 
+  Calls: 
+mbedtls_mutex_free/183 (mbedtls_mutex_free) @06466f30
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_free/163 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_unlock/182 (mbedtls_mutex_unlock) @06466c60
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_lock/181 (mbedtls_mutex_lock) @06466b88
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+memcpy/180 (memcpy) @06456498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_drbg_self_test_entropy/169 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 
+  Calls: 
+mbedtls_mutex_init/179 (mbedtls_mutex_init) @06454948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_seed_buf/154 (read) mbedtls_hmac_drbg_seed/157 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_md_setup/178 (mbedtls_md_setup) @064563f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: 
+mbedtls_platform_zeroize/177 (mbedtls_platform_zeroize) @06456348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_starts/176 (mbedtls_md_hmac_starts) @064562a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_finish/175 (mbedtls_md_hmac_finish) @064561f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_update/174 (mbedtls_md_hmac_update) @06456150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_reset/173 (mbedtls_md_hmac_reset) @064560a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_get_size/172 (mbedtls_md_get_size) @06456000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+memset/171 (memset) @06432d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_init/152 
+  Calls: 
+mbedtls_hmac_drbg_self_test/170 (mbedtls_hmac_drbg_self_test) @064329d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_pr/164 (addr) result_pr/165 (addr) test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_nopr/166 (addr) result_nopr/167 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/189 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_reseed/156 puts/187 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_init/152 printf/186 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 mbedtls_hmac_drbg_set_prediction_resistance/158 puts/187 mbedtls_hmac_drbg_seed/157 printf/186 mbedtls_hmac_drbg_init/152 mbedtls_md_info_from_type/185 
+hmac_drbg_self_test_entropy/169 (hmac_drbg_self_test_entropy) @064322a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  Aux: @0639b990
+  References: test_offset/168 (read) test_offset/168 (read) test_offset/168 (write) 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) mbedtls_hmac_drbg_self_test/170 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/180 
+test_offset/168 (test_offset) @0639b990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (write) mbedtls_hmac_drbg_self_test/170 (write) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (write) 
+  Availability: not-ready
+  Varpool flags:
+result_nopr/167 (result_nopr) @0639b948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0639b8b8
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_nopr/166 (entropy_nopr) @0639b8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0639b828
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+result_pr/165 (result_pr) @0639b828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0639b798
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_pr/164 (entropy_pr) @0639b798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064322a0
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_hmac_drbg_free/163 (mbedtls_hmac_drbg_free) @064321f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064329d8
+  References: mbedtls_mutex_free/183 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_free/184 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random/162 (mbedtls_hmac_drbg_random) @064320a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064321f8
+  References: mbedtls_mutex_lock/181 (read) mbedtls_mutex_unlock/182 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_hmac_drbg_random_with_add/161 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random_with_add/161 (mbedtls_hmac_drbg_random_with_add) @063cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064320a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random/162 
+  Calls: mbedtls_hmac_drbg_update/153 memcpy/180 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_reseed/156 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_set_reseed_interval/160 (mbedtls_hmac_drbg_set_reseed_interval) @063cce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063cc1f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_entropy_len/159 (mbedtls_hmac_drbg_set_entropy_len) @063ccd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063cce70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_prediction_resistance/158 (mbedtls_hmac_drbg_set_prediction_resistance) @063ccbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063ccd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_hmac_drbg_seed/157 (mbedtls_hmac_drbg_seed) @063cca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063ccbd0
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: hmac_drbg_reseed_core/155 memset/171 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_reseed/156 (mbedtls_hmac_drbg_reseed) @063cc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063cca80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_random_with_add/161 
+  Calls: hmac_drbg_reseed_core/155 
+hmac_drbg_reseed_core/155 (hmac_drbg_reseed_core) @063cc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063cca80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_reseed/156 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_hmac_drbg_update/153 memcpy/180 memset/171 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_seed_buf/154 (mbedtls_hmac_drbg_seed_buf) @063cc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063cc930
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_hmac_drbg_update/153 memset/171 mbedtls_md_get_size/172 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_update/153 (mbedtls_hmac_drbg_update) @063cc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063cc690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_starts/176 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_init/152 (mbedtls_hmac_drbg_init) @063cc3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063cc540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: memset/171 
+_putchar_unlocked/151 (_putchar_unlocked) @063cc0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/150 (_getchar_unlocked) @063f69d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/149 (__sputc_r) @063f6498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/148 (mbedtls_error_add) @063f6bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortSetBASEPRI/147 (vPortSetBASEPRI) @06339a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ulPortRaiseBASEPRI/146 (ulPortRaiseBASEPRI) @06339930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortRaiseBASEPRI/145 (vPortRaiseBASEPRI) @06339738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+xPortIsInsideInterrupt/144 (xPortIsInsideInterrupt) @063395e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ucPortCountLeadingZeros/143 (ucPortCountLeadingZeros) @06339348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/142 (ITM_CheckChar) @0631d690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/141 (ITM_ReceiveChar) @0631d540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/140 (ITM_SendChar) @0631d3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/139 (SysTick_Config) @0631d0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/138 (SCB_GetFPUType) @06313540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/137 (ARM_MPU_Load) @06313f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/136 (ARM_MPU_OrderedMemcpy) @06313dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/135 (ARM_MPU_SetRegionEx) @06313c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/134 (ARM_MPU_SetRegion) @06313b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/133 (ARM_MPU_ClrRegion) @063139d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/132 (ARM_MPU_Disable) @06313888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/131 (ARM_MPU_Enable) @06313738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/130 (__NVIC_SystemReset) @06306f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/129 (__NVIC_GetVector) @06306dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/128 (__NVIC_SetVector) @06306c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/127 (NVIC_DecodePriority) @06306b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/126 (NVIC_EncodePriority) @063069d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/125 (__NVIC_GetPriority) @06306888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/124 (__NVIC_SetPriority) @06306738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/123 (__NVIC_GetActive) @063065e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/122 (__NVIC_ClearPendingIRQ) @06306498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/121 (__NVIC_SetPendingIRQ) @06306348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/120 (__NVIC_GetPendingIRQ) @063061f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/119 (__NVIC_DisableIRQ) @063060a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/118 (__NVIC_GetEnableIRQ) @062f3f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/117 (__NVIC_EnableIRQ) @062f3c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/116 (__NVIC_GetPriorityGrouping) @062f3b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/115 (__NVIC_SetPriorityGrouping) @062f39d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/114 (__SMMLA) @062b6d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/113 (__QSUB) @062b6bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/112 (__QADD) @062b6a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/111 (__SEL) @062b6930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/110 (__SMLSLDX) @062b67e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/109 (__SMLSLD) @062b6690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/108 (__SMLSDX) @062b6540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/107 (__SMLSD) @062b63f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/106 (__SMUSDX) @062b62a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/105 (__SMUSD) @062b6150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/104 (__SMLALDX) @062b6000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/103 (__SMLALD) @062abe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/102 (__SMLADX) @062abd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/101 (__SMLAD) @062abbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/100 (__SMUADX) @062aba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/99 (__SMUAD) @062ab930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/98 (__SXTAB16_RORn) @062ab7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/97 (__SXTAB16) @062ab690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/96 (__SXTB16_RORn) @062ab540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/95 (__SXTB16) @062ab3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/94 (__UXTAB16) @062ab2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/93 (__UXTB16) @062ab150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/92 (__USADA8) @062a2e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/91 (__USAD8) @062a2d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/90 (__UHSAX) @062a2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/89 (__UQSAX) @062a2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/88 (__USAX) @062a2930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/87 (__SHSAX) @062a27e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/86 (__QSAX) @062a2690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/85 (__SSAX) @062a2540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/84 (__UHASX) @062a23f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/83 (__UQASX) @062a22a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/82 (__UASX) @062a2150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/81 (__SHASX) @062a2000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/80 (__QASX) @0629de70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/79 (__SASX) @0629dd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/78 (__UHSUB16) @0629dbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/77 (__UQSUB16) @0629da80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/76 (__USUB16) @0629d930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/75 (__SHSUB16) @0629d7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/74 (__QSUB16) @0629d690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/73 (__SSUB16) @0629d540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/72 (__UHADD16) @0629d3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/71 (__UQADD16) @0629d2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/70 (__UADD16) @0629d150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/69 (__SHADD16) @0629d000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/68 (__QADD16) @06298e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/67 (__SADD16) @06298d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/66 (__UHSUB8) @06298bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/65 (__UQSUB8) @06298a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/64 (__USUB8) @06298930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/63 (__SHSUB8) @062987e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/62 (__QSUB8) @06298690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/61 (__SSUB8) @06298540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/60 (__UHADD8) @062983f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/59 (__UQADD8) @062982a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/58 (__UADD8) @06298150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/57 (__SHADD8) @06298000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/56 (__QADD8) @0628fe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/55 (__SADD8) @0628fd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/54 (__set_FPSCR) @0628fbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/53 (__get_FPSCR) @0628fa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/52 (__set_FAULTMASK) @0628f930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/51 (__get_FAULTMASK) @0628f7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/50 (__set_BASEPRI_MAX) @0628f690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/49 (__set_BASEPRI) @0628f540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/48 (__get_BASEPRI) @0628f3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/47 (__disable_fault_irq) @0628f2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/46 (__enable_fault_irq) @0628f150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/45 (__set_PRIMASK) @0628f000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/44 (__get_PRIMASK) @0628be70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/43 (__set_MSP) @0628bd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/42 (__get_MSP) @0628bbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/41 (__set_PSP) @0628ba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/40 (__get_PSP) @0628b930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/39 (__get_xPSR) @0628b7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/38 (__get_APSR) @0628b690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/37 (__get_IPSR) @0628b540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/36 (__set_CONTROL) @0628b3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/35 (__get_CONTROL) @0628b2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/34 (__disable_irq) @0628b150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/33 (__enable_irq) @0628b000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/32 (__STRT) @06284e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/31 (__STRHT) @06284d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/30 (__STRBT) @06284bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/29 (__LDRT) @06284a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/28 (__LDRHT) @06284930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/27 (__LDRBT) @062847e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/26 (__RRX) @06284690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/25 (__CLREX) @062843f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/24 (__STREXW) @062842a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/23 (__STREXH) @06284150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/22 (__STREXB) @06284000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/21 (__LDREXW) @0626fe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/20 (__LDREXH) @0626fd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/19 (__LDREXB) @0626fbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/18 (__CLZ) @0626fa80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/17 (__RBIT) @0626f930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/16 (__ROR) @0626f738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/15 (__REVSH) @0626f5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/14 (__REV16) @0626f498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/13 (__REV) @0626f348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/12 (__DMB) @0626f1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/11 (__DSB) @0626f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/10 (__ISB) @06239d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/9 (__cmsis_start) @06239e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06216d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06216bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06216a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06216690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06216540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062163f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062162a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06216150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06216000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/151 _getchar_unlocked/150 __sputc_r/149 mbedtls_error_add/148 vPortSetBASEPRI/147 ulPortRaiseBASEPRI/146 vPortRaiseBASEPRI/145 xPortIsInsideInterrupt/144 ucPortCountLeadingZeros/143 ITM_CheckChar/142 ITM_ReceiveChar/141 ITM_SendChar/140 SysTick_Config/139 SCB_GetFPUType/138 ARM_MPU_Load/137 ARM_MPU_OrderedMemcpy/136 ARM_MPU_SetRegionEx/135 ARM_MPU_SetRegion/134 ARM_MPU_ClrRegion/133 ARM_MPU_Disable/132 ARM_MPU_Enable/131 __NVIC_SystemReset/130 __NVIC_GetVector/129 __NVIC_SetVector/128 NVIC_DecodePriority/127 NVIC_EncodePriority/126 __NVIC_GetPriority/125 __NVIC_SetPriority/124 __NVIC_GetActive/123 __NVIC_ClearPendingIRQ/122 __NVIC_SetPendingIRQ/121 __NVIC_GetPendingIRQ/120 __NVIC_DisableIRQ/119 __NVIC_GetEnableIRQ/118 __NVIC_EnableIRQ/117 __NVIC_GetPriorityGrouping/116 __NVIC_SetPriorityGrouping/115 __SMMLA/114 __QSUB/113 __QADD/112 __SEL/111 __SMLSLDX/110 __SMLSLD/109 __SMLSDX/108 __SMLSD/107 __SMUSDX/106 __SMUSD/105 __SMLALDX/104 __SMLALD/103 __SMLADX/102 __SMLAD/101 __SMUADX/100 __SMUAD/99 __SXTAB16_RORn/98 __SXTAB16/97 __SXTB16_RORn/96 __SXTB16/95 __UXTAB16/94 __UXTB16/93 __USADA8/92 __USAD8/91 __UHSAX/90 __UQSAX/89 __USAX/88 __SHSAX/87 __QSAX/86 __SSAX/85 __UHASX/84 __UQASX/83 __UASX/82 __SHASX/81 __QASX/80 __SASX/79 __UHSUB16/78 __UQSUB16/77 __USUB16/76 __SHSUB16/75 __QSUB16/74 __SSUB16/73 __UHADD16/72 __UQADD16/71 __UADD16/70 __SHADD16/69 __QADD16/68 __SADD16/67 __UHSUB8/66 __UQSUB8/65 __USUB8/64 __SHSUB8/63 __QSUB8/62 __SSUB8/61 __UHADD8/60 __UQADD8/59 __UADD8/58 __SHADD8/57 __QADD8/56 __SADD8/55 __set_FPSCR/54 __get_FPSCR/53 __set_FAULTMASK/52 __get_FAULTMASK/51 __set_BASEPRI_MAX/50 __set_BASEPRI/49 __get_BASEPRI/48 __disable_fault_irq/47 __enable_fault_irq/46 __set_PRIMASK/45 __get_PRIMASK/44 __set_MSP/43 __get_MSP/42 __set_PSP/41 __get_PSP/40 __get_xPSR/39 __get_APSR/38 __get_IPSR/37 __set_CONTROL/36 __get_CONTROL/35 __disable_irq/34 __enable_irq/33 __STRT/32 __STRHT/31 __STRBT/30 __LDRT/29 __LDRHT/28 __LDRBT/27 __RRX/26 __CLREX/25 __STREXW/24 __STREXH/23 __STREXB/22 __LDREXW/21 __LDREXH/20 __LDREXB/19 __CLZ/18 __RBIT/17 __ROR/16 __REVSH/15 __REV16/14 __REV/13 __DMB/12 __DSB/11 __ISB/10 __cmsis_start/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+putchar/189 (__builtin_putchar) @06456888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+memcmp/188 (memcmp) @064567e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+puts/187 (__builtin_puts) @06456738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+printf/186 (printf) @06456690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_info_from_type/185 (mbedtls_md_info_from_type) @064565e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_free/184 (mbedtls_md_free) @06456540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 
+  Calls: 
+mbedtls_mutex_free/183 (mbedtls_mutex_free) @06466f30
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_free/163 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_unlock/182 (mbedtls_mutex_unlock) @06466c60
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_lock/181 (mbedtls_mutex_lock) @06466b88
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+memcpy/180 (memcpy) @06456498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_drbg_self_test_entropy/169 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 
+  Calls: 
+mbedtls_mutex_init/179 (mbedtls_mutex_init) @06454948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_seed_buf/154 (read) mbedtls_hmac_drbg_seed/157 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_md_setup/178 (mbedtls_md_setup) @064563f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: 
+mbedtls_platform_zeroize/177 (mbedtls_platform_zeroize) @06456348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_starts/176 (mbedtls_md_hmac_starts) @064562a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_finish/175 (mbedtls_md_hmac_finish) @064561f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_update/174 (mbedtls_md_hmac_update) @06456150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_reset/173 (mbedtls_md_hmac_reset) @064560a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_get_size/172 (mbedtls_md_get_size) @06456000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+memset/171 (memset) @06432d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_init/152 
+  Calls: 
+mbedtls_hmac_drbg_self_test/170 (mbedtls_hmac_drbg_self_test) @064329d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_pr/164 (addr) result_pr/165 (addr) test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_nopr/166 (addr) result_nopr/167 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/189 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_reseed/156 puts/187 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_init/152 printf/186 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 mbedtls_hmac_drbg_set_prediction_resistance/158 puts/187 mbedtls_hmac_drbg_seed/157 printf/186 mbedtls_hmac_drbg_init/152 mbedtls_md_info_from_type/185 
+hmac_drbg_self_test_entropy/169 (hmac_drbg_self_test_entropy) @064322a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: test_offset/168 (read) test_offset/168 (read) test_offset/168 (write) 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) mbedtls_hmac_drbg_self_test/170 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/180 
+test_offset/168 (test_offset) @0639b990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (write) mbedtls_hmac_drbg_self_test/170 (write) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (write) 
+  Availability: not-ready
+  Varpool flags:
+result_nopr/167 (result_nopr) @0639b948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_nopr/166 (entropy_nopr) @0639b8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+result_pr/165 (result_pr) @0639b828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_pr/164 (entropy_pr) @0639b798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_hmac_drbg_free/163 (mbedtls_hmac_drbg_free) @064321f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_free/183 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_free/184 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random/162 (mbedtls_hmac_drbg_random) @064320a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_lock/181 (read) mbedtls_mutex_unlock/182 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_hmac_drbg_random_with_add/161 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random_with_add/161 (mbedtls_hmac_drbg_random_with_add) @063cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random/162 
+  Calls: mbedtls_hmac_drbg_update/153 memcpy/180 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_reseed/156 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_set_reseed_interval/160 (mbedtls_hmac_drbg_set_reseed_interval) @063cce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_entropy_len/159 (mbedtls_hmac_drbg_set_entropy_len) @063ccd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_prediction_resistance/158 (mbedtls_hmac_drbg_set_prediction_resistance) @063ccbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_hmac_drbg_seed/157 (mbedtls_hmac_drbg_seed) @063cca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: hmac_drbg_reseed_core/155 memset/171 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_reseed/156 (mbedtls_hmac_drbg_reseed) @063cc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_random_with_add/161 
+  Calls: hmac_drbg_reseed_core/155 
+hmac_drbg_reseed_core/155 (hmac_drbg_reseed_core) @063cc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_reseed/156 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_hmac_drbg_update/153 memcpy/180 memset/171 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_seed_buf/154 (mbedtls_hmac_drbg_seed_buf) @063cc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_hmac_drbg_update/153 memset/171 mbedtls_md_get_size/172 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_update/153 (mbedtls_hmac_drbg_update) @063cc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_starts/176 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_init/152 (mbedtls_hmac_drbg_init) @063cc3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: memset/171 
+
+
+Initial Symbol table:
+
+putchar/189 (__builtin_putchar) @06456888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+memcmp/188 (memcmp) @064567e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+puts/187 (__builtin_puts) @06456738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+printf/186 (printf) @06456690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_info_from_type/185 (mbedtls_md_info_from_type) @064565e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_free/184 (mbedtls_md_free) @06456540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 
+  Calls: 
+mbedtls_mutex_free/183 (mbedtls_mutex_free) @06466f30
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_free/163 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_unlock/182 (mbedtls_mutex_unlock) @06466c60
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_lock/181 (mbedtls_mutex_lock) @06466b88
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+memcpy/180 (memcpy) @06456498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_drbg_self_test_entropy/169 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 
+  Calls: 
+mbedtls_mutex_init/179 (mbedtls_mutex_init) @06454948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_seed_buf/154 (read) mbedtls_hmac_drbg_seed/157 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_md_setup/178 (mbedtls_md_setup) @064563f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: 
+mbedtls_platform_zeroize/177 (mbedtls_platform_zeroize) @06456348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_starts/176 (mbedtls_md_hmac_starts) @064562a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_finish/175 (mbedtls_md_hmac_finish) @064561f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_update/174 (mbedtls_md_hmac_update) @06456150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_reset/173 (mbedtls_md_hmac_reset) @064560a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_get_size/172 (mbedtls_md_get_size) @06456000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+memset/171 (memset) @06432d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_init/152 
+  Calls: 
+mbedtls_hmac_drbg_self_test/170 (mbedtls_hmac_drbg_self_test) @064329d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_pr/164 (addr) result_pr/165 (addr) test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_nopr/166 (addr) result_nopr/167 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/189 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_reseed/156 puts/187 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_init/152 printf/186 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 mbedtls_hmac_drbg_set_prediction_resistance/158 puts/187 mbedtls_hmac_drbg_seed/157 printf/186 mbedtls_hmac_drbg_init/152 mbedtls_md_info_from_type/185 
+hmac_drbg_self_test_entropy/169 (hmac_drbg_self_test_entropy) @064322a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: test_offset/168 (read) test_offset/168 (read) test_offset/168 (write) 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) mbedtls_hmac_drbg_self_test/170 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/180 
+test_offset/168 (test_offset) @0639b990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (write) mbedtls_hmac_drbg_self_test/170 (write) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (write) 
+  Availability: not-ready
+  Varpool flags:
+result_nopr/167 (result_nopr) @0639b948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_nopr/166 (entropy_nopr) @0639b8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+result_pr/165 (result_pr) @0639b828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_pr/164 (entropy_pr) @0639b798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_hmac_drbg_free/163 (mbedtls_hmac_drbg_free) @064321f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_free/183 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_free/184 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random/162 (mbedtls_hmac_drbg_random) @064320a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_lock/181 (read) mbedtls_mutex_unlock/182 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_hmac_drbg_random_with_add/161 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random_with_add/161 (mbedtls_hmac_drbg_random_with_add) @063cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random/162 
+  Calls: mbedtls_hmac_drbg_update/153 memcpy/180 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_reseed/156 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_set_reseed_interval/160 (mbedtls_hmac_drbg_set_reseed_interval) @063cce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_entropy_len/159 (mbedtls_hmac_drbg_set_entropy_len) @063ccd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_prediction_resistance/158 (mbedtls_hmac_drbg_set_prediction_resistance) @063ccbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_hmac_drbg_seed/157 (mbedtls_hmac_drbg_seed) @063cca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: hmac_drbg_reseed_core/155 memset/171 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_reseed/156 (mbedtls_hmac_drbg_reseed) @063cc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_random_with_add/161 
+  Calls: hmac_drbg_reseed_core/155 
+hmac_drbg_reseed_core/155 (hmac_drbg_reseed_core) @063cc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_reseed/156 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_hmac_drbg_update/153 memcpy/180 memset/171 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_seed_buf/154 (mbedtls_hmac_drbg_seed_buf) @063cc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_hmac_drbg_update/153 memset/171 mbedtls_md_get_size/172 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_update/153 (mbedtls_hmac_drbg_update) @063cc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_starts/176 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_init/152 (mbedtls_hmac_drbg_init) @063cc3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: memset/171 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+putchar/189 (__builtin_putchar) @06456888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+memcmp/188 (memcmp) @064567e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+puts/187 (__builtin_puts) @06456738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+printf/186 (printf) @06456690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_info_from_type/185 (mbedtls_md_info_from_type) @064565e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_md_free/184 (mbedtls_md_free) @06456540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 
+  Calls: 
+mbedtls_mutex_free/183 (mbedtls_mutex_free) @06466f30
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_free/163 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_unlock/182 (mbedtls_mutex_unlock) @06466c60
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_mutex_lock/181 (mbedtls_mutex_lock) @06466b88
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not-ready
+  Varpool flags:
+memcpy/180 (memcpy) @06456498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: hmac_drbg_self_test_entropy/169 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 
+  Calls: 
+mbedtls_mutex_init/179 (mbedtls_mutex_init) @06454948
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_seed_buf/154 (read) mbedtls_hmac_drbg_seed/157 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_md_setup/178 (mbedtls_md_setup) @064563f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: 
+mbedtls_platform_zeroize/177 (mbedtls_platform_zeroize) @06456348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_starts/176 (mbedtls_md_hmac_starts) @064562a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_finish/175 (mbedtls_md_hmac_finish) @064561f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_update/174 (mbedtls_md_hmac_update) @06456150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_hmac_reset/173 (mbedtls_md_hmac_reset) @064560a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_update/153 
+  Calls: 
+mbedtls_md_get_size/172 (mbedtls_md_get_size) @06456000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_update/153 
+  Calls: 
+memset/171 (memset) @06432d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 mbedtls_hmac_drbg_init/152 
+  Calls: 
+mbedtls_hmac_drbg_self_test/170 (mbedtls_hmac_drbg_self_test) @064329d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_pr/164 (addr) result_pr/165 (addr) test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_nopr/166 (addr) result_nopr/167 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: putchar/189 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_reseed/156 puts/187 mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_init/152 printf/186 puts/187 mbedtls_hmac_drbg_free/163 mbedtls_hmac_drbg_free/163 puts/187 memcmp/188 puts/187 mbedtls_hmac_drbg_random/162 puts/187 mbedtls_hmac_drbg_random/162 mbedtls_hmac_drbg_set_prediction_resistance/158 puts/187 mbedtls_hmac_drbg_seed/157 printf/186 mbedtls_hmac_drbg_init/152 mbedtls_md_info_from_type/185 
+hmac_drbg_self_test_entropy/169 (hmac_drbg_self_test_entropy) @064322a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Address is taken.
+  References: test_offset/168 (read) test_offset/168 (read) test_offset/168 (write) 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) mbedtls_hmac_drbg_self_test/170 (addr) 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/180 
+test_offset/168 (test_offset) @0639b990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (write) mbedtls_hmac_drbg_self_test/170 (write) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (write) 
+  Availability: not-ready
+  Varpool flags:
+result_nopr/167 (result_nopr) @0639b948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_nopr/166 (entropy_nopr) @0639b8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+result_pr/165 (result_pr) @0639b828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+entropy_pr/164 (entropy_pr) @0639b798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_hmac_drbg_free/163 (mbedtls_hmac_drbg_free) @064321f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_free/183 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_free/184 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random/162 (mbedtls_hmac_drbg_random) @064320a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_lock/181 (read) mbedtls_mutex_unlock/182 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: mbedtls_hmac_drbg_random_with_add/161 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_random_with_add/161 (mbedtls_hmac_drbg_random_with_add) @063cc1f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random/162 
+  Calls: mbedtls_hmac_drbg_update/153 memcpy/180 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_hmac_drbg_update/153 mbedtls_hmac_drbg_reseed/156 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_set_reseed_interval/160 (mbedtls_hmac_drbg_set_reseed_interval) @063cce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_entropy_len/159 (mbedtls_hmac_drbg_set_entropy_len) @063ccd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_prediction_resistance/158 (mbedtls_hmac_drbg_set_prediction_resistance) @063ccbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 
+  Calls: 
+mbedtls_hmac_drbg_seed/157 (mbedtls_hmac_drbg_seed) @063cca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: hmac_drbg_reseed_core/155 memset/171 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_reseed/156 (mbedtls_hmac_drbg_reseed) @063cc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_random_with_add/161 
+  Calls: hmac_drbg_reseed_core/155 
+hmac_drbg_reseed_core/155 (hmac_drbg_reseed_core) @063cc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_seed/157 mbedtls_hmac_drbg_reseed/156 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_hmac_drbg_update/153 memcpy/180 memset/171 
+   Indirect callnum speculative call targets: 0
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_seed_buf/154 (mbedtls_hmac_drbg_seed_buf) @063cc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_hmac_drbg_update/153 memset/171 mbedtls_md_get_size/172 mbedtls_md_hmac_starts/176 mbedtls_md_get_size/172 mbedtls_md_setup/178 
+   Indirect callnum speculative call targets: 0
+mbedtls_hmac_drbg_update/153 (mbedtls_hmac_drbg_update) @063cc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_random_with_add/161 mbedtls_hmac_drbg_random_with_add/161 hmac_drbg_reseed_core/155 mbedtls_hmac_drbg_seed_buf/154 
+  Calls: mbedtls_platform_zeroize/177 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_starts/176 mbedtls_md_hmac_finish/175 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_update/174 mbedtls_md_hmac_reset/173 mbedtls_md_get_size/172 
+mbedtls_hmac_drbg_init/152 (mbedtls_hmac_drbg_init) @063cc3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_hmac_drbg_self_test/170 mbedtls_hmac_drbg_self_test/170 
+  Calls: memset/171 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+putchar/189 (__builtin_putchar) @06456888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 (1029011 (estimated locally),0.00 per call) 
+  Calls: 
+memcmp/188 (memcmp) @064567e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 (6379328 (estimated locally),0.01 per call) mbedtls_hmac_drbg_self_test/170 (169319194 (estimated locally),0.16 per call) 
+  Calls: 
+puts/187 (__builtin_puts) @06456738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 (1029011 (estimated locally),0.00 per call) mbedtls_hmac_drbg_self_test/170 (1076167 (estimated locally),0.00 per call) mbedtls_hmac_drbg_self_test/170 (1084486 (estimated locally),0.00 per call) mbedtls_hmac_drbg_self_test/170 (3335835 (estimated locally),0.00 per call) mbedtls_hmac_drbg_self_test/170 (6824540 (estimated locally),0.01 per call) mbedtls_hmac_drbg_self_test/170 (13961824 (estimated locally),0.01 per call) mbedtls_hmac_drbg_self_test/170 (27311863 (estimated locally),0.03 per call) mbedtls_hmac_drbg_self_test/170 (28563471 (estimated locally),0.03 per call) mbedtls_hmac_drbg_self_test/170 (28784263 (estimated locally),0.03 per call) mbedtls_hmac_drbg_self_test/170 (88539252 (estimated locally),0.08 per call) mbedtls_hmac_drbg_self_test/170 (181135951 (estimated locally),0.17 per call) 
+  Calls: 
+printf/186 (printf) @06456690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 (27311863 (estimated locally),0.03 per call) mbedtls_hmac_drbg_self_test/170 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+mbedtls_md_info_from_type/185 (mbedtls_md_info_from_type) @064565e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_self_test/170 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_md_free/184 (mbedtls_md_free) @06456540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 (879501929 (estimated locally),0.82 per call) 
+  Calls: 
+mbedtls_mutex_free/183 (mbedtls_mutex_free) @06466f30
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_free/163 (read) 
+  Availability: not_available
+  Varpool flags:
+mbedtls_mutex_unlock/182 (mbedtls_mutex_unlock) @06466c60
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not_available
+  Varpool flags:
+mbedtls_mutex_lock/181 (mbedtls_mutex_lock) @06466b88
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_random/162 (read) 
+  Availability: not_available
+  Varpool flags:
+memcpy/180 (memcpy) @06456498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 (960413606 (estimated locally),6.55 per call) hmac_drbg_reseed_core/155 (236588729 (estimated locally),0.22 per call) hmac_drbg_self_test_entropy/169 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mutex_init/179 (mbedtls_mutex_init) @06454948
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_hmac_drbg_seed_buf/154 (read) mbedtls_hmac_drbg_seed/157 (read) 
+  Availability: not_available
+  Varpool flags:
+mbedtls_md_setup/178 (mbedtls_md_setup) @064563f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 (1073741823 (estimated locally),1.00 per call) mbedtls_hmac_drbg_seed_buf/154 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_zeroize/177 (mbedtls_platform_zeroize) @06456348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_free/163 (879501929 (estimated locally),0.82 per call) hmac_drbg_reseed_core/155 (1024193633 (estimated locally),0.95 per call) mbedtls_hmac_drbg_update/153 (166453809 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_md_hmac_starts/176 (mbedtls_md_hmac_starts) @064562a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 (708669600 (estimated locally),0.66 per call) mbedtls_hmac_drbg_seed_buf/154 (708669600 (estimated locally),0.66 per call) mbedtls_hmac_drbg_update/153 (963977621 (estimated locally),5.79 per call) 
+  Calls: 
+mbedtls_md_hmac_finish/175 (mbedtls_md_hmac_finish) @064561f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 (987571835 (estimated locally),6.74 per call) mbedtls_hmac_drbg_update/153 (925804102 (estimated locally),5.56 per call) mbedtls_hmac_drbg_update/153 (983650637 (estimated locally),5.91 per call) 
+  Calls: 
+mbedtls_md_hmac_update/174 (mbedtls_md_hmac_update) @06456150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 (1015498035 (estimated locally),6.93 per call) mbedtls_hmac_drbg_update/153 (944698066 (estimated locally),5.68 per call) mbedtls_hmac_drbg_update/153 (336730991 (estimated locally),2.02 per call) mbedtls_hmac_drbg_update/153 (1010597205 (estimated locally),6.07 per call) mbedtls_hmac_drbg_update/153 (1031221641 (estimated locally),6.20 per call) 
+  Calls: 
+mbedtls_md_hmac_reset/173 (mbedtls_md_hmac_reset) @064560a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 (1044213921 (estimated locally),7.12 per call) mbedtls_hmac_drbg_update/153 (1052266985 (estimated locally),6.32 per call) 
+  Calls: 
+mbedtls_md_get_size/172 (mbedtls_md_get_size) @06456000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_random_with_add/161 (146556392 (estimated locally),1.00 per call) mbedtls_hmac_drbg_seed/157 (708669600 (estimated locally),0.66 per call) mbedtls_hmac_drbg_seed_buf/154 (346397698 (estimated locally),0.32 per call) mbedtls_hmac_drbg_seed_buf/154 (708669600 (estimated locally),0.66 per call) mbedtls_hmac_drbg_update/153 (166453806 (estimated locally),1.00 per call) 
+  Calls: 
+memset/171 (memset) @06432d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_hmac_drbg_seed/157 (346397698 (estimated locally),0.32 per call) mbedtls_hmac_drbg_seed_buf/154 (346397698 (estimated locally),0.32 per call) hmac_drbg_reseed_core/155 (1040367092 (estimated locally),0.97 per call) mbedtls_hmac_drbg_init/152 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_hmac_drbg_self_test/170 (mbedtls_hmac_drbg_self_test) @064329d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_pr/164 (addr) result_pr/165 (addr) test_offset/168 (write) hmac_drbg_self_test_entropy/169 (addr) entropy_nopr/166 (addr) result_nopr/167 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: putchar/189 (1029011 (estimated locally),0.00 per call) puts/187 (1029011 (estimated locally),0.00 per call) mbedtls_hmac_drbg_free/163 (3118215 (estimated locally),0.00 per call) mbedtls_hmac_drbg_free/163 (3118215 (estimated locally),0.00 per call) puts/187 (1076167 (estimated locally),0.00 per call) memcmp/188 (6379328 (estimated locally),0.01 per call) puts/187 (1084486 (estimated locally),0.00 per call) mbedtls_hmac_drbg_random/162 (9665648 (estimated locally),0.01 per call) puts/187 (3335835 (estimated locally),0.00 per call) mbedtls_hmac_drbg_random/162 (19774239 (estimated locally),0.02 per call) puts/187 (6824540 (estimated locally),0.01 per call) mbedtls_hmac_drbg_reseed/156 (40454662 (estimated locally),0.04 per call) puts/187 (13961824 (estimated locally),0.01 per call) mbedtls_hmac_drbg_seed/157 (82763222 (estimated locally),0.08 per call) mbedtls_hmac_drbg_init/152 (82763222 (estimated locally),0.08 per call) printf/186 (27311863 (estimated locally),0.03 per call) puts/187 (27311863 (estimated locally),0.03 per call) mbedtls_hmac_drbg_free/163 (82763221 (estimated locally),0.08 per call) mbedtls_hmac_drbg_free/163 (82763221 (estimated locally),0.08 per call) puts/187 (28563471 (estimated locally),0.03 per call) memcmp/188 (169319194 (estimated locally),0.16 per call) puts/187 (28784263 (estimated locally),0.03 per call) mbedtls_hmac_drbg_random/162 (256544234 (estimated locally),0.24 per call) puts/187 (88539252 (estimated locally),0.08 per call) mbedtls_hmac_drbg_random/162 (524845000 (estimated locally),0.49 per call) mbedtls_hmac_drbg_set_prediction_resistance/158 (524845000 (estimated locally),0.49 per call) puts/187 (181135951 (estimated locally),0.17 per call) mbedtls_hmac_drbg_seed/157 (1073741824 (estimated locally),1.00 per call) printf/186 (354334800 (estimated locally),0.33 per call) mbedtls_hmac_drbg_init/152 (1073741824 (estimated locally),1.00 per call) mbedtls_md_info_from_type/185 (1073741824 (estimated locally),1.00 per call) 
+hmac_drbg_self_test_entropy/169 (hmac_drbg_self_test_entropy) @064322a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  Address is taken.
+  References: test_offset/168 (read) test_offset/168 (write) 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memcpy/180 (1073741824 (estimated locally),1.00 per call) 
+test_offset/168 (test_offset) @0639b990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: hmac_drbg_self_test_entropy/169 (read) hmac_drbg_self_test_entropy/169 (write) mbedtls_hmac_drbg_self_test/170 (write) mbedtls_hmac_drbg_self_test/170 (write) 
+  Availability: available
+  Varpool flags:
+result_nopr/167 (result_nopr) @0639b948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+entropy_nopr/166 (entropy_nopr) @0639b8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+result_pr/165 (result_pr) @0639b828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+entropy_pr/164 (entropy_pr) @0639b798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_hmac_drbg_self_test/170 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_hmac_drbg_free/163 (mbedtls_hmac_drbg_free) @064321f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_mutex_free/183 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_self_test/170 (3118215 (estimated locally),0.00 per call) mbedtls_hmac_drbg_self_test/170 (3118215 (estimated locally),0.00 per call) mbedtls_hmac_drbg_self_test/170 (82763221 (estimated locally),0.08 per call) mbedtls_hmac_drbg_self_test/170 (82763221 (estimated locally),0.08 per call) 
+  Calls: mbedtls_platform_zeroize/177 (879501929 (estimated locally),0.82 per call) mbedtls_md_free/184 (879501929 (estimated locally),0.82 per call) 
+   Indirect call(615651353 (estimated locally),0.57 per call) num speculative call targets: 0
+mbedtls_hmac_drbg_random/162 (mbedtls_hmac_drbg_random) @064320a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_mutex_lock/181 (read) mbedtls_mutex_unlock/182 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_self_test/170 (9665648 (estimated locally),0.01 per call) mbedtls_hmac_drbg_self_test/170 (19774239 (estimated locally),0.02 per call) mbedtls_hmac_drbg_self_test/170 (256544234 (estimated locally),0.24 per call) mbedtls_hmac_drbg_self_test/170 (524845000 (estimated locally),0.49 per call) 
+  Calls: mbedtls_hmac_drbg_random_with_add/161 (524844999 (estimated locally),0.49 per call) 
+   Indirect call(524844999 (estimated locally),0.49 per call) num speculative call targets: 0
+   Indirect call(1073741823 (estimated locally),1.00 per call) num speculative call targets: 0
+mbedtls_hmac_drbg_random_with_add/161 (mbedtls_hmac_drbg_random_with_add) @063cc1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:146556392 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_random/162 (524844999 (estimated locally),0.49 per call) 
+  Calls: mbedtls_hmac_drbg_update/153 (29527904 (estimated locally),0.20 per call) memcpy/180 (960413606 (estimated locally),6.55 per call) mbedtls_md_hmac_finish/175 (987571835 (estimated locally),6.74 per call) mbedtls_md_hmac_update/174 (1015498035 (estimated locally),6.93 per call) mbedtls_md_hmac_reset/173 (1044213921 (estimated locally),7.12 per call) mbedtls_hmac_drbg_update/153 (28410152 (estimated locally),0.19 per call) mbedtls_hmac_drbg_reseed/156 (60400586 (estimated locally),0.41 per call) mbedtls_md_get_size/172 (146556392 (estimated locally),1.00 per call) 
+mbedtls_hmac_drbg_set_reseed_interval/160 (mbedtls_hmac_drbg_set_reseed_interval) @063cce70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_entropy_len/159 (mbedtls_hmac_drbg_set_entropy_len) @063ccd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_prediction_resistance/158 (mbedtls_hmac_drbg_set_prediction_resistance) @063ccbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_hmac_drbg_self_test/170 (524845000 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_hmac_drbg_seed/157 (mbedtls_hmac_drbg_seed) @063cca80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_self_test/170 (82763222 (estimated locally),0.08 per call) mbedtls_hmac_drbg_self_test/170 (1073741824 (estimated locally),1.00 per call) 
+  Calls: hmac_drbg_reseed_core/155 (346397698 (estimated locally),0.32 per call) memset/171 (346397698 (estimated locally),0.32 per call) mbedtls_md_hmac_starts/176 (708669600 (estimated locally),0.66 per call) mbedtls_md_get_size/172 (708669600 (estimated locally),0.66 per call) mbedtls_md_setup/178 (1073741823 (estimated locally),1.00 per call) 
+   Indirect call(708669600 (estimated locally),0.66 per call) num speculative call targets: 0
+mbedtls_hmac_drbg_reseed/156 (mbedtls_hmac_drbg_reseed) @063cc930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_self_test/170 (40454662 (estimated locally),0.04 per call) mbedtls_hmac_drbg_random_with_add/161 (60400586 (estimated locally),0.41 per call) 
+  Calls: hmac_drbg_reseed_core/155 (1073741824 (estimated locally),1.00 per call) 
+hmac_drbg_reseed_core/155 (hmac_drbg_reseed_core) @063cc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: mbedtls_hmac_drbg_seed/157 (346397698 (estimated locally),0.32 per call) mbedtls_hmac_drbg_reseed/156 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_platform_zeroize/177 (1024193633 (estimated locally),0.95 per call) mbedtls_hmac_drbg_update/153 (1024193633 (estimated locally),0.95 per call) memcpy/180 (236588729 (estimated locally),0.22 per call) memset/171 (1040367092 (estimated locally),0.97 per call) 
+   Indirect call(514773638 (estimated locally),0.48 per call) of param:0 loaded from aggregate passed by reference at offset 480 (vptr maybe changed) num speculative call targets: 0
+   Indirect call(1040367092 (estimated locally),0.97 per call) of param:0 loaded from aggregate passed by reference at offset 480 (vptr maybe changed) num speculative call targets: 0
+mbedtls_hmac_drbg_seed_buf/154 (mbedtls_hmac_drbg_seed_buf) @063cc690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_mutex_init/179 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_hmac_drbg_update/153 (346397698 (estimated locally),0.32 per call) memset/171 (346397698 (estimated locally),0.32 per call) mbedtls_md_get_size/172 (346397698 (estimated locally),0.32 per call) mbedtls_md_hmac_starts/176 (708669600 (estimated locally),0.66 per call) mbedtls_md_get_size/172 (708669600 (estimated locally),0.66 per call) mbedtls_md_setup/178 (1073741823 (estimated locally),1.00 per call) 
+   Indirect call(708669600 (estimated locally),0.66 per call) num speculative call targets: 0
+mbedtls_hmac_drbg_update/153 (mbedtls_hmac_drbg_update) @063cc540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:166453806 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_random_with_add/161 (29527904 (estimated locally),0.20 per call) mbedtls_hmac_drbg_random_with_add/161 (28410152 (estimated locally),0.19 per call) mbedtls_hmac_drbg_seed_buf/154 (346397698 (estimated locally),0.32 per call) hmac_drbg_reseed_core/155 (1024193633 (estimated locally),0.95 per call) 
+  Calls: mbedtls_platform_zeroize/177 (166453809 (estimated locally),1.00 per call) mbedtls_md_hmac_finish/175 (925804102 (estimated locally),5.56 per call) mbedtls_md_hmac_update/174 (944698066 (estimated locally),5.68 per call) mbedtls_md_hmac_starts/176 (963977621 (estimated locally),5.79 per call) mbedtls_md_hmac_finish/175 (983650637 (estimated locally),5.91 per call) mbedtls_md_hmac_update/174 (336730991 (estimated locally),2.02 per call) mbedtls_md_hmac_update/174 (1010597205 (estimated locally),6.07 per call) mbedtls_md_hmac_update/174 (1031221641 (estimated locally),6.20 per call) mbedtls_md_hmac_reset/173 (1052266985 (estimated locally),6.32 per call) mbedtls_md_get_size/172 (166453806 (estimated locally),1.00 per call) 
+mbedtls_hmac_drbg_init/152 (mbedtls_hmac_drbg_init) @063cc3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_hmac_drbg_self_test/170 (82763222 (estimated locally),0.08 per call) mbedtls_hmac_drbg_self_test/170 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memset/171 (1073741824 (estimated locally),1.00 per call) 
+Trivially needed variables: test_offset/168 result_nopr/167 entropy_nopr/166 result_pr/165 entropy_pr/164
+Removing variables:
+
+Final Symbol table:
+
+putchar/189 (__builtin_putchar) @06456888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/188 (memcmp) @064567e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/187 (__builtin_puts) @06456738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/186 (printf) @06456690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_info_from_type/185 (mbedtls_md_info_from_type) @064565e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_free/184 (mbedtls_md_free) @06456540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mutex_free/183 (mbedtls_mutex_free) @06466f30
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+mbedtls_mutex_unlock/182 (mbedtls_mutex_unlock) @06466c60
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+mbedtls_mutex_lock/181 (mbedtls_mutex_lock) @06466b88
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+memcpy/180 (memcpy) @06456498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mutex_init/179 (mbedtls_mutex_init) @06454948
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+mbedtls_md_setup/178 (mbedtls_md_setup) @064563f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/177 (mbedtls_platform_zeroize) @06456348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_starts/176 (mbedtls_md_hmac_starts) @064562a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_finish/175 (mbedtls_md_hmac_finish) @064561f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_update/174 (mbedtls_md_hmac_update) @06456150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_hmac_reset/173 (mbedtls_md_hmac_reset) @064560a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_get_size/172 (mbedtls_md_get_size) @06456000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/171 (memset) @06432d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_self_test/170 (mbedtls_hmac_drbg_self_test) @064329d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hmac_drbg_self_test_entropy/169 (hmac_drbg_self_test_entropy) @064322a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.hmac_drbg_self_test_entropy (implicit_section)
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+test_offset/168 (test_offset) @0639b990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.test_offset (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+result_nopr/167 (result_nopr) @0639b948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.result_nopr (implicit_section)
+  Aux: @0639b990
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+entropy_nopr/166 (entropy_nopr) @0639b8b8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.entropy_nopr (implicit_section)
+  Aux: @0639b948
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+result_pr/165 (result_pr) @0639b828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.result_pr (implicit_section)
+  Aux: @0639b8b8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+entropy_pr/164 (entropy_pr) @0639b798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.entropy_pr (implicit_section)
+  Aux: @0639b828
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_hmac_drbg_free/163 (mbedtls_hmac_drbg_free) @064321f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_random/162 (mbedtls_hmac_drbg_random) @064320a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_random (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_random_with_add/161 (mbedtls_hmac_drbg_random_with_add) @063cc1f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_random_with_add (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:146556392 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_reseed_interval/160 (mbedtls_hmac_drbg_set_reseed_interval) @063cce70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_set_reseed_interval (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_entropy_len/159 (mbedtls_hmac_drbg_set_entropy_len) @063ccd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_set_entropy_len (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_set_prediction_resistance/158 (mbedtls_hmac_drbg_set_prediction_resistance) @063ccbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_set_prediction_resistance (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed/157 (mbedtls_hmac_drbg_seed) @063cca80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_seed (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_reseed/156 (mbedtls_hmac_drbg_reseed) @063cc930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_reseed (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+hmac_drbg_reseed_core/155 (hmac_drbg_reseed_core) @063cc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.hmac_drbg_reseed_core (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/154 (mbedtls_hmac_drbg_seed_buf) @063cc690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_seed_buf (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_update/153 (mbedtls_hmac_drbg_update) @063cc540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:166453806 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_init/152 (mbedtls_hmac_drbg_init) @063cc3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_hmac_drbg_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 

@@ -1,0 +1,2 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/maxq_entropy.c:52:12:maxq_get_random	4112	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/maxq_entropy.c:72:5:mbedtls_hardware_poll	16	static

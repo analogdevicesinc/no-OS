@@ -1,0 +1,588 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\+\_\+aead.h File Reference}
+\hypertarget{crypto__aead_8h}{}\label{crypto__aead_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_aead.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_aead.h}}
+{\ttfamily \#include "{}crypto\+\_\+common.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+cipher.\+h"{}}\newline
+{\ttfamily \#include "{}MXQ\+\_\+\+API.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+LENGTH\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x003f0000)
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LEN\+\_\+\+FLAG}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x00008000)
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_adf1b320b66c1a34ebb318df1ef74b485}{USS\+\_\+\+PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+LENGTH\+\_\+\+OFFSET}}~16u
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a1d44829d60065eaa4ac9a703e7d6abc8}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+AEAD}}(alg)
+\begin{DoxyCompactList}\small\item\em Checks if the given algorithm is an AEAD algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_abdec2230cb9187e9974b9068bb06777e}{PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+WITH\+\_\+\+SHORTENED\+\_\+\+TAG}}(aead\+\_\+alg,  tag\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Creates an AEAD algorithm with a shortened tag length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a4aaf387bd55186a76e126788097cdf45}{PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+WITH\+\_\+\+DEFAULT\+\_\+\+LENGTH\+\_\+\+TAG}}(aead\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em Creates an AEAD algorithm with the default tag length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a09c63eca9d111ca7581b63c38bda3cd7}{PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+WITH\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LENGTH\+\_\+\+TAG}}(aead\+\_\+alg,  min\+\_\+tag\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Creates an AEAD algorithm with at least the specified tag length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_ae436c7da29d6f123a88ed9c57f006592}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+FROM\+\_\+\+BLOCK\+\_\+\+FLAG}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00400000)
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a65167d8a43b0a998f1b3f9947be0257f}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+EQUAL}}(aead\+\_\+alg\+\_\+1,  aead\+\_\+alg\+\_\+2)
+\begin{DoxyCompactList}\small\item\em Checks if two AEAD algorithms are equal. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_afa4d92f00cf52ad28c08c6cb434665e7}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+AEAD\+\_\+\+ON\+\_\+\+BLOCK\+\_\+\+CIPHER}}(alg)
+\begin{DoxyCompactList}\small\item\em Checks if the specified algorithm is an AEAD on a block cipher. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_abd700284e695d8737f2d04b627cafd90}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+GET\+\_\+\+TAG\+\_\+\+LENGTH}}(aead\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em Gets the tag length of an AEAD algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\+\_\+\+AEAD\+\_\+\+NONCE\+\_\+\+LENGTH}}(key\+\_\+type,  alg)
+\begin{DoxyCompactList}\small\item\em Gets the nonce length for a given key type and AEAD algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_ac2a332765ba4ccfc24935d6f7f48fcc7}{PSA\+\_\+\+AEAD\+\_\+\+NONCE\+\_\+\+MAX\+\_\+\+SIZE}}~USS\+\_\+\+PSA\+\_\+\+AEAD\+\_\+\+NONCE\+\_\+\+MAX\+\_\+\+SIZE
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a0e0791f41b38a79b1fda63c4cb0eec7a}{PSA\+\_\+\+AEAD\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg,  plaintext\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Gets the output size of an AEAD encryption operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a627fd15f45e7aab42d0126f1534f24a5}{PSA\+\_\+\+AEAD\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}(plaintext\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Gets the maximum output size of an AEAD encryption operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_ad33bdee829a3d6c4083cae62d176fa9e}{PSA\+\_\+\+AEAD\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg,  ciphertext\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Gets the output size of an AEAD decryption operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_aa7135728f0067ffcf6536e7d6c356aa5}{PSA\+\_\+\+AEAD\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}(ciphertext\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Gets the maximum output size of an AEAD decryption operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a38c502f21653f1b3708ae8897d1bb01d}{PSA\+\_\+\+AEAD\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg,  input\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Gets the output size of an AEAD update operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a7bad9346cc8ceaffa4a8e7cb8c4fc9ce}{PSA\+\_\+\+AEAD\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}(input\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Gets the maximum output size of an AEAD update operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_aeaa3630f4450996638d4c56d651301d3}{PSA\+\_\+\+AEAD\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg)
+\begin{DoxyCompactList}\small\item\em Gets the output size of an AEAD finish operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_ae2d44f764023b9e7948af9344ecb66ce}{PSA\+\_\+\+AEAD\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}~\mbox{\hyperlink{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}{PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE}}
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a9aab63d83591633baa13beff3bdf8b2f}{PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+LENGTH}}(key\+\_\+type,  key\+\_\+bits,  alg)
+\begin{DoxyCompactList}\small\item\em Gets the tag length of an AEAD algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_ae3b873ea579c278946e6e536b7e513af}{PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+MAX\+\_\+\+SIZE}}~USS\+\_\+\+PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+MAX\+\_\+\+SIZE
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a4ca7886c2fedd17a1327ad90ee1cc480}{PSA\+\_\+\+AEAD\+\_\+\+VERIFY\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg)
+\begin{DoxyCompactList}\small\item\em Gets the output size of an AEAD verify operation. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a930e643f47921b8d9b3a137897228cab}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+IS\+\_\+\+WILDCARD}}(alg)
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_a19fc08f5f6f33fd0b91152de1643df0c}{PSA\+\_\+\+AEAD\+\_\+\+VERIFY\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}~\mbox{\hyperlink{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}{PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE}}
+\item 
+\#define \mbox{\hyperlink{crypto__aead_8h_af52e036794c0dc6fbadd93a2b990f366}{PSA\+\_\+\+AEAD\+\_\+\+OPERATION\+\_\+\+INIT}}~\{0\}
+\begin{DoxyCompactList}\small\item\em Initializes an AEAD operation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{crypto__aead_8h_aa7135728f0067ffcf6536e7d6c356aa5}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_DECRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_DECRYPT\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_AEAD\_DECRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_DECRYPT\_OUTPUT\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_DECRYPT\_OUTPUT\_MAX\_SIZE}{PSA\_AEAD\_DECRYPT\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_aa7135728f0067ffcf6536e7d6c356aa5} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{ciphertext\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(ciphertext\_length)}
+
+\end{DoxyCode}
+
+
+Gets the maximum output size of an AEAD decryption operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ciphertext\+\_\+length} & The length of the ciphertext.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum output size of the AEAD decryption operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_ad33bdee829a3d6c4083cae62d176fa9e}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_DECRYPT\_OUTPUT\_SIZE@{PSA\_AEAD\_DECRYPT\_OUTPUT\_SIZE}}
+\index{PSA\_AEAD\_DECRYPT\_OUTPUT\_SIZE@{PSA\_AEAD\_DECRYPT\_OUTPUT\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_DECRYPT\_OUTPUT\_SIZE}{PSA\_AEAD\_DECRYPT\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_ad33bdee829a3d6c4083cae62d176fa9e} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{, }\item[{}]{ciphertext\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\_AEAD\_NONCE\_LENGTH}}(key\_type,\ alg)\ !=\ 0\ \&\&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (ciphertext\_length)\ >\ \mbox{\hyperlink{crypto__aead_8h_abd700284e695d8737f2d04b627cafd90}{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}}(alg)\ ?\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (ciphertext\_length)\ -\/\ \mbox{\hyperlink{crypto__aead_8h_abd700284e695d8737f2d04b627cafd90}{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}}(alg)\ :\ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Gets the output size of an AEAD decryption operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em alg} & The AEAD algorithm. \\
+\hline
+{\em ciphertext\+\_\+length} & The length of the ciphertext.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The output size of the AEAD decryption operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a627fd15f45e7aab42d0126f1534f24a5}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_ENCRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_ENCRYPT\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_AEAD\_ENCRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_ENCRYPT\_OUTPUT\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_ENCRYPT\_OUTPUT\_MAX\_SIZE}{PSA\_AEAD\_ENCRYPT\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a627fd15f45e7aab42d0126f1534f24a5} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{plaintext\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ ((plaintext\_length)\ +\ USS\_PSA\_AEAD\_TAG\_MAX\_SIZE)}
+
+\end{DoxyCode}
+
+
+Gets the maximum output size of an AEAD encryption operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em plaintext\+\_\+length} & The length of the plaintext.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum output size of the AEAD encryption operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a0e0791f41b38a79b1fda63c4cb0eec7a}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_ENCRYPT\_OUTPUT\_SIZE@{PSA\_AEAD\_ENCRYPT\_OUTPUT\_SIZE}}
+\index{PSA\_AEAD\_ENCRYPT\_OUTPUT\_SIZE@{PSA\_AEAD\_ENCRYPT\_OUTPUT\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_ENCRYPT\_OUTPUT\_SIZE}{PSA\_AEAD\_ENCRYPT\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a0e0791f41b38a79b1fda63c4cb0eec7a} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{, }\item[{}]{plaintext\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\_AEAD\_NONCE\_LENGTH}}(key\_type,\ alg)\ !=\ 0\ ?\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (plaintext\_length)\ +\ \mbox{\hyperlink{crypto__aead_8h_abd700284e695d8737f2d04b627cafd90}{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}}(alg)\ :\ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Gets the output size of an AEAD encryption operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em alg} & The AEAD algorithm. \\
+\hline
+{\em plaintext\+\_\+length} & The length of the plaintext.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The output size of the AEAD encryption operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_ae2d44f764023b9e7948af9344ecb66ce}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_FINISH\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_FINISH\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_AEAD\_FINISH\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_FINISH\_OUTPUT\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_FINISH\_OUTPUT\_MAX\_SIZE}{PSA\_AEAD\_FINISH\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_ae2d44f764023b9e7948af9344ecb66ce} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE~\mbox{\hyperlink{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}{PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE}}}
+
+\Hypertarget{crypto__aead_8h_aeaa3630f4450996638d4c56d651301d3}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_FINISH\_OUTPUT\_SIZE@{PSA\_AEAD\_FINISH\_OUTPUT\_SIZE}}
+\index{PSA\_AEAD\_FINISH\_OUTPUT\_SIZE@{PSA\_AEAD\_FINISH\_OUTPUT\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_FINISH\_OUTPUT\_SIZE}{PSA\_AEAD\_FINISH\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_aeaa3630f4450996638d4c56d651301d3} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\_AEAD\_NONCE\_LENGTH}}(key\_type,\ alg)\ !=\ 0\ \&\&\ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER(alg)\ ?\ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH(key\_type)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Gets the output size of an AEAD finish operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em alg} & The AEAD algorithm.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The output size of the AEAD finish operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_NONCE\_LENGTH@{PSA\_AEAD\_NONCE\_LENGTH}}
+\index{PSA\_AEAD\_NONCE\_LENGTH@{PSA\_AEAD\_NONCE\_LENGTH}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_NONCE\_LENGTH}{PSA\_AEAD\_NONCE\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+NONCE\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03}{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}}(key\_type)\ ==\ 16u\ ?\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ USS\_PSA\_ALG\_AEAD\_EQUAL(alg,\ PSA\_ALG\_CCM)\ ?\ USS\_PSA\_AEAD\_CCM\_MAX\_NONCE\_SIZE\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ USS\_PSA\_ALG\_AEAD\_EQUAL(alg,\ PSA\_ALG\_GCM)\ ?\ USS\_PSA\_AEAD\_GCM\_NONCE\_SIZE\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ :\ 0u)}
+
+\end{DoxyCode}
+
+
+Gets the nonce length for a given key type and AEAD algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em alg} & The AEAD algorithm.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nonce length. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_ac2a332765ba4ccfc24935d6f7f48fcc7}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_NONCE\_MAX\_SIZE@{PSA\_AEAD\_NONCE\_MAX\_SIZE}}
+\index{PSA\_AEAD\_NONCE\_MAX\_SIZE@{PSA\_AEAD\_NONCE\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_NONCE\_MAX\_SIZE}{PSA\_AEAD\_NONCE\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_ac2a332765ba4ccfc24935d6f7f48fcc7} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+NONCE\+\_\+\+MAX\+\_\+\+SIZE~USS\+\_\+\+PSA\+\_\+\+AEAD\+\_\+\+NONCE\+\_\+\+MAX\+\_\+\+SIZE}
+
+\Hypertarget{crypto__aead_8h_af52e036794c0dc6fbadd93a2b990f366}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_OPERATION\_INIT@{PSA\_AEAD\_OPERATION\_INIT}}
+\index{PSA\_AEAD\_OPERATION\_INIT@{PSA\_AEAD\_OPERATION\_INIT}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_OPERATION\_INIT}{PSA\_AEAD\_OPERATION\_INIT}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_af52e036794c0dc6fbadd93a2b990f366} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+OPERATION\+\_\+\+INIT~\{0\}}
+
+
+
+Initializes an AEAD operation. 
+
+\begin{DoxyReturn}{Returns}
+The initialized AEAD operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a9aab63d83591633baa13beff3bdf8b2f}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_TAG\_LENGTH@{PSA\_AEAD\_TAG\_LENGTH}}
+\index{PSA\_AEAD\_TAG\_LENGTH@{PSA\_AEAD\_TAG\_LENGTH}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_TAG\_LENGTH}{PSA\_AEAD\_TAG\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a9aab63d83591633baa13beff3bdf8b2f} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+bits}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\_AEAD\_NONCE\_LENGTH}}(key\_type,\ alg)\ !=\ 0\ ?\ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH(alg)\ :\ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u}
+
+\end{DoxyCode}
+
+
+Gets the tag length of an AEAD algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em key\+\_\+bits} & The key size in bits. \\
+\hline
+{\em alg} & The AEAD algorithm.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The tag length of the AEAD algorithm. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_ae3b873ea579c278946e6e536b7e513af}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_TAG\_MAX\_SIZE@{PSA\_AEAD\_TAG\_MAX\_SIZE}}
+\index{PSA\_AEAD\_TAG\_MAX\_SIZE@{PSA\_AEAD\_TAG\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_TAG\_MAX\_SIZE}{PSA\_AEAD\_TAG\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_ae3b873ea579c278946e6e536b7e513af} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+MAX\+\_\+\+SIZE~USS\+\_\+\+PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+MAX\+\_\+\+SIZE}
+
+\Hypertarget{crypto__aead_8h_a7bad9346cc8ceaffa4a8e7cb8c4fc9ce}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_UPDATE\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_UPDATE\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_AEAD\_UPDATE\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_UPDATE\_OUTPUT\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_UPDATE\_OUTPUT\_MAX\_SIZE}{PSA\_AEAD\_UPDATE\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a7bad9346cc8ceaffa4a8e7cb8c4fc9ce} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__common_8h_adf2f47b64b42de8ccbb72f39c7bbaba3}{USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE}}(\mbox{\hyperlink{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}{PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE}},\ input\_length))}
+
+\end{DoxyCode}
+
+
+Gets the maximum output size of an AEAD update operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+length} & The length of the input.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The maximum output size of the AEAD update operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a38c502f21653f1b3708ae8897d1bb01d}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_UPDATE\_OUTPUT\_SIZE@{PSA\_AEAD\_UPDATE\_OUTPUT\_SIZE}}
+\index{PSA\_AEAD\_UPDATE\_OUTPUT\_SIZE@{PSA\_AEAD\_UPDATE\_OUTPUT\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_UPDATE\_OUTPUT\_SIZE}{PSA\_AEAD\_UPDATE\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a38c502f21653f1b3708ae8897d1bb01d} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{, }\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\_AEAD\_NONCE\_LENGTH}}(key\_type,\ alg)\ !=\ 0\ ?\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER(alg)\ ?\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE(\mbox{\hyperlink{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03}{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}}(key\_type),\ input\_length)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (input\_length)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Gets the output size of an AEAD update operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em alg} & The AEAD algorithm. \\
+\hline
+{\em input\+\_\+length} & The length of the input.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The output size of the AEAD update operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a19fc08f5f6f33fd0b91152de1643df0c}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_VERIFY\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_VERIFY\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_AEAD\_VERIFY\_OUTPUT\_MAX\_SIZE@{PSA\_AEAD\_VERIFY\_OUTPUT\_MAX\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_VERIFY\_OUTPUT\_MAX\_SIZE}{PSA\_AEAD\_VERIFY\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a19fc08f5f6f33fd0b91152de1643df0c} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+VERIFY\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE~\mbox{\hyperlink{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}{PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE}}}
+
+\Hypertarget{crypto__aead_8h_a4ca7886c2fedd17a1327ad90ee1cc480}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_AEAD\_VERIFY\_OUTPUT\_SIZE@{PSA\_AEAD\_VERIFY\_OUTPUT\_SIZE}}
+\index{PSA\_AEAD\_VERIFY\_OUTPUT\_SIZE@{PSA\_AEAD\_VERIFY\_OUTPUT\_SIZE}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_AEAD\_VERIFY\_OUTPUT\_SIZE}{PSA\_AEAD\_VERIFY\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a4ca7886c2fedd17a1327ad90ee1cc480} 
+\#define PSA\+\_\+\+AEAD\+\_\+\+VERIFY\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__aead_8h_a3dcd505a4e70a63708c05bd8591a4782}{PSA\_AEAD\_NONCE\_LENGTH}}(key\_type,\ alg)\ !=\ 0\ \&\&\ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER(alg)\ ?\ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH(key\_type)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ 0u)}
+
+\end{DoxyCode}
+
+
+Gets the output size of an AEAD verify operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The key type. \\
+\hline
+{\em alg} & The AEAD algorithm.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The output size of the AEAD verify operation. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a09c63eca9d111ca7581b63c38bda3cd7}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_ALG\_AEAD\_WITH\_AT\_LEAST\_THIS\_LENGTH\_TAG@{PSA\_ALG\_AEAD\_WITH\_AT\_LEAST\_THIS\_LENGTH\_TAG}}
+\index{PSA\_ALG\_AEAD\_WITH\_AT\_LEAST\_THIS\_LENGTH\_TAG@{PSA\_ALG\_AEAD\_WITH\_AT\_LEAST\_THIS\_LENGTH\_TAG}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_AEAD\_WITH\_AT\_LEAST\_THIS\_LENGTH\_TAG}{PSA\_ALG\_AEAD\_WITH\_AT\_LEAST\_THIS\_LENGTH\_TAG}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a09c63eca9d111ca7581b63c38bda3cd7} 
+\#define PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+WITH\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LENGTH\+\_\+\+TAG(\begin{DoxyParamCaption}\item[{}]{aead\+\_\+alg}{, }\item[{}]{min\+\_\+tag\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__aead_8h_abdec2230cb9187e9974b9068bb06777e}{PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG}}(aead\_alg,\ min\_tag\_length)\ |\ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}})}
+
+\end{DoxyCode}
+
+
+Creates an AEAD algorithm with at least the specified tag length. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em aead\+\_\+alg} & The base AEAD algorithm. \\
+\hline
+{\em min\+\_\+tag\+\_\+length} & The minimum desired tag length.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The AEAD algorithm with at least the specified tag length. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a4aaf387bd55186a76e126788097cdf45}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_ALG\_AEAD\_WITH\_DEFAULT\_LENGTH\_TAG@{PSA\_ALG\_AEAD\_WITH\_DEFAULT\_LENGTH\_TAG}}
+\index{PSA\_ALG\_AEAD\_WITH\_DEFAULT\_LENGTH\_TAG@{PSA\_ALG\_AEAD\_WITH\_DEFAULT\_LENGTH\_TAG}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_AEAD\_WITH\_DEFAULT\_LENGTH\_TAG}{PSA\_ALG\_AEAD\_WITH\_DEFAULT\_LENGTH\_TAG}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a4aaf387bd55186a76e126788097cdf45} 
+\#define PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+WITH\+\_\+\+DEFAULT\+\_\+\+LENGTH\+\_\+\+TAG(\begin{DoxyParamCaption}\item[{}]{aead\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((aead\_alg\ \&\ \string~(\mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}\ |\ \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}}))\ ==\ 0x05400100)\ ?\ PSA\_ALG\_CCM\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ ((aead\_alg\ \&\ \string~(\mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}\ |\ \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}}))\ ==\ 0x05400200)\ ?\ PSA\_ALG\_GCM\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{crypto__common_8h_a87fb4c311ba365a908ca467ee50f447f}{PSA\_ALG\_NONE}})}
+
+\end{DoxyCode}
+
+
+Creates an AEAD algorithm with the default tag length. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em aead\+\_\+alg} & The AEAD algorithm for which needs to be transformed.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The AEAD algorithm with the default tag length. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_abdec2230cb9187e9974b9068bb06777e}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG@{PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG}}
+\index{PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG@{PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG}{PSA\_ALG\_AEAD\_WITH\_SHORTENED\_TAG}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_abdec2230cb9187e9974b9068bb06777e} 
+\#define PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+WITH\+\_\+\+SHORTENED\+\_\+\+TAG(\begin{DoxyParamCaption}\item[{}]{aead\+\_\+alg}{, }\item[{}]{tag\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((aead\_alg)\ \&\ \string~(\mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}\ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}}))\ |\ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ ((tag\_length\ <<\ \mbox{\hyperlink{crypto__aead_8h_adf1b320b66c1a34ebb318df1ef74b485}{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET}})\ \&\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}))}
+
+\end{DoxyCode}
+
+
+Creates an AEAD algorithm with a shortened tag length. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em aead\+\_\+alg} & The base AEAD algorithm. \\
+\hline
+{\em tag\+\_\+length} & The desired tag length.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The AEAD algorithm with the specified tag length. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a1d44829d60065eaa4ac9a703e7d6abc8}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_ALG\_IS\_AEAD@{PSA\_ALG\_IS\_AEAD}}
+\index{PSA\_ALG\_IS\_AEAD@{PSA\_ALG\_IS\_AEAD}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_AEAD}{PSA\_ALG\_IS\_AEAD}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a1d44829d60065eaa4ac9a703e7d6abc8} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+AEAD(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((alg\ \&\ \mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}})\ ==\ \mbox{\hyperlink{crypto__common_8h_a7c57a3f75ab4ffc0534782a0a2f2a3a0}{USS\_PSA\_ALG\_TYPE\_AEAD}})}
+
+\end{DoxyCode}
+
+
+Checks if the given algorithm is an AEAD algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em alg} & The algorithm to check.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the algorithm is an AEAD algorithm, 0 otherwise. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_afa4d92f00cf52ad28c08c6cb434665e7}\index{crypto\_aead.h@{crypto\_aead.h}!PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER@{PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER}}
+\index{PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER@{PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER}{PSA\_ALG\_IS\_AEAD\_ON\_BLOCK\_CIPHER}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_afa4d92f00cf52ad28c08c6cb434665e7} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+AEAD\+\_\+\+ON\+\_\+\+BLOCK\+\_\+\+CIPHER(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((alg)\ \&\ (\mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}}\ |\ \mbox{\hyperlink{crypto__aead_8h_ae436c7da29d6f123a88ed9c57f006592}{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG}}))\ ==\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ (\mbox{\hyperlink{crypto__common_8h_a7c57a3f75ab4ffc0534782a0a2f2a3a0}{USS\_PSA\_ALG\_TYPE\_AEAD}}\ |\ \mbox{\hyperlink{crypto__aead_8h_ae436c7da29d6f123a88ed9c57f006592}{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG}}))}
+
+\end{DoxyCode}
+
+
+Checks if the specified algorithm is an AEAD on a block cipher. 
+
+This macro checks if the given algorithm is an AEAD on a block cipher by performing a bitwise comparison. It checks if the algorithm is of type AEAD and has the AEAD\+\_\+\+FROM\+\_\+\+BLOCK\+\_\+\+FLAG set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em alg} & The algorithm to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the algorithm is an AEAD on a block cipher, 0 otherwise. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_adf1b320b66c1a34ebb318df1ef74b485}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET@{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET}}
+\index{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET@{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET}{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_adf1b320b66c1a34ebb318df1ef74b485} 
+\#define USS\+\_\+\+PSA\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+LENGTH\+\_\+\+OFFSET~16u}
+
+\Hypertarget{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG@{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}}
+\index{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG@{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LEN\+\_\+\+FLAG~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x00008000)}
+
+\Hypertarget{crypto__aead_8h_a65167d8a43b0a998f1b3f9947be0257f}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_ALG\_AEAD\_EQUAL@{USS\_PSA\_ALG\_AEAD\_EQUAL}}
+\index{USS\_PSA\_ALG\_AEAD\_EQUAL@{USS\_PSA\_ALG\_AEAD\_EQUAL}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_AEAD\_EQUAL}{USS\_PSA\_ALG\_AEAD\_EQUAL}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a65167d8a43b0a998f1b3f9947be0257f} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+EQUAL(\begin{DoxyParamCaption}\item[{}]{aead\+\_\+alg\+\_\+1}{, }\item[{}]{aead\+\_\+alg\+\_\+2}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (!(((aead\_alg\_1)\ \string^\ (aead\_alg\_2))\ \&\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \string~(\mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}\ |\ \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}})))}
+
+\end{DoxyCode}
+
+
+Checks if two AEAD algorithms are equal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em aead\+\_\+alg\+\_\+1} & The first AEAD algorithm. \\
+\hline
+{\em aead\+\_\+alg\+\_\+2} & The second AEAD algorithm.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the AEAD algorithms are equal, 0 otherwise. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_ae436c7da29d6f123a88ed9c57f006592}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG@{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG}}
+\index{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG@{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG}{USS\_PSA\_ALG\_AEAD\_FROM\_BLOCK\_FLAG}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_ae436c7da29d6f123a88ed9c57f006592} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+FROM\+\_\+\+BLOCK\+\_\+\+FLAG~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00400000)}
+
+\Hypertarget{crypto__aead_8h_abd700284e695d8737f2d04b627cafd90}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH@{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}}
+\index{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH@{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}{USS\_PSA\_ALG\_AEAD\_GET\_TAG\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_abd700284e695d8737f2d04b627cafd90} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+GET\+\_\+\+TAG\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{aead\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (((aead\_alg)\ \&\ \mbox{\hyperlink{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}})\ >>\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \mbox{\hyperlink{crypto__aead_8h_adf1b320b66c1a34ebb318df1ef74b485}{USS\_PSA\_AEAD\_TAG\_LENGTH\_OFFSET}})}
+
+\end{DoxyCode}
+
+
+Gets the tag length of an AEAD algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em aead\+\_\+alg} & The AEAD algorithm.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The tag length of the AEAD algorithm. 
+\end{DoxyReturn}
+\Hypertarget{crypto__aead_8h_a930e643f47921b8d9b3a137897228cab}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_ALG\_AEAD\_IS\_WILDCARD@{USS\_PSA\_ALG\_AEAD\_IS\_WILDCARD}}
+\index{USS\_PSA\_ALG\_AEAD\_IS\_WILDCARD@{USS\_PSA\_ALG\_AEAD\_IS\_WILDCARD}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_AEAD\_IS\_WILDCARD}{USS\_PSA\_ALG\_AEAD\_IS\_WILDCARD}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a930e643f47921b8d9b3a137897228cab} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+IS\+\_\+\+WILDCARD(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ ((alg\ \&\ \mbox{\hyperlink{crypto__aead_8h_aa82a211a613a08d5dffe8d8e742ce67b}{USS\_PSA\_ALG\_AEAD\_AT\_LEAST\_THIS\_LEN\_FLAG}})\ !=\ 0)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da}\index{crypto\_aead.h@{crypto\_aead.h}!USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK@{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}
+\index{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK@{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}!crypto\_aead.h@{crypto\_aead.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}{USS\_PSA\_ALG\_AEAD\_TAG\_LENGTH\_MASK}}
+{\footnotesize\ttfamily \label{crypto__aead_8h_a3a530b498be4f0b78a1eba3ad14677da} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+AEAD\+\_\+\+TAG\+\_\+\+LENGTH\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x003f0000)}
+

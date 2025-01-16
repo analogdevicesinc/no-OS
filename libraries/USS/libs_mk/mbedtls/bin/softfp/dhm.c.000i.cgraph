@@ -1,0 +1,2436 @@
+Trivially needed symbols: mbedtls_dhm_self_test/33 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_free/29 mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 mbedtls_dhm_set_group/24 mbedtls_dhm_make_params/23 mbedtls_dhm_read_params/20 mbedtls_dhm_get_value/19 mbedtls_dhm_get_len/18 mbedtls_dhm_get_bitlen/17 mbedtls_dhm_init/16
+
+
+Initial Symbol table:
+
+puts/59 (__builtin_puts) @0639cb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_self_test/33 
+  Calls: 
+printf/58 (printf) @0639ca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: 
+mbedtls_pem_free/57 (mbedtls_pem_free) @0639c9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_mpi/56 (mbedtls_asn1_get_mpi) @0639c930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_tag/55 (mbedtls_asn1_get_tag) @0639c888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_read_buffer/54 (mbedtls_pem_read_buffer) @0639c7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_init/53 (mbedtls_pem_init) @0639c738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_platform_zeroize/52 (mbedtls_platform_zeroize) @0639c690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_free/29 
+  Calls: 
+mbedtls_mpi_inv_mod/51 (mbedtls_mpi_inv_mod) @0639c5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_lset/50 (mbedtls_mpi_lset) @0639c540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_mod_mpi/49 (mbedtls_mpi_mod_mpi) @0639c498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_mul_mpi/48 (mbedtls_mpi_mul_mpi) @0639c3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_random/47 (mbedtls_mpi_random) @0639c348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 
+  Calls: 
+mbedtls_mpi_exp_mod/46 (mbedtls_mpi_exp_mod) @0639c2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_fill_random/45 (mbedtls_mpi_fill_random) @0639c1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_write_binary/44 (mbedtls_mpi_write_binary) @0639c150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 
+  Calls: 
+mbedtls_mpi_free/43 (mbedtls_mpi_free) @0639c0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_mpi/42 (mbedtls_mpi_cmp_mpi) @0639c000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_int/41 (mbedtls_mpi_cmp_int) @06352f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_make_common/22 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_sub_int/40 (mbedtls_mpi_sub_int) @06352e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_init/39 (mbedtls_mpi_init) @06352dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_read_binary/38 (mbedtls_mpi_read_binary) @06352d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_read_public/25 dhm_read_bignum/14 
+  Calls: 
+mbedtls_mpi_copy/37 (mbedtls_mpi_copy) @06352c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_set_group/24 mbedtls_dhm_set_group/24 mbedtls_dhm_get_value/19 
+  Calls: 
+mbedtls_mpi_size/36 (mbedtls_mpi_size) @06352bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_get_len/18 
+  Calls: 
+mbedtls_mpi_bitlen/35 (mbedtls_mpi_bitlen) @06352b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_get_bitlen/17 
+  Calls: 
+memset/34 (memset) @06352a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_init/16 
+  Calls: 
+mbedtls_dhm_self_test/33 (mbedtls_dhm_self_test) @063529d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: mbedtls_test_dhm_params/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_dhm_free/29 puts/59 puts/59 mbedtls_dhm_parse_dhm/30 printf/58 mbedtls_dhm_init/16 
+mbedtls_test_dhm_params_len/32 (mbedtls_test_dhm_params_len) @063451b0
+  Type: variable definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_test_dhm_params/31 (mbedtls_test_dhm_params) @06345168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_dhm_self_test/33 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_dhm_parse_dhm/30 (mbedtls_dhm_parse_dhm) @06352498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063529d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: mbedtls_dhm_free/29 mbedtls_pem_free/57 mbedtls_error_add/9 mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_asn1_get_mpi/56 mbedtls_mpi_init/39 mbedtls_error_add/9 mbedtls_asn1_get_mpi/56 mbedtls_asn1_get_mpi/56 mbedtls_error_add/9 mbedtls_asn1_get_tag/55 mbedtls_pem_read_buffer/54 mbedtls_pem_init/53 
+mbedtls_dhm_free/29 (mbedtls_dhm_free) @063520a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06352498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_parse_dhm/30 
+  Calls: mbedtls_platform_zeroize/52 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 
+mbedtls_dhm_calc_secret/28 (mbedtls_dhm_calc_secret) @0633cf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063520a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_update_blinding/27 mbedtls_mpi_init/39 dhm_check_range/15 mbedtls_dhm_get_len/18 
+dhm_update_blinding/27 (dhm_update_blinding) @0633cd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063520a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_inv_mod/51 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_random_below/21 dhm_random_below/21 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_cmp_int/41 mbedtls_mpi_lset/50 mbedtls_mpi_lset/50 mbedtls_mpi_copy/37 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_init/39 
+mbedtls_dhm_make_public/26 (mbedtls_dhm_make_public) @0633cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0633cf18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 dhm_make_common/22 mbedtls_dhm_get_len/18 
+mbedtls_dhm_read_public/25 (mbedtls_dhm_read_public) @0633c9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0633cbd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 mbedtls_dhm_get_len/18 
+mbedtls_dhm_set_group/24 (mbedtls_dhm_set_group) @0633c7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0633c9d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_copy/37 mbedtls_mpi_copy/37 
+mbedtls_dhm_make_params/23 (mbedtls_dhm_make_params) @0633c5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0633c7e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_size/36 mbedtls_mpi_size/36 dhm_make_common/22 
+dhm_make_common/22 (dhm_make_common) @0633c150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0633c7e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 
+  Calls: dhm_check_range/15 mbedtls_mpi_exp_mod/46 dhm_random_below/21 mbedtls_mpi_fill_random/45 mbedtls_mpi_size/36 mbedtls_mpi_cmp_int/41 
+dhm_random_below/21 (dhm_random_below) @0633c000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0633c7e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_make_common/22 
+  Calls: mbedtls_mpi_sub_int/40 mbedtls_mpi_random/47 
+mbedtls_dhm_read_params/20 (mbedtls_dhm_read_params) @06330f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0633c5e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: dhm_check_range/15 dhm_read_bignum/14 dhm_read_bignum/14 dhm_read_bignum/14 
+mbedtls_dhm_get_value/19 (mbedtls_dhm_get_value) @06330dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06330f18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_copy/37 
+mbedtls_dhm_get_len/18 (mbedtls_dhm_get_len) @06330c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06330dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 
+  Calls: mbedtls_mpi_size/36 
+mbedtls_dhm_get_bitlen/17 (mbedtls_dhm_get_bitlen) @06330b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06330c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_bitlen/35 
+mbedtls_dhm_init/16 (mbedtls_dhm_init) @063309d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06330b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: memset/34 
+dhm_check_range/15 (dhm_check_range) @06330888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0633c5e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_cmp_int/41 mbedtls_mpi_sub_int/40 mbedtls_mpi_init/39 
+dhm_read_bignum/14 (dhm_read_bignum) @06330738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06330888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 
+_putchar_unlocked/13 (_putchar_unlocked) @06330348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/12 (_getchar_unlocked) @063301f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/11 (__sputc_r) @06330000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pem_get_buffer/10 (mbedtls_pem_get_buffer) @062b20a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/9 (mbedtls_error_add) @06275dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06330888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 mbedtls_dhm_set_group/24 mbedtls_dhm_make_params/23 dhm_read_bignum/14 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06264d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06264bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06264a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06264690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06264540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062643f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062642a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06264150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06264000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: mbedtls_test_dhm_params_len/32 _putchar_unlocked/13 _getchar_unlocked/12 __sputc_r/11 mbedtls_pem_get_buffer/10 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+puts/59 (__builtin_puts) @0639cb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_self_test/33 
+  Calls: 
+printf/58 (printf) @0639ca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: 
+mbedtls_pem_free/57 (mbedtls_pem_free) @0639c9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_mpi/56 (mbedtls_asn1_get_mpi) @0639c930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_tag/55 (mbedtls_asn1_get_tag) @0639c888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_read_buffer/54 (mbedtls_pem_read_buffer) @0639c7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_init/53 (mbedtls_pem_init) @0639c738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_platform_zeroize/52 (mbedtls_platform_zeroize) @0639c690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_free/29 
+  Calls: 
+mbedtls_mpi_inv_mod/51 (mbedtls_mpi_inv_mod) @0639c5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_lset/50 (mbedtls_mpi_lset) @0639c540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_mod_mpi/49 (mbedtls_mpi_mod_mpi) @0639c498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_mul_mpi/48 (mbedtls_mpi_mul_mpi) @0639c3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_random/47 (mbedtls_mpi_random) @0639c348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 
+  Calls: 
+mbedtls_mpi_exp_mod/46 (mbedtls_mpi_exp_mod) @0639c2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_fill_random/45 (mbedtls_mpi_fill_random) @0639c1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_write_binary/44 (mbedtls_mpi_write_binary) @0639c150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 
+  Calls: 
+mbedtls_mpi_free/43 (mbedtls_mpi_free) @0639c0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_mpi/42 (mbedtls_mpi_cmp_mpi) @0639c000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_int/41 (mbedtls_mpi_cmp_int) @06352f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_make_common/22 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_sub_int/40 (mbedtls_mpi_sub_int) @06352e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_init/39 (mbedtls_mpi_init) @06352dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_read_binary/38 (mbedtls_mpi_read_binary) @06352d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_read_public/25 dhm_read_bignum/14 
+  Calls: 
+mbedtls_mpi_copy/37 (mbedtls_mpi_copy) @06352c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_set_group/24 mbedtls_dhm_set_group/24 mbedtls_dhm_get_value/19 
+  Calls: 
+mbedtls_mpi_size/36 (mbedtls_mpi_size) @06352bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_get_len/18 
+  Calls: 
+mbedtls_mpi_bitlen/35 (mbedtls_mpi_bitlen) @06352b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_get_bitlen/17 
+  Calls: 
+memset/34 (memset) @06352a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_init/16 
+  Calls: 
+mbedtls_dhm_self_test/33 (mbedtls_dhm_self_test) @063529d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_dhm_params/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_dhm_free/29 puts/59 puts/59 mbedtls_dhm_parse_dhm/30 printf/58 mbedtls_dhm_init/16 
+mbedtls_test_dhm_params/31 (mbedtls_test_dhm_params) @06345168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_dhm_self_test/33 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_dhm_parse_dhm/30 (mbedtls_dhm_parse_dhm) @06352498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: mbedtls_dhm_free/29 mbedtls_pem_free/57 mbedtls_error_add/9 mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_asn1_get_mpi/56 mbedtls_mpi_init/39 mbedtls_error_add/9 mbedtls_asn1_get_mpi/56 mbedtls_asn1_get_mpi/56 mbedtls_error_add/9 mbedtls_asn1_get_tag/55 mbedtls_pem_read_buffer/54 mbedtls_pem_init/53 
+mbedtls_dhm_free/29 (mbedtls_dhm_free) @063520a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_parse_dhm/30 
+  Calls: mbedtls_platform_zeroize/52 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 
+mbedtls_dhm_calc_secret/28 (mbedtls_dhm_calc_secret) @0633cf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_update_blinding/27 mbedtls_mpi_init/39 dhm_check_range/15 mbedtls_dhm_get_len/18 
+dhm_update_blinding/27 (dhm_update_blinding) @0633cd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_inv_mod/51 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_random_below/21 dhm_random_below/21 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_cmp_int/41 mbedtls_mpi_lset/50 mbedtls_mpi_lset/50 mbedtls_mpi_copy/37 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_init/39 
+mbedtls_dhm_make_public/26 (mbedtls_dhm_make_public) @0633cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 dhm_make_common/22 mbedtls_dhm_get_len/18 
+mbedtls_dhm_read_public/25 (mbedtls_dhm_read_public) @0633c9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 mbedtls_dhm_get_len/18 
+mbedtls_dhm_set_group/24 (mbedtls_dhm_set_group) @0633c7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_copy/37 mbedtls_mpi_copy/37 
+mbedtls_dhm_make_params/23 (mbedtls_dhm_make_params) @0633c5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_size/36 mbedtls_mpi_size/36 dhm_make_common/22 
+dhm_make_common/22 (dhm_make_common) @0633c150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 
+  Calls: dhm_check_range/15 mbedtls_mpi_exp_mod/46 dhm_random_below/21 mbedtls_mpi_fill_random/45 mbedtls_mpi_size/36 mbedtls_mpi_cmp_int/41 
+dhm_random_below/21 (dhm_random_below) @0633c000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_make_common/22 
+  Calls: mbedtls_mpi_sub_int/40 mbedtls_mpi_random/47 
+mbedtls_dhm_read_params/20 (mbedtls_dhm_read_params) @06330f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: dhm_check_range/15 dhm_read_bignum/14 dhm_read_bignum/14 dhm_read_bignum/14 
+mbedtls_dhm_get_value/19 (mbedtls_dhm_get_value) @06330dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_copy/37 
+mbedtls_dhm_get_len/18 (mbedtls_dhm_get_len) @06330c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 
+  Calls: mbedtls_mpi_size/36 
+mbedtls_dhm_get_bitlen/17 (mbedtls_dhm_get_bitlen) @06330b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_bitlen/35 
+mbedtls_dhm_init/16 (mbedtls_dhm_init) @063309d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: memset/34 
+dhm_check_range/15 (dhm_check_range) @06330888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_cmp_int/41 mbedtls_mpi_sub_int/40 mbedtls_mpi_init/39 
+dhm_read_bignum/14 (dhm_read_bignum) @06330738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 
+mbedtls_error_add/9 (mbedtls_error_add) @06275dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 mbedtls_dhm_set_group/24 mbedtls_dhm_make_params/23 dhm_read_bignum/14 
+  Calls: 
+
+
+Initial Symbol table:
+
+puts/59 (__builtin_puts) @0639cb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_self_test/33 
+  Calls: 
+printf/58 (printf) @0639ca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: 
+mbedtls_pem_free/57 (mbedtls_pem_free) @0639c9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_mpi/56 (mbedtls_asn1_get_mpi) @0639c930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_tag/55 (mbedtls_asn1_get_tag) @0639c888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_read_buffer/54 (mbedtls_pem_read_buffer) @0639c7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_init/53 (mbedtls_pem_init) @0639c738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_platform_zeroize/52 (mbedtls_platform_zeroize) @0639c690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_free/29 
+  Calls: 
+mbedtls_mpi_inv_mod/51 (mbedtls_mpi_inv_mod) @0639c5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_lset/50 (mbedtls_mpi_lset) @0639c540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_mod_mpi/49 (mbedtls_mpi_mod_mpi) @0639c498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_mul_mpi/48 (mbedtls_mpi_mul_mpi) @0639c3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_random/47 (mbedtls_mpi_random) @0639c348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 
+  Calls: 
+mbedtls_mpi_exp_mod/46 (mbedtls_mpi_exp_mod) @0639c2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_fill_random/45 (mbedtls_mpi_fill_random) @0639c1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_write_binary/44 (mbedtls_mpi_write_binary) @0639c150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 
+  Calls: 
+mbedtls_mpi_free/43 (mbedtls_mpi_free) @0639c0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_mpi/42 (mbedtls_mpi_cmp_mpi) @0639c000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_int/41 (mbedtls_mpi_cmp_int) @06352f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_make_common/22 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_sub_int/40 (mbedtls_mpi_sub_int) @06352e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_init/39 (mbedtls_mpi_init) @06352dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_read_binary/38 (mbedtls_mpi_read_binary) @06352d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_read_public/25 dhm_read_bignum/14 
+  Calls: 
+mbedtls_mpi_copy/37 (mbedtls_mpi_copy) @06352c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_set_group/24 mbedtls_dhm_set_group/24 mbedtls_dhm_get_value/19 
+  Calls: 
+mbedtls_mpi_size/36 (mbedtls_mpi_size) @06352bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_get_len/18 
+  Calls: 
+mbedtls_mpi_bitlen/35 (mbedtls_mpi_bitlen) @06352b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_get_bitlen/17 
+  Calls: 
+memset/34 (memset) @06352a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_init/16 
+  Calls: 
+mbedtls_dhm_self_test/33 (mbedtls_dhm_self_test) @063529d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_dhm_params/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_dhm_free/29 puts/59 puts/59 mbedtls_dhm_parse_dhm/30 printf/58 mbedtls_dhm_init/16 
+mbedtls_test_dhm_params/31 (mbedtls_test_dhm_params) @06345168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_dhm_self_test/33 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_dhm_parse_dhm/30 (mbedtls_dhm_parse_dhm) @06352498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: mbedtls_dhm_free/29 mbedtls_pem_free/57 mbedtls_error_add/9 mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_asn1_get_mpi/56 mbedtls_mpi_init/39 mbedtls_error_add/9 mbedtls_asn1_get_mpi/56 mbedtls_asn1_get_mpi/56 mbedtls_error_add/9 mbedtls_asn1_get_tag/55 mbedtls_pem_read_buffer/54 mbedtls_pem_init/53 
+mbedtls_dhm_free/29 (mbedtls_dhm_free) @063520a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_parse_dhm/30 
+  Calls: mbedtls_platform_zeroize/52 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 
+mbedtls_dhm_calc_secret/28 (mbedtls_dhm_calc_secret) @0633cf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_update_blinding/27 mbedtls_mpi_init/39 dhm_check_range/15 mbedtls_dhm_get_len/18 
+dhm_update_blinding/27 (dhm_update_blinding) @0633cd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_inv_mod/51 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_random_below/21 dhm_random_below/21 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_cmp_int/41 mbedtls_mpi_lset/50 mbedtls_mpi_lset/50 mbedtls_mpi_copy/37 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_init/39 
+mbedtls_dhm_make_public/26 (mbedtls_dhm_make_public) @0633cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 dhm_make_common/22 mbedtls_dhm_get_len/18 
+mbedtls_dhm_read_public/25 (mbedtls_dhm_read_public) @0633c9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 mbedtls_dhm_get_len/18 
+mbedtls_dhm_set_group/24 (mbedtls_dhm_set_group) @0633c7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_copy/37 mbedtls_mpi_copy/37 
+mbedtls_dhm_make_params/23 (mbedtls_dhm_make_params) @0633c5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_size/36 mbedtls_mpi_size/36 dhm_make_common/22 
+dhm_make_common/22 (dhm_make_common) @0633c150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 
+  Calls: dhm_check_range/15 mbedtls_mpi_exp_mod/46 dhm_random_below/21 mbedtls_mpi_fill_random/45 mbedtls_mpi_size/36 mbedtls_mpi_cmp_int/41 
+dhm_random_below/21 (dhm_random_below) @0633c000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_make_common/22 
+  Calls: mbedtls_mpi_sub_int/40 mbedtls_mpi_random/47 
+mbedtls_dhm_read_params/20 (mbedtls_dhm_read_params) @06330f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: dhm_check_range/15 dhm_read_bignum/14 dhm_read_bignum/14 dhm_read_bignum/14 
+mbedtls_dhm_get_value/19 (mbedtls_dhm_get_value) @06330dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_copy/37 
+mbedtls_dhm_get_len/18 (mbedtls_dhm_get_len) @06330c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 
+  Calls: mbedtls_mpi_size/36 
+mbedtls_dhm_get_bitlen/17 (mbedtls_dhm_get_bitlen) @06330b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_bitlen/35 
+mbedtls_dhm_init/16 (mbedtls_dhm_init) @063309d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: memset/34 
+dhm_check_range/15 (dhm_check_range) @06330888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_cmp_int/41 mbedtls_mpi_sub_int/40 mbedtls_mpi_init/39 
+dhm_read_bignum/14 (dhm_read_bignum) @06330738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 
+mbedtls_error_add/9 (mbedtls_error_add) @06275dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 mbedtls_dhm_set_group/24 mbedtls_dhm_make_params/23 dhm_read_bignum/14 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+puts/59 (__builtin_puts) @0639cb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_self_test/33 
+  Calls: 
+printf/58 (printf) @0639ca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: 
+mbedtls_pem_free/57 (mbedtls_pem_free) @0639c9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_mpi/56 (mbedtls_asn1_get_mpi) @0639c930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_asn1_get_tag/55 (mbedtls_asn1_get_tag) @0639c888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_read_buffer/54 (mbedtls_pem_read_buffer) @0639c7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_pem_init/53 (mbedtls_pem_init) @0639c738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 
+  Calls: 
+mbedtls_platform_zeroize/52 (mbedtls_platform_zeroize) @0639c690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_free/29 
+  Calls: 
+mbedtls_mpi_inv_mod/51 (mbedtls_mpi_inv_mod) @0639c5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_lset/50 (mbedtls_mpi_lset) @0639c540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 
+  Calls: 
+mbedtls_mpi_mod_mpi/49 (mbedtls_mpi_mod_mpi) @0639c498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_mul_mpi/48 (mbedtls_mpi_mul_mpi) @0639c3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 mbedtls_dhm_calc_secret/28 
+  Calls: 
+mbedtls_mpi_random/47 (mbedtls_mpi_random) @0639c348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 
+  Calls: 
+mbedtls_mpi_exp_mod/46 (mbedtls_mpi_exp_mod) @0639c2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_fill_random/45 (mbedtls_mpi_fill_random) @0639c1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_make_common/22 
+  Calls: 
+mbedtls_mpi_write_binary/44 (mbedtls_mpi_write_binary) @0639c150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 
+  Calls: 
+mbedtls_mpi_free/43 (mbedtls_mpi_free) @0639c0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 mbedtls_dhm_free/29 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_mpi/42 (mbedtls_mpi_cmp_mpi) @0639c000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_cmp_int/41 (mbedtls_mpi_cmp_int) @06352f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 dhm_make_common/22 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_sub_int/40 (mbedtls_mpi_sub_int) @06352e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_random_below/21 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_init/39 (mbedtls_mpi_init) @06352dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 dhm_update_blinding/27 mbedtls_dhm_calc_secret/28 dhm_check_range/15 
+  Calls: 
+mbedtls_mpi_read_binary/38 (mbedtls_mpi_read_binary) @06352d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_read_public/25 dhm_read_bignum/14 
+  Calls: 
+mbedtls_mpi_copy/37 (mbedtls_mpi_copy) @06352c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: dhm_update_blinding/27 mbedtls_dhm_set_group/24 mbedtls_dhm_set_group/24 mbedtls_dhm_get_value/19 
+  Calls: 
+mbedtls_mpi_size/36 (mbedtls_mpi_size) @06352bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_make_params/23 mbedtls_dhm_get_len/18 
+  Calls: 
+mbedtls_mpi_bitlen/35 (mbedtls_mpi_bitlen) @06352b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_get_bitlen/17 
+  Calls: 
+memset/34 (memset) @06352a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_dhm_init/16 
+  Calls: 
+mbedtls_dhm_self_test/33 (mbedtls_dhm_self_test) @063529d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_dhm_params/31 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_dhm_free/29 puts/59 puts/59 mbedtls_dhm_parse_dhm/30 printf/58 mbedtls_dhm_init/16 
+mbedtls_test_dhm_params/31 (mbedtls_test_dhm_params) @06345168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_dhm_self_test/33 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_dhm_parse_dhm/30 (mbedtls_dhm_parse_dhm) @06352498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: mbedtls_dhm_free/29 mbedtls_pem_free/57 mbedtls_error_add/9 mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_asn1_get_mpi/56 mbedtls_mpi_init/39 mbedtls_error_add/9 mbedtls_asn1_get_mpi/56 mbedtls_asn1_get_mpi/56 mbedtls_error_add/9 mbedtls_asn1_get_tag/55 mbedtls_pem_read_buffer/54 mbedtls_pem_init/53 
+mbedtls_dhm_free/29 (mbedtls_dhm_free) @063520a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 mbedtls_dhm_parse_dhm/30 
+  Calls: mbedtls_platform_zeroize/52 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 mbedtls_mpi_free/43 
+mbedtls_dhm_calc_secret/28 (mbedtls_dhm_calc_secret) @0633cf18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_free/43 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_update_blinding/27 mbedtls_mpi_init/39 dhm_check_range/15 mbedtls_dhm_get_len/18 
+dhm_update_blinding/27 (dhm_update_blinding) @0633cd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_exp_mod/46 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_inv_mod/51 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 dhm_random_below/21 dhm_random_below/21 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_mod_mpi/49 mbedtls_mpi_mul_mpi/48 mbedtls_mpi_cmp_int/41 mbedtls_mpi_lset/50 mbedtls_mpi_lset/50 mbedtls_mpi_copy/37 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_init/39 
+mbedtls_dhm_make_public/26 (mbedtls_dhm_make_public) @0633cbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 dhm_make_common/22 mbedtls_dhm_get_len/18 
+mbedtls_dhm_read_public/25 (mbedtls_dhm_read_public) @0633c9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 mbedtls_dhm_get_len/18 
+mbedtls_dhm_set_group/24 (mbedtls_dhm_set_group) @0633c7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_copy/37 mbedtls_mpi_copy/37 
+mbedtls_dhm_make_params/23 (mbedtls_dhm_make_params) @0633c5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_write_binary/44 mbedtls_mpi_size/36 mbedtls_mpi_size/36 mbedtls_mpi_size/36 dhm_make_common/22 
+dhm_make_common/22 (dhm_make_common) @0633c150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_make_public/26 mbedtls_dhm_make_params/23 
+  Calls: dhm_check_range/15 mbedtls_mpi_exp_mod/46 dhm_random_below/21 mbedtls_mpi_fill_random/45 mbedtls_mpi_size/36 mbedtls_mpi_cmp_int/41 
+dhm_random_below/21 (dhm_random_below) @0633c000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: dhm_update_blinding/27 dhm_update_blinding/27 dhm_make_common/22 
+  Calls: mbedtls_mpi_sub_int/40 mbedtls_mpi_random/47 
+mbedtls_dhm_read_params/20 (mbedtls_dhm_read_params) @06330f18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: dhm_check_range/15 dhm_read_bignum/14 dhm_read_bignum/14 dhm_read_bignum/14 
+mbedtls_dhm_get_value/19 (mbedtls_dhm_get_value) @06330dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_copy/37 
+mbedtls_dhm_get_len/18 (mbedtls_dhm_get_len) @06330c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 
+  Calls: mbedtls_mpi_size/36 
+mbedtls_dhm_get_bitlen/17 (mbedtls_dhm_get_bitlen) @06330b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_mpi_bitlen/35 
+mbedtls_dhm_init/16 (mbedtls_dhm_init) @063309d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_self_test/33 
+  Calls: memset/34 
+dhm_check_range/15 (dhm_check_range) @06330888
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_calc_secret/28 dhm_make_common/22 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_mpi_free/43 mbedtls_mpi_cmp_mpi/42 mbedtls_mpi_cmp_int/41 mbedtls_mpi_sub_int/40 mbedtls_mpi_init/39 
+dhm_read_bignum/14 (dhm_read_bignum) @06330738
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 mbedtls_dhm_read_params/20 
+  Calls: mbedtls_error_add/9 mbedtls_mpi_read_binary/38 
+mbedtls_error_add/9 (mbedtls_error_add) @06275dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_parse_dhm/30 mbedtls_dhm_calc_secret/28 mbedtls_dhm_make_public/26 mbedtls_dhm_read_public/25 mbedtls_dhm_set_group/24 mbedtls_dhm_make_params/23 dhm_read_bignum/14 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+puts/59 (__builtin_puts) @0639cb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 (233860966 (estimated locally),0.22 per call) mbedtls_dhm_self_test/33 (120473833 (estimated locally),0.11 per call) 
+  Calls: 
+printf/58 (printf) @0639ca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_self_test/33 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+mbedtls_pem_free/57 (mbedtls_pem_free) @0639c9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_asn1_get_mpi/56 (mbedtls_asn1_get_mpi) @0639c930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (49002054 (estimated locally),0.05 per call) mbedtls_dhm_parse_dhm/30 (138854567 (estimated locally),0.13 per call) mbedtls_dhm_parse_dhm/30 (284072356 (estimated locally),0.26 per call) 
+  Calls: 
+mbedtls_asn1_get_tag/55 (mbedtls_asn1_get_tag) @0639c888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (581162762 (estimated locally),0.54 per call) 
+  Calls: 
+mbedtls_pem_read_buffer/54 (mbedtls_pem_read_buffer) @0639c7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (177167400 (estimated locally),0.16 per call) 
+  Calls: 
+mbedtls_pem_init/53 (mbedtls_pem_init) @0639c738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_zeroize/52 (mbedtls_platform_zeroize) @0639c690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) 
+  Calls: 
+mbedtls_mpi_inv_mod/51 (mbedtls_mpi_inv_mod) @0639c5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_update_blinding/27 (15323736 (estimated locally),0.01 per call) 
+  Calls: 
+mbedtls_mpi_lset/50 (mbedtls_mpi_lset) @0639c540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_update_blinding/27 (128272117 (estimated locally),0.12 per call) dhm_update_blinding/27 (262422500 (estimated locally),0.24 per call) 
+  Calls: 
+mbedtls_mpi_mod_mpi/49 (mbedtls_mpi_mod_mpi) @0639c498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 (14208359 (estimated locally),0.01 per call) mbedtls_dhm_calc_secret/28 (121660705 (estimated locally),0.11 per call) dhm_update_blinding/27 (3661230 (estimated locally),0.00 per call) dhm_update_blinding/27 (31349705 (estimated locally),0.03 per call) dhm_update_blinding/27 (31349705 (estimated locally),0.03 per call) dhm_update_blinding/27 (131211250 (estimated locally),0.12 per call) 
+  Calls: 
+mbedtls_mpi_mul_mpi/48 (mbedtls_mpi_mul_mpi) @0639c3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 (29067837 (estimated locally),0.03 per call) mbedtls_dhm_calc_secret/28 (248896699 (estimated locally),0.23 per call) dhm_update_blinding/27 (7490242 (estimated locally),0.01 per call) dhm_update_blinding/27 (64136059 (estimated locally),0.06 per call) dhm_update_blinding/27 (64136059 (estimated locally),0.06 per call) dhm_update_blinding/27 (268435456 (estimated locally),0.25 per call) 
+  Calls: 
+mbedtls_mpi_random/47 (mbedtls_mpi_random) @0639c348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_random_below/21 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mpi_exp_mod/46 (mbedtls_mpi_exp_mod) @0639c2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 (59467752 (estimated locally),0.06 per call) dhm_update_blinding/27 (1789609 (estimated locally),0.00 per call) dhm_make_common/22 (689194602 (estimated locally),0.64 per call) 
+  Calls: 
+mbedtls_mpi_fill_random/45 (mbedtls_mpi_fill_random) @0639c1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_make_common/22 (523530658 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_mpi_write_binary/44 (mbedtls_mpi_write_binary) @0639c150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 (6945046 (estimated locally),0.01 per call) mbedtls_dhm_make_public/26 (500418799 (estimated locally),0.47 per call) mbedtls_dhm_make_params/23 (125398821 (estimated locally),0.12 per call) mbedtls_dhm_make_params/23 (256544234 (estimated locally),0.24 per call) mbedtls_dhm_make_params/23 (524844999 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_mpi_free/43 (mbedtls_mpi_free) @0639c0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (49002054 (estimated locally),0.05 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_free/29 (741418729 (estimated locally),0.69 per call) mbedtls_dhm_calc_secret/28 (509199469 (estimated locally),0.47 per call) dhm_update_blinding/27 (993930913 (estimated locally),0.93 per call) dhm_check_range/15 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mpi_cmp_mpi/42 (mbedtls_mpi_cmp_mpi) @0639c000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_update_blinding/27 (1073741824 (estimated locally),1.00 per call) dhm_check_range/15 (510149342 (estimated locally),0.48 per call) 
+  Calls: 
+mbedtls_mpi_cmp_int/41 (mbedtls_mpi_cmp_int) @06352f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_update_blinding/27 (536870913 (estimated locally),0.50 per call) dhm_make_common/22 (1073741823 (estimated locally),1.00 per call) dhm_check_range/15 (524845000 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_mpi_sub_int/40 (mbedtls_mpi_sub_int) @06352e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: dhm_random_below/21 (524845000 (estimated locally),0.49 per call) dhm_check_range/15 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mpi_init/39 (mbedtls_mpi_init) @06352dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_parse_dhm/30 (49002054 (estimated locally),0.05 per call) mbedtls_dhm_calc_secret/28 (509199469 (estimated locally),0.47 per call) dhm_update_blinding/27 (1073741824 (estimated locally),1.00 per call) dhm_check_range/15 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mpi_read_binary/38 (mbedtls_mpi_read_binary) @06352d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_read_public/25 (1029328430 (estimated locally),0.96 per call) dhm_read_bignum/14 (1043626124 (estimated locally),0.97 per call) 
+  Calls: 
+mbedtls_mpi_copy/37 (mbedtls_mpi_copy) @06352c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_set_group/24 (524845000 (estimated locally),0.49 per call) mbedtls_dhm_set_group/24 (1073741824 (estimated locally),1.00 per call) mbedtls_dhm_get_value/19 (920350129 (estimated locally),0.86 per call) dhm_update_blinding/27 (536870913 (estimated locally),0.50 per call) 
+  Calls: 
+mbedtls_mpi_size/36 (mbedtls_mpi_size) @06352bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_calc_secret/28 (6945046 (estimated locally),0.01 per call) mbedtls_dhm_make_params/23 (524844999 (estimated locally),0.49 per call) mbedtls_dhm_make_params/23 (524844999 (estimated locally),0.49 per call) mbedtls_dhm_make_params/23 (524844999 (estimated locally),0.49 per call) mbedtls_dhm_get_len/18 (1073741824 (estimated locally),1.00 per call) dhm_make_common/22 (1047061316 (estimated locally),0.98 per call) 
+  Calls: 
+mbedtls_mpi_bitlen/35 (mbedtls_mpi_bitlen) @06352b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_get_bitlen/17 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+memset/34 (memset) @06352a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_dhm_init/16 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_dhm_self_test/33 (mbedtls_dhm_self_test) @063529d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_dhm_params/31 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_dhm_free/29 (1073741824 (estimated locally),1.00 per call) puts/59 (233860966 (estimated locally),0.22 per call) puts/59 (120473833 (estimated locally),0.11 per call) mbedtls_dhm_parse_dhm/30 (1073741823 (estimated locally),1.00 per call) printf/58 (354334800 (estimated locally),0.33 per call) mbedtls_dhm_init/16 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_test_dhm_params/31 (mbedtls_test_dhm_params) @06345168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_dhm_self_test/33 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_dhm_parse_dhm/30 (mbedtls_dhm_parse_dhm) @06352498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_dhm_self_test/33 (1073741823 (estimated locally),1.00 per call) 
+  Calls: mbedtls_dhm_free/29 (354334800 (estimated locally),0.33 per call) mbedtls_pem_free/57 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_free/43 (49002054 (estimated locally),0.05 per call) mbedtls_asn1_get_mpi/56 (49002054 (estimated locally),0.05 per call) mbedtls_mpi_init/39 (49002054 (estimated locally),0.05 per call) mbedtls_asn1_get_mpi/56 (138854567 (estimated locally),0.13 per call) mbedtls_asn1_get_mpi/56 (284072356 (estimated locally),0.26 per call) mbedtls_asn1_get_tag/55 (581162762 (estimated locally),0.54 per call) mbedtls_pem_read_buffer/54 (177167400 (estimated locally),0.16 per call) mbedtls_pem_init/53 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_dhm_free/29 (mbedtls_dhm_free) @063520a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_dhm_self_test/33 (1073741824 (estimated locally),1.00 per call) mbedtls_dhm_parse_dhm/30 (354334800 (estimated locally),0.33 per call) 
+  Calls: mbedtls_platform_zeroize/52 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) mbedtls_mpi_free/43 (741418729 (estimated locally),0.69 per call) 
+mbedtls_dhm_calc_secret/28 (mbedtls_dhm_calc_secret) @0633cf18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_free/43 (509199469 (estimated locally),0.47 per call) mbedtls_mpi_write_binary/44 (6945046 (estimated locally),0.01 per call) mbedtls_mpi_size/36 (6945046 (estimated locally),0.01 per call) mbedtls_mpi_mod_mpi/49 (14208359 (estimated locally),0.01 per call) mbedtls_mpi_mul_mpi/48 (29067837 (estimated locally),0.03 per call) mbedtls_mpi_exp_mod/46 (59467752 (estimated locally),0.06 per call) mbedtls_mpi_mod_mpi/49 (121660705 (estimated locally),0.11 per call) mbedtls_mpi_mul_mpi/48 (248896699 (estimated locally),0.23 per call) dhm_update_blinding/27 (509199469 (estimated locally),0.47 per call) mbedtls_mpi_init/39 (509199469 (estimated locally),0.47 per call) dhm_check_range/15 (1041733782 (estimated locally),0.97 per call) mbedtls_dhm_get_len/18 (1063970775 (estimated locally),0.99 per call) 
+dhm_update_blinding/27 (dhm_update_blinding) @0633cd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_dhm_calc_secret/28 (509199469 (estimated locally),0.47 per call) 
+  Calls: mbedtls_mpi_free/43 (993930913 (estimated locally),0.93 per call) mbedtls_mpi_exp_mod/46 (1789609 (estimated locally),0.00 per call) mbedtls_mpi_mod_mpi/49 (3661230 (estimated locally),0.00 per call) mbedtls_mpi_mul_mpi/48 (7490242 (estimated locally),0.01 per call) mbedtls_mpi_inv_mod/51 (15323736 (estimated locally),0.01 per call) mbedtls_mpi_mod_mpi/49 (31349705 (estimated locally),0.03 per call) mbedtls_mpi_mul_mpi/48 (64136059 (estimated locally),0.06 per call) dhm_random_below/21 (131211250 (estimated locally),0.12 per call) dhm_random_below/21 (268435456 (estimated locally),0.25 per call) mbedtls_mpi_mod_mpi/49 (31349705 (estimated locally),0.03 per call) mbedtls_mpi_mul_mpi/48 (64136059 (estimated locally),0.06 per call) mbedtls_mpi_mod_mpi/49 (131211250 (estimated locally),0.12 per call) mbedtls_mpi_mul_mpi/48 (268435456 (estimated locally),0.25 per call) mbedtls_mpi_cmp_int/41 (536870913 (estimated locally),0.50 per call) mbedtls_mpi_lset/50 (128272117 (estimated locally),0.12 per call) mbedtls_mpi_lset/50 (262422500 (estimated locally),0.24 per call) mbedtls_mpi_copy/37 (536870913 (estimated locally),0.50 per call) mbedtls_mpi_cmp_mpi/42 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/39 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_dhm_make_public/26 (mbedtls_dhm_make_public) @0633cbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_write_binary/44 (500418799 (estimated locally),0.47 per call) dhm_make_common/22 (1029328430 (estimated locally),0.96 per call) mbedtls_dhm_get_len/18 (1051300617 (estimated locally),0.98 per call) 
+mbedtls_dhm_read_public/25 (mbedtls_dhm_read_public) @0633c9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_read_binary/38 (1029328430 (estimated locally),0.96 per call) mbedtls_dhm_get_len/18 (1051300617 (estimated locally),0.98 per call) 
+mbedtls_dhm_set_group/24 (mbedtls_dhm_set_group) @0633c7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_copy/37 (524845000 (estimated locally),0.49 per call) mbedtls_mpi_copy/37 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_dhm_make_params/23 (mbedtls_dhm_make_params) @0633c5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_write_binary/44 (125398821 (estimated locally),0.12 per call) mbedtls_mpi_write_binary/44 (256544234 (estimated locally),0.24 per call) mbedtls_mpi_write_binary/44 (524844999 (estimated locally),0.49 per call) mbedtls_mpi_size/36 (524844999 (estimated locally),0.49 per call) mbedtls_mpi_size/36 (524844999 (estimated locally),0.49 per call) mbedtls_mpi_size/36 (524844999 (estimated locally),0.49 per call) dhm_make_common/22 (1073741823 (estimated locally),1.00 per call) 
+dhm_make_common/22 (dhm_make_common) @0633c150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: mbedtls_dhm_make_public/26 (1029328430 (estimated locally),0.96 per call) mbedtls_dhm_make_params/23 (1073741823 (estimated locally),1.00 per call) 
+  Calls: dhm_check_range/15 (336878319 (estimated locally),0.31 per call) mbedtls_mpi_exp_mod/46 (689194602 (estimated locally),0.64 per call) dhm_random_below/21 (523530658 (estimated locally),0.49 per call) mbedtls_mpi_fill_random/45 (523530658 (estimated locally),0.49 per call) mbedtls_mpi_size/36 (1047061316 (estimated locally),0.98 per call) mbedtls_mpi_cmp_int/41 (1073741823 (estimated locally),1.00 per call) 
+dhm_random_below/21 (dhm_random_below) @0633c000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: dhm_update_blinding/27 (131211250 (estimated locally),0.12 per call) dhm_update_blinding/27 (268435456 (estimated locally),0.25 per call) dhm_make_common/22 (523530658 (estimated locally),0.49 per call) 
+  Calls: mbedtls_mpi_sub_int/40 (524845000 (estimated locally),0.49 per call) mbedtls_mpi_random/47 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_dhm_read_params/20 (mbedtls_dhm_read_params) @06330f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: dhm_check_range/15 (125398821 (estimated locally),0.12 per call) dhm_read_bignum/14 (256544234 (estimated locally),0.24 per call) dhm_read_bignum/14 (524845000 (estimated locally),0.49 per call) dhm_read_bignum/14 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_dhm_get_value/19 (mbedtls_dhm_get_value) @06330dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_copy/37 (920350129 (estimated locally),0.86 per call) 
+mbedtls_dhm_get_len/18 (mbedtls_dhm_get_len) @06330c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_dhm_calc_secret/28 (1063970775 (estimated locally),0.99 per call) mbedtls_dhm_make_public/26 (1051300617 (estimated locally),0.98 per call) mbedtls_dhm_read_public/25 (1051300617 (estimated locally),0.98 per call) 
+  Calls: mbedtls_mpi_size/36 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_dhm_get_bitlen/17 (mbedtls_dhm_get_bitlen) @06330b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_mpi_bitlen/35 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_dhm_init/16 (mbedtls_dhm_init) @063309d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_dhm_self_test/33 (1073741823 (estimated locally),1.00 per call) 
+  Calls: memset/34 (1073741824 (estimated locally),1.00 per call) 
+dhm_check_range/15 (dhm_check_range) @06330888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_dhm_calc_secret/28 (1041733782 (estimated locally),0.97 per call) mbedtls_dhm_read_params/20 (125398821 (estimated locally),0.12 per call) dhm_make_common/22 (336878319 (estimated locally),0.31 per call) 
+  Calls: mbedtls_mpi_free/43 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_cmp_mpi/42 (510149342 (estimated locally),0.48 per call) mbedtls_mpi_cmp_int/41 (524845000 (estimated locally),0.49 per call) mbedtls_mpi_sub_int/40 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/39 (1073741824 (estimated locally),1.00 per call) 
+dhm_read_bignum/14 (dhm_read_bignum) @06330738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: mbedtls_dhm_read_params/20 (256544234 (estimated locally),0.24 per call) mbedtls_dhm_read_params/20 (524845000 (estimated locally),0.49 per call) mbedtls_dhm_read_params/20 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_mpi_read_binary/38 (1043626124 (estimated locally),0.97 per call) 
+Trivially needed variables: mbedtls_test_dhm_params/31
+Removing variables:
+
+Final Symbol table:
+
+puts/59 (__builtin_puts) @0639cb28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/58 (printf) @0639ca80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pem_free/57 (mbedtls_pem_free) @0639c9d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_mpi/56 (mbedtls_asn1_get_mpi) @0639c930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_tag/55 (mbedtls_asn1_get_tag) @0639c888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pem_read_buffer/54 (mbedtls_pem_read_buffer) @0639c7e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_pem_init/53 (mbedtls_pem_init) @0639c738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/52 (mbedtls_platform_zeroize) @0639c690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_inv_mod/51 (mbedtls_mpi_inv_mod) @0639c5e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_lset/50 (mbedtls_mpi_lset) @0639c540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_mod_mpi/49 (mbedtls_mpi_mod_mpi) @0639c498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_mul_mpi/48 (mbedtls_mpi_mul_mpi) @0639c3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_random/47 (mbedtls_mpi_random) @0639c348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_exp_mod/46 (mbedtls_mpi_exp_mod) @0639c2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_fill_random/45 (mbedtls_mpi_fill_random) @0639c1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_write_binary/44 (mbedtls_mpi_write_binary) @0639c150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_free/43 (mbedtls_mpi_free) @0639c0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_cmp_mpi/42 (mbedtls_mpi_cmp_mpi) @0639c000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_cmp_int/41 (mbedtls_mpi_cmp_int) @06352f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_sub_int/40 (mbedtls_mpi_sub_int) @06352e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_init/39 (mbedtls_mpi_init) @06352dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_read_binary/38 (mbedtls_mpi_read_binary) @06352d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_copy/37 (mbedtls_mpi_copy) @06352c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_size/36 (mbedtls_mpi_size) @06352bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_bitlen/35 (mbedtls_mpi_bitlen) @06352b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/34 (memset) @06352a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_dhm_self_test/33 (mbedtls_dhm_self_test) @063529d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_dhm_params/31 (mbedtls_test_dhm_params) @06345168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.mbedtls_test_dhm_params (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_dhm_parse_dhm/30 (mbedtls_dhm_parse_dhm) @06352498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_parse_dhm (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_free/29 (mbedtls_dhm_free) @063520a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_calc_secret/28 (mbedtls_dhm_calc_secret) @0633cf18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_calc_secret (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+dhm_update_blinding/27 (dhm_update_blinding) @0633cd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.dhm_update_blinding (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_dhm_make_public/26 (mbedtls_dhm_make_public) @0633cbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_make_public (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_read_public/25 (mbedtls_dhm_read_public) @0633c9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_read_public (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_set_group/24 (mbedtls_dhm_set_group) @0633c7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_set_group (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_make_params/23 (mbedtls_dhm_make_params) @0633c5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_make_params (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+dhm_make_common/22 (dhm_make_common) @0633c150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.dhm_make_common (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 
+dhm_random_below/21 (dhm_random_below) @0633c000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.dhm_random_below (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_dhm_read_params/20 (mbedtls_dhm_read_params) @06330f18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_read_params (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_get_value/19 (mbedtls_dhm_get_value) @06330dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_get_value (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_get_len/18 (mbedtls_dhm_get_len) @06330c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_get_len (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_get_bitlen/17 (mbedtls_dhm_get_bitlen) @06330b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_get_bitlen (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_dhm_init/16 (mbedtls_dhm_init) @063309d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_dhm_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+dhm_check_range/15 (dhm_check_range) @06330888
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.dhm_check_range (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+dhm_read_bignum/14 (dhm_read_bignum) @06330738
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.dhm_read_bignum (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 

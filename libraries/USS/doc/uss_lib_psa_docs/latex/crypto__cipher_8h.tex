@@ -1,0 +1,183 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\+\_\+cipher.h File Reference}
+\hypertarget{crypto__cipher_8h}{}\label{crypto__cipher_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_cipher.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_cipher.h}}
+{\ttfamily \#include "{}crypto\+\_\+common.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+config\+\_\+def.\+h"{}}\newline
+{\ttfamily \#include "{}MXQ\+\_\+\+API.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_ada02457bee639a10a0c3ddbe1f73fedc}{PSA\+\_\+\+CIPHER\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg,  input\+\_\+length)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_a745c06526e5e062a9caf45e6f111f67d}{PSA\+\_\+\+CIPHER\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}(input\+\_\+length)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_a413e5c78d89d0f7a4ccdb047e7238125}{PSA\+\_\+\+CIPHER\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg,  input\+\_\+length)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_afbcce9b24605d70ead18d9c6de6a5ac7}{PSA\+\_\+\+CIPHER\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}(input\+\_\+length)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_ad5630c60148421b334b1bb3962bd4f86}{PSA\+\_\+\+CIPHER\+\_\+\+IV\+\_\+\+MAX\+\_\+\+SIZE}}~(16)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_adaeef0383905487313ccbfaf1b73c95e}{PSA\+\_\+\+CIPHER\+\_\+\+IV\+\_\+\+LENGTH}}(key\+\_\+type,  alg)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_acf11f477f1a0f57e3258bc345e9198bc}{PSA\+\_\+\+CIPHER\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg,  input\+\_\+length)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_ab1f6598efd6a7dc56e7ad7e34719eb32}{PSA\+\_\+\+CIPHER\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}(input\+\_\+length)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03}{PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+LENGTH}}(type)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_a2d9422f5ca18e6025d41134fe883d697}{PSA\+\_\+\+CIPHER\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+SIZE}}(key\+\_\+type,  alg)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_ac7980b0ebf97b171493560b06c51e8f5}{PSA\+\_\+\+CIPHER\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE}}~(0)
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}{PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE}}~USS\+\_\+\+PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_a2da0541aabf9a4995cf2004e36311919}{PSA\+\_\+\+CIPHER\+\_\+\+OPERATION\+\_\+\+INIT}}~(\mbox{\hyperlink{crypto__typedefs_8h_ad7990e8fc7f2f225a3f4630e79db5332}{psa\+\_\+cipher\+\_\+operation\+\_\+t}})              \{0\}
+\item 
+\#define \mbox{\hyperlink{crypto__cipher_8h_acfec68e0c6175e02e1b2ebc97df383c0}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+STREAM\+\_\+\+CIPHER}}(alg)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{crypto__cipher_8h_acfec68e0c6175e02e1b2ebc97df383c0}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_ALG\_IS\_STREAM\_CIPHER@{PSA\_ALG\_IS\_STREAM\_CIPHER}}
+\index{PSA\_ALG\_IS\_STREAM\_CIPHER@{PSA\_ALG\_IS\_STREAM\_CIPHER}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_STREAM\_CIPHER}{PSA\_ALG\_IS\_STREAM\_CIPHER}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_acfec68e0c6175e02e1b2ebc97df383c0} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+STREAM\+\_\+\+CIPHER(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ 0x7f800000)\ ==\ 0x04800000)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH@{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}}
+\index{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH@{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03} 
+\#define PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{type}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((type\ \&\ \mbox{\hyperlink{crypto__common_8h_a86bb99c0147c64d98d29c08b2be08854}{USS\_PSA\_KEY\_TYPE\_MASK}})\ ==\ \mbox{\hyperlink{crypto__common_8h_a9016695ac323fd10decb5be92a960d85}{USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK}}\ ?\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1u\ <<\ (((type)\ >>\ 8)\ \&\ 7))\ :\ 0u)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE@{PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE}}
+\index{PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE@{PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE}{PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_a615cd3a686a1d2301a6ef1198e55a512} 
+\#define PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE~USS\+\_\+\+PSA\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+BLOCK\+\_\+\+MAX\+\_\+\+SIZE}
+
+\Hypertarget{crypto__cipher_8h_afbcce9b24605d70ead18d9c6de6a5ac7}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE}{PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_afbcce9b24605d70ead18d9c6de6a5ac7} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(input\_length)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_a413e5c78d89d0f7a4ccdb047e7238125}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE@{PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE}}
+\index{PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE@{PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE}{PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_a413e5c78d89d0f7a4ccdb047e7238125} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+DECRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{, }\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_ad318309706a769cffdc64e4c7e06b2e9}{PSA\_ALG\_CTR}})\ \ \ \ \ \ \ \ \ \ \ \ \ ?\ (input\_length\ -\/\ 12)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_acb332d72716958880ee7f97d8365ae66}{PSA\_ALG\_CBC\_NO\_PADDING}})\ \ \ ?\ (input\_length\ -\/\ 16)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_ab8f0609cd0f12cccc9c950fd5a81a0e3}{PSA\_ALG\_ECB\_NO\_PADDING}})\ \ \ ?\ input\_length\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_a745c06526e5e062a9caf45e6f111f67d}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE}{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_a745c06526e5e062a9caf45e6f111f67d} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(input\_length\ +\ 16)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_ada02457bee639a10a0c3ddbe1f73fedc}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE@{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE}}
+\index{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE@{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE}{PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_ada02457bee639a10a0c3ddbe1f73fedc} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+ENCRYPT\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{, }\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_ad318309706a769cffdc64e4c7e06b2e9}{PSA\_ALG\_CTR}})\ \ \ \ \ \ \ \ \ \ \ \ \ ?\ (input\_length\ +\ 12)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_acb332d72716958880ee7f97d8365ae66}{PSA\_ALG\_CBC\_NO\_PADDING}})\ \ \ ?\ (input\_length\ +\ 16)\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_ab8f0609cd0f12cccc9c950fd5a81a0e3}{PSA\_ALG\_ECB\_NO\_PADDING}})\ \ \ ?\ input\_length\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_ac7980b0ebf97b171493560b06c51e8f5}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE}{PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_ac7980b0ebf97b171493560b06c51e8f5} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE~(0)}
+
+\Hypertarget{crypto__cipher_8h_a2d9422f5ca18e6025d41134fe883d697}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE@{PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE}}
+\index{PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE@{PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE}{PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_a2d9422f5ca18e6025d41134fe883d697} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+FINISH\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__common_8h_a1d1a5a402ad89a2e68f12bfb535490eb}{PSA\_ALG\_IS\_CIPHER}}(alg)\ ?\ \mbox{\hyperlink{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03}{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}}(key\_type)\ :\ 0)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_adaeef0383905487313ccbfaf1b73c95e}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_IV\_LENGTH@{PSA\_CIPHER\_IV\_LENGTH}}
+\index{PSA\_CIPHER\_IV\_LENGTH@{PSA\_CIPHER\_IV\_LENGTH}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_IV\_LENGTH}{PSA\_CIPHER\_IV\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_adaeef0383905487313ccbfaf1b73c95e} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+IV\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_ad318309706a769cffdc64e4c7e06b2e9}{PSA\_ALG\_CTR}})\ ?\ 12\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_acb332d72716958880ee7f97d8365ae66}{PSA\_ALG\_CBC\_NO\_PADDING}})\ ?\ 16\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ \mbox{\hyperlink{key__management_8h_a6ee54579dcf278c677eda4bb1a29575e}{PSA\_KEY\_TYPE\_AES}})\ \&\&\ (alg\ ==\ \mbox{\hyperlink{crypto__common_8h_ab8f0609cd0f12cccc9c950fd5a81a0e3}{PSA\_ALG\_ECB\_NO\_PADDING}})\ ?\ 0\ :\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_ad5630c60148421b334b1bb3962bd4f86}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_IV\_MAX\_SIZE@{PSA\_CIPHER\_IV\_MAX\_SIZE}}
+\index{PSA\_CIPHER\_IV\_MAX\_SIZE@{PSA\_CIPHER\_IV\_MAX\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_IV\_MAX\_SIZE}{PSA\_CIPHER\_IV\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_ad5630c60148421b334b1bb3962bd4f86} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+IV\+\_\+\+MAX\+\_\+\+SIZE~(16)}
+
+\Hypertarget{crypto__cipher_8h_a2da0541aabf9a4995cf2004e36311919}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_OPERATION\_INIT@{PSA\_CIPHER\_OPERATION\_INIT}}
+\index{PSA\_CIPHER\_OPERATION\_INIT@{PSA\_CIPHER\_OPERATION\_INIT}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_OPERATION\_INIT}{PSA\_CIPHER\_OPERATION\_INIT}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_a2da0541aabf9a4995cf2004e36311919} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+OPERATION\+\_\+\+INIT~(\mbox{\hyperlink{crypto__typedefs_8h_ad7990e8fc7f2f225a3f4630e79db5332}{psa\+\_\+cipher\+\_\+operation\+\_\+t}})              \{0\}}
+
+\Hypertarget{crypto__cipher_8h_ab1f6598efd6a7dc56e7ad7e34719eb32}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE}}
+\index{PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE@{PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE}{PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_ab1f6598efd6a7dc56e7ad7e34719eb32} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+MAX\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(input\_length)}
+
+\end{DoxyCode}
+\Hypertarget{crypto__cipher_8h_acf11f477f1a0f57e3258bc345e9198bc}\index{crypto\_cipher.h@{crypto\_cipher.h}!PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE@{PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE}}
+\index{PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE@{PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE}!crypto\_cipher.h@{crypto\_cipher.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE}{PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__cipher_8h_acf11f477f1a0f57e3258bc345e9198bc} 
+\#define PSA\+\_\+\+CIPHER\+\_\+\+UPDATE\+\_\+\+OUTPUT\+\_\+\+SIZE(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{alg}{, }\item[{}]{input\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(input\_length)}
+
+\end{DoxyCode}

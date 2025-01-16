@@ -1,0 +1,5 @@
+v1.0.0
+- Initial USS Release supporting the following targets:
+    - MAX32690
+    - MAX32670
+ 

@@ -127,4 +127,6 @@ CFLAGS += -DNO_OS_LWIP_NETWORKING
 LIBRARIES += mqtt
 SRCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.c
 INCS += $(PROJECT)/src/examples/swiot1l-mqtt/swiot1l_mqtt.h
+#INCS += $(PROJECT)/src/examples/swiot1l-mqtt/MXQ_API.h
+
 endif

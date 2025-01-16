@@ -1,0 +1,5 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_i2c.c:176:11:HOST_init_i2c	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_i2c.c:181:11:HOST_send_bytes_i2c	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_i2c.c:189:11:HOST_receive_bytes_i2c_first	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_i2c.c:197:11:HOST_receive_bytes_i2c	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_i2c.c:205:11:HOST_exchange_bytes_i2c	0	static

@@ -1,0 +1,200 @@
+Trivially needed symbols: HOST_CRCGet/5
+
+
+Initial Symbol table:
+
+HOST_CRCGet/5 (HOST_CRCGet) @0626d9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: outputval/3 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: get_crc/4 
+get_crc/4 (get_crc) @0626df18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: outputval/3 (read) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: HOST_CRCGet/5 
+  Calls: 
+outputval/3 (outputval) @0626a510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0626df18
+  References: 
+  Referring: HOST_CRCGet/5 (write) get_crc/4 (read) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) 
+  Availability: not-ready
+  Varpool flags:
+_putchar_unlocked/2 (_putchar_unlocked) @061e89d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061e8888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061e8690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+HOST_CRCGet/5 (HOST_CRCGet) @0626d9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: outputval/3 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: get_crc/4 
+get_crc/4 (get_crc) @0626df18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: outputval/3 (read) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: HOST_CRCGet/5 
+  Calls: 
+outputval/3 (outputval) @0626a510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: HOST_CRCGet/5 (write) get_crc/4 (read) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+
+Initial Symbol table:
+
+HOST_CRCGet/5 (HOST_CRCGet) @0626d9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: outputval/3 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: get_crc/4 
+get_crc/4 (get_crc) @0626df18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: outputval/3 (read) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: HOST_CRCGet/5 
+  Calls: 
+outputval/3 (outputval) @0626a510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: HOST_CRCGet/5 (write) get_crc/4 (read) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+HOST_CRCGet/5 (HOST_CRCGet) @0626d9d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: outputval/3 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: get_crc/4 
+get_crc/4 (get_crc) @0626df18
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: outputval/3 (read) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) outputval/3 (write) outputval/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: HOST_CRCGet/5 
+  Calls: 
+outputval/3 (outputval) @0626a510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: HOST_CRCGet/5 (write) get_crc/4 (read) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) get_crc/4 (write) get_crc/4 (read) 
+  Availability: not-ready
+  Varpool flags:
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+HOST_CRCGet/5 (HOST_CRCGet) @0626d9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: outputval/3 (write) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: get_crc/4 (1073741824 (estimated locally),1.00 per call) 
+get_crc/4 (get_crc) @0626df18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: outputval/3 (read) outputval/3 (write) outputval/3 (write) outputval/3 (write) outputval/3 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:63136016 (estimated locally) body local nonfreeing_fn
+  Called by: HOST_CRCGet/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+outputval/3 (outputval) @0626a510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: get_crc/4 (read) get_crc/4 (read) get_crc/4 (write) get_crc/4 (write) get_crc/4 (write) HOST_CRCGet/5 (write) 
+  Availability: available
+  Varpool flags:
+Trivially needed variables: outputval/3
+Removing variables:
+
+Final Symbol table:
+
+HOST_CRCGet/5 (HOST_CRCGet) @0626d9d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_CRCGet (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+get_crc/4 (get_crc) @0626df18
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.get_crc (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:63136016 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+outputval/3 (outputval) @0626a510
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.outputval (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:

@@ -1,0 +1,2085 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/\+USS\+\_\+\+API.h File Reference}
+\hypertarget{_u_s_s___a_p_i_8h}{}\label{_u_s_s___a_p_i_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/USS\_API.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/USS\_API.h}}
+{\ttfamily \#include "{}MXQ\+\_\+\+API.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a9d70d3e8f26ae35caf4c481d305ec03e}{uss\+\_\+algo\+\_\+id\+\_\+t}}~\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\+\_\+algo\+\_\+id\+\_\+t}}
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a58b60818522d0af199952387bcf00053}{uss\+\_\+object\+\_\+prop\+\_\+t}}~\mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e5bd4d199413bbcaa302419ebfd7e1f}{mxq\+\_\+object\+\_\+prop\+\_\+t}}
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ad29925ab11b468b8a5f03c2c4b3a8ff8}{USS\+\_\+\+Module\+\_\+\+Init}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a0209d3202c18965130a343c979d75ab9}{USS\+\_\+\+Module\+\_\+\+Deinit}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a354a74647d61f9435b506b09e915e770}{USS\+\_\+\+Module\+\_\+\+Set\+Interface}}(i)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a56aec618b671ceb94d3eea46cd4a618d}{USS\+\_\+\+Reset\+Factory}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_afcdd40313a54cbbcab678370c64e5183}{USS\+\_\+\+Reset}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a265a070d5297f4cb930dcab6267c94a0}{USS\+\_\+\+Display\+Object\+Details}}(p\+Option,  p\+Obj\+Details,  p\+Details\+Len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a1e59143de6b6ede027f3ed599efa017a}{USS\+\_\+\+List\+Object}}(option,  objectid,  pdest,  pmaxlen\+\_\+readlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_af87e1aca1bde858bdc88d0ce1b0b3244}{USS\+\_\+\+Create\+Object}}(objectid,  objectlen,  objtype,  objprops,  accessrules)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a6d58d423415a6620f912349abecf41e3}{USS\+\_\+\+Delete\+Object}}(objectid)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae1b3739b746e220de9f494cee0070ed7}{USS\+\_\+\+Write\+Object}}(objectid,  dest\+\_\+offset,  psrc,  len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a628d7c02f54cd9a2d94443818fdda9a2}{USS\+\_\+\+Write\+Object\+V2}}(objectid,  dest\+\_\+offset,  psrc,  len,  keyid,  algoid,  p\+Iv,  p\+Tag)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ade01f648780c75ba2989739bcc708a05}{USS\+\_\+\+Update\+Counter}}(objectid,  countval)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ab9179354b5bab9c69f9c7430ca19aa78}{USS\+\_\+\+Read\+Object}}(objectid,  src\+\_\+offset,  pdest,  pmaxlen\+\_\+readlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a9730fb01705541d8c7d220d01605fbb9}{USS\+\_\+\+Read\+Counter}}(objectid,  countval)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a703b550f0bce1fdd779c4782d801734e}{USS\+\_\+\+Ping}}(l)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a976add3321c90bbf44c0375ddd7b4303}{USS\+\_\+\+Get\+\_\+\+Challenge}}(p\+\_\+buff\+\_\+out,  len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8e20f735042ff4ae60ad7a3fd79fa770}{USS\+\_\+\+Get\+\_\+\+Random\+\_\+\+Ext}}(p\+\_\+buff\+\_\+out,  len,  option)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a0f5a9bfb6b55149e21c842f7f4b1cffb}{USS\+\_\+\+Get\+\_\+\+Random}}(p,  l)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8c5a058c0d93678ee5439957a8f17358}{USS\+\_\+\+Attestation}}(p\+\_\+buff\+\_\+out,  len,  option,  key\+\_\+id,  alg\+\_\+id,  objid)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a6a277a6b64192604f626b50124c04944}{USS\+\_\+\+GPIO\+\_\+\+Ctrl}}(p\+Sec\+Gpio\+Id,  p\+Sec\+Gpio\+Mode,  p\+Pulse\+Duration,  p\+Output\+Cond,  p\+Sign\+Algo,  p\+Key\+Id,  p\+Signature,  p\+Sign\+Len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ad7769b22ae50f3abd22f8ff95bcc577a}{USS\+\_\+\+GPIO\+\_\+\+Read}}(p\+Sec\+Gpio\+Id,  p\+Sign\+Algo,  p\+Key\+Id,  output,  olen,  p\+Challenge)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aa96a8d4b73ddba476c015d98a9c4a18e}{USS\+\_\+\+Establish\+Key\+\_\+\+DH}}(option\+\_\+flag,  rsa\+\_\+ssa\+\_\+algo,  moduluslen,  modulus,  generator,  message,  server\+\_\+rand\+\_\+len,  server\+\_\+rand\+\_\+buf,  keyusage,  dst\+\_\+\+Aes1\+\_\+kid,  dst1\+\_\+key\+\_\+len,  dst\+\_\+\+Aes2\+\_\+kid,  dst2\+\_\+key\+\_\+len,  fixed\+\_\+info\+\_\+len,  fixed\+\_\+info,  sign\+\_\+verif\+\_\+key\+\_\+id,  signing\+\_\+key\+\_\+pair\+\_\+id,  signature\+\_\+len,  signature,  out\+\_\+buf,  out\+\_\+buf\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a478c92deaeba4eca7f818aa26925e146}{USS\+\_\+\+Establish\+Key}}(option\+\_\+flag,  ec\+\_\+type,  key\+\_\+pair\+\_\+id,  pub\+\_\+key\+\_\+id,  pub\+\_\+key,  server\+\_\+rand\+\_\+len,  server\+\_\+rand\+\_\+buf,  dst\+\_\+\+Aes1\+\_\+kid,  dst1\+\_\+key\+\_\+len,  dst\+\_\+\+Aes2\+\_\+kid,  dst2\+\_\+key\+\_\+len,  fixed\+\_\+info\+\_\+len,  fixed\+\_\+info,  sign\+\_\+verif\+\_\+key\+\_\+id,  signing\+\_\+key\+\_\+pair\+\_\+id,  signature,  out\+\_\+buf,  out\+\_\+buf\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a05a7c8a69f75544110f7770877720f94}{USS\+\_\+\+Perform\+\_\+\+Key\+\_\+\+Exchange}}(key\+\_\+\+Exchange\+\_\+\+Session)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a1f52797c300b6fbd137b7af2dd6445a4}{USS\+\_\+\+TLS13\+\_\+\+Generate\+\_\+\+Key}}(key,  key\+\_\+id,  key\+\_\+type,  key\+\_\+param\+\_\+id,  key\+\_\+size,  p,  g\+\_\+size,  g)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae3bf4ac052fdbe0e7b0512eca26f6b1d}{USS\+\_\+\+TLS13\+\_\+\+Create\+\_\+\+Secret}}(peer\+\_\+key,  peer\+\_\+key\+\_\+size,  key\+\_\+id,  key\+\_\+type,  key\+\_\+param\+\_\+id,  CSID,  shared\+\_\+secret\+\_\+id,  secret,  secret\+\_\+size)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a873ffe514cccc8b8ccba37a9d14370cf}{USS\+\_\+\+TLS13\+\_\+\+Update\+\_\+\+IV}}(key\+\_\+id,  iv,  iv\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_adafbfd287c5291bda25bf7965219828a}{USS\+\_\+\+TLS13\+\_\+\+Extract\+\_\+\+Secret}}(digest\+\_\+id,  ret\+\_\+kid,  prk,  prk\+\_\+len,  salt\+\_\+kid,  salt,  salt\+\_\+len,  ikm\+\_\+kid,  ikm,  ikm\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a0a8d087d3daba9e7dfe3858707aca7f9}{USS\+\_\+\+TLS13\+\_\+\+Expand\+\_\+\+Secret}}(digest\+\_\+id,  ret\+\_\+kid,  ret\+\_\+keytype,  ret\+\_\+isiv,  okm,  okm\+\_\+len,  prk\+\_\+kid,  prk,  prk\+\_\+len,  info,  info\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae3f9c35516427f5bc25c7882dcdf6008}{USS\+\_\+\+Encrypt\+\_\+\+PMS\+\_\+with\+\_\+\+RSA}}(data,  encrypted\+\_\+pms,  data\+\_\+len,  cert\+\_\+id,  CSID)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae3e320fd4c75b1a2f6a8295279579416}{USS\+\_\+\+Ecdh\+\_\+\+Compute\+\_\+\+Shared}}(curve\+\_\+id,  cserver\+\_\+public\+\_\+key,  client\+\_\+public\+\_\+key,  key\+\_\+len,  CSID)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a42174a73c72015ae555a20dff5b07c81}{USS\+\_\+\+Set\+ECDHEKey}}(algoid,  curve\+ID,  na,  random,  randomlen,  ecdheparams,  ecdheparamslen,  signature,  signaturelen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a4da0f8859b1c86ed06008d731fda1b88}{USS\+\_\+tls\+\_\+prf\+\_\+sha\+\_\+256}}(key\+\_\+\+ID,  label,  llen,  rand,  rlen,  destbuf,  dlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ad3692bf47c0632fda4e6c152d3d3c432}{USS\+\_\+tls\+\_\+records}}(direction,  key\+\_\+\+ID,  iv,  iv\+\_\+len,  input,  ilen,  output,  olen,  hdr\+\_\+msg,  hdr\+\_\+msg\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ab4113840d79884836ab4a6bc741cd146}{USS\+\_\+cipher\+\_\+auth\+\_\+ccm}}(key\+\_\+\+ID,  direction,  iv,  iv\+\_\+len,  ad,  ad\+\_\+len,  input,  ilen,  output,  olen,  tag,  tag\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a2e9dd55f9293b24a1933936d3d71ed3e}{USS\+\_\+tls\+\_\+cipher\+\_\+cbc}}(direction,  key\+\_\+\+ID,  iv,  iv\+\_\+len,  input,  ilen,  output,  olen,  hdr\+\_\+msg,  hdr\+\_\+msg\+\_\+len,  maclen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aabcdfce7535308565af29eb1c2868e53}{USS\+\_\+tls\+\_\+cipher\+\_\+aead}}(key\+\_\+\+ID,  direction,  algo,  iv,  iv\+\_\+len,  aad,  aad\+\_\+len,  input,  ilen,  output,  olen,  tag,  tag\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a9acec77f525b266272782ea3f4a9fd87}{USS\+\_\+client\+\_\+key\+\_\+exchange}}(remote\+\_\+random,  srvcert,  client\+\_\+ecdhe\+\_\+key,  client\+\_\+random,  client\+\_\+signkey,  client\+\_\+ecdsa\+\_\+sign,  aeskey)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae8b00ff46818da4e698444ff3e9a8bf5}{USS\+\_\+client\+\_\+decrypt}}(cleartext,  ciphertext,  ciphertext\+\_\+len,  IV)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_af95f4772fef84f5c4097367211846e07}{USS\+\_\+client\+\_\+encrypt}}(ciphertext,  cleartext,  cleartext\+\_\+len,  IV)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aea1898c742971e0426e03dd5057ee71a}{USS\+\_\+client\+\_\+key\+\_\+exchange\+\_\+psk}}(remote\+\_\+ecdhe\+\_\+pubkey,  remote\+\_\+random,  client\+\_\+ecdhe\+\_\+key,  client\+\_\+random,  curve\+\_\+id,  PSK\+\_\+\+ID,  aeskey)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a96c392b6e0a5744f3afb33389fd2dd5a}{USS\+\_\+\+Cipher\+\_\+\+Init}}(\+\_\+1encrypt\+\_\+0decrypt,  cipher\+\_\+algo\+\_\+id,  key\+\_\+object\+\_\+id,  param,  do\+Switch\+Aes\+Spi)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a4161f8f3f344f61b9ffeaf655a497752}{USS\+\_\+\+Cipher\+\_\+\+Update}}(pdest,  psrc,  len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae0ba0ceedbb49fdd29d9cde607f8465b}{USS\+\_\+\+Cipher\+\_\+\+Finish}}(additional\+\_\+data,  additional\+\_\+data\+\_\+len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aa8c2bfaff85bbb271463441706edb713}{USS\+\_\+\+MAC\+\_\+\+Init}}(\+\_\+1compute\+\_\+0verify,  mac\+\_\+algo\+\_\+id,  key\+\_\+object\+\_\+id,  IV,  ivlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a9e89610b3c67989a899c43c275e3fb12}{USS\+\_\+\+MAC\+\_\+\+Update}}(psrc,  inlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ab97d5f3e78854047859a194eaee9652d}{USS\+\_\+\+MAC\+\_\+\+Finish}}(pdest,  destlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a67cc366ffce68c6a5bda8a8e5c2e5d1b}{USS\+\_\+\+MAC\+\_\+\+Verify}}(pmac,  maclen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a38fcabd62a1af777d3b928f19088c7cb}{USS\+\_\+\+MD\+\_\+\+Init}}(md\+\_\+algo\+\_\+id)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a86f01b2e445e64aca004908b83c6392e}{USS\+\_\+\+MD\+\_\+\+Update}}(psrc,  inlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a7881bb6bab81aa0b4aee0fbabc3f999f}{USS\+\_\+\+MD\+\_\+\+Finish}}(pdest,  destlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aac31f055932590869a0c26154157cd95}{USS\+\_\+\+Get\+\_\+\+MD\+\_\+\+Output\+Size}}(md\+\_\+algo\+\_\+id)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a24b3bb16f8a77e3b09ab3415b18a0404}{USS\+\_\+get\+\_\+curve\+\_\+bytelen}}(curve\+\_\+id)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aa692481bf561b9ee7fba60a61fefefef}{USS\+\_\+get\+\_\+sign\+\_\+alg\+\_\+from\+\_\+curve}}(maxq\+\_\+id)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aad4c9c534a9d881b824943c0c15d1d7f}{USS\+\_\+\+Sign}}(signalgo,  privkey\+\_\+objectid,  pdata,  datalen,  psignout,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a23ad4c4c334ecc6cef9f12c9929f1fbb}{USS\+\_\+\+Verify}}(signalgo,  pubkey\+\_\+objectid,  pdata,  datalen,  signature,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a5f6e8a0cd3f60b99a5b6f7e4261a6747}{USS\+\_\+\+Build\+Key}}(pdest,  destlen,  keytype,  keyparam,  keycomplen,  total\+\_\+keylen,  uu1,  a1,  uu2,  a2,  psrc)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a696f4a80979aab33da81f4f6dcd21eb0}{USS\+\_\+\+Build\+Key\+\_\+\+Ex}}(pdest,  destlen,  keytype,  keyparam,  keycomplen,  total\+\_\+keylen,  uu1,  a1,  uu2,  a2,  psrc,  len)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a890a71f739b67fb51c95087e2c89a2fc}{USS\+\_\+\+Build\+EK\+\_\+\+Material}}(pdest,  destlen,  psrc,  srclen,  kek\+\_\+id,  p\+IV,  p\+Tag)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a559ba3666fc1c51c88e0d7d341d56344}{USS\+\_\+\+Build\+\_\+\+EC\+\_\+\+Cert}}(pdest,  destlen,  keytype,  keyparam,  keycomplen,  total\+\_\+keylen,  pubkeyoffset,  tbs\+\_\+start,  tbs\+\_\+len,  total\+\_\+certlen,  verifalgo,  verifkeyobjid,  uu1,  a1,  uu2,  a2,  pcertbody)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a87cae28cfce629212ae1b77f1299f3bb}{USS\+\_\+\+Import\+Key\+Cert}}(destobj\+\_\+id,  verifalgo,  verifkey\+\_\+id,  pdata,  datalen,  sign,  signlen,  cmd)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a7e5f172cc782fd4c7ef756f9f5394b1f}{USS\+\_\+\+Import\+Key}}(destid,  valg,  vkid,  data,  datalen,  sign,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a739124483214b47fda1660a52dbaa889}{USS\+\_\+\+Import\+Key\+Enc}}(destid,  valg,  vkid,  data,  datalen,  sign,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a927ff23dcdc7a0dae2329f66dcae0be9}{USS\+\_\+\+Import\+Root\+Cert}}(destid,  valg,  vkid,  data,  datalen,  sign,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a5187bf8cf9925a4dd9ef3cea464d99e3}{USS\+\_\+\+Import\+Child\+Cert}}(destobj\+\_\+id,  pdata,  datalen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aacfd02bd9421bf1426500a23dfe6d48c}{USS\+\_\+\+Admin\+Auth}}(verifkey\+\_\+id,  algo,  sign,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ac3ef42c27a91bc5137033a5e320049fa}{USS\+\_\+\+Admin\+Auth\+Reset}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a4fe772e09fdef4e44dfcbbee3f5477cc}{USS\+\_\+\+Verify\+Boot}}(verifkey\+\_\+id,  algo,  sign,  signlen)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_ad8b742f3bcfaf79e995878ca924c3ff1}{USS\+\_\+\+Verify\+Boot\+Reset}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8698984cc23db3b373a7e1ed1a3c33da}{USS\+\_\+\+Open\+Secure\+Channel}}(p\+Mode,  p\+SCKey\+Id,  p\+Private\+Key,  local\+\_\+key)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a06497e4a1d5f128ef24aabff7c75b99c}{USS\+\_\+\+Close\+Secure\+Channel}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_afed247b095f65dcbd6164417f0adf34a}{USS\+\_\+\+Set\+Config}}(s)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_abeb1e4bb6f7e85d7826dd9659e2b04d2}{USS\+\_\+\+Set\+State}}(newstate)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aaac8d4db1627880465b67a2bce33c5c0}{USS\+\_\+\+Get\+Status}}(status)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a682a367db3465fa501278136c1fa1b4f}{USS\+\_\+\+TLS\+\_\+\+Enable}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a19729ce6d3c5afb69c96c067e222605f}{USS\+\_\+\+TLS\+\_\+\+Direct}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_af2cf5cc8c8c4c8b2bc4c2d38c6482727}{USS\+\_\+\+TLS\+\_\+\+Restore}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_acfaebfc9f178425b4256fa8edebe9035}{USS\+\_\+\+TLS\+\_\+\+Save}}(void)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a74f20e0633ed2c882e66066f22d6f12a}{USS\+\_\+\+Display\+Status}}(s)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a746e6e896924ecc7b71a1c153b27f6c6}{USS\+\_\+\+Display\+Config}}(c)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_aa497e946b7aa6debae9d574d5ed76db4}{USS\+\_\+\+Display\+Sys\+Config}}(c)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_a7c1f9a309dc2e35f0c2c80f9625639b5}{USS\+\_\+\+Tamper}}(cmd)
+\item 
+\#define \mbox{\hyperlink{_u_s_s___a_p_i_8h_af58d0d04d444a49ba26c9660ad1e34f9}{USS\+\_\+get\+\_\+str\+\_\+code}}(error\+\_\+code)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_a2ab50d3dfa602528154518cd74a7f2f2}{uss\+\_\+keyuse\+\_\+t}}
+\item 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_ac153fdfa88eacf6419f56a13363f456c}{uss\+\_\+keyparam\+\_\+id\+\_\+t}}
+\item 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae8a904c950c73aa90b30cd91e5375cf0}{uss\+\_\+keytype\+\_\+id\+\_\+t}}
+\item 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_a73909432c404289a834e42f4fa191150}{uss\+\_\+objecttype\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}{\+\_\+\+PACKED}} \{ \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}{USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL}} =0x00U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}{USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE}} =0x01U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}{USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION}} =0x11U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION}} =0x\+A2U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC}} =0x\+A1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}{USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION}} =0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}{USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH}} =0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}{USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH}} =0x08U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}{USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH}} =0x18U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT}} =0x10U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW}} =0x20U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}{USS\+\_\+\+KEYUSE\+\_\+\+RFU}} =0x40U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT}} =0x80U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}{USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL}} =0x8\+AU
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE}} =0x\+D1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}{USS\+\_\+\+KEYUSE\+\_\+\+NONE}} =0x\+FFU
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}{USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}{USS\+\_\+\+UNKNOWN\+\_\+\+CURVE}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}{USS\+\_\+\+KEYTYPE\+\_\+\+AES}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}{USS\+\_\+\+KEYTYPE\+\_\+\+PSK}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}{USS\+\_\+\+KEYTYPE\+\_\+\+HMAC}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}{USS\+\_\+\+KEYTYPE\+\_\+\+ECC}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}{USS\+\_\+\+KEYTYPE\+\_\+\+IKM}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}{USS\+\_\+\+KEYTYPE\+\_\+\+RSA}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}{USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}{USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY}} = 0x01U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}{USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY}} = 0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}{USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR}} = 0x03U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}{USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT}} = 0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP}} = 0x05U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}{USS\+\_\+\+OBJTYPE\+\_\+\+X509}} = 0x06U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN}} = 0x07U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}{USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN}} = 0x80U
+ \}
+\item 
+enum \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}{\+\_\+\+PACKED}} \{ \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}{USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL}} =0x00U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}{USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE}} =0x01U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}{USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION}} =0x11U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION}} =0x\+A2U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC}} =0x\+A1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}{USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION}} =0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}{USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH}} =0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}{USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH}} =0x08U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}{USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH}} =0x18U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT}} =0x10U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW}} =0x20U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}{USS\+\_\+\+KEYUSE\+\_\+\+RFU}} =0x40U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT}} =0x80U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}{USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL}} =0x8\+AU
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE}} =0x\+D1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}{USS\+\_\+\+KEYUSE\+\_\+\+NONE}} =0x\+FFU
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}{USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}{USS\+\_\+\+UNKNOWN\+\_\+\+CURVE}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}{USS\+\_\+\+KEYTYPE\+\_\+\+AES}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}{USS\+\_\+\+KEYTYPE\+\_\+\+PSK}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}{USS\+\_\+\+KEYTYPE\+\_\+\+HMAC}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}{USS\+\_\+\+KEYTYPE\+\_\+\+ECC}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}{USS\+\_\+\+KEYTYPE\+\_\+\+IKM}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}{USS\+\_\+\+KEYTYPE\+\_\+\+RSA}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}{USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}{USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY}} = 0x01U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}{USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY}} = 0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}{USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR}} = 0x03U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}{USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT}} = 0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP}} = 0x05U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}{USS\+\_\+\+OBJTYPE\+\_\+\+X509}} = 0x06U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN}} = 0x07U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}{USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN}} = 0x80U
+ \}
+\item 
+enum \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}{\+\_\+\+PACKED}} \{ \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}{USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL}} =0x00U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}{USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE}} =0x01U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}{USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION}} =0x11U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION}} =0x\+A2U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC}} =0x\+A1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}{USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION}} =0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}{USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH}} =0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}{USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH}} =0x08U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}{USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH}} =0x18U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT}} =0x10U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW}} =0x20U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}{USS\+\_\+\+KEYUSE\+\_\+\+RFU}} =0x40U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT}} =0x80U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}{USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL}} =0x8\+AU
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE}} =0x\+D1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}{USS\+\_\+\+KEYUSE\+\_\+\+NONE}} =0x\+FFU
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}{USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}{USS\+\_\+\+UNKNOWN\+\_\+\+CURVE}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}{USS\+\_\+\+KEYTYPE\+\_\+\+AES}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}{USS\+\_\+\+KEYTYPE\+\_\+\+PSK}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}{USS\+\_\+\+KEYTYPE\+\_\+\+HMAC}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}{USS\+\_\+\+KEYTYPE\+\_\+\+ECC}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}{USS\+\_\+\+KEYTYPE\+\_\+\+IKM}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}{USS\+\_\+\+KEYTYPE\+\_\+\+RSA}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}{USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}{USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY}} = 0x01U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}{USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY}} = 0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}{USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR}} = 0x03U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}{USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT}} = 0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP}} = 0x05U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}{USS\+\_\+\+OBJTYPE\+\_\+\+X509}} = 0x06U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN}} = 0x07U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}{USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN}} = 0x80U
+ \}
+\item 
+enum \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}{\+\_\+\+PACKED}} \{ \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}{USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL}} =0x00U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}{USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE}} =0x01U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}{USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION}} =0x11U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION}} =0x\+A2U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}{USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC}} =0x\+A1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}{USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION}} =0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}{USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH}} =0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}{USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH}} =0x08U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}{USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH}} =0x18U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT}} =0x10U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}{USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW}} =0x20U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}{USS\+\_\+\+KEYUSE\+\_\+\+RFU}} =0x40U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT}} =0x80U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}{USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL}} =0x8\+AU
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}{USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE}} =0x\+D1U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}{USS\+\_\+\+KEYUSE\+\_\+\+NONE}} =0x\+FFU
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}{USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}{USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}{USS\+\_\+\+UNKNOWN\+\_\+\+CURVE}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}{USS\+\_\+\+KEYTYPE\+\_\+\+AES}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}{USS\+\_\+\+KEYTYPE\+\_\+\+PSK}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}{USS\+\_\+\+KEYTYPE\+\_\+\+HMAC}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}{USS\+\_\+\+KEYTYPE\+\_\+\+ECC}}
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}{USS\+\_\+\+KEYTYPE\+\_\+\+IKM}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}{USS\+\_\+\+KEYTYPE\+\_\+\+RSA}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}{USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN}}
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}{USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY}} = 0x01U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}{USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY}} = 0x02U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}{USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR}} = 0x03U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}{USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT}} = 0x04U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP}} = 0x05U
+, \newline
+\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}{USS\+\_\+\+OBJTYPE\+\_\+\+X509}} = 0x06U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}{USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN}} = 0x07U
+, \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}{USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN}} = 0x80U
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{_u_s_s___a_p_i_8h_aacfd02bd9421bf1426500a23dfe6d48c}\index{USS\_API.h@{USS\_API.h}!USS\_AdminAuth@{USS\_AdminAuth}}
+\index{USS\_AdminAuth@{USS\_AdminAuth}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_AdminAuth}{USS\_AdminAuth}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aacfd02bd9421bf1426500a23dfe6d48c} 
+\#define USS\+\_\+\+Admin\+Auth(\begin{DoxyParamCaption}\item[{}]{verifkey\+\_\+id}{, }\item[{}]{algo}{, }\item[{}]{sign}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ab901970a5bb939b011c3dcdc7afd6ad0}{MXQ\_AdminAuth}}(verifkey\_id,algo,sign,signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ac3ef42c27a91bc5137033a5e320049fa}\index{USS\_API.h@{USS\_API.h}!USS\_AdminAuthReset@{USS\_AdminAuthReset}}
+\index{USS\_AdminAuthReset@{USS\_AdminAuthReset}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_AdminAuthReset}{USS\_AdminAuthReset}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ac3ef42c27a91bc5137033a5e320049fa} 
+\#define USS\+\_\+\+Admin\+Auth\+Reset(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1896df824aed1552294a265ac39a8cc0}{MXQ\_AdminAuthReset}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a9d70d3e8f26ae35caf4c481d305ec03e}\index{USS\_API.h@{USS\_API.h}!uss\_algo\_id\_t@{uss\_algo\_id\_t}}
+\index{uss\_algo\_id\_t@{uss\_algo\_id\_t}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{uss\_algo\_id\_t}{uss\_algo\_id\_t}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a9d70d3e8f26ae35caf4c481d305ec03e} 
+\#define uss\+\_\+algo\+\_\+id\+\_\+t~\mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ca50ea5d2f5e1b5eacc25ee5a0741f7}{mxq\+\_\+algo\+\_\+id\+\_\+t}}}
+
+\Hypertarget{_u_s_s___a_p_i_8h_a8c5a058c0d93678ee5439957a8f17358}\index{USS\_API.h@{USS\_API.h}!USS\_Attestation@{USS\_Attestation}}
+\index{USS\_Attestation@{USS\_Attestation}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Attestation}{USS\_Attestation}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8c5a058c0d93678ee5439957a8f17358} 
+\#define USS\+\_\+\+Attestation(\begin{DoxyParamCaption}\item[{}]{p\+\_\+buff\+\_\+out}{, }\item[{}]{len}{, }\item[{}]{option}{, }\item[{}]{key\+\_\+id}{, }\item[{}]{alg\+\_\+id}{, }\item[{}]{objid}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a25b562198a8f70915967485eeacff1e9}{MXQ\_Attestation}}(\ p\_buff\_out,\ \ len,\ \ option,\ \ key\_id,\ \ alg\_id,\ \ objid)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a559ba3666fc1c51c88e0d7d341d56344}\index{USS\_API.h@{USS\_API.h}!USS\_Build\_EC\_Cert@{USS\_Build\_EC\_Cert}}
+\index{USS\_Build\_EC\_Cert@{USS\_Build\_EC\_Cert}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Build\_EC\_Cert}{USS\_Build\_EC\_Cert}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a559ba3666fc1c51c88e0d7d341d56344} 
+\#define USS\+\_\+\+Build\+\_\+\+EC\+\_\+\+Cert(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{destlen}{, }\item[{}]{keytype}{, }\item[{}]{keyparam}{, }\item[{}]{keycomplen}{, }\item[{}]{total\+\_\+keylen}{, }\item[{}]{pubkeyoffset}{, }\item[{}]{tbs\+\_\+start}{, }\item[{}]{tbs\+\_\+len}{, }\item[{}]{total\+\_\+certlen}{, }\item[{}]{verifalgo}{, }\item[{}]{verifkeyobjid}{, }\item[{}]{uu1}{, }\item[{}]{a1}{, }\item[{}]{uu2}{, }\item[{}]{a2}{, }\item[{}]{pcertbody}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ae289ae08c94baf886df649817a38ca6b}{MXQ\_Build\_EC\_Cert}}(pdest,\ destlen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keytype,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keyparam,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keycomplen,\ \ total\_keylen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ pubkeyoffset,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ tbs\_start,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ tbs\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ total\_certlen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ verifalgo,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ verifkeyobjid,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ uu1,\ a1,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ uu2,\ a2,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ pcertbody\ )}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a890a71f739b67fb51c95087e2c89a2fc}\index{USS\_API.h@{USS\_API.h}!USS\_BuildEK\_Material@{USS\_BuildEK\_Material}}
+\index{USS\_BuildEK\_Material@{USS\_BuildEK\_Material}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_BuildEK\_Material}{USS\_BuildEK\_Material}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a890a71f739b67fb51c95087e2c89a2fc} 
+\#define USS\+\_\+\+Build\+EK\+\_\+\+Material(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{destlen}{, }\item[{}]{psrc}{, }\item[{}]{srclen}{, }\item[{}]{kek\+\_\+id}{, }\item[{}]{p\+IV}{, }\item[{}]{p\+Tag}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a63b09cf9eaef6b56412f3a8d36574bbf}{MXQ\_BuildEK\_Material}}(pdest,\ destlen,\ psrc,\ srclen,\ kek\_id,\ pIV,\ pTag)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a5f6e8a0cd3f60b99a5b6f7e4261a6747}\index{USS\_API.h@{USS\_API.h}!USS\_BuildKey@{USS\_BuildKey}}
+\index{USS\_BuildKey@{USS\_BuildKey}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_BuildKey}{USS\_BuildKey}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a5f6e8a0cd3f60b99a5b6f7e4261a6747} 
+\#define USS\+\_\+\+Build\+Key(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{destlen}{, }\item[{}]{keytype}{, }\item[{}]{keyparam}{, }\item[{}]{keycomplen}{, }\item[{}]{total\+\_\+keylen}{, }\item[{}]{uu1}{, }\item[{}]{a1}{, }\item[{}]{uu2}{, }\item[{}]{a2}{, }\item[{}]{psrc}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_acb9013d0370b733f7c0de53d2ceec25b}{MXQ\_BuildKey}}(pdest,\ destlen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keytype,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keyparam,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keycomplen,\ total\_keylen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ uu1,\ a1,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ uu2,\ a2,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ psrc\ )}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a696f4a80979aab33da81f4f6dcd21eb0}\index{USS\_API.h@{USS\_API.h}!USS\_BuildKey\_Ex@{USS\_BuildKey\_Ex}}
+\index{USS\_BuildKey\_Ex@{USS\_BuildKey\_Ex}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_BuildKey\_Ex}{USS\_BuildKey\_Ex}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a696f4a80979aab33da81f4f6dcd21eb0} 
+\#define USS\+\_\+\+Build\+Key\+\_\+\+Ex(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{destlen}{, }\item[{}]{keytype}{, }\item[{}]{keyparam}{, }\item[{}]{keycomplen}{, }\item[{}]{total\+\_\+keylen}{, }\item[{}]{uu1}{, }\item[{}]{a1}{, }\item[{}]{uu2}{, }\item[{}]{a2}{, }\item[{}]{psrc}{, }\item[{}]{len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad11bed1700025258f0bd0a7957fb05fc}{MXQ\_BuildKey\_Ex}}(pdest,\ destlen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keytype,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keyparam,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keycomplen,\ total\_keylen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ uu1,\ a1,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ uu2,\ a2,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ psrc,\ len\ )}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ab4113840d79884836ab4a6bc741cd146}\index{USS\_API.h@{USS\_API.h}!USS\_cipher\_auth\_ccm@{USS\_cipher\_auth\_ccm}}
+\index{USS\_cipher\_auth\_ccm@{USS\_cipher\_auth\_ccm}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_cipher\_auth\_ccm}{USS\_cipher\_auth\_ccm}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ab4113840d79884836ab4a6bc741cd146} 
+\#define USS\+\_\+cipher\+\_\+auth\+\_\+ccm(\begin{DoxyParamCaption}\item[{}]{key\+\_\+\+ID}{, }\item[{}]{direction}{, }\item[{}]{iv}{, }\item[{}]{iv\+\_\+len}{, }\item[{}]{ad}{, }\item[{}]{ad\+\_\+len}{, }\item[{}]{input}{, }\item[{}]{ilen}{, }\item[{}]{output}{, }\item[{}]{olen}{, }\item[{}]{tag}{, }\item[{}]{tag\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a225456ac6d79f3cf68cd949c6c4d612a}{MXQ\_cipher\_auth\_ccm}}(key\_ID\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ direction,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ iv,\ iv\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ ad,\ ad\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ input,\ \ ilen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ output,\ olen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ tag,\ tag\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ae0ba0ceedbb49fdd29d9cde607f8465b}\index{USS\_API.h@{USS\_API.h}!USS\_Cipher\_Finish@{USS\_Cipher\_Finish}}
+\index{USS\_Cipher\_Finish@{USS\_Cipher\_Finish}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Cipher\_Finish}{USS\_Cipher\_Finish}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae0ba0ceedbb49fdd29d9cde607f8465b} 
+\#define USS\+\_\+\+Cipher\+\_\+\+Finish(\begin{DoxyParamCaption}\item[{}]{additional\+\_\+data}{, }\item[{}]{additional\+\_\+data\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_afe016baa4e6d9619bf580f0e9d2869f5}{MXQ\_Cipher\_Finish}}(\ additional\_data,\ \ additional\_data\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a96c392b6e0a5744f3afb33389fd2dd5a}\index{USS\_API.h@{USS\_API.h}!USS\_Cipher\_Init@{USS\_Cipher\_Init}}
+\index{USS\_Cipher\_Init@{USS\_Cipher\_Init}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Cipher\_Init}{USS\_Cipher\_Init}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a96c392b6e0a5744f3afb33389fd2dd5a} 
+\#define USS\+\_\+\+Cipher\+\_\+\+Init(\begin{DoxyParamCaption}\item[{}]{\+\_\+1encrypt\+\_\+0decrypt}{, }\item[{}]{cipher\+\_\+algo\+\_\+id}{, }\item[{}]{key\+\_\+object\+\_\+id}{, }\item[{}]{param}{, }\item[{}]{do\+Switch\+Aes\+Spi}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ae1c630d6a5613e92956d567168985060}{MXQ\_Cipher\_Init}}(\_1encrypt\_0decrypt,cipher\_algo\_id,key\_object\_id,param,doSwitchAesSpi)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a4161f8f3f344f61b9ffeaf655a497752}\index{USS\_API.h@{USS\_API.h}!USS\_Cipher\_Update@{USS\_Cipher\_Update}}
+\index{USS\_Cipher\_Update@{USS\_Cipher\_Update}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Cipher\_Update}{USS\_Cipher\_Update}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a4161f8f3f344f61b9ffeaf655a497752} 
+\#define USS\+\_\+\+Cipher\+\_\+\+Update(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{psrc}{, }\item[{}]{len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3b982b6279593c0f21af6abef390f324}{MXQ\_Cipher\_Update}}(\ pdest,\ \ \ psrc,\ \ len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ae8b00ff46818da4e698444ff3e9a8bf5}\index{USS\_API.h@{USS\_API.h}!USS\_client\_decrypt@{USS\_client\_decrypt}}
+\index{USS\_client\_decrypt@{USS\_client\_decrypt}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_client\_decrypt}{USS\_client\_decrypt}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae8b00ff46818da4e698444ff3e9a8bf5} 
+\#define USS\+\_\+client\+\_\+decrypt(\begin{DoxyParamCaption}\item[{}]{cleartext}{, }\item[{}]{ciphertext}{, }\item[{}]{ciphertext\+\_\+len}{, }\item[{}]{IV}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ab4deb874ebe751175c142c6eabecf830}{MXQ\_client\_decrypt}}(\ cleartext,\ \ \ ciphertext,\ \ ciphertext\_len,\ \ \ IV)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_af95f4772fef84f5c4097367211846e07}\index{USS\_API.h@{USS\_API.h}!USS\_client\_encrypt@{USS\_client\_encrypt}}
+\index{USS\_client\_encrypt@{USS\_client\_encrypt}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_client\_encrypt}{USS\_client\_encrypt}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_af95f4772fef84f5c4097367211846e07} 
+\#define USS\+\_\+client\+\_\+encrypt(\begin{DoxyParamCaption}\item[{}]{ciphertext}{, }\item[{}]{cleartext}{, }\item[{}]{cleartext\+\_\+len}{, }\item[{}]{IV}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_afb7869b266c760c7315550f5ceb5df4b}{MXQ\_client\_encrypt}}(\ ciphertext,\ \ \ cleartext,\ \ cleartext\_len,\ \ \ IV)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a9acec77f525b266272782ea3f4a9fd87}\index{USS\_API.h@{USS\_API.h}!USS\_client\_key\_exchange@{USS\_client\_key\_exchange}}
+\index{USS\_client\_key\_exchange@{USS\_client\_key\_exchange}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_client\_key\_exchange}{USS\_client\_key\_exchange}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a9acec77f525b266272782ea3f4a9fd87} 
+\#define USS\+\_\+client\+\_\+key\+\_\+exchange(\begin{DoxyParamCaption}\item[{}]{remote\+\_\+random}{, }\item[{}]{srvcert}{, }\item[{}]{client\+\_\+ecdhe\+\_\+key}{, }\item[{}]{client\+\_\+random}{, }\item[{}]{client\+\_\+signkey}{, }\item[{}]{client\+\_\+ecdsa\+\_\+sign}{, }\item[{}]{aeskey}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ace01157156054d71dfc89697da86acbe}{MXQ\_client\_key\_exchange}}(remote\_random,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ srvcert,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ client\_ecdhe\_key,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ client\_random,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ client\_signkey,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ client\_ecdsa\_sign,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ aeskey)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aea1898c742971e0426e03dd5057ee71a}\index{USS\_API.h@{USS\_API.h}!USS\_client\_key\_exchange\_psk@{USS\_client\_key\_exchange\_psk}}
+\index{USS\_client\_key\_exchange\_psk@{USS\_client\_key\_exchange\_psk}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_client\_key\_exchange\_psk}{USS\_client\_key\_exchange\_psk}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aea1898c742971e0426e03dd5057ee71a} 
+\#define USS\+\_\+client\+\_\+key\+\_\+exchange\+\_\+psk(\begin{DoxyParamCaption}\item[{}]{remote\+\_\+ecdhe\+\_\+pubkey}{, }\item[{}]{remote\+\_\+random}{, }\item[{}]{client\+\_\+ecdhe\+\_\+key}{, }\item[{}]{client\+\_\+random}{, }\item[{}]{curve\+\_\+id}{, }\item[{}]{PSK\+\_\+\+ID}{, }\item[{}]{aeskey}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a48aa9a4f45d0d7cac6803902d41ae8d5}{MXQ\_client\_key\_exchange\_psk}}(remote\_ecdhe\_pubkey,remote\_random,client\_ecdhe\_key,client\_random,\ curve\_id,PSK\_ID,aeskey)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a06497e4a1d5f128ef24aabff7c75b99c}\index{USS\_API.h@{USS\_API.h}!USS\_CloseSecureChannel@{USS\_CloseSecureChannel}}
+\index{USS\_CloseSecureChannel@{USS\_CloseSecureChannel}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_CloseSecureChannel}{USS\_CloseSecureChannel}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a06497e4a1d5f128ef24aabff7c75b99c} 
+\#define USS\+\_\+\+Close\+Secure\+Channel(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af91f4e68bcbc41690153ff1054846ece}{MXQ\_CloseSecureChannel}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_af87e1aca1bde858bdc88d0ce1b0b3244}\index{USS\_API.h@{USS\_API.h}!USS\_CreateObject@{USS\_CreateObject}}
+\index{USS\_CreateObject@{USS\_CreateObject}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_CreateObject}{USS\_CreateObject}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_af87e1aca1bde858bdc88d0ce1b0b3244} 
+\#define USS\+\_\+\+Create\+Object(\begin{DoxyParamCaption}\item[{}]{objectid}{, }\item[{}]{objectlen}{, }\item[{}]{objtype}{, }\item[{}]{objprops}{, }\item[{}]{accessrules}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a6f51b8ede40571ba955c1b65bc373089}{MXQ\_CreateObject}}(\ objectid,\ objectlen,\ objtype,\ objprops,\ accessrules)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a6d58d423415a6620f912349abecf41e3}\index{USS\_API.h@{USS\_API.h}!USS\_DeleteObject@{USS\_DeleteObject}}
+\index{USS\_DeleteObject@{USS\_DeleteObject}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_DeleteObject}{USS\_DeleteObject}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a6d58d423415a6620f912349abecf41e3} 
+\#define USS\+\_\+\+Delete\+Object(\begin{DoxyParamCaption}\item[{}]{objectid}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad64934a0c33084935317c915f627aec6}{MXQ\_DeleteObject}}(\ objectid)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a746e6e896924ecc7b71a1c153b27f6c6}\index{USS\_API.h@{USS\_API.h}!USS\_DisplayConfig@{USS\_DisplayConfig}}
+\index{USS\_DisplayConfig@{USS\_DisplayConfig}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_DisplayConfig}{USS\_DisplayConfig}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a746e6e896924ecc7b71a1c153b27f6c6} 
+\#define USS\+\_\+\+Display\+Config(\begin{DoxyParamCaption}\item[{}]{c}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8142a25ad3def79e3efe56fd03418c37}{MXQ\_DisplayConfig}}(\ c)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a265a070d5297f4cb930dcab6267c94a0}\index{USS\_API.h@{USS\_API.h}!USS\_DisplayObjectDetails@{USS\_DisplayObjectDetails}}
+\index{USS\_DisplayObjectDetails@{USS\_DisplayObjectDetails}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_DisplayObjectDetails}{USS\_DisplayObjectDetails}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a265a070d5297f4cb930dcab6267c94a0} 
+\#define USS\+\_\+\+Display\+Object\+Details(\begin{DoxyParamCaption}\item[{}]{p\+Option}{, }\item[{}]{p\+Obj\+Details}{, }\item[{}]{p\+Details\+Len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4f156d2a6ecc5d91fa0822bd3412d589}{MXQ\_DisplayObjectDetails}}(\ pOption,\ pObjDetails,\ pDetailsLen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a74f20e0633ed2c882e66066f22d6f12a}\index{USS\_API.h@{USS\_API.h}!USS\_DisplayStatus@{USS\_DisplayStatus}}
+\index{USS\_DisplayStatus@{USS\_DisplayStatus}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_DisplayStatus}{USS\_DisplayStatus}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a74f20e0633ed2c882e66066f22d6f12a} 
+\#define USS\+\_\+\+Display\+Status(\begin{DoxyParamCaption}\item[{}]{s}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1c73cbffd2f419cd3e19238d36412673}{MXQ\_DisplayStatus}}(\ s)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aa497e946b7aa6debae9d574d5ed76db4}\index{USS\_API.h@{USS\_API.h}!USS\_DisplaySysConfig@{USS\_DisplaySysConfig}}
+\index{USS\_DisplaySysConfig@{USS\_DisplaySysConfig}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_DisplaySysConfig}{USS\_DisplaySysConfig}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aa497e946b7aa6debae9d574d5ed76db4} 
+\#define USS\+\_\+\+Display\+Sys\+Config(\begin{DoxyParamCaption}\item[{}]{c}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a02a66f339fa6b414d8dc11e9010304b7}{MXQ\_DisplaySysConfig}}(\ c)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ae3e320fd4c75b1a2f6a8295279579416}\index{USS\_API.h@{USS\_API.h}!USS\_Ecdh\_Compute\_Shared@{USS\_Ecdh\_Compute\_Shared}}
+\index{USS\_Ecdh\_Compute\_Shared@{USS\_Ecdh\_Compute\_Shared}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Ecdh\_Compute\_Shared}{USS\_Ecdh\_Compute\_Shared}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae3e320fd4c75b1a2f6a8295279579416} 
+\#define USS\+\_\+\+Ecdh\+\_\+\+Compute\+\_\+\+Shared(\begin{DoxyParamCaption}\item[{}]{curve\+\_\+id}{, }\item[{}]{cserver\+\_\+public\+\_\+key}{, }\item[{}]{client\+\_\+public\+\_\+key}{, }\item[{}]{key\+\_\+len}{, }\item[{}]{CSID}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a997b198ecf74f31e10955610dfd863f0}{MXQ\_Ecdh\_Compute\_Shared}}(curve\_id,\ cserver\_public\_key,\ client\_public\_key,\ key\_len,\ CSID)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ae3f9c35516427f5bc25c7882dcdf6008}\index{USS\_API.h@{USS\_API.h}!USS\_Encrypt\_PMS\_with\_RSA@{USS\_Encrypt\_PMS\_with\_RSA}}
+\index{USS\_Encrypt\_PMS\_with\_RSA@{USS\_Encrypt\_PMS\_with\_RSA}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Encrypt\_PMS\_with\_RSA}{USS\_Encrypt\_PMS\_with\_RSA}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae3f9c35516427f5bc25c7882dcdf6008} 
+\#define USS\+\_\+\+Encrypt\+\_\+\+PMS\+\_\+with\+\_\+\+RSA(\begin{DoxyParamCaption}\item[{}]{data}{, }\item[{}]{encrypted\+\_\+pms}{, }\item[{}]{data\+\_\+len}{, }\item[{}]{cert\+\_\+id}{, }\item[{}]{CSID}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad72327caf01204bad1ca5f6f145b01bc}{MXQ\_Encrypt\_PMS\_with\_RSA}}(\ data,\ \ encrypted\_pms,\ \ data\_len,\ \ cert\_id,\ \ CSID)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a478c92deaeba4eca7f818aa26925e146}\index{USS\_API.h@{USS\_API.h}!USS\_EstablishKey@{USS\_EstablishKey}}
+\index{USS\_EstablishKey@{USS\_EstablishKey}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_EstablishKey}{USS\_EstablishKey}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a478c92deaeba4eca7f818aa26925e146} 
+\#define USS\+\_\+\+Establish\+Key(\begin{DoxyParamCaption}\item[{}]{option\+\_\+flag}{, }\item[{}]{ec\+\_\+type}{, }\item[{}]{key\+\_\+pair\+\_\+id}{, }\item[{}]{pub\+\_\+key\+\_\+id}{, }\item[{}]{pub\+\_\+key}{, }\item[{}]{server\+\_\+rand\+\_\+len}{, }\item[{}]{server\+\_\+rand\+\_\+buf}{, }\item[{}]{dst\+\_\+\+Aes1\+\_\+kid}{, }\item[{}]{dst1\+\_\+key\+\_\+len}{, }\item[{}]{dst\+\_\+\+Aes2\+\_\+kid}{, }\item[{}]{dst2\+\_\+key\+\_\+len}{, }\item[{}]{fixed\+\_\+info\+\_\+len}{, }\item[{}]{fixed\+\_\+info}{, }\item[{}]{sign\+\_\+verif\+\_\+key\+\_\+id}{, }\item[{}]{signing\+\_\+key\+\_\+pair\+\_\+id}{, }\item[{}]{signature}{, }\item[{}]{out\+\_\+buf}{, }\item[{}]{out\+\_\+buf\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3cf865a2b082f461c4c24f35acc42ca0}{MXQ\_EstablishKey}}(option\_flag,\ ec\_type,\ key\_pair\_id,\ pub\_key\_id,\ pub\_key,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ server\_rand\_len,\ server\_rand\_buf,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ dst\_Aes1\_kid,\ dst1\_key\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ dst\_Aes2\_kid,\ dst2\_key\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ fixed\_info\_len,\ fixed\_info,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ sign\_verif\_key\_id,\ signing\_key\_pair\_id,\ signature,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ out\_buf,\ out\_buf\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aa96a8d4b73ddba476c015d98a9c4a18e}\index{USS\_API.h@{USS\_API.h}!USS\_EstablishKey\_DH@{USS\_EstablishKey\_DH}}
+\index{USS\_EstablishKey\_DH@{USS\_EstablishKey\_DH}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_EstablishKey\_DH}{USS\_EstablishKey\_DH}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aa96a8d4b73ddba476c015d98a9c4a18e} 
+\#define USS\+\_\+\+Establish\+Key\+\_\+\+DH(\begin{DoxyParamCaption}\item[{}]{option\+\_\+flag}{, }\item[{}]{rsa\+\_\+ssa\+\_\+algo}{, }\item[{}]{moduluslen}{, }\item[{}]{modulus}{, }\item[{}]{generator}{, }\item[{}]{message}{, }\item[{}]{server\+\_\+rand\+\_\+len}{, }\item[{}]{server\+\_\+rand\+\_\+buf}{, }\item[{}]{keyusage}{, }\item[{}]{dst\+\_\+\+Aes1\+\_\+kid}{, }\item[{}]{dst1\+\_\+key\+\_\+len}{, }\item[{}]{dst\+\_\+\+Aes2\+\_\+kid}{, }\item[{}]{dst2\+\_\+key\+\_\+len}{, }\item[{}]{fixed\+\_\+info\+\_\+len}{, }\item[{}]{fixed\+\_\+info}{, }\item[{}]{sign\+\_\+verif\+\_\+key\+\_\+id}{, }\item[{}]{signing\+\_\+key\+\_\+pair\+\_\+id}{, }\item[{}]{signature\+\_\+len}{, }\item[{}]{signature}{, }\item[{}]{out\+\_\+buf}{, }\item[{}]{out\+\_\+buf\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ MXQ\_EstablishKey\_DH(option\_flag,\ rsa\_ssa\_algo,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ moduluslen,\ modulus,\ generator,\ message,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ server\_rand\_len,\ server\_rand\_buf,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ keyusage,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ dst\_Aes1\_kid,\ dst1\_key\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ dst\_Aes2\_kid,\ dst2\_key\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ fixed\_info\_len,\ fixed\_info,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ sign\_verif\_key\_id,\ signing\_key\_pair\_id,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ signature\_len,\ signature,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ out\_buf,\ out\_buf\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a976add3321c90bbf44c0375ddd7b4303}\index{USS\_API.h@{USS\_API.h}!USS\_Get\_Challenge@{USS\_Get\_Challenge}}
+\index{USS\_Get\_Challenge@{USS\_Get\_Challenge}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Get\_Challenge}{USS\_Get\_Challenge}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a976add3321c90bbf44c0375ddd7b4303} 
+\#define USS\+\_\+\+Get\+\_\+\+Challenge(\begin{DoxyParamCaption}\item[{}]{p\+\_\+buff\+\_\+out}{, }\item[{}]{len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1794b9eca6d5ceee7b8d2781cfeb7a4a}{MXQ\_Get\_Challenge}}(\ p\_buff\_out,\ \ len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a24b3bb16f8a77e3b09ab3415b18a0404}\index{USS\_API.h@{USS\_API.h}!USS\_get\_curve\_bytelen@{USS\_get\_curve\_bytelen}}
+\index{USS\_get\_curve\_bytelen@{USS\_get\_curve\_bytelen}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_get\_curve\_bytelen}{USS\_get\_curve\_bytelen}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a24b3bb16f8a77e3b09ab3415b18a0404} 
+\#define USS\+\_\+get\+\_\+curve\+\_\+bytelen(\begin{DoxyParamCaption}\item[{}]{curve\+\_\+id}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a692e50bd614f7e6d48937970ae8d9c92}{MXQ\_get\_curve\_bytelen}}(\ curve\_id)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aac31f055932590869a0c26154157cd95}\index{USS\_API.h@{USS\_API.h}!USS\_Get\_MD\_OutputSize@{USS\_Get\_MD\_OutputSize}}
+\index{USS\_Get\_MD\_OutputSize@{USS\_Get\_MD\_OutputSize}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Get\_MD\_OutputSize}{USS\_Get\_MD\_OutputSize}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aac31f055932590869a0c26154157cd95} 
+\#define USS\+\_\+\+Get\+\_\+\+MD\+\_\+\+Output\+Size(\begin{DoxyParamCaption}\item[{}]{md\+\_\+algo\+\_\+id}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a21dbda123de2516bd010311227a54dcb}{MXQ\_Get\_MD\_OutputSize}}(\ md\_algo\_id)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a0f5a9bfb6b55149e21c842f7f4b1cffb}\index{USS\_API.h@{USS\_API.h}!USS\_Get\_Random@{USS\_Get\_Random}}
+\index{USS\_Get\_Random@{USS\_Get\_Random}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Get\_Random}{USS\_Get\_Random}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a0f5a9bfb6b55149e21c842f7f4b1cffb} 
+\#define USS\+\_\+\+Get\+\_\+\+Random(\begin{DoxyParamCaption}\item[{}]{p}{, }\item[{}]{l}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{_u_s_s___a_p_i_8h_a8e20f735042ff4ae60ad7a3fd79fa770}{USS\_Get\_Random\_Ext}}(p,l,0)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a8e20f735042ff4ae60ad7a3fd79fa770}\index{USS\_API.h@{USS\_API.h}!USS\_Get\_Random\_Ext@{USS\_Get\_Random\_Ext}}
+\index{USS\_Get\_Random\_Ext@{USS\_Get\_Random\_Ext}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Get\_Random\_Ext}{USS\_Get\_Random\_Ext}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8e20f735042ff4ae60ad7a3fd79fa770} 
+\#define USS\+\_\+\+Get\+\_\+\+Random\+\_\+\+Ext(\begin{DoxyParamCaption}\item[{}]{p\+\_\+buff\+\_\+out}{, }\item[{}]{len}{, }\item[{}]{option}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa92227444a321f2d537f4165bf67962f}{MXQ\_Get\_Random\_Ext}}(\ p\_buff\_out,\ \ len,\ \ option)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aa692481bf561b9ee7fba60a61fefefef}\index{USS\_API.h@{USS\_API.h}!USS\_get\_sign\_alg\_from\_curve@{USS\_get\_sign\_alg\_from\_curve}}
+\index{USS\_get\_sign\_alg\_from\_curve@{USS\_get\_sign\_alg\_from\_curve}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_get\_sign\_alg\_from\_curve}{USS\_get\_sign\_alg\_from\_curve}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aa692481bf561b9ee7fba60a61fefefef} 
+\#define USS\+\_\+get\+\_\+sign\+\_\+alg\+\_\+from\+\_\+curve(\begin{DoxyParamCaption}\item[{}]{maxq\+\_\+id}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4a3ad466c77b1842882cb15850c2a18b}{MXQ\_get\_sign\_alg\_from\_curve}}(\ maxq\_id)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_af58d0d04d444a49ba26c9660ad1e34f9}\index{USS\_API.h@{USS\_API.h}!USS\_get\_str\_code@{USS\_get\_str\_code}}
+\index{USS\_get\_str\_code@{USS\_get\_str\_code}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_get\_str\_code}{USS\_get\_str\_code}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_af58d0d04d444a49ba26c9660ad1e34f9} 
+\#define USS\+\_\+get\+\_\+str\+\_\+code(\begin{DoxyParamCaption}\item[{}]{error\+\_\+code}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8940dc5f3914fd29e6c7e4aa53e24d7e}{MXQ\_get\_str\_code}}(error\_code)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aaac8d4db1627880465b67a2bce33c5c0}\index{USS\_API.h@{USS\_API.h}!USS\_GetStatus@{USS\_GetStatus}}
+\index{USS\_GetStatus@{USS\_GetStatus}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_GetStatus}{USS\_GetStatus}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aaac8d4db1627880465b67a2bce33c5c0} 
+\#define USS\+\_\+\+Get\+Status(\begin{DoxyParamCaption}\item[{}]{status}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e}{MXQ\_GetStatus}}(\ status)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a6a277a6b64192604f626b50124c04944}\index{USS\_API.h@{USS\_API.h}!USS\_GPIO\_Ctrl@{USS\_GPIO\_Ctrl}}
+\index{USS\_GPIO\_Ctrl@{USS\_GPIO\_Ctrl}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_GPIO\_Ctrl}{USS\_GPIO\_Ctrl}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a6a277a6b64192604f626b50124c04944} 
+\#define USS\+\_\+\+GPIO\+\_\+\+Ctrl(\begin{DoxyParamCaption}\item[{}]{p\+Sec\+Gpio\+Id}{, }\item[{}]{p\+Sec\+Gpio\+Mode}{, }\item[{}]{p\+Pulse\+Duration}{, }\item[{}]{p\+Output\+Cond}{, }\item[{}]{p\+Sign\+Algo}{, }\item[{}]{p\+Key\+Id}{, }\item[{}]{p\+Signature}{, }\item[{}]{p\+Sign\+Len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ MXQ\_GPIO\_Ctrl(\ pSecGpioId,\ \ pSecGpioMode,\ pPulseDuration,\ \ pOutputCond,\ pSignAlgo,\ pKeyId,\ pSignature,\ pSignLen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ad7769b22ae50f3abd22f8ff95bcc577a}\index{USS\_API.h@{USS\_API.h}!USS\_GPIO\_Read@{USS\_GPIO\_Read}}
+\index{USS\_GPIO\_Read@{USS\_GPIO\_Read}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_GPIO\_Read}{USS\_GPIO\_Read}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ad7769b22ae50f3abd22f8ff95bcc577a} 
+\#define USS\+\_\+\+GPIO\+\_\+\+Read(\begin{DoxyParamCaption}\item[{}]{p\+Sec\+Gpio\+Id}{, }\item[{}]{p\+Sign\+Algo}{, }\item[{}]{p\+Key\+Id}{, }\item[{}]{output}{, }\item[{}]{olen}{, }\item[{}]{p\+Challenge}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ MXQ\_GPIO\_Read(pSecGpioId,\ pSignAlgo,\ pKeyId,\ output,\ \ olen,\ pChallenge)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a5187bf8cf9925a4dd9ef3cea464d99e3}\index{USS\_API.h@{USS\_API.h}!USS\_ImportChildCert@{USS\_ImportChildCert}}
+\index{USS\_ImportChildCert@{USS\_ImportChildCert}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ImportChildCert}{USS\_ImportChildCert}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a5187bf8cf9925a4dd9ef3cea464d99e3} 
+\#define USS\+\_\+\+Import\+Child\+Cert(\begin{DoxyParamCaption}\item[{}]{destobj\+\_\+id}{, }\item[{}]{pdata}{, }\item[{}]{datalen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4f64deea673029d925df3e877816a109}{MXQ\_ImportChildCert}}(\ destobj\_id,\ pdata,\ datalen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a7e5f172cc782fd4c7ef756f9f5394b1f}\index{USS\_API.h@{USS\_API.h}!USS\_ImportKey@{USS\_ImportKey}}
+\index{USS\_ImportKey@{USS\_ImportKey}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ImportKey}{USS\_ImportKey}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a7e5f172cc782fd4c7ef756f9f5394b1f} 
+\#define USS\+\_\+\+Import\+Key(\begin{DoxyParamCaption}\item[{}]{destid}{, }\item[{}]{valg}{, }\item[{}]{vkid}{, }\item[{}]{data}{, }\item[{}]{datalen}{, }\item[{}]{sign}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af4d2286277e3a6920fb08ca62f273091}{MXQ\_ImportKey}}(destid,valg,vkid,data,datalen,sign,signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a87cae28cfce629212ae1b77f1299f3bb}\index{USS\_API.h@{USS\_API.h}!USS\_ImportKeyCert@{USS\_ImportKeyCert}}
+\index{USS\_ImportKeyCert@{USS\_ImportKeyCert}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ImportKeyCert}{USS\_ImportKeyCert}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a87cae28cfce629212ae1b77f1299f3bb} 
+\#define USS\+\_\+\+Import\+Key\+Cert(\begin{DoxyParamCaption}\item[{}]{destobj\+\_\+id}{, }\item[{}]{verifalgo}{, }\item[{}]{verifkey\+\_\+id}{, }\item[{}]{pdata}{, }\item[{}]{datalen}{, }\item[{}]{sign}{, }\item[{}]{signlen}{, }\item[{}]{cmd}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_afeb420a59d7081bbba4b488900541f03}{MXQ\_ImportKeyCert}}(destobj\_id,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ verifalgo,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ verifkey\_id,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ pdata,\ datalen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ sign,\ signlen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ cmd)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a739124483214b47fda1660a52dbaa889}\index{USS\_API.h@{USS\_API.h}!USS\_ImportKeyEnc@{USS\_ImportKeyEnc}}
+\index{USS\_ImportKeyEnc@{USS\_ImportKeyEnc}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ImportKeyEnc}{USS\_ImportKeyEnc}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a739124483214b47fda1660a52dbaa889} 
+\#define USS\+\_\+\+Import\+Key\+Enc(\begin{DoxyParamCaption}\item[{}]{destid}{, }\item[{}]{valg}{, }\item[{}]{vkid}{, }\item[{}]{data}{, }\item[{}]{datalen}{, }\item[{}]{sign}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad9e6365db65a440fb618663d6fa01b81}{MXQ\_ImportKeyEnc}}(destid,valg,vkid,data,datalen,sign,signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a927ff23dcdc7a0dae2329f66dcae0be9}\index{USS\_API.h@{USS\_API.h}!USS\_ImportRootCert@{USS\_ImportRootCert}}
+\index{USS\_ImportRootCert@{USS\_ImportRootCert}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ImportRootCert}{USS\_ImportRootCert}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a927ff23dcdc7a0dae2329f66dcae0be9} 
+\#define USS\+\_\+\+Import\+Root\+Cert(\begin{DoxyParamCaption}\item[{}]{destid}{, }\item[{}]{valg}{, }\item[{}]{vkid}{, }\item[{}]{data}{, }\item[{}]{datalen}{, }\item[{}]{sign}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a53c28e1916c97bfaf764c81adecb3970}{MXQ\_ImportRootCert}}(destid,valg,vkid,data,datalen,sign,signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a1e59143de6b6ede027f3ed599efa017a}\index{USS\_API.h@{USS\_API.h}!USS\_ListObject@{USS\_ListObject}}
+\index{USS\_ListObject@{USS\_ListObject}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ListObject}{USS\_ListObject}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a1e59143de6b6ede027f3ed599efa017a} 
+\#define USS\+\_\+\+List\+Object(\begin{DoxyParamCaption}\item[{}]{option}{, }\item[{}]{objectid}{, }\item[{}]{pdest}{, }\item[{}]{pmaxlen\+\_\+readlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af04bbbec55e3fc93de25053943ed160e}{MXQ\_ListObject}}(\ option,\ \ objectid,\ \ pdest,\ \ pmaxlen\_readlen\ )}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ab97d5f3e78854047859a194eaee9652d}\index{USS\_API.h@{USS\_API.h}!USS\_MAC\_Finish@{USS\_MAC\_Finish}}
+\index{USS\_MAC\_Finish@{USS\_MAC\_Finish}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MAC\_Finish}{USS\_MAC\_Finish}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ab97d5f3e78854047859a194eaee9652d} 
+\#define USS\+\_\+\+MAC\+\_\+\+Finish(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{destlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8478cada32f2c86d1b091b06883c1ac9}{MXQ\_MAC\_Finish}}(\ pdest,\ \ destlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aa8c2bfaff85bbb271463441706edb713}\index{USS\_API.h@{USS\_API.h}!USS\_MAC\_Init@{USS\_MAC\_Init}}
+\index{USS\_MAC\_Init@{USS\_MAC\_Init}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MAC\_Init}{USS\_MAC\_Init}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aa8c2bfaff85bbb271463441706edb713} 
+\#define USS\+\_\+\+MAC\+\_\+\+Init(\begin{DoxyParamCaption}\item[{}]{\+\_\+1compute\+\_\+0verify}{, }\item[{}]{mac\+\_\+algo\+\_\+id}{, }\item[{}]{key\+\_\+object\+\_\+id}{, }\item[{}]{IV}{, }\item[{}]{ivlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a472263dcb099fb9ac15641e8d29769cb}{MXQ\_MAC\_Init}}(\_1compute\_0verify,mac\_algo\_id,key\_object\_id,IV,ivlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a9e89610b3c67989a899c43c275e3fb12}\index{USS\_API.h@{USS\_API.h}!USS\_MAC\_Update@{USS\_MAC\_Update}}
+\index{USS\_MAC\_Update@{USS\_MAC\_Update}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MAC\_Update}{USS\_MAC\_Update}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a9e89610b3c67989a899c43c275e3fb12} 
+\#define USS\+\_\+\+MAC\+\_\+\+Update(\begin{DoxyParamCaption}\item[{}]{psrc}{, }\item[{}]{inlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a86b2a73a969c5efd1707b5273b1d41e4}{MXQ\_MAC\_Update}}(\ psrc,\ \ inlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a67cc366ffce68c6a5bda8a8e5c2e5d1b}\index{USS\_API.h@{USS\_API.h}!USS\_MAC\_Verify@{USS\_MAC\_Verify}}
+\index{USS\_MAC\_Verify@{USS\_MAC\_Verify}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MAC\_Verify}{USS\_MAC\_Verify}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a67cc366ffce68c6a5bda8a8e5c2e5d1b} 
+\#define USS\+\_\+\+MAC\+\_\+\+Verify(\begin{DoxyParamCaption}\item[{}]{pmac}{, }\item[{}]{maclen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a49c3bdadb5fbc61432a2c60b3ac4b6a9}{MXQ\_MAC\_Verify}}(\ pmac,\ \ maclen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a7881bb6bab81aa0b4aee0fbabc3f999f}\index{USS\_API.h@{USS\_API.h}!USS\_MD\_Finish@{USS\_MD\_Finish}}
+\index{USS\_MD\_Finish@{USS\_MD\_Finish}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MD\_Finish}{USS\_MD\_Finish}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a7881bb6bab81aa0b4aee0fbabc3f999f} 
+\#define USS\+\_\+\+MD\+\_\+\+Finish(\begin{DoxyParamCaption}\item[{}]{pdest}{, }\item[{}]{destlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ab5e5cb75cd1c50cf052d276f1e4c7df6}{MXQ\_MD\_Finish}}(\ pdest,\ \ destlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a38fcabd62a1af777d3b928f19088c7cb}\index{USS\_API.h@{USS\_API.h}!USS\_MD\_Init@{USS\_MD\_Init}}
+\index{USS\_MD\_Init@{USS\_MD\_Init}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MD\_Init}{USS\_MD\_Init}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a38fcabd62a1af777d3b928f19088c7cb} 
+\#define USS\+\_\+\+MD\+\_\+\+Init(\begin{DoxyParamCaption}\item[{}]{md\+\_\+algo\+\_\+id}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a21e39bb7b98fe99d9a2eb25069c0c429}{MXQ\_MD\_Init}}(\ md\_algo\_id)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a86f01b2e445e64aca004908b83c6392e}\index{USS\_API.h@{USS\_API.h}!USS\_MD\_Update@{USS\_MD\_Update}}
+\index{USS\_MD\_Update@{USS\_MD\_Update}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MD\_Update}{USS\_MD\_Update}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a86f01b2e445e64aca004908b83c6392e} 
+\#define USS\+\_\+\+MD\+\_\+\+Update(\begin{DoxyParamCaption}\item[{}]{psrc}{, }\item[{}]{inlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a2ed709bee0df2e524a0962facca544cc}{MXQ\_MD\_Update}}(\ psrc,\ \ inlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a0209d3202c18965130a343c979d75ab9}\index{USS\_API.h@{USS\_API.h}!USS\_Module\_Deinit@{USS\_Module\_Deinit}}
+\index{USS\_Module\_Deinit@{USS\_Module\_Deinit}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Module\_Deinit}{USS\_Module\_Deinit}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a0209d3202c18965130a343c979d75ab9} 
+\#define USS\+\_\+\+Module\+\_\+\+Deinit(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_ga0ead3d761114495e89a6fe863e87e835}{MXQ\_Module\_Deinit}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ad29925ab11b468b8a5f03c2c4b3a8ff8}\index{USS\_API.h@{USS\_API.h}!USS\_Module\_Init@{USS\_Module\_Init}}
+\index{USS\_Module\_Init@{USS\_Module\_Init}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Module\_Init}{USS\_Module\_Init}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ad29925ab11b468b8a5f03c2c4b3a8ff8} 
+\#define USS\+\_\+\+Module\+\_\+\+Init(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\_Module\_Init}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a354a74647d61f9435b506b09e915e770}\index{USS\_API.h@{USS\_API.h}!USS\_Module\_SetInterface@{USS\_Module\_SetInterface}}
+\index{USS\_Module\_SetInterface@{USS\_Module\_SetInterface}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Module\_SetInterface}{USS\_Module\_SetInterface}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a354a74647d61f9435b506b09e915e770} 
+\#define USS\+\_\+\+Module\+\_\+\+Set\+Interface(\begin{DoxyParamCaption}\item[{}]{i}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ad454926461779415f2b908875889dcaa}{MXQ\_Module\_SetInterface}}(i)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a58b60818522d0af199952387bcf00053}\index{USS\_API.h@{USS\_API.h}!uss\_object\_prop\_t@{uss\_object\_prop\_t}}
+\index{uss\_object\_prop\_t@{uss\_object\_prop\_t}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{uss\_object\_prop\_t}{uss\_object\_prop\_t}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a58b60818522d0af199952387bcf00053} 
+\#define uss\+\_\+object\+\_\+prop\+\_\+t~\mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e5bd4d199413bbcaa302419ebfd7e1f}{mxq\+\_\+object\+\_\+prop\+\_\+t}}}
+
+\Hypertarget{_u_s_s___a_p_i_8h_a8698984cc23db3b373a7e1ed1a3c33da}\index{USS\_API.h@{USS\_API.h}!USS\_OpenSecureChannel@{USS\_OpenSecureChannel}}
+\index{USS\_OpenSecureChannel@{USS\_OpenSecureChannel}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_OpenSecureChannel}{USS\_OpenSecureChannel}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8698984cc23db3b373a7e1ed1a3c33da} 
+\#define USS\+\_\+\+Open\+Secure\+Channel(\begin{DoxyParamCaption}\item[{}]{p\+Mode}{, }\item[{}]{p\+SCKey\+Id}{, }\item[{}]{p\+Private\+Key}{, }\item[{}]{local\+\_\+key}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a1bffa9209eb502aebeacc3618dda9302}{MXQ\_OpenSecureChannel}}(\ pMode,\ pSCKeyId,\ pPrivateKey,\ local\_key)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a05a7c8a69f75544110f7770877720f94}\index{USS\_API.h@{USS\_API.h}!USS\_Perform\_Key\_Exchange@{USS\_Perform\_Key\_Exchange}}
+\index{USS\_Perform\_Key\_Exchange@{USS\_Perform\_Key\_Exchange}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Perform\_Key\_Exchange}{USS\_Perform\_Key\_Exchange}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a05a7c8a69f75544110f7770877720f94} 
+\#define USS\+\_\+\+Perform\+\_\+\+Key\+\_\+\+Exchange(\begin{DoxyParamCaption}\item[{}]{key\+\_\+\+Exchange\+\_\+\+Session}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8e3832e0abe653099303dc65c1fd0f65}{MXQ\_Perform\_Key\_Exchange}}(\ key\_Exchange\_Session\ )}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a703b550f0bce1fdd779c4782d801734e}\index{USS\_API.h@{USS\_API.h}!USS\_Ping@{USS\_Ping}}
+\index{USS\_Ping@{USS\_Ping}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Ping}{USS\_Ping}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a703b550f0bce1fdd779c4782d801734e} 
+\#define USS\+\_\+\+Ping(\begin{DoxyParamCaption}\item[{}]{l}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4240b6e958eddd080e3f91fb18ac781f}{MXQ\_Ping}}(\ l)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a9730fb01705541d8c7d220d01605fbb9}\index{USS\_API.h@{USS\_API.h}!USS\_ReadCounter@{USS\_ReadCounter}}
+\index{USS\_ReadCounter@{USS\_ReadCounter}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ReadCounter}{USS\_ReadCounter}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a9730fb01705541d8c7d220d01605fbb9} 
+\#define USS\+\_\+\+Read\+Counter(\begin{DoxyParamCaption}\item[{}]{objectid}{, }\item[{}]{countval}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af7cc751ce2d1dc4847e6e5e4f9ad44c1}{MXQ\_ReadCounter}}(\ objectid,\ \ countval)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ab9179354b5bab9c69f9c7430ca19aa78}\index{USS\_API.h@{USS\_API.h}!USS\_ReadObject@{USS\_ReadObject}}
+\index{USS\_ReadObject@{USS\_ReadObject}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ReadObject}{USS\_ReadObject}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ab9179354b5bab9c69f9c7430ca19aa78} 
+\#define USS\+\_\+\+Read\+Object(\begin{DoxyParamCaption}\item[{}]{objectid}{, }\item[{}]{src\+\_\+offset}{, }\item[{}]{pdest}{, }\item[{}]{pmaxlen\+\_\+readlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a40c80b14c09ff22c99534efab5c58ddc}{MXQ\_ReadObject}}(\ objectid\ ,\ \ src\_offset,\ \ pdest,\ \ pmaxlen\_readlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_afcdd40313a54cbbcab678370c64e5183}\index{USS\_API.h@{USS\_API.h}!USS\_Reset@{USS\_Reset}}
+\index{USS\_Reset@{USS\_Reset}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Reset}{USS\_Reset}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_afcdd40313a54cbbcab678370c64e5183} 
+\#define USS\+\_\+\+Reset(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_ga1b2dd60e215c446702935401c5ee66c8}{MXQ\_Reset}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a56aec618b671ceb94d3eea46cd4a618d}\index{USS\_API.h@{USS\_API.h}!USS\_ResetFactory@{USS\_ResetFactory}}
+\index{USS\_ResetFactory@{USS\_ResetFactory}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_ResetFactory}{USS\_ResetFactory}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a56aec618b671ceb94d3eea46cd4a618d} 
+\#define USS\+\_\+\+Reset\+Factory(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_ga6ae1b5bd52046253eb5f67afdb11939e}{MXQ\_ResetFactory}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_afed247b095f65dcbd6164417f0adf34a}\index{USS\_API.h@{USS\_API.h}!USS\_SetConfig@{USS\_SetConfig}}
+\index{USS\_SetConfig@{USS\_SetConfig}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_SetConfig}{USS\_SetConfig}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_afed247b095f65dcbd6164417f0adf34a} 
+\#define USS\+\_\+\+Set\+Config(\begin{DoxyParamCaption}\item[{}]{s}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_gabc8600c9e34d7e5e1e8fbe7b6df3747f}{MXQ\_SetConfig}}(\ s)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a42174a73c72015ae555a20dff5b07c81}\index{USS\_API.h@{USS\_API.h}!USS\_SetECDHEKey@{USS\_SetECDHEKey}}
+\index{USS\_SetECDHEKey@{USS\_SetECDHEKey}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_SetECDHEKey}{USS\_SetECDHEKey}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a42174a73c72015ae555a20dff5b07c81} 
+\#define USS\+\_\+\+Set\+ECDHEKey(\begin{DoxyParamCaption}\item[{}]{algoid}{, }\item[{}]{curve\+ID}{, }\item[{}]{na}{, }\item[{}]{random}{, }\item[{}]{randomlen}{, }\item[{}]{ecdheparams}{, }\item[{}]{ecdheparamslen}{, }\item[{}]{signature}{, }\item[{}]{signaturelen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7857200b3d898684dc2a3e76fcfb36db}{MXQ\_SetECDHEKey}}(algoid,curveID,na,random,randomlen,ecdheparams,ecdheparamslen,signature,signaturelen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_abeb1e4bb6f7e85d7826dd9659e2b04d2}\index{USS\_API.h@{USS\_API.h}!USS\_SetState@{USS\_SetState}}
+\index{USS\_SetState@{USS\_SetState}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_SetState}{USS\_SetState}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_abeb1e4bb6f7e85d7826dd9659e2b04d2} 
+\#define USS\+\_\+\+Set\+State(\begin{DoxyParamCaption}\item[{}]{newstate}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_ga382f514ebc4771e09d4f7a42cefb71a2}{MXQ\_SetState}}(\ newstate)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aad4c9c534a9d881b824943c0c15d1d7f}\index{USS\_API.h@{USS\_API.h}!USS\_Sign@{USS\_Sign}}
+\index{USS\_Sign@{USS\_Sign}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Sign}{USS\_Sign}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aad4c9c534a9d881b824943c0c15d1d7f} 
+\#define USS\+\_\+\+Sign(\begin{DoxyParamCaption}\item[{}]{signalgo}{, }\item[{}]{privkey\+\_\+objectid}{, }\item[{}]{pdata}{, }\item[{}]{datalen}{, }\item[{}]{psignout}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a19af6a95741eeb1ef2344389640fa68f}{MXQ\_Sign}}(\ signalgo,\ \ privkey\_objectid,\ \ \ pdata,\ \ datalen,\ \ psignout,\ \ signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a7c1f9a309dc2e35f0c2c80f9625639b5}\index{USS\_API.h@{USS\_API.h}!USS\_Tamper@{USS\_Tamper}}
+\index{USS\_Tamper@{USS\_Tamper}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Tamper}{USS\_Tamper}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a7c1f9a309dc2e35f0c2c80f9625639b5} 
+\#define USS\+\_\+\+Tamper(\begin{DoxyParamCaption}\item[{}]{cmd}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a8d73639886a41aa0324681eccf83d7c0}{MXQ\_Tamper}}(cmd)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ae3bf4ac052fdbe0e7b0512eca26f6b1d}\index{USS\_API.h@{USS\_API.h}!USS\_TLS13\_Create\_Secret@{USS\_TLS13\_Create\_Secret}}
+\index{USS\_TLS13\_Create\_Secret@{USS\_TLS13\_Create\_Secret}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS13\_Create\_Secret}{USS\_TLS13\_Create\_Secret}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae3bf4ac052fdbe0e7b0512eca26f6b1d} 
+\#define USS\+\_\+\+TLS13\+\_\+\+Create\+\_\+\+Secret(\begin{DoxyParamCaption}\item[{}]{peer\+\_\+key}{, }\item[{}]{peer\+\_\+key\+\_\+size}{, }\item[{}]{key\+\_\+id}{, }\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+param\+\_\+id}{, }\item[{}]{CSID}{, }\item[{}]{shared\+\_\+secret\+\_\+id}{, }\item[{}]{secret}{, }\item[{}]{secret\+\_\+size}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a568c54ba349825a6100093457db4718f}{MXQ\_TLS13\_Create\_Secret}}(\ peer\_key,\ \ peer\_key\_size,\ \ key\_id,\ \ key\_type,\ \ key\_param\_id,\ \ CSID,\ \ shared\_secret\_id,\ \ secret,\ \ secret\_size)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a0a8d087d3daba9e7dfe3858707aca7f9}\index{USS\_API.h@{USS\_API.h}!USS\_TLS13\_Expand\_Secret@{USS\_TLS13\_Expand\_Secret}}
+\index{USS\_TLS13\_Expand\_Secret@{USS\_TLS13\_Expand\_Secret}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS13\_Expand\_Secret}{USS\_TLS13\_Expand\_Secret}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a0a8d087d3daba9e7dfe3858707aca7f9} 
+\#define USS\+\_\+\+TLS13\+\_\+\+Expand\+\_\+\+Secret(\begin{DoxyParamCaption}\item[{}]{digest\+\_\+id}{, }\item[{}]{ret\+\_\+kid}{, }\item[{}]{ret\+\_\+keytype}{, }\item[{}]{ret\+\_\+isiv}{, }\item[{}]{okm}{, }\item[{}]{okm\+\_\+len}{, }\item[{}]{prk\+\_\+kid}{, }\item[{}]{prk}{, }\item[{}]{prk\+\_\+len}{, }\item[{}]{info}{, }\item[{}]{info\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_af84949c33eab77a06783708b32038b1c}{MXQ\_TLS13\_Expand\_Secret}}(\ digest\_id,\ \ ret\_kid,\ \ ret\_keytype,\ \ ret\_isiv,\ \ okm,\ \ okm\_len,\ \ prk\_kid,\ \ \ prk,\ \ prk\_len,\ \ \ info,\ \ info\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_adafbfd287c5291bda25bf7965219828a}\index{USS\_API.h@{USS\_API.h}!USS\_TLS13\_Extract\_Secret@{USS\_TLS13\_Extract\_Secret}}
+\index{USS\_TLS13\_Extract\_Secret@{USS\_TLS13\_Extract\_Secret}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS13\_Extract\_Secret}{USS\_TLS13\_Extract\_Secret}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_adafbfd287c5291bda25bf7965219828a} 
+\#define USS\+\_\+\+TLS13\+\_\+\+Extract\+\_\+\+Secret(\begin{DoxyParamCaption}\item[{}]{digest\+\_\+id}{, }\item[{}]{ret\+\_\+kid}{, }\item[{}]{prk}{, }\item[{}]{prk\+\_\+len}{, }\item[{}]{salt\+\_\+kid}{, }\item[{}]{salt}{, }\item[{}]{salt\+\_\+len}{, }\item[{}]{ikm\+\_\+kid}{, }\item[{}]{ikm}{, }\item[{}]{ikm\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a906b06827d7ef0f091e553bad56659c0}{MXQ\_TLS13\_Extract\_Secret}}(\ digest\_id,\ ret\_kid,\ prk,\ prk\_len,\ salt\_kid,\ salt,\ \ salt\_len,\ ikm\_kid,\ ikm,\ ikm\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a1f52797c300b6fbd137b7af2dd6445a4}\index{USS\_API.h@{USS\_API.h}!USS\_TLS13\_Generate\_Key@{USS\_TLS13\_Generate\_Key}}
+\index{USS\_TLS13\_Generate\_Key@{USS\_TLS13\_Generate\_Key}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS13\_Generate\_Key}{USS\_TLS13\_Generate\_Key}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a1f52797c300b6fbd137b7af2dd6445a4} 
+\#define USS\+\_\+\+TLS13\+\_\+\+Generate\+\_\+\+Key(\begin{DoxyParamCaption}\item[{}]{key}{, }\item[{}]{key\+\_\+id}{, }\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+param\+\_\+id}{, }\item[{}]{key\+\_\+size}{, }\item[{}]{p}{, }\item[{}]{g\+\_\+size}{, }\item[{}]{g}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7860ca04aa7ac35d12098eb8caf9e836}{MXQ\_TLS13\_Generate\_Key}}(\ key,\ \ key\_id,\ \ key\_type,\ \ key\_param\_id,\ \ key\_size,\ \ p,\ \ g\_size,\ \ g)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a873ffe514cccc8b8ccba37a9d14370cf}\index{USS\_API.h@{USS\_API.h}!USS\_TLS13\_Update\_IV@{USS\_TLS13\_Update\_IV}}
+\index{USS\_TLS13\_Update\_IV@{USS\_TLS13\_Update\_IV}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS13\_Update\_IV}{USS\_TLS13\_Update\_IV}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a873ffe514cccc8b8ccba37a9d14370cf} 
+\#define USS\+\_\+\+TLS13\+\_\+\+Update\+\_\+\+IV(\begin{DoxyParamCaption}\item[{}]{key\+\_\+id}{, }\item[{}]{iv}{, }\item[{}]{iv\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a07636e84713a47a2d2b751e4b5d8a054}{MXQ\_TLS13\_Update\_IV}}(\ key\_id,\ \ \ iv,\ \ iv\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_aabcdfce7535308565af29eb1c2868e53}\index{USS\_API.h@{USS\_API.h}!USS\_tls\_cipher\_aead@{USS\_tls\_cipher\_aead}}
+\index{USS\_tls\_cipher\_aead@{USS\_tls\_cipher\_aead}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_tls\_cipher\_aead}{USS\_tls\_cipher\_aead}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_aabcdfce7535308565af29eb1c2868e53} 
+\#define USS\+\_\+tls\+\_\+cipher\+\_\+aead(\begin{DoxyParamCaption}\item[{}]{key\+\_\+\+ID}{, }\item[{}]{direction}{, }\item[{}]{algo}{, }\item[{}]{iv}{, }\item[{}]{iv\+\_\+len}{, }\item[{}]{aad}{, }\item[{}]{aad\+\_\+len}{, }\item[{}]{input}{, }\item[{}]{ilen}{, }\item[{}]{output}{, }\item[{}]{olen}{, }\item[{}]{tag}{, }\item[{}]{tag\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ae46f2986ffe50f73680ae1bf774f60c5}{MXQ\_tls\_cipher\_aead}}(key\_ID,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ direction,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ algo,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ iv,\ iv\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ aad,\ aad\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ input,\ ilen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ output,\ olen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ tag,\ tag\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a2e9dd55f9293b24a1933936d3d71ed3e}\index{USS\_API.h@{USS\_API.h}!USS\_tls\_cipher\_cbc@{USS\_tls\_cipher\_cbc}}
+\index{USS\_tls\_cipher\_cbc@{USS\_tls\_cipher\_cbc}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_tls\_cipher\_cbc}{USS\_tls\_cipher\_cbc}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a2e9dd55f9293b24a1933936d3d71ed3e} 
+\#define USS\+\_\+tls\+\_\+cipher\+\_\+cbc(\begin{DoxyParamCaption}\item[{}]{direction}{, }\item[{}]{key\+\_\+\+ID}{, }\item[{}]{iv}{, }\item[{}]{iv\+\_\+len}{, }\item[{}]{input}{, }\item[{}]{ilen}{, }\item[{}]{output}{, }\item[{}]{olen}{, }\item[{}]{hdr\+\_\+msg}{, }\item[{}]{hdr\+\_\+msg\+\_\+len}{, }\item[{}]{maclen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a4eb2e59e54a92fb9a20d675bce7942bd}{MXQ\_tls\_cipher\_cbc}}(direction,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ key\_ID,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ iv,\ iv\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ input,\ ilen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ output,\ olen,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ hdr\_msg,\ hdr\_msg\_len,\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ maclen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a19729ce6d3c5afb69c96c067e222605f}\index{USS\_API.h@{USS\_API.h}!USS\_TLS\_Direct@{USS\_TLS\_Direct}}
+\index{USS\_TLS\_Direct@{USS\_TLS\_Direct}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS\_Direct}{USS\_TLS\_Direct}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a19729ce6d3c5afb69c96c067e222605f} 
+\#define USS\+\_\+\+TLS\+\_\+\+Direct(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a9fb4dc9201428f63c97aa7f80088a64d}{MXQ\_TLS\_Direct}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a682a367db3465fa501278136c1fa1b4f}\index{USS\_API.h@{USS\_API.h}!USS\_TLS\_Enable@{USS\_TLS\_Enable}}
+\index{USS\_TLS\_Enable@{USS\_TLS\_Enable}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS\_Enable}{USS\_TLS\_Enable}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a682a367db3465fa501278136c1fa1b4f} 
+\#define USS\+\_\+\+TLS\+\_\+\+Enable(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{group___administration_gabc2576c517e1ee1c3bd6baf25f7ae355}{MXQ\_TLS\_Enable}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a4da0f8859b1c86ed06008d731fda1b88}\index{USS\_API.h@{USS\_API.h}!USS\_tls\_prf\_sha\_256@{USS\_tls\_prf\_sha\_256}}
+\index{USS\_tls\_prf\_sha\_256@{USS\_tls\_prf\_sha\_256}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_tls\_prf\_sha\_256}{USS\_tls\_prf\_sha\_256}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a4da0f8859b1c86ed06008d731fda1b88} 
+\#define USS\+\_\+tls\+\_\+prf\+\_\+sha\+\_\+256(\begin{DoxyParamCaption}\item[{}]{key\+\_\+\+ID}{, }\item[{}]{label}{, }\item[{}]{llen}{, }\item[{}]{rand}{, }\item[{}]{rlen}{, }\item[{}]{destbuf}{, }\item[{}]{dlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a80dde83488b109033d6a38b83183b06a}{MXQ\_tls\_prf\_sha\_256}}(key\_ID,\ label,\ llen,\ rand,\ rlen,\ destbuf,\ dlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ad3692bf47c0632fda4e6c152d3d3c432}\index{USS\_API.h@{USS\_API.h}!USS\_tls\_records@{USS\_tls\_records}}
+\index{USS\_tls\_records@{USS\_tls\_records}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_tls\_records}{USS\_tls\_records}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ad3692bf47c0632fda4e6c152d3d3c432} 
+\#define USS\+\_\+tls\+\_\+records(\begin{DoxyParamCaption}\item[{}]{direction}{, }\item[{}]{key\+\_\+\+ID}{, }\item[{}]{iv}{, }\item[{}]{iv\+\_\+len}{, }\item[{}]{input}{, }\item[{}]{ilen}{, }\item[{}]{output}{, }\item[{}]{olen}{, }\item[{}]{hdr\+\_\+msg}{, }\item[{}]{hdr\+\_\+msg\+\_\+len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a0cc2177f02bb299a05860ff933d7471e}{MXQ\_tls\_records}}(direction,key\_ID,iv,\ iv\_len,\ input,\ ilen,\ output,\ olen,\ hdr\_msg,\ hdr\_msg\_len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_af2cf5cc8c8c4c8b2bc4c2d38c6482727}\index{USS\_API.h@{USS\_API.h}!USS\_TLS\_Restore@{USS\_TLS\_Restore}}
+\index{USS\_TLS\_Restore@{USS\_TLS\_Restore}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS\_Restore}{USS\_TLS\_Restore}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_af2cf5cc8c8c4c8b2bc4c2d38c6482727} 
+\#define USS\+\_\+\+TLS\+\_\+\+Restore(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a6c912ddf378e0598b3de19b7a29bd511}{MXQ\_TLS\_Restore}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_acfaebfc9f178425b4256fa8edebe9035}\index{USS\_API.h@{USS\_API.h}!USS\_TLS\_Save@{USS\_TLS\_Save}}
+\index{USS\_TLS\_Save@{USS\_TLS\_Save}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_TLS\_Save}{USS\_TLS\_Save}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_acfaebfc9f178425b4256fa8edebe9035} 
+\#define USS\+\_\+\+TLS\+\_\+\+Save(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a90ebbd357982744e319b772d1f2800f7}{MXQ\_TLS\_Save}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ade01f648780c75ba2989739bcc708a05}\index{USS\_API.h@{USS\_API.h}!USS\_UpdateCounter@{USS\_UpdateCounter}}
+\index{USS\_UpdateCounter@{USS\_UpdateCounter}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_UpdateCounter}{USS\_UpdateCounter}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ade01f648780c75ba2989739bcc708a05} 
+\#define USS\+\_\+\+Update\+Counter(\begin{DoxyParamCaption}\item[{}]{objectid}{, }\item[{}]{countval}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a76a395ea8c71bb293de115a0ff509414}{MXQ\_UpdateCounter}}(\ objectid,\ countval)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a23ad4c4c334ecc6cef9f12c9929f1fbb}\index{USS\_API.h@{USS\_API.h}!USS\_Verify@{USS\_Verify}}
+\index{USS\_Verify@{USS\_Verify}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_Verify}{USS\_Verify}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a23ad4c4c334ecc6cef9f12c9929f1fbb} 
+\#define USS\+\_\+\+Verify(\begin{DoxyParamCaption}\item[{}]{signalgo}{, }\item[{}]{pubkey\+\_\+objectid}{, }\item[{}]{pdata}{, }\item[{}]{datalen}{, }\item[{}]{signature}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_aa4363131acca126168655621bce9788b}{MXQ\_Verify}}(\ signalgo,\ \ pubkey\_objectid,\ \ \ pdata,\ \ datalen,\ \ \ signature,\ \ signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a4fe772e09fdef4e44dfcbbee3f5477cc}\index{USS\_API.h@{USS\_API.h}!USS\_VerifyBoot@{USS\_VerifyBoot}}
+\index{USS\_VerifyBoot@{USS\_VerifyBoot}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_VerifyBoot}{USS\_VerifyBoot}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a4fe772e09fdef4e44dfcbbee3f5477cc} 
+\#define USS\+\_\+\+Verify\+Boot(\begin{DoxyParamCaption}\item[{}]{verifkey\+\_\+id}{, }\item[{}]{algo}{, }\item[{}]{sign}{, }\item[{}]{signlen}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a13bc851cd8dbaa3824e0326974762b3f}{MXQ\_VerifyBoot}}(verifkey\_id,algo,sign,signlen)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ad8b742f3bcfaf79e995878ca924c3ff1}\index{USS\_API.h@{USS\_API.h}!USS\_VerifyBootReset@{USS\_VerifyBootReset}}
+\index{USS\_VerifyBootReset@{USS\_VerifyBootReset}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_VerifyBootReset}{USS\_VerifyBootReset}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ad8b742f3bcfaf79e995878ca924c3ff1} 
+\#define USS\+\_\+\+Verify\+Boot\+Reset(\begin{DoxyParamCaption}\item[{}]{void}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_ac41fd6e95a1a8847494d73706f98aa44}{MXQ\_VerifyBootReset}}(\textcolor{keywordtype}{void})}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_ae1b3739b746e220de9f494cee0070ed7}\index{USS\_API.h@{USS\_API.h}!USS\_WriteObject@{USS\_WriteObject}}
+\index{USS\_WriteObject@{USS\_WriteObject}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_WriteObject}{USS\_WriteObject}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae1b3739b746e220de9f494cee0070ed7} 
+\#define USS\+\_\+\+Write\+Object(\begin{DoxyParamCaption}\item[{}]{objectid}{, }\item[{}]{dest\+\_\+offset}{, }\item[{}]{psrc}{, }\item[{}]{len}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a7d7d2e83699f29dd133a8ca2492ac074}{MXQ\_WriteObject}}(\ objectid,\ \ dest\_offset,\ \ psrc,\ \ len)}
+
+\end{DoxyCode}
+\Hypertarget{_u_s_s___a_p_i_8h_a628d7c02f54cd9a2d94443818fdda9a2}\index{USS\_API.h@{USS\_API.h}!USS\_WriteObjectV2@{USS\_WriteObjectV2}}
+\index{USS\_WriteObjectV2@{USS\_WriteObjectV2}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{USS\_WriteObjectV2}{USS\_WriteObjectV2}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a628d7c02f54cd9a2d94443818fdda9a2} 
+\#define USS\+\_\+\+Write\+Object\+V2(\begin{DoxyParamCaption}\item[{}]{objectid}{, }\item[{}]{dest\+\_\+offset}{, }\item[{}]{psrc}{, }\item[{}]{len}{, }\item[{}]{keyid}{, }\item[{}]{algoid}{, }\item[{}]{p\+Iv}{, }\item[{}]{p\+Tag}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3255e9a963d7cae514590f07ba7974b9}{MXQ\_WriteObjectV2}}(objectid,dest\_offset,psrc,len,keyid,algoid,pIv,pTag)}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{_u_s_s___a_p_i_8h_ac153fdfa88eacf6419f56a13363f456c}\index{USS\_API.h@{USS\_API.h}!uss\_keyparam\_id\_t@{uss\_keyparam\_id\_t}}
+\index{uss\_keyparam\_id\_t@{uss\_keyparam\_id\_t}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{uss\_keyparam\_id\_t}{uss\_keyparam\_id\_t}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ac153fdfa88eacf6419f56a13363f456c} 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_ac153fdfa88eacf6419f56a13363f456c}{uss\+\_\+keyparam\+\_\+id\+\_\+t}}}
+
+Definition of Key Curves. \Hypertarget{_u_s_s___a_p_i_8h_ae8a904c950c73aa90b30cd91e5375cf0}\index{USS\_API.h@{USS\_API.h}!uss\_keytype\_id\_t@{uss\_keytype\_id\_t}}
+\index{uss\_keytype\_id\_t@{uss\_keytype\_id\_t}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{uss\_keytype\_id\_t}{uss\_keytype\_id\_t}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_ae8a904c950c73aa90b30cd91e5375cf0} 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae8a904c950c73aa90b30cd91e5375cf0}{uss\+\_\+keytype\+\_\+id\+\_\+t}}}
+
+Definition of key types. \Hypertarget{_u_s_s___a_p_i_8h_a2ab50d3dfa602528154518cd74a7f2f2}\index{USS\_API.h@{USS\_API.h}!uss\_keyuse\_t@{uss\_keyuse\_t}}
+\index{uss\_keyuse\_t@{uss\_keyuse\_t}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{uss\_keyuse\_t}{uss\_keyuse\_t}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a2ab50d3dfa602528154518cd74a7f2f2} 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_a2ab50d3dfa602528154518cd74a7f2f2}{uss\+\_\+keyuse\+\_\+t}}}
+
+Definition of cryptographic key usage. \Hypertarget{_u_s_s___a_p_i_8h_a73909432c404289a834e42f4fa191150}\index{USS\_API.h@{USS\_API.h}!uss\_objecttype\_t@{uss\_objecttype\_t}}
+\index{uss\_objecttype\_t@{uss\_objecttype\_t}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{uss\_objecttype\_t}{uss\_objecttype\_t}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a73909432c404289a834e42f4fa191150} 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{_u_s_s___a_p_i_8h_a73909432c404289a834e42f4fa191150}{uss\+\_\+objecttype\+\_\+t}}}
+
+Definition of key object types. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}\index{USS\_API.h@{USS\_API.h}!\_PACKED@{\_PACKED}}
+\index{\_PACKED@{\_PACKED}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{\_PACKED}{\_PACKED}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+enum \+\_\+\+PACKED}
+
+Definition of cryptographic key usage. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL&Key can be used for secure channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION&Key can be used for object or key data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC&Key can be used for MAC key derivation only \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION&Key can be used for generic data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH&Key can be used in TLS authentication \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH&Key can be used to authenticate the manufacturer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH&Key can be used to authenticate the end customer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT&Key/\+Cert can be used to verify certificates \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW&Key can be used to verify firmware \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+RFU&RFU \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT&Key can be used to verify import/generate key requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL&Key can be used to Secure GPIO Control \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE&Key can be used for key exchange requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+NONE&Key can\textquotesingle{}t be used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1&NIST sec\+P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1&NIST sec\+P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1&NIST sec\+P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1&Brainpool P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1&Brainpool P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1&Brainpool P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+UNKNOWN\+\_\+\+CURVE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+AES&AES Key. Supports AES 128 and 256, not 192 (less secure) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+PSK&TLS Pre Shared Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+HMAC&HMAC key. Key length must be suitable, adjusted to the used SHA algo \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+ECC&ECC key. Key length must fit the curve! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+IKM&Input Key Material for HKDF! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+RSA&RSA key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN&Unknown key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY&Secret Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY&Public key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR&Key Pair \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT&Transparent object \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP&Monotonic counter incrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+X509&X.\+509 certificate \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN&Monotonic counter decrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN&Unknown object type \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}\index{USS\_API.h@{USS\_API.h}!\_PACKED@{\_PACKED}}
+\index{\_PACKED@{\_PACKED}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{\_PACKED}{\_PACKED}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+enum \+\_\+\+PACKED}
+
+Definition of Key Curves. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL&Key can be used for secure channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION&Key can be used for object or key data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC&Key can be used for MAC key derivation only \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION&Key can be used for generic data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH&Key can be used in TLS authentication \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH&Key can be used to authenticate the manufacturer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH&Key can be used to authenticate the end customer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT&Key/\+Cert can be used to verify certificates \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW&Key can be used to verify firmware \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+RFU&RFU \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT&Key can be used to verify import/generate key requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL&Key can be used to Secure GPIO Control \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE&Key can be used for key exchange requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+NONE&Key can\textquotesingle{}t be used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1&NIST sec\+P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1&NIST sec\+P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1&NIST sec\+P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1&Brainpool P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1&Brainpool P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1&Brainpool P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+UNKNOWN\+\_\+\+CURVE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+AES&AES Key. Supports AES 128 and 256, not 192 (less secure) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+PSK&TLS Pre Shared Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+HMAC&HMAC key. Key length must be suitable, adjusted to the used SHA algo \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+ECC&ECC key. Key length must fit the curve! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+IKM&Input Key Material for HKDF! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+RSA&RSA key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN&Unknown key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY&Secret Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY&Public key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR&Key Pair \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT&Transparent object \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP&Monotonic counter incrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+X509&X.\+509 certificate \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN&Monotonic counter decrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN&Unknown object type \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}\index{USS\_API.h@{USS\_API.h}!\_PACKED@{\_PACKED}}
+\index{\_PACKED@{\_PACKED}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{\_PACKED}{\_PACKED}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+enum \+\_\+\+PACKED}
+
+Definition of key types. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL&Key can be used for secure channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION&Key can be used for object or key data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC&Key can be used for MAC key derivation only \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION&Key can be used for generic data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH&Key can be used in TLS authentication \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH&Key can be used to authenticate the manufacturer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH&Key can be used to authenticate the end customer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT&Key/\+Cert can be used to verify certificates \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW&Key can be used to verify firmware \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+RFU&RFU \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT&Key can be used to verify import/generate key requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL&Key can be used to Secure GPIO Control \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE&Key can be used for key exchange requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+NONE&Key can\textquotesingle{}t be used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1&NIST sec\+P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1&NIST sec\+P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1&NIST sec\+P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1&Brainpool P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1&Brainpool P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1&Brainpool P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+UNKNOWN\+\_\+\+CURVE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+AES&AES Key. Supports AES 128 and 256, not 192 (less secure) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+PSK&TLS Pre Shared Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+HMAC&HMAC key. Key length must be suitable, adjusted to the used SHA algo \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+ECC&ECC key. Key length must fit the curve! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+IKM&Input Key Material for HKDF! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+RSA&RSA key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN&Unknown key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY&Secret Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY&Public key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR&Key Pair \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT&Transparent object \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP&Monotonic counter incrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+X509&X.\+509 certificate \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN&Monotonic counter decrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN&Unknown object type \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60}\index{USS\_API.h@{USS\_API.h}!\_PACKED@{\_PACKED}}
+\index{\_PACKED@{\_PACKED}!USS\_API.h@{USS\_API.h}}
+\doxysubsubsection{\texorpdfstring{\_PACKED}{\_PACKED}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily \label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+enum \+\_\+\+PACKED}
+
+Definition of key object types. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_SECURECHANNEL@{USS\_KEYUSE\_SECURECHANNEL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL&Key can be used for secure channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_DATASIGNATURE@{USS\_KEYUSE\_DATASIGNATURE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ATTESTATION@{USS\_KEYUSE\_ATTESTATION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ATTESTATION&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALENCRYPTION@{USS\_KEYUSE\_INTERNALENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION&Key can be used for object or key data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_INTERNALMAC@{USS\_KEYUSE\_INTERNALMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC&Key can be used for MAC key derivation only \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENCRYPTION@{USS\_KEYUSE\_ENCRYPTION}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION&Key can be used for generic data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_TLSAUTH@{USS\_KEYUSE\_TLSAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+TLSAUTH&Key can be used in TLS authentication \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ADMINAUTH@{USS\_KEYUSE\_ADMINAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH&Key can be used to authenticate the manufacturer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_ENDCUSTOMERAUTH@{USS\_KEYUSE\_ENDCUSTOMERAUTH}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH&Key can be used to authenticate the end customer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_KEY\_CERT@{USS\_KEYUSE\_VERIFY\_KEY\_CERT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT&Key/\+Cert can be used to verify certificates \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_VERIFY\_FW@{USS\_KEYUSE\_VERIFY\_FW}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW&Key can be used to verify firmware \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_RFU@{USS\_KEYUSE\_RFU}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+RFU&RFU \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_IMPORT@{USS\_KEYUSE\_KEY\_IMPORT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT&Key can be used to verify import/generate key requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_GPIO\_CONTROL@{USS\_KEYUSE\_GPIO\_CONTROL}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL&Key can be used to Secure GPIO Control \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_KEY\_EXCHAGE@{USS\_KEYUSE\_KEY\_EXCHAGE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE&Key can be used for key exchange requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYUSE\_NONE@{USS\_KEYUSE\_NONE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYUSE\+\_\+\+NONE&Key can\textquotesingle{}t be used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P256R1@{USS\_KEYPARAM\_EC\_P256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1&NIST sec\+P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P384R1@{USS\_KEYPARAM\_EC\_P384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1&NIST sec\+P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_P521R1@{USS\_KEYPARAM\_EC\_P521R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1&NIST sec\+P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP256R1@{USS\_KEYPARAM\_EC\_BP256R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1&Brainpool P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP384R1@{USS\_KEYPARAM\_EC\_BP384R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1&Brainpool P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EC\_BP512R1@{USS\_KEYPARAM\_EC\_BP512R1}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1&Brainpool P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYPARAM\_EDWARD\_TBD@{USS\_KEYPARAM\_EDWARD\_TBD}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_UNKNOWN\_CURVE@{USS\_UNKNOWN\_CURVE}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+UNKNOWN\+\_\+\+CURVE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_AES@{USS\_KEYTYPE\_AES}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+AES&AES Key. Supports AES 128 and 256, not 192 (less secure) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_PSK@{USS\_KEYTYPE\_PSK}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+PSK&TLS Pre Shared Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_HMAC@{USS\_KEYTYPE\_HMAC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+HMAC&HMAC key. Key length must be suitable, adjusted to the used SHA algo \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_ECC@{USS\_KEYTYPE\_ECC}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+ECC&ECC key. Key length must fit the curve! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_IKM@{USS\_KEYTYPE\_IKM}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+IKM&Input Key Material for HKDF! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_RSA@{USS\_KEYTYPE\_RSA}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+RSA&RSA key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_KEYTYPE\_UNKNOWN@{USS\_KEYTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN&Unknown key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_SECRETKEY@{USS\_OBJTYPE\_SECRETKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY&Secret Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_PUBKEY@{USS\_OBJTYPE\_PUBKEY}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+PUBKEY&Public key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_KEYPAIR@{USS\_OBJTYPE\_KEYPAIR}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR&Key Pair \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_TRANSPARENT@{USS\_OBJTYPE\_TRANSPARENT}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT&Transparent object \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_UP@{USS\_OBJTYPE\_COUNTER\_UP}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP&Monotonic counter incrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_X509@{USS\_OBJTYPE\_X509}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+X509&X.\+509 certificate \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_COUNTER\_DOWN@{USS\_OBJTYPE\_COUNTER\_DOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN&Monotonic counter decrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}!USS\_API.h@{USS\_API.h}}\index{USS\_API.h@{USS\_API.h}!USS\_OBJTYPE\_UNKNOWN@{USS\_OBJTYPE\_UNKNOWN}}}\Hypertarget{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}\label{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60} 
+USS\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN&Unknown object type \\
+\hline
+
+\end{DoxyEnumFields}

@@ -1,0 +1,11 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:15:6:HOST_wait_usec	4	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:125:10:HOST_block_until_pin	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:138:6:HOST_maxq10xx_reset	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:162:7:HOST_get_interface	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:166:6:HOST_set_interface	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:170:11:HOST_deinit_interface	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:178:11:HOST_reset_maxq106x	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:183:11:HOST_toggle_wdi	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:190:11:HOST_activate_tls	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:202:11:HOST_activate_gcu	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx.c:214:11:HOST_follow_tls	0	static
