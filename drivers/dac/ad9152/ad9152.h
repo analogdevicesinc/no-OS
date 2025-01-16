@@ -44,27 +44,22 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define REG_SPI_INTFCONFA                        0x000 /* Interface configuration A */
-#define REG_SPI_INTFCONFB                        0x001 /* Interface configuration B */
-#define REG_SPI_DEVCONF                          0x002 /* Device Configuration */
+#define REG_SPI_CHIPTYPE                         0x003 /* Chip Type */
 #define REG_SPI_PRODIDL                          0x004 /* Product Identification Low Byte */
 #define REG_SPI_PRODIDH                          0x005 /* Product Identification High Byte */
 #define REG_SPI_CHIPGRADE                        0x006 /* Chip Grade */
-#define REG_SPI_PAGEINDX                         0x008 /* Page Pointer or Device Index */
-#define REG_SPI_DEVINDX2                         0x009 /* Secondary Device Index */
-#define REG_SPI_SCRATCHPAD                       0x00A /* Scratch Pad */
-#define REG_SPI_MS_UPDATE                        0x00F /* Master/Slave Update Bit */
 #define REG_PWRCNTRL0                            0x011 /* Power Control Reg 1 */
 #define REG_TXENMASK1                            0x012 /* TXenable masks */
 #define REG_PWRCNTRL3                            0x013 /* Power control register 3 */
-#define REG_COARSE_GROUP_DLY                     0x014 /* Coarse Group Delay Adjustment */
+#define REG_PWRCNTRL1                            0x014 /* Power control register 1 */
 #define REG_IRQ_ENABLE0                          0x01F /* Interrupt Enable */
 #define REG_IRQ_ENABLE1                          0x020 /* Interrupt Enable */
 #define REG_IRQ_ENABLE2                          0x021 /* Interrupt Enable */
-#define REG_IRQ_ENABLE3                          0x022 /* Interrupt Enable */
 #define REG_IRQ_STATUS0                          0x023 /* Interrupt Status */
 #define REG_IRQ_STATUS1                          0x024 /* Interrupt Status */
 #define REG_IRQ_STATUS2                          0x025 /* Interrupt Status */
 #define REG_IRQ_STATUS3                          0x026 /* Interrupt Status */
+#define REG_IRQ_STATUS4                          0x027 /* Interrupt Status */
 #define REG_JESD_CHECKS                          0x030 /* JESD Parameter Checking */
 #define REG_SYNC_TESTCTRL                        0x031 /* Sync Control Reg0 */
 #define REG_SYNC_DACDELAY_L                      0x032 /* Sync Logic DacDelay [7:0] */
@@ -83,17 +78,8 @@
 #define REG_DACGAIN0_0                           0x041 /* LSBs of Full Scale Adjust DAC */
 #define REG_DACGAIN1_1                           0x042 /* MSBs of Full Scale Adjust DAC */
 #define REG_DACGAIN1_0                           0x043 /* LSBs of Full Scale Adjust DAC */
-#define REG_DACGAIN2_1                           0x044 /* MSBs of Full Scale Adjust DAC */
-#define REG_DACGAIN2_0                           0x045 /* LSBs of Full Scale Adjust DAC */
-#define REG_DACGAIN3_1                           0x046 /* MSBs of Full Scale Adjust DAC */
-#define REG_DACGAIN3_0                           0x047 /* LSBs of Full Scale Adjust DAC */
-#define REG_PD_DACLDO                            0x048 /* Powerdown DAC LDOs */
-#define REG_STAT_DACLDO                          0x049 /* DAC LDO Status */
-#define REG_DECODE_CTRL0                         0x04B /* Decoder Control */
-#define REG_DECODE_CTRL1                         0x04C /* Decoder Control */
-#define REG_DECODE_CTRL2                         0x04D /* Decoder Control */
-#define REG_DECODE_CTRL3                         0x04E /* Decoder Control */
-#define REG_NCO_CLRMODE                          0x050 /* NCO CLR Mode */
+#define REG_COARSE_GROUP_DLY                     0x047 /* Coarse Group Delay Adjustment */
+#define REG_NCO_ALIGNMODE                        0x050 /* NCO Align Mode */
 #define REG_NCOKEY_ILSB                          0x051 /* NCO Clear on Data Key I lsb */
 #define REG_NCOKEY_IMSB                          0x052 /* NCO Clear on Data Key I msb */
 #define REG_NCOKEY_QLSB                          0x053 /* NCO Clear on Data Key Q lsb */
@@ -103,6 +89,8 @@
 #define REG_PA_AVG_TIME                          0x062 /* PDP Control */
 #define REG_PA_POWER0                            0x063 /* PDP Power */
 #define REG_PA_POWER1                            0x064 /* PDP Power */
+#define REG_PA_OFFGAIN0                          0x065 /* PDP Offgain 0 */
+#define REG_PA_OFFGAIN1                          0x066 /* PDP Offgain 1 */
 #define REG_CLKCFG0                              0x080 /* Clock Configuration */
 #define REG_SYSREF_ACTRL0                        0x081 /* SYSREF Analog Control 0 */
 #define REG_SYSREF_ACTRL1                        0x082 /* SYSREF Analog Control 1 */
@@ -115,19 +103,13 @@
 #define REG_DACCPCNTRL                           0x08A /* Charge Pump/Cntrl Voltage */
 #define REG_DACLOGENCNTRL                        0x08B /* Logen Control */
 #define REG_DACLDOCNTRL1                         0x08C /* LDO Control1 + Reference Divider */
-#define REG_CAL_DAC_ERR                          0x0E0 /* Report DAC Cal errors */
-#define REG_CAL_MSB_THRES                        0x0E1 /* MSB sweep Threshold definition */
-#define REG_CAL_CTRL_GLOBAL                      0x0E2 /* Global Calibration DAC Control */
-#define REG_CAL_MSBHILVL                         0x0E3 /* High Level for MSB level compare */
-#define REG_CAL_MSBLOLVL                         0x0E4 /* Low Level for MSB level compare */
-#define REG_CAL_THRESH                           0x0E5 /* TAC Threshold definition */
-#define REG_CAL_AVG_CNT                          0x0E6 /* CAL DAC Number of averages */
-#define REG_CAL_CLKDIV                           0x0E7 /* Calibration DAC clock divide */
-#define REG_CAL_INDX                             0x0E8 /* Calibration DAC Select */
-#define REG_CAL_CTRL                             0x0E9 /* Calibration DAC Control */
-#define REG_CAL_ADDR                             0x0EA /* Calibration DAC Address */
-#define REG_CAL_DATA                             0x0EB /* Calibration DAC Data */
-#define REG_CAL_UPDATE                           0x0EC /* Calibration DAC Write Update */
+#define REG_DAC_PLL_CONFIG0                      0x08D /* DAC PLL Configuration */
+#define REG_CLK_DETECT                           0x08E /* Clock Detect */
+#define REG_DIG_TEST0                            0x0F7 /* Digital Test 0 */
+#define REG_DC_TEST_VALUEI0                      0x0F8 /* DC Test Value I0 */
+#define REG_DC_TEST_VALUEI1                      0x0F9 /* DC Test Value I1 */
+#define REG_DC_TEST_VALUEQ0                      0x0FA /* DC Test Value Q0 */
+#define REG_DC_TEST_VALUEQ1                      0x0FB /* DC Test Value Q1 */
 #define REG_DATA_FORMAT                          0x110 /* Data format */
 #define REG_DATAPATH_CTRL                        0x111 /* Datapath Control */
 #define REG_INTERP_MODE                          0x112 /* Interpolation Mode */
@@ -142,20 +124,10 @@
 #define REG_NCO_PHASE_OFFSET1                    0x11B /* NCO Phase Offset MSB */
 #define REG_NCO_PHASE_ADJ0                       0x11C /* I/Q Phase Adjust LSB */
 #define REG_NCO_PHASE_ADJ1                       0x11D /* I/Q Phase Adjust MSB */
-#define REG_TXEN_FUNC                            0x11E /* Transmit Enable function */
 #define REG_TXEN_SM_0                            0x11F /* Transmit enable power control state machine */
-#define REG_TXEN_SM_1                            0x120 /* Rise and fall */
-#define REG_TXEN_SM_2                            0x121 /* Transmit enable maximum A */
-#define REG_TXEN_SM_3                            0x122 /* Transmit enable maximum B */
-#define REG_TXEN_SM_4                            0x123 /* Transmit enable maximum C */
-#define REG_TXEN_SM_5                            0x124 /* Transmit enable maximum D */
 #define REG_DACOUT_ON_DOWN                       0x125 /* DAC out down control and on trigger */
 #define REG_DACOFF                               0x12C /* DAC Shutdown Source */
-#define REG_DATA_PATH_FLUSH_COUNT0               0x12D /* Data path flush counter LSB */
-#define REG_DATA_PATH_FLUSH_COUNT1               0x12E /* Data path flush counter MSB */
 #define REG_DIE_TEMP_CTRL0                       0x12F /* Die Temp Range Control */
-#define REG_DIE_TEMP_CTRL1                       0x130 /* Die temperature control register */
-#define REG_DIE_TEMP_CTRL2                       0x131 /* Die temperature control register */
 #define REG_DIE_TEMP0                            0x132 /* Die temp LSB */
 #define REG_DIE_TEMP1                            0x133 /* Die Temp MSB */
 #define REG_DIE_TEMP_UPDATE                      0x134 /* Die temperature update */
@@ -174,55 +146,86 @@
 #define REG_GAIN_RAMP_UP_STP1                    0x141 /* MSB of digital gain rises */
 #define REG_GAIN_RAMP_DOWN_STP0                  0x142 /* LSB of digital gain drops */
 #define REG_GAIN_RAMP_DOWN_STP1                  0x143 /* MSB of digital gain drops */
-#define REG_BLSM_CTRL                            0x146 /* Blanking SM control and func */
-#define REG_BLSM_STAT                            0x147 /* Blanking SM control and func */
 #define REG_PRBS                                 0x14B /* PRBS Input Data Checker */
 #define REG_PRBS_ERROR_I                         0x14C /* PRBS Error Counter Real */
 #define REG_PRBS_ERROR_Q                         0x14D /* PRBS Error Counter Imaginary */
+#define REG_DATAPATH_CTRL2                       0x151 /* Datapath Control 2 */
+#define REG_ACC_MODULUS0                         0x152 /* ACC Modulus 0 */
+#define REG_ACC_MODULUS1                         0x153 /* ACC Modulus 1 */
+#define REG_ACC_MODULUS2                         0x154 /* ACC Modulus 2 */
+#define REG_ACC_MODULUS3                         0x155 /* ACC Modulus 3 */
+#define REG_ACC_MODULUS4                         0x156 /* ACC Modulus 4 */
+#define REG_ACC_MODULUS5                         0x157 /* ACC Modulus 5 */
+#define REG_ACC_DELTA0                           0x158 /* ACC Delta 0 */
+#define REG_ACC_DELTA1                           0x159 /* ACC Delta 1 */
+#define REG_ACC_DELTA2                           0x15A /* ACC Delta 2 */
+#define REG_ACC_DELTA3                           0x15B /* ACC Delta 3 */
+#define REG_ACC_DELTA4                           0x15C /* ACC Delta 4 */
+#define REG_ACC_DELTA5                           0x15D /* ACC Delta 5 */
+#define REG_PFIR_COEFF0_L                        0x17A /* PFIR Coefficient 0 LSB */
+#define REG_PFIR_COEFF0_H                        0x17B /* PFIR Coefficient 0 MSB */
+#define REG_PFIR_COEFF1_L                        0x17C /* PFIR Coefficient 1 LSB */
+#define REG_PFIR_COEFF1_H                        0x17D /* PFIR Coefficient 1 MSB */
+#define REG_PFIR_COEFF2_L                        0x17E /* PFIR Coefficient 2 LSB */
+#define REG_PFIR_COEFF2_H                        0x17F /* PFIR Coefficient 2 MSB */
+#define REG_PFIR_COEFF3_L                        0x180 /* PFIR Coefficient 3 LSB */
+#define REG_PFIR_COEFF3_H                        0x181 /* PFIR Coefficient 3 MSB */
+#define REG_PFIR_COEFF_UPDATE                    0x182 /* PFIR Coefficient Update */
+#define REG_DAC_PLL_CONFIG1                      0x1B0 /* DAC PLL Configuration */
+#define REG_DACPLLT4                             0x1B4 /* VCO Cal Control */
 #define REG_DACPLLT5                             0x1B5 /* ALC/Varactor control */
+#define REG_DACPLLT6                             0x1B6 /* DAC PLL VCO Control */
+#define REG_DAC_PLL_CONFIG2                      0x1B9 /* DAC PLL Configuration */
 #define REG_DACPLLTB                             0x1BB /* VCO Bias Control */
-#define REG_DACPLLTD                             0x1BD /* VCO Cal control */
+#define REG_DAC_PLL_CONFIG3                      0x1BC /* DAC PLL Configuration */
+#define REG_DAC_PLL_CONFIG4                      0x1BE /* DAC PLL Configuration */
+#define REG_DAC_PLL_CONFIG5                      0x1BF /* DAC PLL Configuration */
+#define REG_DAC_PLL_CONFIG6                      0x1C0 /* DAC PLL Configuration */
+#define REG_DAC_PLL_CONFIG7                      0x1C1 /* DAC PLL Configuration */
 #define REG_DACPLLT17                            0x1C4 /* Varactor ControlV */
-#define REG_ASPI_SPARE0                          0x1C6 /* Spare Register 0 */
-#define REG_ASPI_SPARE1                          0x1C7 /* Spare Register 1 */
-#define REG_SPISTRENGTH                          0x1DF /* Reg 70 Description */
-#define REG_CLK_TEST                             0x1EB /* Clock related control signaling */
-#define REG_ATEST_VOLTS                          0x1EC /* Analog Test Voltage Extraction */
-#define REG_ASPI_CLKSRC                          0x1ED /* Analog Spi clock source for PD machines */
+#define REG_DACPLLT18                            0x1C5 /* DAC PLL Control */
+#define REG_TEST_MODE                            0x1FE /* Test Mode */
 #define REG_MASTER_PD                            0x200 /* Master power down for Receiver PHYx */
 #define REG_PHY_PD                               0x201 /* Power down for individual Receiver PHYx */
 #define REG_GENERIC_PD                           0x203 /* Miscellaneous power down controls */
+#define REG_CDR_RESET                            0x206 /* CDR Reset */
 #define REG_CDR_OPERATING_MODE_REG_0             0x230 /* Clock and data recovery operating modes */
-#define REG_EQ_CONFIG_PHY_0_1                    0x250 /* Equalizer configuration for PHY 0 and PHY 1 */
-#define REG_EQ_CONFIG_PHY_2_3                    0x251 /* Equalizer configuration for PHY 2 and PHY 3 */
-#define REG_EQ_CONFIG_PHY_4_5                    0x252 /* Equalizer configuration for PHY 4 and PHY 5 */
-#define REG_EQ_CONFIG_PHY_6_7                    0x253 /* Equalizer configuration for PHY 6 and PHY 7 */
 #define REG_EQ_BIAS_REG                          0x268 /* Equalizer bias control */
 #define REG_SYNTH_ENABLE_CNTRL                   0x280 /* Rx PLL enable controls */
 #define REG_PLL_STATUS                           0x281 /* Rx PLL status readbacks */
+#define REG_SERDES_PLL_CONFIG0                   0x284 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG1                   0x285 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG2                   0x286 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG3                   0x287 /* SERDES PLL Configuration */
 #define REG_REF_CLK_DIVIDER_LDO                  0x289 /* Rx PLL LDO control */
+#define REG_SERDES_PLL_VCO_CONTROL0              0x28A /* SERDES PLL VCO Control 0 */
+#define REG_SERDES_PLL_CONFIG4                   0x28B /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG5                   0x290 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_VCO_CONTROL1              0x291 /* SERDES PLL VCO Control 1 */
+#define REG_SERDES_PLL_CONFIG6                   0x294 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_VCO_CONTROL2              0x296 /* SERDES PLL VCO Control 2 */
+#define REG_SERDES_PLL_CONFIG7                   0x297 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG8                   0x299 /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG9                   0x29A /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG10                  0x29C /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG11                  0x29F /* SERDES PLL Configuration */
+#define REG_SERDES_PLL_CONFIG12                  0x2A0 /* SERDES PLL Configuration */
 #define REG_TERM_BLK1_CTRLREG0                   0x2A7 /* Termination controls for PHYs 0, 1, 6, and 7 */
-#define REG_TERM_BLK1_CTRLREG1                   0x2A8 /* Termination controls for PHYs 0, 1, 6, and 7 */
-#define REG_TERM_BLK2_CTRLREG0                   0x2AE /* Termination controls for PHYs 2, 3, 4, and 5 */
-#define REG_TERM_BLK2_CTRLREG1                   0x2AF /* Termination controls for PHYs 2, 3, 4, and 5 */
+#define REG_JESD204B_TERM0                       0x2AA /* JESD204B interface termination configuration */
+#define REG_JESD204B_TERM1                       0x2AB /* JESD204B interface termination configuration */
 #define REG_GENERAL_JRX_CTRL_0                   0x300 /* General JRX Control Register 0 */
 #define REG_GENERAL_JRX_CTRL_1                   0x301 /* General JRX Control Register 1 */
 #define REG_DYN_LINK_LATENCY_0                   0x302 /* Register 1 description */
-#define REG_DYN_LINK_LATENCY_1                   0x303 /* Register 2 description */
 #define REG_LMFC_DELAY_0                         0x304 /* Register 3 description */
-#define REG_LMFC_DELAY_1                         0x305 /* Register 4 description */
 #define REG_LMFC_VAR_0                           0x306 /* Register 5 description */
-#define REG_LMFC_VAR_1                           0x307 /* Register 6 description */
 #define REG_XBAR_LN_0_1                          0x308 /* Register 7 description */
 #define REG_XBAR_LN_2_3                          0x309 /* Register 8 description */
-#define REG_XBAR_LN_4_5                          0x30A /* Register 9 description */
-#define REG_XBAR_LN_6_7                          0x30B /* Register 10 description */
 #define REG_FIFO_STATUS_REG_0                    0x30C /* Register 11 description */
 #define REG_FIFO_STATUS_REG_1                    0x30D /* Register 12 description */
-#define REG_FIFO_STATUS_REG_2                    0x30E /* Register 13 description */
 #define REG_SYNCB_GEN_0                          0x311 /* Register 16 description */
 #define REG_SYNCB_GEN_1                          0x312 /* Register 17 description */
 #define REG_SYNCB_GEN_3                          0x313 /* Register 18 description */
+#define REG_SERDES_SPI_REG                       0x314 /* SERDES SPI Configuration */
 #define REG_PHY_PRBS_TEST_EN                     0x315 /* PHY PRBS TEST ENABLE FOR INDIVIDUAL LANES */
 #define REG_PHY_PRBS_TEST_CTRL                   0x316 /* Reg 20 Description */
 #define REG_PHY_PRBS_TEST_THRESH_LOBITS          0x317 /* Reg 21 Description */
@@ -261,22 +264,11 @@
 #define REG_LID3_REG                             0x422 /* Reg 34 Description */
 #define REG_CHECKSUM3_REG                        0x425 /* Reg 37 Description */
 #define REG_COMPSUM3_REG                         0x426 /* Reg 38 Description */
-#define REG_LID4_REG                             0x42A /* Reg 34 Description */
-#define REG_CHECKSUM4_REG                        0x42D /* Reg 37 Description */
-#define REG_COMPSUM4_REG                         0x42E /* Reg 38 Description */
-#define REG_LID5_REG                             0x432 /* Reg 34 Description */
-#define REG_CHECKSUM5_REG                        0x435 /* Reg 37 Description */
-#define REG_COMPSUM5_REG                         0x436 /* Reg 38 Description */
-#define REG_LID6_REG                             0x43A /* Reg 34 Description */
-#define REG_CHECKSUM6_REG                        0x43D /* Reg 37 Description */
-#define REG_COMPSUM6_REG                         0x43E /* Reg 38 Description */
-#define REG_LID7_REG                             0x442 /* Reg 34 Description */
-#define REG_CHECKSUM7_REG                        0x445 /* Reg 37 Description */
-#define REG_COMPSUM7_REG                         0x446 /* Reg 38 Description */
 #define REG_ILS_DID                              0x450 /* Reg 80 Description */
 #define REG_ILS_BID                              0x451 /* Reg 81 Description */
 #define REG_ILS_LID0                             0x452 /* Reg 82 Description */
 #define REG_ILS_SCR_L                            0x453 /* Reg 83 Description */
+#define REG_ILS_F                                0x454 /* Reg 84 Description */
 #define REG_ILS_K                                0x455 /* Reg 85 Description */
 #define REG_ILS_M                                0x456 /* Reg 86 Description */
 #define REG_ILS_CS_N                             0x457 /* Reg 87 Description */
@@ -302,6 +294,7 @@
 #define REG_SYNCASSERTIONMASK                    0x47B /* Reg 123 Description */
 #define REG_ERRORTHRES                           0x47C /* Reg 124 Description */
 #define REG_LANEENABLE                           0x47D /* Reg 125 Description */
+#define REG_RAMP_ENA                             0x47E /* Ramp Check Enable */
 
 /*
  *      REG_SPI_INTFCONFA
