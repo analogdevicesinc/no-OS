@@ -1,12 +1,12 @@
 SRCS += $(NO-OS)/iio/iio.c
 SRCS += $(NO-OS)/iio/iiod.c
-SRCS += $(NO-OS)/util/no_os_circular_buffer.c
+SRCS += $(NO-OS)/iio/iio_trigger.c
+SRCS += $(NO-OS)/iio/iio_app/iio_app.c
 
-INCS += $(NO-OS)/iio/iio.h
-INCS += $(NO-OS)/iio/iio_types.h
-INCS += $(NO-OS)/iio/iiod.h
-INCS += $(NO-OS)/iio/iiod_private.h
-INCS += $(INCLUDE)/no_os_circular_buffer.h
+NO_OS_INC_DIRS += $(NO-OS)/iio \
+		  $(NO-OS)/iio/iio_app \
+		  $(INCLUDE)
+SRC_DIRS += $(NO-OS)/util
 
 ifeq (y,$(strip $(NETWORKING)))
 DISABLE_SECURE_SOCKET ?= y
