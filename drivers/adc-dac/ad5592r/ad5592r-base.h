@@ -3,7 +3,7 @@
  *   @brief  Header file of AD5592R Base Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,6 +38,7 @@
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
+#include "no_os_alloc.h"
 #include <stdbool.h>
 
 #define CH_MODE_UNUSED			0
@@ -92,6 +93,8 @@ enum ad5592r_registers {
 
 #define INTERNAL_VREF_VOLTAGE			    2.5
 
+#define NUM_OF_CHANNELS 8
+
 struct ad5592r_dev;
 
 struct ad5592r_rw_ops {
@@ -108,8 +111,21 @@ struct ad5592r_rw_ops {
 	int32_t (*gpio_read)(struct ad5592r_dev *dev, uint8_t *value);
 };
 
+enum ad559xr_range {
+	ZERO_TO_VREF,
+	ZERO_TO_2VREF
+};
+
 struct ad5592r_init_param {
 	bool int_ref;
+	struct no_os_spi_init_param *spi_init;
+	struct no_os_i2c_init_param *i2c_init;
+	uint8_t channel_modes[8];
+	uint8_t channel_offstate[8];
+	enum ad559xr_range adc_range;
+	enum ad559xr_range dac_range;
+	bool adc_buf;
+	uint8_t power_down[8];
 };
 
 struct ad5592r_dev {
@@ -126,6 +142,11 @@ struct ad5592r_dev {
 	uint8_t gpio_in;
 	uint8_t gpio_val;
 	uint8_t ldac_mode;
+	enum ad559xr_range adc_range;
+	enum ad559xr_range dac_range;
+	bool int_ref;
+	uint8_t power_down[8];
+	bool adc_buf;
 };
 
 int32_t ad5592r_base_reg_write(struct ad5592r_dev *dev, uint8_t reg,
@@ -141,5 +162,14 @@ int32_t ad5592r_gpio_direction_output(struct ad5592r_dev *dev,
 int32_t ad5592r_software_reset(struct ad5592r_dev *dev);
 int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev);
 int32_t ad5592r_reset_channel_modes(struct ad5592r_dev *dev);
+int32_t ad5592r_set_adc_range(struct ad5592r_dev *dev,
+			      enum ad559xr_range adc_range);
+int32_t ad5592r_set_dac_range(struct ad5592r_dev *dev,
+			      enum ad559xr_range dac_range);
+int32_t ad5592r_power_down(struct ad5592r_dev *dev, uint8_t chan, bool enable);
+int32_t ad5592r_set_int_ref(struct ad5592r_dev *dev, bool enable);
+int32_t ad5592r_set_adc_buffer(struct ad5592r_dev *dev, bool enable);
+int32_t ad5592r_base_reg_update(struct ad5592r_dev* dev, uint16_t reg_addr,
+				uint16_t data, uint16_t mask);
 
 #endif /* AD5592R_BASE_H_ */
