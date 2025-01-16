@@ -76,7 +76,6 @@ extern struct max_gpio_init_param adxrs290_gpio_extra_ip;
 extern struct max_spi_init_param adxrs290_spi_extra_ip;
 
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #if (TARGET_NUM != 32655)
 #error IIO_TRIGGER_EXAMPLE is currently supported only on max32655 targets.
 #else
@@ -91,6 +90,5 @@ extern struct max_spi_init_param adxrs290_spi_extra_ip;
 
 #define ADXRS290_GPIO_TRIG_IRQ_ID    GPIO_SYNC_PIN_NUM
 #define ADXRS290_GPIO_CB_HANDLE      MXC_GPIO_GET_GPIO(GPIO_SYNC_PORT_NUM)
-#endif
 
 #endif /* __PARAMETERS_H__ */

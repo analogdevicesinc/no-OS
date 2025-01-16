@@ -34,16 +34,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-#ifdef IIO_TRIGGER_EXAMPLE
-#include "iio_trigger_example.h"
-#endif
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for STM32 platform.
@@ -58,26 +52,6 @@ int main()
 
 	stm32_init();
 
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-	if (ret)
-		goto error;
-#endif
-
-#ifdef IIO_TRIGGER_EXAMPLE
-#error IIO_TRIGGER_EXAMPLE is not supported on STM32 platform.
-#endif
-
-#ifdef IIO_TIMER_TRIGGER_EXAMPLE
-#error IIO_TIMER_TRIGGER_EXAMPLE is not supported on STM32 platform.
-#endif
-
-#if (IIO_EXAMPLE + IIO_TRIGGER_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-error:
-	return 0;
+	return example_main();
 }
 

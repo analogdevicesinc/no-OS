@@ -34,11 +34,13 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_timer_trigger_example.h"
+#include "parameters.h"
+#include "no_os_timer.h"
 #include "iio_adxrs290.h"
 #include "iio_trigger.h"
 #include "common_data.h"
 #include "no_os_util.h"
+#include "iio_app.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -46,6 +48,33 @@
 #define MAX_SIZE_BASE_ADDR		3000
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 #define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
+
+/* ADXRS290 timer init parameter */
+struct no_os_timer_init_param adxrs290_tip = {
+	.id = ADXRS290_TIMER_DEVICE_ID,
+	.freq_hz = ADXRS290_TIMER_FREQ_HZ,
+	.ticks_count = ADXRS290_TIMER_TICKS_COUNT,
+	.platform_ops = TIMER_OPS,
+	.extra = ADXRS290_TIMER_EXTRA,
+};
+
+/* ADXRS290 timer irq init parameter */
+struct no_os_irq_init_param adxrs290_timer_irq_ip = {
+	.irq_ctrl_id = 0,
+	.platform_ops = TIMER_IRQ_OPS,
+	.extra = ADADXRS290_TIMER_IRQ_EXTRA,
+};
+
+/* ADXRS290 timer trigger init parameter */
+struct iio_hw_trig_init_param adxrs290_timer_trig_ip = {
+	.irq_id = ADXRS290_TIMER_TRIG_IRQ_ID,
+	.cb_info = {
+		.event = NO_OS_EVT_TIM_ELAPSED,
+		.peripheral = NO_OS_TIM_IRQ,
+		.handle = ADXRS290_TIMER_CB_HANDLE,
+	},
+	.name = ADXRS290_TIMER_TRIG_NAME,
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -57,7 +86,7 @@ static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
  *               execute continuously function iio_app_run_with_trigs and will
  * 				 not return.
 *******************************************************************************/
-int iio_timer_trigger_example_main()
+int example_main()
 {
 	int ret;
 	struct adxrs290_dev *adxrs290_desc;

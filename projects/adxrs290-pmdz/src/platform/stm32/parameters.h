@@ -70,10 +70,6 @@ extern UART_HandleTypeDef huart5;
 #define GPIO_OPS            &stm32_gpio_ops
 #define GPIO_EXTRA          &adxrs290_gpio_extra_ip
 
-#ifdef IIO_TRIGGER_EXAMPLE
-#error IIO_TRIGGER_EXAMPLE is not supported on STM32 platform for adxrs290-pmdz project.
-#endif
-
 extern struct stm32_uart_init_param adxrs290_uart_extra_ip;
 extern struct stm32_spi_init_param adxrs290_spi_extra_ip;
 extern struct stm32_gpio_init_param adxrs290_gpio_extra_ip;
