@@ -11,17 +11,17 @@ Supported Devices
 Overview
 --------
 
-The `ADF4382 <www.analog.com/en/products/adf4382a.html>`_ is a high performance,
+The `ADF4382 <www.analog.com/en/products/adf4382.html>`_ is a high performance,
 ultralow jitter, Frac-N PLL with integrated VCO ideally suited for LO generation
 for 5G applications or data converter clock applications. The high performance
 PLL has a figure of merit of -238 dBc/Hz, low 1/f Noise and high PFD frequency
 of 625MHz in integer mode that can achieve ultra-low in-band noise and
-integrated jitter. The ADF4382 can generate  frequencies from 687.5 MHz to
+integrated jitter. The ADF4382 can generate frequencies from 687.5 MHz to
 22 GHz without an external doubler, thereby  eliminating the need for
 sub-harmonic filters.
 
 For multiple data converter clock applications, the
-`ADF4382 <www.analog.com/en/products/adf4382a.html>`_ automatically aligns its
+`ADF4382 <www.analog.com/en/products/adf4382.html>`_ automatically aligns its
 output to the input reference edge by including the output divider in the PLL
 feedback loop. For applications that require deterministic delay or delay
 adjustment capability, a programmable reference to output delay with <1ps
@@ -94,7 +94,7 @@ the value in the same range.
 
 In order to determine which value corresponds to your design charge pump
 current, please refer to the datasheet
-`ADF4382 <www.analog.com/en/products/adf4382a.html>`_ in the register details
+`ADF4382 <www.analog.com/en/products/adf4382.html>`_ in the register details
 section for register REG001F.
 
 Bleed Current Configuration
