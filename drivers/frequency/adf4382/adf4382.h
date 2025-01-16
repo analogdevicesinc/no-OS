@@ -448,6 +448,7 @@
 
 #define ADF4382_SPI_3W_CFG(x)			(no_os_field_prep(ADF4382_SDO_ACTIVE_MSK, x) | \
 						 no_os_field_prep(ADF4382_SDO_ACTIVE_R_MSK, x))
+
 #define ADF4382_BLEED_MSB_MSK			(ADF4382_COARSE_BLEED_MSK | \
 						 ADF4382_FINE_BLEED_MSB_MSK)
 
@@ -499,9 +500,13 @@
 #define ADF4382_VCO_CAL_ALC			123
 #define ADF4382_POR_DELAY_US			200
 #define ADF4382_LKD_DELAY_US			500
+#define ADF4382_COARSE_BLEED_CONST		180U	// 180 microseconds
+#define ADF4382_FINE_BLEED_CONST_1		512U	// 512 microseconds
+#define ADF4382_FINE_BLEED_CONST_2		250U	// 250 microseconds
 
 #define MHZ					MEGA
 #define S_TO_NS					NANO
+#define PS_TO_S					PICO
 #define NS_TO_PS				KHZ_PER_MHZ
 
 /**
