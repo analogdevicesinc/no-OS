@@ -4664,8 +4664,8 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 	if (ret < 0)
 		return ret;
 
-	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[BBPLL_CLK],
-				 rx_path_clks[BBPLL_FREQ]);
+	ret = clk_set_rate(phy, phy->ref_clk_scale[BBPLL_CLK],
+			   rx_path_clks[BBPLL_FREQ]);
 	if (ret < 0)
 		return ret;
 
@@ -4673,14 +4673,14 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 
 	for (i = ADC_CLK, j = DAC_CLK, n = ADC_FREQ;
 	     i <= RX_SAMPL_CLK; i++, j++, n++) {
-		ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[i], rx_path_clks[n]);
+		ret = clk_set_rate(phy, phy->ref_clk_scale[i], rx_path_clks[n]);
 		if (ret < 0) {
 			dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 				ret);
 			return ret;
 		}
 		phy->current_rx_path_clks[n] = rx_path_clks[n];
-		ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[j], tx_path_clks[n]);
+		ret = clk_set_rate(phy, phy->ref_clk_scale[j], tx_path_clks[n]);
 		if (ret < 0) {
 			dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 				ret);
@@ -5424,7 +5424,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 			 DIGITAL_POWER_UP | CLOCK_ENABLE_DFLT | BBPLL_ENABLE |
 			 (pd->use_extclk ? XO_BYPASS : 0)); /* Enable Clocks */
 
-	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[BB_REFCLK], ref_freq);
+	ret = clk_set_rate(phy, phy->ref_clk_scale[BB_REFCLK], ref_freq);
 	if (ret < 0) {
 		dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 			ret);
@@ -5496,13 +5496,13 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (!ref_freq)
 		return -EINVAL;
 
-	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[RX_REFCLK], ref_freq);
+	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_REFCLK], ref_freq);
 	if (ret < 0) {
 		dev_err(dev, "Failed to set RX Synth ref clock rate (%"PRId32")", ret);
 		return ret;
 	}
 
-	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[TX_REFCLK], ref_freq);
+	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_REFCLK], ref_freq);
 	if (ret < 0) {
 		dev_err(dev, "Failed to set TX Synth ref clock rate (%"PRId32")", ret);
 		return ret;
@@ -5519,8 +5519,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	phy->pdata->use_ext_rx_lo = 0;
 	phy->pdata->use_ext_tx_lo = 0;
 
-	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
-				 ad9361_to_clk(pd->rx_synth_freq));
+	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
+			   ad9361_to_clk(pd->rx_synth_freq));
 	if (ret < 0) {
 		dev_err(dev, "Failed to set RX Synth rate (%"PRId32")",
 			ret);
@@ -5539,8 +5539,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	/* Skip quad cal here we do it later again */
 	phy->last_tx_quad_cal_freq = pd->tx_synth_freq;
-	ret = no_os_clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
-				 ad9361_to_clk(pd->tx_synth_freq));
+	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
+			   ad9361_to_clk(pd->tx_synth_freq));
 	if (ret < 0) {
 		dev_err(dev, "Failed to set TX Synth rate (%"PRId32")",
 			ret);
