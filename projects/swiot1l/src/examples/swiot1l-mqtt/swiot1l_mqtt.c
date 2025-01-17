@@ -52,7 +52,32 @@
 #include "mbedtls/debug.h"
 
 #include "MXQ_API.h"
+#include "MXQ_Error.h"
 #include "USS_API.h"
+
+/* Print out the buffer in C code.
+ *
+ * name  [in]  Name of the variable.
+ * data  [in]  Data to print out.
+ * len   [in]  Length of the data.
+ */
+void print_buffer(char* name, unsigned char* data, mxq_length len)
+{
+    mxq_length i;
+
+    printf("unsigned char %s[] = {\n", name);
+    for (i = 0; i < len; i++) {
+        if ((i % 8) == 0)
+            printf("   ");
+        printf(" 0x%02x,", data[i]);
+        if ((i % 8) == 7)
+            printf("\n");
+    }
+    if ((i % 8) != 0)
+        printf("\n");
+    printf("};\n");
+
+}
 
 static void message_handler(struct mqtt_message_data *msg)
 {
@@ -189,7 +214,7 @@ int swiot1l_mqtt()
 	//char my_cli_pk[] = DEVICE_PRIVATE_KEY;
 
 	USS_Module_Init();
-    if(USS_Ping(4) == USS_OK )
+    if(USS_Ping(4) == USS_OK)
         printf("\nSuccessfully initialize.\n");
     else
         printf("\n initialize failed. \n");
@@ -205,21 +230,21 @@ int swiot1l_mqtt()
 
 	mxq_u1 my_cli_cert[1024];
     mxq_length certlen=1024;
-    printf("Device certificate\r\n\r\n");
+    printf("my_cli_cert certificate\r\n\r\n");
     MXQ_ReadObject(0x1002,0,(mxq_u1*)&my_cli_cert,&certlen);
-    //print_buffer(my_cli_cert,certlen);
+    print_buffer("my_cli_cert",my_cli_cert,certlen);
 
 	mxq_u1 my_ca_cert[1024];
     mxq_length ca_certlen=1024;
-    printf("Device certificate\r\n\r\n");
-    MXQ_ReadObject(0x1002,0,(mxq_u1*)&my_ca_cert,&ca_certlen);
-    //print_buffer(my_ca_cert,ca_certlen);
+    printf("my_ca_cert certificate\r\n\r\n");
+    MXQ_ReadObject(0x1003,0,(mxq_u1*)&my_ca_cert,&ca_certlen);
+    print_buffer("my_ca_cert",my_ca_cert,ca_certlen);
 
 	mxq_u1 my_cli_pk[1024];
     mxq_length my_cli_pk_len=1024;
-    printf("Device certificate\r\n\r\n");
-    MXQ_ReadObject(0x1002,0,(mxq_u1*)&my_cli_pk,&my_cli_pk_len);
-    //print_buffer(my_cli_pk,my_cli_pk_len);
+    printf("my_cli_pk certificate\r\n\r\n");
+    MXQ_ReadObject(0x1004,0,(mxq_u1*)&my_cli_pk,&my_cli_pk_len);
+    print_buffer("my_cli_pk",my_cli_pk,my_cli_pk_len);
 
 
 	struct no_os_trng_init_param trng_ip = {

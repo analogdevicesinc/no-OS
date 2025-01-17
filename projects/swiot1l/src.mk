@@ -39,7 +39,9 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 		$(INCLUDE)/no_os_units.h \
 		$(INCLUDE)/no_os_alloc.h \
 		$(INCLUDE)/no_os_trng.h \
-		$(NO-OS)/iio/
+		$(NO-OS)/iio/iio.h \
+		$(NO-OS)/iio/iio_types.h \
+		$(INCLUDE)/no_os_circular_buffer.h
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 		$(NO-OS)/util/no_os_lf256fifo.c \

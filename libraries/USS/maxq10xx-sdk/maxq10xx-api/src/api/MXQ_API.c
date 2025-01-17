@@ -3459,7 +3459,7 @@ mxq_err_t __API__  MXQ_cipher_auth_ccm(mxq_u2 key_ID,
 }
 
 #ifdef MAXQ106x
-#define DEBUG_KEY 0
+#define DEBUG_KEY 1
 mxq_err_t MXQ_client_key_exchange(
         const mxq_u1* remote_random, //in
         mxq_cert* srvcert,
