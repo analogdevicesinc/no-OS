@@ -216,9 +216,9 @@ int adxl38x_init(struct adxl38x_dev **device,
 	if (ret)
 		goto error_com;
 	if ((reg_value & NO_OS_BIT(7))) {
-		dev->dev_type = ID_ADXL380;
-	} else {
 		dev->dev_type = ID_ADXL382;
+	} else {
+		dev->dev_type = ID_ADXL380;
 	}
 
 	/* Set default values to the device structure */
