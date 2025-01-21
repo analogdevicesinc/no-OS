@@ -1,16 +1,16 @@
 {
   "mbed": {
     "basic_example": {
-      "flags" : "RELEASE=y BASIC_EXAMPLE=y"
+      "flags" : "RELEASE=y EXAMPLE=basic"
     },
     "channel_output_example": {
-      "flags" : "RELEASE=y BASIC_EXAMPLE=n CHANNEL_OUTPUT_EXAMPLE=y"
+      "flags" : "RELEASE=y EXAMPLE=channel_output_example"
     },
     "voltage_output_example": {
-      "flags" : "RELEASE=y BASIC_EXAMPLE=n VOLTAGE_OUTPUT_EXAMPLE=y"
+      "flags" : "RELEASE=y EXAMPLE=voltage_output_example"
     },
     "current_output_example": {
-      "flags" : "RELEASE=y BASIC_EXAMPLE=n CURRENT_OUTPUT_EXAMPLE=y"
+      "flags" : "RELEASE=y EXAMPLE=current_output_example"
     }
   }
 }
