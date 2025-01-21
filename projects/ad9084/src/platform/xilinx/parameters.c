@@ -47,17 +47,12 @@ struct xil_uart_init_param platform_uart_extra_ip = {
 	.irq_id = UART_IRQ_ID
 };
 
-struct xil_spi_init_param adf4382_spi_extra_ip = {
+struct xil_spi_init_param clk_spi_extra_ip = {
  	.flags = 0,
 	.type = SPI_PS
 };
 
-// struct xil_spi_init_param ltc6952_spi_extra_ip = {
-// 	.flags = 0,
-// 	.type = SPI_PS
-// };
-
-// struct xil_gpio_init_param xil_gpio_param = {
-// 	.device_id = GPIO_DEVICE_ID,
-// 	.type = GPIO_PS,
-// };
+struct xil_gpio_init_param xil_gpio_param = {
+	.device_id = GPIO_DEVICE_ID,
+	.type = GPIO_PS,
+};

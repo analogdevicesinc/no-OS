@@ -35,6 +35,7 @@
 
 #include "platform_includes.h"
 #include "adf4382.h"
+#include "hmc7044.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_uart.h"
@@ -42,8 +43,8 @@
 
 extern struct no_os_spi_init_param	adf4382_spi_param;
 extern struct adf4382_init_param 	adf4382_ip;
-// extern const struct no_os_spi_init_param	ltc6952_spi_param;
-// extern const struct no_os_gpio_init_param	reset_gpio_param;
+extern struct hmc7044_init_param	hmc7044_ip;
+extern struct no_os_gpio_init_param	reset_gpio_param;
 extern struct no_os_uart_init_param	platform_uart_ip;
 
 

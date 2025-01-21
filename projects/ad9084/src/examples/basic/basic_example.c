@@ -44,15 +44,25 @@
  */
 int basic_example_main()
 {
-	struct adf4382_dev *dev;
+	struct adf4382_dev *adf4382_dev;
+	struct hmc7044_dev *hmc7044_dev;
 	int ret = 0;
 
-	pr_info("Enter basic example \n");
-	ret = adf4382_init(&dev, &adf4382_ip);
-	if (ret)
-		goto error;
+	pr_info("Enter basic example\n");
 
-	pr_info("ADF4382 configured \n");
+	ret = adf4382_init(&adf4382_dev, &adf4382_ip);
+	if (ret) {
+		pr_info("ADF4382 initialization failed\n");
+		goto error;
+	}
+
+	ret = hmc7044_init(&hmc7044_dev, &hmc7044_ip);
+	if (ret) {
+		pr_info("HMC7044 initialization failed\n");
+		goto error;
+	}
+
+	pr_info("Project configured\n");
 
 error:
 	if (ret)

@@ -50,26 +50,26 @@ struct no_os_spi_init_param adf4382_spi_ip = {
 	.max_speed_hz = 1500000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = SPI_OPS_ADF4382,
+	.platform_ops = SPI_OPS_CLK,
+	.extra = SPI_EXTRA_CLK,
 	.chip_select = SPI_CS_ADF4382,
-	.extra = SPI_EXTRA_ADF4382,
 };
 
-// struct no_os_spi_init_param ltc6952_spi_param = {
-// 	.device_id = SPI_DEVICE_ID,
-// 	.max_speed_hz = 1500000,
-// 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-// 	.mode = NO_OS_SPI_MODE_0,
-// 	.platform_ops = SPI_OPS_LTC6952,
-// 	.chip_select = SPI_CS_LTC6952,
-// 	.extra = SPI_EXTRA_LTC6952,
-// };
+struct no_os_spi_init_param hmc7044_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = 1000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS_CLK,
+	.extra = SPI_EXTRA_CLK,
+	.chip_select = SPI_CS_HMC7044,
+};
 
-// struct no_os_gpio_init_param gpio_reset_param = {
-// 	.platform_ops = GPIO_OPS,
-// 	.extra = GPIO_EXTRA,
-// 	.number = GPIO_OFFSET + GPIO_RESET_N,
-// };
+struct no_os_gpio_init_param gpio_reset_param = {
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.number = GPIO_OFFSET + GPIO_RESET_N,
+};
 
 struct adf4382_init_param adf4382_ip = {
 	.spi_init = &adf4382_spi_ip,
@@ -83,4 +83,57 @@ struct adf4382_init_param adf4382_ip = {
 	.bleed_word = 0,
 	.ld_count = 10,
 	.id = ID_ADF4382A,
+};
+
+struct hmc7044_chan_spec chan_spec[] = {
+	{
+		.num = 3,		// FPGA_SYSREF
+		.divider = 512,		// 4.882
+		.driver_mode = 2,	// LVDS
+	},
+	{
+		.num = 8,		// CORE_CLK_TX
+		.divider = 8,		// 156.25
+		.driver_mode = 2,	// LVDS
+	},
+	{
+		.num = 9,		// CORE_CLK_RX
+		.divider = 8,		// 156.25
+		.driver_mode = 2,	// LVDS
+	},
+	{
+		.num = 10,		// FPGA_REFCLK
+		.divider = 8,		// 156.25
+		.driver_mode = 2,	// LVDS
+	},
+	{
+		.num = 11,		// CORE_CLK_RX_B
+		.divider = 8,		// 156.25
+		.driver_mode = 2,	// LVDS
+	},
+	{
+		.num = 12,		// CORE_CLK_TX_B
+		.divider = 8,		// 156.25
+		.driver_mode = 2,	// LVDS
+	}
+};
+
+struct hmc7044_init_param hmc7044_ip = {
+	.spi_init = &hmc7044_spi_ip,
+	.clkin_freq = {125000000, 125000000, 125000000, 125000000},
+	.vcxo_freq = 125000000,
+	.pll2_freq = 2500000000,
+	.pll1_loop_bw = 200,
+	.sysref_timer_div = 1024,
+	.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x5},
+	.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
+	.gpo_ctrl = {0x37, 0x33, 0x00, 0x00},
+	.num_channels = sizeof(chan_spec) /
+	sizeof(struct hmc7044_chan_spec),
+	.pll1_ref_prio_ctrl = 0xE1,
+	.pll1_ref_autorevert_en = true,
+	.sync_pin_mode = 0x1,
+	.high_performance_mode_clock_dist_en = false,
+	.pulse_gen_mode = HMC7044_PULSE_GEN_CONT_PULSE,
+	.channels = chan_spec
 };

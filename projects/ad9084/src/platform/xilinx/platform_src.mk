@@ -1,8 +1,14 @@
-SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c	\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c	\
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c 		\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.c			\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c			\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c			\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c
 
-INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h	\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h	\
+INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h			\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h			\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h			\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h
+
+SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c 	\
+	$(PLATFORM_DRIVERS)/xilinx_axi_io.c	
+INCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h 	\

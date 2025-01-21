@@ -47,6 +47,7 @@
 #include <xil_cache.h>
 #include <xilinx_spi.h>
 #include <xilinx_uart.h>
+#include <xilinx_gpio.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -55,22 +56,23 @@
 #define UART_DEVICE_ID			XPAR_XUARTPSV_0_DEVICE_ID
 #define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 #define SPI_DEVICE_ID			XPAR_XSPIPS_0_DEVICE_ID
+#define GPIO_DEVICE_ID			XPAR_XGPIOPS_0_DEVICE_ID
 #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
 #endif // _XPARAMETERS_PS_H_
 
 extern struct xil_uart_init_param	platform_uart_extra_ip;
-extern struct xil_spi_init_param	adf4382_spi_extra_ip;
+extern struct xil_spi_init_param	clk_spi_extra_ip;
+extern struct xil_gpio_init_param	xil_gpio_param;
 
-#define SPI_OPS_ADF4382			&xil_spi_ops
+#define SPI_OPS_CLK			&xil_spi_ops
+#define SPI_EXTRA_CLK			&clk_spi_extra_ip
 #define SPI_CS_ADF4382			0
-#define SPI_EXTRA_ADF4382		&adf4382_spi_extra_ip
+#define SPI_CS_HMC7044			1
 
-// #define SPI_OPS_LTC6952		&xil_spi_ops
-// #define SPI_CS_LTC6952		0
-// #define SPI_EXTRA_LTC6952		&ltc6952_spi_extra_ip
-
-// #define GPIO_OPS			&xil_gpio_ops
-// #define GPIO_EXTRA			&xil_gpio_param
+#define GPIO_OPS			&xil_gpio_ops
+#define GPIO_EXTRA			&xil_gpio_param
+#define GPIO_OFFSET			0
+#define GPIO_RESET_N			30
 
 #define UART_OPS			&xil_uart_ops
 #define UART_BAUDRATE			115200

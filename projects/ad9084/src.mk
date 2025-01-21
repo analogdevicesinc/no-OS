@@ -22,7 +22,8 @@ SRCS += $(DRIVERS)/api/no_os_uart.c     	\
 	$(NO-OS)/util/no_os_lf256fifo.c 	\
         $(NO-OS)/util/no_os_list.c      	\
         $(NO-OS)/util/no_os_util.c      	\
-        $(NO-OS)/util/no_os_alloc.c
+        $(NO-OS)/util/no_os_alloc.c		\
+	$(NO-OS)/util/no_os_clk.c
 
 INCS += $(INCLUDE)/no_os_delay.h     		\
         $(INCLUDE)/no_os_error.h     		\
@@ -40,7 +41,35 @@ INCS += $(INCLUDE)/no_os_delay.h     		\
         $(INCLUDE)/no_os_units.h     		\
         $(INCLUDE)/no_os_dma.h       		\
 	$(INCLUDE)/no_os_clk.h 			\
+	$(INCLUDE)/no_os_axi_io.h 		\
         $(INCLUDE)/no_os_alloc.h
 
-INCS += $(DRIVERS)/frequency/adf4382/adf4382.h
-SRCS += $(DRIVERS)/frequency/adf4382/adf4382.c
+		
+INCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h 	\
+	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h 	\
+	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h 		\
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h 	\
+	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h 		\
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h 		\
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h 		\
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h 		\
+	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h	\
+	$(INCLUDE)/jesd204.h					\
+	$(NO-OS)/jesd204/jesd204-priv.h
+
+SRCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c 	\
+	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c 	\
+	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c			\
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c 	\
+	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c 		\
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c 		\
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c 		\
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c 		\
+	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c 	\
+	$(NO-OS)/jesd204/jesd204-core.c 			\
+	$(NO-OS)/jesd204/jesd204-fsm.c
+
+INCS += $(DRIVERS)/frequency/adf4382/adf4382.h			\
+	$(DRIVERS)/frequency/hmc7044/hmc7044.h	
+SRCS += $(DRIVERS)/frequency/adf4382/adf4382.c			\
+	$(DRIVERS)/frequency/hmc7044/hmc7044.c	
