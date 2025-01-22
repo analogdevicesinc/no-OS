@@ -32,7 +32,6 @@
 *******************************************************************************/
 
 #include "common_data.h"
-#include "iio_example.h"
 #include "iio_adf4368.h"
 #include "iio_app.h"
 #include "no_os_print_log.h"
@@ -43,7 +42,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
  */
-int iio_example_main()
+int example_main()
 {
 	struct adf4368_iio_dev *adf4368_iio_dev;
 	struct adf4368_iio_dev_init_param adf4368_iio_ip;
