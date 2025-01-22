@@ -34,7 +34,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "dummy_example.h"
 #include "common_data.h"
 #include "adt7420.h"
 #include "no_os_delay.h"
@@ -63,7 +62,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int dummy_example_main()
+int example_main()
 {
 	struct adt7420_dev *adt7420;
 	uint16_t temp_max = 0, temp_min = 0;
@@ -71,6 +70,14 @@ int dummy_example_main()
 	float temp_c_max, temp_c_min;
 	float temp_now;
 	int ret;
+
+	struct no_os_uart_desc *uart;
+
+	ret = no_os_uart_init(&uart, &uip);
+	if (ret)
+		goto error;
+
+	no_os_uart_stdio(uart);
 
 	ret = adt7420_init(&adt7420, adt7420_user_init);
 	if (ret)
