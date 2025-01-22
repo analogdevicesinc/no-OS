@@ -1,12 +1,8 @@
-# Uncomment to use the desired platform
-# PLATFORM = stm32
-PLATFORM = mbed
-
-# Select the example you want to enable by chossing y for enabling and n for disabling
-BASIC_EXAMPLE = n
-IIO_EXAMPLE = y
+EXAMPLE ?= basic
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 

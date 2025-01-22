@@ -31,17 +31,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
+extern int example_main();
 
 /**
  * @brief Main function execution for STM32 platform.
@@ -49,27 +43,9 @@
  */
 int main()
 {
-	int ret = -EINVAL;
 	adf4382_spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
 
 	stm32_init();
 
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &adf4382_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	ret = basic_example_main();
-	if (ret)
-		no_os_uart_remove(uart_desc);
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-	return ret;
+	return example_main();
 }
