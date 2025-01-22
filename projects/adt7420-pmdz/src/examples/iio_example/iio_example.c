@@ -34,7 +34,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_example.h"
 #include "iio_adt7420.h"
 #include "common_data.h"
 
@@ -57,7 +56,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * sizeof(int16_t)];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	struct adt7420_iio_dev *adt7420_iio_desc;
