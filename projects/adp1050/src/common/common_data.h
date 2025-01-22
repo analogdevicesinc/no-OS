@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 #include "no_os_pwm.h"
