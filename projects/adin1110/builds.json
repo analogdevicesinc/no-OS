@@ -1,7 +1,7 @@
 {
   "maxim": {
     "frame_rx_tx": {
-      "flags" : "FRAME_RX_TX=y TARGET=max32650"
+      "flags" : "EXAMPLE=frame_rx_tx TARGET=max32650"
     }
    }
 }
