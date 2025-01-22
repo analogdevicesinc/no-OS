@@ -158,9 +158,9 @@ In order to build the IIO project make sure you have the following configuration
 
 .. code-block:: bash
 
-        # Select the example you want to enable by choosing y for enabling and n for disabling
-        BASIC_EXAMPLE = n
-        IIO__EXAMPLE = y
+        # Select the example you want to build by passing one of the following to make
+        EXAMPLE = basic
+        EXAMPLE = iio_example
 
 No-OS Supported Platforms
 -------------------------
@@ -222,6 +222,6 @@ J2:
 	# to delete current build
 	make reset
 	# to build the project
-	make PLATFORM=maxim TARGET=max32690
+	make PLATFORM=maxim TARGET=max32690 EXAMPLE=basic
 	# to flash the code
 	make run

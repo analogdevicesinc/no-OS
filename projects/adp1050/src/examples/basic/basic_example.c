@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "common_data.h"
-#include "basic_example.h"
 #include "no_os_delay.h"
 #include "no_os_i2c.h"
 #include "no_os_print_log.h"
@@ -39,7 +38,7 @@
 #include "no_os_pwm.h"
 #include "adp1050.h"
 
-int basic_example_main()
+int example_main()
 {
 	int ret;
 
@@ -47,6 +46,14 @@ int basic_example_main()
 	uint8_t data = 120;
 	uint8_t data2[2];
 	uint16_t vout;
+
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &adp1050_uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
 
 	ret = adp1050_init(&adp1050_desc, &adp1050_ip);
 	if (ret)
