@@ -1,7 +1,8 @@
-# Select the example you want to enable by choosing y for enabling and n for disabling
-FRAME_RX_TX = y
+EXAMPLE ?= frame_rx_tx
 
 include ../../tools/scripts/generic_variables.mk
+
+include ../../tools/scripts/examples.mk
 
 include src.mk
 
