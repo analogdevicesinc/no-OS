@@ -1,3 +1,5 @@
+HARDWARE = sdp-ck1z.ioc
+
 INCS += $(PLATFORM_DRIVERS)/stm32_delay.h     \
 	$(PLATFORM_DRIVERS)/stm32_gpio.h      \
 	$(PLATFORM_DRIVERS)/stm32_hal.h       \
@@ -16,7 +18,3 @@ SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c     \
 	$(PLATFORM_DRIVERS)/stm32_gpio_irq.c  \
 	$(PLATFORM_DRIVERS)/stm32_uart.c      \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.c
-
-ifdef IIO_LWIP_EXAMPLE
-HARDWARE := adin1110ebz.ioc
-endif
