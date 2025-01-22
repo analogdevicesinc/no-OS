@@ -46,11 +46,9 @@ struct aducm_spi_init_param adxl355_spi_extra_ip = {
 	.master_mode = MASTER
 };
 
-#ifdef IIO_TRIGGER_EXAMPLE
 struct no_os_gpio_init_param adxl355_gpio_drdy_ip = {
 	.port = GPIO_DRDY_PORT_NUM,
 	.number = GPIO_DRDY_PIN_NUM,
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = GPIO_OPS,
 };
-#endif
