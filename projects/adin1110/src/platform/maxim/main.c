@@ -31,11 +31,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
 
-#include "frame_rx_tx_example.h"
+extern int example_main();
 
 /***************************************************************************//**
  * @brief Main function execution for Maxim platform.
@@ -53,9 +53,5 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-	return frame_rx_tx_example_main();
-
-#ifndef FRAME_RX_TX
-#error No example was selected.
-#endif
+	return example_main();
 }
