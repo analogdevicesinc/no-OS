@@ -1,12 +1,12 @@
 {
   "stm32": {
     "basic_example": {
-      "flags" : "BASIC_EXAMPLE=y"
+      "flags" : "EXAMPLE=basic"
     }
   },
   "mbed": {
     "basic_example": {
-      "flags" : "BASIC_EXAMPLE=y"
+      "flags" : "EXAMPLE=basic"
     }
   }
 }
