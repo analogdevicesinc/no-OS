@@ -43,7 +43,7 @@ struct max_uart_init_param adxl355_uart_extra_ip = {
 	.flow = UART_FLOW_DIS
 };
 
-#ifdef IIO_TRIGGER_EXAMPLE
+#ifdef GPIO_DRDY_PORT_NUM
 /* Initialization for Sync pin GPIO. */
 struct no_os_gpio_init_param adxl355_gpio_drdy_ip = {
 	.port = GPIO_DRDY_PORT_NUM,
@@ -52,11 +52,11 @@ struct no_os_gpio_init_param adxl355_gpio_drdy_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA
 };
+#endif
 
 struct max_gpio_init_param adxl355_gpio_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
-#endif
 
 struct max_spi_init_param adxl355_spi_extra_ip  = {
 	.num_slaves = 1,

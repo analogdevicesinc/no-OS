@@ -84,7 +84,6 @@
 extern struct max_uart_init_param adxl355_uart_extra_ip;
 extern struct max_spi_init_param adxl355_spi_extra_ip;
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #define GPIO_OPS            &max_gpio_ops
 
 #if (TARGET_NUM == 78000)
@@ -108,8 +107,6 @@ Has to be adapted accordingly if another pin is used.
 #define GPIO_DRDY_PORT_NUM  0
 #define NVIC_GPIO_IRQ   GPIO0_IRQn
 #define GPIO_IRQ_ID     0
-#else
-#error IIO_TRIGGER_EXAMPLE is currently supported only on max32655 and max 78000 targets.
 #endif
 
 #define GPIO_EXTRA          &adxl355_gpio_extra_ip
@@ -123,6 +120,5 @@ extern struct no_os_gpio_init_param adxl355_gpio_drdy_ip;
 #define GPIO_IRQ_EXTRA  &adxl355_gpio_extra_ip
 
 extern struct max_gpio_init_param adxl355_gpio_extra_ip;
-#endif
 
 #endif /* __PARAMETERS_H__ */

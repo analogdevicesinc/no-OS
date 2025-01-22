@@ -34,7 +34,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "dummy_example.h"
 #include "common_data.h"
 #include "adxl355.h"
 #include "no_os_delay.h"
@@ -49,10 +48,17 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int dummy_example_main()
+int example_main()
 {
 	struct adxl355_dev *adxl355_desc;
+	struct no_os_uart_desc *uart_desc;
 	int ret;
+
+	ret = no_os_uart_init(&uart_desc, &adxl355_uart_ip);
+	if (ret)
+		goto error;
+
+	no_os_uart_stdio(uart_desc);
 
 	ret = adxl355_init(&adxl355_desc, adxl355_ip);
 	if (ret)

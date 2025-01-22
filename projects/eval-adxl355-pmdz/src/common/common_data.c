@@ -51,26 +51,6 @@ struct no_os_uart_init_param adxl355_uart_ip = {
 	.platform_ops = UART_OPS,
 };
 
-#ifdef IIO_TRIGGER_EXAMPLE
-/* GPIO trigger */
-struct no_os_irq_init_param adxl355_gpio_irq_ip = {
-	.irq_ctrl_id = GPIO_IRQ_ID,
-	.platform_ops = GPIO_IRQ_OPS,
-	.extra = GPIO_IRQ_EXTRA,
-};
-
-struct iio_hw_trig_init_param adxl355_gpio_trig_ip = {
-	.irq_id = ADXL355_GPIO_TRIG_IRQ_ID,
-	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
-	.cb_info = {
-		.event = NO_OS_EVT_GPIO,
-		.peripheral = NO_OS_GPIO_IRQ,
-		.handle = ADXL355_GPIO_CB_HANDLE,
-	},
-	.name = ADXL355_GPIO_TRIG_NAME,
-};
-#endif
-
 struct no_os_spi_init_param adxl355_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
 	.max_speed_hz = SPI_BAUDRATE,
@@ -91,32 +71,3 @@ struct adxl355_init_param adxl355_ip = {
 	.dev_type = ID_ADXL355,
 #endif
 };
-
-#ifdef IIO_LWIP_EXAMPLE
-uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
-
-const struct no_os_gpio_init_param adin1110_reset_ip = {
-	.port = ADIN1110_GPIO_RESET_PORT,
-	.number = ADIN1110_GPIO_RESET_PIN,
-	.pull = NO_OS_PULL_NONE,
-	.platform_ops = GPIO_OPS,
-	.extra = &adin1110_reset_gpio_extra_ip,
-};
-
-const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = ADIN1110_SPI_DEVICE_ID,
-	.max_speed_hz = ADIN1110_SPI_CLK_RATE,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = SPI_OPS,
-	.chip_select = ADIN1110_SPI_CS,
-	.extra = &adin1110_spi_extra_ip,
-};
-
-struct adin1110_init_param adin1110_ip = {
-	.chip_type = ADIN1110,
-	.comm_param = adin1110_spi_ip,
-	.reset_param = adin1110_reset_ip,
-	.append_crc = false,
-};
-#endif

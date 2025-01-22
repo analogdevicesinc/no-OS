@@ -34,7 +34,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_example.h"
 #include "iio_adxl355.h"
 #include "common_data.h"
 #include "iio_app.h"
@@ -61,7 +60,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
 
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	struct adxl355_iio_dev *adxl355_iio_desc;
