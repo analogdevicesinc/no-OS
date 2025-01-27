@@ -56,6 +56,7 @@ FREQUENCY GENERATORS
    drivers/adf4382
    drivers/adf4368
    drivers/adf5611
+   drivers/admfm2000
 
 INERTIAL MEASUREMENT UNITS
 ==========================
