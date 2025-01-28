@@ -854,7 +854,7 @@ int adin1110_init(struct adin1110_desc **desc,
 	if (!param->mac_address)
 		return -EINVAL;
 
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return -ENOMEM;
 
@@ -923,7 +923,7 @@ free_spi:
 free_rst_gpio:
 	no_os_gpio_remove(descriptor->reset_gpio);
 free_desc:
-	free(descriptor);
+	no_os_free(descriptor);
 
 	return ret;
 }
@@ -950,7 +950,7 @@ int adin1110_remove(struct adin1110_desc *desc)
 			return ret;
 	}
 
-	free(desc);
+	no_os_free(desc);
 
 	return 0;
 }
