@@ -1,0 +1,7 @@
+{
+    "maxim": {
+      "ade7753_example": {
+        "flags" : "TARGET=max32690"
+      }
+    }
+  }
