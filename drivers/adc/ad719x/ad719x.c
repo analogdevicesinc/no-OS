@@ -130,6 +130,8 @@ int ad719x_init(struct ad719x_dev **device,
 	}
 
 	/* Initialization */
+	printf("Current polarity: %d\n", init_param.current_polarity);
+	printf("Current gain: %d\n", init_param.current_gain);
 	ret = ad719x_range_setup(dev, init_param.current_polarity,
 				 init_param.current_gain);
 	if (ret != 0)
@@ -140,6 +142,7 @@ int ad719x_init(struct ad719x_dev **device,
 		goto error_sync;
 
 	ret = ad719x_buffer_select(dev, init_param.buffer);
+	printf("buffer: %d\n", init_param.buffer);
 	if (ret != 0)
 		goto error_sync;
 
@@ -158,7 +161,7 @@ int ad719x_init(struct ad719x_dev **device,
 		if (ret != 0)
 			goto error_sync;
 	}
-
+    printf("Operating mode: %d\n", init_param.operating_mode);
 	ret = ad719x_set_operating_mode(dev, init_param.operating_mode);
 	if (ret != 0)
 		goto error_sync;
@@ -467,6 +470,7 @@ int ad719x_config_input_mode(struct ad719x_dev *dev, uint8_t mode)
 		if (ret == 0) {
 			/* Store the last settings regarding input mode. */
 			dev->input_mode = mode;
+			printf("input_mode: %d\n", mode);
 		}
 		return ret;
 	} else
@@ -520,7 +524,7 @@ int ad719x_output_rate_select(struct ad719x_dev *dev,
 		/* Store the last settings regarding filter output data rate. */
 		dev->data_rate_code = out_rate_code;
 	}
-
+    printf("Data rate code: %d\n", out_rate_code);
 	return ret;
 }
 
@@ -540,7 +544,7 @@ int ad719x_clock_select(struct ad719x_dev *dev,
 			enum ad719x_adc_clock clk_select)
 {
 	int ret;
-
+    printf("Selected clock source: %d\n", clk_select);
 	ret = ad719x_set_masked_register_value(dev, AD719X_REG_MODE,
 					       AD719X_MODE_CLKSRC(0x3), AD719X_MODE_CLKSRC(clk_select),
 					       3);
@@ -548,6 +552,7 @@ int ad719x_clock_select(struct ad719x_dev *dev,
 	if (ret == 0) {
 		/* Store the last settings regarding clock source. */
 		dev->clock_source = clk_select;
+		printf("Clock source stored in device structure: %d\n", dev->clock_source);
 	}
 
 	return ret;
@@ -578,6 +583,7 @@ int ad719x_set_bridge_switch(struct ad719x_dev *dev, uint8_t bpdsw_select)
 	if (ret == 0) {
 		/* Store the last settings regarding bridge power-down switch */
 		dev->bpdsw_mode = bpdsw_select;
+		printf("bpdsw_select: %d\n", bpdsw_select);
 	}
 
 	return ret;

@@ -67,7 +67,8 @@ int main()
 
 
 	ad7190_dev_ip.chip_id = AD7195;
-
+	ad7190_dev_ip.data_rate_code = 1;
+        ad7190_dev_ip.current_gain = AD719X_ADC_GAIN_1;
     ret = ad719x_init(&dev, ad7190_dev_ip);
 	if (ret)
 		return ret;
@@ -85,9 +86,14 @@ int main()
 	if (ret != 0)
 		return ret;
 
-	while (x < 100) {
+        /* Set ch0 */
+        ret = ad719x_channels_select(dev, AD719X_CH_MASK(AD719X_CH_0));
+       if (ret)
+		return ret;
+
+	while (x < 200) {
 		ret = ad719x_get_register_value(dev, AD719X_REG_DATA, 3, &samples);
-		no_os_mdelay(100);
+		no_os_mdelay(10);
 		pr_info("%d \n", samples);
 		x++;
 	}
