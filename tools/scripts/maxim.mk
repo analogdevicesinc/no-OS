@@ -43,6 +43,9 @@ TARGET_HARDWARE=TARGET=$(TARGET)
 
 PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/maxim/$(TARGET_LCASE)
 
+# Choose between the v1 and v2 version of the SPI driver for MAX32690 and MAX78002
+MXC_SPI_VERSION ?= v1
+
 ifeq ($(TARGET_LCASE), $(filter $(TARGET_LCASE),max32655 max32690))
 include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_memory.mk
 endif
