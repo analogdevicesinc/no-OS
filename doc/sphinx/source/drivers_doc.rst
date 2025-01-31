@@ -101,6 +101,7 @@ POWER MANAGEMENT
 
    drivers/ades1754
    drivers/adp1050
+   drivers/adp1055
    drivers/adp5055
    drivers/ltc2992
    drivers/ltc4162l
