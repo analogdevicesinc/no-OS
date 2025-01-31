@@ -103,6 +103,7 @@ POWER MANAGEMENT
    drivers/ltc2992
    drivers/ltc4162l
    drivers/ltc4296
+   drivers/ltc7841
    drivers/ltc7871
    drivers/ltm4686
    drivers/lt7170
