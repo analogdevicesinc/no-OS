@@ -100,6 +100,7 @@ POWER MANAGEMENT
    :maxdepth: 1
 
    drivers/adp1050
+   drivers/adp1055
    drivers/ltc2992
    drivers/ltc4162l
    drivers/ltc4296
