@@ -137,3 +137,15 @@ struct hmc7044_init_param hmc7044_ip = {
 	.pulse_gen_mode = HMC7044_PULSE_GEN_CONT_PULSE,
 	.channels = chan_spec
 };
+
+struct axi_dmac_init rx_dmac_ip = {
+	"rx_dmac",
+	RX_DMA_BASEADDR,
+	IRQ_DISABLED
+};
+
+struct axi_dmac_init tx_dmac_ip = {
+	"tx_dmac",
+	TX_DMA_BASEADDR,
+	IRQ_DISABLED
+};

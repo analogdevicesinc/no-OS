@@ -35,6 +35,7 @@
 
 #include "platform_includes.h"
 #include "adf4382.h"
+#include "axi_dmac.h"
 #include "hmc7044.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
@@ -46,6 +47,8 @@ extern struct adf4382_init_param 	adf4382_ip;
 extern struct hmc7044_init_param	hmc7044_ip;
 extern struct no_os_gpio_init_param	reset_gpio_param;
 extern struct no_os_uart_init_param	platform_uart_ip;
+extern struct axi_dmac_init 		rx_dmac_ip;
+extern struct axi_dmac_init 		tx_dmac_ip;
 
 
 #endif /* __COMMON_DATA_H__ */

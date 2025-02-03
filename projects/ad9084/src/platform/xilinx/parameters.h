@@ -78,4 +78,7 @@ extern struct xil_gpio_init_param	xil_gpio_param;
 #define UART_BAUDRATE			115200
 #define UART_EXTRA			&platform_uart_extra_ip
 
+#define RX_DMA_BASEADDR			XPAR_AXI_APOLLO_RX_DMA_BASEADDR
+#define TX_DMA_BASEADDR			XPAR_AXI_APOLLO_TX_DMA_BASEADDR
+
 #endif /* __PARAMETERS_H__ */

@@ -46,6 +46,9 @@ int basic_example_main()
 {
 	struct adf4382_dev *adf4382_dev;
 	struct hmc7044_dev *hmc7044_dev;
+	struct axi_dmac *rx_dmac;
+	struct axi_dmac *tx_dmac;
+	
 	int ret = 0;
 
 	pr_info("Enter basic example\n");
@@ -53,18 +56,37 @@ int basic_example_main()
 	ret = adf4382_init(&adf4382_dev, &adf4382_ip);
 	if (ret) {
 		pr_info("ADF4382 initialization failed\n");
-		goto error;
+		goto error_1;
 	}
 
 	ret = hmc7044_init(&hmc7044_dev, &hmc7044_ip);
 	if (ret) {
 		pr_info("HMC7044 initialization failed\n");
-		goto error;
+		goto error_2;
+	}
+
+	ret = axi_dmac_init(&rx_dmac, &rx_dmac_ip);
+	if (ret) {
+		pr_info("RX DMAC initialization failed\n");
+		goto error_3;
+	}
+
+	ret = axi_dmac_init(&tx_dmac, &tx_dmac_ip);
+	if (ret) {
+		pr_info("TX DMAC initialization failed\n");
+		goto error_4;
 	}
 
 	pr_info("Project configured\n");
 
-error:
+error_4:
+	axi_dmac_remove(tx_dmac);
+error_3:
+	axi_dmac_remove(rx_dmac);
+error_2:
+	hmc7044_remove(hmc7044_dev);
+error_1:
+	adf4382_remove(adf4382_dev);
 	if (ret)
 		pr_info("Error!\n");
 	
