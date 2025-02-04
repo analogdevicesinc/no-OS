@@ -107,8 +107,12 @@ $(PROJECT)_configure:
 
 	$(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
 
-	$(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
-	$(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
+	for inc in $(EXTRA_INC_PATHS); do \
+  		sed -i "/Core\/Inc\"\/>/a <listOptionValue builtIn=\"false\" value=\"$${inc}\"/>" $(PROJECT_BUILDROOT)/.cproject; \
+  	done $(HIDE)
+	for flag in $(CPROJECTFLAGS); do \
+		sed -i "/USE_HAL_DRIVER\"\/>/a <listOptionValue builtIn=\"false\" value=\"$${flag}\"\/>" $(PROJECT_BUILDROOT)/.cproject; \
+	done $(HIDE)
 	$(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import "build/app" -data "build" \
 		$(HIDE)
