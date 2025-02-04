@@ -18,7 +18,7 @@
 #	tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76
 #	tx_bw400_ir491p52_rx_bw200_or245p76_orx_bw400_or491p52_dc245p76
 
-SRCS += $(PROJECT)/src/app/headless.c \
+SRCS += $(PROJECT)/src/app/headless_arm.c \
 	$(PROJECT)/src/app/app_clocking.c \
 	$(PROJECT)/src/app/app_jesd.c \
 	$(PROJECT)/src/app/app_transceiver.c \
