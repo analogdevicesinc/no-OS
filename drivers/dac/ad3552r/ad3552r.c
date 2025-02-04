@@ -36,9 +36,11 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef XILINX_PLATFORM
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "clk_axi_clkgen.h"
+#endif
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -582,11 +584,12 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 	if (!desc)
 		return -ENODEV;
 
+#ifdef XILINX_PLATFORM
 	/* AXI support, transfer delegated to the AXI IP, SDR here */
 	if (desc->axi)
 		return axi_dac_bus_write(desc->ad3552r_core_ip, addr, val,
 					 desc->axi_xfer_size);
-
+#endif
 	reg_len = ad3552r_reg_len(addr);
 	if (reg_len == 0 ||
 	    (addr >= AD3552R_SECONDARY_REGION_ADDR && desc->spi_cfg.addr_asc))
@@ -620,6 +623,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 	if (!desc || !val)
 		return -ENODEV;
 
+#ifdef XILINX_PLATFORM
 	/* AXI support, transfer up to the AXI IP, SDR here */
 	if (desc->axi) {
 		uint32_t rval;
@@ -633,6 +637,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 
 		return 0;
 	}
+#endif
 
 	reg_len = ad3552r_reg_len(addr);
 	if (reg_len == 0 ||
@@ -1275,6 +1280,7 @@ static int32_t ad3552r_configure_device(struct ad3552r_desc *desc,
 	return 0;
 }
 
+#ifdef XILINX_PLATFORM
 int32_t ad3552r_axi_init(struct ad3552r_desc *desc,
 			 struct ad3552r_init_param *init_param)
 {
@@ -1326,6 +1332,7 @@ int32_t ad3552r_axi_init(struct ad3552r_desc *desc,
 
 	return 0;
 }
+#endif
 
 int32_t ad3552r_init(struct ad3552r_desc **desc,
 		     struct ad3552r_init_param *param)
@@ -1374,13 +1381,16 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 		goto err_reset;
 	}
 
+
 	if (ldesc->axi) {
+#ifdef XILINX_PLATFORM
 		/* Pre init for AXI now */
 		err = ad3552r_axi_init(ldesc, param);
 		if (err) {
 			pr_err("AXI init error: %"PRIi32"\n", err);
 			return -1;
 		}
+#endif
 	} else {
 		err = ad3552r_set_dev_value(ldesc, AD3552R_CRC_ENABLE, param->crc_en);
 		if (NO_OS_IS_ERR_VALUE(err)) {
