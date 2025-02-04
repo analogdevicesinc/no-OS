@@ -71,6 +71,7 @@ POWER MANAGEMENT
 .. toctree::
    :maxdepth: 1
 
+   projects/ades1754
    projects/adp1050
    projects/dc2703a
    projects/ltc4162l
