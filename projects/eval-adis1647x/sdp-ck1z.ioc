@@ -1,4 +1,7 @@
 #MicroXplorer Configuration settings - do not modify
+CAD.formats=
+CAD.pinconfig=
+CAD.provider=
 File.Version=6
 GPIO.groupedBy=Group By Peripherals
 KeepUserPlacement=false
@@ -91,10 +94,13 @@ ProjectManager.PreviousToolchain=
 ProjectManager.ProjectBuild=false
 ProjectManager.ProjectFileName=sdp-ck1z.ioc
 ProjectManager.ProjectName=sdp-ck1z
-ProjectManager.RegisterCallBack=
+ProjectManager.ProjectStructure=
+ProjectManager.RegisterCallBack=UART
 ProjectManager.StackSize=0x400
 ProjectManager.TargetToolchain=STM32CubeIDE
 ProjectManager.ToolChainLocation=
+ProjectManager.UAScriptAfterPath=
+ProjectManager.UAScriptBeforePath=
 ProjectManager.UnderRoot=true
 ProjectManager.functionlistsort=1-MX_GPIO_Init-GPIO-false-HAL-true,2-SystemClock_Config-RCC-false-HAL-false,3-MX_UART5_Init-UART5-false-HAL-true,4-MX_SPI1_Init-SPI1-false-HAL-true
 RCC.AHBFreq_Value=180000000
