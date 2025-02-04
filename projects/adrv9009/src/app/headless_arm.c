@@ -1,7 +1,7 @@
 /**
- * \file adrv9009/src/app/headless.c
+ * \file adrv9009/src/app/headless_arm.c
  *
- * \brief Contains example code for user integration with their application
+ * \brief Contains example code for user integration with their application. This file contains code for ARM.
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
