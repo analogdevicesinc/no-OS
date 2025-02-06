@@ -45,7 +45,6 @@
 
 #include <stdint.h>
 #include "gmsl_common.h"
-#include "max96792_csi.h"
 #include "gmsl_dbg.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"

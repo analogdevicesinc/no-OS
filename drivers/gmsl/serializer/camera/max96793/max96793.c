@@ -3,7 +3,7 @@
  *   @brief  Implementation of MAX96793 Driver.
  *   @author Automotive Software and Systems team, Bangalore, India
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *

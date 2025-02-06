@@ -3,7 +3,7 @@
  *   @brief  Diagnostics Driver Implementation of MAX96793 GMSL3 Serializer.
  *   @author Automotive Software and Systems team, Bangalore, India
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -475,11 +475,11 @@ static int max96793_csi_get_mem_data_type_selected(struct gmsl_dev *dev, enum ma
 #ifdef _DEBUG
     if(vid_stream_config->is_data_type_enabled)
     {
-        GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Data type selected for video stream %d is %d", vs_id, vid_stream_config->data_type);
+        GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Data type selected for video stream %d is %d", vs_id, vid_stream_config->data_type);
     }
     else
     {
-        GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Data type is not enabled for video stream %d", vs_id);
+        GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Data type is not enabled for video stream %d", vs_id);
     }
 #endif /* _DEBUG */
 
@@ -665,7 +665,7 @@ static int max96793_csi_diag_check_config_status(struct gmsl_dev *dev, struct ma
                 if(((virtual_channel_selected & (1u << vc_index)) != 0U))
                 {
                     csi_config_status->video_stream_config[vc_index].is_virtual_channel_enabled = true;
-                    GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Virtual Channel %d is enabled", vc_index);
+                    GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Virtual Channel %d is enabled", vc_index);
 
                     ret = max96793_csi_get_mem_data_type_selected(dev, (enum max96793_video_stream)(vc_index +1u), &csi_config_status->video_stream_config[vc_index]);
                     BREAK_ON_ERR(ret);
@@ -681,11 +681,11 @@ static int max96793_csi_diag_check_config_status(struct gmsl_dev *dev, struct ma
                 else
                 {
                     csi_config_status->video_stream_config[vc_index].is_virtual_channel_enabled = false;
-                    GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Virtual Channel %d is disabled. Data type status is not checked.", vc_index);
+                    GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Virtual Channel %d is disabled. Data type status is not checked.", vc_index);
                 }
             }
 
-            GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Smallest data type selected: %d", smallest_data_type);
+            GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Smallest data type selected: %d", smallest_data_type);
 
             /* Get independent_vs_mode enabled status */
             REG_READ_BREAK_ON_ERR(ret, dev->i2c_desc, INDEPENDENT_VS_FRONTTOP_13_ADDR, INDEPENDENT_VS_FRONTTOP_13_MASK, (uint8_t *)&csi_config_status->is_independent_mode_enabled);
@@ -693,11 +693,11 @@ static int max96793_csi_diag_check_config_status(struct gmsl_dev *dev, struct ma
 #ifdef _DEBUG
             if(csi_config_status->is_independent_mode_enabled)
             {
-                GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Independent Video Stream Mode is enabled");
+                GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Independent Video Stream Mode is enabled");
             }
             else
             {
-                GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Independent Video Stream Mode is disabled");
+                GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Independent Video Stream Mode is disabled");
             }
 #endif /* _DEBUG */
 
@@ -713,12 +713,12 @@ static int max96793_csi_diag_check_config_status(struct gmsl_dev *dev, struct ma
 
             if(csi_config_status->is_pixel_doubling_enabled == can_dt_be_doubled)
             {
-                GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Pixel Doubling enabled status is %d as expected", csi_config_status->is_pixel_doubling_enabled);
+                GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Pixel Doubling enabled status is %d as expected", csi_config_status->is_pixel_doubling_enabled);
             }
             else
             {
                 *diag_err = true;
-                GMSL_LOG_DEV_ERROR(dev->dev_name, dev->i2c_desc->slave_address, "Pixel Doubling enabled status is not as expected. Expected: %d, Actual: %d", can_dt_be_doubled, csi_config_status->is_pixel_doubling_enabled);
+                GMSL_LOG_DEBUG(dev->dev_name, dev->i2c_desc->slave_address, "Pixel Doubling enabled status is not as expected. Expected: %d, Actual: %d", can_dt_be_doubled, csi_config_status->is_pixel_doubling_enabled);
             }
 
             if(can_dt_be_doubled)
@@ -762,7 +762,7 @@ static int max96793_csi_diag_check_config_status(struct gmsl_dev *dev, struct ma
                     if(soft_bpp_expected != csi_config_status->soft_bpp_override)
                     {
                         *diag_err = true;
-                        GMSL_LOG_DEV_ERROR(dev->dev_name, dev->i2c_desc->slave_address, "Soft BPP override value is not as expected. Expected: %d, Actual: %d", soft_bpp_expected, csi_config_status->soft_bpp_override);
+                        GMSL_LOG_DEV_INFO(dev->dev_name, dev->i2c_desc->slave_address, "Soft BPP override value is not as expected. Expected: %d, Actual: %d", soft_bpp_expected, csi_config_status->soft_bpp_override);
                     }
                     else
                     {
