@@ -38,26 +38,26 @@
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute__((weak)) inline void no_os_semaphore_init(void **semaphore) {}
+__attribute__((weak)) void no_os_semaphore_init(void **semaphore) {}
 
 /**
  * @brief Take token from semaphore.
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute__((weak)) inline void no_os_semaphore_take(void *semaphore) {}
+__attribute__((weak)) void no_os_semaphore_take(void *semaphore) {}
 
 /**
  * @brief Give token to semaphore
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute((weak)) inline void no_os_semaphore_give(void *semaphore) {}
+__attribute((weak)) void no_os_semaphore_give(void *semaphore) {}
 
 /**
  * @brief Remove semaphore.
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute__((weak)) inline void no_os_semaphore_remove(void *semaphore) {}
+__attribute__((weak)) void no_os_semaphore_remove(void *semaphore) {}
 
