@@ -40,6 +40,12 @@ CFLAGS_MFLOAT_TYPE 	?= hard
 ifeq '$(NO_OS_USB_UART)' 'y'
 CFLAGS += -DNO_OS_USB_UART
 endif
+
+ifndef PLATFORM
+PLATFORM=linux
+$(info "PLATFORM variable set to default linux")
+endif
+
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------

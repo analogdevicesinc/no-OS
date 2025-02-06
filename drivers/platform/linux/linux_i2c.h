@@ -40,7 +40,7 @@
  */
 struct linux_i2c_init_param {
 	/** I2C bus ID (/dev/i2c-"device_id") */
-	uint32_t device_id;
+	unsigned int device_id;
 };
 
 /**
