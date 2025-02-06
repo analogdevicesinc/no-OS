@@ -39,7 +39,7 @@
 
 #include <time.h>
 #include <string.h>
-#include "gmsl_dbg.h" 
+#include "gmsl_dbg.h"
 #include "no_os_print_log.h"
 
 /* Buffer to store the Log message */
@@ -58,12 +58,14 @@ uint32_t gmsl_uc_log_msg_buf_length;
  */
 void gmsl_uc_log_error(uint8_t *tx_data, uint32_t size)
 {
-    time_t current_time;
-    time(&current_time);
-    char logData[700];
-    memset(&logData, (int) 0, sizeof(logData));
-    sprintf(logData, "%02d:%02d:%02d ERROR: %s\r\n", localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min, localtime(&current_time)->tm_sec, tx_data);
-    pr_info("%s",logData);
+	time_t current_time;
+	time(&current_time);
+	char logData[700];
+	memset(&logData, (int) 0, sizeof(logData));
+	sprintf(logData, "%02d:%02d:%02d ERROR: %s\r\n",
+		localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min,
+		localtime(&current_time)->tm_sec, tx_data);
+	pr_info("%s", logData);
 }
 
 /**
@@ -78,12 +80,14 @@ void gmsl_uc_log_error(uint8_t *tx_data, uint32_t size)
  */
 void gmsl_uc_log_info(uint8_t *tx_data, uint32_t size)
 {
-    time_t current_time;
-    time(&current_time);
-    char logData[700];
-    memset(&logData, (int) 0, sizeof(logData));
-    sprintf(logData, "%02d:%02d:%02d INFO: %s\r\n", localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min, localtime(&current_time)->tm_sec, tx_data);
-    pr_info("%s",logData);
+	time_t current_time;
+	time(&current_time);
+	char logData[700];
+	memset(&logData, (int) 0, sizeof(logData));
+	sprintf(logData, "%02d:%02d:%02d INFO: %s\r\n",
+		localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min,
+		localtime(&current_time)->tm_sec, tx_data);
+	pr_info("%s", logData);
 }
 
 /**
@@ -98,12 +102,14 @@ void gmsl_uc_log_info(uint8_t *tx_data, uint32_t size)
  */
 void gmsl_uc_log_debug(uint8_t *tx_data, uint32_t size)
 {
-    time_t current_time;
-    time(&current_time);
-    char logData[700];
-    memset(&logData, (int) 0, sizeof(logData));
-    sprintf(logData, "%02d:%02d:%02d DEBUG: %s\r\n", localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min, localtime(&current_time)->tm_sec, tx_data);
-    pr_info("%s",logData);
+	time_t current_time;
+	time(&current_time);
+	char logData[700];
+	memset(&logData, (int) 0, sizeof(logData));
+	sprintf(logData, "%02d:%02d:%02d DEBUG: %s\r\n",
+		localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min,
+		localtime(&current_time)->tm_sec, tx_data);
+	pr_info("%s", logData);
 }
 
 /**
@@ -118,12 +124,14 @@ void gmsl_uc_log_debug(uint8_t *tx_data, uint32_t size)
  */
 void gmsl_uc_log_warning(uint8_t *tx_data, uint32_t size)
 {
-    time_t current_time;
-    time(&current_time);
-    char logData[700];
-    memset(&logData, (int) 0, sizeof(logData));
-    sprintf(logData, "%02d:%02d:%02d WARNING: %s\r\n", localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min, localtime(&current_time)->tm_sec, tx_data);
-    pr_info("%s",logData);
+	time_t current_time;
+	time(&current_time);
+	char logData[700];
+	memset(&logData, (int) 0, sizeof(logData));
+	sprintf(logData, "%02d:%02d:%02d WARNING: %s\r\n",
+		localtime(&current_time)->tm_hour, localtime(&current_time)->tm_min,
+		localtime(&current_time)->tm_sec, tx_data);
+	pr_info("%s", logData);
 }
 
 /** Allows any layer to notify a fatal error to the application */
@@ -136,7 +144,7 @@ void gmsl_uc_log_warning(uint8_t *tx_data, uint32_t size)
  */
 void gmsl_uc_set_fatal_error(void)
 {
-    while(true){
-        ; /* Do nothing */
-    }
+	while (true) {
+		; /* Do nothing */
+	}
 }

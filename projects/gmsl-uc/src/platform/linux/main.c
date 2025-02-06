@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 #elif defined(CFG_MAX96724_MAX96717_QUAD_EX_ENABLED)
 	ret = gmsl_uc_max96724_max96717_quad_des_ex();
 #elif defined(CFG_DIAG_MAX96792_MAX96793_UC_EX_ENABLED)
-    ret = gmsl_uc_max96792_max96793_ex();
+	ret = gmsl_uc_max96792_max96793_ex();
 #endif
 
 	return ret;

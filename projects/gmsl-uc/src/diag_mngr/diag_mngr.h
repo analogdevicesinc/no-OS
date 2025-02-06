@@ -41,7 +41,7 @@
 
 #ifndef GMSL_DIAG_MNGR_H
 #define GMSL_DIAG_MNGR_H
- 
+
 #include <time.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -53,76 +53,78 @@
 #define START_UP                 (0u)
 #define INTERVAL_5_SEC           (5u)
 
- /**
- *  @enum  gmsl_diag_sub_type
- *  @brief Enumeration for GMSL diagnostic sub-types.
- */
+/**
+*  @enum  gmsl_diag_sub_type
+*  @brief Enumeration for GMSL diagnostic sub-types.
+*/
 enum gmsl_dev_diag_sub_type {
-    GMSL_DIAG_PART_DEV_ID = 0,
-    GMSL_DIAG_PART_DEV_REV = 1,
-    GMSL_DIAG_PART_CFG = 2,
-    GMSL_DIAG_LINK_LOCK = 3,
-    GMSL_DIAG_LINK_DECODE = 4,
-    GMSL_DIAG_LINK_IDLE = 5,
-    GMSL_DIAG_LINK_MAX_RETRANS = 6,
-    GMSL_DIAG_LINK_LINE_FAULT = 7,
-    GMSL_DIAG_LINK_FEC = 8,
-    GMSL_DIAG_LINK_EOM = 9,
-    GMSL_DIAG_VIDEO_PCLK_LOST = 10,
-    GMSL_DIAG_VIDEO_OVERFLOW = 11,
-    GMSL_DIAG_VIDEO_DRIFT = 12,
-    GMSL_DIAG_VIDEO_LINE_ENABLED = 13,
-    GMSL_DIAG_VIDEO_STREAM_ID = 14,
-    GMSL_DIAG_VIDEO_PARAMETER = 15,
-    GMSL_DIAG_VIDEO_PPS = 16,
-    GMSL_DIAG_VIDEO_STREAM_DSC_COMPRESSION = 17,
-    GMSL_DIAG_DP_FEC_SUPPORT = 18,
-    GMSL_DIAG_HDCP = 19,
-    GMSL_DIAG_LINK_TRAINING = 20,
-    GMSL_DIAG_VIDEO_CRC_ERROR_STATUS = 21,
-    GMSL_DIAG_VIDEO_LOCK = 22,
-    GMSL_DIAG_MIPI_STATUS = 23,
-    GMSL_DIAG_DP_LINK_RATE = 24,
-    GMSL_DIAG_DP_LANE_COUNT = 25,
-    GMSL_DIAG_REMOTE_ERROR_FLAG = 26,
-    GMSL_DIAG_LMO_STATUS = 27,
-    GMSL_DIAG_VID_BLK_LENGTH_ERROR = 28,
-    GMSL_DIAG_MIPI_RX = 29,
-    GMSL_DIAG_MEM_ECC_2BIT_ERROR = 30,
-    GMSL_DIAG_INFOFR_CC = 31,
-    GMSL_DIAG_VIDEO_PSM_STATUS = 32,
-    GMSL_DIAG_VIDEO_LINE_CRC = 33,
-    GMSL_DIAG_VIDEO_ERROR_STATUS = 34,
-    GMSL_DIAG_VIDEO_TIMING_DETECT_STATUS = 35,
-    GMSL_DIAG_PHY_LOW_POWER_ERR = 36,	
-    GMSL_DIAG_SUB_TYPE_MAX = 37,
+	GMSL_DIAG_PART_DEV_ID = 0,
+	GMSL_DIAG_PART_DEV_REV = 1,
+	GMSL_DIAG_PART_CFG = 2,
+	GMSL_DIAG_LINK_LOCK = 3,
+	GMSL_DIAG_LINK_DECODE = 4,
+	GMSL_DIAG_LINK_IDLE = 5,
+	GMSL_DIAG_LINK_MAX_RETRANS = 6,
+	GMSL_DIAG_LINK_LINE_FAULT = 7,
+	GMSL_DIAG_LINK_FEC = 8,
+	GMSL_DIAG_LINK_EOM = 9,
+	GMSL_DIAG_VIDEO_PCLK_LOST = 10,
+	GMSL_DIAG_VIDEO_OVERFLOW = 11,
+	GMSL_DIAG_VIDEO_DRIFT = 12,
+	GMSL_DIAG_VIDEO_LINE_ENABLED = 13,
+	GMSL_DIAG_VIDEO_STREAM_ID = 14,
+	GMSL_DIAG_VIDEO_PARAMETER = 15,
+	GMSL_DIAG_VIDEO_PPS = 16,
+	GMSL_DIAG_VIDEO_STREAM_DSC_COMPRESSION = 17,
+	GMSL_DIAG_DP_FEC_SUPPORT = 18,
+	GMSL_DIAG_HDCP = 19,
+	GMSL_DIAG_LINK_TRAINING = 20,
+	GMSL_DIAG_VIDEO_CRC_ERROR_STATUS = 21,
+	GMSL_DIAG_VIDEO_LOCK = 22,
+	GMSL_DIAG_MIPI_STATUS = 23,
+	GMSL_DIAG_DP_LINK_RATE = 24,
+	GMSL_DIAG_DP_LANE_COUNT = 25,
+	GMSL_DIAG_REMOTE_ERROR_FLAG = 26,
+	GMSL_DIAG_LMO_STATUS = 27,
+	GMSL_DIAG_VID_BLK_LENGTH_ERROR = 28,
+	GMSL_DIAG_MIPI_RX = 29,
+	GMSL_DIAG_MEM_ECC_2BIT_ERROR = 30,
+	GMSL_DIAG_INFOFR_CC = 31,
+	GMSL_DIAG_VIDEO_PSM_STATUS = 32,
+	GMSL_DIAG_VIDEO_LINE_CRC = 33,
+	GMSL_DIAG_VIDEO_ERROR_STATUS = 34,
+	GMSL_DIAG_VIDEO_TIMING_DETECT_STATUS = 35,
+	GMSL_DIAG_PHY_LOW_POWER_ERR = 36,
+	GMSL_DIAG_SUB_TYPE_MAX = 37,
 };
 
-typedef void (*fault_call_back) (struct gmsl_dev *dev, enum gmsl_dev_diag_sub_type fault_type, void* data, bool pal_err);
+typedef void (*fault_call_back)(struct gmsl_dev *dev,
+				enum gmsl_dev_diag_sub_type fault_type, void* data, bool pal_err);
 
 /**
  *  @struct gmsl_diag_type_cfg
  *  @brief Structure holding the configuration for a specific GMSL diagnostic type.
  */
-struct gmsl_diag_type_cfg
-{
-    enum gmsl_dev_diag_sub_type diag_sub_type;
-    uint8_t interval_in_sec;         /*!< If set to Zero, diagnostic check will be done on Init */
-    fault_call_back call_back;        /*!< Callback function to recieve the fault reporting */ 
+struct gmsl_diag_type_cfg {
+	enum gmsl_dev_diag_sub_type diag_sub_type;
+	uint8_t interval_in_sec;         /*!< If set to Zero, diagnostic check will be done on Init */
+	fault_call_back
+	call_back;        /*!< Callback function to recieve the fault reporting */
 };
 
 /**
  *  @struct gmsl_diag_mngr_cfg
  *  @brief Structure holding the configuration for the GMSL Diagnostics Manager.
  */
-struct gmsl_diag_mngr_cfg
-{
-    struct gmsl_diag_type_cfg *diag_type_cfg[GMSL_DIAG_SUB_TYPE_MAX_COUNT];
-    struct gmsl_dev *dev;
+struct gmsl_diag_mngr_cfg {
+	struct gmsl_diag_type_cfg *diag_type_cfg[GMSL_DIAG_SUB_TYPE_MAX_COUNT];
+	struct gmsl_dev *dev;
 };
 
-int32_t gmsl_diag_mngr_init(struct gmsl_diag_mngr_cfg **pconfig, uint8_t num_dev, void *pay_load_buffer);
+int32_t gmsl_diag_mngr_init(struct gmsl_diag_mngr_cfg **pconfig,
+			    uint8_t num_dev, void *pay_load_buffer);
 int32_t gmsl_diag_mngr_proc();
-int32_t gmsl_diag_mngr_oneshot(struct gmsl_diag_mngr_cfg *mngr_cfg, fault_call_back call_back, enum gmsl_dev_diag_sub_type fault_type);
+int32_t gmsl_diag_mngr_oneshot(struct gmsl_diag_mngr_cfg *mngr_cfg,
+			       fault_call_back call_back, enum gmsl_dev_diag_sub_type fault_type);
 
 #endif /*GMSL_DIAG_MNGR_H */

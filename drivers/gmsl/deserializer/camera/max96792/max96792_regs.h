@@ -1,21 +1,21 @@
-/******************************************************************************* 
-Copyright (c) 2025 - Analog Devices Inc. All Rights Reserved. 
-This software is proprietary & confidential to Analog Devices, Inc. 
-and its licensors. 
-****************************************************************************** 
- * \file: max96792_regs.h 
- * \brief: Header file of register fields for GMSL device MAX96792 
- * Developed by: Automotive Software and Systems team 
-*****************************************************************************/ 
-/*================================= INCLUDES ================================*/ 
-/*================================= DEFINES =================================*/ 
+/*******************************************************************************
+Copyright (c) 2025 - Analog Devices Inc. All Rights Reserved.
+This software is proprietary & confidential to Analog Devices, Inc.
+and its licensors.
+******************************************************************************
+ * \file: max96792_regs.h
+ * \brief: Header file of register fields for GMSL device MAX96792
+ * Developed by: Automotive Software and Systems team
+*****************************************************************************/
+/*================================= INCLUDES ================================*/
+/*================================= DEFINES =================================*/
 #ifndef MAX96792_REGS_H
 #define MAX96792_REGS_H
 
-#define DEV_CTRL3_LINK_A_LOCK_ADDR 	 (0x13U)  
+#define DEV_CTRL3_LINK_A_LOCK_ADDR 	 (0x13U)
 #define DEV_CTRL3_LINK_A_LOCK_MASK 	 (0x08U)
 
-#define DEV_CTRL9_LINK_B_LOCK_ADDR 	 (0x5009U)  
+#define DEV_CTRL9_LINK_B_LOCK_ADDR 	 (0x5009U)
 #define DEV_CTRL9_LINK_B_LOCK_MASK 	 (0x08U)
 #define REMAP_SRC_DST_REG_DISPLACEMENT          (0x40U)
 #define MAP_DPHY_DEST_MIPI_TX_MIPI_MASK         (0x03U)

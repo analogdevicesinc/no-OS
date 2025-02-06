@@ -1,16 +1,16 @@
-/******************************************************************************* 
-Copyright (c) 2025 - Analog Devices Inc. All Rights Reserved. 
-This software is proprietary & confidential to Analog Devices, Inc. 
-and its licensors. 
-****************************************************************************** 
- * \file: max96793_regs.h 
- * \brief: Header file of register fields for GMSL device MAX96793 
- * Developed by: Automotive Software and Systems team 
-*****************************************************************************/ 
- #ifndef MAX96793_REGS_H
- #define MAX96793_REGS_H
- 
-/*================================= INCLUDES ================================*/ 
+/*******************************************************************************
+Copyright (c) 2025 - Analog Devices Inc. All Rights Reserved.
+This software is proprietary & confidential to Analog Devices, Inc.
+and its licensors.
+******************************************************************************
+ * \file: max96793_regs.h
+ * \brief: Header file of register fields for GMSL device MAX96793
+ * Developed by: Automotive Software and Systems team
+*****************************************************************************/
+#ifndef MAX96793_REGS_H
+#define MAX96793_REGS_H
+
+/*================================= INCLUDES ================================*/
 /*================================= DEFINES =================================*/
 
 #define CFGL_SPI_ARQ2_MASK                                      (0xFFU)

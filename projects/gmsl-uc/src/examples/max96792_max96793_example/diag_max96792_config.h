@@ -1,6 +1,6 @@
 /*******************************************************************************
  *   @file   diag_max96792_config.h
- *   @brief  Header file for configuration needed by Diagnostic example 
+ *   @brief  Header file for configuration needed by Diagnostic example
  *           application for max96792 device.
  *   @author Automotive Software and Systems team, Bangalore, India
  ********************************************************************************
@@ -43,155 +43,137 @@
 
 #include "diag_mngr.h"
 
-extern void gmsl_uc_diag_call_back(struct gmsl_dev *dev, enum gmsl_dev_diag_sub_type fault_type, void* data, bool pal_err);
+extern void gmsl_uc_diag_call_back(struct gmsl_dev *dev,
+				   enum gmsl_dev_diag_sub_type fault_type, void* data, bool pal_err);
 
-static struct gmsl_diag_type_cfg max96792_diag_type_devid = 
-{
-    .diag_sub_type = GMSL_DIAG_PART_DEV_ID,
-    .interval_in_sec = START_UP,
-    .call_back = &gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_devid = {
+	.diag_sub_type = GMSL_DIAG_PART_DEV_ID,
+	.interval_in_sec = START_UP,
+	.call_back = &gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_devrev = 
-{
-    .diag_sub_type = GMSL_DIAG_PART_DEV_REV,
-    .interval_in_sec = START_UP,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_devrev = {
+	.diag_sub_type = GMSL_DIAG_PART_DEV_REV,
+	.interval_in_sec = START_UP,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_partcfg = 
-{
-    .diag_sub_type = GMSL_DIAG_PART_CFG,
-    .interval_in_sec = START_UP,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_partcfg = {
+	.diag_sub_type = GMSL_DIAG_PART_CFG,
+	.interval_in_sec = START_UP,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_linklock = 
-{
-    .diag_sub_type = GMSL_DIAG_LINK_LOCK,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_linklock = {
+	.diag_sub_type = GMSL_DIAG_LINK_LOCK,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_linkdecode = 
-{
-    .diag_sub_type = GMSL_DIAG_LINK_DECODE,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_linkdecode = {
+	.diag_sub_type = GMSL_DIAG_LINK_DECODE,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_linkidle = 
-{
-    .diag_sub_type = GMSL_DIAG_LINK_IDLE,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_linkidle = {
+	.diag_sub_type = GMSL_DIAG_LINK_IDLE,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
 
-static struct gmsl_diag_type_cfg max96792_diag_type_linkmaxtrans = 
-{
-    .diag_sub_type = GMSL_DIAG_LINK_MAX_RETRANS,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_linkmaxtrans = {
+	.diag_sub_type = GMSL_DIAG_LINK_MAX_RETRANS,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_linefault = 
-{
-    .diag_sub_type = GMSL_DIAG_LINK_LINE_FAULT,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_linefault = {
+	.diag_sub_type = GMSL_DIAG_LINK_LINE_FAULT,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_linkeom = 
-{
-    .diag_sub_type = GMSL_DIAG_LINK_EOM,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_linkeom = {
+	.diag_sub_type = GMSL_DIAG_LINK_EOM,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_lmo = 
-{
-    .diag_sub_type = GMSL_DIAG_LMO_STATUS,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_lmo = {
+	.diag_sub_type = GMSL_DIAG_LMO_STATUS,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_mipi_status = 
-{
-    .diag_sub_type = GMSL_DIAG_MIPI_STATUS,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_mipi_status = {
+	.diag_sub_type = GMSL_DIAG_MIPI_STATUS,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_vidlineen = 
-{
-    .diag_sub_type = GMSL_DIAG_VIDEO_LINE_ENABLED,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_vidlineen = {
+	.diag_sub_type = GMSL_DIAG_VIDEO_LINE_ENABLED,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_vidstreamid = 
-{
-    .diag_sub_type = GMSL_DIAG_VIDEO_STREAM_ID,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_vidstreamid = {
+	.diag_sub_type = GMSL_DIAG_VIDEO_STREAM_ID,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_vidparam = 
-{
-    .diag_sub_type = GMSL_DIAG_VIDEO_PARAMETER,
-    .interval_in_sec = START_UP,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_vidparam = {
+	.diag_sub_type = GMSL_DIAG_VIDEO_PARAMETER,
+	.interval_in_sec = START_UP,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_crc = 
-{
-    .diag_sub_type = GMSL_DIAG_VIDEO_CRC_ERROR_STATUS,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_crc = {
+	.diag_sub_type = GMSL_DIAG_VIDEO_CRC_ERROR_STATUS,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_vid_lock = 
-{
-    .diag_sub_type = GMSL_DIAG_VIDEO_LOCK,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_vid_lock = {
+	.diag_sub_type = GMSL_DIAG_VIDEO_LOCK,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_vid_blk_len_err = 
-{
-    .diag_sub_type = GMSL_DIAG_VID_BLK_LENGTH_ERROR,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_vid_blk_len_err = {
+	.diag_sub_type = GMSL_DIAG_VID_BLK_LENGTH_ERROR,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_type_cfg max96792_diag_type_remote_err = 
-{
-    .diag_sub_type = GMSL_DIAG_REMOTE_ERROR_FLAG,
-    .interval_in_sec = INTERVAL_5_SEC,
-    .call_back = gmsl_uc_diag_call_back,
+static struct gmsl_diag_type_cfg max96792_diag_type_remote_err = {
+	.diag_sub_type = GMSL_DIAG_REMOTE_ERROR_FLAG,
+	.interval_in_sec = INTERVAL_5_SEC,
+	.call_back = gmsl_uc_diag_call_back,
 };
 
-static struct gmsl_diag_mngr_cfg max96792_diag_mngr_cfg = 
-{
-    .diag_type_cfg[GMSL_DIAG_PART_DEV_ID] = &max96792_diag_type_devid,
-    .diag_type_cfg[GMSL_DIAG_PART_DEV_REV] = &max96792_diag_type_devrev,
-    .diag_type_cfg[GMSL_DIAG_PART_CFG] = &max96792_diag_type_partcfg,
-    .diag_type_cfg[GMSL_DIAG_LINK_LOCK] = &max96792_diag_type_linklock,
-    .diag_type_cfg[GMSL_DIAG_LINK_DECODE] = &max96792_diag_type_linkdecode,
-    .diag_type_cfg[GMSL_DIAG_LINK_IDLE] = &max96792_diag_type_linkidle,
-    .diag_type_cfg[GMSL_DIAG_LINK_MAX_RETRANS] = &max96792_diag_type_linkmaxtrans,
-    .diag_type_cfg[GMSL_DIAG_LINK_LINE_FAULT] = &max96792_diag_type_linefault,
-    .diag_type_cfg[GMSL_DIAG_LINK_EOM] = &max96792_diag_type_linkeom,
-    .diag_type_cfg[GMSL_DIAG_LMO_STATUS] = &max96792_diag_type_lmo,
-    .diag_type_cfg[GMSL_DIAG_MIPI_STATUS] = &max96792_diag_type_mipi_status,
-    .diag_type_cfg[GMSL_DIAG_VIDEO_LINE_ENABLED] = &max96792_diag_type_vidlineen,
-    .diag_type_cfg[GMSL_DIAG_VIDEO_STREAM_ID] = &max96792_diag_type_vidstreamid,
-    .diag_type_cfg[GMSL_DIAG_VIDEO_PARAMETER] = &max96792_diag_type_vidparam,
-    .diag_type_cfg[GMSL_DIAG_VIDEO_CRC_ERROR_STATUS] = &max96792_diag_type_crc,
-    .diag_type_cfg[GMSL_DIAG_VIDEO_LOCK] = &max96792_diag_type_vid_lock,
-    .diag_type_cfg[GMSL_DIAG_VID_BLK_LENGTH_ERROR] = &max96792_diag_type_vid_blk_len_err,
-    .diag_type_cfg[GMSL_DIAG_REMOTE_ERROR_FLAG] = &max96792_diag_type_remote_err,  
+static struct gmsl_diag_mngr_cfg max96792_diag_mngr_cfg = {
+	.diag_type_cfg[GMSL_DIAG_PART_DEV_ID] = &max96792_diag_type_devid,
+	.diag_type_cfg[GMSL_DIAG_PART_DEV_REV] = &max96792_diag_type_devrev,
+	.diag_type_cfg[GMSL_DIAG_PART_CFG] = &max96792_diag_type_partcfg,
+	.diag_type_cfg[GMSL_DIAG_LINK_LOCK] = &max96792_diag_type_linklock,
+	.diag_type_cfg[GMSL_DIAG_LINK_DECODE] = &max96792_diag_type_linkdecode,
+	.diag_type_cfg[GMSL_DIAG_LINK_IDLE] = &max96792_diag_type_linkidle,
+	.diag_type_cfg[GMSL_DIAG_LINK_MAX_RETRANS] = &max96792_diag_type_linkmaxtrans,
+	.diag_type_cfg[GMSL_DIAG_LINK_LINE_FAULT] = &max96792_diag_type_linefault,
+	.diag_type_cfg[GMSL_DIAG_LINK_EOM] = &max96792_diag_type_linkeom,
+	.diag_type_cfg[GMSL_DIAG_LMO_STATUS] = &max96792_diag_type_lmo,
+	.diag_type_cfg[GMSL_DIAG_MIPI_STATUS] = &max96792_diag_type_mipi_status,
+	.diag_type_cfg[GMSL_DIAG_VIDEO_LINE_ENABLED] = &max96792_diag_type_vidlineen,
+	.diag_type_cfg[GMSL_DIAG_VIDEO_STREAM_ID] = &max96792_diag_type_vidstreamid,
+	.diag_type_cfg[GMSL_DIAG_VIDEO_PARAMETER] = &max96792_diag_type_vidparam,
+	.diag_type_cfg[GMSL_DIAG_VIDEO_CRC_ERROR_STATUS] = &max96792_diag_type_crc,
+	.diag_type_cfg[GMSL_DIAG_VIDEO_LOCK] = &max96792_diag_type_vid_lock,
+	.diag_type_cfg[GMSL_DIAG_VID_BLK_LENGTH_ERROR] = &max96792_diag_type_vid_blk_len_err,
+	.diag_type_cfg[GMSL_DIAG_REMOTE_ERROR_FLAG] = &max96792_diag_type_remote_err,
 };
 
 #endif /* DIAG_MAX96792_CONFIG_H */

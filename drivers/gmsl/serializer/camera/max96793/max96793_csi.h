@@ -55,19 +55,24 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-int32_t max96793_csi_change_ser_address(struct gmsl_dev *dev, unsigned int new_addr);
+int32_t max96793_csi_change_ser_address(struct gmsl_dev *dev,
+					unsigned int new_addr);
 
 int32_t max96793_csi_set_pipe_enable(struct gmsl_dev *dev, bool enable);
 
-int32_t max96793_csi_config_sensor_to_ser_lane_map(struct gmsl_dev *dev, struct gmsl_link_ser_phy_cfg *phy);
+int32_t max96793_csi_config_sensor_to_ser_lane_map(struct gmsl_dev *dev,
+		struct gmsl_link_ser_phy_cfg *phy);
 
-int32_t max96793_csi_config_sensor_lane_pol(struct gmsl_dev *dev, struct gmsl_link_ser_phy_cfg *phy);
+int32_t max96793_csi_config_sensor_lane_pol(struct gmsl_dev *dev,
+		struct gmsl_link_ser_phy_cfg *phy);
 
-int32_t max96793_csi_init_port(struct gmsl_dev *dev, struct gmsl_csi_ser_port_cfg *port);
+int32_t max96793_csi_init_port(struct gmsl_dev *dev,
+			       struct gmsl_csi_ser_port_cfg *port);
 
 int32_t max96793_csi_init(struct gmsl_dev *dev, bool tunnel_mode);
 
-int32_t max96793_csi_init_pipe(struct gmsl_dev *dev, struct gmsl_pipe_ser_pipe_cfg *pipe);
+int32_t max96793_csi_init_pipe(struct gmsl_dev *dev,
+			       struct gmsl_pipe_ser_pipe_cfg *pipe);
 
 extern int max96793_gpio_cam_cfg(struct gmsl_dev *dev);
 #endif

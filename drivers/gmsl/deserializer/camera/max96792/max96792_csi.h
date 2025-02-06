@@ -52,19 +52,34 @@
 #include "no_os_error.h"
 #include "max96792.h"
 
-extern int max96792_csi_update_pipe_remaps(struct gmsl_dev *dev, struct gmsl_pipe_des_pipe_cfg *pipe);
+extern int max96792_csi_update_pipe_remaps(struct gmsl_dev *dev,
+		struct gmsl_pipe_des_pipe_cfg *pipe);
 extern int max96792_csi_select_links(struct gmsl_dev *dev, unsigned int mask);
-extern int max96792_cc_enable_remote_control_chnl(struct gmsl_dev *dev, enum gmsl_link link, bool enable);
+extern int max96792_cc_enable_remote_control_chnl(struct gmsl_dev *dev,
+		enum gmsl_link link, bool enable);
 extern int max96792_csi_enable_mipi_out(struct gmsl_dev *dev, bool enable);
-extern int max96792_csi_init_pipe(struct gmsl_dev *dev, bool pipe_stream_autoselect, struct gmsl_pipe_des_pipe_cfg *pipe);
-extern int max96792_csi_init_phy(struct gmsl_dev *dev, struct gmsl_link_des_phy_cfg *phy);
+extern int max96792_csi_init_pipe(struct gmsl_dev *dev,
+				  bool pipe_stream_autoselect, struct gmsl_pipe_des_pipe_cfg *pipe);
+extern int max96792_csi_init_phy(struct gmsl_dev *dev,
+				 struct gmsl_link_des_phy_cfg *phy);
 extern int max96792_csi_init(struct gmsl_dev *dev);
-extern int max96792_csi_set_cphy_config(struct gmsl_dev *dev, struct gmsl_link_des_phy_cfg *phy);
-extern int max96792_csi_set_dphy_config(struct gmsl_dev *dev, struct gmsl_link_des_phy_cfg *phy);
-extern int max96792_csi_set_rx_link_rate(struct gmsl_dev *dev, struct gmsl_dev_csi_des_init_param *init_param, unsigned int mask);
-extern int max96792_mipi_tunnel_pipe_cntrl(struct gmsl_dev *dev, struct gmsl_pipe_des_pipe_cfg *pipe, enum gmsl_link_mipi_csi_controller dst_cntroller);
-extern int max96792_pipe_set_tx_mode(struct gmsl_dev *dev, struct gmsl_pipe_des_pipe_cfg *pipe);
-extern int max96792_csi_copy1_phy_cfg(struct gmsl_dev *dev, bool copy_en, enum gmsl_link_mipi_csi_controller *src_cont, enum gmsl_link_mipi_csi_controller *dest_cont);
-extern int max96792_csi_copy1_phy_cfg(struct gmsl_dev *dev, bool copy_en, enum gmsl_link_mipi_csi_controller *src_cont, enum gmsl_link_mipi_csi_controller *dest_cont);
-extern int max96792_csi_update_link_config(struct gmsl_dev *dev, unsigned int mask);
+extern int max96792_csi_set_cphy_config(struct gmsl_dev *dev,
+					struct gmsl_link_des_phy_cfg *phy);
+extern int max96792_csi_set_dphy_config(struct gmsl_dev *dev,
+					struct gmsl_link_des_phy_cfg *phy);
+extern int max96792_csi_set_rx_link_rate(struct gmsl_dev *dev,
+		struct gmsl_dev_csi_des_init_param *init_param, unsigned int mask);
+extern int max96792_mipi_tunnel_pipe_cntrl(struct gmsl_dev *dev,
+		struct gmsl_pipe_des_pipe_cfg *pipe,
+		enum gmsl_link_mipi_csi_controller dst_cntroller);
+extern int max96792_pipe_set_tx_mode(struct gmsl_dev *dev,
+				     struct gmsl_pipe_des_pipe_cfg *pipe);
+extern int max96792_csi_copy1_phy_cfg(struct gmsl_dev *dev, bool copy_en,
+				      enum gmsl_link_mipi_csi_controller *src_cont,
+				      enum gmsl_link_mipi_csi_controller *dest_cont);
+extern int max96792_csi_copy1_phy_cfg(struct gmsl_dev *dev, bool copy_en,
+				      enum gmsl_link_mipi_csi_controller *src_cont,
+				      enum gmsl_link_mipi_csi_controller *dest_cont);
+extern int max96792_csi_update_link_config(struct gmsl_dev *dev,
+		unsigned int mask);
 #endif
