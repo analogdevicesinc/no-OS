@@ -155,6 +155,7 @@ int adp1050_read_status(struct adp1050_desc *desc,
 	case ADP1050_STATUS_INPUT_TYPE:
 	case ADP1050_STATUS_TEMPERATURE_TYPE:
 	case ADP1050_STATUS_CML_TYPE:
+	case ADP1051_STATUS_IOUT_TYPE:
 		ret = adp1050_read(desc, (uint16_t)status, &read_byte, 1);
 		if (ret)
 			return ret;
@@ -365,6 +366,30 @@ int adp1050_pwm_duty_cycle(struct adp1050_desc *desc, uint16_t pulse_width,
 		reg_lsb = ADP1050_OUTB_RISING_FALLING_TIMING_LSB;
 
 		break;
+	case ADP1051_OUTC:
+		fedge_msb = no_os_field_get(ADP1050_EDGE_MSB_MASK, pulse_width + pulse_start);
+		redge_msb = no_os_field_get(ADP1050_EDGE_MSB_MASK, pulse_start);
+		lsb = no_os_field_get(ADP1050_FALLING_EDGE_LSB_MASK,
+				      pulse_width + pulse_start) | no_os_field_get(ADP1050_RISING_EDGE_LSB_MASK,
+					              pulse_start);
+
+		reg_fedge = ADP1051_OUTC_FALLING_EDGE_TIMING;
+		reg_redge = ADP1051_OUTC_RISING_EDGE_TIMING;
+		reg_lsb = ADP1051_OUTC_RISING_FALLING_TIMING_LSB;
+
+		break;
+	case ADP1051_OUTD:
+		fedge_msb = no_os_field_get(ADP1050_EDGE_MSB_MASK, pulse_width + pulse_start);
+		redge_msb = no_os_field_get(ADP1050_EDGE_MSB_MASK, pulse_start);
+		lsb = no_os_field_get(ADP1050_FALLING_EDGE_LSB_MASK,
+				      pulse_width + pulse_start) | no_os_field_get(ADP1050_RISING_EDGE_LSB_MASK,
+					      	      pulse_start);
+
+		reg_fedge = ADP1051_OUTD_FALLING_EDGE_TIMING;
+		reg_redge = ADP1051_OUTD_RISING_EDGE_TIMING;
+		reg_lsb = ADP1051_OUTD_RISING_FALLING_TIMING_LSB;
+
+		break;
 	case ADP1050_SR1:
 		redge_msb = no_os_field_get(ADP1050_EDGE_MSB_MASK, pulse_width + pulse_start);
 		fedge_msb = no_os_field_get(ADP1050_EDGE_MSB_MASK, pulse_start);
@@ -421,17 +446,17 @@ int adp1050_pwm_modulation(struct adp1050_desc *desc, enum adp1050_mod mod,
 	uint32_t mask, reg;
 
 	switch (mod) {
-	case ADP1050_OUTA_SR1_FALLING_MOD:
-		mask = ADP1050_OUTA_SR1_FALLING_MOD_MASK;
+	case ADP1050_OUTA_OUTC_SR1_FALLING_MOD:
+		mask = ADP1050_OUTA_OUTC_SR1_FALLING_MOD_MASK;
 		break;
-	case ADP1050_OUTA_SR1_RISING_MOD:
-		mask = ADP1050_OUTA_SR1_RISING_MOD_MASK;
+	case ADP1050_OUTA_OUTC_SR1_RISING_MOD:
+		mask = ADP1050_OUTA_OUTC_SR1_RISING_MOD_MASK;
 		break;
-	case ADP1050_OUTB_SR2_FALLING_MOD:
-		mask = ADP1050_OUTB_SR2_FALLING_MOD_MASK;
+	case ADP1050_OUTB_OUTD_SR2_FALLING_MOD:
+		mask = ADP1050_OUTB_OUTD_SR2_FALLING_MOD_MASK;
 		break;
-	case ADP1050_OUTB_SR2_RISING_MOD:
-		mask = ADP1050_OUTB_SR2_RISING_MOD_MASK;
+	case ADP1050_OUTB_OUTD_SR2_RISING_MOD:
+		mask = ADP1050_OUTB_OUTD_SR2_RISING_MOD_MASK;
 		break;
 	default:
 		return -EINVAL;
@@ -441,6 +466,10 @@ int adp1050_pwm_modulation(struct adp1050_desc *desc, enum adp1050_mod mod,
 	case ADP1050_OUTA:
 	case ADP1050_OUTB:
 		reg = ADP1050_OUTA_OUTB_MODULATION_SETTINGS;
+		break;
+	case ADP1051_OUTC:
+	case ADP1051_OUTD:
+		reg = ADP1051_OUTC_OUTD_MODULATION_SETTINGS;
 		break;
 	case ADP1050_SR1:
 	case ADP1050_SR2:
@@ -487,6 +516,12 @@ int adp1050_set_pwm(struct adp1050_desc *desc, enum adp1050_channel chan,
 	case ADP1050_OUTB:
 		reg_val = ADP1050_OUTB_ON;
 		break;
+	case ADP1051_OUTC:
+		reg_val = ADP1051_OUTC_ON;
+		break;
+	case ADP1051_OUTD:
+		reg_val = ADP1051_OUTD_ON;
+		break;
 	case ADP1050_SR1:
 		reg_val = ADP1050_SR1_ON;
 		break;
@@ -528,6 +563,20 @@ int adp1050_set_vin(struct adp1050_desc *desc, int16_t mantissa, int8_t exp,
 
 	return adp1050_write(desc, state_on ? ADP1050_VIN_ON : ADP1050_VIN_OFF,
 			     val, 2);
+}
+
+/**
+ * @brief Set ADP1051 vout droop for setting the rate of output voltage and current
+ * @param desc - ADP1050 device descriptor
+ * @param mantissa - Mantissa value to be transmitted, 7 bit twos complment
+ * @return 0 in case of success, negative error code otherwise
+*/
+int adp1051_set_vout_droop(struct adp1050_desc *desc, uint16_t mantissa)
+{
+	if (mantissa > ADP1051_VDROOP_MAXVAL)
+		return -EINVAL;
+
+	return adp1050_write(desc, ADP1051_VOUT_DROOP, mantissa, 2);
 }
 
 /**
@@ -579,6 +628,96 @@ int adp1050_set_cs1_settings(struct adp1050_desc *desc,
 }
 
 /**
+ * @brief Set light load and deep light load common setting
+ * @param desc - ADP1050 device descriptor
+ * @param drooping - avg speed for drooping contrl
+ * @param avg_speed - light load and deep light load avg speed
+ * @param hysteresis - light load and deep light load hysteresis
+ * @return 0 in case of succes, negative error code otherwise.
+*/
+int adp1051_llm_dllm_comm_setting(struct adp1050_desc *desc,
+				  enum adp1051_llm_dlm_drooping drooping,
+				  enum adp1051_llm_dlm_avg_speed avg_speed,
+				  enum adp1051_llm_dlm_hysteresis hysteresis)
+{
+	uint16_t val;
+
+	val = no_os_field_prep(ADP1051_LLM_DLM_DROOPING_MASK, drooping) |
+	      no_os_field_prep(ADP1051_LLM_DLM_AVG_SPEED_MASK, avg_speed) |
+	      no_os_field_prep(ADP1051_LLM_DLM_HYST_MASK, hysteresis);
+
+	return adp1050_write(desc, ADP1051_LLM_DLM_SET, val, 1);
+}
+
+/**
+ * @brief Set light load and deep light load
+ * @param desc - ADP1050 device descriptor
+ * @param llm_debounce - cs3_oc_fault flag debounce
+ * @param thresh - light load and deep light load threshold
+ * @param light en - 1 to enable light load mode
+ * @return 0 in case of succes, negative error code otherwise.
+*/
+int adp1051_llm_dllm_setting(struct adp1050_desc *desc,
+			     enum adp1051_cs2_lightload_debounce llm_debounce,
+			     enum adp1051_llm_dlm_thresh thresh,
+			     bool light_en)
+{
+	int16_t val;
+
+	if (light_en)
+		val = no_os_field_prep(ADP1051_LLM_DEBOUNCE_MASK, 1) |
+		      no_os_field_prep(ADP1051_LLM_DEBOUNCE_MASK, llm_debounce) |
+		      no_os_field_prep(ADP1051_LLM_THRESH_MASK, thresh);
+
+	return adp1050_write(desc, ADP1051_CS2_LIGHT_THRESH, val, 1);
+
+	if (!light_en)
+		val = no_os_field_prep(ADP1051_LLM_THRESH_MASK, thresh);
+
+	return adp1050_write(desc, ADP1051_CS2_LIGHT_THRESH, val, 1);
+}
+
+/**
+ * @brief Set the IOUT calibration gain for ADP1051
+ * @param desc - ADP1050 device descriptor
+ * @param mantissa - Mantissa value to be transmitted, 11 bit twos complement.
+ * @param exp - Exponent value to be transmitted, 5 bit twos complement.
+ * added support for ADP1051 - usually used in the read_iout command
+ */
+int adp1051_set_iout_cal_gain(struct adp1050_desc *desc, int16_t mantissa,
+			      int8_t exp)
+{
+	uint16_t val;
+
+	if (mantissa > ADP1050_MANT_MAX || exp > ADP1050_EXP_MAX)
+		return -EINVAL;
+
+	val = no_os_field_prep(ADP1050_EXP_MASK, exp) | mantissa;
+
+	return adp1050_write(desc, ADP1051_IOUT_CAL_GAIN, val, 2);
+}
+
+/**
+ * @brief Set the IOUT OC fault limit for ADP1051
+ * @param desc - ADP1050 device descriptor
+ * @param mantissa - Mantissa value to be transmitted, 11 bit twos complement.
+ * @param exp - Exponent value to be transmitted, 5 bit twos complement.
+ * added support for ADP1051 -
+ */
+int adp1051_set_iout_oc_fault_limit(struct adp1050_desc *desc, int16_t mantissa,
+				    int8_t exp)
+{
+	uint16_t val;
+
+	if (mantissa > ADP1050_MANT_MAX || exp > ADP1050_EXP_MAX)
+		return -EINVAL;
+
+	val = no_os_field_prep(ADP1050_EXP_MASK, exp) | mantissa;
+
+	return adp1050_write(desc, ADP1051_IOUT_OC_FAULT_LIMIT, val, 2);
+}
+
+/**
  * @brief Set requested ADP1050 channel in Open Loop operation mode.
  * @param desc - ADP1050 device descriptor.
  * @param rising_edge - Rising edge timing.
@@ -591,7 +730,7 @@ int adp1050_set_open_loop(struct adp1050_desc *desc, uint8_t rising_edge,
 {
 	int ret;
 
-	if ((chan == ADP1050_OUTA || chan == ADP1050_OUTB)
+	if ((chan == ADP1050_OUTA || chan == ADP1050_OUTB || chan == ADP1051_OUTC|| chan == ADP1051_OUTD)
 	    && falling_edge < rising_edge)
 		return -EINVAL;
 
@@ -610,6 +749,8 @@ int adp1050_set_open_loop(struct adp1050_desc *desc, uint8_t rising_edge,
 	switch (chan) {
 	case ADP1050_OUTA:
 	case ADP1050_OUTB:
+	case ADP1051_OUTC:
+	case ADP1051_OUTD:
 		ret = adp1050_pwm_duty_cycle(desc, falling_edge, falling_edge - rising_edge,
 					     chan);
 		break;
@@ -634,7 +775,7 @@ int adp1050_set_open_loop(struct adp1050_desc *desc, uint8_t rising_edge,
 	if (ret)
 		return ret;
 
-	if (chan == ADP1050_OUTA || chan == ADP1050_OUTB) {
+	if (chan == ADP1050_OUTA || chan == ADP1050_OUTB || chan == ADP1051_OUTC || chan == ADP1051_OUTD) {
 		ret = adp1050_write(desc, ADP1050_SOFT_START_SETTING_OL,
 				    ADP1050_OL_SS_64_CYCLES, 1);
 		if (ret)
@@ -773,7 +914,7 @@ int adp1050_set_flgi_response(struct adp1050_desc *desc,
  * @param hf - Normal mode high filter gain settings.
  * @return 0 in case of succes, negative error code otherwise
 */
-int adp1050_filter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
+int adp1050_nfilter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
 		   uint8_t lf, uint8_t hf)
 {
 	int ret;
@@ -791,6 +932,35 @@ int adp1050_filter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
 		return ret;
 
 	return adp1050_write(desc, ADP1050_NORMAL_MODE_COMP_HIGH_FREQ, hf, 1);
+}
+
+/**
+ * @brief Adjust filter settings of the light mode compensator
+ * @param desc - ADP1050 device descriptor
+ * @param zero - light mode zero settings.
+ * @param pole - light mode pole settings.
+ * @param lf - light mode low filter gain settings.
+ * @param hf - light mode high filter gain settings.
+ * @return 0 in case of succes, negative error code otherwise
+*/
+int adp1050_lfilter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
+		    uint8_t lf, uint8_t hf)
+{
+	int ret;
+
+	ret = adp1050_write(desc, ADP1051_LIGHT_MOD_COMP_LOW_FREQ, lf, 1);
+	if (ret)
+		return ret;
+
+	ret = adp1050_write(desc, ADP1051_LIGHT_MODE_COMP_ZERO, zero, 1);
+	if (ret)
+		return ret;
+
+	ret = adp1050_write(desc, ADP1051_LIGHT_MODE_COMP_POLE, pole, 1);
+	if (ret)
+		return ret;
+
+	return adp1050_write(desc, ADP1051_LIGHTL_MODE_COMP_HIGH_FREQ, hf, 1);
 }
 
 /**
