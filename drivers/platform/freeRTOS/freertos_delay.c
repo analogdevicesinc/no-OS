@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <stdbool.h>
+#include <stdint.h>
 #include "FreeRTOS.h"
 #include "no_os_delay.h"
 #include "task.h"
@@ -43,8 +44,7 @@
 
 void no_os_udelay(uint32_t usecs)
 {
-
-	vTaskDelay((((double)usecs / 1000000) * configTICK_RATE_HZ));
+	vTaskDelay((uint64_t)configTICK_RATE_HZ * usecs / 1000000);
 }
 
 /**
@@ -54,7 +54,7 @@ void no_os_udelay(uint32_t usecs)
  */
 void no_os_mdelay(uint32_t msecs)
 {
-	vTaskDelay((((double)msecs / 1000) * configTICK_RATE_HZ));
+	vTaskDelay(configTICK_RATE_HZ * msecs / 1000);
 }
 
 /**
