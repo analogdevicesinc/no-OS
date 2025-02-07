@@ -217,6 +217,8 @@ int32_t ad9553_setup(struct ad9553_dev **device,
 	if (ret != 0)
 		return ret;
 
+	*device = dev;
+
 	return 0;
 }
 
