@@ -171,6 +171,8 @@ int32_t ad9508_setup(struct ad9508_dev **device,
 	if (ret != 0)
 		return ret;
 
+	*device = dev;
+
 	return 0;
 }
 
