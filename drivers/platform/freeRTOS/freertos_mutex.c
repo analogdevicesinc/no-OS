@@ -43,13 +43,8 @@
  */
 __attribute__((weak)) inline void no_os_mutex_init(void **mutex)
 {
-	if (*mutex == NULL) {
-		SemaphoreHandle_t* mutexTmp = (SemaphoreHandle_t *)no_os_calloc(1,
-					      sizeof(SemaphoreHandle_t));
-
-		*mutex = xSemaphoreCreateBinary();
-		xSemaphoreGive(*mutex);
-	}
+	*mutex = xSemaphoreCreateBinary();
+	xSemaphoreGive(*mutex);
 }
 
 /**
