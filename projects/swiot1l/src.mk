@@ -72,6 +72,9 @@ SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c
 SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 SRCS += $(NO-OS)/util/no_os_crc8.c
 
+INCS += $(DRIVERS)/net/oa_tc6/oa_tc6.h
+SRCS += $(DRIVERS)/net/oa_tc6/oa_tc6.c
+
 ifeq (y,$(strip $(SWIOT1L_DEFAULT_FW)))
 
 IIOD=y
