@@ -28,3 +28,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c		\
 
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
 SRCS += $(DRIVERS)/net/adin1110/adin1110.c
+
+INCS += $(DRIVERS)/net/oa_tc6/oa_tc6.h
+SRCS += $(DRIVERS)/net/oa_tc6/oa_tc6.c
