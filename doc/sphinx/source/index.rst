@@ -25,6 +25,7 @@ Contents
    drivers_guide
    drivers_doc
    projects_doc
+   build_guide
    contributing
 
 Doxygen
