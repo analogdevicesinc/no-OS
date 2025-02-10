@@ -79,6 +79,7 @@ POWER MANAGEMENT
    projects/ltc7841
    projects/ltc7871
    projects/ltm4686
+   projects/lt3074
    projects/lt7170
    projects/lt7182s
    projects/lt8722
