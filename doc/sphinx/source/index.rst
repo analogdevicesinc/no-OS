@@ -26,6 +26,7 @@ Contents
    drivers_doc
    projects_doc
    contributing
+   build_guide
 
 Doxygen
 ~~~~~~~
