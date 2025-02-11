@@ -615,22 +615,10 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 		no_os_pwm_disable(sdesc->tx_pwm_desc);
 #endif
 
-#if defined (STM32H5)
-	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
-#else
-	CLEAR_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
-#endif
+	/* Perform abort SPI transfers */
+	no_os_spi_transfer_abort(desc);
 
-#if defined (STM32H5)
-	CLEAR_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
-#else
-	CLEAR_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
-#endif
-
-	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->txdma_ch);
-
-	no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->rxdma_ch);
-
+	/* Free the allocated memory for tx and rx transfers */
 	no_os_free(sdesc->tx_ch_xfer);
 	no_os_free(sdesc->rx_ch_xfer);
 
@@ -638,13 +626,6 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 	stm32_spi_altrnate_cs_enable(desc, false);
 
 	sdesc->stm32_spi_dma_done = true;
-
-	/* Dummy read to clear any pending read on SPI */
-#ifndef SPI_SR_RXNE
-	*(volatile uint8_t *)&SPIx->RXDR;
-#else
-	*(volatile uint8_t *)&SPIx->DR;
-#endif
 
 	if (sdesc->stm32_spi_dma_user_cb)
 		sdesc->stm32_spi_dma_user_cb(sdesc->stm32_spi_dma_user_ctx);
@@ -706,6 +687,58 @@ int32_t stm32_spi_dma_transfer_sync(struct no_os_spi_desc* desc,
 }
 
 /**
+ * @brief Abort SPI transfers.
+ * @param desc - The SPI descriptor.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t stm32_spi_transfer_abort(struct no_os_spi_desc* desc)
+{
+	int32_t ret;
+	struct stm32_spi_desc* sdesc;
+
+	if (!desc->extra)
+		return -EINVAL;
+
+	sdesc = desc->extra;
+	SPI_TypeDef *SPIx = sdesc->hspi.Instance;
+
+	if (sdesc->rxdma_ch) {
+		ret = no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->rxdma_ch);
+		if (ret) {
+			return ret;
+		}
+
+#if defined (STM32H5)
+		CLEAR_BIT(SPIx->CFG1, SPI_CFG1_RXDMAEN);
+#else
+		CLEAR_BIT(SPIx->CR2, SPI_CR2_RXDMAEN);
+#endif
+	}
+
+	if (sdesc->txdma_ch) {
+		ret = no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->txdma_ch);
+		if (ret) {
+			return ret;
+		}
+
+#if defined (STM32H5)
+		CLEAR_BIT(SPIx->CFG1, SPI_CFG1_TXDMAEN);
+#else
+		CLEAR_BIT(SPIx->CR2, SPI_CR2_TXDMAEN);
+#endif
+	}
+
+	/* Dummy read to clear any pending read on SPI */
+#ifndef SPI_SR_RXNE
+	*(volatile uint8_t *)&SPIx->RXDR;
+#else
+	*(volatile uint8_t *)&SPIx->DR;
+#endif
+
+	return 0;
+}
+
+/**
  * @brief stm32 platform specific SPI platform ops structure
  */
 const struct no_os_spi_platform_ops stm32_spi_ops = {
@@ -714,5 +747,6 @@ const struct no_os_spi_platform_ops stm32_spi_ops = {
 	.remove = &stm32_spi_remove,
 	.transfer = &stm32_spi_transfer,
 	.dma_transfer_async = &stm32_spi_dma_transfer_async,
-	.dma_transfer_sync = &stm32_spi_dma_transfer_sync
+	.dma_transfer_sync = &stm32_spi_dma_transfer_sync,
+	.transfer_abort = &stm32_spi_transfer_abort
 };
