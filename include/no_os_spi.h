@@ -227,6 +227,8 @@ struct no_os_spi_platform_ops {
 				      uint32_t, void (*)(void *), void *);
 	/** SPI remove function pointer */
 	int32_t (*remove)(struct no_os_spi_desc *);
+	/** SPI abort function pointer */
+	int32_t (*transfer_abort)(struct no_os_spi_desc *);
 };
 
 /* Initialize the SPI communication peripheral. */
@@ -259,6 +261,9 @@ int32_t no_os_spi_transfer_dma_async(struct no_os_spi_desc *desc,
 				     uint32_t len,
 				     void (*callback)(void *),
 				     void *ctx);
+
+/* Abort SPI transfers. */
+int32_t no_os_spi_transfer_abort(struct no_os_spi_desc *desc);
 
 /* Initialize SPI bus descriptor*/
 int32_t no_os_spibus_init(const struct no_os_spi_init_param *param);

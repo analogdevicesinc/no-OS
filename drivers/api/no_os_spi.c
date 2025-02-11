@@ -260,3 +260,19 @@ int32_t no_os_spi_transfer_dma_async(struct no_os_spi_desc *desc,
 
 	return -ENOSYS;
 }
+
+/**
+ * @brief Abort SPI transfers.
+ * @param desc - The SPI descriptor.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t no_os_spi_transfer_abort(struct no_os_spi_desc *desc)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->transfer_abort)
+		return -ENOSYS;
+
+	return desc->platform_ops->transfer_abort(desc);
+}
