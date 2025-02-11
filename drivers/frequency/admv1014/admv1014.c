@@ -313,13 +313,13 @@ static int admv1014_update_quad_filters(struct admv1014_dev *dev)
 		return -EINVAL;
 
 	if ((dev->lo_in >= 5400000000) && (dev->lo_in <= 7000000000))
-		filt_raw = LO_BAND_5_4_TO_7_GHZ;
+		filt_raw = ADMV1014_LO_BAND_5_4_TO_7_GHZ;
 	else if ((dev->lo_in > 7000000000) && (dev->lo_in <= 8000000000))
-		filt_raw = LO_BAND_5_4_TO_8_GHZ;
+		filt_raw = ADMV1014_LO_BAND_5_4_TO_8_GHZ;
 	else if ((dev->lo_in > 8000000000) && (dev->lo_in <= 9200000000))
-		filt_raw = LO_BAND_6_6_TO_9_2_GHZ;
+		filt_raw = ADMV1014_LO_BAND_6_6_TO_9_2_GHZ;
 	else
-		filt_raw = LO_BAND_8_62_TO_10_25_GHZ;
+		filt_raw = ADMV1014_LO_BAND_8_62_TO_10_25_GHZ;
 
 	return admv1014_spi_update_bits(dev, ADMV1014_REG_QUAD,
 					ADMV1014_QUAD_FILTERS_MSK,

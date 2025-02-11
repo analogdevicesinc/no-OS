@@ -39,6 +39,9 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 
+#define MIXER_GATE_0_TO_1_8_V(x)		((2389 * x/ 1000000 + 8100) / 100)
+#define MIXER_GATE_1_8_TO_2_6_V(x)		((2375 * x/ 1000000 + 125) / 100)
+
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -131,9 +134,9 @@ static int admv1013_update_mixer_vgate(struct admv1013_dev *dev)
 	unsigned int mixer_vgate;
 
 	if (dev->vcm_uv <= 1800000)
-		mixer_vgate = MIXER_GATE_0_to_1_8_V(dev->vcm_uv);
+		mixer_vgate = MIXER_GATE_0_TO_1_8_V(dev->vcm_uv);
 	else if (dev->vcm_uv > 1800000 && dev->vcm_uv <= 2600000)
-		mixer_vgate = MIXER_GATE_1_8_to_2_6_V(dev->vcm_uv);
+		mixer_vgate = MIXER_GATE_1_8_TO_2_6_V(dev->vcm_uv);
 	else
 		return -EINVAL;
 
@@ -155,13 +158,13 @@ static int admv1013_update_quad_filters(struct admv1013_dev *dev)
 		return -EINVAL;
 
 	if ((dev->lo_in >= 5400000000) && (dev->lo_in <= 7000000000))
-		filt_raw = LO_BAND_5_4_TO_7_GHZ;
+		filt_raw = ADMV1013_LO_BAND_5_4_TO_7_GHZ;
 	else if ((dev->lo_in >= 5400000000) && (dev->lo_in <= 8000000000))
-		filt_raw = LO_BAND_5_4_TO_8_GHZ;
+		filt_raw = ADMV1013_LO_BAND_5_4_TO_8_GHZ;
 	else if ((dev->lo_in >= 6600000000) && (dev->lo_in <= 9200000000))
-		filt_raw = LO_BAND_6_6_TO_9_2_GHZ;
+		filt_raw = ADMV1013_LO_BAND_6_6_TO_9_2_GHZ;
 	else
-		filt_raw = LO_BAND_8_62_TO_10_25_GHZ;
+		filt_raw = ADMV1013_LO_BAND_8_62_TO_10_25_GHZ;
 
 	return admv1013_spi_update_bits(dev, ADMV1013_REG_QUAD,
 					ADMV1013_QUAD_FILTERS_MSK,
