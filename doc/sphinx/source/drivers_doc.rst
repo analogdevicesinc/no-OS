@@ -112,6 +112,7 @@ POWER MANAGEMENT
    drivers/lt8491
    drivers/lt8722
    drivers/ltp8800
+   drivers/max17851
    drivers/max42500
 
 POTENTIOMETER
