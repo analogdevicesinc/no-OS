@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   stm32/stm32_pwm.h
+ *   @file   stm32/stm32_pwm.c
  *   @brief  Implementation of stm32 pwm driver.
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -599,32 +599,31 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 			     uint32_t period_ns)
 {
-	int32_t ret;
-	struct no_os_pwm_init_param param;
-	struct stm32_pwm_init_param sparam = {0};
+	struct stm32_pwm_desc *sdesc = desc->extra;
+	uint32_t timer_frequency_hz;
+	uint32_t period;
 
-	param.id = desc->id;
-	param.duty_cycle_ns = desc->duty_cycle_ns;
-	param.period_ns = period_ns;
-	param.phase_ns = desc->phase_ns;
-	param.pwm_callback = desc->pwm_callback;
-	param.irq_id = desc->irq_id;
-	sparam.clock_divider = ((struct stm32_pwm_desc *)desc->extra)->clock_divider;
-	sparam.prescaler = ((struct stm32_pwm_desc *)desc->extra)->prescaler;
-	sparam.timer_autoreload = ((struct stm32_pwm_desc *)
-				   desc->extra)->timer_autoreload;
-	sparam.get_timer_clock = ((struct stm32_pwm_desc *)
-				  desc->extra)->get_timer_clock;
-	sparam.timer_chn = ((struct stm32_pwm_desc *)desc->extra)->timer_chn;
-	sparam.timer_callback = ((struct stm32_pwm_desc*)desc->extra)->timer_callback;
-	param.extra = &sparam;
-
-	if (!desc || !desc->extra)
+	if (!sdesc)
 		return -EINVAL;
 
-	ret = stm32_init_timer(desc->extra, &param);
-	if (ret != HAL_OK)
-		return -EIO;
+	if (sdesc->get_timer_clock) {
+		timer_frequency_hz = sdesc->get_timer_clock();
+		timer_frequency_hz *= sdesc->clock_divider;
+		timer_frequency_hz /= (sdesc->prescaler + 1);
+		period = _compute_period_ticks(sdesc, timer_frequency_hz, period_ns);
+	} else {
+		period = PWM_DEFAULT_PERIOD - 1;
+	}
+
+	sdesc->htimer.Init.AutoReloadPreload = sdesc->timer_autoreload ?
+					       TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
+	sdesc->htimer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	sdesc->htimer.Init.CounterMode = TIM_COUNTERMODE_UP;
+	sdesc->htimer.Init.Prescaler = sdesc->prescaler;
+	sdesc->htimer.Init.Period = period;
+	sdesc->htimer.Init.RepetitionCounter = sdesc->repetitions;
+
+	TIM_Base_SetConfig(sdesc->htimer.Instance, &sdesc->htimer.Init);
 
 	desc->period_ns = period_ns;
 
