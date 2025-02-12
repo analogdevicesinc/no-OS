@@ -4,7 +4,8 @@ SKIPDIR = -path ./platform -prune -o \
 	-path ./axi_core -prune -o \
 	-path ./rf-transceiver/navassa -prune -o \
 	-path ./adc/ad9081 -prune -o \
-	-path ./rf-transceiver/madura -prune -o
+	-path ./rf-transceiver/madura -prune -o	\
+	-path ./net/oa_tc6 -prune -o
 
 INCLUDES = -I../include/ \
 	 -I../projects/drivers/util/ \
@@ -25,7 +26,8 @@ INCLUDES = -I../include/ \
 	 -I../iio \
 	 -I./display \
 	 -I./rf-transceiver/talise/api \
-	 -I./rf-transceiver/talise/firmware
+	 -I./rf-transceiver/talise/firmware \
+	 -I./net/oa_tc6
 
 IIOD_FLAGS += -DIIO_SUPPORT
 
