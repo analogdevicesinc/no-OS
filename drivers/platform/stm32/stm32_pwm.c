@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   stm32/stm32_pwm.h
+ *   @file   stm32/stm32_pwm.c
  *   @brief  Implementation of stm32 pwm driver.
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -52,31 +52,43 @@
 /******************************************************************************/
 /**
  * @brief Calculate the period in ticks.
- * @param desc - STM32 PWM descriptor.
- * @param timer_clk_hz - timer clock frequency.
+ * @param get_timer_clock - timer source clock function.
+ * @param clock_divider - timer clock divider.
+ * @param prescaler - timer prescaler.
  * @param period_ns - timer period.
  * @return return period value in ticks.
  */
-static uint32_t _compute_period_ticks(struct stm32_pwm_desc *desc,
-				      uint32_t timer_clk_hz, uint32_t period_ns)
+static uint32_t _compute_period_ticks(uint32_t (*get_timer_clock)(void),
+				      uint32_t clock_divider,
+				      uint32_t prescaler,
+				      uint32_t period_ns)
 {
 	float pwm_frequency;
+	uint32_t timer_frequency_hz;
 	uint32_t period;
 
-	/* Formula for timer period count calculation:
-	 * timer frequency = timer clock / (prescaler + 1)
-	 * pwm frequency = 1 / pwm period (sec)
-	 * timer period count = (timer frequency / pwm frequency) - 1
-	 * Example:
-	 * Timer clock = 216Mhz, pwm period = 1000ns, prescaler = 1
-	 * timer frequency = 216 / (0+1) = 216Mhz
-	 * pwm frequency = 1 / 1000ns = 1Mhz
-	 * timer period count = (216 / 1) - 1 = 215
-	 **/
-	/* Timer period is determined based on the timer peripheral frequency */
-	pwm_frequency = (1.0 / period_ns);
-	period = (uint32_t)(timer_clk_hz / (pwm_frequency *
-					    FREQUENCY_HZ_TO_TIME_NS_FACTOR)) - 1;
+	if (get_timer_clock) {
+		timer_frequency_hz = get_timer_clock();
+		timer_frequency_hz *= clock_divider;
+		timer_frequency_hz /= (prescaler + 1);
+
+		/* Formula for timer period count calculation:
+		 * timer frequency = timer clock / (prescaler + 1)
+		 * pwm frequency = 1 / pwm period (sec)
+		 * timer period count = (timer frequency / pwm frequency) - 1
+		 * Example:
+		 * Timer clock = 216Mhz, pwm period = 1000ns, prescaler = 1
+		 * timer frequency = 216 / (0+1) = 216Mhz
+		 * pwm frequency = 1 / 1000ns = 1Mhz
+		 * timer period count = (216 / 1) - 1 = 215
+		 **/
+		/* Timer period is determined based on the timer peripheral frequency */
+		pwm_frequency = (1.0 / period_ns);
+		period = (uint32_t)(timer_frequency_hz / (pwm_frequency *
+				    FREQUENCY_HZ_TO_TIME_NS_FACTOR)) - 1;
+	} else {
+		period = PWM_DEFAULT_PERIOD - 1;
+	}
 
 	return period;
 }
@@ -95,20 +107,14 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	int32_t ret;
 	uint32_t period;
 	TIM_TypeDef *base = NULL;
-	uint32_t timer_frequency_hz;
 	struct stm32_pwm_init_param *sparam = param->extra;
 	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
 	TIM_MasterConfigTypeDef sMasterConfig = {0};
 	TIM_SlaveConfigTypeDef sSlaveConfig = {0};
 
-	if (sparam->get_timer_clock) {
-		timer_frequency_hz = sparam->get_timer_clock();
-		timer_frequency_hz *= sparam->clock_divider;
-		timer_frequency_hz /= (sparam->prescaler + 1);
-		period = _compute_period_ticks(desc, timer_frequency_hz, param->period_ns);
-	} else {
-		period = PWM_DEFAULT_PERIOD - 1;
-	}
+	/* Compute period ticks */
+	period = _compute_period_ticks(sparam->get_timer_clock, sparam->clock_divider,
+				       sparam->prescaler, param->period_ns);
 
 	switch (param->id) {
 #if defined(TIM1)
@@ -599,32 +605,25 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 			     uint32_t period_ns)
 {
-	int32_t ret;
-	struct no_os_pwm_init_param param;
-	struct stm32_pwm_init_param sparam = {0};
+	struct stm32_pwm_desc *sdesc = desc->extra;
+	uint32_t period;
 
-	param.id = desc->id;
-	param.duty_cycle_ns = desc->duty_cycle_ns;
-	param.period_ns = period_ns;
-	param.phase_ns = desc->phase_ns;
-	param.pwm_callback = desc->pwm_callback;
-	param.irq_id = desc->irq_id;
-	sparam.clock_divider = ((struct stm32_pwm_desc *)desc->extra)->clock_divider;
-	sparam.prescaler = ((struct stm32_pwm_desc *)desc->extra)->prescaler;
-	sparam.timer_autoreload = ((struct stm32_pwm_desc *)
-				   desc->extra)->timer_autoreload;
-	sparam.get_timer_clock = ((struct stm32_pwm_desc *)
-				  desc->extra)->get_timer_clock;
-	sparam.timer_chn = ((struct stm32_pwm_desc *)desc->extra)->timer_chn;
-	sparam.timer_callback = ((struct stm32_pwm_desc*)desc->extra)->timer_callback;
-	param.extra = &sparam;
-
-	if (!desc || !desc->extra)
+	if (!sdesc)
 		return -EINVAL;
 
-	ret = stm32_init_timer(desc->extra, &param);
-	if (ret != HAL_OK)
-		return -EIO;
+	/* Compute period ticks */
+	period = _compute_period_ticks(sdesc->get_timer_clock, sdesc->clock_divider,
+				       sdesc->prescaler, period_ns);
+
+	sdesc->htimer.Init.AutoReloadPreload = sdesc->timer_autoreload ?
+					       TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
+	sdesc->htimer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	sdesc->htimer.Init.CounterMode = TIM_COUNTERMODE_UP;
+	sdesc->htimer.Init.Prescaler = sdesc->prescaler;
+	sdesc->htimer.Init.Period = period;
+	sdesc->htimer.Init.RepetitionCounter = sdesc->repetitions;
+
+	TIM_Base_SetConfig(sdesc->htimer.Instance, &sdesc->htimer.Init);
 
 	desc->period_ns = period_ns;
 
