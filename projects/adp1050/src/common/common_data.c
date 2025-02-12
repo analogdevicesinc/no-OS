@@ -64,4 +64,5 @@ struct adp1050_init_param adp1050_ip = {
 	.flgi_param = NULL,
 	.syni_param = NULL,
 	.on_off_config = ADP1050_ON_OFF_DEFAULT_CFG,
+	.device_id = ID_ADP1051,
 };
