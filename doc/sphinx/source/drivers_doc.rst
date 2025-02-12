@@ -45,6 +45,7 @@ DIGITAL TO ANALOG CONVERTERS
 .. toctree::
    :maxdepth: 1
 
+   drivers/ad8460
    drivers/max22017
 
 FREQUENCY GENERATORS
@@ -54,6 +55,8 @@ FREQUENCY GENERATORS
 
    drivers/adf4382
    drivers/adf4368
+   drivers/adf5611
+   drivers/admfm2000
 
 INERTIAL MEASUREMENT UNITS
 ==========================
@@ -96,10 +99,13 @@ POWER MANAGEMENT
 .. toctree::
    :maxdepth: 1
 
+   drivers/ades1754
    drivers/adp1050
    drivers/ltc2992
    drivers/ltc4162l
    drivers/ltc4296
+   drivers/ltc7841
+   drivers/ltc7871
    drivers/ltm4686
    drivers/lt7170
    drivers/lt7182s

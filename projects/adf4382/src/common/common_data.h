@@ -33,7 +33,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "adf4382.h"
 #include "no_os_spi.h"
 #include "no_os_uart.h"

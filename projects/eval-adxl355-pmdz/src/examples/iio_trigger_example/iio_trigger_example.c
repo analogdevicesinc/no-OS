@@ -34,8 +34,11 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_trigger_example.h"
 #include "common_data.h"
+#include "iio_app.h"
+#include "parameters.h"
+#include "iio_trigger.h"
+#include "iio_adxl355.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -44,10 +47,31 @@
 #define DATA_BUFFER_SIZE 400
 #endif
 
+
+#define ADXL355_GPIO_TRIG_NAME "adxl355-dev0"
+
 /******************************************************************************/
 /************************ Variable Declarations ******************************/
 /******************************************************************************/
 uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
+
+/* GPIO trigger */
+struct no_os_irq_init_param adxl355_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+struct iio_hw_trig_init_param adxl355_gpio_trig_ip = {
+	.irq_id = ADXL355_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+	.cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADXL355_GPIO_CB_HANDLE,
+	},
+	.name = ADXL355_GPIO_TRIG_NAME,
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -59,7 +83,7 @@ uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 3 * sizeof(int)];
  *               execute continuously function iio_app_run_with_trigs and will
  * 				 not return.
 *******************************************************************************/
-int iio_trigger_example_main()
+int example_main()
 {
 	int ret;
 	struct adxl355_iio_dev *adxl355_iio_desc;

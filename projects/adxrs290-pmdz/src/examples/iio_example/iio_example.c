@@ -34,9 +34,9 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_example.h"
 #include "iio_adxrs290.h"
 #include "common_data.h"
+#include "iio_app.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -54,7 +54,7 @@ static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
 *******************************************************************************/
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	struct adxrs290_dev *adxrs290_desc;

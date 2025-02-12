@@ -185,63 +185,64 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 
 	dev = (struct ad9656_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret != 0)
-		return ret;
+		goto error_dev;
 
 	ret = ad9656_reg_write(dev, AD9656_SPI_CONFIG, 0x3C);	/* RESET */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	no_os_mdelay(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_CHIP_ID, &chip_id);
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	if (chip_id != AD9656_CHIP_ID) {
 		printf("AD9656: Invalid CHIP ID (0x%x).\n", chip_id);
-		return -1;
+		ret = -ENXIO;
+		goto error_comm;
 	}
 
 	ret = ad9656_reg_write(dev, AD9656_REG_LINK_CONTROL,
 			       0x15);	/* disable link, ilas enable */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_MF_CTRL,
 			       0x1f);	/* 32 frames per multiframe */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_M_CTRL,
 			       0x03);	/* 4 converters */
 
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_CSN_CONFIG,
 			       0x0d);	/* converter resolution of 14-bit */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_SUBCLASS_CONFIG,
-			       0x2f);	/* subclass-1, N'=16 */
+			       0x0f);	/* subclass-0, N'=16 */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_QUICK_CONFIG,
 			       0x44);	/* m=4, l=4 */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_SCR_L,
 			       0x83);	/* enable scrambling, l=4 */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	if (init_param->lane_rate_kbps < 2000000)
 		tmp = 0x08;  /* low line rate mode must be enabled */
@@ -251,25 +252,32 @@ int32_t ad9656_setup(struct ad9656_dev **device,
 	ret = ad9656_reg_write(dev, AD9656_REG_JESD204B_LANE_RATE_CTRL,
 			       tmp);
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_LINK_CONTROL, 0x14);	/* link enable */
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	no_os_mdelay(250);
 
 	ret = ad9656_reg_read(dev, AD9656_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
 	if (ret != 0)
-		return ret;
+		goto error_comm;
 
 	if ((pll_stat & 0x80) != 0x80) {
 		printf("AD9656: PLL is NOT locked!\n");
-		ret = -1;
+		ret = -ENOLCK;
+		goto error_comm;
 	}
 
 	*device = dev;
 
+	return ret;
+
+error_comm:
+	no_os_spi_remove(dev->spi_desc);
+error_dev:
+	no_os_free(dev);
 	return ret;
 }
 

@@ -1,7 +1,8 @@
 /***************************************************************************//**
  *   @file   iio_adf4382.c
  *   @brief  Implementation of IIO ADF4382 Driver.
- *   @author CHegbeli (ciprian.hegbeli@analog.com)
+ *   @authors CHegbeli (ciprian.hegbeli@analog.com)
+ *            Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -119,7 +120,7 @@ static int adf4382_iio_write_reg(struct adf4382_iio_dev *dev, uint32_t reg,
 }
 
 /**
- * @brief Handles the read request for frequency attribute.
+ * @brief Handles the read request for the device attributes.
  * @param dev     - The iio device structure.
  * @param buf	  - Command buffer to be filled with requested data.
  * @param len     - Length of the received command buffer in bytes.
@@ -128,317 +129,18 @@ static int adf4382_iio_write_reg(struct adf4382_iio_dev *dev, uint32_t reg,
  * @return 	  - The size of the read data in case of success, error code
  * 		    otherwise.
  */
-static int adf4382_iio_read_freq(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	uint64_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	adf4382_get_rfout(adf4382, &val);
-	return snprintf(buf, len, "%"PRIu64, val);
-}
-
-/**
- * @brief Handles the write request for frequency attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_freq(void *dev, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	uint64_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	sscanf(buf, "%"PRIu64, &val);
-	return adf4382_set_rfout(adf4382, val);
-}
-
-/**
- * @brief Handles the read request for the reference frequency attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_rfreq(void *dev, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	uint64_t val;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-	ret = adf4382_get_ref_clk(adf4382, &val);
-	if (ret)
-		return ret;
-
-	return snprintf(buf, len, "%"PRIu64, val);
-}
-
-/**
- * @brief Handles the write request for the reference frequency attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_rfreq(void *dev, char *buf, uint32_t len,
-				   const struct iio_ch_info *channel,
-				   intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	uint64_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	sscanf(buf, "%"PRIu64, &val);
-	return adf4382_set_ref_clk(adf4382, val);
-}
-
-/**
- * @brief Handles the read request for the charge pump current attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_cpi(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val[2];
-	int32_t cp_i;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	ret = adf4382_get_cp_i(adf4382, &cp_i);
-	if (ret)
-		return ret;
-
-	val[0] = ci_table[cp_i][0];
-	val[1] = ci_table[cp_i][1];
-	return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2, val);
-}
-
-/**
- * @brief Handles the write request for the charge pump current attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_cpi(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val[2];
-	int index;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT_PLUS_MICRO, &val[0], &val[1]);
-
-	index = adf4382_iio_find_2d_row(ci_table, NO_OS_ARRAY_SIZE(ci_table),
-					val[0], val[1]);
-	if (index < 0)
-		return index;
-
-	return adf4382_set_cp_i(adf4382, index);
-}
-
-/**
- * @brief Handles the read request for the available charge pump current attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_cpi_available(void *dev, char *buf, uint32_t len,
+static int adf4382_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 				     const struct iio_ch_info *channel,
 				     intptr_t priv)
 {
 	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
 	struct adf4382_dev *adf4382;
+	int32_t val = -EINVAL;
+	uint64_t val_64 = 0;
+	int32_t val_b[2];
 	char buffer[5];
-	int32_t val[2];
+	int32_t cp_i;
 	uint8_t i;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	strcpy(buf, "");
-	for (i = 0; i < NO_OS_ARRAY_SIZE(ci_table); i++) {
-		val[0] = ci_table[i][0];
-		val[1] = ci_table[i][1];
-		iio_format_value(buffer, len, IIO_VAL_INT_PLUS_MICRO, 2, val);
-		strcat(buf, buffer);
-		if (i < NO_OS_ARRAY_SIZE(ci_table) - 1)
-			strcat(buf, " ");
-	}
-
-	return strlen(buf);
-}
-
-/**
- * @brief Handles the read request for the bleed current attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_bi(void *dev, char *buf, uint32_t len,
-			       const struct iio_ch_info *channel,
-			       intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	ret = adf4382_get_bleed_word(adf4382, &val);
-	if (ret)
-		return ret;
-
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-/**
- * @brief Handles the write request for the bleed current attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_bi(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	return adf4382_set_bleed_word(adf4382, val);
-}
-
-/**
- * @brief Handles the read request for the reference doubler attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_doubler(void *dev, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
 	bool en;
 	int ret;
 
@@ -450,177 +152,131 @@ static int adf4382_iio_read_doubler(void *dev, char *buf, uint32_t len,
 	if (!adf4382)
 		return -EINVAL;
 
-	ret = adf4382_get_en_ref_doubler(adf4382, &en);
-	if (ret)
-		return ret;
+	switch (priv) {
+	case ADF4382_IIO_DEV_ATTR_REF_FREQ:
+		ret = adf4382_get_ref_clk(adf4382, &val_64);
+		if (ret)
+			return ret;
 
-	val = en;
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
+		ret = snprintf(buf, len, "%"PRIu64, val_64);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_BLEED_CURRENT:
+		ret = adf4382_get_bleed_word(adf4382, &val);
+		if (ret)
+			return ret;
+
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_CHARGE_PUMP_CURRENT:
+		ret = adf4382_get_cp_i(adf4382, &cp_i);
+		if (ret)
+			return ret;
+
+		val_b[0] = ci_table[cp_i][0];
+		val_b[1] = ci_table[cp_i][1];
+		ret = iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2, val_b);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_CHARGE_PUMP_AVAILABLE:
+		strcpy(buf, "");
+		for (i = 0; i < NO_OS_ARRAY_SIZE(ci_table); i++) {
+			val_b[0] = ci_table[i][0];
+			val_b[1] = ci_table[i][1];
+			iio_format_value(buffer, len, IIO_VAL_INT_PLUS_MICRO, 2,
+					 val_b);
+			strcat(buf, buffer);
+			if (i < NO_OS_ARRAY_SIZE(ci_table) - 1)
+				strcat(buf, " ");
+		}
+		ret = strlen(buf);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_REF_DIVIDER:
+		ret = adf4382_get_ref_div(adf4382, &val);
+		if (ret)
+			return ret;
+
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_REF_DOUBLER_EN:
+		ret = adf4382_get_en_ref_doubler(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_EN:
+		ret = adf4382_get_en_lut_calibration(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN:
+		ret = adf4382_get_en_lut_calibration(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_CHANGE_FREQ:
+		ret = adf4382_get_change_rfout(adf4382, &val_64);
+		if (ret)
+			return ret;
+
+		ret = snprintf(buf, len, "%"PRIu64, val_64);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_START_CALIBRATION:
+		ret = adf4382_get_start_calibration(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_SW_SYNC:
+		ret = adf4382_get_sw_sync(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4382_IIO_DEV_ATTR_EZ_SYNC:
+		ret = adf4382_get_phase_sync_setup(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4382_IIO_DEV_ATTR_TIMED_SYNC:
+		ret = adf4382_get_phase_sync_setup(adf4382, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	default:
+		return -EINVAL;
+	};
+	return ret;
+};
 
 /**
- * @brief Handles the write request for the reference doubler attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_doubler(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	return adf4382_set_en_ref_doubler(adf4382, val);
-}
-
-/**
- * @brief Handles the read request for the reference divider attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_divider(void *dev, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	ret = adf4382_get_ref_div(adf4382, &val);
-	if (ret)
-		return ret;
-
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-/**
- * @brief Handles the write request for the reference divider attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_divider(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	return adf4382_set_ref_div(adf4382, val);
-}
-
-/**
- * @brief Handles the read request for the channel output power attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_opwr(void *dev, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel,
-				 intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val = -EINVAL;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	ret = adf4382_get_out_power(adf4382, channel->ch_num, &val);
-	if (ret)
-		return ret;
-
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-/**
- * @brief Handles the write request for the  channel output power attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_opwr(void *dev, char *buf, uint32_t len,
-				  const struct iio_ch_info *channel,
-				  intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	return adf4382_set_out_power(adf4382, channel->ch_num, val);
-}
-
-/**
- * @brief Handles the read request for the channel enable attribute.
+ * @brief Handles the write request for the device attributes.
  * @param dev     - The iio device structure.
  * @param buf	  - Command buffer to be filled with requested data.
  * @param len     - Length of the received command buffer in bytes.
@@ -629,148 +285,17 @@ static int adf4382_iio_write_opwr(void *dev, char *buf, uint32_t len,
  * @return 	  - The size of the read data in case of success, error code
  * 		    otherwise.
  */
-static int adf4382_iio_read_en(void *dev, char *buf, uint32_t len,
-			       const struct iio_ch_info *channel,
-			       intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val = -EINVAL;
-	bool en;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	ret = adf4382_get_en_chan(adf4382, channel->ch_num, &en);
-	if (ret)
-		return ret;
-
-	val = en;
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-/**
- * @brief Handles the write request for the channel enable attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_en(void *dev, char *buf, uint32_t len,
-				const struct iio_ch_info *channel,
-				intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	return adf4382_set_en_chan(adf4382, channel->ch_num, val);
-}
-
-/**
- * @brief Handles the read request for the sync enable attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_sync_en(void *dev, char *buf, uint32_t len,
-				    const struct iio_ch_info *channel,
-				    intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val = -EINVAL;
-	bool en;
-	int ret;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	ret = adf4382_get_en_sync(adf4382, &en);
-	if (ret)
-		return ret;
-
-	val = en;
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-}
-
-/**
- * @brief Handles the write request for the sync enable attribute. When
- * 	  writing this attribute, set frequency function needs to be executed
- * 	  again.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
- */
-static int adf4382_iio_write_sync_en(void *dev, char *buf, uint32_t len,
-				     const struct iio_ch_info *channel,
-				     intptr_t priv)
-{
-	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
-	struct adf4382_dev *adf4382;
-	int32_t val;
-
-	if (!iio_adf4382)
-		return -EINVAL;
-
-	adf4382 = iio_adf4382->adf4382_dev;
-
-	if (!adf4382)
-		return -EINVAL;
-
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-	return adf4382_set_en_sync(adf4382, val);
-}
-
-/**
- * @brief Handles the read request for the phase adjust attribute.
- * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with requested data.
- * @param len     - Length of the received command buffer in bytes.
- * @param channel - Command channel info.
- * @param priv    - Command attribute id.
- * @return 	  - The size of the read data in case of success, error code
- * 		    otherwise.
- */
-static int adf4382_iio_read_phase_adj(void *dev, char *buf, uint32_t len,
+static int adf4382_iio_write_dev_attr(void *dev, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
 	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
 	struct adf4382_dev *adf4382;
 	int32_t val = -EINVAL;
-	bool pol;
+	uint64_t val_64 = 0;
+	int32_t val_b[2];
+	bool en;
+	int8_t index;
 	int ret;
 
 	if (!iio_adf4382)
@@ -781,33 +306,185 @@ static int adf4382_iio_read_phase_adj(void *dev, char *buf, uint32_t len,
 	if (!adf4382)
 		return -EINVAL;
 
-	val = adf4382->phase_adj;
-	ret = adf4382_get_phase_pol(adf4382, &pol);
-	if (ret)
-		return ret;
+	switch (priv) {
+	case ADF4382_IIO_DEV_ATTR_REF_FREQ:
+		sscanf(buf, "%"PRIu64, &val_64);
+		ret = adf4382_set_ref_clk(adf4382, val_64);
+		break;
 
-	if (pol)
-		val *= -1;
+	case ADF4382_IIO_DEV_ATTR_BLEED_CURRENT:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		ret = adf4382_set_bleed_word(adf4382, val);
+		break;
 
-	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+	case ADF4382_IIO_DEV_ATTR_CHARGE_PUMP_CURRENT:
+		iio_parse_value(buf, IIO_VAL_INT_PLUS_MICRO, &val_b[0], &val_b[1]);
+
+		index = adf4382_iio_find_2d_row(ci_table, NO_OS_ARRAY_SIZE(ci_table),
+						val_b[0], val_b[1]);
+		if (index < 0)
+			return index;
+
+		ret = adf4382_set_cp_i(adf4382, index);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_REF_DIVIDER:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		ret = adf4382_set_ref_div(adf4382, val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_REF_DOUBLER_EN:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_en_ref_doubler(adf4382, val);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_EN:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_en_fast_calibration(adf4382, en);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_en_lut_calibration(adf4382, en);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_CHANGE_FREQ:
+		sscanf(buf, "%"PRIu64, &val_64);
+		ret = adf4382_set_change_rfout(adf4382, val_64);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_FASTCAL_START_CALIBRATION:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		if (!val)
+			return 0;
+
+		ret = adf4382_set_start_calibration(adf4382);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_SW_SYNC:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_sw_sync(adf4382, en);
+		break;
+	case ADF4382_IIO_DEV_ATTR_EZ_SYNC:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_ezsync_setup(adf4382, en);
+		break;
+
+	case ADF4382_IIO_DEV_ATTR_TIMED_SYNC:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+
+		en = val;
+		ret = adf4382_set_timed_sync_setup(adf4382, en);
+		break;
+	default:
+		return -EINVAL;
+	}
+	return ret;
 }
 
 /**
- * @brief Handles the write request for the phase adjustment attribute.
+ * @brief Handles the read request for the channel attributes.
  * @param dev     - The iio device structure.
- * @param buf	  - Command buffer to be filled with the data to be written.
+ * @param buf	  - Command buffer to be filled with requested data.
  * @param len     - Length of the received command buffer in bytes.
  * @param channel - Command channel info.
  * @param priv    - Command attribute id.
- * @return 	  - Result of the writing procedure, error code otherwise.
+ * @return 	  - The size of the read data in case of success, error code
+ * 		    otherwise.
  */
-static int adf4382_iio_write_phase_adj(void *dev, char *buf, uint32_t len,
+static int adf4382_iio_read_chan_attr(void *dev, char *buf, uint32_t len,
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
+{
+	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
+	struct adf4382_dev *adf4382;
+	int32_t val = -EINVAL;
+	uint64_t val_64 = 0;
+	bool en, pol;
+	int ret;
+
+	if (!iio_adf4382)
+		return -EINVAL;
+
+	adf4382 = iio_adf4382->adf4382_dev;
+
+	if (!adf4382)
+		return -EINVAL;
+
+	switch (priv) {
+	case ADF4382_IIO_CH_ATTR_EN:
+		ret = adf4382_get_en_chan(adf4382, channel->ch_num, &en);
+		if (ret)
+			return ret;
+
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_CH_ATTR_FREQ:
+		ret = adf4382_get_rfout(adf4382, &val_64);
+		if (ret)
+			return ret;
+
+		ret = snprintf(buf, len, "%"PRIu64, val_64);
+		break;
+
+	case ADF4382_IIO_CH_ATTR_OPWR:
+		ret = adf4382_get_out_power(adf4382, channel->ch_num, &val);
+		if (ret)
+			return ret;
+
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	case ADF4382_IIO_CH_ATTR_PHASE_ADJ:
+		val = adf4382->phase_adj;
+		ret = adf4382_get_phase_pol(adf4382, &pol);
+		if (ret)
+			return ret;
+
+		if (pol)
+			val *= -1;
+
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+
+	default:
+		return -EINVAL;
+	}
+	return ret;
+}
+
+/**
+ * @brief Handles the write request for the channel attributes.
+ * @param dev     - The iio device structure.
+ * @param buf	  - Command buffer to be filled with requested data.
+ * @param len     - Length of the received command buffer in bytes.
+ * @param channel - Command channel info.
+ * @param priv    - Command attribute id.
+ * @return 	  - The size of the read data in case of success, error code
+ * 		    otherwise.
+ */
+static int adf4382_iio_write_chan_attr(void *dev, char *buf, uint32_t len,
 				       const struct iio_ch_info *channel,
 				       intptr_t priv)
 {
 	struct adf4382_iio_dev *iio_adf4382 = (struct adf4382_iio_dev *)dev;
 	struct adf4382_dev *adf4382;
-	int32_t val;
+	int32_t val = -EINVAL;
+	uint64_t val_64 = 0;
+	bool en;
 	int ret;
 
 	if (!iio_adf4382)
@@ -818,62 +495,131 @@ static int adf4382_iio_write_phase_adj(void *dev, char *buf, uint32_t len,
 	if (!adf4382)
 		return -EINVAL;
 
-	iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+	switch (priv) {
+	case ADF4382_IIO_CH_ATTR_EN:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
 
-	if (val < 0)
-		ret = adf4382_set_phase_pol(adf4382, 1);
-	else
-		ret = adf4382_set_phase_pol(adf4382, 0);
+		en = val;
+		ret = adf4382_set_en_chan(adf4382, channel->ch_num, en);
+		break;
 
-	if (ret)
-		return ret;
+	case ADF4382_IIO_CH_ATTR_FREQ:
+		sscanf(buf, "%"PRIu64, &val_64);
 
-	val = abs(val);
+		ret = adf4382_set_rfout(adf4382, val_64);
+		break;
 
-	return adf4382_set_phase_adjust(adf4382, val);
+	case ADF4382_IIO_CH_ATTR_PHASE_ADJ:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		if (val < 0)
+			ret = adf4382_set_phase_pol(adf4382, 1);
+		else
+			ret = adf4382_set_phase_pol(adf4382, 0);
+
+		if (ret)
+			return ret;
+
+		val = abs(val);
+
+		ret = adf4382_set_phase_adjust(adf4382, val);
+		break;
+
+	default:
+		return -EINVAL;
+	}
+	return ret;
 }
 
 static struct iio_attribute adf4382_iio_attrs[] = {
 	{
 		.name = "reference_frequency",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_read_rfreq,
-		.store = adf4382_iio_write_rfreq,
+		.priv = ADF4382_IIO_DEV_ATTR_REF_FREQ,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
 	},
 	{
 		.name = "charge_pump_current",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_read_cpi,
-		.store = adf4382_iio_write_cpi,
+		.priv = ADF4382_IIO_DEV_ATTR_CHARGE_PUMP_CURRENT,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
 	},
 	{
 		.name = "charge_pump_current_available",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_cpi_available,
+		.priv = ADF4382_IIO_DEV_ATTR_CHARGE_PUMP_AVAILABLE,
+		.show = adf4382_iio_read_dev_attr,
 	},
 	{
 		.name = "bleed_current",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_read_bi,
-		.store = adf4382_iio_write_bi,
+		.priv = ADF4382_IIO_DEV_ATTR_BLEED_CURRENT,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
 	},
 	{
 		.name = "reference_doubler_en",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_read_doubler,
-		.store = adf4382_iio_write_doubler,
+		.priv = ADF4382_IIO_DEV_ATTR_REF_DOUBLER_EN,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
 	},
 	{
 		.name = "reference_divider",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_read_divider,
-		.store = adf4382_iio_write_divider,
+		.priv = ADF4382_IIO_DEV_ATTR_REF_DIVIDER,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
 	},
 	{
-		.name = "sync_en",
+		.name = "sw_sync_en",
 		.shared = IIO_SHARED_BY_ALL,
-		.show = adf4382_iio_read_sync_en,
-		.store = adf4382_iio_write_sync_en,
+		.priv = ADF4382_IIO_DEV_ATTR_SW_SYNC,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "ezsync_setup",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_EZ_SYNC,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "timed_sync_setup",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_TIMED_SYNC,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "fastcal_en",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_EN,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "fastcal_lut_en",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "change_frequency",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_CHANGE_FREQ,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
+	},
+	{
+		.name = "start_calibration",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_START_CALIBRATION,
+		.show = adf4382_iio_read_dev_attr,
+		.store = adf4382_iio_write_dev_attr,
 	},
 	END_ATTRIBUTES_ARRAY
 };
@@ -882,26 +628,30 @@ static struct iio_attribute adf4382_iio_ch_attrs[] = {
 	{
 		.name = "en",
 		.shared = IIO_SEPARATE,
-		.show = adf4382_iio_read_en,
-		.store = adf4382_iio_write_en,
+		.priv = ADF4382_IIO_CH_ATTR_EN,
+		.show = adf4382_iio_read_chan_attr,
+		.store = adf4382_iio_write_chan_attr,
 	},
 	{
 		.name = "frequency",
 		.shared = IIO_SHARED_BY_TYPE,
-		.show = adf4382_iio_read_freq,
-		.store = adf4382_iio_write_freq,
+		.priv = ADF4382_IIO_CH_ATTR_FREQ,
+		.show = adf4382_iio_read_chan_attr,
+		.store = adf4382_iio_write_chan_attr,
 	},
 	{
 		.name = "output_power",
 		.shared = IIO_SEPARATE,
-		.show = adf4382_iio_read_opwr,
-		.store = adf4382_iio_write_opwr,
+		.priv = ADF4382_IIO_CH_ATTR_OPWR,
+		.show = adf4382_iio_read_chan_attr,
+		.store = adf4382_iio_write_chan_attr,
 	},
 	{
 		.name = "phase",
 		.shared = IIO_SHARED_BY_TYPE,
-		.show = adf4382_iio_read_phase_adj,
-		.store = adf4382_iio_write_phase_adj,
+		.priv = ADF4382_IIO_CH_ATTR_PHASE_ADJ,
+		.show = adf4382_iio_read_chan_attr,
+		.store = adf4382_iio_write_chan_attr,
 	},
 	END_ATTRIBUTES_ARRAY
 };

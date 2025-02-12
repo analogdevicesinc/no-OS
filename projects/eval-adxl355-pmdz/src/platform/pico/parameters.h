@@ -73,13 +73,11 @@ extern struct pico_uart_init_param adxl355_uart_extra_ip;
 #define GPIO_OPS            &pico_gpio_ops
 #define GPIO_EXTRA          NULL /* Not used for pico platform */
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #define ADXL355_GPIO_TRIG_IRQ_ID     GPIO_DRDY_PIN_NUM
 #define ADXL355_GPIO_CB_HANDLE       NULL /* Not used in pico platform */
 
 #define GPIO_IRQ_ID             GPIO_DRDY_PIN_NUM
 #define GPIO_IRQ_OPS            &pico_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          NULL /* Not used for pico platform */
-#endif
 
 #endif /* __PARAMETERS_H__ */

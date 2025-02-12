@@ -1,7 +1,8 @@
 /***************************************************************************//**
  *   @file   adf4382.h
  *   @brief  Implementation of adf4382 Driver.
- *   @author Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ *   @authors Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ *            Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -420,10 +421,34 @@
 #define ADF4382_ADC_ST_CNV_MSK			NO_OS_BIT(0)
 
 /* ADF4382 REG0058 Map */
+#define ADF4382_FSM_BUSY_MSK			NO_OS_BIT(1)
 #define ADF4382_LOCKED_MSK			NO_OS_BIT(0)
+
+/* ADF4382 REG005E Map */
+#define ADF4382_VCO_BAND_LSB_MSK		NO_OS_GENMASK(7, 0)
+
+/* ADF4382 REG005F Map */
+#define ADF4382_VCO_CORE_MSK			NO_OS_BIT(1)
+#define ADF4382_VCO_BAND_MSB_MSK		NO_OS_BIT(0)
+
+/* ADF4382 REG0200 Map */
+#define ADF4382_LUT_WR_ADDR_MSK			NO_OS_GENMASK(5, 1)
+#define ADF4382_O_VCO_LUT_MSK			NO_OS_BIT(0)
+
+/* ADF4382 REG0201 Map */
+#define ADF4382_M_LUT_BAND_LSB_MSK		NO_OS_GENMASK(7, 0)
+
+/* ADF4382 REG0202 Map */
+#define ADF4382_M_LUT_N_LSB_MSK			NO_OS_GENMASK(7, 2)
+#define ADF4382_M_LUT_CORE_MSK			NO_OS_BIT(1)
+#define ADF4382_M_LUT_BAND_MSB_MSK		NO_OS_BIT(0)
+
+/* ADF4382 REG0203 Map */
+#define ADF4382_M_LUT_N_MSB_MSK			NO_OS_GENMASK(5, 0)
 
 #define ADF4382_SPI_3W_CFG(x)			(no_os_field_prep(ADF4382_SDO_ACTIVE_MSK, x) | \
 						 no_os_field_prep(ADF4382_SDO_ACTIVE_R_MSK, x))
+
 #define ADF4382_BLEED_MSB_MSK			(ADF4382_COARSE_BLEED_MSK | \
 						 ADF4382_FINE_BLEED_MSB_MSK)
 
@@ -436,6 +461,8 @@
 #define ADF4382_BUFF_SIZE_BYTES			3
 #define ADF4382_VCO_FREQ_MIN			11000000000U	// 11GHz
 #define ADF4382_VCO_FREQ_MAX			22000000000U	// 22GHz
+#define ADF4383_VCO_FREQ_MIN			10000000000U	// 10GHz
+#define ADF4383_VCO_FREQ_MAX			20000000000U	// 20GHz
 #define ADF4382A_VCO_FREQ_MIN			11500000000U	// 11.5GHz
 #define ADF4382A_VCO_FREQ_MAX			21000000000U	// 21GHz
 #define ADF4382_MOD1WORD			0x2000000U	// 2^25
@@ -450,6 +477,8 @@
 #define ADF4382_CLKOUT_DIV_REG_VAL_MAX		4
 #define ADF4382A_CLKOUT_DIV_REG_VAL_MAX		2
 
+#define ADF4383_RFOUT_MAX			20000000000U
+#define ADF4383_RFOUT_MIN			625000000U
 #define ADF4382_RFOUT_MAX			22000000000U
 #define ADF4382_RFOUT_MIN			687500000U
 #define ADF4382A_RFOUT_MAX			21000000000U
@@ -461,15 +490,23 @@
 #define ADF4382_CPI_VAL_MAX			15
 #define ADF4382_BLEED_WORD_MAX			8191
 
+#define ADF4382_VPTAT_CALGEN			46
+#define ADF4382_VCTAT_CALGEN			82
+#define ADF4382_FASTCAL_VPTAT_CALGEN		30
+#define ADF4382_FASTCAL_VCTAT_CALGEN		70
 #define ADF4382_PHASE_BLEED_CNST		2044000
-#define ADF4382_VCO_CAL_CNT			202
-#define ADF4382_VCO_CAL_VTUNE			124
-#define ADF4382_VCO_CAL_ALC			250
+#define ADF4382_VCO_CAL_CNT			183
+#define ADF4382_VCO_CAL_VTUNE			640
+#define ADF4382_VCO_CAL_ALC			123
 #define ADF4382_POR_DELAY_US			200
 #define ADF4382_LKD_DELAY_US			500
+#define ADF4382_COARSE_BLEED_CONST		180U	// 180 microseconds
+#define ADF4382_FINE_BLEED_CONST_1		512U	// 512 microseconds
+#define ADF4382_FINE_BLEED_CONST_2		250U	// 250 microseconds
 
 #define MHZ					MEGA
 #define S_TO_NS					NANO
+#define PS_TO_S					PICO
 #define NS_TO_PS				KHZ_PER_MHZ
 
 /**
@@ -478,6 +515,7 @@
 enum adf4382_dev_id {
 	ID_ADF4382,
 	ID_ADF4382A,
+	ID_ADF4383,
 };
 
 /**
@@ -496,6 +534,8 @@ struct adf4382_init_param {
 	uint8_t				cp_i;
 	uint16_t			bleed_word;
 	uint8_t				ld_count;
+	uint8_t				en_lut_gen;
+	uint8_t				en_lut_cal;
 	enum adf4382_dev_id		id;
 };
 
@@ -516,11 +556,15 @@ struct adf4382_dev {
 	uint16_t			bleed_word;
 	uint8_t				ld_count;
 	uint32_t			phase_adj;
+	uint8_t				en_lut_gen;
+	uint8_t				en_lut_cal;
 	uint64_t			vco_max;
 	uint64_t			vco_min;
 	uint64_t			freq_max;
 	uint64_t			freq_min;
 	uint8_t				clkout_div_reg_val_max;
+	// N_INT variable to trigger auto calibration
+	uint16_t			n_int;
 };
 
 /**
@@ -577,8 +621,8 @@ static const struct reg_sequence adf4382_reg_defaults[] = {
 	{ 0x048, 0x00 },
 	{ 0x047, 0x00 },
 	{ 0x046, 0x00 },
-	{ 0x045, 0x62 },
-	{ 0x044, 0x3F },
+	{ 0x045, 0x52 },
+	{ 0x044, 0x2E },
 	{ 0x043, 0xB8 },
 	{ 0x042, 0x01 },
 	{ 0x041, 0x00 },
@@ -588,7 +632,7 @@ static const struct reg_sequence adf4382_reg_defaults[] = {
 	{ 0x03c, 0x00 },
 	{ 0x03b, 0x00 },
 	{ 0x03a, 0xFA },
-	{ 0x039, 0x00 },
+	{ 0x039, 0x80 },
 	{ 0x038, 0x71 },
 	{ 0x037, 0x82 },
 	{ 0x036, 0xC0 },
@@ -693,14 +737,32 @@ int adf4382_set_en_chan(struct adf4382_dev *dev, uint8_t ch, bool en);
 /** ADF4382 Get channel enable attributes */
 int adf4382_get_en_chan(struct adf4382_dev *dev, uint8_t ch, bool *en);
 
-/** ADF4382 Set sync enable attributes */
-int adf4382_set_en_sync(struct adf4382_dev *dev, bool en);
-
-/** ADF4382 Get sync enable attributes */
-int adf4382_get_en_sync(struct adf4382_dev *dev, bool *en);
-
 /** ADF4382 Sets frequency */
 int adf4382_set_freq(struct adf4382_dev *dev);
+
+/** ADF4382 Set fast calibration attributes */
+int adf4382_set_en_fast_calibration(struct adf4382_dev *dev, bool en_fast_cal);
+
+/** ADF4382 Set fast calibration LUT calibration attributes */
+int adf4382_set_en_lut_calibration(struct adf4382_dev *dev, bool en_lut_cal);
+
+/** ADF4382 Get Fast Calibration LUT Calibration attributes */
+int adf4382_get_en_lut_calibration(struct adf4382_dev *dev, bool *en);
+
+/** ADF4382 Set Output Frequency without writing the Ndiv Register */
+int adf4382_set_change_freq(struct adf4382_dev *dev);
+
+/** ADF4382 Get Change Output Frequency attribute value */
+int adf4382_get_change_rfout(struct adf4382_dev *dev, uint64_t *val);
+
+/** ADF4382 Set Change Output Frequency attribute value */
+int adf4382_set_change_rfout(struct adf4382_dev *dev, uint64_t val);
+
+/** ADF4382 Set the NDIV register attribute value */
+int adf4382_set_start_calibration(struct adf4382_dev *dev);
+
+/** ADF4382 Get the NDIV register attribute value as 0 */
+int adf4382_get_start_calibration(struct adf4382_dev *dev, bool *start_cal);
 
 /** ADF4382 Sets Phase adjustment */
 int adf4382_set_phase_adjust(struct adf4382_dev *dev, uint32_t phase_ps);
@@ -710,6 +772,21 @@ int adf4382_set_phase_pol(struct adf4382_dev *dev, bool polarity);
 
 /** ADF4382 Gets Phase adjustment polarity*/
 int adf4382_get_phase_pol(struct adf4382_dev *dev, bool *polarity);
+
+/** ADF4382 Set EZSYNC feature attributes */
+int adf4382_set_ezsync_setup(struct adf4382_dev *dev, bool sync);
+
+/** ADF4382 Set Timed SYNC feature attributes */
+int adf4382_set_timed_sync_setup(struct adf4382_dev *dev, bool sync);
+
+/** ADF4382 Get EZSYNC and Timed SYNC feature attributes */
+int adf4382_get_phase_sync_setup(struct adf4382_dev *dev, bool *en);
+
+/** ADF4382 Set sw_sync attribute */
+int adf4382_set_sw_sync(struct adf4382_dev *dev, bool sw_sync);
+
+/** ADF4382 Get sw_sync attribute */
+int adf4382_get_sw_sync(struct adf4382_dev *dev, bool *sw_sync);
 
 /** ADF4382 Initialization */
 int adf4382_init(struct adf4382_dev **device,

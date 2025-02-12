@@ -56,9 +56,6 @@ EXTRA_FILES += $(STARTUP_FILE)
 # Get the path of the interrupts file
 ITC = $(call rwildcard, $(PROJECT_BUILD)/Src,*_it.c)
 
-# Get the path of the hal config file
-HALCONF = $(call rwildcard, $(PROJECT_BUILD)/Inc,*_hal_conf.h)
-
 ifneq (,$(wildcard $(PROJECT_BUILD)))
 TARGET = $(shell sed -rn 's|^.*(STM32[A-Z][0-9][0-9A-Z][0-9]x.)"/>$$|\1|p' $(PROJECT_BUILDROOT)/.cproject | head -n 1)
 CFLAGS += -D$(TARGET)
@@ -100,22 +97,21 @@ $(PROJECT)_configure:
 	$(call print,Configuring project)
 	sed -i 's/ main(/ stm32_init(/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
 	sed -i '0,/while (1)/s//return 0;/' $(PROJECT_BUILD)/Src/main.c $(HIDE)
-	sed -i 's/USE_HAL_TIM_REGISTER_CALLBACKS\s*0U/USE_HAL_TIM_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
-	sed -i 's/USE_HAL_UART_REGISTER_CALLBACKS\s*0U/USE_HAL_UART_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
-	sed -i 's/USE_HAL_SAI_REGISTER_CALLBACKS\s*0U/USE_HAL_SAI_REGISTER_CALLBACKS\t1U/g' $(HALCONF) $(HIDE)
-	$(call copy_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
-	$(call remove_file, $(PROJECT_BUILD)/Src/main.c) $(HIDE)
-
+	$(call move_file, $(PROJECT_BUILD)/Src/main.c, $(PROJECT_BUILD)/Src/generated_main.c) $(HIDE)
 	$(call remove_file, $(PROJECT_BUILD)/Src/syscalls.c) $(HIDE)
 
-	$(foreach inc, $(EXTRA_INC_PATHS), sed -i '/Core\/Inc"\/>/a <listOptionValue builtIn="false" value="$(inc)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
-	$(foreach flag, $(CPROJECTFLAGS), sed -i '/USE_HAL_DRIVER"\/>/a <listOptionValue builtIn="false" value="$(flag)"\/>' $(PROJECT_BUILDROOT)/.cproject;) $(HIDE)
+	for inc in $(EXTRA_INC_PATHS); do \
+  		sed -i "/Core\/Inc\"\/>/a <listOptionValue builtIn=\"false\" value=\"$${inc}\"/>" $(PROJECT_BUILDROOT)/.cproject; \
+  	done $(HIDE)
+	for flag in $(CPROJECTFLAGS); do \
+		sed -i "/USE_HAL_DRIVER\"\/>/a <listOptionValue builtIn=\"false\" value=\"$${flag}\"\/>" $(PROJECT_BUILDROOT)/.cproject; \
+	done $(HIDE)
 	$(STM32CUBEIDE)/$(IDE) -nosplash -application org.eclipse.cdt.managedbuilder.core.headlessbuild \
 		-import "build/app" -data "build" \
 		$(HIDE)
 	sed -i  's/HAL_NVIC_EnableIRQ(\EXTI/\/\/ HAL_NVIC_EnableIRQ\(EXTI/' $(PROJECT_BUILD)/Src/generated_main.c $(HIDE)
 	$(shell python $(PLATFORM_TOOLS)/exti_script.py $(STARTUP_FILE) $(EXTI_GEN_FILE))
-	$(call copy_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
+	$(call move_file, $(EXTI_GEN_FILE), $(PROJECT_BUILD)/Src/stm32_gpio_irq_generated.c) $(HIDE)
 
 	$(file > $(CPP_PROP_JSON).default,$(CPP_FINAL_CONTENT))
 	$(file > $(SETTINGSJSON).default,$(VSC_SET_CONTENT))

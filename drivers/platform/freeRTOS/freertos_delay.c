@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <stdbool.h>
+#include <stdint.h>
 #include "FreeRTOS.h"
 #include "no_os_delay.h"
 #include "task.h"
@@ -43,8 +44,7 @@
 
 void no_os_udelay(uint32_t usecs)
 {
-
-	vTaskDelay((((double)usecs / 1000000) * configTICK_RATE_HZ));
+	vTaskDelay((uint64_t)configTICK_RATE_HZ * usecs / 1000000);
 }
 
 /**
@@ -54,7 +54,7 @@ void no_os_udelay(uint32_t usecs)
  */
 void no_os_mdelay(uint32_t msecs)
 {
-	vTaskDelay((((double)msecs / 1000) * configTICK_RATE_HZ));
+	vTaskDelay(configTICK_RATE_HZ * msecs / 1000);
 }
 
 /**
@@ -63,18 +63,12 @@ void no_os_mdelay(uint32_t msecs)
  */
 struct no_os_time no_os_get_time(void)
 {
-	unsigned long long Xtime_Global;
-	double fractional_part = 0;
 	struct no_os_time t;
 
-	unsigned long long _system_ticks  = (unsigned long long)xTaskGetTickCount();
+	TickType_t _system_ticks  = xTaskGetTickCount();
 
-	Xtime_Global = HAL_GetTick();
-	t.s = Xtime_Global / 1000; // milliseconds
-
-	fractional_part = (float)Xtime_Global / 1000 - Xtime_Global / 1000;
-	t.us = fractional_part * 1000;
-	t.us *= 1000;
+	t.s = _system_ticks / configTICK_RATE_HZ;
+	t.us = 1000000ULL * (_system_ticks % configTICK_RATE_HZ) / configTICK_RATE_HZ;
 
 	return t;
 }

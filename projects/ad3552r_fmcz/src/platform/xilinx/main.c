@@ -40,15 +40,12 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_includes.h"
+#include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
 
-#ifdef GENERIC_SPI_EXAMPLE
-#include "generic_spi_example.h"
-#elif AXI_QSPI_EXAMPLE
-#include "axi_qspi_example.h"
-#endif
+extern int example_main();
+
 /***************************************************************************//**
  * @brief Main function execution for xilinx platform.
  *

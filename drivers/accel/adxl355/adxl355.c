@@ -731,6 +731,8 @@ int adxl355_get_raw_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
 	if (ret)
 		return ret;
 
+	*fifo_entries = (*fifo_entries / 3) * 3;
+
 	if (*fifo_entries > 0) {
 
 		ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_FIFO_DATA),

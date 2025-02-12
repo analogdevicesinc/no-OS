@@ -34,7 +34,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
 #include "ad5460.h"
 #include "no_os_delay.h"
@@ -50,7 +49,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct ad5460_desc *ad5460_desc;
 	int ret;

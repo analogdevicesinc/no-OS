@@ -366,14 +366,14 @@ static int max_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
  * @brief maxim specific GPIO IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops max_gpio_irq_ops = {
-	.init = (int32_t (*)())max_gpio_irq_ctrl_init,
-	.register_callback = (int32_t (*)())max_gpio_irq_register_callback,
-	.unregister_callback = (int32_t (*)())max_gpio_irq_unregister_callback,
-	.enable = (int32_t (*)())max_gpio_irq_enable,
-	.disable = (int32_t (*)())max_gpio_irq_disable,
-	.trigger_level_set = (int32_t (*)())max_gpio_irq_trigger_level_set,
-	.global_enable = (int32_t (*)())max_gpio_irq_global_enable,
-	.global_disable = (int32_t (*)())max_gpio_irq_global_disable,
-	.set_priority = (int32_t (*)())(max_gpio_irq_set_priority),
-	.remove = (int32_t (*)())max_gpio_irq_ctrl_remove
+	.init = max_gpio_irq_ctrl_init,
+	.register_callback = max_gpio_irq_register_callback,
+	.unregister_callback = max_gpio_irq_unregister_callback,
+	.enable = max_gpio_irq_enable,
+	.disable = max_gpio_irq_disable,
+	.trigger_level_set = max_gpio_irq_trigger_level_set,
+	.global_enable = max_gpio_irq_global_enable,
+	.global_disable = max_gpio_irq_global_disable,
+	.set_priority = max_gpio_irq_set_priority,
+	.remove = max_gpio_irq_ctrl_remove
 };

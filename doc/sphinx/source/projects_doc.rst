@@ -23,6 +23,7 @@ FREQUENCY GENERATORS
 
    projects/adf4382
    projects/adf4368
+   projects/adf5611
 
 INERTIAL MEASUREMENT UNITS
 ==========================
@@ -70,10 +71,13 @@ POWER MANAGEMENT
 .. toctree::
    :maxdepth: 1
 
+   projects/ades1754
    projects/adp1050
    projects/dc2703a
    projects/ltc4162l
    projects/ltc4296
+   projects/ltc7841
+   projects/ltc7871
    projects/ltm4686
    projects/lt7170
    projects/lt7182s
@@ -86,6 +90,7 @@ DAC
 .. toctree::
    :maxdepth: 1
 
+   projects/eval-ad8460
    projects/max22017
 
 TEMPERATURE

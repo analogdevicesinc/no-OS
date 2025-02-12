@@ -1389,6 +1389,31 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 		}
 	}
 
+	/* Clean reset flags. */
+	err = ad3552r_write_reg(ldesc, AD3552R_REG_ADDR_ERR_STATUS,
+				AD3552R_MASK_RESET_STATUS);
+	if (err)
+		return err;
+
+	/*
+	 * FPGA HDL keeps QSPI pin low for ad355xr, so for the whole family
+	 * SPI "multi IO" mode is set appropriately for each working mode.
+	 *
+	 * Whatever is the SPI IO mode, reading in DDR is never possible.
+	 * R/W as D/QSPI is also possible for the secondary region.
+	 *
+	 * When not streaming, so in configuration mode or raw sammple R/W,
+	 * staying instruction mode, simple SPI SDR.
+	 *
+	 * When streaming, setting streamign mode and best high speed mode.
+	 */
+	err = _ad3552r_update_reg_field(ldesc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_B,
+					AD3552R_MASK_SINGLE_INST,
+					AD3552R_MASK_SINGLE_INST);
+	if (err < 0)
+		return err;
+
 	err = ad3552r_check_scratch_pad(ldesc);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		pr_err("Scratch pad test failed: %"PRIi32"\n", err);
@@ -1417,6 +1442,18 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	}
 	ldesc->chip_id = param->chip_id;
 	ldesc->is_simultaneous = param->is_simultaneous;
+	switch (ldesc->chip_id) {
+	case AD3541R_ID:
+	case AD3542R_ID:
+		ldesc->num_spi_data_lanes = 2;
+		break;
+	case AD3551R_ID:
+	case AD3552R_ID:
+	default:
+		ldesc->num_spi_data_lanes = 4;
+		break;
+	}
+
 	err = ad3552r_configure_device(ldesc, param);
 	if (NO_OS_IS_ERR_VALUE(err)) {
 		err = -ENODEV;
@@ -1539,6 +1576,171 @@ int32_t ad3552r_set_asynchronous(struct ad3552r_desc *desc, uint8_t enable)
 	return 0;
 }
 
+static int ad3552r_hs_set_target_io_mode_hs(struct ad3552r_desc *desc)
+{
+	int mode_target, val;
+
+	/*
+	 * Best access for secondary reg area, QSPI where possible,
+	 * else as DSPI.
+	 */
+	mode_target = (desc->num_spi_data_lanes == 4) ?
+		      AD3552R_QUAD_SPI : AD3552R_DUAL_SPI;
+
+	val = no_os_field_prep(AD3552R_MASK_MULTI_IO_MODE, mode_target);
+
+	/*
+	 * Better to not use update here, since generally we are already
+	 * set as DDR mode, and it's not possible to read in DDR mode.
+	 */
+	return ad3552r_write_reg(desc, AD3552R_REG_ADDR_TRANSFER_REGISTER,
+				 val | AD3552R_MASK_STREAM_LENGTH_KEEP_VALUE);
+}
+
+static int ad3552r_hs_set_bus_io_mode_hs(struct ad3552r_desc *desc)
+{
+	int bus_mode;
+
+	bus_mode = (desc->num_spi_data_lanes == 4) ?
+		   AXI_DAC_IO_MODE_QSPI : AXI_DAC_IO_MODE_DSPI;
+
+	return axi_dac_set_io_mode(desc->ad3552r_core_ip, bus_mode);
+}
+
+/*
+ * NOTE: this sequence must be strictly repsected, since, axi side cannot read
+ * in ddr mode (_update can't be used), and can access primary region in
+ * SDR mode only.
+ */
+static int ad3552r_hs_buffer_preenable(struct ad3552r_desc *desc)
+{
+	int ret, loop_len;
+
+	/* Set target into streaming mode. */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_B,
+					AD3552R_MASK_SINGLE_INST, 0);
+	if (ret)
+		return ret;
+
+	/* Need to keep loop len. */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_TRANSFER_REGISTER,
+					AD3552R_MASK_STREAM_LENGTH_KEEP_VALUE,
+					1);
+	if (ret)
+		return ret;
+
+	loop_len = 4;
+	ret = ad3552r_write_reg(desc, AD3552R_REG_ADDR_STREAM_MODE, loop_len);
+	if (ret)
+		return ret;
+
+	/* Set target, then axi bus into DDR mode. */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_D,
+					AD3552R_MASK_SPI_CONFIG_DDR, 1);
+	if (ret)
+		return ret;
+
+	ret = axi_dac_set_ddr(desc->ad3552r_core_ip, true);
+	if (ret)
+		goto exit_err_ddr;
+
+	/* Set high speed, DSPI or QSPI, depending on the model. */
+	ret = ad3552r_hs_set_target_io_mode_hs(desc);
+	if (ret)
+		goto exit_err_ddr;
+
+	ret = ad3552r_hs_set_bus_io_mode_hs(desc);
+	if (ret)
+		goto exit_err_io_mode;
+
+	/* Set up now only rest of backend registers */
+	ret = axi_dac_data_transfer_addr(desc->ad3552r_core_ip,
+					 AD3552R_REG_ADDR_CH_DAC_16B(1));
+	if (ret)
+		goto exit_err_io_mode;
+
+	ret = axi_dac_data_format_set(desc->ad3552r_core_ip, 16);
+	if (ret)
+		goto exit_err_io_mode;
+
+	ret = axi_dac_set_data_stream(desc->ad3552r_core_ip, true);
+	if (ret)
+		goto exit_err_io_mode;
+
+	return 0;
+
+	/* Unwrapping possible error cases. */
+
+exit_err_io_mode:
+	/* Back to simple SPI */
+	ad3552r_write_reg(desc, AD3552R_REG_ADDR_TRANSFER_REGISTER,
+			  AD3552R_MASK_STREAM_LENGTH_KEEP_VALUE);
+
+	axi_dac_set_io_mode(desc->ad3552r_core_ip, AXI_DAC_IO_MODE_SPI);
+
+exit_err_ddr:
+	/* Set target, then axi bus into DDR mode. */
+	_ad3552r_update_reg_field(desc, AD3552R_REG_ADDR_INTERFACE_CONFIG_D,
+				  AD3552R_MASK_SPI_CONFIG_DDR, 0);
+
+	axi_dac_set_ddr(desc->ad3552r_core_ip, false);
+
+	return ret;
+}
+
+static int ad3552r_hs_buffer_postdisable(struct ad3552r_desc *desc)
+{
+	int ret;
+
+	ret = axi_dac_set_data_stream(desc->ad3552r_core_ip, false);
+	if (ret)
+		return ret;
+
+	/*
+	 * Set us to simple SPI, even if still in ddr, so to be able
+	 * to write in primary region.
+	 */
+	ret = axi_dac_set_io_mode(desc->ad3552r_core_ip, AXI_DAC_IO_MODE_SPI);
+	if (ret)
+		return ret;
+
+	/*
+	 * Back to SDR
+	 * (in DDR we cannot read, whatever the mode is, so not using update).
+	 */
+	ret = ad3552r_write_reg(desc, AD3552R_REG_ADDR_INTERFACE_CONFIG_D,
+				no_os_field_prep(
+					AD3552R_MASK_SDO_DRIVE_STRENGTH, 1));
+
+	ret = axi_dac_set_ddr(desc->ad3552r_core_ip, false);
+	if (ret)
+		return ret;
+
+	/*
+	 * Back to simple SPI for secondary region too now,
+	 * so to be able to dump/read registers there too if needed.
+	 */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_TRANSFER_REGISTER,
+					AD3552R_MASK_MULTI_IO_MODE,
+					AD3552R_SPI);
+	if (ret)
+		return ret;
+
+	/* Back to single instruction mode, disabling loop. */
+	ret = _ad3552r_update_reg_field(desc,
+					AD3552R_REG_ADDR_INTERFACE_CONFIG_B,
+					AD3552R_MASK_SINGLE_INST,
+					AD3552R_MASK_SINGLE_INST);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
 /**
  * @brief Write data samples to dac
  * @param desc - The device structure.
@@ -1551,7 +1753,7 @@ int32_t ad3552r_set_asynchronous(struct ad3552r_desc *desc, uint8_t enable)
 int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 			       uint16_t samples, bool cyclic, int cyclic_secs)
 {
-	int ret, loop_len;
+	int ret;
 	struct axi_dma_transfer write_transfer = {
 		.size = samples * AD3552R_BYTES_PER_SAMPLE,
 		.transfer_done = 0,
@@ -1563,39 +1765,15 @@ int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 	if (!desc->axi)
 		return -EINVAL;
 
-	ret = _ad3552r_update_reg_field(desc, AD3552R_REG_ADDR_INTERFACE_CONFIG_D,
-					AD3552R_MASK_SPI_CONFIG_DDR,
-					AD3552R_MASK_SPI_CONFIG_DDR);
+	ret = ad3552r_hs_buffer_preenable(desc);
 	if (ret)
 		return ret;
-
-	ret = axi_dac_set_ddr(desc->ad3552r_core_ip, true);
-	if (ret)
-		goto exit_err_ddr;
-
-	loop_len = 4;
-	ret = ad3552r_write_reg(desc, AD3552R_REG_ADDR_STREAM_MODE, loop_len);
-	if (ret)
-		goto exit_err_ddr;
-
-	ret = axi_dac_data_transfer_addr(desc->ad3552r_core_ip,
-					 AD3552R_REG_ADDR_CH_DAC_16B(1));
-	if (ret)
-		goto exit_err_ddr;
-
-	ret = axi_dac_data_format_set(desc->ad3552r_core_ip, 16);
-	if (ret)
-		goto exit_err_ddr;
-
-	ret = axi_dac_set_data_stream(desc->ad3552r_core_ip, true);
-	if (ret)
-		goto exit_err_ddr;
 
 	/* Need to wait for voltage stabilization */
 	ret = axi_dmac_transfer_start(desc->dmac_ip, &write_transfer);
 	if (ret) {
 		pr_err("axi_dmac_transfer_start() failed!\n");
-		goto exit_err_ddr;
+		goto exit_err;
 	}
 
 	if (cyclic) {
@@ -1607,13 +1785,8 @@ int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 	} else
 		axi_dmac_transfer_wait_completion(desc->dmac_ip, 10000);
 
-	ret = axi_dac_set_data_stream(desc->ad3552r_core_ip, false);
-
-exit_err_ddr:
-	_ad3552r_update_reg_field(desc, AD3552R_REG_ADDR_INTERFACE_CONFIG_D,
-				  AD3552R_MASK_SPI_CONFIG_DDR, 0);
-
-	axi_dac_set_ddr(desc->ad3552r_core_ip, false);
+exit_err:
+	ad3552r_hs_buffer_postdisable(desc);
 
 	return ret;
 }

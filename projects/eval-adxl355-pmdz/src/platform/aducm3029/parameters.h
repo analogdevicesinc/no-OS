@@ -68,7 +68,6 @@
 #define SPI_OPS         &aducm_spi_ops
 #define SPI_EXTRA       &adxl355_spi_extra_ip
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #define GPIO_DRDY_PIN_NUM       12
 #define GPIO_DRDY_PORT_NUM      0
 #define GPIO_OPS                &aducm_gpio_ops
@@ -82,7 +81,6 @@
 #define ADXL355_GPIO_CB_HANDLE      NULL /* Not used for aducm3029 platform */
 
 extern struct no_os_gpio_init_param adxl355_gpio_drdy_ip;
-#endif
 
 extern struct aducm_spi_init_param adxl355_spi_extra_ip;
 #endif /* __PARAMETERS_H__ */

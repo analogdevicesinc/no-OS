@@ -1,27 +1,27 @@
 {
   "stm32": {
     "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "EXAMPLE=dummy"
     },
     "iio_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n"
+      "flags" : "EXAMPLE=iio_example"
     },
     "iio_trigger_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=y"
+      "flags" : "EXAMPLE=iio_trigger_example"
     }
   },
   "maxim": {
     "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max78000"
+      "flags" : "EXAMPLE=dummy TARGET=max78000"
     },
     "dummy_example": {
-      "flags" : "DUMMY_EXAMPLE=y IIO_EXAMPLE=n IIO_TRIGGER_EXAMPLE=n TARGET=max32655"
+      "flags" : "EXAMPLE=dummy TARGET=max32655"
     },
     "iio_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max78000"
+      "flags" : "EXAMPLE=iio_example TARGET=max78000"
     },
     "iio_example": {
-      "flags" : "DUMMY_EXAMPLE=n IIO_EXAMPLE=y IIO_TRIGGER_EXAMPLE=n TARGET=max32655"
+      "flags" : "EXAMPLE=iio_example TARGET=max32655"
     }
   }
 }

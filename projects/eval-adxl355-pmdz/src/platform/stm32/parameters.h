@@ -49,7 +49,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifdef IIO_LWIP_EXAMPLE
+#ifdef NO_OS_LWIP_NETWORKING
 extern UART_HandleTypeDef huart1;
 #define UART_INSTANCE	(&huart1)
 #define SPI_DEVICE_ID   3
@@ -81,7 +81,6 @@ extern UART_HandleTypeDef huart5;
 extern struct stm32_uart_init_param adxl355_uart_extra_ip;
 extern struct stm32_spi_init_param adxl355_spi_extra_ip;
 
-#ifdef IIO_TRIGGER_EXAMPLE
 extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 /* Setting for PortA Pin2 used for DATA_READY.
    Has to be adapted accordingly if another pin is used.
@@ -92,9 +91,7 @@ extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 #define GPIO_IRQ_ID             2 /* Pin 2 */
 #define GPIO_IRQ_OPS            &stm32_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          &adxl355_gpio_irq_extra_ip
-#endif
 
-#ifdef IIO_LWIP_EXAMPLE
 #define ADIN1110_GPIO_RESET_PORT	2
 #define ADIN1110_GPIO_RESET_PIN		7
 #define ADIN1110_SPI_DEVICE_ID		2
@@ -105,6 +102,5 @@ extern struct stm32_gpio_irq_init_param adxl355_gpio_irq_extra_ip;
 
 extern struct stm32_gpio_init_param adin1110_reset_gpio_extra_ip;
 extern struct stm32_spi_init_param adin1110_spi_extra_ip;
-#endif
 
 #endif /* __PARAMETERS_H__ */

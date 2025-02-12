@@ -34,10 +34,11 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "iio_trigger_example.h"
+#include "parameters.h"
 #include "iio_adxrs290.h"
 #include "iio_trigger.h"
 #include "common_data.h"
+#include "iio_app.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -45,6 +46,23 @@
 #define MAX_SIZE_BASE_ADDR		3000
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 #define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
+
+struct no_os_irq_init_param adxrs290_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_EXTRA,
+};
+
+struct iio_hw_trig_init_param adxrs290_gpio_trig_ip = {
+	.irq_id = ADXRS290_GPIO_TRIG_IRQ_ID,
+	.irq_trig_lvl = NO_OS_IRQ_LEVEL_HIGH,
+	.cb_info = {
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+		.handle = ADXRS290_GPIO_CB_HANDLE,
+	},
+	.name = ADXRS290_GPIO_TRIG_NAME,
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -56,7 +74,7 @@ static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
  *               execute continuously function iio_app_run_with_trigs and will
  * 				 not return.
 *******************************************************************************/
-int iio_trigger_example_main()
+int example_main()
 {
 	int ret;
 	struct adxrs290_dev *adxrs290_desc;
@@ -68,6 +86,21 @@ int iio_trigger_example_main()
 	};
 	struct iio_hw_trig *adxrs290_trig_desc;
 	struct no_os_irq_ctrl_desc *adxrs290_irq_desc;
+
+	/* To be moved in the example when all platforms support GPIO IRQ controller */
+	struct no_os_irq_ctrl_desc *nvic_desc;
+	struct no_os_irq_init_param nvic_ip = {
+		.platform_ops = &max_irq_ops,
+	};
+
+	/* Initialize GPIO IRQ controller */
+	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
+	if (ret)
+		goto error;
+
+	ret = no_os_irq_enable(nvic_desc, NVIC_GPIO_IRQ);
+	if (ret)
+		goto error;
 
 	ret = adxrs290_init(&adxrs290_desc, &adxrs290_ip);
 	if (ret)

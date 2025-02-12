@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <string.h>
-#include "frame_rx_tx_example.h"
 #include "common_data.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
@@ -119,7 +118,7 @@ uint8_t eth_rx_buff[ADIN1110_BUFF_LEN];
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
 *******************************************************************************/
-int frame_rx_tx_example_main()
+int example_main()
 {
 	uint32_t ucast_frame_rx_cnt;
 	uint32_t bcast_frame_rx_cnt;

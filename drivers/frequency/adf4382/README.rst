@@ -4,22 +4,24 @@ ADF4382 no-OS driver
 Supported Devices
 -----------------
 
-`ADF4382 <www.analog.com/en/products/adf4382a.html>`_
+* `ADF4382 <www.analog.com/en/products/adf4382.html>`_
+* `ADF4382A <www.analog.com/en/products/adf4382a.html>`_
+* `ADF43823 <www.analog.com/en/products/adf43823.html>`_
 
 Overview
 --------
 
-The `ADF4382 <www.analog.com/en/products/adf4382a.html>`_ is a high performance,
+The `ADF4382 <www.analog.com/en/products/adf4382.html>`_ is a high performance,
 ultralow jitter, Frac-N PLL with integrated VCO ideally suited for LO generation
 for 5G applications or data converter clock applications. The high performance
 PLL has a figure of merit of -238 dBc/Hz, low 1/f Noise and high PFD frequency
 of 625MHz in integer mode that can achieve ultra-low in-band noise and
-integrated jitter. The ADF4382 can generate  frequencies from 687.5 MHz to
+integrated jitter. The ADF4382 can generate frequencies from 687.5 MHz to
 22 GHz without an external doubler, thereby  eliminating the need for
 sub-harmonic filters.
 
 For multiple data converter clock applications, the
-`ADF4382 <www.analog.com/en/products/adf4382a.html>`_ automatically aligns its
+`ADF4382 <www.analog.com/en/products/adf4382.html>`_ automatically aligns its
 output to the input reference edge by including the output divider in the PLL
 feedback loop. For applications that require deterministic delay or delay
 adjustment capability, a programmable reference to output delay with <1ps
@@ -92,7 +94,7 @@ the value in the same range.
 
 In order to determine which value corresponds to your design charge pump
 current, please refer to the datasheet
-`ADF4382 <www.analog.com/en/products/adf4382a.html>`_ in the register details
+`ADF4382 <www.analog.com/en/products/adf4382.html>`_ in the register details
 section for register REG001F.
 
 Bleed Current Configuration
@@ -162,15 +164,36 @@ To determine the current phase adjustment and polarity,
 
 By default the polarity is positive.
 
+ADF4382 Fast Calibration
+------------------------
+Fast calibration uses **adf4382_set_en_fast_calibration** to initialized Fast 
+calibration. It computes the minimum NDIV value and the minimum VCO frequency
+is readback through the frequency counter, which is then used used to generate
+the fast calibration Look up Table.
+
+'1' starts fast calibration LUT generation, and '0' means this function is 
+inactive. The function defaults to '0' after running fast calibration LUT 
+generation. 
+
+**adf4382_set_en_lut_calibration** function enables/disables the lookup table 
+Calibration. '1' enables LUT calibration. '0' disables LUT calibration and
+reverts to normal auto calibration.
+
 Synchronization Enable Configuration
 ------------------------------------
 
 The ADF4382 has a synchronization feature wherein Both RF Output signals are
-synchronized to an input signal at this pin. It is used for multi-chip phase
-synchronization. This can be enabled or disabled using the
-**adf4382_set_en_sync** API.
+synchronized to an input signal at this pin. This feature is used for multi-chip 
+phase synchronization. This can be enabled or disabled using the
+**adf4382_set_ezsync_setup** API for EZSync and **adf4382_set_timed_sync_setup** 
+API for Timed Sync. There are 2 methods for synchronization, EZSync and Timed 
+Sync supported by this function.
 
-By default it is disabled.
+By default, the synchronization feature is disabled by setting option 0 for 
+both API, while option 1 enables EZSYNC or Timed Sync respectively.
+
+The EZSync require a reset signal, which is applied through 
+**adf4382_set_sw_sync** API.
 
 ADF4382 Frequency Generation
 ----------------------------
@@ -189,6 +212,11 @@ with the computed values.
 Because of the link between the calculated values and the configurations, when
 an attribute is reconfigured using the corresponding API it will not have any
 effect until the **adf4382_set_freq** API is called.
+
+In fast calibration mode, locktimes can be measured using the **adf4382_change_freq**
+function in combination with **adf4382_start_calibration**. The first function will
+set the desird registers for the new frequency, while the second function will trigger
+the calibration process.
 
 ADF4382 Driver Initialization Example
 -------------------------------------
@@ -273,12 +301,20 @@ The attributes are:
 * reference_divider - is the current value of the input divider.
 * reference_doubler_en - enables the input doubler.
 * reference_frequency - is the current set input frequency.
-* sync_en - enables the synchronization feature to an external signal.
+* sw_sync_en - enables the reset signal for ezsync feature.
+* ezsync_setup - enables ezsync setup for synchronization with external signal.
+* timed_sync_setup - enables timed sync setup for synchronization with external 
+					 signal.
+* fastcal_en - this enables fast calibration feature post initialization.
+			   It enables the Lookup Table LUT Calibration after fast calibration
+			   initialzation routine is complete.
+* fastcal_lut_en - toggles between fast calibration and normal auto
+				   calibration.
 
 Device Channels
 ---------------
 
-ADXL355 IIO device has 2 output channels which can have independent output
+ADF4382 IIO device has 2 output channels which can have independent output
 powers.
 
 The channels are:
