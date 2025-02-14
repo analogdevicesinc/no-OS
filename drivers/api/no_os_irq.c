@@ -227,6 +227,26 @@ int no_os_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 }
 
 /**
+ * @brief Set the priority for an interrupt.
+ * @param desc - The IRQ controller descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @param priority_level - The priority level of the interrupt.
+ * @return 0 in case of success, negative errno error codes.
+ */
+int no_os_irq_get_priority(struct no_os_irq_ctrl_desc *desc,
+			   uint32_t irq_id,
+			   uint32_t *priority_level)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->get_priority)
+		return -ENOSYS;
+
+	return desc->platform_ops->get_priority(desc, irq_id, priority_level);
+}
+
+/**
  * @brief Clear the pending interrupt.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
