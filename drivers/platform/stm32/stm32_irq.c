@@ -67,6 +67,9 @@ static struct event_list _events[] = {
 	[NO_OS_EVT_TIM_ELAPSED] = {.event = NO_OS_EVT_TIM_ELAPSED, .hal_event = HAL_TIM_PERIOD_ELAPSED_CB_ID},
 	[NO_OS_EVT_TIM_PWM_PULSE_FINISHED] = {.event = NO_OS_EVT_TIM_PWM_PULSE_FINISHED, .hal_event = HAL_TIM_PWM_PULSE_FINISHED_CB_ID},
 #endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	[NO_OS_EVT_LPTIM_PWM_PULSE_FINISHED] = {.event = NO_OS_EVT_LPTIM_PWM_PULSE_FINISHED, .hal_event = HAL_LPTIM_COMPARE_MATCH_CB_ID},
+#endif
 #ifdef HAL_DMA_MODULE_ENABLED
 	[NO_OS_EVT_DMA_RX_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_COMPLETE, .hal_event = HAL_DMA_XFER_CPLT_CB_ID},
 	[NO_OS_EVT_DMA_RX_HALF_COMPLETE] = {.event = NO_OS_EVT_DMA_RX_HALF_COMPLETE, .hal_event = HAL_DMA_XFER_HALFCPLT_CB_ID},
@@ -110,6 +113,24 @@ void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
 		return;
 
 	if (a->callback)
+		a->callback(a->ctx);
+}
+#endif
+
+#ifdef HAL_LPTIM_MODULE_ENABLED
+void HAL_LPTIM_CompareMatchCallback(LPTIM_HandleTypeDef *hlptim)
+{
+	struct event_list *ee = &_events[NO_OS_EVT_LPTIM_PWM_PULSE_FINISHED];
+	struct irq_action *a;
+	struct irq_action key = {.handle = hlptim};
+	int ret;
+
+	/* Find & call callback */
+	ret = no_os_list_read_find(ee->actions, (void **)&a, &key);
+	if (ret < 0)
+		return;
+
+	if(a->callback)
 		a->callback(a->ctx);
 }
 #endif
@@ -290,6 +311,9 @@ int stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 #ifdef HAL_TIM_MODULE_ENABLED
 	pTIM_CallbackTypeDef pTimCallback;
 #endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	pLPTIM_CallbackTypeDef pLPTimCallback;
+#endif
 	struct irq_action action_key = {.handle = cb->handle};
 #ifdef HAL_DMA_MODULE_ENABLED
 	DMA_HandleTypeDef pDmaCallback;
@@ -318,6 +342,21 @@ int stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 			return -EFAULT;
 
 		break;
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case NO_OS_LPTIM_IRQ:
+		switch(hal_event) {
+		case HAL_LPTIM_COMPARE_MATCH_CB_ID:
+			pLPTimCallback = HAL_LPTIM_CompareMatchCallback;
+			break;
+		default:
+			return -EINVAL;
+		};
+
+		ret = HAL_LPTIM_RegisterCallback(cb->handle, hal_event, pLPTimCallback);
+		if (ret != HAL_OK)
+			return -EFAULT;
+		break;
+#endif
 #ifdef HAL_TIM_MODULE_ENABLED
 	case NO_OS_TIM_IRQ:
 		switch (hal_event) {
