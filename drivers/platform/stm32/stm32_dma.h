@@ -82,6 +82,8 @@ struct stm32_dma_channel {
 	uint8_t* dst;
 	/* Transfer length in Bytes */
 	uint32_t length;
+	/* Private Channel Data */
+	void *priv_data;
 };
 
 struct stm32_dma_init_param {
