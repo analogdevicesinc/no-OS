@@ -696,3 +696,44 @@ void no_os_i3c_detach_callback(struct no_os_i3c_desc *desc)
 {
 	no_os_i3c_attach_callback(desc, NULL);
 }
+
+/*
+ * Transfer a list of messages using DMA. Return once the first one started and
+ * invoke a callback when they are done.
+ */
+int32_t no_os_i3c_dma_transfer(struct no_os_i3c_desc *desc,
+			       struct no_os_i3c_msg *msgs,
+			       uint32_t len,
+			       void (*callback)(void *),
+			       void *ctx)
+{
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->i3c_ops_dma_transfer)
+		return -ENOSYS;
+
+	no_os_mutex_lock(desc->bus->mutex);
+	return desc->platform_ops->i3c_ops_dma_transfer(desc, msgs, len, callback, ctx);
+}
+
+/**
+ * @brief Abort the ongoing DMA transaction
+ * @param desc - The I3C descriptor.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t no_os_i3c_dma_abort(struct no_os_i3c_desc *desc)
+{
+	int32_t ret;
+
+	if (!desc || !desc->platform_ops)
+		return -EINVAL;
+
+	if (!desc->platform_ops->i3c_ops_dma_abort)
+		return -ENOSYS;
+
+	ret = desc->platform_ops->i3c_ops_dma_abort(desc);
+	no_os_mutex_unlock(desc->bus->mutex);
+
+	return ret;
+}

@@ -46,6 +46,7 @@
 
 #include <stdint.h>
 #include "no_os_util.h"
+#include "no_os_dma.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -194,6 +195,21 @@ struct no_os_i3c_daa_lut {
 struct no_os_i3c_platform_ops;
 
 /**
+ * @struct no_os_i3c_msg
+ * @brief Item describing an I3C transfer
+ */
+struct no_os_i3c_msg {
+	/** Buffer with data to send */
+	uint8_t			*tx_buff;
+	/** Size of Tx buffer in number of bytes */
+	uint32_t		tx_size;
+	/** Buffer where to store data */
+	uint8_t			*rx_buff;
+	/** Size of Rx buffer in number of bytes */
+	uint32_t		rx_size;
+};
+
+/**
  * @struct no_os_i3c_bus_desc
  * @brief Structure holding I3C bus descriptor.
  */
@@ -332,6 +348,14 @@ struct no_os_i3c_platform_ops {
 	/** I3C fetch CCC info */
 	int (*i3c_ops_get_ccc_info)(struct no_os_i3c_bus_desc *,
 				    uint8_t);
+	/** I3C DMA transfer */
+	int32_t (*i3c_ops_dma_transfer)(struct no_os_i3c_desc *,
+					struct no_os_i3c_msg *,
+					uint32_t,
+					void (*)(void *),
+					void *);
+	/** Abort DMA I3C trnasaction */
+	int32_t (*i3c_ops_dma_abort)(struct no_os_i3c_desc *);
 };
 
 /******************************************************************************/
@@ -407,5 +431,18 @@ void no_os_i3c_attach_callback(struct no_os_i3c_desc *desc,
 
 /* Detach event callback. */
 void no_os_i3c_detach_callback(struct no_os_i3c_desc *desc);
+
+/*
+ * Transfer a list of messages using DMA. Return once the first one started and
+ * invoke a callback when they are done.
+ */
+int32_t no_os_i3c_dma_transfer(struct no_os_i3c_desc *desc,
+			       struct no_os_i3c_msg *msgs,
+			       uint32_t len,
+			       void (*callback)(void *),
+			       void *ctx);
+
+/* Abort the ongoing DMA transaction */
+int32_t no_os_i3c_dma_abort(struct no_os_i3c_desc *desc);
 
 #endif // _NO_OS_I3C_H_
