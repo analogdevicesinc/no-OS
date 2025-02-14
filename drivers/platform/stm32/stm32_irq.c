@@ -577,6 +577,24 @@ static int stm32_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 }
 
 /**
+ * @brief Get a priority level for an interrupt
+ * @param desc - Interrupt controller descriptor.
+ * @param irq_id - The interrupt vector entry id of the peripheral.
+ * @param priority_level - The interrupt priority level
+ * @return 0
+ */
+static int stm32_irq_get_priority(struct no_os_irq_ctrl_desc *desc,
+				  uint32_t irq_id,
+				  uint32_t *priority_level)
+{
+	uint32_t priority_group, sub_priority;
+	priority_group = HAL_NVIC_GetPriorityGrouping();
+	HAL_NVIC_GetPriority(irq_id, priority_group, priority_level, &sub_priority);
+
+	return 0;
+}
+
+/**
  * @brief stm32 specific IRQ platform ops structure
  */
 const struct no_os_irq_platform_ops stm32_irq_ops = {
@@ -589,5 +607,6 @@ const struct no_os_irq_platform_ops stm32_irq_ops = {
 	.enable = &stm32_irq_enable,
 	.disable = &stm32_irq_disable,
 	.set_priority = &stm32_irq_set_priority,
+	.get_priority = &stm32_irq_get_priority,
 	.remove = &stm32_irq_ctrl_remove
 };
