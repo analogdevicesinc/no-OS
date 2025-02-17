@@ -73,6 +73,7 @@ POWER MANAGEMENT
 
    projects/ades1754
    projects/adp1050
+   projects/adp5055
    projects/dc2703a
    projects/ltc4162l
    projects/ltc4296
