@@ -35,6 +35,7 @@
 
 #include <stdint.h>
 #include "no_os_i2c.h"
+#include "no_os_gpio.h"
 #include "stm32_hal.h"
 
 /**
@@ -54,6 +55,10 @@ struct stm32_i2c_desc {
 struct stm32_i2c_init_param {
 	/** I2C Timing */
 	uint32_t i2c_timing;
+	/* SCL GPIO init params */
+	struct no_os_gpio_init_param *scl;
+	/* SDA GPIO init params */
+	struct no_os_gpio_init_param *sda;
 };
 
 /**

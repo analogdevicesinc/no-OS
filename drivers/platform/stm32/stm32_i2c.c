@@ -50,6 +50,7 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 	struct no_os_i2c_desc *descriptor;
 	struct stm32_i2c_desc *xdesc;
 	struct stm32_i2c_init_param *i2cinit;
+	struct no_os_gpio_desc *gpio_desc;
 	I2C_TypeDef *base = NULL;
 
 	if (!desc || !param)
@@ -109,6 +110,22 @@ int32_t stm32_i2c_init(struct no_os_i2c_desc **desc,
 		ret = -EIO;
 		goto error_2;
 	}
+
+	/* Initialize the I2C SCL line */
+	ret = no_os_gpio_get_optional(&gpio_desc, i2cinit->scl);
+	if (ret)
+		goto error_2;
+
+	/* Free the resource */
+	no_os_gpio_remove(gpio_desc);
+
+	/* Initialize the I2C SDA line */
+	ret = no_os_gpio_get_optional(&gpio_desc, i2cinit->sda);
+	if (ret)
+		goto error_2;
+
+	/* Free the resource */
+	no_os_gpio_remove(gpio_desc);
 
 	/* copy settings to device descriptor */
 	descriptor->device_id = param->device_id;
