@@ -52,6 +52,11 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+enum stm32_pwm_timer {
+	PWM_TIM_TIMER = 0,
+	PWM_TIM_LPTIMER = 1,
+};
+
 enum TimOCMode {
 	TIM_OC_TOGGLE = 0,
 	TIM_OC_PWM1 = 1,
@@ -80,6 +85,10 @@ enum stm32_pwm_trigger_out {
  * @brief Structure holding the STM32 PWM parameters.
  */
 struct stm32_pwm_init_param {
+	/** PWM Timer Handle */
+	void *htimer;
+	/** Type of timer used for PWM */
+	enum stm32_pwm_timer pwm_timer;
 	/** Timer prescaler (0 to 0xFFFF) */
 	uint32_t prescaler;
 	/** Timer autoreload enable */
@@ -115,8 +124,10 @@ struct stm32_pwm_init_param {
  * @brief Structure holding the STM32 PWM descriptor.
  */
 struct stm32_pwm_desc {
-	/** PWM Timer Instance */
-	TIM_HandleTypeDef htimer;
+	/** PWM Timer Handle */
+	void *htimer;
+	/** Type of timer used for PWM */
+	enum stm32_pwm_timer pwm_timer;
 	/** Timer GPIO instance */
 	struct no_os_gpio_desc *gpio;
 	/** Timer prescaler */
@@ -141,6 +152,8 @@ struct stm32_pwm_desc {
 	uint32_t repetitions;
 	/* Enable dma */
 	bool dma_enable;
+	/* Enable one pulse */
+	bool onepulse_enable;
 };
 
 /**
