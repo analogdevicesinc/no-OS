@@ -2,7 +2,7 @@
  *   @file   stm32/stm32_pwm.c
  *   @brief  Implementation of stm32 pwm driver.
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2023-25(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -93,6 +93,7 @@ static uint32_t _compute_period_ticks(uint32_t (*get_timer_clock)(void),
 	return period;
 }
 
+#ifdef HAL_TIM_MODULE_ENABLED
 /**
  * @brief Initialize the PWM Timer.
  * @param desc - STM32 PWM descriptor.
@@ -111,10 +112,13 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
 	TIM_MasterConfigTypeDef sMasterConfig = {0};
 	TIM_SlaveConfigTypeDef sSlaveConfig = {0};
+	TIM_HandleTypeDef *htimer;
 
 	/* Compute period ticks */
 	period = _compute_period_ticks(sparam->get_timer_clock, sparam->clock_divider,
 				       sparam->prescaler, param->period_ns);
+
+	htimer = (TIM_HandleTypeDef *)sparam->htimer;
 
 	switch (param->id) {
 #if defined(TIM1)
@@ -183,27 +187,27 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		goto error;
 	};
 
-	desc->htimer.Instance = base;
-	desc->htimer.Init.Prescaler = sparam->prescaler;
-	desc->htimer.Init.CounterMode = TIM_COUNTERMODE_UP;
-	desc->htimer.Init.Period = period;
-	desc->htimer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	desc->htimer.Init.AutoReloadPreload = sparam->timer_autoreload ?
-					      TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
-	desc->htimer.Init.RepetitionCounter = sparam->repetitions;
-	desc->htimer.State = HAL_TIM_STATE_RESET;
-	if (HAL_TIM_Base_Init(&desc->htimer) != HAL_OK)
+	htimer->Instance = base;
+	htimer->Init.Prescaler = sparam->prescaler;
+	htimer->Init.CounterMode = TIM_COUNTERMODE_UP;
+	htimer->Init.Period = period;
+	htimer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htimer->Init.AutoReloadPreload = sparam->timer_autoreload ?
+					 TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
+	htimer->Init.RepetitionCounter = sparam->repetitions;
+	htimer->State = HAL_TIM_STATE_RESET;
+	if (HAL_TIM_Base_Init(htimer) != HAL_OK)
 		return -EIO;
 
 	if (!sparam->trigger_enable) {
 		sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-		if (HAL_TIM_ConfigClockSource(&desc->htimer, &sClockSourceConfig) != HAL_OK)
+		if (HAL_TIM_ConfigClockSource(htimer, &sClockSourceConfig) != HAL_OK)
 			return -EIO;
 	}
-	if (HAL_TIM_PWM_Init(&desc->htimer) != HAL_OK)
+	if (HAL_TIM_PWM_Init(htimer) != HAL_OK)
 		return -EIO;
 	if (sparam->onepulse_enable)
-		if (HAL_TIM_OnePulse_Init(&desc->htimer, TIM_OPMODE_SINGLE) != HAL_OK)
+		if (HAL_TIM_OnePulse_Init(htimer, TIM_OPMODE_SINGLE) != HAL_OK)
 			return -EIO;
 	if (sparam->trigger_enable) {
 		switch (sparam->trigger_source) {
@@ -224,7 +228,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		}
 		sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
 
-		if (HAL_TIM_SlaveConfigSynchro(&desc->htimer, &sSlaveConfig) != HAL_OK)
+		if (HAL_TIM_SlaveConfigSynchro(htimer, &sSlaveConfig) != HAL_OK)
 			return -EIO;
 	}
 
@@ -257,11 +261,13 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 	}
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-	if (HAL_TIMEx_MasterConfigSynchronization(&desc->htimer,
+	if (HAL_TIMEx_MasterConfigSynchronization(htimer,
 			&sMasterConfig) != HAL_OK)
 		return -EIO;
 
 	/* Store the timer specific configuration for later use.*/
+	desc->htimer = htimer;
+	desc->pwm_timer = STM32_PWM_TIMER_TIM;
 	desc->prescaler = sparam->prescaler;
 	desc->get_timer_clock = sparam->get_timer_clock;
 	desc->clock_divider = sparam->clock_divider;
@@ -276,7 +282,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		if (ret < 0)
 			goto error;
 
-		sparam->timer_callback.callback = &param->pwm_callback;
+		sparam->timer_callback.callback = param->pwm_callback;
 		sparam->timer_callback.ctx = desc;
 		sparam->timer_callback.event = NO_OS_EVT_TIM_PWM_PULSE_FINISHED;
 		sparam->timer_callback.peripheral = NO_OS_TIM_IRQ;
@@ -301,6 +307,155 @@ error_register:
 error:
 	return ret;
 }
+#endif
+
+#ifdef HAL_LPTIM_MODULE_ENABLED
+/**
+ * @brief Initialize the PWM LPTimer.
+ * @param desc - STM32 PWM descriptor.
+ * @param param - The structure containing PWM init parameters.
+ * @return 0 in case of success, negative error code otherwise.
+ * @note PWM Timer period is dependent upon the timer clock and prescaler value.
+ *       CounterMode is UP for timer frequency generation in below function.
+ */
+static int32_t stm32_init_lptimer(struct stm32_pwm_desc *desc,
+				  const struct no_os_pwm_init_param *param)
+{
+	int32_t ret;
+	uint32_t period;
+	LPTIM_TypeDef *base = NULL;
+	struct stm32_pwm_init_param *sparam = param->extra;
+	LPTIM_HandleTypeDef *hlptimer;
+
+	/* Compute period ticks */
+	period = _compute_period_ticks(sparam->get_timer_clock, sparam->clock_divider,
+				       sparam->prescaler, param->period_ns);
+	hlptimer = (LPTIM_HandleTypeDef *) sparam->htimer;
+
+	switch (param->id) {
+#if defined(LPTIM1)
+	case 1:
+		base = LPTIM1;
+		break;
+#endif
+#if defined(LPTIM2)
+	case 2:
+		base = LPTIM2;
+		break;
+#endif
+#if defined(LPTIM3)
+	case 3:
+		base = LPTIM3;
+		break;
+#endif
+		break;
+#if defined(LPTIM4)
+	case 4:
+		base = LPTIM4;
+		break;
+#endif
+#if defined(LPTIM5)
+	case 5:
+		base = LPTIM5;
+		break;
+#endif
+#if defined(LPTIM6)
+	case 6:
+		base = LPTIM6;
+		break;
+#endif
+#if defined(LPTIM7)
+	case 7:
+		base = LPTIM7;
+		break;
+#endif
+	default:
+		ret = -EINVAL;
+		goto error;
+	};
+
+	hlptimer->Instance = base;
+	hlptimer->Init.Period = period;
+	hlptimer->Init.UpdateMode = LPTIM_UPDATE_IMMEDIATE;
+	hlptimer->Init.CounterSource = LPTIM_COUNTERSOURCE_INTERNAL;
+	hlptimer->Init.Input1Source = LPTIM_INPUT1SOURCE_GPIO;
+	hlptimer->Init.Input2Source = LPTIM_INPUT2SOURCE_GPIO;
+	hlptimer->Init.RepetitionCounter = sparam->repetitions;
+
+	hlptimer->Init.Clock.Source = LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC;
+	hlptimer->Init.Clock.Prescaler = sparam->prescaler;
+	hlptimer->State = HAL_LPTIM_STATE_RESET;
+
+	if (sparam->trigger_enable) {
+		hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_SOFTWARE;
+		hlptimer->Init.Trigger.ActiveEdge = LPTIM_ACTIVEEDGE_RISING;
+		hlptimer->Init.Trigger.SampleTime = LPTIM_TRIGSAMPLETIME_DIRECTTRANSITION;
+	}
+
+	if (sparam->trigger_enable) {
+		switch (sparam->trigger_source) {
+		case PWM_TS_ITR0:
+			hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_0;
+			break;
+		case PWM_TS_ITR1:
+			hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_1;
+			break;
+		case PWM_TS_ITR2:
+			hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_2;
+			break;
+		case PWM_TS_ITR3:
+			hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_3;
+			break;
+		default:
+			return -EINVAL;
+		}
+	}
+	if (HAL_LPTIM_Init(hlptimer) != HAL_OK)
+		return -EIO;
+
+	/* Store the timer specific configuration for later use.*/
+	desc->htimer = hlptimer;
+	desc->pwm_timer = STM32_PWM_TIMER_LPTIM;
+	desc->prescaler = sparam->prescaler;
+	desc->get_timer_clock = sparam->get_timer_clock;
+	desc->clock_divider = sparam->clock_divider;
+	desc->timer_autoreload = sparam->timer_autoreload;
+
+	if (param->pwm_callback) {
+		struct no_os_irq_init_param nvic_tim_cplt = {
+			.platform_ops = &stm32_irq_ops
+		};
+
+		ret = no_os_irq_ctrl_init(&desc->nvic_tim, &nvic_tim_cplt);
+		if (ret < 0)
+			goto error;
+
+		sparam->timer_callback.callback = param->pwm_callback;
+		sparam->timer_callback.ctx = desc;
+		sparam->timer_callback.event = NO_OS_EVT_LPTIM_PWM_PULSE_FINISHED;
+		sparam->timer_callback.peripheral = NO_OS_LPTIM_IRQ;
+		sparam->timer_callback.handle = hlptimer;
+
+		ret = no_os_irq_register_callback(desc->nvic_tim, param->irq_id,
+						  &sparam->timer_callback);
+		if (ret < 0)
+			goto error_register;
+
+		ret = no_os_irq_enable(desc->nvic_tim, param->irq_id);
+		if (ret < 0)
+			goto error_enable;
+	}
+
+	return 0;
+error_enable:
+	no_os_irq_unregister_callback(desc->nvic_tim, param->irq_id,
+				      &sparam->timer_callback);
+error_register:
+	no_os_irq_ctrl_remove(desc->nvic_tim);
+error:
+	return ret;
+}
+#endif
 
 /**
  * @brief Initialize the PWM.
@@ -313,83 +468,141 @@ static int32_t stm32_init_pwm(struct stm32_pwm_desc *desc,
 {
 	uint32_t pwm_pulse_width;
 	float duty_cycle_percentage;
-	uint32_t ocmode;
 	uint32_t chn;
-	TIM_OC_InitTypeDef sConfigOC = {0};
-	uint32_t period = desc->htimer.Init.Period;
 	struct stm32_pwm_init_param *sparam = param->extra;
+	uint32_t period;
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	LPTIM_OC_ConfigTypeDef sLpTimerConfigOC = {0};
+	LPTIM_HandleTypeDef *hlptimer;
+#endif
+#ifdef HAL_TIM_MODULE_ENABLED
+	TIM_OC_InitTypeDef sTimerConfigOC = {0};
+	TIM_HandleTypeDef *htimer;
+#endif
 
-	switch (sparam->mode) {
-	case TIM_OC_TOGGLE:
-		ocmode = TIM_OCMODE_TOGGLE;
+	switch (sparam->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		htimer = (TIM_HandleTypeDef *) sparam->htimer;
+		period = htimer->Init.Period;
+		switch (sparam->mode) {
+		case TIM_OC_TOGGLE:
+			sTimerConfigOC.OCMode = TIM_OCMODE_TOGGLE;
+			break;
+		case TIM_OC_PWM1:
+			sTimerConfigOC.OCMode = TIM_OCMODE_PWM1;
+			break;
+		case TIM_OC_PWM2:
+			sTimerConfigOC.OCMode = TIM_OCMODE_PWM2;
+			break;
+		default:
+			return -EINVAL;
+		}
+
+		switch (sparam->timer_chn) {
+#if defined(TIM_CHANNEL_1)
+		case 1:
+			chn = TIM_CHANNEL_1;
+			break;
+#endif
+#if defined(TIM_CHANNEL_2)
+		case 2:
+			chn = TIM_CHANNEL_2;
+			break;
+#endif
+#if defined(TIM_CHANNEL_3)
+		case 3:
+			chn = TIM_CHANNEL_3;
+			break;
+#endif
+#if defined(TIM_CHANNEL_4)
+		case 4:
+			chn = TIM_CHANNEL_4;
+			break;
+#endif
+#if defined(TIM_CHANNEL_5)
+		case 5:
+			chn = TIM_CHANNEL_5;
+			break;
+#endif
+#if defined(TIM_CHANNEL_6)
+		case 6:
+			chn = TIM_CHANNEL_6;
+			break;
+#endif
+		default:
+			return -EINVAL;
+		};
+
+		/* Calculate the percentage duty cycle */
+		duty_cycle_percentage = ((float)param->duty_cycle_ns / param->period_ns) * 100;
+		pwm_pulse_width = (uint32_t)((period + 1) * duty_cycle_percentage) / (100);
+
+		sTimerConfigOC.Pulse = pwm_pulse_width;
+		switch (param->polarity) {
+		case NO_OS_PWM_POLARITY_HIGH:
+			sTimerConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+			break;
+		case NO_OS_PWM_POLARITY_LOW:
+			sTimerConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
+			break;
+		default:
+			return -EINVAL;
+		};
+
+		sTimerConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+		sTimerConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+		sTimerConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+		if (HAL_TIM_PWM_ConfigChannel(htimer, &sTimerConfigOC, chn) != HAL_OK)
+			return -EIO;
 		break;
-	case TIM_OC_PWM1:
-		ocmode = TIM_OCMODE_PWM1;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		hlptimer = (LPTIM_HandleTypeDef *) sparam->htimer;
+		period = hlptimer->Init.Period;
+		sparam->complementary_channel = false;
+		sparam->dma_enable = false;
+
+		switch (sparam->timer_chn) {
+#if defined(LPTIM_CHANNEL_1)
+		case 1:
+			chn = LPTIM_CHANNEL_1;
+			break;
+#endif
+#if defined(LPTIM_CHANNEL_2)
+		case 2:
+			chn = LPTIM_CHANNEL_2;
+			break;
+#endif
+		default:
+			return -EINVAL;
+		};
+
+		/* Calculate the percentage duty cycle */
+		duty_cycle_percentage = ((float)param->duty_cycle_ns / param->period_ns) * 100;
+		pwm_pulse_width = (uint32_t)((period + 1) * duty_cycle_percentage) / (100);
+
+		sLpTimerConfigOC.Pulse = pwm_pulse_width;
+		switch (param->polarity) {
+		case NO_OS_PWM_POLARITY_HIGH:
+			sLpTimerConfigOC.OCPolarity = LPTIM_OCPOLARITY_HIGH;
+			break;
+		case NO_OS_PWM_POLARITY_LOW:
+			sLpTimerConfigOC.OCPolarity = LPTIM_OCPOLARITY_LOW;
+			break;
+		default:
+			return -EINVAL;
+		};
+
+		if (HAL_LPTIM_OC_ConfigChannel(hlptimer, &sLpTimerConfigOC, chn) != HAL_OK)
+			return -EIO;
+
 		break;
-	case TIM_OC_PWM2:
-		ocmode = TIM_OCMODE_PWM2;
-		break;
+#endif
 	default:
 		return -EINVAL;
 	}
-
-	switch (sparam->timer_chn) {
-#if defined(TIM_CHANNEL_1)
-	case 1:
-		chn = TIM_CHANNEL_1;
-		break;
-#endif
-#if defined(TIM_CHANNEL_2)
-	case 2:
-		chn = TIM_CHANNEL_2;
-		break;
-#endif
-#if defined(TIM_CHANNEL_3)
-	case 3:
-		chn = TIM_CHANNEL_3;
-		break;
-#endif
-#if defined(TIM_CHANNEL_4)
-	case 4:
-		chn = TIM_CHANNEL_4;
-		break;
-#endif
-#if defined(TIM_CHANNEL_5)
-	case 5:
-		chn = TIM_CHANNEL_5;
-		break;
-#endif
-#if defined(TIM_CHANNEL_6)
-	case 6:
-		chn = TIM_CHANNEL_6;
-		break;
-#endif
-	default:
-		return -EINVAL;
-	};
-
-	/* Calculate the percentage duty cycle */
-	duty_cycle_percentage = ((float)param->duty_cycle_ns / param->period_ns) * 100;
-	pwm_pulse_width = (uint32_t)((period + 1) * duty_cycle_percentage) / (100);
-
-	sConfigOC.OCMode = ocmode;
-	sConfigOC.Pulse = pwm_pulse_width;
-	switch (param->polarity) {
-	case NO_OS_PWM_POLARITY_HIGH:
-		sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-		break;
-	case NO_OS_PWM_POLARITY_LOW:
-		sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
-		break;
-	default:
-		return -EINVAL;
-	};
-
-	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-	sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-	if (HAL_TIM_PWM_ConfigChannel(&desc->htimer, &sConfigOC, chn) != HAL_OK)
-		return -EIO;
 
 	desc->mode = sparam->mode;
 	desc->timer_chn = sparam->timer_chn;
@@ -411,6 +624,7 @@ int32_t stm32_pwm_init(struct no_os_pwm_desc **desc,
 {
 	struct no_os_pwm_desc *descriptor;
 	struct stm32_pwm_desc *extra;
+	struct stm32_pwm_init_param *sparam;
 	int32_t ret;
 
 	if (!desc || !param)
@@ -426,10 +640,27 @@ int32_t stm32_pwm_init(struct no_os_pwm_desc **desc,
 		goto error_desc;
 	}
 
+	sparam = (struct stm32_pwm_init_param *)param->extra;
+
 	/* Initialize the PWM timer */
-	ret = stm32_init_timer(extra, param);
-	if (ret)
-		goto error_extra;
+	switch (sparam->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		ret = stm32_init_timer(extra, param);
+		if (ret)
+			goto error_extra;
+		break;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		ret = stm32_init_lptimer(extra, param);
+		if (ret)
+			goto error_extra;
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
 
 	/* Initialize the PWM */
 	ret = stm32_init_pwm(extra, param);
@@ -470,17 +701,40 @@ int32_t stm32_pwm_remove(struct no_os_pwm_desc *desc)
 {
 	int32_t ret;
 	struct stm32_pwm_desc *extra;
+#ifdef HAL_TIM_MODULE_ENABLED
+	TIM_HandleTypeDef *htimer;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	LPTIM_HandleTypeDef *hlptimer;
+#endif
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
 
 	extra = desc->extra;
+	switch (extra->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		htimer = (TIM_HandleTypeDef *) extra->htimer;
 
-	if (HAL_TIM_Base_DeInit(&extra->htimer) != HAL_OK)
-		return -EIO;
+		if (HAL_TIM_Base_DeInit(htimer) != HAL_OK)
+			return -EIO;
 
-	if (HAL_TIM_PWM_DeInit(&extra->htimer) != HAL_OK)
-		return -EIO;
+		if (HAL_TIM_PWM_DeInit(htimer) != HAL_OK)
+			return -EIO;
+		break;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		hlptimer = (LPTIM_HandleTypeDef *) extra->htimer;
+
+		if (HAL_LPTIM_DeInit(hlptimer) != HAL_OK)
+			return -EIO;
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
 
 	ret = no_os_gpio_remove(extra->gpio);
 	if (ret)
@@ -517,12 +771,24 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	int32_t ret;
 	uint32_t chn_num;
 	struct stm32_pwm_desc *sparam;
-	uint32_t map[] = {
+
+#ifdef HAL_TIM_MODULE_ENABLED
+	TIM_HandleTypeDef *htimer;
+	const uint32_t timer_map[] = {
 		[1] = TIM_DMA_CC1,
 		[2] = TIM_DMA_CC2,
 		[3] = TIM_DMA_CC3,
 		[4] = TIM_DMA_CC4,
 	};
+
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	LPTIM_HandleTypeDef *hlptimer;
+	const uint32_t lptimer_map[] = {
+		[1] = LPTIM_DMA_CC1,
+		[2] = LPTIM_DMA_CC2,
+	};
+#endif
 
 	if (!desc)
 		return -EINVAL;
@@ -530,31 +796,72 @@ int32_t stm32_pwm_enable(struct no_os_pwm_desc *desc)
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
 
-	/* set counter to 0 to start from known state */
-	__HAL_TIM_SET_COUNTER(&sparam->htimer, 0);
+	switch (sparam->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		htimer = (TIM_HandleTypeDef *) sparam->htimer;
+		/* set counter to 0 to start from known state */
+		__HAL_TIM_SET_COUNTER(htimer, 0);
 
-	if (sparam->dma_enable) {
-		/*sw trigger to reload repetition counter from repetitition register */
-		sparam->htimer.Instance->RCR = sparam->repetitions;
-		sparam->htimer.Instance->EGR |= (1 << 0);
-		__HAL_TIM_ENABLE_DMA(&sparam->htimer, map[sparam->timer_chn]);
-	}
-
-	if (desc->irq_id) {
-		if (sparam->complementary_channel) {
-			ret = HAL_TIMEx_PWMN_Start_IT(&sparam->htimer, chn_num);
-		} else {
-			ret = HAL_TIM_PWM_Start_IT(&sparam->htimer, chn_num);
+		if (sparam->dma_enable) {
+			/*sw trigger to reload repetition counter from repetition register */
+			htimer->Instance->RCR = sparam->repetitions;
+			htimer->Instance->EGR |= (1 << 0);
+			__HAL_TIM_ENABLE_DMA(htimer, timer_map[sparam->timer_chn]);
 		}
-	} else {
-		if (sparam->complementary_channel)
-			ret = HAL_TIMEx_PWMN_Start(&sparam->htimer, chn_num);
-		else
-			ret = HAL_TIM_PWM_Start(&sparam->htimer, chn_num);
-	}
 
-	if (ret != HAL_OK)
-		return -EIO;
+		if (desc->irq_id) {
+			if (sparam->complementary_channel) {
+				ret = HAL_TIMEx_PWMN_Start_IT(htimer, chn_num);
+			} else {
+				ret = HAL_TIM_PWM_Start_IT(htimer, chn_num);
+			}
+		} else {
+			if (sparam->complementary_channel)
+				ret = HAL_TIMEx_PWMN_Start(htimer, chn_num);
+			else
+				ret = HAL_TIM_PWM_Start(htimer, chn_num);
+		}
+		if (ret != HAL_OK) {
+			return -EIO;
+		}
+
+		break;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		hlptimer = (LPTIM_HandleTypeDef *) sparam->htimer;
+
+		/* set counter to 0 to start from known state */
+		__HAL_LPTIM_RESET_COUNTER(hlptimer);
+
+		if (sparam->dma_enable) {
+			/*sw trigger to reload repetition counter from repetition register */
+			hlptimer->Instance->RCR = sparam->repetitions;
+			hlptimer->Instance->CR |= (1 << 3);
+			__HAL_LPTIM_ENABLE_DMA(hlptimer, lptimer_map[sparam->timer_chn]);
+		}
+
+		if (desc->irq_id) {
+			if (sparam->onepulse_enable)
+				ret = HAL_LPTIM_OnePulse_Start_IT(hlptimer, chn_num);
+			else
+				ret = HAL_LPTIM_PWM_Start_IT(hlptimer, chn_num);
+		} else {
+			if (sparam->onepulse_enable)
+				ret = HAL_LPTIM_OnePulse_Start(hlptimer, chn_num);
+			else
+				ret = HAL_LPTIM_PWM_Start(hlptimer, chn_num);
+		}
+		if (ret != HAL_OK) {
+			return -EIO;
+		}
+
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -569,12 +876,24 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 	int32_t ret;
 	uint32_t chn_num;
 	struct stm32_pwm_desc *sparam;
-	uint32_t map[] = {
+
+#ifdef HAL_TIM_MODULE_ENABLED
+	TIM_HandleTypeDef *htimer;
+	const uint32_t timer_map[] = {
 		[1] = TIM_DMA_CC1,
 		[2] = TIM_DMA_CC2,
 		[3] = TIM_DMA_CC3,
 		[4] = TIM_DMA_CC4,
 	};
+
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	LPTIM_HandleTypeDef *hlptimer;
+	const uint32_t lptimer_map[] = {
+		[1] = LPTIM_DMA_CC1,
+		[2] = LPTIM_DMA_CC2,
+	};
+#endif
 
 	if (!desc)
 		return -EINVAL;
@@ -582,16 +901,52 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 	sparam = desc->extra;
 	chn_num = NO_OS_CHN_TO_STM32_CHN(sparam->timer_chn);
 
-	if (sparam->dma_enable)
-		__HAL_TIM_DISABLE_DMA(&sparam->htimer,  map[sparam->timer_chn]);
+	switch (sparam->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		htimer = (TIM_HandleTypeDef *) sparam->htimer;
 
-	if (sparam->complementary_channel)
-		ret = HAL_TIMEx_PWMN_Stop(&sparam->htimer, chn_num);
-	else
-		ret = HAL_TIM_PWM_Stop(&sparam->htimer, chn_num);
+		if (sparam->dma_enable)
+			__HAL_TIM_DISABLE_DMA(htimer,  timer_map[sparam->timer_chn]);
 
-	if (ret != HAL_OK)
-		return -EIO;
+		if (sparam->complementary_channel)
+			ret = HAL_TIMEx_PWMN_Stop(htimer, chn_num);
+		else
+			ret = HAL_TIM_PWM_Stop(htimer, chn_num);
+
+		if (ret != HAL_OK) {
+			return -EIO;
+		}
+
+		break;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		hlptimer = (LPTIM_HandleTypeDef *) sparam->htimer;
+
+		if (sparam->dma_enable)
+			__HAL_LPTIM_DISABLE_DMA(hlptimer,  lptimer_map[sparam->timer_chn]);
+
+		if (desc->irq_id) {
+			if (sparam->onepulse_enable)
+				ret = HAL_LPTIM_OnePulse_Stop_IT(hlptimer, chn_num);
+			else
+				ret = HAL_LPTIM_PWM_Stop_IT(hlptimer, chn_num);
+		} else {
+			if (sparam->onepulse_enable)
+				ret = HAL_LPTIM_OnePulse_Stop(hlptimer, chn_num);
+			else
+				ret = HAL_LPTIM_PWM_Stop(hlptimer, chn_num);
+		}
+
+		if (ret != HAL_OK) {
+			return -EIO;
+		}
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -605,25 +960,54 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 			     uint32_t period_ns)
 {
-	struct stm32_pwm_desc *sdesc = desc->extra;
+	struct stm32_pwm_desc *sdesc;
 	uint32_t period;
 
-	if (!sdesc)
+#ifdef HAL_TIM_MODULE_ENABLED
+	TIM_HandleTypeDef *htimer;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	LPTIM_HandleTypeDef *hlptimer;
+#endif
+
+	if (!desc || !desc->extra)
 		return -EINVAL;
 
+	sdesc = desc->extra;
 	/* Compute period ticks */
 	period = _compute_period_ticks(sdesc->get_timer_clock, sdesc->clock_divider,
 				       sdesc->prescaler, period_ns);
 
-	sdesc->htimer.Init.AutoReloadPreload = sdesc->timer_autoreload ?
-					       TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
-	sdesc->htimer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	sdesc->htimer.Init.CounterMode = TIM_COUNTERMODE_UP;
-	sdesc->htimer.Init.Prescaler = sdesc->prescaler;
-	sdesc->htimer.Init.Period = period;
-	sdesc->htimer.Init.RepetitionCounter = sdesc->repetitions;
+	switch (sdesc->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		htimer = (TIM_HandleTypeDef *) sdesc->htimer;
 
-	TIM_Base_SetConfig(sdesc->htimer.Instance, &sdesc->htimer.Init);
+		htimer->Init.AutoReloadPreload = sdesc->timer_autoreload ?
+						 TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
+		htimer->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+		htimer->Init.CounterMode = TIM_COUNTERMODE_UP;
+		htimer->Init.Prescaler = sdesc->prescaler;
+		htimer->Init.Period = period;
+		htimer->Init.RepetitionCounter = sdesc->repetitions;
+
+		TIM_Base_SetConfig(htimer->Instance, &htimer->Init);
+		break;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		hlptimer = (LPTIM_HandleTypeDef *) sdesc->htimer;
+		hlptimer->Init.Period = period;
+
+		/* Change the LPTIM state */
+		hlptimer->State = HAL_LPTIM_STATE_READY;
+		if (HAL_LPTIM_Init(hlptimer) != HAL_OK)
+			return -EIO;
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
 
 	desc->period_ns = period_ns;
 
@@ -640,16 +1024,34 @@ int32_t stm32_pwm_get_period(struct no_os_pwm_desc *desc,
 			     uint32_t *period_ns)
 {
 	uint32_t timer_hz;
+	uint32_t period;
 
 	if (!desc || !desc->extra || !period_ns)
 		return -EINVAL;
 
 	struct stm32_pwm_desc *sparam = desc->extra;
+
 	timer_hz = sparam->get_timer_clock() * sparam->clock_divider;
 	timer_hz /= (sparam->prescaler + 1);
 
-	*period_ns = (uint32_t)((sparam->htimer.Init.Period + 1) *
-				(FREQUENCY_HZ_TO_TIME_NS_FACTOR / timer_hz));
+	switch (sparam->pwm_timer) {
+#ifdef HAL_TIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_TIM:
+		period = ((TIM_HandleTypeDef *)sparam->htimer)->Init.Period;
+		*period_ns = (uint32_t)((period + 1) *
+					(FREQUENCY_HZ_TO_TIME_NS_FACTOR / timer_hz));
+		break;
+#endif
+#ifdef HAL_LPTIM_MODULE_ENABLED
+	case STM32_PWM_TIMER_LPTIM:
+		period = ((LPTIM_HandleTypeDef *)sparam->htimer)->Init.Period;
+		*period_ns = (uint32_t)((period + 1) *
+					(FREQUENCY_HZ_TO_TIME_NS_FACTOR / timer_hz));
+		break;
+#endif
+	default:
+		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -664,8 +1066,8 @@ int32_t stm32_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 				 uint32_t duty_cycle_ns)
 {
 	int32_t ret;
-	struct no_os_pwm_init_param param;
-	struct stm32_pwm_init_param sparam;
+	struct no_os_pwm_init_param param = {0};
+	struct stm32_pwm_init_param sparam = {0};
 
 	if (!desc || !desc->extra)
 		return -EINVAL;
@@ -673,6 +1075,8 @@ int32_t stm32_pwm_set_duty_cycle(struct no_os_pwm_desc *desc,
 	param.duty_cycle_ns = duty_cycle_ns;
 	param.period_ns = desc->period_ns;
 	param.phase_ns = desc->phase_ns;
+	sparam.htimer = ((struct stm32_pwm_desc *)desc->extra)->htimer;
+	sparam.pwm_timer = ((struct stm32_pwm_desc *)desc->extra)->pwm_timer;
 	sparam.mode = ((struct stm32_pwm_desc *)desc->extra)->mode;
 	sparam.timer_chn = ((struct stm32_pwm_desc *)desc->extra)->timer_chn;
 	sparam.complementary_channel = ((struct stm32_pwm_desc*)
