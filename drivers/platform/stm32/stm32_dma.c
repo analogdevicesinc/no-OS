@@ -67,6 +67,7 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 	struct stm32_dma_ch_priv_data *ch_priv_data;
 	uint32_t per_data_align, mem_data_align;
 	DMA_NodeConfTypeDef xfer_node_config = {0};
+	DMA_TriggerConfTypeDef trigger_config;
 #endif
 
 	if (!channel || !xfer || !channel->extra)
@@ -134,6 +135,39 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 		return -EINVAL;
 	}
 
+	if (sdma_ch->trig) {
+		switch (sdma_ch->trig->mode) {
+		case STM32_DMA_MODE_0:
+			trigger_config.TriggerMode = 0;
+			break;
+		case STM32_DMA_MODE_1:
+			trigger_config.TriggerMode = DMA_CTR2_TRIGM_0;
+			break;
+		case STM32_DMA_MODE_2:
+			trigger_config.TriggerMode = DMA_CTR2_TRIGM_1;
+			break;
+		case STM32_DMA_MODE_3:
+			trigger_config.TriggerMode = DMA_CTR2_TRIGM;
+			break;
+		default:
+			return -EINVAL;
+		}
+		switch (sdma_ch->trig->polarity) {
+		case STM32_DMA_TRIG_MASKED:
+			trigger_config.TriggerPolarity = 0;
+			break;
+		case STM32_DMA_TRIG_RISING:
+			trigger_config.TriggerPolarity = DMA_CTR2_TRIGPOL_0;
+			break;
+		case STM32_DMA_TRIG_FALLING:
+			trigger_config.TriggerPolarity = DMA_CTR2_TRIGPOL_1;
+			break;
+		default:
+			return -EINVAL;
+		}
+		trigger_config.TriggerSelection = sdma_ch->trig->id;
+	}
+
 	switch (xfer->xfer_type) {
 	case MEM_TO_MEM:
 		sdma_ch->hdma->Init.Direction = DMA_MEMORY_TO_MEMORY;
@@ -156,6 +190,11 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 		if (ret != HAL_OK)
 			return -EINVAL;
 
+		if (sdma_ch->trig) {
+			ret = HAL_DMAEx_ConfigTrigger(sdma_ch->hdma, &trigger_config);
+			if (ret != HAL_OK)
+				return -EINVAL;
+		}
 		break;
 	case DMA_CIRCULAR_MODE:
 		xfer_node_config.NodeType = DMA_GPDMA_LINEAR_NODE;
@@ -165,6 +204,12 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 		xfer_node_config.DstAddress = (uint32_t) xfer->dst;
 		xfer_node_config.DataSize = (uint32_t) xfer->length;
 
+		if (sdma_ch->trig) {
+			xfer_node_config.TriggerConfig.TriggerMode = trigger_config.TriggerMode;
+			xfer_node_config.TriggerConfig.TriggerPolarity = trigger_config.TriggerPolarity;
+			xfer_node_config.TriggerConfig.TriggerSelection =
+				trigger_config.TriggerSelection;
+		}
 		/* Remove all the previous nodes */
 		if (ch_priv_data) {
 			/* Reset, Unlink and DeInit the previous list */
