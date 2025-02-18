@@ -25,6 +25,11 @@ repository, each commit should respect a few rules:
   of the commit log message - it certifies that the committer has the rights to
   submit the work under the project's license.
 
+- The commit message should follow the **50/72 rule** :
+
+  - The first line (the subject) should be **at most 50 characters** long.
+  - The body of the commit message should wrap at **72 characters** per line.
+
 - If built using **gcc**, options such as **-Wall** and **-Wextra** don't
   detect any issues with the commit. When the pull request is created, drivers
   and project build are automatically triggered.
