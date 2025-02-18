@@ -30,6 +30,15 @@ repository, each commit should respect a few rules:
   - The first line (the subject) should be **at most 50 characters** long.
   - The body of the commit message should wrap at **72 characters** per line.
 
+- The commit subject should start with a **prefix** indicating the relative
+  path to the file that was added or changed. This improves clarity and makes
+  it easier to identify affected areas in the repository.
+
+  Example:
+
+  - ``dac: ad5460: add driver support``
+  - ``projects: eval-adis1655x: add implementation``
+
 - If built using **gcc**, options such as **-Wall** and **-Wextra** don't
   detect any issues with the commit. When the pull request is created, drivers
   and project build are automatically triggered.
