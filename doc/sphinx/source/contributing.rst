@@ -29,8 +29,9 @@ repository, each commit should respect a few rules:
   detect any issues with the commit. When the pull request is created, drivers
   and project build are automatically triggered.
 
-- **astyle --style=linux --indent=force-tab=8 --max-code-length=80** doesn't
-  detect any issue with the commit.
+- **astyle --style=linux --indent=force-tab=8 --max-code-length=80 --suffix=none
+  --pad-oper --pad-header --unpad-paren --pad-comma** doesn't detect any issue
+  with the commit.
 
 - A detailed description of how the new changes were tested is provided. This
   information can be written in the pull request description. If the driver
