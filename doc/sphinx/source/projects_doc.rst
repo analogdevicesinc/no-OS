@@ -14,7 +14,7 @@ ANALOG TO DIGITAL CONVERTERS
    projects/ad7616-st
    projects/ad796x_fmcz
    projects/pulsar-adc
-   projects/ad469x_fmcz
+   projects/ad469x_evb
 
 FREQUENCY GENERATORS
 ====================

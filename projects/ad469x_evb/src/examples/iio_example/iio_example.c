@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   iio_example.c
- *   @brief  Implementation of IIO example for ad469x_fmcz project.
+ *   @brief  Implementation of IIO example for ad469x_evb project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
