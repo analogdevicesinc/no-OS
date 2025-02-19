@@ -16,9 +16,9 @@ Supported Evaluation Boards
 Overview
 --------
 
-The EVAL-AD4696FMCZ is designed to demonstrate AD4696 performance and provide access to its many configuration options via an easy to use ACE plugin graphical interface. The AD4696 is a 16-channel, 16-bit, 1 MSPS, multiplexed successive approximation register (SAR) analog-to-digital converter (ADC) that enables high performance data acquisition of multiple signals in a small form factor. The AD4696 employs easy drive features and on-chip channel sequencing that simplify hardware and software designs and allow it to fit into a variety of space constrained precision multichannel applications.
+The EVAL-AD4696 is designed to demonstrate AD4696 performance and provide access to its many configuration options via an easy to use ACE plugin graphical interface. The AD4696 is a 16-channel, 16-bit, 1 MSPS, multiplexed successive approximation register (SAR) analog-to-digital converter (ADC) that enables high performance data acquisition of multiple signals in a small form factor. The AD4696 employs easy drive features and on-chip channel sequencing that simplify hardware and software designs and allow it to fit into a variety of space constrained precision multichannel applications.
 
-The EVAL-AD4696FMCZ allows users to quickly evaluate the performance of the AD4696 with no or minimal hardware modifications. The hardware includes two externally driven analog input channels for evaluating ac performance and 14 channels with dc levels generated on board for evaluating dc and settling performance. The externally driven channels have configurable drive circuitry and interface with precision signal generators via SMA connectors.
+The EVAL-AD4696 allows users to quickly evaluate the performance of the AD4696 with no or minimal hardware modifications. The hardware includes two externally driven analog input channels for evaluating ac performance and 14 channels with dc levels generated on board for evaluating dc and settling performance. The externally driven channels have configurable drive circuitry and interface with precision signal generators via SMA connectors.
 
 No-OS Build Setup
 -----------------
@@ -53,7 +53,7 @@ No-OS Supported Examples
 ------------------------
 
 The initialization data used in the examples is taken out from:
-`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad469x_fmcz/src/common>`_
+`Project Common Data Path <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad469x_evb/src/common>`_
 
 Basic example
 ^^^^^^^^^^^^^
@@ -105,10 +105,10 @@ The No-OS IIO Application together with the No-OS IIO AD469x driver take care of
 all the back-end logic needed to setup the IIO server.
 
 This example initializes the IIO device and calls the IIO app as shown in:
-`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/AD469x_fmcz/src/examples/iio_example>`_
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/main/projects/AD469x_evb/src/examples/iio_example>`_
 
 In order to build the IIO project make sure you have the following configuration in the
-`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/AD469x_fmcz/Makefile>`_
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/AD469x_evb/Makefile>`_
 
 To build the IIO example:
 

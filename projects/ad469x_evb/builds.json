@@ -2,19 +2,19 @@
       "xilinx": {
         "basic": {
               "flags" : "IIO_EXAMPLE=n BASIC_EXAMPLE=y",
-              "hardware" : ["ad469x_fmc_zed"]
+              "hardware" : ["ad469x_evb_zed"]
         },
         "iio": {
               "flags" : "IIO_EXAMPLE=y BASIC_EXAMPLE=n",
-              "hardware" : ["ad469x_fmc_zed"]
+              "hardware" : ["ad469x_evb_zed"]
         },
         "standard_seq": {
               "flags" : "IIO_EXAMPLE=n BASIC_EXAMPLE=y AD469X_SEQ=standard",
-              "hardware" : ["ad469x_fmc_zed"]
+              "hardware" : ["ad469x_evb_zed"]
         },
         "advance_seq": {
               "flags" : "IIO_EXAMPLE=n BASIC_EXAMPLE=y AD469X_SEQ=advanced",
-              "hardware" : ["ad469x_fmc_zed"]
+              "hardware" : ["ad469x_evb_zed"]
         }
       }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_example.h
- *   @brief  IIO example header for ad469x_fmcz project
+ *   @file   platform_includes.h
+ *   @brief  Includes for used platforms used by ad400x-evb project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
@@ -30,12 +30,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+#ifndef __PLATFORM_INCLUDES_H__
+#define __PLATFORM_INCLUDES_H__
 
 /******************************************************************************/
-/************************ Functions Declarations ******************************/
+/***************************** Include Files **********************************/
 /******************************************************************************/
-int iio_example_main();
+#ifdef XILINX_PLATFORM
+#include "xilinx/parameters.h"
+#endif
 
-#endif /* __IIO_EXAMPLE_H__ */
+#ifdef IIO_SUPPORT
+#include "iio_app.h"
+#endif
+
+#endif /* __PLATFORM_INCLUDES_H__ */
