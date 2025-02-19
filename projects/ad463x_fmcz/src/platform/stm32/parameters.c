@@ -74,6 +74,8 @@ struct stm32_gpio_init_param cnv_pwm_gpio_extra_init_params = {
 };
 
 struct stm32_pwm_init_param cnv_pwm_extra_init_params = {
+	.htimer = &htim1,
+	.pwm_timer = STM32_PWM_TIMER_TIM,
 	.prescaler = 1,
 	.timer_autoreload = true,
 	.mode = TIM_OC_PWM1,
@@ -86,6 +88,8 @@ struct stm32_pwm_init_param cnv_pwm_extra_init_params = {
 
 /* CS PWM */
 struct stm32_pwm_init_param cs_pwm_extra_init_params = {
+	.htimer = &htim2,
+	.pwm_timer = STM32_PWM_TIMER_TIM,
 	.prescaler = 1,
 	.timer_autoreload = true,
 	.mode = TIM_OC_PWM1,
@@ -111,6 +115,8 @@ struct no_os_pwm_init_param cs_pwm_init = {
 
 /* TX PWM */
 struct stm32_pwm_init_param tx_pwm_extra_init_params = {
+	.htimer = &htim8,
+	.pwm_timer = STM32_PWM_TIMER_TIM,
 	.prescaler = 1,
 	.timer_autoreload = true,
 	.mode = TIM_OC_PWM1,
