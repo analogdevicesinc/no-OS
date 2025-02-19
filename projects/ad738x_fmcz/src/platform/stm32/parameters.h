@@ -51,6 +51,9 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 extern UART_HandleTypeDef huart5;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim8;
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID 0
 #endif
