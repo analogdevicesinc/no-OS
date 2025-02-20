@@ -50,6 +50,9 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 extern UART_HandleTypeDef huart5;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim8;
 #define SAMPLES_PER_CHANNEL_PLATFORM 2000
 #define MAX_SIZE_BASE_ADDR     (SAMPLES_PER_CHANNEL_PLATFORM * 2 * sizeof(uint32_t))
 
