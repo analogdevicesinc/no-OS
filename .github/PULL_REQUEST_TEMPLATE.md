@@ -11,6 +11,7 @@ If this PR contains a breaking change, list dependent PRs and try to push all re
 
 ## PR Checklist
 - [ ] I have followed the [Coding style guidelines](http://analogdevicesinc.github.io/no-OS/drivers_guide.html#coding-style)
+- [ ] I have complied with the [Submission Checklist](http://analogdevicesinc.github.io/no-OS/contributing.html#submission-checklist)
 - [ ] I have performed a self-review of the changes
 - [ ] I have commented my code, at least hard-to-understand parts
 - [ ] I have build all projects affected by the changes in this PR
