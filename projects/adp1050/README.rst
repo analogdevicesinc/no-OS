@@ -8,11 +8,12 @@ Supported Evaluation Boards
 ---------------------------
 
 * `ADP1050DC1-EVALZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adp1050.html#eb-documentation>`_
+* `ADP1051-240-EVALZ <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adp1051.html#eb-overview>`_
 
 Overview
 --------
 
-The evaluation board allows the ADP1050 to be exercised without the need for
+The evaluation board allows the ADP1050 and ADP1051 to be exercised without the need for
 external components. The board is set up to act as an isolated PSU,
 outputting a rated load of 12 V, 20 A from a 36 V dc to 75 V dc source.
 
@@ -26,8 +27,8 @@ Power Supply Requirments
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 For this specific project an external power supply is used to provide a 20.1V
-and 12V voltages for the ADP1050DC1-EVALZ daughter board to simulate a parallel
-circuit to the ADP1050 as well as a +5V Power Supply for the PMBUS/I2C
+and 12V voltages for the ADP1050DC1-EVALZ and ADP1051-240-EVALZ daughter board to simulate a parallel
+circuit to the ADP1050 and ADP1051 as well as a +5V Power Supply for the PMBUS/I2C
 interface.
 
 **Pin Description**
@@ -116,7 +117,7 @@ The macros used in Common Data are defined in platform specific files found in:
 Basic example
 ^^^^^^^^^^^^^
 
-This is a simple example that initializes the ADP1050, unlock its CHIP, EEPROM
+This is a simple example that initializes the ADP1050 and ADP1051, unlock its CHIP, EEPROM
 and TRIM registers, sets the device in a closed loop state, and then : sets the
 VOUT transition rate, VOUT scale and value of the VOUT_COMMAND and VOUT_MAX.
 

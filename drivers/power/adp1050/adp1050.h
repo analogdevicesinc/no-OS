@@ -83,17 +83,20 @@
 #define ADP1050_EXP_MASK			NO_OS_GENMASK(15, 11)
 #define ADP1050_MANT_MASK			NO_OS_GENMASK(10, 0)
 
+#define ADP1051_VDROOP_MAXVAL			0xFF
+
 #define ADP1050_VOUT_EXP_MASK			NO_OS_GENMASK(4, 0)
 #define ADP1050_VOUT_GO_COMMAND			0x06
 #define ADP1050_VOUT_OFF			0x00
 
 #define ADP1050_OUTA_FALLING_EDGE_NEGATIVE_MOD	0x03
 #define ADP1050_OUTB_FALLING_EDGE_NEGATIVE_MOD	0x30
-#define ADP1050_OUTA_ON				0x32
-#define ADP1050_OUTB_ON				0x31
-#define ADP1050_SR1_ON				0x23
-#define ADP1050_SR2_ON				0x13
-#define ADP1050_ALL_PWM_OFF			0x33
+
+#define ADP1050X_GEN_PWM_OUTPUT_DISABLE_MASK(x)	~NO_OS_BIT(x)
+#define ADP1050_PWM_OUTPUT_DISABLE_MASK		0x33
+#define ADP1051_PWM_OUTPUT_DISABLE_MASK		0x3F
+
+#define ADP1050_ALL_PWM_OFF			0x3F
 #define ADP1050_EDGE_MAX_VAL			0x0FFF
 #define ADP1050_PULSE_MAX_VAL			0xFFFF
 #define ADP1050_EDGE_MSB_MASK			NO_OS_GENMASK(7, 0)
@@ -106,13 +109,22 @@
 
 #define ADP1050_OUTA_OL_ENABLE			NO_OS_BIT(0)
 #define ADP1050_OUTB_OL_ENABLE			NO_OS_BIT(1)
+#define ADP1051_OUTC_OL_ENABLE			NO_OS_BIT(2)
+#define ADP1051_OUTD_OL_ENABLE			NO_OS_BIT(3)
 #define ADP1050_SR1_OL_ENABLE			NO_OS_BIT(4)
 #define ADP1050_SR2_OL_ENABLE			NO_OS_BIT(5)
 
-#define ADP1050_OUTB_SR2_RISING_MOD_MASK	NO_OS_GENMASK(7, 6)
-#define ADP1050_OUTB_SR2_FALLING_MOD_MASK	NO_OS_GENMASK(5, 4)
-#define ADP1050_OUTA_SR1_RISING_MOD_MASK	NO_OS_GENMASK(3, 2)
-#define ADP1050_OUTA_SR1_FALLING_MOD_MASK	NO_OS_GENMASK(1, 0)
+#define ADP1050_OUTB_OUTD_SR2_RISING_MOD_MASK	NO_OS_GENMASK(7, 6)
+#define ADP1051_OUTD_SR2_RISING_MOD_MASK	NO_OS_GENMASK(7, 6)
+
+#define ADP1050_OUTB_OUTD_SR2_FALLING_MOD_MASK	NO_OS_GENMASK(5, 4)
+#define ADP1051_OUTD_SR2_FALLING_MOD_MASK	NO_OS_GENMASK(5 ,4)
+
+#define ADP1050_OUTA_OUTC_SR1_RISING_MOD_MASK	NO_OS_GENMASK(3, 2)
+#define ADP1051_OUTC_SR1_RISING_MOD_MASK	NO_OS_GENMASK(3, 2)
+
+#define ADP1050_OUTA_OUTC_SR1_FALLING_MOD_MASK	NO_OS_GENMASK(1, 0)
+#define ADP1051_OUTC_SR1_FALLING_MOD_MASK	NO_OS_GENMASK(1, 0)
 
 #define ADP1050_POSITIVE_MOD_SIGN		0x02
 #define ADP1050_NEGATIVE_MOD_SIGN		0x03
@@ -127,6 +139,7 @@
 
 #define ADP1050_FREQ_SYNC_ON			0x48
 #define ADP1050_FREQ_SYNC_OFF			0x49
+
 #define ADP1050_MAX_PERIOD_INTEGER(x)		((1000 / (x)) * 1000)
 #define ADP1050_MAX_PERIOD_FLOAT(x)		((1000 / (((x) - 0xF800) / 2)) * 1000)
 #define ADP1050_FLOAT_FREQ_MASK			NO_OS_BIT(15)
@@ -157,6 +170,14 @@
 #define ADP1050_VS_OFFSET_MAX_INIT_VAL		0x7FFF
 #define ADP1050_VS_MAX_INIT_VAL			0xFF
 #define ADP1050_VS_INIT_MASK			NO_OS_GENMASK(14, 0)
+
+#define ADP1051_LLM_DLM_DROOPING_MASK		NO_OS_GENMASK(7, 6)
+#define ADP1051_LLM_DLM_AVG_SPEED_MASK		NO_OS_GENMASK(5, 4)
+#define ADP1051_LLM_DLM_HYST_MASK		NO_OS_GENMASK(3, 2)
+
+#define ADP1051_LLM_DEBOUNCE_MASK		NO_OS_GENMASK(6, 5)
+#define ADP1051_LLM_THRESH_MASK			NO_OS_GENMASK(3, 0)
+#define ADP1051_LLM_ENABLE_MASK			NO_OS_BIT(4)
 
 /* PMBus Addresses */
 #define ADP1050_PMBUS_10KOHM_ADDRESS		0x70
@@ -205,15 +226,20 @@
 #define ADP1050_VOUT_MARGIN_HIGH		0x25
 #define ADP1050_VOUT_MARGIN_LOW			0x26
 #define ADP1050_VOUT_TRANSITION_RATE		0x27
+#define ADP1051_VOUT_DROOP			0x28
 #define ADP1050_VOUT_SCALE_LOOP			0x29
 #define ADP1050_VOUT_SCALE_MONITOR		0x2A
 #define ADP1050_FREQUENCY_SWITCH		0x33
 #define ADP1050_VIN_ON				0x35
 #define ADP1050_VIN_OFF				0x36
+#define ADP1051_IOUT_CAL_GAIN			0x38
 #define ADP1050_VOUT_OV_FAULT_LIMIT		0x40
 #define ADP1050_VOUT_OV_FAULT_RESPONSE		0x41
 #define ADP1050_VOUT_UV_FAULT_LIMIT		0x44
 #define ADP1050_VOUT_UV_FAULT_RESPONSE		0x45
+#define ADP1051_IOUT_OC_FAULT_LIMIT		0x46
+#define ADP1051_IOUT_OC_FAULT_RES		0x47
+#define ADP1051_IOUT_OC_LV_FAULT_LIMIT		0x48
 #define ADP1050_OT_FAULT_LIMIT			0x4F
 #define ADP1050_OT_FAULT_RESPONSE		0x50
 #define ADP1050_POWER_GOOD_ON			0x5E
@@ -224,12 +250,14 @@
 #define ADP1050_STATUS_BYTE			0x78
 #define ADP1050_STATUS_WORD			0x79
 #define ADP1050_STATUS_VOUT			0x7A
+#define ADP1051_STATUS_IOUT			0x7B
 #define ADP1050_STATUS_INPUT			0x7C
 #define ADP1050_STATUS_TEMPERATURE		0x7D
 #define ADP1050_STATUS_CML			0x7E
 #define ADP1050_READ_VIN			0x88
 #define ADP1050_READ_IIN			0x89
 #define ADP1050_READ_VOUT			0x8B
+#define ADP1051_READ_IOUT			0x8C
 #define ADP1050_READ_TEMPERATURE		0x8D
 #define ADP1050_READ_DUTY_CYCLE			0x94
 #define ADP1050_READ_FREQUENCY			0x95
@@ -297,11 +325,17 @@
 
 /* Current Sense and Limit Setting Registers */
 #define ADP1050_CS1_GAIN_TRIM			0xFE14
+#define ADP1051_CS2_GAIN_TRIM			0xFE15
+#define ADP1051_CS2_DIG_OFFSET_TRIM		0xFE16
+#define ADP1051_CS2_ANA_TRIM			0xFE17
 #define ADP1050_CS3_OC_DEBOUNCE			0xFE19
+#define ADP1051_CS2_LIGHT_THRESH		0xFE19
 #define ADP1050_IIN_OC_FAST_FAULT_LIMIT		0xFE1A
 #define ADP1050_CS1_CBC_CURR_LIM_REF		0xFE1B
+#define ADP1051_PWM_OUT_DIS_DLM			0xFE1C
 #define ADP1050_MATCHED_CBC_CURR_LIM_SETTINGS	0xFE1D
 #define ADP1050_SR1_SR2_RESPONSE_CBC_CURR_LIM	0xFE1E
+#define ADP1051_LLM_DLM_SET			0xFE1E
 #define ADP1050_CS1_CBC_CURR_LIM_SETTINGS	0xFE1F
 
 /* Voltage Sense and Limit Setting Registers */
@@ -328,6 +362,10 @@
 #define ADP1050_PWM_180_PHASE_SHIFT_SETTINGS	0xFE3B
 #define ADP1050_MODULATION_LIMIT		0xFE3C
 #define ADP1050_FEEDFORWARD_SS_FILTER_GAIN	0xFE3D
+#define ADP1051_LIGHT_MOD_COMP_LOW_FREQ		0xFE34
+#define ADP1051_LIGHT_MODE_COMP_ZERO		0xFE35
+#define ADP1051_LIGHT_MODE_COMP_POLE		0xFE36
+#define ADP1051_LIGHTL_MODE_COMP_HIGH_FREQ	0xFE37
 
 /* PWM Outputs Timing Registers */
 #define ADP1050_OUTA_RISING_EDGE_TIMING		0xFE3E
@@ -345,15 +383,32 @@
 #define ADP1050_OUTA_OUTB_MODULATION_SETTINGS	0xFE50
 #define ADP1050_SR1_SR2_MODULATION_SETTINGS	0xFE52
 #define ADP1050_PWM_OUTPUT_DISABLE		0xFE53
+#define ADP1051_OUTC_RISING_EDGE_TIMING		0xFE44
+#define ADP1051_OUTC_FALLING_EDGE_TIMING	0xFE45
+#define ADP1051_OUTC_RISING_FALLING_TIMING_LSB	0xFE46
+#define ADP1051_OUTD_RISING_EDGE_TIMING		0xFE47
+#define ADP1051_OUTD_FALLING_EDGE_TIMING	0xFE48
+#define ADP1051_OUTD_RISING_FALLING_TIMING_LSB	0xFE49
+#define ADP1051_OUTC_OUTD_MODULATION_SETTINGS	0xFE51
 
 /* Volt-Second Balance Control Registers */
 #define ADP1050_VS_BAL_CTRL_GENERAL_SETTINGS	0xFE54
 #define ADP1050_VS_BAL_CTRL_OUTA_OUTB		0xFE55
 #define ADP1050_VS_BAL_CTRL_SR1_SR2		0xFE57
+#define ADP1051_VS_BAL_CTRL_OUTC_OUTD		0xFE56
 
 /* Duty Cycle Reading Setting Registers */
 #define ADP1050_DUTY_CYCLE_READING_SETTINGS	0xFE58
 #define ADP1050_INPUT_VOLTAGE_COMP_MULT		0xFE59
+
+/* Adaptive Dead Time Compensation Registers */
+#define ADP1051_ADAPTIVE_DTIME_TRESH		0xFE5A
+#define ADP1051_OUTA_DTIME			0xFE5B
+#define ADP1051_OUTB_DTIME			0xFE5C
+#define ADP1051_OUTC_DTIME			0xFE5D
+#define ADP1051_OUTD_DTIME			0xFE5E
+#define ADP1051_SR1_DTIME			0xFE5F
+#define ADP1051_SR2_DTIME			0xFE60
 
 /* Other Setting Registers */
 #define ADP1050_GO_COMMANDS			0xFE61
@@ -368,6 +423,9 @@
 #define ADP1050_MOD_FLAG_OVP_SELECTION		0xFE6C
 #define ADP1050_OUTA_OUTB_ADJ_REF_SYNCH		0xFE6D
 #define ADP1050_SR1_SR2_ADJ_REF_SYNCH		0xFE6F
+#define ADP1051_ADAPTIVE_DTIME_COMP_CONFIG	0xFE66
+#define ADP1051_OFFSET_SR1_SR2			0xFE68
+#define ADP1051_OUTC_OUTD_ADJ_REF_SYNC		0xFE6E
 
 /* Manufacturer Specific Fault Flag Registers */
 #define ADP1050_FLAG_REGISTER1			0xFEA0
@@ -386,6 +444,7 @@
 #define ADP1050_VF_VALUE			0xFEAC
 #define ADP1050_DUTY_CYCLE_VALUE		0xFEAD
 #define ADP1050_INPUT_POWER_VALUE		0xFEAE
+#define ADP1051_OUTPUT_POWER_VALUE		0xFEAF
 
 enum adp1050_loop {
 	ADP1050_CLOSE_LOOP,
@@ -395,16 +454,16 @@ enum adp1050_loop {
 enum adp1050_channel {
 	ADP1050_OUTA,
 	ADP1050_OUTB,
+	ADP1051_OUTC,
+	ADP1051_OUTD,
 	ADP1050_SR1,
 	ADP1050_SR2,
 	ADP1050_DISABLE_ALL
 };
 
 enum adp1050_mod {
-	ADP1050_OUTA_SR1_FALLING_MOD = NO_OS_BIT(1),
-	ADP1050_OUTA_SR1_RISING_MOD = NO_OS_BIT(3),
-	ADP1050_OUTB_SR2_FALLING_MOD = NO_OS_BIT(5),
-	ADP1050_OUTB_SR2_RISING_MOD = NO_OS_BIT(7),
+	ADP1050_MOD_FALLING,
+	ADP1050_MOD_RISING
 };
 
 enum adp1050_pass_type {
@@ -439,6 +498,22 @@ enum adp1050_freq {
 	ADP1050_397KHZ = 0x018D,
 	ADP1050_403KHZ = 0x0193,
 	ADP1050_410KHZ = 0x019A,
+	ADP1051_431KHZ = 0x1AF,
+	ADP1051_463KHZ = 0x01CF,
+	ADP1051_472KHZ = 0x01D8,
+	ADP1051_481KHZ = 0x01E1,
+	ADP1051_490KHZ = 0x1EA,
+	ADP1051_500KHZ = 0x1F4,
+	ADP1051_510KHZ = 0x01FE,
+	ADP1051_520KHZ = 0x0208,
+	ADP1051_531KHZ = 0x0213,
+	ADP1051_543KHZ = 0x21F,
+	ADP1051_556KHZ = 0x022C,
+	ADP1051_568KHZ = 0x0238,
+	ADP1051_581KHZ = 0x0245,
+	ADP1051_595KHZ = 0x0253,
+	ADP1051_610KHZ = 0x0262,
+	ADP1051_625KHZ = 0x0271,
 	ADP1050_97_5KHZ = 0xF8C3,
 	ADP1050_111_5KHZ = 0xF8DF,
 	ADP1050_156_5KHZ = 0xF939,
@@ -457,6 +532,12 @@ enum adp1050_freq {
 	ADP1050_320_5KHZ = 0xFA81,
 	ADP1050_367_5KHZ = 0xFADF,
 	ADP1050_390_5KHZ = 0xFB0D,
+	ADP1051_416_5KHZ = 0xFB41,
+	ADP1051_423_5KHZ = 0xFB4F,
+	ADP1051_438_5KHZ = 0xFB6D,
+	ADP1051_446_5KHZ = 0xFB7D,
+	ADP1051_454_5KHZ = 0xFB8D,
+
 };
 
 enum adp1050_vout_tr {
@@ -522,7 +603,8 @@ enum adp1050_value_type {
 	ADP1050_IIN = ADP1050_READ_IIN,
 	ADP1050_TEMP = ADP1050_READ_TEMPERATURE,
 	ADP1050_DUTY_CYCLE = ADP1050_READ_DUTY_CYCLE,
-	ADP1050_FREQUENCY = ADP1050_READ_FREQUENCY
+	ADP1050_FREQUENCY = ADP1050_READ_FREQUENCY,
+	ADP1051_IOUT = ADP1051_READ_IOUT,
 };
 
 enum adp1050_status_type {
@@ -530,13 +612,66 @@ enum adp1050_status_type {
 	ADP1050_STATUS_INPUT_TYPE = ADP1050_STATUS_INPUT,
 	ADP1050_STATUS_WORD_TYPE = ADP1050_STATUS_WORD,
 	ADP1050_STATUS_TEMPERATURE_TYPE = ADP1050_STATUS_TEMPERATURE,
-	ADP1050_STATUS_CML_TYPE = ADP1050_STATUS_CML
+	ADP1050_STATUS_CML_TYPE = ADP1050_STATUS_CML,
+	ADP1051_STATUS_IOUT_TYPE = ADP1051_STATUS_IOUT,
 };
 
 enum adp1050_trim_type {
 	ADP1050_CS1_IIN_TRIM,
 	ADP1050_VS_VOUT_TRIM,
-	ADP1050_VF_VIN_TRIM
+	ADP1050_VF_VIN_TRIM,
+};
+
+enum adp105x_id {
+	ID_ADP1050,
+	ID_ADP1051,
+};
+
+enum adp1051_llm_dlm_drooping {
+	ADP1051_82US_7B,
+	ADP1051_164US_8B = 0x40,
+	ADP1051_328US_9B = 0x80,
+	ADP1051_656_10B = 0xC0,
+};
+
+enum adp1051_llm_dlm_avg_speed {
+	ADP1051_41US_6B_AVG,
+	ADP1051_82US_7B_AVG = 0x10,
+	ADP1051_164US_8B_AVG = 0x20,
+	ADP1051_328US_9B_AVG = 0x30,
+};
+
+enum adp1051_llm_dlm_hysteresis {
+	ADP1051_3LSB,
+	ADP1051_8LSB = 0x04,
+	ADP1051_12LSB = 0x08,
+	ADP1051_16LSB = 0x0C,
+};
+
+enum adp1051_cs2_lightload_debounce {
+	ADP1051_0MS,
+	ADP1051_10MS = 0x20,
+	ADP1051_20MS = 0x40,
+	ADP1051_200MS = 0x60,
+};
+
+enum adp1051_llm_dlm_thresh {
+	ADP1051_0mv,
+	ADP1051_093_7mv = 0x01,
+	ADP1051_187_15mv = 0x02,
+	ADP1051_281_22mv = 0x03,
+	ADP1051_375_30mv = 0x04,
+	ADP1051_468_37mv = 0x05,
+	ADP1051_562_45mv = 0x06,
+	ADP1051_656_52mv = 0x07,
+	ADP1051_750_60mv = 0x08,
+	ADP1051_843_67mv = 0x09,
+	ADP1051_937_75mv = 0x0A,
+	ADP1051_103_82mv = 0x0B,
+	ADP1051_112_90mv = 0x0C,
+	ADP1051_121_97mv = 0x0D,
+	ADP1051_131_105mv = 0x0E,
+	ADP1051_140_112mv = 0x0F,
 };
 
 /**
@@ -550,6 +685,7 @@ struct adp1050_init_param {
 	struct no_os_gpio_init_param *ctrl_param;
 	uint8_t on_off_config;
 	bool ext_syni;
+	enum adp105x_id device_id;
 };
 
 /**
@@ -563,6 +699,8 @@ struct adp1050_desc {
 	struct no_os_gpio_desc *ctrl_desc;
 	enum adp1050_loop loop;
 	enum adp1050_freq freq;
+	uint8_t device_id;
+
 };
 
 /** Send command to ADP1050 device. */
@@ -654,7 +792,7 @@ int adp1050_set_flgi_response(struct adp1050_desc *desc,
 			      enum adp1050_flgi_fault_response fault_response,
 			      enum adp1050_flgi_after_fault after_fault);
 
-/** Set ADP1050's filter value. */
+/**  Adjust filter settings of the normal mode compensator */
 int adp1050_filter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
 		   uint8_t lf, uint8_t hf);
 
@@ -683,5 +821,32 @@ int adp1050_init(struct adp1050_desc **desc,
 
 /** Remove resources allocated by the init function. */
 int adp1050_remove(struct adp1050_desc *desc);
+
+/** Light Load and Deep Light Load Mode Common Setting */
+int adp1051_llm_dllm_comm_setting(struct adp1050_desc *desc,
+				  enum adp1051_llm_dlm_drooping drooping,
+				  enum adp1051_llm_dlm_avg_speed avg_speed,
+				  enum adp1051_llm_dlm_hysteresis hysteresis);
+
+/** Light Load and Deep Light Load Mode Setting */
+int adp1051_llm_dllm_setting(struct adp1050_desc *desc,
+			     enum adp1051_cs2_lightload_debounce llm_debounce,
+			     enum adp1051_llm_dlm_thresh thresh,
+			     bool light_en);
+
+/** Sets IOUT calibration gain */
+int adp1051_set_iout_cal_gain(struct adp1050_desc *desc, int16_t mantissa,
+			      int8_t exp);
+
+/** Sets VOUT drooping */
+int adp1051_set_vout_droop(struct adp1050_desc *desc, uint16_t mantissa);
+
+/** Sets IOUT OC fault limit */
+int adp1051_set_iout_oc_fault_limit(struct adp1050_desc *desc, int16_t mantissa,
+				    int8_t exp);
+
+/** Adjust filter settings of the light mode compensator */
+int adp1050_lfilter(struct adp1050_desc *desc, uint8_t zero, uint8_t pole,
+		    uint8_t lf, uint8_t hf);
 
 #endif /** __ADP_1050_H__ */
