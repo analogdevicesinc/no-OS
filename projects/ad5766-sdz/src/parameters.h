@@ -33,14 +33,8 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <xparameters.h>
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define AD5766_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
 #define AD5766_DMA_BASEADDR		XPAR_AXI_AD5766_DAC_DMA_BASEADDR
 #define AD5766_CORE_BASEADDR		XPAR_SPI_AXI_AD5766_BASEADDR

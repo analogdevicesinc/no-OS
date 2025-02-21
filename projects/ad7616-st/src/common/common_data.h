@@ -34,15 +34,9 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "ad7616.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern struct no_os_uart_init_param ad7616_uart_ip;
 extern struct no_os_spi_init_param ad7616_spi_ip;
 extern struct no_os_gpio_init_param ad7616_gpio_reset_ip;

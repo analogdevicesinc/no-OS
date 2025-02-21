@@ -34,9 +34,6 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <xparameters.h>
 #include <xil_cache.h>
 #include <xilinx_uart.h>
@@ -44,9 +41,6 @@
 #include "spi_engine.h"
 #include "xilinx_gpio.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define DCACHE_INVALIDATE		Xil_DCacheInvalidateRange
 
 #define DMA_BASEADDR			XPAR_AXI_AD469X_DMA_BASEADDR

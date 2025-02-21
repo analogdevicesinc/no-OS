@@ -38,15 +38,8 @@ extern "C"
 {
 #endif
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdio.h>
 #include <stdbool.h>
-
-/******************************************************************************/
-/********************** Variables and User defined data types *****************/
-/******************************************************************************/
 
 /*
  * Note: The structure members are not strongly typed, as this file is included
@@ -88,10 +81,6 @@ extern const struct no_os_uart_platform_ops mbed_uart_ops;
 * @brief Mbed platform specific VCOM platform ops structure
 */
 extern const struct no_os_uart_platform_ops mbed_virtual_com_ops;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 #ifdef __cplusplus // Closing extern c
 }

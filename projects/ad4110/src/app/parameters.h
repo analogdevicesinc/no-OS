@@ -34,9 +34,6 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define BUF_LENGTH 	32U
 #define SPI_DEVICE_ID 	0U
 #define GPIO_OFFSET  	54U

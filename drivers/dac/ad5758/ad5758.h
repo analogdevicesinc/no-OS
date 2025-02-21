@@ -36,9 +36,6 @@
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 /*
  * Create a contiguous bitmask starting at bit position @l and ending at
  * position @h.
@@ -259,9 +256,6 @@
 #define AD5758_REG_WRITE(x) 		((0x80) | (x & 0x1F))
 #define AD5758_CRC8_POLY		0x07 // x^8 + x^2 + x^1 + x^0
 
-/*****************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 enum ad5758_dc_dc_mode {
 	DC_DC_POWER_OFF,
 	DPC_CURRENT_MODE,
@@ -400,9 +394,6 @@ struct ad5758_init_param {
 	enum ad5758_slew_rate_clk slew_rate_clk;
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 int32_t ad5758_set_crc(struct ad5758_dev *dev, uint8_t crc_en);
 int32_t ad5758_wait_for_refresh_cycle(struct ad5758_dev *dev);
 int32_t ad5758_soft_reset(struct ad5758_dev *dev);

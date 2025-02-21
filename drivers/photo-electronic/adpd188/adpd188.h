@@ -34,19 +34,11 @@
 #ifndef ADPD188_H_
 #define ADPD188_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_i2c.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define ADPD188_REG_STATUS		0x00
 #define ADPD188_REG_INT_MASK		0x01
@@ -490,10 +482,6 @@
 #define ADPD188_DATA_ACCESS_CTL_SLOTA_DATA_HOLD_POS	1
 #define ADPD188_DATA_ACCESS_CTL_DIGITAL_CLOCK_ENA_POS	0
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 /**
  * @enum adpd_supported_devices
  * @brief Devices supported by the driver.
@@ -681,10 +669,6 @@ struct adpd188_init_param {
 	/** GPIO 0 initialization structure. */
 	struct no_os_gpio_init_param gpio1_init;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Initialize the ADPD188 driver. */
 int32_t adpd188_init(struct adpd188_dev **device,

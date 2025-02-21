@@ -33,17 +33,11 @@
 #ifndef HMC7044_H_
 #define HMC7044_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdbool.h>
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_spi.h"
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 struct hmc7044_chan_spec {
 	unsigned int	num;
 	bool		disable;
@@ -158,9 +152,6 @@ extern const struct no_os_clk_platform_ops hmc7044_clk_ops;
 #define HMC7044_SYNC_PIN_PULSE_GEN_REQ	        2
 #define HMC7044_SYNC_PIN_SYNC_THEN_PULSE_GEN	3
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /* Initialize the device. */
 int32_t hmc7044_init(struct hmc7044_dev **device,
 		     const struct hmc7044_init_param *init_param);

@@ -33,9 +33,6 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "ad7091r8.h"
 #ifdef IIO_SUPPORT
@@ -45,9 +42,6 @@
 #include "iio_trigger.h"
 #endif
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern struct no_os_uart_init_param ad7091r8_uart_ip;
 extern struct no_os_spi_init_param ad7091r8_spi_ip;
 extern struct ad7091r8_init_param ad7091r8_ip;

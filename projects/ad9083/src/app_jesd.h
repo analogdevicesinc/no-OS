@@ -33,9 +33,6 @@
 #ifndef APP_JESD_H_
 #define APP_JESD_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include "no_os_clk.h"
 #include "jesd204_clk.h"
@@ -68,10 +65,6 @@ struct app_jesd {
 	/* jesd_rx_clk */
 	struct no_os_clk jesd_rx_clk;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* @brief Application JESD initialization. */
 int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param);

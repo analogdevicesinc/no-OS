@@ -40,10 +40,6 @@
 #include "no_os_spi.h"
 #include "no_os_util.h"
 
-/******************************************************************************/
-/*************************** Spi Engine registers *****************************/
-/******************************************************************************/
-
 #define SPI_ENGINE_REG_VERSION			0x00
 #define SPI_ENGINE_REG_DATA_WIDTH		0x0C
 #define SPI_ENGINE_REG_RESET			0x40
@@ -62,10 +58,6 @@
 /* Bit definitions for SPI_ENGINE_REG_DATA_WIDTH register */
 #define SPI_ENGINE_REG_NUM_OF_SDI_MSK		NO_OS_GENMASK(23, 16)
 #define SPI_ENGINE_REG_DATA_WIDTH_MSK		NO_OS_GENMASK(15, 0)
-
-/******************************************************************************/
-/************************ Spi Engine register parameters **********************/
-/******************************************************************************/
 
 #define SPI_ENGINE_INST_TRANSFER		0x00
 #define SPI_ENGINE_INST_ASSERT			0x01
@@ -92,10 +84,6 @@
 #define SPI_ENGINE_VERSION_MAJOR(x) 		((x >> 16) & 0xff)
 #define SPI_ENGINE_VERSION_MINOR(x) 		((x >> 8) & 0xff)
 #define SPI_ENGINE_VERSION_PATCH(x) 		(x & 0xff)
-
-/******************************************************************************/
-/**************************** Spi Engine commands *****************************/
-/******************************************************************************/
 
 #define SPI_ENGINE_INSTRUCTION_TRANSFER_W	0x01
 #define SPI_ENGINE_INSTRUCTION_TRANSFER_R	0x02
@@ -132,10 +120,6 @@
 	SPI_ENGINE_CMD(SPI_ENGINE_INST_MISC, 				\
 			SPI_ENGINE_MISC_SYNC, 				\
 			(id))
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 typedef struct spi_engine_cmd_queue {
 	uint32_t	cmd;

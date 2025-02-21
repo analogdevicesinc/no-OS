@@ -33,16 +33,10 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "no_os_util.h"
 #include "ad796x.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define SAMPLES_PER_CHANNEL     SAMPLES_PER_CHANNEL_PLATFORM
 extern struct no_os_uart_init_param iio_uart_ip;
 extern struct ad796x_init_param ad796x_init_param;

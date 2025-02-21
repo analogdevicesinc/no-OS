@@ -33,19 +33,12 @@
 #ifndef AD463X_H_
 #define AD463x_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include "no_os_util.h"
 #include "spi_engine.h"
 #include "clk_axi_clkgen.h"
 #include "no_os_pwm.h"
 #include "no_os_gpio.h"
-
-/******************************************************************************/
-/********************** Macros and Types Declarations *************************/
-/******************************************************************************/
 
 /* Register addresses */
 #define AD463X_REG_INTERFACE_CONFIG_A	0x00
@@ -284,9 +277,6 @@ struct ad463x_dev {
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /** Read device register. */
 int32_t ad463x_spi_reg_read(struct ad463x_dev *dev,
 			    uint16_t reg_addr,

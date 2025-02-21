@@ -33,18 +33,12 @@
 #ifndef __AD7124_H__
 #define __AD7124_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_spi.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define	AD7124_RW 1   /* Read and Write */
 #define	AD7124_R  2   /* Read only */
 #define AD7124_W  3   /* Write only */
@@ -281,9 +275,6 @@
 #define AD7124_AIN_BUF_MSK                  NO_OS_GENMASK(6,5)
 #define AD7124_POWER_MODE_MSK			    NO_OS_GENMASK(7,6)
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 /**
  * @enum	ad7124_device_type
  * @details AD7124 Device definitions
@@ -520,9 +511,6 @@ struct ad7124_init_param {
 	struct ad7124_channel_map chan_map[AD7124_MAX_CHANNELS];
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /* Reads the value of the specified register without a device state check. */
 int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 				      struct ad7124_st_reg* p_reg);
