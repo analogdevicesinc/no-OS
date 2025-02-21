@@ -58,6 +58,40 @@ enum stm32_dma_mode {
 };
 
 /**
+ * @enum stm32_dma_trig_mode
+ * @brief DMA Trigger Modes
+ */
+enum stm32_dma_trig_mode {
+	STM32_DMA_MODE_0,
+	STM32_DMA_MODE_1,
+	STM32_DMA_MODE_2,
+	STM32_DMA_MODE_3
+};
+
+/**
+ * @enum stm32_dma_trig_pol
+ * @brief DMA Trigger Polarity
+ */
+enum stm32_dma_trig_pol {
+	STM32_DMA_TRIG_MASKED,
+	STM32_DMA_TRIG_RISING,
+	STM32_DMA_TRIG_FALLING,
+};
+
+/**
+ * @struct stm32_dma_trigger
+ * @brief Trigger descriptor for triggering a DMA transfer
+ */
+struct stm32_dma_trigger {
+	/** Trigger ID */
+	uint32_t id;
+	/** Mode of trigger */
+	enum stm32_dma_trig_mode mode;
+	/** Polarity of trigger */
+	enum stm32_dma_trig_pol polarity;
+};
+
+/**
  * @struct stm32_dma_channel
  * @brief STM32 DMA Channels
  */
@@ -76,12 +110,16 @@ struct stm32_dma_channel {
 	enum stm32_dma_data_alignment per_data_alignment;
 	/* DMA Mode */
 	enum stm32_dma_mode dma_mode;
+	/* Trigger configuration */
+	struct stm32_dma_trigger *trig;
 	/* Source Address for the data */
 	uint8_t* src;
 	/* Destination Address for the data */
 	uint8_t* dst;
 	/* Transfer length in Bytes */
 	uint32_t length;
+	/* Private Channel Data */
+	void *priv_data;
 };
 
 struct stm32_dma_init_param {

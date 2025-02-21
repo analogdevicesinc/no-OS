@@ -40,6 +40,13 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#if defined (STM32H5)
+struct stm32_dma_ch_priv_data {
+	DMA_NodeTypeDef *nodes;
+	DMA_QListTypeDef *llist;
+};
+#endif
+
 /**
 * @brief There is only one DMA controller
 */
@@ -56,6 +63,12 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 {
 	struct stm32_dma_channel* sdma_ch;
 	int ret;
+#if defined (STM32H5)
+	struct stm32_dma_ch_priv_data *ch_priv_data;
+	uint32_t per_data_align, mem_data_align;
+	DMA_NodeConfTypeDef xfer_node_config = {0};
+	DMA_TriggerConfTypeDef trigger_config;
+#endif
 
 	if (!channel || !xfer || !channel->extra)
 		return -EINVAL;
@@ -67,37 +80,103 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 #if defined (STM32F2) || defined (STM32F4) || defined (STM32F7)
 	sdma_ch->hdma->Init.Channel = sdma_ch->ch_num;
 #else
-	sdma_ch->hdma->Instance = sdma_ch->ch_num;
+	ch_priv_data = sdma_ch->priv_data;
+	sdma_ch->hdma->Instance = (DMA_Channel_TypeDef *) sdma_ch->ch_num;
 #endif
 #if defined (STM32H5)
-	sdma_ch->hdma->Init.DestInc = sdma_ch->mem_increment ? DMA_DINC_INCREMENTED :
-				      DMA_DINC_FIXED;
-	sdma_ch->hdma->Init.SrcInc = sdma_ch->per_increment ? DMA_SINC_INCREMENTED :
-				     DMA_SINC_FIXED;
-
-	switch (sdma_ch->mem_data_alignment) {
+	switch (sdma_ch->per_data_alignment) {
 	case DATA_ALIGN_BYTE:
-		sdma_ch->hdma->Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
+		per_data_align = 0;
 		break;
 	case DATA_ALIGN_HALF_WORD:
-		sdma_ch->hdma->Init.DestDataWidth = DMA_DEST_DATAWIDTH_HALFWORD;
+		per_data_align = 1;
 		break;
 	case DATA_ALIGN_WORD:
-		sdma_ch->hdma->Init.DestDataWidth = DMA_DEST_DATAWIDTH_WORD;
+		per_data_align = 2;
+		break;
+	default:
+		return -EINVAL;
+	}
+	switch (sdma_ch->mem_data_alignment) {
+	case DATA_ALIGN_BYTE:
+		mem_data_align = 0;
+		break;
+	case DATA_ALIGN_HALF_WORD:
+		mem_data_align = 1;
+		break;
+	case DATA_ALIGN_WORD:
+		mem_data_align = 2;
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	switch (sdma_ch->per_data_alignment) {
-	case DATA_ALIGN_BYTE:
-		sdma_ch->hdma->Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
+	switch (xfer->xfer_type) {
+	case MEM_TO_MEM:
+	case MEM_TO_DEV:
+		sdma_ch->hdma->Init.SrcInc = sdma_ch->mem_increment ? DMA_SINC_INCREMENTED :
+					     DMA_SINC_FIXED;
+		sdma_ch->hdma->Init.DestInc = sdma_ch->per_increment ? DMA_DINC_INCREMENTED :
+					      DMA_DINC_FIXED;
+
+		sdma_ch->hdma->Init.DestDataWidth = per_data_align << DMA_CTR1_DDW_LOG2_Pos;
+		sdma_ch->hdma->Init.SrcDataWidth = mem_data_align << DMA_CTR1_SDW_LOG2_Pos;
 		break;
-	case DATA_ALIGN_HALF_WORD:
-		sdma_ch->hdma->Init.SrcDataWidth = DMA_SRC_DATAWIDTH_HALFWORD;
+	case DEV_TO_MEM:
+		sdma_ch->hdma->Init.SrcInc = sdma_ch->per_increment ? DMA_SINC_INCREMENTED :
+					     DMA_SINC_FIXED;
+		sdma_ch->hdma->Init.DestInc = sdma_ch->mem_increment ? DMA_DINC_INCREMENTED :
+					      DMA_DINC_FIXED;
+
+		sdma_ch->hdma->Init.DestDataWidth = mem_data_align << DMA_CTR1_DDW_LOG2_Pos;
+		sdma_ch->hdma->Init.SrcDataWidth = per_data_align << DMA_CTR1_SDW_LOG2_Pos;
 		break;
-	case DATA_ALIGN_WORD:
-		sdma_ch->hdma->Init.SrcDataWidth = DMA_SRC_DATAWIDTH_WORD;
+	default:
+		return -EINVAL;
+	}
+
+	if (sdma_ch->trig) {
+		switch (sdma_ch->trig->mode) {
+		case STM32_DMA_MODE_0:
+			trigger_config.TriggerMode = 0;
+			break;
+		case STM32_DMA_MODE_1:
+			trigger_config.TriggerMode = DMA_CTR2_TRIGM_0;
+			break;
+		case STM32_DMA_MODE_2:
+			trigger_config.TriggerMode = DMA_CTR2_TRIGM_1;
+			break;
+		case STM32_DMA_MODE_3:
+			trigger_config.TriggerMode = DMA_CTR2_TRIGM;
+			break;
+		default:
+			return -EINVAL;
+		}
+		switch (sdma_ch->trig->polarity) {
+		case STM32_DMA_TRIG_MASKED:
+			trigger_config.TriggerPolarity = 0;
+			break;
+		case STM32_DMA_TRIG_RISING:
+			trigger_config.TriggerPolarity = DMA_CTR2_TRIGPOL_0;
+			break;
+		case STM32_DMA_TRIG_FALLING:
+			trigger_config.TriggerPolarity = DMA_CTR2_TRIGPOL_1;
+			break;
+		default:
+			return -EINVAL;
+		}
+		trigger_config.TriggerSelection = sdma_ch->trig->id;
+	}
+
+	switch (xfer->xfer_type) {
+	case MEM_TO_MEM:
+		sdma_ch->hdma->Init.Direction = DMA_MEMORY_TO_MEMORY;
+		break;
+	case MEM_TO_DEV:
+		sdma_ch->hdma->Init.Direction = DMA_MEMORY_TO_PERIPH;
+		break;
+	case DEV_TO_MEM:
+		sdma_ch->hdma->Init.Direction = DMA_PERIPH_TO_MEMORY;
 		break;
 	default:
 		return -EINVAL;
@@ -106,9 +185,78 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 	switch (sdma_ch->dma_mode) {
 	case DMA_NORMAL_MODE:
 		sdma_ch->hdma->Init.Mode = DMA_NORMAL;
+
+		ret = HAL_DMA_Init(sdma_ch->hdma);
+		if (ret != HAL_OK)
+			return -EINVAL;
+
+		if (sdma_ch->trig) {
+			ret = HAL_DMAEx_ConfigTrigger(sdma_ch->hdma, &trigger_config);
+			if (ret != HAL_OK)
+				return -EINVAL;
+		}
 		break;
 	case DMA_CIRCULAR_MODE:
-		return -ENOTSUP;
+		xfer_node_config.NodeType = DMA_GPDMA_LINEAR_NODE;
+		xfer_node_config.Init = sdma_ch->hdma->Init;
+
+		xfer_node_config.SrcAddress = (uint32_t) xfer->src;
+		xfer_node_config.DstAddress = (uint32_t) xfer->dst;
+		xfer_node_config.DataSize = (uint32_t) xfer->length;
+
+		if (sdma_ch->trig) {
+			xfer_node_config.TriggerConfig.TriggerMode = trigger_config.TriggerMode;
+			xfer_node_config.TriggerConfig.TriggerPolarity = trigger_config.TriggerPolarity;
+			xfer_node_config.TriggerConfig.TriggerSelection =
+				trigger_config.TriggerSelection;
+		}
+		/* Remove all the previous nodes */
+		if (ch_priv_data) {
+			/* Reset, Unlink and DeInit the previous list */
+			if (ch_priv_data->llist) {
+				if (HAL_DMAEx_List_ResetQ(ch_priv_data->llist) != HAL_OK)
+					return -EINVAL;
+				if (HAL_DMAEx_List_DeInit(sdma_ch->hdma) != HAL_OK)
+					return -EINVAL;
+
+				no_os_free(ch_priv_data->llist);
+				ch_priv_data->llist = NULL;
+			}
+			if (ch_priv_data->nodes) {
+				no_os_free(ch_priv_data->nodes);
+				ch_priv_data->nodes = NULL;
+			}
+		} else {
+			sdma_ch->priv_data = (void *) no_os_calloc(1,
+					     sizeof(struct stm32_dma_ch_priv_data));
+			ch_priv_data = sdma_ch->priv_data;
+		}
+
+		ch_priv_data->nodes = (DMA_NodeTypeDef *) no_os_calloc(1,
+				      sizeof(*ch_priv_data->nodes));
+		ch_priv_data->llist = (DMA_QListTypeDef *) no_os_calloc(1,
+				      sizeof(*ch_priv_data->llist));
+
+		if (HAL_DMAEx_List_BuildNode(&xfer_node_config,
+					     ch_priv_data->nodes) != HAL_OK) {
+			return -EINVAL;
+		}
+		if (HAL_DMAEx_List_InsertNode(ch_priv_data->llist, NULL,
+					      ch_priv_data->nodes) != HAL_OK) {
+			return -EINVAL;
+		}
+		if (HAL_DMAEx_List_SetCircularMode(ch_priv_data->llist) != HAL_OK) {
+			return -EINVAL;
+		}
+
+		sdma_ch->hdma->InitLinkedList.LinkedListMode = DMA_LINKEDLIST_CIRCULAR;
+		if (HAL_DMAEx_List_Init(sdma_ch->hdma) != HAL_OK) {
+			return -EINVAL;
+		}
+		if (HAL_DMAEx_List_LinkQ(sdma_ch->hdma, ch_priv_data->llist) != HAL_OK) {
+			return -EINVAL;
+		}
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -156,7 +304,6 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 	default:
 		return -EINVAL;
 	}
-#endif
 
 	switch (xfer->xfer_type) {
 	case MEM_TO_MEM:
@@ -179,6 +326,7 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 	ret = HAL_DMA_Init(sdma_ch->hdma);
 	if (ret != HAL_OK)
 		return -EINVAL;
+#endif
 
 	return 0;
 }
@@ -264,12 +412,27 @@ int stm32_dma_xfer_start(struct no_os_dma_desc *desc,
 
 	sdma_chan = chan->extra;
 
-	if (chan->irq_num) {
-		ret = HAL_DMA_Start_IT(sdma_chan->hdma, (uint32_t)sdma_chan->src,
-				       (uint32_t)sdma_chan->dst, sdma_chan->length);
-	} else {
-		ret = HAL_DMA_Start(sdma_chan->hdma, (uint32_t)sdma_chan->src,
-				    (uint32_t)sdma_chan->dst, sdma_chan->length);
+	switch (sdma_chan->dma_mode) {
+	case DMA_CIRCULAR_MODE:
+#ifdef STM32H5
+		if (chan->irq_num) {
+			ret = HAL_DMAEx_List_Start_IT(sdma_chan->hdma);
+		} else {
+			ret = HAL_DMAEx_List_Start(sdma_chan->hdma);
+		}
+		break;
+#endif
+	case DMA_NORMAL_MODE:
+		if (chan->irq_num) {
+			ret = HAL_DMA_Start_IT(sdma_chan->hdma, (uint32_t)sdma_chan->src,
+					       (uint32_t)sdma_chan->dst, sdma_chan->length);
+		} else {
+			ret = HAL_DMA_Start(sdma_chan->hdma, (uint32_t)sdma_chan->src,
+					    (uint32_t)sdma_chan->dst, sdma_chan->length);
+		}
+		break;
+	default:
+		return -EINVAL;
 	}
 
 	if (ret != HAL_OK)
@@ -295,11 +458,14 @@ int stm32_dma_xfer_abort(struct no_os_dma_desc* desc,
 
 	sdma_chan = chan->extra;
 
+#if defined (STM32H5)
+	ret = HAL_DMA_Abort(sdma_chan->hdma);
+#else
 	if (chan->irq_num)
 		ret = HAL_DMA_Abort_IT(sdma_chan->hdma);
 	else
 		ret = HAL_DMA_Abort(sdma_chan->hdma);
-
+#endif
 	if (ret != HAL_OK)
 		return -EINVAL;
 
