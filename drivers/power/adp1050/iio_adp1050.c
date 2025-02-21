@@ -48,10 +48,15 @@
 #define ADP1050_IIO_MODULATION_AVAIL_MASK(x)	NO_OS_GENMASK((((x) * 2) + 1), ((x) * 2))
 #define ADP1050_IIO_MODULATION_AVAIL_SELECT(x)	NO_OS_BIT(((x) * 2) + 1)
 #define ADP1050_IIO_OUTPUT_CHANNELS		4
+#define ADP1051_IIO_OUTPUT_CHANNELS		6
 #define ADP1050_IIO_OUTPUT_CHANNEL(x)		((x) - 4)
+#define ADP1051_IIO_OUTPUT_CHANNEL(x)		((x) - 6)
 #define ADP1050_IIO_OUTA_DUTY_CYCLE_REPORTING	NO_OS_BIT(2)
 #define ADP1050_IIO_OUTB_DUTY_CYCLE_REPORTING	NO_OS_BIT(3)
+#define ADP1051_IIO_OUTC_DUTY_CYCLE_REPORTING	NO_OS_BIT(4)
+#define ADP1051_IIO_OUTD_DUTY_CYCLE_REPORTING	NO_OS_BIT(5)
 #define ADP1050_IIO_OUTA_OUTB_MASK		NO_OS_GENMASK(1, 0)
+#define ADP1051_IIO_OUTC_OUTD_MASK		NO_OS_GENMASK(3, 2)
 #define ADP1050_IIO_SR1_SR2_MASK		NO_OS_GENMASK(5, 4)
 #define ADP1050_IIO_OUT_MASK			NO_OS_GENMASK(3, 0)
 #define ADP1050_IIO_ENABLE_MASK(x)		NO_OS_BIT(x)
@@ -194,8 +199,10 @@ enum adp1050_iio_input_chan_type {
 enum adp1050_iio_output_chan_type {
 	ADP1050_IIO_OUTA_CHAN = 4,
 	ADP1050_IIO_OUTB_CHAN = 5,
-	ADP1050_IIO_SR1_CHAN = 6,
-	ADP1050_IIO_SR2_CHAN = 7
+	ADP1051_IIO_OUTC_CHAN = 6,
+	ADP1051_IIO_OUTD_CHAN = 7,
+	ADP1050_IIO_SR1_CHAN = 8,
+	ADP1050_IIO_SR2_CHAN = 9
 };
 
 static int adp1050_iio_read_raw(void *dev, char *buf, uint32_t len,
@@ -495,6 +502,24 @@ static struct iio_channel adp1050_channels[] = {
 		.ch_out = true,
 	},
 	{
+		.name = "outc",
+		.ch_type = IIO_VOLTAGE,
+		.indexed = 1,
+		.channel = ADP1051_IIO_OUTC_CHAN,
+		.address = ADP1051_IIO_OUTC_CHAN,
+		.attributes = adp1050_output_attrs,
+		.ch_out = true,
+	},
+	{
+		.name = "outd",
+		.ch_type = IIO_VOLTAGE,
+		.indexed = 1,
+		.channel = ADP1051_IIO_OUTD_CHAN,
+		.address = ADP1051_IIO_OUTD_CHAN,
+		.attributes = adp1050_output_attrs,
+		.ch_out = true,
+	},
+	{
 		.name = "sr1",
 		.ch_type = IIO_VOLTAGE,
 		.indexed = 1,
@@ -788,6 +813,7 @@ static int adp1050_iio_write_freq(void *dev, char *buf, uint32_t len,
 	struct adp1050_iio_desc *iio_adp1050 = dev;
 	struct adp1050_desc *adp1050 = iio_adp1050->adp1050_desc;
 	uint32_t i;
+	uint8_t device;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(adp1050_freq_avail); i++)
 		if (!strcmp(buf, adp1050_freq_avail[i]))
@@ -796,12 +822,22 @@ static int adp1050_iio_write_freq(void *dev, char *buf, uint32_t len,
 	if (i == NO_OS_ARRAY_SIZE(adp1050_freq_avail))
 		return -EINVAL;
 
-	if (i < ADP1050_IIO_FLOAT_FREQ_INDEX)
-		return adp1050_set_pwm(adp1050, ADP1050_IIO_OUTPUT_CHANNEL(channel->address),
-				       (enum adp1050_freq)adp1050_freq2_avail[i]);
+	device = adp1050->device_id;
+	if (device == ID_ADP1050) {
+		if (i < ADP1050_IIO_FLOAT_FREQ_INDEX)
+			return adp1050_set_pwm(adp1050, ADP1050_IIO_OUTPUT_CHANNEL(channel->address),
+					       (enum adp1050_freq)adp1050_freq2_avail[i]);
 
-	return adp1050_set_pwm(adp1050, ADP1050_IIO_OUTPUT_CHANNEL(channel->address),
-			       (enum adp1050_freq)ADP1050_IIO_FLOAT_FREQ_ENUM(adp1050_freq2_avail[i]));
+		return adp1050_set_pwm(adp1050, ADP1050_IIO_OUTPUT_CHANNEL(channel->address),
+				       (enum adp1050_freq)ADP1050_IIO_FLOAT_FREQ_ENUM(adp1050_freq2_avail[i]));
+	} else {
+		if (i < ADP1050_IIO_FLOAT_FREQ_INDEX)
+			return adp1050_set_pwm(adp1050, ADP1051_IIO_OUTPUT_CHANNEL(channel->address),
+					       (enum adp1050_freq)adp1050_freq2_avail[i]);
+
+		return adp1050_set_pwm(adp1050, ADP1051_IIO_OUTPUT_CHANNEL(channel->address),
+				       (enum adp1050_freq)ADP1050_IIO_FLOAT_FREQ_ENUM(adp1050_freq2_avail[i]));
+	}
 }
 
 /**
@@ -864,6 +900,7 @@ static int adp1050_iio_write_loop(void *dev, char *buf, uint32_t len,
 	struct adp1050_iio_desc *iio_adp1050 = dev;
 	struct adp1050_desc *adp1050 = iio_adp1050->adp1050_desc;
 	uint32_t i;
+	uint8_t device;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(adp1050_loop_avail); i++)
 		if (!strcmp(buf, adp1050_loop_avail[i]))
@@ -872,11 +909,21 @@ static int adp1050_iio_write_loop(void *dev, char *buf, uint32_t len,
 	if (i == NO_OS_ARRAY_SIZE(adp1050_loop_avail))
 		return -EINVAL;
 
-	if (i)
-		return adp1050_set_open_loop(adp1050, 0, 0,
-					     ADP1050_IIO_OUTPUT_CHANNEL(channel->address));
+	device = adp1050->device_id;
 
-	return adp1050_set_close_loop(adp1050);
+	if (device == ID_ADP1050) {
+		if (i)
+			return adp1050_set_open_loop(adp1050, 0, 0,
+						     ADP1050_IIO_OUTPUT_CHANNEL(channel->address));
+
+		return adp1050_set_close_loop(adp1050);
+	} else {
+		if (i)
+			return adp1050_set_open_loop(adp1050, 0, 0,
+						     ADP1051_IIO_OUTPUT_CHANNEL(channel->address));
+
+		return adp1050_set_close_loop(adp1050);
+	}
 }
 
 /**
@@ -960,20 +1007,36 @@ static int adp1050_iio_write_modulation(void *dev, char *buf, uint32_t len,
 {
 	struct adp1050_iio_desc *iio_adp1050 = dev;
 	struct adp1050_desc *adp1050 = iio_adp1050->adp1050_desc;
+	uint8_t device, chan;
 	uint32_t i;
 
-	for (i = 0; i < ADP1050_IIO_OUTPUT_CHANNELS; i++)
+	device = adp1050->device_id;
+	if (device == ID_ADP1050)
+		chan = ADP1050_IIO_OUTPUT_CHANNELS;
+	else if (device == ID_ADP1051)
+		chan = ADP1051_IIO_OUTPUT_CHANNELS;
+	else
+		return -EINVAL;
+
+
+	for (i = 0; i < chan; i++)
 		if (!strcmp(buf, adp1050_modulation_avail[ADP1050_IIO_MODULATION_AVAIL_MASK(
 					i)]))
 			break;
 
-	if (i == ADP1050_IIO_OUTPUT_CHANNELS)
+	if (i == chan)
 		return -EINVAL;
 
-	return adp1050_pwm_modulation(adp1050,
-				      (enum adp1050_mod)ADP1050_IIO_MODULATION_AVAIL_SELECT(i),
-				      ADP1050_IIO_OUTPUT_CHANNEL(channel->address),
-				      ADP1050_IIO_MODULATION_AVAIL_MASK(i) % 2);
+	if (device == ID_ADP1050)
+		return adp1050_pwm_modulation(adp1050,
+					      (enum adp1050_mod)ADP1050_IIO_MODULATION_AVAIL_SELECT(i),
+					      ADP1050_IIO_OUTPUT_CHANNEL(channel->address),
+					      ADP1050_IIO_MODULATION_AVAIL_MASK(i) % 2);
+	else
+		return adp1050_pwm_modulation(adp1050,
+					      (enum adp1050_mod)ADP1050_IIO_MODULATION_AVAIL_SELECT(i),
+					      ADP1051_IIO_OUTPUT_CHANNEL(channel->address),
+					      ADP1050_IIO_MODULATION_AVAIL_MASK(i) % 2);
 }
 
 /**
@@ -1005,6 +1068,14 @@ static int adp1050_iio_read_duty_cycle(void *dev, char *buf, uint32_t len,
 	case ADP1050_IIO_SR2_CHAN:
 		ret = adp1050_write(adp1050, ADP1050_DUTY_CYCLE_READING_SETTINGS,
 				    ADP1050_IIO_OUTB_DUTY_CYCLE_REPORTING, 1);
+		break;
+	case ADP1051_IIO_OUTC_CHAN:
+		ret = adp1050_write(adp1050, ADP1050_DUTY_CYCLE_READING_SETTINGS,
+				    ADP1051_IIO_OUTC_DUTY_CYCLE_REPORTING, 1);
+		break;
+	case ADP1051_IIO_OUTD_CHAN:
+		ret = adp1050_write(adp1050, ADP1050_DUTY_CYCLE_READING_SETTINGS,
+				    ADP1051_IIO_OUTD_DUTY_CYCLE_REPORTING, 1);
 		break;
 	default:
 		return -EINVAL;
@@ -1039,12 +1110,20 @@ static int adp1050_iio_write_duty_cycle(void *dev, char *buf, uint32_t len,
 	struct adp1050_iio_desc *iio_adp1050 = dev;
 	struct adp1050_desc *adp1050 = iio_adp1050->adp1050_desc;
 	uint16_t val;
+	uint8_t device;
 
 	iio_parse_value(buf, IIO_VAL_INT, (int32_t *)&val, NULL);
 
-	return adp1050_pwm_duty_cycle(adp1050, no_os_field_get(ADP1050_MSB_MASK, val),
-				      no_os_field_get(ADP1050_LSB_MASK, val),
-				      ADP1050_IIO_OUTPUT_CHANNEL(channel->address));
+	device = adp1050->device_id;
+
+	if (device == ID_ADP1050)
+		return adp1050_pwm_duty_cycle(adp1050, no_os_field_get(ADP1050_MSB_MASK, val),
+					      no_os_field_get(ADP1050_LSB_MASK, val),
+					      ADP1050_IIO_OUTPUT_CHANNEL(channel->address));
+	else
+		return adp1050_pwm_duty_cycle(adp1050, no_os_field_get(ADP1050_MSB_MASK, val),
+					      no_os_field_get(ADP1050_LSB_MASK, val),
+					      ADP1051_IIO_OUTPUT_CHANNEL(channel->address));
 }
 
 /**
@@ -1064,22 +1143,35 @@ static int adp1050_iio_read_enable(void *dev, char *buf, uint32_t len,
 	struct adp1050_iio_desc *iio_adp1050 = dev;
 	struct adp1050_desc *adp1050 = iio_adp1050->adp1050_desc;
 	int ret;
-	uint8_t val;
+	uint8_t val, device;
 	uint32_t mask;
+
+	device = adp1050->device_id;
 
 	switch (priv) {
 	case ADP1050_IIO_OUT_ENABLE:
 		ret = adp1050_read(adp1050, ADP1050_PWM_OUTPUT_DISABLE, &val, 1);
 		if (ret)
 			return ret;
+		if (device == ID_ADP1050) {
+			val = no_os_field_prep(ADP1050_IIO_OUT_MASK,
+					       no_os_field_get(ADP1050_IIO_OUTA_OUTB_MASK,
+							       val) | no_os_field_get(ADP1050_IIO_SR1_SR2_MASK, val));
 
-		val = no_os_field_prep(ADP1050_IIO_OUT_MASK,
-				       no_os_field_get(ADP1050_IIO_OUTA_OUTB_MASK,
-						       val) | no_os_field_get(ADP1050_IIO_SR1_SR2_MASK, val));
+			if (no_os_field_get(ADP1050_IIO_ENABLE_MASK(ADP1050_IIO_OUTPUT_CHANNEL(
+						    channel->address)), val))
+				return sprintf(buf, "%s ", adp1050_enable_avail[1]);
+		} else {
+			val = no_os_field_prep(ADP1050_IIO_OUT_MASK,
+					       no_os_field_get(ADP1050_IIO_OUTA_OUTB_MASK, val) |
+					       no_os_field_get(ADP1051_IIO_OUTC_OUTD_MASK, val) |
+					       no_os_field_get(ADP1050_IIO_SR1_SR2_MASK, val));
 
-		if (no_os_field_get(ADP1050_IIO_ENABLE_MASK(ADP1050_IIO_OUTPUT_CHANNEL(
-					    channel->address)), val))
-			return sprintf(buf, "%s ", adp1050_enable_avail[1]);
+			if (no_os_field_get(ADP1050_IIO_ENABLE_MASK(ADP1051_IIO_OUTPUT_CHANNEL(
+						    channel->address)), val))
+				return sprintf(buf, "%s ", adp1050_enable_avail[1]);
+		}
+
 
 		return sprintf(buf, "%s ", adp1050_enable_avail[0]);
 	case ADP1050_IIO_FEEDFORWARD_ENABLE:
