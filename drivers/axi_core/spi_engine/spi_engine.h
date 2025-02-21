@@ -34,19 +34,11 @@
 #ifndef SPI_ENGINE_H
 #define SPI_ENGINE_H
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdint.h>
 
 #include "xilinx_spi.h"
 #include "spi_engine_private.h"
 #include "axi_dmac.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define OFFLOAD_DISABLED		0x00
 #define OFFLOAD_TX_EN			NO_OS_BIT(0)
@@ -71,10 +63,6 @@
 and will be used inside the function call */
 #define CS_HIGH				SPI_ENGINE_CMD_ASSERT(0x03, 0xFF)
 #define CS_LOW				SPI_ENGINE_CMD_ASSERT(0x03, 0x00)
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /**
  * @struct spi_engine_init_param
@@ -170,10 +158,6 @@ struct spi_engine_offload_message {
 	/** The address where the data that will be received is situated */
 	uint32_t rx_addr;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /**
  * @brief Spi engine platform specific SPI platform ops structure

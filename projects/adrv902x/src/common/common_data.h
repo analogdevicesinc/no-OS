@@ -33,16 +33,10 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern const struct no_os_spi_init_param ad9528_spi_param;
 extern const struct no_os_gpio_init_param clkchip_gpio_init_param;
 

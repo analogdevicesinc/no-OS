@@ -36,17 +36,11 @@
 #define _AD7280A_H_
 
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 /* GPIOs */
 #define AD7280A_PD_OUT              no_os_gpio_direction_output(dev->gpio_pd,    \
 			            NO_OS_GPIO_HIGH)
@@ -158,9 +152,6 @@
 #define NUMBITS_READ        22   // Number of bits for CRC when reading
 #define NUMBITS_WRITE       21   // Number of bits for CRC when writing
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 struct ad7280a_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
@@ -183,9 +174,6 @@ struct ad7280a_init_param {
 	struct no_os_gpio_init_param	gpio_alert;
 };
 
-/*****************************************************************************/
-/************************ Functions Declarations *****************************/
-/*****************************************************************************/
 /* Initializes the communication with the device. */
 int8_t ad7280a_init(struct ad7280a_dev **device,
 		    struct ad7280a_init_param init_param);

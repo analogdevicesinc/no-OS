@@ -35,16 +35,8 @@
 #ifndef IIO_ADIS_INTERNALS_H
 #define IIO_ADIS_INTERNALS_H
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "iio.h"
 #include <errno.h>
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /** @struct adis_iio_chan_type
  *  @brief ADIS IIO channels enumeration
@@ -241,10 +233,6 @@ struct adis_iio_dev {
 	struct iio_hw_trig *hw_trig_desc;
 };
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 #define ADIS_ACCEL_CHAN(mod, idx, adis_nb, attr) { \
 	.ch_type = IIO_ACCEL, \
 	.modified = true, \
@@ -311,10 +299,6 @@ struct adis_iio_dev {
         .attributes = attr,  \
 }
 
-/******************************************************************************/
-/************************ Variables Declarations ******************************/
-/******************************************************************************/
-
 extern struct iio_attribute adis_dev_attrs[];
 extern struct iio_attribute adis_iio_anglvel_attrs[];
 extern struct iio_attribute adis_iio_delta_angl_attrs[];
@@ -322,10 +306,6 @@ extern struct iio_attribute adis_iio_delta_vel_attrs[];
 extern struct iio_attribute adis_iio_accel_attrs[];
 extern struct iio_attribute adis_iio_temp_attrs[];
 extern struct iio_trigger adis_iio_trig_desc;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /*! API to be called before trigger is enabled. */
 int adis_iio_pre_enable(void* dev, uint32_t mask);

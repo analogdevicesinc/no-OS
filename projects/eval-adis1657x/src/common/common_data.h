@@ -34,10 +34,6 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "platform_includes.h"
 #include "adis1657x.h"
 #ifdef IIO_SUPPORT
@@ -46,10 +42,6 @@
 #include "iio_trigger.h"
 #endif
 #endif
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 extern struct no_os_uart_init_param adis1657x_uart_ip;
 extern struct no_os_spi_init_param adis1657x_spi_ip;

@@ -35,17 +35,11 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "maxim_irq.h"
 #include "maxim_spi.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define UART_OPS                &max_uart_ops
 #define UART_EXTRA              &ltc2672_uart_extra_ip
 extern struct max_uart_init_param ltc2672_uart_extra_ip;

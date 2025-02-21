@@ -35,19 +35,12 @@
 #ifndef TCP_SOCKET_H
 # define TCP_SOCKET_H
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "network_interface.h"
 #ifndef DISABLE_SECURE_SOCKET
 #include "mbedtls/ssl.h"
 #endif
 #include <stdint.h>
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 #define MAX_BACKLOG 0xFFFFFFFF
 
 /* Socket descriptor */
@@ -128,10 +121,6 @@ struct tcp_socket_init_param {
 	struct secure_init_param	*secure_init_param;
 #endif /* DISABLE_SECURE_SOCKET */
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Init socket */
 int32_t socket_init(struct tcp_socket_desc **desc,

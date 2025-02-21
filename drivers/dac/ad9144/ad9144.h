@@ -33,18 +33,12 @@
 #ifndef AD9144_H_
 #define AD9144_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_spi.h"
 #include "no_os_util.h"
 #include "jesd204.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define REG_SPI_INTFCONFA			0x000 /* Interface configuration A */
 #define REG_SPI_INTFCONFB			0x001 /* Interface configuration B */
 #define REG_SPI_DEVCONF				0x002 /* Device Configuration */
@@ -1349,9 +1343,6 @@
 #define AD9144_PRBS7				0x0
 #define AD9144_PRBS15				0x1
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 struct ad9144_dev {
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
@@ -1402,9 +1393,6 @@ struct ad9144_init_param {
 	uint32_t	pll_dac_frequency_khz;
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 int32_t ad9144_setup_legacy(struct ad9144_dev **device,
 			    const struct ad9144_init_param *init_param);
 

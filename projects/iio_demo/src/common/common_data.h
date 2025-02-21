@@ -33,9 +33,6 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "app_config.h"
 #include "no_os_util.h"
@@ -45,9 +42,6 @@
 #include "iio_trigger.h"
 #endif
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern struct no_os_uart_init_param iio_demo_uart_ip;
 
 #define DEMO_CHANNELS no_os_max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)

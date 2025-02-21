@@ -78,9 +78,6 @@ int32_t ad5791_iio_init(struct ad5791_iio_desc **iio_dev,
 /* Free memory allocated by ad5791_iio_init(). */
 int32_t ad5791_iio_remove(struct ad5791_iio_desc *desc);
 
-/*****************************************************************************/
-/***************************** Constant definition ***************************/
-/*****************************************************************************/
 extern struct iio_device const iio_ad5791_device;
 
 #endif /* IIO_AD5791_H_ */

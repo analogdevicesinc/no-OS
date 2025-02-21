@@ -35,19 +35,11 @@
 #ifndef IIO_H_
 #define IIO_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "iio_types.h"
 #include "no_os_uart.h"
 #if defined(NO_OS_NETWORKING) || defined(NO_OS_LWIP_NETWORKING)
 #include "tcp_socket.h"
 #endif
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 enum physical_link_type {
 	USE_UART,
@@ -117,10 +109,6 @@ struct iio_init_param {
 	struct iio_trigger_init *trigs;
 	uint32_t nb_trigs;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Set communication ops and read/write ops. */
 int iio_init(struct iio_desc **desc, struct iio_init_param *init_param);

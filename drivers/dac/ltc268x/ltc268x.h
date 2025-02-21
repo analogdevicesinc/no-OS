@@ -38,9 +38,6 @@
 #include "no_os_delay.h"
 #include "errno.h"
 
-/******************************************************************************/
-/******************* Macros and Constants Definitions *************************/
-/******************************************************************************/
 #define LTC268X_CHANNEL_SEL(x, id)			(id ? x : (x << 1))
 
 #define LTC268X_CMD_CH_CODE(x, id)			(0x00 + LTC268X_CHANNEL_SEL(x, id))
@@ -84,9 +81,6 @@
 #define LTC268X_PWDN(x)				(1 << ((x) & 0xF))
 #define LTC268X_DITH_EN(x)			(1 << ((x) & 0xF))
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 enum ltc268x_voltage_range {
 	LTC268X_VOLTAGE_RANGE_0V_5V,
 	LTC268X_VOLTAGE_RANGE_0V_10V,
@@ -160,9 +154,6 @@ struct ltc268x_init_param {
 	enum ltc268x_clk_input		clk_input[16];
 	enum ltc268x_a_b_register	reg_select[16];
 };
-/******************************************************************************/
-/******************************** LTC268X *************************************/
-/******************************************************************************/
 int32_t ltc268x_set_pwr_dac(struct ltc268x_dev *dev, uint16_t setting);
 int32_t ltc268x_set_dither_toggle(struct ltc268x_dev *dev, uint16_t setting);
 int32_t ltc268x_set_dither_mode(struct ltc268x_dev *dev, uint8_t channel,

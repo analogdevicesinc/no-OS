@@ -33,9 +33,6 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "ade9153a.h"
 #include "no_os_uart.h"
 #include "no_os_pwm.h"
@@ -52,10 +49,6 @@
 #include "maxim_pwm.h"
 #include "maxim_spi.h"
 #include "maxim_irq.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 // UART init params
 extern struct no_os_uart_init_param uart_ip;
@@ -136,10 +129,6 @@ extern struct no_os_irq_init_param ade9153a_gpio_irq_ip;
 #define MULT_CC_50HZ                0.017578125
 // Frequency multiplier for angle compute
 #define MULT_CC_60HZ                0.02109375
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Toggle user LED */
 int interface_toggle_led(struct no_os_gpio_desc *gpio_led_desc);

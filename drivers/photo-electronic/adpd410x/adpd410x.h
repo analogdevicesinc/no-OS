@@ -33,18 +33,10 @@
 #ifndef ADPD410X_H_
 #define ADPD410X_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdbool.h>
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define ADPD410X_REG_FIFO_STATUS	0x0000
 #define ADPD410X_REG_INT_STATUS_DATA	0x0001
@@ -877,10 +869,6 @@
 #define ADPD410X_UPPDER_BYTE_I2C_MASK			0x7f00
 #define ADPD410X_LOWER_BYTE_I2C_MASK			0xff
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 /**
  * @union phy_comm_dev
  * @brief Contains physical communication handler
@@ -1193,10 +1181,6 @@ struct adpd410x_dev {
 	/** External low frequency oscillator frequency, if applicable */
 	uint32_t ext_lfo_freq;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /** Read device register. */
 int32_t adpd410x_reg_read(struct adpd410x_dev *dev, uint16_t address,

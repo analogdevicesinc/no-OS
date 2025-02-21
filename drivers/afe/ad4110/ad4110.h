@@ -36,9 +36,6 @@
 #ifndef AD4110_H_
 #define AD4110_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_delay.h"
@@ -46,9 +43,6 @@
 #include "no_os_spi.h"
 #include "no_os_irq.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define AD4110_CMD_WR_COM_REG(x)   (0x00 | ((x) & 0xF)) // Write to Register x
 #define AD4110_CMD_READ_COM_REG(x) (0x40 | ((x) & 0xF)) // Read from Register x
 #define AD4110_DEV_ADDR_MASK	   (0x30) // Device address mask
@@ -177,9 +171,6 @@
 /* ADC conversion timeout */
 #define AD4110_ADC_CONV_TIMEOUT	10000
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 /* If AD4110_AFE_ADC_CLOCKED selected, select AD4110_ADC_INT_CLK_CLKIO */
 enum ad4110_adc_clk_sel {
 	AD4110_ADC_INT_CLK,
@@ -353,9 +344,6 @@ struct ad4110_callback_ctx {
 	uint32_t buffer_size;
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /* Compute CRC8 checksum. */
 uint8_t ad4110_compute_crc8(uint8_t *data,
 			    uint8_t data_size);
