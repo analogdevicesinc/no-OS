@@ -63,10 +63,10 @@ struct network_port_noos {
 	/** Reference to no-os socket */
 	struct tcp_socket_desc	*sock;
 	/** Reference to no-os network wrapper read function */
-	int			(*mqttread)(Network*, unsigned char*, int, int);
+	int	(*mqttread)(Network*, unsigned char*, int, int);
 	/** Reference to no-os network wrapper write function */
-	int			(*mqttwrite)(Network*, unsigned char*, int,
-					     int);
+	int	(*mqttwrite)(Network*, unsigned char*, int,
+			     int);
 };
 
 /* Init porting file */

@@ -307,10 +307,10 @@ struct at_init_param {
 	 * circular buffer where to write data received from the connection.
 	 * If *cb is set to NULL data will not be saved
 	 */
-	void			(*connection_callback)(void *ctx,
-			enum at_event event,
-			uint32_t conn_id,
-			struct no_os_circular_buffer **cb);
+	void	(*connection_callback)(void *ctx,
+				       enum at_event event,
+				       uint32_t conn_id,
+				       struct no_os_circular_buffer **cb);
 	/* Software reset enable */
 	bool		sw_reset_en;
 };
@@ -322,7 +322,7 @@ struct at_init_param {
 struct at_desc;
 
 /* Initialize parser*/
-int32_t at_init(struct at_desc **desc,const struct at_init_param *param);
+int32_t at_init(struct at_desc **desc, const struct at_init_param *param);
 /* Free resources used by parser */
 int32_t at_remove(struct at_desc *desc);
 
