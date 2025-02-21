@@ -34,19 +34,12 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "stdio.h"
 #include "platform_init.h"
 #include "aducm3029_timer.h"
 #include "aducm3029_irq.h"
 #include "aducm3029_uart.h"
 #include "aducm3029_gpio.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define UART_CONFIG_BAUDRATE	115200
 #define UART_CONFIG_IRQ_ID	ADUCM_UART_INT_ID

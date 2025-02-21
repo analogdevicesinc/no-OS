@@ -33,9 +33,6 @@
 #ifndef __AD9361_UTIL_H__
 #define __AD9361_UTIL_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -44,9 +41,6 @@
 #include "common.h"
 #include "app_config.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define CLK_IGNORE_UNUSED						NO_OS_BIT(3)
 #define CLK_GET_RATE_NOCACHE					NO_OS_BIT(6)
 
@@ -97,9 +91,6 @@ typedef SSIZE_T ssize_t;
 #define __func__ __FUNCTION__
 #endif
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 int32_t clk_prepare_enable(struct no_os_clk *clk);
 uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
 		      struct refclk_scale *clk_priv);

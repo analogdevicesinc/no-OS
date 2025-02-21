@@ -85,9 +85,6 @@
 /* Default is ms, we need finer delays (10ns) */
 #define I5G_TIMER_US(d) ((d*100)-1)
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 struct s_i5g {
 	struct ad9625_dev *ad9625_0_device;
 	struct ad9625_dev *ad9625_1_device;
@@ -106,9 +103,6 @@ struct s_i5g_init {
 	int32_t	sysref_delay;
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /* Initializes core descriptor with the devices */
 int32_t i5g_setup(struct s_i5g **descriptor,
 		  struct s_i5g_init init_param);

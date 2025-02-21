@@ -33,10 +33,6 @@
 #ifndef ALTERA_I2C_H_
 #define ALTERA_I2C_H_
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 /**
  * @enum i2c_type
  * @brief Altera platform architecture types
@@ -73,10 +69,6 @@ struct altera_i2c_desc {
  * @brief Altera platform specific i2c platform ops structure
  */
 extern const struct no_os_i2c_platform_ops altera_i2c_ops;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Initialize the I2C communication peripheral. */
 int32_t altera_i2c_init(struct no_os_i2c_desc **desc,

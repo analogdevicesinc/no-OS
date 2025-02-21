@@ -35,16 +35,10 @@
 #ifndef CF_HDMI_H_
 #define CF_HDMI_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "xparameters.h"
 #include "app_config.h"
 #include "clk_axi_clkgen.h"
 
-/******************************************************************************/
-/************************** Macros Definitions ********************************/
-/******************************************************************************/
 #ifdef XPAR_AXI_HDMI_TX_0_BASEADDR
 #define CFV_BASEADDR        XPAR_AXI_HDMI_TX_0_BASEADDR
 #else
@@ -168,9 +162,6 @@ enum videoResolution {
 	RESOLUTION_1920x1080
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 			unsigned short horizontalBlankingTime,
 			unsigned short horizontalSyncOffset,

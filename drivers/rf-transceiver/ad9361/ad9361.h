@@ -32,16 +32,10 @@
 #ifndef IIO_FREQUENCY_AD9361_H_
 #define IIO_FREQUENCY_AD9361_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "common.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define REG_SPI_CONF				 0x000 /* SPI Configuration */
 #define REG_MULTICHIP_SYNC_AND_TX_MON_CTRL	 0x001 /* Multi-Chip Sync and Tx Mon Control */
 #define REG_TX_ENABLE_FILTER_CTRL		 0x002 /* Tx Enable & Filter Control */
@@ -3431,9 +3425,6 @@ enum debugfs_cmd {
 	DBGFS_RXGAIN_2,
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 int32_t ad9361_spi_readm(struct no_os_spi_desc *spi, uint32_t reg,
 			 uint8_t *rbuf, uint32_t num);
 int32_t ad9361_spi_read(struct no_os_spi_desc *spi, uint32_t reg);

@@ -33,15 +33,9 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "parameters.h"
 #include "adxrs290.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern struct no_os_uart_init_param adxrs290_uart_ip;
 extern struct no_os_spi_init_param adxrs290_spi_ip;
 extern struct no_os_gpio_init_param adxrs290_gpio_sync_ip;

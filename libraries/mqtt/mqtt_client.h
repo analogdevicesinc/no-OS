@@ -100,16 +100,8 @@
 #ifndef MQTT_NOOS_CLIENT
 #define MQTT_NOOS_CLIENT
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdbool.h>
 #include "tcp_socket.h"
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /**
  * @enum mqtt_qos
@@ -223,7 +215,7 @@ struct mqtt_init_param {
 	 * Callback to be called when a message is received from the broker
 	 * @param Message received from the broker.
 	 */
-	void			(*message_handler)(struct mqtt_message_data *);
+	void	(*message_handler)(struct mqtt_message_data *);
 };
 
 /**
@@ -231,10 +223,6 @@ struct mqtt_init_param {
  * @brief Reference to MQTT client
  */
 struct mqtt_desc;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Init MQTT client */
 int32_t mqtt_init(struct mqtt_desc **desc,

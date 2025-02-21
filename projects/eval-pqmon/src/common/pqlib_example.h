@@ -34,10 +34,6 @@
 #ifndef __PQLIB_EXAMPLE_H__
 #define __PQLIB_EXAMPLE_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "ade9430.h"
 #include "adi_pqlib.h"
 #include "adi_pqlib_memory.h"
@@ -46,10 +42,6 @@
 #include "status.h"
 #include <stddef.h>
 #include "no_os_circular_buffer.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define PQLIB_MAX_CHANNELS 7
 #define ADI_PQLIB_NUM_WAVEFORM_BLOCKS 4
@@ -154,10 +146,6 @@ typedef struct {
 	struct no_os_circular_buffer *no_os_cb_desc;
 
 } PQLIB_EXAMPLE; // pqlib example struct
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /**
  * @brief One complete cycle for IIO callback function

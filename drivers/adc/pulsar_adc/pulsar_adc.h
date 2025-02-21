@@ -45,9 +45,6 @@
 #endif
 #include "no_os_gpio.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define PULSAR_ADC_READ_COMMAND	0x54
 #define PULSAR_ADC_WRITE_COMMAND	0x14
 #define PULSAR_ADC_RESERVED_MSK	0xE0

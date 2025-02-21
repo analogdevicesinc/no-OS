@@ -34,10 +34,6 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "maxim_gpio.h"
 #include "maxim_i2c.h"
 #include "maxim_irq.h"
@@ -46,10 +42,6 @@
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 #include "maxim_usb_uart.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define INTC_DEVICE_ID 0
 #define UART_DEVICE_ID 1
@@ -98,10 +90,6 @@
 #define INTR_GPIO_EXTRA &max_reset_gpio_extra_ip
 #define INTR_GPIO_IRQ_ID 0
 #define INTR_OPS &max_gpio_irq_ops
-
-/******************************************************************************/
-/************************ Variable Declarations ******************************/
-/******************************************************************************/
 
 extern struct max_i2c_init_param vddioh_i2c_extra;
 extern struct max_spi_init_param spi_extra_ip;

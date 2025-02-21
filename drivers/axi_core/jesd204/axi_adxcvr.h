@@ -33,16 +33,9 @@
 #ifndef AXI_ADXCVR_H_
 #define AXI_ADXCVR_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
 #include "xilinx_transceiver.h"
-
-/******************************************************************************/
-/********************** Macros and Types Declarations *************************/
-/******************************************************************************/
 
 // Selection of PLL reference clock source to drive the RXOUTCLK
 #define ADXCVR_SYS_CLK_CPLL			0x00
@@ -126,9 +119,6 @@ struct adxcvr_init {
  */
 extern const struct no_os_clk_platform_ops adxcvr_clk_ops;
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /** AXI ADXCVR DPR Port Read */
 int adxcvr_drp_read(struct adxcvr *xcvr,
 		    unsigned int drp_port,

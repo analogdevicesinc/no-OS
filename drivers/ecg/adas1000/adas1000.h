@@ -36,10 +36,6 @@
 #ifndef _ADAS1000_H_
 #define _ADAS1000_H_
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_spi.h"
@@ -1099,10 +1095,6 @@ struct read_param {
 	bool ready_repeat;
 };
 
-
-/******************************************************************************/
-/* Functions Prototypes */
-/******************************************************************************/
 /** Compute SPI frequency based on frame rate */
 int32_t adas1000_compute_spi_freq(struct adas1000_init_param *init_param,
 				  uint32_t *spi_freq);

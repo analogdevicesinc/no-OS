@@ -33,9 +33,6 @@
 #ifndef __SELFTEST_EXAMPLE_MAIN_H__
 #define __SELFTEST_EXAMPLE_MAIN_H__
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 int selftest_example_main();
 
 #endif /* __SELFTEST_EXAMPLE_MAIN_H__ */

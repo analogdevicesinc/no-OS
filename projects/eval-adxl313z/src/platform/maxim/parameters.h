@@ -34,18 +34,12 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "maxim_irq.h"
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID  0
 #define UART_IRQ_ID     UART0_IRQn

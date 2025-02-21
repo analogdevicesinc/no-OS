@@ -156,10 +156,6 @@
 #define LTC2992_MFR_ID_VALUE			0x62
 #define LTC2992_RESOLUTION_POS			7
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 enum ltc2992_adr_state {
 	LTC2992_ADR_HIGH,
 	LTC2992_ADR_LOW,
@@ -274,10 +270,6 @@ struct ltc2992_init_param {
 	bool fault_clear_on_read;
 	bool stuck_bus_timer_wakeup_en;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Generate device I2C address based on ADR pin states */
 int ltc2992_addr_gen(struct ltc2992_init_param *init_param,

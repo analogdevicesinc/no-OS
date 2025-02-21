@@ -34,25 +34,13 @@
 #ifndef _EDID_H_
 #define _EDID_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdbool.h>
 #include <stdint.h>
 #include "wrapper.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 /* when defined, SINK 3D is filtered by chip supported 3D formats */
 #define EDID_MSG if(edid_msg_enable)DBG_MSG
 #define STD_DESC_LEN sizeof(struct std_timing)
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 struct std_timing {
 	uint8_t    pixel_clk[2];  /* Divide by 100 to get MHZ */
@@ -148,10 +136,6 @@ struct edid_audio_info {
 	uint8_t   max_channels;
 	uint16_t  bit;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Parse and display the EDID message received. */
 uint8_t ADIAPI_mw_edid_parse(uint8_t *edid_ptr, uint16_t *spa_offset,

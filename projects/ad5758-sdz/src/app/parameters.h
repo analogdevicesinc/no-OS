@@ -34,10 +34,6 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 #define SPI_DEVICE_ID           	XPAR_PS7_SPI_0_DEVICE_ID
 #define AD5758_SPI_CS           	0
 #define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID

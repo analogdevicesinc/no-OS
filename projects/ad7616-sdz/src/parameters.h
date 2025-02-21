@@ -34,9 +34,6 @@
 #ifndef PARAMETERS_H_
 #define PARAMETERS_H_
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define AD7616_SPI_ENGINE_BASEADDR		XPAR_AXI_AD7616_BASEADDR
 #define AD7616_DMA_BASEADDR			XPAR_AXI_AD7616_DMA_BASEADDR
 #define AD7616_RX_CLKGEN_BASEADDR		XPAR_AXI_CLKGEN_0_BASEADDR

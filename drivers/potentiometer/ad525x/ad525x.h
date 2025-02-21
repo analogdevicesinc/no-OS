@@ -35,18 +35,12 @@
 #ifndef __AD525X_H__
 #define __AD525X_H__
 
-/*****************************************************************************/
-/****************************** Include Files ********************************/
-/*****************************************************************************/
 #include <stdint.h>
 #include "no_os_delay.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
 
-/*****************************************************************************/
-/*  Device specific MACROs                                                   */
-/*****************************************************************************/
 /* GPIOs */
 #define AD525X_RESET_OUT                    no_os_gpio_direction_output(dev->gpio_reset,    \
 			                    NO_OS_GPIO_HIGH)
@@ -130,10 +124,6 @@
 #define AD525X_RDAC3_SIGN_TOL               0x1E
 #define AD525X_RDAC4_DECIMAL_TOL            0x1F
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 /* Custom boolean type */
 enum bool_t {
 	false,
@@ -191,9 +181,6 @@ struct ad525x_init_param {
 	enum ad525_x_type_t	this_device;
 };
 
-/*****************************************************************************/
-/*  Functions Prototypes                                                     */
-/*****************************************************************************/
 /* Initialize the communication with the device */
 int8_t ad525x_init(struct ad525x_dev **device,
 		   struct ad525x_init_param init_param);

@@ -36,17 +36,11 @@
 #ifndef __AD717X_H__
 #define __AD717X_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include "no_os_spi.h"
 #include "no_os_util.h"
 #include <stdbool.h>
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 /* Total Number of Setups in the AD717x-AD411x family */
 #define AD717x_MAX_SETUPS			8
 /* Maximum number of channels in the AD717x-AD411x family */
@@ -310,10 +304,6 @@ typedef struct {
 	enum ad717x_mode mode;
 } ad717x_init_param;
 
-/*****************************************************************************/
-/***************** AD717X Register Definitions *******************************/
-/*****************************************************************************/
-
 /* AD717X Register Map */
 #define AD717X_COMM_REG       0x00
 #define AD717X_STATUS_REG     0x00
@@ -507,9 +497,6 @@ typedef struct {
 /* AD4116 ID */
 #define AD4116_ID_REG_VALUE   0x34D0
 
-/*****************************************************************************/
-/******************* AD717X Constants ****************************************/
-/*****************************************************************************/
 #define AD717X_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
 /* Timeout for ADC Conversion */
 #define AD717X_CONV_TIMEOUT			10000
@@ -521,10 +508,6 @@ typedef struct {
 #define AD717X_ADCMODE_REG_MODE_MSK   		NO_OS_GENMASK(6,4)
 #define AD717X_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(5,4)
 #define AD717x_ODR_MSK				NO_OS_GENMASK(4,0)
-
-/*****************************************************************************/
-/************************ Functions Declarations *****************************/
-/*****************************************************************************/
 
 /*! Retrieves a pointer to the register that matches the given address */
 ad717x_st_reg *AD717X_GetReg(ad717x_dev *device,

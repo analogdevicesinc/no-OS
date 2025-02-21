@@ -35,19 +35,11 @@
 #ifndef __AD405X_H__
 #define __AD405X_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdint.h>
 #include <string.h>
 #include "no_os_util.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 /** Register Definition */
 #define AD405X_REG_INTERFACE_CONFIG_A		0x00
@@ -129,10 +121,6 @@
 #define BYTE_ADDR_H				NO_OS_GENMASK(15, 8)
 #define BYTE_ADDR_L				NO_OS_GENMASK(7, 0)
 #define AD405X_DEVICE_TYPE			NO_OS_GENMASK(2, 0)
-
-/******************************************************************************/
-/************************ Types Declarations **********************************/
-/******************************************************************************/
 
 /** AD405X modes of operations */
 enum ad405x_operation_mode {
@@ -283,10 +271,6 @@ struct ad405x_init_param {
 	/** Averaging filter window length */
 	enum ad405x_avg_filter_l filter_length;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /** Write data into a register */
 int ad405x_write(struct ad405x_dev *dev,

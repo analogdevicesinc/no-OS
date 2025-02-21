@@ -33,9 +33,6 @@
 #ifndef __PLATFORM_H__
 #define __PLATFORM_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "ade7913.h"
 #include "no_os_uart.h"
 #include "no_os_pwm.h"
@@ -52,10 +49,6 @@
 #include "maxim_pwm.h"
 #include "maxim_spi.h"
 #include "maxim_irq.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 /* Configuration for AD-APARD32690-SL */
 // Port and pin for user LED
@@ -81,10 +74,6 @@
 #define GPIO_CTRL_IRQ_ID            0
 #define GPIO_IRQ_EXTRA              &ade7913_gpio_extra_ip
 #define NVIC_GPIO_IRQ               GPIO2_IRQn
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 // Init NVIC
 int init_nvic(struct no_os_irq_ctrl_desc *ade7913_nvic_desc);

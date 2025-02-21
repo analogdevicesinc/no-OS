@@ -34,9 +34,6 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "stm32_hal.h"
 #include "stm32_irq.h"
 #include "stm32_gpio_irq.h"
@@ -46,9 +43,6 @@
 #include "stm32_uart_stdio.h"
 #include "no_os_units.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern UART_HandleTypeDef huart5;
 #define SAMPLES_PER_CHANNEL_PLATFORM 2000
 #define MAX_SIZE_BASE_ADDR     (SAMPLES_PER_CHANNEL_PLATFORM * 2 * sizeof(uint32_t))

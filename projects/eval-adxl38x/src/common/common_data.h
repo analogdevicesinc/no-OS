@@ -33,9 +33,6 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "adxl38x.h"
 
@@ -43,9 +40,6 @@
 #include "maxim/parameters.h"
 #endif
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern struct no_os_uart_init_param adxl38x_uart_ip;
 extern struct no_os_spi_init_param adxl38x_spi_ip;
 extern struct adxl38x_init_param adxl38x_ip;

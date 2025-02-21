@@ -34,17 +34,9 @@
 #ifndef MQTT_NOOS
 #define MQTT_NOOS
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdint.h>
 #include "tcp_socket.h"
 #include "no_os_timer.h"
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /** Typedef for \ref timer_port_noos */
 typedef struct timer_port_noos		Timer;
@@ -71,15 +63,11 @@ struct network_port_noos {
 	/** Reference to no-os socket */
 	struct tcp_socket_desc	*sock;
 	/** Reference to no-os network wrapper read function */
-	int			(*mqttread)(Network*, unsigned char*, int, int);
+	int	(*mqttread)(Network*, unsigned char*, int, int);
 	/** Reference to no-os network wrapper write function */
-	int			(*mqttwrite)(Network*, unsigned char*, int,
-					     int);
+	int	(*mqttwrite)(Network*, unsigned char*, int,
+			     int);
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /* Init porting file */
 int32_t mqtt_timer_init(struct no_os_timer_init_param *timer_init_param);

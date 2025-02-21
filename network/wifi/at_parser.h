@@ -78,18 +78,10 @@
 #ifndef AT_DRIVER_H
 # define AT_DRIVER_H
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "at_params.h"
 #include "no_os_circular_buffer.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 /** @brief Maximum number of connection the ESP8266 module can handle */
 #define MAX_CONNECTIONS				4
@@ -107,10 +99,6 @@
 /** @brief An overflow occurred in the internal buffer. This error should be
  * reported to developers */
 #define AT_ERROR_INTERNAL_BUFFER_OVERFLOW	0x10
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /**
  * @enum cmd_operation
@@ -319,10 +307,10 @@ struct at_init_param {
 	 * circular buffer where to write data received from the connection.
 	 * If *cb is set to NULL data will not be saved
 	 */
-	void			(*connection_callback)(void *ctx,
-			enum at_event event,
-			uint32_t conn_id,
-			struct no_os_circular_buffer **cb);
+	void	(*connection_callback)(void *ctx,
+				       enum at_event event,
+				       uint32_t conn_id,
+				       struct no_os_circular_buffer **cb);
 	/* Software reset enable */
 	bool		sw_reset_en;
 };
@@ -333,12 +321,8 @@ struct at_init_param {
  */
 struct at_desc;
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
 /* Initialize parser*/
-int32_t at_init(struct at_desc **desc,const struct at_init_param *param);
+int32_t at_init(struct at_desc **desc, const struct at_init_param *param);
 /* Free resources used by parser */
 int32_t at_remove(struct at_desc *desc);
 

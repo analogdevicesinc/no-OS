@@ -34,16 +34,10 @@
 #ifndef __ADF4153_H__
 #define __ADF4153_H__
 
-/*****************************************************************************/
-/****************************** Include Files ********************************/
-/*****************************************************************************/
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 
-/*****************************************************************************/
-/*  Device specific MACROs                                                   */
-/*****************************************************************************/
 /* GPIOs */
 #define ADF4153_LE_OUT                      no_os_gpio_direction_output(dev->gpio_le,  \
 			                    NO_OS_GPIO_HIGH)
@@ -238,10 +232,6 @@
 #define ADF4153_LOW_NOISE_SPUR              0b11100
 #define ADF4153_LOWEST_NOISE                0b11111
 
-/*****************************************************************************/
-/************************** Types Declarations *******************************/
-/*****************************************************************************/
-
 /**
 *   @struct adf41053_settings_t
 *   @brief store the value of all the latch and the input
@@ -364,9 +354,6 @@ struct adf4153_init_param {
 	struct adf4153_settings_t adf4153_st;
 };
 
-/*****************************************************************************/
-/*  Functions Prototypes                                                     */
-/*****************************************************************************/
 /* Initialize the communication with the device */
 int8_t adf4153_init(struct adf4153_dev **device,
 		    struct adf4153_init_param init_param);

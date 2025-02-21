@@ -33,15 +33,9 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "platform_includes.h"
 #include "ad719x.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 extern const struct no_os_spi_init_param spi_ip;
 extern const struct no_os_gpio_init_param miso_ip;
 extern const struct no_os_gpio_init_param sync_ip;

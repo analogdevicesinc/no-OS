@@ -34,10 +34,6 @@
 #ifndef __STATUS_H__
 #define __STATUS_H__
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 #define SYS_STATUS_SUCCESS 0
 #define SYS_STATUS_PQLIB_ERROR 1
 #define SYS_STATUS_NO_SIGNAL 2

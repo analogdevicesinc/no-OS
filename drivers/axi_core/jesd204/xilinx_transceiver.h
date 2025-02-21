@@ -34,15 +34,9 @@
 #ifndef XILINX_TRANSCEIVER_H_
 #define XILINX_TRANSCEIVER_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
 
-/******************************************************************************/
-/************************ Macros and Types Declarations ***********************/
-/******************************************************************************/
 #define AXI_PCORE_VER(major, minor, letter)	((major << 16) | (minor << 8) | letter)
 #define AXI_PCORE_VER_MAJOR(version)	(((version) >> 16) & 0xff)
 #define AXI_PCORE_VER_MINOR(version)	((version >> 8) & 0xff)
@@ -266,10 +260,6 @@ struct xilinx_xcvr_qpll_config {
 /* Encoding */
 #define ENC_8B10B		810
 #define ENC_66B64B		6664
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
 /** Configure the Clock Data Recovery circuit. */
 int xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,

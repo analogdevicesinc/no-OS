@@ -35,10 +35,6 @@
 #ifndef NOOS_MBEDTLS_CONFIG_H
 #define NOOS_MBEDTLS_CONFIG_H
 
-/******************************************************************************/
-/***************************** User configuration *****************************/
-/******************************************************************************/
-
 /*
  * For an easy configuration of mbedtls library only this macros from user
  * configuration should be modified. For more in deepth configuration see
@@ -93,10 +89,6 @@
  */
 #define ENABLE_MEMORY_OPTIMIZATIONS
 
-/******************************************************************************/
-/********************* Minimal tls client requirements ************************/
-/******************************************************************************/
-
 /* Minimal requirements */
 /* Hardware entropy is used (trng.h) */
 #define MBEDTLS_NO_PLATFORM_ENTROPY
@@ -115,10 +107,6 @@
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,\
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,\
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
-
-/******************************************************************************/
-/*************** Configuration depending on user input ************************/
-/******************************************************************************/
 
 #ifdef MAX_CONTENT_LEN
 #define MBEDTLS_SSL_MAX_CONTENT_LEN	MAX_CONTENT_LEN
@@ -154,10 +142,6 @@
 #define MBEDTLS_PEM_PARSE_C
 
 #endif /* ENABLE_PEM_CERT */
-
-/******************************************************************************/
-/**************** Solve dependencies needed by modules ************************/
-/******************************************************************************/
 
 /* Dependencies for MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #ifdef MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED

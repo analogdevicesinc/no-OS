@@ -34,9 +34,6 @@
 #ifndef __PLATFORM_INCLUDES_H__
 #define __PLATFORM_INCLUDES_H__
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #ifdef XILINX_PLATFORM
 #include "xilinx/parameters.h"
 #elif defined STM32_PLATFORM
