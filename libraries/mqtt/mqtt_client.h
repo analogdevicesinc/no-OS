@@ -215,7 +215,7 @@ struct mqtt_init_param {
 	 * Callback to be called when a message is received from the broker
 	 * @param Message received from the broker.
 	 */
-	void			(*message_handler)(struct mqtt_message_data *);
+	void	(*message_handler)(struct mqtt_message_data *);
 };
 
 /**
