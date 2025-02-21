@@ -27,7 +27,11 @@ INCLUDES = -I../include/ \
 	 -I./display \
 	 -I./rf-transceiver/talise/api \
 	 -I./rf-transceiver/talise/firmware \
-	 -I./net/oa_tc6
+	 -I./net/oa_tc6 \
+	 -I./gmsl/common \
+	 -I./gmsl/serializer \
+	 -I./gmsl/deserializer \
+	 -I./gmsl/gmsl_dbg
 
 IIOD_FLAGS += -DIIO_SUPPORT
 
