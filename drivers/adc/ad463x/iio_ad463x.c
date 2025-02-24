@@ -32,10 +32,6 @@
 *******************************************************************************/
 #ifdef IIO_SUPPORT
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <string.h>
 #include "ad463x.h"
 #include "iio.h"
@@ -43,9 +39,6 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 static int ad463x_iio_read_raw(void *dev, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel, intptr_t priv);
 static int ad463x_iio_read_scale(void *dev, char *buf, uint32_t len,
@@ -58,10 +51,6 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 				    uint32_t nb_samples);
 static int32_t _iio_ad463x_prepare_transfer(struct iio_ad463x *desc,
 		uint32_t mask);
-/******************************************************************************/
-/*************************** Variable Declarations *******************************/
-/******************************************************************************/
-
 #define BITS_PER_SAMPLE 32
 #define REAL_BITS 24
 
@@ -123,10 +112,6 @@ struct iio_device ad463x_iio_desc_two_chn = {
 	.pre_enable = (int32_t (*)())_iio_ad463x_prepare_transfer,
 	.read_dev = (int32_t (*)())_iio_ad463x_read_dev
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * @brief Updates the number of active channels

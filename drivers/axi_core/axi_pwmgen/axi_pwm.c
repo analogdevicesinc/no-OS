@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdlib.h>
 #include "no_os_pwm.h"
 #include "axi_pwm_extra.h"
@@ -42,9 +39,6 @@
 #include "no_os_alloc.h"
 #include "no_os_error.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define AXI_PWMGEN_REG_CORE_VERSION	0x00
 #define AXI_PWMGEN_REG_ID		0x04
 #define AXI_PWMGEN_REG_SCRATCHPAD	0x08
@@ -67,10 +61,6 @@
 #define AXI_PWMGEN_VERSION_MAJOR(x)	(((x) >> 16) & 0xff)
 #define AXI_PWMGEN_VERSION_MINOR(x)	(((x) >> 8) & 0xff)
 #define AXI_PWMGEN_VERSION_PATCH(x)	((x) & 0xff)
-
-/******************************************************************************/
-/************************** Functions Implementation **************************/
-/******************************************************************************/
 
 /**
  * @brief Write the pwmgen axi register using a bitmask

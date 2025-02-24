@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <inttypes.h>
 #include "app_config.h"
 #include "ad9361_api.h"
@@ -88,10 +85,6 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 #if defined(DMA_EXAMPLE) || defined(SYSID_BASEADDR)
 #include <string.h>
 #endif
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
 
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));

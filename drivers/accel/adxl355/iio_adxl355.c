@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include "no_os_error.h"
@@ -43,9 +40,6 @@
 #include "no_os_units.h"
 #include "no_os_alloc.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define ACCEL_AXIS_X (uint32_t) 0
 #define ACCEL_AXIS_Y (uint32_t) 1
 #define ACCEL_AXIS_Z (uint32_t) 2
@@ -74,18 +68,12 @@ static const int adxl355_iio_hpf_3db_multipliers[] = {
 	238,
 };
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 enum adxl355_iio_accel_chans {
 	chan_x,
 	chan_y,
 	chan_z,
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 extern int adxl355_read_device_data(struct adxl355_dev *dev,
 				    uint8_t base_address, uint16_t size, uint8_t *read_data);
 extern int adxl355_write_device_data(struct adxl355_dev *dev,
@@ -122,9 +110,6 @@ static int adxl355_iio_read_samp_freq_avail(void *dev, char *buf,
 static int adxl355_iio_read_samples(void* dev, int* buff, uint32_t samples);
 static int adxl355_iio_update_channels(void* dev, uint32_t mask);
 static int32_t adxl355_trigger_handler(struct iio_device_data *dev_data);
-/******************************************************************************/
-/************************ Variable Declarations ******************************/
-/******************************************************************************/
 static struct iio_attribute adxl355_iio_temp_attrs[] = {
 	{
 		.name = "offset",
@@ -223,9 +208,6 @@ static struct iio_device adxl355_iio_dev = {
 	.debug_reg_write = (int32_t (*)())adxl355_iio_write_reg
 };
 
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 /***************************************************************************//**
  * @brief Fills the 3db frequency table based on the current ODR setting.
  *

@@ -32,10 +32,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <stdlib.h>
 #include <string.h>
 #include "wifi.h"
@@ -44,17 +40,9 @@
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 #define INVALID_ID	0xffffffff
 #define NB_SOCKETS	(MAX_CONNECTIONS + 1)
 #define NB_CLI_SOCKETS	MAX_CONNECTIONS
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /* Structure storing data used by a socket */
 struct socket_desc {
@@ -105,10 +93,6 @@ struct wifi_desc {
 	/* Will be used in callback */
 	int32_t				conn_id_to_sock_id[MAX_CONNECTIONS];
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 				enum socket_protocol proto, uint32_t buff_size);

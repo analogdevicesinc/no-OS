@@ -31,20 +31,12 @@
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
 
 #include "sd.h"
 #include "no_os_error.h"
 #include <stdio.h>
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define DEV_SD		0	/* Example: Map MMC/SD card to physical drive 0 */
 #define DEV_RAM		1	/* Example: Map Ramdisk to physical drive 1 */
@@ -53,10 +45,6 @@
 #define ERASE_SECTOR_SIZE	1u
 uint8_t			sd_init_var = false;
 extern struct sd_desc	*sd_desc;
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 DSTATUS SD_disk_status();
 DSTATUS SD_disk_initialize();

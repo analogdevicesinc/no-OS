@@ -37,10 +37,6 @@
 #include "no_os_alloc.h"
 #include "chibios_gpio.h"
 
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
-
 /**
  * @brief Prepare the GPIO descriptor.
  * @param desc - The GPIO descriptor.

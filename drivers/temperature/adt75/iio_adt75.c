@@ -41,9 +41,6 @@
 #include "adt75.h"
 #include "iio.h"
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 static int adt75_iio_read_raw(void *dev, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel, intptr_t priv);
 static int adt75_iio_read_scale(void *dev, char *buf, uint32_t len,
@@ -52,9 +49,6 @@ static int adt75_iio_read_offset(void *dev, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int adt75_iio_read_samples(void *dev, int16_t *buf, uint32_t samples);
 
-/******************************************************************************/
-/************************ Variable Declarations *******************************/
-/******************************************************************************/
 static struct iio_attribute adt75_attrs[] = {
 	{
 		.name = "raw",

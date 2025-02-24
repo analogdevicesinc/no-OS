@@ -31,10 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/************************* Include Files **************************************/
-/******************************************************************************/
-
 #include "no_os_irq.h"
 #include "aducm3029_irq.h"
 #include "no_os_error.h"
@@ -51,10 +47,6 @@
 #include "no_os_util.h"
 #include "no_os_list.h"
 #include "no_os_alloc.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 /** The number of the first external interrupt, used by NVIC */
 #define BASE_XINT_NB			(XINT_EVT0_IRQn)
@@ -190,10 +182,6 @@ static void aducm_timer_callback(void *ctx, uint32_t event, void *buff)
 			action->callback(action->ctx);
 	}
 }
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * @brief Initialized the controller for the ADuCM3029 external interrupts

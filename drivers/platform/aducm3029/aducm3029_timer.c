@@ -35,20 +35,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/************************* Include Files **************************************/
-/******************************************************************************/
-
 #include <stdlib.h>
 #include <drivers/pwr/adi_pwr.h>
 #include "aducm3029_timer.h"
 #include "no_os_timer.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 /** With this load we get an interrupt each millisecond */
 #define NO_OS_HFOSC_LOAD	26000u
@@ -59,20 +51,12 @@
 /** Converts the timer value into microseconds */
 #define NO_OS_MHZ26_TO_US(count)	((NO_OS_HFOSC_LOAD - count) / (NO_OS_HFOSC_LOAD / 1000u))
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 /** Incremented each millisecond by \ref aducm3029_tmr_callback() */
 static volatile uint64_t	g_count;
 /** Counts the number of instances created */
 static uint32_t			nb_instances;
 /** Counts the number of started timers */
 static uint32_t			nb_enables;
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * Called each millisecond and used to increment a global counter

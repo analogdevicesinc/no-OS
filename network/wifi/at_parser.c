@@ -32,10 +32,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <inttypes.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -50,10 +46,6 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 /* Should be sizeof(async_msgs)/sizeof(*async_msgs) */
 #define NB_ASYNC_MESSAGES	3
 /* Should be sizeof(responses)/sizeof(*responses) */
@@ -66,10 +58,6 @@
 #define PUI8(X)			((uint8_t *)(X))
 /* Timeout waiting for module response. (20 seconds) */
 #define MODULE_TIMEOUT		20000
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /* Command descriptor */
 struct cmd_desc {
@@ -185,10 +173,6 @@ struct at_desc {
 	/* Context that will be passed to the callback */
 	void			*callback_ctx;
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /* Increment idx if current ch match in msg[idx] and return true if idx == len*/
 static inline bool match_message(const struct at_buff *msg, uint8_t *idx,

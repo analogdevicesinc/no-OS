@@ -31,28 +31,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "adis.h"
 #include "adis_internals.h"
 #include "adis1657x.h"
 #include "no_os_units.h"
 #include <string.h>
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 #define ADIS1657X_MSG_SIZE_16_BIT_BURST_FIFO	20 /* in bytes */
 #define ADIS1657X_MSG_SIZE_32_BIT_BURST_FIFO	34 /* in bytes */
 #define ADIS1657X_READ_BURST_DATA_NO_POP	0x00
 #define ADIS1657X_CHECKSUM_BUF_IDX_FIFO		2
-
-/******************************************************************************/
-/************************** Variable Definitions ******************************/
-/******************************************************************************/
 
 static const struct adis_data_field_map_def adis1657x_def = {
 	.x_gyro 		 = {.reg_addr = 0x04, .reg_size = 0x04, .field_mask = 0xFFFFFFFF},
