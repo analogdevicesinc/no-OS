@@ -5,22 +5,24 @@ Supported Devices
 -----------------
 
 `ADP1050 <https://www.analog.com/ADP1050>`_
+`ADP1051 <htpps://www.analog.com/ADP1051>`_
 
 Overview
 --------
 
-The ADP1050 is an advanced digital controller with a PMBus™ interface targeting
+The ADP1050 and ADP1051 is an advanced digital controller with a PMBus™ interface targeting
 high density, high efficiency dc-to-dc power conversion.
 This controller implements voltage mode control with high speed, input voltage
 feedforward operation for enhanced transient and noise performance.
-The ADP1050 has four programmable pulse-width modulation (PWM) outputs capable
-of controlling most high efficiency power supply topologies,
+ADP1050 has four programmable pulse-width modulation (PWM) outputs, while 
+ADP1051 offers six, capable of controlling most high efficiency power supply topologies,
 with the added control of synchronous rectification (SR).
 
 Applications
 ------------
 
 ADP1050
+ADP1051
 -------
 
 * High density, isolated dc-to-dc power supplies
@@ -181,6 +183,7 @@ ADP1050 Driver Initialization Example
 		.flgi_param = NULL,
 		.syni_param = NULL,
 		.on_off_config = ADP1050_ON_OFF_DEFAULT_CFG,
+		.device_id = ID_ADP1051,
 	};
 	ret = adp1050_init(&adp1050_desc, &adp1050_ip);
 	if (ret)
@@ -207,7 +210,7 @@ and each of them has a total of 2 channel attributes:
 Output Channel Attributes
 -------------------------
 
-OUTA/OUTB/SR1/SR2 channels are thee output channels of the ADP1050 IIO device
+OUTA/OUTB/OUTC/OUTD/SR1/SR2 channels are the output channels of the ADP1050 IIO device
 and each of them has a total of 7 channel attributes:
 
 * ``enable - state of the channel``
@@ -245,6 +248,7 @@ Debug Attributes
 * ``status_temperature - TEMPERATURE status byte value of the device``
 * ``status_cml - CML status byte value of the device``
 * ``status_word - Status word value of the device``
+* ``status_iout - IOUT status byte value of the device``
 
 ADP1050 IIO Driver Initialization Example
 -----------------------------------------
