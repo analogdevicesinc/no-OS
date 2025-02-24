@@ -168,8 +168,8 @@ struct at_desc {
 	/* Variable where current message length is built */
 	uint32_t		ipd_len;
 	/* Will be called when a new connection is created or closed */
-	void			(*connection_callback)(void *ctx, enum at_event,
-			uint32_t conn_id, struct no_os_circular_buffer **cb);
+	void	(*connection_callback)(void *ctx, enum at_event,
+				       uint32_t conn_id, struct no_os_circular_buffer **cb);
 	/* Context that will be passed to the callback */
 	void			*callback_ctx;
 };
@@ -567,7 +567,7 @@ static void set_params(struct at_buff *dest, uint8_t *fmt, ...)
 	uint32_t		i;
 	int32_t		nb = 0;
 
-	va_start (args, fmt);
+	va_start(args, fmt);
 	while (*fmt) {
 		switch (*fmt) {
 		case 'd':
@@ -597,7 +597,7 @@ static void set_params(struct at_buff *dest, uint8_t *fmt, ...)
 			dest->buff[dest->len++] = ',';
 	}
 
-	va_end (args);
+	va_end(args);
 }
 
 /* Concatenate command parameters to desc->cmd */
