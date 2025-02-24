@@ -588,7 +588,7 @@ static int32_t ad463x_read_data_dma(struct ad463x_dev *dev,
 	if (ret != 0)
 		goto out;
 
-	ret = no_os_spi_transfer_dma_sync(dev->spi_desc, &spi_msg, 1);
+	ret = no_os_spi_transfer_dma(dev->spi_desc, &spi_msg, 1);
 	if (ret)
 		goto out;
 

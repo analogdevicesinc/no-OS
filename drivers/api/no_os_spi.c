@@ -221,9 +221,9 @@ out:
  * @param len - Number of messages in the array.
  * @return 0 in case of success, negativ error code otherwise.
  */
-int32_t no_os_spi_transfer_dma_sync(struct no_os_spi_desc *desc,
-				    struct no_os_spi_msg *msgs,
-				    uint32_t len)
+int32_t no_os_spi_transfer_dma(struct no_os_spi_desc *desc,
+			       struct no_os_spi_msg *msgs,
+			       uint32_t len)
 {
 	if (!desc || !desc->platform_ops || !msgs || !len)
 		return -EINVAL;
