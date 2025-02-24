@@ -31,10 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/************************* Include Files **************************************/
-/******************************************************************************/
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -60,10 +56,6 @@ static struct event_list _events[] = {
 static struct no_os_irq_ctrl_desc *nvic;
 extern mxc_uart_req_t uart_irq_state[MXC_UART_INSTANCES];
 extern bool is_callback;
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * @brief Action comparator function

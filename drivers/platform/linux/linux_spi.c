@@ -31,10 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "no_os_error.h"
 #include "no_os_spi.h"
 #include "no_os_alloc.h"
@@ -49,10 +45,6 @@
 
 #warning SPI cs_delay_first and cs_delay_last delays are not supported on the linux platform
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
 /**
  * @struct linux_spi_desc
  * @brief Linux platform specific SPI descriptor
@@ -61,10 +53,6 @@ struct linux_spi_desc {
 	/** /dev/spidev"device_id"."chip_select" file descriptor */
 	int spidev_fd;
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * @brief Initialize the SPI communication peripheral.

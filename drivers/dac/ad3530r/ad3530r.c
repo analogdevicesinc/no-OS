@@ -39,9 +39,6 @@
 #include "no_os_spi.h"
 #include "no_os_util.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define AD3530R_DATA_INDEX(x)               (x) ? 1 : 2
 #define AD3530R_INSTR_LEN(x)                AD3530R_DATA_INDEX(x)
 #define AD3530R_ADDR_INDEX(x)               (x) ? 0 : 1
@@ -49,9 +46,6 @@
 #define AD3530R_CRC_BUFF_LEN(x)             (x) ? 3 : 4
 #define AD3530R_CRC_INDEX(x)                AD3530R_ADDR_INDEX(x) + 2
 
-/******************************************************************************/
-/************************ Variable Declarations *******************************/
-/******************************************************************************/
 static struct ad3530r_transfer_config multi_cfg = {
 	.single_instr = 0, /* Sets the streaming mode. */
 	.stream_length_keep_value = 1 /* Prevents the stream length value from

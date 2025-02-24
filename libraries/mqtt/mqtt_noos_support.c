@@ -31,10 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "mqtt_noos_support.h"
 #include <stdlib.h>
 #include "no_os_timer.h"
@@ -47,19 +43,11 @@
 #include "lwip_socket.h"
 #endif
 
-/******************************************************************************/
-/**************************** Global Variables ********************************/
-/******************************************************************************/
-
 /* Timer reference used by the functions */
 static struct no_os_timer_desc	*timer;
 
 /* Number of timer references */
 static uint32_t			nb_references;
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /* Allcoate resources for timer. Must be called from mqqt_init */
 int32_t mqtt_timer_init(struct no_os_timer_init_param *timer_init_param)

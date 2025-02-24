@@ -25,9 +25,6 @@
 #line __LINE__ "adi_adrv9025_cpu.c"
 #endif
 
-/*****************************************************************************/
-/***** Helper functions' prototypes ******************************************/
-/*****************************************************************************/
 static int32_t adrv9025_CpuStackPtrWrite(
     adi_adrv9025_Device_t* device,
     adi_adrv9025_CpuType_e cpuType,
@@ -42,9 +39,6 @@ static uint32_t adrv9025_CpuIntFromBytesGet(
     const uint8_t* buf,
     uint8_t        size);
 
-/*****************************************************************************/
-/***** Helper functions' definition ******************************************/
-/*****************************************************************************/
 int32_t adrv9025_CpuStackPtrWrite(adi_adrv9025_Device_t* device,
                                   adi_adrv9025_CpuType_e cpuType,
                                   const uint32_t*        buf)
@@ -114,9 +108,6 @@ uint32_t adrv9025_CpuIntFromBytesGet(const uint8_t* buf,
     return result;
 }
 
-/*****************************************************************************/
-/***** Public functions' definition ******************************************/
-/*****************************************************************************/
 int32_t adi_adrv9025_CpuStartStatusCheck(
     adi_adrv9025_Device_t* device,
     uint32_t               timeout_us)

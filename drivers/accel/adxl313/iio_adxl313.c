@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include "no_os_error.h"
@@ -42,9 +39,6 @@
 #include "iio_adxl313.h"
 #include "adxl313.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define SCALE_FACTOR 1000000000UL
 #define MIN_SHIFT    9
 
@@ -83,18 +77,12 @@ static const int adxl313_iio_scale_table[4] = { 9576806, 19153613, 38307226, 766
 
 static const int adxl314_iio_scale = 478858719;
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 enum adxl313_iio_accel_chans {
 	CHAN_X = 0,
 	CHAN_Y = 1,
 	CHAN_Z = 2
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 extern int adxl313_read(struct adxl313_dev *dev,
 			uint8_t base_address, uint16_t size, uint8_t *read_data);
 extern int adxl313_write(struct adxl313_dev *dev,
@@ -131,10 +119,6 @@ static int adxl313_iio_read_scale_avail(void *dev, char *buf,
 					uint32_t len, const struct iio_ch_info *channel, intptr_t priv);
 static int adxl313_iio_read_samples(void* dev, int16_t* buff, uint32_t samples);
 static int adxl313_iio_update_channels(void* dev, uint32_t mask);
-/******************************************************************************/
-/************************ Variable Declarations *******************************/
-/******************************************************************************/
-
 static struct iio_attribute adxl313_iio_accel_attrs[] = {
 	{
 		.name  = "calibbias",

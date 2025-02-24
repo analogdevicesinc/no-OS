@@ -33,10 +33,6 @@
 
 #ifdef IIO_SUPPORT
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <errno.h>
 #include <string.h>
 
@@ -49,10 +45,6 @@
 #include "spi_engine.h"
 
 #define MEGA 1000000UL
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /**
  * @struct ad713x_iio
@@ -79,10 +71,6 @@ struct ad713x_iio {
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
 #define AD713x_IIO_FUNC(_name)	static int _name(void *device, char *buf, \
 		uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
 
@@ -93,10 +81,6 @@ AD713x_IIO_FUNC(ad713x_iio_show_raw);
 AD713x_IIO_FUNC(ad713x_iio_show_odr);
 AD713x_IIO_FUNC(ad713x_iio_store_odr);
 AD713x_IIO_FUNC(ad713x_iio_show_scale);
-
-/******************************************************************************/
-/********************* Static Variables Definitions ***************************/
-/******************************************************************************/
 
 static struct iio_attribute channel_attributes[] = {
 	{
@@ -166,10 +150,6 @@ static struct iio_channel ad713x_channels[] = {
 	AD713X_IIO_CHANN_DEF("ch2", 2),
 	AD713X_IIO_CHANN_DEF("ch3", 3)
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * @brief Transform decimal floating point into hexadecimal floating point for

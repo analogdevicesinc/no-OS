@@ -32,9 +32,6 @@
  *   SVN Revision: $WCREV$
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdio.h>
 #include <string.h>
 #include "transmitter.h"
@@ -45,9 +42,6 @@
 #include "edid.h"
 #include "app_config.h"
 
-/*****************************************************************************/
-/******************* Macros and Constants Definitions ************************/
-/*****************************************************************************/
 #define TRANSMITTER_MODE_SWITCH_DELAY	500
 /* This value defines the delay from the time   */
 /* a mode change is detected to the time it is  */
@@ -64,9 +58,6 @@
 /* result in better response but generate much  */
 /* more i2c access. Recommended 100-200 ms      */
 
-/*****************************************************************************/
-/******************************* Variables ***********************************/
-/*****************************************************************************/
 static UINT32					HouseKeepingDelay;
 static TRANSMITTER_OPER_MODE	LastDetMode;
 static UINT32					ModeChngCount;

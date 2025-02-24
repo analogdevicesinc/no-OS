@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include "no_os_error.h"
@@ -43,9 +40,6 @@
 #include "no_os_units.h"
 #include "no_os_alloc.h"
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 static int ad7091r8_iio_read_reg(struct ad7091r8_iio_dev *dev, uint32_t reg,
 				 uint32_t *readval);
 static int ad7091r8_iio_write_reg(struct ad7091r8_iio_dev *dev, uint32_t reg,
@@ -57,9 +51,6 @@ static int ad7091r8_iio_read_scale(void *dev, char *buf, uint32_t len,
 static int ad7091r8_buffer_preenable(void* dev, uint32_t mask);
 static int32_t ad7091r8_trigger_handler(struct iio_device_data *iio_dev_data);
 
-/******************************************************************************/
-/************************ Variable Declarations ******************************/
-/******************************************************************************/
 static struct iio_attribute ad7091r8_iio_attrs[] = {
 	{
 		.name = "raw",
@@ -120,10 +111,6 @@ static struct iio_device ad7091r4_iio_device = ad7091r8_iio_device(
 			ad7091r4_channels);
 static struct iio_device ad7091r8_iio_device = ad7091r8_iio_device(
 			ad7091r8_channels);
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 static int ad7091r8_iio_read_reg(struct ad7091r8_iio_dev *dev, uint32_t reg,
 				 uint32_t *readval)

@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdio.h>
 #include <xil_printf.h>
 #include <xiic.h>
@@ -63,10 +60,6 @@
 
 #define HDMI_CALL_INTERVAL_MS 10
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-
 static uint8_t    major_rev;      /* Major Release Number */
 static uint8_t    minor_rev;      /* Usually used for code-drops */
 static uint8_t    rc_rev;         /* Release Candidate Number */
@@ -74,10 +67,6 @@ static bool     driver_enable;
 static bool     last_enable;
 extern struct no_os_i2c_desc *i2c_handler;
 extern volatile uint32_t timer_counter_intr;
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 #if defined(XSCUTIMER_H)
 void timer_isr(void *instance)

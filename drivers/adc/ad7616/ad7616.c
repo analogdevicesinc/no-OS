@@ -36,9 +36,6 @@
 
 /* Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/AD7616.pdf */
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>

@@ -35,10 +35,6 @@
 
 #ifdef XPAR_XSPI_NUM_INSTANCES
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include <xspi.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -47,10 +43,6 @@
 #include "no_os_delay.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 
 #define XPS_TYPE_WRITE		0x1
 #define XPS_TYPE_READ		0x2
@@ -62,10 +54,6 @@
  * each spi transaction if not needed.
  */
 static struct no_os_spi_desc g_spi_desc[XPAR_XSPI_NUM_INSTANCES];
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /* Xilinx PL spi specific data */
 struct xspi_desc {
@@ -83,10 +71,6 @@ struct msg_iter {
 	uint32_t	buff_i;
 	uint8_t		is_wr;
 };
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /* Read device register */
 static inline uint32_t _read(struct xspi_desc *xdesc, uint32_t reg)

@@ -45,10 +45,6 @@
 #include "max32650.h"
 #include "mxc_errors.h"
 
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
-
 static void set_enable(mxc_gpio_regs_t *regs, uint32_t mask, uint8_t is_enabled)
 {
 	if (is_enabled)

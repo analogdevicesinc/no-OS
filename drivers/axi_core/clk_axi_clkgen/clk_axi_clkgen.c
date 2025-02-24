@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "clk_axi_clkgen.h"
 #ifndef USE_STANDARD_SPI
 #include <stdbool.h>
@@ -46,9 +43,6 @@
 #include "no_os_delay.h"
 #include "no_os_axi_io.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
 #define AXI_PCORE_VER(major, minor, letter)     ((major << 16) | (minor << 8) | letter)
 #define AXI_PCORE_VER_MAJOR(version)    (version >> 16)
 #define AXI_PCORE_VER_MINOR(version)    ((version >> 8) & 0xff)

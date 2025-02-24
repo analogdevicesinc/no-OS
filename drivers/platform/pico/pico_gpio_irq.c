@@ -31,9 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/************************* Include Files **************************************/
-/******************************************************************************/
 #include "no_os_error.h"
 #include "no_os_list.h"
 #include "no_os_irq.h"
@@ -41,10 +38,6 @@
 #include "no_os_alloc.h"
 #include "pico_gpio_irq.h"
 #include "hardware/irq.h"
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 /**
  * @brief Struct used to store a (peripheral, callback) pair
@@ -55,9 +48,6 @@ struct irq_action {
 	void *ctx;
 };
 
-/******************************************************************************/
-/***************************** Static variables *******************************/
-/******************************************************************************/
 static struct no_os_list_desc *actions;
 
 static int32_t irq_action_cmp(void *data1, void *data2)
@@ -68,9 +58,6 @@ static int32_t irq_action_cmp(void *data1, void *data2)
 
 static bool initialized = false;
 
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 /**
  * @brief GPIO interrupt handler callback
  * @param pin pin number on which the interrupt occurred

@@ -31,10 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
 #include "adis.h"
 #include "adis_internals.h"
 #include "adis1655x.h"
@@ -42,19 +38,11 @@
 #include "no_os_delay.h"
 #include <string.h>
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
 #define ADIS1655X_ID_NO_OFFSET(x) 	((x) - ADIS16550)
 #define ADIS1655X_WRITE_REQ		NO_OS_BIT(7)
 #define ADIS1655X_READ_REQ		0x00
 #define ADIS1655X_CRC32_SEED		0xFFFFFFFF
 #define ADIS1655X_STALL_PERIOD_BURST_US	8
-
-/******************************************************************************/
-/************************** Variable Definitions ******************************/
-/******************************************************************************/
 
 static const struct adis_data_field_map_def adis1655x_def = {
 	.x_gyro 		= {.reg_addr = 0x12, .reg_size = 0x04, .field_mask = 0xFFFFFFFF},

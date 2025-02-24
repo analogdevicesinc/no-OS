@@ -38,18 +38,11 @@
 #include "stm32_pwm.h"
 #include "stm32_irq.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definition ***********************/
-/******************************************************************************/
-
 /* For 16-bit pwm timer */
 #define	PWM_DEFAULT_PERIOD	             0xffff
 #define NO_OS_CHN_TO_STM32_CHN(x)        (0x4*(x-1))
 #define FREQUENCY_HZ_TO_TIME_NS_FACTOR   1000000000.0
 
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 /**
  * @brief Calculate the period in ticks.
  * @param get_timer_clock - timer source clock function.
