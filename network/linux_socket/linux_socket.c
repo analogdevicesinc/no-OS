@@ -57,8 +57,8 @@ static int32_t linux_socket_open(void *desc, uint32_t *sock_id,
 	int32_t flags;
 	int err;
 
-	err = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-	if(err < 0)
+	err = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (err < 0)
 		return err;
 
 	*sock_id = err;
@@ -74,7 +74,7 @@ static int32_t linux_socket_close(void *desc, uint32_t sock_id)
 	int32_t ret;
 
 	ret = close(sock_id);
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	return ret;
@@ -94,9 +94,9 @@ static int32_t linux_socket_connect(void *desc, uint32_t sock_id,
 	saddr.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
 	socklen_t len = sizeof(saddr);
 
-	ret = connect(sock_id,(struct sockaddr*) &saddr,len);
+	ret = connect(sock_id, (struct sockaddr*) &saddr, len);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	return ret;
@@ -111,7 +111,7 @@ static int32_t linux_socket_disconnect(void *desc,
 
 	ret = linux_socket_close(desc, sock_id);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	return 0;
@@ -125,7 +125,7 @@ static int32_t linux_socket_send(void *desc, uint32_t sock_id,
 
 	ret = send(sock_id, data, size, 0);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	return size;
@@ -141,11 +141,11 @@ static int32_t linux_socket_recv(void *desc, uint32_t sock_id,
 		return size;
 
 	ret = recv(sock_id, data, size, MSG_DONTWAIT);
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	/* A stream socket peer has performed an orderly shutdown */
-	if(ret == 0)
+	if (ret == 0)
 		return -ENOTCONN;
 
 	return ret;
@@ -169,7 +169,7 @@ static int32_t linux_socket_sendto(void *desc, uint32_t sock_id,
 
 	ret = sendto(sock_id, data, size, 0, (struct sockaddr*) &saddr_to, len);
 
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	return 0;
@@ -191,10 +191,11 @@ static int32_t linux_socket_recvfrom(void *desc, uint32_t sock_id,
 	saddr_from.sin_addr.s_addr = ((struct in_addr*) hptr->h_addr_list[0])->s_addr;
 	len = sizeof(saddr_from);
 
-	ret = recvfrom(sock_id, data, size, MSG_DONTWAIT,(struct sockaddr*) &saddr_from,
+	ret = recvfrom(sock_id, data, size, MSG_DONTWAIT,
+		       (struct sockaddr*) &saddr_from,
 		       &len);
 
-	if(ret != 0)
+	if (ret != 0)
 		return ret;
 
 	return 0;
@@ -215,7 +216,7 @@ static int32_t linux_socket_bind(void *desc, uint32_t sock_id,
 
 	ret = bind(sock_id, (struct sockaddr*) &saddr, len);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	return ret;
@@ -229,7 +230,7 @@ static int32_t linux_socket_listen(void *desc, uint32_t sock_id,
 
 	ret = listen(sock_id, back_log);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	return ret;
@@ -243,7 +244,7 @@ static int32_t linux_socket_accept(void *desc, uint32_t sock_id,
 
 	ret = accept4(sock_id, NULL, NULL, SOCK_NONBLOCK);
 
-	if(ret < 0)
+	if (ret < 0)
 		return -errno;
 
 	*client_socket_id = ret;
@@ -255,15 +256,15 @@ struct network_interface linux_net = {
 	.socket_open = (int32_t (*)(void *, uint32_t *, enum socket_protocol,
 				    uint32_t)) linux_socket_open,
 	.socket_close = (int32_t (*)(void *, uint32_t)) linux_socket_close,
-	.socket_connect = (int32_t (*)(void *, uint32_t,struct socket_address *))linux_socket_connect,
+	.socket_connect = (int32_t (*)(void *, uint32_t, struct socket_address *))linux_socket_connect,
 	.socket_disconnect = (int32_t (*)(void *, uint32_t))linux_socket_disconnect,
 	.socket_send = (int32_t (*)(void *, uint32_t, const void *, uint32_t))linux_socket_send,
 	.socket_recv = (int32_t (*)(void *, uint32_t, void *, uint32_t))linux_socket_recv,
-	.socket_sendto = (int32_t (*)(void *, uint32_t, const void *, uint32_t, const struct socket_address* to))linux_socket_sendto,
-	.socket_recvfrom = (int32_t (*)(void *, uint32_t, void *, uint32_t, struct socket_address* from))linux_socket_recvfrom,
+	.socket_sendto = (int32_t (*)(void *, uint32_t, const void *, uint32_t, const struct socket_address * to))linux_socket_sendto,
+	.socket_recvfrom = (int32_t (*)(void *, uint32_t, void *, uint32_t, struct socket_address * from))linux_socket_recvfrom,
 	.socket_bind = (int32_t (*)(void *, uint32_t, uint16_t))linux_socket_bind,
 	.socket_listen = (int32_t (*)(void *, uint32_t, uint32_t))linux_socket_listen,
-	.socket_accept= (int32_t (*)(void *, uint32_t, uint32_t*))linux_socket_accept
+	.socket_accept = (int32_t (*)(void *, uint32_t, uint32_t*))linux_socket_accept
 };
 
 #endif
