@@ -1,7 +1,5 @@
-INCS += $(PLATFORM_DRIVERS)/maxim_delay.h     		\
-        $(PLATFORM_DRIVERS)/maxim_gpio.h      		\
+INCS += $(PLATFORM_DRIVERS)/maxim_gpio.h      		\
         $(PLATFORM_DRIVERS)/maxim_spi.h       		\
-        $(PLATFORM_DRIVERS)/maxim_init.h      		\
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.h  		\
         $(PLATFORM_DRIVERS)/maxim_irq.h       		\
         $(PLATFORM_DRIVERS)/maxim_i2c.h       		\
