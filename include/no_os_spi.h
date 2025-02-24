@@ -265,9 +265,9 @@ int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 			   uint32_t len);
 
 /* Transfer a list of messages using DMA. Wait until all transfers are done */
-int32_t no_os_spi_transfer_dma_sync(struct no_os_spi_desc *desc,
-				    struct no_os_spi_msg *msgs,
-				    uint32_t len);
+int32_t no_os_spi_transfer_dma(struct no_os_spi_desc *desc,
+			       struct no_os_spi_msg *msgs,
+			       uint32_t len);
 /*
  * Transfer a list of messages using DMA. Return once the first one started and
  * invoke a callback when they are done.
