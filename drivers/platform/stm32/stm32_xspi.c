@@ -648,7 +648,7 @@ free_ch_xfer:
  * @param ctx - User specific data which should be passed to the callback function.
  * @return 0 in case of success, negative code otherwise.
  */
-static int32_t stm32_xspi_dma_transfer_async(struct no_os_spi_desc *desc,
+static int32_t stm32_xspi_transfer_dma_async(struct no_os_spi_desc *desc,
 		struct no_os_spi_msg *msgs,
 		uint32_t len,
 		void (*callback)(void *),
@@ -674,9 +674,9 @@ static int32_t stm32_xspi_dma_transfer_async(struct no_os_spi_desc *desc,
  * @param len - Number of messages.
  * @return 0 in case of success, negative code otherwise.
  */
-static int32_t stm32_xspi_dma_transfer_sync(struct no_os_spi_desc *desc,
-		struct no_os_spi_msg *msgs,
-		uint32_t len)
+static int32_t stm32_xspi_transfer_dma(struct no_os_spi_desc *desc,
+				       struct no_os_spi_msg *msgs,
+				       uint32_t len)
 {
 	int32_t ret;
 	uint32_t timeout;
@@ -716,6 +716,6 @@ const struct no_os_spi_platform_ops stm32_xspi_ops = {
 	.remove = &stm32_xspi_remove,
 	.transfer = &stm32_xspi_transfer,
 	.write_and_read = &stm32_xspi_write_and_read,
-	.dma_transfer_sync = stm32_xspi_dma_transfer_sync,
-	.dma_transfer_async = stm32_xspi_dma_transfer_async,
+	.transfer_dma = stm32_xspi_transfer_dma,
+	.transfer_dma_async = stm32_xspi_transfer_dma_async,
 };

@@ -619,9 +619,9 @@ free_rx_ch_xfer:
  * @param len - Number of messages.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_spi_dma_transfer_sync(struct no_os_spi_desc *desc,
-		struct no_os_spi_msg *msgs,
-		uint32_t len)
+static int32_t max_spi_transfer_dma(struct no_os_spi_desc *desc,
+				    struct no_os_spi_msg *msgs,
+				    uint32_t len)
 {
 	return max_config_dma_and_start(desc, msgs, len, NULL, NULL, false);
 }
@@ -636,7 +636,7 @@ static int32_t max_spi_dma_transfer_sync(struct no_os_spi_desc *desc,
  * @param ctx - User defined parameter for the callback function.
  * @return 0 in case of success, errno codes otherwise.
  */
-static int32_t max_spi_dma_transfer_async(struct no_os_spi_desc *desc,
+static int32_t max_spi_transfer_dma_async(struct no_os_spi_desc *desc,
 		struct no_os_spi_msg *msgs,
 		uint32_t len,
 		void (*callback)(void *),
@@ -778,7 +778,7 @@ const struct no_os_spi_platform_ops max_spi_ops = {
 	.init = &max_spi_init,
 	.write_and_read = &max_spi_write_and_read,
 	.transfer = &max_spi_transfer,
-	.dma_transfer_sync = &max_spi_dma_transfer_sync,
-	.dma_transfer_async = &max_spi_dma_transfer_async,
+	.transfer_dma = &max_spi_transfer_dma,
+	.transfer_dma_async = &max_spi_transfer_dma_async,
 	.remove = &max_spi_remove
 };

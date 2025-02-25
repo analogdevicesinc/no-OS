@@ -228,8 +228,8 @@ int32_t no_os_spi_transfer_dma(struct no_os_spi_desc *desc,
 	if (!desc || !desc->platform_ops || !msgs || !len)
 		return -EINVAL;
 
-	if (desc->platform_ops->dma_transfer_sync)
-		return desc->platform_ops->dma_transfer_sync(desc, msgs, len);
+	if (desc->platform_ops->transfer_dma)
+		return desc->platform_ops->transfer_dma(desc, msgs, len);
 
 	return -ENOSYS;
 }
@@ -254,8 +254,8 @@ int32_t no_os_spi_transfer_dma_async(struct no_os_spi_desc *desc,
 	if (!desc || !desc->platform_ops || !msgs || !len)
 		return -EINVAL;
 
-	if (desc->platform_ops->dma_transfer_async)
-		return desc->platform_ops->dma_transfer_async(desc, msgs, len,
+	if (desc->platform_ops->transfer_dma_async)
+		return desc->platform_ops->transfer_dma_async(desc, msgs, len,
 				callback, ctx);
 
 	return -ENOSYS;

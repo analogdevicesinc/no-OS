@@ -641,7 +641,7 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
  * @param ctx - User defined parameter for the callback function.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t stm32_spi_dma_transfer_async(struct no_os_spi_desc* desc,
+int32_t stm32_spi_transfer_dma_async(struct no_os_spi_desc* desc,
 				     struct no_os_spi_msg* msgs,
 				     uint32_t len,
 				     void (*callback)(void*),
@@ -663,9 +663,9 @@ int32_t stm32_spi_dma_transfer_async(struct no_os_spi_desc* desc,
  * @param len - Number of messages.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t stm32_spi_dma_transfer_sync(struct no_os_spi_desc* desc,
-				    struct no_os_spi_msg* msgs,
-				    uint32_t len)
+int32_t stm32_spi_transfer_dma(struct no_os_spi_desc* desc,
+			       struct no_os_spi_msg* msgs,
+			       uint32_t len)
 {
 	uint32_t timeout;
 	struct stm32_spi_desc* sdesc = desc->extra;
@@ -746,7 +746,7 @@ const struct no_os_spi_platform_ops stm32_spi_ops = {
 	.write_and_read = &stm32_spi_write_and_read,
 	.remove = &stm32_spi_remove,
 	.transfer = &stm32_spi_transfer,
-	.dma_transfer_async = &stm32_spi_dma_transfer_async,
-	.dma_transfer_sync = &stm32_spi_dma_transfer_sync,
+	.transfer_dma_async = &stm32_spi_transfer_dma_async,
+	.transfer_dma = &stm32_spi_transfer_dma,
 	.transfer_abort = &stm32_spi_transfer_abort
 };

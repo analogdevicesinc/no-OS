@@ -217,13 +217,13 @@ struct no_os_spi_platform_ops {
 	/** Iterate over the spi_msg array and send all messages using DMA.
 	 * Blocks until the transfer is completed.
 	 */
-	int32_t (*dma_transfer_sync)(struct no_os_spi_desc *, struct no_os_spi_msg *,
-				     uint32_t);
+	int32_t (*transfer_dma)(struct no_os_spi_desc *, struct no_os_spi_msg *,
+				uint32_t);
 	/** Iterate over the spi_msg array and send all messages using DMA.
 	 * Returns immediately after the transfer is started and invokes a
 	 * callback once all the messages have been transfered.
 	 */
-	int32_t (*dma_transfer_async)(struct no_os_spi_desc *, struct no_os_spi_msg *,
+	int32_t (*transfer_dma_async)(struct no_os_spi_desc *, struct no_os_spi_msg *,
 				      uint32_t, void (*)(void *), void *);
 	/** SPI remove function pointer */
 	int32_t (*remove)(struct no_os_spi_desc *);
