@@ -2,8 +2,9 @@
  *   @file   adf4377.h
  *   @brief  Header file for adf4377 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author  Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2021(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,25 +46,26 @@
 
 /* ADF4377 REG0000 Map */
 #define ADF4377_SOFT_RESET_R_MSK        NO_OS_BIT(7)
-#define ADF4377_SOFT_RESET_R(x)			no_os_field_prep(ADF4377_SOFT_RESET_R_MSK, x)
+#define ADF4377_SOFT_RESET_R(x)		no_os_field_prep(ADF4377_SOFT_RESET_R_MSK, x)
 #define ADF4377_SOFT_RESET_MSK         	NO_OS_BIT(0)
-#define ADF4377_SOFT_RESET(x)			no_os_field_prep(ADF4377_SOFT_RESET_MSK, x)
-#define ADF4377_LSB_FIRST_R_MSK			NO_OS_BIT(6)
+#define ADF4377_SOFT_RESET(x)		no_os_field_prep(ADF4377_SOFT_RESET_MSK, x)
+#define ADF4377_LSB_FIRST_R_MSK		NO_OS_BIT(6)
 #define ADF4377_LSB_FIRST_R(x)       	no_os_field_prep(ADF4377_LSB_FIRST_R_MSK, x)
-#define ADF4377_LSB_FIRST_MSK			NO_OS_BIT(1)
-#define ADF4377_LSB_FIRST(x)       		no_os_field_prep(ADF4377_LSB_FIRST_MSK, x)
-#define ADF4377_ADDRESS_ASC_R_MSK		NO_OS_BIT(5)
-#define ADF4377_ADDRESS_ASC_R(x)		no_os_field_prep(ADF4377_ADDRESS_ASC_R_MSK, x)
-#define ADF4377_ADDRESS_ASC_MSK			NO_OS_BIT(2)
-#define ADF4377_ADDRESS_ASC(x)			no_os_field_prep(ADF4377_ADDRESS_ASC_MSK, x)
+#define ADF4377_LSB_FIRST_MSK		NO_OS_BIT(1)
+#define ADF4377_LSB_FIRST(x)       	no_os_field_prep(ADF4377_LSB_FIRST_MSK, x)
+#define ADF4377_ADDRESS_ASC_R_MSK	NO_OS_BIT(5)
+#define ADF4377_ADDRESS_ASC_R(x)	no_os_field_prep(ADF4377_ADDRESS_ASC_R_MSK, x)
+#define ADF4377_ADDRESS_ASC_MSK		NO_OS_BIT(2)
+#define ADF4377_ADDRESS_ASC(x)		no_os_field_prep(ADF4377_ADDRESS_ASC_MSK, x)
 #define ADF4377_SDO_ACTIVE_R_MSK       	NO_OS_BIT(4)
-#define ADF4377_SDO_ACTIVE_R(x)			no_os_field_prep(ADF4377_SDO_ACTIVE_R_MSK, x)
+#define ADF4377_SDO_ACTIVE_R(x)		no_os_field_prep(ADF4377_SDO_ACTIVE_R_MSK, x)
 #define ADF4377_SDO_ACTIVE_MSK         	NO_OS_BIT(3)
-#define ADF4377_SDO_ACTIVE(x)			no_os_field_prep(ADF4377_SDO_ACTIVE_MSK, x)
+#define ADF4377_SDO_ACTIVE(x)		no_os_field_prep(ADF4377_SDO_ACTIVE_MSK, x)
+#define ADF4377_RESET_CMD		0x81
 
 /* ADF4377 REG0000 Bit Definition */
 #define ADF4377_SDO_ACTIVE_SPI_3W       0x0
-#define ADF4377_SDO_ACTIVE_SPI_4W		0x1
+#define ADF4377_SDO_ACTIVE_SPI_4W	0x1
 
 #define ADF4377_ADDR_ASC_AUTO_DECR      0x0
 #define ADF4377_ADDR_ASC_AUTO_INCR      0x1
@@ -75,10 +77,10 @@
 #define ADF4377_SOFT_RESET_EN           0x1
 
 /* ADF4377 REG0001 Map */
-#define ADF4377_SINGLE_INSTR_MSK		NO_OS_BIT(7)
-#define ADF4377_SINGLE_INSTR(x)   		no_os_field_prep(ADF4377_SINGLE_INSTRUCTION_MSK, x)
-#define ADF4377_MASTER_RB_CTRL_MSK		NO_OS_BIT(5)
-#define ADF4377_MASTER_RB_CTRL(x)		no_os_field_prep(ADF4377_MASTER_RB_CTRL_MSK, x)
+#define ADF4377_SINGLE_INSTR_MSK	NO_OS_BIT(7)
+#define ADF4377_SINGLE_INSTR(x)   	no_os_field_prep(ADF4377_SINGLE_INSTRUCTION_MSK, x)
+#define ADF4377_MASTER_RB_CTRL_MSK	NO_OS_BIT(5)
+#define ADF4377_MASTER_RB_CTRL(x)	no_os_field_prep(ADF4377_MASTER_RB_CTRL_MSK, x)
 
 /* ADF4377 REG0001 Bit Definition */
 #define ADF4377_SPI_STREAM_EN           0x0
@@ -97,7 +99,7 @@
 #define ADF4377_PRODUCT_ID_MSB          0x0005
 
 /* ADF4377 REG000A Map */
-#define ADF4377_SCRATCHPAD_MSK			NO_OS_GENMASK(7, 0)
+#define ADF4377_SCRATCHPAD_MSK		NO_OS_GENMASK(7, 0)
 #define ADF4377_SCRATCHPAD(x)           no_os_field_prep(ADF4377_SCRATCHPAD_MSK, x)
 
 /* ADF4377 REG000B Bit Definition */
@@ -113,17 +115,17 @@
 #define ADF4377_R00F_RSV1				0x14
 
 /* ADF4377 REG0010 Map*/
-#define ADF4377_N_INT_LSB_MSK			NO_OS_GENMASK(7, 0)
+#define ADF4377_N_INT_LSB_MSK		NO_OS_GENMASK(7, 0)
 #define ADF4377_N_INT_LSB(x)            no_os_field_prep(ADF4377_N_INT_LSB_MSK, x)
 
 /* ADF4377 REG0011 Map*/
-#define ADF4377_EN_AUTOCAL_MSK			NO_OS_BIT(7)
+#define ADF4377_EN_AUTOCAL_MSK		NO_OS_BIT(7)
 #define ADF4377_EN_AUTOCAL(x)           no_os_field_prep(ADF4377_EN_AUTOCAL_MSK, x)
-#define ADF4377_EN_RDBLR_MSK			NO_OS_BIT(6)
+#define ADF4377_EN_RDBLR_MSK		NO_OS_BIT(6)
 #define ADF4377_EN_RDBLR(x)             no_os_field_prep(ADF4377_EN_RDBLR_MSK, x)
-#define ADF4377_DCLK_DIV2_MSK			NO_OS_GENMASK(5,4)
+#define ADF4377_DCLK_DIV2_MSK		NO_OS_GENMASK(5,4)
 #define ADF4377_DCLK_DIV2(x)            no_os_field_prep(ADF4377_DCLK_DIV2_MSK, x)
-#define ADF4377_N_INT_MSB_MSK			NO_OS_GENMASK(3,0)
+#define ADF4377_N_INT_MSB_MSK		NO_OS_GENMASK(3,0)
 #define ADF4377_N_INT_MSB(x)            no_os_field_prep(ADF4377_N_INT_MSB_MSK, x)
 
 /* ADF4377 REG0011 Bit Definition */
@@ -139,9 +141,9 @@
 #define ADF4377_DCLK_DIV2_8             0x3
 
 /* ADF4377 REG0012 Map*/
-#define ADF4377_CLKOUT_DIV_MSK			NO_OS_GENMASK(7, 6)
+#define ADF4377_CLKOUT_DIV_MSK		NO_OS_GENMASK(7, 6)
 #define ADF4377_CLKOUT_DIV(x)           no_os_field_prep(ADF4377_CLKOUT_DIV_MSK, x)
-#define ADF4377_R_DIV_MSK				NO_OS_GENMASK(5, 0)
+#define ADF4377_R_DIV_MSK		NO_OS_GENMASK(5, 0)
 #define ADF4377_R_DIV(x)                no_os_field_prep(ADF4377_R_DIV_MSK, x)
 
 /* ADF4377 REG0012 Bit Definition */
@@ -154,7 +156,7 @@
 #define ADF4378_MAX_R_DIV               0x3F
 
 /* ADF4377 REG0013 Map */
-#define ADF4377_M_VCO_CORE_MSK			NO_OS_GENMASK(5,4)
+#define ADF4377_M_VCO_CORE_MSK		NO_OS_GENMASK(5,4)
 #define ADF4377_M_VCO_CORE(x)           no_os_field_prep(ADF4377_M_VCO_CORE_MSK, x)
 #define ADF4377_M_VCO_BIAS_MSK          NO_OS_GENMASK(3,0)
 #define ADF4377_M_VCO_BIAS(x)          	no_os_field_prep(ADF4377_M_VCO_BIAS_MSK, x)
@@ -177,13 +179,13 @@
 #define ADF4377_VCO_BAND_MAX            0x00
 
 /* ADF4377 REG0015 Map */
-#define ADF4377_BLEED_I_LSB_MSK			NO_OS_GENMASK(7, 6)
+#define ADF4377_BLEED_I_LSB_MSK		NO_OS_GENMASK(7, 6)
 #define ADF4377_BLEED_I_LSB(x)          no_os_field_prep(ADF4377_BLEED_I_LSB_MSK, x)
-#define ADF4377_BLEED_POL_MSK			NO_OS_BIT(5)
+#define ADF4377_BLEED_POL_MSK		NO_OS_BIT(5)
 #define ADF4377_BLEED_POL(x)            no_os_field_prep(ADF4377_BLEED_POL_MSK, x)
-#define ADF4377_EN_BLEED_MSK			NO_OS_BIT(4)
+#define ADF4377_EN_BLEED_MSK		NO_OS_BIT(4)
 #define ADF4377_EN_BLEED(x)             no_os_field_prep(ADF4377_EN_BLEED_MSK, x)
-#define ADF4377_CP_I_MSK				NO_OS_GENMASK(3, 0)
+#define ADF4377_CP_I_MSK		NO_OS_GENMASK(3, 0)
 #define ADF4377_CP_I(x)                 no_os_field_prep(ADF4377_CP_I_MSK, x)
 
 /* ADF4377 REG0015 Bit Description */
@@ -208,19 +210,19 @@
 #define ADF4377_CP_10MA1                0xF
 
 /* ADF4377 REG0016 Map */
-#define ADF4377_BLEED_I_MSB_MSK			NO_OS_GENMASK(7, 0)
+#define ADF4377_BLEED_I_MSB_MSK		NO_OS_GENMASK(7, 0)
 #define ADF4377_BLEED_I_MSB(x)          no_os_field_prep(ADF4377_BLEED_I_MSB_MSK, x)
 
 /* ADF4377 REG0017 Map */
-#define ADF4377_INV_CLKOUT_MSK			NO_OS_BIT(7)
+#define ADF4377_INV_CLKOUT_MSK		NO_OS_BIT(7)
 #define ADF4377_INV_CLKOUT(x)           no_os_field_prep(ADF4377_INV_CLKOUT_MSK, x)
-#define ADF4377_N_DEL_MSK				NO_OS_GENMASK(6, 0)
+#define ADF4377_N_DEL_MSK		NO_OS_GENMASK(6, 0)
 #define ADF4377_N_DEL(x)                no_os_field_prep(ADF4377_N_DEL_MSK, x)
 
 /* ADF4377 REG0018 Map */
-#define ADF4377_CMOS_OV_MSK				NO_OS_BIT(7)
+#define ADF4377_CMOS_OV_MSK		NO_OS_BIT(7)
 #define ADF4377_CMOS_OV(x)              no_os_field_prep(ADF4377_CMOS_OV_MSK, x)
-#define ADF4377_R_DEL_MSK				NO_OS_GENMASK(6, 0)
+#define ADF4377_R_DEL_MSK		NO_OS_GENMASK(6, 0)
 #define ADF4377_R_DEL(x)                no_os_field_prep(ADF4377_R_DEL_MSK, x)
 
 /* ADF4377 REG0018 Bit Definition */
@@ -231,17 +233,17 @@
 #define ADF4377_R_DEL_MAX               0x7F
 
 /* ADF4377 REG0019 Map */
-#define ADF4377_CLKOUT2_OP_MSK			NO_OS_GENMASK(7, 6)
+#define ADF4377_CLKOUT2_OP_MSK		NO_OS_GENMASK(7, 6)
 #define ADF4377_CLKOUT2_OP(x)           no_os_field_prep(ADF4377_CLKOUT2_OP_MSK, x)
-#define ADF4377_CLKOUT1_OP_MSK			NO_OS_GENMASK(5, 4)
+#define ADF4377_CLKOUT1_OP_MSK		NO_OS_GENMASK(5, 4)
 #define ADF4377_CLKOUT1_OP(x)           no_os_field_prep(ADF4377_CLKOUT1_OP_MSK, x)
-#define ADF4377_PD_CLK_MSK				NO_OS_BIT(3)
+#define ADF4377_PD_CLK_MSK		NO_OS_BIT(3)
 #define ADF4377_PD_CLK(x)               no_os_field_prep(ADF4377_PD_CLK_MSK, x)
-#define ADF4377_PD_RDET_MSK				NO_OS_BIT(2)
+#define ADF4377_PD_RDET_MSK		NO_OS_BIT(2)
 #define ADF4377_PD_RDET(x)              no_os_field_prep(ADF4377_PD_RDET_MSK, x)
-#define ADF4377_PD_ADC_MSK				NO_OS_BIT(1)
+#define ADF4377_PD_ADC_MSK		NO_OS_BIT(1)
 #define ADF4377_PD_ADC(x)               no_os_field_prep(ADF4377_PD_ADC_MSK, x)
-#define ADF4377_PD_CALADC_MSK			NO_OS_BIT(0)
+#define ADF4377_PD_CALADC_MSK		NO_OS_BIT(0)
 #define ADF4377_PD_CALADC(x)            no_os_field_prep(ADF4377_PD_CALADC_MSK, x)
 
 /* ADF4377 REG0019 Bit Definition */
@@ -263,21 +265,21 @@
 #define ADF4377_PD_CALADC_PD            0x1
 
 /* ADF4377 REG001A Map */
-#define ADF4377_PD_ALL_MSK				NO_OS_BIT(7)
+#define ADF4377_PD_ALL_MSK		NO_OS_BIT(7)
 #define ADF4377_PD_ALL(x)               no_os_field_prep(ADF4377_PD_ALL_MSK, x)
-#define ADF4377_PD_RDIV_MSK				NO_OS_BIT(6)
+#define ADF4377_PD_RDIV_MSK		NO_OS_BIT(6)
 #define ADF4377_PD_RDIV(x)              no_os_field_prep(ADF4377_PD_RDIV_MSK, x)
-#define ADF4377_PD_NDIV_MSK				NO_OS_BIT(5)
+#define ADF4377_PD_NDIV_MSK		NO_OS_BIT(5)
 #define ADF4377_PD_NDIV(x)              no_os_field_prep(ADF4377_PD_NDIV_MSK, x)
-#define ADF4377_PD_VCO_MSK				NO_OS_BIT(4)
+#define ADF4377_PD_VCO_MSK		NO_OS_BIT(4)
 #define ADF4377_PD_VCO(x)               no_os_field_prep(ADF4377_PD_VCO_MSK, x)
-#define ADF4377_PD_LD_MSK				NO_OS_BIT(3)
+#define ADF4377_PD_LD_MSK		NO_OS_BIT(3)
 #define ADF4377_PD_LD(x)                no_os_field_prep(ADF4377_PD_LD_MSK, x)
-#define ADF4377_PD_PFDCP_MSK			NO_OS_BIT(2)
+#define ADF4377_PD_PFDCP_MSK		NO_OS_BIT(2)
 #define ADF4377_PD_PFDCP(x)             no_os_field_prep(ADF4377_PD_PFDCP_MSK, x)
-#define ADF4377_PD_CLKOUT1_MSK			NO_OS_BIT(1)
+#define ADF4377_PD_CLKOUT1_MSK		NO_OS_BIT(1)
 #define ADF4377_PD_CLKOUT1(x)           no_os_field_prep(ADF4377_PD_CLKOUT1_MSK, x)
-#define ADF4377_PD_CLKOUT2_MSK			NO_OS_BIT(0)
+#define ADF4377_PD_CLKOUT2_MSK		NO_OS_BIT(0)
 #define ADF4377_PD_CLKOUT2(x)           no_os_field_prep(ADF4377_PD_CLKOUT2_MSK, x)
 
 /* ADF4377 REG001A Bit Definition */
@@ -306,13 +308,13 @@
 #define ADF4377_PD_CLKOUT2_PD           0x1
 
 /* ADF4377 REG001B Map */
-#define ADF4377_EN_LOL_MSK				NO_OS_BIT(7)
+#define ADF4377_EN_LOL_MSK		NO_OS_BIT(7)
 #define ADF4377_EN_LOL(x)               no_os_field_prep(ADF4377_EN_LOL_MSK, x)
-#define ADF4377_LDWIN_PW_MSK			NO_OS_BIT(6)
+#define ADF4377_LDWIN_PW_MSK		NO_OS_BIT(6)
 #define ADF4377_LDWIN_PW(x)             no_os_field_prep(ADF4377_LDWIN_PW_MSK, x)
-#define ADF4377_EN_LDWIN_MSK			NO_OS_BIT(5)
+#define ADF4377_EN_LDWIN_MSK		NO_OS_BIT(5)
 #define ADF4377_EN_LDWIN(x)             no_os_field_prep(ADF4377_EN_LDWIN_MSK, x)
-#define ADF4377_LD_COUNT_MSK			NO_OS_GENMASK(4, 0)
+#define ADF4377_LD_COUNT_MSK		NO_OS_GENMASK(4, 0)
 #define ADF4377_LD_COUNT(x)             no_os_field_prep(ADF4377_LD_COUNT_MSK, x)
 
 /* ADF4377 REG001B Bit Definition */
@@ -321,14 +323,14 @@
 #define ADF4377_LDWIN_PW_WIDE           0x1
 
 /* ADF4377 REG001C Map */
-#define ADF4377_EN_DNCLK_MSK			NO_OS_BIT(7)
+#define ADF4377_EN_DNCLK_MSK		NO_OS_BIT(7)
 #define ADF4377_EN_DNCLK(x)            	no_os_field_prep(ADF4377_EN_DNCLK_MSK, x)
-#define ADF4377_EN_DRCLK_MSK			NO_OS_BIT(6)
+#define ADF4377_EN_DRCLK_MSK		NO_OS_BIT(6)
 #define ADF4377_EN_DRCLK(x)             no_os_field_prep(ADF4377_EN_DRCLK_MSK, x)
 #define ADF4377_RST_LD_MSK				NO_OS_BIT(2)
 #define ADF4377_RST_LD(x)               no_os_field_prep(ADF4377_RST_LD_MSK, x)
-#define ADF4377_R01C_RSV1_MSK			NO_OS_BIT(0)
-#define ADF4377_R01C_RSV1(x)			no_os_field_prep(ADF4377_R01C_RSV1_MSK, x)
+#define ADF4377_R01C_RSV1_MSK		NO_OS_BIT(0)
+#define ADF4377_R01C_RSV1(x)		no_os_field_prep(ADF4377_R01C_RSV1_MSK, x)
 
 /* ADF4377 REG001C Bit Definition */
 #define ADF4377_EN_DNCLK_OFF            0x0
@@ -375,7 +377,7 @@
 #define ADF4377_REF_SEL_MSK				NO_OS_BIT(5)
 #define ADF4377_REF_SEL(x)              no_os_field_prep(ADF4377_REF_SEL_MSK, x)
 #define ADF4377_R01F_RSV1_MSK           NO_OS_GENMASK(2, 0)
-#define ADF4377_R01F_RSV1(x) 			no_os_field_prep(ADF4377_R01F_RSV1_MSK, x)
+#define ADF4377_R01F_RSV1(x) 		no_os_field_prep(ADF4377_R01F_RSV1_MSK, x)
 
 /* ADF4377 REG001F Bit Description */
 #define ADF4377_BST_LARGE_REF_IN        0x0
@@ -388,12 +390,12 @@
 #define ADF4377_REF_SEL_LNA             0x1
 
 /* ADF4377 REG0020 Map */
-#define ADF4377_RST_SYS_MSK				NO_OS_BIT(4)
+#define ADF4377_RST_SYS_MSK		NO_OS_BIT(4)
 #define ADF4377_RST_SYS(x)              no_os_field_prep(ADF4377_RST_SYS_MSK, x)
-#define ADF4377_EN_ADC_CLK_MSK			NO_OS_BIT(3)
+#define ADF4377_EN_ADC_CLK_MSK		NO_OS_BIT(3)
 #define ADF4377_EN_ADC_CLK(x)           no_os_field_prep(ADF4377_EN_ADC_CLK_MSK, x)
 #define ADF4377_R020_RSV1_MSK           NO_OS_BIT(0)
-#define ADF4377_R020_RSV1(x)			no_os_field_prep(ADF4377_R020_RSV1_MSK, x)
+#define ADF4377_R020_RSV1(x)		no_os_field_prep(ADF4377_R020_RSV1_MSK, x)
 
 /* ADF4377 REG0020 Bit Description */
 #define ADF4377_RST_SYS_INACTIVE        0x0
@@ -409,16 +411,16 @@
 #define ADF4377_R023_RSV1               0x18
 
 /* ADF4377 REG0024 Map */
-#define ADF4377_DCLK_MODE_MSK			NO_OS_BIT(2)
+#define ADF4377_DCLK_MODE_MSK		NO_OS_BIT(2)
 #define ADF4377_DCLK_MODE(x)            no_os_field_prep(ADF4377_DCLK_MODE_MSK, x)
 
 /* ADF4377 REG0025 Map */
-#define ADF4377_CLKODIV_DB_MSK			NO_OS_BIT(7)
+#define ADF4377_CLKODIV_DB_MSK		NO_OS_BIT(7)
 #define ADF4377_CLKODIV_DB(x)           no_os_field_prep(ADF4377_CLKODIV_DB_MSK, x)
-#define ADF4377_DCLK_DB_MSK				NO_OS_BIT(6)
+#define ADF4377_DCLK_DB_MSK		NO_OS_BIT(6)
 #define ADF4377_DCLK_DB(x)              no_os_field_prep(ADF4377_DCLK_DB_MSK, x)
 #define ADF4377_R025_RSV1_MSK           NO_OS_BIT(4) | NO_OS_BIT(2) | NO_OS_BIT(1)
-#define ADF4377_R025_RSV1(x)			no_os_field_prep(ADF4377_R025_RSV1_MSK, x)
+#define ADF4377_R025_RSV1(x)		no_os_field_prep(ADF4377_R025_RSV1_MSK, x)
 
 /* ADF4377 REG0026 Map */
 #define ADF4377_VCO_BAND_DIV_MSK    	NO_OS_GENMASK(7, 0)
@@ -433,34 +435,34 @@
 #define ADF4377_SYNTH_LOCK_TO_LSB(x)   	no_os_field_prep(ADF4377_SYNTH_LOCK_TO_LSB_MSK, x)
 
 /* ADF4377 REG0028 Map */
-#define ADF4377_O_VCO_DB_MSK			NO_OS_BIT(7)
+#define ADF4377_O_VCO_DB_MSK		NO_OS_BIT(7)
 #define ADF4377_O_VCO_DB(x)             no_os_field_prep(ADF4377_O_VCO_DB_MSK, x)
 #define ADF4377_SYNTH_LOCK_TO_MSB_MSK	NO_OS_GENMASK(6, 0)
 #define ADF4377_SYNTH_LOCK_TO_MSB(x)   	no_os_field_prep(ADF4377_SYNTH_LOCK_TO_MSB_MSK, x)
 
 /* ADF4377 REG0029 Map */
-#define ADF4377_VCO_ALC_TO_LSB_MSK		NO_OS_GENMASK(7, 0)
+#define ADF4377_VCO_ALC_TO_LSB_MSK	NO_OS_GENMASK(7, 0)
 #define ADF4377_VCO_ALC_TO_LSB(x)     	no_os_field_prep(ADF4377_VCO_ALC_TO_LSB_MSK, x)
 
 /* ADF4377 REG002A Map */
-#define ADF4377_DEL_CTRL_DB_MSK			NO_OS_BIT(7)
+#define ADF4377_DEL_CTRL_DB_MSK		NO_OS_BIT(7)
 #define ADF4377_DEL_CTRL_DB(x)          no_os_field_prep(ADF4377_DEL_CTRL_DB_MSK, x)
-#define ADF4377_VCO_ALC_TO_MSB_MSK		NO_OS_GENMASK(6, 0)
+#define ADF4377_VCO_ALC_TO_MSB_MSK	NO_OS_GENMASK(6, 0)
 #define ADF4377_VCO_ALC_TO_MSB(x)      	no_os_field_prep(ADF4377_VCO_ALC_TO_MSB_MSK, x)
 
 /* ADF4377 REG002C Map */
 #define ADF4377_R02C_RSV1               0xC0
 
 /* ADF4377 REG002D Map */
-#define ADF4377_ADC_CLK_DIV_MSK			NO_OS_GENMASK(7, 0)
+#define ADF4377_ADC_CLK_DIV_MSK		NO_OS_GENMASK(7, 0)
 #define ADF4377_ADC_CLK_DIV(x)          no_os_field_prep(ADF4377_ADC_CLK_DIV_MSK, x)
 
 /* ADF4377 REG002E Map */
-#define ADF4377_EN_ADC_CNV_MSK			NO_OS_BIT(7)
+#define ADF4377_EN_ADC_CNV_MSK		NO_OS_BIT(7)
 #define ADF4377_EN_ADC_CNV(x)           no_os_field_prep(ADF4377_EN_ADC_CNV_MSK, x)
-#define ADF4377_EN_ADC_MSK				NO_OS_BIT(1)
+#define ADF4377_EN_ADC_MSK		NO_OS_BIT(1)
 #define ADF4377_EN_ADC(x)               no_os_field_prep(ADF4377_EN_ADC_MSK, x)
-#define ADF4377_ADC_A_CONV_MSK			NO_OS_BIT(0)
+#define ADF4377_ADC_A_CONV_MSK		NO_OS_BIT(0)
 #define ADF4377_ADC_A_CONV(x)           no_os_field_prep(ADF4377_ADC_A_CONV_MSK, x)
 
 /* ADF4377 REG002E Bit Definition */
@@ -468,7 +470,7 @@
 #define ADF4377_ADC_A_CONV_VCO_CALIB    0x1
 
 /* ADF4377 REG002F Map */
-#define ADF4377_DCLK_DIV1_MSK			NO_OS_GENMASK(1, 0)
+#define ADF4377_DCLK_DIV1_MSK		NO_OS_GENMASK(1, 0)
 #define ADF4377_DCLK_DIV1(x)            no_os_field_prep(ADF4377_DCLK_DIV1_MSK, x)
 
 /* ADF4377 REG002F Bit Definition */
@@ -478,13 +480,13 @@
 #define ADF4377_DCLK_DIV1_32            0x3
 
 /* ADF4377 REG0031 Map */
-#define ADF4377_R031_RSV1				0x09
+#define ADF4377_R031_RSV1		0x09
 
 /* ADF4377 REG0032 Map */
-#define ADF4377_ADC_CLK_SEL_MSK			NO_OS_BIT(6)
+#define ADF4377_ADC_CLK_SEL_MSK		NO_OS_BIT(6)
 #define ADF4377_ADC_CLK_SEL(x)          no_os_field_prep(ADF4377_ADC_CLK_SEL_MSK, x)
 #define ADF4377_R032_RSV1_MSK           NO_OS_BIT(3) | NO_OS_BIT(0)
-#define ADF4377_R032_RSV1(x)			no_os_field_prep(ADF4377_R032_RSV1_MSK, x)
+#define ADF4377_R032_RSV1(x)		no_os_field_prep(ADF4377_R032_RSV1_MSK, x)
 
 /* ADF4377 REG0032 Bit Definition */
 #define ADF4377_ADC_CLK_SEL_N_OP        0x0
@@ -503,11 +505,11 @@
 #define ADF4377_R03B_RSV1               0x2B
 
 /* ADF4377 REG003D Map */
-#define ADF4377_O_VCO_BAND_MSK			NO_OS_BIT(3)
+#define ADF4377_O_VCO_BAND_MSK		NO_OS_BIT(3)
 #define ADF4377_O_VCO_BAND(x)           no_os_field_prep(ADF4377_O_VCO_BAND_MSK, x)
-#define ADF4377_O_VCO_CORE_MSK			NO_OS_BIT(2)
+#define ADF4377_O_VCO_CORE_MSK		NO_OS_BIT(2)
 #define ADF4377_O_VCO_CORE(x)           no_os_field_prep(ADF4377_O_VCO_CORE_MSK, x)
-#define ADF4377_O_VCO_BIAS_MSK			NO_OS_BIT(1)
+#define ADF4377_O_VCO_BIAS_MSK		NO_OS_BIT(1)
 #define ADF4377_O_VCO_BIAS(x)           no_os_field_prep(ADF4377_O_VCO_BIAS_MSK, x)
 
 /* ADF4377 REG003D Bit Definition */
@@ -524,43 +526,48 @@
 #define ADF4377_R042_RSV1               0x05
 
 /* ADF4377 REG0045 Map */
-#define ADF4377_ADC_ST_CNV_MSK			NO_OS_BIT(0)
+#define ADF4377_ADC_ST_CNV_MSK		NO_OS_BIT(0)
 #define ADF4377_ADC_ST_CNV(x)           no_os_field_prep(ADF4377_ADC_ST_CNV_MSK, x)
 
 /* ADF4377 REG0049 Map */
-#define ADF4377_EN_CLK2_MSK				NO_OS_BIT(7)
+#define ADF4377_EN_CLK2_MSK		NO_OS_BIT(7)
 #define ADF4377_EN_CLK2(x)              no_os_field_prep(ADF4377_EN_CLK2_MSK, x)
-#define ADF4377_EN_CLK1_MSK				NO_OS_BIT(6)
+#define ADF4377_EN_CLK1_MSK		NO_OS_BIT(6)
 #define ADF4377_EN_CLK1(x)              no_os_field_prep(ADF4377_EN_CLK1_MSK, x)
-#define ADF4377_REF_OK_MSK				NO_OS_BIT(3)
+#define ADF4377_REF_OK_MSK		NO_OS_BIT(3)
 #define ADF4377_REF_OK(x)               no_os_field_prep(ADF4377_REF_OK_MSK, x)
-#define ADF4377_ADC_BUSY_MSK			NO_OS_BIT(2)
+#define ADF4377_ADC_BUSY_MSK		NO_OS_BIT(2)
 #define ADF4377_ADC_BUSY(x)             no_os_field_prep(ADF4377_ADC_BUSY_MSK, x)
-#define ADF4377_FSM_BUSY_MSK			NO_OS_BIT(1)
+#define ADF4377_FSM_BUSY_MSK		NO_OS_BIT(1)
 #define ADF4377_FSM_BUSY(x)             no_os_field_prep(ADF4377_FSM_BUSY_MSK, x)
-#define ADF4377_LOCKED_MSK				NO_OS_BIT(0)
+#define ADF4377_LOCKED_MSK		NO_OS_BIT(0)
 #define ADF4377_LOCKED(x)               no_os_field_prep(ADF4377_LOCKED_MSK, x)
 
 /* ADF4377 REG004B Map */
-#define ADF4377_VCO_CORE_MSK			NO_OS_GENMASK(1, 0)
+#define ADF4377_VCO_CORE_MSK		NO_OS_GENMASK(1, 0)
 #define ADF4377_VCO_CORE(x)             no_os_field_prep(ADF4377_VCO_CORE_MSK, x)
 
 /* ADF4377 REG004C Map */
-#define ADF4377_CHIP_TEMP_LSB_MSK		NO_OS_GENMASK(7, 0)
+#define ADF4377_CHIP_TEMP_LSB_MSK	NO_OS_GENMASK(7, 0)
 #define ADF4377_CHIP_TEMP_LSB(x)        no_os_field_prep(ADF4377_CHIP_TEMP_LSB_MSK, x)
 
 /* ADF4377 REG004D Map */
-#define ADF4377_CHIP_TEMP_MSB_MSK		NO_OS_BIT(0)
+#define ADF4377_CHIP_TEMP_MSB_MSK	NO_OS_BIT(0)
 #define ADF4377_CHIP_TEMP_MSB(x)        no_os_field_prep(ADF4377_CHIP_TEMP_MSB_MSK, x)
 
 /* ADF4377 REG004F Map */
-#define ADF4377_VCO_BAND_MSK			NO_OS_GENMASK(7, 0)
+#define ADF4377_VCO_BAND_MSK		NO_OS_GENMASK(7, 0)
 #define ADF4377_VCO_BAND(x)             no_os_field_prep(ADF4377_VCO_BAND_MSK, x)
 
 /* ADF4377 REG0054 Map */
-#define ADF4377_CHIP_VERSION_MSK		NO_OS_GENMASK(7, 0)
+#define ADF4377_CHIP_VERSION_MSK	NO_OS_GENMASK(7, 0)
 #define ADF4377_CHIP_VERSION(x)         no_os_field_prep(ADF4377_CHIP_VERSION_MSK, x)
 
+#define ADF4377_SPI_4W_CFG(x)	(no_os_field_prep(ADF4377_SDO_ACTIVE_MSK, x) | \
+					no_os_field_prep(ADF4377_SDO_ACTIVE_R_MSK, x))
+
+#define ADF4377_SPI_LSB_CFG(x)	(no_os_field_prep(ADF4377_LSB_FIRST_MSK, x) | \
+					no_os_field_prep(ADF4377_LSB_FIRST_R_MSK, x))
 /* Specifications */
 #define ADF4377_SPI_WRITE_CMD		    0x0
 #define ADF4377_SPI_READ_CMD		    NO_OS_BIT(7)
@@ -578,6 +585,17 @@
 #define ADF4377_FREQ_PFD_160MHZ		    160000000
 #define ADF4377_FREQ_PFD_250MHZ		    250000000
 #define ADF4377_FREQ_PFD_320MHZ		    320000000
+#define ADF4377_CPI_VAL_MAX		    15
+#define ADF4377_RFOUT_MAX		    12800000000U
+#define ADF4377_RFOUT_MIN		    800000000U
+#define ADF4377_CLKOUT_DIV_REG_VAL_MAX	    3
+#define ADF4377_LKD_DELAY_US 	  	    5000
+#define ADF4377_POR_DELAY_US		    200
+#define ADF4377_BLEED_WORD_MAX		    1023
+#define ADF4377_REF_DIV_MAX		    63
+#define ADF4377_OUT_PWR_MAX		    ADF4377_CLKOUT_DIV_REG_VAL_MAX
+#define ADF4377_CLKIN_REF_MIN		    10000000
+#define ADF4377_CLKIN_REF_MAX		    10000000000U
 
 /* ADF4377 Extra Definitions */
 #define ADF4377_SPI_SCRATCHPAD_TEST_A	    0xA5u
@@ -613,7 +631,7 @@ struct adf4377_init_param {
 	/** SPI 3-Wire */
 	bool spi4wire;
 	/** Input Reference Clock */
-	uint32_t clkin_freq;
+	uint64_t clkin_freq;
 	/** Output frequency */
 	uint64_t f_clk;
 	/** Charge Pump Current */
@@ -624,6 +642,8 @@ struct adf4377_init_param {
 	uint8_t ref_doubler_en;
 	/** Output Amplitude */
 	uint8_t	clkout_op;
+	/** Reference Divider */
+	uint32_t ref_div_factor;
 };
 
 /**
@@ -650,7 +670,7 @@ struct adf4377_dev {
 	/** Output frequency of the VCO */
 	uint64_t f_vco;
 	/** Input Reference Clock */
-	uint32_t clkin_freq;
+	uint64_t clkin_freq;
 	/** Charge Pump Current */
 	uint8_t cp_i;
 	/** MUXOUT Default */
@@ -665,28 +685,81 @@ struct adf4377_dev {
 	uint16_t n_int;
 	/** Output Amplitude */
 	uint8_t	clkout_op;
+	/** Bleed Word */
+	uint16_t bleed_word;
 };
 
 /** ADF4377 SPI write */
-int32_t adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
-			  uint8_t data);
+int adf4377_spi_write(struct adf4377_dev *dev, uint8_t reg_addr,
+		      uint8_t data);
 
 /* ADF4377 Register Update */
-int32_t adf4377_spi_write_mask(struct adf4377_dev *dev, uint8_t reg_addr,
-			       uint8_t mask, uint8_t data);
+int adf4377_spi_update_bit(struct adf4377_dev *dev, uint16_t reg_addr,
+			   uint8_t mask, uint8_t data);
 
 /** ADF4377 SPI Read */
-int32_t adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
-			 uint8_t *data);
+int adf4377_spi_read(struct adf4377_dev *dev, uint8_t reg_addr,
+		     uint8_t *data);
 
-/* Software Reset */
-int32_t adf4377_soft_reset(struct adf4377_dev *dev);
+/** ADF4377 Set Reference Clock attribute */
+int adf4377_set_ref_clk(struct adf4377_dev *dev, uint64_t val);
+
+/** ADF4377 Get Reference Clock attribute */
+int adf4377_get_ref_clk(struct adf4377_dev *dev, uint64_t *val);
+
+/** ADF477 Set reference doubler attribute */
+int adf4377_set_en_ref_doubler(struct adf4377_dev *dev, bool en);
+
+/** adf4377 Get reference doubler attribute */
+int adf4377_get_en_ref_doubler(struct adf4377_dev *dev, bool *en);
+
+/** adf4377 Set reference divider attribute */
+int adf4377_set_ref_div(struct adf4377_dev *dev, int32_t div);
+
+/** adf4377 Get reference divider attribute */
+int adf4377_get_ref_div(struct adf4377_dev *dev, int32_t *div);
+
+/** adf4377 Set charge pump current attribute */
+int adf4377_set_cp_i(struct adf4377_dev *dev, int32_t reg_val);
+
+/** adf4377 Get charge pump current attribute */
+int adf4377_get_cp_i(struct adf4377_dev *dev, int32_t *reg_val);
+
+/** adf4377 Set bleed current attribute */
+int adf4377_set_bleed_word(struct adf4377_dev *dev, int32_t word);
+
+/** adf4377 Get bleed current attribute */
+int adf4377_get_bleed_word(struct adf4377_dev *dev, int32_t *word);
+
+/** ADF4377 Set output frequency attribute */
+int adf4377_set_rfout(struct adf4377_dev *dev, uint64_t val);
+
+/** ADF4377 Get output frequency attribute */
+int adf4377_get_rfout(struct adf4377_dev *dev, uint64_t *val);
+
+/** ADF4377 Set channel enable attributes */
+int adf4377_set_en_chan(struct adf4377_dev *dev, uint8_t ch, bool en);
+
+/** ADF4377 Get channel enable attributes */
+int adf4377_get_en_chan(struct adf4377_dev *dev, uint8_t ch, bool *en);
+
+/** ADF4377 Set output power attributes */
+int adf4377_set_out_power(struct adf4377_dev *dev, uint8_t ch, int8_t pwr);
+
+/** ADF4377 Get output power attributes */
+int adf4377_get_out_power(struct adf4377_dev *dev, uint8_t ch, int8_t *pwr);
+
+/** ADF4377 Set the rfout divider attribute */
+int adf4377_set_rfout_divider(struct adf4377_dev *dev, uint8_t div);
+
+/** ADF4377 Get the rfout divider attribute */
+int adf4377_get_rfout_divider(struct adf4377_dev *dev, int8_t *div);
 
 /* ADF4377 Scratchpad check */
-int32_t adf4377_check_scratchpad(struct adf4377_dev *dev);
+int adf4377_check_scratchpad(struct adf4377_dev *dev);
 
 /* Set Output frequency */
-int32_t adf4377_set_freq(struct adf4377_dev *dev, uint64_t freq);
+int adf4377_set_freq(struct adf4377_dev *dev);
 
 /** ADF4377 Initialization */
 int32_t adf4377_init(struct adf4377_dev **device,
