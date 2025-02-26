@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   stm32_dma.h
- *   @brief  Platform independent function definitions and data types
- * 	     for the DMA API.
- * 	 @author Janani Sunil (janani.sunil@analog.com)
+ *   @file   stm32_gpdma.h
+ *   @brief  Header file for the STM32 GPDMA driver.
+ * 	 @author Swaroop P Kukkillaya (swaroop.kukkillaya@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,13 +31,13 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef STM32_DMA_H_
-#define STM32_DMA_H_
+#ifndef STM32_GPDMA_H_
+#define STM32_GPDMA_H_
 
 #include "no_os_dma.h"
 #include "stm32_dma_common.h"
 
-extern const struct no_os_dma_platform_ops stm32_dma_ops;
+extern const struct no_os_dma_platform_ops stm32_gpdma_ops;
 
 #endif
 
