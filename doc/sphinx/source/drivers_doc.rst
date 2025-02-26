@@ -55,6 +55,7 @@ FREQUENCY GENERATORS
 
    drivers/adf4382
    drivers/adf4368
+   drivers/adf4377
    drivers/adf5611
    drivers/admfm2000
 
