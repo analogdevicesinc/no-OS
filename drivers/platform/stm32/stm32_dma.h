@@ -95,6 +95,7 @@ struct stm32_dma_desc {
 };
 
 extern const struct no_os_dma_platform_ops stm32_dma_ops;
+extern const struct no_os_dma_platform_ops stm32_gpdma_ops;
 
 #endif
 
