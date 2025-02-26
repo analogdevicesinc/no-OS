@@ -58,57 +58,7 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 
 	sdma_ch = channel->extra;
 
-	/* Note: Channel number is assigned via the Instance for MCU
-	 * families other than STM32F2, STM32F4 and STM32F7 */
-#if defined (STM32F2) || defined (STM32F4) || defined (STM32F7)
 	sdma_ch->hdma->Init.Channel = sdma_ch->ch_num;
-#else
-	sdma_ch->hdma->Instance = sdma_ch->ch_num;
-#endif
-#if defined (STM32H5)
-	sdma_ch->hdma->Init.DestInc = sdma_ch->mem_increment ? DMA_DINC_INCREMENTED :
-				      DMA_DINC_FIXED;
-	sdma_ch->hdma->Init.SrcInc = sdma_ch->per_increment ? DMA_SINC_INCREMENTED :
-				     DMA_SINC_FIXED;
-
-	switch (sdma_ch->mem_data_alignment) {
-	case DATA_ALIGN_BYTE:
-		sdma_ch->hdma->Init.DestDataWidth = DMA_DEST_DATAWIDTH_BYTE;
-		break;
-	case DATA_ALIGN_HALF_WORD:
-		sdma_ch->hdma->Init.DestDataWidth = DMA_DEST_DATAWIDTH_HALFWORD;
-		break;
-	case DATA_ALIGN_WORD:
-		sdma_ch->hdma->Init.DestDataWidth = DMA_DEST_DATAWIDTH_WORD;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	switch (sdma_ch->per_data_alignment) {
-	case DATA_ALIGN_BYTE:
-		sdma_ch->hdma->Init.SrcDataWidth = DMA_SRC_DATAWIDTH_BYTE;
-		break;
-	case DATA_ALIGN_HALF_WORD:
-		sdma_ch->hdma->Init.SrcDataWidth = DMA_SRC_DATAWIDTH_HALFWORD;
-		break;
-	case DATA_ALIGN_WORD:
-		sdma_ch->hdma->Init.SrcDataWidth = DMA_SRC_DATAWIDTH_WORD;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	switch (sdma_ch->dma_mode) {
-	case DMA_NORMAL_MODE:
-		sdma_ch->hdma->Init.Mode = DMA_NORMAL;
-		break;
-	case DMA_CIRCULAR_MODE:
-		return -ENOTSUP;
-	default:
-		return -EINVAL;
-	}
-#else
 	sdma_ch->hdma->Init.MemInc = sdma_ch->mem_increment ? DMA_MINC_ENABLE :
 				     DMA_MINC_DISABLE;
 	sdma_ch->hdma->Init.PeriphInc = sdma_ch->per_increment ? DMA_PINC_ENABLE :
@@ -152,7 +102,6 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 	default:
 		return -EINVAL;
 	}
-#endif
 
 	switch (xfer->xfer_type) {
 	case MEM_TO_MEM:
@@ -189,7 +138,6 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 int stm32_dma_init(struct no_os_dma_desc** desc,
 		   const struct no_os_dma_init_param* param)
 {
-
 	struct no_os_dma_desc* descriptor;
 	int ret;
 	uint8_t i;
