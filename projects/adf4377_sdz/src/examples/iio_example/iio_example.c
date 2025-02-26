@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   iio_example.c
+ *   @brief  Implementation of IIO example for adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2021(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,28 +32,55 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include "iio_adf4377.h"
+#include "common_data.h"
+#include "no_os_print_log.h"
+#include "iio_app.h"
 
-#include <xparameters.h>
+/**
+ * @brief IIO example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
+ */
+int example_main()
+{
+	struct adf4377_iio_dev *adf4377_iio_dev;
+	struct adf4377_iio_dev_init_param adf4377_iio_ip;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+	int ret;
 
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define SPI_ADF4377_CS				0
 
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
+	adf4377_iio_ip.adf4377_dev_init = &adf4377_ip;
+	ret = adf4377_iio_init(&adf4377_iio_dev, &adf4377_iio_ip);
+	if (ret)
+		return ret;
 
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				    XPAR_XUARTPS_1_INTR
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adf4377",
+			.dev = adf4377_iio_dev,
+			.dev_descriptor = adf4377_iio_dev->iio_dev,
+		}
+	};
 
-#define UART_BAUDRATE	            115200
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adf4377_uart_ip;
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto exit;
+	iio_app_run(app);
 
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
+	iio_app_remove(app);
+exit:
+	adf4377_iio_remove(adf4377_iio_dev);
 
-#define GPIO_OFFSET					32 + 54
-#define GPIO_MUXOUT                 GPIO_OFFSET
-#define GPIO_LKDET                  GPIO_OFFSET + 1
-#define GPIO_ENCLK2                 GPIO_OFFSET + 2
-#define GPIO_CE						GPIO_OFFSET + 3
-#define GPIO_ENCLK1                 GPIO_OFFSET + 4
-
-#endif /* _PARAMETERS_H_ */
+	if (ret)
+		pr_info("Error!\n");
+	return ret;
+}
