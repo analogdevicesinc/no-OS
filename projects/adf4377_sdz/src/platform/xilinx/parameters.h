@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   projects/adf4377_sdz/src/app/app_config.h
- *   @brief  Config file for ADF4377 project.
+ *   @file   parameters.h
+ *   @brief  Platform dependent parameters.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2021(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,10 +31,35 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef APP_CONFIG_H_
-#define APP_CONFIG_H_
+#ifndef _PARAMETERS_H_
+#define _PARAMETERS_H_
 
-//#define XILINX_PLATFORM
-//#define IIO_SUPPORT
+#include "xilinx_spi.h"
+#include "xilinx_gpio.h"
+#include <xparameters.h>
 
-#endif /* APP_CONFIG_H_ */
+#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
+#define SPI_CS				0
+#define SPI_EXTRA 			&xil_spi_extra
+#define GPIO_EXTRA			&xil_gpio_init_param
+
+#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+
+#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
+
+#define UART_BAUDRATE	            	115200
+
+#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
+
+#define GPIO_OFFSET			32 + 54
+#define GPIO_MUXOUT                 	GPIO_OFFSET
+#define GPIO_LKDET                  	GPIO_OFFSET + 1
+#define GPIO_ENCLK2                 	GPIO_OFFSET + 2
+#define GPIO_CE				GPIO_OFFSET + 3
+#define GPIO_ENCLK1                 	GPIO_OFFSET + 4
+
+extern struct xil_spi_init_param xil_spi_extra;
+extern struct xil_gpio_init_param xil_gpio_init_param;
+
+#endif /* _PARAMETERS_H_ */
