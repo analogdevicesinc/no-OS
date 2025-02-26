@@ -71,12 +71,16 @@ struct axi_jesd204_rx {
 	struct jesd204_rx_config config;
 	/** Device Clock in KHz */
 	uint32_t device_clk_khz;
+	/** Link Clock in KHz */
+	uint32_t link_clk_khz;
 	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
 	/** Selected Encoder */
 	enum jesd204_encoder encoder;
 	/** Lane Clock */
 	struct no_os_clk_desc *lane_clk;
+	struct no_os_clk_desc *link_clk;
+	struct no_os_clk_desc *device_clk;
 	/** JESD204 FSM device */
 	struct jesd204_dev *jdev;
 };
@@ -98,6 +102,8 @@ struct jesd204_rx_init {
 	uint8_t subclass;
 	/** Device Clock in KHz for the JESD204 interface */
 	uint32_t device_clk_khz;
+	/** Link Clock in KHz */
+	uint32_t link_clk_khz;
 	/** Lane Clock in KHz */
 	uint32_t lane_clk_khz;
 	/** Lane Clock */

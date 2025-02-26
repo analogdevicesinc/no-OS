@@ -62,6 +62,7 @@
 #define JESD204_RX_REG_LINK_DISABLE		0xc0
 #define JESD204_RX_REG_LINK_STATE		0xc4
 #define JESD204_RX_REG_LINK_CLK_RATIO	0xc8
+#define JESD204_RX_REG_DEVICE_CLK_RATIO	0xcc
 
 #define JESD204_RX_REG_SYSREF_CONF		0x100
 #define JESD204_RX_REG_SYSREF_CONF_SYSREF_DISABLE	NO_OS_BIT(0)
@@ -204,6 +205,16 @@ int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd)
 	return axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x1);
 }
 
+static unsigned long axi_jesd204_rx_calc_device_clk(struct axi_jesd204_rx *jesd,
+		unsigned long link_rate)
+{
+	if (jesd->version >= ADI_AXI_PCORE_VER(1, 7, 'a'))
+		return no_os_div_u64((uint64_t) link_rate * jesd->data_path_width,
+				     jesd->tpl_data_path_width);
+
+	return link_rate;
+}
+
 /**
  * @brief Read status of the JESD204 Receive Peripherial
  * @param jesd - The device structure.
@@ -216,7 +227,7 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 	uint32_t sysref_status;
 	uint32_t clock_ratio;
 	uint32_t clock_rate;
-	uint32_t link_rate;
+	unsigned long link_rate;
 	uint32_t sysref_config;
 	uint32_t link_config0;
 	uint32_t lmfc_rate;
@@ -242,9 +253,24 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		       clock_rate / 1000, clock_rate % 1000);
 	}
 
-	clock_rate = jesd->device_clk_khz;
+	clock_rate = jesd->link_clk_khz;
 	printf("\tReported Link Clock: %"PRIu32".%.3"PRIu32" MHz\n",
 	       clock_rate / 1000, clock_rate % 1000);
+
+	axi_jesd204_rx_read(jesd, JESD204_RX_REG_DEVICE_CLK_RATIO, &clock_ratio);
+
+	if (clock_ratio == 0) {
+			printf("\tMeasured Device Clock: off\n");
+		} else {
+			clock_rate = NO_OS_DIV_ROUND_CLOSEST_ULL(100000ULL * clock_ratio,
+					1ULL << 16);
+			printf("\tMeasured Device Clock: %"PRIu32".%.3"PRIu32" MHz\n", \
+			       clock_rate / 1000, clock_rate % 1000);
+	}
+
+	clock_rate = jesd->device_clk_khz;
+	printf("\tReported Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+		   clock_rate / 1000, clock_rate % 1000);
 
 	if (!link_disabled) {
 		l_status = (jesd->encoder == JESD204_ENCODER_8B10B) ?
@@ -261,6 +287,7 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 			lmfc_rate = clock_rate /
 				    (10 * ((link_config0 & 0xFF) + 1));
 		}
+
 		printf("\tLane rate: %"PRIu32".%.3"PRIu32" MHz\n"
 		       "\tLane rate / %d: %"PRIu32".%.3"PRIu32" MHz\n"
 		       "\t%s rate: %"PRIu32".%.3"PRIu32" MHz\n",
@@ -279,6 +306,11 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 		       "disabled" : (sysref_status & 1) ? "Yes" : "No",
 		       (sysref_config & JESD204_RX_REG_SYSREF_CONF_SYSREF_DISABLE) ?
 		       "disabled" : (sysref_status & 2) ? "Yes" : "No");
+
+		clock_rate = axi_jesd204_rx_calc_device_clk(jesd, link_rate);
+		printf("\tDesired Device Clock: %"PRIu32".%.3"PRIu32" MHz\n",
+			   clock_rate / 1000, clock_rate % 1000);
+
 	} else {
 		printf("\tExternal reset is %s\n",
 		       (link_disabled & 0x2) ? "asserted" : "deasserted");
@@ -610,16 +642,6 @@ int32_t axi_jesd204_rx_apply_config_legacy(struct axi_jesd204_rx *jesd,
 	return 0;
 }
 
-static unsigned long axi_jesd204_rx_calc_device_clk(struct axi_jesd204_rx *jesd,
-		unsigned long link_rate)
-{
-	if (jesd->version >= ADI_AXI_PCORE_VER(1, 7, 'a'))
-		return no_os_div_u64((uint64_t) link_rate * jesd->data_path_width,
-				     jesd->tpl_data_path_width);
-
-	return link_rate;
-}
-
 static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason,
 		struct jesd204_link *lnk)
@@ -655,14 +677,27 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 
 	device_rate = axi_jesd204_rx_calc_device_clk(jesd, link_rate);
 
-	pr_debug("%s: Link%u set device clock rate %lu Hz\n",
-		 __func__, lnk->link_id, device_rate);
+	ret = no_os_clk_set_rate(jesd->device_clk, device_rate);
+	if (ret) {
+		pr_err("%s: Link%u set device clock rate %lu kHz failed (%d)\n",
+		       __func__, lnk->link_id, device_rate, ret);
+		return ret;
+	} else {
+		pr_debug("%s: Link%u set device clock rate %lu Hz\n",
+				__func__, lnk->link_id, device_rate);
+	}
 
-	pr_debug("%s: Link%u set link clock rate %lu Hz\n",
-		 __func__, lnk->link_id, link_rate);
+	ret = no_os_clk_set_rate(jesd->link_clk, link_rate);
+	if (ret) {
+		pr_err("%s: Link%u set link clock rate %lu kHz failed (%d)\n",
+		       __func__, lnk->link_id, link_rate, ret);
+		return ret;
+	} else {
+		pr_debug("%s: Link%u set link clock rate %lu Hz\n",
+				__func__, lnk->link_id, link_rate);
+	}
 
-	pr_debug("%s: Link%u set lane rate %lu kHz\n",
-		 __func__, lnk->link_id, lane_rate);
+	printf("RX -> Device clk: %d\nLink clk: %d\n", device_rate, link_rate);
 
 	ret = no_os_clk_set_rate(jesd->lane_clk, lane_rate);
 	if (ret) {
@@ -778,7 +813,7 @@ static int axi_jesd204_rx_jesd204_link_running(struct jesd204_dev *jdev,
 	struct axi_jesd204_rx_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct axi_jesd204_rx *jesd = priv->jesd;
 	unsigned int link_status;
-	int retry = 20;
+	int retry = 100;
 
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
@@ -925,6 +960,7 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 	jesd->name = init->name;
 	jesd->base = init->base;
 	jesd->device_clk_khz = init->device_clk_khz;
+	jesd->link_clk_khz = init->link_clk_khz;
 	jesd->lane_clk_khz = init->lane_clk_khz;
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_MAGIC, &magic);

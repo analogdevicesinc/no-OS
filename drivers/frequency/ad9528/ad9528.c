@@ -948,6 +948,8 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	dev->ad9528_st.vco_out_freq[AD9528_SYSREF] = dev->ad9528_st.sysref_src_pll2 /
 			dev->pdata->sysref_k_div;
 
+	printf("sysref = %d\n", dev->ad9528_st.vco_out_freq[AD9528_SYSREF]);
+
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_R1_DIVIDER,
 				 AD9528_PLL2_R1_DIV(dev->pdata->pll2_r1_div));

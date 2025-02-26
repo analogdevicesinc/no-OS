@@ -3,10 +3,10 @@ const char *json_profile_active_use_case = "{ \n\
     \"framer\": [ \n\
       { \n\
         \"serializerLaneCrossbar\": { \n\
-          \"lane0FramerOutSel\": 0, \n\
-          \"lane1FramerOutSel\": 1, \n\
-          \"lane2FramerOutSel\": 2, \n\
-          \"lane3FramerOutSel\": 3 \n\
+          \"lane0FramerOutSel\": 8, \n\
+          \"lane1FramerOutSel\": 8, \n\
+          \"lane2FramerOutSel\": 0, \n\
+          \"lane3FramerOutSel\": 1 \n\
         }, \n\
         \"adcCrossbar\": { \n\
           \"conv0\": 1, \n\
@@ -40,11 +40,11 @@ const char *json_profile_active_use_case = "{ \n\
         \"lane0Id\": 0, \n\
         \"jesd204M\": 8, \n\
         \"jesd204K\": 32, \n\
-        \"jesd204F\": 4, \n\
+        \"jesd204F\": 8, \n\
         \"jesd204Np\": 16, \n\
         \"jesd204E\": 0, \n\
         \"scramble\": 1, \n\
-        \"serializerLanesEnabled\": 15, \n\
+        \"serializerLanesEnabled\": 12, \n\
         \"lmfcOffset\": 0, \n\
         \"syncbInSelect\": 0, \n\
         \"overSample\": 0, \n\
@@ -58,10 +58,10 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"serializerLaneCrossbar\": { \n\
-          \"lane0FramerOutSel\": 0, \n\
-          \"lane1FramerOutSel\": 0, \n\
-          \"lane2FramerOutSel\": 0, \n\
-          \"lane3FramerOutSel\": 0 \n\
+          \"lane0FramerOutSel\": 8, \n\
+          \"lane1FramerOutSel\": 8, \n\
+          \"lane2FramerOutSel\": 8, \n\
+          \"lane3FramerOutSel\": 8 \n\
         }, \n\
         \"adcCrossbar\": { \n\
           \"conv0\": 127, \n\
@@ -91,19 +91,19 @@ const char *json_profile_active_use_case = "{ \n\
         }, \n\
         \"enableJesd204C\": 0, \n\
         \"bankId\": 0, \n\
-        \"deviceId\": 0, \n\
+        \"deviceId\": 1, \n\
         \"lane0Id\": 0, \n\
-        \"jesd204M\": 0, \n\
-        \"jesd204K\": 0, \n\
-        \"jesd204F\": 0, \n\
-        \"jesd204Np\": 0, \n\
+        \"jesd204M\": 2, \n\
+        \"jesd204K\": 32, \n\
+        \"jesd204F\": 4, \n\
+        \"jesd204Np\": 16, \n\
         \"jesd204E\": 0, \n\
-        \"scramble\": 0, \n\
+        \"scramble\": 1, \n\
         \"serializerLanesEnabled\": 0, \n\
         \"lmfcOffset\": 0, \n\
-        \"syncbInSelect\": 0, \n\
+        \"syncbInSelect\": 1, \n\
         \"overSample\": 0, \n\
-        \"syncbInLvdsMode\": 0, \n\
+        \"syncbInLvdsMode\": 1, \n\
         \"syncbInLvdsPnInvert\": 0, \n\
         \"newSysrefOnRelink\": 0, \n\
         \"sysrefForStartup\": 0, \n\
@@ -172,8 +172,8 @@ const char *json_profile_active_use_case = "{ \n\
         \"deserializerLaneCrossbar\": { \n\
           \"deframerInput0LaneSel\": 0, \n\
           \"deframerInput1LaneSel\": 1, \n\
-          \"deframerInput2LaneSel\": 2, \n\
-          \"deframerInput3LaneSel\": 3 \n\
+          \"deframerInput2LaneSel\": 8, \n\
+          \"deframerInput3LaneSel\": 8 \n\
         }, \n\
         \"enableJesd204C\": 0, \n\
         \"bankId\": 0, \n\
@@ -181,11 +181,11 @@ const char *json_profile_active_use_case = "{ \n\
         \"lane0Id\": 0, \n\
         \"jesd204M\": 8, \n\
         \"jesd204K\": 32, \n\
-        \"jesd204F\": 4, \n\
+        \"jesd204F\": 8, \n\
         \"jesd204Np\": 16, \n\
         \"jesd204E\": 0, \n\
         \"scramble\": 1, \n\
-        \"deserializerLanesEnabled\": 15, \n\
+        \"deserializerLanesEnabled\": 3, \n\
         \"lmfcOffset\": 0, \n\
         \"syncbOutSelect\": 0, \n\
         \"syncbOutLvdsMode\": 1, \n\
@@ -203,7 +203,7 @@ const char *json_profile_active_use_case = "{ \n\
           \"tx4DacChanQ\": 6 \n\
         }, \n\
         \"newSysrefOnRelink\": 0, \n\
-        \"sysrefForStartup\": 1, \n\
+        \"sysrefForStartup\": 0, \n\
         \"sysrefNShotEnable\": 0, \n\
         \"sysrefNShotCount\": 0, \n\
         \"sysrefIgnoreWhenLinked\": 0 \n\
@@ -243,7 +243,7 @@ const char *json_profile_active_use_case = "{ \n\
           \"tx4DacChanQ\": 127 \n\
         }, \n\
         \"newSysrefOnRelink\": 0, \n\
-        \"sysrefForStartup\": 1, \n\
+        \"sysrefForStartup\": 0, \n\
         \"sysrefNShotEnable\": 0, \n\
         \"sysrefNShotCount\": 0, \n\
         \"sysrefIgnoreWhenLinked\": 0 \n\
@@ -337,7 +337,7 @@ const char *json_profile_active_use_case = "{ \n\
       \"linkSharingEnabled\": 0, \n\
       \"linkSharingM\": 0, \n\
       \"linkSharingS\": 0, \n\
-      \"linkSharingNp\": 16, \n\
+      \"linkSharingNp\": 0, \n\
       \"linkSharingAdcCrossbar\": { \n\
         \"conv0\": 127, \n\
         \"conv1\": 127, \n\
@@ -395,44 +395,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 1, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
-          \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
+          \"rxFir2Decimation\": 2, \n\
+          \"rxOutputRate_kHz\": 61440, \n\
+          \"rfBandwidth_kHz\": 20000, \n\
+          \"rxBbf3dBCorner_kHz\": 20000, \n\
+          \"rxAdcBandWidth_kHz\": 10000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
-              4, \n\
-              -1, \n\
-              -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
-              -2, \n\
-              -1, \n\
-              4, \n\
-              -10, \n\
+              25, \n\
+              -46, \n\
+              3, \n\
+              -29, \n\
+              29, \n\
+              20, \n\
+              38, \n\
+              -44, \n\
+              -131, \n\
+              -282, \n\
+              -370, \n\
+              17847, \n\
+              -370, \n\
+              -282, \n\
+              -131, \n\
+              -44, \n\
+              38, \n\
+              20, \n\
+              29, \n\
+              -29, \n\
+              3, \n\
+              -46, \n\
+              25, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -527,7 +527,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -543,44 +543,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 2, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
-          \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
+          \"rxFir2Decimation\": 2, \n\
+          \"rxOutputRate_kHz\": 61440, \n\
+          \"rfBandwidth_kHz\": 20000, \n\
+          \"rxBbf3dBCorner_kHz\": 20000, \n\
+          \"rxAdcBandWidth_kHz\": 10000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
-              4, \n\
-              -1, \n\
-              -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
-              -2, \n\
-              -1, \n\
-              4, \n\
-              -10, \n\
+              25, \n\
+              -46, \n\
+              3, \n\
+              -29, \n\
+              29, \n\
+              20, \n\
+              38, \n\
+              -44, \n\
+              -131, \n\
+              -282, \n\
+              -370, \n\
+              17847, \n\
+              -370, \n\
+              -282, \n\
+              -131, \n\
+              -44, \n\
+              38, \n\
+              20, \n\
+              29, \n\
+              -29, \n\
+              3, \n\
+              -46, \n\
+              25, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -675,7 +675,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -691,44 +691,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 4, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
-          \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
+          \"rxFir2Decimation\": 2, \n\
+          \"rxOutputRate_kHz\": 61440, \n\
+          \"rfBandwidth_kHz\": 20000, \n\
+          \"rxBbf3dBCorner_kHz\": 20000, \n\
+          \"rxAdcBandWidth_kHz\": 10000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
-              4, \n\
-              -1, \n\
-              -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
-              -2, \n\
-              -1, \n\
-              4, \n\
-              -10, \n\
+              25, \n\
+              -46, \n\
+              3, \n\
+              -29, \n\
+              29, \n\
+              20, \n\
+              38, \n\
+              -44, \n\
+              -131, \n\
+              -282, \n\
+              -370, \n\
+              17847, \n\
+              -370, \n\
+              -282, \n\
+              -131, \n\
+              -44, \n\
+              38, \n\
+              20, \n\
+              29, \n\
+              -29, \n\
+              3, \n\
+              -46, \n\
+              25, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -823,7 +823,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -839,44 +839,44 @@ const char *json_profile_active_use_case = "{ \n\
         \"profile\": { \n\
           \"channelType\": 8, \n\
           \"rxFirDecimation\": 1, \n\
-          \"rxDec5Decimation\": 5, \n\
+          \"rxDec5Decimation\": 1, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 1, \n\
           \"rhb2Decimation\": 2, \n\
-          \"rhb3Decimation\": 1, \n\
-          \"rxFir1Decimation\": 1, \n\
-          \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rhb3Decimation\": 2, \n\
+          \"rxFir1Decimation\": 2, \n\
+          \"rxFir2Decimation\": 2, \n\
+          \"rxOutputRate_kHz\": 61440, \n\
+          \"rfBandwidth_kHz\": 20000, \n\
+          \"rxBbf3dBCorner_kHz\": 20000, \n\
+          \"rxAdcBandWidth_kHz\": 10000, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              -10, \n\
-              4, \n\
-              -1, \n\
-              -2, \n\
-              8, \n\
-              -15, \n\
-              21, \n\
-              -21, \n\
-              7, \n\
-              59, \n\
-              -502, \n\
-              17153, \n\
-              -502, \n\
-              59, \n\
-              7, \n\
-              -21, \n\
-              21, \n\
-              -15, \n\
-              8, \n\
-              -2, \n\
-              -1, \n\
-              4, \n\
-              -10, \n\
+              25, \n\
+              -46, \n\
+              3, \n\
+              -29, \n\
+              29, \n\
+              20, \n\
+              38, \n\
+              -44, \n\
+              -131, \n\
+              -282, \n\
+              -370, \n\
+              17847, \n\
+              -370, \n\
+              -282, \n\
+              -131, \n\
+              -44, \n\
+              38, \n\
+              20, \n\
+              29, \n\
+              -29, \n\
+              3, \n\
+              -46, \n\
+              25, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -971,7 +971,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -990,41 +990,41 @@ const char *json_profile_active_use_case = "{ \n\
           \"rxDec5Decimation\": 5, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 0, \n\
-          \"rhb2Decimation\": 1, \n\
+          \"rhb2Decimation\": 2, \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
           \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
           \"rxBbf3dBCorner_kHz\": 225000, \n\
-          \"rxAdcBandWidth_kHz\": 225000, \n\
+          \"rxAdcBandWidth_kHz\": 112500, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              33, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              3, \n\
-              9, \n\
-              -27, \n\
-              62, \n\
-              -138, \n\
-              349, \n\
-              -1663, \n\
-              19282, \n\
-              -1663, \n\
-              349, \n\
-              -138, \n\
-              62, \n\
-              -27, \n\
-              9, \n\
-              3, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              33, \n\
+              6, \n\
+              0, \n\
+              2, \n\
+              -1, \n\
+              1, \n\
+              4, \n\
+              -8, \n\
+              17, \n\
+              -36, \n\
+              100, \n\
+              -446, \n\
+              17182, \n\
+              -446, \n\
+              100, \n\
+              -36, \n\
+              17, \n\
+              -8, \n\
+              4, \n\
+              1, \n\
+              -1, \n\
+              2, \n\
+              0, \n\
+              6, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1076,7 +1076,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1119,7 +1119,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -1138,41 +1138,41 @@ const char *json_profile_active_use_case = "{ \n\
           \"rxDec5Decimation\": 5, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 0, \n\
-          \"rhb2Decimation\": 1, \n\
+          \"rhb2Decimation\": 2, \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
           \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
           \"rxBbf3dBCorner_kHz\": 225000, \n\
-          \"rxAdcBandWidth_kHz\": 225000, \n\
+          \"rxAdcBandWidth_kHz\": 112500, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              33, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              3, \n\
-              9, \n\
-              -27, \n\
-              62, \n\
-              -138, \n\
-              349, \n\
-              -1663, \n\
-              19282, \n\
-              -1663, \n\
-              349, \n\
-              -138, \n\
-              62, \n\
-              -27, \n\
-              9, \n\
-              3, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              33, \n\
+              6, \n\
+              0, \n\
+              2, \n\
+              -1, \n\
+              1, \n\
+              4, \n\
+              -8, \n\
+              17, \n\
+              -36, \n\
+              100, \n\
+              -446, \n\
+              17182, \n\
+              -446, \n\
+              100, \n\
+              -36, \n\
+              17, \n\
+              -8, \n\
+              4, \n\
+              1, \n\
+              -1, \n\
+              2, \n\
+              0, \n\
+              6, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1224,7 +1224,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1267,7 +1267,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -1286,41 +1286,41 @@ const char *json_profile_active_use_case = "{ \n\
           \"rxDec5Decimation\": 5, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 0, \n\
-          \"rhb2Decimation\": 1, \n\
+          \"rhb2Decimation\": 2, \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
           \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
           \"rxBbf3dBCorner_kHz\": 225000, \n\
-          \"rxAdcBandWidth_kHz\": 225000, \n\
+          \"rxAdcBandWidth_kHz\": 112500, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              33, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              3, \n\
-              9, \n\
-              -27, \n\
-              62, \n\
-              -138, \n\
-              349, \n\
-              -1663, \n\
-              19282, \n\
-              -1663, \n\
-              349, \n\
-              -138, \n\
-              62, \n\
-              -27, \n\
-              9, \n\
-              3, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              33, \n\
+              6, \n\
+              0, \n\
+              2, \n\
+              -1, \n\
+              1, \n\
+              4, \n\
+              -8, \n\
+              17, \n\
+              -36, \n\
+              100, \n\
+              -446, \n\
+              17182, \n\
+              -446, \n\
+              100, \n\
+              -36, \n\
+              17, \n\
+              -8, \n\
+              4, \n\
+              1, \n\
+              -1, \n\
+              2, \n\
+              0, \n\
+              6, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1372,7 +1372,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1415,7 +1415,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -1434,41 +1434,41 @@ const char *json_profile_active_use_case = "{ \n\
           \"rxDec5Decimation\": 5, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 0, \n\
-          \"rhb2Decimation\": 1, \n\
+          \"rhb2Decimation\": 2, \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
           \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
           \"rxBbf3dBCorner_kHz\": 225000, \n\
-          \"rxAdcBandWidth_kHz\": 225000, \n\
+          \"rxAdcBandWidth_kHz\": 112500, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              33, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              3, \n\
-              9, \n\
-              -27, \n\
-              62, \n\
-              -138, \n\
-              349, \n\
-              -1663, \n\
-              19282, \n\
-              -1663, \n\
-              349, \n\
-              -138, \n\
-              62, \n\
-              -27, \n\
-              9, \n\
-              3, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              33, \n\
+              6, \n\
+              0, \n\
+              2, \n\
+              -1, \n\
+              1, \n\
+              4, \n\
+              -8, \n\
+              17, \n\
+              -36, \n\
+              100, \n\
+              -446, \n\
+              17182, \n\
+              -446, \n\
+              100, \n\
+              -36, \n\
+              17, \n\
+              -8, \n\
+              4, \n\
+              1, \n\
+              -1, \n\
+              2, \n\
+              0, \n\
+              6, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1520,7 +1520,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1563,7 +1563,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -1582,41 +1582,41 @@ const char *json_profile_active_use_case = "{ \n\
           \"rxDec5Decimation\": 5, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 0, \n\
-          \"rhb2Decimation\": 1, \n\
+          \"rhb2Decimation\": 2, \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
           \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
           \"rxBbf3dBCorner_kHz\": 225000, \n\
-          \"rxAdcBandWidth_kHz\": 225000, \n\
+          \"rxAdcBandWidth_kHz\": 112500, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              33, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              3, \n\
-              9, \n\
-              -27, \n\
-              62, \n\
-              -138, \n\
-              349, \n\
-              -1663, \n\
-              19282, \n\
-              -1663, \n\
-              349, \n\
-              -138, \n\
-              62, \n\
-              -27, \n\
-              9, \n\
-              3, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              33, \n\
+              6, \n\
+              0, \n\
+              2, \n\
+              -1, \n\
+              1, \n\
+              4, \n\
+              -8, \n\
+              17, \n\
+              -36, \n\
+              100, \n\
+              -446, \n\
+              17182, \n\
+              -446, \n\
+              100, \n\
+              -36, \n\
+              17, \n\
+              -8, \n\
+              4, \n\
+              1, \n\
+              -1, \n\
+              2, \n\
+              0, \n\
+              6, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1668,7 +1668,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1711,7 +1711,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -1730,41 +1730,41 @@ const char *json_profile_active_use_case = "{ \n\
           \"rxDec5Decimation\": 5, \n\
           \"rhb1Decimation\": 2, \n\
           \"rhb1WideBandMode\": 0, \n\
-          \"rhb2Decimation\": 1, \n\
+          \"rhb2Decimation\": 2, \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
           \"rxOutputRate_kHz\": 245760, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
           \"rxBbf3dBCorner_kHz\": 225000, \n\
-          \"rxAdcBandWidth_kHz\": 225000, \n\
+          \"rxAdcBandWidth_kHz\": 112500, \n\
           \"rxFir\": { \n\
             \"gain_dB\": 6, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              33, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              3, \n\
-              9, \n\
-              -27, \n\
-              62, \n\
-              -138, \n\
-              349, \n\
-              -1663, \n\
-              19282, \n\
-              -1663, \n\
-              349, \n\
-              -138, \n\
-              62, \n\
-              -27, \n\
-              9, \n\
-              3, \n\
-              -7, \n\
-              9, \n\
-              -7, \n\
-              33, \n\
+              6, \n\
+              0, \n\
+              2, \n\
+              -1, \n\
+              1, \n\
+              4, \n\
+              -8, \n\
+              17, \n\
+              -36, \n\
+              100, \n\
+              -446, \n\
+              17182, \n\
+              -446, \n\
+              100, \n\
+              -36, \n\
+              17, \n\
+              -8, \n\
+              4, \n\
+              1, \n\
+              -1, \n\
+              2, \n\
+              0, \n\
+              6, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -1816,7 +1816,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1859,7 +1859,7 @@ const char *json_profile_active_use_case = "{ \n\
               \"embeddedMonitorSrcLsbQ\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneI\": 0, \n\
               \"embeddedMonitorSrcLsbPlusOneQ\": 0, \n\
-              \"embeddedMonitorHb2LowSrcSel\": 6, \n\
+              \"embeddedMonitorHb2LowSrcSel\": 7, \n\
               \"embeddedMonitorHb2HighSrcSel\": 3, \n\
               \"embeddedMonitorApdLowSrcSel\": 2, \n\
               \"embeddedMonitorApdHighSrcSel\": 2, \n\
@@ -1878,102 +1878,102 @@ const char *json_profile_active_use_case = "{ \n\
     \"txChannelCfg\": [ \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
-          \"txDac3dBCorner_kHz\": 450000, \n\
-          \"txBbf3dBCorner_kHz\": 225000, \n\
+          \"txInputRate_kHz\": 61440, \n\
+          \"primarySigBandwidth_kHz\": 40000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
+          \"txDac3dBCorner_kHz\": 225000, \n\
+          \"txBbf3dBCorner_kHz\": 112500, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
-          \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"txFirInterpolation\": 2, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
-            \"numFirCoefs\": 20, \n\
+            \"gain_dB\": 6, \n\
+            \"numFirCoefs\": 80, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0 \n\
+              -11, \n\
+              -17, \n\
+              29, \n\
+              23, \n\
+              -45, \n\
+              -34, \n\
+              63, \n\
+              56, \n\
+              -94, \n\
+              -75, \n\
+              126, \n\
+              106, \n\
+              -167, \n\
+              -145, \n\
+              220, \n\
+              190, \n\
+              -277, \n\
+              -252, \n\
+              351, \n\
+              323, \n\
+              -435, \n\
+              -410, \n\
+              545, \n\
+              538, \n\
+              -668, \n\
+              -684, \n\
+              820, \n\
+              890, \n\
+              -1013, \n\
+              -1167, \n\
+              1259, \n\
+              1575, \n\
+              -1586, \n\
+              -2235, \n\
+              2035, \n\
+              3443, \n\
+              -2558, \n\
+              -5848, \n\
+              3874, \n\
+              17638, \n\
+              17638, \n\
+              3874, \n\
+              -5848, \n\
+              -2558, \n\
+              3443, \n\
+              2035, \n\
+              -2235, \n\
+              -1586, \n\
+              1575, \n\
+              1259, \n\
+              -1167, \n\
+              -1013, \n\
+              890, \n\
+              820, \n\
+              -684, \n\
+              -668, \n\
+              538, \n\
+              545, \n\
+              -410, \n\
+              -435, \n\
+              323, \n\
+              351, \n\
+              -252, \n\
+              -277, \n\
+              190, \n\
+              220, \n\
+              -145, \n\
+              -167, \n\
+              106, \n\
+              126, \n\
+              -75, \n\
+              -94, \n\
+              56, \n\
+              63, \n\
+              -34, \n\
+              -45, \n\
+              23, \n\
+              29, \n\
+              -17, \n\
+              -11 \n\
             ] \n\
           }, \n\
           \"txBbfPowerMode\": 8 \n\
@@ -1990,102 +1990,102 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
-          \"txDac3dBCorner_kHz\": 450000, \n\
-          \"txBbf3dBCorner_kHz\": 225000, \n\
+          \"txInputRate_kHz\": 61440, \n\
+          \"primarySigBandwidth_kHz\": 40000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
+          \"txDac3dBCorner_kHz\": 225000, \n\
+          \"txBbf3dBCorner_kHz\": 112500, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
-          \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"txFirInterpolation\": 2, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
-            \"numFirCoefs\": 20, \n\
+            \"gain_dB\": 6, \n\
+            \"numFirCoefs\": 80, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0 \n\
+              -11, \n\
+              -17, \n\
+              29, \n\
+              23, \n\
+              -45, \n\
+              -34, \n\
+              63, \n\
+              56, \n\
+              -94, \n\
+              -75, \n\
+              126, \n\
+              106, \n\
+              -167, \n\
+              -145, \n\
+              220, \n\
+              190, \n\
+              -277, \n\
+              -252, \n\
+              351, \n\
+              323, \n\
+              -435, \n\
+              -410, \n\
+              545, \n\
+              538, \n\
+              -668, \n\
+              -684, \n\
+              820, \n\
+              890, \n\
+              -1013, \n\
+              -1167, \n\
+              1259, \n\
+              1575, \n\
+              -1586, \n\
+              -2235, \n\
+              2035, \n\
+              3443, \n\
+              -2558, \n\
+              -5848, \n\
+              3874, \n\
+              17638, \n\
+              17638, \n\
+              3874, \n\
+              -5848, \n\
+              -2558, \n\
+              3443, \n\
+              2035, \n\
+              -2235, \n\
+              -1586, \n\
+              1575, \n\
+              1259, \n\
+              -1167, \n\
+              -1013, \n\
+              890, \n\
+              820, \n\
+              -684, \n\
+              -668, \n\
+              538, \n\
+              545, \n\
+              -410, \n\
+              -435, \n\
+              323, \n\
+              351, \n\
+              -252, \n\
+              -277, \n\
+              190, \n\
+              220, \n\
+              -145, \n\
+              -167, \n\
+              106, \n\
+              126, \n\
+              -75, \n\
+              -94, \n\
+              56, \n\
+              63, \n\
+              -34, \n\
+              -45, \n\
+              23, \n\
+              29, \n\
+              -17, \n\
+              -11 \n\
             ] \n\
           }, \n\
           \"txBbfPowerMode\": 8 \n\
@@ -2102,102 +2102,102 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
-          \"txDac3dBCorner_kHz\": 450000, \n\
-          \"txBbf3dBCorner_kHz\": 225000, \n\
+          \"txInputRate_kHz\": 61440, \n\
+          \"primarySigBandwidth_kHz\": 40000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
+          \"txDac3dBCorner_kHz\": 225000, \n\
+          \"txBbf3dBCorner_kHz\": 112500, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
-          \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"txFirInterpolation\": 2, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
-            \"numFirCoefs\": 20, \n\
+            \"gain_dB\": 6, \n\
+            \"numFirCoefs\": 80, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0 \n\
+              -11, \n\
+              -17, \n\
+              29, \n\
+              23, \n\
+              -45, \n\
+              -34, \n\
+              63, \n\
+              56, \n\
+              -94, \n\
+              -75, \n\
+              126, \n\
+              106, \n\
+              -167, \n\
+              -145, \n\
+              220, \n\
+              190, \n\
+              -277, \n\
+              -252, \n\
+              351, \n\
+              323, \n\
+              -435, \n\
+              -410, \n\
+              545, \n\
+              538, \n\
+              -668, \n\
+              -684, \n\
+              820, \n\
+              890, \n\
+              -1013, \n\
+              -1167, \n\
+              1259, \n\
+              1575, \n\
+              -1586, \n\
+              -2235, \n\
+              2035, \n\
+              3443, \n\
+              -2558, \n\
+              -5848, \n\
+              3874, \n\
+              17638, \n\
+              17638, \n\
+              3874, \n\
+              -5848, \n\
+              -2558, \n\
+              3443, \n\
+              2035, \n\
+              -2235, \n\
+              -1586, \n\
+              1575, \n\
+              1259, \n\
+              -1167, \n\
+              -1013, \n\
+              890, \n\
+              820, \n\
+              -684, \n\
+              -668, \n\
+              538, \n\
+              545, \n\
+              -410, \n\
+              -435, \n\
+              323, \n\
+              351, \n\
+              -252, \n\
+              -277, \n\
+              190, \n\
+              220, \n\
+              -145, \n\
+              -167, \n\
+              106, \n\
+              126, \n\
+              -75, \n\
+              -94, \n\
+              56, \n\
+              63, \n\
+              -34, \n\
+              -45, \n\
+              23, \n\
+              29, \n\
+              -17, \n\
+              -11 \n\
             ] \n\
           }, \n\
           \"txBbfPowerMode\": 8 \n\
@@ -2214,102 +2214,102 @@ const char *json_profile_active_use_case = "{ \n\
       }, \n\
       { \n\
         \"profile\": { \n\
-          \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 200000, \n\
-          \"rfBandwidth_kHz\": 450000, \n\
-          \"txDac3dBCorner_kHz\": 450000, \n\
-          \"txBbf3dBCorner_kHz\": 225000, \n\
+          \"txInputRate_kHz\": 61440, \n\
+          \"primarySigBandwidth_kHz\": 40000, \n\
+          \"rfBandwidth_kHz\": 225000, \n\
+          \"txDac3dBCorner_kHz\": 225000, \n\
+          \"txBbf3dBCorner_kHz\": 112500, \n\
           \"dpdHb1Interpolation\": 2, \n\
           \"dpdHb2Interpolation\": 2, \n\
-          \"txFirInterpolation\": 1, \n\
-          \"thb1Interpolation\": 1, \n\
+          \"txFirInterpolation\": 2, \n\
+          \"thb1Interpolation\": 2, \n\
           \"thb2Interpolation\": 1, \n\
           \"thb3Interpolation\": 2, \n\
           \"txInt5Interpolation\": 1, \n\
           \"txFir\": { \n\
-            \"gain_dB\": 0, \n\
-            \"numFirCoefs\": 20, \n\
+            \"gain_dB\": 6, \n\
+            \"numFirCoefs\": 80, \n\
             \"coefs\": [ \n\
-              150, \n\
-              -1580, \n\
-              4231, \n\
-              -4275, \n\
-              -1981, \n\
-              8637, \n\
-              -2338, \n\
-              -13408, \n\
-              10714, \n\
-              32466, \n\
-              10714, \n\
-              -13408, \n\
-              -2338, \n\
-              8637, \n\
-              -1981, \n\
-              -4275, \n\
-              4231, \n\
-              -1580, \n\
-              150, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0, \n\
-              0 \n\
+              -11, \n\
+              -17, \n\
+              29, \n\
+              23, \n\
+              -45, \n\
+              -34, \n\
+              63, \n\
+              56, \n\
+              -94, \n\
+              -75, \n\
+              126, \n\
+              106, \n\
+              -167, \n\
+              -145, \n\
+              220, \n\
+              190, \n\
+              -277, \n\
+              -252, \n\
+              351, \n\
+              323, \n\
+              -435, \n\
+              -410, \n\
+              545, \n\
+              538, \n\
+              -668, \n\
+              -684, \n\
+              820, \n\
+              890, \n\
+              -1013, \n\
+              -1167, \n\
+              1259, \n\
+              1575, \n\
+              -1586, \n\
+              -2235, \n\
+              2035, \n\
+              3443, \n\
+              -2558, \n\
+              -5848, \n\
+              3874, \n\
+              17638, \n\
+              17638, \n\
+              3874, \n\
+              -5848, \n\
+              -2558, \n\
+              3443, \n\
+              2035, \n\
+              -2235, \n\
+              -1586, \n\
+              1575, \n\
+              1259, \n\
+              -1167, \n\
+              -1013, \n\
+              890, \n\
+              820, \n\
+              -684, \n\
+              -668, \n\
+              538, \n\
+              545, \n\
+              -410, \n\
+              -435, \n\
+              323, \n\
+              351, \n\
+              -252, \n\
+              -277, \n\
+              190, \n\
+              220, \n\
+              -145, \n\
+              -167, \n\
+              106, \n\
+              126, \n\
+              -75, \n\
+              -94, \n\
+              56, \n\
+              63, \n\
+              -34, \n\
+              -45, \n\
+              23, \n\
+              29, \n\
+              -17, \n\
+              -11 \n\
             ] \n\
           }, \n\
           \"txBbfPowerMode\": 8 \n\

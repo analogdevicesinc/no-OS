@@ -138,7 +138,7 @@ int iio_example_main(void)
 	ad9528_channels[1].channel_num = 1;
 	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[1].divider_phase = 0;
-	ad9528_channels[1].channel_divider = 5;
+	ad9528_channels[1].channel_divider = 16;
 	ad9528_channels[1].signal_source = SOURCE_VCO;
 	ad9528_channels[1].output_dis = 0;
 
@@ -146,7 +146,7 @@ int iio_example_main(void)
 	ad9528_channels[3].channel_num = 3;
 	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[3].divider_phase = 0;
-	ad9528_channels[3].channel_divider = 5;
+	ad9528_channels[3].channel_divider = 16;
 	ad9528_channels[3].signal_source = SOURCE_VCO;
 	ad9528_channels[3].output_dis = 0;
 
@@ -162,7 +162,7 @@ int iio_example_main(void)
 	ad9528_channels[13].channel_num = 13;
 	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
 	ad9528_channels[13].divider_phase = 0;
-	ad9528_channels[13].channel_divider = 5;
+	ad9528_channels[13].channel_divider = 8;
 	ad9528_channels[13].signal_source = SOURCE_VCO;
 	ad9528_channels[13].output_dis = 0;
 
@@ -175,25 +175,26 @@ int iio_example_main(void)
 	ad9528_param.pdata->refb_diff_rcv_en = 0;
 	ad9528_param.pdata->osc_in_diff_en = 0;
 	/* JESD */
-	ad9528_param.pdata->jdev_desired_sysref_freq = 7680000 / 2;
+	ad9528_param.pdata->jdev_desired_sysref_freq = 3840000 / 2;
 	/* PLL1 config */
 	ad9528_param.pdata->pll1_feedback_div = 4;
 	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
 	ad9528_param.pdata->ref_mode = REF_MODE_EXT_REF;
 	/* PLL2 config */
 	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
-	ad9528_param.pdata->pll2_vco_div_m1 = 3;
+	ad9528_param.pdata->pll2_vco_div_m1 = 4;
 	ad9528_param.pdata->pll2_r1_div = 1;
 	ad9528_param.pdata->pll2_ndiv_a_cnt = 3;
 	ad9528_param.pdata->pll2_ndiv_b_cnt = 27;
-	ad9528_param.pdata->pll2_n2_div = 10;
+	ad9528_param.pdata->pll2_n2_div = 4;
+	ad9528_param.pdata->pll2_freq_doubler_en = 1;
 	/* SYSREF config */
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
-	ad9528_param.pdata->sysref_k_div = 512;
-	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_NSHOT;
-	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_8_PULSES;
-	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
-	ad9528_param.pdata->sysref_req_en = false;
+	ad9528_param.pdata->sysref_k_div = 64;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_CONTINUOUS;
+	// ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_8_PULSES;
+	// ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
+	// ad9528_param.pdata->sysref_req_en = false;
 	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
 	ad9528_param.pdata->rzero = RZERO_1850_OHM;
 	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
@@ -233,6 +234,7 @@ int iio_example_main(void)
 		.control_bits_per_sample = ADRV9025_TX_JESD_CTRL_BITS_PER_SAMPLE,// optional
 		.subclass = ADRV9025_TX_JESD_SUBCLASS,
 		.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.link_clk_khz = 122880,
 		.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
 	};
 
@@ -243,6 +245,7 @@ int iio_example_main(void)
 		.frames_per_multiframe = ADRV9025_RX_JESD_FRAMES_PER_MULTIFRAME,
 		.subclass = ADRV9025_RX_JESD_SUBCLASS,
 		.device_clk_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.link_clk_khz = 122880,
 		.lane_clk_khz = ADRV9025_LANE_RATE_KHZ
 	};
 
@@ -253,7 +256,7 @@ int iio_example_main(void)
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 0,
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.ref_rate_khz = 122880,
 		.export_no_os_clk = true
 	};
 	struct adxcvr *tx_adxcvr;
@@ -265,7 +268,7 @@ int iio_example_main(void)
 		.out_clk_sel = ADXCVR_REFCLK,
 		.lpm_enable = 1,
 		.lane_rate_khz = ADRV9025_LANE_RATE_KHZ,
-		.ref_rate_khz = ADRV9025_DEVICE_CLK_KHZ,
+		.ref_rate_khz = 122880,
 		.export_no_os_clk = true
 	};
 	struct adxcvr *rx_adxcvr;
