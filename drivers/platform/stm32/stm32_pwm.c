@@ -192,36 +192,61 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	if (HAL_TIM_Base_Init(htimer) != HAL_OK)
 		return -EIO;
 
-	if (!sparam->trigger_enable) {
-		sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-		if (HAL_TIM_ConfigClockSource(htimer, &sClockSourceConfig) != HAL_OK)
-			return -EIO;
+	/* If slave mode enabled but trigger source is not provided */
+	if (sparam->slave_mode != STM32_PWM_SM_DISABLE &&
+	    sparam->trigger_source == PWM_TS_NONE) {
+		return -EINVAL;
 	}
-	if (HAL_TIM_PWM_Init(htimer) != HAL_OK)
-		return -EIO;
-	if (sparam->onepulse_enable)
-		if (HAL_TIM_OnePulse_Init(htimer, TIM_OPMODE_SINGLE) != HAL_OK)
-			return -EIO;
-	if (sparam->trigger_enable) {
+
+	if (sparam->slave_mode == STM32_PWM_SM_DISABLE) {
+		sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+		sSlaveConfig.SlaveMode = TIM_SLAVEMODE_DISABLE;
+	} else {
 		switch (sparam->trigger_source) {
 		case PWM_TS_ITR0:
 			sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_ITR0;
 			break;
 		case PWM_TS_ITR1:
 			sSlaveConfig.InputTrigger = TIM_TS_ITR1;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_ITR1;
 			break;
 		case PWM_TS_ITR2:
 			sSlaveConfig.InputTrigger = TIM_TS_ITR2;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_ITR2;
 			break;
 		case PWM_TS_ITR3:
 			sSlaveConfig.InputTrigger = TIM_TS_ITR3;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_ITR3;
+			break;
+		default:
+			break;
+		}
+
+		switch (sparam->slave_mode) {
+		case STM32_PWM_SM_EXTERNAL1:
+			sSlaveConfig.SlaveMode = TIM_SLAVEMODE_EXTERNAL1;
+			break;
+		case STM32_PWM_SM_TRIGGER:
+			sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
 			break;
 		default:
 			return -EINVAL;
 		}
-		sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
+	}
 
-		if (HAL_TIM_SlaveConfigSynchro(htimer, &sSlaveConfig) != HAL_OK)
+	if (HAL_TIM_ConfigClockSource(htimer, &sClockSourceConfig) != HAL_OK)
+		return -EIO;
+
+	if (HAL_TIM_SlaveConfigSynchro(htimer, &sSlaveConfig) != HAL_OK)
+		return -EIO;
+
+	if (HAL_TIM_PWM_Init(htimer) != HAL_OK)
+		return -EIO;
+
+	if (sparam->onepulse_enable) {
+		if (HAL_TIM_OnePulse_Init(htimer, TIM_OPMODE_SINGLE) != HAL_OK)
 			return -EIO;
 	}
 
@@ -379,13 +404,11 @@ static int32_t stm32_init_lptimer(struct stm32_pwm_desc *desc,
 	hlptimer->Init.Clock.Prescaler = sparam->prescaler;
 	hlptimer->State = HAL_LPTIM_STATE_RESET;
 
-	if (sparam->trigger_enable) {
+	switch (sparam->slave_mode) {
+	case STM32_PWM_SM_DISABLE:
 		hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_SOFTWARE;
-		hlptimer->Init.Trigger.ActiveEdge = LPTIM_ACTIVEEDGE_RISING;
-		hlptimer->Init.Trigger.SampleTime = LPTIM_TRIGSAMPLETIME_DIRECTTRANSITION;
-	}
-
-	if (sparam->trigger_enable) {
+		break;
+	case STM32_PWM_SM_TRIGGER:
 		switch (sparam->trigger_source) {
 		case PWM_TS_ITR0:
 			hlptimer->Init.Trigger.Source = LPTIM_TRIGSOURCE_0;
@@ -402,7 +425,17 @@ static int32_t stm32_init_lptimer(struct stm32_pwm_desc *desc,
 		default:
 			return -EINVAL;
 		}
+		break;
+	case STM32_PWM_SM_EXTERNAL1:
+		/* Not supported */
+		return -ENOTSUP;
+	default:
+		return -EINVAL;
 	}
+
+	hlptimer->Init.Trigger.ActiveEdge = LPTIM_ACTIVEEDGE_RISING;
+	hlptimer->Init.Trigger.SampleTime = LPTIM_TRIGSAMPLETIME_DIRECTTRANSITION;
+
 	if (HAL_LPTIM_Init(hlptimer) != HAL_OK)
 		return -EIO;
 
