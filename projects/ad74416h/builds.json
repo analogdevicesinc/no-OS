@@ -13,6 +13,9 @@
     },
     "current_input_loop": {
       "flags" : "EXAMPLE=current_input_loop"
+    },
+    "current_output": {
+      "flags" : "EXAMPLE=current_output"
     }
   }
 }
