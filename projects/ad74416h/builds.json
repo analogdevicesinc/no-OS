@@ -7,6 +7,9 @@
   "mbed": {
     "basic_example": {
       "flags" : "EXAMPLE=basic"
+    },
+    "current_input_ext": {
+      "flags" : "EXAMPLE=current_input_ext"
     }
   }
 }
