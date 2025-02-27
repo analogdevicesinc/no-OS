@@ -19,6 +19,9 @@
     },
     "multiple_devices": {
       "flags" : "EXAMPLE=multiple_devices"
+    },
+    "digital_input_logic": {
+      "flags" : "EXAMPLE=digital_input_logic"
     }
   }
 }
