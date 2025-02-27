@@ -53,6 +53,7 @@ INCS +=	$(INCLUDE)/no_os_delay.h \
 	$(PLATFORM_DRIVERS)/stm32_gpio_irq.h \
 	$(PLATFORM_DRIVERS)/stm32_spi.h \
 	$(PLATFORM_DRIVERS)/stm32_dma.h  \
+	$(PLATFORM_DRIVERS)/stm32_dma_common.h \
 	$(PLATFORM_DRIVERS)/stm32_i2c.h \
 	$(PLATFORM_DRIVERS)/stm32_gpio.h \
 	$(PLATFORM_DRIVERS)/stm32_hal.h
