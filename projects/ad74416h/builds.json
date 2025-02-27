@@ -31,6 +31,9 @@
     },
     "temperature_2wire_rtd": {
       "flags" : "EXAMPLE=temperature_2wire_rtd"
+    },
+    "temperature_3wire_rtd": {
+      "flags" : "EXAMPLE=temperature_3wire_rtd"
     }
   }
 }
