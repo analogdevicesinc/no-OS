@@ -16,6 +16,9 @@
     },
     "current_output": {
       "flags" : "EXAMPLE=current_output"
+    },
+    "multiple_devices": {
+      "flags" : "EXAMPLE=multiple_devices"
     }
   }
 }
