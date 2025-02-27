@@ -25,6 +25,9 @@
     },
     "digital_input_loop": {
       "flags" : "EXAMPLE=digital_input_loop"
+    },
+    "basic_example": {
+      "flags" : "EXAMPLE=digital_output"
     }
   }
 }
