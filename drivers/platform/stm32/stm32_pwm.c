@@ -248,6 +248,9 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 	if (sparam->onepulse_enable) {
 		if (HAL_TIM_OnePulse_Init(htimer, TIM_OPMODE_SINGLE) != HAL_OK)
 			return -EIO;
+	} else {
+		if (HAL_TIM_OnePulse_Init(htimer, TIM_OPMODE_REPETITIVE) != HAL_OK)
+			return -EIO;
 	}
 
 	switch (sparam->trigger_output) {
@@ -743,10 +746,10 @@ int32_t stm32_pwm_remove(struct no_os_pwm_desc *desc)
 	case STM32_PWM_TIMER_TIM:
 		htimer = (TIM_HandleTypeDef *) extra->htimer;
 
-		if (HAL_TIM_Base_DeInit(htimer) != HAL_OK)
+		if (HAL_TIM_PWM_DeInit(htimer) != HAL_OK)
 			return -EIO;
 
-		if (HAL_TIM_PWM_DeInit(htimer) != HAL_OK)
+		if (HAL_TIM_Base_DeInit(htimer) != HAL_OK)
 			return -EIO;
 		break;
 #endif
