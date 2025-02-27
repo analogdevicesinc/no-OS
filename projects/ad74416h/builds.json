@@ -10,6 +10,9 @@
     },
     "current_input_ext": {
       "flags" : "EXAMPLE=current_input_ext"
+    },
+    "current_input_loop": {
+      "flags" : "EXAMPLE=current_input_loop"
     }
   }
 }
