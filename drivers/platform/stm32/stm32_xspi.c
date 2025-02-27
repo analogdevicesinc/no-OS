@@ -40,7 +40,7 @@
 #include "no_os_mutex.h"
 #include "no_os_dma.h"
 #include "stm32_gpio.h"
-#include "stm32_dma.h"
+#include "stm32_dma_common.h"
 #include "stm32_xspi.h"
 
 /*
