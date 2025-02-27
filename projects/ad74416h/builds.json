@@ -28,6 +28,9 @@
     },
     "basic_example": {
       "flags" : "EXAMPLE=digital_output"
+    },
+    "temperature_2wire_rtd": {
+      "flags" : "EXAMPLE=temperature_2wire_rtd"
     }
   }
 }
