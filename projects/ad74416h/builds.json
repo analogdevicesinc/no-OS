@@ -7,6 +7,9 @@
   "mbed": {
     "basic_example": {
       "flags" : "EXAMPLE=basic"
+    },
+    "digital_input_logic": {
+      "flags" : "EXAMPLE=digital_input_logic"
     }
   }
 }
