@@ -346,19 +346,15 @@ int admv8818_init(struct admv8818_dev **device,
 	if (ret)
 		goto error_dev;
 
-	ret = admv8818_spi_update_bits(dev, ADMV8818_REG_SPI_CONFIG_A,
-				       ADMV8818_SOFTRESET_N_MSK |
-				       ADMV8818_SOFTRESET_MSK,
-				       no_os_field_prep(ADMV8818_SOFTRESET_N_MSK, 1) |
-				       no_os_field_prep(ADMV8818_SOFTRESET_MSK, 1));
+	ret = admv8818_spi_write(dev, ADMV8818_REG_SPI_CONFIG_A,
+				 no_os_field_prep(ADMV8818_SOFTRESET_N_MSK, 1) |
+				 no_os_field_prep(ADMV8818_SOFTRESET_MSK, 1));
 	if (ret)
 		goto error_spi;
 
-	ret = admv8818_spi_update_bits(dev, ADMV8818_REG_SPI_CONFIG_A,
-				       ADMV8818_SDOACTIVE_N_MSK |
-				       ADMV8818_SDOACTIVE_MSK,
-				       no_os_field_prep(ADMV8818_SDOACTIVE_N_MSK, 1) |
-				       no_os_field_prep(ADMV8818_SDOACTIVE_MSK, 1));
+	ret = admv8818_spi_write(dev, ADMV8818_REG_SPI_CONFIG_A,
+				 no_os_field_prep(ADMV8818_SDOACTIVE_N_MSK, 1) |
+				 no_os_field_prep(ADMV8818_SDOACTIVE_MSK, 1));
 	if (ret)
 		goto error_spi;
 
