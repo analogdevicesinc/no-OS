@@ -39,6 +39,8 @@
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 
+#include "oa_tc6.h"
+
 #define ADIN1110_BUFF_LEN			1530
 #define ADIN1110_ETH_ALEN			6
 #define ADIN1110_ETHERTYPE_LEN			2
@@ -203,9 +205,13 @@ struct adin1110_desc {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_desc *comm_desc;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
-	uint8_t data[ADIN1110_BUFF_LEN];
+	uint8_t *data;
 	struct no_os_gpio_desc *reset_gpio;
+	struct no_os_gpio_desc *int_gpio;
+	bool oa_tc6_spi;
 	bool append_crc;
+
+	struct oa_tc6_desc *oa_desc;
 };
 
 /**
@@ -215,8 +221,10 @@ struct adin1110_init_param {
 	enum adin1110_chip_id chip_type;
 	struct no_os_spi_init_param comm_param;
 	struct no_os_gpio_init_param reset_param;
+	struct no_os_gpio_init_param int_param;
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
+	bool oa_tc6_spi;
 };
 
 /**

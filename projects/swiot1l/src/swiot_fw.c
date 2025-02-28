@@ -145,12 +145,18 @@ int swiot_firmware()
 	no_os_gpio_direction_output(adin1110_swpd_gpio, 1);
 	no_os_gpio_direction_output(adin1110_tx2p4_gpio, 0);
 	no_os_gpio_direction_output(adin1110_mssel_gpio, 1);
-	no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
-	no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
 	no_os_gpio_direction_output(swiot_led1_gpio, 1);
 	no_os_gpio_direction_output(swiot_led2_gpio, 1);
 	no_os_gpio_direction_input(adin1110_int_gpio);
 	no_os_gpio_direction_input(ad74413r_irq_gpio);
+
+	if (SWIOT1L_OA_TC6_SPI) {
+		no_os_gpio_direction_output(adin1110_cfg1_gpio, 0);
+		no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
+	} else {
+		no_os_gpio_direction_output(adin1110_cfg1_gpio, 1);
+		no_os_gpio_direction_output(adin1110_cfg0_gpio, 1);
+	}
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,

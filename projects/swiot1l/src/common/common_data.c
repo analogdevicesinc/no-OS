@@ -223,6 +223,7 @@ struct adin1110_init_param adin1110_ip = {
 	.comm_param = adin1110_spi_ip,
 	.reset_param = adin1110_rst_gpio_ip,
 	.append_crc = false,
+	.oa_tc6_spi = SWIOT1L_OA_TC6_SPI,
 };
 
 const struct no_os_platform_spi_delays ad74413r_spi_delays = {
