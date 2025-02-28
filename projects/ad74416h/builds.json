@@ -34,6 +34,9 @@
     },
     "temperature_3wire_rtd": {
       "flags" : "EXAMPLE=temperature_3wire_rtd"
+    },  
+    "voltage_input": {
+      "flags" : "EXAMPLE=voltage_input"
     }
   }
 }
