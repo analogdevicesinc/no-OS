@@ -10,6 +10,9 @@
     },
     "voltage_input": {
       "flags" : "EXAMPLE=voltage_input"
+    },
+    "voltage_input_irq": {
+      "flags" : "EXAMPLE=voltage_input_irq"
     }
   }
 }

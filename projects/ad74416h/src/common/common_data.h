@@ -38,6 +38,8 @@
 
 extern struct no_os_uart_init_param ad74416h_uart_ip;
 extern struct no_os_spi_init_param ad74416h_spi_ip;
+extern struct no_os_gpio_init_param adc_rdy_gpio_ip;
+extern struct no_os_irq_init_param adc_rdy_gpio_irq_ip;
 extern struct ad74416h_init_param ad74416h_ip;
 
 #endif /* __COMMON_DATA_H__ */
