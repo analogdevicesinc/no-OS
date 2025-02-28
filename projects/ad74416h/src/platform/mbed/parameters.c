@@ -50,4 +50,27 @@ extern struct mbed_spi_init_param ad74416h_spi_extra = {
 	.use_sw_csb = false
 };
 
+/* ADC_RDY GPIO parameters*/
+struct no_os_gpio_init_param adc_rdy_gpio_ip = {
+	.port = 0,
+	.pull = NO_OS_PULL_NONE,
+	.number = GPIO_ADC_RDY,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};
 
+/* ADC_RDY GPIO IRQ parameters */
+struct no_os_irq_init_param adc_rdy_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ADC_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_ADC_EXTRA
+};
+
+struct mbed_gpio_init_param ad74416h_gpio_extra = {
+	.pin_mode = 0 //NA
+};
+
+/*ADC_RDY interrupt Mbed platform specific parameters */
+struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_extra = {
+	.gpio_irq_pin = ARDUINO_UNO_D2,
+};

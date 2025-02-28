@@ -39,6 +39,11 @@
 #include "mbed_i2c.h"
 #include "mbed_spi.h"
 #include "no_os_uart.h"
+#include "no_os_gpio.h"
+#include "mbed_gpio.h"
+#include "no_os_irq.h"
+#include "mbed_irq.h"
+#include "mbed_gpio_irq.h"
 
 #define UART_TX_PIN	    CONSOLE_TX
 #define	UART_RX_PIN	    CONSOLE_RX
@@ -60,8 +65,20 @@
 #define SPI_DEVICE_ID   0
 #define SPI_CS          ARDUINO_UNO_D10
 
+#define GPIO_OPS	&mbed_gpio_ops
+#define GPIO_ADC_RDY	ARDUINO_UNO_D2
+#define GPIO_EXTRA 	&ad74416h_gpio_extra
+
+#define GPIO_IRQ_ADC_ID		0
+#define GPIO_IRQ_OPS		&mbed_gpio_irq_ops
+#define GPIO_IRQ_ADC_EXTRA	&mbed_adc_rdy_gpio_irq_extra
+
 extern struct mbed_uart_init_param ad74416h_uart_extra_ip;
 extern struct mbed_i2c_init_param ad74416h_i2c_extra;
 extern struct mbed_spi_init_param ad74416h_spi_extra;
+extern struct no_os_gpio_init_param adc_rdy_gpio_ip;
+extern struct no_os_irq_init_param adc_rdy_gpio_irq_ip;
+extern struct mbed_gpio_init_param ad74416h_gpio_extra;
+extern struct mbed_gpio_irq_init_param mbed_adc_rdy_gpio_irq_extra;
 
 #endif /* __PARAMETERS_H__ */
