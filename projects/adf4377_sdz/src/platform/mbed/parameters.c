@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @file   parameters.c
+ *   @brief  Definition of Mbed platform data used by adf4377 project.
+ *   @authors Antoniu Miclaus (antoniu.miclaus@analog.com)
+ * 	     Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2021(c) Analog Devices, Inc.
+ * Copyright 2024(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,29 +31,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include "parameters.h"
+#include "common_data.h"
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+struct mbed_uart_init_param adf4377_uart_extra_ip = {
+	.uart_tx_pin = UART_TX_PIN,
+	.uart_rx_pin = UART_RX_PIN
+};
 
-#include <xparameters.h>
+struct mbed_spi_init_param adf4377_spi_extra = {
+	.spi_miso_pin = SDP_SPI_MISO,
+	.spi_mosi_pin = SDP_SPI_MOSI,
+	.spi_clk_pin = SDP_SPI_SCK,
+	.use_sw_csb = false
+};
 
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define SPI_ADF4377_CS				0
-
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
-
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				    XPAR_XUARTPS_1_INTR
-
-#define UART_BAUDRATE	            115200
-
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
-
-#define GPIO_OFFSET					32 + 54
-#define GPIO_MUXOUT                 GPIO_OFFSET
-#define GPIO_LKDET                  GPIO_OFFSET + 1
-#define GPIO_ENCLK2                 GPIO_OFFSET + 2
-#define GPIO_CE						GPIO_OFFSET + 3
-#define GPIO_ENCLK1                 GPIO_OFFSET + 4
-
-#endif /* _PARAMETERS_H_ */
+struct no_os_gpio_init_param adf4377_gpio_ip = {
+	// .number = GPIO_SDP,
+	.platform_ops = GPIO_OPS,
+};

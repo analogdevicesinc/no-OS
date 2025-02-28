@@ -22,6 +22,7 @@ FREQUENCY GENERATORS
    :maxdepth: 1
 
    projects/adf4382
+   projects/adf4377_sdz
    projects/adf4368
    projects/adf5611
 

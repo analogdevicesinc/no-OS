@@ -1,8 +1,8 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
+ *   @file   common_data.h
+ *   @brief  Defines the common data used for examples eval-adf4377 project
  *   @authors Antoniu Miclaus (antoniu.miclaus@analog.com)
- * 	      Jude Osemene (jude.osemene@analog.com)
+ * 	     Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -31,41 +31,17 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
-#include "iio_types.h"
-#include "iio.h"
+#include "parameters.h"
+#include "adf4377.h"
+#include "no_os_spi.h"
+#include "no_os_uart.h"
+#include "no_os_util.h"
 
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
-};
+extern struct no_os_uart_init_param	adf4377_uart_ip;
+extern struct no_os_spi_init_param	adf4377_spi_ip;
+extern struct adf4377_init_param 	adf4377_ip;
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
-};
-
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
-};
-
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
-};
-
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
-
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
-
-#endif
+#endif /* __COMMON_DATA_H__ */
