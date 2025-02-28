@@ -7,6 +7,15 @@
   "mbed": {
     "basic_example": {
       "flags" : "EXAMPLE=basic"
+    },
+    "voltage_input": {
+      "flags" : "EXAMPLE=voltage_input"
+    },
+    "voltage_input_irq": {
+      "flags" : "EXAMPLE=voltage_input_irq"
+    },
+    "voltage_output": {
+      "flags" : "EXAMPLE=voltage_output"
     }
   }
 }

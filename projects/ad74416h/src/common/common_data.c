@@ -55,6 +55,22 @@ struct no_os_spi_init_param ad74416h_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+/* ADC_RDY GPIO parameters*/
+struct no_os_gpio_init_param adc_rdy_gpio_ip = {
+	.port = 0,
+	.pull = NO_OS_PULL_NONE,
+	.number = GPIO_ADC_RDY,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
+};
+
+/* ADC_RDY GPIO IRQ parameters */
+struct no_os_irq_init_param adc_rdy_gpio_irq_ip = {
+	.irq_ctrl_id = GPIO_IRQ_ADC_ID,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = GPIO_IRQ_ADC_EXTRA
+};
+
 struct ad74416h_init_param ad74416h_ip = {
 	.id = ID_AD74416H,
 	.dev_addr = 0,
