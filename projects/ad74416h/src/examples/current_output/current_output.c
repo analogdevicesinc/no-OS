@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   common_data.c
- *   @brief  Defines common data to be used by eval-ad74416h examples.
+ *   @file   current_output.c
+ *   @brief  Current Output example code for ad74416h-pmdz project
+ *   @author Raquel Grau (raquel.grau@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,35 +33,55 @@
 *******************************************************************************/
 
 #include "common_data.h"
+#include "ad74416h.h"
+#include "no_os_delay.h"
+#include "no_os_print_log.h"
 
-struct no_os_uart_init_param ad74416h_uart_ip = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = UART_EXTRA,
-	.platform_ops = UART_OPS,
-};
+/***************************************************************************//**
+ * @brief Current output example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
+*******************************************************************************/
+int example_main()
+{
+	struct ad74416h_desc *ad74416h_desc;
+	int ret;
+	uint16_t dac_code;
 
-struct no_os_spi_init_param ad74416h_spi_ip = {
-	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = SPI_BAUDRATE,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.mode = NO_OS_SPI_MODE_2,
-	.platform_ops = SPI_OPS,
-	.chip_select = SPI_CS,
-	.extra = SPI_EXTRA,
-};
+	ret = ad74416h_init(&ad74416h_desc, &ad74416h_ip);
+	if (ret)
+		goto error;
 
-struct ad74416h_init_param ad74416h_ip = {
-	.id = ID_AD74416H,
-	.dev_addr = 0,
-};
+	pr_info("ad74416h successfully initialized!\r\n");
 
-struct ad74416h_init_param ad74416h_ad1_ip = {
-	.id = ID_AD74416H,
-	.dev_addr = 1,
-};
+	//Configure Channel A as Current Output
+	ret = ad74416h_set_channel_function(ad74416h_desc, 0, AD74416H_CURRENT_OUT);
+	if (ret) {
+		pr_info("Error setting Channel 0 as current output\r\n");
+		goto error_ad74416h;
+	}
+
+	//Calculate the code for the DAC
+	ret = ad74416h_dac_current_to_code(ad74416h_desc, 10000, &dac_code);
+	if (ret) {
+		pr_info("Error calculating the code for the DAC\r\n");
+		goto error_ad74416h;
+	}
+
+	pr_info("The code for the dac for 10mA is %0x\r\n", dac_code);
+
+	//Configure Channel A code to middle range
+	ret = ad74416h_set_channel_dac_code(ad74416h_desc, 0, dac_code);
+	if (ret) {
+		pr_info("Error setting the dac code\r\n");
+		goto error_ad74416h;
+	}
+
+error_ad74416h:
+	ad74416h_remove(ad74416h_desc);
+	return 0;
+error:
+	pr_info("Error %d!\r\n", ret);
+	return 0;
+}

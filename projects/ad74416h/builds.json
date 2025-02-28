@@ -7,6 +7,18 @@
   "mbed": {
     "basic_example": {
       "flags" : "EXAMPLE=basic"
+    },
+    "current_input_ext": {
+      "flags" : "EXAMPLE=current_input_ext"
+    },
+    "current_input_loop": {
+      "flags" : "EXAMPLE=current_input_loop"
+    },
+    "current_output": {
+      "flags" : "EXAMPLE=current_output"
+    },
+    "multiple_devices": {
+      "flags" : "EXAMPLE=multiple_devices"
     }
   }
 }
