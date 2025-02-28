@@ -8,7 +8,8 @@ INCS += $(PLATFORM_DRIVERS)/stm32_delay.h     \
 	$(PLATFORM_DRIVERS)/stm32_gpio_irq.h  \
 	$(PLATFORM_DRIVERS)/stm32_uart.h      \
 	$(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
-	$(PLATFORM_DRIVERS)/stm32_dma.h
+	$(PLATFORM_DRIVERS)/stm32_dma.h			\
+	$(PLATFORM_DRIVERS)/stm32_dma_common.h
 
 SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c     \
 	$(PLATFORM_DRIVERS)/stm32_gpio.c      \

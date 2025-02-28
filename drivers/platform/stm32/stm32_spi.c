@@ -39,7 +39,7 @@
 #include "stm32_spi.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
-#include "stm32_dma.h"
+#include "stm32_dma_common.h"
 #ifdef HAL_TIM_MODULE_ENABLED
 #include "no_os_pwm.h"
 #endif

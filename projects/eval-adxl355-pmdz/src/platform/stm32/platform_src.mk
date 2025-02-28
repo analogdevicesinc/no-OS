@@ -5,6 +5,7 @@ INCS += $(PLATFORM_DRIVERS)/stm32_delay.h     \
 	$(PLATFORM_DRIVERS)/stm32_hal.h       \
 	$(PLATFORM_DRIVERS)/stm32_spi.h       \
 	$(PLATFORM_DRIVERS)/stm32_dma.h       \
+	$(PLATFORM_DRIVERS)/stm32_dma_common.h\
 	$(PLATFORM_DRIVERS)/stm32_irq.h       \
 	$(PLATFORM_DRIVERS)/stm32_gpio_irq.h  \
 	$(PLATFORM_DRIVERS)/stm32_uart.h      \
