@@ -26,7 +26,7 @@
     "digital_input_loop": {
       "flags" : "EXAMPLE=digital_input_loop"
     },
-    "basic_example": {
+    "digital_output": {
       "flags" : "EXAMPLE=digital_output"
     },
     "temperature_2wire_rtd": {
