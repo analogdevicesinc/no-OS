@@ -46,6 +46,26 @@
 #define STM32_I3C_TP_PID(x)	(x >> 16)
 
 /**
+ * @struct stm32_i3c_dma_desc
+ * @brief STM32 I3C DMA descriptor for controlling the
+ * I3C DMA transactions.
+ */
+struct stm32_i3c_dma_desc {
+	/** I3C DMA Descriptor */
+	struct no_os_dma_desc *dma_desc;
+	/** Control DMA Channel Descriptor */
+	struct no_os_dma_ch *crdma_ch;
+	/** TX DMA Channel Descriptor */
+	struct no_os_dma_ch *txdma_ch;
+	/** RX DMA Channel Descriptor */
+	struct no_os_dma_ch *rxdma_ch;
+	/** Status DMA Channel Descriptor */
+	struct no_os_dma_ch *srdma_ch;
+	/** Private data */
+	void *priv;
+};
+
+/**
  * @struct stm32_i3c_bus_desc
  * @brief STM32 platform specific I3C bus descriptor.
  */
@@ -56,6 +76,10 @@ struct stm32_i3c_bus_desc {
 	I3C_XferTypeDef xfer;
 	/** I3C CCC info */
 	I3C_CCCInfoTypeDef ccc_info;
+	/** I3C Interrupt ID */
+	uint32_t irq_id;
+	/** I3C DMA descriptor */
+	struct stm32_i3c_dma_desc *i3c_dma_desc;
 };
 
 /**
@@ -74,6 +98,10 @@ struct stm32_i3c_device_desc {
 struct stm32_i3c_init_param {
 	/** I3C instance */
 	I3C_HandleTypeDef *hi3c;
+	/** I3C Interrupt ID */
+	uint32_t irq_id;
+	/** I3C DMA descriptor */
+	struct stm32_i3c_dma_desc *i3c_dma_desc;
 };
 
 /**
