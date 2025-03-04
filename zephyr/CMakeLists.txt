@@ -35,3 +35,5 @@ zephyr_library_include_directories(${NOOS}/drivers/temperature/max31875)
 
 zephyr_library_sources(${NOOS}/util/no_os_alloc.c)
 zephyr_library_sources(${NOOS}/util/no_os_mutex.c)
+
+message(INFO "########## HEREEEEEEEEEEEEEEEEE #################")
