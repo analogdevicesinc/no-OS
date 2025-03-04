@@ -31,7 +31,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "basic_example.h"
 #include "common_data.h"
 #include "ad74416h.h"
 #include "no_os_delay.h"
