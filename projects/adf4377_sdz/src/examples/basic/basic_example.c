@@ -1,8 +1,8 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
+ *   @file   basic_example.c
+ *   @brief  Basic example eval-adf4377 project
  *   @authors Antoniu Miclaus (antoniu.miclaus@analog.com)
- * 	      Jude Osemene (jude.osemene@analog.com)
+ * 	     Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -31,41 +31,45 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
 
-#include "iio_types.h"
-#include "iio.h"
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include "common_data.h"
+#include "no_os_delay.h"
+#include "no_os_print_log.h"
+#include "adf4377.h"
 
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
-};
+/**
+ * @brief Basic example main execution.
+ *
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously the while(1) loop and will not return.
+ */
+int example_main()
+{
+	struct adf4377_dev *dev;
+	struct no_os_gpio_desc *sdp_gpio;
+	int ret;
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
-};
+	pr_info("Enter basic example \n");
 
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
-};
+	ret = adf4377_init(&dev, &adf4377_ip);
+	if (ret)
+		goto error;
+	ret = no_os_gpio_get(&sdp_gpio, &adf4377_gpio_ip);
+	if (ret)
+		goto error;
+	ret = no_os_gpio_direction_output(sdp_gpio, 1);
+	if (ret)
+		goto error;
+	pr_info("ADF4377 initialized\n");
+	ret = adf4377_set_rfout(dev, 10000000000);
+	if (ret)
+		goto error;
 
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
-};
-
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
-
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
-
-#endif
+	return ret;
+error:
+	pr_info("Error!\n");
+	return ret;
+}

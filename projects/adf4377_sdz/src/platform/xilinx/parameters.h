@@ -1,8 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
- *   @authors Antoniu Miclaus (antoniu.miclaus@analog.com)
- * 	      Jude Osemene (jude.osemene@analog.com)
+ *   @file   parameters.h
+ *   @brief  Platform dependent parameters.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -31,41 +30,42 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
 
-#include "iio_types.h"
-#include "iio.h"
+#ifndef _PARAMETERS_H_
+#define _PARAMETERS_H_
 
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
-};
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "xilinx_spi.h"
+#include "xilinx_gpio.h"
+#include <xparameters.h>
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
-};
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
+#define SPI_CS				0
+#define SPI_EXTRA 			&xil_spi_extra
+#define GPIO_EXTRA			&xil_gpio_init_param
 
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
-};
+#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
 
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
-};
+#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
 
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
+#define UART_BAUDRATE	            	115200
 
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
+#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 
-#endif
+#define GPIO_OFFSET			32 + 54
+#define GPIO_MUXOUT                 	GPIO_OFFSET
+#define GPIO_LKDET                  	GPIO_OFFSET + 1
+#define GPIO_ENCLK2                 	GPIO_OFFSET + 2
+#define GPIO_CE				GPIO_OFFSET + 3
+#define GPIO_ENCLK1                 	GPIO_OFFSET + 4
+
+extern struct xil_spi_init_param xil_spi_extra;
+extern struct xil_gpio_init_param xil_gpio_init_param;
+
+#endif /* _PARAMETERS_H_ */

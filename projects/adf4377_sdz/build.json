@@ -1,0 +1,19 @@
+{
+  "mbed": {
+    "basic_example": {
+      "flags" : "EXAMPLE=basic"
+    },
+    "iio": {
+      "flags": "EXAMPLE=iio_example"
+    }
+  },
+  "xilinx": {
+	  "basic_example": {
+		"flags" : "EXAMPLE=basic"
+    },
+    "iio": {
+    "flags": "EXAMPLE=iio_example",
+		"hardware" : ["adf4377_sdz_zed"]
+	  }
+	}
+}
