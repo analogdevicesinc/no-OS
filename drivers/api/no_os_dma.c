@@ -152,7 +152,7 @@ int no_os_dma_remove(struct no_os_dma_desc *desc)
 		return 0;
 
 	for (i = 0; i < desc->num_ch; i++) {
-		ret = no_os_list_remove(desc->channels->sg_list);
+		ret = no_os_list_remove(desc->channels[i].sg_list);
 		if (ret)
 			return ret;
 
