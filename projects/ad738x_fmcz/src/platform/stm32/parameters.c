@@ -93,7 +93,7 @@ struct stm32_pwm_init_param cs_pwm_extra_init_params = {
 	.get_timer_clock = HAL_RCC_GetPCLK1Freq,
 	.clock_divider = 2,
 	.onepulse_enable = true,
-	.trigger_enable = true,
+	.slave_mode = STM32_PWM_SM_TRIGGER,
 	.trigger_source = PWM_TS_ITR0,
 	.trigger_output = PWM_TRGO_ENABLE,
 };
@@ -120,7 +120,7 @@ struct stm32_pwm_init_param tx_pwm_extra_init_params = {
 	.get_timer_clock = HAL_RCC_GetPCLK2Freq,
 	.clock_divider = 2,
 	.onepulse_enable = true,
-	.trigger_enable = true,
+	.slave_mode = STM32_PWM_SM_TRIGGER,
 	.trigger_source = PWM_TS_ITR0,
 	.dma_enable = true,
 	.repetitions = TX_PWM_REPS,

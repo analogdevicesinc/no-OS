@@ -51,6 +51,7 @@ enum TimOCMode {
 };
 
 enum stm32_pwm_trigger {
+	PWM_TS_NONE,
 	PWM_TS_ITR0,
 	PWM_TS_ITR1,
 	PWM_TS_ITR2,
@@ -67,6 +68,13 @@ enum stm32_pwm_trigger_out {
 	PWM_TRGO_OC3REF,
 	PWM_TRGO_OC4REF,
 };
+
+enum stm32_pwm_slave_mode {
+	STM32_PWM_SM_DISABLE,
+	STM32_PWM_SM_TRIGGER,
+	STM32_PWM_SM_EXTERNAL1,
+};
+
 /**
  * @struct stm32_pwm_init_param
  * @brief Structure holding the STM32 PWM parameters.
@@ -90,8 +98,8 @@ struct stm32_pwm_init_param {
 	uint32_t (*get_timer_clock)(void);
 	/** Get timer source clock divider */
 	uint32_t clock_divider;
-	/** Enable trigger source */
-	bool trigger_enable;
+	/** Slave mode */
+	enum stm32_pwm_slave_mode slave_mode;
 	/** Trigger source selection */
 	enum stm32_pwm_trigger trigger_source;
 	/** Trigger out selection */
