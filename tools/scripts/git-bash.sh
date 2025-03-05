@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 url=$(curl -s https://sourceforge.net/projects/ezwinports/files/ | grep -o -E 'href="([^"#]+/make-[^"#]+-without-guile-w32-bin\.zip/download)"' | sed -e 's/href="//' -e 's/"$//' | head -n 1)
 filename=$(echo "$url" | sed -E 's|.*/(make-[0-9]+\.[0-9]+\.[0-9]+-without-guile-w32-bin\.zip)/download|\1|')
