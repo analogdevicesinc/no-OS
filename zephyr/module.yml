@@ -1,4 +1,4 @@
 build:
-  cmake: ./zephyr
+  cmake: zephyr
   settings:
     dts_root: .
