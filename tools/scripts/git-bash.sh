@@ -9,3 +9,10 @@ unzip -j -o "/tmp/$filename" -d /mingw64/bin
 rm "/tmp/$filename"
 
 echo "make is now available in /mingw64/bin."
+
+PATTERN="export MSYS=winsymlinks:nativestrict"
+BASHRC=/etc/bash.bashrc
+if ! grep -qF "$PATTERN" $BASHRC; then
+        echo "$PATTERN" >> $BASHRC
+        echo "Activated symlink support."
+fi
