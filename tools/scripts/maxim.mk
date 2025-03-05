@@ -132,7 +132,7 @@ SRC_DIRS += $(MAXIM_LIBRARIES)/MAXUSB/src/core/musbhsfc \
 endif
 
 $(PLATFORM)_project:
-	$(call print, Building for target $(TARGET_LCASE))
+	$(call print,Building for target $(TARGET_LCASE))
 	$(call print,Creating IDE project)
 	$(call mk_dir,$(BUILD_DIR))
 	$(call mk_dir,$(VSCODE_CFG_DIR))
