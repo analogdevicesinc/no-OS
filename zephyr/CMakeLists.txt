@@ -26,16 +26,18 @@ zephyr_include_directories(
     ${NOOS_DIR}/include
     ${NOOS_DIR}/drivers/platform/zephyr
     ${NOOS_DIR}/drivers/temperature/max31875
+    ${NOOS_DIR}/drivers/accel/adxl355
 )
 
 zephyr_library_sources(
-    ${NOOS_DIR}/drivers/api/no_os_i2c.c
-    ${NOOS_DIR}/drivers/platform/zephyr/zephyr_i2c.c
-    ${NOOS_DIR}/drivers/temperature/max31875/max31875.c
     ${NOOS_DIR}/util/no_os_alloc.c
     ${NOOS_DIR}/util/no_os_mutex.c
+    ${NOOS_DIR}/drivers/api/no_os_i2c.c
+    ${NOOS_DIR}/drivers/api/no_os_spi.c
+    ${NOOS_DIR}/drivers/platform/zephyr/zephyr_i2c.c
+    ${NOOS_DIR}/drivers/platform/zephyr/zephyr_spi.c
+    ${NOOS_DIR}/drivers/temperature/max31875/max31875.c
+    ${NOOS_DIR}/drivers/accel/adxl355/adxl355.c
 )
-
-# add_subdirectory_ifdef(CONFIG_NO_OS NO_OS)
 
 message(INFO "########## TEST #################")
