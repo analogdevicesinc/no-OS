@@ -43,9 +43,43 @@
 #include "no_os_alloc.h"
 #include "no_os_i3c.h"
 #include "stm32_i3c.h"
+#include "stm32_dma.h"
 
+/**
+ * @struct stm32_i3c_dma_ctx
+ * @brief STM32 platform specific I3C DMA context descriptor.
+ */
+struct stm32_i3c_dma_ctx {
+	/** I3C instance */
+	struct no_os_i3c_desc *desc;
+	/** Control Register DMA transfer descriptor */
+	struct no_os_dma_xfer_desc cr_ch_xfer;
+	/** Tx DMA transfer descriptor */
+	struct no_os_dma_xfer_desc *tx_ch_xfer;
+	/** Rx DMA transfer descriptor */
+	struct no_os_dma_xfer_desc *rx_ch_xfer;
+	/** User callback to be called after all transactions */
+	void (*dma_user_cb)(void *);
+	/** User callback context */
+	void *dma_user_ctx;
+};
+
+volatile bool i3c_dma_cplt[NO_OS_I3C_MAX_BUS_NUMBER] = {false};
+
+static HAL_StatusTypeDef stm32_i3c_xfer_complete_cb(I3C_HandleTypeDef *,
+		uint32_t);
+void stm32_i3c_dma_callback(struct no_os_dma_xfer_desc *,
+			    struct no_os_dma_xfer_desc *,
+			    void *);
 static int32_t stm32_i3c_config_extra(struct no_os_i3c_desc *desc,
 				      struct stm32_i3c_device_desc *xdesc);
+static int32_t stm32_i3c_populate_dma_context(struct no_os_i3c_desc *desc,
+		struct no_os_i3c_msg *msgs,
+		uint32_t len,
+		void (*callback)(void *),
+		void *ctx);
+static int32_t stm32_i3c_dma_config(struct stm32_i3c_bus_desc *xdesc,
+				    struct stm32_i3c_dma_ctx *dma_ctx, uint32_t tx_count, uint32_t rx_count);
 static inline void stm32_i3c_find_i3c_table(I3C_HandleTypeDef *hi3c,
 		struct no_os_i3c_bus_desc **iter);
 static inline int32_t stm32_i3c_wait_ready(I3C_HandleTypeDef *hi3c);
@@ -235,6 +269,8 @@ int stm32_i3c_init_bus(struct no_os_i3c_bus_desc *desc,
 
 	bus_init = param->extra;
 	xdesc->hi3c = bus_init->hi3c;
+	xdesc->irq_id = bus_init->irq_id;
+	xdesc->i3c_dma_desc = bus_init->i3c_dma_desc;
 	desc->extra = xdesc;
 
 	return 0;
@@ -421,7 +457,7 @@ int stm32_i3c_write(struct no_os_i3c_desc *desc,
 		    uint8_t data_len)
 {
 	struct stm32_i3c_bus_desc *xdesc;
-	I3C_ControlTypeDef ctrl_buffer;
+	uint32_t ctrl_buffer;
 	I3C_PrivateTypeDef private_descriptor = {
 		desc->addr, {data, data_len}, {NULL, 0}, HAL_I3C_DIRECTION_WRITE
 	};
@@ -430,7 +466,7 @@ int stm32_i3c_write(struct no_os_i3c_desc *desc,
 		return -EINVAL;
 
 	xdesc = desc->bus->extra;
-	xdesc->xfer.CtrlBuf.pBuffer = (uint32_t *)&ctrl_buffer;
+	xdesc->xfer.CtrlBuf.pBuffer = &ctrl_buffer;
 	xdesc->xfer.CtrlBuf.Size = 1;
 	xdesc->xfer.TxBuf.pBuffer = data;
 	xdesc->xfer.TxBuf.Size = data_len;
@@ -463,14 +499,14 @@ int stm32_i3c_read(struct no_os_i3c_desc *desc,
 		   uint8_t data_len)
 {
 	struct stm32_i3c_bus_desc *xdesc;
-	I3C_ControlTypeDef ctrl_buffer;
+	uint32_t ctrl_buffer;
 	I3C_PrivateTypeDef private_descriptor = {desc->addr, {NULL, 0}, {data, data_len}, HAL_I3C_DIRECTION_READ};
 
 	if (!desc || !desc->bus || !desc->bus->extra || !data)
 		return -EINVAL;
 
 	xdesc = desc->bus->extra;
-	xdesc->xfer.CtrlBuf.pBuffer = (uint32_t *)&ctrl_buffer;
+	xdesc->xfer.CtrlBuf.pBuffer = &ctrl_buffer;
 	xdesc->xfer.CtrlBuf.Size = 1;
 	xdesc->xfer.RxBuf.pBuffer = data;
 	xdesc->xfer.RxBuf.Size = data_len;
@@ -638,6 +674,243 @@ int stm32_i3c_get_ccc_info(struct no_os_i3c_bus_desc* desc,
 }
 
 /**
+ * @brief Configure and start a series of transfers using DMA.
+ * @param desc - The I3C descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @param callback - Function to be invoked after transfers.
+ * @param ctx - User defined parameter for the callback function.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t stm32_i3c_transfer_dma_async(struct no_os_i3c_desc *desc,
+				     struct no_os_i3c_msg *msgs,
+				     uint32_t len,
+				     void (*callback)(void *),
+				     void *ctx)
+{
+	int ret = 0;
+	uint32_t i, tx_count, rx_count;
+	struct stm32_i3c_bus_desc *xdesc;
+	I3C_HandleTypeDef *hi3c;
+	struct stm32_i3c_dma_ctx *dma_ctx;
+	uint32_t txdma_priority, rxdma_priority, i3c_priority;
+
+	if (!desc || !msgs)
+		return -EINVAL;
+
+	if (!desc->bus->extra)
+		return -EINVAL;
+
+	xdesc = (struct stm32_i3c_bus_desc *) desc->bus->extra;
+	hi3c = xdesc->hi3c;
+	tx_count = 0;
+	rx_count = 0;
+
+	/* DMA transfer is not supported if DMA descriptor iunavailable */
+	if (!xdesc->i3c_dma_desc)
+		return -ENOTSUP;
+	/* A transfer is ongoing if private data exists */
+	if (xdesc->i3c_dma_desc->priv)
+		return -EBUSY;
+
+	/* check on the Mode */
+	if (hi3c->Mode != HAL_I3C_MODE_CONTROLLER) {
+		hi3c->ErrorCode = HAL_I3C_ERROR_NOT_ALLOWED;
+		return -ENOTSUP;
+	}
+	/* Check on hdmacr handle */
+	else if (xdesc->i3c_dma_desc->crdma_ch == NULL) {
+		hi3c->ErrorCode = HAL_I3C_ERROR_DMA_PARAM;
+		return -EINVAL;
+	}
+	/* check on the State */
+	else if ((hi3c->State != HAL_I3C_STATE_READY)
+		 && (hi3c->State != HAL_I3C_STATE_LISTEN)) {
+		return -EBUSY;
+	}
+
+	/* Verify and count the messages */
+	for (i = 0; i < len; i++) {
+		if (((msgs[i].tx_buff == NULL) && (msgs[i].tx_size != 0U)) ||
+		    ((msgs[i].rx_buff == NULL) && (msgs[i].rx_size != 0U))) {
+			return -EINVAL;
+		}
+		if (msgs[i].tx_buff)
+			tx_count++;
+		if (msgs[i].rx_buff)
+			rx_count++;
+	}
+
+	if (tx_count && !xdesc->i3c_dma_desc->txdma_ch)
+		return -EINVAL;
+	if (rx_count && !xdesc->i3c_dma_desc->rxdma_ch)
+		return -EINVAL;
+	dma_ctx = (struct stm32_i3c_dma_ctx *) no_os_calloc(1,
+			sizeof(struct stm32_i3c_dma_ctx));
+	if (!dma_ctx)
+		return -ENOMEM;
+
+	/* Fill the DMA Context */
+	xdesc->i3c_dma_desc->priv = (void *) dma_ctx;
+	ret = stm32_i3c_populate_dma_context(desc, msgs, len, callback, ctx);
+	if (ret)
+		goto free_dma_ctx;
+
+	/* Set handle transfer parameters */
+	hi3c->ErrorCode     = HAL_I3C_ERROR_NONE;
+	hi3c->XferISR       = stm32_i3c_xfer_complete_cb;
+	hi3c->ControlXferCount = len;
+
+	if ((tx_count == 0) && (rx_count == 0))
+		hi3c->State         = HAL_I3C_STATE_BUSY;
+	else if (rx_count == 0)
+		hi3c->State         = HAL_I3C_STATE_BUSY_TX;
+	else if (tx_count == 0)
+		hi3c->State         = HAL_I3C_STATE_BUSY_RX;
+	else
+		hi3c->State         = HAL_I3C_STATE_BUSY_TX_RX;
+
+	/* Enable Tx process (frame complete and error) interrupts */
+	hi3c->Instance->IER |= (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE);
+
+	/* Enable control DMA Request */
+	LL_I3C_EnableDMAReq_Control(hi3c->Instance);
+
+	/* Enable Rx data DMA Request */
+	if (rx_count != 0U) {
+		LL_I3C_EnableDMAReq_RX(hi3c->Instance);
+	}
+
+	/* Enable Tx data DMA Request */
+	if (tx_count != 0U) {
+		LL_I3C_EnableDMAReq_TX(hi3c->Instance);
+	}
+
+	/* DMA Configure and Start */
+	ret = stm32_i3c_dma_config(xdesc, dma_ctx, tx_count, rx_count);
+	if (ret)
+		goto abort_transfer;
+
+	/*
+	 * The priority of the I3C interrupt has to be lower than the DMA interrupt.
+	 * The I3C interrupt waits until the DMA interrupt is received
+	 * and then continues to write the next control word once the DMA transfer is
+	 * configured.
+	 */
+	if (xdesc->i3c_dma_desc->txdma_ch) {
+		no_os_irq_get_priority(xdesc->i3c_dma_desc->dma_desc->irq_ctrl,
+				       xdesc->i3c_dma_desc->txdma_ch->irq_num,
+				       &txdma_priority);
+	} else {
+		txdma_priority = 0;
+	}
+	if (xdesc->i3c_dma_desc->rxdma_ch) {
+		no_os_irq_get_priority(xdesc->i3c_dma_desc->dma_desc->irq_ctrl,
+				       xdesc->i3c_dma_desc->rxdma_ch->irq_num,
+				       &rxdma_priority);
+	} else {
+		rxdma_priority = 0;
+	}
+
+	i3c_priority = txdma_priority > rxdma_priority ? txdma_priority + 1 :
+		       rxdma_priority + 1;
+	HAL_NVIC_SetPriority(xdesc->irq_id, i3c_priority, 0);
+
+	i3c_dma_cplt[desc->bus->device_id] = false;
+	/* Decrement remaining control buffer data counter */
+	hi3c->ControlXferCount--;
+	/* Initiate a Start condition */
+	LL_I3C_RequestTransfer(hi3c->Instance);
+
+	return ret;
+
+abort_transfer:
+	no_os_dma_xfer_abort(xdesc->i3c_dma_desc->dma_desc,
+			     xdesc->i3c_dma_desc->crdma_ch);
+	no_os_dma_xfer_abort(xdesc->i3c_dma_desc->dma_desc,
+			     xdesc->i3c_dma_desc->txdma_ch);
+	no_os_dma_xfer_abort(xdesc->i3c_dma_desc->dma_desc,
+			     xdesc->i3c_dma_desc->rxdma_ch);
+	no_os_free(dma_ctx->tx_ch_xfer);
+	no_os_free(dma_ctx->rx_ch_xfer);
+	no_os_free(dma_ctx->cr_ch_xfer.src);
+free_dma_ctx:
+	no_os_free(dma_ctx);
+	return ret;
+}
+
+/**
+ * @brief Abort the ongoing DMA transaction
+ * @param desc - The I3C descriptor.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+int32_t stm32_i3c_abort_dma(struct no_os_i3c_desc *desc)
+{
+	struct stm32_i3c_bus_desc *xdesc;
+	struct stm32_i3c_dma_desc *i3c_dma_desc;
+	struct stm32_i3c_dma_ctx *i3c_dma_ctx;
+
+	if (!desc)
+		return -EINVAL;
+
+	if (!desc->bus->extra)
+		return -ESRCH;
+
+	xdesc = (struct stm32_i3c_bus_desc *) desc->bus->extra;
+	i3c_dma_desc = (struct stm32_i3c_dma_desc *) xdesc->i3c_dma_desc;
+
+	if (!i3c_dma_desc || !i3c_dma_desc->priv)
+		return -EINVAL;
+
+	i3c_dma_ctx = i3c_dma_desc->priv;
+
+	/* Disable requested interrupts */
+	__HAL_I3C_DISABLE_IT(xdesc->hi3c, (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE));
+	/* Disable control DMA Request */
+	LL_I3C_DisableDMAReq_Control(xdesc->hi3c->Instance);
+	/* Disable Tx DMA Request */
+	LL_I3C_DisableDMAReq_TX(xdesc->hi3c->Instance);
+	/* Disable Rx DMA Request */
+	LL_I3C_DisableDMAReq_RX(xdesc->hi3c->Instance);
+
+	/* I3C DMA Abort Transfer */
+	no_os_dma_xfer_abort(i3c_dma_desc->dma_desc, i3c_dma_desc->crdma_ch);
+
+	if (i3c_dma_ctx->tx_ch_xfer) {
+		no_os_dma_xfer_abort(i3c_dma_desc->dma_desc, i3c_dma_desc->txdma_ch);
+		no_os_free(i3c_dma_ctx->tx_ch_xfer);
+	}
+	if (i3c_dma_ctx->rx_ch_xfer) {
+		no_os_dma_xfer_abort(i3c_dma_desc->dma_desc, i3c_dma_desc->rxdma_ch);
+		no_os_free(i3c_dma_ctx->rx_ch_xfer);
+	}
+
+	/* Flush the Tx FIFO */
+	LL_I3C_RequestTxFIFOFlush(xdesc->hi3c->Instance);
+	/* Flush the Rx FIFO */
+	LL_I3C_RequestRxFIFOFlush(xdesc->hi3c->Instance);
+
+	/* Clear frame complete flag */
+	if (I3C_CHECK_FLAG(xdesc->hi3c->Instance->EVR, I3C_EVR_FCF) != RESET) {
+		LL_I3C_ClearFlag_FC(xdesc->hi3c->Instance);
+	}
+
+	/* Check on previous state */
+	if (xdesc->hi3c->PreviousState == HAL_I3C_STATE_LISTEN) {
+		xdesc->hi3c->State = HAL_I3C_STATE_LISTEN;
+	} else {
+		xdesc->hi3c->State = HAL_I3C_STATE_READY;
+	}
+
+	no_os_free(i3c_dma_ctx->cr_ch_xfer.src);
+	no_os_free(i3c_dma_ctx);
+	/* Clear the private data to indicate DMA transfer is aborted */
+	i3c_dma_desc->priv = NULL;
+
+	return 0;
+}
+
+/**
  * @brief Configure the bus according the new device.
  * @param desc - The I3C device descriptor.
  * @return 0 in case of success, error code otherwise.
@@ -679,6 +952,203 @@ static int32_t stm32_i3c_config_extra(struct no_os_i3c_desc *desc,
 	mxdesc = desc->bus->extra;
 	if (HAL_I3C_Ctrl_ConfigBusDevices(mxdesc->hi3c, dev_conf, 1U) != HAL_OK)
 		return -EIO;
+
+	return 0;
+}
+
+/**
+ * @brief Populate the context required for DMA transfer.
+ * @param desc - The I3C descriptor.
+ * @param msgs - The messages array.
+ * @param len - Number of messages.
+ * @param callback - Function to be invoked after transfers
+ * @param ctx - User defined parameter for the callback function.
+ * @param dma_ctx - The DMA context to be populated.
+ * @return 0 in case of success, errno codes otherwise.
+ */
+static int32_t stm32_i3c_populate_dma_context(struct no_os_i3c_desc *desc,
+		struct no_os_i3c_msg *msgs,
+		uint32_t len,
+		void (*callback)(void *),
+		void *ctx)
+{
+	int32_t ret;
+	int i = 0;
+	uint32_t tx_count, rx_count, tx_idx, rx_idx;
+	uint8_t *tx_addr, *rx_addr;
+	struct stm32_i3c_dma_desc *i3c_dma_desc;
+	struct stm32_i3c_dma_ctx *dma_ctx;
+	I3C_HandleTypeDef *hi3c;
+
+	if (!desc || !msgs)
+		return -EINVAL;
+	if (!desc->bus->extra)
+		return -EINVAL;
+
+	hi3c = ((struct stm32_i3c_bus_desc *) desc->bus->extra)->hi3c;
+	i3c_dma_desc = ((struct stm32_i3c_bus_desc *) desc->bus->extra)->i3c_dma_desc;
+	tx_count = 0;
+	rx_count = 0;
+
+	if (!i3c_dma_desc || !i3c_dma_desc->priv)
+		return -EINVAL;
+
+	dma_ctx = (struct stm32_i3c_dma_ctx *) i3c_dma_desc->priv;
+
+	/* Verify and count the messages */
+	for (i = 0; i < len; i++) {
+		if (((msgs[i].tx_buff == NULL) && (msgs[i].tx_size != 0U)) ||
+		    ((msgs[i].rx_buff == NULL) && (msgs[i].rx_size != 0U))) {
+			return -EINVAL;
+		}
+		if (msgs[i].tx_buff)
+			tx_count++;
+		if (msgs[i].rx_buff)
+			rx_count++;
+	}
+
+	dma_ctx->cr_ch_xfer.src = (uint8_t *) no_os_calloc(len, sizeof(uint32_t));
+	if (!dma_ctx->cr_ch_xfer.src) {
+		return -ENOMEM;
+	}
+	if (rx_count) {
+		dma_ctx->rx_ch_xfer = no_os_calloc(rx_count, sizeof(*dma_ctx->rx_ch_xfer));
+		if (!dma_ctx->rx_ch_xfer) {
+			ret = -ENOMEM;
+			goto free_cr_src;
+		}
+	}
+	if (tx_count) {
+		dma_ctx->tx_ch_xfer = no_os_calloc(tx_count, sizeof(*dma_ctx->tx_ch_xfer));
+		if (!dma_ctx->tx_ch_xfer) {
+			ret = -ENOMEM;
+			goto free_rx_ch_xfer;
+		}
+	}
+
+	/* Assign the address of TX and RX register depending on the memory alignment */
+	if (tx_count)
+		tx_addr = (((struct stm32_dma_channel *)
+			    i3c_dma_desc->txdma_ch->extra)->mem_data_alignment == DATA_ALIGN_WORD) ?
+			  (uint8_t *) & (hi3c->Instance->TDWR) :
+			  (uint8_t *) & (hi3c->Instance->TDR);
+	if (rx_count)
+		rx_addr = (((struct stm32_dma_channel *)
+			    i3c_dma_desc->rxdma_ch->extra)->mem_data_alignment == DATA_ALIGN_WORD) ?
+			  (uint8_t *) & (hi3c->Instance->RDWR) :
+			  (uint8_t *) & (hi3c->Instance->RDR);
+
+	dma_ctx->cr_ch_xfer.dst = (uint8_t *) & (hi3c->Instance->CR);
+	dma_ctx->cr_ch_xfer.length = len * sizeof(uint32_t);
+	dma_ctx->cr_ch_xfer.xfer_type = MEM_TO_DEV;
+	dma_ctx->cr_ch_xfer.xfer_complete_cb = NULL;
+	dma_ctx->cr_ch_xfer.xfer_complete_ctx = dma_ctx;
+	dma_ctx->cr_ch_xfer.periph = NO_OS_DMA_IRQ;
+	dma_ctx->cr_ch_xfer.extra = NULL;
+
+	/* Create the control words for all the transfer messages */
+	for (i = 0, tx_idx = 0, rx_idx = 0; i < len; i++) {
+		if (msgs[i].tx_buff) {
+			dma_ctx->tx_ch_xfer[tx_idx].src = msgs[i].tx_buff;
+			dma_ctx->tx_ch_xfer[tx_idx].dst = tx_addr;
+			dma_ctx->tx_ch_xfer[tx_idx].length = msgs[i].tx_size;
+			dma_ctx->tx_ch_xfer[tx_idx].xfer_type = MEM_TO_DEV;
+			dma_ctx->tx_ch_xfer[tx_idx].xfer_complete_cb = stm32_i3c_dma_callback;
+			dma_ctx->tx_ch_xfer[tx_idx].xfer_complete_ctx = dma_ctx;
+			dma_ctx->tx_ch_xfer[tx_idx].periph = NO_OS_DMA_IRQ;
+			dma_ctx->tx_ch_xfer[tx_idx].extra = NULL;
+			tx_idx++;
+
+			((uint32_t *)dma_ctx->cr_ch_xfer.src)[i] = I3C_CR_MEND |
+					(2 << I3C_CR_MTYPE_Pos) |
+					(desc->addr << I3C_CR_ADD_Pos) |
+					(msgs[i].tx_size << I3C_CR_DCNT_Pos);
+		} else {
+			dma_ctx->rx_ch_xfer[rx_idx].src = rx_addr;
+			dma_ctx->rx_ch_xfer[rx_idx].dst = msgs[i].rx_buff;
+			dma_ctx->rx_ch_xfer[rx_idx].length = msgs[i].rx_size;
+			dma_ctx->rx_ch_xfer[rx_idx].xfer_type = DEV_TO_MEM;
+			dma_ctx->rx_ch_xfer[rx_idx].xfer_complete_cb = stm32_i3c_dma_callback;
+			dma_ctx->rx_ch_xfer[rx_idx].xfer_complete_ctx = dma_ctx;
+			dma_ctx->rx_ch_xfer[rx_idx].periph = NO_OS_DMA_IRQ;
+			dma_ctx->rx_ch_xfer[rx_idx].extra = NULL;
+			rx_idx++;
+
+			((uint32_t *)dma_ctx->cr_ch_xfer.src)[i] = I3C_CR_MEND |
+					(2 << I3C_CR_MTYPE_Pos) |
+					(desc->addr << I3C_CR_ADD_Pos) |
+					I3C_CR_RNW |
+					(msgs[i].rx_size << I3C_CR_DCNT_Pos);
+		}
+	}
+
+	dma_ctx->desc = desc;
+	dma_ctx->dma_user_cb = callback;
+	dma_ctx->dma_user_ctx = ctx;
+
+	return 0;
+free_rx_ch_xfer:
+	no_os_free(dma_ctx->rx_ch_xfer);
+free_cr_src:
+	no_os_free(dma_ctx->cr_ch_xfer.src);
+
+	return ret;
+}
+
+/**
+ * @brief Configure and Start the DMA
+ * @param xdesc - The STM32 I3C bus descriptor.
+ * @param dma_ctx - The DMA context.
+ * @param tx_count - Number of transmit messages.
+ * @param rx_count - Number of receive messages.
+ * @return 0 in case of success, error code otherwise.
+ */
+static int32_t stm32_i3c_dma_config(struct stm32_i3c_bus_desc *xdesc,
+				    struct stm32_i3c_dma_ctx *dma_ctx, uint32_t tx_count, uint32_t rx_count)
+{
+	int32_t ret;
+
+	if (!xdesc || !dma_ctx || !xdesc->i3c_dma_desc)
+		return -EINVAL;
+
+	/* DMA Configuration */
+	ret = no_os_dma_config_xfer(xdesc->i3c_dma_desc->dma_desc, &dma_ctx->cr_ch_xfer,
+				    1, xdesc->i3c_dma_desc->crdma_ch);
+	if (ret)
+		return ret;
+
+	if (dma_ctx->rx_ch_xfer) {
+		ret = no_os_dma_config_xfer(xdesc->i3c_dma_desc->dma_desc, dma_ctx->rx_ch_xfer,
+					    rx_count, xdesc->i3c_dma_desc->rxdma_ch);
+		if (ret)
+			return ret;
+	}
+	if (dma_ctx->tx_ch_xfer) {
+		ret = no_os_dma_config_xfer(xdesc->i3c_dma_desc->dma_desc, dma_ctx->tx_ch_xfer,
+					    tx_count, xdesc->i3c_dma_desc->txdma_ch);
+		if (ret)
+			return ret;
+	}
+
+	/* TX and RX DMA Start */
+	if (dma_ctx->rx_ch_xfer) {
+		ret = no_os_dma_xfer_start(xdesc->i3c_dma_desc->dma_desc,
+					   xdesc->i3c_dma_desc->rxdma_ch);
+		if (ret)
+			return ret;
+	}
+	if (dma_ctx->tx_ch_xfer) {
+		ret = no_os_dma_xfer_start(xdesc->i3c_dma_desc->dma_desc,
+					   xdesc->i3c_dma_desc->txdma_ch);
+		if (ret)
+			return ret;
+	}
+
+	/* Write Control buffer data to control register */
+	ret = no_os_dma_xfer_start(xdesc->i3c_dma_desc->dma_desc,
+				   xdesc->i3c_dma_desc->crdma_ch);
+	if (ret)
+		return ret;
 
 	return 0;
 }
@@ -729,6 +1199,116 @@ static inline int32_t stm32_i3c_wait_ready(I3C_HandleTypeDef *hi3c)
 };
 
 /**
+ * @brief DMA callback handler.
+ * @param old_xfer - Completed DMA xfer descriptor.
+ * @param next_xfer - DMA xfer descriptor to be configured.
+ * @param ctx - The DMA callback context
+ * @return 0 on success and -EIO in case of error.
+ */
+void stm32_i3c_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
+			    struct no_os_dma_xfer_desc *next_xfer,
+			    void *ctx)
+{
+	struct stm32_i3c_dma_ctx *i3c_ctx;
+	struct stm32_i3c_bus_desc *xdesc;
+
+	i3c_ctx = (struct stm32_i3c_dma_ctx *) ctx;
+	xdesc = (struct stm32_i3c_bus_desc *) i3c_ctx->desc->bus->extra;
+	i3c_dma_cplt[i3c_ctx->desc->bus->device_id] = true;
+
+	/* if more xfers pending dont do anything */
+	if (next_xfer)
+		return;
+
+	/* If more control register are pending */
+	if (xdesc->hi3c->ControlXferCount)
+		return;
+
+	/* Disable requested interrupts */
+	__HAL_I3C_DISABLE_IT(xdesc->hi3c, (HAL_I3C_IT_FCIE | HAL_I3C_IT_ERRIE));
+	/* Disable control DMA Request */
+	LL_I3C_DisableDMAReq_Control(xdesc->hi3c->Instance);
+	/* Disable Tx DMA Request */
+	LL_I3C_DisableDMAReq_TX(xdesc->hi3c->Instance);
+	/* Disable Rx DMA Request */
+	LL_I3C_DisableDMAReq_RX(xdesc->hi3c->Instance);
+
+	no_os_dma_xfer_abort(xdesc->i3c_dma_desc->dma_desc,
+			     xdesc->i3c_dma_desc->crdma_ch);
+
+	if (i3c_ctx->tx_ch_xfer) {
+		no_os_dma_xfer_abort(xdesc->i3c_dma_desc->dma_desc,
+				     xdesc->i3c_dma_desc->txdma_ch);
+		no_os_free(i3c_ctx->tx_ch_xfer);
+	}
+	if (i3c_ctx->rx_ch_xfer) {
+		no_os_dma_xfer_abort(xdesc->i3c_dma_desc->dma_desc,
+				     xdesc->i3c_dma_desc->rxdma_ch);
+		no_os_free(i3c_ctx->rx_ch_xfer);
+	}
+
+	/* Check on previous state */
+	if (xdesc->hi3c->PreviousState == HAL_I3C_STATE_LISTEN) {
+		/* Set state to listen */
+		xdesc->hi3c->State = HAL_I3C_STATE_LISTEN;
+	} else {
+		/* Set state to ready */
+		xdesc->hi3c->State = HAL_I3C_STATE_READY;
+	}
+
+	if (i3c_ctx->dma_user_cb)
+		i3c_ctx->dma_user_cb(i3c_ctx->dma_user_ctx);
+
+	no_os_free(i3c_ctx->cr_ch_xfer.src);
+	no_os_free(i3c_ctx);
+
+	/* Clear private data to indicate DMA transfer is completed */
+	xdesc->i3c_dma_desc->priv = NULL;
+
+	no_os_mutex_unlock(i3c_ctx->desc->bus->mutex);
+}
+
+/**
+ * @brief Transfer complete callback handler.
+ * @param hi3c - The STM32 I3C bus descriptor.
+ * @return 0 on success and -EIO in case of error.
+ */
+static HAL_StatusTypeDef stm32_i3c_xfer_complete_cb(I3C_HandleTypeDef *hi3c,
+		uint32_t itMasks)
+{
+	uint32_t dev_id;
+	/* I3C target frame complete event Check */
+	if (I3C_CHECK_FLAG(itMasks, I3C_EVR_FCF) != RESET) {
+		/* Clear frame complete flag */
+		LL_I3C_ClearFlag_FC(hi3c->Instance);
+
+		if (hi3c->ControlXferCount != 0U) {
+			/*
+			 * Wait till the previous transaction is completed and the next
+			 * DMA transaction has been scheduled
+			 */
+
+			if (hi3c->Instance == I3C1) {
+				dev_id = 1;
+			} else {
+				return HAL_ERROR;
+			}
+
+			while (i3c_dma_cplt[dev_id] == false);
+			i3c_dma_cplt[dev_id] = false;
+
+			/* Decrement remaining control buffer data counter */
+			hi3c->ControlXferCount--;
+
+			/* Then Initiate a Start condition */
+			LL_I3C_RequestTransfer(hi3c->Instance);
+		}
+	}
+
+	return HAL_OK;
+}
+
+/**
  * @brief stm32 platform specific I3C platform ops structure.
  */
 const struct no_os_i3c_platform_ops stm32_i3c_ops = {
@@ -744,4 +1324,6 @@ const struct no_os_i3c_platform_ops stm32_i3c_ops = {
 	.i3c_ops_is_dev_ready = &stm32_i3c_is_dev_ready,
 	.i3c_ops_conf_irq = &stm32_i3c_conf_irq,
 	.i3c_ops_get_ccc_info = &stm32_i3c_get_ccc_info,
+	.i3c_ops_transfer_dma_async = &stm32_i3c_transfer_dma_async,
+	.i3c_ops_abort_dma = &stm32_i3c_abort_dma,
 };
