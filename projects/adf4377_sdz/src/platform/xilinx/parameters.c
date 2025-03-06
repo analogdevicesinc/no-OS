@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
+ *   @file   parameters.c
+ *   @brief  Definition of Mbed platform data used by adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
@@ -31,41 +31,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
 
-#include "iio_types.h"
-#include "iio.h"
+#include "parameters.h"
 
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
+struct xil_spi_init_param spi_extra = {
+	.type = SPI_PS,
+	.flags = 0U
 };
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
+struct xil_gpio_init_param xil_gpio_init = {
+	.device_id = GPIO_DEVICE_ID,
+	.type = GPIO_PS
 };
-
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
-};
-
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
-};
-
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
-
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
-
-#endif

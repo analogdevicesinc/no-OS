@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
+ *   @file   common_data.c
+ *   @brief  Defines the common data used in the examples eval-adf4377 project
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
@@ -31,41 +31,61 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
 
-#include "iio_types.h"
-#include "iio.h"
+#include "common_data.h"
+#include "parameters.h"
 
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
+struct no_os_spi_init_param adf4377_spi_ip = {
+	.device_id = SPI_DEVICE_ID,
+	.max_speed_hz = 2000000,
+	.chip_select = SPI_CS,
+	.mode = NO_OS_SPI_MODE_0,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.platform_ops = SPI_OPS,
+	.extra = SPI_EXTRA
 };
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
+struct no_os_gpio_init_param gpio_ce_param = {
+	.number = GPIO_CE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
 };
 
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
+struct no_os_gpio_init_param gpio_enclk1_param = {
+	.number = GPIO_ENCLK1,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
 };
 
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
+struct no_os_gpio_init_param gpio_enclk2_param = {
+	.number = GPIO_ENCLK2,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA
 };
 
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
+struct no_os_uart_init_param adf4377_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
 
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
-
-#endif
+struct adf4377_init_param adf4377_ip = {
+	.dev_id = ADF4377,
+	.spi_init = &adf4377_spi_ip,
+	.spi4wire = true,
+	.gpio_ce_param = &gpio_ce_param,
+	.gpio_enclk1_param = &gpio_enclk1_param,
+	.gpio_enclk2_param = &gpio_enclk2_param,
+	.clkin_freq = 125000000,
+	.ref_doubler_en = 1,
+	.f_clk = 10000000000,
+	.ref_div_factor = 1,
+	.muxout_select = ADF4377_MUXOUT_HIGH_Z,
+	.cp_i = ADF4377_CP_10MA1,
+};

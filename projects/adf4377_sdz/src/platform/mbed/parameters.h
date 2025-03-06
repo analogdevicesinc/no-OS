@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Mbed platform used by adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
@@ -31,41 +31,45 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "iio_types.h"
-#include "iio.h"
+#include <PinNames.h>
+#include "mbed_uart.h"
+#include "mbed_spi.h"
+#include "no_os_uart.h"
+#include "mbed_gpio.h"
+#include "no_os_gpio.h"
 
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
-};
+#define UART_TX_PIN	CONSOLE_TX
+#define	UART_RX_PIN	CONSOLE_RX
+#define UART_DEVICE_ID  5
+#define UART_IRQ_ID     53
+#define UART_BAUDRATE   115200
+#define UART_EXTRA	&adf4377_uart_extra_ip
+#define UART_OPS        &mbed_uart_ops
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
-};
+#define SPI_BAUDRATE    4000000
+#define SPI_OPS         &mbed_spi_ops
+#define SPI_EXTRA       &adf4377_spi_extra
+#define SPI_DEVICE_ID   5
+#define SPI_CS          SDP_SPI_CS_A
 
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
-};
+/* SDP GPIO Configuration */
+#define GPIO_OPS 	&mbed_gpio_ops
+#define GPIO_EXTRA 	&adf4377_gpio_ip
+// #define GPIO_SDP 	SDP_GPIO_0
+#define GPIO_LKDET      SDP_GPIO_0
+#define GPIO_ENCLK1     SDP_GPIO_1
+#define GPIO_ENCLK2     SDP_GPIO_2
+#define GPIO_MUXOUT     SDP_GPIO_4
+#define GPIO_CE		SDP_GPIO_5
 
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
-};
 
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
 
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
 
-#endif
+extern struct mbed_uart_init_param adf4377_uart_extra_ip;
+extern struct mbed_spi_init_param adf4377_spi_extra;
+extern struct no_os_gpio_init_param adf4377_gpio_ip;
+
+#endif /* __PARAMETERS_H__ */

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adf4377.h
- *   @brief  Implementation of IIO ADF4377 Driver.
+ *   @file   parameters.c
+ *   @brief  Definition of Mbed platform data used by adf4377 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
@@ -31,41 +31,21 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_ADF4377_H
-#define IIO_ADF4377_H
+#include "parameters.h"
+#include "common_data.h"
 
-#include "iio_types.h"
-#include "iio.h"
-
-struct adf4377_iio_dev {
-	struct adf4377_dev *adf4377_dev;
-	struct iio_device *iio_dev;
+struct mbed_uart_init_param adf4377_uart_extra_ip = {
+	.uart_tx_pin = UART_TX_PIN,
+	.uart_rx_pin = UART_RX_PIN
 };
 
-struct adf4377_iio_dev_init_param {
-	struct adf4377_init_param *adf4377_dev_init;
+struct mbed_spi_init_param adf4377_spi_extra = {
+	.spi_miso_pin = SDP_SPI_MISO,
+	.spi_mosi_pin = SDP_SPI_MOSI,
+	.spi_clk_pin = SDP_SPI_SCK,
+	.use_sw_csb = false
 };
 
-enum adf4377_iio_ch_attr_id {
-	ADF4377_IIO_CH_ATTR_FREQ,
-	ADF4377_IIO_CH_ATTR_OPWR,
-	ADF4377_IIO_CH_ATTR_EN,
+struct no_os_gpio_init_param adf4377_gpio_ip = {
+	.platform_ops = GPIO_OPS,
 };
-
-enum adf4377_iio_dev_attr_id {
-	ADF4377_IIO_DEV_ATTR_REF_CLK,
-	ADF4377_IIO_DEV_ATTR_REF_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV,
-	ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
-	ADF4377_IIO_DEV_ATTR_CP_I,
-	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
-	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
-	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
-};
-
-int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
-		     struct adf4377_iio_dev_init_param *init_param);
-
-int adf4377_iio_remove(struct adf4377_iio_dev *desc);
-
-#endif
