@@ -42,11 +42,11 @@ get_full_path = $(patsubst root/%,$(ROOT_DRIVE)%,$(FULL_PATH))
 ifeq 'y' '$(strip $(LINK_SRCS))'
 update_file = $(make_link)
 update_dir = $(make_dir_link)
-ACTION = Linking
+ACTION = symlinks to
 else
 update_file = $(call copy_file,$1,$(dir $2))
 update_dir = $(copy_dir)
-ACTION = Copying
+ACTION = copies of
 endif
 
 # Display the platform for which build is launched
@@ -379,17 +379,23 @@ define process_items_in_chunks
 	)
 endef
 
-define update_file_func
-$(call update_file,$(1),$(call relative_to_project,$(1)))
-endef
+SRC_FILES = $(sort $(SRCS) $(INCS) $(ASM_SRCS))
+BUILD_FILES = $(foreach file,$(SRC_FILES),$(call relative_to_project,$(file)))
+
+$(foreach file,$(BUILD_FILES), \
+	$(eval $(file): $(filter %/$(notdir $(file)),$(SRC_FILES))) \
+)
+
+$(BUILD_FILES): % :
+	$(call update_file,$<,$@)
+	@TS=$(shell stat --format=%Y $<); touch -h -d @$${TS} $@
+
+make_dirs:
+	$(call mk_dir,$(DIRS_TO_CREATE))
 
 PHONY += update
-update:
-	$(call print,$(ACTION) srcs to created project)
-	$(call remove_dir,$(DIRS_TO_REMOVE))
-	$(call mk_dir,$(DIRS_TO_CREATE))
-	$(call process_items_in_chunks,$(sort $(SRCS) $(INCS) $(ASM_SRCS)),10,update_file_func)
-	$(MAKE) --no-print-directory pre_build
+update: make_dirs $(BUILD_FILES) pre_build
+	$(call print,Creating $(ACTION) source files)
 
 standalone:
 	$(MAKE) --no-print-directory project LINK_SRCS=n
