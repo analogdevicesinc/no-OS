@@ -25,8 +25,7 @@ INCS += $(INCLUDE)/no_os_delay.h     \
 	$(DRIVERS)/meter/ade9430/ade9430.h \
 	$(DRIVERS)/display/nhd_c12832a1z/nhd_c12832a1z.h \
 
-INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h     \
-        $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h      \
+INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_i2c.h       \
         $(PLATFORM_DRIVERS)/../common/$(PLATFORM)_dma.h       \
