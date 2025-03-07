@@ -36,16 +36,18 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include <errno.h>
-#include <unistd.h>
 #include "ad7606.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_crc.h"
 #include "no_os_alloc.h"
 
+#ifdef XILINX_PLATFORM
 #include "spi_engine.h"
 #include "no_os_axi_io.h"
+#include <unistd.h>
+#include <errno.h>
+#endif
 
 #define AD7606_SPI_ENG_DATA_WIDTH			0x0C
 #define AD7606_SPI_ENG_OFFLOAD_ADDR_WIDTH		0x10
@@ -242,6 +244,7 @@ static const uint16_t tconv_max[] = {
 struct ad7606_axi_dev {
 	/* Set to 'true' if the AXI modules have been initialized */
 	bool initialized;
+#ifdef XILINX_PLATFORM
 	/* Clock gen for hdl design structure */
 	struct axi_clkgen *clkgen;
 	/* Trigger conversion PWM generator descriptor */
@@ -256,65 +259,7 @@ struct ad7606_axi_dev {
 	uint32_t rx_dma_baseaddr;
 	uint32_t reg_access_speed;
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
-};
-
-/**
- * @struct ad7606_dev
- * @brief Device driver structure
- */
-struct ad7606_dev {
-	/** AXI core device data */
-	struct ad7606_axi_dev axi_dev;
-	/** SPI descriptor*/
-	struct no_os_spi_desc *spi_desc;
-	/** RESET GPIO descriptor */
-	struct no_os_gpio_desc *gpio_reset;
-	/** CONVST GPIO descriptor */
-	struct no_os_gpio_desc *gpio_convst;
-	/** BUSY GPIO descriptor */
-	struct no_os_gpio_desc *gpio_busy;
-	/** STBYn GPIO descriptor */
-	struct no_os_gpio_desc *gpio_stby_n;
-	/** RANGE GPIO descriptor */
-	struct no_os_gpio_desc *gpio_range;
-	/** OS0 GPIO descriptor */
-	struct no_os_gpio_desc *gpio_os0;
-	/** OS1 GPIO descriptor */
-	struct no_os_gpio_desc *gpio_os1;
-	/** OS2 GPIO descriptor */
-	struct no_os_gpio_desc *gpio_os2;
-	/** PARn/SER GPIO descriptor */
-	struct no_os_gpio_desc *gpio_par_ser;
-	/** Device ID */
-	enum ad7606_device_id device_id;
-	/** Oversampling settings */
-	struct ad7606_oversampling oversampling;
-	/** Whether the device is running in hardware or software mode */
-	bool sw_mode;
-	/** Serial interface mode or Parallel interface mode */
-	bool parallel_interface;
-	/** Whether the device is running in register or ADC reading mode */
-	bool reg_mode;
-	/** Number of DOUT lines supported by the device */
-	enum ad7606_dout_format max_dout_lines;
-	/** Configuration register settings */
-	struct ad7606_config config;
-	/** Digital diagnostics register settings */
-	struct ad7606_digital_diag digital_diag_enable;
-	/** Number of input channels of the device */
-	uint8_t num_channels;
-	/** Channel scale computed from channel range setting */
-	double scale_ch[AD7606_MAX_CHANNELS];
-	/** Channel type setting */
-	enum ad7606_range_type range_ch_type[AD7606_MAX_CHANNELS];
-	/** Channel offset calibration */
-	int8_t offset_ch[AD7606_MAX_CHANNELS];
-	/** Channel phase calibration */
-	uint8_t phase_ch[AD7606_MAX_CHANNELS];
-	/** Channel gain calibration */
-	uint8_t gain_ch[AD7606_MAX_CHANNELS];
-	/** Data buffer (used internally by the SPI communication functions) */
-	uint8_t data[28];
+#endif
 };
 
 /***************************************************************************//**
@@ -344,6 +289,7 @@ static int ad7606_parallel_mode_write_reg(struct ad7606_dev *dev,
 		uint8_t reg_addr,
 		uint8_t reg_data)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t wr = AD7606_PARALLEL_WR_FLAG_MSK(reg_addr) << 8 | reg_data;
 
@@ -358,6 +304,7 @@ static int ad7606_parallel_mode_write_reg(struct ad7606_dev *dev,
 			   AD7606_CONFIG_CTRL_DEFAULT);
 
 	dev->reg_mode = true;
+#endif
 
 	return 0;
 }
@@ -377,6 +324,7 @@ static int ad7606_parallel_mode_read_reg(struct ad7606_dev *dev,
 		uint8_t reg_addr,
 		uint8_t *reg_data)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t wr = AD7606_PARALLEL_RD_FLAG_MSK(reg_addr) << 8;
 	uint32_t rd = 0;
@@ -405,6 +353,7 @@ static int ad7606_parallel_mode_read_reg(struct ad7606_dev *dev,
 		*reg_data = rd;
 
 	dev->reg_mode = true;
+#endif
 
 	return 0;
 }
@@ -424,9 +373,8 @@ static int ad7606_parallel_mode_read_reg(struct ad7606_dev *dev,
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-static int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
-				   uint8_t reg_addr,
-				   uint8_t *reg_data)
+int32_t ad7606_spi_reg_read(struct ad7606_dev *dev, uint8_t reg_addr,
+			    uint8_t *reg_data)
 {
 	uint8_t buf[3];
 	uint8_t crc;
@@ -486,9 +434,8 @@ static int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-static int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
-				    uint8_t reg_addr,
-				    uint8_t reg_data)
+int32_t ad7606_spi_reg_write(struct ad7606_dev *dev, uint8_t reg_addr,
+			     uint8_t reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -791,6 +738,7 @@ int32_t ad7606_spi_data_read(struct ad7606_dev *dev, uint32_t *data)
 *******************************************************************************/
 static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	struct axi_dmac_init dmac_init;
 	int32_t i, ret;
@@ -810,6 +758,7 @@ static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 	}
 
 	return no_os_pwm_enable(axi->trigger_pwm_desc);
+#endif
 }
 
 /***************************************************************************//**
@@ -819,6 +768,7 @@ static int32_t ad7606_parallel_capture_pre_enable(struct ad7606_dev *dev)
 *******************************************************************************/
 static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t i;
 
@@ -830,6 +780,7 @@ static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
 	axi_dmac_remove(axi->dmac);
 	no_os_pwm_disable(axi->trigger_pwm_desc);
 	axi->dmac = NULL;
+#endif
 }
 
 /***************************************************************************//**
@@ -848,6 +799,7 @@ static void ad7606_parallel_capture_post_disable(struct ad7606_dev *dev)
 static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 		uint32_t *buf, uint32_t samples)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	struct axi_dma_transfer transfer = {
 		// Number of bytes to writen/read
@@ -876,6 +828,7 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 		axi->dcache_invalidate_range(transfer.dest_addr, samples * sizeof(uint32_t));
 
 	return 0;
+#endif
 }
 
 /***************************************************************************//**
@@ -887,6 +840,7 @@ static int32_t ad7606_read_raw_data_parallel(struct ad7606_dev *dev,
 *******************************************************************************/
 static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	const uint8_t bits = ad7606_chip_info_tbl[dev->device_id].bits;
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 
@@ -895,6 +849,7 @@ static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
 	spi_engine_set_transfer_width(dev->spi_desc, bits);
 
 	return no_os_pwm_enable(axi->trigger_pwm_desc);
+#endif
 }
 
 /***************************************************************************//**
@@ -904,9 +859,11 @@ static int32_t ad7606_spi_engine_capture_pre_enable(struct ad7606_dev *dev)
 *******************************************************************************/
 static void ad7606_spi_engine_capture_post_disable(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 
 	no_os_pwm_disable(axi->trigger_pwm_desc);
+#endif
 }
 
 /***************************************************************************//**
@@ -925,6 +882,7 @@ static void ad7606_spi_engine_capture_post_disable(struct ad7606_dev *dev)
 static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
 		uint32_t *buf, uint32_t samples)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	int32_t ret;
 	uint32_t commands_data[2] = {0x00, 0x00};
@@ -953,6 +911,7 @@ static int32_t ad7606_read_raw_data_spi_engine(struct ad7606_dev *dev,
 
 error:
 	return ret;
+#endif
 }
 
 /***************************************************************************//**
@@ -971,7 +930,7 @@ error:
  *                  -EBADMSG - CRC computation mismatch.
  *                  0 - No errors encountered.
 *******************************************************************************/
-static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
+int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 {
 	int32_t ret;
 	uint8_t busy;
@@ -1014,6 +973,7 @@ static int32_t ad7606_read_one_sample(struct ad7606_dev *dev, uint32_t * data)
 *******************************************************************************/
 int32_t ad7606_capture_pre_enable(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 
 	if (!axi->initialized)
@@ -1023,6 +983,7 @@ int32_t ad7606_capture_pre_enable(struct ad7606_dev *dev)
 		return ad7606_parallel_capture_pre_enable(dev);
 
 	return ad7606_spi_engine_capture_pre_enable(dev);
+#endif
 }
 
 /***************************************************************************//**
@@ -1032,6 +993,7 @@ int32_t ad7606_capture_pre_enable(struct ad7606_dev *dev)
 *******************************************************************************/
 void ad7606_capture_post_disable(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 
 	if (!axi->initialized)
@@ -1041,6 +1003,7 @@ void ad7606_capture_post_disable(struct ad7606_dev *dev)
 		return ad7606_parallel_capture_post_disable(dev);
 
 	return ad7606_spi_engine_capture_post_disable(dev);
+#endif
 }
 
 /***************************************************************************//**
@@ -1062,6 +1025,7 @@ void ad7606_capture_post_disable(struct ad7606_dev *dev)
 int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 			    uint32_t samples)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
 	uint32_t nchannels, i, sample_size;
 	int32_t ret;
@@ -1090,6 +1054,7 @@ int32_t ad7606_read_samples(struct ad7606_dev *dev, uint32_t * data,
 			return ret;
 		data += sample_size;
 	}
+#endif
 
 	return 0;
 }
@@ -1141,7 +1106,9 @@ static inline void ad7606_reset_settings(struct ad7606_dev *dev)
 *******************************************************************************/
 int32_t ad7606_reset(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi = &dev->axi_dev;
+#endif
 	int32_t ret;
 
 	ret = no_os_gpio_set_value(dev->gpio_reset, 1);
@@ -1156,10 +1123,12 @@ int32_t ad7606_reset(struct ad7606_dev *dev)
 
 	ad7606_reset_settings(dev);
 
+#ifdef XILINX_PLATFORM
 	/* Enable core in parallel mode, to be able to read/write registers */
 	if (dev->parallel_interface)
 		no_os_axi_io_write(axi->core_baseaddr, AD7606_CORE_RESET,
 				   AD7606_PARALLEL_CORE_ENABLE);
+#endif
 
 	return ret;
 }
@@ -1765,6 +1734,7 @@ int32_t ad7606_set_digital_diag(struct ad7606_dev *dev,
 static int32_t ad7606_axi_init(struct ad7606_dev *device,
 			       struct ad7606_init_param *init_param)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_init_param *axi_init = init_param->axi_init;
 	struct ad7606_axi_dev *axi = &device->axi_dev;
 	int32_t ret;
@@ -1809,6 +1779,7 @@ static int32_t ad7606_axi_init(struct ad7606_dev *device,
 	/* Note: more validation will be added later */
 error:
 	return ret;
+#endif
 }
 
 /***************************************************************************//**
@@ -1848,6 +1819,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	printf("Initializing device %s, num-channels %u SDI lines %u\n",
 	       info->name, info->num_channels, 1 << info->max_dout_lines);
 
+#ifdef XILINX_PLATFORM
 	ret = ad7606_axi_init(dev, init_param);
 	if (ret != 0)
 		goto error;
@@ -1857,6 +1829,7 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		printf("Parallel interface requires an AXI Core module\n");
 		goto error;
 	}
+#endif
 
 	dev->num_channels = info->num_channels;
 	dev->max_dout_lines = info->max_dout_lines;
@@ -2042,6 +2015,7 @@ int32_t ad7606_data_correction_serial(struct ad7606_dev *dev,
 *******************************************************************************/
 void ad7606_axi_remove(struct ad7606_dev *dev)
 {
+#ifdef XILINX_PLATFORM
 	struct ad7606_axi_dev *axi;
 
 	if (!dev)
@@ -2056,6 +2030,7 @@ void ad7606_axi_remove(struct ad7606_dev *dev)
 	no_os_pwm_remove(axi->trigger_pwm_desc);
 	if (!dev->parallel_interface)
 		axi_clkgen_remove(axi->clkgen);
+#endif
 }
 
 /***************************************************************************//**
@@ -2084,7 +2059,9 @@ int32_t ad7606_remove(struct ad7606_dev *dev)
 	if (!dev->parallel_interface)
 		ret = no_os_spi_remove(dev->spi_desc);
 
+#ifdef XILINX_PLATFORM
 	ad7606_axi_remove(dev);
+#endif
 
 	no_os_free(dev);
 
