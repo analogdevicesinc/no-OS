@@ -426,7 +426,7 @@ reset: clean_libs $(PLATFORM)_reset
 
 PHONY += list
 list:
-	$(call print_lines, $(sort $(SRCS) $(INCS) $(ASM_SRCS)))
+	$(call print_lines, $(SRC_FILES))
 
 .PHONY: $(PHONY)
 
