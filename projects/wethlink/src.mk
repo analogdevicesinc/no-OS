@@ -78,7 +78,6 @@ INCS += $(INCLUDE)/no_os_gpio.h \
 	$(INCLUDE)/no_os_pid.h \
 	$(INCLUDE)/no_os_print_log.h \
 	$(INCLUDE)/no_os_delay.h \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_mutex.h
 

@@ -1,5 +1,4 @@
 INCS += $(PLATFORM_DRIVERS)/platform_init.h   		\
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h		\
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h		\
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_rtc.h		\
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h		\
