@@ -171,7 +171,7 @@ void print_pH(int si_val)
 	if (pH < 0)
 		pH = 0;
 	snprintf(str, 5, "%.2f", pH);
-	print_line(4, 11, 4, str);
+	print_line(1, 11, 4, str);
 	prev = si_val;
 }
 
@@ -186,7 +186,7 @@ void print_temp(int si_val)
 	float temperature = ((float)si_val / 1000 - 215) / 0.819;
 
 	snprintf(str, 5, "%.1f", temperature);
-	print_line(5, 11, 4, str);
+	print_line(2, 11, 4, str);
 	prev = si_val;
 }
 
@@ -406,11 +406,11 @@ int app_step(void *arg)
 	// 	sps_gesture_detection(arg);
 	// }
 
-	cnt2++;
+	/*cnt2++;
 	if (cnt2 == 1000) {
 		cnt2 = 0;
 		display(arg);
-	}
+	}*/
 
 	cnt3++;
 	if (cnt3 == 15000) {
@@ -738,58 +738,55 @@ int main(void)
 	// if (status != 0)
 	// 	return status;
 	
-	struct sps_iio_desc *sps;
-	struct sps_iio_init_param sps_config = {
-		.dev = adpd1080_iio_device->drv_dev,
-		.th_intensity = 1000000,
-		.th_click = 60,
-		.pHdev = ad7793_iiodev->ad7793_desc,
-	};
-	status = sps_iio_init(&sps, &sps_config);
+	// struct sps_iio_desc *sps;
+	// struct sps_iio_init_param sps_config = {
+	// 	.dev = adpd1080_iio_device->drv_dev,
+	// 	.th_intensity = 1000000,
+	// 	.th_click = 60,
+	// 	.pHdev = ad7793_iiodev->ad7793_desc,
+	// };
+	// status = sps_iio_init(&sps, &sps_config);
 
-	struct iio_app_device devices[] = {
-		// IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
-		// 	       &iio_adpd1080_read_buff, NULL, NULL),
-		IIO_APP_DEVICE("ad7793", ad7793_iiodev->ad7793_desc, &ad7799_iio_descriptor,
-				NULL, NULL, NULL),
-		IIO_APP_DEVICE("sps", sps, &iio_sps_device,
-				NULL, NULL, NULL)
-	};
+	// struct iio_app_device devices[] = {
+	// 	// IIO_APP_DEVICE("adpd1080", adpd1080_iio_device, &iio_adpd188_device,
+	// 	// 	       &iio_adpd1080_read_buff, NULL, NULL),
+	// 	IIO_APP_DEVICE("ad7793", ad7793_iiodev->ad7793_desc, &ad7799_iio_descriptor,
+	// 			NULL, NULL, NULL),
+	// 	IIO_APP_DEVICE("sps", sps, &iio_sps_device,
+	// 			NULL, NULL, NULL)
+	// };
 
-	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	app_init_param.devices = devices;
-	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
-	app_init_param.uart_init_params = adpd1080_uart_ip;
-	app_init_param.post_step_callback = app_step;
-	app_init_param.arg = sps;
-	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
-	app_init_param.lwip_param.mac_param = &adin1110_ip;
-	app_init_param.lwip_param.extra = NULL;
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
-	       NETIF_MAX_HWADDR_LEN);
+	// memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	// app_init_param.devices = devices;
+	// app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	// app_init_param.uart_init_params = adpd1080_uart_ip;
+	// app_init_param.post_step_callback = app_step;
+	// app_init_param.arg = sps;
+	// app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
+	// app_init_param.lwip_param.mac_param = &adin1110_ip;
+	// app_init_param.lwip_param.extra = NULL;
+	// memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
+	//        NETIF_MAX_HWADDR_LEN);
 
 	// status = iio_app_init(&app, app_init_param);
-	// if (status)
-	// 	return status;
+	//  if (status)
+	//  	return status;
 	
 	LCD_Init(U2D_R2L, 800);
-	LCD_Clear(MAGENTA);
-	print_line(1, 0, 10, "IO1  (mA):");
-	print_line(2, 0, 10, "IO2      :");
-	print_line(3, 0, 10, "IO3   (V):");
-	print_line(4, 0, 10, "pH       :");
-	print_line(5, 0, 10, "Temp  (C):");
+	LCD_Clear(WHITE);
+	//print_line(1, 0, 10, "IO1  (mA):");
+	//print_line(2, 0, 10, "IO2      :");
+	//print_line(3, 0, 10, "IO3   (V):");
+	// print_line(1, 0, 10, "pH       :");
+	// print_line(2, 0, 10, "Temp  (C):");
 
-	int i, j;
-        for (i = 0; i < 97; i++) {
-		LCD_SetWindow(120, 220 + i, 120 + 240, 220 + i);
-		for (j = 0; j < 240; j++)
-                	LCD_WriteData(adi_logo[i * 240 + j]);
-	}
-
-	while(1);
-
+	// int i, j;
+        // for (i = 0; i < 97; i++) {
+	// 	LCD_SetWindow(120, 220 + i, 120 + 240, 220 + i);
+	// 	for (j = 0; j < 240; j++)
+        //         	LCD_WriteData(adi_logo[i * 240 + j]);
+	// }
+	//return iio_app_run(app);
 	return 0;
-	// return iio_app_run(app);
 }
 
