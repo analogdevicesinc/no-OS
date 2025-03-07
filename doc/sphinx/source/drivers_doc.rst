@@ -124,3 +124,10 @@ POTENTIOMETER
    :maxdepth: 1
 
    drivers/ad5293
+
+MAGNETOMETER
+================
+.. toctree::
+   :maxdepth: 1
+
+   drivers/admt4000
