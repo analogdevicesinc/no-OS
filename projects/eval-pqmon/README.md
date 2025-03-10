@@ -36,7 +36,7 @@ The firmware application can communicate with clients via several interfaces. In
 
 * ```INTERFACE=usb``` (Default value)
 * ```INTERFACE=serial``` (Used for 485 communication. Half-duplex communication must be handled by user)
-* ```INTERFACE=ethernet``` (Used for communication over T1L)
+* ```INTERFACE=ethernet_t1l``` (Used for communication over T1L)
 
 NOTE: In case one builds firmware multiple times with different interfaces, make sure to delete the `build` directory before the new  compilation.
 

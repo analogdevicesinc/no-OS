@@ -17,8 +17,8 @@ $(info Using SERIAL as interface for IIO communication)
 CFLAGS += -DPQM_CONN_SERIAL
 endif
 
-ifeq ($(INTERFACE), ethernet)
-$(info Using ETHERNET as interface for IIO communication)
+ifeq ($(INTERFACE), ethernet_t1l)
+$(info Using ETHERNET T1L as interface for IIO communication)
 CFLAGS += -DPQM_CONN_T1L
 CFLAGS += -DNO_OS_LWIP_NETWORKING
 CFLAGS += -DNO_OS_LWIP_INIT_ONETIME=1
