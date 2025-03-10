@@ -66,7 +66,7 @@ endif
 ifeq ($(INTERFACE), serial)
 endif
 
-ifeq ($(INTERFACE), ethernet)
+ifeq ($(INTERFACE), ethernet_t1l)
 	LIBRARIES += lwip
 	INCS += $(NO-OS)/network/tcp_socket.h			\
 		$(NO-OS)/network/noos_mbedtls_config.h		\
