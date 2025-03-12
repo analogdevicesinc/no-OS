@@ -1020,7 +1020,7 @@ struct iio_attribute event_pqm_intrpr_attribute[] = {
 	END_ATTRIBUTES_ARRAY,
 }; // event channel attribute
 
-struct scan_type pqm_scan_type = {.sign = 'd',
+struct scan_type pqm_scan_type = {.sign = 's',
 	.realbits = 16,
 	.storagebits = 16,
 	.shift = 0,
