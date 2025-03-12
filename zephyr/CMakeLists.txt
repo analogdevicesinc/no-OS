@@ -35,8 +35,10 @@ zephyr_library_sources(
     ${NOOS_DIR}/util/no_os_util.c
     ${NOOS_DIR}/drivers/api/no_os_i2c.c
     ${NOOS_DIR}/drivers/api/no_os_spi.c
+    ${NOOS_DIR}/drivers/api/no_os_gpio.c
     ${NOOS_DIR}/drivers/platform/zephyr/zephyr_i2c.c
     ${NOOS_DIR}/drivers/platform/zephyr/zephyr_spi.c
+    ${NOOS_DIR}/drivers/platform/zephyr/zephyr_gpio.c
     ${NOOS_DIR}/drivers/platform/zephyr/zephyr_delay.c
     ${NOOS_DIR}/drivers/temperature/max31875/max31875.c
     ${NOOS_DIR}/drivers/accel/adxl355/adxl355.c
