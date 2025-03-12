@@ -51,7 +51,7 @@
 {										\
     .name = _name, .ch_type = IIO_COUNT, .channel = _idx,                       \
     .scan_index = _scan_idx, .indexed = true,                                   \
-    .scan_type = &pqm_scan_type, .attributes = _attrb_def,                      \
+    .scan_type = 0, .attributes = _attrb_def,                      		\
     .ch_out = true                                                              \
 }
 
