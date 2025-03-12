@@ -568,11 +568,11 @@ int main(void)
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
 	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc_buffers[1], ADC_BUFFER_SAMPLES * rx2_adc_init.num_channels,
+	       (uintptr_t)adc_buffers[1], ADC_BUFFER_SAMPLES * rx2_adc_init.num_channels / 2,
 	       rx2_adc_init.num_channels, 8 * sizeof(adc_buffers[1][0]));
 #endif
 	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
-	       (uintptr_t)adc_buffers[0], ADC_BUFFER_SAMPLES * rx1_adc_init.num_channels,
+	       (uintptr_t)adc_buffers[0], ADC_BUFFER_SAMPLES * rx1_adc_init.num_channels / 2,
 	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
 
