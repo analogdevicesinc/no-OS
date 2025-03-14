@@ -10,6 +10,12 @@ SRCS += $(PROJECT)/src/examples/basic_i3c/basic_example_i3c.c
 INCS += $(PROJECT)/src/examples/basic_i3c/basic_example_i3c.h
 endif
 
+ifeq (y,$(strip $(I3C_DMA_EXAMPLE)))
+CFLAGS += -DI3C_DMA_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/i3c_dma/i3c_dma_example.c
+INCS += $(PROJECT)/src/examples/i3c_dma/i3c_dma_example.h
+endif
+
 ifeq (y,$(strip $(IIO_EXAMPLE)))
 IIOD=y
 CFLAGS += -DIIO_EXAMPLE=1

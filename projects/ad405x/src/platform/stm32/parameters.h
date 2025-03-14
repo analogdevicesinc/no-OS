@@ -48,6 +48,7 @@
 #include "stm32_uart_stdio.h"
 #ifdef AD405X_I3C
 #include "stm32_i3c.h"
+#include "stm32_dma.h"
 #endif
 #ifdef AD405X_SPI
 #include "stm32_spi.h"
@@ -55,7 +56,21 @@
 
 #ifdef AD405X_I3C
 extern I3C_HandleTypeDef hi3c1;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel2;
 #define I3C_INSTANCE	(&hi3c1)
+
+#define I3C_CRDMA_INSTANCE	(&handle_GPDMA1_Channel0)
+#define I3C_RXDMA_INSTANCE	(&handle_GPDMA1_Channel1)
+#define I3C_TXDMA_INSTANCE	(&handle_GPDMA1_Channel2)
+#define I3C_IRQ_ID		I3C1_EV_IRQn
+#define TX_DMA_IRQ_ID	GPDMA1_Channel2_IRQn
+#define RX_DMA_IRQ_ID	GPDMA1_Channel1_IRQn
+#define CR_DMA_IRQ_ID	GPDMA1_Channel0_IRQn
+#define I3C_CRDMA_CHANNEL_NUM	(uint32_t)GPDMA1_Channel0
+#define I3C_RXDMA_CHANNEL_NUM	(uint32_t)GPDMA1_Channel1
+#define I3C_TXDMA_CHANNEL_NUM	(uint32_t)GPDMA1_Channel2
 #endif
 extern UART_HandleTypeDef huart3;
 #define UART_INSTANCE	(&huart3)
@@ -81,6 +96,7 @@ extern UART_HandleTypeDef huart3;
 #define I3C_OPS		&stm32_i3c_ops
 #define SPI_OPS		&stm32_spi_ops
 #define GPIO_OPS	&stm32_gpio_ops
+#define DMA_OPS	    &stm32_gpdma_ops
 #define SPI_DEVICE_ID 	1U
 
 #ifdef NUCLEO_H563ZI

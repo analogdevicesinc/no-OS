@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for STM32 platform of ad405x project.
- *   @author Jorge Marques (jorge.marques@analog.com)
+ *   @file   i3c_dma_example.h
+ *   @brief  Basic example header for ad405x project
+ *   @author Swaroop P Kukkillaya (swaroop.kukkillaya@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
  *
@@ -36,81 +36,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __I3C_DMA_EXAMPLE_H__
+#define __I3C_DMA_EXAMPLE_H__
 
-#include "platform_includes.h"
-#include "common_data.h"
-#include "no_os_error.h"
+int i3c_dma_example_main();
 
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef BASIC_EXAMPLE_I3C
-#include "basic_example_i3c.h"
-#endif
-
-#ifdef I3C_DMA_EXAMPLE
-#include "i3c_dma_example.h"
-#endif
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-/***************************************************************************//**
- * @brief Main function execution for STM32 platform.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-	int ret = -EINVAL;
-
-	stm32_init();
-
-#ifdef BASIC_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &ad405x_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	ret = basic_example_main();
-#endif
-
-#ifdef BASIC_EXAMPLE_I3C
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &ad405x_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	ret = basic_example_i3c_main();
-#endif
-
-#ifdef I3C_DMA_EXAMPLE
-	struct no_os_uart_desc *uart_desc;
-
-	ret = no_os_uart_init(&uart_desc, &ad405x_uart_ip);
-	if (ret)
-		return ret;
-
-	no_os_uart_stdio(uart_desc);
-	ret = i3c_dma_example_main();
-#endif
-
-#ifdef IIO_EXAMPLE
-	ret = iio_example_main();
-#endif
-
-#if (BASIC_EXAMPLE + BASIC_EXAMPLE_I3C + I3C_DMA_EXAMPLE + IIO_EXAMPLE == 0)
-#error At least one example has to be selected using y value in Makefile.
-#elif (BASIC_EXAMPLE + BASIC_EXAMPLE_I3C + I3C_DMA_EXAMPLE + IIO_EXAMPLE > 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and build the project.
-#endif
-
-	return ret;
-}
+#endif /* __I3C_DMA_EXAMPLE_H__ */

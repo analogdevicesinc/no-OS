@@ -1,6 +1,7 @@
 # Select the example you want to enable by choosing y for enabling and n for disabling
 BASIC_EXAMPLE = y
 BASIC_EXAMPLE_I3C = n
+I3C_DMA_EXAMPLE = n
 IIO_EXAMPLE = n
 
 # Select the device you want to enable, the following are supported:
