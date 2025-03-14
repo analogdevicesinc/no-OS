@@ -10,7 +10,7 @@
 ################################################################################
 
 SRC_DIRS += $(PROJECT)/src
-SRC_DIRS += $(DRIVERS)/adc/ad713x
+SRC_DIRS += $(DRIVERS)/adc/ad4134
 
 SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_pwm.c \

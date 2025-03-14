@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_ad713x.c
- *   @brief  Implementation of iio_ad713x.c.
+ *   @file   iio_ad4134.c
+ *   @brief  Implementation of iio_ad4134.c.
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -33,12 +33,16 @@
 
 #ifdef IIO_SUPPORT
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <errno.h>
 #include <string.h>
 
-#include "ad713x.h"
+#include "ad4134.h"
 #include "iio.h"
-#include "iio_ad713x.h"
+#include "iio_ad4134.h"
 #include "iio_types.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
@@ -46,13 +50,17 @@
 
 #define MEGA 1000000UL
 
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
 /**
- * @struct ad713x_iio
- * @brief AD713x IIO private handler
+ * @struct ad4134_iio
+ * @brief AD4134 IIO private handler
  */
-struct ad713x_iio {
-	/** AD713x driver handler */
-	struct ad713x_dev *drv_dev;
+struct ad4134_iio {
+	/** AD4134 driver handler */
+	struct ad4134_dev *drv_dev;
 	/** Generic IIO device handler */
 	struct iio_device *iio_dev;
 	/** Integer part of the ODR */
@@ -71,57 +79,65 @@ struct ad713x_iio {
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
-#define AD713x_IIO_FUNC(_name)	static int _name(void *device, char *buf, \
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+#define AD4134_IIO_FUNC(_name)	static int _name(void *device, char *buf, \
 		uint32_t len, const struct iio_ch_info *channel, intptr_t priv)
 
-AD713x_IIO_FUNC(ad713x_iio_show_filter_3db);
-AD713x_IIO_FUNC(ad713x_iio_show_offset);
-AD713x_IIO_FUNC(ad713x_iio_store_offset);
-AD713x_IIO_FUNC(ad713x_iio_show_raw);
-AD713x_IIO_FUNC(ad713x_iio_show_odr);
-AD713x_IIO_FUNC(ad713x_iio_store_odr);
-AD713x_IIO_FUNC(ad713x_iio_show_scale);
+AD4134_IIO_FUNC(ad4134_iio_show_filter_3db);
+AD4134_IIO_FUNC(ad4134_iio_show_offset);
+AD4134_IIO_FUNC(ad4134_iio_store_offset);
+AD4134_IIO_FUNC(ad4134_iio_show_raw);
+AD4134_IIO_FUNC(ad4134_iio_show_odr);
+AD4134_IIO_FUNC(ad4134_iio_store_odr);
+AD4134_IIO_FUNC(ad4134_iio_show_scale);
+
+/******************************************************************************/
+/********************* Static Variables Definitions ***************************/
+/******************************************************************************/
 
 static struct iio_attribute channel_attributes[] = {
 	{
 		.name = "filter_low_pass_3db_frequency",
 		.priv = 0,
 		.shared = IIO_SEPARATE,
-		.show = ad713x_iio_show_filter_3db,
+		.show = ad4134_iio_show_filter_3db,
 		.store = NULL
 	},
 	{
 		.name = "offset",
 		.priv = 0,
 		.shared = IIO_SEPARATE,
-		.show = ad713x_iio_show_offset,
-		.store = ad713x_iio_store_offset
+		.show = ad4134_iio_show_offset,
+		.store = ad4134_iio_store_offset
 	},
 	{
 		.name = "raw",
 		.priv = 0,
 		.shared = IIO_SEPARATE,
-		.show = ad713x_iio_show_raw,
+		.show = ad4134_iio_show_raw,
 		.store = NULL
 	},
 	{
 		.name = "sampling_frequency",
 		.priv = 0,
 		.shared = IIO_SHARED_BY_ALL,
-		.show = ad713x_iio_show_odr,
-		.store = ad713x_iio_store_odr
+		.show = ad4134_iio_show_odr,
+		.store = ad4134_iio_store_odr
 	},
 	{
 		.name = "scale",
 		.priv = 0,
 		.shared = IIO_SHARED_BY_ALL,
-		.show = ad713x_iio_show_scale,
+		.show = ad4134_iio_show_scale,
 		.store = NULL
 	},
 	END_ATTRIBUTES_ARRAY
 };
 
-struct scan_type ad713x_iio_scan_type = {
+struct scan_type ad4134_iio_scan_type = {
 	.sign = 's',
 	.realbits = 24,
 	.storagebits = 32,
@@ -129,7 +145,7 @@ struct scan_type ad713x_iio_scan_type = {
 	.is_big_endian = true
 };
 
-#define AD713X_IIO_CHANN_DEF(nm, ch1) \
+#define AD4134_IIO_CHANN_DEF(nm, ch1) \
 	{ \
 		.name = nm, \
 		.ch_type = IIO_VOLTAGE, \
@@ -137,19 +153,23 @@ struct scan_type ad713x_iio_scan_type = {
 		.channel2 = 0, \
 		.address = ch1, \
 		.scan_index = ch1, \
-		.scan_type = &ad713x_iio_scan_type, \
+		.scan_type = &ad4134_iio_scan_type, \
 		.attributes = channel_attributes, \
 		.ch_out = IIO_DIRECTION_INPUT, \
 		.indexed = true, \
 		.diferential = false, \
 	}
 
-static struct iio_channel ad713x_channels[] = {
-	AD713X_IIO_CHANN_DEF("ch0", 0),
-	AD713X_IIO_CHANN_DEF("ch1", 1),
-	AD713X_IIO_CHANN_DEF("ch2", 2),
-	AD713X_IIO_CHANN_DEF("ch3", 3)
+static struct iio_channel ad4134_channels[] = {
+	AD4134_IIO_CHANN_DEF("ch0", 0),
+	AD4134_IIO_CHANN_DEF("ch1", 1),
+	AD4134_IIO_CHANN_DEF("ch2", 2),
+	AD4134_IIO_CHANN_DEF("ch3", 3)
 };
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 /**
  * @brief Transform decimal floating point into hexadecimal floating point for
@@ -157,7 +177,7 @@ static struct iio_channel ad713x_channels[] = {
  * @param [in] odr_flt - Decimal ODR in microhertz (no integer part)
  * @return hexadecimal floating point
  */
-static uint32_t _ad713x_odr_itoh_float_conversion(uint32_t odr_flt)
+static uint32_t _ad4134_odr_itoh_float_conversion(uint32_t odr_flt)
 {
 	int i;
 	uint32_t result = 0;
@@ -179,17 +199,17 @@ static uint32_t _ad713x_odr_itoh_float_conversion(uint32_t odr_flt)
  * @param [in] odr_flt - Decimal ODR in microhertz (no integer part)
  * @return decimal floating point
  */
-static uint32_t _ad713x_odr_htoi_float_conversion(uint32_t odr_flt)
+static uint32_t _ad4134_odr_htoi_float_conversion(uint32_t odr_flt)
 {
 	return (uint32_t)(no_os_mul_u32_u32(odr_flt, 1000000) / 0x100000000ULL);
 }
 
-static int ad713x_iio_show_filter_3db(void *device, char *buf, uint32_t len,
+static int ad4134_iio_show_filter_3db(void *device, char *buf, uint32_t len,
 				      const struct iio_ch_info *channel,
 				      intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
-	struct ad713x_dev	*desc = iio_desc->drv_dev;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
+	struct ad4134_dev	*desc = iio_desc->drv_dev;
 	uint8_t				value;
 	int32_t				ret;
 	uint32_t			val[2];
@@ -201,11 +221,11 @@ static int ad713x_iio_show_filter_3db(void *device, char *buf, uint32_t len,
 	if (!desc->mode_master_nslave)
 		return -1;
 
-	ret = ad713x_spi_reg_read(desc, AD713X_REG_CHAN_DIG_FILTER_SEL, &value);
+	ret = ad4134_spi_reg_read(desc, AD4134_REG_CHAN_DIG_FILTER_SEL, &value);
 	if (ret < 0)
 		return ret;
 
-	value = (value & AD713X_DIGFILTER_SEL_CH_MSK(channel->ch_num)) >>
+	value = (value & AD4134_DIGFILTER_SEL_CH_MSK(channel->ch_num)) >>
 		(channel->ch_num * 2);
 	switch (value) {
 	case SINC6:
@@ -221,10 +241,10 @@ static int ad713x_iio_show_filter_3db(void *device, char *buf, uint32_t len,
 		return iio_format_value(buf, len, IIO_VAL_INT_PLUS_MICRO, 2,
 					(int32_t *)val);
 	case FIR:
-		ret = ad713x_spi_reg_read(desc, AD713X_REG_FIR_BW_SEL, &value);
+		ret = ad4134_spi_reg_read(desc, AD4134_REG_FIR_BW_SEL, &value);
 		if (ret < 0)
 			return ret;
-		value = !!(value & AD713X_FIR_BW_SEL_CH_MSK(channel->ch_num));
+		value = !!(value & AD4134_FIR_BW_SEL_CH_MSK(channel->ch_num));
 		val[0] =  no_os_mul_u32_u32(iio_desc->odr_int, fir_mult_micro[value]) /
 			  MEGA;
 		temp = no_os_mul_u32_u32(iio_desc->odr_int, fir_mult_micro[value]) %
@@ -239,24 +259,24 @@ static int ad713x_iio_show_filter_3db(void *device, char *buf, uint32_t len,
 	}
 }
 
-static int ad713x_iio_show_offset(void *device, char *buf, uint32_t len,
+static int ad4134_iio_show_offset(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
-	struct ad713x_dev	*desc = iio_desc->drv_dev;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
+	struct ad4134_dev	*desc = iio_desc->drv_dev;
 	uint8_t				reg_value;
 	const uint8_t		reg_addr[] = {
-		AD713X_REG_CH0_OFFSET_LSB,
-		AD713X_REG_CH1_OFFSET_LSB,
-		AD713X_REG_CH2_OFFSET_LSB,
-		AD713X_REG_CH3_OFFSET_LSB
+		AD4134_REG_CH0_OFFSET_LSB,
+		AD4134_REG_CH1_OFFSET_LSB,
+		AD4134_REG_CH2_OFFSET_LSB,
+		AD4134_REG_CH3_OFFSET_LSB
 	};
 	uint32_t val = 0;
 	int i, ret;
 
 	for (i = 0; i < 3; i++) {
-		ret = ad713x_spi_reg_read(desc, reg_addr[channel->ch_num] + i,
+		ret = ad4134_spi_reg_read(desc, reg_addr[channel->ch_num] + i,
 					  &reg_value);
 		if (ret < 0)
 			return ret;
@@ -268,18 +288,18 @@ static int ad713x_iio_show_offset(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, (int32_t *)&val);
 }
 
-static int ad713x_iio_store_offset(void *device, char *buf, uint32_t len,
+static int ad4134_iio_store_offset(void *device, char *buf, uint32_t len,
 				   const struct iio_ch_info *channel,
 				   intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
-	struct ad713x_dev	*desc = iio_desc->drv_dev;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
+	struct ad4134_dev	*desc = iio_desc->drv_dev;
 	uint32_t			val;
 	const uint8_t		reg_addr[] = {
-		AD713X_REG_CH0_OFFSET_LSB,
-		AD713X_REG_CH1_OFFSET_LSB,
-		AD713X_REG_CH2_OFFSET_LSB,
-		AD713X_REG_CH3_OFFSET_LSB
+		AD4134_REG_CH0_OFFSET_LSB,
+		AD4134_REG_CH1_OFFSET_LSB,
+		AD4134_REG_CH2_OFFSET_LSB,
+		AD4134_REG_CH3_OFFSET_LSB
 	};
 	uint8_t reg_value;
 	int i, ret;
@@ -289,8 +309,8 @@ static int ad713x_iio_store_offset(void *device, char *buf, uint32_t len,
 	for (i = 0; i < 3; i++) {
 		reg_value = (val >> (8 * i)) & 0xFF;
 		if (i == 2)
-			reg_value |= AD713X_CH_OFFSET_CAL_EN_MSK;
-		ret = ad713x_spi_reg_write(desc, reg_addr[channel->ch_num] + i,
+			reg_value |= AD4134_CH_OFFSET_CAL_EN_MSK;
+		ret = ad4134_spi_reg_write(desc, reg_addr[channel->ch_num] + i,
 					   reg_value);
 		if (ret < 0)
 			return ret;
@@ -299,14 +319,14 @@ static int ad713x_iio_store_offset(void *device, char *buf, uint32_t len,
 	return ret;
 }
 
-static int ad713x_iio_show_raw(void *device, char *buf, uint32_t len,
+static int ad4134_iio_show_raw(void *device, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
 	struct spi_engine_offload_message spi_engine_offload_message;
 	uint32_t spi_eng_msg_cmds[1];
-	uint32_t adc_buffer[3 * AD713X_CH_MAX] __attribute__((aligned));
+	uint32_t adc_buffer[3 * AD4134_CH_MAX] __attribute__((aligned));
 	int ret;
 	int32_t data;
 
@@ -338,12 +358,12 @@ static int ad713x_iio_show_raw(void *device, char *buf, uint32_t len,
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &data);
 }
 
-static int ad713x_iio_show_odr(void *device, char *buf, uint32_t len,
+static int ad4134_iio_show_odr(void *device, char *buf, uint32_t len,
 			       const struct iio_ch_info *channel,
 			       intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
-	struct ad713x_dev	*desc = iio_desc->drv_dev;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
+	struct ad4134_dev	*desc = iio_desc->drv_dev;
 	uint32_t odr_tab[2];
 
 	/** Slave ODR is controlled by external signal */
@@ -357,12 +377,12 @@ static int ad713x_iio_show_odr(void *device, char *buf, uint32_t len,
 				(int32_t *)odr_tab);
 }
 
-static int ad713x_iio_store_odr(void *device, char *buf, uint32_t len,
+static int ad4134_iio_store_odr(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
-	struct ad713x_dev	*desc = iio_desc->drv_dev;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
+	struct ad4134_dev	*desc = iio_desc->drv_dev;
 	uint8_t reg_data;
 	uint32_t reg_int, reg_flt;
 	uint64_t odr_uhz, odr_ref = 24000000000000ULL, rest;
@@ -380,14 +400,14 @@ static int ad713x_iio_store_odr(void *device, char *buf, uint32_t len,
 	reg_int = odr_ref;
 	rest *= MEGA;
 	no_os_do_div(&rest, odr_uhz);
-	reg_flt = _ad713x_odr_itoh_float_conversion(rest);
+	reg_flt = _ad4134_odr_itoh_float_conversion(rest);
 
 	for (i = 0; i < 7; i++) {
 		if (i < 3)
 			reg_data = (reg_int >> (8 * i)) & 0xFF;
 		else
 			reg_data = (reg_flt >> (8 * (i - 3))) & 0xFF;
-		ret = ad713x_spi_reg_write(desc, AD713X_REG_ODR_VAL_INT_LSB + i,
+		ret = ad4134_spi_reg_write(desc, AD4134_REG_ODR_VAL_INT_LSB + i,
 					   reg_data);
 		if (ret < 0)
 			return ret;
@@ -396,11 +416,11 @@ static int ad713x_iio_store_odr(void *device, char *buf, uint32_t len,
 	return ret;
 }
 
-static int ad713x_iio_show_scale(void *device, char *buf, uint32_t len,
+static int ad4134_iio_show_scale(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel,
 				 intptr_t priv)
 {
-	struct ad713x_iio	*iio_desc = (struct ad713x_iio *)device;
+	struct ad4134_iio	*iio_desc = (struct ad4134_iio *)device;
 	uint32_t vref[2];
 	uint64_t reference_nv;
 
@@ -420,7 +440,7 @@ static int ad713x_iio_show_scale(void *device, char *buf, uint32_t len,
 				(int32_t *)vref);
 }
 
-static int32_t ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
+static int32_t ad4134_iio_prepare_transfer(struct ad4134_iio *desc,
 		uint32_t mask)
 {
 	if (!desc)
@@ -431,7 +451,7 @@ static int32_t ad713x_iio_prepare_transfer(struct ad713x_iio *desc,
 	return 0;
 }
 
-static int32_t ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
+static int32_t ad4134_iio_read_dev(struct ad4134_iio *desc, uint32_t *buff,
 				   uint32_t nb_samples)
 {
 	struct spi_engine_offload_message msg;
@@ -466,15 +486,15 @@ static int32_t ad713x_iio_read_dev(struct ad713x_iio *desc, uint32_t *buff,
 }
 
 /**
- * @brief Allocate memory for AD713x IIO handler.
+ * @brief Allocate memory for AD4134 IIO handler.
  * @param desc - Pointer to the IIO device structure.
  * @param param - Pointer to the initialization structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int iio_ad713x_init(struct ad713x_iio **desc,
-		    struct ad713x_iio_init_param *param)
+int iio_ad4134_init(struct ad4134_iio **desc,
+		    struct ad4134_iio_init_param *param)
 {
-	struct ad713x_iio *device;
+	struct ad4134_iio *device;
 	int32_t ret;
 	uint8_t reg_data;
 	uint64_t odr_mult, odr_ref = 24000000000000ULL, rest;
@@ -483,7 +503,7 @@ int iio_ad713x_init(struct ad713x_iio **desc,
 	if (!param)
 		return -EINVAL;
 
-	device = (struct ad713x_iio *)no_os_calloc(1, sizeof(*device));
+	device = (struct ad4134_iio *)no_os_calloc(1, sizeof(*device));
 	if (!device)
 		return -1;
 
@@ -495,8 +515,8 @@ int iio_ad713x_init(struct ad713x_iio **desc,
 	device->dcache_invalidate_range = param->dcache_invalidate_range;
 
 	for (i = 0; i < 7; i++) {
-		ret = ad713x_spi_reg_read(device->drv_dev,
-					  AD713X_REG_ODR_VAL_INT_LSB + i, &reg_data);
+		ret = ad4134_spi_reg_read(device->drv_dev,
+					  AD4134_REG_ODR_VAL_INT_LSB + i, &reg_data);
 		if (ret < 0)
 			goto dev_err;
 		if (i < 3)
@@ -504,7 +524,7 @@ int iio_ad713x_init(struct ad713x_iio **desc,
 		else
 			device->odr_flt |= reg_data << (8 * (i - 3));
 	}
-	device->odr_flt = _ad713x_odr_htoi_float_conversion(device->odr_flt);
+	device->odr_flt = _ad4134_odr_htoi_float_conversion(device->odr_flt);
 	odr_mult = no_os_mul_u32_u32(device->odr_int, MEGA) + device->odr_flt;
 	rest = no_os_do_div(&odr_ref, odr_mult);
 	rest *= MEGA;
@@ -522,11 +542,11 @@ dev_err:
 }
 
 /**
- * @brief Free memory allocated by iio_ad713x_init().
+ * @brief Free memory allocated by iio_ad4134_init().
  * @param desc - Pointer to the IIO device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int iio_ad713x_remove(struct ad713x_iio *desc)
+int iio_ad4134_remove(struct ad4134_iio *desc)
 {
 	if (!desc)
 		return -EINVAL;
@@ -536,19 +556,19 @@ int iio_ad713x_remove(struct ad713x_iio *desc)
 	return 0;
 }
 
-struct iio_device ad713x_iio_desc = {
-	.num_ch = NO_OS_ARRAY_SIZE(ad713x_channels),
-	.channels = ad713x_channels,
+struct iio_device ad4134_iio_desc = {
+	.num_ch = NO_OS_ARRAY_SIZE(ad4134_channels),
+	.channels = ad4134_channels,
 	.attributes = channel_attributes,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.read_dev = (int32_t (*)())ad713x_iio_read_dev,
+	.read_dev = (int32_t (*)())ad4134_iio_read_dev,
 	.write_dev = NULL,
-	.pre_enable = (int32_t (*)())ad713x_iio_prepare_transfer,
+	.pre_enable = (int32_t (*)())ad4134_iio_prepare_transfer,
 	.post_disable = NULL,
 	.submit = NULL,
-	.debug_reg_read = (int32_t (*)()) ad713x_spi_reg_read,
-	.debug_reg_write = (int32_t (*)()) ad713x_spi_reg_write
+	.debug_reg_read = (int32_t (*)()) ad4134_spi_reg_read,
+	.debug_reg_write = (int32_t (*)()) ad4134_spi_reg_write
 };
 
 #endif /* IIO_SUPPORT */

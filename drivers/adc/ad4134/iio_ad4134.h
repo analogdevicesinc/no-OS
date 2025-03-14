@@ -1,6 +1,6 @@
 /***************************************************************************//**
-*   @file   iio_ad713x.h
-*   @brief  Header file of iio_dual_ad713x
+*   @file   iio_ad4134.h
+*   @brief  Header file of iio_axi_adc
 *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
 * Copyright 2019(c) Analog Devices, Inc.
@@ -30,55 +30,52 @@
 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef IIO_DUAL_AD713X
-#define IIO_DUAL_AD713X
+#ifndef IIO_AD4134
+#define IIO_AD4134
 
 #ifdef IIO_SUPPORT
 
-#include <stdio.h>
-#include "ad713x.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include "iio_types.h"
 #include "no_os_spi.h"
 
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+struct ad4134_iio;
+
 /**
- * @struct iio_ad713x_init_par
- * @brief iio_ad713x configuration.
+ * @struct ad4134_iio_init_param
+ * @brief AD4134 IIO initialization structure
  */
-struct iio_ad713x_init_par {
-	/** Number of channels */
-	uint8_t	num_channels;
-	/* Device instance */
-	struct ad713x_dev *dev;
-	/** Spi engine descriptor */
+struct ad4134_iio_init_param {
+	/** AD4134 driver handler */
+	struct ad4134_dev *drv_dev;
+	/** Generic IIO device handler */
+	struct iio_device *iio_dev;
+	/** Integer part of the VREF */
+	uint32_t vref_int;
+	/** Decimal part of the VREF */
+	uint32_t vref_micro;
+	/** SPI Engine driver handler */
 	struct no_os_spi_desc *spi_eng_desc;
-	/** Spi engine message descriptor */
-	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
-struct iio_ad713x {
-	/* Mask of active ch */
-	uint32_t mask;
-	/** iio device descriptor */
-	struct iio_device iio_dev_desc;
-	/** Spi engine descriptor */
-	struct no_os_spi_desc *spi_eng_desc;
-	/** Spi engine message descriptor */
-	struct spi_engine_offload_message *spi_engine_offload_message;
-	/** Invalidate the Data cache for the given address range */
-	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
-};
+extern struct iio_device ad4134_iio_desc;
 
-/* Init function. */
-int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
-			     struct iio_ad713x_init_par *param);
-/* Get desciptor. */
-void iio_dual_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
-					struct iio_device **dev_descriptor);
-/* Free the resources allocated by iio_ad713x_init(). */
-int32_t iio_dual_ad713x_remove(struct iio_ad713x *desc);
+/** Allocate memory for AD4134 IIO handler. */
+int iio_ad4134_init(struct ad4134_iio **desc,
+		    struct ad4134_iio_init_param *param);
+
+/** Free memory allocated by iio_ad4134_init(). */
+int iio_ad4134_remove(struct ad4134_iio *desc);
 
 #endif /* IIO_SUPPORT */
 
-#endif /* IIO_AD713X */
+#endif /* IIO_AD4134 */
