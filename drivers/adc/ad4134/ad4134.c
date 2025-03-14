@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   ad713x.c
- *   @brief  Implementation of ad713x Driver.
+ *   @file   ad4134.c
+ *   @brief  Implementation of ad4134 Driver.
  *   @author SPopa (stefan.popa@analog.com)
  *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************
@@ -38,13 +38,21 @@
  *  - AD4134.
  */
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <stdlib.h>
-#include "ad713x.h"
+#include "ad4134.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 
-static const int ad713x_output_data_frame[4][9][2] = {
+/******************************************************************************/
+/***************************** Variable definition ****************************/
+/******************************************************************************/
+
+static const int ad4134_output_data_frame[4][9][2] = {
 	{
 		{ADC_16_BIT_DATA, CRC_6},
 		{ADC_24_BIT_DATA, CRC_6},
@@ -82,6 +90,10 @@ static const int ad713x_output_data_frame[4][9][2] = {
 	},
 };
 
+/******************************************************************************/
+/************************** Functions Implementation **************************/
+/******************************************************************************/
+
 /**
  * @brief Read from device.
  * @param dev - The device structure.
@@ -89,14 +101,14 @@ static const int ad713x_output_data_frame[4][9][2] = {
  * @param reg_data - The register data.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
+int32_t ad4134_spi_reg_read(struct ad4134_dev *dev,
 			    uint8_t reg_addr,
 			    uint8_t *reg_data)
 {
 	int32_t ret;
 	uint8_t buf[2];
 
-	buf[0] = AD713X_REG_READ(reg_addr);
+	buf[0] = AD4134_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
@@ -114,7 +126,7 @@ int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_spi_reg_write(struct ad713x_dev *dev,
+int32_t ad4134_spi_reg_write(struct ad4134_dev *dev,
 			     uint8_t reg_addr,
 			     uint8_t reg_data)
 {
@@ -134,7 +146,7 @@ int32_t ad713x_spi_reg_write(struct ad713x_dev *dev,
  * @param data - The register data.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
+int32_t ad4134_spi_write_mask(struct ad4134_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t mask,
 			      uint8_t data)
@@ -142,13 +154,13 @@ int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 	uint8_t reg_data;
 	int32_t ret;
 
-	ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+	ret = ad4134_spi_reg_read(dev, reg_addr, &reg_data);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 	reg_data &= ~mask;
 	reg_data |= data;
 
-	return ad713x_spi_reg_write(dev, reg_addr, reg_data);
+	return ad4134_spi_reg_write(dev, reg_addr, reg_data);
 }
 
 /**
@@ -159,15 +171,15 @@ int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
  * 					 HIGH_POWER
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
-			      enum ad713x_power_mode mode)
+int32_t ad4134_set_power_mode(struct ad4134_dev *dev,
+			      enum ad4134_power_mode mode)
 {
 	if (mode == LOW_POWER)
-		return ad713x_spi_write_mask(dev, AD713X_REG_DEVICE_CONFIG,
-					     AD713X_DEV_CONFIG_PWR_MODE_MSK, 0);
+		return ad4134_spi_write_mask(dev, AD4134_REG_DEVICE_CONFIG,
+					     AD4134_DEV_CONFIG_PWR_MODE_MSK, 0);
 	else if (mode == HIGH_POWER)
-		return ad713x_spi_write_mask(dev, AD713X_REG_DEVICE_CONFIG,
-					     AD713X_DEV_CONFIG_PWR_MODE_MSK,
+		return ad4134_spi_write_mask(dev, AD4134_REG_DEVICE_CONFIG,
+					     AD4134_DEV_CONFIG_PWR_MODE_MSK,
 					     1);
 
 	return -1;
@@ -186,22 +198,22 @@ int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
  * 						 CRC_8
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
-				  enum ad713x_adc_data_len adc_data_len,
-				  enum ad713x_crc_header crc_header)
+int32_t ad4134_set_out_data_frame(struct ad4134_dev *dev,
+				  enum ad4134_adc_data_len adc_data_len,
+				  enum ad4134_crc_header crc_header)
 {
 	uint8_t id;
 	uint8_t i = 0;
 
 	id = dev->dev_id;
 
-	while (ad713x_output_data_frame[id][i][0] != INVALID) {
-		if ((adc_data_len == ad713x_output_data_frame[id][i][0]) &&
-		    (crc_header == ad713x_output_data_frame[id][i][1])) {
-			return ad713x_spi_write_mask(dev,
-						     AD713X_REG_DATA_PACKET_CONFIG,
-						     AD713X_DATA_PACKET_CONFIG_FRAME_MSK,
-						     AD713X_DATA_PACKET_CONFIG_FRAME_MODE(i));
+	while (ad4134_output_data_frame[id][i][0] != INVALID) {
+		if ((adc_data_len == ad4134_output_data_frame[id][i][0]) &&
+		    (crc_header == ad4134_output_data_frame[id][i][1])) {
+			return ad4134_spi_write_mask(dev,
+						     AD4134_REG_DATA_PACKET_CONFIG,
+						     AD4134_DATA_PACKET_CONFIG_FRAME_MSK,
+						     AD4134_DATA_PACKET_CONFIG_FRAME_MODE(i));
 		}
 		i++;
 	}
@@ -220,12 +232,12 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
  * 					 CH_AVG_MODE
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
-				  enum ad713x_doutx_format format)
+int32_t ad4134_dout_format_config(struct ad4134_dev *dev,
+				  enum ad4134_doutx_format format)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_DIGITAL_INTERFACE_CONFIG,
-				     AD713X_DIG_INT_CONFIG_FORMAT_MSK,
-				     AD713X_DIG_INT_CONFIG_FORMAT_MODE(format));
+	return ad4134_spi_write_mask(dev, AD4134_REG_DIGITAL_INTERFACE_CONFIG,
+				     AD4134_DIG_INT_CONFIG_FORMAT_MSK,
+				     AD4134_DIG_INT_CONFIG_FORMAT_MODE(format));
 }
 
 /**
@@ -233,14 +245,14 @@ int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
  *        channels at 2 clock delay.
  *        This function is kept for backwards compatibility with the current
  *        application source, but it is deprecated. Use
- *        ad713x_mag_phase_clk_delay_chan().
+ *        ad4134_mag_phase_clk_delay_chan().
  * @param dev - The device structure.
  * @param clk_delay_en - Enable or disable Mag/Phase clock delay.
  * 				Accepted values: true
  * 						         false
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
+int32_t ad4134_mag_phase_clk_delay(struct ad4134_dev *dev,
 				   bool clk_delay_en)
 {
 	int32_t ret;
@@ -253,9 +265,9 @@ int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
 		temp_clk_delay = DELAY_NONE;
 
 	for (i = CH3; i >= 0; i--) {
-		ret = ad713x_spi_write_mask(dev, AD713X_REG_MPC_CONFIG,
-					    AD713X_MPC_CLKDEL_EN_CH_MSK(i),
-					    AD713X_MPC_CLKDEL_EN_CH_MODE(temp_clk_delay, i));
+		ret = ad4134_spi_write_mask(dev, AD4134_REG_MPC_CONFIG,
+					    AD4134_MPC_CLKDEL_EN_CH_MSK(i),
+					    AD4134_MPC_CLKDEL_EN_CH_MODE(temp_clk_delay, i));
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
@@ -275,13 +287,13 @@ int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
  *						 DELAY_2_CLOCKS
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
-					enum ad713x_channels chan,
+int32_t ad4134_mag_phase_clk_delay_chan(struct ad4134_dev *dev,
+					enum ad4134_channels chan,
 					enum ad717x_mpc_clkdel mode)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_MPC_CONFIG,
-				     AD713X_MPC_CLKDEL_EN_CH_MSK(chan),
-				     AD713X_MPC_CLKDEL_EN_CH_MODE(mode, chan));
+	return ad4134_spi_write_mask(dev, AD4134_REG_MPC_CONFIG,
+				     AD4134_MPC_CLKDEL_EN_CH_MSK(chan),
+				     AD4134_MPC_CLKDEL_EN_CH_MODE(mode, chan));
 }
 
 /**
@@ -290,16 +302,16 @@ int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
  * @return 0 in case of success, -1 otherwise.
  */
 
-int32_t ad713x_channel_sync(struct ad713x_dev *dev)
+int32_t ad4134_channel_sync(struct ad4134_dev *dev)
 {
 	int ret = 0;
 	ret = no_os_gpio_set_value(dev->gpio_cs_sync, true);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
-	ret = ad713x_spi_write_mask(dev, AD713X_REG_INTERFACE_CONFIG_B,
-				    AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK,
-				    AD713X_INT_CONFIG_B_DIG_IF_RST_MSK | AD713X_INT_CONFIG_B_SINGLE_INSTR_MSK);
+	ret = ad4134_spi_write_mask(dev, AD4134_REG_INTERFACE_CONFIG_B,
+				    AD4134_INT_CONFIG_B_DIG_IF_RST_MSK | AD4134_INT_CONFIG_B_SINGLE_INSTR_MSK,
+				    AD4134_INT_CONFIG_B_DIG_IF_RST_MSK | AD4134_INT_CONFIG_B_SINGLE_INSTR_MSK);
 
 	ret = no_os_gpio_set_value(dev->gpio_cs_sync, false);
 	if (NO_OS_IS_ERR_VALUE(ret))
@@ -323,13 +335,13 @@ int32_t ad713x_channel_sync(struct ad713x_dev *dev)
  * 							 CH3
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
-				 enum ad713x_dig_filter_sel filter,
-				 enum ad713x_channels ch)
+int32_t ad4134_dig_filter_sel_ch(struct ad4134_dev *dev,
+				 enum ad4134_dig_filter_sel filter,
+				 enum ad4134_channels ch)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_CHAN_DIG_FILTER_SEL,
-				     AD713X_DIGFILTER_SEL_CH_MSK(ch),
-				     AD713X_DIGFILTER_SEL_CH_MODE(filter, ch));
+	return ad4134_spi_write_mask(dev, AD4134_REG_CHAN_DIG_FILTER_SEL,
+				     AD4134_DIGFILTER_SEL_CH_MSK(ch),
+				     AD4134_DIGFILTER_SEL_CH_MODE(filter, ch));
 }
 
 /**
@@ -339,11 +351,11 @@ int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
  *                      false to disable the clkout output.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_clkout_output_en(struct ad713x_dev *dev, bool enable)
+int32_t ad4134_clkout_output_en(struct ad4134_dev *dev, bool enable)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_DEVICE_CONFIG1,
-				     AD713X_DEV_CONFIG1_CLKOUT_EN_MSK,
-				     enable ? AD713X_DEV_CONFIG1_CLKOUT_EN_MSK : 0);
+	return ad4134_spi_write_mask(dev, AD4134_REG_DEVICE_CONFIG1,
+				     AD4134_DEV_CONFIG1_CLKOUT_EN_MSK,
+				     enable ? AD4134_DEV_CONFIG1_CLKOUT_EN_MSK : 0);
 }
 
 /**
@@ -353,11 +365,11 @@ int32_t ad713x_clkout_output_en(struct ad713x_dev *dev, bool enable)
  *                      false to disable the reference gain correction.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_ref_gain_correction_en(struct ad713x_dev *dev, bool enable)
+int32_t ad4134_ref_gain_correction_en(struct ad4134_dev *dev, bool enable)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_DEVICE_CONFIG1,
-				     AD713X_DEV_CONFIG1_REF_GAIN_CORR_EN_MSK,
-				     enable ? AD713X_DEV_CONFIG1_REF_GAIN_CORR_EN_MSK : 0);
+	return ad4134_spi_write_mask(dev, AD4134_REG_DEVICE_CONFIG1,
+				     AD4134_DEV_CONFIG1_REF_GAIN_CORR_EN_MSK,
+				     enable ? AD4134_DEV_CONFIG1_REF_GAIN_CORR_EN_MSK : 0);
 }
 
 /**
@@ -372,23 +384,23 @@ int32_t ad713x_ref_gain_correction_en(struct ad713x_dev *dev, bool enable)
  *                          1 - bandwidth of 0.10825 * ODR.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_wideband_bw_sel(struct ad713x_dev *dev,
-			       enum ad713x_channels ch, uint8_t wb_opt)
+int32_t ad4134_wideband_bw_sel(struct ad4134_dev *dev,
+			       enum ad4134_channels ch, uint8_t wb_opt)
 {
-	return ad713x_spi_write_mask(dev, AD713X_REG_FIR_BW_SEL,
-				     AD713X_FIR_BW_SEL_CH_MSK(ch),
-				     wb_opt ? AD713X_FIR_BW_SEL_CH_MSK(ch) : 0);
+	return ad4134_spi_write_mask(dev, AD4134_REG_FIR_BW_SEL,
+				     AD4134_FIR_BW_SEL_CH_MSK(ch),
+				     wb_opt ? AD4134_FIR_BW_SEL_CH_MSK(ch) : 0);
 }
 
 /**
  * @brief Initialize GPIO driver handlers for the GPIOs in the system.
- *        ad713x_init() helper function.
- * @param [out] dev - AD713X device handler.
+ *        ad4134_init() helper function.
+ * @param [out] dev - AD4134 device handler.
  * @param [in] init_param - Pointer to the initialization structure.
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
-				struct ad713x_init_param *init_param)
+static int32_t ad4134_init_gpio(struct ad4134_dev *dev,
+				struct ad4134_init_param *init_param)
 {
 
 	int32_t ret;
@@ -472,11 +484,11 @@ static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
 }
 
 /**
- * @brief Free the resources allocated by ad713x_init_gpio().
+ * @brief Free the resources allocated by ad4134_init_gpio().
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad713x_remove_gpio(struct ad713x_dev *dev)
+static int32_t ad4134_remove_gpio(struct ad4134_dev *dev)
 {
 	int32_t ret;
 
@@ -511,17 +523,17 @@ static int32_t ad713x_remove_gpio(struct ad713x_dev *dev)
 
 /**
  * @brief Initialize the wideband filter bandwidth for every channel.
- *        ad713x_init() helper function.
- * @param [in] dev - AD713X device handler.
+ *        ad4134_init() helper function.
+ * @param [in] dev - AD4134 device handler.
  * @return 0 in case of success, -1 otherwise.
  */
-static int32_t ad713x_init_chan_bw(struct ad713x_dev *dev)
+static int32_t ad4134_init_chan_bw(struct ad4134_dev *dev)
 {
 	int8_t i;
 	int32_t ret;
 
 	for (i = CH3; i >= 0; i--) {
-		ret = ad713x_wideband_bw_sel(dev, i, 0);
+		ret = ad4134_wideband_bw_sel(dev, i, 0);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return -1;
 	}
@@ -536,14 +548,14 @@ static int32_t ad713x_init_chan_bw(struct ad713x_dev *dev)
  *                     parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_init(struct ad713x_dev **device,
-		    struct ad713x_init_param *init_param)
+int32_t ad4134_init(struct ad4134_dev **device,
+		    struct ad4134_init_param *init_param)
 {
-	struct ad713x_dev *dev;
+	struct ad4134_dev *dev;
 	int32_t ret;
 	uint8_t data;
 
-	dev = (struct ad713x_dev *)no_os_calloc(1, sizeof(*dev));
+	dev = (struct ad4134_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -560,49 +572,49 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		dev->spi_desc->platform_ops = init_param->spi_init_prm.platform_ops;
 	}
 
-	ret = ad713x_init_gpio(dev, init_param);
+	ret = ad4134_init_gpio(dev, init_param);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
 	dev->dev_id = init_param->dev_id;
 	dev->mode_master_nslave = init_param->mode_master_nslave;
 
-	ret = ad713x_spi_reg_read(dev, AD713X_REG_CHIP_TYPE, &data);
+	ret = ad4134_spi_reg_read(dev, AD4134_REG_CHIP_TYPE, &data);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
-	if (AD713X_CHIP_TYPE_BITS_MODE(data) != AD713X_CHIP_TYPE)
+	if (AD4134_CHIP_TYPE_BITS_MODE(data) != AD4134_CHIP_TYPE)
 		goto error_gpio;
 
-	ret = ad713x_spi_reg_read(dev, AD713X_REG_DEVICE_CONFIG, &data);
+	ret = ad4134_spi_reg_read(dev, AD4134_REG_DEVICE_CONFIG, &data);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
-	data |= AD713X_DEV_CONFIG_PWR_MODE_MSK;
-	ret = ad713x_spi_reg_write(dev, AD713X_REG_DEVICE_CONFIG, data);
-	if (NO_OS_IS_ERR_VALUE(ret))
-		goto error_gpio;
-
-	ret = ad713x_clkout_output_en(dev, true);
+	data |= AD4134_DEV_CONFIG_PWR_MODE_MSK;
+	ret = ad4134_spi_reg_write(dev, AD4134_REG_DEVICE_CONFIG, data);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
-	ret = ad713x_ref_gain_correction_en(dev, true);
+	ret = ad4134_clkout_output_en(dev, true);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
-	ret = ad713x_set_out_data_frame(dev, init_param->adc_data_len,
+	ret = ad4134_ref_gain_correction_en(dev, true);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		goto error_gpio;
+
+	ret = ad4134_set_out_data_frame(dev, init_param->adc_data_len,
 					init_param->crc_header);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
-	ret = ad713x_dout_format_config(dev, init_param->format);
+	ret = ad4134_dout_format_config(dev, init_param->format);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
-	ret = ad713x_mag_phase_clk_delay(dev, init_param->clk_delay_en);
+	ret = ad4134_mag_phase_clk_delay(dev, init_param->clk_delay_en);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
-	ret = ad713x_init_chan_bw(dev);
+	ret = ad4134_init_chan_bw(dev);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto error_gpio;
 
@@ -611,19 +623,19 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	return 0;
 
 error_gpio:
-	ad713x_remove_gpio(dev);
+	ad4134_remove_gpio(dev);
 error_dev:
-	ad713x_remove(dev);
+	ad4134_remove(dev);
 
 	return -1;
 }
 
 /**
- * @brief Free the resources allocated by ad713x_init().
+ * @brief Free the resources allocated by ad4134_init().
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_remove(struct ad713x_dev *dev)
+int32_t ad4134_remove(struct ad4134_dev *dev)
 {
 	int32_t ret;
 
@@ -634,7 +646,7 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
-	ret = ad713x_remove_gpio(dev);
+	ret = ad4134_remove_gpio(dev);
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return -1;
 
@@ -646,17 +658,17 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 /**
  * @brief Print all registers values for the AD4134 device.
  *    	  Register map has gaps, reg dump function specific for AD4134 dev.
- * @param [in] dev - AD713X device handler.
+ * @param [in] dev - AD4134 device handler.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev)
+int32_t ad4134_spi_reg_dump(struct ad4134_dev *dev)
 {
 	int32_t ret;
 	uint8_t reg_data;
 	uint8_t reg_addr;
 
 	for (reg_addr = 0x0; reg_addr <= 0x7; reg_addr++) {
-		ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+		ret = ad4134_spi_reg_read(dev, reg_addr, &reg_data);
 		if (NO_OS_IS_ERR_VALUE(ret)) {
 			printf("REG%x: error read\n", reg_addr);
 			return -1;
@@ -664,7 +676,7 @@ int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev)
 			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
 	}
 	for (reg_addr = 0xA; reg_addr <= 0x42; reg_addr++) {
-		ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+		ret = ad4134_spi_reg_read(dev, reg_addr, &reg_data);
 		if (NO_OS_IS_ERR_VALUE(ret)) {
 			printf("REG%x: error read\n", reg_addr);
 			return -1;
@@ -672,7 +684,7 @@ int32_t ad713x_spi_reg_dump(struct ad713x_dev *dev)
 			printf("REG%x: 0x%08x\n", reg_addr, reg_data);
 	}
 	for (reg_addr = 0x47; reg_addr <= 0x48; reg_addr++) {
-		ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+		ret = ad4134_spi_reg_read(dev, reg_addr, &reg_data);
 		if (NO_OS_IS_ERR_VALUE(ret)) {
 			printf("REG%x: error read\n", reg_addr);
 			return -1;
