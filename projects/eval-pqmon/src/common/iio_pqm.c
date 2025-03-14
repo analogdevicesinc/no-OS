@@ -51,7 +51,7 @@
 {										\
     .name = _name, .ch_type = IIO_COUNT, .channel = _idx,                       \
     .scan_index = _scan_idx, .indexed = true,                                   \
-    .scan_type = &pqm_scan_type, .attributes = _attrb_def,                      \
+    .scan_type = 0, .attributes = _attrb_def,                      		\
     .ch_out = true                                                              \
 }
 
@@ -1020,7 +1020,7 @@ struct iio_attribute event_pqm_intrpr_attribute[] = {
 	END_ATTRIBUTES_ARRAY,
 }; // event channel attribute
 
-struct scan_type pqm_scan_type = {.sign = 'd',
+struct scan_type pqm_scan_type = {.sign = 's',
 	.realbits = 16,
 	.storagebits = 16,
 	.shift = 0,
