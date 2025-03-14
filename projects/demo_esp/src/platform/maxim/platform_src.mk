@@ -1,5 +1,4 @@
-INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.h     \
-        $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h      \
+INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h      \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h       \
         $(PLATFORM_DRIVERS)/../common/$(PLATFORM)_dma.h       \
         $(PLATFORM_DRIVERS)/$(PLATFORM)_gpio_irq.h  \

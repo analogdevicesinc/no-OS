@@ -1,7 +1,6 @@
 HARDWARE = sdp-ck1z.ioc
 
-INCS += $(PLATFORM_DRIVERS)/stm32_delay.h     \
-	$(PLATFORM_DRIVERS)/stm32_gpio.h      \
+INCS += $(PLATFORM_DRIVERS)/stm32_gpio.h      \
 	$(PLATFORM_DRIVERS)/stm32_hal.h       \
 	$(PLATFORM_DRIVERS)/stm32_spi.h       \
 	$(PLATFORM_DRIVERS)/stm32_dma.h       \

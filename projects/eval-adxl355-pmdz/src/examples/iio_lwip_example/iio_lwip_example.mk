@@ -13,4 +13,3 @@ SRCS += $(DRIVERS)/net/adin1110/adin1110.c
 SRCS += $(DRIVERS)/net/oa_tc6/oa_tc6.c
 SRCS += $(NO-OS)/util/no_os_crc8.c
 SRCS += $(PROJECT)/src/examples/iio_lwip_example/iio_lwip_example.c
-INCS += $(PROJECT)/src/examples/iio_lwip_example/iio_lwip_example.h

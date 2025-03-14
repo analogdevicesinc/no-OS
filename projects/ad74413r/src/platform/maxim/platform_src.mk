@@ -1,5 +1,4 @@
 INCS += $(PLATFORM_DRIVERS)/maxim_gpio.h      \
-        $(PLATFORM_DRIVERS)/maxim_hal.h       \
         $(PLATFORM_DRIVERS)/maxim_spi.h       \
         $(PLATFORM_DRIVERS)/../common/maxim_dma.h       \
         $(PLATFORM_DRIVERS)/maxim_gpio_irq.h  \

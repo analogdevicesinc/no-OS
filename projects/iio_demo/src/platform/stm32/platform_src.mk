@@ -1,5 +1,4 @@
-INCS += $(PLATFORM_DRIVERS)/stm32_delay.h     \
-        $(PLATFORM_DRIVERS)/stm32_hal.h       \
+INCS += $(PLATFORM_DRIVERS)/stm32_hal.h       \
         $(PLATFORM_DRIVERS)/stm32_irq.h       \
         $(PLATFORM_DRIVERS)/stm32_uart.h      \
         $(PLATFORM_DRIVERS)/stm32_timer.h     \
