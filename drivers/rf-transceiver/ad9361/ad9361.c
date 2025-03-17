@@ -5671,7 +5671,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal,
 			    int32_t arg)
 {
-	int32_t ret;
+	int32_t ret, ret2;
 
 	dev_dbg(&phy->spi->dev, "%s: CAL %"PRIu32" ARG %"PRId32, __func__, cal, arg);
 
@@ -5695,11 +5695,11 @@ int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal,
 		break;
 	}
 
-	ret = ad9361_tracking_control(phy, phy->bbdc_track_en,
-				      phy->rfdc_track_en, phy->quad_track_en);
+	ret2 = ad9361_tracking_control(phy, phy->bbdc_track_en,
+				       phy->rfdc_track_en, phy->quad_track_en);
 	ad9361_ensm_restore_prev_state(phy);
 
-	return ret;
+	return ret ? ret : ret2;
 }
 
 /**
