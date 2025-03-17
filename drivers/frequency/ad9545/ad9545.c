@@ -264,7 +264,7 @@ static int32_t ad9545_pll_clk_recalc_rate(struct no_os_clk_desc *hw,
 	uint32_t frac;
 	uint32_t mod;
 	int ret;
-	uint32_t m;
+	uint8_t m;
 	uint32_t n;
 	uint8_t i;
 
@@ -1388,7 +1388,7 @@ static int32_t ad9545_parse_plls(struct ad9545_dev *dev,
 
 		if (init_param->pll_clks[addr].internal_zero_delay_source_rate_hz >=
 		    AD9545_MAX_ZERO_DELAY_RATE) {
-			pr_err("Invalid zero-delay output rate: %llu.\n",
+			pr_err("Invalid zero-delay output rate: %lu.\n",
 			       init_param->pll_clks[addr].internal_zero_delay_source_rate_hz);
 			ret = -EINVAL;
 			goto out_fail;
@@ -2397,7 +2397,8 @@ int32_t ad9545_setup(struct ad9545_dev *dev)
  */
 int32_t ad9545_remove(struct ad9545_dev *dev)
 {
-	int32_t ret, i;
+	int32_t ret;
+	uint32_t i;
 
 	if (!dev)
 		return -EINVAL;
