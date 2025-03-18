@@ -1,0 +1,7 @@
+{
+    "stm32": {
+      "main": {
+        "flags" : "HARDWARE=nucleo-f767zi.ioc"
+      }
+    }
+}
