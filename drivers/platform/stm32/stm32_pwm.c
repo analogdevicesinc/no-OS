@@ -347,10 +347,11 @@ static int32_t stm32_init_lptimer(struct stm32_pwm_desc *desc,
 	LPTIM_TypeDef *base = NULL;
 	struct stm32_pwm_init_param *sparam = param->extra;
 	LPTIM_HandleTypeDef *hlptimer;
+	uint32_t computed_prescaler = 0;
 
 	/* Compute period ticks */
 	period = _compute_period_ticks(sparam->get_timer_clock, sparam->clock_divider,
-				       sparam->prescaler, param->period_ns);
+				       sparam->prescaler - 1, param->period_ns);
 	hlptimer = (LPTIM_HandleTypeDef *) sparam->htimer;
 
 	switch (param->id) {
@@ -395,6 +396,33 @@ static int32_t stm32_init_lptimer(struct stm32_pwm_desc *desc,
 		goto error;
 	};
 
+	switch (sparam->prescaler) {
+	case 1:
+		computed_prescaler = LPTIM_PRESCALER_DIV1;
+		break;
+	case 2:
+		computed_prescaler = LPTIM_PRESCALER_DIV2;
+		break;
+	case 3 ... 4:
+		computed_prescaler = LPTIM_PRESCALER_DIV4;
+		break;
+	case 5 ... 8:
+		computed_prescaler = LPTIM_PRESCALER_DIV8;
+		break;
+	case 9 ... 16:
+		computed_prescaler = LPTIM_PRESCALER_DIV16;
+		break;
+	case 17 ... 32:
+		computed_prescaler = LPTIM_PRESCALER_DIV32;
+		break;
+	case 33 ... 64:
+		computed_prescaler = LPTIM_PRESCALER_DIV64;
+		break;
+	default:
+		computed_prescaler = LPTIM_PRESCALER_DIV128;
+		break;
+	}
+
 	hlptimer->Instance = base;
 	hlptimer->Init.Period = period;
 	hlptimer->Init.UpdateMode = LPTIM_UPDATE_IMMEDIATE;
@@ -404,7 +432,7 @@ static int32_t stm32_init_lptimer(struct stm32_pwm_desc *desc,
 	hlptimer->Init.RepetitionCounter = sparam->repetitions;
 
 	hlptimer->Init.Clock.Source = LPTIM_CLOCKSOURCE_APBCLOCK_LPOSC;
-	hlptimer->Init.Clock.Prescaler = sparam->prescaler;
+	hlptimer->Init.Clock.Prescaler = computed_prescaler;
 	hlptimer->State = HAL_LPTIM_STATE_RESET;
 
 	switch (sparam->slave_mode) {
@@ -1003,14 +1031,14 @@ int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 		return -EINVAL;
 
 	sdesc = desc->extra;
-	/* Compute period ticks */
-	period = _compute_period_ticks(sdesc->get_timer_clock, sdesc->clock_divider,
-				       sdesc->prescaler, period_ns);
 
 	switch (sdesc->pwm_timer) {
 #ifdef HAL_TIM_MODULE_ENABLED
 	case STM32_PWM_TIMER_TIM:
 		htimer = (TIM_HandleTypeDef *) sdesc->htimer;
+		/* Compute period ticks */
+		period = _compute_period_ticks(sdesc->get_timer_clock, sdesc->clock_divider,
+					       sdesc->prescaler, period_ns);
 
 		htimer->Init.AutoReloadPreload = sdesc->timer_autoreload ?
 						 TIM_AUTORELOAD_PRELOAD_ENABLE : TIM_MASTERSLAVEMODE_DISABLE;
@@ -1026,6 +1054,9 @@ int32_t stm32_pwm_set_period(struct no_os_pwm_desc *desc,
 #ifdef HAL_LPTIM_MODULE_ENABLED
 	case STM32_PWM_TIMER_LPTIM:
 		hlptimer = (LPTIM_HandleTypeDef *) sdesc->htimer;
+		/* Compute period ticks */
+		period = _compute_period_ticks(sdesc->get_timer_clock, sdesc->clock_divider,
+					       sdesc->prescaler - 1, period_ns);
 		hlptimer->Init.Period = period;
 
 		/* Change the LPTIM state */
@@ -1061,11 +1092,11 @@ int32_t stm32_pwm_get_period(struct no_os_pwm_desc *desc,
 	struct stm32_pwm_desc *sparam = desc->extra;
 
 	timer_hz = sparam->get_timer_clock() * sparam->clock_divider;
-	timer_hz /= (sparam->prescaler + 1);
 
 	switch (sparam->pwm_timer) {
 #ifdef HAL_TIM_MODULE_ENABLED
 	case STM32_PWM_TIMER_TIM:
+		timer_hz /= (sparam->prescaler + 1);
 		period = ((TIM_HandleTypeDef *)sparam->htimer)->Init.Period;
 		*period_ns = (uint32_t)((period + 1) *
 					(FREQUENCY_HZ_TO_TIME_NS_FACTOR / timer_hz));
@@ -1073,6 +1104,7 @@ int32_t stm32_pwm_get_period(struct no_os_pwm_desc *desc,
 #endif
 #ifdef HAL_LPTIM_MODULE_ENABLED
 	case STM32_PWM_TIMER_LPTIM:
+		timer_hz /= sparam->prescaler;
 		period = ((LPTIM_HandleTypeDef *)sparam->htimer)->Init.Period;
 		*period_ns = (uint32_t)((period + 1) *
 					(FREQUENCY_HZ_TO_TIME_NS_FACTOR / timer_hz));
