@@ -307,7 +307,7 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 		sparam->timer_callback.ctx = desc;
 		sparam->timer_callback.event = NO_OS_EVT_TIM_PWM_PULSE_FINISHED;
 		sparam->timer_callback.peripheral = NO_OS_TIM_IRQ;
-		sparam->timer_callback.handle = &desc->htimer;
+		sparam->timer_callback.handle = htimer;
 
 		ret = no_os_irq_register_callback(desc->nvic_tim, param->irq_id,
 						  &sparam->timer_callback);
