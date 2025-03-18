@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_ad713x.c
- *   @brief  Implementation of iio_ad713x.c.
+ *   @file   iio_ad4134.c
+ *   @brief  Implementation of iio_ad4134.c.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -33,6 +33,10 @@
 
 #ifdef IIO_SUPPORT
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
@@ -41,9 +45,13 @@
 #include "no_os_util.h"
 #include "iio_types.h"
 #include "spi_engine.h"
-#include "iio_dual_ad713x.h"
+#include "iio_dual_ad4134.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
 #define BITS_PER_SAMPLE 32
 
@@ -55,7 +63,7 @@ static struct scan_type adc_scan_type = {
 	.is_big_endian = false
 };
 
-#define IIO_AD713X_CHANNEL(_idx) {\
+#define IIO_AD4134_CHANNEL(_idx) {\
 	.name = "ch" # _idx,\
 	.ch_type = IIO_VOLTAGE,\
 	.channel = _idx,\
@@ -66,18 +74,22 @@ static struct scan_type adc_scan_type = {
 }
 
 static struct iio_channel iio_adc_channels[] = {
-	IIO_AD713X_CHANNEL(0),
-	IIO_AD713X_CHANNEL(1),
-	IIO_AD713X_CHANNEL(2),
-	IIO_AD713X_CHANNEL(3),
-	IIO_AD713X_CHANNEL(4),
-	IIO_AD713X_CHANNEL(5),
-	IIO_AD713X_CHANNEL(6),
-	IIO_AD713X_CHANNEL(7),
-	IIO_AD713X_CHANNEL(8)
+	IIO_AD4134_CHANNEL(0),
+	IIO_AD4134_CHANNEL(1),
+	IIO_AD4134_CHANNEL(2),
+	IIO_AD4134_CHANNEL(3),
+	IIO_AD4134_CHANNEL(4),
+	IIO_AD4134_CHANNEL(5),
+	IIO_AD4134_CHANNEL(6),
+	IIO_AD4134_CHANNEL(7),
+	IIO_AD4134_CHANNEL(8)
 };
 
-static int32_t _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+
+static int32_t _iio_ad4134_prepare_transfer(struct iio_ad4134 *desc,
 		uint32_t mask)
 {
 	if (!desc)
@@ -88,7 +100,7 @@ static int32_t _iio_ad713x_prepare_transfer(struct iio_ad713x *desc,
 	return 0;
 }
 
-static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
+static int32_t _iio_ad4134_read_dev(struct iio_ad4134 *desc, uint32_t *buff,
 				    uint32_t nb_samples)
 {
 	struct spi_engine_offload_message *msg;
@@ -131,7 +143,7 @@ static int32_t _iio_ad713x_read_dev(struct iio_ad713x *desc, uint32_t *buff,
  * @param desc - Descriptor.
  * @param dev_descriptor - iio device descriptor.
  */
-void iio_dual_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
+void iio_dual_ad4134_get_dev_descriptor(struct iio_ad4134 *desc,
 					struct iio_device **dev_descriptor)
 {
 	*dev_descriptor = &desc->iio_dev_desc;
@@ -139,32 +151,32 @@ void iio_dual_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
 
 /**
  * @brief Init for reading/writing and parameterization of a
- * iio_ad713x device.
+ * iio_ad4134 device.
  * @param desc - Descriptor.
  * @param param - Configuration structure.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
-			     struct iio_ad713x_init_par *param)
+int32_t iio_dual_ad4134_init(struct iio_ad4134 **desc,
+			     struct iio_ad4134_init_par *param)
 {
-	struct iio_ad713x *iio_ad713x;
+	struct iio_ad4134 *iio_ad4134;
 
-	iio_ad713x = (struct iio_ad713x *)no_os_calloc(1, sizeof(struct iio_ad713x));
-	if (!iio_ad713x)
+	iio_ad4134 = (struct iio_ad4134 *)no_os_calloc(1, sizeof(struct iio_ad4134));
+	if (!iio_ad4134)
 		return -1;
 
-	iio_ad713x->spi_eng_desc = param->spi_eng_desc;
-	iio_ad713x->spi_engine_offload_message = param->spi_engine_offload_message;
-	iio_ad713x->dcache_invalidate_range = param->dcache_invalidate_range;
+	iio_ad4134->spi_eng_desc = param->spi_eng_desc;
+	iio_ad4134->spi_engine_offload_message = param->spi_engine_offload_message;
+	iio_ad4134->dcache_invalidate_range = param->dcache_invalidate_range;
 
-	iio_ad713x->iio_dev_desc = (struct iio_device) {
+	iio_ad4134->iio_dev_desc = (struct iio_device) {
 		.num_ch = param->num_channels,
 		.channels = iio_adc_channels,
-		.pre_enable = (int32_t (*)())_iio_ad713x_prepare_transfer,
-		.read_dev = (int32_t (*)())_iio_ad713x_read_dev
+		.pre_enable = (int32_t (*)())_iio_ad4134_prepare_transfer,
+		.read_dev = (int32_t (*)())_iio_ad4134_read_dev
 	};
 
-	*desc = iio_ad713x;
+	*desc = iio_ad4134;
 
 	return 0;
 }
@@ -174,7 +186,7 @@ int32_t iio_dual_ad713x_init(struct iio_ad713x **desc,
  * @param desc - Descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t iio_dual_ad713x_remove(struct iio_ad713x *desc)
+int32_t iio_dual_ad4134_remove(struct iio_ad4134 *desc)
 {
 	if (!desc)
 		return -1;

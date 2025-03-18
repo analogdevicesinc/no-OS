@@ -42,7 +42,7 @@
 #include <math.h>
 #include "xil_printf.h"
 #include "spi_engine.h"
-#include "ad713x.h"
+#include "ad4134.h"
 #include "no_os_spi.h"
 #include "xilinx_spi.h"
 #include "no_os_delay.h"
@@ -61,7 +61,7 @@
 #include "xilinx_irq.h"
 #include "no_os_uart.h"
 #include "xilinx_uart.h"
-#include "iio_ad713x.h"
+#include "iio_ad4134.h"
 #include "iio.h"
 #include "iio_app.h"
 #endif // IIO_SUPPORT
@@ -76,8 +76,8 @@ int main()
 		.name = "cn0561_clkgen",
 		.parent_rate = 100000000
 	};
-	struct ad713x_dev *cn0561_dev;
-	struct ad713x_init_param cn0561_init_param;
+	struct ad4134_dev *cn0561_dev;
+	struct ad4134_init_param cn0561_init_param;
 	uint32_t i = 0, j;
 	uint32_t adc_channel;
 	int32_t ret;
@@ -203,22 +203,22 @@ int main()
 	if (ret != 0)
 		return ret;
 
-	ret = ad713x_init(&cn0561_dev, &cn0561_init_param);
+	ret = ad4134_init(&cn0561_dev, &cn0561_init_param);
 	if (ret != 0)
 		return -1;
 
 	for (adc_channel = CH0; adc_channel <= CH3; adc_channel++) {
-		ret = ad713x_dig_filter_sel_ch(cn0561_dev, SINC3, adc_channel);
+		ret = ad4134_dig_filter_sel_ch(cn0561_dev, SINC3, adc_channel);
 		if (ret != 0)
 			return -1;
 	} /* Select SINC3 filtering, enable higher data convertion rates */
 
 	no_os_mdelay(1000);
 
-	ret = ad713x_spi_reg_write(cn0561_dev, AD713X_REG_GPIO_DIR_CTRL, 0xE7);
+	ret = ad4134_spi_reg_write(cn0561_dev, AD4134_REG_GPIO_DIR_CTRL, 0xE7);
 	if (ret != 0)
 		return -1;
-	ret = ad713x_spi_reg_write(cn0561_dev, AD713X_REG_GPIO_DATA, 0x84);
+	ret = ad4134_spi_reg_write(cn0561_dev, AD4134_REG_GPIO_DATA, 0x84);
 	if (ret != 0)
 		return -1;
 
@@ -245,15 +245,15 @@ int main()
 		.buff = (void *)adc_buffer,
 		.size = ADC_BUFFER_SIZE
 	};
-	struct ad713x_iio *iio_desc;
-	struct ad713x_iio_init_param iio_desc_param = {
+	struct ad4134_iio *iio_desc;
+	struct ad4134_iio_init_param iio_desc_param = {
 		.drv_dev = cn0561_dev,
 		.vref_int = 4,
 		.vref_micro = 96000,
 		.spi_eng_desc = spi_eng_desc,
 		.dcache_invalidate_range =
 		(void (*)(uint32_t,  uint32_t))Xil_DCacheInvalidateRange,
-		.iio_dev = &ad713x_iio_desc
+		.iio_dev = &ad4134_iio_desc
 	};
 	struct xil_uart_init_param platform_uart_init_par = {
 		.type = UART_PS,
@@ -274,12 +274,12 @@ int main()
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 
-	ret = iio_ad713x_init(&iio_desc, &iio_desc_param);
+	ret = iio_ad4134_init(&iio_desc, &iio_desc_param);
 	if (ret < 0)
 		return ret;
 
 	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("ad4134", iio_desc, &ad713x_iio_desc,
+		IIO_APP_DEVICE("ad4134", iio_desc, &ad4134_iio_desc,
 			       &rd_buff, NULL, NULL),
 	};
 
@@ -322,13 +322,13 @@ int main()
 	}
 
 #ifdef CN0561_REG_DUMP
-	ret = ad713x_spi_reg_dump(cn0561_dev);
+	ret = ad4134_spi_reg_dump(cn0561_dev);
 	if (ret != 0)
 		return ret;
 
 #endif /* AD4134 DEVICE REG DUMP */
 
-	ad713x_remove(cn0561_dev);
+	ad4134_remove(cn0561_dev);
 	print("Bye\n\r");
 
 	return 0;
