@@ -2,6 +2,12 @@ ifeq (y,$(strip $(IIO_EXAMPLE)))
 CFLAGS += -DIIO_EXAMPLE
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
+
+SRCS += $(NO-OS)/drivers/display/ssd_1306/ssd_1306.c 
+SRCS += $(NO-OS)/drivers/display/display.c 
+INCS += $(NO-OS)/drivers/display/ssd_1306/ssd_1306.h
+INCS += $(NO-OS)/drivers/display/display.h
+
 endif
 
 ifeq (y,$(strip $(IIO_TIMER_TRIGGER_EXAMPLE)))

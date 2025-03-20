@@ -45,6 +45,11 @@
 #include "maxim_usb_uart.h"
 #endif
 
+/* Alias the default handler names to match CMSIS weak symbols */
+#define vPortSVCHandler SVC_Handler
+#define xPortPendSVHandler PendSV_Handler
+#define xPortSysTickHandler SysTick_Handler
+
 #define MAX_SIZE_BASE_ADDR	(SAMPLES_PER_CHANNEL * DEMO_CHANNELS * \
 					sizeof(uint16_t))
 
