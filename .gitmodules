@@ -13,3 +13,6 @@
 [submodule "libraries/lwip/lwip"]
 	path = libraries/lwip/lwip
 	url = https://github.com/lwip-tcpip/lwip
+[submodule "libraries/lvgl/lvgl"]
+	path = libraries/lvgl/lvgl
+	url = https://github.com/lvgl/lvgl.git
