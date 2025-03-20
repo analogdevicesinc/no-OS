@@ -376,6 +376,7 @@ int max22190_reg_write(struct max22190_desc *desc, uint32_t addr, uint32_t val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
+		.rx_buff = desc->buff,
 		.bytes_number = MAX22190_FRAME_SIZE,
 		.cs_change = 1,
 	};
