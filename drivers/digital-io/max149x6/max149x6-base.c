@@ -99,6 +99,7 @@ int max149x6_reg_write(struct max149x6_desc *desc, uint32_t addr, uint32_t val)
 {
 	struct no_os_spi_msg xfer = {
 		.tx_buff = desc->buff,
+		.rx_buff = desc->buff,
 		.bytes_number = MAX149X6_FRAME_SIZE,
 		.cs_change = 1,
 	};
