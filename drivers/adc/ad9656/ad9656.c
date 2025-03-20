@@ -103,20 +103,26 @@ int32_t ad9656_reg_write(struct ad9656_dev *dev,
  * @param dev - The device handler for the ad9656 chip
  * @param test_mode - The type of test that is to be performed or OFF if the testing
  * 					  process is to be stopped
+ * @param link_mode - Used for link control, it also specifies what type of test is
+ * 					  is going to be performed, OFF if no testing is done
  * @return 0 if the ad9656 chip could be successfully set for JESD204 link testing,
  * 		   -1 otherwise
  */
 int32_t ad9656_JESD204_test(struct ad9656_dev *dev,
-			    uint32_t test_mode)
+			    uint32_t test_mode, uint32_t link_mode)
 {
 	uint8_t format;
 	int32_t ret;
+
+	ret = ad9656_reg_write(dev, AD9656_REG_LINK_MODE, link_mode);
+	if (ret != 0)
+		return ret;
 
 	ret = ad9656_reg_write(dev, AD9656_REG_ADC_TEST_MODE, test_mode);
 	if (ret != 0)
 		return ret;
 
-	if (test_mode == AD9656_TEST_OFF)
+	if (test_mode != AD9656_TEST_OFF)
 		format = AD9656_FORMAT_OFFSET_BINARY;
 	else
 		format = AD9656_FORMAT_2S_COMPLEMENT;

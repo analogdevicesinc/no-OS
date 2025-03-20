@@ -225,20 +225,20 @@ int main(void)
 //******************************************************************************
 
 	/* receive path testing */
-	ad9656_JESD204_test(ad9656_device, AD9656_TEST_PN9);
+	ad9656_JESD204_test(ad9656_device, AD9656_TEST_PN9, AD9656_LINK_PN9);
 	if (axi_adc_pn_mon(ad9656_core, AXI_ADC_PN9, 10) == -1) {
 		printf("%s ad9656 - PN9 sequence mismatch!\n", __func__);
 	} else {
 		printf("%s ad9656 - PN9 sequence checked!\n", __func__);
 	}
-	ad9656_JESD204_test(ad9656_device, AD9656_TEST_PN23);
+	ad9656_JESD204_test(ad9656_device, AD9656_TEST_PN23, AD9656_LINK_PN23);
 	if (axi_adc_pn_mon(ad9656_core, AXI_ADC_PN23A, 10) == -1) {
 		printf("%s ad9656 - PN23 sequence mismatch!\n", __func__);
 	} else {
 		printf("%s ad9656 - PN23 sequence checked!\n", __func__);
 	}
 
-	ad9656_JESD204_test(ad9656_device, AD9656_TEST_OFF);
+	ad9656_JESD204_test(ad9656_device, AD9656_TEST_OFF, AD9656_LINK_OFF);
 
 //******************************************************************************
 // generate user input in place of real ADC data and capture data with DMA
