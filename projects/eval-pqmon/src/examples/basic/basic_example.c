@@ -225,6 +225,17 @@ int basic_pqm_firmware()
 	app_init_param.lwip_param.extra = NULL;
 #endif
 
+	struct wiz850io_dev *wiz_dev;
+	printf("AAAAAAA\n");
+
+	status = wiz850io_init(&wiz_dev, &wiz850io_ip);
+	if (status) {
+		printf("wiz850io_init failed with %d\n", status);
+		return status;
+	}
+
+	printf("wiz850io_init succeeded\n");
+
 	app_init_param.post_step_callback = &(pqm_one_cycle);
 	status = iio_app_init(&app, app_init_param);
 

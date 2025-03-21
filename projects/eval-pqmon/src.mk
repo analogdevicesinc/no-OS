@@ -66,6 +66,12 @@ endif
 ifeq ($(INTERFACE), serial)
 endif
 
+ifeq ($(INTERFACE), ethernet)
+	INCS += $(DRIVERS)/net/wiz/wiz850io.h
+
+	SRCS += $(DRIVERS)/net/wiz/wiz850io.c
+endif
+
 ifeq ($(INTERFACE), ethernet_t1l)
 	LIBRARIES += lwip
 	INCS += $(NO-OS)/network/tcp_socket.h			\
