@@ -17,6 +17,13 @@ $(info Using SERIAL as interface for IIO communication)
 CFLAGS += -DPQM_CONN_SERIAL
 endif
 
+ifeq ($(INTERFACE), ethernet)
+$(info Using ETHERNET as interface for IIO communication)
+CFLAGS += -DPQM_CONN_USB
+CFLAGS += -DNO_OS_USB_UART
+CFLAGS += -DPQM_CONN_ETH
+endif
+
 ifeq ($(INTERFACE), ethernet_t1l)
 $(info Using ETHERNET T1L as interface for IIO communication)
 CFLAGS += -DPQM_CONN_T1L

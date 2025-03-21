@@ -33,6 +33,36 @@
 
 #include "common_data.h"
 
+#if defined(PQM_CONN_ETH)
+
+const struct no_os_gpio_init_param wiz850io_rst_gpio_ip = {
+	.port = 2,			// ??????
+	.number = 1,			// ??????
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_spi_init_param wiz850io_spi_init_params = {
+	.device_id = 3,
+	.max_speed_hz = 15000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS,
+	.chip_select = 0,
+	.extra = WIZ_SPI_EXTRA,
+};
+
+struct wiz850io_init_param wiz850io_ip = {
+	.spi_init = wiz850io_spi_init_params,
+	// .gpio_reset = wiz850io_rst_gpio_ip,
+	.mac_addr = {0x00, 0x08, 0xDC, 0x01, 0x02, 0x03}, // Example MAC address
+	.ip_addr = {192, 168, 1, 100},                    // Example IP address
+	.subnet_mask = {255, 255, 255, 0},                // Example subnet mask
+	.gateway = {192, 168, 1, 1},                      // Example gateway
+};
+#endif
+
 #if defined(PQM_CONN_USB)
 struct no_os_uart_init_param iio_demo_usb_ip = {
 	.device_id = UART_DEVICE_ID,
