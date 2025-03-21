@@ -209,13 +209,13 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
 
 		switch (desc->chip_select) {
 		case 0:
-			cs = gpio_cfg_spi2_ss0;
+			cs = gpio_cfg_spi3_ss0;
 			break;
 		case 1:
-			cs = gpio_cfg_spi2_ss1;
+			cs = gpio_cfg_spi3_ss1;
 			break;
 		case 2:
-			cs = gpio_cfg_spi2_ss2;
+			cs = gpio_cfg_spi3_ss2;
 			break;
 		case 3:
 			cs = gpio_cfg_spi3_ss3;
