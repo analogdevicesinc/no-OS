@@ -251,6 +251,26 @@ static int adf4377_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 		}
 		ret = strlen(buf);
 		break;
+	case ADF4377_IIO_DEV_ATTR_SR_DEL_ADJ:
+		ret = adf4377_get_sr_del_adj(adf4377, &val);
+		if (ret)
+			return ret;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4377_IIO_DEV_ATTR_SR_INV_ADJ:
+		ret = adf4377_get_en_sr_inv_adj(adf4377, &en);
+		if (ret)
+			return ret;
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
+	case ADF4377_IIO_DEV_ATTR_SR_MONITORING:
+		ret = adf4377_get_en_sysref_monitor(adf4377, &en);
+		if (ret)
+			return ret;
+		val = en;
+		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -328,6 +348,20 @@ static int adf4377_iio_write_dev_attr(void *dev, char *buf, uint32_t len,
 		if (index < 0)
 			return index;
 		ret = adf4377_set_rfout_divider(adf4377, index);
+		break;
+	case ADF4377_IIO_DEV_ATTR_SR_DEL_ADJ:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		ret = adf4377_set_sr_del_adj(adf4377, val);
+		break;
+	case ADF4377_IIO_DEV_ATTR_SR_INV_ADJ:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		en = val;
+		ret = adf4377_set_en_sr_inv_adj(adf4377, en);
+		break;
+	case ADF4377_IIO_DEV_ATTR_SR_MONITORING:
+		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
+		en = val;
+		ret = adf4377_set_en_sysref_monitor(adf4377, en);
 		break;
 	default:
 		return -EINVAL;
@@ -507,6 +541,27 @@ static struct iio_attribute adf4377_iio_dev_attributes[] = {
 		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_RFOUT_DIV_AVAIL,
+	},
+	{
+		.name = "sysref_delay_adjust",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = adf4377_iio_read_dev_attr,
+		.store = adf4377_iio_write_dev_attr,
+		.priv = ADF4377_IIO_DEV_ATTR_SR_DEL_ADJ,
+	},
+	{
+		.name = "sysref_invert_adjust",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = adf4377_iio_read_dev_attr,
+		.store = adf4377_iio_write_dev_attr,
+		.priv = ADF4377_IIO_DEV_ATTR_SR_INV_ADJ,
+	},
+	{
+		.name = "sysref_monitoring",
+		.shared = IIO_SHARED_BY_ALL,
+		.show = adf4377_iio_read_dev_attr,
+		.store = adf4377_iio_write_dev_attr,
+		.priv = ADF4377_IIO_DEV_ATTR_SR_MONITORING,
 	},
 	END_ATTRIBUTES_ARRAY
 };
