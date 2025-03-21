@@ -142,6 +142,23 @@ used.
 
 By default only channel 1 is enabled.
 
+SYSREF Output Configuration
+---------------------------
+There are two distinct ways to configure the SYSREF output:
+
+using the **adf4377_set_sr_del_adj** API, which will set the delay adjustment
+value for the SYSREF signal incrementally. While **adf4377_get_sr_del_adj** will
+return the current register value of the SYSREF delay.
+
+using the **adf4377_set_sr_inv_adj** API, which will apply a constant delay
+adjustment value for the SYSREF signal. While **adf4377_get_sr_inv_adj** will
+return the current register value of the SYSREF delay.
+
+The SYSREF monitoring feature can be enabled/disabled using **adf4377_set_en_sysref_monitor**
+while the current configuration can be read out using **adf4377_get_en_sysref_monitor**.
+This api will power up/down the SYSREF monitoring feature as well as toggle the reset
+signal.
+
 ADF4377 Frequency Generation
 ----------------------------
 
@@ -269,6 +286,9 @@ The attributes are:
                             of the ADF4377.
 * reference_doubler_en - enables the input doubler.
 * reference_frequency - is the current set input frequency.
+* sysref_delay_adjust - is the delay adjustment value for the SYSREF signal.
+* sysref_invert_adjust - is a constant delay adjustment value for the SYSREF signal.
+* sysref_monitoring - enables the SYSREF monitoring feature.
 
 Device Channels
 ---------------
