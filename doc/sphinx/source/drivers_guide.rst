@@ -176,9 +176,9 @@ It creates the device handler, initializes the communication peripherals, reques
 		return 0;
 		
 		error_3:
-			spi_remove(dev->spi_desc);
+			no_os_spi_remove(dev->spi_desc);
 		error_2:
-			gpio_remove(dev->gpio_reset);
+			no_os_gpio_remove(dev->gpio_reset);
 		error_1:
 			free(dev);
 
@@ -201,8 +201,8 @@ It frees the resources allocated by the initialization function.
 	{
 		int ret;
 		
-		ret = spi_remove(dev->spi_desc);
-		ret |= gpio_remove(dev->gpio_reset);
+		ret = no_os_spi_remove(dev->spi_desc);
+		ret |= no_os_gpio_remove(dev->gpio_reset);
 
 		free(dev);
 
