@@ -381,6 +381,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		axi_jesd204_rx_lane_clk_enable(rx_jesd);
 #endif
 
+#ifndef ADRV9008_1
 	if (talInit.obsRx.obsRxChannelsEnable != TAL_RXOFF)
 		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
 
@@ -396,6 +397,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
 				    phy_ctrl);
 	}
+#endif
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
 
