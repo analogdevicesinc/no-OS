@@ -259,7 +259,7 @@ int ad5142_dpot_remove(struct dpot_dev *desc)
 
 	if (!desc)
 		return -EINVAL;
-	
+
 	if (!desc->extra)
 		return -EINVAL;
 
@@ -292,7 +292,7 @@ int ad5142_dpot_reset(struct dpot_dev *desc)
 
 	if (!desc)
 		return -EINVAL;
-	
+
 	if (!desc->extra)
 		return -EINVAL;
 
@@ -346,7 +346,7 @@ int ad5142_dpot_shutdown(struct dpot_dev *desc,
 	uint8_t nIndex = chn;
 	if (!desc)
 		return -EINVAL;
-	
+
 	if (!desc->extra)
 		return -EINVAL;
 
@@ -391,7 +391,7 @@ int ad5142_dpot_set_operating_mode(struct dpot_dev *desc,
 
 	if (!desc)
 		return -EINVAL;
-	
+
 	if (!desc->extra)
 		return -EINVAL;
 
