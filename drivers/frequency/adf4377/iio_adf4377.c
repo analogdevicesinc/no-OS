@@ -519,7 +519,6 @@ static struct iio_attribute adf4377_iio_dev_attributes[] = {
 		.name = "charge_pump_available",
 		.shared = IIO_SHARED_BY_ALL,
 		.show = adf4377_iio_read_dev_attr,
-		.store = adf4377_iio_write_dev_attr,
 		.priv = ADF4377_IIO_DEV_ATTR_CP_AVAIL,
 	},
 	{
