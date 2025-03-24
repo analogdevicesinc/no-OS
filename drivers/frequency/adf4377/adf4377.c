@@ -257,8 +257,6 @@ int adf4377_get_ref_clk(struct adf4377_dev *dev, uint64_t *val)
  */
 int adf4377_set_cp_i(struct adf4377_dev *dev, int32_t reg_val)
 {
-	int ret;
-
 	if (!dev)
 		return -EINVAL;
 
