@@ -425,7 +425,7 @@ int dpot_tolerance_read(struct dpot_dev *desc, enum dpot_chn_type chn,
  * @param shutdown_enable - To set bid scaleenable mid scale .
  * @return 0 in case of success, negative error code otherwise.
  */
-int dpot_set_mid_scale(struct dpot_dev *desc,enum dpot_chn_type chn,
+int dpot_set_mid_scale(struct dpot_dev *desc, enum dpot_chn_type chn,
 		       bool shutdown_enable)
 {
 	if (!desc || !desc->dpot_ops) {

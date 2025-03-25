@@ -210,7 +210,7 @@ static int ad5144_validate_chn(struct ad5144_dpot_dev *ad5144_desc,
 int ad5144_dpot_init(struct dpot_init_param *param, struct dpot_dev **desc)
 {
 	int ret;
-	struct dpot_dev *dev=NULL;
+	struct dpot_dev *dev = NULL;
 	struct ad5144_dpot_init_param *ad5144_params;
 	struct ad5144_dpot_dev *ad5144_dev;
 	struct no_os_spi_init_param *spi_init;
@@ -475,7 +475,7 @@ int ad5144_dpot_set_operating_mode(struct dpot_dev *desc,
 	cmd.control = EXTRACT_CMD_BITS(AD51XX_CMD_WRITE_SERIAL_REG_TO_CTL);
 	cmd.address = EXTRACT_ADS_BITS(AD51XX_CMD_WRITE_SERIAL_REG_TO_CTL);;
 	if (operating_mode == DPOT_LINEAR_GAIN_SETTING_MODE)
-		cmd.data = control_mode | (1<<OPERATING_MODE_BIT_POSITION);
+		cmd.data = control_mode | (1 << OPERATING_MODE_BIT_POSITION);
 	cmd.is_readback = false;
 
 	ret = ad5144_dpot_send_cmd(desc, &cmd);
@@ -851,7 +851,7 @@ int ad5144_dpot_rdac_linear_update(struct dpot_dev *desc,
 		return ret;
 
 	/* RDAC linear increment/decrement (command #4 and #5) */
-	cmd.data =EXTRACT_DATA_BITS(AD51XX_CMD_LRDAC_DEC);
+	cmd.data = EXTRACT_DATA_BITS(AD51XX_CMD_LRDAC_DEC);
 	cmd.control = EXTRACT_CMD_BITS(AD51XX_CMD_LRDAC_INC);
 	cmd.address = ad5144_dpot_cmd_addr[chn];
 	if (status == DPOT_RDAC_LINEAR_INCREMENT)
@@ -886,11 +886,11 @@ int ad5144_dpot_rdac_6db_update(struct dpot_dev *desc, enum dpot_chn_type chn,
 		return ret;
 
 	/* RDAC 6dB increment/decrement (command #6 and #7) */
-	cmd.data =EXTRACT_DATA_BITS(AD51XX_CMD_LRDAC_6DB_DEC);
+	cmd.data = EXTRACT_DATA_BITS(AD51XX_CMD_LRDAC_6DB_DEC);
 	cmd.control = EXTRACT_CMD_BITS(AD51XX_CMD_LRDAC_6DB_INC);
 	cmd.address = ad5144_dpot_cmd_addr[chn];
 	if (status == DPOT_RDAC_6DB_INCREMENT)
-		cmd.data =EXTRACT_DATA_BITS(AD51XX_CMD_LRDAC_6DB_INC);
+		cmd.data = EXTRACT_DATA_BITS(AD51XX_CMD_LRDAC_6DB_INC);
 	cmd.is_readback = false;
 
 	ret = ad5144_dpot_send_cmd(desc, &cmd);
