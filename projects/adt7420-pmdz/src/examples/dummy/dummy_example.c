@@ -2,8 +2,10 @@
  *   @file   dummy_example.c
  *   @brief  DUMMY example code for adt7420-pmdz project
  *   @author RNechita (ramona.nechita@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
+ *   @author Rene Arthur Necesito (Renearthur.Necesito@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2022, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,6 +38,14 @@
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
 
+#ifdef LINUX_PLATFORM
+#include <time.h>
+#include <sys/time.h>
+struct timeval tv;
+struct tm *timeinfo;
+char time_string[9];  // hh:mm:ss\0
+#endif  // LINUX_PLATFORM
+
 #define ADT7320_L8		NO_OS_BIT(8)
 #define ADT7320_L16		NO_OS_BIT(16)
 
@@ -62,6 +72,7 @@ int example_main()
 	float temp_now;
 	int ret;
 
+#ifndef LINUX_PLATFORM
 	struct no_os_uart_desc *uart;
 
 	ret = no_os_uart_init(&uart, &uip);
@@ -69,6 +80,7 @@ int example_main()
 		goto error;
 
 	no_os_uart_stdio(uart);
+#endif // LINUX_PLATFORM
 
 	ret = adt7420_init(&adt7420, adt7420_user_init);
 	if (ret)
@@ -130,6 +142,12 @@ int example_main()
 		ret = adt7420_reg_read(adt7420, ADT7420_REG_HIST, &readval);
 		if (ret)
 			goto error_adt7420;
+#ifdef LINUX_PLATFORM
+		gettimeofday(&tv, NULL);
+		timeinfo = localtime(&tv.tv_sec);
+		strftime(time_string, sizeof(time_string), "%H:%M:%S", timeinfo);
+		printf("[%lu.%lu - %s]\n", tv.tv_sec, tv.tv_usec, time_string);
+#endif  // LINUX_PLATFORM
 		printf("The value read from the hist register is %d\n", readval);
 		pr_info("Temp read is %lf\r\n", temp_now);
 		pr_info("Current temp high setpoint is %d\r\n", (int) temp_c_max);

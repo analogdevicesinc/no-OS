@@ -1,10 +1,10 @@
 /***************************************************************************//**
- *   @file   common_data.c
- *   @brief  Defines common data to be used by adt7420-pmdz examples.
- *   @author RNechita (ramona.nechita@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Linux platform used by adt7420-pmdz
+ *           project.
  *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2022, 2025(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,33 +31,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "common_data.h"
+#include "linux_i2c.h"
 
-#ifndef LINUX_PLATFORM
-struct no_os_uart_init_param uip = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.platform_ops = UART_OPS,
-	.extra = &xuip,
-};
-#endif // LINUX_PLATFORM
+#define I2C_DEVICE_ID   1
+#define I2C_EXTRA	&adt7420_i2c_extra
+#define I2C_OPS		&linux_i2c_ops
 
-const struct no_os_i2c_init_param iip = {
-	.device_id = I2C_DEVICE_ID,
-	.max_speed_hz = 100000,
-	.slave_address = 0x48,
-	.extra = NULL,
-	.platform_ops = I2C_OPS,
-	.extra = &adt7420_i2c_extra,
-};
+extern struct linux_i2c_init_param adt7420_i2c_extra;
 
-struct adt7420_init_param adt7420_user_init = {
-	.interface_init = iip,
-	.active_device = ID_ADT7420
-};
+#endif /* __PARAMETERS_H__ */
