@@ -35,7 +35,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "dpot.h"
+#include "../common/dpot.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
 #include "ad51xx_cmd.h"
