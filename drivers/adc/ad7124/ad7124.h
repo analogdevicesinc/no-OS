@@ -271,6 +271,7 @@
 #define AD7124_CHMAP_REG_AINNEG_MSK    		NO_OS_GENMASK(4,0)
 #define AD7124_ADC_CTRL_REG_MODE_MSK   		NO_OS_GENMASK(5,2)
 #define AD7124_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(4,3)
+#define AD7124_SETUP_CONF_REG_PGA_MSK       NO_OS_GENMASK(2,0)
 #define AD7124_REF_BUF_MSK                  NO_OS_GENMASK(8,7)
 #define AD7124_AIN_BUF_MSK                  NO_OS_GENMASK(6,5)
 #define AD7124_POWER_MODE_MSK			    NO_OS_GENMASK(7,6)
@@ -375,6 +376,21 @@ enum ad7124_reference_source {
 };
 
 /**
+ * @enum ad7124_pga
+ * @brief PGA gains
+ */
+enum ad7124_pga {
+	AD7124_PGA_1,
+	AD7124_PGA_2,
+	AD7124_PGA_4,
+	AD7124_PGA_8,
+	AD7124_PGA_16,
+	AD7124_PGA_32,
+	AD7124_PGA_64,
+	AD7124_PGA_128
+};
+
+/**
   * @struct ad7124_channel_setup
   * @brief Channel setup
 **/
@@ -383,6 +399,7 @@ struct ad7124_channel_setup {
 	bool ref_buff;
 	bool  ain_buff;
 	enum ad7124_reference_source ref_source;
+	enum ad7124_pga pga;
 };
 
 /**
@@ -629,6 +646,11 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 			  bool ain_buff,
 			  bool ref_buff,
 			  uint8_t setup_id);
+
+/* Assign PGA gain to setup */
+int ad7124_set_pga(struct ad7124_dev* device,
+		   enum ad7124_pga pga,
+		   uint8_t setup_id);
 
 /* Select the power mode */
 int ad7124_set_power_mode(struct ad7124_dev *device,
