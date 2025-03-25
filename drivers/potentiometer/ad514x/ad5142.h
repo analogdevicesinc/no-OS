@@ -91,7 +91,7 @@ struct ad5142_dpot_dev {
 	/* SPI descriptor */
 	struct no_os_spi_desc *spi_desc;
 	/* I2C descriptor */
-	struct no_os_i2c_desc *i2c_desc;	
+	struct no_os_i2c_desc *i2c_desc;
 	/* Reset GPIO desc */
 	struct no_os_gpio_desc *reset_gpio_desc;
 	/* INDEP GPIO init parameters */

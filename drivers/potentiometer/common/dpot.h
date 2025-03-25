@@ -60,25 +60,25 @@
  * @brief Digital potentiometer device IDs.
  */
 enum dpot_dev_id {
-	DEV_AD5121,	
-    DEV_AD5122,	
-	DEV_AD5122A,	
-	DEV_AD5123,	
-	DEV_AD5124,	
+	DEV_AD5121,
+	DEV_AD5122,
+	DEV_AD5122A,
+	DEV_AD5123,
+	DEV_AD5124,
 	DEV_AD5141,
 	DEV_AD5142,
-	DEV_AD5142A,		
-	DEV_AD5143,	
+	DEV_AD5142A,
+	DEV_AD5143,
 	DEV_AD5144,
-	DEV_AD5160,	
+	DEV_AD5160,
 	DEV_AD5161,
-	DEV_AD5165,	
-	DEV_AD5171,	
-	DEV_AD5241,		
-	DEV_AD5242,	
-	DEV_AD5245,		
+	DEV_AD5165,
+	DEV_AD5171,
+	DEV_AD5241,
+	DEV_AD5242,
+	DEV_AD5245,
 	DEV_AD5246,
-	DEV_AD5258,	
+	DEV_AD5258,
 	DEV_AD5259,
 	DEV_AD5273
 };
@@ -93,9 +93,9 @@ enum dpot_dev_id {
  */
 enum dpot_intf_type {
 	/* SPI digital interface */
-	AD_SPI_INTERFACE=0x1,
+	AD_SPI_INTERFACE = 0x1,
 	/* I2C digital interface */
-	AD_I2C_INTERFACE=0x2
+	AD_I2C_INTERFACE = 0x2
 };
 /**
  * @enum dpot_chn_type.
@@ -127,7 +127,7 @@ enum dpot_chn_type {
  * @note Operating mode is applicable to only certain
  *       generics of digipots and not all.
  */
- enum dpot_operating_mode {
+enum dpot_operating_mode {
 	/* Potentiometer mode */
 	DPOT_POTENTIOMETER_MODE,
 	/* Linear gain setting mode */
@@ -181,7 +181,7 @@ struct dpot_command {
  * @brief Digital potentiometer init parameters.
  */
 typedef struct dpot_init_param {
-	
+
 	enum dpot_intf_type intf_type;
 	/* Active device ID */
 	enum dpot_dev_id device_id;
@@ -190,7 +190,7 @@ typedef struct dpot_init_param {
 	/* Device specific parameters */
 	void *extra;
 	enum dpot_operating_mode operating_mode;
-}DPOT_INIT_PARAM;
+} DPOT_INIT_PARAM;
 
 /**
  * @struct dpot_dev_info.
@@ -203,7 +203,7 @@ typedef struct dpot_device_info {
 	/* Number of input channels */
 	uint8_t num_of_channels;
 	/* Resolution (number of wiper positions = 2^res) */
-	uint8_t nSupportedInterface;	
+	uint8_t nSupportedInterface;
 	struct dpot_init_param dpot_init_params;
 } dpot_device_info;
 
@@ -270,15 +270,16 @@ struct dpot_ops {
 				   enum dpot_rdac_6db_status status);
 	/* Send digital potentiometer command */
 	int(*dpot_send_cmd)(struct dpot_dev *desc, struct dpot_command *cmd);
-	int(*dpot_tolerance_read)(struct dpot_dev *desc, enum dpot_chn_type chn, uint8_t *data);
-	
+	int(*dpot_tolerance_read)(struct dpot_dev *desc, enum dpot_chn_type chn,
+				  uint8_t *data);
+
 	int(*dpot_enable_top_bottom_scale)(struct dpot_dev *desc,
-		enum dpot_chn_type chn,
-		bool isTopScale,
-		uint8_t nEnter);
+					   enum dpot_chn_type chn,
+					   bool isTopScale,
+					   uint8_t nEnter);
 	int(*dpot_set_mid_scale)(struct dpot_dev *desc,
-		enum dpot_chn_type chn,
-		bool shutdown_enable);
+				 enum dpot_chn_type chn,
+				 bool shutdown_enable);
 };
 
 /* Digipots device information table */
@@ -315,9 +316,13 @@ int dpot_rdac_linear_update(struct dpot_dev *desc, enum dpot_chn_type chn,
 int dpot_rdac_6db_update(struct dpot_dev *desc, enum dpot_chn_type chn,
 			 enum dpot_rdac_6db_status status);
 int dpot_send_cmd(struct dpot_dev *desc, struct dpot_command *cmd);
-int dpot_enable_top_scale(struct dpot_dev *desc,enum dpot_chn_type chn,	uint8_t nEnter);
-int dpot_enable_bottom_scale(struct dpot_dev *desc,enum dpot_chn_type chn,	uint8_t nEnter);
-int dpot_tolerance_read(struct dpot_dev *desc, enum dpot_chn_type chn, uint8_t *data);
-int dpot_set_mid_scale(struct dpot_dev *desc, enum dpot_chn_type chn, bool shutdown_enable);
-extern dpot_device_info dpot_info[NUM_SUPPORTED_DEVICES]; 
+int dpot_enable_top_scale(struct dpot_dev *desc, enum dpot_chn_type chn,
+			  uint8_t nEnter);
+int dpot_enable_bottom_scale(struct dpot_dev *desc, enum dpot_chn_type chn,
+			     uint8_t nEnter);
+int dpot_tolerance_read(struct dpot_dev *desc, enum dpot_chn_type chn,
+			uint8_t *data);
+int dpot_set_mid_scale(struct dpot_dev *desc, enum dpot_chn_type chn,
+		       bool shutdown_enable);
+extern dpot_device_info dpot_info[NUM_SUPPORTED_DEVICES];
 #endif	// DPOT_H_

@@ -110,7 +110,7 @@ struct ad5144_dpot_dev {
 	bool shutdown_enable[AD5144_NUM_LINEAR_GAIN_CH];
 	/* Operating mode */
 	enum dpot_operating_mode eoperating_mode;
-	
+
 };
 /* AD5144 digital potentiometer ops */
 int ad5144_dpot_init(struct dpot_init_param *init_params,

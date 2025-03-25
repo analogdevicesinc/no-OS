@@ -52,7 +52,7 @@ struct ad5143_dpot_init_param {
 	struct no_os_i2c_init_param *i2c_init;
 	/* Shutdown enable flag for  potentiometer mode */
 	bool shutdown_enable_pt[4];
-	/* Shutdown enable flag for  potentiometer mode */	
+	/* Shutdown enable flag for  potentiometer mode */
 	bool shutdown_enable_lg[8];
 
 	/* Operating mode */
