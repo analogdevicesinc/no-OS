@@ -270,6 +270,7 @@
 #define AD7124_CHMAP_REG_AINPOS_MSK    		NO_OS_GENMASK(9,5)
 #define AD7124_CHMAP_REG_AINNEG_MSK    		NO_OS_GENMASK(4,0)
 #define AD7124_ADC_CTRL_REG_MODE_MSK   		NO_OS_GENMASK(5,2)
+#define AD7124_SETUP_CONF_REG_BURNOUT_MSK	NO_OS_GENMASK(10,9)
 #define AD7124_SETUP_CONF_REG_REF_SEL_MSK	NO_OS_GENMASK(4,3)
 #define AD7124_SETUP_CONF_REG_PGA_MSK       NO_OS_GENMASK(2,0)
 #define AD7124_REF_BUF_MSK                  NO_OS_GENMASK(8,7)
@@ -359,6 +360,21 @@ struct ad7124_channel_map {
 };
 
 /**
+ * @enum ad7124_burnout
+ * @brief Burnout current values
+ */
+enum ad7124_burnout {
+	/* Off */
+	AD7124_BURNOUT_OFF,
+	/* 500nA */
+	AD7124_BURNOUT_500N,
+	/* 2 uA */
+	AD7124_BURNOUT_2U,
+	/* 4 uA */
+	AD7124_BURNOUT_4U,
+};
+
+/**
  * @enum ad7124_reference_source
  * @brief Type of ADC Reference
 **/
@@ -396,6 +412,7 @@ enum ad7124_pga {
 **/
 struct ad7124_channel_setup {
 	bool bi_unipolar;
+	enum ad7124_burnout burnout;
 	bool ref_buff;
 	bool  ain_buff;
 	enum ad7124_reference_source ref_source;
@@ -634,6 +651,11 @@ int ad7124_assign_setup(struct ad7124_dev *device,
 int ad7124_set_polarity(struct ad7124_dev* device,
 			bool bipolar,
 			uint8_t setup_id);
+
+/* Assign magnitude of burnout current source to setup */
+int ad7124_set_burnout(struct ad7124_dev* device,
+		       enum ad7124_burnout burnout,
+		       uint8_t setup_id);
 
 /* Assign reference source to setup */
 int ad7124_set_reference_source(struct ad7124_dev* device,
