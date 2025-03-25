@@ -62,6 +62,7 @@ int example_main()
 	float temp_now;
 	int ret;
 
+#ifndef LINUX_PLATFORM
 	struct no_os_uart_desc *uart;
 
 	ret = no_os_uart_init(&uart, &uip);
@@ -69,6 +70,7 @@ int example_main()
 		goto error;
 
 	no_os_uart_stdio(uart);
+#endif
 
 	ret = adt7420_init(&adt7420, adt7420_user_init);
 	if (ret)
