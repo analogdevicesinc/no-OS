@@ -282,6 +282,8 @@ int main(void)
 
 	printf("ad9656: setup, configuration and test program is done\n");
 
+	no_os_mdelay(10);
+
 #ifdef IIO_SUPPORT
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
