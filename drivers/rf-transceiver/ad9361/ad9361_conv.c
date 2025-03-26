@@ -36,7 +36,9 @@
 #include "ad9361.h"
 #include "no_os_delay.h"
 #include "ad9361_util.h"
+#ifndef AXI_ADC_NOT_PRESENT
 #include "axi_adc_core.h"
+#endif
 #include "app_config.h"
 
 #ifndef AXI_ADC_NOT_PRESENT
