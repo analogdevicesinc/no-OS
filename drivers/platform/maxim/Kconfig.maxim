@@ -1,0 +1,19 @@
+config SPI_MAXIM
+        bool "Enable Maxim SPI driver"
+        default n
+
+config I2C_MAXIM
+        bool "Enable Maxim I2C driver"
+        default n
+
+config UART_MAXIM
+        bool "Enable Maxim UART driver"
+        default n
+
+config UART_STDIO_MAXIM
+        bool "Enable Maxim UART STDIO driver"
+        default n
+
+config IRQ_MAXIM
+        bool "Enable Maxim interrupt controller driver"
+        default n
