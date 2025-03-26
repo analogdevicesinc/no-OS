@@ -1,0 +1,10 @@
+add_subdirectory(api)
+add_subdirectory(platform)
+
+# add_subdirectory(accel)
+# add_subdirectory(adc)
+# add_subdirectory(adc-dac)
+# add_subdirectory(afe)
+# add_subdirectory(amplifiers)
+# add_subdirectory(axi_core)
+# add_subdirectory(cdc)
