@@ -1,6 +1,7 @@
 SRCS += $(PROJECT)/src/main.c
 
 INCS += $(PROJECT)/src/parameters.h
+SRCS += $(PROJECT)/src/parameters.c
 
 INCS += $(INCLUDE)/no_os_delay.h    \
 	$(INCLUDE)/no_os_alloc.h 		\
