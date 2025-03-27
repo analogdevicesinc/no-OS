@@ -28,7 +28,7 @@ COMPILER_INTELLISENSE_PATH = $(COMPILER_BIN)/arm-none-eabi-gcc
 
 # Locate openocd location under STM32CubeIDE plugins directory
 OPENOCD_SCRIPTS = $(realpath $(addsuffix ..,$(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *st_scripts/interface/stlink-dap.cfg))))
-OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd)))
+OPENOCD_BIN = $(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *bin/openocd *bin/openocd.exe)))
 OPENOCD_SVD = $(word 1,$(realpath $(dir $(call rwildcard, $(STM32CUBEIDE)/plugins, *.svd))))
 VSCODE_CMSISCFG_FILE = "$(BINARY).openocd-cmsis"
 TARGET_HARDWARE=HARDWARE=$(HARDWARE)
