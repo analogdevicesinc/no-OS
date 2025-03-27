@@ -41,6 +41,7 @@
 #include "no_os_uart.h"
 #include "aducm3029_uart.h"
 #include "aducm3029_uart_stdio.h"
+#include "aducm3029_irq.h"
 
 /***************************************************************************//**
  * @brief main
@@ -72,6 +73,7 @@ int main(int argc, char *argv[])
 	struct no_os_irq_ctrl_desc *irq_dut;
 	struct no_os_irq_init_param irq_init = {
 		.irq_ctrl_id = 0,
+		.platform_ops = &aducm_irq_ops,
 		.extra = NULL
 	};
 
