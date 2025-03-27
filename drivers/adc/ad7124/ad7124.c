@@ -857,6 +857,32 @@ int ad7124_set_polarity(struct ad7124_dev* device,
 	return 0;
 }
 
+/***************************************************************************//**
+ * @brief Set the Magnitude of the Burnout Detect Current Source
+ * @param device - AD7124 Device Descriptor.
+ * @param burnout - Burnout current.
+ * @param setup_id - Setup ID (number).
+ * @return Returns 0 for success or negative error code otherwise.
+*****************************************************************************/
+int ad7124_set_burnout(struct ad7124_dev* device,
+		       enum ad7124_burnout burnout,
+		       uint8_t setup_id)
+{
+	int ret;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CFG0_REG + setup_id,
+				   no_os_field_prep(AD7124_SETUP_CONF_REG_BURNOUT_MSK, burnout),
+				   AD7124_SETUP_CONF_REG_BURNOUT_MSK);
+
+	if (ret)
+		return ret;
+
+	device->setups[setup_id].burnout = burnout;
+
+	return 0;
+}
+
 /***************************************************************************//*
  * @brief Select the reference source.
  * @param device - AD7124 Device Descriptor.
@@ -950,6 +976,32 @@ int ad7124_enable_buffers(struct ad7124_dev* device,
 
 	device->setups[setup_id].ain_buff = inbuf_en;
 	device->setups[setup_id].ref_buff = refbuf_en;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Select the PGA Gain.
+ * @param device - AD7124 Device Descriptor.
+ * @param pga - PGA gain.
+ * @param setup_id - Setup ID (Number).
+ * @return Returns 0 for success or negative error code otherwise.
+******************************************************************************/
+int ad7124_set_pga(struct ad7124_dev* device,
+		   enum ad7124_pga pga,
+		   uint8_t setup_id)
+{
+	int ret;
+
+	ret = ad7124_reg_write_msk(device,
+				   AD7124_CFG0_REG + setup_id,
+				   no_os_field_prep(AD7124_SETUP_CONF_REG_PGA_MSK, pga),
+				   AD7124_SETUP_CONF_REG_PGA_MSK);
+
+	if (ret)
+		return ret;
+
+	device->setups[setup_id].pga = pga;
 
 	return 0;
 }
@@ -1059,6 +1111,13 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 		if (ret)
 			goto error_spi;
 
+		ret = ad7124_set_burnout(dev,
+					 init_param->setups[setup_index].burnout,
+					 setup_index);
+
+		if (ret)
+			goto error_spi;
+
 		ret = ad7124_set_reference_source(dev,
 						  init_param->setups[setup_index].ref_source,
 						  setup_index,
@@ -1070,6 +1129,13 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 					    init_param->setups[setup_index].ain_buff,
 					    init_param->setups[setup_index].ref_buff,
 					    setup_index);
+		if (ret)
+			goto error_spi;
+
+		ret = ad7124_set_pga(dev,
+				     init_param->setups[setup_index].pga,
+				     setup_index);
+
 		if (ret)
 			goto error_spi;
 	}
