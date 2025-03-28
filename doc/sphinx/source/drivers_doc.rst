@@ -20,6 +20,7 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/ad405x
    drivers/ad796x
    drivers/pulsar_adc
+   drivers/ad7768
 
 AXI CORES
 =========
