@@ -33,6 +33,6 @@
 
 #include "parameters.h"
 
-struct linux_i2c_init_param ad9545_i2c_extra_ip = {
-	.device_id = 0
+struct linux_i2c_init_param adt7420_i2c_extra = {
+	.device_id = I2C_DEVICE_ID
 };

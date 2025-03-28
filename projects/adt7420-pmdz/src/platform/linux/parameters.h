@@ -36,6 +36,7 @@
 
 #include "linux_i2c.h"
 
+#define I2C_DEVICE_ID   1
 #define I2C_EXTRA	&adt7420_i2c_extra
 #define I2C_OPS		&linux_i2c_ops
 

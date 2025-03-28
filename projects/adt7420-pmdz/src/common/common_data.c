@@ -33,6 +33,7 @@
 
 #include "common_data.h"
 
+#ifndef LINUX_PLATFORM
 struct no_os_uart_init_param uip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
@@ -44,6 +45,7 @@ struct no_os_uart_init_param uip = {
 	.platform_ops = UART_OPS,
 	.extra = &xuip,
 };
+#endif
 
 const struct no_os_i2c_init_param iip = {
 	.device_id = I2C_DEVICE_ID,

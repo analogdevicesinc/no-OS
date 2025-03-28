@@ -33,6 +33,8 @@
 #ifndef LINUX_I2C_H_
 #define LINUX_I2C_H_
 
+#include <stdint.h>
+
 /**
  * @struct linux_i2c_init_param
  * @brief Structure holding the initialization parameters for Linux platform
