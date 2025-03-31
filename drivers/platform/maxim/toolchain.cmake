@@ -9,11 +9,22 @@ endif()
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)  # Target architecture
 
+if (${USE_VENDOR_TOOLCHAIN})
+
 # Specify the cross compiler
 set(CMAKE_C_COMPILER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-g++)
 set(CMAKE_ASM_COMPILER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-gcc)
 set(CMAKE_LINKER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-ld)
+
+else()
+
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
+set(CMAKE_LINKER arm-none-eabi-ld)
+
+endif()
 
 set(CMAKE_C_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -g3")
 set(CMAKE_ASM_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")

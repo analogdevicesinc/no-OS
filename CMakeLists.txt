@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.27)
 # set the project name
 
 project(capi VERSION 1.0 LANGUAGES C CXX ASM)
+include(FetchContent)
 
-# set(CMAKE_SYSTEM_PROCESSOR arm)
-# set(CMAKE_CXX_COMPILER /usr/bin/arm-none-eabi-g++)
-# set(CMAKE_C_COMPILER /usr/bin/arm-none-eabi-gcc)
+message(STATUS "🦨🦨🦨 No-OS build 🦨🦨🦨")
 
 find_package (Python3 COMPONENTS Interpreter Development)
+find_package(Git)
 
 set(CONFIG_FILE ${CMAKE_SOURCE_DIR}/.config)
 configure_file(${CONFIG_FILE} ${CMAKE_BINARY_DIR}/.config COPYONLY)
@@ -38,3 +38,9 @@ add_subdirectory(util)
 add_subdirectory(iio)
 add_subdirectory(network)
 add_subdirectory(projects)
+
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e # release-1.10.0
+)

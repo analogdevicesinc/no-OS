@@ -6,7 +6,7 @@ capi_dir = Path(sys.argv[1])
 
 kconf = kconfiglib.Kconfig(capi_dir.joinpath("Kconfig"))
 
-kconf.load_config(capi_dir.joinpath("projects/template/project.conf"))
+kconf.load_config(capi_dir.joinpath("projects/iio_demo/project.conf"))
 kconf.write_config(capi_dir.joinpath(".config"))
 
 with open(capi_dir.joinpath("config.cmake"), "w") as cmake_file:
