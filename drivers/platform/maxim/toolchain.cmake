@@ -7,7 +7,7 @@ else()
 endif()
 
 set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_SYSTEM_PROCESSOR arm)  # Target architecture
+set(CMAKE_SYSTEM_PROCESSOR arm)
 
 if (${USE_VENDOR_TOOLCHAIN})
 

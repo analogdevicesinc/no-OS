@@ -1,23 +1,31 @@
 config SPI_MAXIM
         depends on SPI
         bool "Enable Maxim SPI driver"
-        default y
+        default n
 
 config I2C_MAXIM
         depends on I2C
         bool "Enable Maxim I2C driver"
-        default y
+        default n
 
 config UART_MAXIM
         depends on UART
         bool "Enable Maxim UART driver"
-        default y
+        default n
 
 config UART_STDIO_MAXIM
         bool "Enable Maxim UART STDIO driver"
-        default y
+        default n
 
 config IRQ_MAXIM
         depends on IRQ
         bool "Enable Maxim interrupt controller driver"
-        default y
+        default n
+
+config GPIO_MAXIM
+        bool "Enable the Maxim GPIO driver"
+        default n
+
+config GPIO_IRQ_MAXIM
+        bool "Enable the Maxim GPIO driver"
+        default n
