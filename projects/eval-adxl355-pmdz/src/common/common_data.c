@@ -47,7 +47,7 @@ struct no_os_uart_init_param adxl355_uart_ip = {
 
 struct no_os_spi_init_param adxl355_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = SPI_BAUDRATE,
+	.max_speed_hz = UART_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS,

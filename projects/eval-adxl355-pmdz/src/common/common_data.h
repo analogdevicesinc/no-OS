@@ -33,8 +33,8 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "parameters.h"
 #include "adxl355.h"
+#include "maxim/parameters.h"
 
 extern struct no_os_uart_init_param adxl355_uart_ip;
 extern struct no_os_spi_init_param adxl355_spi_ip;

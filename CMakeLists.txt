@@ -9,18 +9,39 @@ message(STATUS "🦨🦨🦨 No-OS build 🦨🦨🦨")
 find_package (Python3 COMPONENTS Interpreter Development)
 find_package(Git)
 
-set(CONFIG_FILE ${CMAKE_SOURCE_DIR}/.config)
-configure_file(${CONFIG_FILE} ${CMAKE_BINARY_DIR}/.config COPYONLY)
-
 function(no_os_sources_ifdef feature_toggle source)
   if(${feature_toggle})
     target_sources(capi_build PRIVATE ${source} ${ARGN})
   endif()
 endfunction()
 
+list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR})
+list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
+
+# list(APPEND CONFIG_FILES ${CMAKE_SOURCE_DIR}/generate_config.py)
+
 execute_process(
-        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/generate_config.py ${CMAKE_SOURCE_DIR}
+        COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_SOURCE_DIR}/generate_config.py
+        ${GENERATE_CONFIG_ARGS}
 )
+
+# add_custom_command(
+#         OUTPUT ${CMAKE_BINARY_DIR}/.config
+#         COMMAND ${Python3_EXECUTABLE}
+#         ${CMAKE_SOURCE_DIR}/generate_config.py
+#         ${GENERATE_CONFIG_ARGS}
+#         DEPENDS ${CMAKE_SOURCE_DIR}/generate_config.py ${CONFIG_FILES}
+#         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+# )
+
+# add_custom_target(
+#         generate_config ALL
+#         DEPENDS ${CMAKE_BINARY_DIR}/.config
+# )
+
+set(CONFIG_FILE ${CMAKE_SOURCE_DIR}/.config)
+configure_file(${CONFIG_FILE} ${CMAKE_BINARY_DIR}/.config COPYONLY)
 
 include(config.cmake)
 
@@ -42,5 +63,7 @@ add_subdirectory(projects)
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e # release-1.10.0
+  GIT_TAG        6910c9d9165801d8827d628cb72eb7ea9dd538c5 # release-1.16.0
 )
+
+FetchContent_MakeAvailable(googletest)
