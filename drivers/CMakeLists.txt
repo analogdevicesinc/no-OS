@@ -1,5 +1,6 @@
 add_subdirectory(api)
 add_subdirectory(platform)
+add_subdirectory(accel)
 add_subdirectory(adc)
 add_subdirectory(dac)
 
