@@ -95,7 +95,7 @@ Has to be adapted accordingly if another pin is used.
  */
 #define NVIC_GPIO_IRQ   GPIO1_IRQn
 #define GPIO_IRQ_ID     1
-#elif (TARGET_NUM == 32690)
+#elif (TARGET_NUM == 32690 || TARGET_NUM == 32650)
 #define GPIO_DRDY_PIN_NUM   14
 #define GPIO_DRDY_PORT_NUM  0
 #define NVIC_GPIO_IRQ   GPIO0_IRQn

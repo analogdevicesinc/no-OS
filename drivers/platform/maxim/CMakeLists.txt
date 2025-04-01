@@ -5,6 +5,8 @@ no_os_sources_ifdef(CONFIG_UART_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim
 no_os_sources_ifdef(CONFIG_UART_STDIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim_uart_stdio.c)
 no_os_sources_ifdef(CONFIG_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim_spi.c)
 no_os_sources_ifdef(CONFIG_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim_irq.c)
+no_os_sources_ifdef(CONFIG_GPIO_IRQ_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim_gpio_irq.c)
+no_os_sources_ifdef(CONFIG_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim_gpio.c)
 
 target_sources(capi_build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/max32650/maxim_delay.c)
 target_sources(capi_build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
