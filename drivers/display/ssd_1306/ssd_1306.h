@@ -39,6 +39,18 @@
 #include "display.h"
 #include "no_os_gpio.h"
 
+enum comm_type {
+	SSD1306_I2C,
+	SSD1306_SPI
+};
+
+enum transmit_type {
+	SSD1306_CMD,
+	SSD1306_DATA
+};
+
+#define SSD1306_I2C_ADDR	0x3C
+
 /**
  * @struct ssd_1306_extra
  * @brief Extra parameters needed for ssd_1306 usage.
@@ -56,6 +68,12 @@ typedef struct ssd_1306_extra {
 	struct no_os_spi_init_param      *spi_ip;
 	/* SPI descriptor*/
 	struct no_os_spi_desc	           *spi_desc;
+	/* I2C initial param*/
+	struct no_os_i2c_init_param      *i2c_ip;
+	/* I2C descriptor*/
+	struct no_os_i2c_desc           *i2c_desc;
+	/* Communication type */
+	enum comm_type                   comm_type;
 } ssd_1306_extra;
 
 extern const struct display_controller_ops ssd1306_ops;
