@@ -11,39 +11,17 @@ find_package(Git)
 
 function(no_os_sources_ifdef feature_toggle source)
   if(${feature_toggle})
+    set_source_files_properties(${source} OBJECT DEPENDS ${CMAKE_BINARY_DIR}/config.cmake)
     target_sources(capi_build PRIVATE ${source} ${ARGN})
   endif()
 endfunction()
 
-list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR})
-list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
-
-# list(APPEND CONFIG_FILES ${CMAKE_SOURCE_DIR}/generate_config.py)
-
-execute_process(
-        COMMAND ${Python3_EXECUTABLE}
-        ${CMAKE_SOURCE_DIR}/generate_config.py
-        ${GENERATE_CONFIG_ARGS}
-)
-
-# add_custom_command(
-#         OUTPUT ${CMAKE_BINARY_DIR}/.config
-#         COMMAND ${Python3_EXECUTABLE}
-#         ${CMAKE_SOURCE_DIR}/generate_config.py
-#         ${GENERATE_CONFIG_ARGS}
-#         DEPENDS ${CMAKE_SOURCE_DIR}/generate_config.py ${CONFIG_FILES}
-#         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-# )
-
-# add_custom_target(
-#         generate_config ALL
-#         DEPENDS ${CMAKE_BINARY_DIR}/.config
-# )
+# Board specific defconfig
+list(APPEND CONFIG_FILES ${DEFAULT_DEFCONFIG})
+list(APPEND CONFIG_FILES ${CMAKE_SOURCE_DIR}/projects/eval-adxl355-pmdz/project.conf)
 
 set(CONFIG_FILE ${CMAKE_SOURCE_DIR}/.config)
 configure_file(${CONFIG_FILE} ${CMAKE_BINARY_DIR}/.config COPYONLY)
-
-include(config.cmake)
 
 add_library(capi_build STATIC)
 
@@ -51,14 +29,36 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR})
+list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
+
 target_compile_options(capi_build PRIVATE -Wall)
 target_link_options(capi_build PRIVATE -Wl,--gc-sections)
 
-add_subdirectory(drivers)
-add_subdirectory(util)
-add_subdirectory(iio)
-add_subdirectory(network)
+add_custom_command(
+        OUTPUT ${CMAKE_BINARY_DIR}/.config ${CMAKE_BINARY_DIR}/config.cmake
+        COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_SOURCE_DIR}/generate_config.py
+        ${GENERATE_CONFIG_ARGS}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(
+        generate_config ALL
+        DEPENDS ${CMAKE_BINARY_DIR}/.config ${CONFIG_FILES} ${CMAKE_BINARY_DIR}/config.cmake
+)
+
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_BINARY_DIR}/config.cmake)
+include(${CMAKE_SOURCE_DIR}/config.cmake)
+
 add_subdirectory(projects)
+
+message(STATUS "config files ### : ${CONFIG_FILES}")
+
+add_subdirectory(drivers)
+add_subdirectory(iio)
+add_subdirectory(util)
+add_subdirectory(network)
 
 FetchContent_Declare(
   googletest
