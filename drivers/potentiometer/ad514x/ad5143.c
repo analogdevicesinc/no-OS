@@ -76,7 +76,7 @@ static int ad5143_validate_chn(struct ad5143_dpot_dev *ad5143_desc,
  */
 int ad5143_dpot_init(struct dpot_init_param *param, struct dpot_dev **desc)
 {
-	int ret;
+	int ret,nIndex=0;
 	struct dpot_dev *dev;
 	struct ad5143_dpot_init_param *ad5143_params;
 	struct ad5143_dpot_dev *ad5143_dev;
@@ -115,13 +115,13 @@ int ad5143_dpot_init(struct dpot_init_param *param, struct dpot_dev **desc)
 	/* Enable/disable shutdown */
 	if (ad5143_params->eoperating_mode == DPOT_LINEAR_GAIN_SETTING_MODE) {
 		for (chn = DPOT_CHN_R_AW1; chn <= DPOT_CHN_R_WB4; chn++) {
-			ret = ad5143_dpot_shutdown(dev, chn, ad5143_params->shutdown_enable_lg[chn]);
+			ret = ad5143_dpot_shutdown(dev, chn, ad5143_params->shutdown_enable_lg[nIndex++]);
 			if (ret)
 				goto err_dpot_init;
 		}
 	} else {
 		for (chn = DPOT_CHN_RDAC1; chn <= DPOT_CHN_RDAC4; chn++) {
-			ret = ad5143_dpot_shutdown(dev, chn, ad5143_params->shutdown_enable_pt[chn]);
+			ret = ad5143_dpot_shutdown(dev, chn, ad5143_params->shutdown_enable_pt[nIndex++]);
 			if (ret)
 				goto err_dpot_init;
 		}
@@ -234,7 +234,6 @@ int ad5143_dpot_shutdown(struct dpot_dev *desc,
 	if (ret)
 		return ret;
 
-	ad5143_desc->shutdown_enable[chn] = shutdown_enable;
 
 	return 0;
 }

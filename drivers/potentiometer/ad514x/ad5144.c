@@ -431,10 +431,6 @@ int ad5144_dpot_shutdown(struct dpot_dev *desc,
 	ret = ad5144_dpot_send_cmd(desc, &cmd);
 	if (ret)
 		return ret;
-	if (ad5144_desc->eoperating_mode == DPOT_LINEAR_GAIN_SETTING_MODE) {
-		nindex = chn - DPOT_CHN_R_AW1;
-	}
-	ad5144_desc->shutdown_enable[nindex] = shutdown_enable;
 
 	return 0;
 }
