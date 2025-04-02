@@ -1,8 +1,8 @@
 /***************************************************************************//**
  *   @file   adf4382.h
  *   @brief  Implementation of adf4382 Driver.
- *   @authors Ciprian Hegbeli (ciprian.hegbeli@analog.com)
- *            Jude Osemene (jude.osemene@analog.com)
+ *   @author Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -492,17 +492,19 @@
 
 #define ADF4382_VPTAT_CALGEN			46
 #define ADF4382_VCTAT_CALGEN			82
-#define ADF4382_FASTCAL_VPTAT_CALGEN		30
-#define ADF4382_FASTCAL_VCTAT_CALGEN		70
+#define ADF4382_FASTCAL_VPTAT_CALGEN		7
+#define ADF4382_FASTCAL_VCTAT_CALGEN		21
 #define ADF4382_PHASE_BLEED_CNST		2044000
 #define ADF4382_VCO_CAL_CNT			183
 #define ADF4382_VCO_CAL_VTUNE			640
 #define ADF4382_VCO_CAL_ALC			123
 #define ADF4382_POR_DELAY_US			200
-#define ADF4382_LKD_DELAY_US			500
+#define ADF4382_LKD_DELAY_US			1000
 #define ADF4382_COARSE_BLEED_CONST		180U	// 180 microseconds
 #define ADF4382_FINE_BLEED_CONST_1		512U	// 512 microseconds
 #define ADF4382_FINE_BLEED_CONST_2		250U	// 250 microseconds
+#define ADF4382_CAL_VTUNE_TO			124U
+#define ADF4382_FSM_BUSY_LOOP_CNT		100U
 
 #define MHZ					MEGA
 #define S_TO_NS					NANO
@@ -629,12 +631,13 @@ static const struct reg_sequence adf4382_reg_defaults[] = {
 	{ 0x040, 0x00 },
 	{ 0x03f, 0x82 },
 	{ 0x03e, 0x4E },
+	{ 0x03d, 0x20 },
 	{ 0x03c, 0x00 },
 	{ 0x03b, 0x00 },
 	{ 0x03a, 0xFA },
-	{ 0x039, 0x80 },
-	{ 0x038, 0x71 },
-	{ 0x037, 0x82 },
+	{ 0x039, 0x00 },
+	{ 0x038, 0x7C },
+	{ 0x037, 0xCA },
 	{ 0x036, 0xC0 },
 	{ 0x035, 0x00 },
 	{ 0x034, 0x36 },
