@@ -1,0 +1,3 @@
+config DAC_DEMO
+    bool "Enable ADC demo driver"
+    default n
