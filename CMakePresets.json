@@ -1,0 +1,38 @@
+{
+        "version": 8,
+        "cmakeMinimumRequired": {
+                "major": 3,
+                "minor": 28,
+                "patch": 0
+        },
+
+        "configurePresets": [
+                {
+                        "name": "default",
+                        "description": "Default config",
+                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake"
+                },
+                {
+                        "name": "max78000_fthr",
+                        "description": "Config for MAX78000 feather board",
+                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake",
+                        "cacheVariables": {
+                                "BOARD": "MAX78000_FTHR",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "maxim",
+                                "DEFAULT_DEFCONFIG": "board_configs/maxim/max78000_fthr_defconfig"
+                        }
+                },
+                {
+                        "name": "max32650_fthr",
+                        "description": "Config for MAX78000 feather board",
+                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake",
+                        "cacheVariables": {
+                                "BOARD": "MAX32650_FTHR",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "maxim",
+                                "DEFAULT_DEFCONFIG": "board_configs/maxim/max32650_fthr_defconfig"
+                        }
+                }
+        ]
+}
