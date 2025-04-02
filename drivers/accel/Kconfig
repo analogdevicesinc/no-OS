@@ -1,0 +1,4 @@
+config ACCEL_ADXL355
+    depends on SPI
+    bool "Enable the ADXL355 driver"
+    default n
