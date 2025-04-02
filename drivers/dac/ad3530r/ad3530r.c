@@ -332,9 +332,13 @@ int ad3530r_multiple_reg_write(struct ad3530r_desc *desc,
 			       uint8_t *buff)
 {
 	struct ad3530r_transfer_data msg = { 0 };
+	uint8_t reg_len;
 
-	if (!desc || !buff || (start_addr > AD3530R_REG_ADDR_MAX))
+	if (!desc || !buff || (AD3530R_ADDR(start_addr) > AD3530R_REG_ADDR_MAX))
 		return -EINVAL;
+
+	/* Get the register length */
+	reg_len = AD3530R_LEN(start_addr);
 
 	/* Short instruction only works below reg address 0x80 */
 	if (start_addr < AD3530R_MAX_SHORT_REG_ADDR)
@@ -346,8 +350,12 @@ int ad3530r_multiple_reg_write(struct ad3530r_desc *desc,
 	multi_cfg.addr_asc = desc->spi_cfg.addr_asc;
 	multi_cfg.single_instr = 0;
 
+	if (!desc->spi_cfg.addr_asc)
+		msg.addr = AD3530R_ADDR(start_addr) + reg_len - 1;
+	else
+		msg.addr = AD3530R_ADDR(start_addr);
+
 	msg.is_read = 0;
-	msg.addr = AD3530R_ADDR(start_addr);
 	msg.data = buff;
 	msg.len = count;
 	msg.spi_cfg = &multi_cfg;
@@ -458,9 +466,13 @@ int ad3530r_multiple_reg_read(struct ad3530r_desc *desc,
 			      uint8_t *buff)
 {
 	struct ad3530r_transfer_data msg = { 0 };
+	uint8_t reg_len;
 
 	if (!desc || !buff)
 		return -EINVAL;
+
+	/* Get the register length */
+	reg_len = AD3530R_LEN(addr);
 
 	/* Short instruction only works below reg address 0x80 */
 	if (addr < AD3530R_MAX_SHORT_REG_ADDR)
@@ -471,8 +483,12 @@ int ad3530r_multiple_reg_read(struct ad3530r_desc *desc,
 	multi_cfg.stream_mode_length = count;
 	multi_cfg.addr_asc = desc->spi_cfg.addr_asc;
 
+	if (!desc->spi_cfg.addr_asc)
+		msg.addr = AD3530R_ADDR(addr) + reg_len - 1;
+	else
+		msg.addr = AD3530R_ADDR(addr);
+
 	msg.is_read = 1;
-	msg.addr = AD3530R_ADDR(addr);
 	msg.data = buff;
 	msg.len = count;
 
@@ -590,8 +606,11 @@ int ad3530r_set_crc_enable(struct ad3530r_desc *desc, bool en_di)
 	reg = en_di ? AD3530R_CRC_ENABLE_VALUE : AD3530R_CRC_DISABLE_VALUE;
 	err = ad3530r_spi_write_mask(desc, AD3530R_REG_ADDR_INTERFACE_CONFIG_C,
 				     AD3530R_MASK_CRC_ENABLE, reg);
-	if (NO_OS_IS_ERR_VALUE(err))
+	if (err)
 		return err;
+
+	if (en_di)
+		no_os_crc8_populate_msb(desc->crc_table, AD3530R_CRC_POLY);
 
 	desc->crc_en = en_di;
 
@@ -1018,9 +1037,6 @@ int ad3530r_init(struct ad3530r_desc **desc,
 		pr_err("Device Configuration failed: %d \n", ret);
 		goto err_ldac;
 	}
-
-	if (descriptor->crc_en)
-		no_os_crc8_populate_msb(descriptor->crc_table, AD3530R_CRC_POLY);
 
 	descriptor->chip_id = init_param->chip_id;
 
