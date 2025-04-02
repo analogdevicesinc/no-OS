@@ -151,7 +151,7 @@ static int ad5142_validate_chn(struct ad5142_dpot_dev *ad5142_desc,
  */
 int ad5142_dpot_init(struct dpot_init_param *param, struct dpot_dev **desc)
 {
-	int ret,nIndex=0;
+	int ret, nIndex = 0;
 	struct dpot_dev *dev;
 	struct ad5142_dpot_init_param *ad5142_params;
 	struct ad5142_dpot_dev *ad5142_dev;
@@ -216,13 +216,15 @@ int ad5142_dpot_init(struct dpot_init_param *param, struct dpot_dev **desc)
 	/* Enable/disable shutdown */
 	if (ad5142_params->eoperating_mode == DPOT_LINEAR_GAIN_SETTING_MODE) {
 		for (chn = DPOT_CHN_R_AW1; chn <= DPOT_CHN_R_WB2; chn++) {
-				ret = ad5142_dpot_shutdown(dev, chn, ad5142_params->shutdown_enable_lg[nIndex++]);
+			ret = ad5142_dpot_shutdown(dev, chn,
+						   ad5142_params->shutdown_enable_lg[nIndex++]);
 			if (ret)
 				goto err_dpot_init;
 		}
 	} else {
 		for (chn = DPOT_CHN_RDAC1; chn <= DPOT_CHN_RDAC2; chn++) {
-			ret = ad5142_dpot_shutdown(dev, chn, ad5142_params->shutdown_enable_lg[nIndex++]);
+			ret = ad5142_dpot_shutdown(dev, chn,
+						   ad5142_params->shutdown_enable_lg[nIndex++]);
 			if (ret)
 				goto err_dpot_init;
 		}
