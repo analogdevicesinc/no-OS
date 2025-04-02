@@ -1,8 +1,8 @@
 /***************************************************************************//**
  *   @file   adf4382.c
  *   @brief  Implementation of adf4382 Driver.
- *   @authors Ciprian Hegbeli (ciprian.hegbeli@analog.com)
- * 	      Jude Osemene (jude.osemene@analog.com)
+ *   @author Ciprian Hegbeli (ciprian.hegbeli@analog.com)
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
