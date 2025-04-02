@@ -3,15 +3,16 @@ import sys
 from pathlib import Path
 
 if len(sys.argv) <= 2:
-        sys.exit("Error: Invalid number of parameters (expected 2, provided {})".format(len(sys.argv) - 1))
+        sys.exit("Error: Invalid number of parameters (expected 3, provided {})".format(len(sys.argv) - 1))
 
 capi_dir = Path(sys.argv[1])
 board_defconfig = sys.argv[2]
+project_defconfig = sys.argv[3]
 
 kconf = kconfiglib.Kconfig(capi_dir.joinpath("Kconfig"))
 
 kconf.load_config(capi_dir.joinpath(board_defconfig))
-kconf.load_config(capi_dir.joinpath("projects/eval-adxl355-pmdz/project.conf"), replace=False)
+kconf.load_config(capi_dir.joinpath(project_defconfig), replace=False)
 kconf.write_config(capi_dir.joinpath(".config"))
 
 with open(capi_dir.joinpath("config.cmake"), "w") as cmake_file:
