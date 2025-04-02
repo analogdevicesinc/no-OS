@@ -731,7 +731,9 @@ static int ad9081_setup(struct ad9081_phy *phy)
 	uint8_t txfe_pll_stat;
 	int ret;
 
-	no_os_clk_recalc_rate(phy->dev_clk->clk_desc, &dev_frequency_hz);
+	ret = no_os_clk_recalc_rate(phy->dev_clk->clk_desc, &dev_frequency_hz);
+	if(ret)
+		return ret;
 
 	ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNC_LMFC_DELAY_ADDR,
 				    BF_SYNC_LMFC_DELAY_SET_INFO,

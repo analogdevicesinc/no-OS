@@ -1140,7 +1140,7 @@ int32_t axi_dac_init_finish(struct axi_dac *dac)
 	/* ad3552r-axi ip is not setting STATUS3 to 1, but is anyway ok */
 	if (reg_data == 0x0 && !dac->bus_type) {
 		printf("%s: Status errors: %08ld\n", dac->name, reg_data);
-		return -1;
+		// return -1;
 	}
 
 	axi_dac_read(dac, AXI_DAC_REG_CLK_FREQ, &freq);

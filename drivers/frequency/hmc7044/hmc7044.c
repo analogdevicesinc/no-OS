@@ -1050,6 +1050,13 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
 	no_os_mdelay(1);
 
+	printf("HMC7043 reg dump:\n");
+	uint8_t readdump;
+	for(i = 0; i <= 338; i++) {
+		hmc7044_read(dev, i, &readdump);
+		printf("[0x%X] = 0x%x\n", i, readdump);
+	}
+
 	return 0;
 }
 
@@ -1446,6 +1453,28 @@ static const struct jesd204_dev_data jesd204_hmc7044_init = {
 };
 
 
+int32_t hmc7044_clk_enable(struct hmc7044_dev *dev)
+{
+	int ret;
+	struct hmc7044_chan_spec *chan;
+	uint32_t i, c;
+
+	// ret = hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
+	// 			  HMC7044_RESTART_DIV_FSM);
+	// if (ret)
+	// 	return ret;
+	// no_os_mdelay(1);
+	// ret = hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
+	// 			(dev->high_performance_mode_clock_dist_en ?
+	// 			HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
+	// if (ret)
+	// 	return ret;
+	
+	// no_os_mdelay(1);
+
+	return 0;
+}
+
 /**
  * Initialize the device.
  * @param device - The device structure.
@@ -1679,6 +1708,7 @@ int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
  * @brief hmc7044 clock ops
  */
 const struct no_os_clk_platform_ops hmc7044_clk_ops = {
+	.clk_enable = &hmc7044_clk_enable,
 	.clk_recalc_rate = &hmc7044_recalc_rate,
 	.clk_round_rate = &hmc7044_round_rate,
 	.clk_set_rate = &hmc7044_set_rate,

@@ -71,7 +71,7 @@ extern struct hmc7044_dev* hmc7044_dev;
 
 int main(void)
 {
-	struct no_os_clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
+	struct no_os_clk app_clk[5];
 	struct no_os_clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
 #ifdef PLATFORM_MB
@@ -145,10 +145,11 @@ int main(void)
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
 		.sysref_cmos_input_enable = 0,
-		.config_sync_0a_cmos_enable = 0,
+		.config_sync_0a_cmos_enable = 1,
 		.multidevice_instance_count = 1,
+		.jesd_sync_pins_01_swap_enable = 0,
 #ifdef QUAD_MXFE
-		.jesd_sync_pins_01_swap_enable = true,
+		.jesd_sync_pins_01_swap_enable = false,
 #else
 		.jesd_sync_pins_01_swap_enable = false,
 #endif
@@ -247,15 +248,63 @@ int main(void)
 	if (status)
 		return status;
 #endif
-
+	
 	status = app_clock_init(app_clk);
 	if (status != 0)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
-	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
-	if (status != 0)
-		printf("app_jesd_init() error: %" PRId32 "\n", status);
+	// status = app_jesd_init(jesd_clk,
+	// 		       500000, 250000, 250000, 16500000, 16500000);
+	// if (status != 0)
+	// 	printf("app_jesd_init() error: %" PRId32 "\n", status);
+	uint32_t reference_clk_khz = 500000;
+	uint32_t rx_device_clk_khz = 250000;
+	uint32_t tx_device_clk_khz = 250000;
+	uint32_t rx_lane_clk_khz = 16500000;
+	uint32_t tx_lane_clk_khz = 16500000;
+	int ret;
+
+	struct jesd204_tx_init tx_jesd_init = {
+		.name = "tx_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = AD9081_TX_JESD_F,
+		.frames_per_multiframe = AD9081_TX_JESD_K,
+		.converters_per_device = AD9081_TX_JESD_M *
+		MULTIDEVICE_INSTANCE_COUNT,
+		.converter_resolution = AD9081_TX_JESD_N,
+		.bits_per_sample = AD9081_TX_JESD_NP,
+		.high_density = AD9081_TX_JESD_HD,
+		.control_bits_per_sample = AD9081_TX_JESD_CS,
+		.subclass = AD9081_TX_JESD_SUBCLASS,
+		.device_clk_khz = tx_device_clk_khz,
+		.lane_clk_khz = tx_lane_clk_khz
+	};
+
+	struct jesd204_rx_init rx_jesd_init = {
+		.name = "rx_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = AD9081_RX_JESD_F,
+		.frames_per_multiframe = AD9081_RX_JESD_K,
+		.subclass = AD9081_RX_JESD_SUBCLASS,
+		.device_clk_khz = rx_device_clk_khz,
+		.lane_clk_khz = rx_lane_clk_khz
+	};
+	
+	rx_jesd_init.lane_clk = app_clk[4].clk_desc;
+
+	tx_jesd_init.lane_clk = app_clk[4].clk_desc;
+
+	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	if (ret)
+		return ret;
+
+	jesd_clk[1].clk_desc = tx_jesd->lane_clk;
+
+	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	if (ret)
+		return ret;
+
+	jesd_clk[0].clk_desc = rx_jesd->lane_clk;
 
 	rx_adc_init.num_channels = 0;
 	tx_dac_init.num_channels = 0;

@@ -1,5 +1,5 @@
-IIOD ?= n
-QUAD_MXFE = n
+IIOD = y
+QUAD_MXFE = y
 
 include ../../tools/scripts/generic_variables.mk
 

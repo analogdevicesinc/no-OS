@@ -165,4 +165,6 @@ int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
 int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan_num,
 			     uint64_t rate);
 
+int32_t hmc7044_clk_enable(struct hmc7044_dev *dev);
+
 #endif // HMC7044_H_
