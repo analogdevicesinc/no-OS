@@ -36,7 +36,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "iio_app.h"
-#include "parameters.h"
 #include "no_os_alloc.h"
 
 #if defined(ADUCM_PLATFORM)
@@ -272,7 +271,7 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
 #endif
 
 	struct no_os_irq_init_param irq_init_param = {
-		.irq_ctrl_id = INTC_DEVICE_ID,
+		.irq_ctrl_id = 0,
 		.platform_ops = platform_irq_ops,
 		.extra = platform_irq_init_par
 	};
