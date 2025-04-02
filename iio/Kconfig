@@ -1,0 +1,3 @@
+config IIO
+        bool "Enable the IIO infrastructure"
+        default n
