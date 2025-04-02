@@ -55,7 +55,7 @@
 #define AD3530R_SCRATCH_PAD_TEST_VAL			0x34
 #define AD3530R_CRC_POLY						0x07
 #define AD3530R_CRC_SEED						0xA5
-#define AD3530R_REG_ADDR_OPERATING_MODE_CHN(x) (AD3530R_R1B | (0x20 + x/4))
+#define AD3530R_REG_ADDR_OPERATING_MODE_CHN(x) (AD3530R_R1B | (0x20 + (((x) & 4) >> 2)))
 
 /* Register addresses */
 /* Primary address space */
@@ -84,14 +84,14 @@
 /* DAC configuration registers */
 #define AD3530R_REG_ADDR_HW_LDAC_EN_0           (AD3530R_R1B | 0xD0)
 #define AD3530R_REG_ADDR_SW_LDAC_EN_0           (AD3530R_R1B | 0xD1)
-#define AD3530R_REG_ADDR_DAC_CHN(x)             (AD3530R_R2B | (0xD2 + (x * 2)))
+#define AD3530R_REG_ADDR_DAC_CHN(x)             (AD3530R_R2B | (0xD2 + (((x) & 7) << 1)))
 #define AD3530R_REG_ADDR_MULTI_DAC_CH           (AD3530R_R2B | 0XE2)
 #define AD3530R_REG_ADDR_MULTI_DAC_SEL_0        (AD3530R_R1B | 0XE4)
 #define AD3530R_REG_ADDR_SW_LDAC_TRIG_A         (AD3530R_R1B | 0XE5)
 #define AD3530R_REG_ADDR_MULTI_INPUT_CH         (AD3530R_R2B | 0XE6)
 #define AD3530R_REG_ADDR_MULTI_INPUT_SEL_0      (AD3530R_R1B | 0XE8)
 #define AD3530R_REG_ADDR_SW_LDAC_TRIG_B         (AD3530R_R1B | 0XE9)
-#define AD3530R_REG_ADDR_INPUT_CHN(x)           (AD3530R_R2B | (0xEA + (x * 2)))
+#define AD3530R_REG_ADDR_INPUT_CHN(x)           (AD3530R_R2B | (0xEA + (((x) & 7) << 1)))
 
 /* Register masks */
 /* AD3530R_REG_ADDR_INTERFACE_CONFIG_A bit masks */
@@ -140,10 +140,10 @@
 #define AD3530R_MASK_MUX_SELECT                 NO_OS_GENMASK(4, 0)
 
 /* AD3530R_REG_ADDR_HW_LDAC_EN_0 bit masks */
-#define AD3530R_MASK_HW_LDAC_EN_0(x)            NO_OS_BIT(x)
+#define AD3530R_MASK_HW_LDAC_EN_0(x)            NO_OS_BIT((x) & 7)
 
 /* AD3530R_REG_ADDR_SW_LDAC_EN_0 bit masks */
-#define AD3530R_MASK_SW_LDAC_EN_0(x)            NO_OS_BIT(x)
+#define AD3530R_MASK_SW_LDAC_EN_0(x)            NO_OS_BIT((x) & 7)
 
 /* AD3530R_REG_ADDR_SW_LDAC_TRIG_B bit masks */
 #define AD3530R_MASK_SW_LDAC_TRIG_B             NO_OS_BIT(7)
@@ -159,13 +159,30 @@
 #define AD3530R_CRC_DISABLE_VALUE			    (NO_OS_BIT(1) | NO_OS_BIT(0))
 #define AD3530R_NUM_MUX_OUT_SELECTS				27
 #define AD3530R_NUM_REGS			45  // Number of valid registers (mb regs considered a single entity)
+#define AD3530R_CH_GRP(x)						((x) / 8)
+
+/* Useful defines for AD3531R */
+#define AD3531R_NUM_CH					        4
+#define AD3531R_NUM_MUX_OUT_SELECTS				27
+#define AD3531R_REG_ADDR_MAX	                0xE9
+#define AD3531R_CH_REG_OFFSET					8
 
 /**
  * @enum ad3530r_id
  * @brief Device IDs
  */
 enum ad3530r_id {
-	AD3530R_ID
+	AD3530R_ID,
+	AD3531R_ID
+};
+
+/**
+ * @enum ad3530r_ch_sel
+ * @brief Channel select options
+ */
+enum ad3530r_ch_sel {
+	CH_0_TO_7,
+	CH_8_TO_15
 };
 
 /**
@@ -372,5 +389,7 @@ int ad3530r_reset(struct ad3530r_desc *desc);
 int ad3530r_init(struct ad3530r_desc **desc,
 		 struct ad3530r_init_param *init_param);
 int ad3530r_remove(struct ad3530r_desc *desc);
+uint32_t get_reg_addr(uint32_t addr, enum ad3530r_id chip_id,
+		      enum ad3530r_ch_sel ch_sel);
 
 #endif /* _AD3530R_H_ */
