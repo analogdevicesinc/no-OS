@@ -43,7 +43,6 @@ static volatile int flag_zx = 0;
 /**
  * @brief Zero crossing callback function
  * @param context - context variable
- * @return none
  */
 static void zx_zero_cross_fn(void *context)
 {
@@ -63,7 +62,6 @@ int get_zero_cross_flag_state(void)
 /**
  * @brief Reset zero crossing flag value
  *
- * @return none
  */
 void reset_zero_cross_flag_state(void)
 {

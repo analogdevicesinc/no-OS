@@ -57,7 +57,6 @@ extern struct no_os_irq_ctrl_desc *stout_nvic_desc;
 /**
  * @brief TMR0 ISR
  *
- * @return none
  */
 void TMR0_IRQHandler_CP()
 {
@@ -80,7 +79,6 @@ void TMR0_IRQHandler_CP()
 /**
  * @brief TMR1 ISR
  *
- * @return none
  */
 void TMR1_IRQHandler_CP()
 {
@@ -137,7 +135,6 @@ uint32_t get_pwm_high_val(void)
 /**
  * @brief Reset PWM low flag value
  *
- * @return none
  */
 void reset_pwm_low_flag_state(void)
 {
@@ -180,7 +177,6 @@ int pilot_init(struct stout *stout)
 /**
  * @brief Set PMW parameters
  * @param duty_cycle - duty cycle of output PWM
- * @return none
  */
 void pilot_pwm_timer_setup(unsigned int duty_cycle)
 {
@@ -252,7 +248,6 @@ int pilot_interrupts_setup(struct no_os_irq_ctrl_desc *desc,
  * @brief Set PMW duty cycle
  * @param stout - state  machine descriptor
  * @param duty_cycle - duty cycle of output PWM times 10
- * @return none
  */
 void pilot_pwm_timer_set_duty_cycle(struct stout *stout,
 				    unsigned int duty_cycle)
@@ -369,7 +364,6 @@ int pilot_write_new_values(struct stout *stout)
 /**
  * @brief Update PWM values
  *
- * @return none
  */
 void pilot_update_vals(void)
 {

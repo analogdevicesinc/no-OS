@@ -104,7 +104,6 @@ uint8_t get_relay_status(void)
 /**
  * @brief Set relay status to CLOSED - 1
  *
- * @return none
  */
 void set_relay_status(void)
 {
@@ -114,7 +113,6 @@ void set_relay_status(void)
 /**
  * @brief Set relay status to OPENED - 0
  *
- * @return none
  */
 void reset_relay_status(void)
 {

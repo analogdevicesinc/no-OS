@@ -42,7 +42,6 @@ extern struct no_os_irq_ctrl_desc *stout_nvic_desc;
 /**
  * @brief callback function
  * @param context - context variable
- * @return none
  */
 static void gpio_2_3_cb_fn(void *context)
 {
@@ -58,7 +57,6 @@ static void gpio_2_3_cb_fn(void *context)
 /**
  * @brief callback function opt_1
  * @param context - context variable
- * @return none
  */
 static void gpio_2_5_cb_fn(void *context)
 {
@@ -74,7 +72,6 @@ static void gpio_2_5_cb_fn(void *context)
 /**
  * @brief callback function opt_2
  * @param context - context variable
- * @return none
  */
 static void gpio_2_7_cb_fn(void *context)
 {
@@ -100,7 +97,6 @@ int get_gpio_flag_state(void)
 /**
  * @brief Reset GPIO low flag value
  *
- * @return none
  */
 void reset_gpio_low_flag_state(void)
 {
@@ -120,7 +116,6 @@ int get_gpio_opto_out1_flag_state(void)
 /**
  * @brief Reset GPIO Opto_out1 flag value
  *
- * @return none
  */
 void reset_gpio_opto_out1_flag_state(void)
 {
@@ -140,7 +135,6 @@ int get_gpio_opto_out2_flag_state(void)
 /**
  * @brief Reset GPIO Opto_out2 low flag value
  *
- * @return none
  */
 void reset_gpio_opto_out2_flag_state(void)
 {

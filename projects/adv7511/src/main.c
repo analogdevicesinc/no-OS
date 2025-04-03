@@ -83,7 +83,6 @@ void timer_isr(void *instance, uint8_t timer_nr)
  * @param [in] enable - true to enable the driver;
  *                      flase to disable the driver.
  *
- * @return void
  */
 void app_enable_driver(bool enable)
 {
@@ -112,7 +111,6 @@ static bool app_driver_enabled(void)
  *
  * @param void
  *
- * @return void
  */
 static void app_print_revisions(void)
 {
@@ -133,7 +131,6 @@ static void app_print_revisions(void)
  *
  * @param void
  *
- * @return void
  */
 static void app_change_resolution(struct axi_clkgen *clk_gen_core)
 {
@@ -300,8 +297,6 @@ static int32_t hal_platform_init(struct no_os_i2c_desc **adv7511_i2c,
 
 /**
  * Main function of the application.
- *
- * @param none
  *
  * @return 0 in case of success, non-zero error code otherwise
  */

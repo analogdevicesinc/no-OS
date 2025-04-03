@@ -41,7 +41,6 @@ static volatile uint8_t drdy_flag;
 /**
  * @brief callback function
  * @param context - context variable
- * @return none
  */
 static void interrupt_cb_fn(void *context)
 {
@@ -67,7 +66,6 @@ int get_drdy_flag_state(void)
 /**
  * @brief Reset data ready low flag value
  *
- * @return none
  */
 void reset_drdy_low_flag_state(void)
 {
