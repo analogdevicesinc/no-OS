@@ -69,7 +69,6 @@ static uint8_t edid_get_block_checksum(uint8_t *blk_ptr, uint8_t blk_indx)
  * @param [in] curr_ptr - Pointer to the relevant part of the EDID block	.
  * @param [in] max_len - Max length of the part.
  *
- * @return void
  */
 static void edid_parse_desc(uint8_t *curr_ptr, uint32_t max_len)
 {
@@ -466,7 +465,6 @@ static void edid_parse_display_ext_tag(uint8_t *blk_ptr, uint8_t desc_l)
  * @param [in] len - Length of DBC area.
  * @param [out] spa_ptr - Pointer to receive a pointer to the SPA.
  *
- * @return void
  */
 static void edid_parse_data_blk_collection(uint8_t *blk_ptr, uint8_t len,
 		uint8_t **spa_ptr)
@@ -976,7 +974,6 @@ uint8_t ADIAPI_mw_edid_parse_silent(uint8_t *edid_ptr, uint16_t *spa_offset,
  * @param [out] info_ptr - Pointer to the EDID structure where to copy the
  *                         information.
  *
- * @return void
  */
 void ADIAPI_mw_edid_get_info(struct edid_info *info_ptr)
 {
@@ -989,7 +986,6 @@ void ADIAPI_mw_edid_get_info(struct edid_info *info_ptr)
  * @param [out] audio_info_ptr - Pointer to the EDID structure where to
  *                               copy the information.
  *
- * @return void
  */
 void ADIAPI_mw_edid_get_audio_info(struct edid_audio_info *audio_info_ptr)
 {
@@ -1004,7 +1000,6 @@ void ADIAPI_mw_edid_get_audio_info(struct edid_audio_info *audio_info_ptr)
  * @param [in] enable - True to enable sending EDID information to the serial
  *                      connection, false to disable it.
  *
- * @return void
  */
 void ADIAPI_mw_edid_enable_debug_msg(bool enable)
 {

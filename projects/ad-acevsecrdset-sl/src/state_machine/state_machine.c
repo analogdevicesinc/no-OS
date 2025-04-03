@@ -1313,7 +1313,6 @@ uint16_t get_action(void)
 /**
  * @brief Set take action flag
  *
- * @return none
  */
 void set_action_flag(void)
 {
@@ -1323,7 +1322,6 @@ void set_action_flag(void)
 /**
  * @brief Reset take action flag
  *
- * @return none
  */
 void reset_action_flag(void)
 {
@@ -1333,7 +1331,6 @@ void reset_action_flag(void)
 /**
  * @brief Increment take action flag
  *
- * @return none
  */
 void inc_action_flag(void)
 {
@@ -1343,7 +1340,6 @@ void inc_action_flag(void)
 /**
  * @brief Signal that EV starts charging
  *
- * @return none
  */
 void start_charging(void)
 {
@@ -1353,7 +1349,6 @@ void start_charging(void)
 /**
  * @brief Signal that EV stops charging
  *
- * @return none
  */
 void stop_charging(void)
 {

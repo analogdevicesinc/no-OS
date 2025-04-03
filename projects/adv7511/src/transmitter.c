@@ -70,7 +70,6 @@ TRANSMITTER_TX_VARS	TransmitterTxVars;
 /**
  * @brief Link the transmitter clk_gen handler to the application one.
  * @param [in] clk_gen_handle - Pointer to the clk_axi_clkgen handle.
- * @return void
  */
 void transmitter_link_clkgen(struct axi_clkgen *clk_gen_handle)
 {
@@ -117,7 +116,6 @@ ATV_ERR ADIAPI_TransmitterInit(void)
 /***************************************************************************//**
  * @brief Initializes the software parameters.
  *
- * @return None.
 *******************************************************************************/
 void TRANSMITTER_SoftwareInit(void)
 {
@@ -130,7 +128,6 @@ void TRANSMITTER_SoftwareInit(void)
 /***************************************************************************//**
  * @brief Initializes the hardware of the transmitter.
  *
- * @return None.
 *******************************************************************************/
 void TRANSMITTER_HardwareInit(void)
 {
@@ -259,7 +256,6 @@ ATV_ERR ADIAPI_TransmitterSetOperatingMode(TRANSMITTER_OPER_MODE Mode)
  *
  * @param Mode - operating mode.
  *
- * @return None.
 *******************************************************************************/
 void ADIAPI_TransmitterSetMuteMode(TRANSMITTER_OPER_MODE Mode)
 {
@@ -274,7 +270,6 @@ void ADIAPI_TransmitterSetMuteMode(TRANSMITTER_OPER_MODE Mode)
  * @brief Checks current AVR operating mode and notify application if mode
  * 		  changed.
  *
- * @return None.
 *******************************************************************************/
 void TRANSMITTER_MonitorAvrMode(void)
 {
@@ -298,7 +293,6 @@ void TRANSMITTER_MonitorAvrMode(void)
  * @brief Main function for polling mode operation.
  * 		  This function should be called periodically (at least every 100 ms).
  *
- * @return None.
 *******************************************************************************/
 ATV_ERR ADIAPI_TransmitterMain(void)
 {
@@ -332,7 +326,6 @@ ATV_ERR ADIAPI_TransmitterMain(void)
  * @brief Performs TX housekeeping tasks.
  *		  This function should be called periodically (at least every 100 ms)
  *
- * @return None.
 *******************************************************************************/
 void TRANSMITTER_Housekeeping(void)
 {
@@ -405,7 +398,6 @@ UINT16 TRANSMITTER_Notification(TX_EVENT Ev, UINT16 Count, void *BufPtr)
  * @param SegmentNum - Segment number.
  * @param SegPtr - Segment pointer.
  *
- * @return None.
 *******************************************************************************/
 void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 {

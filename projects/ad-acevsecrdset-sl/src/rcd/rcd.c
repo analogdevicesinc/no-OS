@@ -41,7 +41,6 @@ static volatile int flag_rcd;
 /**
  * @brief RCDADC callback function
  * @param context - context variable
- * @return none
  */
 static void rcdac_fn(void *context)
 {
@@ -61,7 +60,6 @@ int get_rcd_flag_state(void)
 /**
  * @brief Reset RCD flag value
  *
- * @return none
  */
 void reset_rcd_flag_state(void)
 {

@@ -1376,9 +1376,6 @@ ATV_ERR CEC_AllocateLogAddr(UCHAR *LogAddrList)
 
 /**
  * Return switch state.
- *
- * @param void
- *
  * @return bool value corresponding to the switch state.
  */
 BOOL HAL_GetMBSwitchState()
@@ -1392,9 +1389,6 @@ BOOL HAL_GetMBSwitchState()
 
 /**
  * Get the current microseconds count from the timer variable.
- *
- * @param void
- *
  * @return number of microseconds
  */
 uint32_t HAL_GetCurrentMsCount()
@@ -1423,7 +1417,6 @@ uint32_t HAL_GetCurrentMsCount()
  * @param [in] instance - Pointer to the UART driver handler passed by the
  *                        application.
  *
- * @return void
  */
 void uart_int_handler(void *instance)
 {
@@ -1436,9 +1429,6 @@ void uart_int_handler(void *instance)
 
 /**
  * Returns the status of the interrupts asserted in the ADV7511 IC.
- *
- * @param void
- *
  * @return status of the ADV7511 interrupts
  */
 bool HAL_TxIntPending()

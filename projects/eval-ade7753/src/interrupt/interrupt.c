@@ -42,7 +42,6 @@ extern struct no_os_irq_ctrl_desc *ade7753_nvic_desc;
 /**
  * @brief callback function
  * @param context - context variable
- * @return none
  */
 static void interrupt_cb_fn(void *context)
 {
@@ -68,7 +67,6 @@ int get_irq_flag_state(void)
 /**
  * @brief Reset irqn flag value
  *
- * @return none
  */
 void reset_irq_flag_state(void)
 {
@@ -78,7 +76,6 @@ void reset_irq_flag_state(void)
 /**
  * @brief callback function zx
  * @param context - context variable
- * @return none
  */
 static void interrupt_cb_zx_fn(void *context)
 {
@@ -104,7 +101,6 @@ int get_zx_flag_state(void)
 /**
  * @brief Reset zx flag value
  *
- * @return none
  */
 void reset_zx_flag_state(void)
 {
