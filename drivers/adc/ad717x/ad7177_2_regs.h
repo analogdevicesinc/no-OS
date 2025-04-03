@@ -36,19 +36,19 @@
 
 #include "ad717x.h"
 
-#ifdef AD7172_2_INIT
+#ifdef AD7177_2_INIT
 /*! Array holding the info for the AD7172_2 registers - address, initial value, size */
-ad717x_st_reg ad7172_2_regs[] = {
+ad717x_st_reg ad7177_2_regs[] = {
 	{ AD717X_STATUS_REG, 0x00, 1 },
-	{ AD717X_ADCMODE_REG, 0x0000, 2	},
+	{ AD717X_ADCMODE_REG, 0x8000, 2	},
 	{
 		AD717X_IFMODE_REG,
-		AD717X_IFMODE_REG_DOUT_RESET | AD717X_IFMODE_REG_CRC_EN,
+		0,
 		2
 	},
 	{ AD717X_REGCHECK_REG, 0x0000, 3},
 	{ AD717X_DATA_REG, 0x0000, 3 },
-	{ AD717X_GPIOCON_REG, 0x0000, 2 },
+	{ AD717X_GPIOCON_REG, 0x8000, 2 },
 	{ AD717X_ID_REG, 0x0000, 2 },
 	{
 		AD717X_CHMAP0_REG,
@@ -58,7 +58,7 @@ ad717x_st_reg ad7172_2_regs[] = {
 	{ AD717X_CHMAP1_REG, 0x0000, 2 },
 	{ AD717X_CHMAP2_REG, 0x0000, 2 },
 	{ AD717X_CHMAP3_REG, 0x0000, 2 },
-	{ AD717X_SETUPCON0_REG, 0x0000, 2 },
+	{ AD717X_SETUPCON0_REG, 0x1320, 2 },
 	{ AD717X_SETUPCON1_REG,	0x0000,	2 },
 	{ AD717X_SETUPCON2_REG, 0x0000,	2 },
 	{ AD717X_SETUPCON3_REG, 0x0000, 2 },
