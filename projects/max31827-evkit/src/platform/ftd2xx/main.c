@@ -1,9 +1,9 @@
 /*******************************************************************************
- *   @file   iio_example.h
- *   @brief  IIO example header for max31827 project
- *   @author John Erasmus Mari Geronimo (johnerasmusmari.geronimo@analog.com)
- ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ *   @file   main.c
+ *   @brief  Main file for FTD2XX platform of max31827 project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
+ *******************************************************************************
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,10 +29,15 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+ ******************************************************************************/
+#include "common_data.h"
 
-int iio_example_main();
-
-#endif /* __IIO_EXAMPLE_H__ */
+/******************************************************************************
+ * @brief Main function execution for FTD2XX platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+ *****************************************************************************/
+int main()
+{
+	return example_main();
+}
