@@ -155,7 +155,6 @@ typedef int32_t (*f_edit)(struct no_os_list_desc *list_desc, void *new_data);
 /**
  * @brief Read an element from the list.
  * @param list_desc - Reference to the list. Created by \ref no_os_list_init.
- * @param result - If not null, result is filled with:
  * @param data - Content of the list element, NULL if some error occur.
  * @return \n
  *  - 0 : On success
@@ -168,7 +167,6 @@ typedef int32_t (*f_read)(struct no_os_list_desc *list_desc, void **data);
 /**
  * @brief Read and remove an element from the list.
  * @param list_desc - Reference to the list. Created by \ref no_os_list_init.
- * @param result - If not null, result is filled with:
  * @param data - Content of the list element, NULL if some error occur.
  * @return
  *  - 0 : On success
