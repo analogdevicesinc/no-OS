@@ -1,18 +1,26 @@
 import kconfiglib
 import sys
+import argparse
 from pathlib import Path
 
-if len(sys.argv) <= 2:
-        sys.exit("Error: Invalid number of parameters (expected 3, provided {})".format(len(sys.argv) - 1))
+parser = argparse.ArgumentParser(description="Generate config.cmake from defconfig files")
 
-capi_dir = Path(sys.argv[1])
-board_defconfig = sys.argv[2]
-project_defconfig = sys.argv[3]
+parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory", default=Path(__file__).parent.resolve())
+parser.add_argument("--defconfig", type=str, help="Path to a defconfig file", nargs='+')
+parser.add_argument("--update", type=bool, help="Append the defconfig file to the existing .config file", default=False)
 
+args = parser.parse_args(sys.argv[1:])
+print(args.update)
+
+capi_dir = args.root_dir
 kconf = kconfiglib.Kconfig(capi_dir.joinpath("Kconfig"))
 
-kconf.load_config(capi_dir.joinpath(board_defconfig))
-kconf.load_config(capi_dir.joinpath(project_defconfig), replace=False)
+if args.update:
+        kconf.load_config(capi_dir.joinpath(".config"))
+
+for defconfig in args.defconfig:
+        kconf.load_config(capi_dir.joinpath(defconfig), replace=False)
+
 kconf.write_config(capi_dir.joinpath(".config"))
 
 with open(capi_dir.joinpath("config.cmake"), "w") as cmake_file:
