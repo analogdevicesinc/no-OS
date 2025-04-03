@@ -1,9 +1,9 @@
 /*******************************************************************************
- *   @file   basic_example.h
- *   @brief  Basic example header for max31827 project
- *   @author John Erasmus Mari Geronimo (johnerasmusmari.geronimo@analog.com)
- ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ *   @file   parameters.h
+ *   @brief  Definition of FTD2XX platform data used by max31827 project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
+ *******************************************************************************
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,10 +29,26 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
-#ifndef __BASIC_EXAMPLE_H__
-#define __BASIC_EXAMPLE_H__
+ ******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-int basic_example_main();
+#include "ftd2xx_uart.h"
+#include "ftd2xx_i2c.h"
 
-#endif /* __BASIC_EXAMPLE_H__ */
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID	0
+#endif
+#define UART_IRQ_ID	0
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	0
+#define UART_EXTRA      NULL
+#define UART_OPS        &ftd2xx_uart_ops
+
+#define I2C_DEVICE_ID   0
+#define I2C_OPS         &ftd2xx_i2c_ops
+#define I2C_EXTRA       &max31827_i2c_extra
+
+extern struct ftd2xx_i2c_init max31827_i2c_extra;
+
+#endif /* __PARAMETERS_H__ */

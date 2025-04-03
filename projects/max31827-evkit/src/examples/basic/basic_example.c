@@ -30,8 +30,6 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-
-#include "basic_example.h"
 #include "common_data.h"
 #include "max31827.h"
 #include "no_os_delay.h"
@@ -43,18 +41,26 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously the while(1) loop and will not return.
  *******************************************************************************/
-int basic_example_main()
+int example_main()
 {
 	struct max31827_device *dev;
 	int ret;
 	int32_t val;
 	int idx;
 
+	struct no_os_uart_desc *uart;
+
+	ret = no_os_uart_init(&uart, &uip);
+	if (ret)
+		goto error;
+
+	no_os_uart_stdio(uart);
+
 	pr_info("\r\nRunning MAX31827 Basic Example\r\n");
 
 	ret = max31827_init(&dev, &max31827_ip);
 	if (ret)
-		goto error;
+		goto free_uart;
 
 	while (1) {
 		ret = max31827_read_temp_input(dev, &val);
@@ -68,6 +74,8 @@ int basic_example_main()
 
 free_dev:
 	max31827_remove(dev);
+free_uart:
+	no_os_uart_remove(uart);
 error:
 	pr_info("Error!\r\n");
 	return ret;
