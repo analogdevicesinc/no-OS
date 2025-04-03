@@ -83,7 +83,7 @@ build_documentation() {
     pip3 install pip --upgrade
     pip3 install -r ${TOP_DIR}/doc/sphinx/source/requirements.txt
     # Install a recent version of doxygen
-	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.17/doxygen-1.8.17.src.tar.gz/"
+	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.13.2/doxygen-1.13.2.src.tar.gz/"
 	mkdir -p "${DEPS_DIR}"
 	cd ${DEPS_DIR}
 	[ -d "doxygen" ] || {

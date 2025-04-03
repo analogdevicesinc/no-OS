@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.3)
+cmake_minimum_required(VERSION 3.5)
 project(doc)
 
 find_program(DOXYGEN_PATH doxygen)
