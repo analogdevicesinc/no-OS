@@ -1,0 +1,10 @@
+
+INCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h		\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h		\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_platform.h	\
+
+SRCS += $(PLATFORM_DRIVERS)/$(PLATFORM)_delay.c		\
+        $(PLATFORM_DRIVERS)/$(PLATFORM)_spi.c		\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.c		\
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_platform.c	\
+

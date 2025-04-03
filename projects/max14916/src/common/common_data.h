@@ -32,8 +32,8 @@
 *******************************************************************************/
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
+#include "parameters.h"
 
-#include "platform_includes.h"
 #include "max149x6-base.h"
 #include "max14916.h"
 
