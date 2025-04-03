@@ -12,5 +12,13 @@
 		"iio_example_max32690": {
 			"flags" :"BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32690"
 		}
+	},
+	"ftd2xx": {
+		"basic_example": {
+			"flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+		},
+		"iio_example": {
+			"flags" :"BASIC_EXAMPLE=n IIO_EXAMPLE=y"
+		}
 	}
 }

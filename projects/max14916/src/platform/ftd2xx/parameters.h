@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   max14916/src/examples/iio_example/iio_example.h
- *   @brief  Header file for iio example.
+ *   @file   parameters.h
+ *   @brief  Definition of FTD2XX platform data used by max14916 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,9 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-int iio_example_main();
+#include "ftd2xx_spi.h"
+#include "ftd2xx_uart.h"
 
-#endif /* __IIO_EXAMPLE_H__ */
+#define UART_IRQ_ID	0
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	0
+#define UART_EXTRA      NULL
+#define UART_OPS        &ftd2xx_uart_ops
+
+extern struct ftd2xx_spi_init max14916_spi_extra;
+
+#define SPI_DEVICE_ID	0
+#define SPI_CS		0
+#define SPI_BAUDRATE	100000
+#define SPI_OPS		&ftd2xx_spi_ops
+#define SPI_EXTRA	&max14916_spi_extra
+
+#endif  /* __PARAMETERS_H__ */
