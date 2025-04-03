@@ -36,6 +36,7 @@ target_sources(capi_build PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TMR/tm
 target_sources(capi_build PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_me10.c)
 target_sources(capi_build PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_reva.c)
 target_sources(capi_build PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/GPIO/gpio_common.c)
+
 target_include_directories(capi_build PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/RTC)
 target_include_directories(capi_build PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/ICC)
 target_include_directories(capi_build PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/FLC)
@@ -52,3 +53,4 @@ target_sources(capi_build PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32650/
 target_sources(capi_build PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32650/Source/system_max32650.c)
 
 target_compile_definitions(capi_build PUBLIC -DTARGET_NUM=32650)
+target_compile_definitions(capi_build PUBLIC -DTARGET=32650)

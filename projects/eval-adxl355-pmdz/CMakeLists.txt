@@ -33,5 +33,4 @@ target_include_directories(eval-adxl355-pmdz-dummy PUBLIC ${CMAKE_CURRENT_SOURCE
 target_include_directories(eval-adxl355-pmdz-iio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example)
 target_include_directories(eval-adxl355-pmdz-iio-trigger PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example)
 
-set(CAPI_CURRENT_PROJECT eval-adxl355-pmdz CACHE INTERNAL "Current project")
-list(APPEND CONFIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/project.conf)
+message(STATUS "Running CMake for eval-adxl355-pmdz")

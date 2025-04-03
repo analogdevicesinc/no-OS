@@ -9,22 +9,15 @@ message(STATUS "🦨🦨🦨 No-OS build 🦨🦨🦨")
 find_package (Python3 COMPONENTS Interpreter Development)
 find_package(Git)
 
-execute_process(
-  COMMAND touch
-  ${CMAKE_SOURCE_DIR}/config.cmake
-)
-
-# execute_process(
-#   COMMAND ${Python3_EXECUTABLE}
-#   ${CMAKE_SOURCE_DIR}/generate_config.py
-#   ${GENERATE_CONFIG_ARGS}
-#   )
-
 function(no_os_sources_ifdef feature_toggle source)
   if(${feature_toggle})
     message(STATUS "Adding ${source}")
     target_sources(capi_build PRIVATE ${source} ${ARGN})
   endif()
+endfunction()
+
+function(capi_update_config)
+  include(${CMAKE_SOURCE_DIR}/config.cmake)
 endfunction()
 
 # Board specific defconfig
@@ -39,32 +32,17 @@ add_library(capi_build STATIC)
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-
-list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR})
+list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
 
 target_compile_options(capi_build PRIVATE -Wall)
 target_link_options(capi_build PRIVATE -Wl,--gc-sections)
 
-# add_custom_command(
-#         OUTPUT ${CMAKE_SOURCE_DIR}/.config ${CMAKE_SOURCE_DIR}/config.cmake
-#         COMMAND ${Python3_EXECUTABLE}
-#         ${CMAKE_SOURCE_DIR}/generate_config.py
-#         ${GENERATE_CONFIG_ARGS}
-#         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-# )
-
-# add_custom_target(
-#         generate_config ALL
-#         DEPENDS ${CMAKE_SOURCE_DIR}/.config ${CONFIG_FILES} ${CMAKE_SOURCE_DIR}/config.cmake
-# )
-
-# configure_file(${CONFIG_FILE} ${CMAKE_BINARY_DIR}/.config COPYONLY)
-# configure_file(${CMAKE_SOURCE_DIR}/config.cmake ${CMAKE_BINARY_DIR}/config.cmake COPYONLY)
-
 add_subdirectory(projects)
 
-list(APPEND GENERATE_CONFIG_ARGS ${NO_OS_DIR}/projects/${CAPI_CURRENT_PROJECT}/project.conf)
+if (DEFINED ${CAPI_CURRENT_PROJECT})
+  list(APPEND GENERATE_CONFIG_ARGS ${NO_OS_DIR}/projects/${CAPI_CURRENT_PROJECT}/project.conf)
+endif()
 
 set_property(
   DIRECTORY
@@ -76,7 +54,6 @@ set_property(
   ${NO_OS_DIR}/.config
 )
 
-message(STATUS "Included config files: ${CONFIG_FILES} ${CAPI_CURRENT_PROJECT}/project.conf")
 execute_process(
   COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_SOURCE_DIR}/generate_config.py
