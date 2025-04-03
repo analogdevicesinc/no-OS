@@ -838,7 +838,6 @@ static int ad7768_sync(ad7768_dev *dev)
 /**
  * Set available sampling frequency.
  * @param dev - The device structure.
- * @return 0 in case of success, negative error code otherwise.
  */
 void ad7768_set_available_sampl_freq(ad7768_dev *dev)
 {

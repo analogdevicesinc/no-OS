@@ -450,7 +450,6 @@ error:
  * @brief Get device descriptor.
  * @param desc - axi iio axi adc descriptor.
  * @param dev_descriptor - iio device.
- * @return None.
  */
 void iio_axi_adc_get_dev_descriptor(struct iio_axi_adc_desc *desc,
 				    struct iio_device **dev_descriptor)

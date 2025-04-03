@@ -47,8 +47,6 @@
  * @param dev        - The device structure.
  * @param write_byte - Write data.
  * @param read_byte  - Read data.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_write_read_byte(struct adf7023_dev *dev,
 			     uint8_t write_byte,
@@ -145,8 +143,6 @@ int32_t adf7023_remove(struct adf7023_dev *dev)
  *
  * @param dev    - The device structure.
  * @param status - Status word.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_get_status(struct adf7023_dev *dev,
 			uint8_t* status)
@@ -162,8 +158,6 @@ void adf7023_get_status(struct adf7023_dev *dev,
  *
  * @param dev     - The device structure.
  * @param command - Command.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_set_command(struct adf7023_dev *dev,
 			 uint8_t command)
@@ -178,8 +172,6 @@ void adf7023_set_command(struct adf7023_dev *dev,
  *
  * @param dev      - The device structure.
  * @param fw_state - FW state.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_set_fw_state(struct adf7023_dev *dev,
 			  uint8_t fw_state)
@@ -214,8 +206,6 @@ void adf7023_set_fw_state(struct adf7023_dev *dev,
  * @param address - Start address.
  * @param length  - Number of bytes to write.
  * @param data    - Read buffer.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_get_ram(struct adf7023_dev *dev,
 		     uint32_t address,
@@ -239,8 +229,6 @@ void adf7023_get_ram(struct adf7023_dev *dev,
  * @param address - Start address.
  * @param length  - Number of bytes to write.
  * @param data    - Write buffer.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_set_ram(struct adf7023_dev *dev,
 		     uint32_t address,
@@ -262,8 +250,6 @@ void adf7023_set_ram(struct adf7023_dev *dev,
  * @param dev    - The device structure.
  * @param packet - Data buffer.
  * @param length - Number of received bytes.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_receive_packet(struct adf7023_dev *dev,
 			    uint8_t* packet,
@@ -291,8 +277,6 @@ void adf7023_receive_packet(struct adf7023_dev *dev,
  * @param dev    - The device structure.
  * @param packet - Data buffer.
  * @param length - Number of bytes to transmit.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_transmit_packet(struct adf7023_dev *dev,
 			     uint8_t* packet,
@@ -319,8 +303,6 @@ void adf7023_transmit_packet(struct adf7023_dev *dev,
  *
  * @param dev    - The device structure.
  * @param ch_freq - Channel frequency.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_set_channel_frequency(struct adf7023_dev *dev,
 				   uint32_t ch_freq)
@@ -337,8 +319,6 @@ void adf7023_set_channel_frequency(struct adf7023_dev *dev,
  *
  * @param dev       - The device structure.
  * @param data_rate - Data rate.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_set_data_rate(struct adf7023_dev *dev,
 			   uint32_t data_rate)
@@ -359,8 +339,6 @@ void adf7023_set_data_rate(struct adf7023_dev *dev,
  *
  * @param dev      - The device structure.
  * @param freq_dev - Frequency deviation.
- *
- * @return None.
 *******************************************************************************/
 void adf7023_set_frequency_deviation(struct adf7023_dev *dev,
 				     uint32_t freq_dev)

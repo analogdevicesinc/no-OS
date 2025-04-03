@@ -456,7 +456,6 @@ int32_t ad463x_read_data_offload(struct ad463x_dev *dev,
  * @param in1 - second byte of interleaved data
  * @param out0 - unscrambled byte 0
  * @param out1 - unscrambled byte 1
- * @return none
  */
 static void ad463x_pext(uint8_t in0, uint8_t in1,
 			uint8_t *out0, uint8_t *out1)
@@ -495,7 +494,6 @@ static void ad463x_pext(uint8_t in0, uint8_t in1,
  * @param size - number of bytes in the buffer
  * @param ch0_out - unscrambled byte 0
  * @param ch1_out - unscrambled byte 1
- * @return none
  */
 static void ad463x_pext_sample(struct ad463x_dev *dev,
 			       uint8_t *buf, int size,
@@ -642,7 +640,6 @@ int32_t ad463x_read_data(struct ad463x_dev *dev,
 /**
  * @brief Fill Scales table based on the available PGIA gains.
  * @param dev - Pointer to the device handler.
- * @return None.
  */
 static void ad463x_fill_scale_tbl(struct ad463x_dev *dev)
 {

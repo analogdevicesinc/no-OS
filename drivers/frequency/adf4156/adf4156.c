@@ -147,7 +147,6 @@ int32_t adf4156_remove(struct adf4156_dev *dev)
  * @param dev   - The device structure.
  * @param value - Data which will be transmitted.
  *
- * @return none.
 ******************************************************************************/
 int8_t adf4156_set(struct adf4156_dev *dev,
 		   uint32_t value)

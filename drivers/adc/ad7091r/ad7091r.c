@@ -93,8 +93,6 @@ int32_t ad7091r_remove(struct ad7091r_dev *dev)
  *        to initiate a software reset when power is first applied.
  *
  * @param dev     - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad7091r_software_reset(struct ad7091r_dev *dev)
 {
@@ -139,8 +137,6 @@ uint16_t ad7091r_read_sample(struct ad7091r_dev *dev)
  * @brief Puts the device in power-down mode.
  *
  * @param dev     - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad7091r_power_down(struct ad7091r_dev *dev)
 {
@@ -161,8 +157,6 @@ void ad7091r_power_down(struct ad7091r_dev *dev)
  *         - 100 us delay, when external reference is used.
  *
  * @param dev     - The device structure.
- *
- * @return  None.
 *******************************************************************************/
 void ad7091r_power_up(struct ad7091r_dev *dev)
 {

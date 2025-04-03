@@ -136,8 +136,6 @@ int32_t ad5629r_remove(struct ad5629r_dev *dev)
  * @param   function - command control bits;
  * @param   dac_n    - address of selected DAC;
  * @param   data     - data to be written in register.
- *
- * @return  readBack - value read from register.
 ******************************************************************************/
 void ad5629r_set_ctrl(struct ad5629r_dev *dev,
 		      uint8_t function,
@@ -178,8 +176,6 @@ void ad5629r_set_ctrl(struct ad5629r_dev *dev,
  * @param   function - command control bits.
  * @param   dac_n    - address of selected DAC;
  * @param   dac_value - data to be written in input register.
- *
- * @return  readBack - value read from register.
 ******************************************************************************/
 void ad5629r_set_input_reg(struct ad5629r_dev *dev,
 			   uint8_t function,
@@ -220,8 +216,6 @@ void ad5629r_set_input_reg(struct ad5629r_dev *dev,
  * @param dev      - The device structure.
  * @param dac_value - Value to be written in register;
  * @param dac_n     - Address of selected DAC.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_write_reg_n(struct ad5629r_dev *dev,
 			 uint8_t dac_n,
@@ -238,8 +232,6 @@ void ad5629r_write_reg_n(struct ad5629r_dev *dev,
  *
  * @param dev  - The device structure.
  * @param dac_n - Address of selected DAC.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_update_dac_n(struct ad5629r_dev *dev,
 			  uint8_t dac_n)
@@ -257,8 +249,6 @@ void ad5629r_update_dac_n(struct ad5629r_dev *dev,
  * @param dev      - The device structure.
  * @param dac_value - Value to be written in register;
  * @param dac_n     - Address of selected DAC.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_write_reg_nupdate_all(struct ad5629r_dev *dev,
 				   uint8_t dac_n,
@@ -277,8 +267,6 @@ void ad5629r_write_reg_nupdate_all(struct ad5629r_dev *dev,
  * @param dev      - The device structure.
  * @param dac_value - Value to be written in register;
  * @param dac_n     - Address of selected DAC.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_write_reg_nupdate_n(struct ad5629r_dev *dev,
 				 uint8_t dac_n,
@@ -304,8 +292,6 @@ void ad5629r_write_reg_nupdate_n(struct ad5629r_dev *dev,
  *                          PWR_1K_TO_GND   - 1KOhm to GND;
  *                          PWR_100K_TO_GND - 100KOhms to GND;
  *                          PWR_3_STATE     - three-state.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_set_power_mode(struct ad5629r_dev *dev,
 			    uint8_t dac_sel,
@@ -331,8 +317,6 @@ void ad5629r_set_power_mode(struct ad5629r_dev *dev,
  *                              CLR_TO_MIDSCALE  - clears to 0x8000;
  *                              CLR_TO_FULLSCALE - clears to 0xFFFF;
  *                              CLR_NOOP         - no operation.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_load_clear_code_reg(struct ad5629r_dev *dev,
 				 uint8_t clear_value)
@@ -358,8 +342,6 @@ void ad5629r_load_clear_code_reg(struct ad5629r_dev *dev,
  *                                      is DAC A;
  *                          DAC_D_SEL | DAC_F_SEL | DAC_H_SEL - the selected DACs
  *                          to override the LDAC pin are: DAC D, DAC F and DAC H.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_load_ldac_reg(struct ad5629r_dev *dev,
 			   uint8_t dac_sel)
@@ -378,8 +360,6 @@ void ad5629r_load_ldac_reg(struct ad5629r_dev *dev,
  * @brief Makes a power-on reset.
  *
  * @param dev - The device structure.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_reset(struct ad5629r_dev *dev)
 {
@@ -396,8 +376,6 @@ void ad5629r_reset(struct ad5629r_dev *dev)
  * @param status - the status of internal reference.
  *                 Example: REF_ON  - the reference is on;
  *                          REF_OFF - the reference is off.
- *
- * @return none.
 *******************************************************************************/
 void ad5629r_set_ref(struct ad5629r_dev *dev,
 		     uint8_t status)

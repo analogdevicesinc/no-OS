@@ -39,7 +39,6 @@
 /**
  * @brief Initialize mutex.
  * mutex - Pointer toward the mutex.
- * @return None.
  */
 __attribute__((weak)) inline void no_os_mutex_init(void **mutex)
 {
@@ -50,7 +49,6 @@ __attribute__((weak)) inline void no_os_mutex_init(void **mutex)
 /**
  * @brief Lock mutex.
  * mutex - Pointer toward the mutex.
- * @return None.
  */
 __attribute__((weak)) inline void no_os_mutex_lock(void *mutex)
 {
@@ -60,7 +58,6 @@ __attribute__((weak)) inline void no_os_mutex_lock(void *mutex)
 /**
  * @brief Unlock mutex.
  * mutex - Pointer toward the mutex.
- * @return None.
  */
 __attribute((weak)) inline void no_os_mutex_unlock(void *mutex)
 {
@@ -71,7 +68,6 @@ __attribute((weak)) inline void no_os_mutex_unlock(void *mutex)
 /**
  * @brief Remove mutex.
  * mutex - Pointer toward the mutex.
- * @return None.
  */
 __attribute__((weak)) inline void no_os_mutex_remove(void *mutex)
 {

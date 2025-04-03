@@ -41,7 +41,6 @@ SOFTWARE.
  *
  * @param dev - The device structure.
  *
- * @return void
  *******************************************************************************/
 static void ad5293_reset_chip_info(struct ad5293_dev* dev)
 {

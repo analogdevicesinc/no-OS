@@ -50,7 +50,6 @@
  * @param regs - The GPIO register structure.
  * @param mask - GPIO pins mask.
  * @param is_enabled - Enable status.
- * @return none.
  */
 static void set_enable(mxc_gpio_regs_t *regs, uint32_t mask, uint8_t is_enabled)
 {

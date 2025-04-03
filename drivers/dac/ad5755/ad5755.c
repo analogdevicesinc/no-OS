@@ -248,8 +248,6 @@ int32_t ad5755_get_register_value(struct ad5755_dev *dev,
  *                           AD5755_DAC_C
  *                           AD5755_DAC_D
  * @param register_value - Data value to write.
- *
- * @return None.
 *******************************************************************************/
 uint16_t ad5755_set_register_value(struct ad5755_dev *dev,
 				   uint8_t register_address,
@@ -291,8 +289,6 @@ uint16_t ad5755_set_register_value(struct ad5755_dev *dev,
  * @brief Performs a software reset to the device.
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad5755_software_reset(struct ad5755_dev *dev)
 {
@@ -314,8 +310,6 @@ void ad5755_software_reset(struct ad5755_dev *dev)
  *                             AD5755_WD_10MS
  *                             AD5755_WD_100MS
  *                             AD5755_WD_200MS
- *
- * @return None.
 *******************************************************************************/
 void ad5755_watch_dog_setup(struct ad5755_dev *dev,
 			    uint8_t wtd_enable,
@@ -340,8 +334,6 @@ void ad5755_watch_dog_setup(struct ad5755_dev *dev,
  * @brief Write a "service pulse" to the AD5755 watchdog timer when enabled.
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad5755_feed_watch_dog_timer(struct ad5755_dev *dev)
 {
@@ -369,8 +361,6 @@ void ad5755_feed_watch_dog_timer(struct ad5755_dev *dev)
  *                                  AD5755_DAC_C
  *                                  AD5755_DAC_D
  * @param reg_value - Value to be written to the selected Control Register.
- *
- * @return None.
 *******************************************************************************/
 void ad5755_set_control_registers(struct ad5755_dev *dev,
 				  uint8_t  ctrl_reg_address,
@@ -426,8 +416,6 @@ uint8_t ad5755_check_crc(uint8_t* data,
  * @param pwr_status - Power mode.
  *                    Example: 0 - power-down the channel;
  *                             1 - power-up the channel.
- *
- * @return None.
 *******************************************************************************/
 void ad5755_set_channel_power(struct ad5755_dev *dev,
 			      uint8_t channel,
@@ -469,8 +457,6 @@ void ad5755_set_channel_power(struct ad5755_dev *dev,
  *                  AD5755_R_4_20_MA    - 4 mA to 20 mA current range
  *                  AD5755_R_0_20_MA    - 0 mA to 20 mA current range
  *                  AD5755_R_0_24_MA    - 0 mA to 24 mA current range
- *
- * @return None.
 *******************************************************************************/
 void ad5755_set_channel_range(struct ad5755_dev *dev,
 			      uint8_t channel,
@@ -532,8 +518,6 @@ void ad5755_set_channel_range(struct ad5755_dev *dev,
  *                  Example:
  *                   1 - channel clears when the part is cleared;
  *                   0 - channel does not clear when the part is cleared.
- *
- * @return None.
 *******************************************************************************/
 void ad5755_channel_clear_enable(struct ad5755_dev *dev,
 				 uint8_t channel,
@@ -579,8 +563,6 @@ void ad5755_channel_clear_enable(struct ad5755_dev *dev,
  *                            ...
  *                            AD5755_STEP_128
  *                            AD5755_STEP_256
- *
- * @return None.
 *******************************************************************************/
 void ad5755_slew_rate_ctrl(struct ad5755_dev *dev,
 			   int8_t channel,

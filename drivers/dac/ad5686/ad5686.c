@@ -432,7 +432,6 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
  *					AD5686_CH_15
  * @param data - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5686_write_register(struct ad5686_dev *dev,
 			   enum ad5686_dac_channels channel,
@@ -467,7 +466,6 @@ void ad5686_write_register(struct ad5686_dev *dev,
  *					AD5686_CH_13
  *					AD5686_CH_14
  *					AD5686_CH_15
-  * @return None.
 ******************************************************************************/
 void ad5686_update_register(struct ad5686_dev *dev,
 			    enum ad5686_dac_channels channel)
@@ -500,7 +498,6 @@ void ad5686_update_register(struct ad5686_dev *dev,
  *					AD5686_CH_15
  * @param data    - Desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5686_write_update_register(struct ad5686_dev *dev,
 				  enum ad5686_dac_channels channel,
@@ -600,7 +597,6 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
  *                  'AD5686_PWRM_THREESTATE' - Three-State
  *                  'AD5686_PWRM_100K' is not available for AD5674R/AD5679R.
  *
- * @return None.
 ******************************************************************************/
 void ad5686_power_mode(struct ad5686_dev *dev,
 		       enum ad5686_dac_channels channel,
@@ -646,7 +642,6 @@ void ad5686_power_mode(struct ad5686_dev *dev,
  *					AD5686_CH_14
  *					AD5686_CH_15
  * @param enable - Enable/disable channel.
- * @return None.
 ******************************************************************************/
 void ad5686_ldac_mask(struct ad5686_dev *dev,
 		      enum ad5686_dac_channels channel,
@@ -664,7 +659,6 @@ void ad5686_ldac_mask(struct ad5686_dev *dev,
  *
  * @param dev - The device structure.
  *
- * @return None.
 ******************************************************************************/
 void ad5686_software_reset(struct ad5686_dev *dev)
 {
@@ -683,7 +677,6 @@ void ad5686_software_reset(struct ad5686_dev *dev)
  *                Example : 'AD5686_INTREF_EN' - enable internal reference
  *                            'AD5686_INTREF_DIS' - disable internal reference
  *
- * @return None.
 ******************************************************************************/
 void ad5686_internal_reference(struct ad5686_dev *dev,
 			       uint8_t value)
@@ -703,7 +696,6 @@ void ad5686_internal_reference(struct ad5686_dev *dev,
  *                Example : 'AD5686_DC_EN' - daisy-chain enable
  *                          'AD5686_DC_DIS' - daisy-chain disable
  *
- * @return None.
 ******************************************************************************/
 void ad5686_daisy_chain_en(struct ad5686_dev *dev,
 			   uint8_t value)
@@ -722,7 +714,6 @@ void ad5686_daisy_chain_en(struct ad5686_dev *dev,
  *                Example : 'AD5686_RB_EN' - daisy-chain enable
  *                          'AD5686_RB_DIS' - daisy-chain disable
  *
- * @return None.
 ******************************************************************************/
 void ad5686_read_back_en(struct ad5686_dev *dev,
 			 uint8_t value)
@@ -740,7 +731,6 @@ void ad5686_read_back_en(struct ad5686_dev *dev,
  *                Example : 'AD5683_GB_VREF' - 0V to VREF
  *                          'AD5683_GB_2VREF' - 0V to 2xVREF
  *
- * @return None.
 ******************************************************************************/
 int32_t ad5686_gain_mode(struct ad5686_dev *dev, uint8_t value)
 {

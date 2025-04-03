@@ -186,8 +186,6 @@ int32_t adf4153_remove(struct adf4153_dev *dev)
  *
  * @param dev          - The device structure.
  * @param   latch_data - the data which will be written to the latch
- *
- * @return
 ******************************************************************************/
 void adf4153_update_latch(struct adf4153_dev *dev,
 			  uint32_t latch_data)

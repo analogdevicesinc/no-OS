@@ -52,7 +52,6 @@ static uint32_t nb_created_desc[MXC_I2C_INSTANCES];
 
 /**
  * @brief I2C0 interrupt handler.
- * @return void
  */
 void I2C0_IRQHandler(void)
 {
@@ -61,7 +60,6 @@ void I2C0_IRQHandler(void)
 
 /**
  * @brief I2C1 interrupt handler.
- * @return void
  */
 void I2C1_IRQHandler(void)
 {

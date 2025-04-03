@@ -634,7 +634,6 @@ error:
  * and attributes.
  * @param desc - Descriptor.
  * @param dev_descriptor - device descriptor.
- * @return None.
  */
 void iio_axi_dac_get_dev_descriptor(struct iio_axi_dac_desc *desc,
 				    struct iio_device **dev_descriptor)

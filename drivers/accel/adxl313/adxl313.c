@@ -1234,8 +1234,6 @@ int adxl313_get_conf_act_inact_ctl(struct adxl313_dev *dev,
  * @param int_pin       - Interrupts pin.
  *                        Example: 0x00 - activity interrupts on INT1 pin.
  *                                 0x01 - activity interrupts on INT2 pin.
- *
- * @return None.
 *******************************************************************************/
 int adxl313_set_activity_detection(struct adxl313_dev *dev,
 				   uint8_t act_axes,
@@ -1298,8 +1296,6 @@ int adxl313_set_activity_detection(struct adxl313_dev *dev,
  * @param int_pin         - Interrupts pin.
  *                          Example: 0x00 - activity interrupts on INT1 pin.
  *                                   0x01 - activity interrupts on INT2 pin.
- *
- * @return None.
 *******************************************************************************/
 int adxl313_set_inactivity_detection(struct adxl313_dev *dev,
 				     uint8_t inact_axes,

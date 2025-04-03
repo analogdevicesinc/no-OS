@@ -99,8 +99,6 @@ int32_t ad5933_remove(struct ad5933_dev *dev)
  * @param register_address - Address of the register.
  * @param register_value   - Data value to write.
  * @param bytes_number     - Number of bytes.
- *
- * @return None.
 *******************************************************************************/
 void ad5933_set_register_value(struct ad5933_dev *dev,
 			       uint8_t register_address,
@@ -154,8 +152,6 @@ uint32_t ad5933_get_register_value(struct ad5933_dev *dev,
  * @brief Resets the device.
  *
  * @param dev             - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad5933_reset(struct ad5933_dev *dev)
 {
@@ -173,8 +169,6 @@ void ad5933_reset(struct ad5933_dev *dev)
  *                     Example: AD5933_CONTROL_INT_SYSCLK
  *                              AD5933_CONTROL_EXT_SYSCLK
  * @param ext_clk_freq - Frequency value of the external clock, if used.
- *
- * @return None.
 *******************************************************************************/
 void ad5933_set_system_clk(struct ad5933_dev *dev,
 			   int8_t clk_source,
@@ -206,8 +200,6 @@ void ad5933_set_system_clk(struct ad5933_dev *dev,
  * @param gain  - Gain option.
  *                Example: AD5933_GAIN_X5
  *                         AD5933_GAIN_X1
- *
- * @return None.
 *******************************************************************************/
 void ad5933_set_range_and_gain(struct ad5933_dev *dev,
 			       int8_t range,
@@ -270,8 +262,6 @@ float ad5933_get_temperature(struct ad5933_dev *dev)
  * @param start_freq - Start frequency in Hz;
  * @param inc_freq   - Frequency increment in Hz;
  * @param inc_num    - Number of increments. Maximum value is 511(0x1FF).
- *
- * @return None.
 *******************************************************************************/
 void ad5933_config_sweep(struct ad5933_dev *dev,
 			 uint32_t  start_freq,
@@ -316,8 +306,6 @@ void ad5933_config_sweep(struct ad5933_dev *dev,
  * @brief Starts the sweep operation.
  *
  * @param dev             - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad5933_start_sweep(struct ad5933_dev *dev)
 {
@@ -357,8 +345,6 @@ void ad5933_start_sweep(struct ad5933_dev *dev)
  * @param freq_function         - Frequency function.
  * @param imag_data         	- Pointer to imaginary data
  * @param real_data         	- Pointer to real data
- *
- * @return None.
 *******************************************************************************/
 void ad5933_get_data(struct ad5933_dev *dev,
 		     uint8_t freq_function,
@@ -459,8 +445,6 @@ double ad5933_calculate_impedance(struct ad5933_dev *dev,
  *                Example: AD5933_SETTLING_X1
  *                         AD5933_SETTLING_X2
  *                         AD5933_SETTLING_X4
- *
- * @return None.
 *******************************************************************************/
 void ad5933_set_settling_time(struct ad5933_dev *dev,
 			      uint8_t multiplier,

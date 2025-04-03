@@ -42,8 +42,6 @@
  * @param p_read_data       - The read values are stored in this buffer.
  * @param register_address  - The start address of the burst read.
  * @param bytes_number      - Number of bytes to read.
- *
- * @return None.
 *******************************************************************************/
 void ad7156_get_register_value(struct ad7156_dev *dev,
 			       uint8_t* p_read_data,
@@ -61,8 +59,6 @@ void ad7156_get_register_value(struct ad7156_dev *dev,
  * @param register_value   - Data value to write.
  * @param register_address - Address of the register.
  * @param bytes_number     - Number of bytes. Accepted values: 0 - 1.
- *
- * @return None.
 *******************************************************************************/
 void ad7156_set_register_value(struct ad7156_dev *dev,
 			       uint16_t register_value,
@@ -141,8 +137,6 @@ int32_t ad7156_remove(struct ad7156_dev *dev)
  * @brief Resets the device.
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad7156_reset(struct ad7156_dev *dev)
 {
@@ -161,8 +155,6 @@ void ad7156_reset(struct ad7156_dev *dev)
  *                           AD7156_CONV_MODE_CONT_CONV  - Continuous conversion
  *                           AD7156_CONV_MODE_SINGLE_CONV - Single conversion
  *                           AD7156_CONV_MODE_PWR_DWN - Power-down
- *
- * @return None.
 *******************************************************************************/
 void ad7156_set_power_mode(struct ad7156_dev *dev,
 			   uint8_t pwr_mode)
@@ -192,8 +184,6 @@ void ad7156_set_power_mode(struct ad7156_dev *dev,
  * @param enable_conv - The state of channel activity.
  *                      Example: 0 - disable conversion on selected channel.
  *                               1 - enable conversion on selected channel.
- *
- * @return None.
 *******************************************************************************/
 void ad7156_channel_state(struct ad7156_dev *dev,
 			  uint8_t channel,
@@ -229,8 +219,6 @@ void ad7156_channel_state(struct ad7156_dev *dev,
  *                           AD7156_CDC_RANGE_0_5_PF - 0.5pF input range.
  *                           AD7156_CDC_RANGE_1_PF   - 1pF input range.
  *                           AD7156_CDC_RANGE_4_PF   - 4pF input range.
- *
- * @return None.
 *******************************************************************************/
 void ad7156_set_range(struct ad7156_dev *dev,
 		      uint32_t channel,
@@ -320,8 +308,6 @@ float ad7156_get_range(struct ad7156_dev *dev,
  * @param thr_fixed - Selects the threshold mode.
  *                   Example: AD7156_ADAPTIVE_THRESHOLD
  *                            AD7156_FIXED_THRESHOLD
- *
- * @return None.
 *******************************************************************************/
 void ad7156_set_threshold_mode(struct ad7156_dev *dev,
 			       uint8_t thr_mode,
@@ -353,8 +339,6 @@ void ad7156_set_threshold_mode(struct ad7156_dev *dev,
  *                           AD7156_CHANNEL2
  * @param p_fthr   - The threshold value in picofarads(pF). The value must not be
  *                  out of the selected input range.
- *
- * @return None.
 *******************************************************************************/
 void ad7156_set_threshold(struct ad7156_dev *dev,
 			  uint8_t channel,
@@ -389,8 +373,6 @@ void ad7156_set_threshold(struct ad7156_dev *dev,
  *                        Example: AD7156_CHANNEL1
  *                                 AD7156_CHANNEL2
  * @param p_fsensitivity - The sensitivity value in picofarads(pF).
- *
- * @return None.
 *******************************************************************************/
 void ad7156_set_sensitivity(struct ad7156_dev *dev,
 			    uint8_t channel,

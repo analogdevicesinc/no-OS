@@ -100,8 +100,6 @@ int32_t ad799x_remove(struct ad799x_dev *dev)
  *
  * @param dev            - The device structure.
  * @param register_value - Data value to write.
- *
- * @return None.
 *******************************************************************************/
 void ad799x_set_configuration_reg(struct ad799x_dev *dev,
 				  uint8_t register_value)
@@ -115,8 +113,6 @@ void ad799x_set_configuration_reg(struct ad799x_dev *dev,
  * @param dev        - The device structure.
  * @param conv_value - It is used to store the conversion value.
  * @param channel    - Stores the channel number for the current conversion.
- *
- * @return none.
 *******************************************************************************/
 void ad799x_get_conversion_result(struct ad799x_dev *dev,
 				  int16_t* conv_value,

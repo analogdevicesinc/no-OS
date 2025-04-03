@@ -87,8 +87,6 @@ int32_t ad5110_remove(struct ad5110_dev *dev)
  *
  * @param dev        - The device structure.
  * @param rdac_value - Value of the serial register.
- *
- * @return none.
 *******************************************************************************/
 void ad5110_write_rdac(struct ad5110_dev *dev,
 		       uint8_t rdac_value)
@@ -134,8 +132,6 @@ uint8_t ad5110_read_rdac(struct ad5110_dev *dev)
  * @brief Write the content of RDAC register to EEPROM.
  *
  * @param dev - The device structure.
- *
- * @return none.
 *******************************************************************************/
 void ad5110_write_rdac_eeprom(struct ad5110_dev *dev)
 {
@@ -208,8 +204,6 @@ uint8_t ad5110_read_res_tolerance(struct ad5110_dev *dev)
  * @brief Software reset; makes a refresh of RDAC register with EEPROM.
  *
  * @param dev - The device structure.
- *
- * @return none.
 *******************************************************************************/
 void ad5110_reset(struct ad5110_dev *dev)
 {
@@ -231,8 +225,6 @@ void ad5110_reset(struct ad5110_dev *dev)
  * @param value - the value written to shut down register.
  *              Example: ShutDownOff - the device is on.
  *                       ShutDownOn  - the device is shut down.
- *
- * @return none.
 *******************************************************************************/
 void ad5110_shut_down(struct ad5110_dev *dev,
 		      uint8_t value)
