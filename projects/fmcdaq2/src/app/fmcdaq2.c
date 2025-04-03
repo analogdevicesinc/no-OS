@@ -1303,6 +1303,7 @@ int main(void)
 		// Address of data destination
 		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
 	};
+	no_os_mdelay(100);
 	status = axi_dmac_transfer_start(fmcdaq2.ad9680_dmac, &transfer_rx);
 	if (status)
 		return status;
@@ -1313,6 +1314,10 @@ int main(void)
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR,
 				  1024 * sizeof(uint32_t));
 #endif
+	printf("DMA_EXAMPLE: address=%#lx samples=%u channels=%u bits=%u\n",
+	       (uintptr_t)ADC_DDR_BASEADDR, transfer_rx.size / 2,
+	       fmcdaq2.ad9680_core->num_channels,
+	       16);
 	printf("\ndaq2: setup and configuration is done\n");
 	printf("\n SAMPLE NO. |     CH1     |     CH 2     |");
 	for (unsigned int i = 0; i < 1024; i++)
