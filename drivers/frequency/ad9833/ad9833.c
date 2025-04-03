@@ -154,7 +154,6 @@ int32_t ad9833_remove(struct ad9833_dev *dev)
  * @param dev   - The device structure.
  * @param value - Data which will be transmitted.
  *
- * @return none.
 ******************************************************************************/
 void ad9833_tx_spi(struct ad9833_dev *dev,
 		   int16_t value)
@@ -259,7 +258,6 @@ int8_t ad9833_out_mode(struct ad9833_dev *dev,
  *                              0 - No power-down.
  *                              1 - DAC powered down.
  *
- * @return None.
 ******************************************************************************/
 void ad9833_sleep_mode(struct ad9833_dev *dev,
 		       uint8_t sleep_mode)
@@ -308,7 +306,6 @@ void ad9833_sleep_mode(struct ad9833_dev *dev,
  * @param register_number - Number of the register (0 / 1).
  * @param frequency_value - Frequency value.
  *
- * @return None.
 ******************************************************************************/
 void ad9833_set_freq(struct ad9833_dev *dev,
 		     uint8_t register_number,
@@ -344,7 +341,6 @@ void ad9833_set_freq(struct ad9833_dev *dev,
  * @param register_number - Number of the register (0 / 1).
  * @param phase_value     - Phase value.
  *
- * @return none
 ******************************************************************************/
 void ad9833_set_phase(struct ad9833_dev *dev,
 		      uint8_t register_number,
@@ -368,7 +364,6 @@ void ad9833_set_phase(struct ad9833_dev *dev,
  * @param dev      - The device structure.
  * @param freq_reg - Number of frequency register. (0 / 1)
  *
- * @return None.
 ******************************************************************************/
 void ad9833_select_freq_reg(struct ad9833_dev *dev,
 			    uint8_t freq_reg)
@@ -404,7 +399,6 @@ void ad9833_select_freq_reg(struct ad9833_dev *dev,
  * @param dev       - The device structure.
  * @param phase_reg - Number of phase register. (0 / 1)
  *
- * @return None.
 ******************************************************************************/
 void ad9833_select_phase_reg(struct ad9833_dev *dev,
 			     uint8_t phase_reg)
@@ -440,7 +434,6 @@ void ad9833_select_phase_reg(struct ad9833_dev *dev,
  * @param dev   - The device structure.
  * @param value - soft or hard method. (0 / 1)
  *
- * @return None.
 ******************************************************************************/
 void ad9834_select_prog_method(struct ad9833_dev *dev,
 			       uint8_t value)
@@ -466,7 +459,6 @@ void ad9834_select_prog_method(struct ad9833_dev *dev,
  * @param signpib - Connects comparator / MSB to the SIGN BIT OUT pin.
  * @param div2    - MSB / MSB/2
  *
- * @return None.
 ******************************************************************************/
 void ad9834_logic_output(struct ad9833_dev *dev,
 			 uint8_t opbiten,

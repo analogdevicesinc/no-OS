@@ -96,8 +96,6 @@ int32_t adxl362_remove(struct adxl362_dev *dev)
  * @param register_value   - Data value to write.
  * @param register_address - Address of the register.
  * @param bytes_number     - Number of bytes. Accepted values: 0 - 1.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_set_register_value(struct adxl362_dev *dev,
 				uint16_t register_value,
@@ -122,8 +120,6 @@ void adxl362_set_register_value(struct adxl362_dev *dev,
  * @param read_data        - The read values are stored in this buffer.
  * @param register_address - The start address of the burst read.
  * @param bytes_number     - Number of bytes to read.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_get_register_value(struct adxl362_dev *dev,
 				uint8_t* read_data,
@@ -151,8 +147,6 @@ void adxl362_get_register_value(struct adxl362_dev *dev,
  * @param dev          - The device structure.
  * @param buffer       - Stores the read bytes.
  * @param bytes_number - Number of bytes to read.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_get_fifo_value(struct adxl362_dev *dev,
 			    uint8_t  *buffer,
@@ -176,8 +170,6 @@ void adxl362_get_fifo_value(struct adxl362_dev *dev,
  * @brief Resets the device via SPI communication bus.
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_software_reset(struct adxl362_dev *dev)
 {
@@ -194,8 +186,6 @@ void adxl362_software_reset(struct adxl362_dev *dev)
  * @param pwr_mode - Power mode.
  *                   Example: 0 - standby mode.
  *                            1 - measure mode.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_set_power_mode(struct adxl362_dev *dev,
 			    uint8_t pwr_mode)
@@ -224,8 +214,6 @@ void adxl362_set_power_mode(struct adxl362_dev *dev,
  *                  Example: ADXL362_RANGE_2G  -  +-2 g
  *                           ADXL362_RANGE_4G  -  +-4 g
  *                           ADXL362_RANGE_8G  -  +-8 g
- *
- * @return None.
 *******************************************************************************/
 void adxl362_set_range(struct adxl362_dev *dev,
 		       uint8_t g_range)
@@ -257,8 +245,6 @@ void adxl362_set_range(struct adxl362_dev *dev,
  *                            ADXL362_ODR_100_HZ   -  100Hz
  *                            ADXL362_ODR_200_HZ   -  200Hz
  *                            ADXL362_ODR_400_HZ   -  400Hz
- *
- * @return None.
 *******************************************************************************/
 void adxl362_set_output_rate(struct adxl362_dev *dev,
 			     uint8_t out_rate)
@@ -285,8 +271,6 @@ void adxl362_set_output_rate(struct adxl362_dev *dev,
  * @param x   - Stores the X-axis data(as two's complement).
  * @param y   - Stores the Y-axis data(as two's complement).
  * @param z   - Stores the Z-axis data(as two's complement).
- *
- * @return None.
 *******************************************************************************/
 void adxl362_get_xyz(struct adxl362_dev *dev,
 		     int16_t* x,
@@ -311,8 +295,6 @@ void adxl362_get_xyz(struct adxl362_dev *dev,
  * @param x   - Stores the X-axis data.
  * @param y   - Stores the Y-axis data.
  * @param z   - Stores the Z-axis data.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_get_g_xyz(struct adxl362_dev *dev,
 		       float* x,
@@ -370,8 +352,6 @@ float adxl362_read_temperature(struct adxl362_dev *dev)
  *                         Example: 1 - temperature data is stored in the FIFO
  *                                      together with x-, y- and x-axis data.
  *                                  0 - temperature data is skipped.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_fifo_setup(struct adxl362_dev *dev,
 			uint8_t  mode,
@@ -405,8 +385,6 @@ void adxl362_fifo_setup(struct adxl362_dev *dev,
  * @param time      - 8-bit value written to the activity timer register. The
  *                    amount of time (in seconds) is: time / ODR, where ODR - is
  *                    the output data rate.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_setup_activity_detection(struct adxl362_dev *dev,
 				      uint8_t  ref_or_abs,
@@ -452,8 +430,6 @@ void adxl362_setup_activity_detection(struct adxl362_dev *dev,
  * @param time      - 16-bit value written to the inactivity timer register. The
  *                    amount of time (in seconds) is: time / ODR, where ODR - is
  *                    the output data rate.
- *
- * @return None.
 *******************************************************************************/
 void adxl362_setup_inactivity_detection(struct adxl362_dev *dev,
 					uint8_t  ref_or_abs,

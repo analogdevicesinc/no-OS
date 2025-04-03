@@ -209,7 +209,6 @@ uint16_t ad5449_set_input_shift_reg(struct ad5449_dev *dev,
  *                               AD5449_CH_B = 1.
  * @param   dac_value - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_load_update_channel(struct ad5449_dev *dev,
 				uint8_t channel,
@@ -235,7 +234,6 @@ void ad5449_load_update_channel(struct ad5449_dev *dev,
  *                               AD5449_CH_B = 1.
  * @param   dac_value - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_load_channel(struct ad5449_dev *dev,
 			 uint8_t channel,
@@ -291,7 +289,6 @@ uint16_t ad5449_readback_channel(struct ad5449_dev *dev,
  *
  * @param   dev      - The device structure.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_update_all(struct ad5449_dev *dev)
 {
@@ -309,7 +306,6 @@ void ad5449_update_all(struct ad5449_dev *dev)
  * @param dev       - The device structure.
  * @param dac_value - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_load_all(struct ad5449_dev *dev,
 		     int16_t dac_value)
@@ -330,7 +326,6 @@ void ad5449_load_all(struct ad5449_dev *dev,
  *                Example: ZERO_SCALE = zero scale.
  *                         MIDSCALE   = midscale.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_clear_scale_setup(struct ad5449_dev *dev,
 			      int8_t type)
@@ -370,7 +365,6 @@ void ad5449_clear_scale_setup(struct ad5449_dev *dev,
  *                Example: ZERO_SCALE = zero scale.
  *                         MIDSCALE   = midscale.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_daisy_chain_setup(struct ad5449_dev *dev,
 			      int8_t value)
@@ -409,7 +403,6 @@ void ad5449_daisy_chain_setup(struct ad5449_dev *dev,
  *                         AD5449_SDO_WEAK = Weak SDO driver.
  *                         AD5449_SDO_OPEN_DRAIN = SDO configured as open drain
  *                         AD5449_SDO_DISABLE = Disable SDO output
- * @return None.
 ******************************************************************************/
 void ad5449_sdocontrol(struct ad5449_dev *dev,
 		       int8_t control_bits)
@@ -437,7 +430,6 @@ void ad5449_sdocontrol(struct ad5449_dev *dev,
  *                Example: AD5449_CLOCK_NEGEDGE = Falling edge. (Default)
  *                         AD5449_CLOCK_POSEDGE = Rising edge.
  *
- * @return None.
 ******************************************************************************/
 void ad5449_sclksetup(struct ad5449_dev *dev,
 		      int8_t value)

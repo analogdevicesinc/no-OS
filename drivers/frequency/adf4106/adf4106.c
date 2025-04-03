@@ -163,8 +163,6 @@ int32_t adf4106_remove(struct adf4106_dev *dev)
  *
  * @param dev        - The device structure.
  * @param latch_data - the data which will be written to the latch
- *
- * @return
 ******************************************************************************/
 void adf4106_update_latch(struct adf4106_dev *dev,
 			  uint32_t latch_data)
@@ -207,8 +205,6 @@ void adf4106_update_latch(struct adf4106_dev *dev,
  * @brief Initialization latch method
  *
  * @param dev - The device structure.
- *
- * @return
 ******************************************************************************/
 void adf4106_init_latch_method(struct adf4106_dev *dev)
 {
@@ -249,8 +245,6 @@ void adf4106_init_latch_method(struct adf4106_dev *dev)
  * @brief CE Pin method
  *
  * @param dev - The device structure.
- *
- * @return
 ******************************************************************************/
 void adf4106_init_cepin_method(struct adf4106_dev *dev)
 {
@@ -291,8 +285,6 @@ void adf4106_init_cepin_method(struct adf4106_dev *dev)
  * @brief Counter reset method
  *
  * @param dev - The device structure.
- *
- * @return
 ******************************************************************************/
 void adf4106_init_counte_reset_method(struct adf4106_dev *dev)
 {

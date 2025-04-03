@@ -127,7 +127,6 @@ int32_t ad5421_remove(struct ad5421_dev *dev)
  * @param dev       - The device structure.
  * @param dac_value - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5421_set_dac(struct ad5421_dev *dev,
 		    int32_t dac_value)
@@ -147,7 +146,6 @@ void ad5421_set_dac(struct ad5421_dev *dev,
  * @param dev          - The device structure.
  * @param offset_value - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5421_set_offset(struct ad5421_dev *dev,
 		       int32_t offset_value)
@@ -167,7 +165,6 @@ void ad5421_set_offset(struct ad5421_dev *dev,
  * @param dev        - The device structure.
  * @param gain_value - desired value to be written in register.
  *
- * @return None.
 ******************************************************************************/
 void ad5421_set_gain(struct ad5421_dev *dev,
 		     int32_t gain_value)
@@ -406,7 +403,6 @@ int32_t ad5421_get(struct ad5421_dev *dev)
  *
  * @param dev - The device structure.
  *
- * @return None.
 ******************************************************************************/
 void ad5421_reset(struct ad5421_dev *dev)
 {

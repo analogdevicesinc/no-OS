@@ -64,7 +64,6 @@ __attribute__((weak)) void *no_os_calloc(size_t nitems, size_t size)
  * 		  or no_os_malloc.
  * @param ptr - Pointer to a memory block previously allocated by a call
  * 		  to no_os_calloc or no_os_malloc.
- * @return None.
  */
 __attribute__((weak)) void no_os_free(void *ptr)
 {

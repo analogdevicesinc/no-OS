@@ -250,7 +250,6 @@ static void ad9361_dig_tune_verbose_print(struct ad9361_rf_phy *phy,
 /**
  * Set intf delay.
  * @param phy The AD9361 state structure.
- * @return None.
  */
 static void ad9361_set_intf_delay(struct ad9361_rf_phy *phy, bool tx,
 				  unsigned int clock_delay,

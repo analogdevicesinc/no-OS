@@ -982,11 +982,11 @@ int ltc4296_chk_global_events(struct ltc4296_dev *dev)
 /**
  * @brief Check port events
  * @param dev - The device structure
- * @param ltc4296_port - The port number
+ * @param ltc4296_p - The port number
  * @return 0 in case of success, negative code otherwise
  */
 int ltc4296_chk_port_events(struct ltc4296_dev *dev,
-			    enum ltc4296_port ltc4296_port)
+			    enum ltc4296_port ltc4296_p)
 {
 	int ret;
 	uint16_t port_events = 0;
@@ -995,16 +995,16 @@ int ltc4296_chk_port_events(struct ltc4296_dev *dev,
 		return -EINVAL;
 
 	/* Read the Port Events */
-	ret = ltc4296_read_port_events(dev, ltc4296_port, &port_events);
+	ret = ltc4296_read_port_events(dev, ltc4296_p, &port_events);
 	if (ret)
 		return ret;
 
 	/* Report only in case of port event other than signature */
-	ret = ltc4296_print_port_events(ltc4296_port, port_events);
+	ret = ltc4296_print_port_events(ltc4296_p, port_events);
 	if (ret)
 		return ret;
 
-	return ltc4296_clear_port_events(dev, ltc4296_port);
+	return ltc4296_clear_port_events(dev, ltc4296_p);
 }
 
 /**

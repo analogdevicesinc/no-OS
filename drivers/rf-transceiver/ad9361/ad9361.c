@@ -1162,7 +1162,6 @@ int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode)
  * Get BIST loopback mode.
  * @param phy The AD9361 state structure.
  * @param mode BIST loopback mode.
- * @return 0 in case of success, negative error code otherwise.
  */
 void ad9361_get_bist_loopback(struct ad9361_rf_phy *phy, int32_t *mode)
 {
@@ -1204,7 +1203,6 @@ int32_t ad9361_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode mode)
  * Get BIST mode settings.
  * @param phy The AD9361 state structure.
  * @param mode Bist mode.
- * @return 0 in case of success, negative error code otherwise.
  */
 void ad9361_get_bist_prbs(struct ad9361_rf_phy *phy,
 			  enum ad9361_bist_mode *mode)
@@ -1277,7 +1275,6 @@ int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
  * @param freq_Hz Bist tone frequency.
  * @param level_dB Bist tone level.
  * @param mask Bist reg mask.
- * @return 0 in case of success, negative error code otherwise.
  */
 void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
 			  enum ad9361_bist_mode *mode, uint32_t *freq_Hz,
@@ -1978,7 +1975,6 @@ uint8_t ad9361_ensm_get_state(struct ad9361_rf_phy *phy)
  * @param ensm_state The ENSM state [ENSM_STATE_SLEEP_WAIT, ENSM_STATE_ALERT,
  *                   ENSM_STATE_TX, ENSM_STATE_TX_FLUSH, ENSM_STATE_RX,
  *                   ENSM_STATE_RX_FLUSH, ENSM_STATE_FDD, ENSM_STATE_FDD_FLUSH].
- * @return None.
  */
 void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 {
@@ -2058,7 +2054,6 @@ out:
  * Restore an Enable State Machine (ENSM) state.
  * @param phy The AD9361 state structure.
  * @param ensm_state The state.
- * @return None.
  */
 void ad9361_ensm_restore_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 {
@@ -2113,7 +2108,6 @@ void ad9361_ensm_restore_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 /**
  * Restore the previous Enable State Machine (ENSM) state.
  * @param phy The AD9361 state structure.
- * @return None.
  */
 void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 {
@@ -5293,7 +5287,6 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 /**
  * Clear state.
  * @param phy The AD9361 state structure.
- * @return None.
  */
 void ad9361_clear_state(struct ad9361_rf_phy *phy)
 {

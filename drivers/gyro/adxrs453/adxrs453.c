@@ -136,8 +136,6 @@ uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
  * @param dev             - The device structure.
  * @param register_address - Address of the register.
  * @param register_value   - Data value to write.
- *
- * @return None.
 *******************************************************************************/
 void adxrs453_set_register_value(struct adxrs453_dev *dev,
 				 uint8_t register_address,

@@ -37,7 +37,6 @@
 /**
  * @brief Generate miliseconds delay.
  * @param msecs - Delay in miliseconds.
- * @return None.
  */
 void no_os_mdelay(uint32_t msecs)
 {

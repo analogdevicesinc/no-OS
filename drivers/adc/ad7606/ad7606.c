@@ -2035,10 +2035,6 @@ int32_t ad7606_data_correction_serial(struct ad7606_dev *dev,
  * @brief Free any resource used by the driver.
  *
  * @param dev        - The device structure.
- *
- * @return ret - return code.
- *         Example: -EIO - SPI communication error.
- *                  0 - No errors encountered.
 *******************************************************************************/
 void ad7606_axi_remove(struct ad7606_dev *dev)
 {

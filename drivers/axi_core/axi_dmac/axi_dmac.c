@@ -46,8 +46,6 @@
  *			if any, and sets the transfer structure fields accordingly.
  *
  * @param instance - the instance that triggered the ISR.
- *
- * @return None.
 *******************************************************************************/
 void axi_dmac_dev_to_mem_isr(void *instance)
 {
@@ -97,8 +95,6 @@ void axi_dmac_dev_to_mem_isr(void *instance)
  *			if any, and sets the transfer structure fields accordingly.
  *
  * @param instance - the instance that triggered the ISR.
- *
- * @return None.
 *******************************************************************************/
 void axi_dmac_mem_to_dev_isr(void *instance)
 {
@@ -154,8 +150,6 @@ void axi_dmac_mem_to_dev_isr(void *instance)
  *			params, if any, and sets the transfer structure fields accordingly.
  *
  * @param instance - the instance that triggered the ISR.
- *
- * @return None.
 *******************************************************************************/
 void axi_dmac_mem_to_mem_isr(void *instance)
 {
@@ -556,7 +550,6 @@ int32_t axi_dmac_transfer_wait_completion(struct axi_dmac *dmac,
  *
  * @param dmac - DMAC istance.
  *
- * @return None
 *******************************************************************************/
 void axi_dmac_transfer_stop(struct axi_dmac *dmac)
 {

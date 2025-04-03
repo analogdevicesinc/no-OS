@@ -41,8 +41,6 @@
  * @param dev              - The device structure.
  * @param register_address - Address of the register.
  * @param register_value   - Data value to write.
- *
- * @return None.
 *******************************************************************************/
 void adp5589_set_register_value(struct adp5589_dev *dev,
 				uint8_t register_address,
@@ -139,8 +137,6 @@ int32_t adp5589_remove(struct adp5589_dev *dev)
  * @brief Initializes the PWM generator in continuous mode.
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void adp5589_init_pwm(struct adp5589_dev *dev)
 {
@@ -159,8 +155,6 @@ void adp5589_init_pwm(struct adp5589_dev *dev)
  * @param pmod_port  - J1 or J2 connector of PmodIOXP
  *			Example: PMOD_IOXP_J1 - J1 connector.
  *			         PMOD_IOXP_J2 - J2 connector.
- *
- * @return None.
 *******************************************************************************/
 void adp5589_init_key(struct adp5589_dev *dev,
 		      uint8_t pmod_port)
@@ -192,8 +186,6 @@ void adp5589_init_key(struct adp5589_dev *dev,
  * @param dev          - The device structure.
  * @param pwm_off_time - The amount of time in uS for which the PWM pulse is LOW.
  * @param pwm_on_time  - The amount of time in uS for which the PWM pulse is HIGH.
- *
- * @return None.
 *******************************************************************************/
 void adp5589_set_pwm(struct adp5589_dev *dev,
 		     uint16_t pwm_off_time,
@@ -225,8 +217,6 @@ void adp5589_set_pwm(struct adp5589_dev *dev,
  * @param dev  - The device structure.
  * @param reg  - The address of the direction register to be written.
  * @param val  - The data to be written to the direction register.
- *
- * @return None.
 *******************************************************************************/
 void adp5589_gpio_direction(struct adp5589_dev *dev,
 			    uint8_t reg,
@@ -262,7 +252,6 @@ uint8_t adp5589_get_pin_state(struct adp5589_dev *dev,
  * @param reg    - The address of the status register to be read.
  * @param state  - The value to be written to the pins.
  *
- * @return none
 *******************************************************************************/
 void adp5589_set_pin_state(struct adp5589_dev *dev,
 			   uint8_t reg,
@@ -362,8 +351,6 @@ uint8_t adp5589_key_decode(uint8_t reg,
  * @param pmod_port  - J1 or J2 connector of PmodIOXP
  *			Example: PMOD_IOXP_J1 - J1 connector.
  *				 PMOD_IOXP_J2 - J2 connector.
- *
- * @return key       - Actual Key on the Pmod-KYPD.
 *******************************************************************************/
 void adp5589_key_lock(struct adp5589_dev *dev,
 		      uint8_t first_event,

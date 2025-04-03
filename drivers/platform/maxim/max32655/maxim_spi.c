@@ -131,7 +131,6 @@ static void _max_dma_set_req(struct no_os_spi_desc *desc)
  * @brief Set the closest first and last SCLK delays to what was requested
  * @param desc - SPI descriptor
  * @param msg - The message for which the delays will be set
- * @return void
  */
 static void _max_delay_config(struct no_os_spi_desc *desc,
 			      struct no_os_spi_msg *msg)

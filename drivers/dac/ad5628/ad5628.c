@@ -112,8 +112,6 @@ int32_t ad5628_remove(struct ad5628_dev *dev)
  *                            AD5628_ADDR_DAC_B
  *                            ...
  *                            AD5628_ADDR_DAC_ALL
- *
- * @return none.
 *******************************************************************************/
 void ad5628_power_mode(struct ad5628_dev *dev,
 		       uint8_t pwr_mode,
@@ -137,8 +135,6 @@ void ad5628_power_mode(struct ad5628_dev *dev,
  * @brief Resets the device.
  *
  * @param dev - The device structure.
- *
- * @return none.
 *******************************************************************************/
 void ad5628_reset(struct ad5628_dev *dev)
 {
@@ -151,8 +147,6 @@ void ad5628_reset(struct ad5628_dev *dev)
  * @param dev            - The device structure.
  *
  * @param register_value - Value of the register.
- *
- * @return none.
 *******************************************************************************/
 void ad5628_set_input_register(struct ad5628_dev *dev,
 			       uint32_t register_value)

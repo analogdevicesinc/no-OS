@@ -189,8 +189,6 @@ int32_t ad5446_remove(struct ad5446_dev *dev)
  * @param dev      - The device structure.
  * @param command  - Command to be transmitted to the device.
  * @param data     - Data to be written in input register.
- *
- * @return  None.
 ******************************************************************************/
 void ad5446_set_register(struct ad5446_dev *dev,
 			 uint8_t command,

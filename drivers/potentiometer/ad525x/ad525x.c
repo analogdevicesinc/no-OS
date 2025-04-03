@@ -222,8 +222,6 @@ uint16_t ad525x_read_mem(struct ad525x_dev *dev,
  * @param dev     - The device structure.
  * @param address - desired address of the EEMEM memory
  * @param data    - the data which will be written to the memory
- *
- * @return success
 ******************************************************************************/
 void ad525x_write_mem(struct ad525x_dev *dev,
 		      uint8_t address,
@@ -330,8 +328,6 @@ uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
  * @param dev     - The device structure.
  * @param address - desired address of the RDAC register
  * @param data    - the data which will be written to the RDAC register
- *
- * @return success
 ******************************************************************************/
 void ad525x_write_rdac(struct ad525x_dev *dev,
 		       uint8_t address,
@@ -377,7 +373,6 @@ void ad525x_write_rdac(struct ad525x_dev *dev,
  * @param command - desired command, the functionality of a command it may
  *                    vary at diffrent devices
  * @param address - Address to be written
- * @return success
 ******************************************************************************/
 void ad525x_write_command(struct ad525x_dev *dev,
 			  uint8_t command,

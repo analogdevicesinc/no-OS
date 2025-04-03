@@ -356,7 +356,6 @@ static uint64_t adf4371_pll_fract_n_get_rate(struct adf4371_dev *dev,
  * @param fract1 - The fractionality.
  * @param fract2 - The auxiliary fractionality.
  * @param mod2 - The auxiliary modulus.
- * @return None.
  */
 static void adf4371_pll_fract_n_compute(uint64_t vco,
 					uint64_t pfd,

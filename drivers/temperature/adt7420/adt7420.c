@@ -280,8 +280,6 @@ int32_t adt7420_remove(struct adt7420_dev *dev)
  *                        ADT7420_OP_MODE_ONE_SHOT  - one shot;
  *                        ADT7420_OP_MODE_1_SPS     - 1 SPS mode;
  *                        ADT7420_OP_MODE_SHUTDOWN  - shutdown.
- *
- * @return None.
 *******************************************************************************/
 int adt7420_set_operation_mode(struct adt7420_dev *dev,
 			       uint8_t mode)
@@ -306,8 +304,6 @@ int adt7420_set_operation_mode(struct adt7420_dev *dev,
  * @param resolution - Resolution.
  *                     Example: 0 - 13-bit resolution;
  *                              1 - 16-bit resolution.
- *
- * @return None.
 *******************************************************************************/
 int adt7420_set_resolution(struct adt7420_dev *dev,
 			   uint8_t resolution)

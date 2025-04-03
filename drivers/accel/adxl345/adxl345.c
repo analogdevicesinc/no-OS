@@ -81,8 +81,6 @@ uint8_t adxl345_get_register_value(struct adxl345_dev *dev,
  * @param dev              - The device structure.
  * @param register_address - Address of the register.
  * @param register_value   - Data value to write.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_register_value(struct adxl345_dev *dev,
 				uint8_t register_address,
@@ -177,8 +175,6 @@ int32_t adxl345_remove(struct adxl345_dev *dev)
  * @param pwr_mode - Power mode.
  *                   Example: 0x0 - standby mode.
  *                            0x1 - measure mode.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_power_mode(struct adxl345_dev *dev,
 			    uint8_t pwr_mode)
@@ -202,8 +198,6 @@ void adxl345_set_power_mode(struct adxl345_dev *dev,
  * @param x   - X-axis's output data.
  * @param y   - Y-axis's output data.
  * @param z   - Z-axis's output data.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_get_xyz(struct adxl345_dev *dev,
 		     int16_t* x,
@@ -251,8 +245,6 @@ void adxl345_get_xyz(struct adxl345_dev *dev,
  * @param x   - X-axis's output data.
  * @param y   - Y-axis's output data.
  * @param z   - Z-axis's output data.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_get_g_xyz(struct adxl345_dev *dev,
 		       float* x,
@@ -297,8 +289,6 @@ void adxl345_get_g_xyz(struct adxl345_dev *dev,
  *						     INT2 pin.
  *				ADXL345_DOUBLE_TAP - double tap interrupts on
  *						     INT2 pin.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_tap_detection(struct adxl345_dev *dev,
 			       uint8_t tap_type,
@@ -376,8 +366,6 @@ void adxl345_set_tap_detection(struct adxl345_dev *dev,
  *                    Example: 0x0 - activity interrupts on INT1 pin.
  *                             ADXL345_ACTIVITY - activity interrupts on INT2
  *                                                pin.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_activity_detection(struct adxl345_dev *dev,
 				    uint8_t act_on_off,
@@ -444,8 +432,6 @@ void adxl345_set_activity_detection(struct adxl345_dev *dev,
  *		         Example: 0x0 - inactivity interrupts on INT1 pin.
  *				  ADXL345_INACTIVITY - inactivity interrupts on
  *						       INT2 pin.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_inactivity_detection(struct adxl345_dev *dev,
 				      uint8_t inact_on_off,
@@ -509,8 +495,6 @@ void adxl345_set_inactivity_detection(struct adxl345_dev *dev,
  *		      Example: 0x0 - free-fall interrupts on INT1 pin.
  *			       ADXL345_FREE_FALL - free-fall interrupts on
  *                                                 INT2 pin.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_free_fall_detection(struct adxl345_dev *dev,
 				     uint8_t ff_on_off,
@@ -563,8 +547,6 @@ void adxl345_set_free_fall_detection(struct adxl345_dev *dev,
                                          (disables 2d orientation detection).
  * @param dead_zone     - Dead zone angle encoding.
  * @param divisor       - Bandwidth divisor encoding.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_orientation_detection(struct adxl345_dev *dev,
 				       uint8_t orient_int,
@@ -612,8 +594,6 @@ void adxl345_set_orientation_detection(struct adxl345_dev *dev,
  * @param x_offset - X-axis's offset.
  * @param y_offset - Y-axis's offset.
  * @param z_offset - Z-axis's offset.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_offset(struct adxl345_dev *dev,
 			uint8_t x_offset,
@@ -643,8 +623,6 @@ void adxl345_set_offset(struct adxl345_dev *dev,
  * @param full_res - Full resolution option.
  *                   Example: 0x0 - Disables full resolution.
  *                            ADXL345_FULL_RES - Enables full resolution.
- *
- * @return None.
 *******************************************************************************/
 void adxl345_set_range_resolution(struct adxl345_dev *dev,
 				  uint8_t g_range,

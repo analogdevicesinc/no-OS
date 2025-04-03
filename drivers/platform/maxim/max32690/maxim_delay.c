@@ -49,7 +49,6 @@ void SysTick_Handler(void)
 /**
  * @brief Generate microseconds delay.
  * @param usecs - Delay in microseconds.
- * @return None.
  */
 void no_os_udelay(uint32_t usecs)
 {
@@ -59,7 +58,6 @@ void no_os_udelay(uint32_t usecs)
 /**
  * @brief Generate miliseconds delay.
  * @param msecs - Delay in miliseconds.
- * @return None.
  */
 void no_os_mdelay(uint32_t msecs)
 {

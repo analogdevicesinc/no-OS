@@ -103,8 +103,6 @@ int32_t ad74xx_remove(struct ad74xx_dev *dev)
  *        AD7478A, AD7479(partial power down).
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad74xx_power_down(struct ad74xx_dev *dev)
 {
@@ -123,8 +121,6 @@ void ad74xx_power_down(struct ad74xx_dev *dev)
  *        AD7476A, AD7477A, AD7478A, AD7479(partial power down).
  *
  * @param dev - The device structure.
- *
- * @return None.
 *******************************************************************************/
 void ad74xx_power_up(struct ad74xx_dev *dev)
 {

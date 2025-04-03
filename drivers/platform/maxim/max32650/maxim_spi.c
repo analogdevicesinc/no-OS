@@ -112,7 +112,6 @@ static void max_dma_xfer_cycle(struct no_os_dma_xfer_desc *old_xfer,
 /**
  * @brief Set the reqsel field of the cfg (DMA channel specific) register
  * @param desc - SPI descriptor
- * @return void
  */
 static void _max_dma_set_req(struct no_os_spi_desc *desc)
 {
@@ -240,7 +239,6 @@ static int32_t _max_spi_config_pins(struct no_os_spi_desc *desc)
  * @brief Set the closest first and last SCLK delays to what was requested
  * @param desc - SPI descriptor
  * @param msg - The message for which the delays will be set
- * @return void
  */
 static void _max_delay_config(struct no_os_spi_desc *desc,
 			      struct no_os_spi_msg *msg)

@@ -91,8 +91,6 @@ int32_t ad7303_remove(struct ad7303_dev *dev)
  *                     reference and loads DAC A input register from shift
  *                     register and updates both DAC A and DAC B DAC registers.
  * @param data_reg    - Value of data register.
- *
- * @return None.
 *******************************************************************************/
 void ad7303_write(struct ad7303_dev *dev,
 		  uint8_t control_reg,

@@ -117,7 +117,6 @@ int32_t ltc2312_remove(struct ltc2312_dev *dev)
  * @param [in]  dev 		 - The device structure.
  * @param [out] ptr_adc_code - Read data.
  *
- * @return void
  */
 static uint8_t ltc2312_get_shift(struct ltc2312_dev *dev)
 {
@@ -193,7 +192,6 @@ int32_t ltc2312_read(struct ltc2312_dev *dev, uint16_t *ptr_adc_code)
  * @param [in]  vref	 - The reference voltage of the ADC.
  * @param [out] voltage	 - Voltage value calculated.
  *
- * @return void
  */
 void ltc2312_code_to_voltage(struct ltc2312_dev *dev, uint16_t adc_code,
 			     float vref, float *voltage)

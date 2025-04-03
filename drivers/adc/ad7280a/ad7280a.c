@@ -530,7 +530,6 @@ float ad7280a_convert_data(uint8_t type,
  *                   selected device (only registers from Register Map with
  *                   address higher or equal to 0x0D).
  *
- * @return none.
 ******************************************************************************/
 void ad7280a_write_register(struct ad7280a_dev *dev,
 			    uint8_t dev_addr,
@@ -671,7 +670,6 @@ void ad7280a_write_register(struct ad7280a_dev *dev,
  *          *selfTestRegB - the voltage corresponding to self test slave
  *                          register.
  *
- * @return none.
 ******************************************************************************/
 void ad7280a_selftest_all(struct ad7280a_dev *dev,
 			  float *self_test_reg_a,

@@ -198,7 +198,6 @@ static int32_t max_uart_write_nonblocking(struct no_os_uart_desc *desc,
 /**
  * @brief UART receive interrupt callback function
  * @param context - UART context
- * @return none
  */
 void uart_rx_callback(void *context)
 {

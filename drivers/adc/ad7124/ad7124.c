@@ -463,7 +463,6 @@ uint8_t ad7124_compute_crc8(uint8_t * p_buf, uint8_t buf_size)
 /***************************************************************************//**
  * @brief Updates the CRC settings.
  * @param dev - The handler of the instance of the driver.
- * @return None.
 *******************************************************************************/
 void ad7124_update_crcsetting(struct ad7124_dev *dev)
 {
@@ -484,7 +483,6 @@ void ad7124_update_crcsetting(struct ad7124_dev *dev)
 /***************************************************************************//**
  * @brief Updates the device SPI interface settings.
  * @param dev - The handler of the instance of the driver.
- * @return None.
 *******************************************************************************/
 void ad7124_update_dev_spi_settings(struct ad7124_dev *dev)
 {
