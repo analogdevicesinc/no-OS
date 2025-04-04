@@ -140,7 +140,7 @@ update_gh_pages() {
 
                 # Create doxygen folder holding new build content
                 mkdir -p ${TOP_DIR}/doxygen
-                cp -R ${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/* ${TOP_DIR}/doxygen/
+                rsync -a "${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/" "${TOP_DIR}/doxygen/"
 
                 # Add sphinx build content to root folder
                 cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}
