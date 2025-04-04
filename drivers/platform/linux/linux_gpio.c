@@ -2,8 +2,9 @@
  *   @file   linux/linux_gpio.c
  *   @brief  Implementation of Linux platform GPIO Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -42,16 +43,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <linux/gpio.h>
+#include <string.h>
 
 /**
  * @struct linux_gpio_desc
  * @brief Linux platform specific GPIO descriptor
  */
 struct linux_gpio_desc {
-	/** /sys/class/gpio/gpio"number"/direction file descriptor */
-	int direction_fd;
-	/** /sys/class/gpio/gpio"number"/value file descriptor */
-	int value_fd;
+	/** GPIO Chip file descriptor */
+	int chip_fd;
+	/** GPIO Line file descriptor */
+	int line_fd;
 };
 
 #define GPIO_TIMEOUT_MS 1000
@@ -68,10 +71,11 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 	struct linux_gpio_desc *linux_desc;
 	struct no_os_gpio_desc *descriptor;
 	char path[64];
-	int fd;
-	int len;
 	int ret;
 	int timeout;
+	struct gpiochip_info chip_info = {0};
+	struct gpio_v2_line_info line_info = {0};
+	struct gpio_v2_line_request line_request = {0};
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -84,58 +88,50 @@ int32_t linux_gpio_get(struct no_os_gpio_desc **desc,
 	descriptor->extra = linux_desc;
 	descriptor->number = param->number;
 
-	fd = open("/sys/class/gpio/export", O_WRONLY);
-	if (fd < 0) {
-		printf("%s: Can't open device\n\r", __func__);
-		goto free_linux_desc;
-	}
-
-	len = sprintf(path, "%d", descriptor->number);
-	ret = write(fd, path, len);
-	if ((ret < 0) && (errno != EBUSY)) {
-		printf("%s: Can't write to file\n\r", __func__);
-		close(fd);
-		goto free_linux_desc;
-	}
-
-	ret = close(fd);
-	if (ret < 0) {
-		printf("%s: Can't close device\n\r", __func__);
-		goto free_linux_desc;
-	}
-
-	sprintf(path, "/sys/class/gpio/gpio%d/direction", descriptor->number);
+	sprintf(path, "/dev/gpiochip%d", descriptor->port);
 	timeout = GPIO_TIMEOUT_MS;
 	while (--timeout) {
-		linux_desc->direction_fd = open(path, O_WRONLY);
-		if (linux_desc->direction_fd >= 0)
+		linux_desc->chip_fd = open(path, O_RDONLY);
+		if (linux_desc->chip_fd >= 0)
 			break;
 		no_os_mdelay(1);
 	}
-	if (linux_desc->direction_fd < 0) {
-		printf("%s: Can't open %s\n\r", __func__, path);
-		goto free_linux_desc;
-	}
-
-	sprintf(path, "/sys/class/gpio/gpio%d/value", descriptor->number);
-	timeout = GPIO_TIMEOUT_MS;
-	while (--timeout) {
-		linux_desc->value_fd = open(path, O_WRONLY);
-		if (linux_desc->value_fd >= 0)
-			break;
-		no_os_mdelay(1);
-	}
-	if (linux_desc->value_fd < 0) {
+	if (linux_desc->chip_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, path);
 		goto close_dir;
 	}
+
+	/* Get Chip Info */
+	ret = ioctl(linux_desc->chip_fd, GPIO_GET_CHIPINFO_IOCTL, &chip_info);
+	if (ret < 0) {
+		printf("%s: Can't get chipinfo\n\r", __func__);
+		goto close_dir;
+	}
+
+	/* Get Line Info */
+	line_info.offset = descriptor->number;
+	ret = ioctl(linux_desc->chip_fd, GPIO_V2_GET_LINEINFO_IOCTL, &line_info);
+	if (ret < 0) {
+		printf("%s: Can't get lineinfo\n\r", __func__);
+		goto close_dir;
+	}
+
+	/* Get Line Request */
+	line_request.offsets[0] = descriptor->number;
+	line_request.num_lines = 1;
+	ret = ioctl(linux_desc->chip_fd, GPIO_V2_GET_LINE_IOCTL, &line_request);
+	if (ret < 0) {
+		printf("%s: Can't get line request\n\r", __func__);
+		goto close_dir;
+	}
+	linux_desc->line_fd = line_request.fd;
 
 	*desc = descriptor;
 
 	return 0;
 
 close_dir:
-	close(linux_desc->direction_fd);
+	close(linux_desc->chip_fd);
 free_linux_desc:
 	no_os_free(linux_desc);
 free_desc:
@@ -166,39 +162,17 @@ int32_t linux_gpio_get_optional(struct no_os_gpio_desc **desc,
 int32_t linux_gpio_remove(struct no_os_gpio_desc *desc)
 {
 	struct linux_gpio_desc *linux_desc;
-	char path[64];
-	int fd;
-	int len;
 	int ret;
 
 	linux_desc = desc->extra;
 
-	ret = close(linux_desc->direction_fd);
+	ret = close(linux_desc->chip_fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
 		return -1;
 	}
 
-	ret = close(linux_desc->value_fd);
-	if (ret < 0) {
-		printf("%s: Can't close device\n\r", __func__);
-		return -1;
-	}
-
-	fd = open("/sys/class/gpio/unexport", O_WRONLY);
-	if (fd < 0) {
-		printf("%s: Can't open device\n\r", __func__);
-		return -1;
-	}
-
-	len = sprintf(path, "%d", desc->number);
-	ret = write(fd, path, len);
-	if (ret < 0) {
-		printf("%s: Can't write to file\n\r", __func__);
-		return -1;
-	}
-
-	ret = close(fd);
+	ret = close(linux_desc->line_fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
 		return -1;
@@ -223,15 +197,16 @@ int32_t linux_gpio_set_value(struct no_os_gpio_desc *desc,
 {
 	struct linux_gpio_desc *linux_desc;
 	int ret;
+	struct gpio_v2_line_values line_value = {0};
 
 	linux_desc = desc->extra;
 
-	if (value)
-		ret = write(linux_desc->value_fd, "1", 2);
-	else
-		ret = write(linux_desc->value_fd, "0", 2);
+	/* Set Line Value */
+	line_value.bits = value;
+	line_value.mask = 1; /* Only set one line (or one GPIO) */
+	ret = ioctl(linux_desc->line_fd, GPIO_V2_LINE_SET_VALUES_IOCTL, &line_value);
 	if (ret < 0) {
-		printf("%s: Can't write to file\n\r", __func__);
+		printf("%s: Can't set line value\n\r", __func__);
 		return -1;
 	}
 
@@ -250,18 +225,20 @@ int32_t linux_gpio_get_value(struct no_os_gpio_desc *desc,
 			     uint8_t *value)
 {
 	struct linux_gpio_desc *linux_desc;
-	char data;
 	int ret;
+	struct gpio_v2_line_values line_value = {0};
 
 	linux_desc = desc->extra;
 
-	ret = read(linux_desc->value_fd, &data, 1);
+	/* Get Line Value */
+	line_value.mask = 1; /* Only get one line (or one GPIO) */
+	ret = ioctl(linux_desc->line_fd, GPIO_V2_LINE_GET_VALUES_IOCTL, &line_value);
 	if (ret < 0) {
-		printf("%s: Can't read from file\n\r", __func__);
+		printf("%s: Can't get line value\n\r", __func__);
 		return -1;
 	}
 
-	if (data == '0')
+	if (line_value.bits == 0)
 		*value = NO_OS_GPIO_LOW;
 	else
 		*value = NO_OS_GPIO_HIGH;
@@ -278,12 +255,15 @@ int32_t linux_gpio_direction_input(struct no_os_gpio_desc *desc)
 {
 	struct linux_gpio_desc *linux_desc;
 	int ret;
+	struct gpio_v2_line_config line_config = {0};
 
 	linux_desc = desc->extra;
 
-	ret = write(linux_desc->direction_fd, "in", 3);
+	/* Set Line Config */
+	line_config.flags = GPIO_V2_LINE_FLAG_INPUT;
+	ret = ioctl(linux_desc->line_fd, GPIO_V2_LINE_SET_CONFIG_IOCTL, &line_config);
 	if (ret < 0) {
-		printf("%s: Can't write to file\n\r", __func__);
+		printf("%s: Can't config line\n\r", __func__);
 		return -1;
 	}
 
@@ -303,20 +283,19 @@ int32_t linux_gpio_direction_output(struct no_os_gpio_desc *desc,
 {
 	struct linux_gpio_desc *linux_desc;
 	int ret;
+	struct gpio_v2_line_config line_config = {0};
 
 	linux_desc = desc->extra;
 
-	ret = write(linux_desc->direction_fd, "out", 4);
+	/* Set Line Config */
+	line_config.flags = GPIO_V2_LINE_FLAG_OUTPUT;
+	ret = ioctl(linux_desc->line_fd, GPIO_V2_LINE_SET_CONFIG_IOCTL, &line_config);
 	if (ret < 0) {
-		printf("%s: Can't write to file\n\r", __func__);
+		printf("%s: Can't config line\n\r", __func__);
 		return -1;
 	}
 
-	ret = linux_gpio_set_value(desc, value);
-	if (ret != 0) {
-		printf("%s: Can't set value\n\r", __func__);
-		return -1;
-	}
+	linux_gpio_set_value(desc, value);
 
 	return 0;
 }
@@ -333,20 +312,23 @@ int32_t linux_gpio_get_direction(struct no_os_gpio_desc *desc,
 				 uint8_t *direction)
 {
 	struct linux_gpio_desc *linux_desc;
-	char data;
 	int ret;
+	struct gpio_v2_line_info line_info = {0};
 
 	linux_desc = desc->extra;
 
-	ret = read(linux_desc->direction_fd, &data, 1);
+	/* Get Line Info */
+	line_info.offset = desc->number;
+	ret = ioctl(linux_desc->chip_fd, GPIO_V2_GET_LINEINFO_IOCTL, &line_info);
 	if (ret < 0) {
-		printf("%s: Can't read from file\n\r", __func__);
+		printf("%s: Can't get lineinfo\n\r", __func__);
+
 		return -1;
 	}
 
-	if (data == 'o')
+	if (line_info.flags & GPIO_V2_LINE_FLAG_OUTPUT)
 		*direction = NO_OS_GPIO_OUT;
-	else
+	else if (line_info.flags & GPIO_V2_LINE_FLAG_INPUT)
 		*direction = NO_OS_GPIO_IN;
 
 	return 0;
