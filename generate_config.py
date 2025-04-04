@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser(description="Generate config.cmake from defconf
 parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory", default=Path(__file__).parent.resolve())
 parser.add_argument("--defconfig", type=str, help="Path to a defconfig file", nargs='+')
 parser.add_argument("--update", type=bool, help="Append the defconfig file to the existing .config file", default=False)
+parser.add_argument("--verbose", type=bool, help="Enable verbose output", default=False)
 
 args = parser.parse_args(sys.argv[1:])
 print(args.update)
@@ -37,3 +38,8 @@ with open(capi_dir.joinpath("config.cmake"), "w") as cmake_file:
                 cmake_file.write(f"set(CONFIG_{sym.name} {value})\n")
 
 print("Generated config.cmake")
+
+if True:
+        print("Config files used:")
+        for defconfig in args.defconfig:
+                print("{}".format(defconfig))
