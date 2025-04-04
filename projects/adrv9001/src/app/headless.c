@@ -567,11 +567,11 @@ int main(void)
 				  ADRV9001_I_Q_CHANNELS * /* nr of channels */
 				  2 /* bytes per sample */);
 #endif /* XILINX_PLATFORM */
-	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	printf("DMA_EXAMPLE Rx2: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffers[1], ADC_BUFFER_SAMPLES * rx2_adc_init.num_channels / 2,
 	       rx2_adc_init.num_channels, 8 * sizeof(adc_buffers[1][0]));
 #endif
-	printf("DMA_EXAMPLE: address=%#lx samples=%lu channels=%u bits=%lu\n",
+	printf("DMA_EXAMPLE Rx1: address=%#lx samples=%lu channels=%u bits=%lu\n",
 	       (uintptr_t)adc_buffers[0], ADC_BUFFER_SAMPLES * rx1_adc_init.num_channels / 2,
 	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
