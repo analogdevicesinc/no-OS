@@ -60,7 +60,11 @@
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
 #include "adi_adrv9001_profileutil.h"
+#ifdef LVDS
+#include "Navassa_LVDS_profile.h"
+#else
 #include "Navassa_CMOS_profile.h"
+#endif
 
 /* ADC/DAC Buffers */
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
