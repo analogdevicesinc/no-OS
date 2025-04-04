@@ -340,7 +340,7 @@ int ad717x_enable_input_buffer(ad717x_dev* device,
  * @param adc_raw_data ADC Raw Value
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_single_read(ad717x_dev* device,  uint8_t id, int32_t *adc_raw_data)
+int ad717x_single_read(ad717x_dev* device,  uint8_t id, uint32_t *adc_raw_data)
 {
 	int ret;
 
@@ -587,7 +587,7 @@ int32_t AD717X_WaitForReady(ad717x_dev *device,
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
 int32_t AD717X_ReadData(ad717x_dev *device,
-			int32_t* pData)
+			uint32_t* pData)
 {
 	ad717x_st_reg *dataReg;
 	int32_t ret;

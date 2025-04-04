@@ -241,7 +241,7 @@ typedef enum {
 /*! AD717X register info */
 typedef struct {
 	int32_t addr;
-	int32_t value;
+	uint32_t value;
 	int32_t size;
 } ad717x_st_reg;
 
@@ -530,7 +530,7 @@ int32_t AD717X_WaitForReady(ad717x_dev *device,
 
 /*! Reads the conversion result from the device. */
 int32_t AD717X_ReadData(ad717x_dev *device,
-			int32_t* pData);
+			uint32_t* pData);
 
 /*! Computes data register read size to account for bit number and status
  *  read. */
@@ -582,7 +582,7 @@ int ad717x_enable_buffers(ad717x_dev* device, bool inbuf_en,
 
 /* Perform single conversion and read sample */
 int ad717x_single_read(ad717x_dev* device, uint8_t id,
-		       int32_t *adc_raw_data);
+		       uint32_t *adc_raw_data);
 
 /* Configure device ODR */
 int32_t ad717x_configure_device_odr(ad717x_dev *dev, uint8_t filtcon_id,
