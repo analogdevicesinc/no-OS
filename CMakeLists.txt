@@ -40,9 +40,9 @@ target_link_options(capi_build PRIVATE -Wl,--gc-sections)
 
 add_subdirectory(projects)
 
-if (DEFINED ${CAPI_CURRENT_PROJECT})
-  list(APPEND GENERATE_CONFIG_ARGS ${NO_OS_DIR}/projects/${CAPI_CURRENT_PROJECT}/project.conf)
-endif()
+# if (DEFINED ${CAPI_CURRENT_PROJECT})
+#   list(APPEND GENERATE_CONFIG_ARGS ${NO_OS_DIR}/projects/${CAPI_CURRENT_PROJECT}/project.conf)
+# endif()
 
 set_property(
   DIRECTORY
@@ -53,6 +53,12 @@ set_property(
   ${NO_OS_DIR}/config.cmake
   ${NO_OS_DIR}/.config
 )
+
+message(STATUS "Using default defconfig: ${PROJECT_DEFCONFIG}")
+
+if (DEFINED PROJECT_DEFCONFIG)
+  list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
+endif()
 
 execute_process(
   COMMAND ${Python3_EXECUTABLE}
