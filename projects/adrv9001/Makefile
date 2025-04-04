@@ -1,4 +1,5 @@
 IIOD ?= n
+LVDS ?= n
 
 include ../../tools/scripts/generic_variables.mk
 
