@@ -1,9 +1,9 @@
-/********************************************************************************
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by the max31827 project.
- *   @author John Erasmus Mari Geronimo (johnerasmusmari.geronimo@analog.com)
- ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+/***************************************************************************//**
+ *   @file   ftd2xx_platform.c
+ *   @brief  Implementation of HAL for ftd2xx platform.
+ *   @author Radu Sabau (radu.sabau@analog.com)
+********************************************************************************
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,16 +29,7 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+*******************************************************************************/
+#include "ftd2xx_platform.h"
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
-
-#ifdef IIO_SUPPORT
-#include "iio_app.h"
-#endif
-
-#endif /* __PLATFORM_INCLUDES_H__ */
+FT_HANDLE ftHandle[FTD2XX_MAX_DEV_PER_CHIP];

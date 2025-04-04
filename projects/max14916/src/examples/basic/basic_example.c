@@ -30,7 +30,6 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "basic_example.h"
 #include "common_data.h"
 #include "max149x6-base.h"
 #include "max14916.h"
@@ -44,7 +43,7 @@
  * 		 turn the status led's on and off in the while loop, set some
  * 		 values in the config 2 register, and then return 0.
 */
-int basic_example_main()
+int example_main()
 {
 	int ret, i;
 	int j = 0;
@@ -53,11 +52,18 @@ int basic_example_main()
 	enum max14916_wd wd = MAX14916_WD_600MS;
 	enum max14916_ow_off_cs ow_off_cs = MAX14916_OW_OFF_CS_300UA;
 	enum max14916_sht_vdd_thr sht_vdd_thr = MAX14916_SHT_VDD_THR_14V;
+	struct no_os_uart_desc *uart_desc;
+
+	ret = no_os_uart_init(&uart_desc, &max14916_uart_ip);
+	if (ret)
+		goto exit;
+
+	no_os_uart_stdio(uart_desc);
 
 	/* Intializing the device MAX14916. */
 	ret = max14916_init(&max14916_desc, &max14916_ip);
 	if (ret)
-		goto exit;
+		goto remove_uart;
 
 	/* Create a loop that will turn SLEDs on and off like in a "loading screen"
 	   sequence. */
@@ -117,6 +123,8 @@ int basic_example_main()
 
 remove_max14916:
 	max14916_remove(max14916_desc);
+remove_uart:
+	no_os_uart_remove(uart_desc);
 exit:
 	if (ret)
 		pr_info("Error!\n");

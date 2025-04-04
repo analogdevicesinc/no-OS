@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   max14916/src/common/common_data.h
- *   @brief  Defines common data to be used by max14916 examples.
+ *   @file   parameters.h
+ *   @brief  Definition of FTD2XX platform data used by max14916 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,19 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
-#include "parameters.h"
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "max149x6-base.h"
-#include "max14916.h"
+#include "ftd2xx_spi.h"
+#include "ftd2xx_uart.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_max14916.h"
-#endif
+#define UART_IRQ_ID	0
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	0
+#define UART_EXTRA      NULL
+#define UART_OPS        &ftd2xx_uart_ops
 
-extern struct no_os_uart_init_param max14916_uart_ip;
-extern struct no_os_spi_init_param max14916_spi_ip;
-extern struct max149x6_init_param max14916_ip;
+extern struct ftd2xx_spi_init max14916_spi_extra;
 
-#endif /* __COMMON_DATA_H__ */
+#define SPI_DEVICE_ID	0
+#define SPI_CS		0
+#define SPI_BAUDRATE	100000
+#define SPI_OPS		&ftd2xx_spi_ops
+#define SPI_EXTRA	&max14916_spi_extra
+
+#endif  /* __PARAMETERS_H__ */

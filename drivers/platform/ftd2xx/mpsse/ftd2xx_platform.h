@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   max14916/src/common/common_data.h
- *   @brief  Defines common data to be used by max14916 examples.
+ *   @file   ftd2xx_platform.h
+ *   @brief  Implementation of HAL for ftd2xx platform.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,20 +29,14 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
-#include "parameters.h"
+********************************************************************************/
+#ifndef FTD2XX_PLATFORM_H_
+#define FTD2XX_PLATFORM_H_
+#include "ftd2xx.h"
+#include "mpsse.h"
 
-#include "max149x6-base.h"
-#include "max14916.h"
+#define FTD2XX_MAX_DEV_PER_CHIP		4
 
-#ifdef IIO_SUPPORT
-#include "iio_max14916.h"
-#endif
+extern FT_HANDLE ftHandle[FTD2XX_MAX_DEV_PER_CHIP];
 
-extern struct no_os_uart_init_param max14916_uart_ip;
-extern struct no_os_spi_init_param max14916_spi_ip;
-extern struct max149x6_init_param max14916_ip;
-
-#endif /* __COMMON_DATA_H__ */
+#endif /* FTD2XX_PLATFORM_H_ */

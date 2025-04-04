@@ -30,8 +30,6 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-
-#include "iio_example.h"
 #include "common_data.h"
 #include "no_os_print_log.h"
 
@@ -41,7 +39,7 @@
  * @return ret - Result of the example execution. If working correctly, will
  *               execute continuously function iio_app_run and will not return.
  *******************************************************************************/
-int iio_example_main()
+int example_main()
 {
 	int ret;
 	struct max31827_iio_device *max31827_iio_dev;

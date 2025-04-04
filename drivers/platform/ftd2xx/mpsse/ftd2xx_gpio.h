@@ -1,9 +1,9 @@
-/***************************************************************************//**
- *   @file   platform_includes.h
- *   @brief  Includes for used platforms used by max14906 project.
+/*******************************************************************************
+ *   @file   ftd2xx_gpio.h
+ *   @brief  Implementation of GPIO driver for ftd2xx platform.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,11 +30,42 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PLATFORM_INCLUDES_H__
-#define __PLATFORM_INCLUDES_H__
+#ifndef FTD2XX_GPIO_H_
+#define FTD2XX_GPIO_H_
 
-#ifdef MAXIM_PLATFORM
-#include "maxim/parameters.h"
-#endif
+#include <stdbool.h>
 
-#endif /* __PLATFORM_INCLUDES_H__ */
+#include "no_os_gpio.h"
+#include "mpsse.h"
+#include "ftd2xx.h"
+
+#define FTD2XX_MAX_PIN_NB		7
+
+/**
+ * @brief ftd2xx platform specific gpio platform ops structure
+ */
+extern const struct no_os_gpio_platform_ops ftd2xx_gpio_ops;
+
+/**
+ * @struct ftd2xx_gpio_init_param
+ * @brief Structure holding the initialization parameters for ftd2xx platform
+ */
+struct ftd2xx_gpio_init {
+	/* Initial direction of the port pins at initialization time. */
+	uint8_t pins_dir;
+};
+
+/**
+ * @struct stm32_gpio_desc
+ * @brief stm32 platform specific gpio descriptor
+ */
+struct ftd2xx_gpio_desc {
+	/** Specific device handle */
+	FT_HANDLE *ftHandle;
+	/** Pins direction. */
+	uint8_t pins_dir;
+	/** Pins value. */
+	uint8_t pins_val;
+};
+
+#endif /* FTD2XX_GPIO_H*/

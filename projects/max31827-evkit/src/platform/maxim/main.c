@@ -30,17 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
-
-#include "platform_includes.h"
 #include "common_data.h"
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
 
 /*******************************************************************************
  * @brief Main function execution for MAX31827 platform.
@@ -49,32 +39,5 @@
  *******************************************************************************/
 int main()
 {
-#ifdef BASIC_EXAMPLE
-	int ret;
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret)
-		goto error;
-
-	no_os_uart_stdio(uart);
-	ret = basic_example_main();
-	if (ret)
-		goto error;
-#endif
-
-#ifdef IIO_EXAMPLE
-	return iio_example_main();
-#endif
-
-#if (IIO_EXAMPLE + BASIC_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-#ifdef BASIC_EXAMPLE
-error:
-	no_os_uart_remove(uart);
-#endif
-	return 0;
+	return example_main();
 }

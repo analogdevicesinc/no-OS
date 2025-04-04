@@ -1,9 +1,9 @@
-/***************************************************************************//**
- *   @file   max14916/src/examples/iio_example/iio_example.h
- *   @brief  Header file for iio example.
- *   @author Radu Sabau (radu.sabau@analog.com)
+/*******************************************************************************
+ *   @file   ftd2xx_uart.h
+ *   @brief  Implementation of UART driver for ftd2xx platform.
+ *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,9 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __IIO_EXAMPLE_H__
-#define __IIO_EXAMPLE_H__
+#ifndef FTD2XX_UART_H_
+#define FTD2XX_UART_H_
 
-int iio_example_main();
+#include "no_os_uart.h"
 
-#endif /* __IIO_EXAMPLE_H__ */
+/**
+ * @brief ftd2xx specific UART platform ops structure
+ */
+extern const struct no_os_uart_platform_ops ftd2xx_uart_ops;
+
+#endif

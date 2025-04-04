@@ -1,9 +1,9 @@
-/***************************************************************************//**
- *   @file   max14916/src/common/common_data.h
- *   @brief  Defines common data to be used by max14916 examples.
- *   @author Radu Sabau (radu.sabau@analog.com)
+/*******************************************************************************
+ *   @file   ftd2xx_spi.h
+ *   @brief  Implementation of SPI driver for ftd2xx platform.
+ *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,19 +30,40 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
-#include "parameters.h"
+#ifndef FTD2XX_SPI_H_
+#define FTD2XX_SPI_H_
 
-#include "max149x6-base.h"
-#include "max14916.h"
+#include "no_os_spi.h"
 
-#ifdef IIO_SUPPORT
-#include "iio_max14916.h"
+#include "ftd2xx.h"
+
+/**
+ * @struct ftd2xx_spi_init
+ * @brief Structure holding the initialization parameters for ftd2xx platform
+ * 	  specific SPI parameters.
+ */
+struct ftd2xx_spi_init {
+	/** Selected device specific PIN configuration.
+	 *  BIT7-BIT0: Initial direction of the pins
+	 *  BIT15-BIT8: Initial values of the pins
+	 *  BIT23-BIT16: Final direction of the pins
+	 *  BIT31-BIT24: Final values of the pins
+	 */
+	uint32_t channel_config_pin;
+};
+
+/**
+ * @struct ftd2xx_spi_desc
+ * @brief ftd2xx platform specific SPI descriptor
+ */
+struct ftd2xx_spi_desc {
+	/** Specific device HANDLE. */
+	FT_HANDLE ftHandle;
+};
+
+/**
+ * @brief ftd2xx specific SPI platform ops structure
+ */
+extern const struct no_os_spi_platform_ops ftd2xx_spi_ops;
+
 #endif
-
-extern struct no_os_uart_init_param max14916_uart_ip;
-extern struct no_os_spi_init_param max14916_spi_ip;
-extern struct max149x6_init_param max14916_ip;
-
-#endif /* __COMMON_DATA_H__ */
