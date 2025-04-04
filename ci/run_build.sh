@@ -83,7 +83,7 @@ build_documentation() {
     pip3 install pip --upgrade
     pip3 install -r ${TOP_DIR}/doc/sphinx/source/requirements.txt
     # Install a recent version of doxygen
-	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.17/doxygen-1.8.17.src.tar.gz/"
+	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.9.8/doxygen-1.9.8.src.tar.gz/"
 	mkdir -p "${DEPS_DIR}"
 	cd ${DEPS_DIR}
 	[ -d "doxygen" ] || {
@@ -92,7 +92,6 @@ build_documentation() {
 
     # Install Doxygen
     cd doxygen
-    patch ./src/docparser.cpp < ${TOP_DIR}/ci/patch_doxy.patch
     mkdir -p build && cd build
     cmake ..
     make -j${NUM_JOBS}
