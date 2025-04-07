@@ -18,6 +18,11 @@ CFLAGS += -DFREERTOS
 include $(NO-OS)/tools/scripts/freertos.mk
 endif
 
+ifneq ($(if $(findstring ftd2xx, $(LIBRARIES)), 1),)
+CFLAGS += -DFTD2XX
+include $(NO-OS)/tools/scripts/ftd2xx.mk
+endif
+
 #	MBEDTLS
 ifneq ($(if $(findstring mbedtls, $(LIBRARIES)), 1),)
 # Generic part

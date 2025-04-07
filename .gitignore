@@ -23,6 +23,7 @@ aducm_build
 .Xil
 .github/CODEOWNERS
 .github/PULL_REQUEST_TEMPLATE.md
+libraries/ftd2xx
 
 *.a
 *.o

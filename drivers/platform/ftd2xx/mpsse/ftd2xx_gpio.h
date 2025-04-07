@@ -36,7 +36,6 @@
 #include <stdbool.h>
 
 #include "no_os_gpio.h"
-#include "mpsse.h"
 #include "ftd2xx.h"
 
 #define FTD2XX_MAX_PIN_NB		7
