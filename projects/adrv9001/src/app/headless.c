@@ -402,10 +402,10 @@ int main(void)
 	adi_adrv9001_arm_Version(phy.adrv9001, &arm_version);
 	adi_adrv9001_SiliconVersion_Get(phy.adrv9001, &silicon_version);
 
-	printf("%s Rev %d.%d, Firmware %u.%u.%u.%u API version: %u.%u.%u successfully initialized\n",
+	printf("%s Rev %d.%d, Firmware %u.%u.%u API version: %u.%u.%u successfully initialized\n",
 	       "ADRV9002", silicon_version.major, silicon_version.minor,
 	       arm_version.majorVer, arm_version.minorVer,
-	       arm_version.maintVer, arm_version.rcVer, api_version.major,
+	       arm_version.maintVer, api_version.major,
 	       api_version.minor, api_version.patch);
 
 	/* Post AXI DAC/ADC setup, digital interface tuning */
