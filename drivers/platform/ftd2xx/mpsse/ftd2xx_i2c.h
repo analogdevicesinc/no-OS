@@ -34,9 +34,7 @@
 #define FTD2XX_I2C_H_
 
 #include <stdbool.h>
-
 #include "no_os_i2c.h"
-#include "mpsse.h"
 #include "ftd2xx.h"
 
 /**
