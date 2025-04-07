@@ -1,34 +1,18 @@
-VSCODE_SUPPORT = y
+ifeq ($(wildcard $(NO-OS)/libraries/ftd2xx/release),)
+        SCRIPT_CFG := $(shell mkdir -p $(NO-OS)/libraries/ftd2xx)
+        SCRIPT_CFG := $(shell python $(NO-OS)/tools/scripts/config_ftd2xx.py $(NO-OS)/libraries/ftd2xx)
+endif
 
-CC = gcc
-SIZE = size
-CFLAGS += -g3
-CFLAGS += -DFTD2XX_PLATFORM
+CFLAGS += -DFT_VER_MAJOR
+CFLAGS += -DFT_VER_MINOR
+CFLAGS += -DFT_VER_BUILD
 
-BINARY = $(BUILD_DIR)/$(PROJECT_NAME).elf
+INCS += $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_platform.h \
+        $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_uart.h
 
-PROJECT_BUILD = $(BUILD_DIR)
-export PROJECT_DIR
-PROJECT_DIR = $(PROJECT)
+SRCS += $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_platform.c \
+        $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_uart.c
 
-TARGET = mpsse
-
-EXTRA_LIBS += libmpsse.a
-
-PLATFORM_DRIVERS := $(NO-OS)/drivers/platform/$(PLATFORM)/$(TARGET)
-
-$(PLATFORM)_project:
-	$(call mk_dir, $(BUILD_DIR)) $(HIDE)
-	$(call copy_dir, $(PLATFORM_TOOLS)/.vscode, $(PROJECT)/.vscode) $(HIDE)
-	python $(PLATFORM_TOOLS)/config_build.py $(NO-OS) $(PROJECT) $(BINARY) $(HIDE)
-
-$(PLATFORM)_run:
-	$(BINARY)
-
-$(PLATFORM)_sdkopen:
-	code $(PROJECT)
-
-$(PLATFORM)_reset:
-	$(call remove_dir,$(PROJECT)/.vscode)
-
-$(PLATFORM)_post_build:
+SRC_DIRS += $(NO-OS)/libraries/ftd2xx/release/include   \
+            $(NO-OS)/libraries/ftd2xx/release/source    \
+            $(NO-OS)/libraries/ftd2xx/release/libftd2xx

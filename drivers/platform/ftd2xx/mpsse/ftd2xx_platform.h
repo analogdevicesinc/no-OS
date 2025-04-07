@@ -33,7 +33,6 @@
 #ifndef FTD2XX_PLATFORM_H_
 #define FTD2XX_PLATFORM_H_
 #include "ftd2xx.h"
-#include "mpsse.h"
 
 #define FTD2XX_MAX_DEV_PER_CHIP		4
 
