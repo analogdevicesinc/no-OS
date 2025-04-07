@@ -69,6 +69,7 @@ typedef enum {
     ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS = 2u,   /*!< Frequency hopping with LO retuning during transition time. Frequency hopping table is processed during frequency hopping operation. */
     ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS_DUAL_HOP = 3u, /*!< 2 HOP signals are used to control Channel 1 and Channel 2 independently. Frequency hopping with LO retuning during transition time.
                                                                        Frequency hopping table is processed during frequency hopping operation. */
+	ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS_PFIR_SWITCH = 4u,  /*!< Dynamic Pfir Load and Switch over LO Retune */
 } adi_adrv9001_FhMode_e;
 
 typedef enum {

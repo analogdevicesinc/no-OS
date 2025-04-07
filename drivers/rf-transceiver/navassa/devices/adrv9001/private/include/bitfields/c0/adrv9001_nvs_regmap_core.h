@@ -426,8 +426,8 @@ static inline int32_t adrv9001_NvsRegmapCore_AdiCommonSpiReserved1_Get(void *con
 }
 
 /**
- * This enables access for the stream processor, HSCI, and ARM to
- * access to the register map along with the SPI. It will also switch the clock
+ * This enables access for the stream processor, HSCI, and ARM to
+ * access to the register map along with the SPI. It will also switch the clock
  * to the chip control registers over to the synchronous free-running reg_clk.
  */
 static inline int32_t adrv9001_NvsRegmapCore_AhbSpiBridgeEnable_Set(void *const device,
@@ -441,8 +441,8 @@ static inline int32_t adrv9001_NvsRegmapCore_AhbSpiBridgeEnable_Set(void *const 
 }
 
 /**
- * This enables access for the stream processor, HSCI, and ARM to
- * access to the register map along with the SPI. It will also switch the clock
+ * This enables access for the stream processor, HSCI, and ARM to
+ * access to the register map along with the SPI. It will also switch the clock
  * to the chip control registers over to the synchronous free-running reg_clk.
  */
 static inline int32_t adrv9001_NvsRegmapCore_AhbSpiBridgeEnable_Get(void *const device,
@@ -1325,7 +1325,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArbDisableResp_Get(void *const devi
 }
 
 /**
- * Number of reg_clk cycles to wait while reading (facilitates
+ * Number of reg_clk cycles to wait while reading (facilitates
  * multicycle path). The read mux is timed to a 10ns max delay.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArbRdCount_Set(void *const device,
@@ -1339,7 +1339,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArbRdCount_Set(void *const device,
 }
 
 /**
- * Number of reg_clk cycles to wait while reading (facilitates
+ * Number of reg_clk cycles to wait while reading (facilitates
  * multicycle path). The read mux is timed to a 10ns max delay.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArbRdCount_Get(void *const device,
@@ -1356,7 +1356,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArbRdCount_Get(void *const device,
 }
 
 /**
- * Number of reg_clk cycles to wait while reading (facilitates
+ * Number of reg_clk cycles to wait while reading (facilitates
  * multicycle path). The read mux is timed to a 10ns max delay.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArbRdCountAnalog_Set(void *const device,
@@ -1370,7 +1370,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArbRdCountAnalog_Set(void *const de
 }
 
 /**
- * Number of reg_clk cycles to wait while reading (facilitates
+ * Number of reg_clk cycles to wait while reading (facilitates
  * multicycle path). The read mux is timed to a 10ns max delay.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArbRdCountAnalog_Get(void *const device,
@@ -1553,11 +1553,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmClockEnable_Get(void *const devi
 }
 
 /**
- * Sets the frequency of the AHB and ARM subsystem clock as follows:
- * 00 : HS_dig_clk / 4
- * 01 : HS_dig_clk / 8
- * 10 : HS_dig_clk / 16
- * 11 : HS_dig_clk / 32
+ * Sets the frequency of the AHB and ARM subsystem clock as follows:
+ * 00 : HS_dig_clk / 4
+ * 01 : HS_dig_clk / 8
+ * 10 : HS_dig_clk / 16
+ * 11 : HS_dig_clk / 32
  * Maximum 250 MHz
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmClockRate_Set(void *const device,
@@ -1571,11 +1571,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmClockRate_Set(void *const device
 }
 
 /**
- * Sets the frequency of the AHB and ARM subsystem clock as follows:
- * 00 : HS_dig_clk / 4
- * 01 : HS_dig_clk / 8
- * 10 : HS_dig_clk / 16
- * 11 : HS_dig_clk / 32
+ * Sets the frequency of the AHB and ARM subsystem clock as follows:
+ * 00 : HS_dig_clk / 4
+ * 01 : HS_dig_clk / 8
+ * 10 : HS_dig_clk / 16
+ * 11 : HS_dig_clk / 32
  * Maximum 250 MHz
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmClockRate_Get(void *const device,
@@ -1593,7 +1593,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmClockRate_Get(void *const device
 
 
 /**
- * Status and error bits for commands 36 to 39.
+ * Status and error bits for commands 36 to 39.
  *  Arm Cmd Status
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmCmdStatus_Get(void *const device,
@@ -1669,7 +1669,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmCmdStatus_Get(void *const device
 }
 
 /**
- * Read only bit; This bit indicates that the ARM is busy (either it has not read an outstanding arm command, or it is loading up initial code). This bit clears when the ARM reads the command and payload, and when it is ready to accept a new ARM command.  A new command should be written to register 0xD30 only after checking that this bit is 0.
+ * Read only bit; This bit indicates that the ARM is busy (either it has not read an outstanding arm command, or it is loading up initial code). This bit clears when the ARM reads the command and payload, and when it is ready to accept a new ARM command.  A new command should be written to register 0xD30 only after checking that this bit is 0.
  *  Arm Command
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmCommand_Set(void *const device,
@@ -1683,7 +1683,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmCommand_Set(void *const device,
 }
 
 /**
- * Read only bit; This bit indicates that the ARM is busy (either it has not read an outstanding arm command, or it is loading up initial code). This bit clears when the ARM reads the command and payload, and when it is ready to accept a new ARM command.  A new command should be written to register 0xD30 only after checking that this bit is 0.
+ * Read only bit; This bit indicates that the ARM is busy (either it has not read an outstanding arm command, or it is loading up initial code). This bit clears when the ARM reads the command and payload, and when it is ready to accept a new ARM command.  A new command should be written to register 0xD30 only after checking that this bit is 0.
  *  Arm Command
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmCommand_Get(void *const device,
@@ -1746,11 +1746,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDebugEnable_Get(void *const devi
 }
 
 /**
- * This enables the capture of digital data to the SRAM in the following ways: 
- * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
- * b) Switches the SRAM inputs to continually write according to the controller
- * c) Activates the controller in DP capture mode
- * The memories affected will be the last two data memories in the memory map. 
+ * This enables the capture of digital data to the SRAM in the following ways: 
+ * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
+ * b) Switches the SRAM inputs to continually write according to the controller
+ * c) Activates the controller in DP capture mode
+ * The memories affected will be the last two data memories in the memory map. 
  * This mode must not be enabled at the same time as the driver mode.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureEnable_Set(void *const device,
@@ -1764,11 +1764,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureEnable_Set(void *const 
 }
 
 /**
- * This enables the capture of digital data to the SRAM in the following ways: 
- * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
- * b) Switches the SRAM inputs to continually write according to the controller
- * c) Activates the controller in DP capture mode
- * The memories affected will be the last two data memories in the memory map. 
+ * This enables the capture of digital data to the SRAM in the following ways: 
+ * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
+ * b) Switches the SRAM inputs to continually write according to the controller
+ * c) Activates the controller in DP capture mode
+ * The memories affected will be the last two data memories in the memory map. 
  * This mode must not be enabled at the same time as the driver mode.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureEnable_Get(void *const device,
@@ -1814,11 +1814,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureForce_Get(void *const d
 }
 
 /**
- * This selects the data to feed to the SRAM according to the following selection:
- * 00 = The 16 bit RX ch1 samples (I and Q) which are also sent to the framer, not triggered automatically
- * 01 = The 14 bit TX samples (I and Q) which are also sent to the TXQEC engine, not triggered automatically
- * 10 = link 0 deframer deskewed lane data, triggered on the rise edge of SYNC~ 
- * 11 = reserved
+ * This selects the data to feed to the SRAM according to the following selection:
+ * 00 = The 16 bit RX ch1 samples (I and Q) which are also sent to the framer, not triggered automatically
+ * 01 = The 14 bit TX samples (I and Q) which are also sent to the TXQEC engine, not triggered automatically
+ * 10 = link 0 deframer deskewed lane data, triggered on the rise edge of SYNC~ 
+ * 11 = reserved
  * Note: On Talise first tapeout (2/2015) only setting 10 is available due to physical design restrictions.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureSel_Set(void *const device,
@@ -1832,11 +1832,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureSel_Set(void *const dev
 }
 
 /**
- * This selects the data to feed to the SRAM according to the following selection:
- * 00 = The 16 bit RX ch1 samples (I and Q) which are also sent to the framer, not triggered automatically
- * 01 = The 14 bit TX samples (I and Q) which are also sent to the TXQEC engine, not triggered automatically
- * 10 = link 0 deframer deskewed lane data, triggered on the rise edge of SYNC~ 
- * 11 = reserved
+ * This selects the data to feed to the SRAM according to the following selection:
+ * 00 = The 16 bit RX ch1 samples (I and Q) which are also sent to the framer, not triggered automatically
+ * 01 = The 14 bit TX samples (I and Q) which are also sent to the TXQEC engine, not triggered automatically
+ * 10 = link 0 deframer deskewed lane data, triggered on the rise edge of SYNC~ 
+ * 11 = reserved
  * Note: On Talise first tapeout (2/2015) only setting 10 is available due to physical design restrictions.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpCaptureSel_Get(void *const device,
@@ -1893,9 +1893,9 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDriveCaptureSel_Get(void *cons
 }
 
 /**
- * Capture mode: Sets the final SRAM location index to write to before stopping
- * the data capture. A value of 0 will cause the counter to continuously wrap 
- * through all SRAM locations available for capturing data without stopping.
+ * Capture mode: Sets the final SRAM location index to write to before stopping
+ * the data capture. A value of 0 will cause the counter to continuously wrap 
+ * through all SRAM locations available for capturing data without stopping.
  * Driver mode: Sets the final SRAM location index to read from before resetting.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterLimit_Set(void *const device,
@@ -1912,9 +1912,9 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterLimit_Set(void *cons
 }
 
 /**
- * Capture mode: Sets the final SRAM location index to write to before stopping
- * the data capture. A value of 0 will cause the counter to continuously wrap 
- * through all SRAM locations available for capturing data without stopping.
+ * Capture mode: Sets the final SRAM location index to write to before stopping
+ * the data capture. A value of 0 will cause the counter to continuously wrap 
+ * through all SRAM locations available for capturing data without stopping.
  * Driver mode: Sets the final SRAM location index to read from before resetting.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterLimit_Get(void *const device,
@@ -1935,7 +1935,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterLimit_Get(void *cons
 }
 
 /**
- * This will reset the counter value in the DP driver state machine.
+ * This will reset the counter value in the DP driver state machine.
  * This is useful in capture mode after the counter stops at the final value.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterReset_Set(void *const device,
@@ -1949,7 +1949,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterReset_Set(void *cons
 }
 
 /**
- * This will reset the counter value in the DP driver state machine.
+ * This will reset the counter value in the DP driver state machine.
  * This is useful in capture mode after the counter stops at the final value.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterReset_Get(void *const device,
@@ -1966,9 +1966,9 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterReset_Get(void *cons
 }
 
 /**
- * This will set the SRAM index to start driving or capturing from.
- * When the counter is manually reset, the controller will take it back to this value.
- * In driver mode, when the counter reaches its final value, it will reset to
+ * This will set the SRAM index to start driving or capturing from.
+ * When the counter is manually reset, the controller will take it back to this value.
+ * In driver mode, when the counter reaches its final value, it will reset to
  * this value.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterStart_Set(void *const device,
@@ -1985,9 +1985,9 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterStart_Set(void *cons
 }
 
 /**
- * This will set the SRAM index to start driving or capturing from.
- * When the counter is manually reset, the controller will take it back to this value.
- * In driver mode, when the counter reaches its final value, it will reset to
+ * This will set the SRAM index to start driving or capturing from.
+ * When the counter is manually reset, the controller will take it back to this value.
+ * In driver mode, when the counter reaches its final value, it will reset to
  * this value.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterStart_Get(void *const device,
@@ -2008,12 +2008,12 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvCounterStart_Get(void *cons
 }
 
 /**
- * When set to 1, the DP driver will be activated in DAC driving mode (TX data).
- * When set to 0, the DP driver will be activated in ADC driving mode (RX data).
- * In ADC driving mode, I data comes from one SRAM while Q data comes from another.
- * In DAC driving mode, the output of the SRAMs will be used one at a time.
- * In DAC driving mode, the 32 bit SRAM output will be split into 16 bits for I
- * and Q and then used instead of the JESD deframer output.
+ * When set to 1, the DP driver will be activated in DAC driving mode (TX data).
+ * When set to 0, the DP driver will be activated in ADC driving mode (RX data).
+ * In ADC driving mode, I data comes from one SRAM while Q data comes from another.
+ * In DAC driving mode, the output of the SRAMs will be used one at a time.
+ * In DAC driving mode, the 32 bit SRAM output will be split into 16 bits for I
+ * and Q and then used instead of the JESD deframer output.
  * in ADC driving mode, the first 20 bits of the 32 bit SRAM output will be used as 4 interleaved ADC codes
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvDacAdcbSel_Set(void *const device,
@@ -2027,12 +2027,12 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvDacAdcbSel_Set(void *const 
 }
 
 /**
- * When set to 1, the DP driver will be activated in DAC driving mode (TX data).
- * When set to 0, the DP driver will be activated in ADC driving mode (RX data).
- * In ADC driving mode, I data comes from one SRAM while Q data comes from another.
- * In DAC driving mode, the output of the SRAMs will be used one at a time.
- * In DAC driving mode, the 32 bit SRAM output will be split into 16 bits for I
- * and Q and then used instead of the JESD deframer output.
+ * When set to 1, the DP driver will be activated in DAC driving mode (TX data).
+ * When set to 0, the DP driver will be activated in ADC driving mode (RX data).
+ * In ADC driving mode, I data comes from one SRAM while Q data comes from another.
+ * In DAC driving mode, the output of the SRAMs will be used one at a time.
+ * In DAC driving mode, the 32 bit SRAM output will be split into 16 bits for I
+ * and Q and then used instead of the JESD deframer output.
  * in ADC driving mode, the first 20 bits of the 32 bit SRAM output will be used as 4 interleaved ADC codes
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvDacAdcbSel_Get(void *const device,
@@ -2049,11 +2049,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvDacAdcbSel_Get(void *const 
 }
 
 /**
- * This enables the driving of data from the SRAM to the datapath in the following ways:
- * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
- * b) Switches the SRAM inputs to continually read according to the controller
- * c) Activates the controller in DP driving mode
- * The memories affected will be the last two data memories in the memory map.
+ * This enables the driving of data from the SRAM to the datapath in the following ways:
+ * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
+ * b) Switches the SRAM inputs to continually read according to the controller
+ * c) Activates the controller in DP driving mode
+ * The memories affected will be the last two data memories in the memory map.
  * This mode must not be enabled at the same time as the capture mode.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvEnable_Set(void *const device,
@@ -2067,11 +2067,11 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvEnable_Set(void *const devi
 }
 
 /**
- * This enables the driving of data from the SRAM to the datapath in the following ways:
- * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
- * b) Switches the SRAM inputs to continually read according to the controller
- * c) Activates the controller in DP driving mode
- * The memories affected will be the last two data memories in the memory map.
+ * This enables the driving of data from the SRAM to the datapath in the following ways:
+ * a) Switches the SRAM clock from the AHB subsystem clock (arm_clk) to the trx_mem_clk
+ * b) Switches the SRAM inputs to continually read according to the controller
+ * c) Activates the controller in DP driving mode
+ * The memories affected will be the last two data memories in the memory map.
  * This mode must not be enabled at the same time as the capture mode.
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvEnable_Get(void *const device,
@@ -2088,7 +2088,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmDpDrvEnable_Get(void *const devi
 }
 
 /**
- * This bit goes high when a watchdog timeout occurs. It remains high until a 1 is written to it . Thus is it write-1-to-clear.
+ * This bit goes high when a watchdog timeout occurs. It remains high until a 1 is written to it . Thus is it write-1-to-clear.
  *  Watchdog timeout
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmError_Set(void *const device,
@@ -2102,7 +2102,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmError_Set(void *const device,
 }
 
 /**
- * This bit goes high when a watchdog timeout occurs. It remains high until a 1 is written to it . Thus is it write-1-to-clear.
+ * This bit goes high when a watchdog timeout occurs. It remains high until a 1 is written to it . Thus is it write-1-to-clear.
  *  Watchdog timeout
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmError_Get(void *const device,
@@ -2119,7 +2119,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmError_Get(void *const device,
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 1
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte1_Set(void *const device,
@@ -2133,7 +2133,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte1_Set(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 1
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte1_Get(void *const device,
@@ -2150,7 +2150,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte1_Get(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 2
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte2_Set(void *const device,
@@ -2164,7 +2164,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte2_Set(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 2
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte2_Get(void *const device,
@@ -2181,7 +2181,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte2_Get(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 3
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte3_Set(void *const device,
@@ -2195,7 +2195,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte3_Set(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 3
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte3_Get(void *const device,
@@ -2212,7 +2212,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte3_Get(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 4
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte4_Set(void *const device,
@@ -2226,7 +2226,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte4_Set(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 4
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte4_Get(void *const device,
@@ -2243,7 +2243,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte4_Get(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 5
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte5_Set(void *const device,
@@ -2257,7 +2257,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte5_Set(void *const devi
 }
 
 /**
- * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
+ * ARM command payload 2. All payloads should be written to before writing the ARM register 0xD30.
  *  Arm Ext Cmd Byte 5
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte5_Get(void *const device,
@@ -2274,7 +2274,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmExtCmdByte5_Get(void *const devi
 }
 
 /**
- * Setting this bit holds the ARM and all QEC related logic in reset.
+ * Setting this bit holds the ARM and all QEC related logic in reset.
  *  Arm Force Reset
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmForceReset_Set(void *const device,
@@ -2288,7 +2288,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ArmForceReset_Set(void *const devic
 }
 
 /**
- * Setting this bit holds the ARM and all QEC related logic in reset.
+ * Setting this bit holds the ARM and all QEC related logic in reset.
  *  Arm Force Reset
  */
 static inline int32_t adrv9001_NvsRegmapCore_ArmForceReset_Get(void *const device,
@@ -3234,12 +3234,12 @@ static inline int32_t adrv9001_NvsRegmapCore_AuxSynthLdoVoutTrim_Get(void *const
 }
 
 /**
- * This register contains the number of SPI clock cycles to hold a
- * read blockout which will prevent conflict from the HSCI accessing the first 
- * large read mux simultaneously with the SPI. This number will include the cycle 
- * which the SPI takes over the read address bus, which means a setting of 2 will 
- * provide one sclk cycle of blockout time before the SPI needs the read mux.
- * Note: The ARM and stream processor use a separate read mux and will not be
+ * This register contains the number of SPI clock cycles to hold a
+ * read blockout which will prevent conflict from the HSCI accessing the first 
+ * large read mux simultaneously with the SPI. This number will include the cycle 
+ * which the SPI takes over the read address bus, which means a setting of 2 will 
+ * provide one sclk cycle of blockout time before the SPI needs the read mux.
+ * Note: The ARM and stream processor use a separate read mux and will not be
  * affected by this setting.
  */
 static inline int32_t adrv9001_NvsRegmapCore_BlockoutWindowSize_Set(void *const device,
@@ -3253,12 +3253,12 @@ static inline int32_t adrv9001_NvsRegmapCore_BlockoutWindowSize_Set(void *const 
 }
 
 /**
- * This register contains the number of SPI clock cycles to hold a
- * read blockout which will prevent conflict from the HSCI accessing the first 
- * large read mux simultaneously with the SPI. This number will include the cycle 
- * which the SPI takes over the read address bus, which means a setting of 2 will 
- * provide one sclk cycle of blockout time before the SPI needs the read mux.
- * Note: The ARM and stream processor use a separate read mux and will not be
+ * This register contains the number of SPI clock cycles to hold a
+ * read blockout which will prevent conflict from the HSCI accessing the first 
+ * large read mux simultaneously with the SPI. This number will include the cycle 
+ * which the SPI takes over the read address bus, which means a setting of 2 will 
+ * provide one sclk cycle of blockout time before the SPI needs the read mux.
+ * Note: The ARM and stream processor use a separate read mux and will not be
  * affected by this setting.
  */
 static inline int32_t adrv9001_NvsRegmapCore_BlockoutWindowSize_Get(void *const device,
@@ -3792,7 +3792,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ClkSynthLpLdoVoutTrim_Get(void *con
 
 
 /**
- * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
+ * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
  * reset with the new stream number value that just completed.
  */
 static inline int32_t adrv9001_NvsRegmapCore_CompletedStreamNum_Get(void *const device,
@@ -3826,7 +3826,7 @@ static inline int32_t adrv9001_NvsRegmapCore_ControllerDocRevision_Get(void *con
 }
 
 /**
- * When set, the chip select signal may be de-asserted during byte
+ * When set, the chip select signal may be de-asserted during byte
  * boundaries. This only applies to single instruction mode.
  */
 static inline int32_t adrv9001_NvsRegmapCore_CsbStall_Set(void *const device,
@@ -3840,7 +3840,7 @@ static inline int32_t adrv9001_NvsRegmapCore_CsbStall_Set(void *const device,
 }
 
 /**
- * When set, the chip select signal may be de-asserted during byte
+ * When set, the chip select signal may be de-asserted during byte
  * boundaries. This only applies to single instruction mode.
  */
 static inline int32_t adrv9001_NvsRegmapCore_CsbStall_Get(void *const device,
@@ -4236,13 +4236,13 @@ static inline int32_t adrv9001_NvsRegmapCore_DeviceClkBufferEnable_Get(void *con
 }
 
 /**
- * Divide Ratio selection bits: 000 : 2**0
- * 001 : 2**1
- * 010 : 2**2
- * 011 : 2**3
- * 100 : 2**4
- * 101 : 2**5
- * 110 : 2**6
+ * Divide Ratio selection bits: 000 : 2**0
+ * 001 : 2**1
+ * 010 : 2**2
+ * 011 : 2**3
+ * 100 : 2**4
+ * 101 : 2**5
+ * 110 : 2**6
  * 111:  2**7
  */
 static inline int32_t adrv9001_NvsRegmapCore_DeviceClkDivideRatio_Set(void *const device,
@@ -4256,13 +4256,13 @@ static inline int32_t adrv9001_NvsRegmapCore_DeviceClkDivideRatio_Set(void *cons
 }
 
 /**
- * Divide Ratio selection bits: 000 : 2**0
- * 001 : 2**1
- * 010 : 2**2
- * 011 : 2**3
- * 100 : 2**4
- * 101 : 2**5
- * 110 : 2**6
+ * Divide Ratio selection bits: 000 : 2**0
+ * 001 : 2**1
+ * 010 : 2**2
+ * 011 : 2**3
+ * 100 : 2**4
+ * 101 : 2**5
+ * 110 : 2**6
  * 111:  2**7
  */
 static inline int32_t adrv9001_NvsRegmapCore_DeviceClkDivideRatio_Get(void *const device,
@@ -5491,7 +5491,7 @@ static inline int32_t adrv9001_NvsRegmapCore_EccDisable_Get(void *const device,
 }
 
 /**
- * Set to interrupt on all parity errors (even correctable ones).
+ * Set to interrupt on all parity errors (even correctable ones).
  * Clear to interrupt only for uncorrectable (double bit) errors.
  */
 static inline int32_t adrv9001_NvsRegmapCore_EccIrqSensitivity_Set(void *const device,
@@ -5505,7 +5505,7 @@ static inline int32_t adrv9001_NvsRegmapCore_EccIrqSensitivity_Set(void *const d
 }
 
 /**
- * Set to interrupt on all parity errors (even correctable ones).
+ * Set to interrupt on all parity errors (even correctable ones).
  * Clear to interrupt only for uncorrectable (double bit) errors.
  */
 static inline int32_t adrv9001_NvsRegmapCore_EccIrqSensitivity_Get(void *const device,
@@ -6417,7 +6417,7 @@ static inline int32_t adrv9001_NvsRegmapCore_HsDigClkPd_Get(void *const device,
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore_LastStreamNum_Set(void *const device,
@@ -6431,7 +6431,7 @@ static inline int32_t adrv9001_NvsRegmapCore_LastStreamNum_Set(void *const devic
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore_LastStreamNum_Get(void *const device,
@@ -6523,7 +6523,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Loopback2FilterFlip_Get(void *const
 }
 
 /**
- * This bit is the enable override for the LO delay cell in loopback 1. The LO delay cell is always powered up when this bit is set. Note that this does not disable the associated LO delay correction DAC.
+ * This bit is the enable override for the LO delay cell in loopback 1. The LO delay cell is always powered up when this bit is set. Note that this does not disable the associated LO delay correction DAC.
  *  ARM uses these bits to enable the loopback mode
  */
 static inline int32_t adrv9001_NvsRegmapCore_LpbkEnable_Set(void *const device,
@@ -6537,7 +6537,7 @@ static inline int32_t adrv9001_NvsRegmapCore_LpbkEnable_Set(void *const device,
 }
 
 /**
- * This bit is the enable override for the LO delay cell in loopback 1. The LO delay cell is always powered up when this bit is set. Note that this does not disable the associated LO delay correction DAC.
+ * This bit is the enable override for the LO delay cell in loopback 1. The LO delay cell is always powered up when this bit is set. Note that this does not disable the associated LO delay correction DAC.
  *  ARM uses these bits to enable the loopback mode
  */
 static inline int32_t adrv9001_NvsRegmapCore_LpbkEnable_Get(void *const device,
@@ -6895,7 +6895,7 @@ static inline int32_t adrv9001_NvsRegmapCore_McsCaptureReceivedClear_Get(void *c
 
 
 /**
- * Status bit of the CLK SYNTH sigma delta modulator sequence synchronization. This bit indicates that the CLK SYNTH SDM has been synchronized.
+ * Status bit of the CLK SYNTH sigma delta modulator sequence synchronization. This bit indicates that the CLK SYNTH SDM has been synchronized.
  *  Mcs Clk Pll Sdm Sync Status
  */
 static inline int32_t adrv9001_NvsRegmapCore_McsClkPllSdmSyncStatus_Get(void *const device,
@@ -6913,7 +6913,7 @@ static inline int32_t adrv9001_NvsRegmapCore_McsClkPllSdmSyncStatus_Get(void *co
 
 
 /**
- * Status bit of the CLK SYNTH DEVICE CLOCK DIVIDER synchronization. This bit indicates that the CLK SYNTH DEVICE CLOCK divider has been reset during the same device clock period.
+ * Status bit of the CLK SYNTH DEVICE CLOCK DIVIDER synchronization. This bit indicates that the CLK SYNTH DEVICE CLOCK divider has been reset during the same device clock period.
  *  Mcs Device Clk Divder Sync Status
  */
 static inline int32_t adrv9001_NvsRegmapCore_McsDeviceClkDividerSyncStatus_Get(void *const device,
@@ -6931,7 +6931,7 @@ static inline int32_t adrv9001_NvsRegmapCore_McsDeviceClkDividerSyncStatus_Get(v
 
 
 /**
- * Status bit of the digital clocks being synchronized. Logic high indicates that he synchronizing pulse for the digital clocks has been received, re-timed to the output of the CLK SYNTH, and sent to the digital clock generation block.
+ * Status bit of the digital clocks being synchronized. Logic high indicates that he synchronizing pulse for the digital clocks has been received, re-timed to the output of the CLK SYNTH, and sent to the digital clock generation block.
  *  Mcs Digital Clocks Sync Status
  */
 static inline int32_t adrv9001_NvsRegmapCore_McsDigitalClocksSyncStatus_Get(void *const device,
@@ -6995,7 +6995,7 @@ static inline int32_t adrv9001_NvsRegmapCore_McsInternalGenSel_Get(void *const d
 
 
 /**
- * Status bit for the JESD204 MCS. Logic high indicates that the SYSREF pulses are being synchronized to the output of the CLK SYNTH (HSDIGCLK) and are being sent to the JESD204B digital.
+ * Status bit for the JESD204 MCS. Logic high indicates that the SYSREF pulses are being synchronized to the output of the CLK SYNTH (HSDIGCLK) and are being sent to the JESD204B digital.
  *  Mcs Jesd Sysref Status
  */
 static inline int32_t adrv9001_NvsRegmapCore_McsJesdSysrefStatus_Get(void *const device,
@@ -7101,7 +7101,7 @@ static inline int32_t adrv9001_NvsRegmapCore_McsStretchedTestSel_Get(void *const
 }
 
 /**
- * Setting this bit will mask all bus errors from the memory to the ARM '- this includes parity errors, key mismatch errors etc. (Thus a parity error will not generate a hard fault in the ARM). It is recommended to have the error mask setting on while loading program code into the instruction memories.
+ * Setting this bit will mask all bus errors from the memory to the ARM '- this includes parity errors, key mismatch errors etc. (Thus a parity error will not generate a hard fault in the ARM). It is recommended to have the error mask setting on while loading program code into the instruction memories.
  *  Mem Hresp Mask
  */
 static inline int32_t adrv9001_NvsRegmapCore_MemHrespMask_Set(void *const device,
@@ -7115,7 +7115,7 @@ static inline int32_t adrv9001_NvsRegmapCore_MemHrespMask_Set(void *const device
 }
 
 /**
- * Setting this bit will mask all bus errors from the memory to the ARM '- this includes parity errors, key mismatch errors etc. (Thus a parity error will not generate a hard fault in the ARM). It is recommended to have the error mask setting on while loading program code into the instruction memories.
+ * Setting this bit will mask all bus errors from the memory to the ARM '- this includes parity errors, key mismatch errors etc. (Thus a parity error will not generate a hard fault in the ARM). It is recommended to have the error mask setting on while loading program code into the instruction memories.
  *  Mem Hresp Mask
  */
 static inline int32_t adrv9001_NvsRegmapCore_MemHrespMask_Get(void *const device,
@@ -8136,7 +8136,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Orx2rxWithoutPowerDown_Get(void *co
 }
 
 /**
- * This bit enables the second observation receiver as the observation receiver path.
+ * This bit enables the second observation receiver as the observation receiver path.
  *  BBIC uses these bits to enable the ORx mode on Talise receivers
  */
 static inline int32_t adrv9001_NvsRegmapCore_OrxEnable_Set(void *const device,
@@ -8150,7 +8150,7 @@ static inline int32_t adrv9001_NvsRegmapCore_OrxEnable_Set(void *const device,
 }
 
 /**
- * This bit enables the second observation receiver as the observation receiver path.
+ * This bit enables the second observation receiver as the observation receiver path.
  *  BBIC uses these bits to enable the ORx mode on Talise receivers
  */
 static inline int32_t adrv9001_NvsRegmapCore_OrxEnable_Get(void *const device,
@@ -8196,11 +8196,11 @@ static inline int32_t adrv9001_NvsRegmapCore_OrxEnableByArm_Get(void *const devi
 }
 
 /**
- * This bit enables the second observation receiver as the observation receiver path.
- *  Select from 3 sets of GPIO pin pairs
- * 2'b00 : O_orx_enable         = {I_gpio_data_from_pads[1],I_gpio_data_from_pads[0]};
- * 2'b01 : O_orx_enable         = {I_gpio_data_from_pads[5],I_gpio_data_from_pads[4]};
- * 2'b10 : O_orx_enable         = {I_gpio_data_from_pads[9],I_gpio_data_from_pads[8]};
+ * This bit enables the second observation receiver as the observation receiver path.
+ *  Select from 3 sets of GPIO pin pairs
+ * 2'b00 : O_orx_enable         = {I_gpio_data_from_pads[1],I_gpio_data_from_pads[0]};
+ * 2'b01 : O_orx_enable         = {I_gpio_data_from_pads[5],I_gpio_data_from_pads[4]};
+ * 2'b10 : O_orx_enable         = {I_gpio_data_from_pads[9],I_gpio_data_from_pads[8]};
  * 2'b11 : O_orx_enable       = 2'b0;
  */
 static inline int32_t adrv9001_NvsRegmapCore_OrxEnableGpioSelect_Set(void *const device,
@@ -8214,11 +8214,11 @@ static inline int32_t adrv9001_NvsRegmapCore_OrxEnableGpioSelect_Set(void *const
 }
 
 /**
- * This bit enables the second observation receiver as the observation receiver path.
- *  Select from 3 sets of GPIO pin pairs
- * 2'b00 : O_orx_enable         = {I_gpio_data_from_pads[1],I_gpio_data_from_pads[0]};
- * 2'b01 : O_orx_enable         = {I_gpio_data_from_pads[5],I_gpio_data_from_pads[4]};
- * 2'b10 : O_orx_enable         = {I_gpio_data_from_pads[9],I_gpio_data_from_pads[8]};
+ * This bit enables the second observation receiver as the observation receiver path.
+ *  Select from 3 sets of GPIO pin pairs
+ * 2'b00 : O_orx_enable         = {I_gpio_data_from_pads[1],I_gpio_data_from_pads[0]};
+ * 2'b01 : O_orx_enable         = {I_gpio_data_from_pads[5],I_gpio_data_from_pads[4]};
+ * 2'b10 : O_orx_enable         = {I_gpio_data_from_pads[9],I_gpio_data_from_pads[8]};
  * 2'b11 : O_orx_enable       = 2'b0;
  */
 static inline int32_t adrv9001_NvsRegmapCore_OrxEnableGpioSelect_Get(void *const device,
@@ -8322,8 +8322,8 @@ static inline int32_t adrv9001_NvsRegmapCore_OrxSingleChMode_Get(void *const dev
 }
 
 /**
- * This bit is only valid When orx_single_ch_mode is 1.
- * When this bit is 0, orx_select bit is valid
+ * This bit is only valid When orx_single_ch_mode is 1.
+ * When this bit is 0, orx_select bit is valid
  * When this bit is 1, orx_select bit is invalid, and orx_enable_pin[1] selects which channel is enabled in orx_single_ch_mode. (0 selects ORx1, and 1 selects ORx2)
  */
 static inline int32_t adrv9001_NvsRegmapCore_OrxSingleChSelectPinMode_Set(void *const device,
@@ -8337,8 +8337,8 @@ static inline int32_t adrv9001_NvsRegmapCore_OrxSingleChSelectPinMode_Set(void *
 }
 
 /**
- * This bit is only valid When orx_single_ch_mode is 1.
- * When this bit is 0, orx_select bit is valid
+ * This bit is only valid When orx_single_ch_mode is 1.
+ * When this bit is 0, orx_select bit is valid
  * When this bit is 1, orx_select bit is invalid, and orx_enable_pin[1] selects which channel is enabled in orx_single_ch_mode. (0 selects ORx1, and 1 selects ORx2)
  */
 static inline int32_t adrv9001_NvsRegmapCore_OrxSingleChSelectPinMode_Get(void *const device,
@@ -15645,7 +15645,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Rx1dpIntfIdata_Get(void *const devi
 }
 
 /**
- * 0 => Interrupt output signals are level signals
+ * 0 => Interrupt output signals are level signals
  * 1 => Interrupt output signals are pulse-signals. Pulse duration is one clock-period of the respective clocks on which the interrupts are generated.
  */
 static inline int32_t adrv9001_NvsRegmapCore_Rx1dpIntfIrqEdgeTriggered_Set(void *const device,
@@ -15659,7 +15659,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Rx1dpIntfIrqEdgeTriggered_Set(void 
 }
 
 /**
- * 0 => Interrupt output signals are level signals
+ * 0 => Interrupt output signals are level signals
  * 1 => Interrupt output signals are pulse-signals. Pulse duration is one clock-period of the respective clocks on which the interrupts are generated.
  */
 static inline int32_t adrv9001_NvsRegmapCore_Rx1dpIntfIrqEdgeTriggered_Get(void *const device,
@@ -17233,11 +17233,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxAlgMux303Ch1Sel_Get(void *const d
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank A
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank A
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in NAVASSA
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirDecimation_Set(void *const device,
@@ -17251,11 +17251,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirDecimation_Set(void *con
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank A
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank A
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in NAVASSA
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirDecimation_Get(void *const device,
@@ -17272,14 +17272,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirDecimation_Get(void *con
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank A
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank A
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirGain_Set(void *const device,
@@ -17293,14 +17293,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank A
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank A
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirGain_Get(void *const device,
@@ -17317,10 +17317,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirGain_Get(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank A
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank A
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirTaps_Set(void *const device,
@@ -17334,10 +17334,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank A
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank A
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankAPfirTaps_Get(void *const device,
@@ -17383,11 +17383,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankASymmetric_Get(void *const de
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank B
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank B
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in NAVASSA
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirDecimation_Set(void *const device,
@@ -17401,11 +17401,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirDecimation_Set(void *con
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank B
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank B
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in NAVASSA
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirDecimation_Get(void *const device,
@@ -17422,14 +17422,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirDecimation_Get(void *con
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank B
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank B
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirGain_Set(void *const device,
@@ -17443,14 +17443,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank B
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank B
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirGain_Get(void *const device,
@@ -17467,10 +17467,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirGain_Get(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank B
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank B
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirTaps_Set(void *const device,
@@ -17484,10 +17484,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank B
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank B
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankBPfirTaps_Get(void *const device,
@@ -17533,11 +17533,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankBSymmetric_Get(void *const de
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank C
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank C
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in Navassa
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirDecimation_Set(void *const device,
@@ -17551,11 +17551,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirDecimation_Set(void *con
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank C
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank C
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in Navassa
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirDecimation_Get(void *const device,
@@ -17572,14 +17572,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirDecimation_Get(void *con
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank C
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank C
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirGain_Set(void *const device,
@@ -17593,14 +17593,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank C
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank C
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirGain_Get(void *const device,
@@ -17617,10 +17617,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirGain_Get(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank C
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank C
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirTaps_Set(void *const device,
@@ -17634,10 +17634,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank C
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank C
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankCPfirTaps_Get(void *const device,
@@ -17683,11 +17683,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankCSymmetric_Get(void *const de
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank A
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank A
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in NAVASSA
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirDecimation_Set(void *const device,
@@ -17701,11 +17701,11 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirDecimation_Set(void *con
 }
 
 /**
- * This controls the decimation when the RX PFIR uses coefficient bank A
- * 00 --  Decimate by 1 and bypass filter 
- * 01 --  Decimate by 1 and enable filter 
- * 10 --  Decimate by 2 and enable filter 
- * 11 --  Decimate by 4 and enable filter
+ * This controls the decimation when the RX PFIR uses coefficient bank A
+ * 00 --  Decimate by 1 and bypass filter 
+ * 01 --  Decimate by 1 and enable filter 
+ * 10 --  Decimate by 2 and enable filter 
+ * 11 --  Decimate by 4 and enable filter
  * NOT USED in NAVASSA
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirDecimation_Get(void *const device,
@@ -17722,14 +17722,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirDecimation_Get(void *con
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank A
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank A
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirGain_Set(void *const device,
@@ -17743,14 +17743,14 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the RX PFIR uses coefficient bank A
- * 111 --   20db (x10) 
- * 110 --   14db (x5)
- * 101 --   12db  (x4)
- * 100 --   9.54dB (x3)
- * 011 --   6db
- * 010 --   0db
- * 001 --   -6db
+ * This controls the gain when the RX PFIR uses coefficient bank A
+ * 111 --   20db (x10) 
+ * 110 --   14db (x5)
+ * 101 --   12db  (x4)
+ * 100 --   9.54dB (x3)
+ * 011 --   6db
+ * 010 --   0db
+ * 001 --   -6db
  * 000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirGain_Get(void *const device,
@@ -17767,10 +17767,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirGain_Get(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank D
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank D
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirTaps_Set(void *const device,
@@ -17784,10 +17784,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the RX PFIR uses coefficient bank D
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the RX PFIR uses coefficient bank D
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxBankDPfirTaps_Get(void *const device,
@@ -18209,13 +18209,13 @@ static inline int32_t adrv9001_NvsRegmapCore_Rxadc2InputMask_Get(void *const dev
 }
 
 /**
- * Algorithm Select.  Hardware blocks attempts to change the state of this bit while calibration is active (see bit rxqec_calen).  
- * 0 = Tone assisted Calibration (TCAL)
- * This mode is used for offline calibration. IQ imbalance is estimated using internally generated RF test tones which are summed directly to the receive path.  See ARM mapped RxQEC registers with RXQEC_TONE prefix for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{NEG,POS}{I,R}.  If bit RMODE in ARM mapped RxQEC register RXQEC_TONE_BASELINE is set to 0, calibration results are also reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
- * 		
- * 1 = Calibration Tracking (POLY)
- * This mode is used for online calibration.  IQ imbalance is estimated based on the unexpected correlation between negative and positive frequencies.  Calibration is possible only in subbands where there is receive signal.  See ARM mapped RxQEC registers RXQEC_TRACK_WIND[23:0] and RXQEC_TRACK_CTRL for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
- * 	
+ * Algorithm Select.  Hardware blocks attempts to change the state of this bit while calibration is active (see bit rxqec_calen).  
+ * 0 = Tone assisted Calibration (TCAL)
+ * This mode is used for offline calibration. IQ imbalance is estimated using internally generated RF test tones which are summed directly to the receive path.  See ARM mapped RxQEC registers with RXQEC_TONE prefix for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{NEG,POS}{I,R}.  If bit RMODE in ARM mapped RxQEC register RXQEC_TONE_BASELINE is set to 0, calibration results are also reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
+ * 		
+ * 1 = Calibration Tracking (POLY)
+ * This mode is used for online calibration.  IQ imbalance is estimated based on the unexpected correlation between negative and positive frequencies.  Calibration is possible only in subbands where there is receive signal.  See ARM mapped RxQEC registers RXQEC_TRACK_WIND[23:0] and RXQEC_TRACK_CTRL for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
+ * 	
  * Note: While one algorithm is paused using bit rxqec_halt, another algorithm may be executed without effecting the execution state of the paused algorithm.  Shared result reporting registers (RXQEC_STAT_{A,B,C,D}) may however be affected, so these should be saved/restored as required by software.
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecAlgr_Set(void *const device,
@@ -18229,13 +18229,13 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecAlgr_Set(void *const device,
 }
 
 /**
- * Algorithm Select.  Hardware blocks attempts to change the state of this bit while calibration is active (see bit rxqec_calen).  
- * 0 = Tone assisted Calibration (TCAL)
- * This mode is used for offline calibration. IQ imbalance is estimated using internally generated RF test tones which are summed directly to the receive path.  See ARM mapped RxQEC registers with RXQEC_TONE prefix for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{NEG,POS}{I,R}.  If bit RMODE in ARM mapped RxQEC register RXQEC_TONE_BASELINE is set to 0, calibration results are also reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
- * 		
- * 1 = Calibration Tracking (POLY)
- * This mode is used for online calibration.  IQ imbalance is estimated based on the unexpected correlation between negative and positive frequencies.  Calibration is possible only in subbands where there is receive signal.  See ARM mapped RxQEC registers RXQEC_TRACK_WIND[23:0] and RXQEC_TRACK_CTRL for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
- * 	
+ * Algorithm Select.  Hardware blocks attempts to change the state of this bit while calibration is active (see bit rxqec_calen).  
+ * 0 = Tone assisted Calibration (TCAL)
+ * This mode is used for offline calibration. IQ imbalance is estimated using internally generated RF test tones which are summed directly to the receive path.  See ARM mapped RxQEC registers with RXQEC_TONE prefix for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{NEG,POS}{I,R}.  If bit RMODE in ARM mapped RxQEC register RXQEC_TONE_BASELINE is set to 0, calibration results are also reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
+ * 		
+ * 1 = Calibration Tracking (POLY)
+ * This mode is used for online calibration.  IQ imbalance is estimated based on the unexpected correlation between negative and positive frequencies.  Calibration is possible only in subbands where there is receive signal.  See ARM mapped RxQEC registers RXQEC_TRACK_WIND[23:0] and RXQEC_TRACK_CTRL for algorithm specific configuration options.  Calibration results are reported by ARM mapped RxQEC registers RXQEC_STAT_{A,B,C,D}
+ * 	
  * Note: While one algorithm is paused using bit rxqec_halt, another algorithm may be executed without effecting the execution state of the paused algorithm.  Shared result reporting registers (RXQEC_STAT_{A,B,C,D}) may however be affected, so these should be saved/restored as required by software.
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecAlgr_Get(void *const device,
@@ -18252,12 +18252,12 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecAlgr_Get(void *const device,
 }
 
 /**
- * Calibrate Enable.  Writing a 1 to this bit commences the gathering of RxQEC calibration statistics for the Rx channel specified by bits rxqec_source[3:0], using the calibration algorithm specified by bit rxqec_algr, with the calibration identifier specified by bits rxqec_cid[1:0].  While calibration is active, attempts to change the states of bits rxqec_source, rxqec_algr, or rxqec_cid are blocked by hardware.  Writing a zero to this bit has no effect.  When read, this bit returns a 1 if gathering of statistics is active, or a 0 if gathering has ended.  To end the gathering of statistics early, the user may clear bit rxqec_rpt to 0 to cause the current iteration to run to completion and be the final.  Alternatively, bit rxqec_halt may asserted to trigger an immediate suspension of the gathering of statistics.  Once an iteration of the gathering of statistics completes, hardware sets bit CUPD (Calibration Update) in ARM mapped RxQEC register RXQEC_FLAG to flag this event.  If calibration completes (bit rxqec_calen falls) without influence from either rxqec_halt or rxqec_clear, bit CDONE (Calibration Done) in ARM mapped RxQEC register RXQEC_FLAG is asserted to indicate a proper completion of calibration.
- * When Written:
- * 0 = No Effect
- * 1 = Start gathering of Calibration Statistics, or Continue a Halted gathering of statistics (see bit rxqec_halt)
- * When Read:
- * 0 = Calibration Idle
+ * Calibrate Enable.  Writing a 1 to this bit commences the gathering of RxQEC calibration statistics for the Rx channel specified by bits rxqec_source[3:0], using the calibration algorithm specified by bit rxqec_algr, with the calibration identifier specified by bits rxqec_cid[1:0].  While calibration is active, attempts to change the states of bits rxqec_source, rxqec_algr, or rxqec_cid are blocked by hardware.  Writing a zero to this bit has no effect.  When read, this bit returns a 1 if gathering of statistics is active, or a 0 if gathering has ended.  To end the gathering of statistics early, the user may clear bit rxqec_rpt to 0 to cause the current iteration to run to completion and be the final.  Alternatively, bit rxqec_halt may asserted to trigger an immediate suspension of the gathering of statistics.  Once an iteration of the gathering of statistics completes, hardware sets bit CUPD (Calibration Update) in ARM mapped RxQEC register RXQEC_FLAG to flag this event.  If calibration completes (bit rxqec_calen falls) without influence from either rxqec_halt or rxqec_clear, bit CDONE (Calibration Done) in ARM mapped RxQEC register RXQEC_FLAG is asserted to indicate a proper completion of calibration.
+ * When Written:
+ * 0 = No Effect
+ * 1 = Start gathering of Calibration Statistics, or Continue a Halted gathering of statistics (see bit rxqec_halt)
+ * When Read:
+ * 0 = Calibration Idle
  * 1 = Statistics Gathering for Calibration Active
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecCalen_Set(void *const device,
@@ -18271,12 +18271,12 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecCalen_Set(void *const device,
 }
 
 /**
- * Calibrate Enable.  Writing a 1 to this bit commences the gathering of RxQEC calibration statistics for the Rx channel specified by bits rxqec_source[3:0], using the calibration algorithm specified by bit rxqec_algr, with the calibration identifier specified by bits rxqec_cid[1:0].  While calibration is active, attempts to change the states of bits rxqec_source, rxqec_algr, or rxqec_cid are blocked by hardware.  Writing a zero to this bit has no effect.  When read, this bit returns a 1 if gathering of statistics is active, or a 0 if gathering has ended.  To end the gathering of statistics early, the user may clear bit rxqec_rpt to 0 to cause the current iteration to run to completion and be the final.  Alternatively, bit rxqec_halt may asserted to trigger an immediate suspension of the gathering of statistics.  Once an iteration of the gathering of statistics completes, hardware sets bit CUPD (Calibration Update) in ARM mapped RxQEC register RXQEC_FLAG to flag this event.  If calibration completes (bit rxqec_calen falls) without influence from either rxqec_halt or rxqec_clear, bit CDONE (Calibration Done) in ARM mapped RxQEC register RXQEC_FLAG is asserted to indicate a proper completion of calibration.
- * When Written:
- * 0 = No Effect
- * 1 = Start gathering of Calibration Statistics, or Continue a Halted gathering of statistics (see bit rxqec_halt)
- * When Read:
- * 0 = Calibration Idle
+ * Calibrate Enable.  Writing a 1 to this bit commences the gathering of RxQEC calibration statistics for the Rx channel specified by bits rxqec_source[3:0], using the calibration algorithm specified by bit rxqec_algr, with the calibration identifier specified by bits rxqec_cid[1:0].  While calibration is active, attempts to change the states of bits rxqec_source, rxqec_algr, or rxqec_cid are blocked by hardware.  Writing a zero to this bit has no effect.  When read, this bit returns a 1 if gathering of statistics is active, or a 0 if gathering has ended.  To end the gathering of statistics early, the user may clear bit rxqec_rpt to 0 to cause the current iteration to run to completion and be the final.  Alternatively, bit rxqec_halt may asserted to trigger an immediate suspension of the gathering of statistics.  Once an iteration of the gathering of statistics completes, hardware sets bit CUPD (Calibration Update) in ARM mapped RxQEC register RXQEC_FLAG to flag this event.  If calibration completes (bit rxqec_calen falls) without influence from either rxqec_halt or rxqec_clear, bit CDONE (Calibration Done) in ARM mapped RxQEC register RXQEC_FLAG is asserted to indicate a proper completion of calibration.
+ * When Written:
+ * 0 = No Effect
+ * 1 = Start gathering of Calibration Statistics, or Continue a Halted gathering of statistics (see bit rxqec_halt)
+ * When Read:
+ * 0 = Calibration Idle
  * 1 = Statistics Gathering for Calibration Active
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecCalen_Get(void *const device,
@@ -18293,10 +18293,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecCalen_Get(void *const device,
 }
 
 /**
- * Calibration ID.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which of four RxQEC flag register is affected by calibration events.
- * 00 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG12
- * 01 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG34
- * 10 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG56 
+ * Calibration ID.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which of four RxQEC flag register is affected by calibration events.
+ * 00 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG12
+ * 01 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG34
+ * 10 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG56 
  * 11 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG78
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecCid_Set(void *const device,
@@ -18310,10 +18310,10 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecCid_Set(void *const device,
 }
 
 /**
- * Calibration ID.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which of four RxQEC flag register is affected by calibration events.
- * 00 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG12
- * 01 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG34
- * 10 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG56 
+ * Calibration ID.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which of four RxQEC flag register is affected by calibration events.
+ * 00 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG12
+ * 01 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG34
+ * 10 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG56 
  * 11 = RxQEC_PROC_FLAG0 and RxQEC_PROC_FLAG78
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecCid_Get(void *const device,
@@ -18330,9 +18330,9 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecCid_Get(void *const device,
 }
 
 /**
- * Calibration Clear.  Writing a 1 to this bit triggers an initialization of the algorithm specified by the value simultaneously written to bit rxqec_algr.  Initialization of an algorithm will not influence previously gathered observation statistics (see ARM mapped RxQEC registers RXQEC_STAT*) until a subsequent calibration overwrites them.  For tone based calibration (rxqec_algr = 0), rxqec_clear causes the sequencing of enabled tones to be restarted from the beginning, that is, from the first enabled negative tone closest to DC.  For calibration tracking (rxqec_algr = 1), rxqec_clear causes the current integrator state to be excluded from the next integrator state (next integrator state will be dependent solely on the next accumulator state).  Clear also causes accumulator state preserved from a previously halted calibration to be discarded (see bit rxqec_halt in this registers, and bit RAVG in register RXQEC_TRACK_CTRL).  If an algorithm (tone or tracking) is cleared while it is active, calibration will be immediately restarted from the algorithms reset state.  If an algorithm is cleared while it is not active, preserved execution state from the most recent calibration halt (see bit rxqec_halt) is forgotten.  When this bit is read a 0 is always returned. 
- * When Written:
- * 0 = No effect
+ * Calibration Clear.  Writing a 1 to this bit triggers an initialization of the algorithm specified by the value simultaneously written to bit rxqec_algr.  Initialization of an algorithm will not influence previously gathered observation statistics (see ARM mapped RxQEC registers RXQEC_STAT*) until a subsequent calibration overwrites them.  For tone based calibration (rxqec_algr = 0), rxqec_clear causes the sequencing of enabled tones to be restarted from the beginning, that is, from the first enabled negative tone closest to DC.  For calibration tracking (rxqec_algr = 1), rxqec_clear causes the current integrator state to be excluded from the next integrator state (next integrator state will be dependent solely on the next accumulator state).  Clear also causes accumulator state preserved from a previously halted calibration to be discarded (see bit rxqec_halt in this registers, and bit RAVG in register RXQEC_TRACK_CTRL).  If an algorithm (tone or tracking) is cleared while it is active, calibration will be immediately restarted from the algorithms reset state.  If an algorithm is cleared while it is not active, preserved execution state from the most recent calibration halt (see bit rxqec_halt) is forgotten.  When this bit is read a 0 is always returned. 
+ * When Written:
+ * 0 = No effect
  * 1 = Reset sequencing and data gathering for algorithm specified by bits rxqec_algr
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecClear_Set(void *const device,
@@ -18346,9 +18346,9 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecClear_Set(void *const device,
 }
 
 /**
- * Calibration Clear.  Writing a 1 to this bit triggers an initialization of the algorithm specified by the value simultaneously written to bit rxqec_algr.  Initialization of an algorithm will not influence previously gathered observation statistics (see ARM mapped RxQEC registers RXQEC_STAT*) until a subsequent calibration overwrites them.  For tone based calibration (rxqec_algr = 0), rxqec_clear causes the sequencing of enabled tones to be restarted from the beginning, that is, from the first enabled negative tone closest to DC.  For calibration tracking (rxqec_algr = 1), rxqec_clear causes the current integrator state to be excluded from the next integrator state (next integrator state will be dependent solely on the next accumulator state).  Clear also causes accumulator state preserved from a previously halted calibration to be discarded (see bit rxqec_halt in this registers, and bit RAVG in register RXQEC_TRACK_CTRL).  If an algorithm (tone or tracking) is cleared while it is active, calibration will be immediately restarted from the algorithms reset state.  If an algorithm is cleared while it is not active, preserved execution state from the most recent calibration halt (see bit rxqec_halt) is forgotten.  When this bit is read a 0 is always returned. 
- * When Written:
- * 0 = No effect
+ * Calibration Clear.  Writing a 1 to this bit triggers an initialization of the algorithm specified by the value simultaneously written to bit rxqec_algr.  Initialization of an algorithm will not influence previously gathered observation statistics (see ARM mapped RxQEC registers RXQEC_STAT*) until a subsequent calibration overwrites them.  For tone based calibration (rxqec_algr = 0), rxqec_clear causes the sequencing of enabled tones to be restarted from the beginning, that is, from the first enabled negative tone closest to DC.  For calibration tracking (rxqec_algr = 1), rxqec_clear causes the current integrator state to be excluded from the next integrator state (next integrator state will be dependent solely on the next accumulator state).  Clear also causes accumulator state preserved from a previously halted calibration to be discarded (see bit rxqec_halt in this registers, and bit RAVG in register RXQEC_TRACK_CTRL).  If an algorithm (tone or tracking) is cleared while it is active, calibration will be immediately restarted from the algorithms reset state.  If an algorithm is cleared while it is not active, preserved execution state from the most recent calibration halt (see bit rxqec_halt) is forgotten.  When this bit is read a 0 is always returned. 
+ * When Written:
+ * 0 = No effect
  * 1 = Reset sequencing and data gathering for algorithm specified by bits rxqec_algr
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecClear_Get(void *const device,
@@ -18388,9 +18388,9 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecCommonClkEn_Get(void *const de
 }
 
 /**
- * Calibration Halt.  Writing a 1 to this bit causes a calibration in progress to be immediately suspended.  A suspended calibration will resume from where it was halted when next enabled (bit rxqec_calen of register rxqec_ctrl1) asserted) unless bit rxqec_clear is asserted before or coincident to it being resumed. Bit rxqec_halt applies to whichever algorithm is running.  This differs from rxqec_clear which applies to the algorithm specified by bit rxqec_algr.  Bits rxqec_halt, rxqec_clear and rxqec_calen may be asserted in any combination, including together, which would cause any active calibration to be halted, and the calibration specified by bit rxqec_algr to be initiated with previous calibrate state forgotten.  Note: Hardware delays the internal serving of rxqec_halt if calibration tracking is active (rxqec_algr=1) and calibration statistics (ARM mapped RxQEC registers RXQEC_STAT*) are actively being updated as rxqec_halt is asserted.  This ensures that gathered tracking statistics are always fully associated.  Other than possibly extending the apparent duration of a new calibration initiated immediately after rxqec_halt (due to delaying the actual start time of this new calibration), the effects of delaying internal hardware servicing of rxqec_halt is invisible to the user.  However, immediately after reading calibration statistics, bit SOR in ARM mapped RxQEC register RXQEC_PROC_FLAG should always be read to ensure that hardware was not in the midst of updating these registers.  When this bit is read a 0 is always returned. 
- * When Written:
- * 0 = No effect
+ * Calibration Halt.  Writing a 1 to this bit causes a calibration in progress to be immediately suspended.  A suspended calibration will resume from where it was halted when next enabled (bit rxqec_calen of register rxqec_ctrl1) asserted) unless bit rxqec_clear is asserted before or coincident to it being resumed. Bit rxqec_halt applies to whichever algorithm is running.  This differs from rxqec_clear which applies to the algorithm specified by bit rxqec_algr.  Bits rxqec_halt, rxqec_clear and rxqec_calen may be asserted in any combination, including together, which would cause any active calibration to be halted, and the calibration specified by bit rxqec_algr to be initiated with previous calibrate state forgotten.  Note: Hardware delays the internal serving of rxqec_halt if calibration tracking is active (rxqec_algr=1) and calibration statistics (ARM mapped RxQEC registers RXQEC_STAT*) are actively being updated as rxqec_halt is asserted.  This ensures that gathered tracking statistics are always fully associated.  Other than possibly extending the apparent duration of a new calibration initiated immediately after rxqec_halt (due to delaying the actual start time of this new calibration), the effects of delaying internal hardware servicing of rxqec_halt is invisible to the user.  However, immediately after reading calibration statistics, bit SOR in ARM mapped RxQEC register RXQEC_PROC_FLAG should always be read to ensure that hardware was not in the midst of updating these registers.  When this bit is read a 0 is always returned. 
+ * When Written:
+ * 0 = No effect
  * 1 = Suspend statistics gathering without losing current state, resume when bit rxqec_calen is next asserted, unless reset by rxqec_clear
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecHalt_Set(void *const device,
@@ -18404,9 +18404,9 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecHalt_Set(void *const device,
 }
 
 /**
- * Calibration Halt.  Writing a 1 to this bit causes a calibration in progress to be immediately suspended.  A suspended calibration will resume from where it was halted when next enabled (bit rxqec_calen of register rxqec_ctrl1) asserted) unless bit rxqec_clear is asserted before or coincident to it being resumed. Bit rxqec_halt applies to whichever algorithm is running.  This differs from rxqec_clear which applies to the algorithm specified by bit rxqec_algr.  Bits rxqec_halt, rxqec_clear and rxqec_calen may be asserted in any combination, including together, which would cause any active calibration to be halted, and the calibration specified by bit rxqec_algr to be initiated with previous calibrate state forgotten.  Note: Hardware delays the internal serving of rxqec_halt if calibration tracking is active (rxqec_algr=1) and calibration statistics (ARM mapped RxQEC registers RXQEC_STAT*) are actively being updated as rxqec_halt is asserted.  This ensures that gathered tracking statistics are always fully associated.  Other than possibly extending the apparent duration of a new calibration initiated immediately after rxqec_halt (due to delaying the actual start time of this new calibration), the effects of delaying internal hardware servicing of rxqec_halt is invisible to the user.  However, immediately after reading calibration statistics, bit SOR in ARM mapped RxQEC register RXQEC_PROC_FLAG should always be read to ensure that hardware was not in the midst of updating these registers.  When this bit is read a 0 is always returned. 
- * When Written:
- * 0 = No effect
+ * Calibration Halt.  Writing a 1 to this bit causes a calibration in progress to be immediately suspended.  A suspended calibration will resume from where it was halted when next enabled (bit rxqec_calen of register rxqec_ctrl1) asserted) unless bit rxqec_clear is asserted before or coincident to it being resumed. Bit rxqec_halt applies to whichever algorithm is running.  This differs from rxqec_clear which applies to the algorithm specified by bit rxqec_algr.  Bits rxqec_halt, rxqec_clear and rxqec_calen may be asserted in any combination, including together, which would cause any active calibration to be halted, and the calibration specified by bit rxqec_algr to be initiated with previous calibrate state forgotten.  Note: Hardware delays the internal serving of rxqec_halt if calibration tracking is active (rxqec_algr=1) and calibration statistics (ARM mapped RxQEC registers RXQEC_STAT*) are actively being updated as rxqec_halt is asserted.  This ensures that gathered tracking statistics are always fully associated.  Other than possibly extending the apparent duration of a new calibration initiated immediately after rxqec_halt (due to delaying the actual start time of this new calibration), the effects of delaying internal hardware servicing of rxqec_halt is invisible to the user.  However, immediately after reading calibration statistics, bit SOR in ARM mapped RxQEC register RXQEC_PROC_FLAG should always be read to ensure that hardware was not in the midst of updating these registers.  When this bit is read a 0 is always returned. 
+ * When Written:
+ * 0 = No effect
  * 1 = Suspend statistics gathering without losing current state, resume when bit rxqec_calen is next asserted, unless reset by rxqec_clear
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecHalt_Get(void *const device,
@@ -18764,8 +18764,8 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecReset_Get(void *const device,
 }
 
 /**
- * Calibration Repeat.  This bit specifies the duration of RxQEC calibrations initiated by bit rxqec_calen.
- * 0 = Select single execution of calibration
+ * Calibration Repeat.  This bit specifies the duration of RxQEC calibrations initiated by bit rxqec_calen.
+ * 0 = Select single execution of calibration
  * 1 = Select endless execution of calibration (till this bit is cleared or halt is asserted)
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecRpt_Set(void *const device,
@@ -18779,8 +18779,8 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecRpt_Set(void *const device,
 }
 
 /**
- * Calibration Repeat.  This bit specifies the duration of RxQEC calibrations initiated by bit rxqec_calen.
- * 0 = Select single execution of calibration
+ * Calibration Repeat.  This bit specifies the duration of RxQEC calibrations initiated by bit rxqec_calen.
+ * 0 = Select single execution of calibration
  * 1 = Select endless execution of calibration (till this bit is cleared or halt is asserted)
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecRpt_Get(void *const device,
@@ -18797,22 +18797,22 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecRpt_Get(void *const device,
 }
 
 /**
- * Receive Channel Calibration Select.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which receive path will have calibration statistics gathered in response to bit rxqec_calen being asserted.  
- * 0000 = Receive Channel 1 at PFIR Output
- * 0001 = Receive Channel 2 at PFIR Output
- * 0010 = Receive Channel 1 at QEC Output (for algorithm self-check)
- * 0011 = Receive Channel 2 at QEC Output (for algorithm self-check)
- * 0100 = Receive Channel 1 I versus Receive Channel 2 Q at PFIR Output
- * 0101 = Receive Channel 1 I versus Receive Channel 2 I at PFIR Output
- * 0110 = Receive Channel 1 Q versus Receive Channel 2 Q at PFIR Output
- * 0111 = Receive Channel 1 then Receive Channel 2 at PFIR Output (Interleaved FFT data segments) 
- * 1000 = Receive Channel 1 I versus Receive Channel 2 Q at FIC Output
- * 1001 = Receive Channel 1 I versus Receive Channel 2 I at FIC Output
- * 1010 = Receive Channel 1 Q versus Receive Channel 2 Q at FIC Output
- * 1011 = LPF DDC output of HD2 hardware (for blocker frequency identification)
- * 1100 = Receive Channel 1 I versus Receive Channel 2 Q at XFIR Output
- * 1101 = Receive Channel 1 I versus Receive Channel 2 I at XFIR Output
- * 1110 = Receive Channel 1 Q versus Receive Channel 2 Q at XFIR Output
+ * Receive Channel Calibration Select.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which receive path will have calibration statistics gathered in response to bit rxqec_calen being asserted.  
+ * 0000 = Receive Channel 1 at PFIR Output
+ * 0001 = Receive Channel 2 at PFIR Output
+ * 0010 = Receive Channel 1 at QEC Output (for algorithm self-check)
+ * 0011 = Receive Channel 2 at QEC Output (for algorithm self-check)
+ * 0100 = Receive Channel 1 I versus Receive Channel 2 Q at PFIR Output
+ * 0101 = Receive Channel 1 I versus Receive Channel 2 I at PFIR Output
+ * 0110 = Receive Channel 1 Q versus Receive Channel 2 Q at PFIR Output
+ * 0111 = Receive Channel 1 then Receive Channel 2 at PFIR Output (Interleaved FFT data segments) 
+ * 1000 = Receive Channel 1 I versus Receive Channel 2 Q at FIC Output
+ * 1001 = Receive Channel 1 I versus Receive Channel 2 I at FIC Output
+ * 1010 = Receive Channel 1 Q versus Receive Channel 2 Q at FIC Output
+ * 1011 = LPF DDC output of HD2 hardware (for blocker frequency identification)
+ * 1100 = Receive Channel 1 I versus Receive Channel 2 Q at XFIR Output
+ * 1101 = Receive Channel 1 I versus Receive Channel 2 I at XFIR Output
+ * 1110 = Receive Channel 1 Q versus Receive Channel 2 Q at XFIR Output
  * 1111 = Receive Signal A then Receive Signal B from HD2 hardware (Interleaved FFT data segments)
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecSource_Set(void *const device,
@@ -18826,22 +18826,22 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecSource_Set(void *const device,
 }
 
 /**
- * Receive Channel Calibration Select.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which receive path will have calibration statistics gathered in response to bit rxqec_calen being asserted.  
- * 0000 = Receive Channel 1 at PFIR Output
- * 0001 = Receive Channel 2 at PFIR Output
- * 0010 = Receive Channel 1 at QEC Output (for algorithm self-check)
- * 0011 = Receive Channel 2 at QEC Output (for algorithm self-check)
- * 0100 = Receive Channel 1 I versus Receive Channel 2 Q at PFIR Output
- * 0101 = Receive Channel 1 I versus Receive Channel 2 I at PFIR Output
- * 0110 = Receive Channel 1 Q versus Receive Channel 2 Q at PFIR Output
- * 0111 = Receive Channel 1 then Receive Channel 2 at PFIR Output (Interleaved FFT data segments) 
- * 1000 = Receive Channel 1 I versus Receive Channel 2 Q at FIC Output
- * 1001 = Receive Channel 1 I versus Receive Channel 2 I at FIC Output
- * 1010 = Receive Channel 1 Q versus Receive Channel 2 Q at FIC Output
- * 1011 = LPF DDC output of HD2 hardware (for blocker frequency identification)
- * 1100 = Receive Channel 1 I versus Receive Channel 2 Q at XFIR Output
- * 1101 = Receive Channel 1 I versus Receive Channel 2 I at XFIR Output
- * 1110 = Receive Channel 1 Q versus Receive Channel 2 Q at XFIR Output
+ * Receive Channel Calibration Select.  Hardware blocks attempts to change the state of these bits while calibration is active (see bit rxqec_calen).  These bits specify which receive path will have calibration statistics gathered in response to bit rxqec_calen being asserted.  
+ * 0000 = Receive Channel 1 at PFIR Output
+ * 0001 = Receive Channel 2 at PFIR Output
+ * 0010 = Receive Channel 1 at QEC Output (for algorithm self-check)
+ * 0011 = Receive Channel 2 at QEC Output (for algorithm self-check)
+ * 0100 = Receive Channel 1 I versus Receive Channel 2 Q at PFIR Output
+ * 0101 = Receive Channel 1 I versus Receive Channel 2 I at PFIR Output
+ * 0110 = Receive Channel 1 Q versus Receive Channel 2 Q at PFIR Output
+ * 0111 = Receive Channel 1 then Receive Channel 2 at PFIR Output (Interleaved FFT data segments) 
+ * 1000 = Receive Channel 1 I versus Receive Channel 2 Q at FIC Output
+ * 1001 = Receive Channel 1 I versus Receive Channel 2 I at FIC Output
+ * 1010 = Receive Channel 1 Q versus Receive Channel 2 Q at FIC Output
+ * 1011 = LPF DDC output of HD2 hardware (for blocker frequency identification)
+ * 1100 = Receive Channel 1 I versus Receive Channel 2 Q at XFIR Output
+ * 1101 = Receive Channel 1 I versus Receive Channel 2 I at XFIR Output
+ * 1110 = Receive Channel 1 Q versus Receive Channel 2 Q at XFIR Output
  * 1111 = Receive Signal A then Receive Signal B from HD2 hardware (Interleaved FFT data segments)
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecSource_Get(void *const device,
@@ -19026,8 +19026,8 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecWdata3_Get(void *const device,
 }
 
 /**
- * Window Enable.  This bit enables a window to be applied to receive data prior to FFT processing during IQ imbalance estimation. Window coefficients are specified by registers RXQEC_TRACK_WIND[23:0].
- * 0 = Window Disabled (Defaults to rectangular)
+ * Window Enable.  This bit enables a window to be applied to receive data prior to FFT processing during IQ imbalance estimation. Window coefficients are specified by registers RXQEC_TRACK_WIND[23:0].
+ * 0 = Window Disabled (Defaults to rectangular)
  * 1 = Window Enabled; Coefficients specified by ARM mapped registers RXQEC_TRACK_WIND[23:0]
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecWinden_Set(void *const device,
@@ -19041,8 +19041,8 @@ static inline int32_t adrv9001_NvsRegmapCore_RxqecWinden_Set(void *const device,
 }
 
 /**
- * Window Enable.  This bit enables a window to be applied to receive data prior to FFT processing during IQ imbalance estimation. Window coefficients are specified by registers RXQEC_TRACK_WIND[23:0].
- * 0 = Window Disabled (Defaults to rectangular)
+ * Window Enable.  This bit enables a window to be applied to receive data prior to FFT processing during IQ imbalance estimation. Window coefficients are specified by registers RXQEC_TRACK_WIND[23:0].
+ * 0 = Window Disabled (Defaults to rectangular)
  * 1 = Window Enabled; Coefficients specified by ARM mapped registers RXQEC_TRACK_WIND[23:0]
  */
 static inline int32_t adrv9001_NvsRegmapCore_RxqecWinden_Get(void *const device,
@@ -19244,8 +19244,8 @@ static inline int32_t adrv9001_NvsRegmapCore_SelClkPllLp_Get(void *const device,
 }
 
 /**
- * lock bit for semaphore 0, when semaphore0 register is read by either the stream processor or the ARM, this bit will get set to 1'b1 atomically. eg: if the ARM is trying to
- * acquire semaphore 0 , reading this register will set semaphore0_lock to 1'b1. When it is done with modifying the associated registers, it should write 1'b0 to this bit, to indicate to
+ * lock bit for semaphore 0, when semaphore0 register is read by either the stream processor or the ARM, this bit will get set to 1'b1 atomically. eg: if the ARM is trying to
+ * acquire semaphore 0 , reading this register will set semaphore0_lock to 1'b1. When it is done with modifying the associated registers, it should write 1'b0 to this bit, to indicate to
  * the stream processor, that the semaphore has been released.
  */
 static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Lock_Set(void *const device,
@@ -19259,8 +19259,8 @@ static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Lock_Set(void *const devi
 }
 
 /**
- * lock bit for semaphore 0, when semaphore0 register is read by either the stream processor or the ARM, this bit will get set to 1'b1 atomically. eg: if the ARM is trying to
- * acquire semaphore 0 , reading this register will set semaphore0_lock to 1'b1. When it is done with modifying the associated registers, it should write 1'b0 to this bit, to indicate to
+ * lock bit for semaphore 0, when semaphore0 register is read by either the stream processor or the ARM, this bit will get set to 1'b1 atomically. eg: if the ARM is trying to
+ * acquire semaphore 0 , reading this register will set semaphore0_lock to 1'b1. When it is done with modifying the associated registers, it should write 1'b0 to this bit, to indicate to
  * the stream processor, that the semaphore has been released.
  */
 static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Lock_Get(void *const device,
@@ -19277,7 +19277,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Lock_Get(void *const devi
 }
 
 /**
- * first of 16 semaphore registers to manage register access by ARM and stream processor. When the ARM/stream processor acquire this semaphore, they can write any value (based on protocol) to
+ * first of 16 semaphore registers to manage register access by ARM and stream processor. When the ARM/stream processor acquire this semaphore, they can write any value (based on protocol) to
  * semaphore0_proc field, which may be helpful for debug purposes, or to indicate which master has acquired the semaphore.
  */
 static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Proc_Set(void *const device,
@@ -19291,7 +19291,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Proc_Set(void *const devi
 }
 
 /**
- * first of 16 semaphore registers to manage register access by ARM and stream processor. When the ARM/stream processor acquire this semaphore, they can write any value (based on protocol) to
+ * first of 16 semaphore registers to manage register access by ARM and stream processor. When the ARM/stream processor acquire this semaphore, they can write any value (based on protocol) to
  * semaphore0_proc field, which may be helpful for debug purposes, or to indicate which master has acquired the semaphore.
  */
 static inline int32_t adrv9001_NvsRegmapCore_Semaphore0Proc_Get(void *const device,
@@ -20641,7 +20641,7 @@ static inline int32_t adrv9001_NvsRegmapCore_Stat9_Get(void *const device,
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore_StreamBase_Set(void *const device,
@@ -20658,7 +20658,7 @@ static inline int32_t adrv9001_NvsRegmapCore_StreamBase_Set(void *const device,
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore_StreamBase_Get(void *const device,
@@ -20708,24 +20708,24 @@ static inline int32_t adrv9001_NvsRegmapCore_StreamError_Get(void *const device,
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore_StreamProcAddr_Set(void *const device,
@@ -20739,24 +20739,24 @@ static inline int32_t adrv9001_NvsRegmapCore_StreamProcAddr_Set(void *const devi
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore_StreamProcAddr_Get(void *const device,
@@ -22326,7 +22326,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TopClockDividerReset_Get(void *cons
 }
 
 /**
- * These bits set a hysteresis on toggles of transceiver datapath signals so that they can be observed by the HSCI properly if the HSCI is running slower.
+ * These bits set a hysteresis on toggles of transceiver datapath signals so that they can be observed by the HSCI properly if the HSCI is running slower.
  *  Needed for ARM dp drv and capture, off by default to save power
  */
 static inline int32_t adrv9001_NvsRegmapCore_TrxMemClkEnable_Set(void *const device,
@@ -22340,7 +22340,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TrxMemClkEnable_Set(void *const dev
 }
 
 /**
- * These bits set a hysteresis on toggles of transceiver datapath signals so that they can be observed by the HSCI properly if the HSCI is running slower.
+ * These bits set a hysteresis on toggles of transceiver datapath signals so that they can be observed by the HSCI properly if the HSCI is running slower.
  *  Needed for ARM dp drv and capture, off by default to save power
  */
 static inline int32_t adrv9001_NvsRegmapCore_TrxMemClkEnable_Get(void *const device,
@@ -24969,16 +24969,16 @@ static inline int32_t adrv9001_NvsRegmapCore_Tx2StrobeLvdsRxOnchipTerm_Get(void 
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank A
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank A
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirGain_Set(void *const device,
@@ -24992,16 +24992,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank A
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank A
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirGain_Get(void *const device,
@@ -25047,10 +25047,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirSymmetric_Get(void *cons
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank A
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank A
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirTaps_Set(void *const device,
@@ -25064,10 +25064,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank A
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank A
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirTaps_Get(void *const device,
@@ -25084,16 +25084,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankAPfirTaps_Get(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank B
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank B
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirGain_Set(void *const device,
@@ -25107,16 +25107,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank B
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank B
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirGain_Get(void *const device,
@@ -25162,10 +25162,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirSymmetric_Get(void *cons
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank B
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank B
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirTaps_Set(void *const device,
@@ -25179,10 +25179,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank B
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank B
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirTaps_Get(void *const device,
@@ -25199,16 +25199,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankBPfirTaps_Get(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank C
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank C
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirGain_Set(void *const device,
@@ -25222,16 +25222,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank C
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank C
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirGain_Get(void *const device,
@@ -25277,10 +25277,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirSymmetric_Get(void *cons
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank C
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank C
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirTaps_Set(void *const device,
@@ -25294,10 +25294,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank C
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank C
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirTaps_Get(void *const device,
@@ -25314,16 +25314,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankCPfirTaps_Get(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank D
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank D
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirGain_Set(void *const device,
@@ -25337,16 +25337,16 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirGain_Set(void *const dev
 }
 
 /**
- * This controls the gain when the TX PFIR uses coefficient bank D
- * 1001 --   26db (x20) 
- * 1000 --   24db (x16)
- * 0111 --   20db (x10) 
- * 0110 --   14db (x5)
- * 0101 --   12db  (x4)
- * 0100 --   9.54dB (x3)
- * 0011 --   6db
- * 0010 --   0db
- * 0001 --   -6db
+ * This controls the gain when the TX PFIR uses coefficient bank D
+ * 1001 --   26db (x20) 
+ * 1000 --   24db (x16)
+ * 0111 --   20db (x10) 
+ * 0110 --   14db (x5)
+ * 0101 --   12db  (x4)
+ * 0100 --   9.54dB (x3)
+ * 0011 --   6db
+ * 0010 --   0db
+ * 0001 --   -6db
  * 0000 --   -12db
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirGain_Get(void *const device,
@@ -25392,10 +25392,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirSymmetric_Get(void *cons
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank D
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank D
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirTaps_Set(void *const device,
@@ -25409,10 +25409,10 @@ static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirTaps_Set(void *const dev
 }
 
 /**
- * This controls the number of rows of taps when the TX PFIR uses coefficient bank D
- * 00 --  32 taps
- * 01 --  64 taps
- * 10 --  96 taps
+ * This controls the number of rows of taps when the TX PFIR uses coefficient bank D
+ * 00 --  32 taps
+ * 01 --  64 taps
+ * 10 --  96 taps
  * 11 --  128 taps
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxBankDPfirTaps_Get(void *const device,
@@ -25452,7 +25452,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TxComplexGainUpdateBoth_Get(void *c
 }
 
 /**
- * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
+ * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
  *  Mask DAC data
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh1_Set(void *const device,
@@ -25466,7 +25466,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh1_Set(void *const devic
 }
 
 /**
- * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
+ * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
  *  Mask DAC data
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh1_Get(void *const device,
@@ -25483,7 +25483,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh1_Get(void *const devic
 }
 
 /**
- * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
+ * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
  *  Mask DAC data
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh2_Set(void *const device,
@@ -25497,7 +25497,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh2_Set(void *const devic
 }
 
 /**
- * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
+ * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
  *  Mask DAC data
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxDataMaskCh2_Get(void *const device,
@@ -26079,7 +26079,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TxdpIntfIdata_Get(void *const devic
 }
 
 /**
- * 0 => Interrupt output signals are level signals
+ * 0 => Interrupt output signals are level signals
  * 1 => Interrupt output signals are pulse-signals. Pulse duration is one clock-period of the respective clocks on which the interrupts are generated.
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxdpIntfIrqEdgeTriggered_Set(void *const device,
@@ -26093,7 +26093,7 @@ static inline int32_t adrv9001_NvsRegmapCore_TxdpIntfIrqEdgeTriggered_Set(void *
 }
 
 /**
- * 0 => Interrupt output signals are level signals
+ * 0 => Interrupt output signals are level signals
  * 1 => Interrupt output signals are pulse-signals. Pulse duration is one clock-period of the respective clocks on which the interrupts are generated.
  */
 static inline int32_t adrv9001_NvsRegmapCore_TxdpIntfIrqEdgeTriggered_Get(void *const device,
@@ -26297,7 +26297,7 @@ static inline int32_t adrv9001_NvsRegmapCore_VendorId_Get(void *const device,
 }
 
 /**
- * Number of reg_clk cycles to wait while reading (facilitates
+ * Number of reg_clk cycles to wait while reading (facilitates
  * multicycle path). The read mux is timed to a 10ns max delay.
  */
 static inline int32_t adrv9001_NvsRegmapCore_WrEnDelay_Set(void *const device,
@@ -26311,7 +26311,7 @@ static inline int32_t adrv9001_NvsRegmapCore_WrEnDelay_Set(void *const device,
 }
 
 /**
- * Number of reg_clk cycles to wait while reading (facilitates
+ * Number of reg_clk cycles to wait while reading (facilitates
  * multicycle path). The read mux is timed to a 10ns max delay.
  */
 static inline int32_t adrv9001_NvsRegmapCore_WrEnDelay_Get(void *const device,
@@ -26328,11 +26328,11 @@ static inline int32_t adrv9001_NvsRegmapCore_WrEnDelay_Get(void *const device,
 }
 
 /**
- * Reg clock rate selection for use with AHB SPI bridge
- * 00 --  HS_dig_clk / 4
- * 01 --  HS_dig_clk / 8
- * 10 --  HS_dig_clk / 16
- * 11 --  HS_dig_clk / 32
+ * Reg clock rate selection for use with AHB SPI bridge
+ * 00 --  HS_dig_clk / 4
+ * 01 --  HS_dig_clk / 8
+ * 10 --  HS_dig_clk / 16
+ * 11 --  HS_dig_clk / 32
  * Max 250 MHz
  */
 static inline int32_t adrv9001_NvsRegmapCore_WriteRegClockSel_Set(void *const device,
@@ -26346,11 +26346,11 @@ static inline int32_t adrv9001_NvsRegmapCore_WriteRegClockSel_Set(void *const de
 }
 
 /**
- * Reg clock rate selection for use with AHB SPI bridge
- * 00 --  HS_dig_clk / 4
- * 01 --  HS_dig_clk / 8
- * 10 --  HS_dig_clk / 16
- * 11 --  HS_dig_clk / 32
+ * Reg clock rate selection for use with AHB SPI bridge
+ * 00 --  HS_dig_clk / 4
+ * 01 --  HS_dig_clk / 8
+ * 10 --  HS_dig_clk / 16
+ * 11 --  HS_dig_clk / 32
  * Max 250 MHz
  */
 static inline int32_t adrv9001_NvsRegmapCore_WriteRegClockSel_Get(void *const device,

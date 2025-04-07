@@ -30,6 +30,7 @@ extern "C" {
 /* ADI specific header files */
 #include "adi_adrv9001_tx_types.h"
 #include "adi_adrv9001_types.h"
+#include "adi_adrv9001_radio_types.h"
 
 /**
  * \brief Configure the Tx attenuation for the specified channel
@@ -475,6 +476,18 @@ int32_t adi_adrv9001_Tx_DataPath_Loopback_Set(adi_adrv9001_Device_t *adrv9001,
                                               adi_common_ChannelNumber_e channel,
                                               bool loopbackEnable);
 
+/**
+ * \brief Inspect the DC Offset for txlol datapath filter
+ *
+ * \note Message type: \ref timing_direct "Direct register acccess"
+ *
+ * \param[in]  adrv9001     Context variable - Pointer to the ADRV9001 device data structure
+ * \param[out] status       DC Offset for txlol datapath filter
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Tx_LolActuatorFilterDcOffset_Status_Get(adi_adrv9001_Device_t *adrv9001,
+	                                                         adi_adrv9001_TxlolActuatorFilterDcOffsetStatus_t *status);
 
 #ifdef __cplusplus
 }

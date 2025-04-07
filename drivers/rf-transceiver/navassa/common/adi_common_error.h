@@ -29,6 +29,68 @@
 #include "adi_common_types.h"
 #include "adi_common_macros.h"
 
+#ifdef API_MUTEX
+/**
+* \brief Macro to call API mutex release function
+* This macro implements a simple recusive mutex to un-lock API
+* 
+* \param commonDev Pointer to the common device structure
+* 
+*/
+#define ADI_MUTEX_ERROR_RELEASE(commonDev)\
+{\
+    if (((adi_common_Device_t *)(commonDev))->error.newAction < ADI_COMMON_ACT_NO_ACTION &&\
+       ((adi_common_Device_t *)(commonDev))->error.unlock != NULL)\
+    {\
+        if (((adi_common_Device_t *)(commonDev))->error.locked > 0) \
+        {\
+            ((adi_common_Device_t *)(commonDev))->error.locked--; \
+            if (((adi_common_Device_t *)(commonDev))->error.locked == 0) { \
+                ((adi_common_Device_t *)(commonDev))->error.unlock(commonDev); \
+			}\
+        }\
+    }\
+}
+
+#define ADI_MUTEX_RELEASE(commonDev)\
+{\
+    if (((adi_common_Device_t *)(commonDev))->error.unlock != NULL)\
+    {\
+        if (((adi_common_Device_t *)(commonDev))->error.locked > 0) \
+        {\
+            ((adi_common_Device_t *)(commonDev))->error.locked--; \
+            if (((adi_common_Device_t *)(commonDev))->error.locked == 0) { \
+                ((adi_common_Device_t *)(commonDev))->error.unlock(commonDev); \
+			} \
+        }\
+    }\
+}
+
+/**
+* \brief Macro to call API mutex release function
+* This macro implements a simple recusive mutex to un-lock API
+* 
+* \param commonDev Pointer to the common device structure
+* 
+*/
+#define ADI_MUTEX_AQUIRE(commonDev) \
+{\
+    if(((adi_common_Device_t *)(commonDev))->error.lock)\
+    {\
+        if (((adi_common_Device_t *)(commonDev))->error.locked == 0) \
+        {\
+            ((adi_common_Device_t *)(commonDev))->error.lock(commonDev); \
+        }\
+        ((adi_common_Device_t *)(commonDev))->error.locked++; \
+    }\
+}
+
+#else /* API_MUTEX */
+#define ADI_MUTEX_RELEASE(commonDev) 
+#define ADI_MUTEX_ERROR_RELEASE(commonDev) 
+#define ADI_MUTEX_AQUIRE(commonDev) 
+#endif /* API_MUTEX */
+
 /**
 * \brief Macro to check if device pointer is a valid pointer
 * if null pointer detected return ADI_COMMON_ACT_ERR_CHECK_PARAM action
@@ -57,6 +119,7 @@ if(ptr == NULL)\
     if(ptr == NULL) \
     { \
          ADI_ERROR_REPORT((adi_common_Device_t *)(commonDev), ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_NULL_PARAM, ADI_COMMON_ACT_ERR_CHECK_PARAM, ptr, "NULL Pointer passed"); \
+         ADI_MUTEX_ERROR_RELEASE(commonDev) \
          return ADI_COMMON_ACT_ERR_CHECK_PARAM; \
     } \
 }
@@ -99,7 +162,7 @@ if(ptr == NULL)\
 */
 #define ADI_ERROR_REPORT(commonDev, errorSource, error, action, variable, customError) \
     adi_common_ErrorReport((adi_common_Device_t *)(commonDev), (adi_common_ErrSources_e)errorSource, (int32_t)error, (int32_t)action, __FILE__, __FUNCTION__, __LINE__, #variable, customError)
-#else 
+#else /* ADI_COMMON_VERBOSE */
 #define ADI_ERROR_REPORT(commonDev, errorSource, errorCode, action, variable, customError) \
 do \
 { \
@@ -145,21 +208,24 @@ if ((value < minimum) || (value > maximum)) \
         ADI_COMMON_ACT_ERR_CHECK_PARAM, \
         devicePtr, \
         devicePtr->common.error.errormessage); \
+    ADI_MUTEX_ERROR_RELEASE(devicePtr) \
     ADI_ERROR_RETURN(devicePtr->common.error.newAction); \
 }
 
 /* Legacy - no format specifier defaults to %d */
 #define ADI_RANGE_CHECK(devicePtr, value, minimum, maximum) ADI_RANGE_CHECK_X(devicePtr, value, minimum, maximum, "%d")
-#else
+#else /* ADI_COMMON_VERBOSE */
 #define ADI_RANGE_CHECK(devicePtr, value, minimum, maximum) \
 if ((value < minimum) || (value > maximum)) \
 { \
+    ADI_MUTEX_ERROR_RELEASE(devicePtr) \
     return ADI_COMMON_ACT_ERR_CHECK_PARAM; \
 }
 
 #define ADI_RANGE_CHECK_X(devicePtr, value, minimum, maximum, formatSpecifier) \
 if ((value < minimum) || (value > maximum)) \
 { \
+    ADI_MUTEX_ERROR_RELEASE(devicePtr) \
     return ADI_COMMON_ACT_ERR_CHECK_PARAM; \
 }
 #endif
@@ -184,6 +250,7 @@ if ((value < minimum) || (value > maximum)) \
     int32_t _recoveryAction = ADI_COMMON_ACT_NO_ACTION; \
     _recoveryAction = fcnPtr(devicePtr, ##__VA_ARGS__); \
     ADI_ERROR_REPORT(&devicePtr->common, ADI_COMMON_ERRSRC_API, devicePtr->common.error.errCode, _recoveryAction, NULL, devicePtr->common.error.errormessage); \
+    ADI_MUTEX_ERROR_RELEASE(devicePtr) \
     ADI_ERROR_RETURN(devicePtr->common.error.newAction); \
 }
 
@@ -208,6 +275,7 @@ if ((value < minimum) || (value > maximum)) \
     int32_t _recoveryAction = ADI_COMMON_ACT_NO_ACTION; \
     _recoveryAction = fcnPtr(devicePtr, ##__VA_ARGS__); \
     ADI_ERROR_REPORT(&devicePtr->common, ADI_COMMON_ERRSRC_API, devicePtr->common.error.errCode, _recoveryAction, NULL, errMsg); \
+    ADI_MUTEX_ERROR_RELEASE(devicePtr) \
     ADI_ERROR_RETURN(devicePtr->common.error.newAction); \
 }
 
@@ -276,6 +344,7 @@ if ((value < minimum) || (value > maximum)) \
             ADI_COMMON_ACT_ERR_CHECK_PARAM, \
             arraySize, \
             "Invalid arraySize"); \
+        ADI_MUTEX_ERROR_RELEASE(devicePtr) \
         ADI_ERROR_RETURN(devicePtr->common.error.newAction); \
     } \
 }

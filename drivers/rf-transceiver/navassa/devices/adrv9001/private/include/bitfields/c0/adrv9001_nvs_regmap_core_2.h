@@ -530,10 +530,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_Auxdac3Pd_Get(void *const device,
 }
 
 /**
- * 4bits AUXDAC mux selection.
- * Bit [0]: AUXDAC 0 select:  1: xbar_dac0, 0: spi_auxdac0
- * Bit [1]: AUXDAC 1 select:  1: xbar_dac1, 0: spi_auxdac1
- * Bit [2]: AUXDAC 2 select:  1: xbar_dac2, 0: spi_auxdac2
+ * 4bits AUXDAC mux selection.
+ * Bit [0]: AUXDAC 0 select:  1: xbar_dac0, 0: spi_auxdac0
+ * Bit [1]: AUXDAC 1 select:  1: xbar_dac1, 0: spi_auxdac1
+ * Bit [2]: AUXDAC 2 select:  1: xbar_dac2, 0: spi_auxdac2
  * Bit [3]: AUXDAC 3 select:  1: xbar_dac3, 0: spi_auxdac3
  */
 static inline int32_t adrv9001_NvsRegmapCore2_AuxdacMuxsel_Set(void *const device,
@@ -547,10 +547,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_AuxdacMuxsel_Set(void *const devic
 }
 
 /**
- * 4bits AUXDAC mux selection.
- * Bit [0]: AUXDAC 0 select:  1: xbar_dac0, 0: spi_auxdac0
- * Bit [1]: AUXDAC 1 select:  1: xbar_dac1, 0: spi_auxdac1
- * Bit [2]: AUXDAC 2 select:  1: xbar_dac2, 0: spi_auxdac2
+ * 4bits AUXDAC mux selection.
+ * Bit [0]: AUXDAC 0 select:  1: xbar_dac0, 0: spi_auxdac0
+ * Bit [1]: AUXDAC 1 select:  1: xbar_dac1, 0: spi_auxdac1
+ * Bit [2]: AUXDAC 2 select:  1: xbar_dac2, 0: spi_auxdac2
  * Bit [3]: AUXDAC 3 select:  1: xbar_dac3, 0: spi_auxdac3
  */
 static inline int32_t adrv9001_NvsRegmapCore2_AuxdacMuxsel_Get(void *const device,
@@ -567,10 +567,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_AuxdacMuxsel_Get(void *const devic
 }
 
 /**
- * Control the XBAR 2in 4 out MUX. 
- * Bit[0]: xbar 0 select: 1: TX2, 0: TX1
- * Bit[1]: xbar 1 select: 1: TX2, 0: TX1
- * Bit[2]: xbar 2 select: 1: TX2, 0: TX1
+ * Control the XBAR 2in 4 out MUX. 
+ * Bit[0]: xbar 0 select: 1: TX2, 0: TX1
+ * Bit[1]: xbar 1 select: 1: TX2, 0: TX1
+ * Bit[2]: xbar 2 select: 1: TX2, 0: TX1
  * Bit[3]: xbar 3 select: 1: TX2, 0: TX1
  */
 static inline int32_t adrv9001_NvsRegmapCore2_AuxdacXconfig_Set(void *const device,
@@ -584,10 +584,10 @@ static inline int32_t adrv9001_NvsRegmapCore2_AuxdacXconfig_Set(void *const devi
 }
 
 /**
- * Control the XBAR 2in 4 out MUX. 
- * Bit[0]: xbar 0 select: 1: TX2, 0: TX1
- * Bit[1]: xbar 1 select: 1: TX2, 0: TX1
- * Bit[2]: xbar 2 select: 1: TX2, 0: TX1
+ * Control the XBAR 2in 4 out MUX. 
+ * Bit[0]: xbar 0 select: 1: TX2, 0: TX1
+ * Bit[1]: xbar 1 select: 1: TX2, 0: TX1
+ * Bit[2]: xbar 2 select: 1: TX2, 0: TX1
  * Bit[3]: xbar 3 select: 1: TX2, 0: TX1
  */
 static inline int32_t adrv9001_NvsRegmapCore2_AuxdacXconfig_Get(void *const device,

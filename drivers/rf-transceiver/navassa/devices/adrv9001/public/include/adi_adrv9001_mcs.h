@@ -20,7 +20,7 @@ extern "C" {
 
 #include "adi_adrv9001_mcs_types.h"
 #include "adi_common_macros.h"
-#include "adi_adrv9001_user.h"
+#include <adi_adrv9001_user.h>
 #include "adi_adrv9001_types.h"
 #include "adi_adrv9001_radio_types.h"
 

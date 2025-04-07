@@ -42,7 +42,6 @@
                                                       FREQ_HOPPING_RX_GAIN_TABLE_NUM_BYTES  +\
                                                       FREQ_HOPPING_TX_ATTEN_TABLE_NUM_BYTES +\
                                                       FREQ_HOPPING_CONFIGURATION_NUM_BYTES)
-#define FREQ_HOPPING_MAX_NUM_BYTES                   1536u
 #define FREQ_HOPPING_HOP_TABLE_PARTITION_ADDR_OFFSET 16u
 #define FREQ_HOPPING_HOP1_OFFSET_FREQ_OVERWRITE_ADDR 0x2001FFF0
 #define FREQ_HOPPING_HOP2_OFFSET_FREQ_OVERWRITE_ADDR 0x2001FFF8
@@ -188,7 +187,7 @@ static __maybe_unused int32_t adi_adrv9001_fh_Configure_Validate(adi_adrv9001_De
     }
     
     /* Check mode*/
-    ADI_RANGE_CHECK(adrv9001, fhConfig->mode, ADI_ADRV9001_FHMODE_LO_MUX_PREPROCESS, ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS_DUAL_HOP);
+	ADI_RANGE_CHECK(adrv9001, fhConfig->mode, ADI_ADRV9001_FHMODE_LO_MUX_PREPROCESS, ADI_ADRV9001_FHMODE_LO_RETUNE_REALTIME_PROCESS_PFIR_SWITCH);
 
     /* Check tableIndexCtrl_e */
     ADI_RANGE_CHECK(adrv9001, fhConfig->tableIndexCtrl, ADI_ADRV9001_TABLEINDEXCTRL_AUTO_LOOP, ADI_ADRV9001_TABLEINDEXCTRL_GPIO);
@@ -747,13 +746,13 @@ int32_t adi_adrv9001_fh_HopTable_Static_Configure(adi_adrv9001_Device_t *adrv900
 	
     /* ARM Data is written directly to ARM memory because FREQ_HOPPING_NUM_BYTES is greater than set buffer size */
 #ifndef __KERNEL__
-    uint8_t armData[FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+    uint8_t armData[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
 #else
     /*
      * linux stack is not that big which means we need to be carefull. Some archs like arm set
      * Wframe-larger-than=1024
      */
-    static uint8_t armData[FREQ_HOPPING_MAX_NUM_BYTES];
+	static uint8_t armData[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
 
     memset(&armData, 0, sizeof(armData));
 #endif
@@ -798,7 +797,7 @@ int32_t adi_adrv9001_fh_HopTable_Static_Configure(adi_adrv9001_Device_t *adrv900
         armData[offset++] = hopTable[frequencyIndex].tx1Attenuation_fifthdB;
 	    armData[offset++] = hopTable[frequencyIndex].tx2Attenuation_fifthdB;
     }
-	
+
 	/* Write the data directly to the ARM memory */
 	/* 'offset' is used to represent the exact number of bytes to write to avoid writing over the entire table */
 	ADI_EXPECT(adi_adrv9001_arm_Memory_WriteFH, adrv9001, hopSignal, tableId, hopTableAddress, numHopTableEntries, sizeof(numHopTableEntries), hopTableBufferAddress, armData, offset);
@@ -824,13 +823,13 @@ int32_t adi_adrv9001_fh_HopTable_Inspect(adi_adrv9001_Device_t *adrv9001,
     uint32_t hopFrequencyHz_MSB = 0;
 
 #ifndef __KERNEL__
-    uint8_t armData[FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+    uint8_t armData[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
 #else
     /*
      * linux stack is not that big which means we need to be carefull. Some archs like arm set
      * Wframe-larger-than=1024
      */
-    static uint8_t armData[FREQ_HOPPING_MAX_NUM_BYTES];
+	static uint8_t armData[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
 
     memset(&armData, 0, sizeof(armData));
 #endif
@@ -890,9 +889,9 @@ int32_t adi_adrv9001_fh_HopTable_Inspect(adi_adrv9001_Device_t *adrv9001,
     }
     /* Read back the hopping table from ARM memory based on number of HOP frequencies */
     numberOfBytesReadback = (numHopFrequenciesReadback * sizeof(adrv9001_FhHopFrame_t));
-    if (numberOfBytesReadback > FREQ_HOPPING_MAX_NUM_BYTES)
+    if (numberOfBytesReadback > ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES)
     {
-        numberOfBytesReadback = FREQ_HOPPING_MAX_NUM_BYTES;
+        numberOfBytesReadback = ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES;
     }
     if (numHopFrequenciesReadback > hopTableSize)
     {

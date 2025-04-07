@@ -19,6 +19,7 @@
 #include "adi_adrv9001_arm_types.h"
 #include "adi_adrv9001_tx_types.h"
 #include "adrv9001_init_types.h"
+#include "adrv9001_radio.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -460,7 +461,7 @@ int32_t adi_adrv9001_Radio_PllLoopFilter_Set(adi_adrv9001_Device_t *adrv9001,
  *
  * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure containing settings
  * \param[in] pll                   The PLL for which to configure the loop filter
- * \param[in] pllLoopFilterConfig   The current loop filter configuration
+ * \param[out] pllLoopFilterConfig   The current loop filter configuration
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -563,6 +564,26 @@ int32_t adi_adrv9001_Radio_ToMcsReady(adi_adrv9001_Device_t *adrv9001);
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_Radio_RfLogenDivider_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Pll_e pll, uint32_t *RfLogenDivider);
+
+/**
+ * \brief Write the TX/RX WB/NB PFIR channel filter Banks
+ *
+ * \note Used with TX/RX WB/NB compensation PFIR types only
+ * 
+ * \pre Channel state is RF_ENABLED
+ *
+ * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure                      
+ * \param[in] pfirCoeff PFIR configuration to write
+ * \param[in] bankSel   The PFIR Bank of interest
+ * \param[in] port      The port of interest
+ * \param[in] channel   The channel of interest
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Radio_PfirWbNbCompChFilter_Set(adi_adrv9001_Device_t *adrv9001, 
+		                                            const adi_adrv9001_PfirWbNbBuffer_t *pfirCoeff,
+		                                            adi_adrv9001_PfirBank_e bankSel, adi_common_Port_e port,
+	                                                adi_common_ChannelNumber_e channel);
 
 #ifdef __cplusplus
 }

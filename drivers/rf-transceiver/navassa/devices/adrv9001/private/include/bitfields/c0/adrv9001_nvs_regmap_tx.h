@@ -285,8 +285,8 @@ static inline int32_t adrv9001_NvsRegmapTx_AnalogSpare_Get(void *const device,
 }
 
 /**
- * This starts ramping down gain (increasing attenuation) on the TX
- * ch1 path. Useful for slowly reducing PA power before shutting off the TX
+ * This starts ramping down gain (increasing attenuation) on the TX
+ * ch1 path. Useful for slowly reducing PA power before shutting off the TX
  * upconverter. This bit is cleared automatically when the procedure is complete.
  */
 static inline int32_t adrv9001_NvsRegmapTx_AttenRampDown_Set(void *const device,
@@ -301,8 +301,8 @@ static inline int32_t adrv9001_NvsRegmapTx_AttenRampDown_Set(void *const device,
 }
 
 /**
- * This starts ramping down gain (increasing attenuation) on the TX
- * ch1 path. Useful for slowly reducing PA power before shutting off the TX
+ * This starts ramping down gain (increasing attenuation) on the TX
+ * ch1 path. Useful for slowly reducing PA power before shutting off the TX
  * upconverter. This bit is cleared automatically when the procedure is complete.
  */
 static inline int32_t adrv9001_NvsRegmapTx_AttenRampDown_Get(void *const device,
@@ -320,9 +320,9 @@ static inline int32_t adrv9001_NvsRegmapTx_AttenRampDown_Get(void *const device,
 }
 
 /**
- * This starts ramping up gain (decreasing attenuation) on the TX
- * ch1 path. Useful for slowly increasing PA power after powering on the TX. This
- * bit is cleared automatically when the procedure is complete. Must have
+ * This starts ramping up gain (decreasing attenuation) on the TX
+ * ch1 path. Useful for slowly increasing PA power after powering on the TX. This
+ * bit is cleared automatically when the procedure is complete. Must have
  * previously used the "atten_ramp_down_tx1" bit for this to be useful.
  */
 static inline int32_t adrv9001_NvsRegmapTx_AttenRampUp_Set(void *const device,
@@ -337,9 +337,9 @@ static inline int32_t adrv9001_NvsRegmapTx_AttenRampUp_Set(void *const device,
 }
 
 /**
- * This starts ramping up gain (decreasing attenuation) on the TX
- * ch1 path. Useful for slowly increasing PA power after powering on the TX. This
- * bit is cleared automatically when the procedure is complete. Must have
+ * This starts ramping up gain (decreasing attenuation) on the TX
+ * ch1 path. Useful for slowly increasing PA power after powering on the TX. This
+ * bit is cleared automatically when the procedure is complete. Must have
  * previously used the "atten_ramp_down_tx1" bit for this to be useful.
  */
 static inline int32_t adrv9001_NvsRegmapTx_AttenRampUp_Get(void *const device,
@@ -1348,7 +1348,7 @@ static inline int32_t adrv9001_NvsRegmapTx_ComplexGainUpdateSingle_Get(void *con
 }
 
 /**
- * step size for constant step mode in increments of .05 dB. Value
+ * step size for constant step mode in increments of .05 dB. Value
  * should be greater than zero when using constant step mode.
  */
 static inline int32_t adrv9001_NvsRegmapTx_ConstStepModeStepSize_Set(void *const device,
@@ -1363,7 +1363,7 @@ static inline int32_t adrv9001_NvsRegmapTx_ConstStepModeStepSize_Set(void *const
 }
 
 /**
- * step size for constant step mode in increments of .05 dB. Value
+ * step size for constant step mode in increments of .05 dB. Value
  * should be greater than zero when using constant step mode.
  */
 static inline int32_t adrv9001_NvsRegmapTx_ConstStepModeStepSize_Get(void *const device,
@@ -3552,9 +3552,9 @@ static inline int32_t adrv9001_NvsRegmapTx_GanPaPmXSel_Get(void *const device,
 }
 
 /**
- * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
- * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
+ * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
+ * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 1[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain1_Set(void *const device,
@@ -3569,9 +3569,9 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain1_Set(void *const device,
 }
 
 /**
- * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
- * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
+ * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
+ * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 1[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain1_Get(void *const device,
@@ -3589,9 +3589,9 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain1_Get(void *const device,
 }
 
 /**
- * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
- * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
+ * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
+ * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 2[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain2_Set(void *const device,
@@ -3606,9 +3606,9 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain2_Set(void *const device,
 }
 
 /**
- * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
- * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
+ * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
+ * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 2[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain2_Get(void *const device,
@@ -3626,7 +3626,7 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalAnaGain2_Get(void *const device,
 }
 
 /**
- * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 1[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain1_Set(void *const device,
@@ -3641,7 +3641,7 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain1_Set(void *const device,
 }
 
 /**
- * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 1[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain1_Get(void *const device,
@@ -3659,7 +3659,7 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain1_Get(void *const device,
 }
 
 /**
- * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 2[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain2_Set(void *const device,
@@ -3674,7 +3674,7 @@ static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain2_Set(void *const device,
 }
 
 /**
- * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 2[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapTx_GdcalDigGain2_Get(void *const device,
@@ -10450,10 +10450,10 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAlgTwinFirBClkEn_Get(void *const de
 }
 
 /**
- * These bits set the step size for the SPI mode attenuation. 
- * 00 --  .05 dB steps
- * 01 --  .10 dB steps
- * 10 --  .20 dB steps
+ * These bits set the step size for the SPI mode attenuation. 
+ * 00 --  .05 dB steps
+ * 01 --  .10 dB steps
+ * 10 --  .20 dB steps
  * 11 --  .40 dB steps
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxAttenConfig_Set(void *const device,
@@ -10468,10 +10468,10 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAttenConfig_Set(void *const device,
 }
 
 /**
- * These bits set the step size for the SPI mode attenuation. 
- * 00 --  .05 dB steps
- * 01 --  .10 dB steps
- * 10 --  .20 dB steps
+ * These bits set the step size for the SPI mode attenuation. 
+ * 00 --  .05 dB steps
+ * 01 --  .10 dB steps
+ * 10 --  .20 dB steps
  * 11 --  .40 dB steps
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxAttenConfig_Get(void *const device,
@@ -10817,10 +10817,10 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAttenHpRef_Get(void *const device,
 }
 
 /**
- * These bits are used to set the TPC mode according to the following settings: 
- * 00 --  Bypass: zero total attenuation 
- * 01 --  SPI: 10-bit attenuation index used to determine total attenuation 
- * 10 --  SPI Direct: attenuation values are set manually 
+ * These bits are used to set the TPC mode according to the following settings: 
+ * 00 --  Bypass: zero total attenuation 
+ * 01 --  SPI: 10-bit attenuation index used to determine total attenuation 
+ * 10 --  SPI Direct: attenuation values are set manually 
  * 11 --  Incr/Decr: total attenuation is altered incrementally using pin control
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxAttenMode_Set(void *const device,
@@ -10835,10 +10835,10 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAttenMode_Set(void *const device,
 }
 
 /**
- * These bits are used to set the TPC mode according to the following settings: 
- * 00 --  Bypass: zero total attenuation 
- * 01 --  SPI: 10-bit attenuation index used to determine total attenuation 
- * 10 --  SPI Direct: attenuation values are set manually 
+ * These bits are used to set the TPC mode according to the following settings: 
+ * 00 --  Bypass: zero total attenuation 
+ * 01 --  SPI: 10-bit attenuation index used to determine total attenuation 
+ * 10 --  SPI Direct: attenuation values are set manually 
  * 11 --  Incr/Decr: total attenuation is altered incrementally using pin control
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxAttenMode_Get(void *const device,
@@ -10856,7 +10856,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAttenMode_Get(void *const device,
 }
 
 /**
- * This register specifies an offset to the Tx attenuation words
+ * This register specifies an offset to the Tx attenuation words
  * when the TPC mode is set to SPI mode. The resolution is 0.4 dB steps.
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxAttenOffset_Set(void *const device,
@@ -10871,7 +10871,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAttenOffset_Set(void *const device,
 }
 
 /**
- * This register specifies an offset to the Tx attenuation words
+ * This register specifies an offset to the Tx attenuation words
  * when the TPC mode is set to SPI mode. The resolution is 0.4 dB steps.
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxAttenOffset_Get(void *const device,
@@ -11239,7 +11239,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxAttenuationTableReset_Get(void *con
 }
 
 /**
- * Setting this bit starts the TX baseband filter tuner calibration. The bit self-clears when the calibration completes.
+ * Setting this bit starts the TX baseband filter tuner calibration. The bit self-clears when the calibration completes.
  *  Tx Bbf Tuner Cal Start
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxBbfTunerCalStart_Set(void *const device,
@@ -11254,7 +11254,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxBbfTunerCalStart_Set(void *const de
 }
 
 /**
- * Setting this bit starts the TX baseband filter tuner calibration. The bit self-clears when the calibration completes.
+ * Setting this bit starts the TX baseband filter tuner calibration. The bit self-clears when the calibration completes.
  *  Tx Bbf Tuner Cal Start
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxBbfTunerCalStart_Get(void *const device,
@@ -14063,7 +14063,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayCorrDac_Get(void *const devi
 }
 
 /**
- * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx Lo Delay Corr Dac
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDac_Set(void *const device,
@@ -14081,7 +14081,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDac_Set(void *const 
 }
 
 /**
- * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx Lo Delay Corr Dac
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDac_Get(void *const device,
@@ -14103,7 +14103,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDac_Get(void *const 
 }
 
 /**
- * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx Lo Delay Corr Dac
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDacB_Set(void *const device,
@@ -14121,7 +14121,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDacB_Set(void *const
 }
 
 /**
- * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx Lo Delay Corr Dac
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDacB_Get(void *const device,
@@ -14143,7 +14143,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayFineCorrDacB_Get(void *const
 }
 
 /**
- * Toggling this bit latches the Tx LO delay correction DAC word.
+ * Toggling this bit latches the Tx LO delay correction DAC word.
  *  Tx Lo  Delay Latch En
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayLatchEn_Set(void *const device,
@@ -14158,7 +14158,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayLatchEn_Set(void *const devi
 }
 
 /**
- * Toggling this bit latches the Tx LO delay correction DAC word.
+ * Toggling this bit latches the Tx LO delay correction DAC word.
  *  Tx Lo  Delay Latch En
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxLoDelayLatchEn_Get(void *const device,
@@ -16047,7 +16047,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxTxlolActuatorScalerUpdate_Get(void 
 }
 
 /**
- * Reserved for future use.
+ * Reserved for future use.
  *  Txqec Control
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxTxqecControl_Set(void *const device,
@@ -16071,7 +16071,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxTxqecControl_Set(void *const device
 }
 
 /**
- * Reserved for future use.
+ * Reserved for future use.
  *  Txqec Control
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxTxqecControl_Get(void *const device,
@@ -17541,7 +17541,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxTxqecWdata_Get(void *const device,
 }
 
 /**
- * Setting this bit performs a register write of data in txqec_iaddr to the address selected in txqec_wdata.
+ * Setting this bit performs a register write of data in txqec_iaddr to the address selected in txqec_wdata.
  *  Txqec Write
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxTxqecWrite_Set(void *const device,
@@ -17556,7 +17556,7 @@ static inline int32_t adrv9001_NvsRegmapTx_TxTxqecWrite_Set(void *const device,
 }
 
 /**
- * Setting this bit performs a register write of data in txqec_iaddr to the address selected in txqec_wdata.
+ * Setting this bit performs a register write of data in txqec_iaddr to the address selected in txqec_wdata.
  *  Txqec Write
  */
 static inline int32_t adrv9001_NvsRegmapTx_TxTxqecWrite_Get(void *const device,

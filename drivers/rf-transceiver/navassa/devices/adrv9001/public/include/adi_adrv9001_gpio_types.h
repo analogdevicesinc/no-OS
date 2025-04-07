@@ -14,7 +14,7 @@
 #ifndef _ADI_ADRV9001_GPIO_TYPES_H_
 #define _ADI_ADRV9001_GPIO_TYPES_H_
 
-#include "adi_adrv9001_user.h"
+#include <adi_adrv9001_user.h>
 #include "adi_adrv9001_types.h"
 
 /**
@@ -202,8 +202,10 @@ typedef enum adi_adrv9001_GpioSignal
     ADI_ADRV9001_GPIO_SIGNAL_FH_HOP2_NCO_ASYNC_CHANGE,      /*!< Asynchronously change NCO for Hop2 */
     ADI_ADRV9001_GPIO_SIGNAL_RX1_INTERFACEGAIN_SEED_SAVE = 52,   /*!< Seed (rising edge) or save (falling edge) the RX1 InterfaceGain */
     ADI_ADRV9001_GPIO_SIGNAL_RX2_INTERFACEGAIN_SEED_SAVE = 53,   /*!< Seed (rising edge) or save (falling edge) the RX2 InterfaceGain  */
+	ADI_ADRV9001_GPIO_SIGNAL_RX1_AGC_FREEZE = 54,                /*!< Asynchronous update Rx1 AGC freeze  */
+	ADI_ADRV9001_GPIO_SIGNAL_RX2_AGC_FREEZE = 55,                /*!< Asynchronous update Rx2 AGC freeze  */
 	
-    ADI_ADRV9001_GPIO_NUM_SIGNALS = 54,                     /*!< Total Number of signals from BBIC*/
+    ADI_ADRV9001_GPIO_NUM_SIGNALS = 56,                     /*!< Total Number of signals from BBIC*/
 } adi_adrv9001_GpioSignal_e;
 
 /**

@@ -31,6 +31,12 @@ extern "C" {
 #define ADI_ERROR_MSG_MAX_LEN 314
 
 /**
+ * \brief API (un)lock function pointers
+*/
+typedef int (*api_lock)(void*device);
+typedef int (*api_unlock)(void*device);
+
+/**
 *  \brief ADI common error structure
 */
 typedef struct adi_common_ErrStruct
@@ -46,6 +52,11 @@ typedef struct adi_common_ErrStruct
     int32_t lastAction;        /*!< Previous action detected */
     int32_t newAction;         /*!< Current action detected */
     uint8_t logEnable;         /*!< Log errors enable flag */
+#ifdef API_MUTEX
+    api_lock lock;             /* HW semaphore lock */
+	api_unlock unlock;		   /* HW semaphore unlock */
+	int locked;		           /* HW semaphore lock status */
+#endif /* API_MUTEX */
 } adi_common_ErrStruct_t;
 
 /**

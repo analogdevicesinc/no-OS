@@ -9240,12 +9240,12 @@ static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx1InSel_Get(void *const dev
 }
 
 /**
- * (B0 New) The LUT read interval.
- * 0: Read LUT every DP_CLK cycle
- * 1: Read LUT every 2 DP_CLK cycles
- * 3: Read LUT every 4 DP_CLK cycles
- * 7: Read LUT every 8 DP_CLK cycles
- * 15: Read LUT every 16 DP_CLK cycles
+ * (B0 New) The LUT read interval.
+ * 0: Read LUT every DP_CLK cycle
+ * 1: Read LUT every 2 DP_CLK cycles
+ * 3: Read LUT every 4 DP_CLK cycles
+ * 7: Read LUT every 8 DP_CLK cycles
+ * 15: Read LUT every 16 DP_CLK cycles
  * Others are not supported
  */
 static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx1Interval_Set(void *const device,
@@ -9259,12 +9259,12 @@ static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx1Interval_Set(void *const 
 }
 
 /**
- * (B0 New) The LUT read interval.
- * 0: Read LUT every DP_CLK cycle
- * 1: Read LUT every 2 DP_CLK cycles
- * 3: Read LUT every 4 DP_CLK cycles
- * 7: Read LUT every 8 DP_CLK cycles
- * 15: Read LUT every 16 DP_CLK cycles
+ * (B0 New) The LUT read interval.
+ * 0: Read LUT every DP_CLK cycle
+ * 1: Read LUT every 2 DP_CLK cycles
+ * 3: Read LUT every 4 DP_CLK cycles
+ * 7: Read LUT every 8 DP_CLK cycles
+ * 15: Read LUT every 16 DP_CLK cycles
  * Others are not supported
  */
 static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx1Interval_Get(void *const device,
@@ -10118,12 +10118,12 @@ static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx2InSel_Get(void *const dev
 }
 
 /**
- * (B0 New) The LUT read interval.
- * 0: Read LUT every DP_CLK cycle
- * 1: Read LUT every 2 DP_CLK cycles
- * 3: Read LUT every 4 DP_CLK cycles
- * 7: Read LUT every 8 DP_CLK cycles
- * 15: Read LUT every 16 DP_CLK cycles
+ * (B0 New) The LUT read interval.
+ * 0: Read LUT every DP_CLK cycle
+ * 1: Read LUT every 2 DP_CLK cycles
+ * 3: Read LUT every 4 DP_CLK cycles
+ * 7: Read LUT every 8 DP_CLK cycles
+ * 15: Read LUT every 16 DP_CLK cycles
  * Others are not supported
  */
 static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx2Interval_Set(void *const device,
@@ -10137,12 +10137,12 @@ static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx2Interval_Set(void *const 
 }
 
 /**
- * (B0 New) The LUT read interval.
- * 0: Read LUT every DP_CLK cycle
- * 1: Read LUT every 2 DP_CLK cycles
- * 3: Read LUT every 4 DP_CLK cycles
- * 7: Read LUT every 8 DP_CLK cycles
- * 15: Read LUT every 16 DP_CLK cycles
+ * (B0 New) The LUT read interval.
+ * 0: Read LUT every DP_CLK cycle
+ * 1: Read LUT every 2 DP_CLK cycles
+ * 3: Read LUT every 4 DP_CLK cycles
+ * 7: Read LUT every 8 DP_CLK cycles
+ * 15: Read LUT every 16 DP_CLK cycles
  * Others are not supported
  */
 static inline int32_t adrv9001_NvsRegmapCore3_PaRampTx2Interval_Get(void *const device,
@@ -11503,8 +11503,8 @@ static inline int32_t adrv9001_NvsRegmapCore3_RefTimerEventMaskIT_Get(void *cons
 
 
 /**
- * (C0 New) This register captures the events that happen since the last clear.
- * Only unmasked events are captured in this status register.
+ * (C0 New) This register captures the events that happen since the last clear.
+ * Only unmasked events are captured in this status register.
  * A READ to this register clears it
  */
 static inline int32_t adrv9001_NvsRegmapCore3_RefTimerEventStatus_Get(void *const device,
@@ -11637,8 +11637,8 @@ static inline int32_t adrv9001_NvsRegmapCore3_RefTimerMonEnableStopEdgeDetectPol
 }
 
 /**
- * (C0 New) Selects the Monitor stop event from a pin (1) or from the counter event (0).
- * 0: Monitor Stop Event from Timer value comparison with STOP time value.
+ * (C0 New) Selects the Monitor stop event from a pin (1) or from the counter event (0).
+ * 0: Monitor Stop Event from Timer value comparison with STOP time value.
  * 1: Monitor Stop Event from GPIO pin (Monitor Enable) or a SPI register bit.
  */
 static inline int32_t adrv9001_NvsRegmapCore3_RefTimerMonEnableStopUsePin_Set(void *const device,
@@ -11652,8 +11652,8 @@ static inline int32_t adrv9001_NvsRegmapCore3_RefTimerMonEnableStopUsePin_Set(vo
 }
 
 /**
- * (C0 New) Selects the Monitor stop event from a pin (1) or from the counter event (0).
- * 0: Monitor Stop Event from Timer value comparison with STOP time value.
+ * (C0 New) Selects the Monitor stop event from a pin (1) or from the counter event (0).
+ * 0: Monitor Stop Event from Timer value comparison with STOP time value.
  * 1: Monitor Stop Event from GPIO pin (Monitor Enable) or a SPI register bit.
  */
 static inline int32_t adrv9001_NvsRegmapCore3_RefTimerMonEnableStopUsePin_Get(void *const device,

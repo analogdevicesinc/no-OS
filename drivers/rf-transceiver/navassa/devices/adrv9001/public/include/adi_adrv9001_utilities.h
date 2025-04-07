@@ -127,10 +127,11 @@ int32_t adi_adrv9001_Utilities_WaitMs(adi_adrv9001_Device_t *adrv9001, uint32_t 
  * \param[in] init              Pointer to the ADRV9001 initialization settings data structure
  * \param[in] armImagePath      Absolute path of the ARM image to be programmed
  * \param[in] streamImagePath   Absolute path of the stream image to be programmed
+ * \param[in] armImageVer       ARM image version (from SDK : packages.adrv9001.config file)
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Utilities_SystemDebugPreCalibrate(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Init_t *init, const char *armImagePath, const char *streamImagePath);
+int32_t adi_adrv9001_Utilities_SystemDebugPreCalibrate(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Init_t *init, const char *armImagePath, const char *streamImagePath, const char *armImageVer);
 
 /**
  * \brief Function for In-System Debugging
@@ -142,6 +143,78 @@ int32_t adi_adrv9001_Utilities_SystemDebugPreCalibrate(adi_adrv9001_Device_t *ad
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_Utilities_SystemDebugPostCalibrate(adi_adrv9001_Device_t *adrv9001);
+
+/**
+ * \brief Read the InitCal cal coefficient table
+ *
+ * \pre Channel state is CALIBRATED
+ *
+ * \param[in] adrv9001         Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] calNo            InitCal number 
+ * \param[in] maskChannel1     Calibration bit mask for channel 1
+ * \param[in] maskChannel2     Calibration bit mask for channel 2
+ * \param[out] addr            Address of InitCal
+ * \param[out] size            Size of InitCal cal coefficients
+ * \param[out] initMask        InitCal bit mask for channels
+ * \param[out] profMask        InitCal profile mask for channels
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Utilities_InitCals_WarmBoot_Coefficients_VectTblChunkRead(adi_adrv9001_Device_t *adrv9001,
+																		       uint16_t calNo,
+																			   uint32_t maskChannel1,
+																			   uint32_t maskChannel2,
+																			   uint32_t *addr,
+																			   uint32_t *size,
+																			   uint32_t *initMask,
+																			   uint32_t *profMask);
+
+/**
+ * \brief Read the InitCal coefficients needed for Warmboot in chunks
+ *
+ * \pre Channel state is CALIBRATED
+ *
+ * \param[in] adrv9001        Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] maskChannel1    Calibration bit mask for channel 1
+ * \param[in] maskChannel2    Calibration bit mask for channel 2
+ * \param[in] addr            Address of InitCal
+ * \param[in] initMask        InitCal bit mask for channels
+ * \param[in] profMask        InitCal profile mask for channels
+ * \param[out] calVecTblData  Array of InitCal coefficients read
+ * \param[in] size            Size of InitCal coefficient table
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Utilities_InitCals_WarmBoot_Coefficients_MaxArrayChunk_Get(adi_adrv9001_Device_t *adrv9001,
+																				uint32_t maskChannel1,
+																				uint32_t maskChannel2,
+																				uint32_t addr,
+																				uint32_t initMask,
+																				uint32_t profMask,
+																				uint8_t calVecTblData[],
+																				uint32_t size);
+
+/**
+ * \brief Write the InitCal coefficients needed for Warmboot in chunks
+ *
+ * \pre Channel state is STANDBY
+ *
+ * \param[in] adrv9001        Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] maskChannel1    Calibration bit mask for channel 1
+ * \param[in] maskChannel2    Calibration bit mask for channel 2
+ * \param[in] addr            Address of InitCal
+ * \param[in] initMask        InitCal bit mask for channels
+ * \param[in] profMask        InitCal profile mask for channels
+ * \param[in] calVecTblData   Array of InitCal coefficients to write
+ * \param[in] size            Size of Init cal vector table entry data
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Utilities_InitCals_WarmBoot_Coefficients_MaxArrayChunk_Set(adi_adrv9001_Device_t *adrv9001,
+																				 uint32_t maskChannel1,
+																				 uint32_t maskChannel2,
+																				 uint32_t addr,
+																				 uint32_t initMask,
+																				 uint32_t profMask,
+																				 uint8_t calVecTblData[],
+																				 uint32_t size);
 
 #ifdef __cplusplus
 }

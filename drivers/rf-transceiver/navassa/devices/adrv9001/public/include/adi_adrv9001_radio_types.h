@@ -144,4 +144,48 @@ typedef struct adi_adrv9001_ChannelEnablementDelays
     uint32_t holdDelay;             /*!< Delay from falling edge until the Tx/Rx interface is disabled */
 } adi_adrv9001_ChannelEnablementDelays_t;
 
+/**
+ *  \brief Enumerations to determine PFIR type
+ */
+typedef enum adi_adrv9001_PfirTypeId
+{
+	ADI_ADRV9001_PFIR_TYPE_RX_WB_NB_COMP = 0u, /*!< RX WB/NB compensation PFIR */
+	ADI_ADRV9001_PFIR_TYPE_RX_NB_PULSE = 1u,   /*!< RX NB pulse shaping PFIR */
+	ADI_ADRV9001_PFIR_TYPE_TX_WB_NB_COMP = 2u, /*!< TX WB/NB compensation PFIR */
+	ADI_ADRV9001_PFIR_TYPE_MAG_COMP = 3u,      /*!< TX/RX magnitude compensation PFIR */
+} adi_adrv9001_PfirTypeId_e;
+
+/**
+ * \brief Data structure to hold DC Offsets for txlol datapath filter
+ */
+typedef struct adi_adrv9001_TxlolActuatorFilterDcOffsetStatus
+{
+	uint16_t TxlolActuatorFilterDcOffsetI; /* DC offset to I data for txlol datapath filter */
+	uint16_t TxlolActuatorFilterDcOffsetQ; /* DC offset to Q data for txlol datapath filter */
+} adi_adrv9001_TxlolActuatorFilterDcOffsetStatus_t;
+
+/**
+ *  \brief Enumerations to select RSSI read mode
+ */
+typedef enum adi_adrv9001_ManualRssiReadMode
+{
+    ADI_ADRV9001_RSSI_READ_HIGH_SPEED_MODE = 0u, /*!< Read only the exponent register */
+    ADI_ADRV9001_RSSI_READ_HIGH_PRECISION_MODE = 1u,   /*!< Reads all exponent, mantissa and slicer registers */
+} adi_adrv9001_ManualRssiReadMode_e;
+
+/**
+ * \brief Data structure to hold parameters for RSSI calculation
+ */
+typedef struct adi_adrv9001_ManualRssiReadStatus
+{
+    /* Formula for high speed mode RSSI calculation in dBFS : 3 * (-(exponent) + slicerIn * (18 - 2 * (3 - slicerOffset))) */
+
+	/* Formula for high precision mode RSSI calculation in dBFS : 10*log10(Linear_power) */
+	/* Formula for Linear_power calculation : mantissa * (2 ^ -15) * (2 ^ (-exponent + slicerIn*(18 - 2 * (3 - slicer_offset)))) */
+	uint8_t linearPowerExponent; /* exponent of linear power */
+	uint16_t linearPowerMantissa; /* mantissa of linear power */
+	uint8_t slicerIn;
+	uint8_t slicerOffset;
+} adi_adrv9001_ManualRssiReadStatus_t;
+
 #endif /* _ADI_ADRV9001_RADIO_TYPES_H_ */

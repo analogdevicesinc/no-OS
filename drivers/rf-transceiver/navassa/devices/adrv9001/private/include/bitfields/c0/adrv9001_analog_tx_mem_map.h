@@ -920,7 +920,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmCorrPdOverrideSelect_Get(void 
 }
 
 /**
- * These bits set the value of Tx1 LO select when in SPI Direct mode.
+ * These bits set the value of Tx1 LO select when in SPI Direct mode.
  *  tx1 cmlo bias
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxCmloBias_Set(void *const device,
@@ -935,7 +935,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmloBias_Set(void *const device,
 }
 
 /**
- * These bits set the value of Tx1 LO select when in SPI Direct mode.
+ * These bits set the value of Tx1 LO select when in SPI Direct mode.
  *  tx1 cmlo bias
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxCmloBias_Get(void *const device,
@@ -953,7 +953,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmloBias_Get(void *const device,
 }
 
 /**
- * These bits set the value of Tx1 LO select when in SPI Direct mode.
+ * These bits set the value of Tx1 LO select when in SPI Direct mode.
  *  tx1 cmlo correction dac i
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacI_Set(void *const device,
@@ -971,7 +971,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacI_Set(void *const device,
 }
 
 /**
- * These bits set the value of Tx1 LO select when in SPI Direct mode.
+ * These bits set the value of Tx1 LO select when in SPI Direct mode.
  *  tx1 cmlo correction dac i
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacI_Get(void *const device,
@@ -1018,7 +1018,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacLatchb_Get(void *const de
 }
 
 /**
- * These bits set the value of Tx1 LO select when in SPI Direct mode.
+ * These bits set the value of Tx1 LO select when in SPI Direct mode.
  *  tx1 cmlo correction dac q
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacQ_Set(void *const device,
@@ -1036,7 +1036,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacQ_Set(void *const device,
 }
 
 /**
- * These bits set the value of Tx1 LO select when in SPI Direct mode.
+ * These bits set the value of Tx1 LO select when in SPI Direct mode.
  *  tx1 cmlo correction dac q
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxCmloDacQ_Get(void *const device,
@@ -1108,7 +1108,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxCmloSel2xMixer_Get(void *const d
 }
 
 /**
- * These bits set the Tx LO common mode voltage according to the following settings: 000 --  Vdd18 '- 0.25V 001 --  Vdd18 '- 0.25V 010 --  Vdd18 '- 0.45V 011 --  Vdd18 '- 0.55V
+ * These bits set the Tx LO common mode voltage according to the following settings: 000 --  Vdd18 '- 0.25V 001 --  Vdd18 '- 0.25V 010 --  Vdd18 '- 0.45V 011 --  Vdd18 '- 0.55V
  *  Tx Lo Cm
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoCm_Set(void *const device,
@@ -1123,7 +1123,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoCm_Set(void *const device,
 }
 
 /**
- * These bits set the Tx LO common mode voltage according to the following settings: 000 --  Vdd18 '- 0.25V 001 --  Vdd18 '- 0.25V 010 --  Vdd18 '- 0.45V 011 --  Vdd18 '- 0.55V
+ * These bits set the Tx LO common mode voltage according to the following settings: 000 --  Vdd18 '- 0.25V 001 --  Vdd18 '- 0.25V 010 --  Vdd18 '- 0.45V 011 --  Vdd18 '- 0.55V
  *  Tx Lo Cm
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoCm_Get(void *const device,
@@ -1141,7 +1141,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoCm_Get(void *const device,
 }
 
 /**
- * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx1 Lo Delay Corr Pd
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPd_Set(void *const device,
@@ -1156,7 +1156,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPd_Set(void *const de
 }
 
 /**
- * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx1 Lo Delay Corr Pd
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPd_Get(void *const device,
@@ -1174,7 +1174,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPd_Get(void *const de
 }
 
 /**
- * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx1 Lo Delay Corr Pd
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverride_Set(void *const device,
@@ -1189,7 +1189,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverride_Set(void *
 }
 
 /**
- * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx1 Lo Delay Corr Pd
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverride_Get(void *const device,
@@ -1207,7 +1207,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverride_Get(void *
 }
 
 /**
- * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx1 Lo Delay Corr Pd
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverrideSelect_Set(void *const device,
@@ -1222,7 +1222,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverrideSelect_Set(
 }
 
 /**
- * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
+ * Setting this bit powers down the Tx1 LO delay correction DAC. Note that this does not disable the LO path, it only disables the I/Q LO delay tuning.
  *  Tx1 Lo Delay Corr Pd
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxLoDelayCorrPdOverrideSelect_Get(void *const device,
@@ -1655,7 +1655,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPdRinBoost_Get(void *const devic
 }
 
 /**
- * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
+ * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
  *  Tx Pdbias
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPdbias_Set(void *const device,
@@ -1670,7 +1670,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPdbias_Set(void *const device,
 }
 
 /**
- * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
+ * These bits set how many data lanes are enabled for the transmit path according to the following settings: 00 --  1 data lane from transceiver to BBP in CMOS mode, invalid in LVDS mode 01 --  2 data lanes from transceiver to BBP 10 --  4 data lanes from transceiver to BBP 11 --  Invalid configuration in both CMOS and LVDS modes
  *  Tx Pdbias
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPdbias_Get(void *const device,
@@ -1688,7 +1688,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPdbias_Get(void *const device,
 }
 
 /**
- * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
+ * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
  *  Tx Predist Amp Bias
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpBias_Set(void *const device,
@@ -1703,7 +1703,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpBias_Set(void *const d
 }
 
 /**
- * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
+ * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
  *  Tx Predist Amp Bias
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpBias_Get(void *const device,
@@ -1771,7 +1771,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpBiasPtatStart_Get(void
 }
 
 /**
- * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
+ * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
  *  Tx Predist Amp Cc
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpCc_Set(void *const device,
@@ -1786,7 +1786,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpCc_Set(void *const dev
 }
 
 /**
- * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
+ * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
  *  Tx Predist Amp Cc
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpCc_Get(void *const device,
@@ -1804,7 +1804,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpCc_Get(void *const dev
 }
 
 /**
- * Setting these bits bypasses two huge filtering resistors in the bias circuits of the Tx pre-distortion amplifier. The bits are for internal test only.
+ * Setting these bits bypasses two huge filtering resistors in the bias circuits of the Tx pre-distortion amplifier. The bits are for internal test only.
  *  Tx Predist Amp Filter Bypass
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpFilterBypass_Set(void *const device,
@@ -1819,7 +1819,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpFilterBypass_Set(void 
 }
 
 /**
- * Setting these bits bypasses two huge filtering resistors in the bias circuits of the Tx pre-distortion amplifier. The bits are for internal test only.
+ * Setting these bits bypasses two huge filtering resistors in the bias circuits of the Tx pre-distortion amplifier. The bits are for internal test only.
  *  Tx Predist Amp Filter Bypass
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpFilterBypass_Get(void *const device,
@@ -1837,7 +1837,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpFilterBypass_Get(void 
 }
 
 /**
- * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
+ * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
  *  Tx Predist Amp Rz
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpRz_Set(void *const device,
@@ -1852,7 +1852,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpRz_Set(void *const dev
 }
 
 /**
- * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
+ * This bit selects different bias sources for Tx pre-distortion amplifier. 0 selects a local PTAT source which gives a bias current proportional to absolute temperature and is roughly 80A at room temperature. The current also varies with poly resistance. 1 selects external resistor bias which is 100A constant across temperature. This bit is for internal test only.
  *  Tx Predist Amp Rz
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxPredistAmpRz_Get(void *const device,
@@ -2230,7 +2230,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxbbfPdoverrideSelect_Get(void *co
 }
 
 /**
- * This bit sets the Tx output supply voltage being used. Clear this bit for 1.8V, set it for 1.3V
+ * This bit sets the Tx output supply voltage being used. Clear this bit for 1.8V, set it for 1.3V
  *  Txuc Lv
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxucLv_Set(void *const device,
@@ -2245,7 +2245,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxucLv_Set(void *const device,
 }
 
 /**
- * This bit sets the Tx output supply voltage being used. Clear this bit for 1.8V, set it for 1.3V
+ * This bit sets the Tx output supply voltage being used. Clear this bit for 1.8V, set it for 1.3V
  *  Txuc Lv
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxucLv_Get(void *const device,
@@ -2288,7 +2288,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxucRfcascLvl_Get(void *const devi
 }
 
 /**
- * These bits set the cascode off voltage according to the following equation:
+ * These bits set the cascode off voltage according to the following equation:
  *  Txuc Vcascctrl
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascctrl_Set(void *const device,
@@ -2303,7 +2303,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascctrl_Set(void *const devi
 }
 
 /**
- * These bits set the cascode off voltage according to the following equation:
+ * These bits set the cascode off voltage according to the following equation:
  *  Txuc Vcascctrl
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascctrl_Get(void *const device,
@@ -2321,7 +2321,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascctrl_Get(void *const devi
 }
 
 /**
- * These bits set the cascode off voltage according to the following equation:
+ * These bits set the cascode off voltage according to the following equation:
  *  Txuc Vcascoff
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascoff_Set(void *const device,
@@ -2336,7 +2336,7 @@ static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascoff_Set(void *const devic
 }
 
 /**
- * These bits set the cascode off voltage according to the following equation:
+ * These bits set the cascode off voltage according to the following equation:
  *  Txuc Vcascoff
  */
 static inline int32_t adrv9001_AnalogTxMemMap_TxucVcascoff_Get(void *const device,

@@ -860,7 +860,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_AuxAdc0ClockEnable_Get(void *const
 }
 
 /**
- * This bit must be cleared before changing the AuxADC clock divider. Setting this bit after changing the divider word enables the AuxADC clock.
+ * This bit must be cleared before changing the AuxADC clock divider. Setting this bit after changing the divider word enables the AuxADC clock.
  *  Aux Adc Clock Enable
  */
 static inline int32_t adrv9001_NvsRegmapCore1_AuxAdc1ClockEnable_Set(void *const device,
@@ -874,7 +874,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_AuxAdc1ClockEnable_Set(void *const
 }
 
 /**
- * This bit must be cleared before changing the AuxADC clock divider. Setting this bit after changing the divider word enables the AuxADC clock.
+ * This bit must be cleared before changing the AuxADC clock divider. Setting this bit after changing the divider word enables the AuxADC clock.
  *  Aux Adc Clock Enable
  */
 static inline int32_t adrv9001_NvsRegmapCore1_AuxAdc1ClockEnable_Get(void *const device,
@@ -960,7 +960,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_AuxAdcClkArmSel_Get(void *const de
 }
 
 /**
- * The AuxADC clock results from dividing down HSDIGCLK/2 (800MHz max) as described in the following equation:
+ * The AuxADC clock results from dividing down HSDIGCLK/2 (800MHz max) as described in the following equation:
  *  Aux Adc Clk Div
  */
 static inline int32_t adrv9001_NvsRegmapCore1_AuxAdcClkDiv_Set(void *const device,
@@ -974,7 +974,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_AuxAdcClkDiv_Set(void *const devic
 }
 
 /**
- * The AuxADC clock results from dividing down HSDIGCLK/2 (800MHz max) as described in the following equation:
+ * The AuxADC clock results from dividing down HSDIGCLK/2 (800MHz max) as described in the following equation:
  *  Aux Adc Clk Div
  */
 static inline int32_t adrv9001_NvsRegmapCore1_AuxAdcClkDiv_Get(void *const device,
@@ -1761,12 +1761,12 @@ static inline int32_t adrv9001_NvsRegmapCore1_DigDevClkDivSourceSelFromSpi_Get(v
 }
 
 /**
- * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential receiver mode.  The default is div 16 such that if the input differential clock is the maximum allowed of 1000 MHz, the REF_CLK beig sent to the digital is no greater than 80 MHz (the maximum allowed for the REF_CLK to the digital).   0 => bypass
- * 1 => div 2
- * 2 => div 4
- * 3 => div 8
- * 4 => div 16
- * 5 => div 32
+ * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential receiver mode.  The default is div 16 such that if the input differential clock is the maximum allowed of 1000 MHz, the REF_CLK beig sent to the digital is no greater than 80 MHz (the maximum allowed for the REF_CLK to the digital).   0 => bypass
+ * 1 => div 2
+ * 2 => div 4
+ * 3 => div 8
+ * 4 => div 16
+ * 5 => div 32
  * 6 => div 64
  */
 static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioDiffRcv_Set(void *const device,
@@ -1780,12 +1780,12 @@ static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioDiffRcv_Set(vo
 }
 
 /**
- * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential receiver mode.  The default is div 16 such that if the input differential clock is the maximum allowed of 1000 MHz, the REF_CLK beig sent to the digital is no greater than 80 MHz (the maximum allowed for the REF_CLK to the digital).   0 => bypass
- * 1 => div 2
- * 2 => div 4
- * 3 => div 8
- * 4 => div 16
- * 5 => div 32
+ * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential receiver mode.  The default is div 16 such that if the input differential clock is the maximum allowed of 1000 MHz, the REF_CLK beig sent to the digital is no greater than 80 MHz (the maximum allowed for the REF_CLK to the digital).   0 => bypass
+ * 1 => div 2
+ * 2 => div 4
+ * 3 => div 8
+ * 4 => div 16
+ * 5 => div 32
  * 6 => div 64
  */
 static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioDiffRcv_Get(void *const device,
@@ -1802,12 +1802,12 @@ static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioDiffRcv_Get(vo
 }
 
 /**
- * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential CMOS single-ended or oscillator mode. 0 => bypass
- * 1 => div 2
- * 2 => div 4
- * 3 => div 8
- * 4 => div 16
- * 5 => div 32
+ * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential CMOS single-ended or oscillator mode. 0 => bypass
+ * 1 => div 2
+ * 2 => div 4
+ * 3 => div 8
+ * 4 => div 16
+ * 5 => div 32
  * 6 => div 64
  */
 static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioOscRcv_Set(void *const device,
@@ -1821,12 +1821,12 @@ static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioOscRcv_Set(voi
 }
 
 /**
- * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential CMOS single-ended or oscillator mode. 0 => bypass
- * 1 => div 2
- * 2 => div 4
- * 3 => div 8
- * 4 => div 16
- * 5 => div 32
+ * The divide ratio in the analog for the REF_CLK being sent to the main digital when the REF_CLK block is in differential CMOS single-ended or oscillator mode. 0 => bypass
+ * 1 => div 2
+ * 2 => div 4
+ * 3 => div 8
+ * 4 => div 16
+ * 5 => div 32
  * 6 => div 64
  */
 static inline int32_t adrv9001_NvsRegmapCore1_DigDevclkDivideRatioOscRcv_Get(void *const device,
@@ -1990,7 +1990,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_EfuseForceRead_Get(void *const dev
 }
 
 /**
- * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
+ * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
  *  Efuse Over Ride Enable
  */
 static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrideEnable_Set(void *const device,
@@ -2004,7 +2004,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrideEnable_Set(void *cons
 }
 
 /**
- * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
+ * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
  *  Efuse Over Ride Enable
  */
 static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrideEnable_Get(void *const device,
@@ -2021,7 +2021,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrideEnable_Get(void *cons
 }
 
 /**
- * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
+ * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
  *  eFuse override bits.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrides_Set(void *const device,
@@ -2068,7 +2068,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrides_Set(void *const dev
 }
 
 /**
- * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
+ * When set, this bit allows the SPI bits in 0xC20 '- 0xC22 to affect the chip configuration. When clear, the contents 0f 0xC20 '- 0xC22 are not used.
  *  eFuse override bits.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_EfuseOverrides_Get(void *const device,
@@ -2516,7 +2516,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_ForceArmClk_Get(void *const device
 }
 
 /**
- * Forces the division word selection for the REF_CLK being sent to the digital to be determined by the SPI as opposed to the mode pin.  See the description for the "dig_dev_clk_div_source_sel_from_spi" bit. "0" => Use division word selection determined by MODE pin ADC.
+ * Forces the division word selection for the REF_CLK being sent to the digital to be determined by the SPI as opposed to the mode pin.  See the description for the "dig_dev_clk_div_source_sel_from_spi" bit. "0" => Use division word selection determined by MODE pin ADC.
  * "1" => Force division word selection to be controlled by SPI.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_ForceDigDevClkDivSourceSelFromSpi_Set(void *const device,
@@ -2530,7 +2530,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_ForceDigDevClkDivSourceSelFromSpi_
 }
 
 /**
- * Forces the division word selection for the REF_CLK being sent to the digital to be determined by the SPI as opposed to the mode pin.  See the description for the "dig_dev_clk_div_source_sel_from_spi" bit. "0" => Use division word selection determined by MODE pin ADC.
+ * Forces the division word selection for the REF_CLK being sent to the digital to be determined by the SPI as opposed to the mode pin.  See the description for the "dig_dev_clk_div_source_sel_from_spi" bit. "0" => Use division word selection determined by MODE pin ADC.
  * "1" => Force division word selection to be controlled by SPI.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_ForceDigDevClkDivSourceSelFromSpi_Get(void *const device,
@@ -6517,7 +6517,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpLdoThermalShutdown0c2_Get(void *
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmCalibrationError_Set(void *const device,
@@ -6531,7 +6531,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmCalibrationError_Set(void
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmCalibrationError_Get(void *const device,
@@ -6594,7 +6594,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmMonitorInterrupt_Get(void
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmSystemError_Set(void *const device,
@@ -6608,7 +6608,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmSystemError_Set(void *con
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmSystemError_Get(void *const device,
@@ -6625,7 +6625,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskArmSystemError_Get(void *con
 }
 
 /**
- * When this bit is set, it will prevent the AUX synthesizer lock
+ * When this bit is set, it will prevent the AUX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskAuxSynthLock_Set(void *const device,
@@ -6639,7 +6639,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskAuxSynthLock_Set(void *const
 }
 
 /**
- * When this bit is set, it will prevent the AUX synthesizer lock
+ * When this bit is set, it will prevent the AUX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskAuxSynthLock_Get(void *const device,
@@ -6656,7 +6656,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskAuxSynthLock_Get(void *const
 }
 
 /**
- * When this bit is set, it will prevent the CLK synthesizer lock
+ * When this bit is set, it will prevent the CLK synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLock_Set(void *const device,
@@ -6670,7 +6670,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLock_Set(void *const
 }
 
 /**
- * When this bit is set, it will prevent the CLK synthesizer lock
+ * When this bit is set, it will prevent the CLK synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLock_Get(void *const device,
@@ -6687,7 +6687,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLock_Get(void *const
 }
 
 /**
- * When this bit is set, it will prevent the CLK synthesizer lock
+ * When this bit is set, it will prevent the CLK synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLpLock_Set(void *const device,
@@ -6701,7 +6701,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLpLock_Set(void *con
 }
 
 /**
- * When this bit is set, it will prevent the CLK synthesizer lock
+ * When this bit is set, it will prevent the CLK synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskClkSynthLpLock_Get(void *const device,
@@ -6960,7 +6960,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskPaProtectionCh2Error_Get(voi
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRf2SynthLock_Set(void *const device,
@@ -6974,7 +6974,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRf2SynthLock_Set(void *const
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRf2SynthLock_Get(void *const device,
@@ -6991,7 +6991,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRf2SynthLock_Get(void *const
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRfSynthLock_Set(void *const device,
@@ -7005,7 +7005,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRfSynthLock_Set(void *const 
 }
 
 /**
- * When this bit is set, it will prevent the RX synthesizer lock
+ * When this bit is set, it will prevent the RX synthesizer lock
  * signal from asserting the GP interrupt
  */
 static inline int32_t adrv9001_NvsRegmapCore1_GpMaskRfSynthLock_Get(void *const device,
@@ -7611,8 +7611,8 @@ static inline int32_t adrv9001_NvsRegmapCore1_PdConverterLdo_Get(void *const dev
 }
 
 /**
- * Disables active shield for REF_CLK going to main digital from REF_CLK receivers. 
- * "0" = > Enable active shield
+ * Disables active shield for REF_CLK going to main digital from REF_CLK receivers. 
+ * "0" = > Enable active shield
  * "1" => Disable active shield
  */
 static inline int32_t adrv9001_NvsRegmapCore1_PdDigRefclkActiveShield_Set(void *const device,
@@ -7626,8 +7626,8 @@ static inline int32_t adrv9001_NvsRegmapCore1_PdDigRefclkActiveShield_Set(void *
 }
 
 /**
- * Disables active shield for REF_CLK going to main digital from REF_CLK receivers. 
- * "0" = > Enable active shield
+ * Disables active shield for REF_CLK going to main digital from REF_CLK receivers. 
+ * "0" = > Enable active shield
  * "1" => Disable active shield
  */
 static inline int32_t adrv9001_NvsRegmapCore1_PdDigRefclkActiveShield_Get(void *const device,
@@ -7644,7 +7644,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_PdDigRefclkActiveShield_Get(void *
 }
 
 /**
- * Powers down last REF_CLK driver going from the analog to the digital.  Will also power down the MCS associated with the digital REF_CLK. "0" => Enable REF_CLK to digital and associated MCS pulse.
+ * Powers down last REF_CLK driver going from the analog to the digital.  Will also power down the MCS associated with the digital REF_CLK. "0" => Enable REF_CLK to digital and associated MCS pulse.
  * "1" => Disable REF_CLK to digital and assocaited MCS pulse.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_PdDigclk_Set(void *const device,
@@ -7658,7 +7658,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_PdDigclk_Set(void *const device,
 }
 
 /**
- * Powers down last REF_CLK driver going from the analog to the digital.  Will also power down the MCS associated with the digital REF_CLK. "0" => Enable REF_CLK to digital and associated MCS pulse.
+ * Powers down last REF_CLK driver going from the analog to the digital.  Will also power down the MCS associated with the digital REF_CLK. "0" => Enable REF_CLK to digital and associated MCS pulse.
  * "1" => Disable REF_CLK to digital and assocaited MCS pulse.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_PdDigclk_Get(void *const device,
@@ -12099,7 +12099,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0BbicStreamStatus_Get(void *cons
 
 
 /**
- * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
+ * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
  * reset with the new stream number value that just completed.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0CompletedStreamNum_Get(void *const device,
@@ -12203,7 +12203,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0IrqSensitivity_Get(void *const 
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0LastStreamNum_Set(void *const device,
@@ -12217,7 +12217,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0LastStreamNum_Set(void *const d
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0LastStreamNum_Get(void *const device,
@@ -12292,7 +12292,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0Select_Get(void *const device,
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamBase_Set(void *const device,
@@ -12309,7 +12309,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamBase_Set(void *const devi
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamBase_Get(void *const device,
@@ -12359,24 +12359,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamError_Get(void *const dev
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamProcAddr_Set(void *const device,
@@ -12390,24 +12390,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamProcAddr_Set(void *const 
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp0StreamProcAddr_Get(void *const device,
@@ -12650,7 +12650,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1BbicStreamStatus_Get(void *cons
 
 
 /**
- * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
+ * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
  * reset with the new stream number value that just completed.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1CompletedStreamNum_Get(void *const device,
@@ -12754,7 +12754,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1IrqSensitivity_Get(void *const 
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1LastStreamNum_Set(void *const device,
@@ -12768,7 +12768,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1LastStreamNum_Set(void *const d
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1LastStreamNum_Get(void *const device,
@@ -12843,7 +12843,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1Select_Get(void *const device,
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamBase_Set(void *const device,
@@ -12860,7 +12860,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamBase_Set(void *const devi
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamBase_Get(void *const device,
@@ -12910,24 +12910,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamError_Get(void *const dev
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamProcAddr_Set(void *const device,
@@ -12941,24 +12941,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamProcAddr_Set(void *const 
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp1StreamProcAddr_Get(void *const device,
@@ -13201,7 +13201,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2BbicStreamStatus_Get(void *cons
 
 
 /**
- * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
+ * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
  * reset with the new stream number value that just completed.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2CompletedStreamNum_Get(void *const device,
@@ -13305,7 +13305,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2IrqSensitivity_Get(void *const 
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2LastStreamNum_Set(void *const device,
@@ -13319,7 +13319,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2LastStreamNum_Set(void *const d
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2LastStreamNum_Get(void *const device,
@@ -13394,7 +13394,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2Select_Get(void *const device,
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamBase_Set(void *const device,
@@ -13411,7 +13411,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamBase_Set(void *const devi
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamBase_Get(void *const device,
@@ -13461,24 +13461,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamError_Get(void *const dev
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamProcAddr_Set(void *const device,
@@ -13492,24 +13492,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamProcAddr_Set(void *const 
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp2StreamProcAddr_Get(void *const device,
@@ -13752,7 +13752,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3BbicStreamStatus_Get(void *cons
 
 
 /**
- * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
+ * This field displays the number of the last stream that completed execution (even if it failed and errored out). Each time a stream completes, this register field will get
  * reset with the new stream number value that just completed.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3CompletedStreamNum_Get(void *const device,
@@ -13856,7 +13856,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3IrqSensitivity_Get(void *const 
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3LastStreamNum_Set(void *const device,
@@ -13870,7 +13870,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3LastStreamNum_Set(void *const d
 }
 
 /**
- * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
+ * this 8 bit register indicates the last valid stream number. eg: if we have 50 streams in the stream memory, this register should be programmed to a number greater than 50.
  * If a stream execution is requested, for a stream greater than the setting in last_stream_num, the stream error will immediately error out.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3LastStreamNum_Get(void *const device,
@@ -13945,7 +13945,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3Select_Get(void *const device,
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamBase_Set(void *const device,
@@ -13962,7 +13962,7 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamBase_Set(void *const devi
 }
 
 /**
- * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
+ * this data memory address points to the beginning of the stream memory. eg : if stream_base is 0x6000, then stream memory sits at data memory address 0x20006000. 
  * the stream memory can only sit in the data memory (cannot reside in the program memory)
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamBase_Get(void *const device,
@@ -14012,24 +14012,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamError_Get(void *const dev
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamProcAddr_Set(void *const device,
@@ -14043,24 +14043,24 @@ static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamProcAddr_Set(void *const 
 }
 
 /**
- * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
- * r0_addr         4'h0 		16 bit register data.
- * r1_addr         4'h1 		16 bit register data.
- * r2_addr         4'h2 		16 bit register data.
- * r3_addr         4'h3 		16 bit register data.
- * r4_addr      	4'h4 		16 bit register data.
- * r5_addr      	4'h5 		16 bit register data.
- * r6_addr      	4'h6 		16 bit register data.
- * r7_addr      	4'h7 		16 bit register data.
- * error_reg_addr  4'h8 		7 bits output :
- * 				error_data[0] invalid spi address access
- * 				error_data[1] CHECK_INSTR error
- * 				error_data[2] TIMEOUT error
- * 				error_data[3] stack overflow error
- * 				error_data[4] invalid stream number
- * 				error_data[5] invalid ahb address access error
- * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
- * 				
+ * This field provides the address for a stream processor readback interface. The architectural registers within the stream processor , as well as an error register can be read out. The addresses of the registers is specified below. 
+ * r0_addr         4'h0 		16 bit register data.
+ * r1_addr         4'h1 		16 bit register data.
+ * r2_addr         4'h2 		16 bit register data.
+ * r3_addr         4'h3 		16 bit register data.
+ * r4_addr      	4'h4 		16 bit register data.
+ * r5_addr      	4'h5 		16 bit register data.
+ * r6_addr      	4'h6 		16 bit register data.
+ * r7_addr      	4'h7 		16 bit register data.
+ * error_reg_addr  4'h8 		7 bits output :
+ * 				error_data[0] invalid spi address access
+ * 				error_data[1] CHECK_INSTR error
+ * 				error_data[2] TIMEOUT error
+ * 				error_data[3] stack overflow error
+ * 				error_data[4] invalid stream number
+ * 				error_data[5] invalid ahb address access error
+ * 				error_data[6] invalid stream proc instruction OR external timers error (ran out of external timers) 
+ * 				
  * In order to read back the value of the register, stream_proc_rden should be set in the register stream_proc_readback_addr.
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Sp3StreamProcAddr_Get(void *const device,
@@ -15577,9 +15577,9 @@ static inline int32_t adrv9001_NvsRegmapCore1_Tx1Mag13tapsCoeffSel_Get(void *con
 }
 
 /**
- * 2’b00: TX1 mag comp 21 taps PFIR select bank A coeff
- *                                                       2’b01: TX1 mag comp 21 taps PFIR select bank B coeff
- *                                                       2’b10: TX1 mag comp 21 taps PFIR select bank C coeff
+ * 2’b00: TX1 mag comp 21 taps PFIR select bank A coeff
+ *                                                       2’b01: TX1 mag comp 21 taps PFIR select bank B coeff
+ *                                                       2’b10: TX1 mag comp 21 taps PFIR select bank C coeff
  *                                                       2’b11: TX1 mag comp 21 taps PFIR select bank D coeff
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Tx1Mag21tapsBankSel_Set(void *const device,
@@ -15593,9 +15593,9 @@ static inline int32_t adrv9001_NvsRegmapCore1_Tx1Mag21tapsBankSel_Set(void *cons
 }
 
 /**
- * 2’b00: TX1 mag comp 21 taps PFIR select bank A coeff
- *                                                       2’b01: TX1 mag comp 21 taps PFIR select bank B coeff
- *                                                       2’b10: TX1 mag comp 21 taps PFIR select bank C coeff
+ * 2’b00: TX1 mag comp 21 taps PFIR select bank A coeff
+ *                                                       2’b01: TX1 mag comp 21 taps PFIR select bank B coeff
+ *                                                       2’b10: TX1 mag comp 21 taps PFIR select bank C coeff
  *                                                       2’b11: TX1 mag comp 21 taps PFIR select bank D coeff
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Tx1Mag21tapsBankSel_Get(void *const device,
@@ -15825,9 +15825,9 @@ static inline int32_t adrv9001_NvsRegmapCore1_Tx2Mag13tapsCoeffSel_Get(void *con
 }
 
 /**
- * 2’b00: TX2 mag comp 21 taps PFIR select bank A coeff
- *                                                       2’b01: TX2 mag comp 21 taps PFIR select bank B coeff
- *                                                       2’b10: TX2 mag comp 21 taps PFIR select bank C coeff
+ * 2’b00: TX2 mag comp 21 taps PFIR select bank A coeff
+ *                                                       2’b01: TX2 mag comp 21 taps PFIR select bank B coeff
+ *                                                       2’b10: TX2 mag comp 21 taps PFIR select bank C coeff
  *                                                       2’b11: TX2 mag comp 21 taps PFIR select bank D coeff
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Tx2Mag21tapsBankSel_Set(void *const device,
@@ -15841,9 +15841,9 @@ static inline int32_t adrv9001_NvsRegmapCore1_Tx2Mag21tapsBankSel_Set(void *cons
 }
 
 /**
- * 2’b00: TX2 mag comp 21 taps PFIR select bank A coeff
- *                                                       2’b01: TX2 mag comp 21 taps PFIR select bank B coeff
- *                                                       2’b10: TX2 mag comp 21 taps PFIR select bank C coeff
+ * 2’b00: TX2 mag comp 21 taps PFIR select bank A coeff
+ *                                                       2’b01: TX2 mag comp 21 taps PFIR select bank B coeff
+ *                                                       2’b10: TX2 mag comp 21 taps PFIR select bank C coeff
  *                                                       2’b11: TX2 mag comp 21 taps PFIR select bank D coeff
  */
 static inline int32_t adrv9001_NvsRegmapCore1_Tx2Mag21tapsBankSel_Get(void *const device,

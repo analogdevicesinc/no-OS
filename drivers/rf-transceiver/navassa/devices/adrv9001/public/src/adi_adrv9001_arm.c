@@ -332,7 +332,36 @@ int32_t adi_adrv9001_arm_Image_Write(adi_adrv9001_Device_t *device, uint32_t byt
             (((uint32_t)binary[i + 2]) << 16) | (((uint32_t)binary[i + 1]) << 8) | ((uint32_t)binary[i]));
     }
 
-    ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_START_PROG + byteOffset, &binary[0], byteCount, spiWriteMode);
+	if (byteCount < ADRV9001_ARM_PROG_MEM_BYTE_COUNT)
+	{
+		if (byteOffset < ADRV9001_ARM_PROG_MEM_BYTE_COUNT)
+		{
+			ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_START_PROG + byteOffset, &binary[0], byteCount, spiWriteMode);
+		}
+		else
+		{
+			ADI_EXPECT(adi_adrv9001_arm_Memory_Write,
+				       device,
+				       ADRV9001_ADDR_ARM_START_DATA + ADRV9001_ADDR_CODE_REGION_OFFSET + (byteOffset - ADRV9001_ARM_PROG_MEM_BYTE_COUNT),
+				       &binary[0],
+				       byteCount,
+				       spiWriteMode);
+		}
+	}
+	else
+	{
+		ADI_EXPECT(adi_adrv9001_arm_Memory_Write, device, ADRV9001_ADDR_ARM_START_PROG + byteOffset, &binary[0], ADRV9001_ARM_PROG_MEM_BYTE_COUNT, spiWriteMode);
+
+		if (byteCount > ADRV9001_ARM_PROG_MEM_BYTE_COUNT)
+		{
+			ADI_EXPECT(adi_adrv9001_arm_Memory_Write,
+				       device,
+				       ADRV9001_ADDR_ARM_START_DATA + ADRV9001_ADDR_CODE_REGION_OFFSET,
+				       &binary[ADRV9001_ARM_DATA_MEM_BINARY_IMAGE_OFFSET],
+				       (byteCount - ADRV9001_ARM_PROG_MEM_BYTE_COUNT),
+				       spiWriteMode);
+		 }
+	}
 
     ADI_API_RETURN(device);
 }
@@ -845,8 +874,7 @@ int32_t adi_adrv9001_arm_Version(adi_adrv9001_Device_t *device, adi_adrv9001_Arm
     recoveryAction = adi_adrv9001_arm_Memory_Read(device, ADRV9001_ADDR_ARM_VERSION, &ver[0], sizeof(ver), ADRV9001_ARM_MEM_READ_AUTOINCR);
     ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recoveryAction, NULL, "Failed to read ARM memory");
     ADI_ERROR_RETURN(device->common.error.newAction);
-    fullVersion = (((uint32_t)ver[0]) | (((uint32_t)ver[1]) << 8) | (((uint32_t)ver[2]) << 16) | (((uint32_t)ver[3]) << 24));
-
+	fullVersion = (((uint32_t)ver[0]) | (((uint32_t)ver[1]) << 8) | (((uint32_t)ver[2]) << 16));
 
 #if ADI_ADRV9001_SW_TEST > 0
     if (device->devStateInfo.swTest > 1)
@@ -857,17 +885,15 @@ int32_t adi_adrv9001_arm_Version(adi_adrv9001_Device_t *device, adi_adrv9001_Arm
 
     if (ARMBUILD_USES_FOUR_DIGIT_VERSION)
     {
-        armVersion->majorVer = (uint8_t)(fullVersion >> 28) & 0x0F;
-        armVersion->minorVer = (uint8_t)(fullVersion >> 20) & 0xFF;
-        armVersion->maintVer = (uint8_t)(fullVersion >> 12) & 0xFF;
-        armVersion->rcVer = (uint16_t)(fullVersion & 0xFFF);
+	    armVersion->majorVer = (uint8_t)(fullVersion >> 16) & 0x0F;
+	    armVersion->minorVer = (uint8_t)(fullVersion >> 8) & 0xFF;
+	    armVersion->maintVer = (uint8_t)(fullVersion & 0xFF);
     }
     else
     {
-        armVersion->rcVer = (uint8_t)(fullVersion % 100);
+	    armVersion->maintVer = (uint8_t)(fullVersion % 100);
         armVersion->minorVer = (uint8_t)((fullVersion / 100) % 100);
         armVersion->majorVer = (uint8_t)(fullVersion / 10000);
-        armVersion->maintVer = 0;
     }
 
     if (ver[4] & ARMBUILD_DEBUG)

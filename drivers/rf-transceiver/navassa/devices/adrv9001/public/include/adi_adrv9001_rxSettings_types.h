@@ -352,6 +352,15 @@ typedef enum adi_adrv9001_RxGainTableType
 } adi_adrv9001_RxGainTableType_e;
 
 /**
+*  \brief Enum to select the external LNA type
+*/
+typedef enum adi_adrv9001_ExternalLnaType
+{
+	ADI_ADRV9001_EXTERNAL_LNA_TYPE_SINGLE = 0,    /*!< Single external LNA */
+	ADI_ADRV9001_EXTERNAL_LNA_TYPE_MULTIPLE = 1   /*!< Multiple external LNAs */
+} adi_adrv9001_ExternalLnaType_e;
+
+/**
  * \brief Structure which holds the LNA configuration
  */
 typedef struct adi_adrv9001_RxLnaConfig
@@ -362,10 +371,12 @@ typedef struct adi_adrv9001_RxLnaConfig
 	adi_adrv9001_ExternalLnaPinSel_e externalLnaPinSel;		/*!< External LNA pin selection for RX channel. If ADI_ADRV9001_EXTERNAL_LNA_PIN_RX1_LOWER_RX2_UPPER, then
 																 lower 2 pins in analog GPIO pin nibble are selected for Rx1 channel */
     uint8_t settlingDelay;                                  /*!< External LNA Settling Delay (Units: AGC clocks * 4) */
-    uint8_t numberLnaGainSteps;                             /*!< Number of Gain Step(s) required in external LNA */
+    uint8_t numberLnaGainSteps;                             /*!< Number of Gain Step(s) required for lnaType (TYPE_SINGLE) or
+                                                                 Number of LNAs for lnaType (TYPE_MULTIPLE) */
     uint16_t lnaGainSteps_mdB[4];							/*!< Array of Gain Step Size(s) in mdB corresponding to the value of the GPIO pin(s) */
     uint16_t lnaDigitalGainDelay;
 	uint8_t minGainIndex;                                   /*!< The desired minimum gain index to be configured */
+    adi_adrv9001_ExternalLnaType_e lnaType;                 /*!< External LNA type selection for RX channel. */
 } adi_adrv9001_RxLnaConfig_t;
 
 /**

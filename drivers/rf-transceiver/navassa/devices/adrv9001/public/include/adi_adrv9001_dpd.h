@@ -184,6 +184,21 @@ int32_t adi_adrv9001_dpd_fh_regions_Inspect(adi_adrv9001_Device_t *adrv9001,
                                             adi_adrv9001_DpdFhRegions_t dpdFhRegions[],
                                             uint32_t size);
 
+/**
+ * \brief Get information about DPD operation and power at some points on the data path
+ *
+ * \note Message type: \ref timing_mailbox "Mailbox command"
+ *
+ * \pre Channel state is CALIBRATED or PRIMED or RF_ENABLED
+ *
+ * \param[in]  adrv9001		Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  channel      The channel of interest
+ * \param[out] dpdChannelStatus	The latest DPD operational status
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_dpd_channel_Status_Get(adi_adrv9001_Device_t* adrv9001, adi_common_ChannelNumber_e channel, adi_adrv9001_DpdChannelStatus_t* dpdChannelStatus);
+
 #ifdef __cplusplus
 }
 #endif

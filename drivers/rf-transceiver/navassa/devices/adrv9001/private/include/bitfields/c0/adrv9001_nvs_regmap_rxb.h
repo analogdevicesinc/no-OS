@@ -26,7 +26,7 @@ static const adrv9001_BfNvsRegmapRxb_e nvsRegmapRxbInstances[] = {
 
 
 /**
- * TIA control readback for Ch1. Bit[0] is TIA gain and bit [1] is ADC gain.
+ * TIA control readback for Ch1. Bit[0] is TIA gain and bit [1] is ADC gain.
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AdcControl_Get(void *const device,
@@ -131,7 +131,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcAdcHighOvrgExceededCounter_Get(vo
 }
 
 /**
- * This register can take any value from 1 through 255. If the ADC Low Overrange threshold is triggered N times where N is the value configured in this register, a flag is set indicating a HIGH on ADC low overrange trigger. Consequently, at the termination of the agc_gain_update_counter, or in hybrid mode when a pulse is seen on the corresponding GPIO pin, if a gain increment is slated to occur based on power thresholds, and if agc_low_ths_prevent_gain_inc is 1, then the gain increment does not occur. If agc_peak_threshold_gain_control_mode is enabled and the flag is NOT set, the gain will increment.
+ * This register can take any value from 1 through 255. If the ADC Low Overrange threshold is triggered N times where N is the value configured in this register, a flag is set indicating a HIGH on ADC low overrange trigger. Consequently, at the termination of the agc_gain_update_counter, or in hybrid mode when a pulse is seen on the corresponding GPIO pin, if a gain increment is slated to occur based on power thresholds, and if agc_low_ths_prevent_gain_inc is 1, then the gain increment does not occur. If agc_peak_threshold_gain_control_mode is enabled and the flag is NOT set, the gain will increment.
  * When in multiple time constants in AGC loop mode, the flag is used to determine gain increments for the 3rd update interval. For details on using this field, see description in agc_enable_fast_recovery_loop.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcAdcLowOvrgExceededCounter_Set(void *const device,
@@ -146,7 +146,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcAdcLowOvrgExceededCounter_Set(voi
 }
 
 /**
- * This register can take any value from 1 through 255. If the ADC Low Overrange threshold is triggered N times where N is the value configured in this register, a flag is set indicating a HIGH on ADC low overrange trigger. Consequently, at the termination of the agc_gain_update_counter, or in hybrid mode when a pulse is seen on the corresponding GPIO pin, if a gain increment is slated to occur based on power thresholds, and if agc_low_ths_prevent_gain_inc is 1, then the gain increment does not occur. If agc_peak_threshold_gain_control_mode is enabled and the flag is NOT set, the gain will increment.
+ * This register can take any value from 1 through 255. If the ADC Low Overrange threshold is triggered N times where N is the value configured in this register, a flag is set indicating a HIGH on ADC low overrange trigger. Consequently, at the termination of the agc_gain_update_counter, or in hybrid mode when a pulse is seen on the corresponding GPIO pin, if a gain increment is slated to occur based on power thresholds, and if agc_low_ths_prevent_gain_inc is 1, then the gain increment does not occur. If agc_peak_threshold_gain_control_mode is enabled and the flag is NOT set, the gain will increment.
  * When in multiple time constants in AGC loop mode, the flag is used to determine gain increments for the 3rd update interval. For details on using this field, see description in agc_enable_fast_recovery_loop.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcAdcLowOvrgExceededCounter_Get(void *const device,
@@ -512,8 +512,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAcc_Get(void *const devic
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccI_Set(void *const device,
@@ -534,8 +534,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccI_Set(void *const devi
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccI_Get(void *const device,
@@ -561,8 +561,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccI_Get(void *const devi
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccQ_Set(void *const device,
@@ -583,8 +583,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccQ_Set(void *const devi
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcLoadAccQ_Get(void *const device,
@@ -703,7 +703,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcManualRestoreAcc_Get(void *co
 }
 
 /**
- * When this bit is set, the BBDC offset words going to the datapath
+ * When this bit is set, the BBDC offset words going to the datapath
  * are masked (set to 0).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcMaskOutput_Set(void *const device,
@@ -718,7 +718,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcMaskOutput_Set(void *const de
 }
 
 /**
- * When this bit is set, the BBDC offset words going to the datapath
+ * When this bit is set, the BBDC offset words going to the datapath
  * are masked (set to 0).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcBbdcMaskOutput_Get(void *const device,
@@ -1269,8 +1269,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcDigSaturationExceededCounter_Get(
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers or the ADC Low Ovrg triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers or the ADC Low Ovrg triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
  * AGC Slow Loop: In this mode, when the Digital Saturation triggers a programmable number of times (agc_dig_saturation_exceeded_counter) above its configured threshold, the slow loop will decrement gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be reduced by when a gain step change needs to be made due to Digital Saturation triggering. The digital saturation has a separate trigger than ADC or HB3 overload because this check for saturation is after the digital gain has been applied. It is possible that the signal exceeds FS after digital gain but not at the ADC output.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcDigsatGainStep_Set(void *const device,
@@ -1285,8 +1285,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcDigsatGainStep_Set(void *const de
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers or the ADC Low Ovrg triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers or the ADC Low Ovrg triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
  * AGC Slow Loop: In this mode, when the Digital Saturation triggers a programmable number of times (agc_dig_saturation_exceeded_counter) above its configured threshold, the slow loop will decrement gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be reduced by when a gain step change needs to be made due to Digital Saturation triggering. The digital saturation has a separate trigger than ADC or HB3 overload because this check for saturation is after the digital gain has been applied. It is possible that the signal exceeds FS after digital gain but not at the ADC output.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcDigsatGainStep_Get(void *const device,
@@ -1676,26 +1676,26 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableDigsatOvrg_Get(void *const 
 }
 
 /**
- * The multiple time constants in AGC loop allow for fast attack and fast recovery back to max gain for radar applications. For MC-GSM, this should also help in quick recovery of gain to alleviate degradation to a minimal number of time slots of the GSM signal.
- * This mode for AGC operations requires the following:
- *     - I^2 + Q^2 calculation on a sample basis (dec_overload_power_mode = 1) from decimated overload data detector (agc_adc_ovrg_sel = 1, enable_dec_overload = 1)
- *     - Common offset for peak/power thresholds across all thresholds (dec_threshold_config)
- *     - Single over-range level peak/power threshold: One peak required to trigger gain reduction (dec_overload_threshold_count = 1) within over-range window (dec_overload_duration_count). With agc_change_gain_if_adcovrg_high, the AGC can decrease gain rapidly if over-range.
- *     - Three under-range level peak/power thresholds (decimated_data_overload_int0_lower_threshold, decimated_data_overload_int1_lower_threshold, dec_overload_lower_threshold). Each one of these under-range peak thresholds is associated with one of the three update intervals, one of three threshold counters, and one of the three gain steps.
- *         - 1st update interval (agc_urange_interval0) is an 16-bit count value (at the AGC clock rate)
- *         - 1st counter (agc_adcovrg_low_int0_counter) counts the number of overloads within the 1st update interval.
- *         - 1st gain step (agc_ovrg_low_int0_gain_step) determines the gain increment if the overloads do not exceed the 1st counter within the 1st update interval
- *         - 2nd update interval is a multiple of the 1st update interval and a 6-bit agc_urange_interval1_mult.
- *         - 2nd counter (agc_adcovrg_low_int1_counter) counts the number of overloads within the 2nd update interval.
- *         - 2nd gain step (agc_ovrg_low_int1_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
- *         - 3rd update interval is a multiple of 2nd update interval and a 6-bit agc_urange_interval2_mult
- *         - 3rd counter (agc_adc_low_ovrg_exceeded_counter) counts the number of overloads within the 2nd update interval.
- *         - 3rd gain step (agc_ovrg_low_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
- *         - To allow the counters to correlate closer to the IQ sample rate, a 2-bit agc_mult_clk_rate_comp allows the 1st update interval to be multiplied by either 1, 2 or 4 to effectively allow for count duration to run at the IQ sample rate.
- *     - The priority for gain change when the update intervals occur is
- *         - Check if over-range flag was set, else
- *         - Check if flag was set for underrange update interval0, else
- *         - Check if flag was set for underrange update interval1, else
+ * The multiple time constants in AGC loop allow for fast attack and fast recovery back to max gain for radar applications. For MC-GSM, this should also help in quick recovery of gain to alleviate degradation to a minimal number of time slots of the GSM signal.
+ * This mode for AGC operations requires the following:
+ *     - I^2 + Q^2 calculation on a sample basis (dec_overload_power_mode = 1) from decimated overload data detector (agc_adc_ovrg_sel = 1, enable_dec_overload = 1)
+ *     - Common offset for peak/power thresholds across all thresholds (dec_threshold_config)
+ *     - Single over-range level peak/power threshold: One peak required to trigger gain reduction (dec_overload_threshold_count = 1) within over-range window (dec_overload_duration_count). With agc_change_gain_if_adcovrg_high, the AGC can decrease gain rapidly if over-range.
+ *     - Three under-range level peak/power thresholds (decimated_data_overload_int0_lower_threshold, decimated_data_overload_int1_lower_threshold, dec_overload_lower_threshold). Each one of these under-range peak thresholds is associated with one of the three update intervals, one of three threshold counters, and one of the three gain steps.
+ *         - 1st update interval (agc_urange_interval0) is an 16-bit count value (at the AGC clock rate)
+ *         - 1st counter (agc_adcovrg_low_int0_counter) counts the number of overloads within the 1st update interval.
+ *         - 1st gain step (agc_ovrg_low_int0_gain_step) determines the gain increment if the overloads do not exceed the 1st counter within the 1st update interval
+ *         - 2nd update interval is a multiple of the 1st update interval and a 6-bit agc_urange_interval1_mult.
+ *         - 2nd counter (agc_adcovrg_low_int1_counter) counts the number of overloads within the 2nd update interval.
+ *         - 2nd gain step (agc_ovrg_low_int1_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
+ *         - 3rd update interval is a multiple of 2nd update interval and a 6-bit agc_urange_interval2_mult
+ *         - 3rd counter (agc_adc_low_ovrg_exceeded_counter) counts the number of overloads within the 2nd update interval.
+ *         - 3rd gain step (agc_ovrg_low_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
+ *         - To allow the counters to correlate closer to the IQ sample rate, a 2-bit agc_mult_clk_rate_comp allows the 1st update interval to be multiplied by either 1, 2 or 4 to effectively allow for count duration to run at the IQ sample rate.
+ *     - The priority for gain change when the update intervals occur is
+ *         - Check if over-range flag was set, else
+ *         - Check if flag was set for underrange update interval0, else
+ *         - Check if flag was set for underrange update interval1, else
  *         - Check if flag was set for underrange update interval2
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableFastRecoveryLoop_Set(void *const device,
@@ -1710,26 +1710,26 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableFastRecoveryLoop_Set(void *
 }
 
 /**
- * The multiple time constants in AGC loop allow for fast attack and fast recovery back to max gain for radar applications. For MC-GSM, this should also help in quick recovery of gain to alleviate degradation to a minimal number of time slots of the GSM signal.
- * This mode for AGC operations requires the following:
- *     - I^2 + Q^2 calculation on a sample basis (dec_overload_power_mode = 1) from decimated overload data detector (agc_adc_ovrg_sel = 1, enable_dec_overload = 1)
- *     - Common offset for peak/power thresholds across all thresholds (dec_threshold_config)
- *     - Single over-range level peak/power threshold: One peak required to trigger gain reduction (dec_overload_threshold_count = 1) within over-range window (dec_overload_duration_count). With agc_change_gain_if_adcovrg_high, the AGC can decrease gain rapidly if over-range.
- *     - Three under-range level peak/power thresholds (decimated_data_overload_int0_lower_threshold, decimated_data_overload_int1_lower_threshold, dec_overload_lower_threshold). Each one of these under-range peak thresholds is associated with one of the three update intervals, one of three threshold counters, and one of the three gain steps.
- *         - 1st update interval (agc_urange_interval0) is an 16-bit count value (at the AGC clock rate)
- *         - 1st counter (agc_adcovrg_low_int0_counter) counts the number of overloads within the 1st update interval.
- *         - 1st gain step (agc_ovrg_low_int0_gain_step) determines the gain increment if the overloads do not exceed the 1st counter within the 1st update interval
- *         - 2nd update interval is a multiple of the 1st update interval and a 6-bit agc_urange_interval1_mult.
- *         - 2nd counter (agc_adcovrg_low_int1_counter) counts the number of overloads within the 2nd update interval.
- *         - 2nd gain step (agc_ovrg_low_int1_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
- *         - 3rd update interval is a multiple of 2nd update interval and a 6-bit agc_urange_interval2_mult
- *         - 3rd counter (agc_adc_low_ovrg_exceeded_counter) counts the number of overloads within the 2nd update interval.
- *         - 3rd gain step (agc_ovrg_low_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
- *         - To allow the counters to correlate closer to the IQ sample rate, a 2-bit agc_mult_clk_rate_comp allows the 1st update interval to be multiplied by either 1, 2 or 4 to effectively allow for count duration to run at the IQ sample rate.
- *     - The priority for gain change when the update intervals occur is
- *         - Check if over-range flag was set, else
- *         - Check if flag was set for underrange update interval0, else
- *         - Check if flag was set for underrange update interval1, else
+ * The multiple time constants in AGC loop allow for fast attack and fast recovery back to max gain for radar applications. For MC-GSM, this should also help in quick recovery of gain to alleviate degradation to a minimal number of time slots of the GSM signal.
+ * This mode for AGC operations requires the following:
+ *     - I^2 + Q^2 calculation on a sample basis (dec_overload_power_mode = 1) from decimated overload data detector (agc_adc_ovrg_sel = 1, enable_dec_overload = 1)
+ *     - Common offset for peak/power thresholds across all thresholds (dec_threshold_config)
+ *     - Single over-range level peak/power threshold: One peak required to trigger gain reduction (dec_overload_threshold_count = 1) within over-range window (dec_overload_duration_count). With agc_change_gain_if_adcovrg_high, the AGC can decrease gain rapidly if over-range.
+ *     - Three under-range level peak/power thresholds (decimated_data_overload_int0_lower_threshold, decimated_data_overload_int1_lower_threshold, dec_overload_lower_threshold). Each one of these under-range peak thresholds is associated with one of the three update intervals, one of three threshold counters, and one of the three gain steps.
+ *         - 1st update interval (agc_urange_interval0) is an 16-bit count value (at the AGC clock rate)
+ *         - 1st counter (agc_adcovrg_low_int0_counter) counts the number of overloads within the 1st update interval.
+ *         - 1st gain step (agc_ovrg_low_int0_gain_step) determines the gain increment if the overloads do not exceed the 1st counter within the 1st update interval
+ *         - 2nd update interval is a multiple of the 1st update interval and a 6-bit agc_urange_interval1_mult.
+ *         - 2nd counter (agc_adcovrg_low_int1_counter) counts the number of overloads within the 2nd update interval.
+ *         - 2nd gain step (agc_ovrg_low_int1_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
+ *         - 3rd update interval is a multiple of 2nd update interval and a 6-bit agc_urange_interval2_mult
+ *         - 3rd counter (agc_adc_low_ovrg_exceeded_counter) counts the number of overloads within the 2nd update interval.
+ *         - 3rd gain step (agc_ovrg_low_gain_step) determines the gain increment if the overloads do not exceed the 2nd counter within the 2nd update interval
+ *         - To allow the counters to correlate closer to the IQ sample rate, a 2-bit agc_mult_clk_rate_comp allows the 1st update interval to be multiplied by either 1, 2 or 4 to effectively allow for count duration to run at the IQ sample rate.
+ *     - The priority for gain change when the update intervals occur is
+ *         - Check if over-range flag was set, else
+ *         - Check if flag was set for underrange update interval0, else
+ *         - Check if flag was set for underrange update interval1, else
  *         - Check if flag was set for underrange update interval2
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableFastRecoveryLoop_Get(void *const device,
@@ -1840,7 +1840,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableGainIndexUpdate_Get(void *c
 }
 
 /**
- * This enables the two-threshold AGC loop mode. The two-threshold AGC loop can work as follows. It will have the first threshold (programmable - agc_optimal_ip3_index) at -17dBFS. When a signal exceeds -17dBFS, the gain is reduced by ~5dB (this improves IIP3 but only results in a 0.5dB degradation in NF). If FE attenuation is greater than 5dB below min attenuation, then this threshold does not reduce the gain further.
+ * This enables the two-threshold AGC loop mode. The two-threshold AGC loop can work as follows. It will have the first threshold (programmable - agc_optimal_ip3_index) at -17dBFS. When a signal exceeds -17dBFS, the gain is reduced by ~5dB (this improves IIP3 but only results in a 0.5dB degradation in NF). If FE attenuation is greater than 5dB below min attenuation, then this threshold does not reduce the gain further.
  * Therefore, if (gain_index  = max_gain) and (gain_index   (max_gain -5dB)), then the threshold is active. otherwise it is not.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableIp3OptimizationThreshold_Set(void *const device,
@@ -1855,7 +1855,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableIp3OptimizationThreshold_Se
 }
 
 /**
- * This enables the two-threshold AGC loop mode. The two-threshold AGC loop can work as follows. It will have the first threshold (programmable - agc_optimal_ip3_index) at -17dBFS. When a signal exceeds -17dBFS, the gain is reduced by ~5dB (this improves IIP3 but only results in a 0.5dB degradation in NF). If FE attenuation is greater than 5dB below min attenuation, then this threshold does not reduce the gain further.
+ * This enables the two-threshold AGC loop mode. The two-threshold AGC loop can work as follows. It will have the first threshold (programmable - agc_optimal_ip3_index) at -17dBFS. When a signal exceeds -17dBFS, the gain is reduced by ~5dB (this improves IIP3 but only results in a 0.5dB degradation in NF). If FE attenuation is greater than 5dB below min attenuation, then this threshold does not reduce the gain further.
  * Therefore, if (gain_index  = max_gain) and (gain_index   (max_gain -5dB)), then the threshold is active. otherwise it is not.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcEnableIp3OptimizationThreshold_Get(void *const device,
@@ -2122,12 +2122,12 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcFastAttackSettlingDelay_Get(void 
 
 
 /**
- * This field is read back only.  If the fast attack AGC loop is enabled (agc_rx1_setup), this register indicates the current state of the state machine according to the following options:
- * 000	Reset peak detectors
- * 001	Settling delay state (wait for the gain transients to flush out of the Rx datapath)
- * 010	Slow measurement state (a power measurement is performed to determine power level of input signal)
- * 011	Gain change state (gain is changed based on the power measurement made in the previous state)
- * 101	Gain lock state
+ * This field is read back only.  If the fast attack AGC loop is enabled (agc_rx1_setup), this register indicates the current state of the state machine according to the following options:
+ * 000	Reset peak detectors
+ * 001	Settling delay state (wait for the gain transients to flush out of the Rx datapath)
+ * 010	Slow measurement state (a power measurement is performed to determine power level of input signal)
+ * 011	Gain change state (gain is changed based on the power measurement made in the previous state)
+ * 101	Gain lock state
  * 110	Recovery from overload state
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcFastAttackState_Get(void *const device,
@@ -2300,9 +2300,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcGainChangeSyncUpdate_Get(void *co
 }
 
 /**
- * This register is read back only. When read back in Rx mode, it indicates the gain index selected by either the AGC loops or in manual gain mode, the index selected by the BBP for Rx1 at that time. The number of rows in the programmable gain table is 256 (0 through 255). The default gain table has valid entries from index 255 through index 236. When agc_enable_gain_index_update is set, the register must be written to (with some dummy data) before reading. The write latches the current index into the register. When the bit is not set, the register can be read from (without a write to it), but the user must ensure that that index is not being read while it is changing.
- * 
- *  In the Rx AGC `increment gain on peak threshold only' mode, when the LL blocker triggers a programmable number of times above its configured threshold (see 0x482, LL blocker exceeded counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to LL blocker triggering.
+ * This register is read back only. When read back in Rx mode, it indicates the gain index selected by either the AGC loops or in manual gain mode, the index selected by the BBP for Rx1 at that time. The number of rows in the programmable gain table is 256 (0 through 255). The default gain table has valid entries from index 255 through index 236. When agc_enable_gain_index_update is set, the register must be written to (with some dummy data) before reading. The write latches the current index into the register. When the bit is not set, the register can be read from (without a write to it), but the user must ensure that that index is not being read while it is changing.
+ * 
+ *  In the Rx AGC `increment gain on peak threshold only' mode, when the LL blocker triggers a programmable number of times above its configured threshold (see 0x482, LL blocker exceeded counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to LL blocker triggering.
  *  Rx1 AGC gain index
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcGainIndex_Set(void *const device,
@@ -2317,9 +2317,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcGainIndex_Set(void *const device,
 }
 
 /**
- * This register is read back only. When read back in Rx mode, it indicates the gain index selected by either the AGC loops or in manual gain mode, the index selected by the BBP for Rx1 at that time. The number of rows in the programmable gain table is 256 (0 through 255). The default gain table has valid entries from index 255 through index 236. When agc_enable_gain_index_update is set, the register must be written to (with some dummy data) before reading. The write latches the current index into the register. When the bit is not set, the register can be read from (without a write to it), but the user must ensure that that index is not being read while it is changing.
- * 
- *  In the Rx AGC `increment gain on peak threshold only' mode, when the LL blocker triggers a programmable number of times above its configured threshold (see 0x482, LL blocker exceeded counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to LL blocker triggering.
+ * This register is read back only. When read back in Rx mode, it indicates the gain index selected by either the AGC loops or in manual gain mode, the index selected by the BBP for Rx1 at that time. The number of rows in the programmable gain table is 256 (0 through 255). The default gain table has valid entries from index 255 through index 236. When agc_enable_gain_index_update is set, the register must be written to (with some dummy data) before reading. The write latches the current index into the register. When the bit is not set, the register can be read from (without a write to it), but the user must ensure that that index is not being read while it is changing.
+ * 
+ *  In the Rx AGC `increment gain on peak threshold only' mode, when the LL blocker triggers a programmable number of times above its configured threshold (see 0x482, LL blocker exceeded counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to LL blocker triggering.
  *  Rx1 AGC gain index
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcGainIndex_Get(void *const device,
@@ -2431,8 +2431,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcGainUpdateCounter_Get(void *const
 }
 
 /**
- * (C0 New) Delay value for the counter defining the delay for gain index delay FIFO.
- * 0x00 = 0 delay
+ * (C0 New) Delay value for the counter defining the delay for gain index delay FIFO.
+ * 0x00 = 0 delay
  * 0x01~0xff = 1 clk_RHRI delay to 255 clk_RHRI delays
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelay_Set(void *const device,
@@ -2447,8 +2447,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelay_Set(void *const de
 }
 
 /**
- * (C0 New) Delay value for the counter defining the delay for gain index delay FIFO.
- * 0x00 = 0 delay
+ * (C0 New) Delay value for the counter defining the delay for gain index delay FIFO.
+ * 0x00 = 0 delay
  * 0x01~0xff = 1 clk_RHRI delay to 255 clk_RHRI delays
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelay_Get(void *const device,
@@ -2466,7 +2466,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelay_Get(void *const de
 }
 
 /**
- * (C0 New) Selects rx_gain_caly delay to select data path tap point rxnb_dem resamp_mux output just before final rounding of Rx data path data.
+ * (C0 New) Selects rx_gain_caly delay to select data path tap point rxnb_dem resamp_mux output just before final rounding of Rx data path data.
  * Note that to select proper clocking for measuring delay to resamp mux the gdcal_sel[1:0] register must = 0x01.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelayCal_Set(void *const device,
@@ -2481,7 +2481,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelayCal_Set(void *const
 }
 
 /**
- * (C0 New) Selects rx_gain_caly delay to select data path tap point rxnb_dem resamp_mux output just before final rounding of Rx data path data.
+ * (C0 New) Selects rx_gain_caly delay to select data path tap point rxnb_dem resamp_mux output just before final rounding of Rx data path data.
  * Note that to select proper clocking for measuring delay to resamp mux the gdcal_sel[1:0] register must = 0x01.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcGainindexDelayCal_Get(void *const device,
@@ -2731,8 +2731,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcLlbThresholdExceededCounter_Get(v
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: This register allows the user to configure the power level at which the signal should be held after gain lock. The value in this register is specified as a (negative sign implied)dB value below full scale. Therefore, for an LTE signal with PAR = 10dB, and leaving a 4dB margin for signal variation, the AGC lock level should be written to 0x0E. This gain control closed loop algorithm will attempt to achieve this average power level for the signal during gain lock.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: This register allows the user to configure the power level at which the signal should be held after gain lock. The value in this register is specified as a (negative sign implied)dB value below full scale. Therefore, for an LTE signal with PAR = 10dB, and leaving a 4dB margin for signal variation, the AGC lock level should be written to 0x0E. This gain control closed loop algorithm will attempt to achieve this average power level for the signal during gain lock.
  * AGC Slow Loop: In this mode, there exist four thresholds. There are two inner thresholds and two outer thresholds as shown below. The value in this register specifies the inner High threshold in (negative sign implied) dBFS. If the average power of the signal goes above this level during normal RXON operation, the gain control loop will attempt to correct this situation by reducing the gain. The gain can only be reduced when the gain update counter expires. The gain in this case will be reduced by the value in agc_upper_0_threshold_exceeded_gain_step.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcLockLevel_Set(void *const device,
@@ -2747,8 +2747,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcLockLevel_Set(void *const device,
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: This register allows the user to configure the power level at which the signal should be held after gain lock. The value in this register is specified as a (negative sign implied)dB value below full scale. Therefore, for an LTE signal with PAR = 10dB, and leaving a 4dB margin for signal variation, the AGC lock level should be written to 0x0E. This gain control closed loop algorithm will attempt to achieve this average power level for the signal during gain lock.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: This register allows the user to configure the power level at which the signal should be held after gain lock. The value in this register is specified as a (negative sign implied)dB value below full scale. Therefore, for an LTE signal with PAR = 10dB, and leaving a 4dB margin for signal variation, the AGC lock level should be written to 0x0E. This gain control closed loop algorithm will attempt to achieve this average power level for the signal during gain lock.
  * AGC Slow Loop: In this mode, there exist four thresholds. There are two inner thresholds and two outer thresholds as shown below. The value in this register specifies the inner High threshold in (negative sign implied) dBFS. If the average power of the signal goes above this level during normal RXON operation, the gain control loop will attempt to correct this situation by reducing the gain. The gain can only be reduced when the gain update counter expires. The gain in this case will be reduced by the value in agc_upper_0_threshold_exceeded_gain_step.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcLockLevel_Get(void *const device,
@@ -2859,7 +2859,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcLower0ThresholdExceededGainStep_G
 }
 
 /**
- * This specifies the difference between outer and inner low thresholds in dB.See description in agc_lower_0_threshold for details on power threshold modes. 
+ * This specifies the difference between outer and inner low thresholds in dB.See description in agc_lower_0_threshold for details on power threshold modes. 
  * Outer Low Power Threshold Offset = Outer Low Power threshold  Inner Low Power threshold (in dB).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcLower1Threshold_Set(void *const device,
@@ -2874,7 +2874,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcLower1Threshold_Set(void *const d
 }
 
 /**
- * This specifies the difference between outer and inner low thresholds in dB.See description in agc_lower_0_threshold for details on power threshold modes. 
+ * This specifies the difference between outer and inner low thresholds in dB.See description in agc_lower_0_threshold for details on power threshold modes. 
  * Outer Low Power Threshold Offset = Outer Low Power threshold  Inner Low Power threshold (in dB).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcLower1Threshold_Get(void *const device,
@@ -3178,10 +3178,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcMinimumGainIndex_Get(void *const 
 }
 
 /**
- * This field allows the 1st update interval to be multiplied by either 1, 2, or 4 to effectively allow for count duration to run at the IQ sample rate. For details on using this field, see description in agc_enable_fast_recovery_loop.
- * 00      1
- * 01      2
- * 10      4
+ * This field allows the 1st update interval to be multiplied by either 1, 2, or 4 to effectively allow for count duration to run at the IQ sample rate. For details on using this field, see description in agc_enable_fast_recovery_loop.
+ * 00      1
+ * 01      2
+ * 10      4
  * 11      8
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcMultClkRateComp_Set(void *const device,
@@ -3196,10 +3196,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcMultClkRateComp_Set(void *const d
 }
 
 /**
- * This field allows the 1st update interval to be multiplied by either 1, 2, or 4 to effectively allow for count duration to run at the IQ sample rate. For details on using this field, see description in agc_enable_fast_recovery_loop.
- * 00      1
- * 01      2
- * 10      4
+ * This field allows the 1st update interval to be multiplied by either 1, 2, or 4 to effectively allow for count duration to run at the IQ sample rate. For details on using this field, see description in agc_enable_fast_recovery_loop.
+ * 00      1
+ * 01      2
+ * 10      4
  * 11      8
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcMultClkRateComp_Get(void *const device,
@@ -3434,8 +3434,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgFreeze_Get(void *const device
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
  * AGC Slow Loop: In this mode, when the ADC High Overrange triggers a programmable number of times (agc_adc_high_ovrg_exceeded_counter), ADC Ovrg Count Threshold) above its configured threshold, the slow loop will decrement gain either immediately (agc_change_gain_if_ulbth_high) or at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be reduced by when a gain step change needs to be made due to ADC High Ovrg triggering.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgHighGainStep_Set(void *const device,
@@ -3450,8 +3450,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgHighGainStep_Set(void *const 
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when either UL blocker triggers or the ADC High Ovrg block triggers requesting a gain change. The gain index in that case is reduced by the value specified in this register.
  * AGC Slow Loop: In this mode, when the ADC High Overrange triggers a programmable number of times (agc_adc_high_ovrg_exceeded_counter), ADC Ovrg Count Threshold) above its configured threshold, the slow loop will decrement gain either immediately (agc_change_gain_if_ulbth_high) or at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be reduced by when a gain step change needs to be made due to ADC High Ovrg triggering.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgHighGainStep_Get(void *const device,
@@ -3469,7 +3469,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgHighGainStep_Get(void *const 
 }
 
 /**
- * In the Rx AGC `increment gain on peak threshold only' mode, when the ADC Low Overrange triggers a programmable number of times above its configured threshold (agc_adc_low_ovrg_exceeded_counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to ADC Low Ovrg triggering.
+ * In the Rx AGC `increment gain on peak threshold only' mode, when the ADC Low Overrange triggers a programmable number of times above its configured threshold (agc_adc_low_ovrg_exceeded_counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to ADC Low Ovrg triggering.
  * When in multiple time constants in AGC loop mode, the value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to ADC Low Ovrg interval 2 triggering for the 3rd update interval. For details on using this field in this mode, see description in agc_enable_fast_recovery_loop.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgLowGainStep_Set(void *const device,
@@ -3484,7 +3484,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgLowGainStep_Set(void *const d
 }
 
 /**
- * In the Rx AGC `increment gain on peak threshold only' mode, when the ADC Low Overrange triggers a programmable number of times above its configured threshold (agc_adc_low_ovrg_exceeded_counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to ADC Low Ovrg triggering.
+ * In the Rx AGC `increment gain on peak threshold only' mode, when the ADC Low Overrange triggers a programmable number of times above its configured threshold (agc_adc_low_ovrg_exceeded_counter), the slow loop will increment gain at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to ADC Low Ovrg triggering.
  * When in multiple time constants in AGC loop mode, the value entered into this register should be the number of index values that the gain should be increased by when a gain step change needs to be made due to ADC Low Ovrg interval 2 triggering for the 3rd update interval. For details on using this field in this mode, see description in agc_enable_fast_recovery_loop.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcOvrgLowGainStep_Get(void *const device,
@@ -3744,13 +3744,13 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcResetOnRxonGainIndex_Get(void *co
 }
 
 /**
- * These bits configure the gain control algorithm that is used on channel 1. The option are as follows: 
- *         Gain Control Mode                       Application
- *         -----------------                       -----------
- * 00      Manual Gain Mode Operation              FDD and TDD modes (but much slower
- *        (SPI control or pin control modes)       than the internal AGC loops)
- * 01      Fast Attack AGC Mode                    TDD mode
- * 10      Slow Loop AGC Mode                      FDD, TDD modes
+ * These bits configure the gain control algorithm that is used on channel 1. The option are as follows: 
+ *         Gain Control Mode                       Application
+ *         -----------------                       -----------
+ * 00      Manual Gain Mode Operation              FDD and TDD modes (but much slower
+ *        (SPI control or pin control modes)       than the internal AGC loops)
+ * 01      Fast Attack AGC Mode                    TDD mode
+ * 10      Slow Loop AGC Mode                      FDD, TDD modes
  * 11      Hybrid AGC Mode                         FDD, TDD modes
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcSetup_Set(void *const device,
@@ -3765,13 +3765,13 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcSetup_Set(void *const device,
 }
 
 /**
- * These bits configure the gain control algorithm that is used on channel 1. The option are as follows: 
- *         Gain Control Mode                       Application
- *         -----------------                       -----------
- * 00      Manual Gain Mode Operation              FDD and TDD modes (but much slower
- *        (SPI control or pin control modes)       than the internal AGC loops)
- * 01      Fast Attack AGC Mode                    TDD mode
- * 10      Slow Loop AGC Mode                      FDD, TDD modes
+ * These bits configure the gain control algorithm that is used on channel 1. The option are as follows: 
+ *         Gain Control Mode                       Application
+ *         -----------------                       -----------
+ * 00      Manual Gain Mode Operation              FDD and TDD modes (but much slower
+ *        (SPI control or pin control modes)       than the internal AGC loops)
+ * 01      Fast Attack AGC Mode                    TDD mode
+ * 10      Slow Loop AGC Mode                      FDD, TDD modes
  * 11      Hybrid AGC Mode                         FDD, TDD modes
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcSetup_Get(void *const device,
@@ -3821,10 +3821,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcSlowLoopSettlingDelay_Get(void *c
 
 
 /**
- * This field is read back only. If the slow AGC loop is enabled (agc_rx1_setup), this register indicates the current state of the state machine according to the settings below. This register should only be read back in RXON mode.
- * 00	Reset state of state machine
- * 01	Perform power measurements on signal
- * 10	Change gain based on power measurements and power thresholds defined by the BBP
+ * This field is read back only. If the slow AGC loop is enabled (agc_rx1_setup), this register indicates the current state of the state machine according to the settings below. This register should only be read back in RXON mode.
+ * 00	Reset state of state machine
+ * 01	Perform power measurements on signal
+ * 10	Change gain based on power measurements and power thresholds defined by the BBP
  * 11	Clear all peak detectors
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcSlowLoopState_Get(void *const device,
@@ -3997,12 +3997,12 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcStrongerSignalThreshold_Get(void 
 }
 
 /**
- * Combined with agc_rx1_ul_sig_power_meas_duration, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
- *         - Gain update counter expires
- *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
- *         - Power measurement starts
- *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
- *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
+ * Combined with agc_rx1_ul_sig_power_meas_duration, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
+ *         - Gain update counter expires
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
+ *         - Power measurement starts
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
+ *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
  * A value of 0 causes the power measuremt to start as soon as the gain counter expires.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDelay_Set(void *const device,
@@ -4020,12 +4020,12 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDelay_Set(void *con
 }
 
 /**
- * Combined with agc_rx1_ul_sig_power_meas_duration, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
- *         - Gain update counter expires
- *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
- *         - Power measurement starts
- *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
- *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
+ * Combined with agc_rx1_ul_sig_power_meas_duration, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
+ *         - Gain update counter expires
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
+ *         - Power measurement starts
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
+ *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
  * A value of 0 causes the power measuremt to start as soon as the gain counter expires.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDelay_Get(void *const device,
@@ -4047,12 +4047,12 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDelay_Get(void *con
 }
 
 /**
- * Combined with agc_rx1_ul_sig_power_meas_delay, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
- *         - Gain update counter expires
- *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
- *         - Power measurement starts
- *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
- *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
+ * Combined with agc_rx1_ul_sig_power_meas_delay, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
+ *         - Gain update counter expires
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
+ *         - Power measurement starts
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
+ *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
  * A value of 0 causes the power measurement to run until the next gain update counter expiry.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDuration_Set(void *const device,
@@ -4070,12 +4070,12 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDuration_Set(void *
 }
 
 /**
- * Combined with agc_rx1_ul_sig_power_meas_delay, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
- *         - Gain update counter expires
- *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
- *         - Power measurement starts
- *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
- *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
+ * Combined with agc_rx1_ul_sig_power_meas_delay, these fields allow power detection of data for a specific slice of the gain update counter period as follows:
+ *         - Gain update counter expires
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_delay
+ *         - Power measurement starts
+ *         - A counter counts till agc_rx1_ul_sig_power_meas_duration
+ *         - Power measurement stops, and the last value of measured power during this time is used by AGC when the gain update counter expires the next time.
  * A value of 0 causes the power measurement to run until the next gain update counter expiry.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDuration_Get(void *const device,
@@ -4097,8 +4097,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUlSigPowerMeasDuration_Get(void *
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when both UL blocker triggers and the ADC High Ovrg block triggers simultaneously. The gain index in that case is reduced by the value specified in this register.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when both UL blocker triggers and the ADC High Ovrg block triggers simultaneously. The gain index in that case is reduced by the value specified in this register.
  * AGC Slow Loop: In this mode, when the UL blocker triggers a programmable number of times (upper_level_blocker_threshold) above its configured threshold, the slow loop will decrement gain either immediately (agc_change_gain_if_ulbth_high) or at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be reduced by when a gain step change needs to be made due to UL Blocker triggering.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUlbGainStep_Set(void *const device,
@@ -4113,8 +4113,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUlbGainStep_Set(void *const devic
 }
 
 /**
- * This register performs two functions (based on gain control mode used):
- * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when both UL blocker triggers and the ADC High Ovrg block triggers simultaneously. The gain index in that case is reduced by the value specified in this register.
+ * This register performs two functions (based on gain control mode used):
+ * AGC Fast Attack Loop: The gain control loop reduces the gain by the specified number of indices when both UL blocker triggers and the ADC High Ovrg block triggers simultaneously. The gain index in that case is reduced by the value specified in this register.
  * AGC Slow Loop: In this mode, when the UL blocker triggers a programmable number of times (upper_level_blocker_threshold) above its configured threshold, the slow loop will decrement gain either immediately (agc_change_gain_if_ulbth_high) or at the termination of the gain update counter. The value entered into this register should be the number of index values that the gain should be reduced by when a gain step change needs to be made due to UL Blocker triggering.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUlbGainStep_Get(void *const device,
@@ -4225,7 +4225,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUpper0ThresholdExceededGainStep_G
 }
 
 /**
- * This specifies the difference between outer and inner high thresholds in dB. See description in agc_lower_0_threshold for details on power threshold modes.
+ * This specifies the difference between outer and inner high thresholds in dB. See description in agc_lower_0_threshold for details on power threshold modes.
  * Outer High Power Threshold Offset = Outer High Power threshold  Inner High Power threshold (in dB).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUpper1Threshold_Set(void *const device,
@@ -4240,7 +4240,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_AgcUpper1Threshold_Set(void *const d
 }
 
 /**
- * This specifies the difference between outer and inner high thresholds in dB. See description in agc_lower_0_threshold for details on power threshold modes.
+ * This specifies the difference between outer and inner high thresholds in dB. See description in agc_lower_0_threshold for details on power threshold modes.
  * Outer High Power Threshold Offset = Outer High Power threshold  Inner High Power threshold (in dB).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_AgcUpper1Threshold_Get(void *const device,
@@ -4826,8 +4826,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAcc_Get(void *const device,
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccI_Set(void *const device,
@@ -4848,8 +4848,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccI_Set(void *const device,
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the I path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccI_Get(void *const device,
@@ -4875,8 +4875,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccI_Get(void *const device,
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccQ_Set(void *const device,
@@ -4897,8 +4897,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccQ_Set(void *const device,
 }
 
 /**
- * When "bbdc_load_acc" is set, the value in this register is loaded
- * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
+ * When "bbdc_load_acc" is set, the value in this register is loaded
+ * in the digital DC offset accumulator for the Q path. Once "bbdc_load_acc" is
  * cleared, tracking continues from this loaded value.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_BbdcLoadAccQ_Get(void *const device,
@@ -5167,7 +5167,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_BbdcManualRestoreAcc_Get(void *const
 }
 
 /**
- * When this bit is set, the BBDC offset words going to the datapath
+ * When this bit is set, the BBDC offset words going to the datapath
  * are masked (set to 0).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_BbdcMaskOutput_Set(void *const device,
@@ -5182,7 +5182,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_BbdcMaskOutput_Set(void *const devic
 }
 
 /**
- * When this bit is set, the BBDC offset words going to the datapath
+ * When this bit is set, the BBDC offset words going to the datapath
  * are masked (set to 0).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_BbdcMaskOutput_Get(void *const device,
@@ -5678,10 +5678,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_CurrentGainIndex_Get(void *const dev
 }
 
 /**
- * (B0 New) SPI toggled bit to capture the slicer gain shift value calculated by rssi_pm or by number-of-sign-bits. If the SPI toggle occurs before rssi_pm or number-sign-bits completes the SPI toggle is placed on a queue. Upon completion of rssi_pm or number-sign-bits the slicer gain is captured and the queue is cleared 
- *  1 = capture slicer gain
- * 0 = no capture
- * 
+ * (B0 New) SPI toggled bit to capture the slicer gain shift value calculated by rssi_pm or by number-of-sign-bits. If the SPI toggle occurs before rssi_pm or number-sign-bits completes the SPI toggle is placed on a queue. Upon completion of rssi_pm or number-sign-bits the slicer gain is captured and the queue is cleared 
+ *  1 = capture slicer gain
+ * 0 = no capture
+ * 
  * Note: If by number-sign-bits and the slicer gain completed, the SPI toggle initiates a new slicer gain by sign-bits calculation.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgDpDoutShiftValid_Set(void *const device,
@@ -5696,10 +5696,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgDpDoutShiftValid_Set(void *const
 }
 
 /**
- * (B0 New) SPI toggled bit to capture the slicer gain shift value calculated by rssi_pm or by number-of-sign-bits. If the SPI toggle occurs before rssi_pm or number-sign-bits completes the SPI toggle is placed on a queue. Upon completion of rssi_pm or number-sign-bits the slicer gain is captured and the queue is cleared 
- *  1 = capture slicer gain
- * 0 = no capture
- * 
+ * (B0 New) SPI toggled bit to capture the slicer gain shift value calculated by rssi_pm or by number-of-sign-bits. If the SPI toggle occurs before rssi_pm or number-sign-bits completes the SPI toggle is placed on a queue. Upon completion of rssi_pm or number-sign-bits the slicer gain is captured and the queue is cleared 
+ *  1 = capture slicer gain
+ * 0 = no capture
+ * 
  * Note: If by number-sign-bits and the slicer gain completed, the SPI toggle initiates a new slicer gain by sign-bits calculation.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgDpDoutShiftValid_Get(void *const device,
@@ -5742,8 +5742,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgDpOutShift_Get(void *const devic
 }
 
 /**
- * (B0 New) Masking bit to enable or disable the slicer gain to be captured by the falling edge of rxon (delay enable). This only applies when slicer gain is generated by rssi_pm or numder-of-sign-bits
- * 1 = slicer gain captured on falling edge rxon
+ * (B0 New) Masking bit to enable or disable the slicer gain to be captured by the falling edge of rxon (delay enable). This only applies when slicer gain is generated by rssi_pm or numder-of-sign-bits
+ * 1 = slicer gain captured on falling edge rxon
  * 0 = slicer gain not captured on falling edge rxon
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgFallingRxonMask_Set(void *const device,
@@ -5758,8 +5758,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgFallingRxonMask_Set(void *const 
 }
 
 /**
- * (B0 New) Masking bit to enable or disable the slicer gain to be captured by the falling edge of rxon (delay enable). This only applies when slicer gain is generated by rssi_pm or numder-of-sign-bits
- * 1 = slicer gain captured on falling edge rxon
+ * (B0 New) Masking bit to enable or disable the slicer gain to be captured by the falling edge of rxon (delay enable). This only applies when slicer gain is generated by rssi_pm or numder-of-sign-bits
+ * 1 = slicer gain captured on falling edge rxon
  * 0 = slicer gain not captured on falling edge rxon
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgFallingRxonMask_Get(void *const device,
@@ -6426,10 +6426,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShift_Get(void *const device,
 }
 
 /**
- * (B0 New) Slicer gain shift right ceiling. Define the maximum shift right that can occur. Ceiling range is 9 to 0.
- * 4’h0 : shift right celing = 0
- * 4’h1 : shift right ceiling =1
- * …
+ * (B0 New) Slicer gain shift right ceiling. Define the maximum shift right that can occur. Ceiling range is 9 to 0.
+ * 4’h0 : shift right celing = 0
+ * 4’h1 : shift right ceiling =1
+ * …
  * 4’h9 : shift right ceiling = 9
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftCeiling_Set(void *const device,
@@ -6444,10 +6444,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftCeiling_Set(void *const dev
 }
 
 /**
- * (B0 New) Slicer gain shift right ceiling. Define the maximum shift right that can occur. Ceiling range is 9 to 0.
- * 4’h0 : shift right celing = 0
- * 4’h1 : shift right ceiling =1
- * …
+ * (B0 New) Slicer gain shift right ceiling. Define the maximum shift right that can occur. Ceiling range is 9 to 0.
+ * 4’h0 : shift right celing = 0
+ * 4’h1 : shift right ceiling =1
+ * …
  * 4’h9 : shift right ceiling = 9
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftCeiling_Get(void *const device,
@@ -6465,17 +6465,17 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftCeiling_Get(void *const dev
 }
 
 /**
- * (B0 New) Slicer gain shift floor for range from +9 to -5, Bit-4 defines the minimum shift right value when=0 and the maximum shift left value when=1. Bits[3:0] define either the minimum shift right value or the maximum shift left value.
- * 
- * Bit-4 = 1: bits[3:0] define maximum shift left value.
- * Bits[3:0] define shift value.
- * {0, 4;h9} : minimum shift right = 9
- * {0, 4’h8} : minimum shift right = 8
- * …
- * {0, 4’h0} : minimum shift right = 0
- * 
- * {1, 4’h1} : maximum shift left = 1
- * …
+ * (B0 New) Slicer gain shift floor for range from +9 to -5, Bit-4 defines the minimum shift right value when=0 and the maximum shift left value when=1. Bits[3:0] define either the minimum shift right value or the maximum shift left value.
+ * 
+ * Bit-4 = 1: bits[3:0] define maximum shift left value.
+ * Bits[3:0] define shift value.
+ * {0, 4;h9} : minimum shift right = 9
+ * {0, 4’h8} : minimum shift right = 8
+ * …
+ * {0, 4’h0} : minimum shift right = 0
+ * 
+ * {1, 4’h1} : maximum shift left = 1
+ * …
  * {1, 4’h5} : maximum shift left = 5
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftFloor_Set(void *const device,
@@ -6490,17 +6490,17 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftFloor_Set(void *const devic
 }
 
 /**
- * (B0 New) Slicer gain shift floor for range from +9 to -5, Bit-4 defines the minimum shift right value when=0 and the maximum shift left value when=1. Bits[3:0] define either the minimum shift right value or the maximum shift left value.
- * 
- * Bit-4 = 1: bits[3:0] define maximum shift left value.
- * Bits[3:0] define shift value.
- * {0, 4;h9} : minimum shift right = 9
- * {0, 4’h8} : minimum shift right = 8
- * …
- * {0, 4’h0} : minimum shift right = 0
- * 
- * {1, 4’h1} : maximum shift left = 1
- * …
+ * (B0 New) Slicer gain shift floor for range from +9 to -5, Bit-4 defines the minimum shift right value when=0 and the maximum shift left value when=1. Bits[3:0] define either the minimum shift right value or the maximum shift left value.
+ * 
+ * Bit-4 = 1: bits[3:0] define maximum shift left value.
+ * Bits[3:0] define shift value.
+ * {0, 4;h9} : minimum shift right = 9
+ * {0, 4’h8} : minimum shift right = 8
+ * …
+ * {0, 4’h0} : minimum shift right = 0
+ * 
+ * {1, 4’h1} : maximum shift left = 1
+ * …
  * {1, 4’h5} : maximum shift left = 5
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftFloor_Get(void *const device,
@@ -6549,8 +6549,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeft_Get(void *const device
 }
 
 /**
- * (B0 New) Enable slicer gain from number sign bits or rssi_pm power measurement to shift left when number sign bits greater than 10
- * 0 = shift left not enabled (supports Navassa_A0 backwards compatibility)
+ * (B0 New) Enable slicer gain from number sign bits or rssi_pm power measurement to shift left when number sign bits greater than 10
+ * 0 = shift left not enabled (supports Navassa_A0 backwards compatibility)
  * 1 = shift left enabled (slicer gain can shift left or right based on sign-bits or power level)
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftEn_Set(void *const device,
@@ -6565,8 +6565,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftEn_Set(void *const devi
 }
 
 /**
- * (B0 New) Enable slicer gain from number sign bits or rssi_pm power measurement to shift left when number sign bits greater than 10
- * 0 = shift left not enabled (supports Navassa_A0 backwards compatibility)
+ * (B0 New) Enable slicer gain from number sign bits or rssi_pm power measurement to shift left when number sign bits greater than 10
+ * 0 = shift left not enabled (supports Navassa_A0 backwards compatibility)
  * 1 = shift left enabled (slicer gain can shift left or right based on sign-bits or power level)
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftEn_Get(void *const device,
@@ -6584,8 +6584,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftEn_Get(void *const devi
 }
 
 /**
- * (B0 New) SPI select to shift slicer gain left or right when slicer gain being forced by SPI.
- * 0 = shift right
+ * (B0 New) SPI select to shift slicer gain left or right when slicer gain being forced by SPI.
+ * 0 = shift right
  * 1 = shift left
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftSel_Set(void *const device,
@@ -6600,8 +6600,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftSel_Set(void *const dev
 }
 
 /**
- * (B0 New) SPI select to shift slicer gain left or right when slicer gain being forced by SPI.
- * 0 = shift right
+ * (B0 New) SPI select to shift slicer gain left or right when slicer gain being forced by SPI.
+ * 0 = shift right
  * 1 = shift left
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgShiftLeftSel_Get(void *const device,
@@ -6670,9 +6670,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgSlicerNsbsMeasured_Get(void *con
 }
 
 /**
- * (C0 New) Delays slicer gain change pulse and slicer gain value a number of clk_RHRI cycles to match the pipeline delay of the demod data path to the serial interface.
- * 0x00 = 0 delay
- * 0x01 = delay 1-clk_RHRI
+ * (C0 New) Delays slicer gain change pulse and slicer gain value a number of clk_RHRI cycles to match the pipeline delay of the demod data path to the serial interface.
+ * 0x00 = 0 delay
+ * 0x01 = delay 1-clk_RHRI
  * 0x1f = delay 31-clk_RHRI
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgUpdateDelay_Set(void *const device,
@@ -6687,9 +6687,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_DcsgUpdateDelay_Set(void *const devi
 }
 
 /**
- * (C0 New) Delays slicer gain change pulse and slicer gain value a number of clk_RHRI cycles to match the pipeline delay of the demod data path to the serial interface.
- * 0x00 = 0 delay
- * 0x01 = delay 1-clk_RHRI
+ * (C0 New) Delays slicer gain change pulse and slicer gain value a number of clk_RHRI cycles to match the pipeline delay of the demod data path to the serial interface.
+ * 0x00 = 0 delay
+ * 0x01 = delay 1-clk_RHRI
  * 0x1f = delay 31-clk_RHRI
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DcsgUpdateDelay_Get(void *const device,
@@ -6950,7 +6950,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_DecPowerLogShift_Get(void *const dev
 }
 
 /**
- * These bits contain the power measurement duration used by the decimated power block. The power measurement duration in Rx sample periods is determined using the following equation:
+ * These bits contain the power measurement duration used by the decimated power block. The power measurement duration in Rx sample periods is determined using the following equation:
  * dec power meas duration = 8 x 2^DPMD,  where DPMD  3:0   are the contents of these register bits.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DecPowerMeasurementDuration_Set(void *const device,
@@ -6965,7 +6965,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_DecPowerMeasurementDuration_Set(void
 }
 
 /**
- * These bits contain the power measurement duration used by the decimated power block. The power measurement duration in Rx sample periods is determined using the following equation:
+ * These bits contain the power measurement duration used by the decimated power block. The power measurement duration in Rx sample periods is determined using the following equation:
  * dec power meas duration = 8 x 2^DPMD,  where DPMD  3:0   are the contents of these register bits.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DecPowerMeasurementDuration_Get(void *const device,
@@ -7711,7 +7711,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_DigitalDcOffsetTrackingCorrectionWor
 
 
 /**
- * This register contains the readback value of the Ch1 digital gain. 
+ * This register contains the readback value of the Ch1 digital gain. 
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DigitalGain_Get(void *const device,
@@ -7759,7 +7759,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_DigitalPhaseDelay_Get(void *const de
 
 
 /**
- * This register contains the readback value of the Ch1 Rx external control for band A. 
+ * This register contains the readback value of the Ch1 Rx external control for band A. 
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DualbandControlBandA_Get(void *const device,
@@ -7778,7 +7778,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_DualbandControlBandA_Get(void *const
 
 
 /**
- * Readback value of Ch1 Rx external gain for band A.
+ * Readback value of Ch1 Rx external gain for band A.
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_DualbandGainBandA_Get(void *const device,
@@ -7828,7 +7828,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_EnableExtLnaSyncMode_Get(void *const
 
 
 /**
- * This register contains the readback value of the Ch1 external control.
+ * This register contains the readback value of the Ch1 external control.
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_ExtControl_Get(void *const device,
@@ -8270,9 +8270,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_GainIndexFifoFull_Get(void *const de
 }
 
 /**
- * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
- * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
+ * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
+ * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 1[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain1_Set(void *const device,
@@ -8287,9 +8287,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain1_Set(void *const device
 }
 
 /**
- * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
- * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
+ * This sets the initial analog attenuation for Tx1/Tx2 gain delay calibrations, and the intial Rx Fe Gain for the Rx1/Rx2 gain delay calibrations
+ * HP Atten = Gain Delay Cal Analog Gain 1[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 1[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 1[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain1_Get(void *const device,
@@ -8307,9 +8307,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain1_Get(void *const device
 }
 
 /**
- * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
- * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
+ * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
+ * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 2[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain2_Set(void *const device,
@@ -8324,9 +8324,9 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain2_Set(void *const device
 }
 
 /**
- * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
- * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
- * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
+ * This register sets the final analog attenuation for Tx1/Tx2 gain delay calibrations, and the final Rx Fe Gain for the Rx1/Rx2 gain delay calibrations.
+ * HP Atten = Gain Delay Cal Analog Gain 2[5:0]
+ * LO Sel = Gain Delay Cal Analog Gain 2[7:6]
  * Fe Gain = Gain Delay Cal Analog Gain 2[5:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain2_Get(void *const device,
@@ -8344,7 +8344,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalAnaGain2_Get(void *const device
 }
 
 /**
- * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 1[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain1_Set(void *const device,
@@ -8359,7 +8359,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain1_Set(void *const device
 }
 
 /**
- * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the initial digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 1[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain1_Get(void *const device,
@@ -8377,7 +8377,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain1_Get(void *const device
 }
 
 /**
- * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 2[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain2_Set(void *const device,
@@ -8392,7 +8392,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain2_Set(void *const device
 }
 
 /**
- * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
+ * This register sets the final digital attenuation for Tx1/Tx2 gain delay calibrations. 
  * Tx attenuation = Gain delay cal digital gain 2[6:0]
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalDigGain2_Get(void *const device,
@@ -8497,22 +8497,22 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalPowerThreshold_Get(void *const 
 }
 
 /**
- * This bit starts Rx gain delay calibration. 
- * Setup:
- *     - Enable loopback mode from Tx1 to Rx1
- *     - Enable Tx1 NCO
- *     - Rx analog gain delay calibration
- *         o FE_GAIN = gdcal_ana_gain 1/2 
- *         o The data peak with gdcal_ana_gain1 should be below threshold
- *         o The data peak with gdcal_ana_gain2 should be above threshold
- *         o Digital attenuation should be minimum
- *  The calibration works as follows:
- *     1. FE_GAIN = gdcal_ana_gain1
- *     2. Wait for gdcal_flush_period
- *     3. FE_GAIN = gdcal_ana_gain2
- *     4. Start counter
- *     5. Wait for threshold to be met, incrementing counter
- *     6. When threshold is met, rx1_gdcal_ana_dig_delay = counter value.
+ * This bit starts Rx gain delay calibration. 
+ * Setup:
+ *     - Enable loopback mode from Tx1 to Rx1
+ *     - Enable Tx1 NCO
+ *     - Rx analog gain delay calibration
+ *         o FE_GAIN = gdcal_ana_gain 1/2 
+ *         o The data peak with gdcal_ana_gain1 should be below threshold
+ *         o The data peak with gdcal_ana_gain2 should be above threshold
+ *         o Digital attenuation should be minimum
+ *  The calibration works as follows:
+ *     1. FE_GAIN = gdcal_ana_gain1
+ *     2. Wait for gdcal_flush_period
+ *     3. FE_GAIN = gdcal_ana_gain2
+ *     4. Start counter
+ *     5. Wait for threshold to be met, incrementing counter
+ *     6. When threshold is met, rx1_gdcal_ana_dig_delay = counter value.
  *     7. The bit is cleared when the calibration completes.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalStartRxCal_Set(void *const device,
@@ -8527,22 +8527,22 @@ static inline int32_t adrv9001_NvsRegmapRxb_GdcalStartRxCal_Set(void *const devi
 }
 
 /**
- * This bit starts Rx gain delay calibration. 
- * Setup:
- *     - Enable loopback mode from Tx1 to Rx1
- *     - Enable Tx1 NCO
- *     - Rx analog gain delay calibration
- *         o FE_GAIN = gdcal_ana_gain 1/2 
- *         o The data peak with gdcal_ana_gain1 should be below threshold
- *         o The data peak with gdcal_ana_gain2 should be above threshold
- *         o Digital attenuation should be minimum
- *  The calibration works as follows:
- *     1. FE_GAIN = gdcal_ana_gain1
- *     2. Wait for gdcal_flush_period
- *     3. FE_GAIN = gdcal_ana_gain2
- *     4. Start counter
- *     5. Wait for threshold to be met, incrementing counter
- *     6. When threshold is met, rx1_gdcal_ana_dig_delay = counter value.
+ * This bit starts Rx gain delay calibration. 
+ * Setup:
+ *     - Enable loopback mode from Tx1 to Rx1
+ *     - Enable Tx1 NCO
+ *     - Rx analog gain delay calibration
+ *         o FE_GAIN = gdcal_ana_gain 1/2 
+ *         o The data peak with gdcal_ana_gain1 should be below threshold
+ *         o The data peak with gdcal_ana_gain2 should be above threshold
+ *         o Digital attenuation should be minimum
+ *  The calibration works as follows:
+ *     1. FE_GAIN = gdcal_ana_gain1
+ *     2. Wait for gdcal_flush_period
+ *     3. FE_GAIN = gdcal_ana_gain2
+ *     4. Start counter
+ *     5. Wait for threshold to be met, incrementing counter
+ *     6. When threshold is met, rx1_gdcal_ana_dig_delay = counter value.
  *     7. The bit is cleared when the calibration completes.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GdcalStartRxCal_Get(void *const device,
@@ -9153,8 +9153,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_GtUncorrectableParityErrorAddr_Get(v
 }
 
 /**
- * (B0 New) Clear the capture register for the AGC gain table parity error address. This is a self-clearing register.
- * 1= clear ECC address capture address
+ * (B0 New) Clear the capture register for the AGC gain table parity error address. This is a self-clearing register.
+ * 1= clear ECC address capture address
  * 0 = no operation
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GtUncorrectableParityErrorAddrClear_Set(void *const device,
@@ -9169,8 +9169,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_GtUncorrectableParityErrorAddrClear_
 }
 
 /**
- * (B0 New) Clear the capture register for the AGC gain table parity error address. This is a self-clearing register.
- * 1= clear ECC address capture address
+ * (B0 New) Clear the capture register for the AGC gain table parity error address. This is a self-clearing register.
+ * 1= clear ECC address capture address
  * 0 = no operation
  */
 static inline int32_t adrv9001_NvsRegmapRxb_GtUncorrectableParityErrorAddrClear_Get(void *const device,
@@ -10749,7 +10749,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_PcaUpdateManualGainMode_Get(void *co
 
 
 /**
- * This register contains the readback value of the Ch1 phase offset. 
+ * This register contains the readback value of the Ch1 phase offset. 
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_PhaseOffset_Get(void *const device,
@@ -12107,8 +12107,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcInitDone_Get(void *const device,
 }
 
 /**
- * (B0 New) Invert I channel spectrum sent to idac_i. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
- * 0 = no invert
+ * (B0 New) Invert I channel spectrum sent to idac_i. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
+ * 0 = no invert
  * 1 = invert I channel spectrum
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertISpectrum_Set(void *const device,
@@ -12123,8 +12123,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertISpectrum_Set(void *const 
 }
 
 /**
- * (B0 New) Invert I channel spectrum sent to idac_i. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
- * 0 = no invert
+ * (B0 New) Invert I channel spectrum sent to idac_i. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
+ * 0 = no invert
  * 1 = invert I channel spectrum
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertISpectrum_Get(void *const device,
@@ -12142,8 +12142,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertISpectrum_Get(void *const 
 }
 
 /**
- * (B0 New) Invert Q channel spectrum sent to idac_q. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
- * 0 = no invert
+ * (B0 New) Invert Q channel spectrum sent to idac_q. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
+ * 0 = no invert
  * 1 = invert Q channel spectrum
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertQSpectrum_Set(void *const device,
@@ -12158,8 +12158,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertQSpectrum_Set(void *const 
 }
 
 /**
- * (B0 New) Invert Q channel spectrum sent to idac_q. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
- * 0 = no invert
+ * (B0 New) Invert Q channel spectrum sent to idac_q. The 21-bit DC correction after the mux [rx, orx, ilb, elb] is 2s complemented.
+ * 0 = no invert
  * 1 = invert Q channel spectrum
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RfdcInvertQSpectrum_Get(void *const device,
@@ -13382,10 +13382,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcStart_Get(void *const device,
 }
 
 /**
- * (B0 New) Update mode to DC tables and/or [orx, ILB, ELB] correction registers. Note all update modes must be qualifies with LOID allowing write to occur.
- * 00 = only update immediate on DC estimation complete
- * 01 = only update when agc_gain_change
- * 10 = only update on falling edge rxon
+ * (B0 New) Update mode to DC tables and/or [orx, ILB, ELB] correction registers. Note all update modes must be qualifies with LOID allowing write to occur.
+ * 00 = only update immediate on DC estimation complete
+ * 01 = only update when agc_gain_change
+ * 10 = only update on falling edge rxon
  * 11=
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RfdcUpdateMode_Set(void *const device,
@@ -13400,10 +13400,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcUpdateMode_Set(void *const devic
 }
 
 /**
- * (B0 New) Update mode to DC tables and/or [orx, ILB, ELB] correction registers. Note all update modes must be qualifies with LOID allowing write to occur.
- * 00 = only update immediate on DC estimation complete
- * 01 = only update when agc_gain_change
- * 10 = only update on falling edge rxon
+ * (B0 New) Update mode to DC tables and/or [orx, ILB, ELB] correction registers. Note all update modes must be qualifies with LOID allowing write to occur.
+ * 00 = only update immediate on DC estimation complete
+ * 01 = only update when agc_gain_change
+ * 10 = only update on falling edge rxon
  * 11=
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RfdcUpdateMode_Get(void *const device,
@@ -13528,8 +13528,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RfdcoLoidBypass_Get(void *const devi
 }
 
 /**
- * When set, normal RSSI measurement duration is used.  When clear,
- * the extended measurement duration is triggered and the duration is determined
+ * When set, normal RSSI measurement duration is used.  When clear,
+ * the extended measurement duration is triggered and the duration is determined
  * as described in registers "rssi_measurement_duration_0 through _3"
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiDefaultMode_Set(void *const device,
@@ -13544,8 +13544,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiDefaultMode_Set(void *const devi
 }
 
 /**
- * When set, normal RSSI measurement duration is used.  When clear,
- * the extended measurement duration is triggered and the duration is determined
+ * When set, normal RSSI measurement duration is used.  When clear,
+ * the extended measurement duration is triggered and the duration is determined
  * as described in registers "rssi_measurement_duration_0 through _3"
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiDefaultMode_Get(void *const device,
@@ -13563,8 +13563,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiDefaultMode_Get(void *const devi
 }
 
 /**
- * This register configures the RSSI block to wait for the configured duration
- * for before kicking off an RSSI measurement.  The RSSI measurement is enabled
+ * This register configures the RSSI block to wait for the configured duration
+ * for before kicking off an RSSI measurement.  The RSSI measurement is enabled
  * by writing to "rssi_enable_meas" register.  The duration is specified in output sample rate clock cycles (clkRout rate).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiDelay_Set(void *const device,
@@ -13582,8 +13582,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiDelay_Set(void *const device,
 }
 
 /**
- * This register configures the RSSI block to wait for the configured duration
- * for before kicking off an RSSI measurement.  The RSSI measurement is enabled
+ * This register configures the RSSI block to wait for the configured duration
+ * for before kicking off an RSSI measurement.  The RSSI measurement is enabled
  * by writing to "rssi_enable_meas" register.  The duration is specified in output sample rate clock cycles (clkRout rate).
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiDelay_Get(void *const device,
@@ -13698,10 +13698,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiLogshift_Get(void *const device,
 }
 
 /**
- * When "rssi_default_mode" is set, these bits set the measurement
- * duration for the RSSI calculation.  In this case, the measurement duration is: RSSI duration=2^avrg0 where avrg0 is the value written in these bits.
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  If the weighting is non zero, then the measurement duration is the sum of each measurement duration as a power of two.  That is, if all four weights are used, the duration will be:
- * RSSI duration=2^avrg0+2^avrg1+2^avrg2+2^avrg3
+ * When "rssi_default_mode" is set, these bits set the measurement
+ * duration for the RSSI calculation.  In this case, the measurement duration is: RSSI duration=2^avrg0 where avrg0 is the value written in these bits.
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  If the weighting is non zero, then the measurement duration is the sum of each measurement duration as a power of two.  That is, if all four weights are used, the duration will be:
+ * RSSI duration=2^avrg0+2^avrg1+2^avrg2+2^avrg3
  * If any of the corresponding weights are set to zero, then that term is removed from the equation.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiMeasurementDuration0_Set(void *const device,
@@ -13716,10 +13716,10 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiMeasurementDuration0_Set(void *c
 }
 
 /**
- * When "rssi_default_mode" is set, these bits set the measurement
- * duration for the RSSI calculation.  In this case, the measurement duration is: RSSI duration=2^avrg0 where avrg0 is the value written in these bits.
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  If the weighting is non zero, then the measurement duration is the sum of each measurement duration as a power of two.  That is, if all four weights are used, the duration will be:
- * RSSI duration=2^avrg0+2^avrg1+2^avrg2+2^avrg3
+ * When "rssi_default_mode" is set, these bits set the measurement
+ * duration for the RSSI calculation.  In this case, the measurement duration is: RSSI duration=2^avrg0 where avrg0 is the value written in these bits.
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  If the weighting is non zero, then the measurement duration is the sum of each measurement duration as a power of two.  That is, if all four weights are used, the duration will be:
+ * RSSI duration=2^avrg0+2^avrg1+2^avrg2+2^avrg3
  * If any of the corresponding weights are set to zero, then that term is removed from the equation.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiMeasurementDuration0_Get(void *const device,
@@ -13974,8 +13974,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWaitTime_Get(void *const device,
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 0 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 0 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier0_Set(void *const device,
@@ -13990,8 +13990,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier0_Set(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 0 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 0 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier0_Get(void *const device,
@@ -14009,8 +14009,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier0_Get(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 1 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 1 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier1_Set(void *const device,
@@ -14025,8 +14025,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier1_Set(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 1 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 1 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier1_Get(void *const device,
@@ -14044,8 +14044,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier1_Get(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 2 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 2 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier2_Set(void *const device,
@@ -14060,8 +14060,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier2_Set(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 2 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 2 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier2_Get(void *const device,
@@ -14079,8 +14079,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier2_Get(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 3 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 3 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier3_Set(void *const device,
@@ -14095,8 +14095,8 @@ static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier3_Set(void *co
 }
 
 /**
- * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 3 is programmed into this register and is determined using the following equation:
- * Weight 0=2552^avrg0/(RSSI duration)
+ * When "rssi_default_mode" is clear, the extended measurement mode is triggered and the measurement length is set by averaging durations with weighted multipliers.  The weight for duration 3 is programmed into this register and is determined using the following equation:
+ * Weight 0=2552^avrg0/(RSSI duration)
  * The total of all weights (rssi_weighted_multiplier_0 through _3) must be 0xFF.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RssiWeightedMultiplier3_Get(void *const device,
@@ -14357,7 +14357,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_RxDpToLssi22bit_Get(void *const devi
 
 
 /**
- * This register contains the readback value of the Ch1 Rx front end gain.
+ * This register contains the readback value of the Ch1 Rx front end gain.
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_RxFeGain_Get(void *const device,
@@ -15386,7 +15386,7 @@ static inline int32_t adrv9001_NvsRegmapRxb_SpiRfdcLnapFreezeMask_Get(void *cons
 
 
 /**
- * TIA control readback for Ch1. Bit[0] is TIA gain and bit [1] is ADC gain.
+ * TIA control readback for Ch1. Bit[0] is TIA gain and bit [1] is ADC gain.
  * If "read_gain_table" is set, the value is read back from the gain table corresponding to the "gt_addr". If "read_gain_table" is clear,the value is the current gain being used.
  */
 static inline int32_t adrv9001_NvsRegmapRxb_TiaControl_Get(void *const device,

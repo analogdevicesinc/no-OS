@@ -14,7 +14,7 @@
 #ifndef _ADI_ADRV9001_USER_H_
 #define _ADI_ADRV9001_USER_H_
 
-#include "adi_adrv9001_types.h"
+#include "adi_adrv9001_profile_types.h"
 
 #define HAL_SPIWRITEARRAY_BUFFERSIZE 256
 
@@ -155,6 +155,20 @@
 #define ADI_ADRV9001_SSI_DEBUG_INTERVAL_US          10000
 
 #define ADI_ADRV9001_GETTXATTEN_WAIT_INTERVAL_US	0
+
+#define ADI_ADRV9001_MEM_WRITE_OVERHEAD_BYTES     14u   /* Bytes required as overhead when writing FHTable */
+#define ADI_ADRV9001_FREQ_HOPPING_NUM_TABLE_BYTES 1280u /* Number of bytes required to write table FHTable. */
+                                                        /* Size of Table (Max 64) * 20 Bytes. */
+                                                        /* User may set lower value if smaller table size is used */
+
+#define ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES   (ADI_ADRV9001_MEM_WRITE_OVERHEAD_BYTES      +\
+                                                   ADI_ADRV9001_FREQ_HOPPING_NUM_TABLE_BYTES)
+
+#define ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS 156
+#define ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_WORDS 624
+#define ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES 2496
+#define ADI_ADRV9001_WB_MAX_NUM_ENTRY 16384
+#define ADI_ADRV9001_WB_MAX_NUM_COEFF 6000
 /*
  *****************************************
  * Rx and ObsRx gain tables

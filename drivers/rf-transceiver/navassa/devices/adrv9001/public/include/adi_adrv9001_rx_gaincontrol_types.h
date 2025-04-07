@@ -113,6 +113,15 @@ typedef struct adi_adrv9001_ExtLna
 } adi_adrv9001_ExtLna_t;
 
 /**
+*  \brief Available AGC FREEZE options
+*/
+typedef enum adi_adrv9001_AgcFreezeType
+{
+	ADI_ADRV9001_RX_AGC_HW_FREEZE,
+    ADI_ADRV9001_RX_AGC_SW_FREEZE
+} adi_adrv9001_AgcFreezeType_e;
+
+/**
 * \brief Gain control configuration settings for initialization
 *  The Transceiver Evaluation Software can be used to generate a structure with suggested settings.
 */
@@ -143,6 +152,7 @@ typedef struct adi_adrv9001_GainControlCfg
     adi_adrv9001_ExtLna_t extLna;
 	bool rxQecFreezeEnable;		/*!< RXQEC Freeze Enable/Disable, only applies in AGC mode*/
 	adi_adrv9001_GpioPin_e gpioFreezePin; /*!< GPIO pin to activate to freeze AGC - set to 0/UNASSIGNED if unused */
+	adi_adrv9001_AgcFreezeType_e agcFreezeType; /*!< HW_FREEZE = 0 or SW_FREEZE = 1  */
 } adi_adrv9001_GainControlCfg_t;
 
 typedef struct adi_adrv9001_RxGainControlPinCfg

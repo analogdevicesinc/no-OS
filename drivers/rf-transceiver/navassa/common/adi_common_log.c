@@ -37,7 +37,7 @@ void adi_common_LogWrite(adi_common_Device_t *commonDev, uint32_t logLevel, cons
 
     if (halError != ADI_COMMON_ERR_OK)
     {
-        /* reentrant function call, ADI_ERROR_REPORT calls adi_common_LogWrite
+        /* reentrant function call, ADI_ERROR_REPORT calls adi_common_LogWrite 
          * At this point we should disable logging as it is not available, but keep reporting errors/warnings */
         commonDev->error.logEnable = false;
         ADI_ERROR_REPORT(commonDev, ADI_COMMON_SRC_LOG, halError, ADI_COMMON_ACT_WARN_RESET_LOG, NULL, "Logging failed");

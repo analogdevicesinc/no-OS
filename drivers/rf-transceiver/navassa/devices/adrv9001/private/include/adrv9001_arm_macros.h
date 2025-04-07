@@ -88,6 +88,10 @@ extern "C" {
 #define ADRV9001_ADDR_FH_HOP_TABLE_A_OFFSET                 0x00000450
 #define ADRV9001_ADDR_FH_HOP_TABLE_B_OFFSET                 0x00000454
 
+/* ARM data memory offset */
+/* Code region in ARM data memory starts at 0x20034400 and is max 0x3c00 bytes */
+#define ADRV9001_ADDR_CODE_REGION_OFFSET                    0x34400
+
 /* ARM checksum MailBox */
 #define ADRV9001_ADDR_ARM_MAILBOX_SET					    0x20000000
 #define ADRV9001_ADDR_ARM_MAILBOX_GET					    0x20000100
@@ -100,6 +104,8 @@ extern "C" {
 #define ADRV9001_MAILBOX_ERROR_DEVICE_PROFILE				0x00
 
 #define ADRV9001_ARM_MEM_READ_AUTOINCR                      0x1
+#define ADRV9001_ARM_PROG_MEM_BYTE_COUNT                    0x48000
+#define ADRV9001_ARM_DATA_MEM_BINARY_IMAGE_OFFSET           0x48000
 
 #ifdef __cplusplus
 }

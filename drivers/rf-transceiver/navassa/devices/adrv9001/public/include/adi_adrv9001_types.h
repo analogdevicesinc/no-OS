@@ -19,6 +19,7 @@
 
 #include "adi_adrv9001_common.h"
 #include "adi_common.h"
+#include <adi_adrv9001_user.h>
 
 #define ADI_ADRV9001_NUM_TXRX_CHANNELS         0x4
 #define ADI_ADRV9001_NUM_RX_CHANNELS           0x2
@@ -37,12 +38,6 @@
 /* TODO: Determine a reasonable value */
 #define ADI_ADRV9001_READY_FOR_MCS_DELAY_US 100U
 
-#define ADI_ADRV9001_WB_MAX_NUM_UNIQUE_CALS 156
-#define ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_WORDS 624
-#define ADI_ADRV9001_WB_MAX_NUM_VECTOR_TABLE_BYTES 2496
-#define ADI_ADRV9001_WB_MAX_NUM_ENTRY 16384
-#define ADI_ADRV9001_WB_MAX_NUM_COEFF 6000
-
 /**
 * \brief ADRV9001 part number
 */
@@ -52,6 +47,8 @@ typedef enum adi_adrv9001_PartNumber
     ADI_ADRV9001_PART_NUMBER_ADRV9002   = 0x0,
     ADI_ADRV9001_PART_NUMBER_ADRV9003   = 0xC,
     ADI_ADRV9001_PART_NUMBER_ADRV9004   = 0x8,
+    ADI_ADRV9001_PART_NUMBER_ADRV9005   = 0x0006,
+    ADI_ADRV9001_PART_NUMBER_ADRV9006   = 0x1989
 } adi_adrv9001_PartNumber_e;
 
 /**
@@ -141,6 +138,17 @@ typedef enum adi_adrv9001_FirGain
     ADRV9001_FIR_GAIN_POS_24_DB   = 24,  /*!< FIR gain 24 */
     ADRV9001_FIR_GAIN_POS_26_DB   = 26   /*!< FIR gain 26 */
 } adi_adrv9001_FirGain_e;
+
+/**
+ * \brief Enumerated list of Temperature Read options from internal temperature sensor
+ */
+typedef enum adi_adrv9001_TempReadMode
+{
+	ADI_ADRV9001_TEMPERATURE_READ_MAILBOX = 0, /*!< Reads temperature value using Mailbox command, only after ADC completes temperature measurement */
+	ADI_ADRV9001_TEMPERATURE_READ_SPI = 1	   /*!< Instantly reads the Aux ADC temperature sense result from register via direct register access,
+                                                    irrespective of ADC temperature measurement done or not.
+                                                    Hence, the value readback may be an older one */
+} adi_adrv9001_TempReadMode_e;
 
 /*
 *********************************************************************************************************
