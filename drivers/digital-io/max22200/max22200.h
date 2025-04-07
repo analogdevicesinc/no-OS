@@ -50,9 +50,9 @@
 #define MAX22200_R1B			NO_OS_BIT(0)
 
 #define MAX22200_STATUS_REG		0x00
-#define MAX22200_CFG_CH(x)		(0x02 + (0x02 * (x)))
-#define MAX22200_FAULT_REG		0x0C
-#define MAX22200_CFG_DPM_REG		0x0E
+#define MAX22200_CFG_CH(x)		(0x01 + (0x01 * (x)))
+#define MAX22200_FAULT_REG		0x09
+#define MAX22200_CFG_DPM_REG		0x0A
 
 /* Write/Read Masks */
 #define MAX22200_RW_MASK		NO_OS_BIT(7)
