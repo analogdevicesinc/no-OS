@@ -25,7 +25,7 @@ extern "C" {
 *********************************************************************************************************
 */
 /* "adi_adrv9001_user.h" contains the #define that other header file use */
-#include "adi_adrv9001_user.h"
+#include <adi_adrv9001_user.h>
 
 /* ADI specific header files */
 #include "adi_common_macros.h"
@@ -266,16 +266,17 @@ int32_t adi_adrv9001_Profiles_Verify(adi_adrv9001_Device_t *adrv9001, adi_adrv90
 /**
  * \brief Gets the temperature in Celsius from the internal temperature sensor
  *
- * \note Message type: \ref timing_mailbox "Mailbox command"
+ * \note Message type: Mailbox commands or direct register access
  *
  * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
  *
  * \param[in]  adrv9001	        Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in]  tempReadMode	    Options to read temperature : Default option - Mailbox, Other option - Direct Register Access
  * \param[out] temperature_C    The current temperature, in Celsius
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Temperature_Get(adi_adrv9001_Device_t *adrv9001, int16_t *temperature_C);
+int32_t adi_adrv9001_Temperature_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_TempReadMode_e tempReadMode, int16_t *temperature_C);
 
 /**
  * \brief Reads back the part number for the ADRV9001 variant device

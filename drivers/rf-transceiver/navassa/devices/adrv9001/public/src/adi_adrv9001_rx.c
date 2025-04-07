@@ -54,53 +54,73 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_GainTable_Write_Val
     ADI_NULL_PTR_RETURN(&device->common, lnaConfig);
     ADI_ENTRY_PTR_ARRAY_EXPECT(device, gainTableRows, arraySize);
 
-    if ((ADI_RX == port) && (lnaConfig->externalLnaPresent))
-    {
-        ADI_RANGE_CHECK(device, lnaConfig->numberLnaGainSteps, 2, 4);
-        //ADI_RANGE_CHECK(device, lnaConfig->settlingDelay, 0, 0);
-        //ADI_RANGE_CHECK(device, lnaConfig->lnaDigitalGainDelay, 0, 0);
+	if ((ADI_RX == port) && (lnaConfig->externalLnaPresent))
+	{
+		ADI_RANGE_CHECK(device, lnaConfig->numberLnaGainSteps, 2, 4);
+		//ADI_RANGE_CHECK(device, lnaConfig->settlingDelay, 0, 0);
+		//ADI_RANGE_CHECK(device, lnaConfig->lnaDigitalGainDelay, 0, 0);
 
-        ADI_NULL_PTR_RETURN(&device->common, lnaConfig);
+		ADI_NULL_PTR_RETURN(&device->common, lnaConfig);
 
-        if (lnaConfig->minGainIndex < ABSOLUTE_MIN_INDEX)
-        {
-            ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                lnaConfig->lnaGainSteps[0],
-                "lnaConfig->minGainIndex should be greater than or equal to 187");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        }
+		if (lnaConfig->minGainIndex < ABSOLUTE_MIN_INDEX)
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_INV_PARAM,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				lnaConfig->minGainIndex,
+				"lnaConfig->minGainIndex should be greater than or equal to 187");
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
 
-        if (0 != lnaConfig->lnaGainSteps_mdB[0])
-        {
-            ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                lnaConfig->lnaGainSteps[0],
-                "lnaConfig->lnaGainSteps[0] should have the gain step as '0' only");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        }
+		if (0 != lnaConfig->lnaGainSteps_mdB[0])
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_INV_PARAM,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				lnaConfig->lnaGainSteps_mdB[0],
+				"lnaConfig->lnaGainSteps_mdB[0] should have the gain step as '0' only");
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
 
-        for (i = 1; i < lnaConfig->numberLnaGainSteps; i++)
-        {
-            if ((lnaConfig->lnaGainSteps_mdB[i] == 0) || ((lnaConfig->lnaGainSteps_mdB[i] % 500) != 0))
-            {
-                ADI_ERROR_REPORT(&device->common,
-                    ADI_COMMON_ERRSRC_API,
-                    ADI_COMMON_ERR_INV_PARAM,
-                    ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                    lnaConfig->LNAGainSteps[i],
-                    "External LNA gain step can not be zero and should be multiple of 500 mdB");
-                ADI_ERROR_RETURN(device->common.error.newAction);
-            }
-            totalGainSteps += lnaConfig->lnaGainSteps_mdB[i];
-        }
+		for (i = 1; i < lnaConfig->numberLnaGainSteps; i++)
+		{
+			if ((lnaConfig->lnaGainSteps_mdB[i] == 0) || ((lnaConfig->lnaGainSteps_mdB[i] % 500) != 0))
+			{
+				ADI_ERROR_REPORT(&device->common,
+					ADI_COMMON_ERRSRC_API,
+					ADI_COMMON_ERR_INV_PARAM,
+					ADI_COMMON_ACT_ERR_CHECK_PARAM,
+					lnaConfig->lnaGainSteps_mdB[i],
+					"External LNA gain step can not be zero and should be multiple of 500 mdB");
+				ADI_ERROR_RETURN(device->common.error.newAction);
+			}
 
-        // Maximum combined gain step must not exceed 29000 mdB
-        ADI_RANGE_CHECK(device, totalGainSteps, 0, 29000);
+			if (lnaConfig->lnaType == ADI_ADRV9001_EXTERNAL_LNA_TYPE_SINGLE)
+			{
+				totalGainSteps += lnaConfig->lnaGainSteps_mdB[i];
+			}
+			else
+			{
+				if (lnaConfig->lnaGainSteps_mdB[i] > 29000)
+				{
+					ADI_ERROR_REPORT(&device->common,
+						ADI_COMMON_ERRSRC_API,
+						ADI_COMMON_ERR_INV_PARAM,
+						ADI_COMMON_ACT_ERR_CHECK_PARAM,
+						lnaConfig->lnaGainSteps_mdB[i],
+						"In case of multiple LNA, the gain per LNA can not be more than 29000 mdB");
+					ADI_ERROR_RETURN(device->common.error.newAction);
+				}
+			}
+
+			if (lnaConfig->lnaType == ADI_ADRV9001_EXTERNAL_LNA_TYPE_SINGLE)
+			{
+				// Maximum combined gain step must not exceed 29000 mdB
+				ADI_RANGE_CHECK(device, totalGainSteps, 0, 29000);
+			}
+		}
     }
     
     /*Check that the gain index offset is within range*/
@@ -179,9 +199,9 @@ int32_t adi_adrv9001_Rx_GainTable_Write(adi_adrv9001_Device_t *device,
     uint16_t numGainIndicesToWrite = 0;
     uint8_t  lnaStepOffset = { 0 };
 #ifdef __KERNEL__
-    static adi_adrv9001_RxGainTableRow_t lnaGainTable[127];
+    static adi_adrv9001_RxGainTableRow_t lnaGainTable[235];
 #else
-    adi_adrv9001_RxGainTableRow_t lnaGainTable[127] = { { 0 } };
+    adi_adrv9001_RxGainTableRow_t lnaGainTable[235] = { { 0 } };
 #endif
     adi_adrv9001_RxGainTableRow_t *gainTablePtr = NULL;
     uint8_t minGainIndex = 0;
@@ -576,10 +596,26 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_Rssi_Read_Validate(
                                                                  uint32_t *rxRssiPower_mdB,
                                                                  adi_common_ChannelNumber_e rxChannel)
 {
-    ADI_NULL_PTR_RETURN(&device->common, rxRssiPower_mdB);
+	adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
 
-    /* Check that the requested channel mask is valid */
-    ADI_RANGE_CHECK(device, rxChannel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+	/* Check device pointer is not null */
+	ADI_ENTRY_EXPECT(device);
+
+	ADI_NULL_PTR_RETURN(&device->common, rxRssiPower_mdB);
+
+	/* Check that the requested channel mask is valid */
+	ADI_RANGE_CHECK(device, rxChannel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+
+	ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_RX, rxChannel, &state);
+	if (ADI_ADRV9001_CHANNEL_RF_ENABLED != state)
+	{
+		ADI_ERROR_REPORT(device,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			state,
+			"Error attempting to read RSSI. Specified channel must be in RF_ENABLED state");
+	}
 
     ADI_API_RETURN(device);
 }
@@ -1449,8 +1485,21 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_GainIndex_Gpio_Conf
     ADI_RANGE_CHECK(device, gainIndexPinCfgchannel->gainIndex_01_00, ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED, ADI_ADRV9001_GPIO_PIN_CRUMB_15_14);
     ADI_RANGE_CHECK(device, gainIndexPinCfgchannel->gainIndex_03_02, ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED, ADI_ADRV9001_GPIO_PIN_CRUMB_15_14);
     ADI_RANGE_CHECK(device, gainIndexPinCfgchannel->gainIndex_05_04, ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED, ADI_ADRV9001_GPIO_PIN_CRUMB_15_14);
-    ADI_RANGE_CHECK(device, gainIndexPinCfgchannel->gainIndex_07_06, ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED, ADI_ADRV9001_GPIO_PIN_CRUMB_15_14);
-    ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_RX, channel, &state);
+    ADI_RANGE_CHECK(device, gainIndexPinCfgchannel->gainChange_gainIndex_06, ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED, ADI_ADRV9001_GPIO_PIN_CRUMB_15_14);
+	if ((gainIndexPinCfgchannel->gainIndex_01_00 == ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED) &&
+		(gainIndexPinCfgchannel->gainIndex_03_02 == ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED) &&
+		(gainIndexPinCfgchannel->gainIndex_05_04 == ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED) &&
+		(gainIndexPinCfgchannel->gainChange_gainIndex_06 == ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED))
+	{
+		ADI_ERROR_REPORT(&device->common,
+			ADI_COMMON_ERRSRC_API,
+			ADI_COMMON_ERR_API_FAIL,
+			ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			NULL,
+			"All crumbs cannot be unassigned");
+		ADI_API_RETURN(device)
+	}
+	ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_RX, channel, &state);
     if (ADI_ADRV9001_CHANNEL_CALIBRATED != state)
     {
         ADI_ERROR_REPORT(&device->common,
@@ -1505,7 +1554,7 @@ int32_t adi_adrv9001_Rx_GainIndex_Gpio_Configure(adi_adrv9001_Device_t *device,
     gpioCrumb1_0 = (uint8_t)gainIndexPinCfgchannel->gainIndex_01_00;
     gpioCrumb3_2 = (uint8_t)gainIndexPinCfgchannel->gainIndex_03_02;
     gpioCrumb5_4 = (uint8_t)gainIndexPinCfgchannel->gainIndex_05_04;
-    gpioCrumb7_6 = (uint8_t)gainIndexPinCfgchannel->gainIndex_07_06;
+    gpioCrumb7_6 = (uint8_t)gainIndexPinCfgchannel->gainChange_gainIndex_06;
 
     if (ADI_CHANNEL_1 == channel)
     {
@@ -1523,17 +1572,43 @@ int32_t adi_adrv9001_Rx_GainIndex_Gpio_Configure(adi_adrv9001_Device_t *device,
     }
 
     ADI_EXPECT(adrv9001_NvsRegmapCore_NvsGpioDirectionControlOe_Get, device, &gpioOutEn);
-    gpioOutEn |= (1 << (gpioCrumb1_0 * 2 - 1)) | (1 << (gpioCrumb1_0 * 2 - 2));
-    gpioOutEn |= (1 << (gpioCrumb3_2 * 2 - 1)) | (1 << (gpioCrumb3_2 * 2 - 2));
-    gpioOutEn |= (1 << (gpioCrumb5_4 * 2 - 1)) | (1 << (gpioCrumb5_4 * 2 - 2));
-    gpioOutEn |= (1 << (gpioCrumb7_6 * 2 - 1)) | (1 << (gpioCrumb7_6 * 2 - 2));
+
+	if (gpioCrumb1_0 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		gpioOutEn |= (1 << (gpioCrumb1_0 * 2 - 1)) | (1 << (gpioCrumb1_0 * 2 - 2));
+	}
+	if(gpioCrumb3_2 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		gpioOutEn |= (1 << (gpioCrumb3_2 * 2 - 1)) | (1 << (gpioCrumb3_2 * 2 - 2));
+	}
+	if (gpioCrumb5_4 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		gpioOutEn |= (1 << (gpioCrumb5_4 * 2 - 1)) | (1 << (gpioCrumb5_4 * 2 - 2));
+	}
+	if (gpioCrumb7_6 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		gpioOutEn |= (1 << (gpioCrumb7_6 * 2 - 1)) | (1 << (gpioCrumb7_6 * 2 - 2));
+	}
+
     ADI_EXPECT(adrv9001_NvsRegmapCore_NvsGpioDirectionControlOe_Set, device, gpioOutEn);
 
     /* Configure source */
-    ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb1_0 - 1), gpioSource1_0);
-    ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb3_2 - 1), gpioSource3_2);
-    ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb5_4 - 1), gpioSource5_4);
-    ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb7_6 - 1), gpioSource7_6);
+	if (gpioCrumb1_0 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb1_0 - 1), gpioSource1_0);
+	}
+	if (gpioCrumb3_2 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb3_2 - 1), gpioSource3_2);
+	}
+	if (gpioCrumb5_4 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb5_4 - 1), gpioSource5_4);
+	}
+	if (gpioCrumb7_6 != ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED)
+	{
+		ADRV9001_SPIWRITEBYTE(device, "GPIO_SOURCE_SEL", (GPIO_SOURCE_SEL_ADDR + gpioCrumb7_6 - 1), gpioSource7_6);
+	}
 
     ADI_EXPECT(adrv9001_NvsRegmapRx_ControlOutMuxSel_Set, device, instance, GAIN_INDEX_MUX_ADDRESS);
 
@@ -1702,7 +1777,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_ExternalLna_Configu
             ADI_COMMON_ERRSRC_API,
             ADI_COMMON_ERR_INV_PARAM,
             ADI_COMMON_ACT_ERR_CHECK_PARAM,
-            lnaConfig->lnaGainSteps[0],
+		    lnaConfig->minGainIndex,
             "lnaConfig->minGainIndex should be greater than or equal to 187");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
@@ -1722,24 +1797,44 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_ExternalLna_Configu
             "lnaConfig->lnaGainSteps_mdB[0] should have the gain step as '0' only");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
-    
-    for (i = 1; i < lnaConfig->numberLnaGainSteps; i++)
-    {
-        if ((lnaConfig->lnaGainSteps_mdB[i] == 0) || ((lnaConfig->lnaGainSteps_mdB[i] % 500) != 0))
-        {
-            ADI_ERROR_REPORT(&device->common,
-                ADI_COMMON_ERRSRC_API,
-                ADI_COMMON_ERR_INV_PARAM,
-                ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                lnaConfig->lnaGainSteps_mdB[i],
-                "External LNA gain step can not be zero and should be multiple of 500 mdB");
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        }
-        totalGainSteps += lnaConfig->lnaGainSteps_mdB[i];
-    }
 
-    // Maximum combined gain step must not exceed 29000 mdB
-    ADI_RANGE_CHECK(device, totalGainSteps, 0, 29000);
+	for (i = 1; i < lnaConfig->numberLnaGainSteps; i++)
+	{
+		if ((lnaConfig->lnaGainSteps_mdB[i] == 0) || ((lnaConfig->lnaGainSteps_mdB[i] % 500) != 0))
+		{
+			ADI_ERROR_REPORT(&device->common,
+				ADI_COMMON_ERRSRC_API,
+				ADI_COMMON_ERR_INV_PARAM,
+				ADI_COMMON_ACT_ERR_CHECK_PARAM,
+				lnaConfig->lnaGainSteps_mdB[i],
+				"External LNA gain step can not be zero and should be multiple of 500 mdB");
+			ADI_ERROR_RETURN(device->common.error.newAction);
+		}
+
+		if (lnaConfig->lnaType == ADI_ADRV9001_EXTERNAL_LNA_TYPE_SINGLE)
+		{
+			totalGainSteps += lnaConfig->lnaGainSteps_mdB[i];
+		}
+		else
+		{
+			if (lnaConfig->lnaGainSteps_mdB[i] > 29000)
+			{
+				ADI_ERROR_REPORT(&device->common,
+					ADI_COMMON_ERRSRC_API,
+					ADI_COMMON_ERR_INV_PARAM,
+					ADI_COMMON_ACT_ERR_CHECK_PARAM,
+					lnaConfig->lnaGainSteps_mdB[i],
+					"In case of multiple LNA, the gain per LNA can not be more than 29000 mdB");
+				ADI_ERROR_RETURN(device->common.error.newAction);
+			}
+		}
+
+		if (lnaConfig->lnaType == ADI_ADRV9001_EXTERNAL_LNA_TYPE_SINGLE)
+		{
+			// Maximum combined gain step must not exceed 29000 mdB
+			ADI_RANGE_CHECK(device, totalGainSteps, 0, 29000);
+		}
+	}
 
     ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, device, ADI_RX, channel, &state);
     if (!(ADI_ADRV9001_CHANNEL_STANDBY == state) &&
@@ -1995,4 +2090,116 @@ int32_t adi_adrv9001_Rx_Loid_Inspect(adi_adrv9001_Device_t *adrv9001,
 	loidConfig->loidThreshold_negdBFS = armReadBack[2] + 6;
 
     ADI_API_RETURN(adrv9001);
+}
+
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_Rssi_Manual_Configure_Validate(adi_adrv9001_Device_t *adrv9001,
+                                                                                            adi_common_ChannelNumber_e channel,
+                                                                                            uint32_t rssiInterval)
+{
+	adi_adrv9001_ChannelState_e state = ADI_ADRV9001_CHANNEL_STANDBY;
+
+	/* Check device pointer is not null */
+	ADI_ENTRY_EXPECT(adrv9001);
+	/* Check that the requested channel mask is valid */
+	ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+
+	ADI_EXPECT(adi_adrv9001_Radio_Channel_State_Get, adrv9001, ADI_RX, channel, &state);
+	if ((ADI_ADRV9001_CHANNEL_CALIBRATED != state)
+	    && (ADI_ADRV9001_CHANNEL_PRIMED != state)
+	    && (ADI_ADRV9001_CHANNEL_RF_ENABLED != state))
+	{
+		ADI_ERROR_REPORT(adrv9001,
+			             ADI_COMMON_ERRSRC_API,
+			             ADI_COMMON_ERR_API_FAIL,
+			             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+			             state,
+			             "Error attempting to manually configure RSSI. Specified channel must be in CALIBRATED,  PRIMED or RF_ENABLED state");
+	}
+
+	if (0 == rssiInterval)
+	{
+		ADI_ERROR_REPORT(&adrv9001->common,
+		                 ADI_COMMON_ERRSRC_API,
+		                 ADI_COMMON_ERR_INV_PARAM,
+		                 ADI_COMMON_ACT_ERR_CHECK_PARAM,
+		                 rssiInterval,
+		                 "rssiInterval should not have the value as '0'");
+		ADI_ERROR_RETURN(adrv9001->common.error.newAction);
+	}
+
+	ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_Rx_Rssi_Manual_Configure(adi_adrv9001_Device_t* adrv9001,
+	                                          adi_common_ChannelNumber_e channel,
+                                              uint32_t rssiInterval, adi_adrv9001_ManualRssiReadStatus_t* manualRssiReadStatus)
+{
+    uint8_t setRssiMode = 1; /* 1 = clear accumulator on falling pwr_mon_rssi_enable (restart rssi), 0 = don't clear accumulator (pause & resume rssi) */
+    uint8_t setRssiTapPoint = 1; /* 1 = slicer input, 0 = slicer output */
+    uint32_t acc0recipFactor = 8388608; /* (2 ^ 23) */
+    uint32_t setAcc0RecipValue = 0; /* Set rssi_interval reciprocal = acc0recipFactor/rssiInterval */
+
+    adrv9001_BfNvsRegmapRxb_e instance = ADRV9001_BF_RXB1_CORE;
+
+	ADI_PERFORM_VALIDATION(adi_adrv9001_Rx_Rssi_Manual_Configure_Validate, adrv9001, channel, rssiInterval);
+
+	if (ADI_CHANNEL_2 == channel)
+	{
+		instance = ADRV9001_BF_RXB2_CORE;
+	}
+
+    /* RSSI Tap Point select and mode */
+    ADI_MSG_EXPECT("Error selecting RSSI tap point", adrv9001_NvsRegmapRxb_DcsgPmDsel_Set, adrv9001, instance, setRssiTapPoint);
+    ADI_MSG_EXPECT("Error setting RSSI Mode", adrv9001_NvsRegmapRxb_DcsgPmMode_Set, adrv9001, instance, setRssiMode);
+    /* RSSI interval and reciprocal configuration */
+    ADI_MSG_EXPECT("Error setting accumulator value", adrv9001_NvsRegmapRxb_DcsgPmAcc0Num_Set, adrv9001, instance, rssiInterval);
+    setAcc0RecipValue = acc0recipFactor / rssiInterval;
+    ADI_MSG_EXPECT("Error setting accumulator reciprocal value", adrv9001_NvsRegmapRxb_DcsgPmAcc0NumRecip_Set, adrv9001, instance, setAcc0RecipValue);
+    /* Fetch and store slicer values for high speed mode RSSI calculation */
+    ADI_MSG_EXPECT("Error fetching RSSI slicer in", adrv9001_NvsRegmapRxb_DcsgPmDsel_Get, adrv9001, instance, &manualRssiReadStatus->slicerIn);
+    ADI_MSG_EXPECT("Error fetching RSSI slicer offset", adrv9001_NvsRegmapRxb_SlicerPositionOffset_Get, adrv9001, instance, &manualRssiReadStatus->slicerOffset);
+
+    ADI_API_RETURN(adrv9001);
+}
+
+static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_Rssi_Manual_Status_Get_Validate(adi_adrv9001_Device_t* adrv9001,
+                                                                                             adi_common_ChannelNumber_e channel)
+{
+    /* Check device pointer is not null */
+    ADI_ENTRY_EXPECT(adrv9001);
+    /* Check that the requested channel mask is valid */
+    ADI_RANGE_CHECK(adrv9001, channel, ADI_CHANNEL_1, ADI_CHANNEL_2);
+
+    ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_Rx_Rssi_Manual_Status_Get(adi_adrv9001_Device_t *adrv9001,
+	                                           adi_common_ChannelNumber_e channel,
+                                               adi_adrv9001_ManualRssiReadMode_e manualRssiReadMode,
+                                               adi_adrv9001_ManualRssiReadStatus_t *manualRssiReadStatus)
+{
+	adrv9001_BfNvsRegmapRxb_e instance = ADRV9001_BF_RXB1_CORE;
+
+	ADI_PERFORM_VALIDATION(adi_adrv9001_Rx_Rssi_Manual_Status_Get_Validate, adrv9001, channel);
+
+	if (ADI_CHANNEL_2 == channel)
+	{
+		instance = ADRV9001_BF_RXB2_CORE;
+	}
+
+    if (manualRssiReadMode == ADI_ADRV9001_RSSI_READ_HIGH_SPEED_MODE)
+    {
+        /* Readback parameters for high speed mode RSSI calculation */
+        ADI_MSG_EXPECT("Error reading linear power exponent", adrv9001_NvsRegmapRxb_DcsgPmPowExp0_Get, adrv9001, instance, &manualRssiReadStatus->linearPowerExponent);
+    }
+    else
+    {
+        /* Readback parameters for high precision mode RSSI calculation */
+        ADI_MSG_EXPECT("Error reading linear power exponent", adrv9001_NvsRegmapRxb_DcsgPmPowExp0_Get, adrv9001, instance, &manualRssiReadStatus->linearPowerExponent);
+        ADI_MSG_EXPECT("Error reading linear power mantissa", adrv9001_NvsRegmapRxb_DcsgPmPowMan0_Get, adrv9001, instance, &manualRssiReadStatus->linearPowerMantissa);
+        ADI_MSG_EXPECT("Error fetching RSSI slicer in", adrv9001_NvsRegmapRxb_DcsgPmDsel_Get, adrv9001, instance, &manualRssiReadStatus->slicerIn);
+        ADI_MSG_EXPECT("Error fetching RSSI slicer offset", adrv9001_NvsRegmapRxb_SlicerPositionOffset_Get, adrv9001, instance, &manualRssiReadStatus->slicerOffset);
+    }
+
+	ADI_API_RETURN(adrv9001);
 }

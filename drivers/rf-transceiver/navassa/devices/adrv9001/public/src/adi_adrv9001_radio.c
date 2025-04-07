@@ -217,7 +217,7 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Radio_Pll_Configure_Va
                 ADI_API_RETURN(adrv9001)
             }
         }
-    }
+    }   
 
     ADI_API_RETURN(adrv9001);
 }
@@ -229,14 +229,14 @@ int32_t adi_adrv9001_Radio_Pll_Configure(adi_adrv9001_Device_t *adrv9001,
     uint8_t armData[7] = { 0 };
     uint8_t extData[5] = { 0 };
     uint32_t offset = 0;
-
+    
     ADI_PERFORM_VALIDATION(adi_adrv9001_Radio_Pll_Configure_Validate, adrv9001, pllId, pllConfig);
 
     adrv9001_LoadFourBytes(&offset, armData, sizeof(armData) - sizeof(uint32_t));
     armData[offset++] = pllId;
     armData[offset++] = pllConfig->pllCalibration;
     armData[offset++] = pllConfig->pllPower;
-
+    
     extData[0] = 0;
     extData[1] = OBJID_GS_CONFIG;
     extData[2] = OBJID_CFG_PLL_CONFIG;
@@ -270,10 +270,10 @@ int32_t adi_adrv9001_Radio_Pll_Inspect(adi_adrv9001_Device_t *adrv9001,
     extendedData[0] = pllId;
     ADI_EXPECT(adi_adrv9001_arm_Memory_Write, adrv9001, ADRV9001_ADDR_ARM_MAILBOX_GET + 4u, &extendedData[0], 1, ADI_ADRV9001_ARM_SINGLE_SPI_WRITE_MODE_STANDARD_BYTES_4);
     ADI_EXPECT(adi_adrv9001_arm_Config_Read, adrv9001, OBJID_CFG_PLL_CONFIG, channelMask, offset, armReadBack, sizeof(armReadBack))
-
+    
     /* Skip pll id */
     offset++;
-
+    
     pllConfig->pllCalibration    = (adi_adrv9001_PllCalibration_e) armReadBack[offset++];
     pllConfig->pllPower          = (adi_adrv9001_PllPower_e) armReadBack[offset++];
     ADI_API_RETURN(adrv9001);
@@ -405,10 +405,10 @@ int32_t adi_adrv9001_Radio_State_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv90
 	static const uint8_t ARM_CMD_STATUS_8_BROADCAST_MODE = 0x11;
 	static const uint8_t ARM_CMD_STATUS_9_BROADCAST_MODE = 0x00;
 #endif
-
+    
     /* Range checks */
     ADI_ENTRY_PTR_EXPECT(adrv9001, radioState);
-
+    
 #if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
 	ADRV9001_SPIREADBYTE(adrv9001, "arm_cmd_status_8", ADRV9001_ADDR_ARM_CMD_STATUS_8, &regValue);
 #else
@@ -429,7 +429,7 @@ int32_t adi_adrv9001_Radio_State_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv90
 		ADRV9001_SPIREADBYTE(adrv9001, "arm_cmd_status_8", ADRV9001_ADDR_ARM_CMD_STATUS_8, &regValue);
 	}
 #endif
-
+    
     radioState->systemState         = regValue & 0x03;
     /* The same parts of the register are stored twice for monitor mode state and MCS substate.
        These bits have different definitions depending on systemState.
@@ -450,7 +450,7 @@ int32_t adi_adrv9001_Radio_State_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv90
         ADRV9001_SPIREADBYTE(adrv9001, "arm_cmd_status_9", ADRV9001_ADDR_ARM_CMD_STATUS_9, &regValue);
     }
 #endif
-
+    
     radioState->channelStates[0][0] = (regValue >> 0) & 0x03;   /* Rx1 */
     radioState->channelStates[0][1] = (regValue >> 2) & 0x03;   /* Rx2 */
     radioState->channelStates[1][0] = (regValue >> 4) & 0x03;   /* Tx1 */
@@ -483,7 +483,7 @@ int32_t adi_adrv9001_Radio_Channel_State_Get(adi_adrv9001_Device_t *adrv9001,
 #endif
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_Radio_Channel_State_Get_Validate, adrv9001, port, channel, channelState);
-
+    
 #if ADI_ADRV9001_PRE_MCS_BROADCAST_DISABLE > 0
 	ADRV9001_SPIREADBYTE(adrv9001, "arm_cmd_status_9", ADRV9001_ADDR_ARM_CMD_STATUS_9, &regValue);
 #else
@@ -612,7 +612,6 @@ int32_t adi_adrv9001_Radio_Channels_EnableRf(adi_adrv9001_Device_t *adrv9001,
     uint8_t i = 0;
     uint8_t port_index = 0;
     uint8_t chan_index = 0;
-    adi_adrv9001_ChannelEnableMode_e enableMode = ADI_ADRV9001_SPI_MODE;
     adi_adrv9001_RadioState_t currentState = { 0 };
 
     ADI_PERFORM_VALIDATION(adi_adrv9001_Channel_State_GenericValidate, adrv9001, ports, channels, length);
@@ -622,18 +621,6 @@ int32_t adi_adrv9001_Radio_Channels_EnableRf(adi_adrv9001_Device_t *adrv9001,
     ADI_EXPECT(adi_adrv9001_Radio_State_Get, adrv9001, &currentState);
     for (i = 0; i < length; i++)
     {
-        ADI_EXPECT(adi_adrv9001_Radio_ChannelEnableMode_Get, adrv9001, ports[i], channels[i], &enableMode);
-        if (ADI_ADRV9001_SPI_MODE != enableMode)
-        {
-            ADI_ERROR_REPORT(&adrv9001->common,
-                             ADI_COMMON_ERRSRC_API,
-                             ADI_COMMON_ERR_API_FAIL,
-                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                             enableMode,
-                             "Error while attempting to enable/disable RF for channel. Channel enable mode must be ADI_ADRV9001_SPI_MODE");
-            ADI_API_RETURN(adrv9001);
-        }
-
         adi_common_port_to_index(ports[i], &port_index);
         adi_common_channel_to_index(channels[i], &chan_index);
         if (currentState.channelStates[port_index][chan_index] != ADI_ADRV9001_CHANNEL_PRIMED &&
@@ -712,7 +699,7 @@ static __maybe_unused int32_t adi_adrv9001_Channel_DisableRF_Wait(adi_adrv9001_D
     adi_common_channel_to_index(channel, &chan_index);
 
     ADI_EXPECT(adi_adrv9001_Radio_Channel_EnableRf, adrv9001, port, channel, false);
-
+    
     waitInterval_us = (waitInterval_us > timeout_us) ? timeout_us : waitInterval_us;
     numEventChecks = (waitInterval_us == 0) ? 1 : (timeout_us / waitInterval_us);
 
@@ -832,9 +819,9 @@ int32_t adi_adrv9001_Radio_Channels_PowerUp(adi_adrv9001_Device_t *adrv9001,
     ADI_API_RETURN(adrv9001);
 }
 
-int32_t adi_adrv9001_Radio_Channel_ToCalibrated(adi_adrv9001_Device_t *adrv9001,
-                                                adi_common_Port_e port,
-                                                adi_common_ChannelNumber_e channel)
+static int32_t adi_adrv9001_Radio_Channel_ToCalibrated(adi_adrv9001_Device_t *adrv9001,
+						       adi_common_Port_e port,
+						       adi_common_ChannelNumber_e channel)
 {
     uint8_t port_index = 0;
     uint8_t chan_index = 0;
@@ -870,9 +857,9 @@ int32_t adi_adrv9001_Radio_Channel_ToCalibrated(adi_adrv9001_Device_t *adrv9001,
     ADI_API_RETURN(adrv9001)
 }
 
-int32_t adi_adrv9001_Radio_Channel_ToPrimed(adi_adrv9001_Device_t *adrv9001,
-                                            adi_common_Port_e port,
-                                            adi_common_ChannelNumber_e channel)
+static int32_t adi_adrv9001_Radio_Channel_ToPrimed(adi_adrv9001_Device_t *adrv9001,
+						   adi_common_Port_e port,
+						   adi_common_ChannelNumber_e channel)
 {
     uint8_t port_index = 0;
     uint8_t chan_index = 0;
@@ -909,9 +896,9 @@ int32_t adi_adrv9001_Radio_Channel_ToPrimed(adi_adrv9001_Device_t *adrv9001,
     ADI_API_RETURN(adrv9001)
 }
 
-int32_t adi_adrv9001_Radio_Channel_ToRfEnabled(adi_adrv9001_Device_t *adrv9001,
-                                               adi_common_Port_e port,
-                                               adi_common_ChannelNumber_e channel)
+static int32_t adi_adrv9001_Radio_Channel_ToRfEnabled(adi_adrv9001_Device_t *adrv9001,
+						      adi_common_Port_e port,
+						      adi_common_ChannelNumber_e channel)
 {
     uint8_t port_index = 0;
     uint8_t chan_index = 0;
@@ -964,7 +951,21 @@ int32_t adi_adrv9001_Radio_Channel_ToState(adi_adrv9001_Device_t *adrv9001,
                                            adi_common_ChannelNumber_e channel,
                                            adi_adrv9001_ChannelState_e state)
 {
+    adi_adrv9001_ChannelEnableMode_e enableMode;
+
     ADI_PERFORM_VALIDATION(adi_adrv9001_Radio_Channel_ToState_Validate, adrv9001, port, channel, state);
+
+    ADI_EXPECT(adi_adrv9001_Radio_ChannelEnableMode_Get, adrv9001, port, channel, &enableMode);
+    if (ADI_ADRV9001_SPI_MODE != enableMode)
+    {
+            ADI_ERROR_REPORT(&adrv9001->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_API_FAIL,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             enableMode,
+                             "Error while attempting to change RF State for channel. Channel enable mode must be ADI_ADRV9001_SPI_MODE");
+            ADI_API_RETURN(adrv9001);
+    }
 
     switch (state)
     {
@@ -1413,7 +1414,7 @@ int32_t adi_adrv9001_Radio_ToMcsReady (adi_adrv9001_Device_t *adrv9001)
                                         ADRV9001_ARM_OBJECTID_MCS,
                                         ADI_ADRV9001_WRITEARMCFG_TIMEOUT_US,
                                         ADI_ADRV9001_WRITEARMCFG_INTERVAL_US);
-    ADI_API_RETURN(adrv9001);
+    ADI_API_RETURN(adrv9001);      
 }
 
 static __maybe_unused int32_t __maybe_unused adi_adrv9001_Radio_RfLogenDivider_Get_Validate(adi_adrv9001_Device_t *adrv9001,
@@ -1463,12 +1464,12 @@ int32_t adi_adrv9001_Radio_RfLogenDivider_Get(adi_adrv9001_Device_t *adrv9001, a
 {
 	uint8_t RfLogenDivMode = 0;
 	uint16_t RfLogenDivRatio = 0;
+	*RfLogenDivider = 0;
+
 	static const adrv9001_BfNvsPllMemMap_e instances[] = {
 		ADRV9001_BF_RF1_PLL,
 		ADRV9001_BF_RF2_PLL
 	};
-
-	*RfLogenDivider = 0;
 
 	ADI_PERFORM_VALIDATION(adi_adrv9001_Radio_RfLogenDivider_Get_Validate, adrv9001, pll, RfLogenDivider);
 
@@ -1497,3 +1498,61 @@ int32_t adi_adrv9001_Radio_RfLogenDivider_Get(adi_adrv9001_Device_t *adrv9001, a
 
 	ADI_API_RETURN(adrv9001);
 }
+
+static __maybe_unused int32_t adi_adrv9001_Radio_PfirWbNbCompChFilter_Set_Validate(adi_adrv9001_Device_t *adrv9001,
+	                                                                 const adi_adrv9001_PfirWbNbBuffer_t *pfirCoeff,
+	                                                                 adi_common_Port_e port,
+	                                                                 adi_common_ChannelNumber_e channel, 
+	                                                                 adi_adrv9001_PfirBank_e bankSel)
+{
+	/* Check input pointers are not null */
+	ADI_ENTRY_PTR_EXPECT(adrv9001, pfirCoeff);
+	
+	ADI_EXPECT(adi_adrv9001_Port_Validate, adrv9001, port);
+	ADI_EXPECT(adi_adrv9001_Channel_Validate, adrv9001, channel);
+	
+	ADI_RANGE_CHECK(adrv9001, bankSel, ADI_ADRV9001_PFIR_BANK_A, ADI_ADRV9001_PFIR_BANK_D);
+
+	ADI_API_RETURN(adrv9001);
+}
+
+int32_t adi_adrv9001_Radio_PfirWbNbCompChFilter_Set(adi_adrv9001_Device_t *adrv9001, 
+	                                                const adi_adrv9001_PfirWbNbBuffer_t *pfirCoeff,
+	                                                adi_adrv9001_PfirBank_e bankSel,
+	                                                adi_common_Port_e port,
+	                                                adi_common_ChannelNumber_e channel)
+{
+	uint8_t PfirWbNbCoeffSelModeEnable = 1;
+	adi_adrv9001_PfirTypeId_e pfirType = ADI_ADRV9001_PFIR_TYPE_RX_WB_NB_COMP;
+	
+	ADI_PERFORM_VALIDATION(adi_adrv9001_Radio_PfirWbNbCompChFilter_Set_Validate, adrv9001, pfirCoeff, port, channel, bankSel);
+	
+	if (((channel == ADI_CHANNEL_1) && ((bankSel == ADI_ADRV9001_PFIR_BANK_A) || 
+		(bankSel == ADI_ADRV9001_PFIR_BANK_B))) || ((channel == ADI_CHANNEL_2) && 
+		((bankSel == ADI_ADRV9001_PFIR_BANK_C) || (bankSel == ADI_ADRV9001_PFIR_BANK_D))))
+	{
+		if (port == ADI_TX)
+		{
+			pfirType = ADI_ADRV9001_PFIR_TYPE_TX_WB_NB_COMP;
+		}
+		else if (port == ADI_RX)
+		{
+			pfirType = ADI_ADRV9001_PFIR_TYPE_RX_WB_NB_COMP;	
+		}
+	}
+
+	/* Load coefficients */
+	adrv9001_Radio_PfirWbNbCompCoeffBankSelMode_Set(adrv9001, bankSel, PfirWbNbCoeffSelModeEnable, port);
+	adrv9001_Radio_Pfir_Write(adrv9001, pfirCoeff, pfirType, port, channel);
+	adrv9001_Radio_PfirWbNbCompCoeffBankSelMode_Set(adrv9001, bankSel, !(PfirWbNbCoeffSelModeEnable), port);
+
+	/* Load symmetric, taps, gain */ 
+	adrv9001_Radio_PfirWbNbCompSymmetric_Set(adrv9001, bankSel, pfirCoeff->symmetricSel, port);
+	adrv9001_Radio_PfirWbNbCompTaps_Set(adrv9001, bankSel, pfirCoeff->tapsSel, port);
+	adrv9001_Radio_PfirWbNbCompGain_Set(adrv9001, bankSel, pfirCoeff->gainSel, port);
+	
+	ADI_API_RETURN(adrv9001);
+}
+
+
+
