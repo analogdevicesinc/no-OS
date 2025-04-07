@@ -25,7 +25,7 @@ extern "C"{
 */
 
 /* Header files related to libraries */
-#include "adi_adrv9001_user.h"
+#include "adi_adrv9001_types.h"
 
 /* System header files */
 

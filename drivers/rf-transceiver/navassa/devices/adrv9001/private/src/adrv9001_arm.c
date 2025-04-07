@@ -71,7 +71,6 @@
 
 #define ADRV9001_PROFILE_CHUNK_MAX              256u
 #define ADRV9001_DYNAMIC_PROFILE_BLOB_SIZE      164
-#define ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES     1536u
 const char* const adrv9001_error_table_ArmBootStatus[] =
 {
     "ARM is powering up",
@@ -2187,17 +2186,17 @@ int32_t adrv9001_DmaMemWriteFH(adi_adrv9001_Device_t *device, adi_adrv9001_FhHop
 	uint32_t    ADDR_ARM_DMA_DATA[4] = { ADRV9001_ADDR_ARM_DMA_DATA3, ADRV9001_ADDR_ARM_DMA_DATA2, ADRV9001_ADDR_ARM_DMA_DATA1, ADRV9001_ADDR_ARM_DMA_DATA0 };
 	uint32_t    index = 0;
 #ifndef __KERNEL__
-	uint8_t     addrMsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
-	uint8_t     addrLsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
-	uint8_t     dataArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+	uint8_t     addrMsbArray[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+	uint8_t     addrLsbArray[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
+	uint8_t     dataArray[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES] = { 0 };
 #else
-        static uint8_t     addrMsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
-        static uint8_t     addrLsbArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
-        static uint8_t     dataArray[ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
+	static uint8_t     addrMsbArray[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
+	static uint8_t     addrLsbArray[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
+	static uint8_t     dataArray[ADI_ADRV9001_FREQ_HOPPING_MAX_NUM_BYTES];
 
-        memset(addrMsbArray, 0, sizeof(addrMsbArray));
-        memset(addrLsbArray, 0, sizeof(addrLsbArray));
-        memset(dataArray, 0, sizeof(dataArray));
+    memset(addrMsbArray, 0, sizeof(addrMsbArray));
+    memset(addrLsbArray, 0, sizeof(addrLsbArray));
+    memset(dataArray, 0, sizeof(dataArray));
 #endif
 
 	ADI_ENTRY_PTR_ARRAY_EXPECT(device, numHopTableEntries, numHopTableEntriesByteCount);
@@ -2228,6 +2227,7 @@ int32_t adrv9001_DmaMemWriteFH(adi_adrv9001_Device_t *device, adi_adrv9001_FhHop
 	{
 		regWrite |= ADRV9001_DMA_CTL_AUTO_INCR;
 	}
+    
 	/* setting up the DMA control register for a write */
 	addrMsbArray[addrIndex] = (uint8_t)(((ADRV9001_SPI_WRITE_POLARITY & 0x01) << 7) | ((ADRV9001_ADDR_ARM_DMA_CTL >> 8) & 0x7F));
 	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_CTL;
@@ -2249,6 +2249,7 @@ int32_t adrv9001_DmaMemWriteFH(adi_adrv9001_Device_t *device, adi_adrv9001_FhHop
 	addrLsbArray[addrIndex] = (uint8_t)ADRV9001_ADDR_ARM_DMA_ADDR0;
 	dataArray[addrIndex] = (uint8_t)((hopTableAddress) >> ADRV9001_ADDR_ARM_DMA_ADDR0_BYTE_SHIFT);
 	addrIndex++;
+
 	/* Cache Enable and Auto Inc */
 	for (i = 0; i < numHopTableEntriesByteCount; i++)
 	{

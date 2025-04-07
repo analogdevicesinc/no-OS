@@ -108,7 +108,6 @@ typedef struct adi_adrv9001_ArmVersion
     uint8_t majorVer;
     uint8_t minorVer;
     uint8_t maintVer;
-    uint8_t rcVer;
     adi_adrv9001_ArmBuildType_e armBuildType;
 } adi_adrv9001_ArmVersion_t;
 

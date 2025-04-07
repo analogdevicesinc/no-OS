@@ -236,6 +236,15 @@ static __maybe_unused int32_t __maybe_unused adi_adrv9001_Rx_GainControl_Configu
                     ADI_ADRV9001_GPIO_PIN_CRUMB_UNASSIGNED,
                     ADI_ADRV9001_GPIO_PIN_CRUMB_15_14);
 
+	if (agcCfg->agcFreezeType == ADI_ADRV9001_RX_AGC_SW_FREEZE)
+	{
+		/* SW AGC freeze is interrupt controlled by DGPIO pin.Only pins 0 to 3 are interruptible */
+		ADI_RANGE_CHECK(device,
+			            agcCfg->gpioFreezePin,
+			            ADI_ADRV9001_GPIO_UNASSIGNED,
+			            ADI_ADRV9001_GPIO_DIGITAL_03);
+	}
+
     ADI_API_RETURN(device);
 }
 
@@ -471,23 +480,44 @@ int32_t adi_adrv9001_Rx_GainControl_Configure(adi_adrv9001_Device_t *device,
 	{
 		ADI_EXPECT(adrv9001_NvsRegmapCore2_Rx2Fic2CaptPedSoftOverrideEnable_Set, device, agcCfg->rxQecFreezeEnable);
 	}
-    
+
 	if (agcCfg->gpioFreezePin != ADI_ADRV9001_GPIO_UNASSIGNED)
 	{
-		/* Enable freeze mode */
-		ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcEnableGainFreeze_Set, device, rxbAddr, 0x1);
+		if (agcCfg->agcFreezeType == ADI_ADRV9001_RX_AGC_HW_FREEZE)
+		{
+			/* Enable freeze mode */
+			ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcEnableGainFreeze_Set, device, rxbAddr, 0x1);
 
-		/* Set up GPIO pins */
-		ADI_EXPECT(adi_adrv9001_gpio_ManualInput_Configure, device, agcCfg->gpioFreezePin);
-		if (ADI_CHANNEL_1 == channel)
-		{
-			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioSelect_Set, device, (agcCfg->gpioFreezePin - 1));
-			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioMask_Set, device, 0);
+			/* Set up GPIO pins */
+			ADI_EXPECT(adi_adrv9001_gpio_ManualInput_Configure, device, agcCfg->gpioFreezePin);
+			if (ADI_CHANNEL_1 == channel)
+			{
+				ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioSelect_Set, device, (agcCfg->gpioFreezePin - 1));
+				ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioMask_Set, device, 0);
+			}
+			else
+			{
+				ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioSelect_Set, device, (agcCfg->gpioFreezePin - 1));
+				ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioMask_Set, device, 0);
+			}
 		}
-		else
+		else if (agcCfg->agcFreezeType == ADI_ADRV9001_RX_AGC_SW_FREEZE)
 		{
-			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioSelect_Set, device, (agcCfg->gpioFreezePin - 1));
-			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioMask_Set, device, 0);
+			/* Set up GPIO pins */
+			adi_adrv9001_GpioCfg_t gpio = {
+				.pin = agcCfg->gpioFreezePin,
+				.polarity = ADI_ADRV9001_GPIO_POLARITY_NORMAL,
+				.master = ADI_ADRV9001_GPIO_MASTER_BBIC,
+			};
+
+			if (ADI_CHANNEL_1 == channel)
+			{
+				ADI_EXPECT(adi_adrv9001_gpio_Configure, device, ADI_ADRV9001_GPIO_SIGNAL_RX1_AGC_FREEZE, &gpio);
+			}
+			else
+			{
+				ADI_EXPECT(adi_adrv9001_gpio_Configure, device, ADI_ADRV9001_GPIO_SIGNAL_RX2_AGC_FREEZE, &gpio);
+			}
 		}
 	}
 
@@ -513,6 +543,7 @@ int32_t adi_adrv9001_Rx_GainControl_Inspect(adi_adrv9001_Device_t *device,
     uint8_t instanceIdx = 0;
     uint8_t bfValue = 0;
     uint8_t i = 0;
+	adi_adrv9001_GpioCfg_t gpio = { 0 };
 
     static const uint16_t GPIO_SOURCE_SEL_ADDR = 0x56;
     enum
@@ -673,24 +704,49 @@ int32_t adi_adrv9001_Rx_GainControl_Inspect(adi_adrv9001_Device_t *device,
 		ADI_EXPECT(adrv9001_NvsRegmapCore2_Rx2Fic2CaptPedSoftOverrideEnable_Get, device, &bfValue);
 	}
 	agcCfg->rxQecFreezeEnable = (bool)bfValue;
-
-	/* GPIO Freeze Pin*/
-	ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcEnableGainFreeze_Get, device, rxbAddr, &bfValue);
-	if (bfValue == 0x1)
+	
+	if (ADI_CHANNEL_1 == channel)
 	{
-		if (ADI_CHANNEL_1 == channel)
-		{
-			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioSelect_Get, device, &bfValue);
-		}
-		else
-		{
-			ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioSelect_Get, device, &bfValue);
-		}
-		agcCfg->gpioFreezePin = (adi_adrv9001_GpioPin_e)(bfValue + 1);
+		ADI_EXPECT(adi_adrv9001_gpio_Inspect, device, ADI_ADRV9001_GPIO_SIGNAL_RX1_AGC_FREEZE, &gpio);
 	}
 	else
 	{
-		agcCfg->gpioFreezePin = ADI_ADRV9001_GPIO_UNASSIGNED;
+		ADI_EXPECT(adi_adrv9001_gpio_Inspect, device, ADI_ADRV9001_GPIO_SIGNAL_RX2_AGC_FREEZE, &gpio);
+	}
+
+	if (gpio.pin == ADI_ADRV9001_GPIO_UNASSIGNED)
+	{
+		agcCfg->agcFreezeType = ADI_ADRV9001_RX_AGC_HW_FREEZE;
+	}
+	else
+	{
+		agcCfg->agcFreezeType = ADI_ADRV9001_RX_AGC_SW_FREEZE;
+	}
+
+	if (agcCfg->agcFreezeType == ADI_ADRV9001_RX_AGC_HW_FREEZE)
+	{
+		/* GPIO Freeze Pin*/
+		ADI_EXPECT(adrv9001_NvsRegmapRxb_AgcEnableGainFreeze_Get, device, rxbAddr, &bfValue);
+		if (bfValue == 0x1)
+		{
+			if (ADI_CHANNEL_1 == channel)
+			{
+				ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx1AgcSlowloopFreezeGpioSelect_Get, device, &bfValue);
+			}
+			else
+			{
+				ADI_EXPECT(adrv9001_NvsRegmapCore1_Rx2AgcSlowloopFreezeGpioSelect_Get, device, &bfValue);
+			}
+			agcCfg->gpioFreezePin = (adi_adrv9001_GpioPin_e)(bfValue + 1);
+		}
+		else
+		{
+			agcCfg->gpioFreezePin = ADI_ADRV9001_GPIO_UNASSIGNED;
+		}
+	}
+	else
+	{
+		agcCfg->gpioFreezePin = gpio.pin;
 	}
 
     ADI_API_RETURN(device);

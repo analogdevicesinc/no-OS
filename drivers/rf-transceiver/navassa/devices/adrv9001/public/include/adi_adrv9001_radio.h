@@ -19,13 +19,14 @@
 #include "adi_adrv9001_arm_types.h"
 #include "adi_adrv9001_tx_types.h"
 #include "adrv9001_init_types.h"
+#include "adrv9001_radio.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * \brief Minimum supported carrier frequency 
+ * \brief Minimum supported carrier frequency
  */
 #define ADI_ADRV9001_CARRIER_FREQUENCY_MIN_HZ 25000000llu    /* 25 MHz */
 /**
@@ -79,7 +80,7 @@ int32_t adi_adrv9001_Radio_Carrier_Inspect(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre This function should be called before running init calibration when all the channels are in STANDBY state. 
+ * \pre This function should be called before running init calibration when all the channels are in STANDBY state.
  *
  * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] pllId     The PLL of interest
@@ -96,7 +97,7 @@ int32_t adi_adrv9001_Radio_Carrier_Inspect(adi_adrv9001_Device_t *adrv9001,
  *
  * \note Message type: \ref timing_mailbox "Mailbox command"
  *
- * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED 
+ * \pre Channel state any of STANDBY, CALIBRATED, PRIMED, RF_ENABLED
  *
  * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
  * \param[in] pllId     The PLL of interest
@@ -181,7 +182,7 @@ int32_t adi_adrv9001_Radio_ChannelEnableMode_Get(adi_adrv9001_Device_t *adrv9001
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_Radio_State_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_RadioState_t *radioState);
-    
+
 /**
  * \brief Reads the current channel state
  *
@@ -197,7 +198,7 @@ int32_t adi_adrv9001_Radio_State_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv90
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
-int32_t adi_adrv9001_Radio_Channel_State_Get(adi_adrv9001_Device_t *adrv9001, 
+int32_t adi_adrv9001_Radio_Channel_State_Get(adi_adrv9001_Device_t *adrv9001,
                                              adi_common_Port_e port,
                                              adi_common_ChannelNumber_e channel,
                                              adi_adrv9001_ChannelState_e *channelState);
@@ -372,50 +373,6 @@ int32_t adi_adrv9001_Radio_Channels_PowerUp(adi_adrv9001_Device_t *adrv9001,
                                             adi_common_ChannelNumber_e channels[],
                                             uint32_t length);
 
-/**
- * \brief Transition the specified channel to the CALIBRATED state
- *
- * This function will transition the specified channel to the CALIBRATED state from any state where it is valid to do so.
- *
- * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure containing settings
- * \param[in] port      The port that the channel refers to
- * \param[in] channel   The channel of the specified port to transition to the CALIBRATED state
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_Radio_Channel_ToCalibrated(adi_adrv9001_Device_t *adrv9001,
-                                                adi_common_Port_e port,
-                                                adi_common_ChannelNumber_e channel);
-
-/**
- * \brief Transition the specified channel to the PRIMED state
- *
- * This function will transition the specified channel to the PRIMED state from any state where it is valid to do so.
- *
- * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure containing settings
- * \param[in] port      The port that the channel refers to
- * \param[in] channel   The channel of the specified port to transition to the PRIMED state
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_Radio_Channel_ToPrimed(adi_adrv9001_Device_t *adrv9001,
-                                            adi_common_Port_e port,
-                                            adi_common_ChannelNumber_e channel);
-
-/**
- * \brief Transition the specified channel to the RF ENABLED state
- *
- * This function will transition the specified channel to the RF ENABLED state from any state where it is valid to do so.
- *
- * \param[in] adrv9001  Context variable - Pointer to the ADRV9001 device data structure containing settings
- * \param[in] port      The port that the channel refers to
- * \param[in] channel   The channel of the specified port to transition to the RF ENABLED state
- *
- * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
- */
-int32_t adi_adrv9001_Radio_Channel_ToRfEnabled(adi_adrv9001_Device_t *adrv9001,
-                                               adi_common_Port_e port,
-                                               adi_common_ChannelNumber_e channel);
 
 /**
  * \brief Transition the specified channel to the specified state
@@ -460,7 +417,7 @@ int32_t adi_adrv9001_Radio_PllLoopFilter_Set(adi_adrv9001_Device_t *adrv9001,
  *
  * \param[in] adrv9001              Context variable - Pointer to the ADRV9001 device data structure containing settings
  * \param[in] pll                   The PLL for which to configure the loop filter
- * \param[in] pllLoopFilterConfig   The current loop filter configuration
+ * \param[out] pllLoopFilterConfig   The current loop filter configuration
  *
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
@@ -563,6 +520,26 @@ int32_t adi_adrv9001_Radio_ToMcsReady(adi_adrv9001_Device_t *adrv9001);
  * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
  */
 int32_t adi_adrv9001_Radio_RfLogenDivider_Get(adi_adrv9001_Device_t *adrv9001, adi_adrv9001_Pll_e pll, uint32_t *RfLogenDivider);
+
+/**
+ * \brief Write the TX/RX WB/NB PFIR channel filter Banks
+ *
+ * \note Used with TX/RX WB/NB compensation PFIR types only
+ *
+ * \pre Channel state is RF_ENABLED
+ *
+ * \param[in] adrv9001	Context variable - Pointer to the ADRV9001 device settings data structure
+ * \param[in] pfirCoeff PFIR configuration to write
+ * \param[in] bankSel   The PFIR Bank of interest
+ * \param[in] port      The port of interest
+ * \param[in] channel   The channel of interest
+ *
+ * \returns A code indicating success (ADI_COMMON_ACT_NO_ACTION) or the required action to recover
+ */
+int32_t adi_adrv9001_Radio_PfirWbNbCompChFilter_Set(adi_adrv9001_Device_t *adrv9001,
+		                                            const adi_adrv9001_PfirWbNbBuffer_t *pfirCoeff,
+		                                            adi_adrv9001_PfirBank_e bankSel, adi_common_Port_e port,
+	                                                adi_common_ChannelNumber_e channel);
 
 #ifdef __cplusplus
 }

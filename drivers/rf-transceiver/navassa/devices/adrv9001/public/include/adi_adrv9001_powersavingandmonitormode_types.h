@@ -14,7 +14,7 @@
 #ifndef _ADI_ADRV9001_POWERSAVINGANDMONITORMODE_TYPES_H_
 #define _ADI_ADRV9001_POWERSAVINGANDMONITORMODE_TYPES_H_
 
-#include "adi_adrv9001_user.h"
+#include <adi_adrv9001_user.h>
 
 #ifdef __KERNEL__
 #include <linux/types.h>
