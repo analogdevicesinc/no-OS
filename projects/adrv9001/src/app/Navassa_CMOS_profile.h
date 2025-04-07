@@ -48,8 +48,8 @@ const char *json_profile = "{ \
           \"hpAdcCorner\": 20000000, \
           \"lpAdcCorner\": 0, \
           \"adcClk_kHz\": 2211840, \
-          \"rxCorner3dB_kHz\": 10000, \
-          \"rxCorner3dBLp_kHz\": 10000, \
+          \"rxCorner3dB_kHz\": 40000, \
+          \"rxCorner3dBLp_kHz\": 40000, \
           \"tiaPower\": 2, \
           \"tiaPowerLp\": 2, \
           \"channelType\": 1, \
@@ -131,7 +131,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 1, \
@@ -165,8 +166,8 @@ const char *json_profile = "{ \
           \"hpAdcCorner\": 20000000, \
           \"lpAdcCorner\": 0, \
           \"adcClk_kHz\": 2211840, \
-          \"rxCorner3dB_kHz\": 10000, \
-          \"rxCorner3dBLp_kHz\": 10000, \
+          \"rxCorner3dB_kHz\": 40000, \
+          \"rxCorner3dBLp_kHz\": 40000, \
           \"tiaPower\": 2, \
           \"tiaPowerLp\": 2, \
           \"channelType\": 2, \
@@ -248,7 +249,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 1, \
@@ -365,7 +367,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 0, \
@@ -482,7 +485,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 0, \
@@ -599,7 +603,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 1, \
@@ -716,7 +721,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 1, \
@@ -833,7 +839,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 0, \
@@ -950,7 +957,8 @@ const char *json_profile = "{ \
             \"numberLnaGainSteps\": 0, \
             \"lnaGainSteps_mdB\": [ 0, 0, 0, 0 ], \
             \"lnaDigitalGainDelay\": 0, \
-            \"minGainIndex\": 0 \
+            \"minGainIndex\": 0, \
+            \"lnaType\": 0 \
           }, \
           \"rxSsiConfig\": { \
             \"ssiType\": 0, \
@@ -1174,7 +1182,7 @@ const char *json_profile = "{ \
     \"mcsMode\": 0, \
     \"mcsInterfaceType\": 0, \
     \"adcTypeMonitor\": 1, \
-    \"pllLockTime_us\": 750, \
+    \"pllLockTime_us\": 380, \
     \"pllPhaseSyncWait_us\": 0, \
     \"pllModulus\": { \
       \"modulus\": [ 8388593, 8388593, 8388593, 8388593, 8388593 ], \
@@ -1254,17 +1262,17 @@ const char *json_profile = "{ \
       } ], \
     \"pfirRxMagLowTiaLowSRHp\": [ { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -346, 1329, -1178, -1281, 1308, 2727, -1341, -5852, -1018, 12236, 19599, 12236, -1018, -5852, -1341, 2727, 1308, -1281, -1178, 1329, -346 ] \
+        \"coefficients\": [ -12, 83, -293, 734, -1489, 2594, -3965, 5403, -6516, 5868, 27957, 5868, -6516, 5403, -3965, 2594, -1489, 734, -293, 83, -12 ] \
       }, { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -346, 1329, -1178, -1281, 1308, 2727, -1341, -5852, -1018, 12236, 19599, 12236, -1018, -5852, -1341, 2727, 1308, -1281, -1178, 1329, -346 ] \
+        \"coefficients\": [ -12, 83, -293, 734, -1489, 2594, -3965, 5403, -6516, 5868, 27957, 5868, -6516, 5403, -3965, 2594, -1489, 734, -293, 83, -12 ] \
       } ], \
     \"pfirRxMagLowTiaHighSRHp\": [ { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -2474, 892, 6049, 4321, -7599, -15881, -6074, 13307, 18926, 6338, -2843, 6338, 18926, 13307, -6074, -15881, -7599, 4321, 6049, 892, -2474 ] \
+        \"coefficients\": [ -62, 194, 80, -829, 201, 1857, -179, -4602, -1259, 11431, 19102, 11431, -1259, -4602, -179, 1857, 201, -829, 80, 194, -62 ] \
       }, { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -2474, 892, 6049, 4321, -7599, -15881, -6074, 13307, 18926, 6338, -2843, 6338, 18926, 13307, -6074, -15881, -7599, 4321, 6049, 892, -2474 ] \
+        \"coefficients\": [ -62, 194, 80, -829, 201, 1857, -179, -4602, -1259, 11431, 19102, 11431, -1259, -4602, -179, 1857, 201, -829, 80, 194, -62 ] \
       } ], \
     \"pfirRxMagHighTiaHighSRHp\": [ { \
         \"numCoeff\": 21, \
@@ -1275,17 +1283,17 @@ const char *json_profile = "{ \
       } ], \
     \"pfirRxMagLowTiaLowSRLp\": [ { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -346, 1329, -1178, -1281, 1308, 2727, -1341, -5851, -1018, 12236, 19599, 12236, -1018, -5851, -1341, 2727, 1308, -1281, -1178, 1329, -346 ] \
+        \"coefficients\": [ -12, 83, -293, 733, -1488, 2593, -3963, 5401, -6514, 5870, 27953, 5870, -6514, 5401, -3963, 2593, -1488, 733, -293, 83, -12 ] \
       }, { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -346, 1329, -1178, -1281, 1308, 2727, -1341, -5851, -1018, 12236, 19599, 12236, -1018, -5851, -1341, 2727, 1308, -1281, -1178, 1329, -346 ] \
+        \"coefficients\": [ -12, 83, -293, 733, -1488, 2593, -3963, 5401, -6514, 5870, 27953, 5870, -6514, 5401, -3963, 2593, -1488, 733, -293, 83, -12 ] \
       } ], \
     \"pfirRxMagLowTiaHighSRLp\": [ { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -2473, 892, 6048, 4321, -7598, -15879, -6072, 13306, 18924, 6338, -2843, 6338, 18924, 13306, -6072, -15879, -7598, 4321, 6048, 892, -2473 ] \
+        \"coefficients\": [ -62, 194, 80, -828, 201, 1855, -180, -4597, -1254, 11428, 19093, 11428, -1254, -4597, -180, 1855, 201, -828, 80, 194, -62 ] \
       }, { \
         \"numCoeff\": 21, \
-        \"coefficients\": [ -2473, 892, 6048, 4321, -7598, -15879, -6072, 13306, 18924, 6338, -2843, 6338, 18924, 13306, -6072, -15879, -7598, 4321, 6048, 892, -2473 ] \
+        \"coefficients\": [ -62, 194, 80, -828, 201, 1855, -180, -4597, -1254, 11428, 19093, 11428, -1254, -4597, -180, 1855, 201, -828, 80, 194, -62 ] \
       } ], \
     \"pfirRxMagHighTiaHighSRLp\": [ { \
         \"numCoeff\": 21, \

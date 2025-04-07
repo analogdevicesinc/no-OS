@@ -38,6 +38,7 @@
 #include "xil_cache.h"
 #endif /* XILINX_PLATFORM */
 
+#include "no_os_print_log.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
@@ -68,7 +69,8 @@
 
 /* ADC/DAC Buffers */
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
-static uint32_t dac_buffers[IIO_DEV_COUNT][DAC_BUFFER_SAMPLES]
+static uint32_t dac_buffers[IIO_DEV_COUNT][DAC_BUFFER_SAMPLES  *
+		ADRV9001_I_Q_CHANNELS]
 __attribute__((aligned(1024)));
 static uint16_t adc_buffers[IIO_DEV_COUNT][ADC_BUFFER_SAMPLES *
 		ADRV9001_I_Q_CHANNELS]
@@ -100,26 +102,37 @@ struct adi_adrv9001_SpiSettings *adrv9002_spi_settings_get(void)
 	return &spiSettings;
 }
 
-enum adi_adrv9001_SsiType adrv9002_ssi_type_detect(struct adrv9002_rf_phy *phy)
+static int32_t adrv9002_dev_clk_recalc_rate(struct no_os_clk_desc *desc,
+		uint64_t *rate)
 {
-	enum adi_adrv9001_SsiType ssi, ssi2;
-	char *ssi_str[3] = {
-		"[SSI Disabled]",
-		"CMOS",
-		"LVDS"
-	};
+	*rate = 38400000;
 
-	ssi = adrv9002_axi_ssi_type_get(phy);
-
-	ssi2 = phy->curr_profile->rx.rxChannelCfg[0].profile.rxSsiConfig.ssiType;
-	if (ssi != ssi2) {
-		printf("SSI mismatch: detected %s in HDL and %s in profile.\n", ssi_str[ssi],
-		       ssi_str[ssi2]);
-		return ADI_ADRV9001_SSI_TYPE_DISABLE;
-	}
-
-	return ssi;
+	return 0;
 }
+
+static int32_t adrv9002_dev_clk_set_rate(struct no_os_clk_desc *desc,
+		uint64_t rate)
+{
+	// Do nothing
+	return 0;
+}
+
+static int32_t adrv9002_dev_clk_round_rate(struct no_os_clk_desc *desc,
+		uint64_t rate,
+		uint64_t *rounded_rate)
+{
+	pr_debug("%s: Rate %lu Hz", __func__, rate);
+
+	*rounded_rate = rate;
+
+	return 0;
+}
+
+static const struct no_os_clk_platform_ops adrv9002_dev_clk_ops = {
+	.clk_round_rate = &adrv9002_dev_clk_round_rate,
+	.clk_set_rate = &adrv9002_dev_clk_set_rate,
+	.clk_recalc_rate = &adrv9002_dev_clk_recalc_rate,
+};
 
 static struct adi_adrv9001_GainControlCfg agc_defaults = {
 	.peakWaitTime = 4,
@@ -184,7 +197,6 @@ static struct adi_adrv9001_GainControlCfg agc_defaults = {
 };
 
 #ifdef IIO_SUPPORT
-
 static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 		       struct iio_axi_dac_init_param *dac_pars)
 {
@@ -224,7 +236,7 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 			return ret;
 		a = 2 * i;
 		iio_axi_adc_get_dev_descriptor(adcs[i], &iio_descs[a]);
-		app_devices[a].name = adc_pars[i].rx_adc->name;
+		app_devices[a].name = (char *)adc_pars[i].rx_adc->name;
 		app_devices[a].dev = adcs[i];
 		app_devices[a].dev_descriptor = iio_descs[a];
 		app_devices[a].read_buff = &iio_adc_buffers[i];
@@ -237,7 +249,7 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 			return ret;
 		a = 2 * i + 1;
 		iio_axi_dac_get_dev_descriptor(dacs[i], &iio_descs[a]);
-		app_devices[a].name = dac_pars[i].tx_dac->name;
+		app_devices[a].name = (char *)dac_pars[i].tx_dac->name;
 		app_devices[a].dev = dacs[i];
 		app_devices[a].dev_descriptor = iio_descs[a];
 		app_devices[a].write_buff = &iio_dac_buffers[i];
@@ -257,14 +269,12 @@ static int32_t iio_run(struct iio_axi_adc_init_param *adc_pars,
 
 int main(void)
 {
+	struct adrv9002_init_param adrv9002_init_par = { 0 };
+	struct adi_adrv9001_Device adrv9001_device = { 0 };
+	struct no_os_clk_init_param clk_init = { 0 };
+	struct adrv9002_chip_info chip = { 0 };
+	struct adrv9002_rf_phy phy = { 0 };
 	int ret;
-	struct adi_common_ApiVersion api_version;
-	struct adi_adrv9001_ArmVersion arm_version;
-	struct adi_adrv9001_SiliconVersion silicon_version;
-	struct adi_adrv9001_Device adrv9001_device = {0};
-	struct adrv9002_chip_info chip = {0};
-	struct adrv9002_rf_phy phy = {0};
-	unsigned int c;
 
 	struct axi_adc_init rx1_adc_init = {
 		.name = "axi-adrv9002-rx-lpc",
@@ -281,7 +291,7 @@ int main(void)
 		.base = TX1_DAC_BASEADDR,
 		.num_channels = ADRV9001_I_Q_CHANNELS,
 		.channels = tx1_dac_channels,
-		.rate = 3
+		.rate = 1
 	};
 
 #ifndef ADRV9002_RX2TX2
@@ -336,28 +346,37 @@ int main(void)
 
 	printf("Hello\n");
 
-#if defined(ADRV9002_RX2TX2)
-	phy.rx2tx2 = true;
-#endif
-
-	phy.adrv9001 = &adrv9001_device;
-
 	/* ADRV9002 */
 	chip.cmos_profile = "Navassa_CMOS_profile.json";
 	chip.lvd_profile = "Navassa_LVDS_profile.json";
 	chip.name = "adrv9002-phy";
+	chip.num_channels = 2;
+#if defined(ADRV9002_RX2TX2)
+	chip.num_channels = 4;
+	chip.rx2tx2 = 1;
+#endif
 	chip.n_tx = ADRV9002_CHANN_MAX;
 
-	phy.chip = &chip;
+	phy.adrv9001 = &adrv9001_device;
+	phy.adrv9001->common.devHalInfo = &phy.hal;
 
-	ret = adi_adrv9001_profileutil_Parse(phy.adrv9001, &phy.profile,
-					     (char *)json_profile, strlen(json_profile));
-	if (ret)
-		goto error;
+	/* Initialize dev_clk component */
+	clk_init.name = "adrv9002_ext_refclk";
+	clk_init.hw_ch_num = 1;
+	clk_init.platform_ops = &adrv9002_dev_clk_ops;
+	clk_init.dev_desc = &phy;
 
-	phy.curr_profile = &phy.profile;
+	ret = no_os_clk_init(&adrv9002_init_par.dev_clk, &clk_init);
+	if (ret) {
+		pr_err("Failed to create descriptor for dev_clk.\n");
+		return ret;
+	}
 
-	sampling_freq = phy.curr_profile->rx.rxChannelCfg[0].profile.rxOutputRate_Hz;
+	adrv9002_init_par.chip = &chip;
+	adrv9002_init_par.agcConfig_init_param = &agc_defaults;
+	adrv9002_init_par.profile = (char *)json_profile;
+	adrv9002_init_par.profile_length = strlen(json_profile);
+	adrv9002_dev_init(&phy, &adrv9002_init_par);
 
 	/* Initialize the ADC/DAC cores */
 	ret = axi_adc_init_begin(&phy.rx1_adc, &rx1_adc_init);
@@ -385,29 +404,6 @@ int main(void)
 	}
 #endif
 
-	phy.ssi_type = adrv9002_ssi_type_detect(&phy);
-	if (phy.ssi_type == ADI_ADRV9001_SSI_TYPE_DISABLE)
-		goto error;
-
-	/* Initialize AGC */
-	for (c = 0; c < ADRV9002_CHANN_MAX; c++) {
-		phy.rx_channels[c].agc = agc_defaults;
-	}
-
-	ret = adrv9002_setup(&phy);
-	if (ret)
-		return ret;
-
-	adi_adrv9001_ApiVersion_Get(phy.adrv9001, &api_version);
-	adi_adrv9001_arm_Version(phy.adrv9001, &arm_version);
-	adi_adrv9001_SiliconVersion_Get(phy.adrv9001, &silicon_version);
-
-	printf("%s Rev %d.%d, Firmware %u.%u.%u.%u API version: %u.%u.%u successfully initialized\n",
-	       "ADRV9002", silicon_version.major, silicon_version.minor,
-	       arm_version.majorVer, arm_version.minorVer,
-	       arm_version.maintVer, arm_version.rcVer, api_version.major,
-	       api_version.minor, api_version.patch);
-
 	/* Post AXI DAC/ADC setup, digital interface tuning */
 	ret = adrv9002_post_setup(&phy);
 	if (ret) {
@@ -427,7 +423,6 @@ int main(void)
 		printf("axi_dac_init_finish() failed with status %d\n", ret);
 		goto error;
 	}
-	phy.tx1_dac->clock_hz = phy.curr_profile->tx.txProfile[0].txInputRate_Hz;
 #ifndef ADRV9002_RX2TX2
 	ret = axi_adc_init_finish(phy.rx2_adc);
 	if (ret) {
@@ -440,7 +435,6 @@ int main(void)
 		printf("axi_dac_init_finish() failed with status %d\n", ret);
 		goto error;
 	}
-	phy.tx2_dac->clock_hz = phy.curr_profile->tx.txProfile[1].txInputRate_Hz;
 #endif
 
 	/* Initialize the AXI DMA Controller cores */
@@ -468,6 +462,8 @@ int main(void)
 		goto error;
 	}
 #endif
+
+	sampling_freq = phy.curr_profile->rx.rxChannelCfg[0].profile.rxOutputRate_Hz;
 
 #ifdef DMA_EXAMPLE
 	axi_dac_load_custom_data(phy.tx1_dac, sine_lut_iq,
@@ -581,6 +577,8 @@ int main(void)
 	       rx1_adc_init.num_channels, 8 * sizeof(adc_buffers[0][0]));
 #endif
 
+	no_os_mdelay(100);
+
 #ifdef IIO_SUPPORT
 	struct iio_axi_adc_init_param iio_axi_adcs_init_par[] = {{
 			.rx_adc = phy.rx1_adc,
@@ -632,11 +630,15 @@ error:
 	adi_adrv9001_HwClose(phy.adrv9001);
 	axi_adc_remove(phy.rx1_adc);
 	axi_dac_remove(phy.tx1_dac);
+#ifndef ADRV9002_RX2TX2
 	axi_adc_remove(phy.rx2_adc);
 	axi_dac_remove(phy.tx2_dac);
+#endif
 	axi_dmac_remove(phy.rx1_dmac);
 	axi_dmac_remove(phy.tx1_dmac);
+#ifndef ADRV9002_RX2TX2
 	axi_dmac_remove(phy.rx2_dmac);
 	axi_dmac_remove(phy.tx2_dmac);
+#endif
 	return ret;
 }
