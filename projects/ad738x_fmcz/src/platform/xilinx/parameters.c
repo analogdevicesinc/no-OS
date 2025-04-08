@@ -53,6 +53,7 @@ struct spi_engine_init_param spi_eng_init_param  = {
 	.data_width = 32,
 };
 
+#ifdef XILINX_PLATFORM
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 	.offload_config = OFFLOAD_RX_EN,
 	.rx_dma_baseaddr = DMA_BASEADDR,
@@ -69,4 +70,5 @@ struct axi_pwm_init_param axi_pwm_init_param = {
 	.ref_clock_Hz = 100000000,
 	.channel = 0
 };
+#endif
 

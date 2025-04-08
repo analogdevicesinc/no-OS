@@ -72,9 +72,11 @@ struct no_os_pwm_init_param trigger_pwm_init_param = {
 
 struct ad738x_init_param ad738x_init_param = {
 	.spi_param = &ad738x_spi_init_param,
+#ifdef XILINX_PLATFORM
 	.clkgen_init = CLKGEN_INIT,
 	.axi_clkgen_rate = 100000000,
 	.offload_init_param = OFFLOAD_INIT,
+#endif
 	.dcache_invalidate_range =
 	(void (*)(uint32_t, uint32_t))DCACHE_INVALIDATE,
 	.pwm_init = &trigger_pwm_init_param,
