@@ -33,12 +33,14 @@
 ******************************************************************************/
 
 #include "ad3552r.h"
-#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
+#ifdef XILINX_PLATFORM
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "clk_axi_clkgen.h"
+#endif
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -582,10 +584,12 @@ int32_t ad3552r_write_reg(struct ad3552r_desc *desc, uint8_t addr,
 	if (!desc)
 		return -ENODEV;
 
+#ifdef XILINX_PLATFORM
 	/* AXI support, transfer delegated to the AXI IP, SDR here */
 	if (desc->axi)
 		return axi_dac_bus_write(desc->ad3552r_core_ip, addr, val,
 					 desc->axi_xfer_size);
+#endif
 
 	reg_len = ad3552r_reg_len(addr);
 	if (reg_len == 0 ||
@@ -621,6 +625,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 		return -ENODEV;
 
 	/* AXI support, transfer up to the AXI IP, SDR here */
+#ifdef XILINX_PLATFORM
 	if (desc->axi) {
 		uint32_t rval;
 
@@ -633,6 +638,7 @@ int32_t ad3552r_read_reg(struct ad3552r_desc *desc, uint8_t addr, uint16_t *val)
 
 		return 0;
 	}
+#endif
 
 	reg_len = ad3552r_reg_len(addr);
 	if (reg_len == 0 ||
@@ -1006,12 +1012,14 @@ int32_t ad3552r_get_ch_value(struct ad3552r_desc *desc,
 		*val = desc->ch_data[ch].fast_en;
 		return 0;
 	case AD3552R_CH_CODE:
+#ifdef XILINX_PLATFORM
 		if (desc->axi)
 			desc->axi_xfer_size = 2;
 		err = _ad3552r_get_code_value(desc, ch, val);
 		if (desc->axi)
 			desc->axi_xfer_size = 1;
 		return err;
+#endif
 	case AD3552R_CH_RFB:
 		*val = desc->ch_data[ch].rfb;
 		return 0;
@@ -1056,6 +1064,7 @@ int32_t ad3552r_set_ch_value(struct ad3552r_desc *desc,
 		desc->ch_data[ch].fast_en = !!val;
 		return 0;
 	case AD3552R_CH_CODE:
+#ifdef XILINX_PLATFORM
 		if (desc->axi)
 			desc->axi_xfer_size = 2;
 		if (desc->is_simultaneous)
@@ -1066,6 +1075,7 @@ int32_t ad3552r_set_ch_value(struct ad3552r_desc *desc,
 		if (desc->axi)
 			desc->axi_xfer_size = 1;
 		return err;
+#endif
 	case AD3552R_CH_RFB:
 		desc->ch_data[ch].rfb = val;
 		ad3552r_calc_gain_and_offset(desc, ch);
@@ -1279,6 +1289,7 @@ int32_t ad3552r_axi_init(struct ad3552r_desc *desc,
 			 struct ad3552r_init_param *init_param)
 {
 	int32_t err;
+#ifdef XILINX_PLATFORM
 
 	err = axi_clkgen_init(&desc->clkgen, init_param->clkgen_ip);
 	if (err) {
@@ -1323,6 +1334,7 @@ int32_t ad3552r_axi_init(struct ad3552r_desc *desc,
 		pr_err("error: axi_dac_set_datasel: %"PRIi32"\n", err);
 		return err;
 	}
+#endif
 
 	return 0;
 }
@@ -1344,9 +1356,11 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	*desc = ldesc;
 
 	if (param->axi_qspi_controller) {
+#ifdef XILINX_PLATFORM
 		ldesc->axi = true;
 		/* All the setup communiactions are 1 byte size */
 		ldesc->axi_xfer_size = 1;
+#endif
 	} else {
 		err = no_os_spi_init(&ldesc->spi, &param->spi_param);
 		if (NO_OS_IS_ERR_VALUE(err))
@@ -1375,12 +1389,14 @@ int32_t ad3552r_init(struct ad3552r_desc **desc,
 	}
 
 	if (ldesc->axi) {
+#ifdef XILINX_PLATFORM
 		/* Pre init for AXI now */
 		err = ad3552r_axi_init(ldesc, param);
 		if (err) {
 			pr_err("AXI init error: %"PRIi32"\n", err);
 			return -1;
 		}
+#endif
 	} else {
 		err = ad3552r_set_dev_value(ldesc, AD3552R_CRC_ENABLE, param->crc_en);
 		if (NO_OS_IS_ERR_VALUE(err)) {
@@ -1599,12 +1615,14 @@ static int ad3552r_hs_set_target_io_mode_hs(struct ad3552r_desc *desc)
 
 static int ad3552r_hs_set_bus_io_mode_hs(struct ad3552r_desc *desc)
 {
+#ifdef XILINX_PLATFORM
 	int bus_mode;
 
 	bus_mode = (desc->num_spi_data_lanes == 4) ?
 		   AXI_DAC_IO_MODE_QSPI : AXI_DAC_IO_MODE_DSPI;
 
 	return axi_dac_set_io_mode(desc->ad3552r_core_ip, bus_mode);
+#endif
 }
 
 /*
@@ -1643,9 +1661,11 @@ static int ad3552r_hs_buffer_preenable(struct ad3552r_desc *desc)
 	if (ret)
 		return ret;
 
+#ifdef XILINX_PLATFORM
 	ret = axi_dac_set_ddr(desc->ad3552r_core_ip, true);
 	if (ret)
 		goto exit_err_ddr;
+#endif
 
 	/* Set high speed, DSPI or QSPI, depending on the model. */
 	ret = ad3552r_hs_set_target_io_mode_hs(desc);
@@ -1656,6 +1676,7 @@ static int ad3552r_hs_buffer_preenable(struct ad3552r_desc *desc)
 	if (ret)
 		goto exit_err_io_mode;
 
+#ifdef XILINX_PLATFORM
 	/* Set up now only rest of backend registers */
 	ret = axi_dac_data_transfer_addr(desc->ad3552r_core_ip,
 					 AD3552R_REG_ADDR_CH_DAC_16B(1));
@@ -1669,6 +1690,7 @@ static int ad3552r_hs_buffer_preenable(struct ad3552r_desc *desc)
 	ret = axi_dac_set_data_stream(desc->ad3552r_core_ip, true);
 	if (ret)
 		goto exit_err_io_mode;
+#endif
 
 	return 0;
 
@@ -1679,14 +1701,18 @@ exit_err_io_mode:
 	ad3552r_write_reg(desc, AD3552R_REG_ADDR_TRANSFER_REGISTER,
 			  AD3552R_MASK_STREAM_LENGTH_KEEP_VALUE);
 
+#ifdef XILINX_PLATFORM
 	axi_dac_set_io_mode(desc->ad3552r_core_ip, AXI_DAC_IO_MODE_SPI);
+#endif
 
 exit_err_ddr:
 	/* Set target, then axi bus into DDR mode. */
 	_ad3552r_update_reg_field(desc, AD3552R_REG_ADDR_INTERFACE_CONFIG_D,
 				  AD3552R_MASK_SPI_CONFIG_DDR, 0);
 
+#ifdef XILINX_PLATFORM
 	axi_dac_set_ddr(desc->ad3552r_core_ip, false);
+#endif
 
 	return ret;
 }
@@ -1695,6 +1721,7 @@ static int ad3552r_hs_buffer_postdisable(struct ad3552r_desc *desc)
 {
 	int ret;
 
+#ifdef XILINX_PLATFORM
 	ret = axi_dac_set_data_stream(desc->ad3552r_core_ip, false);
 	if (ret)
 		return ret;
@@ -1706,6 +1733,7 @@ static int ad3552r_hs_buffer_postdisable(struct ad3552r_desc *desc)
 	ret = axi_dac_set_io_mode(desc->ad3552r_core_ip, AXI_DAC_IO_MODE_SPI);
 	if (ret)
 		return ret;
+#endif
 
 	/*
 	 * Back to SDR
@@ -1715,9 +1743,11 @@ static int ad3552r_hs_buffer_postdisable(struct ad3552r_desc *desc)
 				no_os_field_prep(
 					AD3552R_MASK_SDO_DRIVE_STRENGTH, 1));
 
+#ifdef XILINX_PLATFORM
 	ret = axi_dac_set_ddr(desc->ad3552r_core_ip, false);
 	if (ret)
 		return ret;
+#endif
 
 	/*
 	 * Back to simple SPI for secondary region too now,
@@ -1753,7 +1783,9 @@ static int ad3552r_hs_buffer_postdisable(struct ad3552r_desc *desc)
 int32_t ad3552r_axi_write_data(struct ad3552r_desc *desc, uint32_t *buf,
 			       uint16_t samples, bool cyclic, int cyclic_secs)
 {
+#ifdef XILINX_PLATFORM
 	int ret;
+
 	struct axi_dma_transfer write_transfer = {
 		.size = samples * AD3552R_BYTES_PER_SAMPLE,
 		.transfer_done = 0,
@@ -1789,6 +1821,7 @@ exit_err:
 	ad3552r_hs_buffer_postdisable(desc);
 
 	return ret;
+#endif
 }
 
 static int32_t ad3552r_axi_write_all_channels(struct ad3552r_desc *desc,
@@ -1797,6 +1830,7 @@ static int32_t ad3552r_axi_write_all_channels(struct ad3552r_desc *desc,
 {
 	uint8_t reg, is_dac, is_fast;
 	int i, err;
+#ifdef XILINX_PLATFORM
 
 	is_fast = desc->ch_data[0].fast_en;
 	is_dac = (mode == AD3552R_WRITE_DAC_REGS);
@@ -1819,6 +1853,7 @@ static int32_t ad3552r_axi_write_all_channels(struct ad3552r_desc *desc,
 	if (mode == AD3552R_WRITE_INPUT_REGS_AND_TRIGGER_LDAC) {
 		return ad3552r_ldac_trigger(desc, AD3552R_MASK_ALL_CH, is_fast);
 	}
+#endif
 
 	return 0;
 }
@@ -1832,8 +1867,10 @@ static int32_t ad3552r_write_all_channels(struct ad3552r_desc *desc,
 	uint8_t buff[AD3552R_MAX_NUM_CH * AD3552R_MAX_REG_SIZE + 1] = { 0 };
 	uint8_t len, is_fast;
 
+#ifdef XILINX_PLATFORM
 	if (desc->axi)
 		return ad3552r_axi_write_all_channels(desc, data, mode);
+#endif
 
 	is_fast = desc->ch_data[0].fast_en;
 	no_os_put_unaligned_be16(data[0], buff);
