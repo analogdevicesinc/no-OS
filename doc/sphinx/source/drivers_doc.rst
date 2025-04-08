@@ -48,6 +48,7 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/ad8460
    drivers/max22017
+   drivers/ad3552r
 
 FREQUENCY GENERATORS
 ====================
