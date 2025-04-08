@@ -36,8 +36,10 @@
 #define SRC_AD738X_H_
 
 #include "no_os_util.h"
-#include "clk_axi_clkgen.h"
 #include "no_os_spi.h"
+#ifdef XILINX_PLATFORM
+#include "clk_axi_clkgen.h"
+#endif
 
 /*
  * AD738X registers definition
@@ -140,9 +142,11 @@ enum ad738x_ref_sel {
 struct ad738x_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
+#ifdef XILINX_PLATFORM
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
 	struct axi_clkgen *clkgen;
+#endif
 	struct no_os_pwm_desc *pwm_desc;
 
 	/* Device Settings */
@@ -158,10 +162,12 @@ struct ad738x_dev {
 struct ad738x_init_param {
 	/* SPI */
 	struct no_os_spi_init_param		*spi_param;
+#ifdef XILINX_PLATFORM
 	struct axi_clkgen_init *clkgen_init;
 	uint32_t axi_clkgen_rate;
 	/** SPI module offload init */
 	struct spi_engine_offload_init_param *offload_init_param;
+#endif
 	struct no_os_pwm_init_param *pwm_init;
 
 	/* Device Settings */
