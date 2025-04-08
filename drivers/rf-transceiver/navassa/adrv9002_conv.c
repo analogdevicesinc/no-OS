@@ -44,31 +44,6 @@
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_ssi.h"
 
-/* TODO: move this register in axi_adc_core.h */
-#define ADI_REG_CONFIG 			0x000C
-#define ADI_IQCORRECTION_DISABLE	(1 << 0)
-#define ADI_DCFILTER_DISABLE		(1 << 1)
-#define ADI_DATAFORMAT_DISABLE		(1 << 2)
-#define ADI_USERPORTS_DISABLE		(1 << 3)
-#define ADI_MODE_1R1T			(1 << 4)
-#define ADI_DELAY_CONTROL_DISABLE 	(1 << 5)
-#define ADI_CMOS_OR_LVDS_N		(1 << 7)
-#define ADI_PPS_RECEIVER_ENABLE		(1 << 8)
-#define ADI_SCALECORRECTION_ONLY	(1 << 9)
-
-#define ADI_REG_RSTN			0x0040
-#define ADI_RSTN				(1 << 0)
-#define ADI_MMCM_RSTN 			(1 << 1)
-
-#define ADI_REG_CNTRL			0x0044
-#define ADI_R1_MODE			(1 << 2)
-#define ADI_DDR_EDGESEL			(1 << 1)
-#define ADI_PIN_MODE			(1 << 0)
-
-#define ADI_REG_CLK_RATIO		0x0058
-#define ADI_CLK_RATIO(x)		(((x) & 0xFFFFFFFF) << 0)
-#define ADI_TO_CLK_RATIO(x)		(((x) >> 0) & 0xFFFFFFFF)
-
 #define ADI_RX2_REG_OFF			0x1000
 #define ADI_TX1_REG_OFF			0x2000
 #define ADI_TX2_REG_OFF			0x4000
@@ -87,7 +62,7 @@
 #define TX_ONLY_MASK			NO_OS_BIT(10)
 #define TX_ONLY(x)			FIELD_GET(TX_ONLY_MASK, x)
 
-#define IS_CMOS(cfg)			((cfg) & (ADI_CMOS_OR_LVDS_N))
+#define IS_CMOS(cfg)			((cfg) & (AXI_ADC_CMOS_OR_LVDS_N))
 
 void adrv9002_axi_interface_enable(struct adrv9002_rf_phy *phy, const int chan,
 				   const bool tx, const bool en)
@@ -101,11 +76,11 @@ void adrv9002_axi_interface_enable(struct adrv9002_rf_phy *phy, const int chan,
 
 	if (en)
 		/* bring axi core out of reset */
-		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, ADI_REG_RSTN),
-			      ADI_RSTN | ADI_MMCM_RSTN);
+		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, AXI_ADC_REG_RSTN),
+			      AXI_ADC_RSTN | AXI_ADC_MMCM_RSTN);
 	else
 		/* reset axi core*/
-		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, ADI_REG_RSTN), 0);
+		axi_adc_write(phy->rx1_adc, AIM_AXI_REG(off, AXI_ADC_REG_RSTN), 0);
 }
 
 int adrv9002_axi_interface_set(const struct adrv9002_rf_phy *phy,
@@ -122,7 +97,7 @@ int adrv9002_axi_interface_set(const struct adrv9002_rf_phy *phy,
 		reg_ctrl = ADI_TX_REG_CTRL_2;
 	} else {
 		off = channel ? ADI_RX2_REG_OFF : 0;
-		reg_ctrl = ADI_REG_CNTRL;
+		reg_ctrl = AXI_ADC_REG_CNTRL;
 	}
 
 	axi_adc_read(phy->rx1_adc, AIM_AXI_REG(off, reg_ctrl), &reg_value);
@@ -155,7 +130,7 @@ int adrv9002_axi_interface_set(const struct adrv9002_rf_phy *phy,
 	if (tx) {
 		uint32_t ddr = cmos_ddr;
 
-		axi_adc_read(phy->rx1_adc, AIM_AXI_REG(off, ADI_REG_CLK_RATIO), &divider);
+		axi_adc_read(phy->rx1_adc, AIM_AXI_REG(off, AXI_ADC_REG_CLK_RATIO), &divider);
 		/* in LVDS, data type is always DDR */
 		if (phy->ssi_type == ADI_ADRV9001_SSI_TYPE_LVDS)
 			ddr = 1;
@@ -170,7 +145,7 @@ adi_adrv9001_SsiType_e adrv9002_axi_ssi_type_get(struct adrv9002_rf_phy *phy)
 {
 	uint32_t axi_config = 0;
 
-	axi_adc_read(phy->rx1_adc, ADI_REG_CONFIG, &axi_config);
+	axi_adc_read(phy->rx1_adc, AXI_ADC_REG_CONFIG, &axi_config);
 	if (IS_CMOS(axi_config))
 		return ADI_ADRV9001_SSI_TYPE_CMOS;
 	else
