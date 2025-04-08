@@ -35,7 +35,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#ifdef XILINX_PLATFORM
 #include "spi_engine.h"
+#endif
 #include "ad738x.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
@@ -315,6 +317,7 @@ static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 					uint32_t *buf,
 					uint16_t samples)
 {
+#ifdef XILINX_PLATFORM
 	int32_t ret;
 	uint32_t commands_data[2] = {0, 0};
 	struct spi_engine_offload_message msg;
@@ -344,6 +347,7 @@ static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 	if (dev->dcache_invalidate_range)
 		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
 
+#endif
 	return 0;
 }
 
@@ -395,9 +399,11 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	if (!dev)
 		return -1;
 
+	dev->flags = init_param->flags;
+
+#ifdef XILINX_PLATFORM
 	dev->offload_init_param = init_param->offload_init_param;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
-	dev->flags = init_param->flags;
 
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret)
@@ -406,6 +412,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	ret = axi_clkgen_set_rate(dev->clkgen, init_param->axi_clkgen_rate);
 	if (ret)
 		goto err;
+#endif
 
 	ret = no_os_pwm_init(&dev->pwm_desc, init_param->pwm_init);
 	if (ret)
@@ -456,9 +463,11 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 	if (ret)
 		goto out;
 
+#ifdef XILINX_PLATFORM
 	ret = axi_clkgen_remove(dev->clkgen);
 	if (ret)
 		goto out;
+#endif
 
 	ret = no_os_pwm_remove(dev->pwm_desc);
 	if (ret)
