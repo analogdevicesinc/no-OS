@@ -33,21 +33,32 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
+#ifdef FTD2XX
 #include "ftd2xx_spi.h"
 #include "ftd2xx_uart.h"
+#else
+#include "linux_spi.h"
+#include "linux_uart.h"
+#endif
 
 #define UART_IRQ_ID	0
 #define UART_DEVICE_ID	0
 #define UART_BAUDRATE	0
 #define UART_EXTRA      NULL
-#define UART_OPS        &ftd2xx_uart_ops
 
+#ifdef FTD2XX
 extern struct ftd2xx_spi_init max14916_spi_extra;
+#define SPI_EXTRA	&max14916_spi_extra
+#define SPI_OPS		&ftd2xx_spi_ops
+#define UART_OPS	&ftd2xx_uart_ops
+#else
+#define SPI_EXTRA	NULL
+#define SPI_OPS		&linux_spi_ops
+#define UART_OPS	&linux_uart_ops
+#endif
 
 #define SPI_DEVICE_ID	0
 #define SPI_CS		0
 #define SPI_BAUDRATE	100000
-#define SPI_OPS		&ftd2xx_spi_ops
-#define SPI_EXTRA	&max14916_spi_extra
 
 #endif  /* __PARAMETERS_H__ */

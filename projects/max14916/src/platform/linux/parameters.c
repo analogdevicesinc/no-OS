@@ -32,6 +32,7 @@
 *******************************************************************************/
 #include "parameters.h"
 
+#ifdef FTD2XX
 struct ftd2xx_spi_init max14916_spi_extra  = {
 	.channel_config_pin =
 	((1 << 6) |	 /*  BIT7 - BIT0:   Initial direction of the pins */
@@ -39,3 +40,4 @@ struct ftd2xx_spi_init max14916_spi_extra  = {
 	 (1 << 6) << 16 | /* BIT23 - BIT16: Final direction of the pins	  */
 	 (1 << 6) << 24), /* BIT31 - BIT24: Final values of the pins	  */
 };
+#endif
