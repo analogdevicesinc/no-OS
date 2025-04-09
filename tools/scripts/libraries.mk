@@ -13,9 +13,9 @@ CFLAGS += -DIIO_SUPPORT
 endif
 
 # FreeRTOS
-ifeq '$(FREERTOS)' 'y'
+ifneq ($(if $(findstring freertos, $(LIBRARIES)), 1),)
 CFLAGS += -DFREERTOS
-include $(NO-OS)/tools/scripts/freertos.mk
+include $(NO-OS)/libraries/free_rtos/freertos.mk
 endif
 
 #	MBEDTLS
