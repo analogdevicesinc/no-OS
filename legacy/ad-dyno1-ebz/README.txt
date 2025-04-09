@@ -1,1 +1,0 @@
-When creating a new project use the supplied ADuC702x.s
