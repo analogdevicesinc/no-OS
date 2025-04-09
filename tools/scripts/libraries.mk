@@ -15,7 +15,7 @@ endif
 # FreeRTOS
 ifneq ($(if $(findstring freertos, $(LIBRARIES)), 1),)
 CFLAGS += -DFREERTOS
-include $(NO-OS)/libraries/free_rtos/freertos.mk
+include $(NO-OS)/tools/scripts/freertos.mk
 endif
 
 #	MBEDTLS
