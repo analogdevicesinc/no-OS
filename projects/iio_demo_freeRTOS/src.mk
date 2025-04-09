@@ -31,22 +31,11 @@ INCS += $(INCLUDE)/no_os_delay.h     \
     $(INCLUDE)/no_os_mutex.h     \
     $(INCLUDE)/no_os_semaphore.h 
 
-
-# linking FreeRTOS implementation
-ifeq '$(FREERTOS)' 'y'
-SRCS += $(NO-OS)/drivers/platform/freeRTOS/freertos_mutex.c \
-        $(NO-OS)/drivers/platform/freeRTOS/freertos_semaphore.c \
-        $(NO-OS)/drivers/platform/freeRTOS/freertos_delay.c 
-
-INCS += $(PROJECT)/src/platform/$(PLATFORM)/FreeRTOSConfig.h
-else
-SRCS += $(NO-OS)/util/no_os_mutex.c \
-        $(NO-OS)/util/no_os_semaphore.c \
-	$(PLATFORM_DRIVERS)/maxim_delay.c	
-endif
-
 INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \
     $(DRIVERS)/dac/dac_demo/dac_demo.h
 
 SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
     $(DRIVERS)/dac/dac_demo/dac_demo.c
+
+# Platform specific, free-rtos config file
+FREERTOS_CONFIG_PATH := $(PROJECT)/src/platform/$(PLATFORM)/FreeRTOSConfig.h
