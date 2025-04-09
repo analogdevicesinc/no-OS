@@ -1,8 +1,4 @@
-ifeq ($(FREERTOS_KERNEL),)
-$(error $(ENDL)$(ENDL)FREERTOS_KERNEL not defined\
-		$(ENDL)$(ENDL)\
-		Please run command "export FREERTOS_KERNEL=/path/to/FreeRTOS-Kernel"$(ENDL))
-endif # FREERTOS_KERNEL check
+FREERTOS_KERNEL := $(NO-OS)/libraries/free_rtos/free_rtos
 
 # link freeRTOS kernel files
 RTOS_INCS = $(FREERTOS_KERNEL)/include/projdefs.h \
@@ -32,3 +28,17 @@ RTOS_SRCS += $(FREERTOS_KERNEL)/portable/GCC/ARM_CM4F/port.c
 
 SRCS += $(RTOS_SRCS)
 INCS += $(RTOS_INCS)
+
+# Include freeRTOS platform specifics
+SRCS += $(NO-OS)/drivers/platform/freeRTOS/freertos_mutex.c \
+        $(NO-OS)/drivers/platform/freeRTOS/freertos_semaphore.c \
+        $(NO-OS)/drivers/platform/freeRTOS/freertos_delay.c 
+
+# Include FreeRTOS specific configurations
+ifeq ($(wildcard $(FREERTOS_CONFIG_PATH)),)
+$(error File FreeRTOSConfig.h does not exists)
+else
+$(info Found FreeRTOSConfig.h config file)
+INCS += $(FREERTOS_CONFIG_PATH)
+endif
+
