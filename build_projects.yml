@@ -236,7 +236,7 @@ jobs:
     persistCredentials: true
   - script: |
       sudo apt install ruby-full
-      sudo gem install ceedling -v 0.31.1
+      sudo gem install ceedling -v 1.0.1
       pip install gcovr==4.1
       cd tests/drivers/imu/
       ceedling test:all
