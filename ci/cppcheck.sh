@@ -32,9 +32,12 @@ build_cppheck() {
 	mkdir -p build
 	pushd build
 
-	# libtinyxml2-a is a dependency package for cppcheck-1.90
+	# libtinyxml2-a and libpcre3 dependencis for cppcheck-1.90
 	wget http://mirrors.kernel.org/ubuntu/pool/universe/t/tinyxml2/libtinyxml2-6a_7.0.0+dfsg-1build1_amd64.deb
 	sudo dpkg -i ./libtinyxml2-6a_7.0.0+dfsg-1build1_amd64.deb
+
+	wget https://launchpad.net/~ubuntu-security-proposed/+archive/ubuntu/ppa/+build/23754764/+files/libpcre3_8.39-9ubuntu0.1_amd64.deb
+	sudo dpkg -i ./libpcre3_8.39-9ubuntu0.1_amd64.deb
 
 	wget http://mirrors.kernel.org/ubuntu/pool/universe/c/cppcheck/cppcheck_1.90-4build1_amd64.deb
 	sudo dpkg -i ./cppcheck_1.90-4build1_amd64.deb
