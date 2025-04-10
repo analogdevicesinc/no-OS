@@ -7,7 +7,7 @@
 
 :project:
   :use_exceptions: FALSE
-  :use_test_preprocessor: TRUE
+  :use_test_preprocessor: :all
   :use_auxiliary_dependencies: TRUE
   :build_root: build
 #  :release_build: TRUE
@@ -35,7 +35,9 @@
     - -:test/support
   :source:
     - ../../../drivers/imu/**
+  :include:
     - ../../../include/**
+    - ../../../drivers/imu/**
   :support:
     - test/support
   :libraries: []
@@ -97,13 +99,10 @@
   :artifact_filename: report_junit.xml
 
 :plugins:
-  :load_paths:
-    - "#{Ceedling.load_path}"
   :enabled:
-    - stdout_pretty_tests_report
+    - report_tests_pretty_stdout
     - module_generator
-    - raw_output_report
+    - report_tests_raw_output_log
     - gcov
-    - xml_tests_report
-    - junit_tests_report
+    - report_tests_log_factory
 ...
