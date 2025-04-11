@@ -286,6 +286,8 @@ int no_os_i3c_remove(struct no_os_i3c_desc *desc)
 		it++;
 	}
 
+	no_os_i3c_remove_bus(bus_desc);
+
 	/* Only error case is !desc */
 	desc->platform_ops->i3c_ops_remove(desc);
 	no_os_free(desc);
@@ -295,7 +297,7 @@ int no_os_i3c_remove(struct no_os_i3c_desc *desc)
 
 /**
  * @brief Free the resources allocated by no_os_i3c_init_bus.
- * Must remove all devices first, if not, -EFAULT is returned.
+ * Must remove all devices first, if not, -EBUSY is returned.
  * @param desc - The I3C bus descriptor.
  * @return 0 in case of success, error code otherwise.
  */
@@ -312,7 +314,7 @@ int no_os_i3c_remove_bus(struct no_os_i3c_bus_desc *desc)
 	/* Verify if all devices are removed */
 	for (it = desc->devs; it < desc->devs + NO_OS_I3C_MAX_DEV_NUMBER; it++) {
 		if (*it)
-			return -EFAULT;
+			return -EBUSY;
 	}
 
 	no_os_mutex_remove(desc->mutex);
