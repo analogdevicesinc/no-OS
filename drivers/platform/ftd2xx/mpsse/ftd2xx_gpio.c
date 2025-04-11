@@ -259,20 +259,20 @@ int32_t ftd2xx_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 {
 	struct ftd2xx_gpio_desc *extra_desc;
 	FT_STATUS status;
-	UCHAR value = 0;
+	UCHAR val = 0;
 	int32_t ret;
 
 	extra_desc = desc->extra;
 	if (no_os_field_get(NO_OS_BIT(desc->number),
 			    extra_desc->pins_dir) == NO_OS_GPIO_IN) {
-		status = FT_ReadGPIO(extra_desc->ftHandle, &value);
+		status = FT_ReadGPIO(extra_desc->ftHandle, &val);
 		if (status != FT_OK) {
 			ret = status;
 			return ret;
 		}
 		extra_desc->pins_val &= ~NO_OS_BIT(desc->number);
 		extra_desc->pins_val |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(
-						desc->number), no_os_field_get(NO_OS_BIT(desc->number), value));
+						desc->number), no_os_field_get(NO_OS_BIT(desc->number), val));
 	}
 
 	*value = no_os_field_get(NO_OS_BIT(desc->number), extra_desc->pins_val);
