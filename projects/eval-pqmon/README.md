@@ -37,10 +37,13 @@ The firmware application can communicate with clients via several interfaces. In
 * ```INTERFACE=usb``` (Default value)
 * ```INTERFACE=serial``` (Used for 485 communication. Half-duplex communication must be handled by user)
 * ```INTERFACE=ethernet_t1l``` (Used for communication over T1L)
+* ```INTERFACE=ethernet``` (Used for standard Ethernet communication via W5500 controller)
 
 NOTE: In case one builds firmware multiple times with different interfaces, make sure to delete the `build` directory before the new  compilation.
 
 NOTE 2: For T1L connection the deffault ip for the device is `192.168.97.40`. For network configuration on client side, use the following steps: [network configuration steps](https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602).
+
+NOTE 3: For standard Ethernet connection, the default IP for the device is `192.168.1.110`. Make sure your network environment is configured appropriately to communicate with this IP address.
 
 ## Build and run
 

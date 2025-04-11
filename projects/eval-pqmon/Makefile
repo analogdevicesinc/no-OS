@@ -17,6 +17,20 @@ $(info Using SERIAL as interface for IIO communication)
 CFLAGS += -DPQM_CONN_SERIAL
 endif
 
+ifeq ($(INTERFACE), ethernet)
+$(info Using ETHERNET as interface for IIO communication)
+CFLAGS += -DPQM_CONN_USB
+CFLAGS += -DNO_OS_USB_UART
+CFLAGS += -DPQM_CONN_ETH
+CFLAGS += -DNO_OS_W5500_NETWORKING
+CFLAGS += -DNO_OS_IP=\"$(NO_OS_IP)\"
+CFLAGS += -DNO_OS_NETMASK=\"$(NO_OS_NETMASK)\"
+CFLAGS += -DNO_OS_GATEWAY=\"$(NO_OS_GATEWAY)\"
+NO_OS_IP=192.168.1.110
+NO_OS_NETMASK=255.255.255.0
+NO_OS_GATEWAY=192.168.1.1
+endif
+
 ifeq ($(INTERFACE), ethernet_t1l)
 $(info Using ETHERNET T1L as interface for IIO communication)
 CFLAGS += -DPQM_CONN_T1L
