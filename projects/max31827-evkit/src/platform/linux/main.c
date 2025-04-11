@@ -1,8 +1,8 @@
-/***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of FTD2XX platform data used by max14916 project.
+/*******************************************************************************
+ *   @file   main.c
+ *   @brief  Main file for linux platform of max31827 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
-********************************************************************************
+ *******************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,13 +29,15 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
-#include "parameters.h"
+ ******************************************************************************/
+#include "common_data.h"
 
-struct ftd2xx_spi_init max14916_spi_extra  = {
-	.channel_config_pin =
-	((1 << 6) |	 /*  BIT7 - BIT0:   Initial direction of the pins */
-	 (1 << 6) << 8 |	 /* BIT15 - BIT8:   Initial values of the pins	  */
-	 (1 << 6) << 16 | /* BIT23 - BIT16: Final direction of the pins	  */
-	 (1 << 6) << 24), /* BIT31 - BIT24: Final values of the pins	  */
-};
+/******************************************************************************
+ * @brief Main function execution for FTD2XX platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+ *****************************************************************************/
+int main()
+{
+	return example_main();
+}

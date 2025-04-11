@@ -7,7 +7,7 @@
         "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32665"
       }
     },
-    "ftd2xx": {
+    "linux": {
       "basic_example": {
         "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
       },

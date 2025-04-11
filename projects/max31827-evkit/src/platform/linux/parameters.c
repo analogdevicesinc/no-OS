@@ -1,6 +1,6 @@
 /*******************************************************************************
  *   @file   parameters.c
- *   @brief  Definition of FTD2XX platform data used by max31827 project.
+ *   @brief  Definition of linux platform data used by max31827 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
  *******************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -32,9 +32,15 @@
  ******************************************************************************/
 #include "parameters.h"
 
+#ifdef FTD2XX
 struct ftd2xx_i2c_init max31827_i2c_extra = {
 	.channel_config = false,
 	.extra_pins = true,
 	.extra_pins_dir = 0xFF,
 	.extra_pins_val = 0xBE
 };
+#else
+struct linux_i2c_init_param max31827_i2c_extra = {
+	.device_id = I2C_DEVICE_ID,
+};
+#endif

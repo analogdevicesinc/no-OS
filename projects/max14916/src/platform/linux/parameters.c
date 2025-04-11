@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   parameters.h
+ *   @file   parameters.c
  *   @brief  Definition of FTD2XX platform data used by max14916 project.
  *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
@@ -30,24 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#include "parameters.h"
 
-#include "ftd2xx_spi.h"
-#include "ftd2xx_uart.h"
-
-#define UART_IRQ_ID	0
-#define UART_DEVICE_ID	0
-#define UART_BAUDRATE	0
-#define UART_EXTRA      NULL
-#define UART_OPS        &ftd2xx_uart_ops
-
-extern struct ftd2xx_spi_init max14916_spi_extra;
-
-#define SPI_DEVICE_ID	0
-#define SPI_CS		0
-#define SPI_BAUDRATE	100000
-#define SPI_OPS		&ftd2xx_spi_ops
-#define SPI_EXTRA	&max14916_spi_extra
-
-#endif  /* __PARAMETERS_H__ */
+#ifdef FTD2XX
+struct ftd2xx_spi_init max14916_spi_extra  = {
+	.channel_config_pin =
+	((1 << 6) |	 /*  BIT7 - BIT0:   Initial direction of the pins */
+	 (1 << 6) << 8 |	 /* BIT15 - BIT8:   Initial values of the pins	  */
+	 (1 << 6) << 16 | /* BIT23 - BIT16: Final direction of the pins	  */
+	 (1 << 6) << 24), /* BIT31 - BIT24: Final values of the pins	  */
+};
+#endif
