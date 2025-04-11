@@ -66,6 +66,17 @@ endif
 ifeq ($(INTERFACE), serial)
 endif
 
+ifeq ($(INTERFACE), ethernet)
+	INCS += $(DRIVERS)/net/w5500/w5500.h
+	INCS += $(NO-OS)/network/w5500_network/w5500_network.h
+	INCS += $(NO-OS)/network/network_interface.h
+	INCS += $(NO-OS)/network/tcp_socket.h
+
+	SRCS += $(DRIVERS)/net/w5500/w5500.c
+	SRCS += $(NO-OS)/network/w5500_network/w5500_network.c
+	SRCS += $(NO-OS)/network/tcp_socket.c
+endif
+
 ifeq ($(INTERFACE), ethernet_t1l)
 	LIBRARIES += lwip
 	INCS += $(NO-OS)/network/tcp_socket.h			\

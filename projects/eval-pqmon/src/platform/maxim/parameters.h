@@ -49,6 +49,10 @@
 #define UART_IRQ_ID USB_IRQn
 #define UART_OPS &max_usb_uart_ops
 
+#if defined(PQM_CONN_ETH)
+#define WIZ_SPI_EXTRA &spi_extra_ip
+#endif
+
 #if defined(PQM_CONN_USB)
 #define UART_EXTRA &iio_demo_usb_uart_extra_ip
 #elif defined(PQM_CONN_SERIAL)
