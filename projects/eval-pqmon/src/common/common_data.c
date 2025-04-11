@@ -33,6 +33,50 @@
 
 #include "common_data.h"
 
+#if defined(PQM_CONN_ETH)
+
+const struct no_os_gpio_init_param w5500_rst_gpio_ip = {
+	.port = 0,
+	.number = 14,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_gpio_init_param w5500_int_gpio_ip = {
+	.port = 0,
+	.number = 13,
+	.pull = NO_OS_PULL_NONE,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+};
+
+const struct no_os_spi_init_param w5500_spi_init_params = {
+	.device_id = 3,
+	.max_speed_hz = 15000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS,
+	.chip_select = 0,
+	.extra = WIZ_SPI_EXTRA,
+};
+
+struct w5500_init_param w5500_ip = {
+	.spi_init = &w5500_spi_init_params,
+	.gpio_reset = &w5500_rst_gpio_ip,
+	.gpio_int = &w5500_int_gpio_ip,
+	.mac_addr = {0x00, 0x08, 0xDC, 0x01, 0x02, 0x03},
+	.retry_time = 2000,
+	.retry_count = 3,
+};
+
+struct w5500_network_init_param w5500_network_ip = {
+	.mac_dev = NULL,
+	.w5500_ip = &w5500_ip,
+};
+
+#endif
+
 #if defined(PQM_CONN_USB)
 struct no_os_uart_init_param iio_demo_usb_ip = {
 	.device_id = UART_DEVICE_ID,
