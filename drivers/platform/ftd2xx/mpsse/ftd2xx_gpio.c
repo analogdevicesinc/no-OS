@@ -108,7 +108,7 @@ error:
 int32_t ftd2xx_gpio_get_optional(struct no_os_gpio_desc **desc,
 				 const struct no_os_gpio_init_param *param)
 {
-	if (param = NULL) {
+	if (!param) {
 		*desc = NULL;
 		return 0;
 	}
