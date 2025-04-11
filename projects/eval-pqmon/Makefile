@@ -19,6 +19,14 @@ endif
 
 ifeq ($(INTERFACE), ethernet)
 $(info Using ETHERNET as interface for IIO communication)
+CFLAGS += -DPQM_CONN_USB
+CFLAGS += -DNO_OS_USB_UART
+CFLAGS += -DPQM_CONN_ETH
+CFLAGS += -DNO_OS_W5500_NETWORKING
+endif
+
+ifeq ($(INTERFACE), ethernet_t1l)
+$(info Using ETHERNET T1L as interface for IIO communication)
 CFLAGS += -DPQM_CONN_T1L
 CFLAGS += -DNO_OS_LWIP_NETWORKING
 CFLAGS += -DNO_OS_LWIP_INIT_ONETIME=1
