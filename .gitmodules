@@ -13,3 +13,6 @@
 [submodule "libraries/lwip/lwip"]
 	path = libraries/lwip/lwip
 	url = https://github.com/lwip-tcpip/lwip
+[submodule "libraries/free_rtos/free_rtos"]
+	path = libraries/free_rtos/free_rtos
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
