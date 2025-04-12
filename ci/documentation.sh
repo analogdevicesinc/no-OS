@@ -92,7 +92,7 @@ check_sphinx_doc() {
 ############################################################################
 build_doxygen() {
         pushd ${TOP_DIR}/doc/doxygen
-        (cd build && ! make -j${NUM_JOBS} doc 2>&1 | grep -E "warning:|error:") || {
+        (cd build && ! make -j${NUM_JOBS} doc TOP_DIR=${TOP_DIR} 2>&1 | grep -E "warning:|error:") || {
                 echo_red "Documentation incomplete or errors in the generation of it have occured!"
                 exit 1
         }
