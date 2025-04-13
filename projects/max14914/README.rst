@@ -1,6 +1,8 @@
 MAX14914 no-OS Example Project
 ==============================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

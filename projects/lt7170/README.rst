@@ -1,6 +1,8 @@
 Evaluating the LT7170
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

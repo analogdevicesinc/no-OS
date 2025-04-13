@@ -1,6 +1,8 @@
 AD7606x no-OS Example Project
 =============================
 
+.. no-os-doxygen::
+
 
 Contents
 --------

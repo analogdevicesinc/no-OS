@@ -1,6 +1,8 @@
 MAX31827 no-OS driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

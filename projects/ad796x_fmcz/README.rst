@@ -1,6 +1,8 @@
 AD796x no-OS Example Project
 ============================
 
+.. no-os-doxygen::
+
 
 Contents
 --------

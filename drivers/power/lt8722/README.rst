@@ -1,6 +1,8 @@
 LT8722 no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

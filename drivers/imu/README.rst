@@ -1,6 +1,8 @@
 ADIS no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 .. contents::
     :depth: 2
 

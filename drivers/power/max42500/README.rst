@@ -1,6 +1,8 @@
 MAX42500 no-OS driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 `MAX42500 <https://www.analog.com/en/products/max42500>`_

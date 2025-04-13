@@ -1,6 +1,8 @@
 Evaluating the LTC2983
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

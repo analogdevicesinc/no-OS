@@ -1,6 +1,8 @@
 AD7768 no-OS Driver
 ===================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

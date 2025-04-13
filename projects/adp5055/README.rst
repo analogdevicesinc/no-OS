@@ -1,6 +1,8 @@
 ADP5055 no-OS Example Project
 =============================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

@@ -1,6 +1,8 @@
 ADMFM2000 no-OS driver
 ======================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

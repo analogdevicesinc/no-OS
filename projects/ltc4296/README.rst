@@ -1,6 +1,8 @@
 LTC4296 no-OS Example Project
 =============================
 
+.. no-os-doxygen::
+
 
 Contents
 --------

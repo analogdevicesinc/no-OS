@@ -1,6 +1,8 @@
 MAX22017 no-OS Example Project
 ==============================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

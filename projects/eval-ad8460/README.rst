@@ -1,6 +1,8 @@
 Evaluating the EVAL-AD8460
 ===========================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

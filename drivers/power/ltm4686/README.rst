@@ -1,6 +1,8 @@
 LTM4686 no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

@@ -21,30 +21,33 @@ def manage_no_os_doxygen_links(env):
         env.no_os_doxygen = {}
         for p in pages:
             env.no_os_doxygen[p] = {'ctime': 0, 'list': None,
-                                    'exclude': [], 'warn': True}
+                                    'exclude': [], 'ctime_exclude': 0,
+                                    'warn': True}
 
     dxy = env.no_os_doxygen
 
     root_path = path.abspath(path.join(env.srcdir, "..", "..", ".."))
 
     def get_exclusions(file):
-        ctime = path.getctime(file)
-        if ctime <= dxy['drivers']['ctime']:
-            return []
-
         if not path.isfile(file):
             logger.warning(f"'{file}' does not exist!")
-            return []
+            return
+
+        ctime = path.getctime(file)
+        if ctime <= dxy['drivers']['ctime_exclude']:
+            return
 
         with open(file, 'r') as f:
             for line in f:
                 line = line.strip()
                 if line.startswith("EXCLUDE_DRV="):
-                    return line.split("=", 1)[1].strip().strip('"').split()
-        return []
+                    exclude = line.split("=", 1)[1].strip().strip('"').split()
+                    dxy['drivers']['exclude'] = exclude
+                    dxy['drivers']['ctime_exclude'] = ctime
+                    return
+        return
 
-    dxy['drivers']['exclude'] = get_exclusions(path.join(root_path, "ci",
-                                                         "gen_dox.sh"))
+    get_exclusions(path.join(root_path, "ci", "gen_dox.sh"))
 
     doxypath = path.join(root_path, "doc", "doxygen", "build",
                          "doxygen_doc", "html")

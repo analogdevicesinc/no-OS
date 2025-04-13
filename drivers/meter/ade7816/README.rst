@@ -1,6 +1,8 @@
 ADE7816 no-OS documentation
 ===========================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

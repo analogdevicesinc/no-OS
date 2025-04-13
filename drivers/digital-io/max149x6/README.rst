@@ -1,6 +1,8 @@
 MAX149X6 no-OS driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

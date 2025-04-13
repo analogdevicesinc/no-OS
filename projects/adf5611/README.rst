@@ -1,6 +1,8 @@
 Evaluating the ADF5611
 ======================
 
+.. no-os-doxygen::
+
 Contents
 --------
 

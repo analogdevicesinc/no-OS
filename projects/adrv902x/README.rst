@@ -1,6 +1,8 @@
 adrv902x no-OS Example Project
 ==============================
 
+.. no-os-doxygen::
+
 Supported Devices
 =================
 

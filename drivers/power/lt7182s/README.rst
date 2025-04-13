@@ -1,6 +1,8 @@
 LT7182S no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

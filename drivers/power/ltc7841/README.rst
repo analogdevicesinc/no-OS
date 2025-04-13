@@ -1,6 +1,8 @@
 LTC7841 no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

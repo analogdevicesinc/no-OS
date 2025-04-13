@@ -1,6 +1,8 @@
 System ID (AXI_SYSID) no-OS Driver
 ==================================
 
+.. no-os-doxygen::
+
 Overview
 --------
 

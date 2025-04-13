@@ -1,6 +1,8 @@
 ADP1050 no-OS Example Project
 =============================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

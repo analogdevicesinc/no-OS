@@ -1,6 +1,8 @@
 ADM1177 no-OS Driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

@@ -1,6 +1,8 @@
 Evaluating the EVAL-ADES1754
 ============================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

@@ -1,6 +1,8 @@
 Evaluating the LT7182S
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

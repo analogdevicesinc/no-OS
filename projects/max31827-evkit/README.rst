@@ -1,6 +1,8 @@
 Evaluating the MAX31827
 =======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

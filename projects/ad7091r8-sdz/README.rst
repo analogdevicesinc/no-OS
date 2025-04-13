@@ -1,6 +1,8 @@
 AD7091R-2/-4/-8 no-OS Example Project
 =====================================
 
+.. no-os-doxygen::
+
 .. contents::
     :depth: 3
 
