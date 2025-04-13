@@ -1,6 +1,8 @@
 AD8460 no-OS driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

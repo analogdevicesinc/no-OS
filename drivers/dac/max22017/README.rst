@@ -1,6 +1,8 @@
 MAX22017 no-OS Driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

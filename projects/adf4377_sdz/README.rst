@@ -1,6 +1,8 @@
 Evaluating the ADF4377 Wideband Synthesizer
 ===========================================
 
+.. no-os-doxygen::
+
 Contents
 --------
 

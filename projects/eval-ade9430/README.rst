@@ -1,6 +1,8 @@
 EVAL-ADE9430 Sensor-to-Cloud no-OS Example Project
 ==================================================
 
+.. no-os-doxygen::
+
 Building project
 ----------------
 

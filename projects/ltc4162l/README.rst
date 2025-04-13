@@ -1,6 +1,8 @@
 Evaluating the LTC4162L
 =======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

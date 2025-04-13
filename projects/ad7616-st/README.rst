@@ -1,6 +1,8 @@
 AD7616 no-OS Example Project on SDP-K1
 ======================================
 
+.. no-os-doxygen::
+
 .. contents::
     :depth: 3
 

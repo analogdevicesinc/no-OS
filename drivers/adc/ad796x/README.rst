@@ -1,6 +1,8 @@
 AD796X no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

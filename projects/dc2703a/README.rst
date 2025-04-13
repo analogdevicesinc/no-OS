@@ -1,6 +1,8 @@
 Evaluating the LT8491
 =======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

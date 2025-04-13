@@ -1,6 +1,8 @@
 MAX42500 no-OS Example Project
 ==============================
 
+.. no-os-doxygen::
+
 ..contents::
         :depth: 3
 

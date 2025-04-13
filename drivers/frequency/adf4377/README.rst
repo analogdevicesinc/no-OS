@@ -1,6 +1,8 @@
 ADF4377 No-OS Driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices  
 -----------------
 

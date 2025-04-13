@@ -1,6 +1,8 @@
 ADIS1646X Family no-OS Example Project
 ======================================
 
+.. no-os-doxygen::
+
 .. contents::
     :depth: 3
 

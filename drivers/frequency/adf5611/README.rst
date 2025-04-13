@@ -1,6 +1,8 @@
 ADF5611 no-OS driver
 ====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

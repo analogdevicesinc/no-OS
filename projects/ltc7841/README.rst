@@ -1,6 +1,8 @@
 Evaluating the LTC7841
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

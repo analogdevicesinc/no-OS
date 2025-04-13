@@ -1,6 +1,8 @@
 Evaluating the ADF4368
 ======================
 
+.. no-os-doxygen::
+
 Contents
 --------
 

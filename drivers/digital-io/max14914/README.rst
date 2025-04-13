@@ -1,6 +1,8 @@
 MAX14914 no-OS driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

@@ -1,6 +1,8 @@
 Evaluating the LTM4686
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

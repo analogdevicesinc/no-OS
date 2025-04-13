@@ -1,6 +1,8 @@
 AD405X no-OS Driver
 ===================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

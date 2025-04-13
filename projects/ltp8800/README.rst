@@ -1,6 +1,8 @@
 Evaluating the LTP8800
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

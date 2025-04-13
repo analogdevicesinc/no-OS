@@ -1,6 +1,8 @@
 AD469x no-OS Example Project
 ============================
 
+.. no-os-doxygen::
+
 
 Contents
 --------

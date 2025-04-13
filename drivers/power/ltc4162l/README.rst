@@ -1,6 +1,8 @@
 LTC4162L no-OS driver
 =====================
 
+.. no-os-doxygen::
+
 Supported Devices
 -----------------
 

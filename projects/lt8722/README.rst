@@ -1,6 +1,8 @@
 Evaluating the LT8722
 ======================
 
+.. no-os-doxygen::
+
 .. contents::
 	:depth: 3
 

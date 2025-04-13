@@ -1,6 +1,8 @@
 AD400x no-OS Example Project on ZED and SDP-K1
 ==============================================
 
+.. no-os-doxygen::
+
 Contents
 --------
 

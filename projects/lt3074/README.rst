@@ -1,6 +1,8 @@
 Evaluating the LT3074
 ======================
 
+.. no-os-doxygen::
+
 
 Contents
 --------

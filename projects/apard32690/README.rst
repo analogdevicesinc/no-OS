@@ -1,6 +1,8 @@
 AD-APARD32690-SL no-OS Example Project
 ======================================
 
+.. no-os-doxygen::
+
 Prerequisites
 -------------
 
