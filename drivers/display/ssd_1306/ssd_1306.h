@@ -94,4 +94,7 @@ int32_t ssd_1306_print_ascii(struct display_dev *device, uint8_t ascii,
 /** Removes resources allocated by device. */
 int32_t ssd_1306_remove(struct display_dev *device);
 
+/** Print entire screen buffer */
+int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer);
+
 #endif

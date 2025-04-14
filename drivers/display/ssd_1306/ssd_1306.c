@@ -352,3 +352,30 @@ int32_t ssd_1306_remove(struct display_dev *device)
 
 	return 0;
 }
+
+/**
+ * @brief Print entire screen buffer
+ *
+ * @param device - The device structure.
+ * @param buffer - The buffer to be printed.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t ssd_1306_print_screen(struct display_dev *device, char *buffer)
+{
+	int32_t ret;
+
+	ssd_1306_extra *extra;
+
+	if (!device || !buffer)
+		return -1;
+
+
+	extra = device->extra;
+	ret = ssd_1306_move_cursor(device, 0, 0);
+	if (ret != 0)
+		return -1;
+
+	return ssd1306_buffer_transmit(extra, (uint8_t *)buffer,
+				       device->cols_nb * device->rows_nb / 8U,
+				       SSD1306_DATA);
+}
