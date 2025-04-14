@@ -85,6 +85,8 @@ struct display_controller_ops {
 			      uint8_t);
 	/** Removes resources allocated by device */
 	int32_t (*remove)(struct display_dev *);
+	/** Print screen buffer */
+	int32_t (*print_buffer)(struct display_dev *, char *);
 };
 
 /** Initializes the display peripheral. */
@@ -114,5 +116,8 @@ int32_t display_print_string(struct display_dev *device, char *msg,
 /** Prints single char at selected position. */
 int32_t display_print_char(struct display_dev *device, char chr,
 			   uint8_t row, uint8_t column);
+
+/** Print display buffer on entire screen */
+int32_t display_print_buffer(struct display_dev *device, char *buffer);
 
 #endif
