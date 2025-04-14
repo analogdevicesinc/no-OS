@@ -172,8 +172,8 @@ update_gh_pages() {
 
 check_sphinx_doc
 
-build_sphinx
-
 build_doxygen
+
+build_sphinx
 
 update_gh_pages
