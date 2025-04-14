@@ -29,3 +29,10 @@ MAXIM
    
    build_guides/build_maxim
 
+
+FTD2XX
+======
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_ftd2xx
