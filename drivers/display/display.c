@@ -38,14 +38,14 @@
 #include "no_os_alloc.h"
 #include <string.h>
 
-/***************************************************************************//**
+/**
  * @brief Initializes the display peripheral.
  *
  * @param device     - The device structure.
  * @param param      - The structure that contains the device initial
  * 		               parameters.
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_init(struct display_dev **device,
 		     const struct display_init_param *param)
 {
@@ -74,12 +74,12 @@ int32_t display_init(struct display_dev **device,
 	return ret;
 }
 
-/****************************************************************************//**
+/**
  * @brief Frees the resources allocated by display_init().
  *
  * @param device - The device structure.
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_remove(struct display_dev *device)
 {
 	int32_t ret;
@@ -95,12 +95,12 @@ int32_t display_remove(struct display_dev *device)
 	return ret;
 }
 
-/***************************************************************************//**
+/**
  * @brief Turns display on.
  *
  * @param device - The device structure.
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_on(struct display_dev *device)
 {
 	if (!device)
@@ -109,12 +109,12 @@ int32_t display_on(struct display_dev *device)
 	return device->controller_ops->display_on_off(device, true);
 }
 
-/***************************************************************************//**
+/**
  * @brief Turns display off.
  *
  * @param device - The device structure.
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_off(struct display_dev *device)
 {
 	if (!device)
@@ -123,14 +123,14 @@ int32_t display_off(struct display_dev *device)
 	return device->controller_ops->display_on_off(device, false);
 }
 
-/***************************************************************************//**
+/**
  * @brief Moves cursor to desired position.
  *
  * @param device - The device structure.
  * @param row    - row
  * @param column - column
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_move_cursor(struct display_dev *device, uint8_t row,
 			    uint8_t column)
 {
@@ -140,12 +140,12 @@ int32_t display_move_cursor(struct display_dev *device, uint8_t row,
 	return device->controller_ops->move_cursor(device, row, column);
 }
 
-/***************************************************************************//**
+/**
  * @brief Clears data on display.
  *
  * @param device - The device structure.
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_clear(struct display_dev *device)
 {
 	int32_t ret;
@@ -163,7 +163,7 @@ int32_t display_clear(struct display_dev *device)
 	return ret;
 }
 
-/***************************************************************************//**
+/**
  * @brief Prints char string at selected position.
  *
  * @param device - The device structure.
@@ -171,7 +171,7 @@ int32_t display_clear(struct display_dev *device)
  * @param row    - row
  * @param column - column
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_print_string(struct display_dev *device, char *msg,
 			     uint8_t row, uint8_t column)
 {
@@ -206,7 +206,7 @@ int32_t display_print_string(struct display_dev *device, char *msg,
 	return ret;
 }
 
-/***************************************************************************//**
+/**
  * @brief Prints single char at selected position.
  *
  * @param device - The device structure.
@@ -214,7 +214,7 @@ int32_t display_print_string(struct display_dev *device, char *msg,
  * @param row    - row
  * @param column - column
  * @return Returns 0 in case of success or negative error code otherwise.
-*******************************************************************************/
+*/
 int32_t display_print_char(struct display_dev *device, char chr,
 			   uint8_t row, uint8_t column)
 {
@@ -222,4 +222,19 @@ int32_t display_print_char(struct display_dev *device, char chr,
 		return -EINVAL;
 
 	return device->controller_ops->print_char(device, chr, row, column);
+}
+
+/**
+ * @brief Prints entire screen buffer.
+ *
+ * @param device  - The device structure.
+ * @param buffer  - The buffer to be printed.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t display_print_buffer(struct display_dev *device, char *buffer)
+{
+	if (!device || !buffer)
+		return -EINVAL;
+
+	return ret = device->controller_ops->print_buffer(device, buffer);
 }
