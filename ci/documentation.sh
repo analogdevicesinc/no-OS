@@ -70,16 +70,16 @@ check_sphinx_doc() {
                         if ! [ -f "$sphinx_path/$top_dir/$fn_dir.rst" ];
                         then
                                 echo_red "Missing $fn_dir.rst file at $sphinx_path/$top_dir"
-                                erros_found=1
+                                errors_found=1
                         fi
 
                         if ! grep -q "$top_dir/$fn_dir" "$sphinx_path/${top_dir}_doc.rst"
                         then
                                 echo_red "Missing $top_dir/$fn_dir link inside $sphinx_path/${top_dir}_doc.rst"
-                                erros_found=1
+                                errors_found=1
                         fi
 
-                        if [ $erros_found -eq 1 ]
+                        if [ "$errors_found" -eq "1" ]
                         then
                                 exit 1
                         fi
