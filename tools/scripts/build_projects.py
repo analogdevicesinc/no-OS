@@ -51,7 +51,6 @@ def parse_input():
 
 ERR = 0
 LOG_START = " -> "
-USER = os.environ.get('USER')
 TOKEN = os.environ.get('TOKEN')
 BRANCH = os.environ.get('BRANCH')
 blacklist_url = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
@@ -152,8 +151,8 @@ NEW_HW_DIR_NAME = 'new_hardware'
 
 def process_blacklist():
 	blacklist = []
-	err = os.system('wget --http-user={} --http-password={} --auth-no-challenge \'{}\' -O blacklist.txt >> {} 2>&1'
-				.format(USER, TOKEN, blacklist_url, log_file))
+	err = os.system('curl -L -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt >> {} 2>&1'
+				.format(TOKEN, blacklist_url, log_file))
 	if err != 0 or (not os.path.isfile('blacklist.txt')):
 		log_err('Can not download blacklist file')
 		return blacklist
