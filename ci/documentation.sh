@@ -109,6 +109,13 @@ build_sphinx() {
         popd
 }
 
+merge_doc() {
+        mkdir -p ${TOP_DIR}/doc_build
+        mkdir -p ${TOP_DIR}/doc_build/doxygen
+
+        rsync -a "${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/" "${TOP_DIR}/doc_build/doxygen/"
+        cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}/doc_build
+}
 ############################################################################
 # If the current build is not a pull request and it is on main the 
 # documentation will be pushed to the gh-pages branch
@@ -136,16 +143,12 @@ update_gh_pages() {
                 git checkout gh-pages
 
                 # Clear previous content in the root folder except the doc path which holds new builds
-                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! \( -name "doc" -o -name ".git" \) -exec rm -r {} \;
+                find ${TOP_DIR} -mindepth 1 -maxdepth 1 ! \( -name "doc_build" -o -name ".git" \) -exec rm -r {} \;
 
-                # Create doxygen folder holding new build content
-                mkdir -p ${TOP_DIR}/doxygen
-                rsync -a "${TOP_DIR}/doc/doxygen/build/doxygen_doc/html/" "${TOP_DIR}/doxygen/"
+                # Add build content to root folder
+                cp -R ${TOP_DIR}/doc_build/* ${TOP_DIR}
 
-                # Add sphinx build content to root folder
-                cp -R ${TOP_DIR}/doc/sphinx/build/html/* ${TOP_DIR}
-
-                rm -rf ${TOP_DIR}/doc
+                rm -rf ${TOP_DIR}/doc_build
 
                 # Create .nojekyll file
                 touch ${TOP_DIR}/.nojekyll
@@ -175,5 +178,7 @@ check_sphinx_doc
 build_sphinx
 
 build_doxygen
+
+merge_doc
 
 update_gh_pages
