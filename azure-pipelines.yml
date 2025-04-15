@@ -32,6 +32,7 @@ jobs:
         imageName: 'ubuntu-latest'
         BUILD_TYPE: documentation
         UPDATE_GH_DOCS: 0
+        IS_DOCS: true
   pool:
     vmImage: $(imageName)
   steps:
@@ -43,3 +44,9 @@ jobs:
   - script: ./ci/run_build.sh
     condition: eq(variables.runCondition, true)
     displayName: 'Run $(BUILD_TYPE)'
+  - task: PublishPipelineArtifact@1
+    condition: and(succeeded(), eq(variables['IS_DOCS'], 'true'))
+    inputs:
+      targetPath: '$(Build.SourcesDirectory)/doc_build'
+      artifact: 'documentation-artifact'
+      publishLocation: 'pipeline'
