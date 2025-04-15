@@ -512,9 +512,9 @@ int main(void)
 #endif
 
 #ifdef XILINX_PLATFORM
-	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[0], sizeof(sine_lut_iq));
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffers[0], sizeof(sine_lut_iq));
 #ifndef ADRV9002_RX2TX2
-	Xil_DCacheInvalidateRange((uintptr_t)adc_buffers[1], sizeof(sine_lut_iq));
+	Xil_DCacheInvalidateRange((uintptr_t)dac_buffers[1], sizeof(sine_lut_iq));
 #endif
 #endif /* XILINX_PLATFORM */
 
