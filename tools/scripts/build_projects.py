@@ -52,7 +52,7 @@ def parse_input():
 ERR = 0
 LOG_START = " -> "
 TOKEN = os.environ.get('TOKEN')
-BRANCH = os.environ.get('BRANCH')
+BRANCH = 'main'
 blacklist_url = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
 
 def log(msg):
@@ -165,7 +165,7 @@ def process_blacklist():
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	try:
-		with open(os.path.expanduser('~') + '/configure_hdl_new.txt') as configure_file:
+		with open(os.path.expanduser('~') + '/configure.txt') as configure_file:
 			lines = configure_file.readlines()
 			server_base_path = lines[0].rstrip()
 			environment_path_files = lines[1].rstrip()
@@ -175,27 +175,27 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 	blacklist = []
 	timestamp_match = re.search(pattern, hdl_branch)
-	if timestamp_match:
-		hdl_branch = re.split('\/', hdl_branch)[0]
-		timestamp_folder = timestamp_match.group()
+	# if timestamp_match:
+	# 	hdl_branch = re.split('\/', hdl_branch)[0]
+	# 	timestamp_folder = timestamp_match.group()
 
-	if hdl_branch == "main":
-		hdl_branch_path = hdl_branch + '/hdl_output'
-	else:
-		if requests.get(server_base_path + 'releases/' + hdl_branch, stream=True).status_code == 200:
-			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output'
-		elif requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
-			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output'
-		else:
-			print("Error related to hdl branch name: " + hdl_branch)
-			exit()
+	# if hdl_branch == "main":
+	# 	hdl_branch_path = hdl_branch + '/hdl_output'
+	# else:
+	# 	if requests.get(server_base_path + 'releases/' + hdl_branch, stream=True).status_code == 200:
+	# 		hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output'
+	# 	elif requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
+	# 		hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output'
+	# 	else:
+	# 		print("Error related to hdl branch name: " + hdl_branch)
+	# 		exit()
 
-	if timestamp_match:
-		if requests.get(server_base_path + hdl_branch_path + '/' + timestamp_folder, stream=True).status_code == 200:
-			hdl_branch_path += '/' + timestamp_folder
-		else:
-			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
-			exit()
+	# if timestamp_match:
+	# 	if requests.get(server_base_path + hdl_branch_path + '/' + timestamp_folder, stream=True).status_code == 200:
+	# 		hdl_branch_path += '/' + timestamp_folder
+	# 	else:
+	# 		print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
+	# 		exit()
 
 	builds_dir = _builds_dir + '_' + hdl_branch
 	run_cmd(create_dir_cmd.format(builds_dir))
@@ -203,7 +203,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		return (environment_path_files, builds_dir)
 	hardwares = os.path.join(builds_dir, HW_DIR_NAME)
 	run_cmd(create_dir_cmd.format(hardwares))
-	server_full_path = server_base_path + hdl_branch_path
+	server_full_path = server_base_path
 	if (_platform is None or _platform == 'xilinx'):
 		blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
