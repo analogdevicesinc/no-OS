@@ -3,25 +3,25 @@
     "axi_qspi": {
       "flags": "EXAMPLE=axi_qspi",
       "hardware": [
-        "ad3552r_evb_zed"
+        "ad35xxr_evb_zed"
       ]
     },
     "axi_qspi_iio": {
       "flags": "EXAMPLE=axi_qspi IIOD=y",
       "hardware": [
-        "ad3552r_evb_zed"
+        "ad35xxr_evb_zed"
       ]
     },
     "generic_spi": {
       "flags": "EXAMPLE=generic_spi",
       "hardware": [
-        "ad3552r_evb_zed"
+        "ad35xxr_evb_zed"
       ]
     },
     "generic_spi_iio": {
       "flags": "EXAMPLE=generic_spi IIOD=y",
       "hardware": [
-        "ad3552r_evb_zed"
+        "ad35xxr_evb_zed"
       ]
     }
   }
