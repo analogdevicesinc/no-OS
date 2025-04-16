@@ -10,6 +10,8 @@ IIO_EXAMPLE = y
 IIO_SW_TRIGGER_EXAMPLE = n
 IIO_TIMER_TRIGGER_EXAMPLE = n
 
+LIBRARIES += lvgl
+# LIBRARIES += freertos
 
 include ../../tools/scripts/generic_variables.mk
 

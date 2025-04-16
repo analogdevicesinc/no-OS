@@ -33,10 +33,35 @@
 
 #include "platform_includes.h"
 #include "common_data.h"
+#include "FreeRTOSConfig.h"
 
 #ifdef IIO_EXAMPLE
 #include "iio_example.h"
 #endif
+
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	115200
+#define UART_IRQ_ID    	UART0_IRQn
+#define UART_EXTRA      &demo_uart_extra_ip
+#define UART_OPS        &max_uart_ops
+
+struct no_os_uart_desc *demo_uart_desc;
+
+struct max_uart_init_param demo_uart_extra_ip = {
+	.flow = UART_FLOW_DIS
+};
+
+struct no_os_uart_init_param demo_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
 
 /**
  * @brief IIOD example task
@@ -44,7 +69,16 @@
 */
 int iiodTask()
 {
-	return iio_example_main();
+	// iio_example_main();
+	printf("\n\r\n\r###############\n\r\n\r");
+	printf("Starting firmware...\n\r");
+
+	while(1)
+	{
+		printf("Test run\n\r");
+		no_os_mdelay(1000);
+	}
+	return 0;
 }
 
 /**
@@ -104,7 +138,7 @@ int create_tasks(void)
 		goto error_iio_demo_task;
 	}
 	ret = xTaskCreate(blinkingTask, (const char *)"blinkingTask",
-			  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &led_task_handle);
+		configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &led_task_handle);
 	if (ret != pdPASS) {
 		printf("xTaskCreate() failed to create blinkingTask task.\n");
 		goto error_blinking_task;
@@ -129,17 +163,23 @@ error_iio_demo_task:
 int main()
 {
 	int ret = -1;
+	// Init stdio
+	ret = no_os_uart_init(&demo_uart_desc, &demo_uart_ip);
+	if (ret)
+		return 0;
 
-#if TARGET_NUM == 32660
-#error TARGET MAX32660 not supported
-#endif
+	no_os_uart_stdio(demo_uart_desc);
 
-#ifdef IIO_EXAMPLE
+	printf("\n\r\n\r###############\n\r\n\r");
+	printf("Starting firmware...\n\r");
+	
+	// // Init stdio
+	// ret = no_os_uart_init(&demo_uart_desc, &demo_uart_ip);
+	// if (ret)
+	// 	return ret;
+	// no_os_uart_stdio(demo_uart_desc);
+
 	ret = create_tasks();
-#endif
 
-#if (IIO_EXAMPLE== 0)
-#error At least one example has to be selected using y value in Makefile.
-#endif
 	return ret;
 }

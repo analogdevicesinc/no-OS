@@ -43,6 +43,7 @@ extern void SysTick_Handler(void);
 void SysTick_Handler(void)
 {
 	MXC_DelayHandler();
+
 	_system_ticks++;
 }
 

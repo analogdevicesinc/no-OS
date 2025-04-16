@@ -39,3 +39,5 @@ SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c \
         $(DRIVERS)/dac/dac_demo/dac_demo.c
 
 
+# Platform specific, free-rtos config file
+# FREERTOS_CONFIG_PATH := $(PROJECT)/src/platform/maxim/FreeRTOSConfig.h

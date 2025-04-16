@@ -42,6 +42,21 @@
 #include "iio_trigger.h"
 #endif
 
+#ifdef FREERTOS
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "portmacro.h"
+#include "task.h"
+#include "semphr.h"
+#include "wut.h"
+#include "uart.h"
+#include "lp.h"
+#include "no_os_delay.h"
+#endif
+
 extern struct no_os_uart_init_param iio_demo_uart_ip;
 
 #define DEMO_CHANNELS no_os_max(TOTAL_ADC_CHANNELS, TOTAL_DAC_CHANNELS)

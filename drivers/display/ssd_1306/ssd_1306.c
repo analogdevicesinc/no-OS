@@ -37,6 +37,7 @@
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
 #include "no_os_delay.h"
+#include "mxc_delay.h"
 #include <string.h>
 
 /* @defines for ssd_1306 pins signal level */
@@ -53,7 +54,8 @@ const struct display_controller_ops ssd1306_ops = {
 	.display_on_off = &ssd_1306_display_on_off,
 	.move_cursor = &ssd_1306_move_cursor,
 	.print_char = &ssd_1306_print_ascii,
-	.remove = &ssd_1306_remove
+	.remove = &ssd_1306_remove,
+	.print_buffer = &ssd_1306_print_buffer
 };
 
 extern const uint8_t no_os_chr_8x8[128][8];
@@ -151,7 +153,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 
 	}
 	// Post reset delay, Treset=3us (See datasheet -> power on sequence)
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	if (extra->reset_pin) {
 		ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
 		if (ret != 0)
@@ -159,7 +161,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 	}
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xA8;
 	command[1] = 0x3F;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
@@ -167,7 +169,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xD3;
 	command[1] = 0x00;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
@@ -175,36 +177,36 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0x40;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xA0;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xC0;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xDA;
-	command[1] = 0x02;
+	command[1] = 0xD2;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0x81;
 	command[1] = 0x7F;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
@@ -212,14 +214,21 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xA4;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
+	command[0] = 0xA6;
+	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
+	if (ret != 0)
+		return -1;
+
+	printf("Line: %d\n\r", __LINE__);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xD5;
 	command[1] = 0x80;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
@@ -227,7 +236,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0x8D;
 	command[1] = 0x14;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
@@ -235,7 +244,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0xAF;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
@@ -243,7 +252,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 
 	// set addressing mode
 	printf("Line: %d\n\r", __LINE__);
-	no_os_udelay(3U);
+	MXC_Delay(MXC_DELAY_USEC(3U));
 	command[0] = 0x20;
 	command[1] = 0x00;
 	return ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
@@ -360,7 +369,7 @@ int32_t ssd_1306_remove(struct display_dev *device)
  * @param buffer - The buffer to be printed.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
-int32_t ssd_1306_print_screen(struct display_dev *device, char *buffer)
+int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer)
 {
 	int32_t ret;
 
@@ -371,11 +380,43 @@ int32_t ssd_1306_print_screen(struct display_dev *device, char *buffer)
 
 
 	extra = device->extra;
+
 	ret = ssd_1306_move_cursor(device, 0, 0);
 	if (ret != 0)
 		return -1;
 
-	return ssd1306_buffer_transmit(extra, (uint8_t *)buffer,
-				       device->cols_nb * device->rows_nb / 8U,
-				       SSD1306_DATA);
+	uint32_t nr_of_frame_bytes = device->cols_nb * device->rows_nb / 8;
+	uint8_t nr_of_sendable_frames = nr_of_frame_bytes / 254;
+	uint8_t last_frame_bytes = nr_of_frame_bytes % 254;
+
+	for (int i = 0; i < nr_of_sendable_frames; i++) {
+		ret = ssd1306_buffer_transmit(extra, &buffer[i * 254], 254, SSD1306_DATA);
+		if (ret != 0)
+			return -1;
+	}
+	if (last_frame_bytes > 0) {
+		ret = ssd1306_buffer_transmit(extra, &buffer[nr_of_sendable_frames * 254],
+					      last_frame_bytes, SSD1306_DATA);
+		if (ret != 0)
+			return -1;
+	}
+
+	return 0;
 }
+
+// int32_t convert_frame_buf_from_lvg_to_ssd1306(display_dev *device, uint8_t *lvg_buf, uint8_t *ssd_buf)
+// {
+// 	int i, j;
+
+// 	int8_t page_rezolution = 8; // Nr of bits per page column
+
+// 	uint32_t hor_rezolution = device->cols_nb;
+// 	uint32_t ver_rezolution = device->rows_nb;
+
+// 	for (i = 0; i < ver_rezolution; i++) {
+// 		for (j = 0; j < hor_rezolution; j++) {
+// 			ssd_buf[i * SSD1306_HOR_REZ + j] = lvg_buf[i * hor_rezolution + j];
+// 		}
+// 	}
+// 	return 0;
+// }

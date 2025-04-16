@@ -92,13 +92,13 @@ int iio_example_main()
 	if (status)
 		goto error_iio_app;
 
-	status = iio_app_run(app);
-	if (status)
-		iio_app_remove(app);
+	// status = iio_app_run(app);
+// 	if (status)
+// 		iio_app_remove(app);
 
 error_iio_app:
-	dac_demo_remove(dac_desc);
+// 	dac_demo_remove(dac_desc);
 error_dac_buffer:
-	adc_demo_remove(adc_desc);
+// 	adc_demo_remove(adc_desc);
 	return status;
 }

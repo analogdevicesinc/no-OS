@@ -485,7 +485,7 @@ int nhd_c12832a1z_init(struct nhd_c12832a1z_dev **device,
 		if (ret)
 			goto error_rst;
 
-		no_os_udelay(3U);
+		MXC_Delay(MXC_DELAY_USEC(3U));
 		ret = no_os_gpio_set_value(dev->reset_pin, NHD_C12832A1Z_RST_OFF);
 		if (ret)
 			goto error_rst;

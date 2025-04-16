@@ -37,17 +37,17 @@
 static uint16_t loopback_buffs[DEMO_CHANNELS][SAMPLES_PER_CHANNEL];
 #endif
 
-struct no_os_uart_init_param iio_demo_uart_ip = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = UART_EXTRA,
-	.platform_ops = UART_OPS,
-};
+// struct no_os_uart_init_param iio_demo_uart_ip = {
+// 	.device_id = UART_DEVICE_ID,
+// 	.irq_id = UART_IRQ_ID,
+// 	.asynchronous_rx = true,
+// 	.baud_rate = UART_BAUDRATE,
+// 	.size = NO_OS_UART_CS_8,
+// 	.parity = NO_OS_UART_PAR_NO,
+// 	.stop = NO_OS_UART_STOP_1_BIT,
+// 	.extra = UART_EXTRA,
+// 	.platform_ops = UART_OPS,
+// };
 
 struct adc_demo_init_param adc_init_par = {
 	.ext_buff_len = SAMPLES_PER_CHANNEL,

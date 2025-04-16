@@ -236,5 +236,5 @@ int32_t display_print_buffer(struct display_dev *device, char *buffer)
 	if (!device || !buffer)
 		return -EINVAL;
 
-	return ret = device->controller_ops->print_buffer(device, buffer);
+	return device->controller_ops->print_buffer(device, buffer);
 }
