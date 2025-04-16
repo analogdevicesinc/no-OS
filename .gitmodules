@@ -16,3 +16,6 @@
 [submodule "libraries/free_rtos/free_rtos"]
 	path = libraries/free_rtos/free_rtos
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "libraries/lvgl/lvgl"]
+	path = libraries/lvgl/lvgl
+	url = https://github.com/lvgl/lvgl.git

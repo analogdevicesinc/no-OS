@@ -115,6 +115,12 @@ INCS += $(NO-OS)/libraries/lwip/configs/lwipcfg.h
 INCS += $(NO-OS)/libraries/lwip/configs/lwipopts.h
 endif
 
+# Add LVGL library
+ifneq ($(if $(findstring lvgl, $(LIBRARIES)), 1),)
+include $(NO-OS)/tools/scripts/lvgl.mk
+endif
+
+
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
