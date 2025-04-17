@@ -85,7 +85,9 @@
 
 extern struct xil_uart_init_param uart_extra_ip;
 extern struct axi_clkgen_init clkgen_init;
+#ifdef XILINX_PLATFORM
 extern struct spi_engine_offload_init_param spi_engine_offload_init_param;
+#endif
 extern struct spi_engine_init_param spi_eng_init_param;
 extern struct axi_pwm_init_param axi_pwm_init_param;
 
