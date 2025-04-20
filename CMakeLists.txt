@@ -32,6 +32,7 @@ add_library(capi_build STATIC)
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+list(APPEND GENERATE_CONFIG_ARGS "--update")
 list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
 
@@ -80,3 +81,16 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(googletest)
+
+add_custom_target(
+  menuconfig
+  COMMAND ${Python3_EXECUTABLE} -m menuconfig
+  DEPENDS ${CONFIG_FILE}
+  VERBATIM
+)
+
+add_custom_target(
+  distclean
+  COMMAND make clean && rm ${NO_OS_DIR}/.config
+  VERBATIM
+)
