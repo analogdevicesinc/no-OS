@@ -1,12 +1,15 @@
+cmake_minimum_required(VERSION 3.28)
+project(eval-adxl355-pmdz C ASM)
+
+message(STATUS "Args ${CMAKE_TOOLCHAIN_FILE}")
+
 add_library(eval-adxl355-pmdz-common STATIC)
 
 add_executable(eval-adxl355-pmdz-dummy ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy/dummy_example.c)
 target_link_libraries(eval-adxl355-pmdz-dummy eval-adxl355-pmdz-common)
-target_link_libraries(eval-adxl355-pmdz-common capi_build)
 
 add_executable(eval-adxl355-pmdz-iio ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c)
 target_link_libraries(eval-adxl355-pmdz-iio eval-adxl355-pmdz-common)
-target_link_libraries(eval-adxl355-pmdz-common capi_build)
 
 add_executable(eval-adxl355-pmdz-iio-trigger ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example/iio_trigger_example.c)
 target_link_libraries(eval-adxl355-pmdz-iio-trigger eval-adxl355-pmdz-common)
@@ -18,11 +21,8 @@ target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/
 target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/main.c)
 target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c)
 
-# Just because iio_app.c includes parameters.h ...
 target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform)
-# And parameters.h includes common_data.h
 target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/common)
-# And common_data.h includes platform_includes.h
 target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM})
 
 target_compile_definitions(eval-adxl355-pmdz-dummy PRIVATE -DADXL355_DEV=1)

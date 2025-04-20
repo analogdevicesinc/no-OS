@@ -1,5 +1,6 @@
 import kconfiglib
 import sys
+import os
 import argparse
 from pathlib import Path
 
@@ -7,7 +8,7 @@ parser = argparse.ArgumentParser(description="Generate config.cmake from defconf
 
 parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory", default=Path(__file__).parent.resolve())
 parser.add_argument("--defconfig", type=str, help="Path to a defconfig file", nargs='+')
-parser.add_argument("--update", type=bool, help="Append the defconfig file to the existing .config file", default=False)
+parser.add_argument("--update", action='store_true', help="Append the defconfig file to the existing .config file")
 parser.add_argument("--verbose", type=bool, help="Enable verbose output", default=False)
 
 args = parser.parse_args(sys.argv[1:])
@@ -17,7 +18,11 @@ capi_dir = args.root_dir
 kconf = kconfiglib.Kconfig(capi_dir.joinpath("Kconfig"))
 
 if args.update:
-        kconf.load_config(capi_dir.joinpath(".config"))
+        main_config = capi_dir.joinpath(".config")
+        if not os.path.exists(main_config):
+                os.mknod(main_config)
+
+        kconf.load_config(main_config)
 
 for defconfig in args.defconfig:
         kconf.load_config(capi_dir.joinpath(defconfig), replace=False)

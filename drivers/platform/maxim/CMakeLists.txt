@@ -1,13 +1,13 @@
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-find_package(MaximSDK REQUIRED)
+# list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+# find_package(MaximSDK REQUIRED)
 
-message(STATUS "MaximSDK = ${MaximSDK_FOUND}")
+# message(STATUS "MaximSDK = ${MaximSDK_FOUND}")
 
-if (${MaximSDK_FOUND})
-    message(STATUS "MaximSDK found")
-else()
-    message(FATAL_ERROR "MaximSDK not found!")
-endif()
+# if (${MaximSDK_FOUND})
+#     message(STATUS "MaximSDK found")
+# else()
+#     message(FATAL_ERROR "MaximSDK not found!")
+# endif()
 
 target_compile_definitions(capi_build PUBLIC -DMAXIM_PLATFORM)
 
