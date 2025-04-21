@@ -10,6 +10,7 @@ ACCELEROMETERS
    :maxdepth: 1
 
    drivers/adxl355
+   drivers/adxl38x
 
 ANALOG TO DIGITAL CONVERTERS
 ============================
