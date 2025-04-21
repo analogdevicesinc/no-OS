@@ -115,8 +115,6 @@ static int stm32_gpdma_llist_config(struct stm32_dma_channel *sdma_ch,
 		if (ch_priv_data->llist) {
 			if (HAL_DMAEx_List_ResetQ(ch_priv_data->llist) != HAL_OK)
 				return -EINVAL;
-			if (HAL_DMAEx_List_DeInit(sdma_ch->hdma) != HAL_OK)
-				return -EINVAL;
 
 			no_os_free(ch_priv_data->llist);
 			ch_priv_data->llist = NULL;
