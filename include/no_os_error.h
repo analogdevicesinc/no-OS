@@ -44,5 +44,8 @@
 
 
 #define NO_OS_IS_ERR_VALUE(x)	((x) < 0)
+#define NO_OS_IS_ERR(x)		(NO_OS_IS_ERR_VALUE((unsigned long)x))
+#define NO_OS_PTR_ERR(x)	((long)x)
+#define NO_OS_ERR_CAST(x)	((void *) x)
 
 #endif // _NO_OS_ERROR_H_
