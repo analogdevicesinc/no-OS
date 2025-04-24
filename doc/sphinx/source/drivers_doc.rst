@@ -25,6 +25,13 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/ad7768-1
    drivers/ad9083
 
+ADC / DAC
+==========
+.. toctree::
+   :maxdepth: 1
+   
+   drivers/ad74416h
+
 AXI CORES
 =========
 .. toctree::
