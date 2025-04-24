@@ -31,6 +31,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef _ADF4382_H_
+#define _ADF4382_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -797,3 +799,5 @@ int adf4382_init(struct adf4382_dev **device,
 
 /** ADF4382 Remove */
 int adf4382_remove(struct adf4382_dev *dev);
+
+#endif
