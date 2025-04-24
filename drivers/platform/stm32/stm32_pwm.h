@@ -34,9 +34,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "no_os_gpio.h"
 #include "no_os_irq.h"
-#include "stm32_gpio.h"
 #include "stm32_hal.h"
 
 enum stm32_pwm_timer {
@@ -123,8 +121,6 @@ struct stm32_pwm_desc {
 	void *htimer;
 	/** Type of timer used for PWM */
 	enum stm32_pwm_timer pwm_timer;
-	/** Timer GPIO instance */
-	struct no_os_gpio_desc *gpio;
 	/** Timer prescaler */
 	uint32_t prescaler;
 	/** Timer autoreload enable */

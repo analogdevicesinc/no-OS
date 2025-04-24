@@ -793,7 +793,7 @@ int32_t stm32_pwm_remove(struct no_os_pwm_desc *desc)
 		return -EINVAL;
 	}
 
-	ret = no_os_gpio_remove(extra->gpio);
+	ret = no_os_gpio_remove(desc->pwm_gpio);
 	if (ret)
 		return ret;
 
