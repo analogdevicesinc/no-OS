@@ -2,8 +2,9 @@
  *   @file   linux/linux_i2c.c
  *   @brief  Implementation of Linux platform I2C Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+ *   @author Rene Arthur Necesito (Renearthur.Necesito@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,6 +42,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <linux/i2c.h>
 #include <linux/i2c-dev.h>
 
 /**
@@ -50,7 +52,86 @@
 struct linux_i2c_desc {
 	/** /dev/i2c-"device_id" file descriptor */
 	int fd;
+	/** struct for write - repeated start - read operations */
+	struct i2c_msg *messages;
+	/** count of i2c messages in array */
+	int len_messages;
 };
+
+/**
+ * @brief Add I2C messages for a combined I2C R/W transaction.
+ * @param desc - The I2C descriptor.
+ * @param data - Buffer that stores the received/transmission data.
+ * @param bytes_number - Number of bytes to read/write.
+ * @param read - 0 to write, otherwise read.
+ * @return 0 in case of success.
+ */
+int linux_i2c_add_msg(struct no_os_i2c_desc *desc,
+		      uint8_t *data,
+		      uint8_t bytes_number,
+		      uint8_t read)
+{
+	struct linux_i2c_desc *linux_desc;
+	struct i2c_msg msg;
+	void *ptr;
+
+	linux_desc = desc->extra;
+
+	msg.addr = desc->slave_address;
+	msg.len = bytes_number;
+	msg.buf = data;
+
+	if (read)
+		msg.flags = I2C_M_RD;
+	else
+		msg.flags = 0;  // Write
+
+
+	if (linux_desc->messages) {
+		ptr = realloc(linux_desc->messages, sizeof(struct i2c_msg) *
+			      (linux_desc->len_messages + 1));
+		if (!ptr)
+			return -ENOMEM;
+		linux_desc->messages = ptr;
+	} else {
+		linux_desc->messages = no_os_malloc(sizeof(struct i2c_msg));
+		linux_desc->len_messages = 0;
+		if (!linux_desc->messages)
+			return -ENOMEM;
+	}
+
+	linux_desc->messages[linux_desc->len_messages] = msg;
+	linux_desc->len_messages++;
+
+	return 0;
+}
+
+/**
+ * @brief Send a combined I2C R/W transaction with only one stop bit.
+ * @param desc - The I2C descriptor.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int linux_i2c_send_msg(struct no_os_i2c_desc *desc)
+{
+	struct linux_i2c_desc *linux_desc;
+	struct i2c_rdwr_ioctl_data packets;
+	int32_t ret;
+
+	linux_desc = desc->extra;
+
+	packets.msgs = linux_desc->messages;
+	packets.nmsgs = linux_desc->len_messages;
+
+	ret = ioctl(linux_desc->fd, I2C_RDWR, &packets);
+	if (ret <= 0)  // True if error or no messages sent.
+		return -1;
+
+	no_os_free(linux_desc->messages);
+	linux_desc->len_messages = 0;
+	linux_desc->messages = NULL;
+
+	return 0;
+}
 
 /**
  * @brief Initialize the I2C communication peripheral.
@@ -58,8 +139,8 @@ struct linux_i2c_desc {
  * @param param - The structure that contains the I2C parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_init(struct no_os_i2c_desc **desc,
-		       const struct no_os_i2c_init_param *param)
+int linux_i2c_init(struct no_os_i2c_desc **desc,
+		   const struct no_os_i2c_init_param *param)
 {
 	struct linux_i2c_init_param *linux_init;
 	struct linux_i2c_desc *linux_desc;
@@ -105,7 +186,7 @@ free_desc:
  * @param desc - The I2C descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
+int linux_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
@@ -113,7 +194,7 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
 	linux_desc = desc->extra;
 
 	ret = close(linux_desc->fd);
-	if (ret < 0) {
+	if (ret) {
 		printf("%s: Can't close device\n\r", __func__);
 		return -1;
 	}
@@ -134,30 +215,25 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
-			uint8_t *data,
-			uint8_t bytes_number,
-			uint8_t stop_bit)
+int linux_i2c_write(struct no_os_i2c_desc *desc,
+		    uint8_t *data,
+		    uint8_t bytes_number,
+		    uint8_t stop_bit)
 {
-	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
 
-	linux_desc = desc->extra;
-
-	ret = ioctl(linux_desc->fd, I2C_SLAVE, desc->slave_address);
-	if (ret < 0) {
-		printf("%s: Can't select device\n\r", __func__);
-		return -1;
-	}
-
-	ret = write(linux_desc->fd, data, bytes_number);
-	if (ret < 0) {
-		printf("%s: Can't write to file\n\r", __func__);
+	ret = linux_i2c_add_msg(desc, data, bytes_number, 0);
+	if (ret) {
+		printf("%s: Can't allocate memory\n\r", __func__);
 		return -1;
 	}
 
 	if (stop_bit) {
-		// Unused variable - fix compiler warning
+		ret = linux_i2c_send_msg(desc);
+		if (ret) {
+			printf("%s: Can't write to file\n\r", __func__);
+			return -1;
+		}
 	}
 
 	return 0;
@@ -173,30 +249,25 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_read(struct no_os_i2c_desc *desc,
-		       uint8_t *data,
-		       uint8_t bytes_number,
-		       uint8_t stop_bit)
+int linux_i2c_read(struct no_os_i2c_desc *desc,
+		   uint8_t *data,
+		   uint8_t bytes_number,
+		   uint8_t stop_bit)
 {
-	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
 
-	linux_desc = desc->extra;
-
-	ret = ioctl(linux_desc->fd, I2C_SLAVE, desc->slave_address);
-	if (ret < 0) {
-		printf("%s: Can't select device\n\r", __func__);
-		return -1;
-	}
-
-	ret = read(linux_desc->fd, data, bytes_number);
-	if (ret < 0) {
-		printf("%s: Can't read from file\n\r", __func__);
+	ret = linux_i2c_add_msg(desc, data, bytes_number, 1);
+	if (ret) {
+		printf("%s: Can't allocate memory\n\r", __func__);
 		return -1;
 	}
 
 	if (stop_bit) {
-		// Unused variable - fix compiler warning
+		ret = linux_i2c_send_msg(desc);
+		if (ret) {
+			printf("%s: Can't read from file\n\r", __func__);
+			return -1;
+		}
 	}
 
 	return 0;
