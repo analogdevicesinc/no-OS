@@ -1,0 +1,16 @@
+{
+  "maxim": {
+    "pqmon_usb": {
+      "flags": "INTERFACE=usb TARGET=max32650 PQLIB_PATH=/export/library/pqm_lib"
+    },
+    "pqmon_serial": {
+      "flags": "INTERFACE=serial TARGET=max32650 PQLIB_PATH=/export/library/pqm_lib"
+    },
+    "pqmon_ethernet": {
+      "flags": "INTERFACE=ethernet TARGET=max32650 PQLIB_PATH=/export/library/pqm_lib"
+    },
+    "pqmon_ethernet_t1l": {
+      "flags": "INTERFACE=ethernet_t1l TARGET=max32650 PQLIB_PATH=/export/library/pqm_lib"
+    }
+  }
+}
