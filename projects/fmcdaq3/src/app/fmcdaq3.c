@@ -360,34 +360,42 @@ int main(void)
 	// dac-device-clock (1.233G)
 	ad9528_channels[0].channel_num = 2;
 	ad9528_channels[0].channel_divider = 1;
+	ad9528_channels[0].output_dis = 0;
 
 	//adc sysref (4.9M)
 	ad9528_channels[1].channel_num = 8;
 	ad9528_channels[1].channel_divider = 256;
+	ad9528_channels[1].output_dis = 0;
 
 	// adc-fpga-clock (616.5M)
 	ad9528_channels[2].channel_num = 9;
 	ad9528_channels[2].channel_divider = 2;
+	ad9528_channels[2].output_dis = 0;
 
 	// adc dev sysref (4.9M)
 	ad9528_channels[3].channel_num = 7;
 	ad9528_channels[3].channel_divider = 256;
+	ad9528_channels[3].output_dis = 0;
 
 	// adc-device-clock (1.233G)
 	ad9528_channels[4].channel_num = 13;
 	ad9528_channels[4].channel_divider = 1;
+	ad9528_channels[4].output_dis = 0;
 
 	// dac sysref (4.9M)
 	ad9528_channels[5].channel_num = 5;
 	ad9528_channels[5].channel_divider = 256;
+	ad9528_channels[5].output_dis = 0;
 
 	// dac-fpga-fmc (616.5M)
 	ad9528_channels[6].channel_num = 4;
 	ad9528_channels[6].channel_divider = 2;
+	ad9528_channels[6].output_dis = 0;
 
 	// dac dev sysref (4.9M)
 	ad9528_channels[7].channel_num = 6;
 	ad9528_channels[7].channel_divider = 256;
+	ad9528_channels[7].output_dis = 0;
 
 	// pllx settings
 	ad9528_param.pdata->spi3wire = 1;
