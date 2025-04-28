@@ -36,8 +36,3 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 
 INCS += $(DRIVERS)/temperature/max31827/max31827.h
 SRCS += $(DRIVERS)/temperature/max31827/max31827.c
-
-ifneq ($(if $(findstring ftd2xx, $(LIBRARIES)), 1),)
-INCS += $(DRIVERS)/platform/ftd2xx/mpsse/ftd2xx_i2c.h
-SRCS += $(DRIVERS)/platform/ftd2xx/mpsse/ftd2xx_i2c.c
-endif
