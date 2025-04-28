@@ -1031,11 +1031,6 @@ int main(void)
 	struct iio_axi_dac_init_param iio_axi_dac_init_par;
 
 	/**
-	 * iio application instance descriptor.
-	 */
-	struct iio_desc *iio_app_desc;
-
-	/**
 	 * iio instance descriptor.
 	 */
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
@@ -1056,6 +1051,14 @@ int main(void)
 	struct iio_device *adc_dev_desc, *dac_dev_desc;
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if (status < 0)
+		return status;
+
+	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
+	if (status < 0)
+		return status;
+
+	status = axi_dmac_init(&rx_obs_dmac, &rx_obs_dmac_init);
 	if (status < 0)
 		return status;
 
