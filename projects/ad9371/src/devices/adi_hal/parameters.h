@@ -139,7 +139,7 @@
 #endif
 
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
-#define DAC_BUFFER_SAMPLES 1024
+#define DAC_BUFFER_SAMPLES 4096
 #define ADC_BUFFER_SAMPLES 16384
 #define ADC_CHANNELS 4
 #endif
