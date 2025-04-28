@@ -278,6 +278,15 @@
 #define ADXL367_SELF_TEST_MAX	270 * 100 / 25
 
 /**
+ * @enum adxl367_id
+ * @brief Compatible device specifier.
+ */
+enum adxl367_id {
+	ADXL367_ID,
+	ADXL366_ID,
+};
+
+/**
  * @enum adxl367_comm_type
  * @brief Enum for communication type.
  */
@@ -411,6 +420,8 @@ struct adxl367_fractional_val {
  * @brief ADXL367 Device structure.
  */
 struct adxl367_dev {
+	/** Compatible device specifier. */
+	enum adxl367_id			id;
 	/** Communication type - I2C or SPI. */
 	enum adxl367_comm_type		comm_type;
 	/** SPI Descriptor */
@@ -438,6 +449,8 @@ struct adxl367_dev {
  * @brief Structure holding the parameters for ADXL367 device initialization.
  */
 struct adxl367_init_param {
+	/** Compatible device specifier. */
+	enum adxl367_id			id;
 	/** Communication type - I2C or SPI. */
 	enum adxl367_comm_type 		comm_type;
 	/** SPI Initialization structure. */

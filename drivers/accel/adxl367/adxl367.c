@@ -63,6 +63,7 @@ int adxl367_init(struct adxl367_dev **device,
 	if (!dev)
 		return -1;
 
+	dev->id = init_param.id;
 	dev->comm_type = init_param.comm_type;
 	if (dev->comm_type == ADXL367_SPI_COMM) {
 		/* SPI */
