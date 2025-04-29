@@ -159,7 +159,6 @@ int32_t ssd_1306_init(struct display_dev *device)
 			return -1;
 	}
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xA8;
 	command[1] = 0x3F;
@@ -167,7 +166,6 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xD3;
 	command[1] = 0x00;
@@ -175,36 +173,31 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0x40;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xA0;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xC0;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xDA;
-	command[1] = 0x02;
+	command[1] = 0xD2;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0x81;
 	command[1] = 0x7F;
@@ -212,14 +205,18 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xA4;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
+	no_os_udelay(3U);
+	command[0] = 0xA7;
+	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
+	if (ret != 0)
+		return -1;
+
 	no_os_udelay(3U);
 	command[0] = 0xD5;
 	command[1] = 0x80;
@@ -227,7 +224,6 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0x8D;
 	command[1] = 0x14;
@@ -235,7 +231,6 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0xAF;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
@@ -243,7 +238,6 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	// set addressing mode
-	printf("Line: %d\n\r", __LINE__);
 	no_os_udelay(3U);
 	command[0] = 0x20;
 	command[1] = 0x00;
@@ -370,14 +364,29 @@ int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer)
 	ssd_1306_extra *extra;
 
 	if (!device || !buffer)
-		return -EINVAL;
+		return -ENOMEM;
 
 	extra = device->extra;
+
 	ret = ssd_1306_move_cursor(device, 0, 0);
 	if (ret != 0)
 		return ret;
 
-	return ssd1306_buffer_transmit(extra, (uint8_t *)buffer,
-				       device->cols_nb * device->rows_nb / 8U,
-				       SSD1306_DATA);
+	uint32_t nr_of_frame_bytes = device->cols_nb * device->rows_nb / 8;
+	uint8_t nr_of_sendable_frames = nr_of_frame_bytes / 254;
+	uint8_t last_frame_bytes = nr_of_frame_bytes % 254;
+
+	for (int i = 0; i < nr_of_sendable_frames; i++) {
+		ret = ssd1306_buffer_transmit(extra, &buffer[i * 254], 254, SSD1306_DATA);
+		if (ret != 0)
+			return ret;
+	}
+	if (last_frame_bytes > 0) {
+		ret = ssd1306_buffer_transmit(extra, &buffer[nr_of_sendable_frames * 254],
+					      last_frame_bytes, SSD1306_DATA);
+		if (ret != 0)
+			return ret;
+	}
+
+	return 0;
 }
