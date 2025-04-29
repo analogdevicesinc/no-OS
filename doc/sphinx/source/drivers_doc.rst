@@ -129,3 +129,10 @@ POTENTIOMETER
    :maxdepth: 1
 
    drivers/ad5293
+
+ETHERNET
+========
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adin1110
