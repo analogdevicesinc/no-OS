@@ -33,8 +33,8 @@
 
 /**
  * @brief Initialize the digital potentiometer.
- * @param param - digipot init parameters.
  * @param desc - digipot descriptor.
+ * @param pdpot_init_param - digipot init parameters. 
  * @return 0 in case of success, negative error code otherwise.
  */
 int dpot_init(struct dpot_dev **desc, struct dpot_init_param *pdpot_init_param)
@@ -320,7 +320,7 @@ int dpot_rdac_linear_update(struct dpot_dev *desc, enum dpot_chn_type chn,
  * @brief Perform Enter/exit top scale.
  * @param desc - digipot descriptor.
  * @param chn  - digipot channel.
- * @param Enter - Enter or exit the TS.
+ * @param nEnter - Enter or exit the TS.
  * @return 0 in case of success, negative error code otherwise.
  */
 int dpot_enable_top_scale(struct dpot_dev *desc,
@@ -337,7 +337,7 @@ int dpot_enable_top_scale(struct dpot_dev *desc,
  * @brief Perform Enter/exit top scale.
  * @param desc - digipot descriptor.
  * @param chn  - digipot channel.
- * @param Enter - Enter or exit the Bottom scake.
+ * @param nEnter - Enter or exit the Bottom scake.
  * @return 0 in case of success, negative error code otherwise.
  */
 int dpot_enable_bottom_scale(struct dpot_dev *desc,
@@ -391,8 +391,9 @@ int dpot_send_cmd(struct dpot_dev *desc, struct dpot_command *cmd)
 /**
  * @brief Send command word to the digital potentiometer.
  * @param desc - digipot descriptor.
- * @param cmd  - digipot command word
- * @return 0 in case of success, negative error code otherwise.
+ * @param chn  - Channel type 
+ * @param data  - Pointer to location where tolerance should be written.  
+  * @return 0 in case of success, negative error code otherwise.
  */
 int dpot_tolerance_read(struct dpot_dev *desc, enum dpot_chn_type chn,
 			uint8_t *data)
