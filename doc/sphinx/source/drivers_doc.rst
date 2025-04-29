@@ -144,3 +144,11 @@ ETHERNET
    :maxdepth: 1
 
    drivers/adin1110
+
+GYROSCOPES
+============
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adxrs290
+   
