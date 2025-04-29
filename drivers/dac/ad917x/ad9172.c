@@ -350,7 +350,7 @@ int32_t ad9172_init(ad9172_dev **device,
 		goto error_3;
 	}
 
-	printf("%s : AD936x Rev %d successfully initialized\n", __func__, 1);
+	printf("%s : AD917x Rev %d successfully initialized\n", __func__, 1);
 	*device = dev;
 
 	return 0;
