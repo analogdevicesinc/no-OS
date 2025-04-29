@@ -83,6 +83,7 @@ METER
    :maxdepth: 1
 
    drivers/ade7816
+   drivers/ade7913
 
 RF TRANSCEIVER
 ==============
