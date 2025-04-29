@@ -393,7 +393,7 @@ int dpot_send_cmd(struct dpot_dev *desc, struct dpot_command *cmd)
  * @param desc - digipot descriptor.
  * @param chn  - Channel type 
  * @param data  - Pointer to location where tolerance should be written.  
-  * @return 0 in case of success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  */
 int dpot_tolerance_read(struct dpot_dev *desc, enum dpot_chn_type chn,
 			uint8_t *data)
