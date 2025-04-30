@@ -30,6 +30,10 @@ with open(file, 'r') as fp:
 	data = json.loads(fp.read())
 data['configurations'][0]['program'] = binary
 data['configurations'][0]['cwd'] = dir
+if os.name == 'nt':
+	data['configurations'][0]['miDebuggerPath'] = "C:/msys64/mingw64/bin/gdb.exe"
+	data['configurations'][0]['name'] = "C/C++ (Launch)"
+
 with open(file, 'w') as fp:
 	json.dump(data, fp, indent=4)
 
