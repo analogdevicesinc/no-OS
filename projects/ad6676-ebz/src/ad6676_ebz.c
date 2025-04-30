@@ -409,7 +409,7 @@ int main(void)
 		pr_err("%s ad6676 - PN9 sequence mismatch!\n", __func__);
 	};
 	ad6676_test(ad6676_device, TESTGENMODE_PN23_SEQ);
-	if (axi_adc_pn_mon(ad6676_core, AXI_ADC_PN23, 10) == -1) {
+	if (axi_adc_pn_mon(ad6676_core, AXI_ADC_PN23A, 10) == -1) {
 		pr_err("%s ad6676 - PN23 sequence mismatch!\n", __func__);
 	};
 
