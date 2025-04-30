@@ -33,6 +33,8 @@
 #ifndef _NO_OS_SEMAPHORE_H_
 #define _NO_OS_SEMAPHORE_H_
 
+#include "no_os_util.h"
+
 /* Initialize semaphore */
 void no_os_semaphore_init(void **semaphore);
 

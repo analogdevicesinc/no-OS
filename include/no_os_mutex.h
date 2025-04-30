@@ -33,6 +33,8 @@
 #ifndef _NO_OS_MUTEX_H_
 #define _NO_OS_MUTEX_H_
 
+#include "no_os_util.h"
+
 /**
 * @brief Function for no-os mutex initialization and thread safety.
 * This function is implemented based on different platforms/OS libraries

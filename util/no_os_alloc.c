@@ -38,7 +38,7 @@
  * @param size - Size of the memory block, in bytes.
  * @return Pointer to the allocated memory, or NULL if the request fails.
  */
-__attribute__((weak)) void *no_os_malloc(size_t size)
+__no_os_weak__((weak)) void *no_os_malloc(size_t size)
 {
 	return malloc(size);
 }
@@ -49,7 +49,7 @@ __attribute__((weak)) void *no_os_malloc(size_t size)
  * @param size - Size of elements.
  * @return Pointer to the allocated memory, or NULL if the request fails.
  */
-__attribute__((weak)) void *no_os_calloc(size_t nitems, size_t size)
+__no_os_weak__((weak)) void *no_os_calloc(size_t nitems, size_t size)
 {
 	return calloc(nitems, size);
 }
@@ -61,7 +61,7 @@ __attribute__((weak)) void *no_os_calloc(size_t nitems, size_t size)
  * 		  to no_os_calloc or no_os_malloc.
  * @return None.
  */
-__attribute__((weak)) void no_os_free(void *ptr)
+__no_os_weak__((weak)) void no_os_free(void *ptr)
 {
 	free(ptr);
 }
