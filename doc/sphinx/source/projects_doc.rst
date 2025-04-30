@@ -25,6 +25,7 @@ FREQUENCY GENERATORS
    projects/adf4377_sdz
    projects/adf4368
    projects/adf5611
+   projects/adf4030
 
 INERTIAL MEASUREMENT UNITS
 ==========================
