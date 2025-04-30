@@ -39,8 +39,3 @@ INCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.h	\
 
 SRCS += $(DRIVERS)/digital-io/max149x6/max149x6-base.c	\
 	$(DRIVERS)/digital-io/max149x6/max14916.c
-
-ifneq ($(if $(findstring ftd2xx, $(LIBRARIES)), 1),)
-INCS += $(DRIVERS)/platform/ftd2xx/mpsse/ftd2xx_spi.h
-SRCS += $(DRIVERS)/platform/ftd2xx/mpsse/ftd2xx_spi.c
-endif
