@@ -473,6 +473,9 @@ int main(void)
 	       ad6676_core_param.num_channels, 16);
 
 #ifdef IIO_SUPPORT
+	// Allow time for UART messages to be displayed
+	no_os_mdelay(200);
+
 	struct xil_uart_init_param platform_uart_init_par = {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
