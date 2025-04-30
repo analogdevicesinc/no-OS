@@ -269,6 +269,10 @@ int main(void)
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)DDR_MEM_BASEADDR,
 				  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
+	printf("Tx DMA example: address=%#x samples=%lu channels=%u bits=%u\n",
+	       (uintptr_t)DDR_MEM_BASEADDR,
+	       transfer.size / (tx_jesd_init.converter_resolution / 8),
+	       tx_dac_init.num_channels, tx_jesd_init.converter_resolution);
 #else /* DMA_EXAMPLE */
 	printf("Set dds frequency at 40MHz\n");
 
