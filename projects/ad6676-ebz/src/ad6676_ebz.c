@@ -439,6 +439,11 @@ int main(void)
 	/* Flush cache data. */
 	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
 
+	printf("DMA RAMP example: address=%#x samples=%u channels=%u bits=%u\n",
+	       (uintptr_t)ADC_DDR_BASEADDR,
+	       transfer_test.size / ad6676_core_param.num_channels,
+	       ad6676_core_param.num_channels, 16);
+
 	// capture data with DMA
 	ad6676_test(ad6676_device, TESTGENMODE_OFF);
 
@@ -452,7 +457,7 @@ int main(void)
 		// Address of data source
 		.src_addr = 0,
 		// Address of data destination
-		.dest_addr = (uintptr_t)ADC_DDR_BASEADDR
+		.dest_addr = (uintptr_t)(ADC_DDR_BASEADDR + 0x100000)
 	};
 	axi_dmac_transfer_start(ad6676_dmac, &transfer_capture);
 	/* Wait until transfer finishes */
@@ -460,7 +465,12 @@ int main(void)
 	if (status)
 		return status;
 	/* Flush cache data. */
-	Xil_DCacheInvalidateRange((uintptr_t)ADC_DDR_BASEADDR, 16384 * 2);
+	Xil_DCacheInvalidateRange((uintptr_t)(ADC_DDR_BASEADDR + 0x100000), 16384 * 2);
+
+	printf("DMA capture example: address=%#x samples=%u channels=%u bits=%u\n",
+	       (uintptr_t)(ADC_DDR_BASEADDR + 0x100000),
+	       transfer_test.size / ad6676_core_param.num_channels,
+	       ad6676_core_param.num_channels, 16);
 
 #ifdef IIO_SUPPORT
 	struct xil_uart_init_param platform_uart_init_par = {
