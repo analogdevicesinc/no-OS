@@ -26,7 +26,10 @@ def manage_no_os_doxygen_links(env):
 
     dxy = env.no_os_doxygen
 
-    root_path = path.abspath(path.join(env.srcdir, "..", "..", ".."))
+    if hasattr(env.config, 'monolithic') and env.config.monolithic:
+        root_path = path.abspath(path.join(env.srcdir, "..", "no-OS"))
+    else:
+        root_path = path.abspath(path.join(env.srcdir, "..", "..", ".."))
 
     def get_exclusions(file):
         if not path.isfile(file):
