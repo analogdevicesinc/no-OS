@@ -98,7 +98,7 @@ int main(void)
 
 	struct app_ad9083_init app_ad9083_init_param = {
 		.uc = uc,
-		.jesd_rx_clk = NULL,
+		.jesd_rx_clk_desc = NULL,
 	};
 
 	pr_info("Hello\n");
@@ -124,7 +124,7 @@ int main(void)
 		return -1;
 	}
 
-	app_ad9083_init_param.jesd_rx_clk = &app_jesd->jesd_rx_clk,
+	app_ad9083_init_param.jesd_rx_clk_desc = app_jesd->jesd_rx_clk_desc;
 
 	status = app_ad9083_init(&app_ad9083, &app_ad9083_init_param);
 	if (status != 0) {

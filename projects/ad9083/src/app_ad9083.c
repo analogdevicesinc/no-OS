@@ -170,7 +170,7 @@ int32_t app_ad9083_init(struct app_ad9083 **app,
 		.gpio_reset = &gpio_phy_resetb,
 		.gpio_pd = &gpio_phy_pd,
 		.uc = init_param->uc,
-		.jesd_rx_clk = init_param->jesd_rx_clk,
+		.jesd_rx_clk_desc = init_param->jesd_rx_clk_desc,
 	};
 
 	app_ad9083 = (struct app_ad9083 *)no_os_calloc(1, sizeof(*app_ad9083));
