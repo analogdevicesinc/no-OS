@@ -12,8 +12,8 @@
 struct app_ad9083_init {
 	/* Settings selection */
 	uint8_t uc;
-	/* jesd receive clock */
-	struct no_os_clk *jesd_rx_clk;
+	/* jesd receive clock descriptor */
+	struct no_os_clk_desc *jesd_rx_clk_desc;
 };
 
 /**

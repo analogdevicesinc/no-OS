@@ -97,12 +97,14 @@ int32_t app_jesd_init(struct app_jesd **app, struct app_jesd_init *init_param)
 
 	app_jesd->rx_jesd_clk.xcvr = app_jesd->rx_adxcvr;
 	app_jesd->rx_jesd_clk.jesd_rx = app_jesd->rx_jesd;
-	app_jesd->jesd_rx_hw.dev = &app_jesd->rx_jesd_clk;
-	app_jesd->jesd_rx_hw.dev_clk_enable = jesd204_clk_enable;
-	app_jesd->jesd_rx_hw.dev_clk_disable = jesd204_clk_disable;
-	app_jesd->jesd_rx_hw.dev_clk_set_rate = jesd204_clk_set_rate;
-	app_jesd->jesd_rx_clk.name = "jesd_rx";
-	app_jesd->jesd_rx_clk.hw = &app_jesd->jesd_rx_hw;
+
+	struct no_os_clk_init_param clk_init = { 0 };
+	clk_init.hw_ch_num = 1;
+	clk_init.name = "jesd_rx";
+	clk_init.dev_desc = &app_jesd->rx_jesd_clk;
+	clk_init.platform_ops = &jesd204_clk_ops;
+
+	status = no_os_clk_init(&app_jesd->jesd_rx_clk_desc, &clk_init);
 
 	*app = app_jesd;
 

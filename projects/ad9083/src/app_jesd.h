@@ -60,10 +60,8 @@ struct app_jesd {
 	struct adxcvr *rx_adxcvr;
 	/* rx_jesd_clk */
 	struct jesd204_clk rx_jesd_clk;
-	/* jesd_rx_hw */
-	struct no_os_clk_hw jesd_rx_hw;
-	/* jesd_rx_clk */
-	struct no_os_clk jesd_rx_clk;
+	/* jesd_rx_clk descriptor */
+	struct no_os_clk_desc *jesd_rx_clk_desc;
 };
 
 /* @brief Application JESD initialization. */
