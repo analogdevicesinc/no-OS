@@ -103,7 +103,7 @@ int main()
 	uint8_t 		*data;
 	uint32_t 		i;
 	int32_t ret;
-	uint8_t commands_data[4] = {0, 0, 0, AD77681_REG_READ(AD77681_REG_ADC_DATA)};
+	uint32_t commands_data[4] = {0, 0, 0, AD77681_REG_READ(AD77681_REG_ADC_DATA)};
 	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 		.offload_config = (OFFLOAD_RX_EN | OFFLOAD_TX_EN),
 		.rx_dma_baseaddr = AD77681_DMA_1_BASEADDR,
