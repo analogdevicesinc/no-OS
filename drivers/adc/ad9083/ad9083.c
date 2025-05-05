@@ -378,8 +378,8 @@ int32_t ad9083_init(struct ad9083_phy **device,
 		goto error_4;
 	}
 
-	if (init_param->jesd_rx_clk) {
-		ret = no_os_clk_enable(init_param->jesd_rx_clk);
+	if (init_param->jesd_rx_clk_desc) {
+		ret = no_os_clk_enable(init_param->jesd_rx_clk_desc);
 		if (ret != 0) {
 			printf("Failed to enable JESD204 link: %d\n", ret);
 			goto error_4;

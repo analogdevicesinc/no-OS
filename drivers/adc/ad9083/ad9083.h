@@ -50,8 +50,8 @@ struct ad9083_init_param {
 	struct no_os_gpio_init_param	*gpio_pd;
 	/* Settings selection */
 	uint8_t uc;
-	/* jesd receive clock */
-	struct no_os_clk *jesd_rx_clk;
+	/* jesd receive clock descriptor */
+	struct no_os_clk_desc *jesd_rx_clk_desc;
 };
 
 /**
