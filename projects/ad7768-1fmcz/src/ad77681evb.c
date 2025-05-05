@@ -71,7 +71,7 @@ struct ad77681_init_param ADC_default_init_param = {
 	AD77681_CONV_CONTINUOUS,	// conv_mode
 	AD77681_POSITIVE_FS,		// diag_mux_sel
 	false,						// conv_diag_sel
-	AD77681_CONV_16BIT,			// conv_len
+	AD77681_CONV_24BIT,			// conv_len
 	AD77681_CRC, 				// crc_sel
 	0, 							// status_bit
 	AD77681_VCM_HALF_VCC,		/* VCM setup*/
@@ -130,7 +130,7 @@ int main()
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
 		while (1) {
 			ad77681_spi_read_adc_data(adc_dev, adc_data,
-						  AD77681_CONTINUOUS_DATA_READ);
+						  AD77681_REGISTER_DATA_READ);
 			printf("[ADC DATA]: 0x");
 			for (i = 0; i < sizeof(adc_data); i++) {
 				printf("%x", adc_data[i]);
