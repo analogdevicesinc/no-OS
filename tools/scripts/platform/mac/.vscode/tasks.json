@@ -1,0 +1,17 @@
+{
+    "tasks": [
+        {
+            "command": "make -C /Users/analog/no-OS/projects/max31827-evkit",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "type": "shell",
+            "label": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

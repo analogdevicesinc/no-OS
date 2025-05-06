@@ -1,0 +1,37 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "intelliSenseMode": "macos-gcc-x64",
+            "name": "App",
+            "cppStandard": "gnu++14",
+            "compilerArgs": [],
+            "cStandard": "gnu17",
+            "compilerPath": "/Applications/Xcode.app/Contents/Developer/usr/bin/gcc",
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/max31827-evkit/src/common",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/max31827-evkit/src/platform/linux",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/noos/drivers/platform/ftd2xx/mpsse",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/noos/drivers/temperature/max31827",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/noos/libraries/ftd2xx/release/include",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/noos/libraries/ftd2xx/release/libftd2xx",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/noos/libraries/ftd2xx/release/source",
+                "/Users/analog/no-OS/projects/max31827-evkit/build/app/noos/include"
+            ],
+            "defines": [
+                "DISABLE_SECURE_SOCKET",
+                "FTD2XX",
+                "FT_VER_BUILD",
+                "FT_VER_MAJOR",
+                "FT_VER_MINOR",
+                "LINUX_PLATFORM",
+                "NO_OS_PROJECT=max31827-evkit",
+                "NO_OS_VERSION=staging/mac_sup_ftd2xx-f1547be3c-modified"
+            ]
+        }
+    ]
+}
