@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   maxim_delay.c
- *   @brief  Implementation of maxim delay functions.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/***************************************************************************//**
+ *   @file   subscreen_main_menu_screen.h
+ *   @brief  Main menu screen header for navigation in eval-powrms project
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,61 +30,36 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "no_os_delay.h"
-#include "no_os_util.h"
-#include "mxc_delay.h"
-#include "mxc_sys.h"
-#include "lvgl.h"
 
-static volatile unsigned long long _system_ticks = 0;
+#ifndef __MAIN_MENU_SCREEN_H__
+#define __MAIN_MENU_SCREEN_H__
 
-extern void SysTick_Handler(void);
+#include "example.h"
 
-/* ************************************************************************** */
-void SysTick_Handler(void)
-{
-	MXC_DelayHandler();
-	lv_tick_inc(1);
-	_system_ticks++;
-}
+extern bool show_menu;
 
 /**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
+ * @brief Display and handle the main menu navigation screen
+ *
+ * This function creates the main menu interface allowing users to navigate
+ * between different application screens (Show measurements, Settings).
+ *
+ * Navigation:
+ * - 'q': Switch between menu options (Show/Settings)
+ * - 'e': Select current menu option and navigate to selected screen
+ *
+ * @note This is the central navigation hub of the application
  */
-void no_os_udelay(uint32_t usecs)
-{
-	MXC_Delay(MXC_DELAY_USEC(usecs));
-}
+void subscreen_main_menu_screen();
 
 /**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
+ * @brief Apply visual highlighting to menu labels
+ *
+ * @param label1 First menu label (typically "MAIN SCREEN")
+ * @param label2 Second menu label (typically "SETTINGS")
+ * @param show_menu Boolean indicating which label should be highlighted
  */
-void no_os_mdelay(uint32_t msecs)
-{
-	MXC_Delay(MXC_DELAY_MSEC(msecs));
-}
+void underline_in_main_screen(lv_obj_t *label1, lv_obj_t *label2,
+			      bool show_menu);
 
-/**
- * @brief Get current time.
- * @return Current time structure from system start (seconds, microseconds).
- */
-struct no_os_time no_os_get_time(void)
-{
-	struct no_os_time t;
-	uint64_t sub_ms;
-	uint32_t systick_val;
-	uint64_t ticks;
-
-	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
-	systick_val = SysTick->VAL;
-	ticks = _system_ticks;
-	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
-
-	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
-	t.s = ticks / 1000;
-	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
-
-	return t;
-}
+#endif // __MAIN_MENU_SCREEN_H__
