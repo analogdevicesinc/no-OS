@@ -158,4 +158,5 @@ source "projects/fmcdaq2/Kconfig"
 source "projects/fmcdaq3/Kconfig"
 source "projects/hello_world/Kconfig"
 source "projects/capi_selftest/Kconfig"
+source "projects/eval-powrms/Kconfig"
 endmenu
