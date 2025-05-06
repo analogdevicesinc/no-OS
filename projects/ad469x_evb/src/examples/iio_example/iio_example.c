@@ -120,6 +120,12 @@ int iio_example_main()
 		.read_dev = (int32_t (*)(void *, void *, uint32_t))ad469x_seq_read_data
 	};
 
+#if defined(AD469X_SEQ_ADVANCED)
+	pr_info("Advanced sequence example\n");
+#elif (defined(AD469X_SEQ_STANDARD))
+	pr_info("Standard sequence example\n");
+#endif
+
 	ret = ad469x_init(&dev, &ad469x_init_param);
 	if (ret < 0)
 		return ret;
