@@ -282,8 +282,8 @@
  * @brief Compatible device specifier.
  */
 enum adxl367_id {
-	ADXL367_ID,
-	ADXL366_ID,
+	ADXL367_ID = 0x3,
+	ADXL366_ID = 0x5,
 };
 
 /**
