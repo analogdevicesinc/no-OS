@@ -2,8 +2,10 @@
  *   @file   dummy_example.c
  *   @brief  DUMMY example code for adt7420-pmdz project
  *   @author RNechita (ramona.nechita@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
+ *   @author Rene Arthur Necesito (Renearthur.Necesito@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2022, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

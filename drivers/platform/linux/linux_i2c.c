@@ -2,8 +2,9 @@
  *   @file   linux/linux_i2c.c
  *   @brief  Implementation of Linux platform I2C Driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+ *   @author Rene Arthur Necesito (Renearthur.Necesito@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

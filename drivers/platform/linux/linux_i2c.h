@@ -2,8 +2,9 @@
  *   @file   linux/linux_i2c.h
  *   @brief  Header containing extra types used by the I2C driver.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:

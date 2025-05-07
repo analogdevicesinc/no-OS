@@ -2,8 +2,9 @@
  *   @file   common_data.c
  *   @brief  Defines common data to be used by adt7420-pmdz examples.
  *   @author RNechita (ramona.nechita@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2022, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
