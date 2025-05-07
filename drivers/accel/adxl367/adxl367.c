@@ -100,12 +100,20 @@ int adxl367_init(struct adxl367_dev **device,
 	status = adxl367_get_register_value(dev, &reg_value, ADXL367_REG_PARTID, 1);
 	if (status)
 		goto err;
-	if (reg_value != ADXL367_PART_ID)
+	if (reg_value != ADXL367_PART_ID) {
+		status = -EFAULT;
 		goto err;
+	}
+	status = adxl367_get_register_value(dev, &reg_value, ADXL367_REG_REVID, 1);
+	if (status)
+		goto err;
+	if (reg_value != dev->id) {
+		status = -ENODEV;
+		goto err;
+	}
 
 	*device = dev;
 
-	pr_info("ADXL367 successfully initialized\n");
 	return 0;
 
 err:
@@ -115,8 +123,7 @@ err:
 		no_os_i2c_remove(dev->i2c_desc);
 comm_err:
 	no_os_free(dev);
-	pr_err("%s: Failed initialization.\n", __func__);
-	return -1;
+	return status;
 }
 
 /***************************************************************************//**
