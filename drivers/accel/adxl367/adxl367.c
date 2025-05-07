@@ -1351,3 +1351,119 @@ int adxl367_setup_inactivity_detection(struct adxl367_dev *dev,
 		return ret;
 	return adxl367_set_register_value(dev, time & 0xFF, ADXL367_REG_TIME_INACT_L);
 }
+
+/* Enable or disable Z-axis nonlinearity compensation. */
+int adxl367_z_nonlinearity_compensation(struct adxl367_dev *dev, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->id != ADXL366_ID)
+		return -ENOTSUP;
+
+	return adxl367_reg_write_msk(dev, ADXL367_REG_TEMP_CTL,
+				     no_os_field_prep(ADXL367_NL_COMP_EN, ADXL367_INACTIVITY_ENABLE),
+				     ADXL367_NL_COMP_EN);
+}
+
+int adxl367_reference_readback(struct adxl367_dev *dev,
+			       bool inactivity,
+			       int16_t* x,
+			       int16_t* y,
+			       int16_t* z)
+{
+	int ret;
+	uint8_t reg;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->id != ADXL366_ID)
+		return -ENOTSUP;
+
+	// make sure we're in referenced mode
+	ret = adxl367_get_register_value(dev, &reg, ADXL367_REG_ACT_INACT_CTL, 1);
+	if (ret)
+		return ret;
+	if (inactivity
+	    && no_os_field_get(ADXL367_ACT_INACT_CTL_INACT_EN_MSK,
+			       reg) != ADXL367_REFERENCED_INACTIVITY_ENABLE)
+		return -ENOTSUP;
+	if (!inactivity
+	    && no_os_field_get(ADXL367_ACT_INACT_CTL_INACT_EN_MSK,
+			       reg) != ADXL367_REFERENCED_ACTIVITY_ENABLE)
+		return -ENOTSUP;
+
+	// enable reference readback
+	ret = adxl367_reg_write_msk(dev, ADXL367_REG_ACT_INACT_CTL,
+				    no_os_field_prep(ADXL367_ACT_INACT_CTL_REF_READBACK_MSK,
+						    inactivity ? 0x2 : 0x1),
+				    ADXL367_ACT_INACT_CTL_REF_READBACK_MSK);
+	if (ret)
+		return ret;
+
+	// reference readback
+	ret = adxl367_get_raw_xyz(dev, x, y, z);
+	if (ret)
+		return ret;
+
+	// disable reference readback
+	return adxl367_reg_write_msk(dev, ADXL367_REG_ACT_INACT_CTL,
+				     no_os_field_prep(ADXL367_ACT_INACT_CTL_REF_READBACK_MSK, 0),
+				     ADXL367_ACT_INACT_CTL_REF_READBACK_MSK);
+}
+
+int adxl367_pedometer_enable(struct adxl367_dev *dev, bool enable)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->id != ADXL366_ID)
+		return -ENOTSUP;
+
+	return adxl367_reg_write_msk(dev, ADXL367_REG_PEDOMETER_CTL,
+				     no_os_field_prep(ADXL367_PEDOMETER_EN_MSK, enable),
+				     ADXL367_PEDOMETER_EN_MSK);
+}
+
+int adxl367_pedometer_get_steps(struct adxl367_dev *dev, uint16_t *steps)
+{
+	int ret;
+	uint8_t high, low;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->id != ADXL366_ID)
+		return -ENOTSUP;
+
+	if (!steps)
+		return -EINVAL;
+
+	ret = adxl367_get_register_value(dev, &high, ADXL367_REG_PEDOMETER_STEP_CNT_H,
+					 1);
+	if (ret)
+		return ret;
+
+	ret = adxl367_get_register_value(dev, &low, ADXL367_REG_PEDOMETER_STEP_CNT_L,
+					 1);
+	if (ret)
+		return ret;
+
+	*steps = ((uint16_t)high << 8) | low;
+
+	return 0;
+}
+
+int adxl367_pedometer_reset(struct adxl367_dev *dev)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->id != ADXL366_ID)
+		return -ENOTSUP;
+
+	return adxl367_reg_write_msk(dev, ADXL367_REG_PEDOMETER_CTL,
+				     no_os_field_prep(ADXL367_PEDOMETER_RESET_STEPMSK, 1),
+				     ADXL367_PEDOMETER_RESET_STEPMSK);
+}
