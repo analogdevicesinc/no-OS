@@ -166,9 +166,9 @@ Device Initialization Example
    #include "ad3552r.h"
 
    static struct ad3552r_init_param default_ad3552r_param = {
-       .chip_id = AD3552R_ID,
+       .chip_id = 0x4008,
        .spi_param = {
-           .device_id = SPI_DEVICE_ID,
+           .device_id = 1,
            .chip_select = 0,
            .mode = NO_OS_SPI_MODE_0,
            .max_speed_hz = 66000000,
