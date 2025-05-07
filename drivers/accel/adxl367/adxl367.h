@@ -605,4 +605,23 @@ int adxl367_setup_inactivity_detection(struct adxl367_dev *dev,
 				       uint16_t threshold,
 				       uint16_t  time);
 
+/* Enable or disable Z-axis nonlinearity compensation. */
+int adxl367_z_nonlinearity_compensation(struct adxl367_dev *dev, bool enable);
+
+/* Enable or disable activity and inactivity reference readback. */
+int adxl367_reference_readback(struct adxl367_dev *dev,
+			       bool inactivity,
+			       int16_t* x,
+			       int16_t* y,
+			       int16_t* z);
+
+/* Enable the step counter feature. */
+int adxl367_pedometer_enable(struct adxl367_dev *dev, bool enable);
+
+/* Read the step counter. */
+int adxl367_pedometer_get_steps(struct adxl367_dev *dev, uint16_t *steps);
+
+/* Reset the step counter. */
+int adxl367_pedometer_reset(struct adxl367_dev *dev);
+
 #endif /* __ADXL367_H__ */
