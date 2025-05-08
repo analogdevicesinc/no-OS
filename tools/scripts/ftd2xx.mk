@@ -1,6 +1,12 @@
 ifeq ($(wildcard $(NO-OS)/libraries/ftd2xx/release),)
-        SCRIPT_CFG := $(shell mkdir -p $(NO-OS)/libraries/ftd2xx)
-        SCRIPT_CFG := $(shell python $(NO-OS)/tools/scripts/config_ftd2xx.py $(NO-OS)/libraries/ftd2xx)
+        UNAME_S := $(shell uname -s)
+        ifeq ($(UNAME_S),Darwin)
+                SCRIPT_CFG := $(shell mkdir -p $(NO-OS)/libraries/ftd2xx)
+                SCRIPT_CFG := $(shell python3 $(NO-OS)/tools/scripts/config_ftd2xx.py $(NO-OS)/libraries/ftd2xx)
+        else
+                SCRIPT_CFG := $(shell mkdir -p $(NO-OS)/libraries/ftd2xx)
+                SCRIPT_CFG := $(shell python $(NO-OS)/tools/scripts/config_ftd2xx.py $(NO-OS)/libraries/ftd2xx)
+        endif
 endif
 
 CFLAGS += -DFT_VER_MAJOR
