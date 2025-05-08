@@ -62,13 +62,13 @@ struct linux_i2c_desc {
  * @param desc - The I2C descriptor.
  * @param data - Buffer that stores the received/transmission data.
  * @param bytes_number - Number of bytes to read/write.
- * @param read - 0 to write, otherwise read. 
+ * @param read - 0 to write, otherwise read.
  * @return 0 in case of success.
  */
 int32_t linux_i2c_add_msg(struct no_os_i2c_desc *desc,
-						  uint8_t *data,
-						  uint8_t bytes_number,
-						  uint8_t read)
+			  uint8_t *data,
+			  uint8_t bytes_number,
+			  uint8_t read)
 {
 	struct linux_i2c_desc *linux_desc;
 	struct i2c_msg msg;
@@ -87,8 +87,8 @@ int32_t linux_i2c_add_msg(struct no_os_i2c_desc *desc,
 	}
 
 	if (linux_desc->messages) {
-		ptr = realloc(linux_desc->messages, sizeof(struct i2c_msg) * 
-				(linux_desc->len_messages + 1));
+		ptr = realloc(linux_desc->messages, sizeof(struct i2c_msg) *
+			      (linux_desc->len_messages + 1));
 		if (!ptr) {
 			return -ENOMEM;
 		}
@@ -153,7 +153,7 @@ int32_t linux_i2c_init(struct no_os_i2c_desc **desc,
 		return -1;
 
 	linux_desc = (struct linux_i2c_desc*) no_os_malloc(sizeof(
-				struct linux_i2c_desc));
+			     struct linux_i2c_desc));
 	if (!linux_desc)
 		goto free_desc;
 
@@ -217,9 +217,9 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
-				uint8_t *data,
-				uint8_t bytes_number,
-				uint8_t stop_bit)
+			uint8_t *data,
+			uint8_t bytes_number,
+			uint8_t stop_bit)
 {
 	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
@@ -231,7 +231,7 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
 		printf("%s: Can't allocate memory\n\r", __func__);
 		return -1;
 	}
-	
+
 	if (stop_bit) {
 		ret = linux_i2c_send_msg(desc);
 		if (ret < 0) {
@@ -254,9 +254,9 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t linux_i2c_read(struct no_os_i2c_desc *desc,
-				uint8_t *data,
-				uint8_t bytes_number,
-				uint8_t stop_bit)
+		       uint8_t *data,
+		       uint8_t bytes_number,
+		       uint8_t stop_bit)
 {
 	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
