@@ -80,7 +80,7 @@ int example_main()
 		goto error;
 
 	no_os_uart_stdio(uart);
-#endif
+#endif // LINUX_PLATFORM
 
 	ret = adt7420_init(&adt7420, adt7420_user_init);
 	if (ret)

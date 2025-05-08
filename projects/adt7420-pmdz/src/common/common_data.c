@@ -46,7 +46,7 @@ struct no_os_uart_init_param uip = {
 	.platform_ops = UART_OPS,
 	.extra = &xuip,
 };
-#endif
+#endif // LINUX_PLATFORM
 
 const struct no_os_i2c_init_param iip = {
 	.device_id = I2C_DEVICE_ID,
