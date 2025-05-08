@@ -331,7 +331,7 @@ define overwrite_file_if_different
 endef
 
 define generate_flags_file
-	echo -n > $(1).tmp
+	touch $(1).tmp
 	$(call process_items_in_chunks,$(2),10,$(3))
 	$(call overwrite_file_if_different,$(1).tmp,$(1))
 	rm -f $(1).tmp
@@ -367,7 +367,7 @@ project: $(LIB_TARGETS) $(PLATFORM)_project
 
 # Platform specific post build dependencies can be added to this rule.
 post_build: $(PLATFORM)_post_build
-	$(SIZE) --format=Berkley $(BINARY) $(HEX)
+	$(SIZE) --format=Berkley $(BINARY) $(HEX) 2> /dev/null
 
 # Function to process a list in chunks
 # Arguments:
@@ -392,7 +392,12 @@ $(foreach file,$(BUILD_FILES), \
 
 $(BUILD_FILES): % :
 	$(call update_file,$<,$@)
-	@TS=$(shell stat --format=%Y $<); touch -h -d @$${TS} $@
+ifeq ($($(shell uname -s)),Darwin)
+	-export TIMESTAMP_STR=$(shell stat -t %Y%m%d%H%M.%S $< 2> /dev/null | awk '{print $$12}')
+	-touch -h -t $TIMESTAMP_STR $@ 2> /dev/null
+else
+	-@TS=$(shell stat --format=%Y $< 2> /dev/null); touch -h -d @$${TS} $@ 2>/dev/null
+endif
 
 make_dirs:
 	$(call mk_dir,$(DIRS_TO_CREATE))
