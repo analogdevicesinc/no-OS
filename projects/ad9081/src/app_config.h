@@ -48,7 +48,18 @@
 #endif
 
 /* TX path */
-
+// #define AD9081_TX_JESD_MODE		9
+// #define AD9081_TX_JESD_SUBCLASS		1
+// #define AD9081_TX_JESD_VERSION		1
+// #define AD9081_TX_JESD_M		8
+// #define AD9081_TX_JESD_F		4
+// #define AD9081_TX_JESD_K		32
+// #define AD9081_TX_JESD_N		16
+// #define AD9081_TX_JESD_NP		16
+// #define AD9081_TX_JESD_CS		0
+// #define AD9081_TX_JESD_L		4
+// #define AD9081_TX_JESD_S		1
+// #define AD9081_TX_JESD_HD		0
 #define AD9081_TX_JESD_MODE		11
 #define AD9081_TX_JESD_SUBCLASS		1
 #define AD9081_TX_JESD_VERSION		2
@@ -78,7 +89,18 @@
 #define AD9081_TX_DAC_CHAN_CROSSBAR	{0x1, 0x2, 0x4, 0x8}
 
 /* RX path */
-
+// #define AD9081_RX_JESD_MODE		10
+// #define AD9081_RX_JESD_SUBCLASS		1
+// #define AD9081_RX_JESD_VERSION		1
+// #define AD9081_RX_JESD_M		8
+// #define AD9081_RX_JESD_F		4
+// #define AD9081_RX_JESD_K		32
+// #define AD9081_RX_JESD_N		16
+// #define AD9081_RX_JESD_NP		16
+// #define AD9081_RX_JESD_CS		0
+// #define AD9081_RX_JESD_L		4
+// #define AD9081_RX_JESD_S		1
+// #define AD9081_RX_JESD_HD		0
 #define AD9081_RX_JESD_MODE		4
 #define AD9081_RX_JESD_SUBCLASS		1
 #define AD9081_RX_JESD_VERSION		2

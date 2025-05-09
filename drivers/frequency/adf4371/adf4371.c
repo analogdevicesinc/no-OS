@@ -828,6 +828,13 @@ int32_t adf4371_init(struct adf4371_dev **device,
 
 	*device = dev;
 
+	/*forcing the registers to test something for quadmxfe*/
+	adf4371_write(dev, 0x32, 0x3);
+	adf4371_write(dev, 0x33, 0xa4);
+	// adf4371_write(dev, 0x6E, 0x9f);
+	// adf4371_write(dev, 0x6F, 0x0);
+	adf4371_write(dev, 0x73, 0x4);
+
 	
 	printf("ADF4371-0 reg dump:\n");
 	uint8_t readdump;
