@@ -1,0 +1,7 @@
+{
+    "maxim": {
+      "example": {
+        "flags": "PLATFORM=maxim TARGET=max78000"
+      }
+    }
+}
