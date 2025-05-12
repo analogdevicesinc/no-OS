@@ -36,6 +36,10 @@
 
 #define FTD2XX_MAX_DEV_PER_CHIP		4
 
+#if _WIN32
+#define FTDIMPSSE_API
+#endif
+
 extern FT_HANDLE ftHandle[FTD2XX_MAX_DEV_PER_CHIP];
 
 #endif /* FTD2XX_PLATFORM_H_ */

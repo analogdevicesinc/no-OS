@@ -19,10 +19,9 @@ include $(NO-OS)/tools/scripts/freertos.mk
 endif
 
 ifneq ($(if $(findstring ftd2xx, $(LIBRARIES)), 1),)
-ifeq 'linux' '$(PLATFORM)'
+ifneq ($(or ($(PLATFORM), win), ($(PLATFORM), linux)),)
 CFLAGS += -DFTD2XX
 include $(NO-OS)/tools/scripts/ftd2xx.mk
-else
 endif
 endif
 
