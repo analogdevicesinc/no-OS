@@ -13,6 +13,19 @@ INCS += $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_platform.h \
 SRCS += $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_platform.c \
         $(NO-OS)/drivers/platform/ftd2xx/mpsse/ftd2xx_uart.c
 
+ifeq ($(OS), Windows_NT)
+CFLAGS += -DFTDIMPSSE_STATIC
+SRC_DIRS += $(NO-OS)/libraries/ftd2xx/release/include   \
+            $(NO-OS)/libraries/ftd2xx/release/libftd2xx
+INCS += $(NO-OS)/libraries/ftd2xx/release/source/ftdi_common.h  \
+        $(NO-OS)/libraries/ftd2xx/release/source/ftdi_infra.h   \
+        $(NO-OS)/libraries/ftd2xx/release/source/ftdi_mid.h
+SRCS += $(NO-OS)/libraries/ftd2xx/release/source/ftdi_i2c.c     \
+        $(NO-OS)/libraries/ftd2xx/release/source/ftdi_infra.c   \
+        $(NO-OS)/libraries/ftd2xx/release/source/ftdi_mid.c     \
+        $(NO-OS)/libraries/ftd2xx/release/source/ftdi_spi.c
+else
 SRC_DIRS += $(NO-OS)/libraries/ftd2xx/release/include   \
             $(NO-OS)/libraries/ftd2xx/release/source    \
             $(NO-OS)/libraries/ftd2xx/release/libftd2xx
+endif
