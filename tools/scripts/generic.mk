@@ -144,6 +144,10 @@ ifeq 'mbed' '$(PLATFORM)'
 include $(NO-OS)/tools/scripts/mbed.mk
 endif
 
+ifeq 'win' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/win.mk
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
