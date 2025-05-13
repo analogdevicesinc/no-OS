@@ -468,12 +468,12 @@ static int32_t ad7091r5_init_gpio(struct ad7091r5_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_LOW);
+	ret = no_os_gpio_direction_output(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	if (ret < 0)
 		return ret;
 
 	/** Reset to configure pins */
-	return ad7091r5_reset(dev, init_param->gpio_resetn);
+	return ad7091r5_reset(dev, false);
 }
 
 /**
