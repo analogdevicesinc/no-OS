@@ -61,6 +61,7 @@ enum iiod_cmd {
 	IIOD_CMD_HELP,
 	IIOD_CMD_EXIT,
 	IIOD_CMD_PRINT,
+	IIOD_CMD_BINARY,
 	IIOD_CMD_VERSION,
 	IIOD_CMD_TIMEOUT,
 	IIOD_CMD_OPEN,
@@ -72,6 +73,39 @@ enum iiod_cmd {
 	IIOD_CMD_GETTRIG,
 	IIOD_CMD_SETTRIG,
 	IIOD_CMD_SET
+};
+
+enum iiod_opcode {
+	IIOD_OP_RESPONSE,
+	IIOD_OP_PRINT,
+	IIOD_OP_TIMEOUT,
+	IIOD_OP_READ_ATTR,
+	IIOD_OP_READ_DBG_ATTR,
+	IIOD_OP_READ_BUF_ATTR,
+	IIOD_OP_READ_CHN_ATTR,
+	IIOD_OP_WRITE_ATTR,
+	IIOD_OP_WRITE_DBG_ATTR,
+	IIOD_OP_WRITE_BUF_ATTR,
+	IIOD_OP_WRITE_CHN_ATTR,
+	IIOD_OP_GETTRIG,
+	IIOD_OP_SETTRIG,
+
+	IIOD_OP_CREATE_BUFFER,
+	IIOD_OP_FREE_BUFFER,
+	IIOD_OP_ENABLE_BUFFER,
+	IIOD_OP_DISABLE_BUFFER,
+
+	IIOD_OP_CREATE_BLOCK,
+	IIOD_OP_FREE_BLOCK,
+	IIOD_OP_TRANSFER_BLOCK,
+	IIOD_OP_ENQUEUE_BLOCK_CYCLIC,
+	IIOD_OP_RETRY_DEQUEUE_BLOCK,
+
+	IIOD_OP_CREATE_EVSTREAM,
+	IIOD_OP_FREE_EVSTREAM,
+	IIOD_OP_READ_EVENT,
+
+	IIOD_NB_OPCODES,
 };
 
 /*
@@ -91,6 +125,7 @@ struct comand_desc {
 	char attr[MAX_ATTR_NAME];
 	char trigger[MAX_TRIG_ID];
 	enum iio_attr_type type;
+	enum iiod_opcode op_code;
 };
 
 /* Used to store buffer indexes for non blocking transfers */
@@ -157,6 +192,8 @@ struct iiod_conn_priv {
 	char *strtok_ctx;
 	/* True if the device was open with cyclic buffer flag */
 	bool is_cyclic_buffer;
+	// flag for binary protocol indication
+	bool is_binary_protocol;
 };
 
 /* Private iiod information */
@@ -173,6 +210,20 @@ struct iiod_desc {
 	uint32_t xml_len;
 	/* Backend used by IIOD */
 	enum physical_link_type phy_type;
+};
+
+struct iiod_binary_cmd {
+	uint16_t client_id;
+    uint8_t op;
+    uint8_t dev;
+	int32_t code;
+};
+
+struct iiod_binary_resp {
+    uint8_t cmd_id;
+    uint8_t status;
+    uint16_t length;
+    uint8_t payload[];
 };
 
 #endif //IIOD_PRIVATE_H

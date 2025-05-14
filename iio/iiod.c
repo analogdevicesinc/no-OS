@@ -56,9 +56,10 @@ static const char *attr_types_strs[] = {
 };
 
 static struct iiod_str cmds[] = {
-	[IIOD_CMD_HELP]		= IIOD_STR("HELP"),
+	[IIOD_CMD_HELP]		= IIOD_STR("HELP"), //I'm here
 	[IIOD_CMD_EXIT]		= IIOD_STR("EXIT"),
 	[IIOD_CMD_PRINT]	= IIOD_STR("PRINT"),
+	[IIOD_CMD_BINARY]   = IIOD_STR("BINARY"),
 	[IIOD_CMD_VERSION]	= IIOD_STR("VERSION"),
 	[IIOD_CMD_TIMEOUT]	= IIOD_STR("TIMEOUT"),
 	[IIOD_CMD_OPEN]		= IIOD_STR("OPEN"),
@@ -80,6 +81,7 @@ static const uint32_t priority_array[] = {
 	IIOD_CMD_WRITE,
 	IIOD_CMD_OPEN,
 	IIOD_CMD_CLOSE,
+	IIOD_CMD_BINARY,
 	IIOD_CMD_PRINT,
 	IIOD_CMD_EXIT,
 	IIOD_CMD_TIMEOUT,
@@ -240,6 +242,7 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 	case IIOD_CMD_EXIT:
 	case IIOD_CMD_PRINT:
 	case IIOD_CMD_VERSION:
+	case IIOD_CMD_BINARY:
 		return 0;
 	case IIOD_CMD_TIMEOUT:
 		return parse_num(token, &res->timeout, 10);
@@ -276,6 +279,15 @@ int32_t iiod_parse_line(char *buf, struct comand_desc *res, char **ctx)
 
 	return -EINVAL;
 }
+
+// static int32_t iiod_parse_binary_cmd(struct iiod_conn_priv *conn, struct iiod_binary_cmd *cmd){
+// 	conn->cmd_data.cmd = cmd->cmd_id;
+// 	conn->cmd_data.bytes_count = cmd->length;
+// 	memcpy(conn->cmd_data.device, cmd->payload, cmd->length);
+// 	return 0;
+// }
+
+
 
 static int dummy_open(struct iiod_ctx *ctx, const char *device,
 		      uint32_t samples, uint32_t mask, bool cyclic)
@@ -363,6 +375,7 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 		return ret;
 	}
 
+	//ldesc->ops = param->ops;
 	ldesc->xml = param->xml;
 	ldesc->xml_len = param->xml_len;
 	ldesc->app_instance = param->instance;
@@ -371,6 +384,20 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 	*desc = ldesc;
 
 	return 0;
+}
+
+static int32_t detect_protocol(struct iiod_conn_priv *conn, struct iiod_desc *desc) {
+    uint8_t header[4];
+    int32_t ret = desc->ops.recv(conn, header, sizeof(header));
+    if (ret < 0)
+        return ret;
+
+    if (header[0] == 0)
+        conn->is_binary_protocol = true;
+    else
+        conn->is_binary_protocol = false;
+
+    return 0;
 }
 
 void iiod_remove(struct iiod_desc *desc)
@@ -495,6 +522,32 @@ static int32_t rw_iiod_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
 			return ret;
 
 		if (ret != 1)
+			return -EAGAIN;
+	}
+
+	return 0;
+}
+
+static int32_t rw_iiod_binary_buff(struct iiod_desc *desc, struct iiod_conn_priv *conn,
+				   struct iiod_buff *buf, uint8_t flags)
+{
+	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
+	int32_t ret;
+	int32_t len;
+
+	len = buf->len - buf->idx;
+	if (len) {
+		if (flags & IIOD_WR)
+			ret = desc->ops.send(&ctx, (uint8_t *)buf->buf + buf->idx,
+					     len);
+		else
+			ret = desc->ops.recv(&ctx, (uint8_t *)buf->buf + buf->idx,
+					     len);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		buf->idx += ret;
+		if (ret < len)
 			return -EAGAIN;
 	}
 
@@ -699,6 +752,26 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 	return 0;
 }
 
+// static int32_t iiod_run_binary_cmd(struct iiod_desc *desc, struct iiod_conn_priv *conn){
+// 	struct iiod_binary_cmd *cmd = (struct iiod_binary_cmd *)conn->payload_buf;
+// 	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
+
+// 	switch(cmd->cmd_id) {
+// 	case IIOD_CMD_WRITE:
+// 		conn->cmd_data.bytes_count = cmd->length;
+// 		memcpy(conn->cmd_data.device, cmd->payload, cmd->length);
+// 		break;
+// 	case IIOD_CMD_READ:
+// 		conn->cmd_data.bytes_count = cmd->length;
+// 		memcpy(conn->cmd_data.device, cmd->payload, cmd->length);
+// 		break;
+// 	default:
+// 		return -EINVAL;
+// 	}
+
+// 	return 0;
+// }
+
 static int32_t iiod_read_line(struct iiod_desc *desc,
 			      struct iiod_conn_priv *conn)
 {
@@ -735,6 +808,65 @@ end:
 	return ret;
 }
 
+static int32_t iiod_read_binary_cmd(struct iiod_desc *desc, struct iiod_conn_priv *conn)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	struct iiod_binary_cmd cmd;
+
+	ret = desc->ops.recv(&ctx, (uint8_t *)&cmd, sizeof(cmd));
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return ret;
+
+	// if (cmd.length > 0){
+	// 	ret = desc->ops.recv(&ctx, (uint8_t *)conn->payload_buf,
+	// 			     cmd.length);
+	// 	if (NO_OS_IS_ERR_VALUE(ret))
+	// 		return ret;
+	// }
+
+	//Parse binary command
+	conn->cmd_data.op_code = cmd.op;
+	//sprintf(conn->cmd_data.device, "%d", cmd.dev);
+
+
+    switch (cmd.op) {
+		uint8_t len;
+		case IIOD_OP_WRITE_CHN_ATTR:
+		case IIOD_OP_WRITE_ATTR:
+
+			sprintf(conn->cmd_data.attr, "%d", (int16_t)cmd.code);
+			sprintf(conn->cmd_data.channel, "%d", (int16_t)(cmd.code>>16));
+			// Handle binary write command
+			ret = desc->ops.recv(&ctx, (uint8_t *)&len,
+				     1);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			ret = desc->ops.recv(&ctx, (uint8_t *)conn->payload_buf,
+				     len);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			break;
+		case IIOD_OP_READ_ATTR:
+			sprintf(conn->cmd_data.attr, "%d", (int16_t)cmd.code);
+			sprintf(conn->cmd_data.channel, "%d", (int16_t)(cmd.code>>16));
+			// Handle binary read command
+			break;
+		case IIOD_OP_TIMEOUT:
+			break;
+		// Add cases for other binary commands
+		default:
+			return -EINVAL;
+		}
+
+	return 0;
+}
+
 /*
  * Function will return SUCCESS when a state was processed.
  * If a state is still in processing state, it will return -EAGAIN.
@@ -752,27 +884,58 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 
 	switch (conn->state) {
 	case IIOD_READING_LINE:
-		/* Read input data until \n. I/O Calls */
-		ret = iiod_read_line(desc, conn);
-		if (NO_OS_IS_ERR_VALUE(ret))
-			return ret;
+		if(!conn->is_binary_protocol){
+			/* Read input data until \n. I/O Calls */
+			ret = iiod_read_line(desc, conn);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
 
-		/* Fill struct comand_desc with data from line. No I/O */
-		ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
-				      &conn->strtok_ctx);
-		if (NO_OS_IS_ERR_VALUE(ret)) {
-			/* Parsing line failed */
-			conn->res.write_val = 1;
-			conn->res.val = ret;
-			conn->state = IIOD_WRITING_CMD_RESULT;
-		} else if (conn->cmd_data.cmd == IIOD_CMD_WRITE) {
-			/* Special case. Attribute needs to be read */
-			conn->nb_buf.buf = conn->payload_buf;
-			conn->nb_buf.len = conn->cmd_data.bytes_count;
-			conn->nb_buf.idx = 0;
-			conn->state = IIOD_READING_WRITE_DATA;
-		} else {
-			conn->state = IIOD_RUNNING_CMD;
+			if(strcmp(conn->parser_buf, "BINARY\r\n") == 0){
+				conn->is_binary_protocol = true;
+
+				// int32_t ack = 0;
+				// ret = desc->ops.send(&ctx, (uint8_t *)&ack,
+				// 		     sizeof(ack));
+				conn->res.write_val = 1;
+				conn->res.val = 0;
+				conn->state = IIOD_WRITING_CMD_RESULT; //see
+				return 0;
+			}
+#if 0
+//			if(strcmp(conn->parser_buf, "PRINT")==0){
+//				printf("I'm here\r\n");
+//			}
+
+			/* Fill struct comand_desc with data from line. No I/O */
+			ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
+						&conn->strtok_ctx);
+			if (NO_OS_IS_ERR_VALUE(ret)) {
+				/* Parsing line failed */
+				conn->res.write_val = 1;
+				conn->res.val = ret;
+				conn->state = IIOD_WRITING_CMD_RESULT;
+			} else if (conn->cmd_data.cmd == IIOD_CMD_WRITE) {
+				/* Special case. Attribute needs to be read */
+				conn->nb_buf.buf = conn->payload_buf;
+				conn->nb_buf.len = conn->cmd_data.bytes_count;
+				conn->nb_buf.idx = 0;
+				conn->state = IIOD_READING_WRITE_DATA;
+			} else {
+				conn->state = IIOD_RUNNING_CMD;
+			}
+#endif
+		}else{
+			// ret = iiod_parse_binary_cmd(conn, (struct iiod_binary_cmd *)conn->parser_buf);
+			// if (NO_OS_IS_ERR_VALUE(ret)) {
+			// 	conn->res.write_val = 1;
+			// 	conn->res.val = ret;
+			// 	conn->state = IIOD_WRITING_CMD_RESULT;
+			// }else{
+				ret = iiod_read_binary_cmd(desc, conn);
+				if (NO_OS_IS_ERR_VALUE(ret))
+					return ret;
+				conn->state = IIOD_READING_LINE; //IIOD_RUNNING_CMD;
+			//}
 		}
 
 		return 0;
