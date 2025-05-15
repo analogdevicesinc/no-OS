@@ -853,11 +853,22 @@ static int32_t iiod_read_binary_cmd(struct iiod_desc *desc, struct iiod_conn_pri
 
 			break;
 		case IIOD_OP_READ_ATTR:
+		case IIOD_OP_READ_CHN_ATTR:
 			sprintf(conn->cmd_data.attr, "%d", (int16_t)cmd.code);
 			sprintf(conn->cmd_data.channel, "%d", (int16_t)(cmd.code>>16));
 			// Handle binary read command
 			break;
 		case IIOD_OP_TIMEOUT:
+			conn->res.val = 0;
+			conn->res.write_val = 1;
+			conn->state = IIOD_WRITING_CMD_RESULT;
+			break;
+		case IIOD_OP_PRINT:
+			conn->res.val= desc->xml_len;
+			conn->res.write_val = 1;
+			conn->res.buf.buf = desc->xml;
+			conn->res.buf.len = desc->xml_len;
+			conn->state = IIOD_WRITING_CMD_RESULT;
 			break;
 		// Add cases for other binary commands
 		default:
@@ -934,7 +945,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 				ret = iiod_read_binary_cmd(desc, conn);
 				if (NO_OS_IS_ERR_VALUE(ret))
 					return ret;
-				conn->state = IIOD_READING_LINE; //IIOD_RUNNING_CMD;
+				//conn->state = IIOD_READING_LINE; //IIOD_RUNNING_CMD;
 			//}
 		}
 
