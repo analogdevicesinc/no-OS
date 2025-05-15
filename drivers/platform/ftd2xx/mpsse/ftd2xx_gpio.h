@@ -38,21 +38,15 @@
 #include "no_os_gpio.h"
 #include "ftd2xx.h"
 
+#define FTD2XX_GPIO_PIN(x)		NO_OS_BIT(x)
+
 #define FTD2XX_MAX_PIN_NB		7
+#define FTD2XX_MAX_PORT_NB		4
 
 /**
  * @brief ftd2xx platform specific gpio platform ops structure
  */
 extern const struct no_os_gpio_platform_ops ftd2xx_gpio_ops;
-
-/**
- * @struct ftd2xx_gpio_init_param
- * @brief Structure holding the initialization parameters for ftd2xx platform
- */
-struct ftd2xx_gpio_init {
-	/* Initial direction of the port pins at initialization time. */
-	uint8_t pins_dir;
-};
 
 /**
  * @struct stm32_gpio_desc
@@ -61,10 +55,6 @@ struct ftd2xx_gpio_init {
 struct ftd2xx_gpio_desc {
 	/** Specific device handle */
 	FT_HANDLE *ftHandle;
-	/** Pins direction. */
-	uint8_t pins_dir;
-	/** Pins value. */
-	uint8_t pins_val;
 };
 
 #endif /* FTD2XX_GPIO_H*/
