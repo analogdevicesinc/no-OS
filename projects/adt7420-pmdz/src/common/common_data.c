@@ -2,8 +2,9 @@
  *   @file   common_data.c
  *   @brief  Defines common data to be used by adt7420-pmdz examples.
  *   @author RNechita (ramona.nechita@analog.com)
+ *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2022, 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,6 +34,7 @@
 
 #include "common_data.h"
 
+#ifndef LINUX_PLATFORM
 struct no_os_uart_init_param uip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
@@ -44,6 +46,7 @@ struct no_os_uart_init_param uip = {
 	.platform_ops = UART_OPS,
 	.extra = &xuip,
 };
+#endif // LINUX_PLATFORM
 
 const struct no_os_i2c_init_param iip = {
 	.device_id = I2C_DEVICE_ID,
