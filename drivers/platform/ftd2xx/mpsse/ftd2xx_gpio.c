@@ -38,6 +38,9 @@
 #include "libmpsse_i2c.h"
 #include "ftd2xx_platform.h"
 
+static uint8_t ftd2xx_gpio_pins_dir[FTD2XX_MAX_PORT_NB] = { 0 };
+static uint8_t ftd2xx_gpio_pins_val[FTD2XX_MAX_PORT_NB] = { 0 };
+
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
@@ -48,9 +51,9 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 			const struct no_os_gpio_init_param *param)
 {
 	struct ftd2xx_gpio_desc *extra_desc;
-	struct ftd2xx_gpio_init *extra_init;
 	struct no_os_gpio_desc *descriptor;
 	FT_STATUS status;
+	bool gpio_dir;
 	int32_t ret;
 
 	if (!param || param->port >= FTD2XX_MAX_DEV_PER_CHIP
@@ -80,8 +83,6 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 		extra_desc->ftHandle = ftHandle[param->port];
 	}
 
-	extra_init = param->extra;
-	extra_desc->pins_dir = extra_init->pins_dir;
 	descriptor->extra = extra_desc;
 	descriptor->number = param->number;
 	descriptor->port = param->port;
@@ -149,16 +150,17 @@ int32_t ftd2xx_gpio_direction_input(struct no_os_gpio_desc *desc)
 
 	extra_desc = desc->extra;
 
-	dir = extra_desc->pins_dir;
+	dir = ftd2xx_gpio_pins_dir[desc->port];
 	dir &= ~NO_OS_BIT(desc->number);
 	dir |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number), 0);
-	status = FT_WriteGPIO(extra_desc->ftHandle, (UCHAR)dir, extra_desc->pins_val);
+	status = FT_WriteGPIO(extra_desc->ftHandle, (UCHAR)dir,
+			      ftd2xx_gpio_pins_val[desc->port]);
 	if (status != FT_OK) {
 		ret = status;
 		return ret;
 	}
 
-	extra_desc->pins_dir = dir;
+	ftd2xx_gpio_pins_dir[desc->port] = dir;
 
 	return 0;
 }
@@ -180,10 +182,10 @@ int32_t ftd2xx_gpio_direction_output(struct no_os_gpio_desc *desc,
 	int32_t ret;
 
 	extra_desc = desc->extra;
-	dir = extra_desc->pins_dir;
+	dir = ftd2xx_gpio_pins_dir[desc->port];
 	dir &= ~NO_OS_BIT(desc->number);
-	dir |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number), 0);
-	val = extra_desc->pins_val;
+	dir |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number), 1);
+	val = ftd2xx_gpio_pins_val[desc->port];
 	val &= ~NO_OS_BIT(desc->number);
 	val |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number),
 			value);
@@ -193,8 +195,8 @@ int32_t ftd2xx_gpio_direction_output(struct no_os_gpio_desc *desc,
 		return ret;
 	}
 
-	extra_desc->pins_dir = dir;
-	extra_desc->pins_val = val;
+	ftd2xx_gpio_pins_dir[desc->port] = dir;
+	ftd2xx_gpio_pins_val[desc->port] = val;
 
 	return 0;
 }
@@ -213,7 +215,8 @@ int32_t ftd2xx_gpio_get_direction(struct no_os_gpio_desc *desc,
 	struct ftd2xx_gpio_desc *extra_desc;
 	extra_desc = desc->extra;
 
-	*direction = no_os_field_get(NO_OS_BIT(desc->number), extra_desc->pins_dir);
+	*direction = no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
+				     ftd2xx_gpio_pins_dir[desc->port]);
 
 	return 0;
 }
@@ -230,19 +233,26 @@ int32_t ftd2xx_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 {
 	struct ftd2xx_gpio_desc *extra_desc;
 	FT_STATUS status;
-	uint8_t val = 0;
+	uint8_t val;
 	int32_t ret;
 
+	if (no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
+			    ftd2xx_gpio_pins_dir[desc->port]) == 0)
+		return -EINVAL;
+
 	extra_desc = desc->extra;
+
+	val = ftd2xx_gpio_pins_val[desc->port];
 	val &= ~NO_OS_BIT(desc->number);
 	val |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number),
 			value);
-	status = FT_WriteGPIO(extra_desc->ftHandle, extra_desc->pins_dir, val);
+	status = FT_WriteGPIO(extra_desc->ftHandle, ftd2xx_gpio_pins_dir[desc->port],
+			      val);
 	if (status != FT_OK) {
 		ret = status;
 		return ret;
 	}
-	extra_desc->pins_val = val;
+	ftd2xx_gpio_pins_val[desc->port] = val;
 
 	return 0;
 }
@@ -263,19 +273,19 @@ int32_t ftd2xx_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 	int32_t ret;
 
 	extra_desc = desc->extra;
-	if (no_os_field_get(NO_OS_BIT(desc->number),
-			    extra_desc->pins_dir) == NO_OS_GPIO_IN) {
+	if (no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
+			    ftd2xx_gpio_pins_dir[desc->port]) == NO_OS_GPIO_IN) {
 		status = FT_ReadGPIO(extra_desc->ftHandle, &val);
 		if (status != FT_OK) {
 			ret = status;
 			return ret;
 		}
-		extra_desc->pins_val &= ~NO_OS_BIT(desc->number);
-		extra_desc->pins_val |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(
-						desc->number), no_os_field_get(NO_OS_BIT(desc->number), val));
+
+		*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number), val);
 	}
 
-	*value = no_os_field_get(NO_OS_BIT(desc->number), extra_desc->pins_val);
+	*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
+				 ftd2xx_gpio_pins_dir[desc->port]);
 
 	return 0;
 }
