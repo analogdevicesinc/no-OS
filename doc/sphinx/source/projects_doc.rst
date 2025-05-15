@@ -158,3 +158,10 @@ GYROSCOPES
    :maxdepth: 1
 
    projects/adxrs290-pmdz
+
+MAGNETOMETER
+==============
+.. toctree::
+   :maxdepth: 1
+
+   projects/admt4000
