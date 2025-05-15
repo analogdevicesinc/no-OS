@@ -1,0 +1,1 @@
+.. include:: ../../../../drivers/magnetometer/admt4000/README.rst

@@ -104,3 +104,10 @@ TEMPERATURE
 
    projects/max31827-evkit
    projects/ltc2983
+
+MAGNETOMETER
+==============
+.. toctree::
+   :maxdepth: 1
+
+   projects/admt4000
