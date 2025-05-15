@@ -35,20 +35,42 @@
 
 #include "platform_includes.h"
 #include "adf4382.h"
-#include "axi_dmac.h"
 #include "hmc7044.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_uart.h"
 #include "no_os_util.h"
 
-extern struct no_os_spi_init_param	adf4382_spi_param;
-extern struct adf4382_init_param 	adf4382_ip;
-extern struct hmc7044_init_param	hmc7044_ip;
-extern struct no_os_gpio_init_param	reset_gpio_param;
-extern struct no_os_uart_init_param	platform_uart_ip;
-extern struct axi_dmac_init 		rx_dmac_ip;
-extern struct axi_dmac_init 		tx_dmac_ip;
+#include "axi_dmac.h"
+#include "axi_jesd204_rx.h"
+#include "axi_jesd204_tx.h"
+
+/*UC42*/
+#define AD9084_RX_JESD_F			2
+#define AD9084_RX_JESD_K			128
+#define AD9084_RX_JESD_SUBCLASS			0
+
+#define AD9084_TX_JESD_F			2
+#define AD9084_TX_JESD_K			128
+#define AD9084_TX_JESD_M 			4
+#define AD9084_TX_JESD_N			16
+#define AD9084_TX_JESD_NP			16
+#define AD9084_TX_JESD_HD			0
+#define AD9084_TX_JESD_CS			0
+#define AD9084_TX_JESD_SUBCLASS			0
+
+#define AD9084_DEVICE_CLK_KHZ			20000000
+#define AD9084_LANE_RATE_KHZ			20625000
+
+extern struct no_os_spi_init_param		adf4382_spi_param;
+extern struct adf4382_init_param 		adf4382_ip;
+extern struct hmc7044_init_param		hmc7044_ip;
+extern struct no_os_gpio_init_param		reset_gpio_param;
+extern struct no_os_uart_init_param		platform_uart_ip;
+extern struct axi_dmac_init 			rx_dmac_ip;
+extern struct axi_dmac_init 			tx_dmac_ip;
+extern struct jesd204_rx_init			rx_jesd204_ip;
+extern struct jesd204_tx_init			tx_jesd204_ip;
 
 
 #endif /* __COMMON_DATA_H__ */

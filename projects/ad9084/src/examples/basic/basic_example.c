@@ -46,6 +46,8 @@ int basic_example_main()
 {
 	struct adf4382_dev *adf4382_dev;
 	struct hmc7044_dev *hmc7044_dev;
+	struct axi_jesd204_rx *rx_jesd;
+	struct axi_jesd204_tx *tx_jesd;
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
 	
@@ -77,8 +79,24 @@ int basic_example_main()
 		goto error_4;
 	}
 
+	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd204_ip);
+	if (ret) {
+		pr_info("JESD RX initialization failed\n");
+		goto error_5;
+	}
+
+	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd204_ip);
+	if (ret) {
+		pr_info("JESD RX initialization failed\n");
+		goto error_6;
+	}
+
 	pr_info("Project configured\n");
 
+error_6:
+	axi_jesd204_tx_remove(tx_jesd);
+error_5:
+	axi_jesd204_rx_remove(rx_jesd);
 error_4:
 	axi_dmac_remove(tx_dmac);
 error_3:

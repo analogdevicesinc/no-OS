@@ -149,3 +149,28 @@ struct axi_dmac_init tx_dmac_ip = {
 	TX_DMA_BASEADDR,
 	IRQ_DISABLED
 };
+
+struct jesd204_rx_init rx_jesd204_ip = {
+	.name = "rx_jesd",
+	.base = RX_JESD_BASEADDR,
+	.octets_per_frame = AD9084_RX_JESD_F,
+	.frames_per_multiframe = AD9084_RX_JESD_K,
+	.subclass = AD9084_RX_JESD_SUBCLASS,
+	.device_clk_khz = AD9084_DEVICE_CLK_KHZ,
+	.lane_clk_khz = AD9084_LANE_RATE_KHZ	
+};
+
+struct jesd204_tx_init tx_jesd204_ip = {
+	.name = "tx_jesd",
+	.base = TX_JESD_BASEADDR,
+	.octets_per_frame = AD9084_TX_JESD_F,
+	.frames_per_multiframe = AD9084_TX_JESD_K,
+	.converters_per_device = AD9084_TX_JESD_M,
+	.converter_resolution = AD9084_TX_JESD_N,
+	.bits_per_sample = AD9084_TX_JESD_NP,
+	.high_density = AD9084_TX_JESD_HD,
+	.control_bits_per_sample = AD9084_TX_JESD_CS,
+	.subclass = AD9084_TX_JESD_SUBCLASS,
+	.device_clk_khz = AD9084_DEVICE_CLK_KHZ,
+	.lane_clk_khz = AD9084_LANE_RATE_KHZ
+};
