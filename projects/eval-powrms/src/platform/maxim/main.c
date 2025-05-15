@@ -33,6 +33,7 @@
 
 #include "platform_includes.h"
 #include "common_data.h"
+#include "example.h"
 
 
 /***************************************************************************//**
@@ -42,5 +43,5 @@
 *******************************************************************************/
 int main()
 {
-	return example_main();
+    return example_main();
 }

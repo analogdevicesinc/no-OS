@@ -36,55 +36,91 @@
 struct display_dev *oled_display;
 struct ad7091r5_dev *adc_desc;
 struct no_os_i2c_desc *oled_display_i2c_desc;
+struct no_os_i2c_desc *ltc3556_i2c_desc;
+
+struct no_os_gpio_desc *mcu_led_gpio_desc;
+struct no_os_gpio_desc *en_adc_5v_gpio_desc;
+struct no_os_gpio_desc *en_adc_vdrive_gpio_desc;
 
 
 struct no_os_uart_init_param demo_uart_ip = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.extra = UART_EXTRA,
-	.platform_ops = UART_OPS,
+    .device_id = UART_DEVICE_ID,
+    .irq_id = UART_IRQ_ID,
+    .asynchronous_rx = true,
+    .baud_rate = UART_BAUDRATE,
+    .size = NO_OS_UART_CS_8,
+    .parity = NO_OS_UART_PAR_NO,
+    .stop = NO_OS_UART_STOP_1_BIT,
+    .extra = UART_EXTRA,
+    .platform_ops = UART_OPS,
 };
 
 struct no_os_i2c_init_param oled_display_i2c_init_param = {
-	.device_id = 1,
-	.max_speed_hz = 400000,
-	.slave_address = SSD1306_I2C_ADDR,
-	.platform_ops = I2C_OPS,
-	.extra = I2C_EXTRA_DISPLAY,
+    .device_id = 1,
+    .max_speed_hz = 400000,
+    .slave_address = SSD1306_I2C_ADDR,
+    .platform_ops = I2C_OPS,
+    .extra = I2C_EXTRA_DISPLAY,
 };
 
 ssd_1306_extra oled_display_extra = {
-	.comm_type = SSD1306_I2C,
-	.i2c_ip = &oled_display_i2c_init_param,
+    .comm_type = SSD1306_I2C,
+    .i2c_ip = &oled_display_i2c_init_param,
 };
 
 struct display_init_param oled_display_ini_param = {
-	.cols_nb = 128,
-	.rows_nb = 64,
-	.controller_ops = &ssd1306_ops,
-	.extra = &oled_display_extra,
+    .cols_nb = 128,
+    .rows_nb = 64,
+    .controller_ops = &ssd1306_ops,
+    .extra = &oled_display_extra,
 };
 
 struct no_os_i2c_init_param	adc_i2c_ini_param = {
-	.device_id = 1,
-	.max_speed_hz = 400000,
-	.slave_address = 0x20,
-	.platform_ops = I2C_OPS,
-	.extra = I2C_EXTRA_ADC,
+    .device_id = 1,
+    .max_speed_hz = 400000,
+    .slave_address = 0x20,
+    .platform_ops = I2C_OPS,
+    .extra = I2C_EXTRA_ADC,
 };
 
 struct no_os_gpio_init_param adc_gpio_ini_param = {
-	.number = GPIO_ADC_RESET,
-	.platform_ops = GPIO_OPS,
-	.extra = GPIO_EXTRA,
+    .number = GPIO_ADC_RESET,
+    .platform_ops = GPIO_OPS,
+    .extra = GPIO_EXTRA,
 };
 
 struct ad7091r5_init_param adc_ini_param = {
-	.i2c_init = &adc_i2c_ini_param,
-	.gpio_resetn = &adc_gpio_ini_param,
+    .i2c_init = &adc_i2c_ini_param,
+    .gpio_resetn = &adc_gpio_ini_param,
+};
+
+struct no_os_i2c_init_param ltc3556_i2c_init_param = {
+    .device_id = 1,
+    .max_speed_hz = 400000,
+    .slave_address = 0x09,
+    .platform_ops = I2C_OPS,
+    .extra = GPIO_EXTRA,
+};
+
+// LEDs
+
+struct no_os_gpio_init_param mcu_led_ip = {
+    .port = 0,
+    .number = 9,
+    .platform_ops = GPIO_OPS,
+    .extra = GPIO_EXTRA,
+};
+
+struct no_os_gpio_init_param en_adc_5v_ip = {
+    .port = 0,
+    .number = 19,
+    .platform_ops = GPIO_OPS,
+    .extra = GPIO_EXTRA,
+};
+
+struct no_os_gpio_init_param en_adc_vdrive_ip = {
+    .port = 0,
+    .number = 20,
+    .platform_ops = GPIO_OPS,
+    .extra = GPIO_EXTRA,
 };

@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   maxim_delay.c
- *   @brief  Implementation of maxim delay functions.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/***************************************************************************//**
+ *   @file   example.h
+ *   @brief  Ssd1306 example header for ssd1306 project
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,60 +30,34 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "no_os_delay.h"
-#include "no_os_util.h"
-#include "mxc_delay.h"
-#include "mxc_sys.h"
 
-static volatile unsigned long long _system_ticks = 0;
+#ifndef __SHOW_SCREEN_H__
+#define __SHOW_SCREEN_H__
 
-extern void SysTick_Handler(void);
+#include "example.h"
 
-/* ************************************************************************** */
-void SysTick_Handler(void)
-{
-	MXC_DelayHandler();
-	lv_tick_inc(1);
-	_system_ticks++;
-}
+#define INTEGER_PRECISION			2
+#define FLOATING_POINT_PRECISION	3
 
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
- */
-void no_os_udelay(uint32_t usecs)
-{
-	MXC_Delay(MXC_DELAY_USEC(usecs));
-}
+#define OUTPUT_VARIABLE_NAMES  	{"Vrmsf:", "Vrmsr:"}
 
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- */
-void no_os_mdelay(uint32_t msecs)
-{
-	MXC_Delay(MXC_DELAY_MSEC(msecs));
-}
+#define ADC_VRMSF_CHANNEL_NO	0
+#define ADC_VRMSR_CHANNEL_NO	1
 
-/**
- * @brief Get current time.
- * @return Current time structure from system start (seconds, microseconds).
- */
-struct no_os_time no_os_get_time(void)
-{
-	struct no_os_time t;
-	uint64_t sub_ms;
-	uint32_t systick_val;
-	uint64_t ticks;
+#define ADC_V_REF				4.096
+#define ADC_V_REF_GND			0.0
+#define ADC_COUNTER_MAX			4096
 
-	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
-	systick_val = SysTick->VAL;
-	ticks = _system_ticks;
-	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
+struct adc_data {
+    uint16_t adc_vrmsf_raw;
+    uint16_t adc_vrmsr_raw;
+    float adc_vrmsf;
+    float adc_vrmsr;
+};
 
-	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
-	t.s = ticks / 1000;
-	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
+extern struct adc_data adc_data_input;
 
-	return t;
-}
+
+void show_screen();
+
+#endif // __SHOW_SCREEN_H__

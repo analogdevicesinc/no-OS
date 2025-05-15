@@ -10,8 +10,8 @@ STACK_SIZE=0x20000
 
 include src.mk
 
-CFLAGS += -Os -ffunction-sections -fdata-sections -fno-strict-aliasing -flto
-LDFLAGS += -Wl,--gc-sections -flto --specs=nosys.specs
+CFLAGS += -Os -ffunction-sections -fdata-sections -fno-strict-aliasing #-flto
+LDFLAGS += -Wl,--gc-sections -flto
 # LDFLAGS += -Wl,--wrap=_getpid_r
 
 include ../../tools/scripts/generic.mk

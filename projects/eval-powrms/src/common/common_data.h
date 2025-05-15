@@ -59,6 +59,17 @@ extern struct no_os_gpio_init_param	adc_gpio_ini_param;
 extern struct ad7091r5_init_param adc_ini_param;
 extern struct ad7091r5_dev *adc_desc;
 
+// LTC3556 data
+extern struct no_os_i2c_desc *ltc3556_i2c_desc;
+extern struct no_os_i2c_init_param ltc3556_i2c_init_param;
 
+// GPIOs
+extern struct no_os_gpio_desc *mcu_led_gpio_desc;
+extern struct no_os_gpio_desc *en_adc_5v_gpio_desc;
+extern struct no_os_gpio_desc *en_adc_vdrive_gpio_desc;
+
+extern struct no_os_gpio_init_param mcu_led_ip;
+extern struct no_os_gpio_init_param en_adc_5v_ip;
+extern struct no_os_gpio_init_param en_adc_vdrive_ip;
 
 #endif /* __COMMON_DATA_H__ */

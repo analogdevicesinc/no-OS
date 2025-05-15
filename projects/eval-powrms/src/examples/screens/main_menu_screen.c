@@ -30,64 +30,67 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __SSD1306_EXAMPLE__
-#define __SSD1306_EXAMPLE__
 
-#include "common_data.h"
-#include "no_os_util.h"
-#include <stdint.h>
-#include <stdio.h>
-#include "no_os_delay.h"
-#include "no_os_i2c.h"
-#include "display.h"
-#include "ssd_1306.h"
-#include "lvgl.h"
-#include "lv_types.h"
-#include "lv_display.h"
-#include "lv_display_private.h"
-#include "no_os_init.h"
-#include <string.h>
-#include "no_os_display.h"
-#include "no_os_error.h"
-
-#include "powrms_utils.h"
 #include "main_menu_screen.h"
-#include "startup_freq_screen.h"
-#include "show_screen.h"
-#include "settings_screen.h"
-#include "powrms_variables.h"
 
-#define POWRMS_UART_DEBUG
+void underline_in_main_screen(lv_obj_t *label1, lv_obj_t *label2,
+                              bool show_menu)
+{
+    bool tmp_var = show_menu ? LV_TEXT_DECOR_UNDERLINE : LV_TEXT_DECOR_NONE;
+    lv_obj_set_style_text_decor(label1, tmp_var, LV_PART_MAIN);
+    lv_obj_set_style_text_decor(label2, !tmp_var, LV_PART_MAIN);
+}
 
-// SSD1306 setup
-#define SSD1306_HOR_REZ			128
-#define SSD1306_VER_REZ			64
-#define SSD1306_BUFFER_SIZE ((SSD1306_HOR_REZ * SSD1306_VER_REZ) / 8 + 8)
+void main_menu_screen()
+{
+    char input_char;
 
-// Buffer for UI usage
-static uint8_t display_buffer[SSD1306_HOR_REZ * SSD1306_VER_REZ / 8 + 8];
+// --------------------- SETUP SCREEN ------------------
 
-// Display options
-#define NUMERIC_FONT_SIZE &lv_font_montserrat_12
+    lv_obj_t *scr = lv_obj_create(NULL);
+    lv_obj_t *label1 = lv_label_create(scr);
+    lv_label_set_text(label1, "MAIN SCREEN");
+    lv_obj_align(label1, LV_ALIGN_TOP_MID, 0, 10);
+    lv_obj_set_style_text_color(label1, lv_color_black(), LV_PART_MAIN);
 
-// ----------------------- Global variables	-----------------------
+    lv_obj_t *label2 = lv_label_create(scr);
+    lv_label_set_text(label2, "SETTINGS");
+    lv_obj_align_to(label2, label1, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 10);
+    lv_obj_set_style_text_color(label2, lv_color_black(), LV_PART_MAIN);
 
-/**
- * @brief Display descriptor
- * 0 -> Startup Frequency Screen
- * 1 -> Main Screen (ADC values)
- * 2 -> Show Screen
- * 3 -> Settings Screen
- */
-extern enum display_entry_t display_entry;
+    underline_in_main_screen(label1, label2, show_menu);
 
-enum display_entry_t {
-    DISPLAY_INPUT_FREQUENCY,
-    DISPLAY_ENTRY_MENU,
-    DISPLAY_ENTRY_SHOW,
-    DISPLAY_ENTRY_SETTINGS
-};
+    lv_scr_load(scr);
+    lv_timer_handler();
 
-int example_main();
+// ---------------- INPUT LOOP & SCREEN UPDATE ------------------
 
-#endif /* __SSD1306_EXAMPLE__ */
+    while (display_entry == DISPLAY_ENTRY_MENU) {
+        uint8_t tmp = read_input();
+        switch (tmp) {
+        case 1: // NEXT
+            show_menu = !show_menu;
+            underline_in_main_screen(label1, label2, show_menu);
+            lv_scr_load(scr);
+            lv_timer_handler();
+            break;
+        case 2: // BACK
+            // NOP
+            break;
+
+        case 3: // ENTER
+            if (show_menu) {
+                display_entry = DISPLAY_ENTRY_SHOW;
+                lv_obj_del(scr);
+                return;
+            } else {
+                display_entry = DISPLAY_ENTRY_SETTINGS;
+                lv_obj_del(scr);
+                return;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+}

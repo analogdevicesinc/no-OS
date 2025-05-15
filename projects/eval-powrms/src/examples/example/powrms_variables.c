@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.c
- *   @brief  Definition of Maxim platform data used by ssd1306 project.
+ *   @file   example.h
+ *   @brief  Ssd1306 example header for ssd1306 project
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -31,17 +31,49 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "parameters.h"
+#include "powrms_variables.h"
 
-struct max_uart_init_param demo_uart_extra_ip = {
-    .flow = MAX_UART_FLOW_DIS
-};
+void update_values(struct powrms_variables *input_var, uint8_t increment_pos)
+{
+    double new_value = 0;
+    double divisor = 1.0/10.0;
 
-struct max_i2c_init_param oled_display_i2c_maxim_extra_param = {
-    .vssel = MXC_GPIO_VSSEL_VDDIOH
-};
+    char temp_digits[NUMERIC_LENGTH + 1];
+    memcpy(temp_digits, input_var->digits, NUMERIC_LENGTH);
+    temp_digits[NUMERIC_LENGTH] = '\0';
 
-struct max_gpio_init_param adc_gpio_extra_param = {
-    .vssel = MXC_GPIO_VSSEL_VDDIOH
-};
+    if (increment_pos < NUMERIC_LENGTH) {
+        if (temp_digits[increment_pos] == '9') {
+            temp_digits[increment_pos] = '0';
+        } else {
+            temp_digits[increment_pos]++;
+        }
+    }
 
+    for (int i = 0; i < INTEGER_NUMERIC_LENGTH; i++) {
+        new_value = new_value * 10 + (temp_digits[i] - '0');
+    }
+    for (int i = 0; i < FLOATING_POINT_LENGTH; i++) {
+        new_value = new_value + (temp_digits[input_var->nr_of_int_digits + i] - '0') * divisor;
+        divisor /= 10.0;
+    }
+
+    if (new_value >= input_var->min_possible_value && new_value <= input_var->max_possible_value) {
+        input_var->value = new_value;
+        memcpy(input_var->digits, temp_digits, NUMERIC_LENGTH);
+    } else {
+        input_var->value = input_var->min_possible_value;
+        powrms_float_to_str(input_var->value, input_var->digits, input_var->nr_of_int_digits, input_var->nr_of_float_digits);
+    }
+
+#ifdef POWRMS_UART_DEBUG
+    // print variables:
+    printf(""
+           "input_impedance: %04.2f\n\r"
+           "output_impedance: %04.2f\n\r"
+           "signal_frequency: %04.2f\n\r",
+           input_variables[INPUT_IMPEDANCE].value,
+           input_variables[OUTPUT_IMPEDANCE].value,
+           input_variables[SIGNAL_FREQUENCY].value);
+#endif
+}

@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   maxim_delay.c
- *   @brief  Implementation of maxim delay functions.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/***************************************************************************//**
+ *   @file   example.h
+ *   @brief  Ssd1306 example header for ssd1306 project
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,60 +30,16 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "no_os_delay.h"
-#include "no_os_util.h"
-#include "mxc_delay.h"
-#include "mxc_sys.h"
 
-static volatile unsigned long long _system_ticks = 0;
+#ifndef POWRMS_UTILS_H
+#define POWRMS_UTILS_H
 
-extern void SysTick_Handler(void);
+#include <stdint.h>
+#include "common_data.h"
 
-/* ************************************************************************** */
-void SysTick_Handler(void)
-{
-	MXC_DelayHandler();
-	lv_tick_inc(1);
-	_system_ticks++;
-}
+uint8_t read_input();
+void powrms_float_to_str(float var, char* text_buf, uint8_t, uint8_t);
+void powrms_int_to_str(int var, char* text_buf);
+int update_adc_data();
 
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
- */
-void no_os_udelay(uint32_t usecs)
-{
-	MXC_Delay(MXC_DELAY_USEC(usecs));
-}
-
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- */
-void no_os_mdelay(uint32_t msecs)
-{
-	MXC_Delay(MXC_DELAY_MSEC(msecs));
-}
-
-/**
- * @brief Get current time.
- * @return Current time structure from system start (seconds, microseconds).
- */
-struct no_os_time no_os_get_time(void)
-{
-	struct no_os_time t;
-	uint64_t sub_ms;
-	uint32_t systick_val;
-	uint64_t ticks;
-
-	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
-	systick_val = SysTick->VAL;
-	ticks = _system_ticks;
-	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
-
-	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
-	t.s = ticks / 1000;
-	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
-
-	return t;
-}
+#endif /* POWRMS_UTILS_H */
