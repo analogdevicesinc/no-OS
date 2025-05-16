@@ -15,6 +15,7 @@ ANALOG TO DIGITAL CONVERTERS
    projects/ad796x_fmcz
    projects/pulsar-adc
    projects/ad469x_evb
+   projects/ad7768-1fmcz
 
 ADC / DAC
 ==========
