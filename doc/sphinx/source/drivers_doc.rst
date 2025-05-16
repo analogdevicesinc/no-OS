@@ -100,6 +100,7 @@ RF TRANSCEIVER
    :maxdepth: 1
 
    drivers/madura
+   drivers/talise
 
 TEMPERATURE
 ==============
