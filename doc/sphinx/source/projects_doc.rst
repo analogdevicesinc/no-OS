@@ -23,6 +23,7 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/pulsar-adc
 
+
    projects/ad9467
 
    projects/ad9081
@@ -35,6 +36,8 @@ ADC / DAC
    :maxdepth: 1
    
    projects/ad74416h
+
+   projects/ad9083
 
 FREQUENCY GENERATORS
 ====================
