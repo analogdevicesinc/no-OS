@@ -66,10 +66,10 @@ struct linux_i2c_desc {
  * @param read - 0 to write, otherwise read.
  * @return 0 in case of success.
  */
-int32_t linux_i2c_add_msg(struct no_os_i2c_desc *desc,
-			  uint8_t *data,
-			  uint8_t bytes_number,
-			  uint8_t read)
+int linux_i2c_add_msg(struct no_os_i2c_desc *desc,
+		      uint8_t *data,
+		      uint8_t bytes_number,
+		      uint8_t read)
 {
 	struct linux_i2c_desc *linux_desc;
 	struct i2c_msg msg;
@@ -81,24 +81,22 @@ int32_t linux_i2c_add_msg(struct no_os_i2c_desc *desc,
 	msg.len = bytes_number;
 	msg.buf = data;
 
-	if (read) {
+	if (read)
 		msg.flags = I2C_M_RD;
-	} else {
+	else
 		msg.flags = 0;  // Write
-	}
+
 
 	if (linux_desc->messages) {
 		ptr = realloc(linux_desc->messages, sizeof(struct i2c_msg) *
 			      (linux_desc->len_messages + 1));
-		if (!ptr) {
+		if (!ptr)
 			return -ENOMEM;
-		}
 		linux_desc->messages = ptr;
 	} else {
 		linux_desc->messages = no_os_malloc(sizeof(struct i2c_msg));
-		if (!linux_desc->messages) {
+		if (!linux_desc->messages)
 			return -ENOMEM;
-		}
 	}
 
 	linux_desc->messages[linux_desc->len_messages] = msg;
@@ -112,7 +110,7 @@ int32_t linux_i2c_add_msg(struct no_os_i2c_desc *desc,
  * @param desc - The I2C descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_send_msg(struct no_os_i2c_desc *desc)
+int linux_i2c_send_msg(struct no_os_i2c_desc *desc)
 {
 	struct linux_i2c_desc *linux_desc;
 	struct i2c_rdwr_ioctl_data packets;
@@ -124,9 +122,8 @@ int32_t linux_i2c_send_msg(struct no_os_i2c_desc *desc)
 	packets.nmsgs = linux_desc->len_messages;
 
 	ret = ioctl(linux_desc->fd, I2C_RDWR, &packets);
-	if (ret < 0) {
+	if (ret)
 		return -1;
-	}
 
 	no_os_free(linux_desc->messages);
 	linux_desc->len_messages = 0;
@@ -141,8 +138,8 @@ int32_t linux_i2c_send_msg(struct no_os_i2c_desc *desc)
  * @param param - The structure that contains the I2C parameters.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_init(struct no_os_i2c_desc **desc,
-		       const struct no_os_i2c_init_param *param)
+int linux_i2c_init(struct no_os_i2c_desc **desc,
+		   const struct no_os_i2c_init_param *param)
 {
 	struct linux_i2c_init_param *linux_init;
 	struct linux_i2c_desc *linux_desc;
@@ -188,7 +185,7 @@ free_desc:
  * @param desc - The I2C descriptor.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
+int linux_i2c_remove(struct no_os_i2c_desc *desc)
 {
 	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
@@ -196,7 +193,7 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
 	linux_desc = desc->extra;
 
 	ret = close(linux_desc->fd);
-	if (ret < 0) {
+	if (ret) {
 		printf("%s: Can't close device\n\r", __func__);
 		return -1;
 	}
@@ -217,10 +214,10 @@ int32_t linux_i2c_remove(struct no_os_i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
-			uint8_t *data,
-			uint8_t bytes_number,
-			uint8_t stop_bit)
+int linux_i2c_write(struct no_os_i2c_desc *desc,
+		    uint8_t *data,
+		    uint8_t bytes_number,
+		    uint8_t stop_bit)
 {
 	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
@@ -228,14 +225,14 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
 	linux_desc = desc->extra;
 
 	ret = linux_i2c_add_msg(desc, data, bytes_number, 0);
-	if (ret < 0) {
+	if (ret) {
 		printf("%s: Can't allocate memory\n\r", __func__);
 		return -1;
 	}
-
+	
 	if (stop_bit) {
 		ret = linux_i2c_send_msg(desc);
-		if (ret < 0) {
+		if (ret) {
 			printf("%s: Can't write to file\n\r", __func__);
 			return -1;
 		}
@@ -254,10 +251,10 @@ int32_t linux_i2c_write(struct no_os_i2c_desc *desc,
  *                            1 - A stop condition will be generated.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t linux_i2c_read(struct no_os_i2c_desc *desc,
-		       uint8_t *data,
-		       uint8_t bytes_number,
-		       uint8_t stop_bit)
+int linux_i2c_read(struct no_os_i2c_desc *desc,
+		   uint8_t *data,
+		   uint8_t bytes_number,
+		   uint8_t stop_bit)
 {
 	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
@@ -265,14 +262,14 @@ int32_t linux_i2c_read(struct no_os_i2c_desc *desc,
 	linux_desc = desc->extra;
 
 	ret = linux_i2c_add_msg(desc, data, bytes_number, 1);
-	if (ret < 0) {
+	if (ret) {
 		printf("%s: Can't allocate memory\n\r", __func__);
 		return -1;
 	}
 
 	if (stop_bit) {
 		ret = linux_i2c_send_msg(desc);
-		if (ret < 0) {
+		if (ret) {
 			printf("%s: Can't read from file\n\r", __func__);
 			return -1;
 		}
