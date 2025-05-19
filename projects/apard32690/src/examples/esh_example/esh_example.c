@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for the apard32690 project.
+ *   @file   esh_example.c
+ *   @brief  Implementation for the esh example.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -30,35 +30,51 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "common_data.h"
-#include "no_os_init.h"
 
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
-#include "tcp_echo_server_example.h"
-#elif defined(APARD32690_BASIC_EXAMPLE)
-#include "basic_example.h"
-#elif defined(APARD32690_ESH_EXAMPLE)
-#include "esh_example.h"
-#elif defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
-#include "adin1110_standalone_example.h"
-#endif
+#include <stdio.h>
+#include "common_data.h"
+#include "no_os_esh.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "shell.h"
+
+void prompt_task(void *data)
+{
+	prompt();
+}
+
+int thread_setup()
+{
+	TaskHandle_t esh_prompt_handle = NULL;
+	int ret;
+
+	ret = xTaskCreate(prompt_task, "esh_prompt", 1024, NULL, 1, &esh_prompt_handle);
+	if (ret != pdPASS) {
+		printf("Failed to create prompt task\n");
+		return ret;
+	}
+
+	vTaskStartScheduler();
+
+	return -1;
+}
 
 /***************************************************************************//**
- * @brief Main function execution.
+ * @brief Basic example main execution.
  *
- * @return ret - Result of the enabled examples execution.
+ * @return ret - Result of the example execution.
 *******************************************************************************/
-int main()
+int esh_example_main()
 {
-#if defined(APARD32690_ECHO_SERVER_EXAMPLE)
-	return tcp_echo_server_example_main();
-#elif defined(APARD32690_BASIC_EXAMPLE)
-	return basic_example_main();
-#elif defined(APARD32690_ESH_EXAMPLE)
-	return esh_example_main();
-#elif defined(APARD32690_ADIN1110_STANDALONE_EXAMPLE)
-	return adin1110_standalone_example_main();
-#endif
+	struct no_os_uart_desc *uart_desc;
+	int ret;
 
-	return 0;
+	ret = no_os_uart_init(&uart_desc, &uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+
+	return thread_setup();
 }
