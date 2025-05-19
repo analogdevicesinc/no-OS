@@ -102,7 +102,7 @@ int _read(int file, char *ptr, int len)
 	int ret;
 
 	if (file == STDIN_FILENO) {
-		ret = no_os_uart_read(guart, (uint8_t *)ptr, len);
+		ret = no_os_uart_read(guart, (uint8_t *)ptr, 1);
 		if (ret < 0) {
 			errno = -ret;
 			return -1;
