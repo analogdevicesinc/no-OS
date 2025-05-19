@@ -90,6 +90,9 @@ ifeq ($(INTERFACE), ethernet_t1l)
 		$(DRIVERS)/net/adin1110/adin1110.c					\
 		$(NO-OS)/util/no_os_crc8.c						\
 		$(NO-OS)/network/tcp_socket.c
+
+	INCS += $(DRIVERS)/net/oa_tc6/oa_tc6.h
+	SRCS += $(DRIVERS)/net/oa_tc6/oa_tc6.c
 endif
 
 INCS += $(INCLUDE)/no_os_crc8.h
