@@ -1011,6 +1011,9 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 		if (chan->num >= HMC7044_NUM_CHAN || chan->disable)
 			continue;
 
+		pr_debug("===========================================\n");
+		pr_debug("now configuring channel number %d\n", chan->num);
+		pr_debug("===========================================\n");
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan->num),
 			      HMC7044_DIV_LSB(chan->divider));
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan->num),
@@ -1068,10 +1071,10 @@ static int hmc7044_jesd204_sysref(struct jesd204_dev *jdev)
 
 	pr_debug("%s:%d\n", __func__, __LINE__);
 
-	ret = hmc7044_toggle_bit(hmc, HMC7044_REG_REQ_MODE_0,
-				 HMC7044_PULSE_GEN_REQ, 0);
+	// ret = hmc7044_toggle_bit(hmc, HMC7044_REG_REQ_MODE_0,
+	// 			 HMC7044_PULSE_GEN_REQ, 0);
 
-	return ret;
+	return 0;
 }
 
 static int hmc7044_lmfc_lemc_validate(struct hmc7044_dev *hmc,
@@ -1200,6 +1203,10 @@ static int hmc7044_continuous_chan_sync_enable(struct hmc7044_dev *hmc,
 				     0 : HMC7044_HI_PERF_MODE) |
 				    ((enable || chan->start_up_mode_dynamic_enable) ?
 				     HMC7044_SYNC_EN : 0) | HMC7044_CH_EN);
+		uint8_t regval;
+		hmc7044_read(hmc, HMC7044_REG_CH_OUT_CRTL_0(chan->num), &regval);
+		pr_debug("%s:%d FSM OP hmc7044_sync_en: , reg_ctrl_0 %x \n", __func__, __LINE__,
+				 regval);
 		if (ret < 0)
 			return ret;
 	}
@@ -1246,6 +1253,10 @@ static int hmc7044_jesd204_clks_sync1(struct jesd204_dev *jdev,
 	ret = hmc7044_toggle_bit(hmc, HMC7044_REG_REQ_MODE_0,
 				 HMC7044_RESTART_DIV_FSM, (!hmc->is_hmc7043 &&
 						 !hmc->clkin1_vcoin_en) ? 10000 : 1000);
+	uint8_t regval;
+	hmc7044_read(hmc,  HMC7044_REG_REQ_MODE_0, &regval);
+	pr_debug("%s:%d FSM OP hmc7044_sync1: , reg_reqmdoe0 %x \n", __func__, __LINE__,
+				regval);
 	if (ret)
 		return ret;
 
@@ -1256,6 +1267,9 @@ reseed:
 		hmc7044_write(hmc, HMC7044_REG_PULSE_GEN,
 			      HMC7044_PULSE_GEN_MODE(HMC7044_PULSE_GEN_LEVEL_SENSITIVE));
 		no_os_mdelay(10);
+		hmc7044_read(hmc,  HMC7044_REG_PULSE_GEN, &regval);
+		pr_debug("%s:%d FSM OP hmc7044_sync1: , reg_pulse_mode %x \n", __func__, __LINE__,
+					regval);
 	}
 
 	ret = hmc7044_toggle_bit(hmc, HMC7044_REG_REQ_MODE_0,
@@ -1332,6 +1346,10 @@ static int hmc7044_jesd204_clks_sync3(struct jesd204_dev *jdev,
 
 	if (!hmc->is_hmc7043 && !hmc->clkin0_rfsync_en && !hmc->clkin1_vcoin_en) {
 		ret = hmc7044_sync_pin_set(hmc, HMC7044_SYNC_PIN_PULSE_GEN_REQ);
+		uint8_t regval;
+		hmc7044_read(hmc,  HMC7044_REG_PULSE_GEN, &regval);
+		pr_debug("%s:%d FSM OP hmc7044_sync3: , reg_pulse_mode %x \n", __func__, __LINE__,
+					regval);
 		if (ret)
 			return ret;
 	} else {
@@ -1421,6 +1439,10 @@ static int hmc7044_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 
 		ret = hmc7044_write(hmc, HMC7044_REG_PULSE_GEN,
 				    HMC7044_PULSE_GEN_MODE(HMC7044_PULSE_GEN_CONT_PULSE));
+		uint8_t regval;
+		hmc7044_read(hmc,  HMC7044_REG_PULSE_GEN, &regval);
+		pr_debug("%s:%d FSM OP hmc7044_pre_link: reg_pulse_mode %x \n", __func__, __LINE__,
+					regval);
 		if (ret)
 			return ret;
 	}
@@ -1456,14 +1478,14 @@ static const struct jesd204_dev_data jesd204_hmc7044_init = {
 int32_t hmc7044_clk_enable(struct hmc7044_dev *dev)
 {
 	int ret;
-	struct hmc7044_chan_spec *chan;
-	uint32_t i, c;
 
-	// ret = hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
-	// 			  HMC7044_RESTART_DIV_FSM);
-	// if (ret)
+	// ret = hmc7044_toggle_bit(dev, HMC7044_REG_REQ_MODE_0,
+	// 			 HMC7044_RESTART_DIV_FSM, 10000);
+	// if (ret) {
+	// 	pr_err("could not reset hmc7043");
 	// 	return ret;
-	// no_os_mdelay(1);
+	// }
+	// no_os_mdelay(10);
 	// ret = hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 	// 			(dev->high_performance_mode_clock_dist_en ?
 	// 			HMC7044_HIGH_PERF_DISTRIB_PATH : 0));

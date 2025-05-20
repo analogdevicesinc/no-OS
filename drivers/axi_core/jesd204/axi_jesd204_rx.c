@@ -618,6 +618,7 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	struct axi_jesd204_rx_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct axi_jesd204_rx *jesd = priv->jesd;
 	unsigned long link_rate, lane_rate, device_rate;
+	long rate;
 	int ret;
 
 	if (reason != JESD204_STATE_OP_REASON_INIT)
@@ -655,17 +656,66 @@ static int axi_jesd204_rx_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 	pr_debug("%s: Link%u set lane rate %lu kHz\n",
 		 __func__, lnk->link_id, lane_rate);
 
+	// ret = no_os_clk_round_rate(jesd->lane_clk, lane_rate, &rate);
+	// pr_debug("%s: Link%u round lane rate %lu returned %ld\n",
+	// 	__func__, lnk->link_id, lane_rate, rate);
+	//TODO: match linux version
+	if (rate != (long)lane_rate) {
+		uint64_t parent_rate;
+
+		/*
+		 * Check GT QPLL/CPLL reference clock and make
+		 * it equal to the link/device rate
+		 */
+		// parent_rate = no_os_clk_get_parent_rate(jesd->lane_clk); //parent??
+		// rate = parent_rate;
+		parent_rate = 500000000; //ref_in 
+		rate = parent_rate;
+		pr_debug("%s: Link%u lane parent rate %ld link_rate %ld\n",
+			__func__, lnk->link_id, rate, link_rate);
+		//TODO: determine what to do in the case of the parent
+		//in QUADMxFE project, the parent is a reference from a generator
+		// if (rate != (long)link_rate) {
+		// 	// ===not aplicable bc fixed clock
+		// 	//rate = clk_round_rate(parent_rate, link_rate);
+		// 	// pr_debug("%s: Link%u round lane parent rate %ld\n",
+		// 	// 	__func__, lnk->link_id, rate);
+
+		// 	if (rate == (long)link_rate) {
+		// 		ret = clk_set_rate(parent_rate, link_rate);
+		// 		if (!ret && !IS_ERR_OR_NULL(jesd->conv2_clk))
+		// 			ret = clk_set_rate(jesd->conv2_clk, link_rate);
+		// 	} else {
+		// 		ret = -EINVAL;
+		// 	}
+		// 	if (ret < 0) {
+		// 		pr_err("%s: Link%u set REFCLK to device/link rate %lu Hz failed (%d)\n",
+		// 			__func__, lnk->link_id, link_rate, ret);
+		// 	}
+		// }
+	}
+
 	ret = no_os_clk_set_rate(jesd->lane_clk, lane_rate);
 	if (ret) {
 		pr_err("%s: Link%u set lane rate %lu kHz failed (%d)\n",
-		       __func__, lnk->link_id, lane_rate, ret);
+			__func__, lnk->link_id, lane_rate, ret);
 		return ret;
-	} else {
+	}else {
 		pr_debug("%s: Link%u set lane rate %lu kHz\n",
 			 __func__, lnk->link_id, lane_rate);
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
+	// if (ret) {
+	// 	pr_err("%s: Link%u set lane rate %lu kHz failed (%d)\n",
+	// 	       __func__, lnk->link_id, lane_rate, ret);
+	// 	return ret;
+	// } else {
+	// 	pr_debug("%s: Link%u set lane rate %lu kHz\n",
+	// 		 __func__, lnk->link_id, lane_rate);
+	// }
+
+	// return JESD204_STATE_CHANGE_DONE;
 }
 
 static int axi_jesd204_rx_jesd204_link_setup(struct jesd204_dev *jdev,
@@ -700,6 +750,9 @@ static int axi_jesd204_rx_jesd204_clks_enable(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason,
 		struct jesd204_link *lnk)
 {
+	struct axi_jesd204_rx_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct axi_jesd204_rx *jesd = priv->jesd;
+	int ret;
 
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
@@ -712,6 +765,8 @@ static int axi_jesd204_rx_jesd204_clks_enable(struct jesd204_dev *jdev,
 	default:
 		return JESD204_STATE_CHANGE_DONE;
 	}
+
+	// ret = no_os_clock_enable(jesd->device_clk)
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -751,8 +806,16 @@ static int axi_jesd204_rx_jesd204_link_enable(struct jesd204_dev *jdev,
 		       __func__, lnk->link_id, ret);
 		return ret;
 	}
+
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_SYSREF_STATUS, 0x3);
 	axi_jesd204_rx_write(jesd, JESD204_RX_REG_LINK_DISABLE, 0x0);
+	no_os_mdelay(10);
+	unsigned int link_status;
+	unsigned int link_dis;
+	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATUS, &link_status);
+	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_DISABLE, &link_dis);
+	pr_debug("%s:%d link_status %x dis %x\n", __func__, __LINE__,
+		 link_status, link_dis);
 #if 0
 	if (!jesd->irq)
 		schedule_delayed_work(&jesd->watchdog_work, HZ);

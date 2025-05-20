@@ -57,7 +57,7 @@ struct no_os_clk_hw adf4371_hw[MULTIDEVICE_INSTANCE_COUNT];
  * @brief Application clock setup.
  * @return 0 in case of success, -1 otherwise.
  */
-int32_t app_clock_init(struct no_os_clk dev_refclk[5])
+int32_t app_clock_init(struct no_os_clk dev_refclk[6])
 {
 	int32_t ret;
 
@@ -170,8 +170,8 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[5])
 		.export_no_os_clk = true,
 		.is_hmc7043 = true,
 		.clkin_freq = {500000000, 0, 0, 0},
-		.sysref_timer_div = 512,
-		.pulse_gen_mode = 7,
+		.sysref_timer_div = 1024,
+		.pulse_gen_mode = 7,		//continuos mode
 		.rf_reseeder_disable = true,
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x00},
 		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
@@ -180,7 +180,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[5])
 		sizeof(struct hmc7044_chan_spec),
 		.channels = chan_spec,
 		.jesd204_sysref_provider = true,
-		// .jesd204_max_sysref_frequency_hz = 2000000
+		.jesd204_max_sysref_frequency_hz = 2000000
 	};
 
 	struct xil_gpio_init_param xil_gpio_param = {
@@ -365,7 +365,8 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[5])
 		dev_refclk[i].clk_desc = clk_desc;
 	}
 
-	dev_refclk[i].clk_desc = hmc7044_dev->clk_desc[1];
+	dev_refclk[i].clk_desc = hmc7044_dev->clk_desc[2];
+	dev_refclk[i+1].clk_desc = hmc7044_dev->clk_desc[4];
 
 #else
 	hmc7044_hw.dev = hmc7044_dev;

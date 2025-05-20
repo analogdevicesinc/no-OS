@@ -633,7 +633,13 @@ static int axi_jesd204_tx_jesd204_clks_enable(struct jesd204_dev *jdev,
 	no_os_udelay(1);
 	axi_jesd204_tx_write(jesd, JESD204_TX_REG_SYSREF_STATUS, 0x3);
 	axi_jesd204_tx_write(jesd, JESD204_TX_REG_LINK_DISABLE, 0x0);
-
+	no_os_mdelay(10);
+	unsigned int link_status;
+	unsigned int link_dis;
+	axi_jesd204_rx_read(jesd, JESD204_TX_REG_LINK_STATUS, &link_status);
+	axi_jesd204_rx_read(jesd, JESD204_TX_REG_LINK_DISABLE, &link_dis);
+	pr_debug("%s:%d link_status %x dis %x\n", __func__, __LINE__,
+		 link_status, link_dis);
 	return JESD204_STATE_CHANGE_DONE;
 }
 

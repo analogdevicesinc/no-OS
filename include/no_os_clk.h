@@ -77,6 +77,7 @@ typedef struct no_os_clk_desc {
 	void		*dev_desc;
 } no_os_clk_desc;
 
+//TODO: add get_parent rate function to platform ops
 /**
  * @struct no_os_clk_platform_ops
  * @brief Structure holding CLK function pointers that point to the platform

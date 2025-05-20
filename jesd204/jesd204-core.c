@@ -359,7 +359,7 @@ int jesd204_sysref_async(struct jesd204_dev *jdev)
 		return -EFAULT;
 
 	dev_data = jdev_top->jdev_sysref->dev_data;
-
+	pr_debug("%s:%d before callback\n", __func__, __LINE__);
 	/* By now, this should have been validated to have sysref_cb() */
 	return dev_data->sysref_cb(jdev_top->jdev_sysref);
 }

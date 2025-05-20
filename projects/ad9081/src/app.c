@@ -71,7 +71,7 @@ extern struct hmc7044_dev* hmc7044_dev;
 
 int main(void)
 {
-	struct no_os_clk app_clk[5];
+	struct no_os_clk app_clk[6];
 	struct no_os_clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
 #ifdef PLATFORM_MB
@@ -145,9 +145,8 @@ int main(void)
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
 		.sysref_cmos_input_enable = 0,
-		.config_sync_0a_cmos_enable = 1,
+		.config_sync_0a_cmos_enable = true,
 		.multidevice_instance_count = 1,
-		.jesd_sync_pins_01_swap_enable = 0,
 #ifdef QUAD_MXFE
 		.jesd_sync_pins_01_swap_enable = false,
 #else
@@ -292,7 +291,7 @@ int main(void)
 	
 	rx_jesd_init.lane_clk = app_clk[4].clk_desc;
 
-	tx_jesd_init.lane_clk = app_clk[4].clk_desc;
+	tx_jesd_init.lane_clk = app_clk[5].clk_desc;
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret)

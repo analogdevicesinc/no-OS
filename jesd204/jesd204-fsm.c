@@ -6,6 +6,7 @@
 
 #include "no_os_error.h"
 #include "jesd204-priv.h"
+#include "no_os_print_log.h"
 
 /* no-OS specific */
 int jesd204_fsm_start(struct jesd204_topology *topology, unsigned int link_idx)
@@ -21,13 +22,16 @@ int jesd204_fsm_start(struct jesd204_topology *topology, unsigned int link_idx)
 	for (op = 0; op < __JESD204_MAX_OPS; op++) {
 		for (dev = 0; dev < topology->devs_number; dev++)
 			per_device_op_done[dev] = false;
-
+		pr_debug("%s:%d FSM OPS: device num %d \n", __func__, __LINE__,
+				dev);
 		for (lnk_id = 0; lnk_id < jdev_top->num_links; lnk_id++) {
 			for (dev = 0; dev < topology->devs_number; dev++) {
 				for (lnk_dev = 0; lnk_dev < topology->devs[dev].links_number; lnk_dev++) {
 					if (topology->devs[dev].link_ids[lnk_dev] == jdev_top->link_ids[lnk_id]) {
 						if (topology->devs[dev].jdev->dev_data->state_ops[op].per_device
 						    && !per_device_op_done[dev]) {
+							pr_debug("%s:%d FSM OPS: state num %d \n", __func__, __LINE__,
+				 				 op);
 							topology->devs[dev].jdev->dev_data->state_ops[op].per_device(
 								topology->devs[dev].jdev, reason);
 							per_device_op_done[dev] = true;
