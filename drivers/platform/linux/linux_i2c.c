@@ -122,7 +122,7 @@ int linux_i2c_send_msg(struct no_os_i2c_desc *desc)
 	packets.nmsgs = linux_desc->len_messages;
 
 	ret = ioctl(linux_desc->fd, I2C_RDWR, &packets);
-	if (ret)
+	if (ret <= 0)  // True if error or no messages sent.
 		return -1;
 
 	no_os_free(linux_desc->messages);
@@ -151,7 +151,7 @@ int linux_i2c_init(struct no_os_i2c_desc **desc,
 		return -1;
 
 	linux_desc = (struct linux_i2c_desc*) no_os_malloc(sizeof(
-			     struct linux_i2c_desc));
+				struct linux_i2c_desc));
 	if (!linux_desc)
 		goto free_desc;
 
@@ -229,7 +229,7 @@ int linux_i2c_write(struct no_os_i2c_desc *desc,
 		printf("%s: Can't allocate memory\n\r", __func__);
 		return -1;
 	}
-	
+
 	if (stop_bit) {
 		ret = linux_i2c_send_msg(desc);
 		if (ret) {
