@@ -219,6 +219,10 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 			sSlaveConfig.InputTrigger = TIM_TS_ITR3;
 			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_ITR3;
 			break;
+		case PWM_TS_ETR:
+			sSlaveConfig.InputTrigger = TIM_TS_ETRF;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_ETRMODE1;
+			break;
 		default:
 			break;
 		}
@@ -233,6 +237,19 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 			break;
 		default:
 			return -EINVAL;
+		}
+
+		if (sparam->trigger_source == PWM_TS_ETR) {
+			switch (sparam->trigger_polarity) {
+			case PWM_TRIG_POL_RISING:
+				sSlaveConfig.TriggerPolarity = TIM_TRIGGERPOLARITY_NONINVERTED;
+				break;
+			case PWM_TRIG_POL_FALLING:
+				sSlaveConfig.TriggerPolarity = TIM_TRIGGERPOLARITY_INVERTED;
+				break;
+			default:
+				return -EINVAL;
+			}
 		}
 	}
 

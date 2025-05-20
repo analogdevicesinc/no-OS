@@ -54,6 +54,12 @@ enum stm32_pwm_trigger {
 	PWM_TS_ITR1,
 	PWM_TS_ITR2,
 	PWM_TS_ITR3,
+	PWM_TS_ETR,
+};
+
+enum stm32_pwm_trigger_polarity {
+	PWM_TRIG_POL_RISING,
+	PWM_TRIG_POL_FALLING,
 };
 
 enum stm32_pwm_trigger_out {
@@ -102,6 +108,8 @@ struct stm32_pwm_init_param {
 	enum stm32_pwm_trigger trigger_source;
 	/** Trigger out selection */
 	enum stm32_pwm_trigger_out trigger_output;
+	/** Trigger polarity selection */
+	enum stm32_pwm_trigger_polarity trigger_polarity;
 	/* Enable one pulse */
 	bool onepulse_enable;
 	/* Number of pulse repetitions */
