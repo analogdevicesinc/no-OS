@@ -1032,8 +1032,7 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
 			      (chan->start_up_mode_dynamic_enable ?
-			       HMC7044_START_UP_MODE_DYN_EN : 0) |
-			      (chan->output_control0_rb4_enable ? NO_OS_BIT(4) : 0) |
+			       HMC7044_START_UP_MODE_DYN_EN : 0) | NO_OS_BIT(4) |
 			      (chan->high_performance_mode_dis ?
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
@@ -1370,7 +1369,8 @@ static int hmc7044_jesd204_link_pre_setup(struct jesd204_dev *jdev,
 
 			hmc7044_clk_round_rate(hmc, hmc->jdev_lmfc_lemc_gcd, &rate);
 
-			if (rate == (long)hmc->jdev_lmfc_lemc_gcd)
+			if ((uint64_t)hmc->jdev_lmfc_lemc_gcd - 10 <= rate &&
+			    rate <= (uint64_t)hmc->jdev_lmfc_lemc_gcd + 10)
 				ret = hmc7044_clk_set_rate(hmc, hmc->channels[i].num, hmc->jdev_lmfc_lemc_gcd);
 			else
 				ret = -EINVAL;
@@ -1444,6 +1444,28 @@ static const struct jesd204_dev_data jesd204_hmc7044_init = {
 		},
 	},
 };
+
+int32_t hmc7044_clk_enable(struct hmc7044_dev *dev)
+{
+	int ret;
+
+	// ret = hmc7044_toggle_bit(dev, HMC7044_REG_REQ_MODE_0,
+	// 			 HMC7044_RESTART_DIV_FSM, 10000);
+	// if (ret) {
+	// 	pr_err("could not reset hmc7043");
+	// 	return ret;
+	// }
+	// no_os_mdelay(10);
+	// ret = hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
+	// 			(dev->high_performance_mode_clock_dist_en ?
+	// 			HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
+	// if (ret)
+	// 	return ret;
+	
+	// no_os_mdelay(1);
+
+	return 0;
+}
 
 
 /**
@@ -1679,6 +1701,7 @@ int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
  * @brief hmc7044 clock ops
  */
 const struct no_os_clk_platform_ops hmc7044_clk_ops = {
+	.clk_enable = &hmc7044_clk_enable,
 	.clk_recalc_rate = &hmc7044_recalc_rate,
 	.clk_round_rate = &hmc7044_round_rate,
 	.clk_set_rate = &hmc7044_set_rate,

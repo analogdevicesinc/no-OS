@@ -38,6 +38,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_clk.h"
 #include "adf4371.h"
 
 #define ADF4371_WRITE			(0 << 15)
@@ -189,7 +190,7 @@ static const struct reg_sequence adf4371_reg_defaults[] = {
 	{ ADF4371_REG(0x22), 0x00 },
 	{ ADF4371_REG(0x23), 0x00 },
 	{ ADF4371_REG(0x24), 0x80 },
-	{ ADF4371_REG(0x25), 0x07 },
+	{ ADF4371_REG(0x25), 0x03 },
 	{ ADF4371_REG(0x27), 0xC5 },
 	{ ADF4371_REG(0x28), 0x83 },
 	{ ADF4371_REG(0x2C), 0x44 },
@@ -210,6 +211,7 @@ static const struct reg_sequence adf4371_reg_defaults[] = {
 	{ ADF4371_REG(0x70), 0x03 },
 	{ ADF4371_REG(0x71), 0x60 },
 	{ ADF4371_REG(0x72), 0x32 },
+	{ ADF4371_REG(0x73), 0x00 },
 };
 
 /**
@@ -642,6 +644,14 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
 		dev->fpfd = dev->clkin_freq / dev->ref_div_factor;
 	} while (dev->fpfd > ADF4371_MAX_FREQ_PFD);
 
+	/* Calculate ADC_CLK_DIV */
+	tmp = NO_OS_DIV_ROUND_UP((dev->fpfd / 100000) - 2, 4);
+	tmp = no_os_clamp(tmp, 0U, 255U);
+
+	ret = adf4371_write(dev, ADF4371_REG(0x35), tmp);
+	if (ret)
+		return ret;
+
 	/* Calculate Timeouts */
 	vco_band_div = NO_OS_DIV_ROUND_UP(dev->fpfd, 2400000U);
 
@@ -678,13 +688,24 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
  * @param rate - Channel rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adf4371_clk_recalc_rate(struct adf4371_dev *dev, uint32_t chan,
+int32_t adf4371_clk_recalc_rate_chan(struct adf4371_dev *dev, uint32_t chan,
 				uint64_t *rate)
 {
 	if (chan > dev->num_channels)
 		return -1;
 
 	*rate = adf4371_pll_fract_n_get_rate(dev, chan);
+
+	return 0;
+}
+
+static int32_t adf4371_clk_recalc_rate(struct no_os_clk_desc *desc,
+	uint64_t *rate)
+{
+	uint64_t tmp = 0;
+
+	tmp = adf4371_pll_fract_n_get_rate(desc->dev_desc, desc->hw_ch_num);
+	*rate = tmp;
 
 	return 0;
 }
@@ -696,8 +717,16 @@ int32_t adf4371_clk_recalc_rate(struct adf4371_dev *dev, uint32_t chan,
  * @param rounded_rate - The closest possible rate of desired rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adf4371_clk_round_rate(struct adf4371_dev *dev, uint64_t rate,
+int32_t adf4371_clk_round_rate_chan(struct adf4371_dev *dev, uint64_t rate,
 			       uint64_t *rounded_rate)
+{
+	*rounded_rate = rate;
+
+	return 0;
+}
+
+static int32_t adf4371_clk_round_rate(struct no_os_clk_desc *desc, uint64_t rate,
+	uint64_t *rounded_rate)
 {
 	*rounded_rate = rate;
 
@@ -711,13 +740,19 @@ int32_t adf4371_clk_round_rate(struct adf4371_dev *dev, uint64_t rate,
  * @param rate - Channel rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adf4371_clk_set_rate(struct adf4371_dev *dev, uint32_t chan,
+int32_t adf4371_clk_set_rate_chan(struct adf4371_dev *dev, uint32_t chan,
 			     uint64_t rate)
 {
 	if (chan >= dev->num_channels)
 		return -1;
 
 	return adf4371_set_freq(dev, rate, chan);
+}
+
+static int32_t adf4371_clk_set_rate(struct no_os_clk_desc *desc,
+	uint64_t rate)
+{
+	return adf4371_set_freq(desc->dev_desc, rate, desc->hw_ch_num);
 }
 
 /**
@@ -816,3 +851,12 @@ int32_t adf4371_remove(struct adf4371_dev *device)
 
 	return ret;
 }
+
+/**
+ * @brief adf4371 clock ops
+ */
+ const struct no_os_clk_platform_ops adf4371_clk_ops = {
+	.clk_recalc_rate = &adf4371_clk_recalc_rate,
+	.clk_round_rate = &adf4371_clk_round_rate,
+	.clk_set_rate = &adf4371_clk_set_rate,
+};

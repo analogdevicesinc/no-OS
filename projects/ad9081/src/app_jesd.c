@@ -132,21 +132,21 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		return ret;
 #endif
 
-	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
+	// rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 
-	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
+	// tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 
-	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (ret)
-		return ret;
+	// ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	// if (ret)
+	// 	return ret;
 
-	clk[1].clk_desc = tx_jesd->lane_clk;
+	// clk[1].clk_desc = tx_jesd->lane_clk;
 
-	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	if (ret)
-		return ret;
+	// ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	// if (ret)
+	// 	return ret;
 
-	clk[0].clk_desc = rx_jesd->lane_clk;
+	// clk[0].clk_desc = rx_jesd->lane_clk;
 
 	return 0;
 }

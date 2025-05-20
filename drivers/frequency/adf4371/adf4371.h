@@ -88,6 +88,8 @@ struct adf4371_init_param {
 	struct adf4371_chan_spec	*channels;
 };
 
+extern const struct no_os_clk_platform_ops adf4371_clk_ops;
+
 /* Initialize the device. */
 int32_t adf4371_init(struct adf4371_dev **device,
 		     const struct adf4371_init_param *init_param);
@@ -96,15 +98,15 @@ int32_t adf4371_init(struct adf4371_dev **device,
 int32_t adf4371_remove(struct adf4371_dev *device);
 
 /* Recalculate rate corresponding to a channel. */
-int32_t adf4371_clk_recalc_rate(struct adf4371_dev *dev, uint32_t chan,
+int32_t adf4371_clk_recalc_rate_chan(struct adf4371_dev *dev, uint32_t chan,
 				uint64_t *rate);
 
 /* Calculate closest possible rate */
-int32_t adf4371_clk_round_rate(struct adf4371_dev *dev, uint64_t rate,
+int32_t adf4371_clk_round_rate_chan(struct adf4371_dev *dev, uint64_t rate,
 			       uint64_t *rounded_rate);
 
 /* Set channel rate. */
-int32_t adf4371_clk_set_rate(struct adf4371_dev *dev, uint32_t chan,
+int32_t adf4371_clk_set_rate_chan(struct adf4371_dev *dev, uint32_t chan,
 			     uint64_t rate);
 
 #endif
