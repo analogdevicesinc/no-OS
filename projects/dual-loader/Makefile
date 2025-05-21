@@ -1,5 +1,5 @@
 PLATFORM=maxim
-TARGET=max32665
+TARGET=max32690
 
 include ../../tools/scripts/generic_variables.mk
 

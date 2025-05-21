@@ -34,19 +34,19 @@
     .syntax unified
     .arch armv7-m
 
-    .section .stack
+.section .stack
     .align 3
 #ifdef __STACK_SIZE
     .equ    Stack_Size, __STACK_SIZE
 #else
-    .equ    Stack_Size, 0x00001000
+    .equ    Stack_Size, 0x00001000 // This will be 4KB, starting at 0x20000010
 #endif
     .globl    __StackTop
     .globl    __StackLimit
-__StackLimit:
+__StackLimit: // This will be the start of the reserved space
     .space    Stack_Size
     .size __StackLimit, . - __StackLimit
-__StackTop:
+__StackTop: // This will be the end of the reserved space
     .size __StackTop, . - __StackTop
 
     .section .heap
@@ -54,18 +54,16 @@ __StackTop:
 #ifdef __HEAP_SIZE
     .equ    Heap_Size, __HEAP_SIZE
 #else
-    .equ    Heap_Size, 0x00000C00
+    .equ    Heap_Size, 0x00000C00 // This will be 3KB, starting after stack
 #endif
     .globl    __HeapBase
     .globl    __HeapLimit
-__HeapBase:
+__HeapBase: // This will be the start of the reserved space
     .if    Heap_Size
     .space    Heap_Size
     .endif
+__HeapLimit: // This will be the end of the reserved space
     .size __HeapBase, . - __HeapBase
-__HeapLimit:
-    .size __HeapLimit, . - __HeapLimit
-
 
     .section .isr_vector
     .align 2
