@@ -39,7 +39,7 @@
 #define __FUNCTION_NAME__ __FUNCTION__
 #endif
 
-#define AD9081_API_REV 0x00010202
+#define AD9081_API_REV 0x00010700
 #define AD9081_API_HW_RESET_LOW 600000
 #define AD9081_API_RESET_WAIT 500000
 #define AD9081_PLL_LOCK_TRY 75
@@ -48,6 +48,7 @@
 #define AD9081_JESD_MAN_CAL_WAIT 200000
 #define AD9081_JESD_RX_204C_CAL_WAIT 500000
 #define AD9081_JESD_FG_CAL_WAIT 200000
+#define AD9081_JESD_BG_CAL_WAIT 10000
 #define AD9081_SERDES_RST_WAIT 50000
 #define AD9081_DESER_MODE_204B_BR_TRESH 8000000000ULL
 #define AD9081_DESER_MODE_204C_BR_TRESH 16000000000ULL
@@ -58,69 +59,69 @@
 	adi_ad9081_hal_error_report(device, ADI_CMS_LOG_MSG, API_CMS_ERROR_OK, \
 				    __FILE__, __FUNCTION_NAME__, __LINE__,     \
 				    #var, comment)
-#define AD9081_WARN_REPORT(var, comment)                                       \
-	adi_ad9081_hal_error_report(device, ADI_CMS_LOG_WARN,                  \
-				    API_CMS_ERROR_OK, __FILE__,                \
-				    __FUNCTION_NAME__, __LINE__, #var,         \
+#define AD9081_WARN_REPORT(var, comment)                               \
+	adi_ad9081_hal_error_report(device, ADI_CMS_LOG_WARN,          \
+				    API_CMS_ERROR_OK, __FILE__,        \
+				    __FUNCTION_NAME__, __LINE__, #var, \
 				    comment)
-#define AD9081_ERROR_REPORT(error, var, comment)                               \
-	adi_ad9081_hal_error_report(device, ADI_CMS_LOG_ERR, error, __FILE__,  \
-				    __FUNCTION_NAME__, __LINE__, #var,         \
+#define AD9081_ERROR_REPORT(error, var, comment)                              \
+	adi_ad9081_hal_error_report(device, ADI_CMS_LOG_ERR, error, __FILE__, \
+				    __FUNCTION_NAME__, __LINE__, #var,        \
 				    comment)
 
 /* log report */
-#define AD9081_LOG_FUNC()                                                      \
-	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_API, "%s(...)",           \
+#define AD9081_LOG_FUNC()                                            \
+	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_API, "%s(...)", \
 				 __FUNCTION_NAME__)
-#define AD9081_LOG_SPIR(addr, data)                                            \
-	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI,                      \
+#define AD9081_LOG_SPIR(addr, data)                       \
+	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI, \
 				 "ad9081: r@%.4x = %.2x", addr, data)
-#define AD9081_LOG_SPIW(addr, data)                                            \
-	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI,                      \
+#define AD9081_LOG_SPIW(addr, data)                       \
+	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI, \
 				 "ad9081: w@%.4x = %.2x", addr, data)
-#define AD9081_LOG_SPIR32(addr, data)                                          \
-	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI,                      \
+#define AD9081_LOG_SPIR32(addr, data)                     \
+	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI, \
 				 "ad9081: r32@%.4x = %.8x", addr, data)
-#define AD9081_LOG_SPIW32(addr, data)                                          \
-	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI,                      \
+#define AD9081_LOG_SPIW32(addr, data)                     \
+	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_SPI, \
 				 "ad9081: w32@%.4x = %.8x", addr, data)
-#define AD9081_LOG_VAR(type, msg, ...)                                         \
+#define AD9081_LOG_VAR(type, msg, ...) \
 	adi_ad9081_hal_log_write(device, type, msg, ##__VA_ARGS__)
-#define AD9081_LOG_MSG(msg)                                                    \
+#define AD9081_LOG_MSG(msg) \
 	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_MSG, msg)
-#define AD9081_LOG_WARN(msg)                                                   \
+#define AD9081_LOG_WARN(msg) \
 	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_WARN, msg)
-#define AD9081_LOG_ERR(msg)                                                    \
+#define AD9081_LOG_ERR(msg) \
 	adi_ad9081_hal_log_write(device, ADI_CMS_LOG_ERR, msg)
 
 /* var error check */
-#define AD9081_ERROR_RETURN(r)                                                 \
-	{                                                                      \
-		if (r != API_CMS_ERROR_OK) {                                   \
-			return r;                                              \
-		}                                                              \
+#define AD9081_ERROR_RETURN(r)               \
+	{                                    \
+		if (r != API_CMS_ERROR_OK) { \
+			return r;            \
+		}                            \
 	}
-#define AD9081_NULL_POINTER_RETURN(p)                                          \
-	{                                                                      \
-		if (p == NULL) {                                               \
-			AD9081_ERROR_REPORT(API_CMS_ERROR_NULL_PARAM, p,       \
-					    "Null pointer passed.");           \
-			return API_CMS_ERROR_NULL_PARAM;                       \
-		}                                                              \
+#define AD9081_NULL_POINTER_RETURN(p)                                    \
+	{                                                                \
+		if (p == NULL) {                                         \
+			AD9081_ERROR_REPORT(API_CMS_ERROR_NULL_PARAM, p, \
+					    "Null pointer passed.");     \
+			return API_CMS_ERROR_NULL_PARAM;                 \
+		}                                                        \
 	}
-#define AD9081_INVALID_PARAM_RETURN(r)                                         \
-	{                                                                      \
-		if (r) {                                                       \
-			AD9081_ERROR_REPORT(API_CMS_ERROR_INVALID_PARAM, r,    \
-					    "Invalid param passed.");          \
-			return API_CMS_ERROR_INVALID_PARAM;                    \
-		}                                                              \
+#define AD9081_INVALID_PARAM_RETURN(r)                                      \
+	{                                                                   \
+		if (r) {                                                    \
+			AD9081_ERROR_REPORT(API_CMS_ERROR_INVALID_PARAM, r, \
+					    "Invalid param passed.");       \
+			return API_CMS_ERROR_INVALID_PARAM;                 \
+		}                                                           \
 	}
-#define AD9081_INVALID_PARAM_WARN(r)                                           \
-	{                                                                      \
-		if (r) {                                                       \
-			AD9081_WARN_REPORT(r, "Invalid param passed.");        \
-		}                                                              \
+#define AD9081_INVALID_PARAM_WARN(r)                                    \
+	{                                                               \
+		if (r) {                                                \
+			AD9081_WARN_REPORT(r, "Invalid param passed."); \
+		}                                                       \
 	}
 
 /*============= E X P O R T S ==============*/
@@ -437,6 +438,23 @@ int32_t adi_ad9081_dac_duc_nco_ftw0_set(adi_ad9081_device_t *device,
 					uint8_t dacs, uint8_t channels,
 					uint64_t ftw);
 
+#if AD9081_USE_FLOATING_TYPE > 0
+/**
+ * \brief  Block Top Level API. \n Configure NCO Shift Freq.
+ *         Call after adi_ad9081_device_startup_tx().
+ *
+ * \param[in]  device       Pointer to the device structure
+ * \param[in]  dacs         DAC mask, like AD9081_DAC_0, ...
+ * \param[in]  channels     Channel mask, like AD9081_DAC_CH_0, ...
+ * \param[in]  nco_shift_hz NCO shift freq in Hz
+ *
+ * \returns API_CMS_ERROR_OK                     API Completed Successfully
+ * \returns <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_dac_duc_nco_set_f(adi_ad9081_device_t *device, uint8_t dacs,
+				     uint8_t channels, double nco_shift_hz);
+#endif
+
 /**
  * \brief Enables soft off gain block for specified DACs.
  *
@@ -580,6 +598,23 @@ int32_t adi_ad9081_adc_power_up_set(adi_ad9081_device_t *device, uint8_t adcs,
 uint8_t
 adi_ad9081_adc_ddc_coarse_dcm_decode(adi_ad9081_adc_coarse_ddc_dcm_e cddc_dcm);
 
+#if AD9081_USE_FLOATING_TYPE > 0
+/**
+ * /brief  Configure NCO frequency for the coarse DDCs
+ *         Call after adi_ad9081_device_startup_rx().
+ *
+ * \param[in]  device        Pointer to the device structure
+ * \param[in]  cddcs         Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
+ * \param[in]  cddc_shift_hz Value of frequency shift in Hz
+ *
+ * \returns API_CMS_ERROR_OK                     API Completed Successfully
+ * \returns <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_ddc_coarse_nco_set_f(adi_ad9081_device_t *device,
+					    uint8_t cddcs,
+					    double cddc_shift_hz);
+#endif
+
 /**
  * \brief Decodes ADC fine DDC decimation values.
  *
@@ -592,6 +627,22 @@ adi_ad9081_adc_ddc_coarse_dcm_decode(adi_ad9081_adc_coarse_ddc_dcm_e cddc_dcm);
  */
 uint8_t
 adi_ad9081_adc_ddc_fine_dcm_decode(adi_ad9081_adc_fine_ddc_dcm_e fddc_dcm);
+
+#if AD9081_USE_FLOATING_TYPE > 0
+/**
+ * \brief  Configure NCO frequency for fine DDCs
+ *         Call after adi_ad9081_device_startup_rx().
+ *
+ * \param[in]  device        Pointer to the device structure
+ * \param[in]  fddcs         Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
+ * \param[in]  fddc_shift_hz Value of frequency shift in Hz
+ *
+ * \returns API_CMS_ERROR_OK                     API Completed Successfully
+ * \returns <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_ddc_fine_nco_set_f(adi_ad9081_device_t *device,
+					  uint8_t fddcs, double fddc_shift_hz);
+#endif
 
 /**
  * \brief Selects the GPIOs to which PERI_I_SEL21/22 are connected.
@@ -634,23 +685,6 @@ int32_t adi_ad9081_adc_fdelay_cdelay_pfir_sel_to_gpio_mapping_set(
  */
 int32_t adi_ad9081_adc_common_hop_en_set(adi_ad9081_device_t *device,
 					 uint8_t enable);
-
-/**
- * \brief Enables trig NCO reset for specified coarse DDCs.
- *
- *
- * \param[in]  device	         Pointer to device handler structure.
- * \param[in]  cddcs             0bXXXX, set X==1 to specify cddcs you wish to affect:
- *                                  Bit 3: cddc 3  (MSB)
- *                                  Bit 2: cddc 2
- *                                  Bit 1: cddc 1
- *                                  Bit 0: cddc 0  (LSB)
- * \param[in]  enable            1: enable, 0: disable.
- *
- * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
- */
-int32_t adi_ad9081_adc_ddc_coarse_trig_nco_reset_enable_set(
-	adi_ad9081_device_t *device, uint8_t cddcs, uint8_t enable);
 
 /**
  * \brief Changes Profile Update Mode/ Phase Update Mode for specified coarse DDCs.
@@ -956,6 +990,39 @@ adi_ad9081_jesd_determine_common_nc(adi_ad9081_jesd_link_select_e links,
  */
 int32_t adi_ad9081_jesd_sysref_d2acenter_enable_set(adi_ad9081_device_t *device,
 						    uint8_t enable);
+
+/**
+ * \brief Set hardware sysref control
+ *
+ * \param[in] device      Pointer to the device structure
+ *
+ * \return API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
+ */
+int32_t adi_ad9081_sync_sysref_ctrl(adi_ad9081_device_t *device);
+
+/**
+ * \brief Sets JTX_BR_LOG2_RATIO for specified links.
+ *
+ * \param[in]   device           Pointer to device handler structure.
+ * \param[in]   chip_op_mode     Chip operating mode, 1 : Tx Only, 2 : Rx Only, 3 : Tx + Rx Only.
+ * \param[in]   jesd_param       @see adi_cms_jesd_param_t, pass array with 2 elements for dual link.
+ * \param[in]   links            Choose AD9081 link(s) to set mask for:
+ *                                  0x1 - AD9081_LINK_0
+ *                                  0x2 - AD9081_LINK_1
+ *                                  0x3 - Both
+ * \param[in]   jtx_lane_rate    jtx_lane_rate[0] - lane rate in bps for AD9081_LINK_0.
+ *                               jtx_lane_rate[1] - lane rate in bps for AD9081_LINK_1.
+ * \param[out]  jtx_brr          jtx_brr[0] - JTX_BR_LOG2_RATIO value for AD9081_LINK_0.
+ *                               jtx_brr[1] - JTX_BR_LOG2_RATIO value for AD9081_LINK_1.
+ *
+ * \returns API_CMS_ERROR_OK is returned upon success. Otherwise, a failure code.
+ */
+int32_t adi_ad9081_jesd_tx_calc_br_ratio(adi_ad9081_device_t *device,
+					 adi_cms_chip_op_mode_t chip_op_mode,
+					 adi_cms_jesd_param_t *jesd_param,
+					 adi_ad9081_jesd_link_select_e links,
+					 uint64_t jtx_lane_rate[2],
+					 uint8_t jtx_brr[2]);
 
 #if AD9081_USE_FLOATING_TYPE > 0
 int32_t adi_ad9081_hal_calc_nco_ftw_f(adi_ad9081_device_t *device, double freq,

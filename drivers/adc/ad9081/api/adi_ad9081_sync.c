@@ -58,7 +58,8 @@ int32_t adi_ad9081_jesd_sysref_input_mode_set(
 		return API_CMS_ERROR_INVALID_PARAM;
 	}
 
-	adi_ad9081_jesd_sysref_d2acenter_enable_set(device, 1);
+	err = adi_ad9081_jesd_sysref_d2acenter_enable_set(device, 1);
+	AD9081_ERROR_RETURN(err);
 
 	/* 1: AC couple, 0: DC couple */
 	err = adi_ad9081_hal_bf_set(
@@ -78,7 +79,87 @@ int32_t adi_ad9081_jesd_sysref_input_mode_set(
 		enable_capture); /* not paged, spi_sysref_en@sysref_control */
 	AD9081_ERROR_RETURN(err);
 
-	adi_ad9081_jesd_sysref_d2acenter_enable_set(device, 0);
+	err = adi_ad9081_jesd_sysref_d2acenter_enable_set(device, 0);
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_sync_sysref_input_config_set(
+	adi_ad9081_device_t *device, adi_cms_signal_coupling_e coupling_mode,
+	adi_cms_signal_type_e signal_type, uint8_t sysref_single_end_p,
+	uint8_t sysref_single_end_n)
+{
+	int32_t err;
+	AD9081_LOG_FUNC();
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_INVALID_PARAM_RETURN(sysref_single_end_n > 15 ||
+				    sysref_single_end_n < 0);
+	AD9081_INVALID_PARAM_RETURN(sysref_single_end_p > 15 ||
+				    sysref_single_end_p < 0);
+	AD9081_INVALID_PARAM_RETURN(coupling_mode != COUPLING_AC &&
+				    coupling_mode != COUPLING_DC);
+	AD9081_INVALID_PARAM_RETURN(signal_type == SIGNAL_UNKNOWN);
+
+	if ((coupling_mode == COUPLING_AC &&
+	     (signal_type == SIGNAL_LVDS || signal_type == SIGNAL_CML ||
+	      signal_type == SIGNAL_LVPECL)) ||
+	    coupling_mode == COUPLING_DC) {
+		err = adi_ad9081_jesd_sysref_input_mode_set(
+			device, 1, 1,
+			(signal_type == SIGNAL_LVDS ||
+			 signal_type == SIGNAL_CML ||
+			 signal_type == SIGNAL_LVPECL) ?
+				0 :
+				1);
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_jesd_sysref_d2acenter_enable_set(device, 1);
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_hal_bf_set(
+			device, 0x0fb9, 0x100,
+			(coupling_mode == COUPLING_AC) ?
+				0 :
+				1); /* not paged, sysref_dc_mode_sel */
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_hal_bf_set(
+			device, 0x0fb9, 0x104,
+			(signal_type == SIGNAL_CMOS) ?
+				1 :
+				0); /* not paged, sysref_single_end_mode_sel */
+		AD9081_ERROR_RETURN(err);
+
+		/* for 1.8V CMOS or higher, set ground ref resistor to 6.3 kohm. For 1.5V CMOS, set to 7.9 kohm.*/
+		if (signal_type == SIGNAL_CMOS) {
+			err = adi_ad9081_hal_bf_set(
+				device, 0x0fba, 0x400,
+				sysref_single_end_p); /* not paged, sysref_single_end_p */
+			AD9081_ERROR_RETURN(err);
+			err = adi_ad9081_hal_bf_set(
+				device, 0x0fba, 0x404,
+				sysref_single_end_n); /* not paged, sysref_single_end_n */
+			AD9081_ERROR_RETURN(err);
+		}
+		err = adi_ad9081_jesd_sysref_d2acenter_enable_set(device, 0);
+		AD9081_ERROR_RETURN(err);
+	} else {
+		AD9081_LOG_ERR(
+			"The SYSREF receiver input buffer cannot be configured in the mode specified.");
+		return API_CMS_ERROR_INVALID_PARAM;
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_sync_sysref_ctrl(adi_ad9081_device_t *device)
+{
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_NULL_POINTER_RETURN(device->clk_info.sysref_clk);
+	AD9081_NULL_POINTER_RETURN(device->clk_info.sysref_ctrl);
+
+	if (API_CMS_ERROR_OK !=
+	    device->clk_info.sysref_ctrl(device->clk_info.sysref_clk)) {
+		return API_CMS_ERROR_SYSREF_CTRL;
+	}
 
 	return API_CMS_ERROR_OK;
 }
@@ -129,6 +210,12 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device,
 				    BF_SYSREF_MODE_ONESHOT_INFO,
 				    1); /* not paged */
 	AD9081_ERROR_RETURN(err);
+
+	if (device->clk_info.sysref_mode == SYSREF_ONESHOT) {
+		err = adi_ad9081_sync_sysref_ctrl(device);
+		AD9081_ERROR_RETURN(err);
+	}
+
 	if (err = adi_ad9081_hal_bf_wait_to_clear(
 		    device, REG_SYSREF_MODE_ADDR,
 		    BF_SYSREF_MODE_ONESHOT_INFO), /* not paged */
@@ -288,12 +375,16 @@ int32_t adi_ad9081_jesd_sysref_monitor_phase_get(adi_ad9081_device_t *device,
 	AD9081_NULL_POINTER_RETURN(sysref_phase);
 	AD9081_LOG_FUNC();
 
+	/* Write strobe to trigger a value update */
+	err = adi_ad9081_hal_bf_set(device, REG_SYSREF_PHASE0_ADDR, 0x800,
+				    0x00);
+
 	err = adi_ad9081_hal_bf_get(device, REG_SYSREF_PHASE0_ADDR, 0x800,
 				    &phase0_val, sizeof(uint8_t));
 	err = adi_ad9081_hal_bf_get(device, REG_SYSREF_PHASE1_ADDR, 0x400,
 				    &phase1_val, sizeof(uint8_t));
 
-	*sysref_phase = (phase0_val << 8) + phase1_val;
+	*sysref_phase = (phase1_val << 8) + phase0_val;
 
 	AD9081_ERROR_RETURN(err);
 
@@ -386,6 +477,198 @@ adi_ad9081_jesd_sysref_oneshot_sync_done_get(adi_ad9081_device_t *device,
 
 	if (*sync_done != 1) {
 		AD9081_LOG_ERR("oneshot sync not finished.");
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_sync_calc_jrx_lmfc_lemc(uint64_t dac_clk,
+					   uint8_t main_interp,
+					   uint8_t ch_interp,
+					   adi_cms_jesd_param_t *jesd_param,
+					   uint64_t *lmfc_freq)
+{
+	if (lmfc_freq == NULL) {
+		return API_CMS_ERROR_NULL_PARAM;
+	}
+
+#ifdef __KERNEL__
+	*lmfc_freq =
+		div64_u64(dac_clk, jesd_param->jesd_s * jesd_param->jesd_k *
+					   main_interp * ch_interp);
+#else
+	*lmfc_freq = (dac_clk) / (jesd_param->jesd_s * jesd_param->jesd_k *
+				  main_interp * ch_interp);
+#endif
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_sync_calc_jtx_lmfc_lemc(uint64_t adc_clk,
+					   uint8_t cddc_dcm[4],
+					   uint8_t fddc_dcm[8],
+					   adi_ad9081_jesd_link_select_e links,
+					   adi_cms_jesd_param_t jesd_param[2],
+					   uint64_t *lmfc_freq)
+{
+	uint64_t lmfc_link0, lmfc_link1, gcd, min_link, max_link, lmfc_gcd;
+	uint8_t cdcm, fdcm;
+	if (lmfc_freq == NULL) {
+		return API_CMS_ERROR_NULL_PARAM;
+	}
+
+	cdcm = adi_ad9081_adc_ddc_coarse_dcm_decode(cddc_dcm[0]);
+	fdcm = adi_ad9081_adc_ddc_fine_dcm_decode(fddc_dcm[0]);
+
+	if (jesd_param->jesd_duallink > 0) {
+#ifdef __KERNEL__
+		/* link 0 */
+		lmfc_link0 = div64_u64(adc_clk, jesd_param[0].jesd_s *
+							jesd_param[0].jesd_k *
+							cdcm * fdcm);
+
+		/* link 1 */
+		lmfc_link1 = div64_u64(adc_clk, jesd_param[1].jesd_s *
+							jesd_param[1].jesd_k *
+							cdcm * fdcm);
+#else
+		/* link 0 */
+		lmfc_link0 = (adc_clk) / (jesd_param[0].jesd_s *
+					  jesd_param[0].jesd_k * cdcm * fdcm);
+
+		/* link 1 */
+		lmfc_link1 = (adc_clk) / (jesd_param[1].jesd_s *
+					  jesd_param[1].jesd_k * cdcm * fdcm);
+#endif
+
+		/* gcd between links */
+		max_link = (lmfc_link0 >= lmfc_link1) ? lmfc_link0 : lmfc_link1;
+		min_link = (lmfc_link0 >= lmfc_link1) ? lmfc_link1 : lmfc_link0;
+		gcd = adi_api_utils_gcd(min_link, max_link);
+		lmfc_gcd = gcd;
+	} else {
+		/* link 0 */
+#ifdef __KERNEL__
+		lmfc_link0 = div64_u64(adc_clk, jesd_param[0].jesd_s *
+							jesd_param[0].jesd_k *
+							cdcm * fdcm);
+#else
+		lmfc_link0 = (adc_clk) / (jesd_param[0].jesd_s *
+					  jesd_param[0].jesd_k * cdcm * fdcm);
+#endif
+		lmfc_gcd = lmfc_link0;
+	}
+
+	*lmfc_freq = lmfc_gcd;
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_sync_sysref_frequency_set(
+	adi_ad9081_device_t *device, uint64_t *sysref_freq, uint64_t dev_ref,
+	uint64_t dac_clk, uint64_t adc_clk, uint8_t main_interp,
+	uint8_t ch_interp, uint8_t cddc_dcm[4], uint8_t fddc_dcm[8],
+	adi_ad9081_jesd_link_select_e jtx_links,
+	adi_cms_jesd_param_t *jrx_param, adi_cms_jesd_param_t jtx_param[2])
+{
+	uint64_t jrx_lmfc = 0, jtx_lmfc = 0, max_lmfc = 0, min_lmfc = 0,
+		 gcd = 0, rem1, rem2;
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_NULL_POINTER_RETURN(sysref_freq);
+	AD9081_NULL_POINTER_RETURN(jrx_param);
+
+	AD9081_LOG_FUNC();
+
+	/* jrx */
+	if (jrx_param->jesd_l > 0) {
+		AD9081_INVALID_PARAM_RETURN(jrx_param->jesd_s == 0 ||
+					    jrx_param->jesd_k == 0 ||
+					    main_interp == 0 || ch_interp == 0);
+		err = adi_ad9081_sync_calc_jrx_lmfc_lemc(
+			dac_clk, main_interp, ch_interp, jrx_param, &jrx_lmfc);
+		AD9081_ERROR_RETURN(err);
+		if (jrx_lmfc == 0) {
+			AD9081_LOG_ERR("LMFC/LEMC = 0, missing input params");
+		}
+
+#ifdef __KERNEL__
+		div64_u64_rem(dev_ref, jrx_lmfc, &rem1);
+		div64_u64_rem(jrx_lmfc, dev_ref, &rem2);
+#else
+		rem1 = dev_ref % jrx_lmfc;
+		rem2 = jrx_lmfc % dev_ref;
+#endif
+		/* Internal PLL requires LMFC and dev_ref to be integer multiples*/
+		if (dev_ref != dac_clk && rem1 != 0 && rem2 != 0) {
+			AD9081_LOG_WARN(
+				"JRx LMFC/LEMC and dev_ref clock are not integer multiples. DL will not be achieved.");
+		}
+	}
+
+	/* jtx */
+	if (jtx_param[0].jesd_l > 0) {
+		AD9081_INVALID_PARAM_RETURN(jtx_param[0].jesd_s == 0 ||
+					    jtx_param[0].jesd_k == 0);
+		if (jtx_param[0].jesd_duallink == 1) {
+			AD9081_INVALID_PARAM_RETURN(jtx_param[1].jesd_s == 0 ||
+						    jtx_param[1].jesd_k == 0);
+		}
+		err = adi_ad9081_sync_calc_jtx_lmfc_lemc(adc_clk, cddc_dcm,
+							 fddc_dcm, jtx_links,
+							 jtx_param, &jtx_lmfc);
+		AD9081_ERROR_RETURN(err);
+		if (jtx_lmfc == 0) {
+			AD9081_LOG_ERR("LMFC/LEMC = 0, missing input params");
+		}
+
+#ifdef __KERNEL__
+		div64_u64_rem(dev_ref, jtx_lmfc, &rem1);
+		div64_u64_rem(jtx_lmfc, dev_ref, &rem2);
+#else
+		rem1 = dev_ref % jtx_lmfc;
+		rem2 = jtx_lmfc % dev_ref;
+#endif
+
+		/* Internal PLL requires LMFC and dev_ref to be integer multiples*/
+		if (dev_ref != dac_clk && rem1 != 0 && rem2 != 0) {
+			AD9081_LOG_WARN(
+				"JTx LMFC/LEMC and dev_ref clock are not integer multiples. DL will not be achieved.");
+		}
+	}
+
+	/* gcd */
+	max_lmfc = (jrx_lmfc >= jtx_lmfc) ? jrx_lmfc : jtx_lmfc;
+	min_lmfc = (jrx_lmfc >= jtx_lmfc) ? jtx_lmfc : jrx_lmfc;
+	gcd = adi_api_utils_gcd(min_lmfc, max_lmfc);
+	*sysref_freq = gcd;
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t
+adi_ad9081_sync_jrx_tpl_phase_diff_get(adi_ad9081_device_t *device,
+				       adi_ad9081_jesd_link_select_e links,
+				       uint8_t *jrx_phase_diff)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_NULL_POINTER_RETURN(jrx_phase_diff);
+	AD9081_LOG_FUNC();
+
+	if ((links & AD9081_LINK_0) > 0) {
+		err = adi_ad9081_jesd_rx_link_select_set(device, AD9081_LINK_0);
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_hal_bf_get(device, REG_JRX_TPL_5_ADDR,
+					    BF_JRX_TPL_PHASE_DIFF_INFO,
+					    jrx_phase_diff, 1);
+		AD9081_ERROR_RETURN(err);
+	}
+	if ((links & AD9081_LINK_1) > 0) {
+		err = adi_ad9081_jesd_rx_link_select_set(device, AD9081_LINK_1);
+		AD9081_ERROR_RETURN(err);
+		err = adi_ad9081_hal_bf_get(device, REG_JRX_TPL_5_ADDR,
+					    BF_JRX_TPL_PHASE_DIFF_INFO,
+					    jrx_phase_diff, 1);
+		AD9081_ERROR_RETURN(err);
 	}
 
 	return API_CMS_ERROR_OK;

@@ -5,43 +5,34 @@
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
- * All rights reserved.
- *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *  - Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *  - Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *  - The use of this software may or may not infringe the patent rights
- *    of one or more patent holders.  This license does not release you
- *    from the requirement that you obtain separate licenses from these
- *    patent holders to use this software.
- *  - Use of the software either in source or binary form, must be run
- *    on or directly connected to an Analog Devices Inc. component.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #ifndef AD9081_H_
 #define AD9081_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include <stdbool.h>
 #include <stdint.h>
 #include "no_os_clk.h"
@@ -50,9 +41,6 @@
 #include "adi_ad9081.h"
 #include "jesd204.h"
 
-/******************************************************************************/
-/********************** Macros and Types Declarations *************************/
-/******************************************************************************/
 #define MAX_NUM_MAIN_DATAPATHS	4
 #define MAX_NUM_CHANNELIZER	8
 
@@ -73,20 +61,22 @@ struct dac_settings_cache {
 };
 
 struct ad9081_phy {
-	no_os_spi_desc		*spi_desc;
-	no_os_gpio_desc		*gpio_reset;
-	no_os_gpio_desc		*ms_sync_en_gpio;
+	struct no_os_spi_desc		*spi_desc;
+	struct no_os_gpio_desc		*gpio_reset;
+	struct no_os_gpio_desc		*ms_sync_en_gpio;
 	struct no_os_clk		*jesd_rx_clk;
 	struct no_os_clk		*jesd_tx_clk;
 	struct no_os_clk		*dev_clk;
 	struct jesd204_dev		*jdev;
 	uint8_t		sync_ms_gpio_num;
 	bool		sysref_coupling_ac_en;
+	bool 		sysref_cmos_input_en;
+	uint8_t 	sysref_cmos_single_end_term_pos;
+	uint8_t 	sysref_cmos_single_end_term_neg;
 	adi_ad9081_device_t	ad9081;
 	struct ad9081_jesd_link	jrx_link_tx[2];
 	struct ad9081_jesd_link	jtx_link_rx[2];
 	uint32_t	multidevice_instance_count;
-	bool		dual_link_use_own_tpl_en;
 	bool		config_sync_01_swapped;
 	bool		config_sync_0a_cmos_en;
 	uint32_t	lmfc_delay;
@@ -104,10 +94,11 @@ struct ad9081_phy {
 	uint8_t		tx_dac_chan_xbar[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		tx_dac_chan_xbar_1x_non1x[MAX_NUM_MAIN_DATAPATHS];
 	int64_t		tx_main_shift[MAX_NUM_MAIN_DATAPATHS];
-	uint32_t	tx_dac_fsc[MAX_NUM_MAIN_DATAPATHS];
 	/* The 8 DAC Channelizers */
 	uint32_t	tx_chan_interp;
 	int64_t		tx_chan_shift[MAX_NUM_CHANNELIZER];
+	uint32_t	tx_dac_fsc[MAX_NUM_MAIN_DATAPATHS];
+	bool		tx_ffh_hopf_via_gpio_en;
 	struct dac_settings_cache	dac_cache;
 	/* RX */
 	uint32_t	adc_dcm[2];
@@ -117,17 +108,19 @@ struct ad9081_phy {
 	int64_t		rx_cddc_shift[MAX_NUM_MAIN_DATAPATHS];
 	uint32_t	adc_main_decimation[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t 	rx_cddc_dcm[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t 	rx_fddc_mxr_if[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_cddc_c2r[MAX_NUM_MAIN_DATAPATHS];
-	uint8_t		rx_cddc_gain_6db_en[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_cddc_select;
 	/* The 8 ADC Channelizers */
 	int64_t		rx_fddc_shift[MAX_NUM_CHANNELIZER];
 	uint32_t	adc_chan_decimation[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_fddc_dcm[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_c2r[MAX_NUM_CHANNELIZER];
-	uint8_t 	rx_fddc_mxr_if[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_cddc_gain_6db_en[MAX_NUM_MAIN_DATAPATHS];
 	uint8_t		rx_fddc_gain_6db_en[MAX_NUM_CHANNELIZER];
 	uint8_t 	rx_fddc_select;
+	uint8_t		rx_cddc_nco_channel_select_mode[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_ffh_gpio_mux_sel[6];
 };
 
 struct link_init_param {
@@ -153,18 +146,20 @@ struct link_init_param {
 };
 
 struct ad9081_init_param {
-	no_os_spi_init_param	*spi_init;
-	no_os_gpio_init_param	*gpio_reset;
-	no_os_gpio_init_param	*ms_sync_enable;
+	struct no_os_spi_init_param	*spi_init;
+	struct no_os_gpio_init_param	*gpio_reset;
+	struct no_os_gpio_init_param	*ms_sync_enable;
 	struct no_os_clk	*dev_clk;
 	struct no_os_clk	*jesd_rx_clk;
 	struct no_os_clk	*jesd_tx_clk;
 	uint8_t		master_slave_sync_gpio_num;
 	bool		sysref_coupling_ac_en;
+	bool		sysref_cmos_input_enable;
+	uint8_t 	sysref_cmos_single_end_term_pos;
+	uint8_t 	sysref_cmos_single_end_term_neg;
 	uint32_t	multidevice_instance_count;
-	bool		dual_link_use_separate_tpl_enable;
 	bool		jesd_sync_pins_01_swap_enable;
-	bool		jesd_sync_pin_0a_cmos_enable;
+	bool 		config_sync_0a_cmos_enable;
 	uint32_t	lmfc_delay_dac_clk_cycles;
 	uint32_t	nco_sync_ms_extra_lmfc_num;
 	bool		nco_sync_direct_sysref_mode_enable;
@@ -201,8 +196,31 @@ struct ad9081_init_param {
 	uint8_t		rx_channel_nco_mixer_mode[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_digital_gain_6db_enable[MAX_NUM_CHANNELIZER];
 	uint8_t		rx_channel_enable[MAX_NUM_CHANNELIZER];
+	uint8_t		rx_cddc_nco_channel_select_mode[MAX_NUM_MAIN_DATAPATHS];
+	uint8_t		rx_ffh_gpio_mux_selection[6];
 	struct link_init_param	*jtx_link_rx[2];
 };
+
+/* ffh: 2 - gpio6, 3 - gpio7, 4 - gpio8, 5 - gpio9, 6 - gpio10, 7 - syncinb1_p, 8 - syncinb1_n */
+
+#define AD9081_PERI_SEL_GPIO6		2
+#define AD9081_PERI_SEL_GPIO7		3
+#define AD9081_PERI_SEL_GPIO8		4
+#define AD9081_PERI_SEL_GPIO9		5
+#define AD9081_PERI_SEL_GPIO10		6
+#define AD9081_PERI_SEL_SYNCINB1_P	7
+#define AD9081_PERI_SEL_SYNCINB1_N	8
+
+#define AD9081_FFH_CHAN_SEL_REG_MODE		0 /* 0:  Register Map control (Use ddc_nco_regmap_chan_sel) */
+#define AD9081_FFH_CHAN_SEL_1GPIO_MODE		1 /* 1:  profile_pins[0]     is used. Pin level control {3'b0, profile_pins[0]} */
+#define AD9081_FFH_CHAN_SEL_2GPIO_MODE		2 /* 2:  profile_pins[1 :0] are used. Pin level control {2'b0, profile_pins[1:0]} */
+#define AD9081_FFH_CHAN_SEL_3GPIO_MODE		3 /* 3:  profile_pins[2 :0] are used. Pin level control {1'b0, profile_pins[2:0]} */
+#define AD9081_FFH_CHAN_SEL_4GPIO_MODE		4 /* 4:  profile_pins[3 :0] are used. Pin level control { profile_pins[3:0]} */
+#define AD9081_FFH_CHAN_SEL_GPIO0_EDGE_MODE	8 /* 8:  profile_pins[0] Pin edge control- increment internal counter when rising edge of profile_pins[0] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO1_EDGE_MODE	9 /* 9:  profile_pins[1] Pin edge control- increment internal counter when rising edge of profile_pins[1] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO2_EDGE_MODE	10 /* 10: profile_pins[2] Pin edge control- increment internal counter when rising edge of profile_pins[2] Pin. */
+#define AD9081_FFH_CHAN_SEL_GPIO3_EDGE_MODE	11 /* 11: profile_pins[3] Pin edge control- increment internal counter when rising edge of profile_pins[3] Pin. */
+#define AD9081_FFH_CHAN_SEL_FHT_EXP_MODE	12 /* 12: FHT expire based control - increment internal counter when FHT is expired. */
 
 /*
  * JESD204-FSM defines
@@ -212,9 +230,6 @@ struct ad9081_init_param {
 #define FRAMER_LINK0_RX 2
 #define FRAMER_LINK1_RX 3
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 /* Initialize the device. */
 int32_t ad9081_init(struct ad9081_phy **device,
 		    const struct ad9081_init_param *init_param);

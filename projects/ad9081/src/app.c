@@ -165,9 +165,9 @@ int main(void)
 		.multidevice_instance_count = 1,
 		.jesd_sync_pins_01_swap_enable = false,
 #ifdef QUAD_MXFE
-		.jesd_sync_pin_0a_cmos_enable = true,
+		.config_sync_0a_cmos_enable = true,
 #else
-		.jesd_sync_pin_0a_cmos_enable = false,
+		.config_sync_0a_cmos_enable = false,
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,

@@ -20,11 +20,73 @@
 #include <linux/kernel.h>
 #include <linux/math64.h>
 #include <linux/delay.h>
+#include <linux/gcd.h>
+
+static inline int32_t adi_api_utils_is_power_of_two(uint64_t x)
+{
+	return (uint32_t) is_power_of_2(x);
+}
+
+static inline int32_t adi_api_utils_gcd(int32_t u, int32_t v)
+{
+	return (u32) gcd(u, v);
+}
+
+static inline uint32_t adi_api_utils_log2(uint32_t a)
+{
+	uint8_t b = 0;
+
+	while (a >>= 1)
+		b++;
+
+	return b; /* log2(a) , only for power of 2 numbers */
+}
+
 #else
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdarg.h>
+
+static inline int32_t adi_api_utils_is_power_of_two(uint64_t x)
+{
+	if (x == 0)
+		return 0;
+
+	while (x != 1) {
+		if (x % 2 != 0)
+			return 0;
+		x = x / 2;
+	}
+
+	return 1;
+}
+
+static inline int32_t adi_api_utils_gcd(int32_t u, int32_t v)
+{
+	uint32_t div;
+	uint32_t common_div = 1;
+
+	if ((u == 0) || (v == 0))
+		return (((u) > (v)) ? (u) : (v));
+
+	for (div = 1; (div <= u) && (div <= v); div++)
+		if (!(u % div) && !(v % div))
+			common_div = div;
+
+	return common_div;
+}
+
+static inline uint32_t adi_api_utils_log2(uint32_t a)
+{
+	uint8_t b = 0;
+
+	while (a >>= 1)
+		b++;
+
+	return b; /* log2(a) , only for power of 2 numbers */
+}
+
 #endif
 #include "adi_cms_api_config.h"
 
@@ -69,7 +131,8 @@ typedef enum {
 	API_CMS_ERROR_LOG_WRITE = -68, /*!< Log write error */
 	API_CMS_ERROR_LOG_CLOSE = -69, /*!< Log close error */
 	API_CMS_ERROR_DELAY_US = -70, /*!< Delay error */
-	API_CMS_ERROR_PD_STBY_PIN_CTRL = -71 /*!< PD STBY function error */
+	API_CMS_ERROR_PD_STBY_PIN_CTRL = -71, /*!< PD STBY function error */
+	API_CMS_ERROR_SYSREF_CTRL = -72 /*!< SYSREF enable function error */
 
 } adi_cms_error_e;
 
@@ -246,6 +309,15 @@ typedef struct {
 	uint8_t jesd_mode_s_sel; /*!< JESD mode S value */
 } adi_cms_jesd_param_t;
 
+/*!
+ * @brief  Enumerate ADI Device Operating Mode
+ */
+typedef enum {
+	TX_ONLY = 1, /*!< Chip using Tx path only */
+	RX_ONLY = 2, /*!< Chip using Rx path only */
+	TX_RX_ONLY = 3 /*!< Chip using Tx + Rx both paths */
+} adi_cms_chip_op_mode_t;
+
 /**
  * @brief  Platform dependent SPI access functions.
  *
@@ -399,6 +471,17 @@ typedef int32_t (*adi_pd_stby_pin_ctrl_t)(void *user_data, uint8_t enable);
  * @return Any non-zero value indicates an error
  */
 typedef int32_t (*adi_reset_pin_ctrl_t)(void *user_data, uint8_t enable);
+
+/**
+ * @brief sysref control function
+ *
+ * @param sysref_clk   A void pointer to a structure containing the clock source
+ *                     required by the function to control the hardware sysref control.
+ *
+ * @return 0 for success
+ * @return Any non-zero value indicates an error
+ */
+typedef int32_t (*adi_sysref_ctrl_t)(void *sysref_clk);
 
 /**
  * @brief   Control function for GPIO write.
