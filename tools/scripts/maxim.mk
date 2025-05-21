@@ -64,7 +64,7 @@ TARGETSVD=$(TARGET)
 VSCODE_CMSISCFG_FILE="interface/cmsis-dap.cfg","target/$(TARGET).cfg"
 
 LDFLAGS = -mcpu=cortex-m4 	\
-	-Wl,--gc-sections 	\
+	-Wl,-Map=map.map,--gc-sections 	\
 	--specs=nosys.specs	\
 	-mfloat-abi=$(CFLAGS_MFLOAT_TYPE) 	\
 	-mfpu=fpv4-sp-d16 	\
@@ -106,8 +106,12 @@ endif
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 
+ifeq ($(LSCRIPT),)
 LSCRIPT = $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
+endif
+ifeq ($(ASM_SRCS),)
 ASM_SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).S
+endif
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/heap.c
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/system_$(TARGET_LCASE).c
 INCS += $(wildcard $(MAXIM_LIBRARIES)/CMSIS/Include/*.h)
