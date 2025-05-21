@@ -698,6 +698,8 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		conn->res.write_val = 1;
 		conn->res.buf.buf = desc->xml;
 		conn->res.buf.len = desc->xml_len;
+
+
 		break;
 	case IIOD_CMD_VERSION:
 		conn->res.buf.buf = IIOD_VERSION;
@@ -832,6 +834,8 @@ static int32_t iiod_read_binary_cmd(struct iiod_desc *desc, struct iiod_conn_pri
 	conn->cmd_data.op_code = cmd.op;
 	//sprintf(conn->cmd_data.device, "%d", cmd.dev);
 
+	static uint8_t curr; 
+
 
     switch (cmd.op) {
 		uint8_t len;
@@ -861,15 +865,86 @@ static int32_t iiod_read_binary_cmd(struct iiod_desc *desc, struct iiod_conn_pri
 		case IIOD_OP_TIMEOUT:
 			conn->res.val = 0;
 			conn->res.write_val = 1;
-			conn->state = IIOD_WRITING_CMD_RESULT;
+			conn->state = IIOD_WRITING_CMD_RESULT; //todo: need to update this as well i think
 			break;
 		case IIOD_OP_PRINT:
 			conn->res.val= desc->xml_len;
 			conn->res.write_val = 1;
 			conn->res.buf.buf = desc->xml;
 			conn->res.buf.len = desc->xml_len;
-			conn->state = IIOD_WRITING_CMD_RESULT;
+			conn->state = IIOD_WRITING_BIN_RESPONSE;
+			conn->res.buf.idx = 0;
+
+			conn->cmd_response_data.code = desc->xml_len;
+			
+
 			break;
+		case IIOD_OP_CREATE_BUFFER:
+			ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.mask, 4);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+			conn->res.val = 0;
+			conn->res.write_val = 1;
+			conn->state = IIOD_WRITING_BIN_RESPONSE; //todo: hopefully res.buf is vacated/emptied
+			
+			conn->cmd_response_data.code = 0; //can be given though to mask value recieved as client expects something
+			break;
+		case IIOD_OP_CREATE_BLOCK: // 4 times create block
+			//take block index from (int16_t)(cmd.code>>16)
+			sprintf(conn->cmd_data.block_id[curr], "%d", (int16_t)(cmd.code>>16));
+
+			//  receive block size
+			ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.block_size[curr], 8);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			curr = (curr + 1) % 4;
+			conn->res.val = 0;
+			conn->res.write_val = 1;
+			conn->state = IIOD_WRITING_BIN_RESPONSE;
+
+			conn->cmd_response_data.code = 0; //for precaution
+			break;
+
+		case IIOD_OP_TRANSFER_BLOCK:
+			//take block index from (int16_t)(cmd.code>>16)
+			//op for enqueue block
+			sprintf(conn->cmd_data.block_id[curr], "%d", (int16_t)(cmd.code>>16)); //todo: see
+
+			//  receive block size
+			ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.bytes_size[curr], 8);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			
+			conn->state = IIOD_WRITING_BIN_RESPONSE;//IIOD_READING_LINE; //first send cmd then transfer block
+
+			conn->cmd_response_data.code = conn->cmd_data.bytes_size[curr];
+			curr = (curr + 1) % 4;
+			//transfer block to client
+			break;
+
+		case IIOD_OP_ENABLE_BUFFER:
+			// enable/start buffer streaming
+			// call submit buffer here
+			// fill some dummy data to the buffer
+
+			ret = do_read_buff(desc, conn); //todo: not sure of enabling and others
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			conn->state = IIOD_LINE_DONE;
+
+			//ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
+
+			break;
+
+		case IIOD_OP_RETRY_DEQUEUE_BLOCK:
+			// dequeue block from the buffer
+			// fill some dummy data to the buffer
+			// only when previous deque fails
+			break;
+
 		// Add cases for other binary commands
 		default:
 			return -EINVAL;
@@ -999,6 +1074,30 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		}
 
 		return 0;
+
+	case IIOD_WRITING_BIN_RESPONSE:
+		if (conn->res.write_val) {
+			conn->cmd_response_data.op = IIOD_OP_RESPONSE;
+
+			//Send response cmd
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			/* Send buf from result. Non blocking */
+			if (conn->res.buf.buf &&
+				conn->res.buf.idx < conn->res.buf.len) {
+				ret = rw_iiod_buff(desc, conn, &conn->res.buf,
+						IIOD_WR);
+				if (NO_OS_IS_ERR_VALUE(ret))
+					return ret;
+			}		
+		}
+
+		conn->state = IIOD_LINE_DONE;
+		return 0;
+
 	case IIOD_RW_BUF:
 		/* IIOD_CMD_READBUF and IIOD_CMD_WRITEBUF special case */
 		/* Non blocking read/write until all data is processed */

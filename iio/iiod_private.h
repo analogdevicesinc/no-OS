@@ -126,6 +126,10 @@ struct comand_desc {
 	char trigger[MAX_TRIG_ID];
 	enum iio_attr_type type;
 	enum iiod_opcode op_code;
+	uint16_t block_id[4];
+	uint32_t block_size[4]; //todo: 64?
+	uint32_t bytes_size[4]; //todo: 64?
+	uint8_t curr;
 };
 
 /* Used to store buffer indexes for non blocking transfers */
@@ -133,6 +137,13 @@ struct iiod_buff {
 	char *buf;
 	uint32_t idx;
 	uint32_t len;
+};
+
+struct iiod_binary_cmd {
+	uint16_t client_id;
+    uint8_t op;
+    uint8_t dev;
+	int32_t code;
 };
 
 /* Result after executing a command. */
@@ -163,6 +174,7 @@ struct iiod_conn_priv {
 		IIOD_RUNNING_CMD,
 		/* Write result of executed cmd */
 		IIOD_WRITING_CMD_RESULT,
+		IIOD_WRITING_BIN_RESPONSE,
 		/* I/O operations for READBUF and WRITEBUF cmds */
 		IIOD_RW_BUF,
 		/* I/O operations for WRITE cmd */
@@ -194,6 +206,7 @@ struct iiod_conn_priv {
 	bool is_cyclic_buffer;
 	// flag for binary protocol indication
 	bool is_binary_protocol;
+	struct iiod_binary_cmd cmd_response_data;
 };
 
 /* Private iiod information */
@@ -210,13 +223,6 @@ struct iiod_desc {
 	uint32_t xml_len;
 	/* Backend used by IIOD */
 	enum physical_link_type phy_type;
-};
-
-struct iiod_binary_cmd {
-	uint16_t client_id;
-    uint8_t op;
-    uint8_t dev;
-	int32_t code;
 };
 
 struct iiod_binary_resp {
