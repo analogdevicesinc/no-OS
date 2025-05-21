@@ -30,13 +30,21 @@ with zipfile.ZipFile(filename, 'r') as zip_ref:
 
 os.remove(filename)
 
-if os.name == 'nt':
+from sys import platform
+if platform == "linux" or platform == "linux2":
 	file = os.path.join(ftd2xx_lib, './LibMPSSE_1.0.7/Windows/libmpsse-windows-1.0.7.zip')
 	with zipfile.ZipFile(file, 'r') as zip_ref:
 		zip_ref.extractall(ftd2xx_lib)
 	shutil.rmtree(os.path.join(ftd2xx_lib, 'LibMPSSE_1.0.7'))
-else:
-	file = os.path.join(ftd2xx_lib, './LibMPSSE_1.0.7/Linux/libmpsse-x86_64-1.0.7.tgz')
-	tar = tarfile.open(file, 'r')
-	tar.extractall(ftd2xx_lib)
+elif platform == "darwin":
+	file = os.path.join(ftd2xx_lib, './LibMPSSE_1.0.7/Windows/libmpsse-windows-1.0.7.zip')
+	with zipfile.ZipFile(file, 'r') as zip_ref:
+		zip_ref.extractall(ftd2xx_lib)
+	shutil.rmtree(os.path.join(ftd2xx_lib, 'LibMPSSE_1.0.7'))
+	file = os.path.join(ftd2xx_lib, './release/source/memcpy.c')
+	os.remove(file)
+elif platform == "win32":
+	file = os.path.join(ftd2xx_lib, './LibMPSSE_1.0.7/Windows/libmpsse-windows-1.0.7.zip')
+	with zipfile.ZipFile(file, 'r') as zip_ref:
+		zip_ref.extractall(ftd2xx_lib)
 	shutil.rmtree(os.path.join(ftd2xx_lib, 'LibMPSSE_1.0.7'))
