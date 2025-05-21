@@ -34,7 +34,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param adis1647x_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = MAX_UART_FLOW_DIS
 };
 
 struct max_gpio_init_param adis1647x_gpio_extra_ip = {

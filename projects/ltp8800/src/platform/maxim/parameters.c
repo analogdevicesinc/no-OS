@@ -33,7 +33,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param ltp8800_uart_extra = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 };
 
 struct max_i2c_init_param ltp8800_i2c_extra = {

@@ -34,7 +34,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param demo_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = MAX_UART_FLOW_DIS
 };
 
 struct max_i2c_init_param oled_display_i2c_maxim_extra_param = {

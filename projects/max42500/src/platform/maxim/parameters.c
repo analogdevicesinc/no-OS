@@ -42,7 +42,7 @@
 #include "maxim_uart.h"
 
 struct max_uart_init_param uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = MAX_UART_FLOW_DIS
 };
 
 const struct max_i2c_init_param max42500_i2c_ip = {

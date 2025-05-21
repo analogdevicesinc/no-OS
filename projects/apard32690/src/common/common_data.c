@@ -46,7 +46,7 @@
 #endif
 
 struct max_uart_init_param uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = MAX_UART_FLOW_DIS
 };
 
 struct no_os_uart_init_param uart_ip = {

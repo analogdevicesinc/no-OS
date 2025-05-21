@@ -35,10 +35,10 @@
 #include "no_os_spi.h"
 
 struct max_uart_init_param ades1754_uart_extra = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 };
 
 struct max_uart_init_param ades1754_comm_extra = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 	.vssel = MXC_GPIO_VSSEL_VDDIO,
 };

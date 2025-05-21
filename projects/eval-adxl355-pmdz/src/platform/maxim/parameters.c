@@ -34,7 +34,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param adxl355_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = MAX_UART_FLOW_DIS
 };
 
 #ifdef GPIO_DRDY_PORT_NUM

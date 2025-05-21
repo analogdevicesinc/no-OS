@@ -39,7 +39,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param lt7170_uart_extra = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 };
 
 struct max_i2c_init_param lt7170_i2c_extra = {

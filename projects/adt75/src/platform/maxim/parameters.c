@@ -34,7 +34,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param adt75_uart_extra_ip = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
