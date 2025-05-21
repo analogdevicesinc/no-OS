@@ -33,7 +33,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param ltc4296_uart_extra = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 };
 
 struct max_spi_init_param ltc4296_spi_extra = {
