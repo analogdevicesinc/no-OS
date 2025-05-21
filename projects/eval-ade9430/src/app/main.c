@@ -413,7 +413,7 @@ int main()
 	struct no_os_irq_ctrl_desc *irq_desc;
 
 	struct max_uart_init_param ip = {
-		.flow = UART_FLOW_DIS
+		.flow = MAX_UART_FLOW_DIS
 	};
 
 	struct no_os_uart_init_param luart_par = {

@@ -319,7 +319,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 	}
 
 	switch (eparam->flow) {
-	case UART_FLOW_DIS:
+	case MAX_UART_FLOW_DIS:
 		flow = MXC_UART_FLOW_DIS;
 		break;
 	case UART_FLOW_LOW:

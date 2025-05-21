@@ -35,7 +35,7 @@
 #include "parameters.h"
 
 struct max_uart_init_param ad7091r8_uart_extra_ip = {
-	.flow = UART_FLOW_DIS
+	.flow = MAX_UART_FLOW_DIS
 };
 
 struct max_spi_init_param ad7091r8_spi_extra_ip  = {
