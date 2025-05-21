@@ -63,7 +63,7 @@ extern bool is_callback;
  * @param data2 - Key
  * @return 0 if the two are equal, any other integer otherwise
  */
-int irq_action_cmp(void *data1, void *data2)
+int32_t irq_action_cmp(void *data1, void *data2)
 {
 	return ((struct irq_action *)data1)->irq_id -
 	       ((struct irq_action *)data2)->irq_id;
