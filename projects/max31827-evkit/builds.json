@@ -14,5 +14,13 @@
       "iio_example": {
         "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y"
       }
+    },
+    "mac": {
+      "basic_example": {
+        "flags" : "BASIC_EXAMPLE=y IIO_EXAMPLE=n"
+      },
+      "iio_example": {
+        "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y"
+      }
     }
   }
