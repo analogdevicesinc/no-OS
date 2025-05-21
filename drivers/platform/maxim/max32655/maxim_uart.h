@@ -44,7 +44,7 @@
  * @brief UART flow control
  */
 enum max_uart_flow_ctrl {
-	UART_FLOW_DIS,
+	MAX_UART_FLOW_DIS,
 	UART_FLOW_LOW,
 	UART_FLOW_HIGH
 };

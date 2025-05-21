@@ -37,7 +37,7 @@ struct max_gpio_init_param max22017_gpio_extra_ip = {
 };
 
 struct max_uart_init_param max22017_uart_extra = {
-	.flow = UART_FLOW_DIS,
+	.flow = MAX_UART_FLOW_DIS,
 };
 
 struct max_spi_init_param max22017_spi_extra = {

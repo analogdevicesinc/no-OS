@@ -43,7 +43,7 @@ struct max_spi_init_param spi_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
-struct max_uart_init_param uart_stdio_extra_ip = {.flow = UART_FLOW_DIS};
+struct max_uart_init_param uart_stdio_extra_ip = {.flow = MAX_UART_FLOW_DIS};
 
 struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip = {.vid = 0x0B6B,
 	       .pid = 0x003C
