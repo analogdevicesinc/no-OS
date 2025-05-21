@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(lldb) Launch",
+            "targetArchitecture": "x86_64",
+            "externalConsole": false,
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "program.out",
+            "MIMode": "lldb",
+            "type": "cppdbg",
+            "cwd": "project_dir",
+            "environment": [{ "name": "DYLD_LIBRARY_PATH", "value": "/usr/local/lib" }]
+        }
+    ]
+}
