@@ -1069,11 +1069,11 @@ static int writeWord(uint32_t addr, uint32_t val)
     // write the data
     MXC_FLC->addr = addr;
     MXC_FLC->data[0] = val;
-    MXC_FLC->ctrl |= MXC_F_FLC_CTRL_WRITE;
+    MXC_FLC->ctrl |= MXC_F_FLC_CTRL_WR;
 
     // TODO - timeout
     // Wait until flash operation is complete.
-    while (MXC_FLC->ctrl & MXC_F_FLC_CTRL_WRITE);
+    while (MXC_FLC->ctrl & MXC_F_FLC_CTRL_WR);
     
     return 1;
 }
@@ -1168,11 +1168,11 @@ static int erasePages(uint32_t addr, uint32_t len)
 
         // Issue page erase command
         MXC_FLC->addr = addr;
-        MXC_FLC->ctrl |= MXC_S_FLC_CTRL_ERASE_CODE_ERASEPAGE;
+        MXC_FLC->ctrl |= MXC_F_FLC_CTRL_PGE;
 
         // TODO - timeout?
         // Wait until flash operation is complete.
-        while(MXC_FLC->ctrl & MXC_S_FLC_CTRL_ERASE_CODE_ERASEPAGE);
+        while(MXC_FLC->ctrl & MXC_F_FLC_CTRL_PGE);
 
         // Go to next page.
         addr += PAGE_SIZE;
@@ -1218,10 +1218,10 @@ static int startFlashOp()
 
     // TODO - timeout??
     // Check if the flash controller is busy.
-    while(MXC_FLC->ctrl & (MXC_F_FLC_CTRL_WRITE | MXC_F_FLC_CTRL_MASS_ERASE | MXC_F_FLC_CTRL_PAGE_ERASE));
+    while(MXC_FLC->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
 
     // Unlock flash.
-    MXC_FLC->ctrl = (MXC_FLC->ctrl & ~MXC_F_FLC_CTRL_UNLOCK_CODE) | MXC_S_FLC_CTRL_UNLOCK_CODE_UNLOCKED;
+    MXC_FLC->ctrl = (MXC_FLC->ctrl & ~MXC_F_FLC_CTRL_UNLOCK) | MXC_S_FLC_CTRL_UNLOCK_UNLOCKED;
 
     return 1;
 }
@@ -1229,14 +1229,14 @@ static int startFlashOp()
 static int endFlashOp()
 {
     // Lock flash.
-    MXC_FLC->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK_CODE;
+    MXC_FLC->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
 
     // Flush the instruction cache.
-    MXC_GCR->scon |= MXC_F_GCR_SCON_ICC0_FLUSH;
+    MXC_GCR->sysctrl |= MXC_F_GCR_SYSCTRL_ICC0_FLUSH;
     
     // TODO - timeout??
     // Wait for flush to complete.
-    while(MXC_GCR->scon & MXC_F_GCR_SCON_ICC0_FLUSH);
+    while(MXC_GCR->sysctrl & MXC_F_GCR_SYSCTRL_ICC0_FLUSH);
     
     return 1;
 }
@@ -1252,7 +1252,7 @@ void SystemInit(void)
 {
     uint32_t ovr, div;
 
-    MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_WDT_EN;  /* Turn off watchdog. Application can re-enable as needed. */
+    MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_EN;  /* Turn off watchdog. Application can re-enable as needed. */
 
     /* Enable FPU on Cortex-M4, which occupies coprocessor slots 10 & 11 */
     /* Grant full access, per "Table B3-24 CPACR bit assignments". */
@@ -1262,78 +1262,49 @@ void SystemInit(void)
     __ISB();
 
     // Set flash wait states higher than what the minimum for the fastest clock is
-    MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x5UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
+    MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x5UL << MXC_F_GCR_MEMCTRL_FWS_POS);
 
-    // Enable 96MHz Clock
-    MXC_GCR->clk_ctrl |=MXC_F_GCR_CLK_CTRL_HIRC_EN;
+    // Enable 120 MHz IPO Clock
+    MXC_GCR->clkctrl |=MXC_F_GCR_CLKCTRL_IPO_EN;
 
     // TODO - timeout???
     // Wait for clock to be ready
-    while((MXC_GCR->clk_ctrl & MXC_F_GCR_CLK_CTRL_HIRC_RDY) == 0);
+    while((MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_IPO_RDY) == 0);
     
-    // Set 96MHz clock as System Clock
-    MXC_SETFIELD(MXC_GCR->clk_ctrl, MXC_F_GCR_CLK_CTRL_CLKSEL, MXC_S_GCR_CLK_CTRL_CLKSEL_HIRC);
+    // Set 120MHz IPO clock as System Clock
+    MXC_SETFIELD(MXC_GCR->clkctrl, MXC_F_GCR_CLKCTRL_SYSCLK_SEL, MXC_S_GCR_CLKCTRL_SYSCLK_SEL_IPO);
 
     // TODO - timeout???
     // Wait for system clock to be ready
-    while((MXC_GCR->clk_ctrl & MXC_F_GCR_CLK_CTRL_CLKRDY) == 0);
+    while((MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_RDY) == 0);
 
     // Get the clock divider
-    div = (MXC_GCR->clk_ctrl & MXC_F_GCR_CLK_CTRL_PSC) >> MXC_F_GCR_CLK_CTRL_PSC_POS;
+    div = (MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_DIV) >> MXC_F_GCR_CLKCTRL_SYSCLK_DIV_POS;
 
-    // Get OVR setting
-    ovr = (MXC_PWRSEQ->lp_ctrl & MXC_F_PWRSEQ_LP_CTRL_OVR);
-
-    // Set flash wait settings
-    if(ovr == MXC_S_PWRSEQ_LP_CTRL_OVR_0_9V)
+    if(div == 0)
     {
-        if(div == 0)
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x2UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        } 
-        else
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x1UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        }
+        MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
     }
-    else if(ovr == MXC_S_PWRSEQ_LP_CTRL_OVR_1_0V)
+    else if(div == 1)
     {
-        if(div == 0)
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x2UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        } 
-        else
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x1UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        }
-    }
-    else 
+        MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x2UL << MXC_F_GCR_MEMCTRL_FWS_POS);
+    } 
+    else
     {
-        if(div == 0)
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x4UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        }
-        else if(div == 1)
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x2UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        } 
-        else
-        {
-            MXC_GCR->mem_ctrl = (MXC_GCR->mem_ctrl & ~(MXC_F_GCR_MEM_CTRL_FWS)) | (0x1UL << MXC_F_GCR_MEM_CTRL_FWS_POS);
-        }
+        MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x1UL << MXC_F_GCR_MEMCTRL_FWS_POS);
     }
 
     /* Disable clocks to peripherals by default to reduce power */
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_DMAD;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_SPI0D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_SPI1D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_UART0D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_UART1D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_I2C0D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_TIMER0D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_TIMER1D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_TIMER2D;
-    MXC_GCR->pclk_dis0 |= MXC_F_GCR_PCLK_DIS0_I2C1D;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_DMA;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_SPI0;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_SPI1;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_UART0;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_UART1;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_I2C0;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_TMR0;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_TMR1;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_TMR2;
+    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_I2C1;
 }
 
 
