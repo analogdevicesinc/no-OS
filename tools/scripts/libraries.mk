@@ -27,6 +27,10 @@ ifeq 'win' '$(PLATFORM)'
 CFLAGS += -DFTD2XX
 include $(NO-OS)/tools/scripts/ftd2xx.mk
 endif
+ifeq 'mac' '$(PLATFORM)'
+CFLAGS += -DFTD2XX
+include $(NO-OS)/tools/scripts/ftd2xx.mk
+endif
 endif
 
 #	MBEDTLS
