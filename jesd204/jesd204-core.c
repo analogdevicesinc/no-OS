@@ -72,6 +72,7 @@ int jesd204_init_topology(struct jesd204_topology **topology,
 	top->devs = (struct jesd204_topology_dev *)calloc(1, top->devs_number * sizeof(*top->devs));
 
 	for (i = 0; i < devs_number; i++) {
+		devs[i].jdev->topology = top;
 		if (devs[i].is_top_device) {
 			top->dev_top->jdev = devs[i].jdev;
 			top->dev_top->jdev->is_top = true;
@@ -82,10 +83,13 @@ int jesd204_init_topology(struct jesd204_topology **topology,
 			jesd204_dev_alloc_links(top->dev_top);
 		} else {
 			top->devs[d] = devs[i];
-			if (top->devs[d].is_sysref_provider)
-				top->dev_top->jdev_sysref = top->devs[d].jdev;
 			d++;
 		}
+	}
+
+	for (i = 0; i < devs_number; i++) {
+		if (devs[i].is_sysref_provider)
+				top->dev_top->jdev_sysref = top->devs[i].jdev;
 	}
 
 	*topology = top;
