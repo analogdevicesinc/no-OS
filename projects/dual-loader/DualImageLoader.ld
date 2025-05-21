@@ -32,9 +32,9 @@
  ******************************************************************************/
 
 MEMORY {
-    FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 8K
-    SRAM (rwx) : ORIGIN = 0x20017F00, LENGTH = 0x100 - 4
-    LDR_RAM (rwx) : ORIGIN = 0x20017FFC, LENGTH = 4  /* Need to save last four bytes for loader state */
+    FLASH (rx) : ORIGIN = 0x1033ffff, LENGTH = 1M
+    SRAM (rwx) : ORIGIN = 0x200fffff, LENGTH = 1M - 4
+    LDR_RAM (rwx) : ORIGIN = 0x1fffffc, LENGTH = 4  /* Need to save last four bytes for loader state */
 }
 
 SECTIONS {
