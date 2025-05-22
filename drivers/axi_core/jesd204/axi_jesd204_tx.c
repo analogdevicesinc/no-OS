@@ -572,7 +572,7 @@ static int axi_jesd204_tx_jesd204_link_setup(struct jesd204_dev *jdev,
 	if (ret) {
 		pr_err("%s: Link%u enable lane clock failed (%d)\n",
 			__func__, lnk->link_id, ret);
-		return ret;
+		//return ret;
 	}
 
 	return JESD204_STATE_CHANGE_DONE;
