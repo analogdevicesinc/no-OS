@@ -102,6 +102,7 @@ typedef enum
 // Defines header that is found at the beginning of each image
 typedef struct
 {
+    uint32_t reserved[2];
     uint32_t crc;
     uint32_t len;
 } image_footer_t;

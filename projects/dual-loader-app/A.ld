@@ -32,8 +32,8 @@
  ******************************************************************************/
 
 MEMORY {
-    FLASH (rx) : ORIGIN = 0x10008000, LENGTH = 1M - 8      /* Save 8 bytes at end for CRC and image length */
-    FOOTER (rx) : ORIGIN = 0x10107ff8, LENGTH = 8
+    FLASH (rx) : ORIGIN = 0x10008000, LENGTH = 1M - 16      /* Save 16 bytes at end for CRC and image length (only last 8 are needed) */
+    FOOTER (rx) : ORIGIN = 0x10107ff0, LENGTH = 16
     SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 1M - 4 /* Save 4 bytes at end for loader working area */
 }
 
