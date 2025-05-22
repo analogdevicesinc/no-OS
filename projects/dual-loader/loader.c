@@ -45,18 +45,14 @@
 #define REV_MAJOR               0
 #define REV_MINOR               1
 
-#define CORE_CLOCK_MHZ          96
-
-#define LOADER_STATE_ADDR       0x20017FFC  // Last 4 bytes of SRAM
-
 // Flash page size in bytes
-#define PAGE_SIZE               0x2000      // 8K Bytes
+#define PAGE_SIZE               0x4000      // 16K Bytes
 
 // Number of pages used by each region
 #define LOADER_PAGES            1
 #define COMMIT_PAGES            1
-#define IMAGE_A_PAGES           13
-#define IMAGE_B_PAGES           13
+#define IMAGE_A_PAGES           64
+#define IMAGE_B_PAGES           64
 #define NVS_PAGES               4
 
 // Length of each region in bytes
@@ -67,7 +63,7 @@
 #define NVS_LENGTH              (NVS_PAGES * PAGE_SIZE)
 
 // Starting address of each region in bytes
-#define LOADER_START            (0)
+#define LOADER_START            (0x10000000)
 #define COMMIT_START            (LOADER_START + LOADER_LENGTH)
 #define IMAGE_A_START           (COMMIT_START + COMMIT_LENGTH)
 #define IMAGE_B_START           (IMAGE_A_START + IMAGE_A_LENGTH)
@@ -1213,8 +1209,8 @@ static uint32_t doCRC(uint8_t* data, uint32_t len)
 
 static int startFlashOp()
 {
-    // Set flash clock divider to generate a 1MHz clock from the APB clock.
-    MXC_FLC->clkdiv = CORE_CLOCK_MHZ;
+    // The flash controller requires a 1MHz internal clock for low-power wakeup, write, and erase operations.
+    MXC_FLC->clkdiv = 120;
 
     // TODO - timeout??
     // Check if the flash controller is busy.
@@ -1317,11 +1313,11 @@ void SystemInit(void)
 int main(void)
 {
     uint32_t commitAddr;
-    
+     erasePages(COMMIT_START, COMMIT_LENGTH);
     // Get the state of the commit list.
     commitAddr = getNextRecord();
     
-    // Check if commit area is empty.
+    // Check if commit area is empty (very first boot).
     if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 4))
     {
         // Write the commit record to indicate A is committed.
@@ -1333,7 +1329,7 @@ int main(void)
     // See if A or B is the currently commited image
     if((commitAddr & 0x4) == 0)
     {
-        // A is committed.  Assume it is valid and check the validity of B.
+        // Even address, A is committed. Assume A is valid and check the validity of B.
         if(validateImageB())
         {
             // Set the loader state to reflect the discovered state.
@@ -1349,7 +1345,7 @@ int main(void)
     }
     else
     {
-        // B is committed.  Assume it is valid and check the validity of A.
+        // Odd address, B is committed. Assume B is valid and check the validity of A.
         if(validateImageA())
         {
             // Set the loader state to reflect the discovered state.
