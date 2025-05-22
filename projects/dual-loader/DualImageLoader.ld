@@ -11,7 +11,7 @@
 
 MEMORY
 {
-    FLASH_BOOT (rx) : ORIGIN = 0x10000000, LENGTH = 64K /* Allocate 64KB for the bootloader. Adjust LENGTH as needed. */
+    FLASH_BOOT (rx) : ORIGIN = 0x10000000, LENGTH = 16K /* Allocate 16KB for the bootloader. Adjust LENGTH as needed. */
 
     SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 1M /* Full 1MB SRAM for the bootloader's general use. */
 
