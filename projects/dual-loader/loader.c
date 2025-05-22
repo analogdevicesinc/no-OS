@@ -47,6 +47,7 @@
 
 // Flash page size in bytes
 #define PAGE_SIZE               0x4000      // 16K Bytes
+#define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 0x80) // enough for 32 entries
 
 // Number of pages used by each region
 #define LOADER_PAGES            1
