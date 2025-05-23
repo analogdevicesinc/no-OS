@@ -349,7 +349,7 @@ pre_build:
 	$(call generate_flags_file,$(OBJS_FILE),$(OBJS),generate_objs_func)
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
-	$(call print,[LD] $(notdir $(OBJS)))
+	$(call print,[LD] $(notdir $(OBJS) $(notdir $(ASM_OBJS))))
 	$(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MAKE) --no-print-directory post_build
