@@ -50,10 +50,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Control word for placing the AD5161 in reset state(mid range ) */
 #define AD5161_CTL_FOR_RESET_POSITION 0x40
 
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 /**
  * @struct ad516x_dpot_init_param.
  * @brief ad516x digital potentiometer init parameters.
