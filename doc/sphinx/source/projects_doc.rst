@@ -16,6 +16,8 @@ ANALOG TO DIGITAL CONVERTERS
    projects/pulsar-adc
    projects/ad469x_evb
 
+   projects/ad9083
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
