@@ -41,9 +41,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "no_os_gpio.h"
 #include "no_os_util.h"
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
 
 #define ENABLE_OTP_PROGRAMMING 0x80
 /**
