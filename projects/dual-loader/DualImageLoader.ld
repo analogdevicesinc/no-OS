@@ -11,9 +11,11 @@
 
 MEMORY
 {
-    FLASH_BOOT (rx) : ORIGIN = 0x10000000, LENGTH = 16K /* Allocate 16KB for the bootloader. Adjust LENGTH as needed. */
+    FLASH_BOOT (rx) : ORIGIN = 0x10000000, LENGTH = 16K - 128 /* Allocate 16KB for the bootloader. Leave 128 bytes for function table. */
 
-    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 1M /* Full 1MB SRAM for the bootloader's general use. */
+    FLASH_BOOT_END (rx) : ORIGIN = 0x10003f80, LENGTH = 128
+
+    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 1M - 4 /* Full 1MB SRAM for the bootloader's general use. */
 
     LDR_RAM (rwx) : ORIGIN = 0x200FFFFC, LENGTH = 4 /* Dedicated small region for 'loaderState' at end of SRAM. */
 }
@@ -82,7 +84,7 @@ SECTIONS
         . = ALIGN(4);
         KEEP(*(.loader_function_table)) /* Keep this section even if unused */
         . = ALIGN(4);
-    } > FLASH_BOOT
+    } > FLASH_BOOT_END
 
     /*
      * .loaderVariablesSection: Specifically for your 'loaderState' variable.

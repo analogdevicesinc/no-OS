@@ -47,7 +47,7 @@
 
 // Flash page size in bytes
 #define PAGE_SIZE               0x4000      // 16K Bytes
-#define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 0x80) // enough for 32 entries
+#define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 128) // enough for 16 wide instruction entries
 
 // Number of pages used by each region
 #define LOADER_PAGES            1
@@ -1315,7 +1315,7 @@ void SystemInit(void)
 int main(void)
 {
     uint32_t commitAddr;
-     erasePages(COMMIT_START, COMMIT_LENGTH);
+    erasePages(COMMIT_START, COMMIT_LENGTH); // TODO REMOVE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Get the state of the commit list.
     commitAddr = getNextRecord();
     
@@ -1362,5 +1362,3 @@ int main(void)
         startImageB();
     }
 }
-
-
