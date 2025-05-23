@@ -43,8 +43,7 @@ void consolePrepare(mxc_uart_regs_t* uart)
     // Save the UART to use
     console_uart = uart;
 
-    // Nothing else to do.  
-    // board.c already handles setting up the UART correctly.
+    MXC_UART_Init(uart, 115200, MXC_UART_APB_CLK);
 }
 
 void consoleStrOut(char* str)

@@ -84,9 +84,9 @@ int led_init(void)
 	no_os_gpio_get(&led[0], &led0_cfg);
 	no_os_gpio_direction_output(led[0], NO_OS_GPIO_LOW);
 	no_os_gpio_get(&led[1], &led1_cfg);
-	no_os_gpio_direction_output(led[0], NO_OS_GPIO_LOW);
+	no_os_gpio_direction_output(led[1], NO_OS_GPIO_LOW);
 	no_os_gpio_get(&led[2], &led2_cfg);
-	no_os_gpio_direction_output(led[0], NO_OS_GPIO_LOW);
+	no_os_gpio_direction_output(led[2], NO_OS_GPIO_LOW);
 }
 
 int led_toggle(int num)
@@ -95,22 +95,36 @@ int led_toggle(int num)
 	led_state[num] = !led_state[num];
 }
 
+void enable_usage_fault_handler(void) {
+    // Enable UsageFault in the System Handler Control and State Register (SHCSR)
+    // SCB->SHCSR |= SCB_SHCSR_USGFAULTENA_Msk; // If you have CMSIS macros
+    // Or, hardcoded:
+    SCB->SHCSR |= (1UL << 18); // Set bit 18 (USGFAULTENA)
+
+    // Ensure the change takes effect immediately
+    __DSB();
+    __ISB();
+}
+
 int main(void)
 {
     uint8_t ch;
     mxc_tmr_cfg_t tmr;
+
+enable_usage_fault_handler();
+
     MXC_TMR_Shutdown(DELAY_TIMER);
-    tmr.pres = TMR_PRES_32;
-    tmr.mode = TMR_MODE_COUNTER;
+    tmr.pres = TMR_PRES_8;
+    tmr.mode = TMR_MODE_COMPARE;
     tmr.bitMode = TMR_BIT_MODE_32;
-    tmr.clock = MXC_TMR_EXT_CLK; /**< 32MHz Clock */
-    tmr.cmp_cnt = 0xFFFFFFFF; //SystemCoreClock*(1/interval_time);
+    tmr.clock = MXC_TMR_8M_CLK; /**< 32MHz Clock */
+    tmr.cmp_cnt = DELAY_TIME_US; //SystemCoreClock*(1/interval_time);
     tmr.pol = 0;               // Rising edge
 
     if (MXC_TMR_Init(DELAY_TIMER, &tmr, false) != E_NO_ERROR) {
         return -1;
     }
-
+    led_init();
     consolePrepare(CONSOLE_PORT);
 
     consoleStrOut("*********************************\n");
@@ -148,4 +162,85 @@ int main(void)
 	led_toggle(1);
 	led_toggle(2);
     }
+}
+
+// Structure representing the exception stack frame
+// These are the registers automatically pushed by the CPU on exception entry.
+typedef struct {
+    uint32_t r0;
+    uint32_t r1;
+    uint32_t r2;
+    uint32_t r3;
+    uint32_t r12;
+    uint32_t lr;  // Link Register (EXC_RETURN value)
+    uint32_t pc;  // Program Counter (faulting instruction address)
+    uint32_t psr; // Program Status Register
+} StackFrame;
+
+void HardFault_Handler(void) {
+    StackFrame *stack_frame; // Pointer to the stacked registers
+    volatile uint32_t _CFSR;
+    volatile uint32_t _HFSR;
+    volatile uint32_t _MMFAR;
+    volatile uint32_t _BFAR;
+    volatile uint32_t _AFSR;
+
+    // Use inline assembly to get the correct stack pointer (MSP or PSP)
+    // and store it into the 'stack_frame' pointer.
+    __asm volatile (
+        "TST LR, #4\n"        // Test EXC_RETURN[2] (bit 2 of LR, which was pushed)
+                              // 0 if MSP was used (privileged access)
+                              // 1 if PSP was used (unprivileged access)
+        "ITE EQ\n"            // If equal (MSP used)
+        "MRSEQ R0, MSP\n"     // Then move MSP to R0
+        "MRSNE R0, PSP\n"     // Else (PSP used) move PSP to R0
+        "MOV %0, R0\n"        // Move R0 (the determined stack pointer) to stack_frame
+        : "=r" (stack_frame)  // Output: stack_frame will receive the stack pointer
+        :                     // No direct C inputs for this assembly
+        : "r0"                // Clobbered: R0 is modified by the assembly
+    );
+
+    // Now, you can access the stacked registers directly through the stack_frame pointer
+    // Declare them volatile to ensure they are visible in the debugger
+    volatile uint32_t fault_r0  = stack_frame->r0;
+    volatile uint32_t fault_r1  = stack_frame->r1;
+    volatile uint32_t fault_r2  = stack_frame->r2;
+    volatile uint32_t fault_r3  = stack_frame->r3;
+    volatile uint32_t fault_r12 = stack_frame->r12;
+    volatile uint32_t fault_lr  = stack_frame->lr;
+    volatile uint32_t fault_pc  = stack_frame->pc;  // This is the crucial faulting PC!
+    volatile uint32_t fault_psr = stack_frame->psr;
+
+    // Read fault status registers directly
+    _HFSR  = SCB->HFSR;
+    _CFSR  = SCB->CFSR;
+    _MMFAR = SCB->MMFAR;
+    _BFAR  = SCB->BFAR;
+    _AFSR  = SCB->AFSR; // This register is key for TrustZone fault info on MAX32690
+
+    // Set a hardware breakpoint (BKPT) here. Your debugger should stop here.
+    // You can inspect all the 'fault_rX', 'fault_pc', 'fault_lr', and the fault registers
+    // (_HFSR, _CFSR, _AFSR, _BFAR, _MMFAR) from your debugger's Locals/Watch window.
+    __asm volatile ("BKPT #0");
+
+    // Loop indefinitely to hold the CPU here after the breakpoint
+    while (1) {
+        // Add debug output (e.g., via UART) here if not using a debugger
+    }
+}
+
+
+void MemManage_Handler(void)
+{
+     while(1);
+}
+
+void BusFault_Handler(void)
+{
+     while(1);
+}
+
+void UsageFault_Handler(void)
+{
+    while(1);
 }

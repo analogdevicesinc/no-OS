@@ -7,7 +7,8 @@ INCS += $(PROJECT)/console.h \
 LSCRIPT = $(PROJECT)/A.ld
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c
+	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
+	$(NO-OS)/util/no_os_alloc.c
 INCS += $(INCLUDE)/no_os_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \

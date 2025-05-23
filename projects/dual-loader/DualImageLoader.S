@@ -132,29 +132,20 @@ Reset_Handler:
     def_irq_handler    SysTick_Handler
     def_irq_handler    Default_Handler
     
-     .section .loader_function_table
-    .align
+    .thumb
+    .section .loader_function_table, "a", %progbits
+    .align 4
 Loader_Function_Table:
-    ldr     pc, =LDR_StartDownload + 1
-    .align
-    ldr     pc, =LDR_DownloadImageBlock + 1
-    .align
-    ldr     pc, =LDR_AbortUpgrade + 1
-    .align
-    ldr     pc, =LDR_CompleteDownload + 1
-    .align
-    ldr     pc, =LDR_RunImageA + 1
-    .align
-    ldr     pc, =LDR_RunImageB + 1
-    .align
-    ldr     pc, =LDR_CommitImageA + 1
-    .align
-    ldr     pc, =LDR_CommitImageB + 1
-    .align
-    ldr     pc, =LDR_GetImageStatus + 1
-    .align
-    ldr     pc, =LDR_GetVersion + 1
-    .align
-    ldr     pc, =LDR_GetBuildDate + 1
+    b.w (LDR_StartDownload + 1)
+    b.w (LDR_DownloadImageBlock + 1)
+    b.w (LDR_AbortUpgrade + 1)
+    b.w (LDR_CompleteDownload + 1)
+    b.w (LDR_RunImageA + 1)
+    b.w (LDR_RunImageB + 1)
+    b.w (LDR_CommitImageA + 1)
+    b.w (LDR_CommitImageB + 1)
+    b.w (LDR_GetImageStatus + 1)
+    b.w (LDR_GetVersion + 1)
+    b.w (LDR_GetBuildDate + 1)
 
     .end
