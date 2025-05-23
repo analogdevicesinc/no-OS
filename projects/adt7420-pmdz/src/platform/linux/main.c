@@ -1,10 +1,9 @@
-/*******************************************************************************
- *   @file   linux/linux_i2c.h
- *   @brief  Header containing extra types used by the I2C driver.
- *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+/***************************************************************************//**
+ *   @file   main.c
+ *   @brief  Main file for Linux platform of adt7420-pmdz project.
  *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,24 +30,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef LINUX_I2C_H_
-#define LINUX_I2C_H_
 
-#include <stdint.h>
+#include "parameters.h"
+#include "common_data.h"
 
-/**
- * @struct linux_i2c_init_param
- * @brief Structure holding the initialization parameters for Linux platform
- * specific I2C parameters.
- */
-struct linux_i2c_init_param {
-	/** I2C bus ID (/dev/i2c-"device_id") */
-	uint32_t device_id;
-};
+int example_main();
 
-/**
- * @brief Linux specific I2C platform ops structure
- */
-extern const struct no_os_i2c_platform_ops linux_i2c_ops;
-
-#endif // LINUX_I2C_H_
+/***************************************************************************//**
+ * @brief Main function execution for Linux platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+*******************************************************************************/
+int main()
+{
+	return example_main();
+}
