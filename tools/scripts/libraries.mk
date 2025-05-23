@@ -128,6 +128,10 @@ ifneq ($(if $(findstring lvgl, $(LIBRARIES)), 1),)
 include $(NO-OS)/tools/scripts/lvgl.mk
 endif
 
+ifneq ($(if $(findstring esh, $(LIBRARIES)), 1),)
+$(error)
+include $(NO-OS)/tools/scripts/esh.mk
+endif
 
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
