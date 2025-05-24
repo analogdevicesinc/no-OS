@@ -32,15 +32,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AD5171_H_
 #define AD5171_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
 #include "../common/dpot.h"
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 #include "no_os_util.h"
-
 
 #define ENABLE_OTP_PROGRAMMING 0x80
 /**
