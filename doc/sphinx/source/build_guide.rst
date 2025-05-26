@@ -36,3 +36,10 @@ FTD2XX
     :maxdepth: 1
 
     build_guides/build_ftd2xx
+
+WIN
+===
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_win
