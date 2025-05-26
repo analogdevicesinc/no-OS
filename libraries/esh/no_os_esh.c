@@ -1,10 +1,9 @@
 /***************************************************************************//**
- *   @file   maxim_uart_stdio.c
- *   @brief  Implementation file of MAX32660 UART driver stdout/stdin redirection.
+ *   @file   no_os_esh.c
+ *   @brief  Implementation of stub functions required by esh.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
- *
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,102 +30,33 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#include <errno.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include "maxim_uart_stdio.h"
+#include "no_os_esh.h"
 
-#include "mxc_sys.h"
-#include "no_os_uart.h"
-#include "uart.h"
-
-#include <unistd.h>
-#include <sys/stat.h>
-
-#define STDIN_FILENO	0   /**> Definition of stdin */
-#define STDOUT_FILENO   1   /**> Definition of stdout */
-#define STDERR_FILENO   2   /**> Definition of stderr */
-
-static struct no_os_uart_desc *guart = NULL;
-
-void no_os_uart_stdio(struct no_os_uart_desc *desc)
+void esh_write_char(char c)
 {
-	if (!desc)
-		return;
-	guart = desc;
-
-	setvbuf(stdout, NULL, _IONBF, 0);
+	printf("%c", c);
 }
 
-int _close(int file)
-{
-	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
-		return 0;
-
-	errno = EBADF;
-	return -1;
-}
-int _isatty(int file)
-{
-	if (file >= STDIN_FILENO && file <= STDERR_FILENO)
-		return 1;
-
-	errno = EBADF;
-	return 0;
-}
-int _lseek(int file, off_t offset, int whence)
-{
-	(void) file;
-	(void) offset;
-	(void) whence;
-
-	errno = EBADF;
-	return -1;
-}
-int _fstat(int file, struct stat *st)
-{
-	if (file >= STDIN_FILENO && file <= STDERR_FILENO) {
-		st->st_mode = S_IFCHR;
-		return 0;
-	}
-
-	errno = EBADF;
-	return 0;
-}
-
-int _read(int file, char *ptr, int len)
+int esh_read_char()
 {
 	int ret;
+	char c;
 
-	if (file == STDIN_FILENO) {
-		ret = no_os_uart_read(guart, (uint8_t *)ptr, 1);
-		if (ret < 0) {
-			errno = -ret;
-			return -1;
-		}
+	ret = scanf("%c", &c);
+	if (ret < 0)
+		return -1;
 
-		return ret;
-	}
-	errno = EBADF;
-	return -1;
+	return c;
 }
 
-int _write(int file, char *ptr, int len)
+void initial_setup()
 {
-	int ret;
+	set_write_char(esh_write_char);
+	set_read_char(esh_read_char);
+}
 
-	if (file == STDOUT_FILENO || file == STDERR_FILENO) {
-		ret = no_os_uart_write(guart, (uint8_t *)ptr, len);
-		if (ret < 0) {
-			errno = -ret;
-			return -1;
-		}
+void platform_init()
+{
 
-		return ret;
-	}
-	errno = EBADF;
-	return -1;
 }

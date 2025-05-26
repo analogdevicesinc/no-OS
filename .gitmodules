@@ -19,3 +19,6 @@
 [submodule "libraries/lvgl/lvgl"]
 	path = libraries/lvgl/lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "libraries/esh/esh"]
+	path = libraries/esh/esh
+	url = https://github.com/google/esh.git
