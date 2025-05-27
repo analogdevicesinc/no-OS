@@ -95,6 +95,7 @@ int linux_i2c_add_msg(struct no_os_i2c_desc *desc,
 		linux_desc->messages = ptr;
 	} else {
 		linux_desc->messages = no_os_malloc(sizeof(struct i2c_msg));
+		linux_desc->len_messages = 0;
 		if (!linux_desc->messages)
 			return -ENOMEM;
 	}
@@ -219,10 +220,7 @@ int linux_i2c_write(struct no_os_i2c_desc *desc,
 		    uint8_t bytes_number,
 		    uint8_t stop_bit)
 {
-	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
-
-	linux_desc = desc->extra;
 
 	ret = linux_i2c_add_msg(desc, data, bytes_number, 0);
 	if (ret) {
@@ -256,10 +254,7 @@ int linux_i2c_read(struct no_os_i2c_desc *desc,
 		   uint8_t bytes_number,
 		   uint8_t stop_bit)
 {
-	struct linux_i2c_desc *linux_desc;
 	int32_t ret;
-
-	linux_desc = desc->extra;
 
 	ret = linux_i2c_add_msg(desc, data, bytes_number, 1);
 	if (ret) {
