@@ -15,7 +15,7 @@ OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
 PYTHON = python
-ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../../../Tools/gcc/arm-none-eabi -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
@@ -50,6 +50,11 @@ ifeq ($(TARGET_LCASE), $(filter $(TARGET_LCASE),max32655 max32690))
 include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_memory.mk
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
+
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_assert.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_delay.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/nvic_table.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_lock.c
 
 HEX=$(basename $(BINARY)).hex
 TARGET_REV=0x4131
