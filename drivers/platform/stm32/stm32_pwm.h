@@ -77,6 +77,7 @@ enum stm32_pwm_slave_mode {
 	STM32_PWM_SM_DISABLE,
 	STM32_PWM_SM_TRIGGER,
 	STM32_PWM_SM_EXTERNAL1,
+	STM32_PWM_SM_GATED,
 };
 
 /**
