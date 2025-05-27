@@ -235,6 +235,10 @@ static int32_t stm32_init_timer(struct stm32_pwm_desc *desc,
 			sSlaveConfig.SlaveMode = TIM_SLAVEMODE_TRIGGER;
 			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
 			break;
+		case STM32_PWM_SM_GATED:
+			sSlaveConfig.SlaveMode = TIM_SLAVEMODE_GATED;
+			sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+			break;
 		default:
 			return -EINVAL;
 		}
