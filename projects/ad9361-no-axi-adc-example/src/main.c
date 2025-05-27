@@ -36,10 +36,12 @@
 #include "ad9361_api.h"
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
+#include "no_os_uart.h"
 #include "no_os_delay.h"
 #include "no_os_error.h"
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
+#include "maxim_uart.h"
 
 struct max_gpio_init_param max_gpio_param =
 {
@@ -59,8 +61,8 @@ struct max_spi_init_param max_spi_param = {
 
 #define GPIO_RESET_PIN	0
 
-#define SPI_DEVICE_ID	0
-#define SPI_CS		0
+#define SPI_DEVICE_ID	1
+#define SPI_CS		1
 
 AD9361_InitParam default_init_param = {
 	/* Device selection */
@@ -320,6 +322,7 @@ AD9361_InitParam default_init_param = {
 
 	{
 		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = 5000000,
 		.mode = NO_OS_SPI_MODE_1,
 		.chip_select = SPI_CS,
 		.platform_ops = SPI_OPS,
@@ -401,6 +404,32 @@ struct ad9361_rf_phy *ad9361_phy_b;
 int main(void)
 {
 	int32_t status;
+	struct no_os_uart_desc *uart_desc;
+	int ret;
+#ifdef MAXIM_PLATFORM
+#define UART_IRQ_ID     UART0_IRQn
+#define UART_DEVICE_ID  0
+#define UART_BAUDRATE   57600
+struct max_uart_init_param adxl355_uart_extra_ip = {
+	.flow = UART_FLOW_DIS,
+};
+struct no_os_uart_init_param uart_config = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = &adxl355_uart_extra_ip,
+	.platform_ops = &max_uart_ops,
+};
+	ret = no_os_uart_init(&uart_desc, &uart_config);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+#endif
 #ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
