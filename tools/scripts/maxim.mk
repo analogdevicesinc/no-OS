@@ -15,7 +15,7 @@ OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
 PYTHON = python
-ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../../../Tools/gcc/arm-none-eabi -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
@@ -51,13 +51,18 @@ include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGE
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_assert.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_delay.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/nvic_table.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_lock.c
+
 HEX=$(basename $(BINARY)).hex
 TARGET_REV=0x4131
 
 TARGETCFG=$(TARGET_LCASE).cfg
 
-OPENOCD_SCRIPTS=$(MAXIM_LIBRARIES)/../Tools/OpenOCD/scripts
-OPENOCD_BIN=$(MAXIM_LIBRARIES)/../Tools/OpenOCD
+OPENOCD_SCRIPTS=$(MAXIM_LIBRARIES)/../../../Tools/openocd/share/openocd/scripts
+OPENOCD_BIN=$(MAXIM_LIBRARIES)/../../../Tools/openocd/bin
 GDB_PATH=$(ARM_COMPILER_PATH)
 OPENOCD_SVD=$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include
 TARGETSVD=$(TARGET)
