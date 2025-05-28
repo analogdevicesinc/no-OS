@@ -44,7 +44,7 @@
 
 #define CONSOLE_PORT    MXC_UART0
 #define DELAY_TIMER	MXC_TMR0
-#define DELAY_TIME_US	100000
+#define DELAY_TIME_US	800000
 
 /***** Globals *****/
 bool led_state[3] = {0};

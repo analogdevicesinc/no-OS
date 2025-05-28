@@ -84,7 +84,14 @@ typedef enum
     STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE,
     STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE,
     STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE,
-    STATE7_RUN_B_COMMIT_B_VALID_B_IDLE
+    STATE7_RUN_B_COMMIT_B_VALID_B_IDLE,
+    STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE,
+    STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE,
+    STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE,
+    STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE,
+    STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE,
+    STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE,
+    STATE14_RECOVERY_INVALID_AB
 } e_ldr_state;
 
 // Defines used to fill in the status bytes of the loader state
@@ -422,6 +429,16 @@ int LDR_RunImageA(void)
             break;
         }
         
+        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
+        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
+        {
+            // A is now running.
+            loaderState = STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE;
+            // Restart A - function will not return.
+            startImageA();
+            break;
+        }
+        
         case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
         {
             // Image A is currently being updated.
@@ -429,6 +446,11 @@ int LDR_RunImageA(void)
         }
         
         case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
+        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
+        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
+        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
+        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
+        case STATE14_RECOVERY_INVALID_AB:
         {
             // Image A is not valid.
             return LDR_IMAGE_NOT_VALID;
@@ -445,8 +467,13 @@ int LDR_RunImageB(void)
     switch(loaderState)
     {
         case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
+        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
+        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
+        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
+        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
+        case STATE14_RECOVERY_INVALID_AB:
         {
-            // Image A is not valid.
+            // Image B is not valid.
             return LDR_IMAGE_NOT_VALID;
         }
 
@@ -485,6 +512,16 @@ int LDR_RunImageB(void)
             startImageB();
             break;
         }
+        
+        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
+        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
+        {
+            // B is now running.
+            loaderState = STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE;
+            // Restart B - function will not return.
+            startImageB();
+            break;
+        }
     }
 
     // Should never reach here.  If code does reach here, something has
@@ -500,6 +537,9 @@ int LDR_CommitImageA()
         case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
         case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
         case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
+        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
+        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
+        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
         {
             return LDR_SUCCESS;     // Image A is already committed.
         }
@@ -537,9 +577,23 @@ int LDR_CommitImageA()
         }
         
         case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
+        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
+        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
+        case STATE14_RECOVERY_INVALID_AB:
         {
             // Image A is not currently valid.
             return LDR_IMAGE_NOT_VALID;
+        }
+        
+        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
+        {
+            // Write new commit record to make A committed
+            if(!commitImageA()) 
+            {
+                return LDR_FLASH_ERROR;
+            }
+            loaderState = STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE;
+            return LDR_SUCCESS;
         }
         
         default:
@@ -556,6 +610,13 @@ int LDR_CommitImageB()
     switch(loaderState)
     {
         case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
+        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
+        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
+        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
+        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
+        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
+        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
+        case STATE14_RECOVERY_INVALID_AB:
         {
             // Image B is not currently valid.
             return LDR_IMAGE_NOT_VALID;
@@ -666,6 +727,48 @@ int LDR_GetImageStatus(ldr_image_status_t* status)
             {
                 status->image_status |= INVALID_A;
             }
+            return LDR_SUCCESS;
+        }
+        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
+        {
+            status->active_commit_status = RUN_A | COMMIT_A;
+            status->image_status = VALID_A | INVALID_B;
+            return LDR_SUCCESS;
+        }
+        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
+        {
+            status->active_commit_status = RUN_B | COMMIT_A;
+            status->image_status = INVALID_A | VALID_B;
+            return LDR_SUCCESS;
+        }
+        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
+        {
+            status->active_commit_status = RUN_A | COMMIT_B;
+            status->image_status = VALID_A | INVALID_B;
+            return LDR_SUCCESS;
+        }
+        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
+        {
+            status->active_commit_status = RUN_B | COMMIT_B;
+            status->image_status = INVALID_A | VALID_B;
+            return LDR_SUCCESS;
+        }
+        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
+        {
+            status->active_commit_status = RUN_A | COMMIT_A;
+            status->image_status = INVALID_A | INVALID_B;
+            return LDR_SUCCESS;
+        }
+        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
+        {
+            status->active_commit_status = RUN_B | COMMIT_B;
+            status->image_status = INVALID_A | INVALID_B;
+            return LDR_SUCCESS;
+        }
+        case STATE14_RECOVERY_INVALID_AB:
+        {
+            status->active_commit_status = 0; // No image running
+            status->image_status = INVALID_A | INVALID_B;
             return LDR_SUCCESS;
         }
         
@@ -1322,43 +1425,97 @@ int main(void)
     // Check if commit area is empty (very first boot).
     if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 16))
     {
-        // Write the commit record to indicate A is committed.
-        // TODO - check return
-        writeFlash(commitAddr, (uint32_t[]){0, 0, 0, 0});
-        commitAddr -= 16;
-    }
-    
-    // See if A or B is the currently commited image
-    if((commitAddr & 16) == 0)
-    {
-        // Even address, A is committed. Assume A is valid and check the validity of B.
-        if(validateImageB())
+        // Validate Image A before committing it as default
+        if(validateImageA())
         {
-            // Set the loader state to reflect the discovered state.
-            loaderState = STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE;
+            // Write the commit record to indicate A is committed.
+            writeFlash(commitAddr, (uint32_t[]){0, 0, 0, 0});
+            commitAddr -= 16;
         }
         else
         {
-            // Set the loader state to reflect the discovered state.
-            loaderState = STATE0_RUN_A_COMMIT_A_VALID_A_IDLE;
+            // Image A is invalid on first boot - check if B is valid
+            if(validateImageB())
+            {
+                // Commit B instead and run it
+                writeFlash(commitAddr - 16, (uint32_t[]){0, 0, 0, 0});
+                loaderState = STATE7_RUN_B_COMMIT_B_VALID_B_IDLE;
+                startImageB();
+            }
+            else
+            {
+                // Both images invalid - enter recovery mode
+                loaderState = STATE14_RECOVERY_INVALID_AB;
+                while(1); // TODO: Implement recovery mechanism
+            }
         }
-        // Launch image A.
-        startImageA();
+    }
+    
+    // See if A or B is the currently committed image
+    if((commitAddr & 16) == 0)
+    {
+        // A is committed - validate A before running
+        if(validateImageA()) 
+        {
+            // A is valid, check B
+            if(validateImageB())
+            {
+                loaderState = STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE;
+            }
+            else
+            {
+                loaderState = STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE;
+            }
+            startImageA();
+        }
+        else
+        {
+            // A is invalid! Check if B is valid and fall back to it
+            if(validateImageB())
+            {
+                // Keep A committed but run B (fallback scenario)
+                loaderState = STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE;
+                startImageB();
+            }
+            else
+            {
+                // Both invalid - enter recovery mode
+                loaderState = STATE14_RECOVERY_INVALID_AB;
+                while(1); // TODO: Implement recovery mechanism
+            }
+        }
     }
     else
     {
-        // Odd address, B is committed. Assume B is valid and check the validity of A.
-        if(validateImageA())
+        // B is committed - validate B before running
+        if(validateImageB())
         {
-            // Set the loader state to reflect the discovered state.
-            loaderState = STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE;
+            // B is valid, check A
+            if(validateImageA())
+            {
+                loaderState = STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE;
+            }
+            else
+            {
+                loaderState = STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE;
+            }
+            startImageB();
         }
         else
         {
-            // Set the loader state to reflect the discovered state.
-            loaderState = STATE7_RUN_B_COMMIT_B_VALID_B_IDLE;
+            // B is invalid! Check if A is valid and fall back to it
+            if(validateImageA())
+            {
+                // Keep B committed but run A (fallback scenario)
+                loaderState = STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE;
+                startImageA();
+            }
+            else
+            {
+                // Both invalid - enter recovery mode
+                loaderState = STATE14_RECOVERY_INVALID_AB;
+                while(1); // TODO: Implement recovery mechanism
+            }
         }
-        // Launch image B.
-        startImageB();
     }
 }
