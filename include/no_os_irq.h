@@ -183,6 +183,8 @@ struct no_os_irq_platform_ops {
 	int (*remove)(struct no_os_irq_ctrl_desc *desc);
 	/** Clear pending interrupt */
 	int(*clear_pending)(struct no_os_irq_ctrl_desc* desc, uint32_t irq_id);
+	/** Set pending interrupt */
+	int(*set_pending)(struct no_os_irq_ctrl_desc* desc, uint32_t irq_id);
 };
 
 /* Initialize a interrupt controller peripheral. */
@@ -232,4 +234,8 @@ int no_os_irq_get_priority(struct no_os_irq_ctrl_desc *desc,
 /* Clear the pending interrupts */
 int no_os_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
 			    uint32_t irq_id);
+
+/* Set pending interrupt */
+int no_os_irq_set_pending(struct no_os_irq_ctrl_desc* desc,
+			  uint32_t irq_id);
 #endif // _NO_OS_IRQ_H_
