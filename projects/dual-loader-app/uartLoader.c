@@ -74,9 +74,9 @@ void downloadImageBlock()
     int res;
     uint8_t* buff;
 
-    // Ask the user for the 'offset' value.
-    consoleStrOut("Ready to receive block.\nEnter offset: ");
-    if(!consoleReadVal(&offset))
+    // Ask the user for the 'offset' value (in hex).
+    consoleStrOut("Ready to receive block.\nEnter offset (hex): ");
+    if(!consoleReadHex(&offset))
     {
         consoleStrOut("\n\nInvalid input.\n");
         return;
@@ -299,7 +299,7 @@ void getBuildDate()
 void receiveImage()
 {
     int offset = 0;
-    uint8_t buff[4];
+    uint8_t buff[16];
     int res;
 
     // Place the loader in download mode.
@@ -317,11 +317,11 @@ void receiveImage()
     // Image files will always be 212992 bytes long.
     while(offset < 212992)
     {
-        // Read 1 word (32 bits) worth of data.
-        consoleRead(buff, 4, 0);
+        // Read 1 word (128 bits) worth of data.
+        consoleRead(buff, 16, 0);
 
         // Send it to the loader.
-        res = LDR_DownloadImageBlock(offset, buff, 4);
+        res = LDR_DownloadImageBlock(offset, buff, 16);
         if(res != LDR_SUCCESS)
         {
             consoleStrOut("\n\nFailed to download block: ");
@@ -330,7 +330,7 @@ void receiveImage()
             return;
         }
 
-        offset += 4;
+        offset += 16;
     }
 
     // Tell the loader the entire image has been sent.

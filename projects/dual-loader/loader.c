@@ -52,8 +52,8 @@
 // Number of pages used by each region
 #define LOADER_PAGES            1
 #define COMMIT_PAGES            1
-#define IMAGE_A_PAGES           64
-#define IMAGE_B_PAGES           64
+#define IMAGE_A_PAGES           8   // 128KB / 16KB = 8 pages
+#define IMAGE_B_PAGES           8   // 128KB / 16KB = 8 pages
 #define NVS_PAGES               4
 
 // Length of each region in bytes
@@ -596,85 +596,56 @@ static int eraseImageB()
 
 static int writeImageA(uint32_t offset, uint8_t* buff, uint32_t length)
 {
-    // Is the offset in range?
-    if(offset > (IMAGE_A_LENGTH + IMAGE_B_LENGTH))
+    // Check if offset is in the valid range for Image A
+    if(offset < IMAGE_A_START || offset >= (IMAGE_A_START + IMAGE_A_LENGTH))
     {
         return 0;
     }
 
+    // Convert absolute address to relative offset
+    uint32_t relative_offset = offset - IMAGE_A_START;
+
     // Is the length in range?
-    if(length > (IMAGE_A_LENGTH + IMAGE_B_LENGTH))
+    if(length > IMAGE_A_LENGTH)
     {
         return 0;
     }
     
     // Are the two together in range?
-    if((offset + length) > (IMAGE_A_LENGTH + IMAGE_B_LENGTH))
+    if((relative_offset + length) > IMAGE_A_LENGTH)
     {
         return 0;
     }
     
-    if(offset < IMAGE_A_LENGTH)
-    {
-        // Does this write go past the end of image A?
-        if(offset + length > (IMAGE_A_LENGTH))
-        {
-            // Truncate the length so it only goes up to the end of A.
-            length = IMAGE_A_LENGTH - offset;
-        }
-        // Write the bytes to image A.
-        return writeBytes(IMAGE_A_START + offset, buff, length);
-    }
-
-    // Received data for image B.  Just ignore it and return success.
-    return 1;
+    // Write the bytes to image A using the absolute address
+    return writeBytes(offset, buff, length);
 }
 
 static int writeImageB(uint32_t offset, uint8_t* buff, uint32_t length)
 {
-    // Is the offset in range?
-    if(offset > (IMAGE_A_LENGTH + IMAGE_B_LENGTH))
+    // Check if offset is in the valid range for Image B
+    if(offset < IMAGE_B_START || offset >= (IMAGE_B_START + IMAGE_B_LENGTH))
     {
         return 0;
     }
 
+    // Convert absolute address to relative offset
+    uint32_t relative_offset = offset - IMAGE_B_START;
+
     // Is the length in range?
-    if(length > (IMAGE_A_LENGTH + IMAGE_B_LENGTH))
+    if(length > IMAGE_B_LENGTH)
     {
         return 0;
     }
     
     // Are the two together in range?
-    if((offset + length) > (IMAGE_A_LENGTH + IMAGE_B_LENGTH))
+    if((relative_offset + length) > IMAGE_B_LENGTH)
     {
         return 0;
     }
     
-    // Any image A data included here?
-    if(offset < IMAGE_A_LENGTH)
-    {
-        // Does this write go past the end of image A?
-        if(offset + length > (IMAGE_A_LENGTH))
-        {
-            // Move buffer past image A data.
-            buff += (IMAGE_A_LENGTH - offset);
-            // Adjust length to account for the amount of image A data.
-            length = length - (IMAGE_A_LENGTH - offset);
-            // Move offset to the beginning of image B data.
-            offset = IMAGE_A_LENGTH;
-        }
-        else
-        {
-            // Received data for image A.  Just ignore it and return success.
-            return 1;
-        }
-    }
-
-    // Translate offset to be relative to start of B.
-    offset -= IMAGE_A_LENGTH;
-
-    // Write the bytes to image A.
-    return writeBytes(IMAGE_B_START + offset, buff, length);
+    // Write the bytes to image B using the absolute address
+    return writeBytes(offset, buff, length);
 }
 
 static int validateImageA()
@@ -870,9 +841,11 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
         return 0;
     }
 
-    for(i = 0; i < len; i++)
+    // Process 16 bytes (4 words) at a time
+    for(i = 0; i < len; i += 16)
     {
-        if(!write128(addr, (uint32_t[]){mem[i], mem[i+1], mem[i+2], mem[i+3]}))
+        uint32_t word_idx = i / 4;  // Convert byte index to word index
+        if(!write128(addr, &mem[word_idx]))
         {
             return 0;
         }
