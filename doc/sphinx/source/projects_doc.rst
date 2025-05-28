@@ -113,3 +113,11 @@ TEMPERATURE
 
    projects/max31827-evkit
    projects/ltc2983
+
+GYROSCOPES
+============
+
+.. toctree::
+   :maxdepth: 1
+
+   projects/adxrs290-pmdz
