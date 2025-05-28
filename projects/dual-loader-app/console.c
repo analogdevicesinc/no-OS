@@ -73,7 +73,7 @@ void consoleDecOut(int val)
 
 int consoleReadVal(uint32_t* val)
 {
-    char str[11];
+    char str[16];
     int off = 0;
 
     do
@@ -95,13 +95,51 @@ int consoleReadVal(uint32_t* val)
         {
             off++;
         }
-    } while((str[off - 1] != '\n') && (str[off -1] != '\r') && (off < 10));
+    } while((str[off - 1] != '\n') && (str[off -1] != '\r') && (off < 15));
 
     // Add a NULL character at the end of the string
     str[off] = 0;
 
     // Parse the value as a base 10 string.
     if(sscanf(str, "%d", val) != 1)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+int consoleReadHex(uint32_t* val)
+{
+    char str[16];
+    int off = 0;
+
+    do
+    {
+        // Retreive a byte and echo it.
+        str[off] = MXC_UART_ReadCharacter(console_uart);
+        MXC_UART_WriteCharacter(console_uart, str[off]);
+
+        // Hande backspace characters specially.
+        if(str[off] == 0x08)
+        {
+            // Make sure to not go back too far.
+            if(off)
+            {
+                off--;
+            }
+        }
+        else
+        {
+            off++;
+        }
+    } while((str[off - 1] != '\n') && (str[off -1] != '\r') && (off < 15));
+
+    // Add a NULL character at the end of the string
+    str[off] = 0;
+
+    // Parse the value as a hexadecimal string.
+    if(sscanf(str, "%x", val) != 1)
     {
         return 0;
     }

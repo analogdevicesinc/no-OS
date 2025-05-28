@@ -43,9 +43,14 @@ void consoleStrOut(char* str);
 void consoleDecOut(int val);
 
 /* Read a value (base 10) from the console.  This function will read from the
-   console until a new line character is received or 10 digits have been 
+   console until a new line character is received or 15 digits have been 
    entered.  This function returns 1 if successful, otherwise it returns 0. */
 int consoleReadVal(uint32_t* val);
+
+/* Read a value (base 16) from the console.  This function will read from the
+   console until a new line character is received or 15 characters have been 
+   entered.  This function returns 1 if successful, otherwise it returns 0. */
+int consoleReadHex(uint32_t* val);
 
 /* Reads 'len' number of bytes from the console and places them into 'buff'.  
    Set 'doEcho' to a non-zero value to echo back each byte as it is received.
