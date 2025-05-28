@@ -6,20 +6,20 @@ ADF4368 no-OS driver
 Supported Devices
 -----------------
 
-`ADF4368 <www.analog.com/en/products/adf4368.html>`_
+`ADF4368 <https://www.analog.com/en/products/adf4368.html>`_
 
 Overview
 --------
 
 
-The `ADF4368 <www.analog.com/en/products/adf4368.html>`_ is a 
+The `ADF4368 <https://www.analog.com/en/products/adf4368.html>`_ is a 
 high performance, ultra-low jitter, integer-N and
 fractional-N phase-locked loop (PLL) with integrated VCO ideally
 suited for frequency conversion applications.
 The high performance PLL has a figure of merit of -239 dBc/Hz,
 very low 1/f noise of normalized -287 dBc/Hz and high PFD
 frequency that can achieve ultra-low in-band noise and integrated
-jitter. The `ADF4368 <www.analog.com/en/products/adf4368.html>`_ 
+jitter. The `ADF4368 <https://www.analog.com/en/products/adf4368.html>`_ 
 can generate any frequency from 800 MHz to 12.8 GHz without an 
 internal doubler, which eliminates the need for sub-harmonic filters. 
 The Σ-Δ modulator includes a 25-bit fixed modulus that allows 
@@ -31,7 +31,7 @@ useful for any application.
 
 For multiple frequency conversion applications, such as phase
 array radar or massive MIMO systems, the outputs of multiple
-`ADF4368 <www.analog.com/en/products/adf4368.html>`_ can 
+`ADF4368 <https://www.analog.com/en/products/adf4368.html>`_ can 
 be aligned by using the SYNC input or EZSync™. The EZSync method is 
 used when it is difficult to distribute the SYNC signal to all 
 devices precisely. For applications that require deterministic 
@@ -107,7 +107,7 @@ the value in the same range.
 
 In order to determine which value corresponds to your design charge pump
 current, please refer to the datasheet
-`ADF4368 <www.analog.com/en/products/adf4368.html>`_ in the register details
+`ADF4368 <https://www.analog.com/en/products/adf4368.html>`_ in the register details
 section for register REG001F.
 
 Bleed Current Configuration

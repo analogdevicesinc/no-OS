@@ -6,24 +6,24 @@ ADF5611 no-OS driver
 Supported Devices
 -----------------
 
-* `ADF5611 <www.analog.com/en/products/adf5611.html>`_
-* `ADF5612 <www.analog.com/en/products/adf5612.html>`_
+* `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_
+* `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_
 
 Overview
 --------
 
-The `ADF5611 <www.analog.com/en/products/adf5611.html>`_ and `ADF5612 <www.analog.com/en/products/adf5612.html>`_ 
+The `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_ and `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_ 
 allows implementation of fractional-N or Integer N phase-locked loop (PLL) frequency 
 synthesizers when used with an external loop filter and an external reference source. 
 The wideband microwave voltage controlled oscillator (VCO) design permits frequency operation 
-from 7300 MHz to 14600 MHz for `ADF5611 <www.analog.com/en/products/adf5611.html>`_ and from 7300 
-MHz to 8500 MHz for `ADF5612 <www.analog.com/en/products/adf5612.html>`_ at a single radio 
+from 7300 MHz to 14600 MHz for `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_ and from 7300 
+MHz to 8500 MHz for `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_ at a single radio 
 frequency (RF) output. A series of frequency dividers with a differential frequency output 
-allows operation from 57 MHz to 14600MHz for `ADF5611 <www.analog.com/en/products/adf5611.html>`_, 
-while `ADF5612 <www.analog.com/en/products/adf5612.html>`_ is limited to 57MHz to 8500MHz. 
+allows operation from 57 MHz to 14600MHz for `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_, 
+while `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_ is limited to 57MHz to 8500MHz. 
 Analog and digital power supplies for the PLL circuitry range from 3.15 V to 3.45 V, and 
 the VCO supplies are between 4.75 V and 5.25 V.
-Both `ADF5611 <www.analog.com/en/products/adf5611.html>`_ and `ADF5612 <www.analog.com/en/products/adf5612.html>`_ 
+Both `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_ and `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_ 
 has an integrated VCO with a fundamental frequency of 3650 MHz to 7300 MHz. These frequencies 
 are internally doubled and routed to the RFOUT pin. An additional differential output allows 
 the doubled VCO frequency to be divided by 1, 2, 4, 8, 16, 32, 64, or 128, allowing the user 
@@ -91,18 +91,18 @@ configuration can be read out using **adf5611_get_cp_i**, which will also return
 the value in the same range.
 
 In order to determine which value corresponds to your design charge pump
-current, please refer to the datasheet `ADF5611 <www.analog.com/en/products/adf5611.html>`_ 
+current, please refer to the datasheet `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_ 
 in the register details section for register REG0021h.
 
 
 Output Frequency Configuration
 ------------------------------
 
-The `ADF5611 <www.analog.com/en/products/adf5611.html>`_ and `ADF5612 <www.analog.com/en/products/adf5612.html>`_ 
+The `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_ and `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_ 
 each has a main RF output and a differential divider RF output.
 The main RF output range from 7300MHz to 14600MHz, and the differential divided 
-output is between 57MHz to 14600MHz for `ADF5611 <www.analog.com/en/products/adf5611.html>`_,
-while `ADF5612 <www.analog.com/en/products/adf5612.html>`_ has a similar minimum main RF output 
+output is between 57MHz to 14600MHz for `ADF5611 <https://www.analog.com/en/products/adf5611.html>`_,
+while `ADF5612 <https://www.analog.com/en/products/adf5612.html>`_ has a similar minimum main RF output 
 frequency but has maximum main RF output as well as divided output of 8500MHz.
 The main RF output can be reconfigured by using the **adf5611_set_rfout** API. 
 The output frequency set by the API is expressed in Hz. The previously configured output 

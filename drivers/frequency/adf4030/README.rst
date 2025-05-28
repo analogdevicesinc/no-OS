@@ -4,31 +4,31 @@ ADF4030 no-OS driver
 Supported Devices
 -----------------
 
-`ADF4030 <www.analog.com/en/products/adf4030.html>`_
+`ADF4030 <https://www.analog.com/en/products/adf4030.html>`_
 
 Overview
 --------
 
-The `ADF4030 <www.analog.com/en/products/adf4030.html>`_ provides for 10 bidirectional synchronized clock
+The `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_ provides for 10 bidirectional synchronized clock
 (BSYNC) channels and accepts a reference clock input (REFIN)
 signal as a frequency reference for generating an output clock
 on any BSYNC channels that are configured as an output. The
-hallmark feature of the `ADF4030 <www.analog.com/en/products/adf4030.html>`_ is the ability to time align the clock
+hallmark feature of the `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_ is the ability to time align the clock
 edges of any one or more BSYNC channels to <5 ps (at the device
 pins) with respect to the BSYNC channel selected as the reference
 BSYNC channel.
-The `ADF4030 <www.analog.com/en/products/adf4030.html>`_  is well adapted for multiple connections with other
-`ADF4030 <www.analog.com/en/products/adf4030.html>`_  devices for synchronizing clock signals in a system. Each
+The `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_  is well adapted for multiple connections with other
+`ADF4030 <https://www.analog.com/en/products/adf4030.html>`_  devices for synchronizing clock signals in a system. Each
 BSYNC is bidirectional, allowing for reversing the direction of the
 clock signal to measure the propagation delay of the transmission
 medium. Round trip constructions that use replica paths are also
 supported. The bidirectional nature of the round trip delay measurement greatly reduces the error in determining the propagation delay
 through the BSYNC transmission medium as compared to using
-a replica path. This feature makes the `ADF4030 <www.analog.com/en/products/adf4030.html>`_  capable to time
-align the clock edges of BSYNC channels across multiple `ADF4030 <www.analog.com/en/products/adf4030.html>`_ 
+a replica path. This feature makes the `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_  capable to time
+align the clock edges of BSYNC channels across multiple `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_ 
 devices, independent of the tree or cascade architecture in which
-the `ADF4030 <www.analog.com/en/products/adf4030.html>`_  system is designed. The benefits of bidirectional
-clocking extend to devices other than the `ADF4030 <www.analog.com/en/products/adf4030.html>`_  (assuming
+the `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_  system is designed. The benefits of bidirectional
+clocking extend to devices other than the `ADF4030 <https://www.analog.com/en/products/adf4030.html>`_  (assuming
 those devices support bidirectional clock exchanges).
 
 
