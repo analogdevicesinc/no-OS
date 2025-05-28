@@ -70,29 +70,12 @@
 #define IMAGE_B_START           (IMAGE_A_START + IMAGE_A_LENGTH)
 #define NVS_START               (IMAGE_B_START + IMAGE_B_LENGTH)
  
-// Possible combinataion of states of the current images.
-//      RUN_X         - which image is currently running.
-//      COMMIT_X      - which image is currently committed.
-//      VALID_XY      - which images are detected to be valid.
-//      IDLE/ACTIVE   - whether a download is in progress.
-typedef enum 
-{
-    STATE0_RUN_A_COMMIT_A_VALID_A_IDLE,
-    STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE,
-    STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE,
-    STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE,
-    STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE,
-    STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE,
-    STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE,
-    STATE7_RUN_B_COMMIT_B_VALID_B_IDLE,
-    STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE,
-    STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE,
-    STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE,
-    STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE,
-    STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE,
-    STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE,
-    STATE14_RECOVERY_INVALID_AB
-} e_ldr_state;
+// Simple loader state tracking
+typedef struct {
+    uint8_t running_image;      // 0=A, 1=B
+    uint8_t committed_image;    // 0=A, 1=B
+    uint8_t download_active;    // 0=idle, 1=active
+} ldr_state_t;
 
 // Defines used to fill in the status bytes of the loader state
 #define RUN_A       0x00
@@ -122,7 +105,7 @@ typedef struct
 ///////////////////////////////////////////////////////////////////////////////
 
 // Variable holding the current state.
-static e_ldr_state __attribute__((section (".loaderVariables"))) loaderState;
+static ldr_state_t __attribute__((section (".loaderVariables"))) loaderState;
 
 
 
@@ -193,6 +176,12 @@ static int startFlashOp(void);
 // Prepares flash for an operation.
 static int endFlashOp(void);
 
+// Helper functions for simplified state management
+static int isImageAValid(void);
+static int isImageBValid(void);
+static int getCommittedImage(void);
+static void setCommittedImage(int image);
+
 
 
 
@@ -202,583 +191,230 @@ static int endFlashOp(void);
 
 int LDR_StartDownload(void) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        {
-            // Write new commit record
-            if(!eraseImageB()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-
-            // Image B is now invalid, download session active.
-            loaderState = STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE;
-            return LDR_SUCCESS;
-        }
-        
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        {
-            // Image B is currently being updated.
-            return LDR_DOWNLOAD_IN_PROGRESS;
-        }
-
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        {
-            // Cannot load to the image because it is currrently running.
-            return LDR_IMAGE_RUNNING;
-        }
-        
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            // Write new commit record
-            if(!eraseImageA()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-
-            // Image A becomes invalid, loader becomes active
-            loaderState = STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE;
-            return LDR_SUCCESS;
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Check if download already in progress
+    if(loaderState.download_active) {
+        return LDR_DOWNLOAD_IN_PROGRESS;
     }
+    
+    // Determine which image to update (opposite of running image)
+    int target_image = 1 - loaderState.running_image;
+    
+    // Cannot update the currently running image
+    if(target_image == loaderState.running_image) {
+        return LDR_IMAGE_RUNNING;
+    }
+    
+    // Erase the target image
+    int result;
+    if(target_image == 0) {
+        result = eraseImageA();
+    } else {
+        result = eraseImageB();
+    }
+    
+    if(!result) {
+        return LDR_FLASH_ERROR;
+    }
+    
+    // Mark download as active
+    loaderState.download_active = 1;
+    return LDR_SUCCESS;
 }
 
 int LDR_DownloadImageBlock(uint32_t offset, uint8_t* buff, uint32_t length) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            // A downloading session has not been started.
-            return LDR_DOWNLOAD_NOT_STARTED;
-        }
-        
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // Image A is running and commited.  Write to image B.
-            if(!writeImageB(offset, buff, length)) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-            return LDR_SUCCESS;
-        }
-        
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        {
-            // Image B is running and commited.  Write to image A.
-            if(!writeImageA(offset, buff, length)) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-            return LDR_SUCCESS;
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Check if download session is active
+    if(!loaderState.download_active) {
+        return LDR_DOWNLOAD_NOT_STARTED;
     }
+    
+    // Write to the opposite of the running image
+    int target_image = 1 - loaderState.running_image;
+    int result;
+    
+    if(target_image == 0) {
+        result = writeImageA(offset, buff, length);
+    } else {
+        result = writeImageB(offset, buff, length);
+    }
+    
+    return result ? LDR_SUCCESS : LDR_FLASH_ERROR;
 }
 
 int LDR_AbortUpgrade(void) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            // A downloading session has not been started.
-            return LDR_DOWNLOAD_NOT_STARTED;
-        }
-        
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // Download session is now idle.
-            loaderState = STATE0_RUN_A_COMMIT_A_VALID_A_IDLE;
-            return LDR_SUCCESS;
-        }
-        
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        {
-            // Download session is now idle.
-            loaderState = STATE7_RUN_B_COMMIT_B_VALID_B_IDLE;
-            return LDR_SUCCESS;
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Check if download session is active
+    if(!loaderState.download_active) {
+        return LDR_DOWNLOAD_NOT_STARTED;
     }
+    
+    // Mark download as inactive
+    loaderState.download_active = 0;
+    return LDR_SUCCESS;
 }
 
 int LDR_CompleteDownload(void) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            // A downloading session has not been started.
-            return LDR_DOWNLOAD_NOT_STARTED;
-        }
-        
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // Check that image B is correct.
-            if(validateImageB()) 
-            {
-                // B is now valid, download session idle.
-                loaderState = STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE;
-                return LDR_SUCCESS;
-            }
-            else
-            {
-                // Abort the download session.
-                loaderState = STATE0_RUN_A_COMMIT_A_VALID_A_IDLE;
-                return LDR_IMAGE_NOT_VALID;
-            }
-        }
-        
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        {
-            // Check that image A is correct.
-            if(validateImageA()) 
-            {
-                // A is now valid, download session idle.
-                loaderState = STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE;
-                return LDR_SUCCESS;
-            }
-            else
-            {
-                // Abort the download session.
-                loaderState = STATE7_RUN_B_COMMIT_B_VALID_B_IDLE;
-                return LDR_IMAGE_NOT_VALID;
-            }
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Check if download session is active
+    if(!loaderState.download_active) {
+        return LDR_DOWNLOAD_NOT_STARTED;
+    }
+    
+    // Validate the target image (opposite of running)
+    int target_image = 1 - loaderState.running_image;
+    int valid;
+    
+    if(target_image == 0) {
+        valid = isImageAValid();
+    } else {
+        valid = isImageBValid();
+    }
+    
+    // Mark download as inactive
+    loaderState.download_active = 0;
+    
+    if(valid) {
+        return LDR_SUCCESS;
+    } else {
+        return LDR_IMAGE_NOT_VALID;
     }
 }
 
 int LDR_RunImageA(void) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // A is now running.
-            loaderState = STATE0_RUN_A_COMMIT_A_VALID_A_IDLE;
-            // Restart A - function will not return.
-            startImageA();
-            break;
-        }
-        
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        {
-            // A is now running.
-            loaderState = STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE;
-            // Restart A - function will not return.
-            startImageA();
-            break;
-        }
-        
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        {
-            // A is now running.
-            loaderState = STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE;
-            // Restart A - function will not return.
-            startImageA();
-            break;
-        }
-        
-        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
-        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
-        {
-            // A is now running.
-            loaderState = STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE;
-            // Restart A - function will not return.
-            startImageA();
-            break;
-        }
-        
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        {
-            // Image A is currently being updated.
-            return LDR_DOWNLOAD_IN_PROGRESS;
-        }
-        
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
-        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
-        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
-        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
-        case STATE14_RECOVERY_INVALID_AB:
-        {
-            // Image A is not valid.
-            return LDR_IMAGE_NOT_VALID;
-        }
+    // Check if image A is valid
+    if(!isImageAValid()) {
+        return LDR_IMAGE_NOT_VALID;
     }
-
-    // Should never reach here.  If code does reach here, something has
-    //   incorreclty modified the 'loaderState' variable.
+    
+    // Check if download is in progress on A
+    if(loaderState.download_active && loaderState.running_image == 1) {
+        return LDR_DOWNLOAD_IN_PROGRESS;
+    }
+    
+    // Update state and start image A
+    loaderState.running_image = 0;
+    loaderState.download_active = 0;
+    startImageA();
+    
+    // Should never reach here
     return LDR_UNKNOWN_ERROR;
 }
 
 int LDR_RunImageB(void) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
-        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
-        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
-        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
-        case STATE14_RECOVERY_INVALID_AB:
-        {
-            // Image B is not valid.
-            return LDR_IMAGE_NOT_VALID;
-        }
-
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // Image A is currently being updated.
-            return LDR_DOWNLOAD_IN_PROGRESS;
-        }
-
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        {
-            // B is now running.
-            loaderState = STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE;
-            // Restart B - function will not return.
-            startImageB();
-            break;
-        }
-        
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        {
-            // B is now running.
-            loaderState = STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE;
-            // Restart B - function will not return.
-            startImageB();
-            break;
-        }
-        
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            // B is now running.
-            loaderState = STATE7_RUN_B_COMMIT_B_VALID_B_IDLE;
-            // Restart B - function will not return.
-            startImageB();
-            break;
-        }
-        
-        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
-        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
-        {
-            // B is now running.
-            loaderState = STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE;
-            // Restart B - function will not return.
-            startImageB();
-            break;
-        }
+    // Check if image B is valid
+    if(!isImageBValid()) {
+        return LDR_IMAGE_NOT_VALID;
     }
-
-    // Should never reach here.  If code does reach here, something has
-    //   incorreclty modified the 'loaderState' variable.
+    
+    // Check if download is in progress on B
+    if(loaderState.download_active && loaderState.running_image == 0) {
+        return LDR_DOWNLOAD_IN_PROGRESS;
+    }
+    
+    // Update state and start image B
+    loaderState.running_image = 1;
+    loaderState.download_active = 0;
+    startImageB();
+    
+    // Should never reach here
     return LDR_UNKNOWN_ERROR;
 }
 
 int LDR_CommitImageA() 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
-        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
-        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
-        {
-            return LDR_SUCCESS;     // Image A is already committed.
-        }
-               
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        {
-            // Write new commit record
-            if(!commitImageA()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-
-            // A is now the committed image.
-            loaderState = STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE;
-            return LDR_SUCCESS;
-        }
-            
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        {
-            // Write new commit record
-            if(!commitImageA()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-
-            // A is now the committed image.
-            loaderState = STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE;
-            return LDR_SUCCESS;
-        }
-        
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        {
-            // Image A is currently being updated.
-            return LDR_DOWNLOAD_IN_PROGRESS;
-        }
-        
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
-        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
-        case STATE14_RECOVERY_INVALID_AB:
-        {
-            // Image A is not currently valid.
-            return LDR_IMAGE_NOT_VALID;
-        }
-        
-        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
-        {
-            // Write new commit record to make A committed
-            if(!commitImageA()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-            loaderState = STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE;
-            return LDR_SUCCESS;
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Check if image A is valid
+    if(!isImageAValid()) {
+        return LDR_IMAGE_NOT_VALID;
     }
+    
+    // Check if download is in progress
+    if(loaderState.download_active) {
+        return LDR_DOWNLOAD_IN_PROGRESS;
+    }
+    
+    // Only allow committing A if A is running
+    if(loaderState.running_image != 0) {
+        return LDR_IMAGE_RUNNING;
+    }
+    
+    // Check if A is already committed
+    if(loaderState.committed_image == 0) {
+        return LDR_SUCCESS;
+    }
+    
+    // Commit image A
+    if(!commitImageA()) {
+        return LDR_FLASH_ERROR;
+    }
+    
+    loaderState.committed_image = 0;
+    return LDR_SUCCESS;
 }
 
 int LDR_CommitImageB() 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
-        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
-        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
-        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
-        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
-        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
-        case STATE14_RECOVERY_INVALID_AB:
-        {
-            // Image B is not currently valid.
-            return LDR_IMAGE_NOT_VALID;
-        }
-        
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // Image B is currently being updated.
-            return LDR_DOWNLOAD_IN_PROGRESS;
-        }
-        
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        {
-            // Write new commit record
-            if(!commitImageB()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-
-            // B is now the committed image.
-            loaderState = STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE;
-            return LDR_SUCCESS;
-        }
-
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        {
-            // Write new commit record
-            if(!commitImageB()) 
-            {
-                return LDR_FLASH_ERROR;
-            }
-
-            // B is now the committed image.
-            loaderState = STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE;
-            return LDR_SUCCESS;
-        }
-
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            return LDR_SUCCESS;     // Image B is already committed.
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Check if image B is valid
+    if(!isImageBValid()) {
+        return LDR_IMAGE_NOT_VALID;
     }
+    
+    // Check if download is in progress
+    if(loaderState.download_active) {
+        return LDR_DOWNLOAD_IN_PROGRESS;
+    }
+    
+    // Only allow committing B if B is running
+    if(loaderState.running_image != 1) {
+        return LDR_IMAGE_RUNNING;
+    }
+    
+    // Check if B is already committed
+    if(loaderState.committed_image == 1) {
+        return LDR_SUCCESS;
+    }
+    
+    // Commit image B
+    if(!commitImageB()) {
+        return LDR_FLASH_ERROR;
+    }
+    
+    loaderState.committed_image = 1;
+    return LDR_SUCCESS;
 }
 
 int LDR_GetImageStatus(ldr_image_status_t* status) 
 {
-    switch(loaderState)
-    {
-        case STATE0_RUN_A_COMMIT_A_VALID_A_IDLE:
-        case STATE1_RUN_A_COMMIT_A_VALID_A_ACTIVE:
-        {
-            // Fill in known status.
-            status->active_commit_status = RUN_A | COMMIT_A;
-            status->image_status = VALID_A;
-            // Discover and fill in other possible states.
-            if(!imageBEmpty())
-            {
-                status->image_status |= INVALID_B;
-            }
-            return LDR_SUCCESS;
-        }
-        case STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE:
-        {
-            // Fill in known status.
-            status->active_commit_status = RUN_A | COMMIT_A;
-            status->image_status = VALID_A | VALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE3_RUN_B_COMMIT_A_VALID_AB_IDLE:
-        {
-            // Fill in known status.
-            status->active_commit_status = RUN_B | COMMIT_A;
-            status->image_status = VALID_A | VALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE4_RUN_A_COMMIT_B_VALID_AB_IDLE:
-        {
-            // Fill in known status.
-            status->active_commit_status = RUN_A | COMMIT_B;
-            status->image_status = VALID_A | VALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE:
-        {
-            // Fill in known status.
-            status->active_commit_status = RUN_B | COMMIT_B;
-            status->image_status = VALID_A | VALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE6_RUN_B_COMMIT_B_VALID_B_ACTIVE:
-        case STATE7_RUN_B_COMMIT_B_VALID_B_IDLE:
-        {
-            // Fill in known status.
-            status->active_commit_status = RUN_B | COMMIT_B;
-            status->image_status = VALID_B;
-            // Discover and fill in other possible states.
-            if(!imageAEmpty())
-            {
-                status->image_status |= INVALID_A;
-            }
-            return LDR_SUCCESS;
-        }
-        case STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE:
-        {
-            status->active_commit_status = RUN_A | COMMIT_A;
-            status->image_status = VALID_A | INVALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE:
-        {
-            status->active_commit_status = RUN_B | COMMIT_A;
-            status->image_status = INVALID_A | VALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE:
-        {
-            status->active_commit_status = RUN_A | COMMIT_B;
-            status->image_status = VALID_A | INVALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE:
-        {
-            status->active_commit_status = RUN_B | COMMIT_B;
-            status->image_status = INVALID_A | VALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE12_RUN_A_COMMIT_A_INVALID_AB_IDLE:
-        {
-            status->active_commit_status = RUN_A | COMMIT_A;
-            status->image_status = INVALID_A | INVALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE13_RUN_B_COMMIT_B_INVALID_AB_IDLE:
-        {
-            status->active_commit_status = RUN_B | COMMIT_B;
-            status->image_status = INVALID_A | INVALID_B;
-            return LDR_SUCCESS;
-        }
-        case STATE14_RECOVERY_INVALID_AB:
-        {
-            status->active_commit_status = 0; // No image running
-            status->image_status = INVALID_A | INVALID_B;
-            return LDR_SUCCESS;
-        }
-        
-        default:
-        {
-            // Should never reach here.  If code does reach here, something has
-            //   incorreclty modified the 'loaderState' variable.
-            return LDR_UNKNOWN_ERROR;
-        }
+    // Build active/commit status
+    status->active_commit_status = 0;
+    if(loaderState.running_image == 0) {
+        status->active_commit_status |= RUN_A;
+    } else {
+        status->active_commit_status |= RUN_B;
     }
+    
+    if(loaderState.committed_image == 0) {
+        status->active_commit_status |= COMMIT_A;
+    } else {
+        status->active_commit_status |= COMMIT_B;
+    }
+    
+    // Build image validity status
+    status->image_status = 0;
+    if(isImageAValid()) {
+        status->image_status |= VALID_A;
+    } else if(!imageAEmpty()) {
+        status->image_status |= INVALID_A;
+    }
+    
+    if(isImageBValid()) {
+        status->image_status |= VALID_B;
+    } else if(!imageBEmpty()) {
+        status->image_status |= INVALID_B;
+    }
+    
+    return LDR_SUCCESS;
 }
 
 uint32_t LDR_GetVersion()
@@ -1342,6 +978,33 @@ static int endFlashOp()
     return 1;
 }
 
+// Helper function implementations
+static int isImageAValid(void)
+{
+    return validateImageA() && !imageAEmpty();
+}
+
+static int isImageBValid(void)
+{
+    return validateImageB() && !imageBEmpty();
+}
+
+static int getCommittedImage(void)
+{
+    uint32_t commitAddr = getNextRecord();
+    // If commit area is empty, default to A
+    if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 16)) {
+        return 0; // A
+    }
+    // Check if last commit was for A (even address) or B (odd address)
+    return (commitAddr & 16) ? 1 : 0; // A=0, B=1
+}
+
+static void setCommittedImage(int image)
+{
+    loaderState.committed_image = image;
+}
+
 
 
 
@@ -1417,105 +1080,78 @@ void SystemInit(void)
 
 int main(void)
 {
-    uint32_t commitAddr;
-
-    // Get the state of the commit list.
-    commitAddr = getNextRecord();
+    // Initialize state structure 
+    loaderState.download_active = 0;
     
-    // Check if commit area is empty (very first boot).
+    // Determine which image is committed from flash
+    loaderState.committed_image = getCommittedImage();
+    
+    // Check if commit area is empty (very first boot)
+    uint32_t commitAddr = getNextRecord();
     if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 16))
     {
-        // Validate Image A before committing it as default
-        if(validateImageA())
+        // First boot - validate and commit image A as default
+        if(isImageAValid())
         {
-            // Write the commit record to indicate A is committed.
             writeFlash(commitAddr, (uint32_t[]){0, 0, 0, 0});
-            commitAddr -= 16;
-        }
-        else
-        {
-            // Image A is invalid on first boot - check if B is valid
-            if(validateImageB())
-            {
-                // Commit B instead and run it
-                writeFlash(commitAddr - 16, (uint32_t[]){0, 0, 0, 0});
-                loaderState = STATE7_RUN_B_COMMIT_B_VALID_B_IDLE;
-                startImageB();
-            }
-            else
-            {
-                // Both images invalid - enter recovery mode
-                loaderState = STATE14_RECOVERY_INVALID_AB;
-                while(1); // TODO: Implement recovery mechanism
-            }
-        }
-    }
-    
-    // See if A or B is the currently committed image
-    if((commitAddr & 16) == 0)
-    {
-        // A is committed - validate A before running
-        if(validateImageA()) 
-        {
-            // A is valid, check B
-            if(validateImageB())
-            {
-                loaderState = STATE2_RUN_A_COMMIT_A_VALID_AB_IDLE;
-            }
-            else
-            {
-                loaderState = STATE8_RUN_A_COMMIT_A_INVALID_B_IDLE;
-            }
+            loaderState.committed_image = 0; // A
+            loaderState.running_image = 0;   // A
             startImageA();
         }
-        else
+        else if(isImageBValid())
         {
-            // A is invalid! Check if B is valid and fall back to it
-            if(validateImageB())
-            {
-                // Keep A committed but run B (fallback scenario)
-                loaderState = STATE9_RUN_B_COMMIT_A_INVALID_A_IDLE;
-                startImageB();
-            }
-            else
-            {
-                // Both invalid - enter recovery mode
-                loaderState = STATE14_RECOVERY_INVALID_AB;
-                while(1); // TODO: Implement recovery mechanism
-            }
-        }
-    }
-    else
-    {
-        // B is committed - validate B before running
-        if(validateImageB())
-        {
-            // B is valid, check A
-            if(validateImageA())
-            {
-                loaderState = STATE5_RUN_B_COMMIT_B_VALID_AB_IDLE;
-            }
-            else
-            {
-                loaderState = STATE11_RUN_B_COMMIT_B_INVALID_A_IDLE;
-            }
+            // A invalid, try B
+            writeFlash(commitAddr - 16, (uint32_t[]){0, 0, 0, 0});
+            loaderState.committed_image = 1; // B
+            loaderState.running_image = 1;   // B
             startImageB();
         }
         else
         {
-            // B is invalid! Check if A is valid and fall back to it
-            if(validateImageA())
-            {
-                // Keep B committed but run A (fallback scenario)
-                loaderState = STATE10_RUN_A_COMMIT_B_INVALID_B_IDLE;
-                startImageA();
-            }
-            else
-            {
-                // Both invalid - enter recovery mode
-                loaderState = STATE14_RECOVERY_INVALID_AB;
-                while(1); // TODO: Implement recovery mechanism
-            }
+            // Both invalid - enter recovery mode
+            while(1); // TODO: Implement recovery mechanism
+        }
+    }
+    
+    // Normal boot - try committed image first
+    if(loaderState.committed_image == 0)
+    {
+        // A is committed
+        if(isImageAValid())
+        {
+            loaderState.running_image = 0;
+            startImageA();
+        }
+        else if(isImageBValid())
+        {
+            // Fallback to B
+            loaderState.running_image = 1;
+            startImageB();
+        }
+        else
+        {
+            // Both invalid - recovery mode
+            while(1); // TODO: Implement recovery mechanism
+        }
+    }
+    else
+    {
+        // B is committed
+        if(isImageBValid())
+        {
+            loaderState.running_image = 1;
+            startImageB();
+        }
+        else if(isImageAValid())
+        {
+            // Fallback to A
+            loaderState.running_image = 0;
+            startImageA();
+        }
+        else
+        {
+            // Both invalid - recovery mode
+            while(1); // TODO: Implement recovery mechanism
         }
     }
 }
