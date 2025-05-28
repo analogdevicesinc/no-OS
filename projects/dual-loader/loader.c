@@ -164,12 +164,12 @@ static int imageBEmpty(void);
 static int erasePages(uint32_t addr, uint32_t len);
 
 // Writes the given 32-bit word to flash.
-static int writeFlash(uint32_t addr, uint32_t val);
+static int writeFlash(uint32_t addr, uint32_t val[4]);
 
 // Writes the given 32-bit word to flash.  This is a helper function to
-//   writeWord and writeBytes.  It does not prepare the flash or lock it back
+//   write128 and writeBytes.  It does not prepare the flash or lock it back
 //   upon completion.
-static int writeWord(uint32_t addr, uint32_t val);
+static int write128(uint32_t addr, uint32_t val[4]);
 
 // Writes the given array to flash.
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len);
@@ -815,14 +815,14 @@ static int commitImageA()
     
     // Image A commit always happens on an even address.
     // Code should never pass this check.  
-    if((recordLoc & 4) == 0)
+    if((recordLoc & 0x10) == 0)
     {
         // Trying to commit A when it is already committed.
         return 0;
     }
     
     // Write the commit record.
-    return writeFlash(recordLoc, 0);
+    return writeFlash(recordLoc, (uint32_t[]){0, 0, 0, 0});
 }
 
 static int commitImageB()
@@ -835,14 +835,14 @@ static int commitImageB()
     // Image B commit always happens on an odd address.
     // Code should never pass this check.  
 
-    if((recordLoc & 4) != 0)
+    if((recordLoc & 0x10) != 0)
     {
         // Trying to commit B when it is already committed.
         return 0;
     }
     
     // Write the commit record.
-    return writeFlash(recordLoc, 0);
+    return writeFlash(recordLoc, (uint32_t[]){0, 0, 0, 0});
 }
 
 static int eraseImageA()
@@ -1038,10 +1038,10 @@ static uint32_t getNextRecord()
     uint32_t* mem = (uint32_t*)COMMIT_START;
     
     // Look at the flash 4 bytes at a time.
-    for(i = 0; i < (COMMIT_LENGTH >> 2); i++)
+    for(i = 0; i < COMMIT_LENGTH / 4; i+=4)
     {
         // If any word is found to be not-erased, return previous address.
-        if(mem[i] != 0xFFFFFFFFUL)
+        if((mem[i] == 0) && (mem[i+1] == 0) && (mem[i+2] == 0) && (mem[i+3] == 0))
         {
             // See if commit region is full.
             if(i == 0)
@@ -1053,20 +1053,23 @@ static uint32_t getNextRecord()
             else
             {
                 // Return byte address of previous empty 32-bit word.
-                return ((i - 1) << 2) + COMMIT_START;
+                return (i - 4) * 4 + COMMIT_START;
             }
         }
     }
     
     // Commit area is empty, return byte address of the last 32-bit word.
-    return (COMMIT_START + COMMIT_LENGTH - 4);
+    return (COMMIT_START + COMMIT_LENGTH - 16);
 }
 
-static int writeWord(uint32_t addr, uint32_t val)
+static int write128(uint32_t addr, uint32_t val[4])
 {
     // write the data
     MXC_FLC->addr = addr;
-    MXC_FLC->data[0] = val;
+    MXC_FLC->data[0] = val[0];
+    MXC_FLC->data[1] = val[1];
+    MXC_FLC->data[2] = val[2];
+    MXC_FLC->data[3] = val[3];
     MXC_FLC->ctrl |= MXC_F_FLC_CTRL_WR;
 
     // TODO - timeout
@@ -1076,10 +1079,10 @@ static int writeWord(uint32_t addr, uint32_t val)
     return 1;
 }
 
-static int writeFlash(uint32_t addr, uint32_t val)
+static int writeFlash(uint32_t addr, uint32_t val[4])
 {
-    // Make sure address is on a 32-bit boundary.
-    if(addr & 0x3) 
+    // Make sure address is on a 128-bit boundary.
+    if(addr & 0xf) 
     {
         return 0;
     }
@@ -1091,7 +1094,7 @@ static int writeFlash(uint32_t addr, uint32_t val)
     }
 
     // Do the write.
-    if(!writeWord(addr, val))
+    if(!write128(addr, val))
     {
         return 0;
     }
@@ -1110,20 +1113,17 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
     uint32_t i;
     uint32_t* mem = (uint32_t*)buff;
     
-    // Make sure address is on a 32-bit boundary.
-    if(addr & 0x3) 
+    // Make sure address is on a 128-bit boundary.
+    if(addr & 0xf) 
     {
         return 0;
     }
 
-    // Make sure length is multiple of 4.  Can only write 32 bits at a time.
-    if(len & 0x3) 
+    // Make sure length is multiple of 16.  Can only write 128 bits at a time.
+    if(len & 0xf) 
     {
         return 0;
     }
-    
-    // Convert to number of 32-bit words.
-    len >>= 2;
     
     // Prepare flash controller for writes.
     if(!startFlashOp())
@@ -1133,11 +1133,11 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
 
     for(i = 0; i < len; i++)
     {
-        if(!writeWord(addr, mem[i]))
+        if(!write128(addr, (uint32_t[]){mem[i], mem[i+1], mem[i+2], mem[i+3]}))
         {
             return 0;
         }
-        addr += 4;
+        addr += 16;
     }
 
     // Lock the flash and flush the caches.
@@ -1248,7 +1248,7 @@ static int endFlashOp()
 
 void SystemInit(void)
 {
-    uint32_t ovr, div;
+    uint32_t div;
 
     MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_EN;  /* Turn off watchdog. Application can re-enable as needed. */
 
@@ -1315,21 +1315,21 @@ void SystemInit(void)
 int main(void)
 {
     uint32_t commitAddr;
-    erasePages(COMMIT_START, COMMIT_LENGTH); // TODO REMOVE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     // Get the state of the commit list.
     commitAddr = getNextRecord();
     
     // Check if commit area is empty (very first boot).
-    if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 4))
+    if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 16))
     {
         // Write the commit record to indicate A is committed.
         // TODO - check return
-        writeFlash(commitAddr, 0);
-        commitAddr -= 4;
+        writeFlash(commitAddr, (uint32_t[]){0, 0, 0, 0});
+        commitAddr -= 16;
     }
     
     // See if A or B is the currently commited image
-    if((commitAddr & 0x4) == 0)
+    if((commitAddr & 16) == 0)
     {
         // Even address, A is committed. Assume A is valid and check the validity of B.
         if(validateImageB())
