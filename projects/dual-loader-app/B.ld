@@ -32,22 +32,22 @@
  ******************************************************************************/
 
 MEMORY {
-    FLASH (rx) : ORIGIN = 0x1E000, LENGTH = 104K - 8      /* Save 8 bytes at end for CRC and image length */
-    FOOTER (rx) : ORIGIN = 0x37FF8, LENGTH = 8
-    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 96K - 256 /* Save 256 bytes at end for loader working area */
+    FLASH (rx) : ORIGIN = 0x10108000, LENGTH = 1M - 16      /* Save 16 bytes at end for CRC and image length (only last 8 are needed) */
+    FOOTER (rx) : ORIGIN = 0x10207FF0, LENGTH = 16
+    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 1M - 4 /* Save 4 bytes at end for loader working area */
 }
 
-LDR_StartDownload           = 0x1F00;
-LDR_DownloadImageBlock      = 0x1F04;
-LDR_AbortUpgrade            = 0x1F08;
-LDR_CompleteDownload        = 0x1F0C;
-LDR_RunImageA               = 0x1F10;
-LDR_RunImageB               = 0x1F14;
-LDR_CommitImageA            = 0x1F18;
-LDR_CommitImageB            = 0x1F1C;
-LDR_GetImageStatus          = 0x1F20;
-LDR_GetVersion              = 0x1F24;
-LDR_GetBuildDate            = 0x1F28;
+LDR_StartDownload           = 0x10003f80;
+LDR_DownloadImageBlock      = 0x10003f84;
+LDR_AbortUpgrade            = 0x10003f88;
+LDR_CompleteDownload        = 0x10003f8c;
+LDR_RunImageA               = 0x10003f90;
+LDR_RunImageB               = 0x10003f94;
+LDR_CommitImageA            = 0x10003f98;
+LDR_CommitImageB            = 0x10003f9c;
+LDR_GetImageStatus          = 0x10003fa0;
+LDR_GetVersion              = 0x10003fa4;
+LDR_GetBuildDate            = 0x10003fa8;
 
 SECTIONS {
     .text :
