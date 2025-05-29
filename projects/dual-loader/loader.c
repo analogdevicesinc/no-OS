@@ -596,6 +596,12 @@ static int eraseImageB()
 
 static int writeImageA(uint32_t offset, uint8_t* buff, uint32_t length)
 {
+    // Check if image A is currently running
+    if(loaderState.running_image == 0)
+    {
+        return 0;  // Cannot write to running image
+    }
+
     // Check if offset is in the valid range for Image A
     if(offset < IMAGE_A_START || offset >= (IMAGE_A_START + IMAGE_A_LENGTH))
     {
@@ -623,6 +629,12 @@ static int writeImageA(uint32_t offset, uint8_t* buff, uint32_t length)
 
 static int writeImageB(uint32_t offset, uint8_t* buff, uint32_t length)
 {
+    // Check if image B is currently running
+    if(loaderState.running_image == 1)
+    {
+        return 0;  // Cannot write to running image
+    }
+
     // Check if offset is in the valid range for Image B
     if(offset < IMAGE_B_START || offset >= (IMAGE_B_START + IMAGE_B_LENGTH))
     {
