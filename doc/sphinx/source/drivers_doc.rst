@@ -93,6 +93,7 @@ METER
 
    drivers/ade7816
    drivers/ade7913
+   drivers/ade9113
 
 RF TRANSCEIVER
 ==============
