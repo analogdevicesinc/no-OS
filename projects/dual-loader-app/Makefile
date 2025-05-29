@@ -21,7 +21,7 @@ include ../../tools/scripts/generic.mk
 
 ARTIFACT=$(basename $(BINARY))-$(basename $(notdir $(LSCRIPT)))
 
-binaries:
+bin: all
 	cp $(BINARY) $(ARTIFACT).elf
 	$(OC) $(ARTIFACT).elf -O binary -R .app_footer $(ARTIFACT).bin
 	echo ffffffffffffffff | xxd -r -p > $(BUILD_DIR)/Footer.bin
