@@ -45,6 +45,7 @@ METER
    :maxdepth: 1
 
    projects/eval-ade9430
+   projects/eval-ade7913
 
 RF TRANSCEIVER
 ==============
