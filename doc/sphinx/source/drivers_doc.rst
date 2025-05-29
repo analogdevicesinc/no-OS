@@ -109,6 +109,7 @@ TEMPERATURE
 
    drivers/max31827
    drivers/ltc2983
+   drivers/max31855
 
 POWER MANAGEMENT
 ================
