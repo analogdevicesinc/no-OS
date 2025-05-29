@@ -202,6 +202,7 @@
 #define HMC7044_REG_CH_OUT_CRTL_0(ch)	(0x00C8 + 0xA * (ch))
 #define HMC7044_HI_PERF_MODE		NO_OS_BIT(7)
 #define HMC7044_SYNC_EN			NO_OS_BIT(6)
+#define HMC7044_RB4_EN			NO_OS_BIT(4)
 #define HMC7044_CH_EN			NO_OS_BIT(0)
 #define HMC7044_START_UP_MODE_DYN_EN	(NO_OS_BIT(3) | NO_OS_BIT(2))
 
@@ -1033,7 +1034,7 @@ static int32_t hmc7043_setup(struct hmc7044_dev *dev)
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
 			      (chan->start_up_mode_dynamic_enable ?
 			       HMC7044_START_UP_MODE_DYN_EN : 0) |
-			      (chan->output_control0_rb4_enable ? NO_OS_BIT(4) : 0) |
+			      HMC7044_RB4_EN |
 			      (chan->high_performance_mode_dis ?
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
@@ -1584,8 +1585,6 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 			init_param->channels[i].start_up_mode_dynamic_enable;
 		dev->channels[i].dynamic_driver_enable =
 			init_param->channels[i].dynamic_driver_enable;
-		dev->channels[i].output_control0_rb4_enable =
-			init_param->channels[i].output_control0_rb4_enable;
 		dev->channels[i].force_mute_enable =
 			init_param->channels[i].force_mute_enable;
 		dev->channels[i].is_sysref =
