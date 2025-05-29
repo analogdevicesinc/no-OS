@@ -144,13 +144,12 @@ int main(void)
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
 		.sysref_coupling_ac_en = 0,
-		.sysref_cmos_input_enable = 0,
-		.config_sync_0a_cmos_enable = 0,
 		.multidevice_instance_count = 1,
-#ifdef QUAD_MXFE
-		.jesd_sync_pins_01_swap_enable = true,
-#else
 		.jesd_sync_pins_01_swap_enable = false,
+#ifdef QUAD_MXFE
+		.config_sync_0a_cmos_enable = true,
+#else
+		.config_sync_0a_cmos_enable = false,
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
@@ -165,6 +164,8 @@ int main(void)
 		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
 		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
 		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
+		.tx_maindp_dac_1x_non1x_crossbar_select = AD9081_TX_DAC_1X_NON1X_CROSSBAR,
+		.tx_full_scale_current_ua = AD9081_TX_FSC,
 		/* The 8 DAC Channelizers */
 		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
 		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
@@ -178,11 +179,18 @@ int main(void)
 		.rx_main_nco_frequency_shift_hz = AD9081_RX_MAIN_NCO_SHIFT,
 		.rx_main_decimation = AD9081_RX_MAIN_DECIMATION,
 		.rx_main_complex_to_real_enable = {0, 0, 0, 0},
+		.rx_main_digital_gain_6db_enable = {0, 0, 0, 0},
 		.rx_main_enable = AD9081_RX_MAIN_ENABLE,
 		/* The 8 ADC Channelizers */
 		.rx_channel_nco_frequency_shift_hz = AD9081_RX_CHAN_NCO_SHIFT,
 		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
+		.rx_channel_nco_mixer_mode = {
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF
+		},
+		.rx_channel_digital_gain_6db_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
@@ -196,8 +204,7 @@ int main(void)
 	struct axi_dac_init tx_dac_init = {
 		.name = "tx_dac",
 		.base = TX_CORE_BASEADDR,
-		.channels = NULL,
-		.rate = 3
+		.channels = NULL
 	};
 	struct axi_dac *tx_dac;
 	struct axi_dmac_init rx_dmac_init = {
@@ -232,28 +239,44 @@ int main(void)
 #endif
 		.device_id = GPIO_2_DEVICE_ID
 	};
-	struct no_os_gpio_init_param	ad9081_gpio0_mux_init = {
-		.number = AD9081_GPIO_0_MUX,
+	struct no_os_gpio_init_param	ms_sync_en_gpio_init = {
+		.number = MS_SYNC_ENABLE_GPIO,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param_2
 	};
-	struct no_os_gpio_desc *ad9081_gpio0_mux;
 
-	status = no_os_gpio_get(&ad9081_gpio0_mux, &ad9081_gpio0_mux_init);
-	if (status)
-		return status;
+	struct no_os_gpio_init_param	hmc540_gpio_init = {
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+	hmc540_gpio_init.number = 35;
+	struct no_os_gpio_desc *hmc540_gpio_v1;
+	no_os_gpio_get(&hmc540_gpio_v1, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v1, 0);
 
-	status = no_os_gpio_set_value(ad9081_gpio0_mux, 1);
-	if (status)
-		return status;
+	hmc540_gpio_init.number = 36;
+	struct no_os_gpio_desc *hmc540_gpio_v2;
+	no_os_gpio_get(&hmc540_gpio_v2, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v2, 0);
+
+	hmc540_gpio_init.number = 37;
+	struct no_os_gpio_desc *hmc540_gpio_v3;
+	no_os_gpio_get(&hmc540_gpio_v3, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v3, 0);
+
+	hmc540_gpio_init.number = 38;
+	struct no_os_gpio_desc *hmc540_gpio_v4;
+	no_os_gpio_get(&hmc540_gpio_v4, &hmc540_gpio_init);
+	no_os_gpio_set_value(hmc540_gpio_v4, 0);
 #endif
 
 	status = app_clock_init(app_clk);
 	if (status != 0)
 		printf("app_clock_init() error: %" PRId32 "\n", status);
 
-	status = app_jesd_init(jesd_clk,
-			       500000, 250000, 250000, 10000000, 10000000);
+	status = app_jesd_init(jesd_clk, ADXCVR_REF_CLK_KHZ,
+			       ADXCVR_RX_DEV_CLK_KHZ, ADXCVR_TX_DEV_CLK_KHZ,
+			       ADXCVR_RX_LANE_CLK_KHZ, ADXCVR_TX_LANE_CLK_KHZ);
 	if (status != 0)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
@@ -266,6 +289,11 @@ int main(void)
 		phy_param.dev_clk = &app_clk[i];
 		jtx_link_rx.device_id = i;
 
+#ifdef QUAD_MXFE
+		if (i == (MULTIDEVICE_INSTANCE_COUNT - 1))
+			phy_param.ms_sync_enable = &ms_sync_en_gpio_init;
+#endif
+
 		status = ad9081_init(&phy[i], &phy_param);
 		if (status != 0)
 			printf("ad9081_init() error: %" PRId32 "\n", status);
@@ -276,14 +304,6 @@ int main(void)
 		tx_dac_init.num_channels += phy[i]->jrx_link_tx[0].jesd_param.jesd_m *
 					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
-
-	axi_jesd204_rx_watchdog(rx_jesd);
-
-	axi_dac_init(&tx_dac, &tx_dac_init);
-	axi_adc_init(&rx_adc, &rx_adc_init);
-
-	axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
@@ -340,10 +360,16 @@ int main(void)
 
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
+	axi_jesd204_rx_watchdog(rx_jesd);
+
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
-	no_os_mdelay(10);
+	axi_dac_init(&tx_dac, &tx_dac_init);
+	axi_adc_init(&rx_adc, &rx_adc_init);
+
+	axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
 #ifdef IIO_SUPPORT
 

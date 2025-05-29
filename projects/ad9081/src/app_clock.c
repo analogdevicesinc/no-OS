@@ -89,63 +89,63 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #ifdef QUAD_MXFE
 	struct hmc7044_chan_spec chan_spec[] = {
 		{
-			.num = 0,				// FPGA_REFCLK
-			.divider = 1,				// 500 MHz
-			.driver_mode = 2,			// LVDS
+			.num = 0,	// FPGA_REFCLK
+			.divider = HMC7043_FPGA_XCVR_CLKDIV,
+			.driver_mode = 2,
 		}, {
-			.num = 1,				// SYSREF_MXFE0
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
-			.coarse_delay = 0,
-			.fine_delay = 24,
-			.out_mux_mode = 1,
-		}, {
-			.num = 3,				// SYSREF_MXFE1
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
-			.coarse_delay = 1,
-			.fine_delay = 0,
-			.out_mux_mode = 0,
-		}, {
-			.num = 5,				// SYSREF_MXFE2
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
-			.coarse_delay = 0,
-			.fine_delay = 16,
-			.out_mux_mode = 1,
-		}, {
-			.num = 7,				// SYSREF_MXFE3
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
+			.num = 1,	// SYSREF_FPGA
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = 1,
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
 		}, {
-			.num = 8,				// CORE_LINK_CLK
-			.divider = 2,				// 250 MHz
-			.driver_mode = 2,			// LVDS
+			.num = 2,	// RX_CORE_LINK_CLK
+			.divider = HMC7043_FPGA_LINK_CLKDIV_RX,
+			.driver_mode = 2,
 		}, {
-			.num = 9,				// SYSREF_FPGA
-			.divider = 256,				// 1.953125 MHz
-			.driver_mode = 2,			// LVDS
-			.start_up_mode_dynamic_enable = true,
-			.high_performance_mode_dis = true,
+			.num = 4,	// TX_CORE_LINK_CLK
+			.divider = HMC7043_FPGA_LINK_CLKDIV_TX,
+			.driver_mode = 2,
+		}, {
+			.num = 7,	// SYSREF_MXFE0
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = 1,
 			.coarse_delay = 0,
 			.fine_delay = 0,
 			.out_mux_mode = 0,
+			.is_sysref = true,
+		}, {
+			.num = 9,	// SYSREF_MXFE1
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = 1,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+			.is_sysref = true,
+		}, {
+			.num = 11,	// SYSREF_MXFE2
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = 1,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+			.is_sysref = true,
+		}, {
+			.num = 13,	// SYSREF_MXFE3
+			.divider = HMC7043_SYSREF_CLKDIV,
+			.driver_mode = 1,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+			.is_sysref = true,
 		}
 	};
 
 	struct hmc7044_init_param hmc7044_param = {
 		.spi_init = &clkchip_spi_init_param,
+		.export_no_os_clk = true,
 		.is_hmc7043 = true,
 		.clkin_freq = {500000000, 0, 0, 0},
 		.sysref_timer_div = 1024,
@@ -172,7 +172,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
-	no_os_gpio_desc *adrf5020_ctrl;
+	struct no_os_gpio_desc *adrf5020_ctrl;
 	int32_t i;
 
 	ret = no_os_gpio_get(&adrf5020_ctrl, &gpio_adrf5020_ctrl);
@@ -319,15 +319,26 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		ret = adf4371_init(&adf4371_dev[i], &adf4371_param);
 		if (ret)
 			return ret;
+		struct no_os_clk_desc *clk_desc;
+		struct no_os_clk_init_param clk_desc_init = { 0 };
+
+		clk_desc_init.dev_desc = adf4371_dev[i];
+		clk_desc_init.hw_ch_num = 2;
+		clk_desc_init.name = "dev_refclk";
+		clk_desc_init.platform_ops = &adf4371_clk_ops;
+		ret = no_os_clk_init(&clk_desc, &clk_desc_init);
+		if (ret)
+			return ret;
 
 		adf4371_hw[i].dev = adf4371_dev[i];
-		adf4371_hw[i].dev_clk_recalc_rate = adf4371_clk_recalc_rate;
-		adf4371_hw[i].dev_clk_round_rate = adf4371_clk_round_rate;
-		adf4371_hw[i].dev_clk_set_rate = adf4371_clk_set_rate;
+		adf4371_hw[i].dev_clk_recalc_rate = adf4371_clk_recalc_rate_chan;
+		adf4371_hw[i].dev_clk_round_rate = adf4371_clk_round_rate_chan;
+		adf4371_hw[i].dev_clk_set_rate = adf4371_clk_set_rate_chan;
 
 		dev_refclk[i].hw = &adf4371_hw[i];
 		dev_refclk[i].hw_ch_num = 2;
 		dev_refclk[i].name = "dev_refclk";
+		dev_refclk[i].clk_desc = clk_desc;
 	}
 #else
 	hmc7044_hw.dev = hmc7044_dev;
