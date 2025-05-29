@@ -40,6 +40,7 @@
 #include "axi_adxcvr.h"
 #include "no_os_error.h"
 #include "parameters.h"
+#include "jesd204_clk.h"
 #include "app_jesd.h"
 #include "app_config.h"
 
@@ -51,6 +52,11 @@ struct axi_jesd204_tx *tx_jesd;
 
 struct adxcvr *rx_adxcvr;
 struct adxcvr *tx_adxcvr;
+
+struct jesd204_clk rx_jesd_clk;
+struct jesd204_clk tx_jesd_clk;
+struct no_os_clk_desc rx_lane_clk;
+struct no_os_clk_desc tx_lane_clk;
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -100,7 +106,7 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		.name = "tx_adxcvr",
 		.base = TX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0,
-		.out_clk_sel = ADXCVR_REFCLK_DIV2,
+		.out_clk_sel = ADXCVR_PROGDIV_CLK,
 		.lpm_enable = 0,
 		.lane_rate_khz = tx_lane_clk_khz,
 		.ref_rate_khz = reference_clk_khz,
@@ -113,7 +119,7 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		.name = "rx_adxcvr",
 		.base = RX_XCVR_BASEADDR,
 		.sys_clk_sel = ADXCVR_SYS_CLK_CPLL,
-		.out_clk_sel = ADXCVR_REFCLK_DIV2,
+		.out_clk_sel = ADXCVR_PROGDIV_CLK,
 		.lpm_enable = 1,
 		.lane_rate_khz = rx_lane_clk_khz,
 		.ref_rate_khz = reference_clk_khz,
@@ -125,27 +131,41 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
 	if (ret)
 		return ret;
+	tx_jesd_clk.xcvr = tx_adxcvr;
 #endif
 #ifdef RX_XCVR_BASEADDR
 	ret = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
 	if (ret)
 		return ret;
+	rx_jesd_clk.xcvr = rx_adxcvr;
 #endif
 
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 
 	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 
+
+	tx_lane_clk.platform_ops = &jesd204_clk_ops;
+	tx_jesd_init.lane_clk = &tx_lane_clk;
+	tx_lane_clk.dev_desc = &tx_jesd_clk;
+
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret)
 		return ret;
 
+	tx_jesd_clk.jesd_tx = tx_jesd;
 	clk[1].clk_desc = tx_jesd->lane_clk;
+
+
+	rx_lane_clk.platform_ops = &jesd204_clk_ops;
+	rx_jesd_init.lane_clk = &rx_lane_clk;
+	rx_lane_clk.dev_desc = &rx_jesd_clk;
 
 	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
 	if (ret)
 		return ret;
 
+	rx_jesd_clk.jesd_rx = rx_jesd;
 	clk[0].clk_desc = rx_jesd->lane_clk;
 
 	return 0;
