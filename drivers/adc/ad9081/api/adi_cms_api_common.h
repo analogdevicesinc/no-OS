@@ -24,7 +24,7 @@
 
 static inline int32_t adi_api_utils_is_power_of_two(uint64_t x)
 {
-	return (u32) is_power_of_2(x);
+	return (uint32_t) is_power_of_2(x);
 }
 
 static inline int32_t adi_api_utils_gcd(int32_t u, int32_t v)
