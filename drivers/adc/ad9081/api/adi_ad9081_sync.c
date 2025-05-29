@@ -563,28 +563,77 @@ int32_t adi_ad9081_sync_calc_jtx_lmfc_lemc(uint64_t adc_clk,
 }
 
 int32_t adi_ad9081_sync_sysref_frequency_set(
-	adi_ad9081_device_t *device, uint64_t *sysref_freq, uint64_t dac_clk,
-	uint64_t adc_clk, uint8_t main_interp, uint8_t ch_interp,
-	uint8_t cddc_dcm[4], uint8_t fddc_dcm[8],
+	adi_ad9081_device_t *device, uint64_t *sysref_freq, uint64_t dev_ref,
+	uint64_t dac_clk, uint64_t adc_clk, uint8_t main_interp,
+	uint8_t ch_interp, uint8_t cddc_dcm[4], uint8_t fddc_dcm[8],
 	adi_ad9081_jesd_link_select_e jtx_links,
 	adi_cms_jesd_param_t *jrx_param, adi_cms_jesd_param_t jtx_param[2])
 {
-	uint64_t jrx_lmfc, jtx_lmfc, max_lmfc, min_lmfc, gcd = 0;
+	uint64_t jrx_lmfc = 0, jtx_lmfc = 0, max_lmfc = 0, min_lmfc = 0,
+		 gcd = 0, rem1, rem2;
 	int32_t err;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_NULL_POINTER_RETURN(sysref_freq);
 	AD9081_NULL_POINTER_RETURN(jrx_param);
+
 	AD9081_LOG_FUNC();
 
 	/* jrx */
-	err = adi_ad9081_sync_calc_jrx_lmfc_lemc(
-		dac_clk, main_interp, ch_interp, jrx_param, &jrx_lmfc);
-	AD9081_ERROR_RETURN(err);
+	if (jrx_param->jesd_l > 0) {
+		AD9081_INVALID_PARAM_RETURN(jrx_param->jesd_s == 0 ||
+					    jrx_param->jesd_k == 0 ||
+					    main_interp == 0 || ch_interp == 0);
+		err = adi_ad9081_sync_calc_jrx_lmfc_lemc(
+			dac_clk, main_interp, ch_interp, jrx_param, &jrx_lmfc);
+		AD9081_ERROR_RETURN(err);
+		if (jrx_lmfc == 0) {
+			AD9081_LOG_ERR("LMFC/LEMC = 0, missing input params");
+		}
+
+#ifdef __KERNEL__
+		div64_u64_rem(dev_ref, jrx_lmfc, &rem1);
+		div64_u64_rem(jrx_lmfc, dev_ref, &rem2);
+#else
+		rem1 = dev_ref % jrx_lmfc;
+		rem2 = jrx_lmfc % dev_ref;
+#endif
+		/* Internal PLL requires LMFC and dev_ref to be integer multiples*/
+		if (dev_ref != dac_clk && rem1 != 0 && rem2 != 0) {
+			AD9081_LOG_WARN(
+				"JRx LMFC/LEMC and dev_ref clock are not integer multiples. DL will not be achieved.");
+		}
+	}
 
 	/* jtx */
-	err = adi_ad9081_sync_calc_jtx_lmfc_lemc(
-		adc_clk, cddc_dcm, fddc_dcm, jtx_links, jtx_param, &jtx_lmfc);
-	AD9081_ERROR_RETURN(err);
+	if (jtx_param[0].jesd_l > 0) {
+		AD9081_INVALID_PARAM_RETURN(jtx_param[0].jesd_s == 0 ||
+					    jtx_param[0].jesd_k == 0);
+		if (jtx_param[0].jesd_duallink == 1) {
+			AD9081_INVALID_PARAM_RETURN(jtx_param[1].jesd_s == 0 ||
+						    jtx_param[1].jesd_k == 0);
+		}
+		err = adi_ad9081_sync_calc_jtx_lmfc_lemc(adc_clk, cddc_dcm,
+							 fddc_dcm, jtx_links,
+							 jtx_param, &jtx_lmfc);
+		AD9081_ERROR_RETURN(err);
+		if (jtx_lmfc == 0) {
+			AD9081_LOG_ERR("LMFC/LEMC = 0, missing input params");
+		}
+
+#ifdef __KERNEL__
+		div64_u64_rem(dev_ref, jtx_lmfc, &rem1);
+		div64_u64_rem(jtx_lmfc, dev_ref, &rem2);
+#else
+		rem1 = dev_ref % jtx_lmfc;
+		rem2 = jtx_lmfc % dev_ref;
+#endif
+
+		/* Internal PLL requires LMFC and dev_ref to be integer multiples*/
+		if (dev_ref != dac_clk && rem1 != 0 && rem2 != 0) {
+			AD9081_LOG_WARN(
+				"JTx LMFC/LEMC and dev_ref clock are not integer multiples. DL will not be achieved.");
+		}
+	}
 
 	/* gcd */
 	max_lmfc = (jrx_lmfc >= jtx_lmfc) ? jrx_lmfc : jtx_lmfc;
