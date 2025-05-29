@@ -4,7 +4,6 @@ SRCS += $(PROJECT)/main.c \
 INCS += $(PROJECT)/console.h \
 	$(PROJECT)/uartLoader.h \
 	$(PROJECT)/../dual-loader/loader.h
-LSCRIPT = $(PROJECT)/B.ld
 
 SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.c \
