@@ -1,6 +1,18 @@
 PLATFORM=maxim
 TARGET=max32690
 
+# Handle BLINKING parameter (default to normal)
+BLINKING ?= normal
+
+# Add BLINKING_SPEED define based on parameter
+ifeq ($(BLINKING),fast)
+    CFLAGS += -DBLINKING_FAST
+else ifeq ($(BLINKING),slow)
+    CFLAGS += -DBLINKING_SLOW
+else
+    CFLAGS += -DBLINKING_NORMAL
+endif
+
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk

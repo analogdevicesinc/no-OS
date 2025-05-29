@@ -44,7 +44,15 @@
 
 #define CONSOLE_PORT    MXC_UART0
 #define DELAY_TIMER	MXC_TMR0
-#define DELAY_TIME_US	800000
+
+// Set delay time based on compile-time flag
+#if defined(BLINKING_FAST)
+    #define DELAY_TIME_US	20000
+#elif defined(BLINKING_SLOW)
+    #define DELAY_TIME_US	800000
+#else // BLINKING_NORMAL (default)
+    #define DELAY_TIME_US	100000
+#endif
 
 /***** Globals *****/
 bool led_state[3] = {0};
