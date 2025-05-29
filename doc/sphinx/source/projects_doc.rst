@@ -16,6 +16,13 @@ ANALOG TO DIGITAL CONVERTERS
    projects/pulsar-adc
    projects/ad469x_evb
 
+ADC / DAC
+==========
+.. toctree::
+   :maxdepth: 1
+   
+   projects/ad74416h
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
