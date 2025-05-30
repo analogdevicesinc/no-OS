@@ -36,6 +36,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+#if _WIN32
+#define __no_os_weak__(x)
+#else
+#define __no_os_weak__(x)	__attribute__(x)
+#endif
+
 #define NO_OS_BIT(x)	(1 << (x))
 
 #define NO_OS_BIT_ULL(x) ((uint64_t) 1 << (x))
