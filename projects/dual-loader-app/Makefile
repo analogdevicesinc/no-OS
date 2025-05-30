@@ -1,5 +1,5 @@
 PLATFORM=maxim
-TARGET=max32690
+TARGET=max32672
 
 # Handle BLINKING parameter (default to normal)
 BLINKING ?= normal

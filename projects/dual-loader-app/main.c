@@ -63,15 +63,15 @@ struct max_gpio_init_param xgpio = {
 struct no_os_gpio_desc *led[3];
 
 struct no_os_gpio_init_param led0_cfg = {
-	.port = 2,
-	.number = 1,
+	.port = 0,
+	.number = 22,
 	.platform_ops = &max_gpio_ops,
 	.extra = &xgpio,
 };
 
 struct no_os_gpio_init_param led1_cfg = {
 	.port = 0,
-	.number = 11,
+	.number = 23,
 	.platform_ops = &max_gpio_ops,
 	.extra = &xgpio,
 };

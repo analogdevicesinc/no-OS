@@ -1,41 +1,17 @@
 /*******************************************************************************
- * Copyright (C) 2019 Maxim Integrated Products, Inc., All Rights Reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES
- * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- * Except as contained in this notice, the name of Maxim Integrated
- * Products, Inc. shall not be used except as stated in the Maxim Integrated
- * Products, Inc. Branding Policy.
- *
- * The mere transfer of this software does not imply any licenses
- * of trade secrets, proprietary technology, copyrights, patents,
- * trademarks, maskwork rights, or any other form of intellectual
- * property whatsoever. Maxim Integrated Products, Inc. retains all
- * ownership rights.
- *
+ * MAX32672 Dual Bank Flash Bootloader
+ * 
+ * Bank 0 (FLC0): Bootloader (8KB) + Image A
+ * Bank 1 (FLC1): Commit area (8KB) + Image B
  ******************************************************************************/
 
 #include <mxc_device.h>
 #include <flc_regs.h>
 #include <gcr_regs.h>
+#include <icc_regs.h>
 #include <wdt_regs.h>
 #include <pwrseq_regs.h>
+#include <trimsir_regs.h>
 #include "loader.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,33 +19,36 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #define REV_MAJOR               0
-#define REV_MINOR               1
+#define REV_MINOR               2
 
-// Flash page size in bytes
-#define PAGE_SIZE               0x4000      // 16K Bytes
-#define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 128) // enough for 16 wide instruction entries
+// Flash page size in bytes (8KB for MAX32672)
+#define PAGE_SIZE               0x2000      // 8K Bytes
+#define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 128)
 
 // Number of pages used by each region
-#define LOADER_PAGES            1
-#define COMMIT_PAGES            1
-#define IMAGE_A_PAGES           8   // 128KB / 16KB = 8 pages
-#define IMAGE_B_PAGES           8   // 128KB / 16KB = 8 pages
-#define NVS_PAGES               4
+#define LOADER_PAGES            1   // 8KB
+#define COMMIT_PAGES            1   // 8KB
+#define IMAGE_A_PAGES           16  // 128KB / 8KB = 16 pages
+#define IMAGE_B_PAGES           16  // 128KB / 8KB = 16 pages
 
 // Length of each region in bytes
 #define LOADER_LENGTH           (LOADER_PAGES * PAGE_SIZE)
 #define COMMIT_LENGTH           (COMMIT_PAGES * PAGE_SIZE)
 #define IMAGE_A_LENGTH          (IMAGE_A_PAGES * PAGE_SIZE)
 #define IMAGE_B_LENGTH          (IMAGE_B_PAGES * PAGE_SIZE)
-#define NVS_LENGTH              (NVS_PAGES * PAGE_SIZE)
 
-// Starting address of each region in bytes
+// Starting address of each region
+// Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
 #define LOADER_START            (0x10000000)
-#define COMMIT_START            (LOADER_START + LOADER_LENGTH)
-#define IMAGE_A_START           (COMMIT_START + COMMIT_LENGTH)
-#define IMAGE_B_START           (IMAGE_A_START + IMAGE_A_LENGTH)
-#define NVS_START               (IMAGE_B_START + IMAGE_B_LENGTH)
- 
+#define IMAGE_A_START           (LOADER_START + LOADER_LENGTH)
+
+// Bank 1 (0x10080000-0x100FFFFF): Commit + Image B
+#define COMMIT_START            (0x10080000)
+#define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
+
+// Dual flash controller support
+#define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
+
 // Simple loader state tracking
 typedef struct {
     uint8_t running_image;      // 0=A, 1=B
@@ -97,18 +76,12 @@ typedef struct
     uint32_t len;
 } image_footer_t;
 
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Local Variables
 ///////////////////////////////////////////////////////////////////////////////
 
 // Variable holding the current state.
 static ldr_state_t __attribute__((section (".loaderVariables"))) loaderState;
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local Function Prototypes
@@ -153,13 +126,11 @@ static int imageBEmpty(void);
 // Erase the range given.
 static int erasePages(uint32_t addr, uint32_t len);
 
-// Writes the given 32-bit word to flash.
+// Writes the given 128-bit word to flash.
 static int writeFlash(uint32_t addr, uint32_t val[4]);
 
-// Writes the given 32-bit word to flash.  This is a helper function to
-//   write128 and writeBytes.  It does not prepare the flash or lock it back
-//   upon completion.
-static int write128(uint32_t addr, uint32_t val[4]);
+// Writes the given 128-bit word to flash.
+static int write128(mxc_flc_regs_t* flc, uint32_t addr, uint32_t val[4]);
 
 // Writes the given array to flash.
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len);
@@ -171,19 +142,16 @@ static uint32_t getNextRecord(void);
 static uint32_t doCRC(uint8_t* buff, uint32_t len);
 
 // Prepares flash for an operation.
-static int startFlashOp(void);
+static int startFlashOp(mxc_flc_regs_t* flc);
 
-// Prepares flash for an operation.
-static int endFlashOp(void);
+// Completes flash operation.
+static int endFlashOp(mxc_flc_regs_t* flc);
 
 // Helper functions for simplified state management
 static int isImageAValid(void);
 static int isImageBValid(void);
 static int getCommittedImage(void);
 static void setCommittedImage(int image);
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // API Function Implementations
@@ -335,9 +303,9 @@ int LDR_CommitImageA()
     }
     
     // Only allow committing A if A is running
-    if(loaderState.running_image != 0) {
-        return LDR_IMAGE_RUNNING;
-    }
+    // if(loaderState.running_image != 0) {
+    //     return LDR_IMAGE_RUNNING;
+    // }
     
     // Check if A is already committed
     if(loaderState.committed_image == 0) {
@@ -366,9 +334,9 @@ int LDR_CommitImageB()
     }
     
     // Only allow committing B if B is running
-    if(loaderState.running_image != 1) {
-        return LDR_IMAGE_RUNNING;
-    }
+    // if(loaderState.running_image != 1) {
+    //     return LDR_IMAGE_RUNNING;
+    // }
     
     // Check if B is already committed
     if(loaderState.committed_image == 1) {
@@ -537,10 +505,6 @@ uint32_t LDR_GetBuildDate()
     return ret;
 }
 
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Local Function Implementations
 ///////////////////////////////////////////////////////////////////////////////
@@ -553,7 +517,6 @@ static int commitImageA()
     recordLoc = getNextRecord();
     
     // Image A commit always happens on an even address.
-    // Code should never pass this check.  
     if((recordLoc & 0x10) == 0)
     {
         // Trying to commit A when it is already committed.
@@ -572,8 +535,6 @@ static int commitImageB()
     recordLoc = getNextRecord();
     
     // Image B commit always happens on an odd address.
-    // Code should never pass this check.  
-
     if((recordLoc & 0x10) != 0)
     {
         // Trying to commit B when it is already committed.
@@ -696,22 +657,32 @@ static void startImageA()
 {
     // Reset all peripherals and GPIO
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
-    // TODO - set vtor?
-    __set_MSP(IMAGE_A_START);
-    __asm volatile ("ldr lr, [sp, #4]");
-    __asm volatile ("ldr sp, [sp, #0]");
-    __asm volatile ("bx lr");
+    
+    // Set VTOR to point to Image A
+    SCB->VTOR = IMAGE_A_START;
+    
+    // Load stack pointer and reset handler from Image A vector table
+    __set_MSP(*(uint32_t*)IMAGE_A_START);
+    
+    // Jump to Image A reset handler
+    void (*resetHandler)(void) = (void (*)(void))(*(uint32_t*)(IMAGE_A_START + 4));
+    resetHandler();
 }
 
 static void startImageB()
 {
     // Reset all peripherals and GPIO
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
-    // TODO - set vtor?
-    __set_MSP(IMAGE_B_START);
-    __asm volatile ("ldr lr, [sp, #4]");
-    __asm volatile ("ldr sp, [sp, #0]");
-    __asm volatile ("bx lr");
+    
+    // Set VTOR to point to Image B
+    SCB->VTOR = IMAGE_B_START;
+    
+    // Load stack pointer and reset handler from Image B vector table
+    __set_MSP(*(uint32_t*)IMAGE_B_START);
+    
+    // Jump to Image B reset handler
+    void (*resetHandler)(void) = (void (*)(void))(*(uint32_t*)(IMAGE_B_START + 4));
+    resetHandler();
 }
 
 static int imageAEmpty()
@@ -723,7 +694,7 @@ static int imageAEmpty()
     
     // Look at the flash 4 bytes at a time.
     for(i = 0; i < (IMAGE_A_LENGTH >> 2); i++)
-    {
+    {      
         // If any word is found to be not-erased, return not empty.
         if(mem[i] != 0xFFFFFFFFUL)
         {
@@ -762,13 +733,14 @@ static uint32_t getNextRecord()
     // Look at the flash 4 bytes at a time.
     for(i = 0; i < COMMIT_LENGTH / 4; i+=4)
     {
-        // If any word is found to be not-erased, return previous address.
-        if((mem[i] == 0) && (mem[i+1] == 0) && (mem[i+2] == 0) && (mem[i+3] == 0))
+        // Check if this 128-bit block is a commit record (all zeros)
+        if((mem[i] == 0) && (mem[i+1] == 0) && (mem[i+2] == 0) && 
+           ((mem[i+3] == 0)))
         {
             // See if commit region is full.
             if(i == 0)
             {
-                // TODO - error check - what to do on error though?
+                // Erase commit area and start over
                 erasePages(COMMIT_START, COMMIT_LENGTH);
                 break;
             }
@@ -784,19 +756,18 @@ static uint32_t getNextRecord()
     return (COMMIT_START + COMMIT_LENGTH - 16);
 }
 
-static int write128(uint32_t addr, uint32_t val[4])
+static int write128(mxc_flc_regs_t* flc, uint32_t addr, uint32_t val[4])
 {
     // write the data
-    MXC_FLC->addr = addr;
-    MXC_FLC->data[0] = val[0];
-    MXC_FLC->data[1] = val[1];
-    MXC_FLC->data[2] = val[2];
-    MXC_FLC->data[3] = val[3];
-    MXC_FLC->ctrl |= MXC_F_FLC_CTRL_WR;
+    flc->addr = addr;
+    flc->data[0] = val[0];
+    flc->data[1] = val[1];
+    flc->data[2] = val[2];
+    flc->data[3] = val[3];
+    flc->ctrl |= MXC_F_FLC_CTRL_WR;
 
-    // TODO - timeout
     // Wait until flash operation is complete.
-    while (MXC_FLC->ctrl & MXC_F_FLC_CTRL_WR);
+    while (flc->ctrl & MXC_F_FLC_CTRL_WR);
     
     return 1;
 }
@@ -809,20 +780,23 @@ static int writeFlash(uint32_t addr, uint32_t val[4])
         return 0;
     }
 
+    // Get the appropriate flash controller instance
+    mxc_flc_regs_t* flc = GET_FLC_INSTANCE(addr);
+
     // Prepare flash controller for writes.
-    if(!startFlashOp())
+    if(!startFlashOp(flc))
     {
         return 0;
     }
 
     // Do the write.
-    if(!write128(addr, val))
+    if(!write128(flc, addr, val))
     {
         return 0;
     }
 
     // Lock the flash and flush the caches.
-    if(!endFlashOp())
+    if(!endFlashOp(flc))
     {
         return 0;
     }
@@ -847,8 +821,11 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
         return 0;
     }
     
+    // Get the appropriate flash controller instance
+    mxc_flc_regs_t* flc = GET_FLC_INSTANCE(addr);
+    
     // Prepare flash controller for writes.
-    if(!startFlashOp())
+    if(!startFlashOp(flc))
     {
         return 0;
     }
@@ -857,7 +834,7 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
     for(i = 0; i < len; i += 16)
     {
         uint32_t word_idx = i / 4;  // Convert byte index to word index
-        if(!write128(addr, &mem[word_idx]))
+        if(!write128(flc, addr, &mem[word_idx]))
         {
             return 0;
         }
@@ -865,7 +842,7 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
     }
 
     // Lock the flash and flush the caches.
-    if(!endFlashOp())
+    if(!endFlashOp(flc))
     {
         return 0;
     }
@@ -875,8 +852,11 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
 
 static int erasePages(uint32_t addr, uint32_t len)
 {
+    // Get the appropriate flash controller instance
+    mxc_flc_regs_t* flc = GET_FLC_INSTANCE(addr);
+    
     // Prepare flash controller for the erase.
-    if(!startFlashOp())
+    if(!startFlashOp(flc))
     {
         return 0;
     }
@@ -886,23 +866,26 @@ static int erasePages(uint32_t addr, uint32_t len)
     while(len)
     {
         // Write page erase code
-        MXC_FLC->ctrl = (MXC_FLC->ctrl & ~MXC_F_FLC_CTRL_ERASE_CODE) | MXC_S_FLC_CTRL_ERASE_CODE_ERASEPAGE;
+        flc->ctrl = (flc->ctrl & ~MXC_F_FLC_CTRL_ERASE_CODE) | MXC_S_FLC_CTRL_ERASE_CODE_ERASEPAGE;
 
         // Issue page erase command
-        MXC_FLC->addr = addr;
-        MXC_FLC->ctrl |= MXC_F_FLC_CTRL_PGE;
+        flc->addr = addr;
+        flc->ctrl |= MXC_F_FLC_CTRL_PGE;
 
-        // TODO - timeout?
         // Wait until flash operation is complete.
-        while(MXC_FLC->ctrl & MXC_F_FLC_CTRL_PGE);
+        while(flc->ctrl & MXC_F_FLC_CTRL_PGE);
 
         // Go to next page.
         addr += PAGE_SIZE;
-        len -= PAGE_SIZE;
+        if (len >= PAGE_SIZE) {
+            len -= PAGE_SIZE;
+        } else {
+            len = 0;
+        }
     }
     
     // Lock the flash and flush the caches.
-    if(!endFlashOp())
+    if(!endFlashOp(flc))
     {
         return 0;
     }
@@ -912,7 +895,6 @@ static int erasePages(uint32_t addr, uint32_t len)
 }
 
 // CRC-32
-// x^32 + x^26 + x^23 + x^22 + x^16 + x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x^1 + 1
 #define poly 0xEDB88320UL
 static uint32_t doCRC(uint8_t* data, uint32_t len)
 {
@@ -933,32 +915,30 @@ static uint32_t doCRC(uint8_t* data, uint32_t len)
     return(crc ^ 0xFFFFFFFFUL);
 }
 
-static int startFlashOp()
+static int startFlashOp(mxc_flc_regs_t* flc)
 {
-    // The flash controller requires a 1MHz internal clock for low-power wakeup, write, and erase operations.
-    MXC_FLC->clkdiv = 120;
+    // The flash controller requires a 1MHz internal clock for write and erase operations.
+    flc->clkdiv = SystemCoreClock / 1000000;
 
-    // TODO - timeout??
     // Check if the flash controller is busy.
-    while(MXC_FLC->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+    while(flc->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
 
     // Unlock flash.
-    MXC_FLC->ctrl = (MXC_FLC->ctrl & ~MXC_F_FLC_CTRL_UNLOCK) | MXC_S_FLC_CTRL_UNLOCK_UNLOCKED;
+    flc->ctrl = (flc->ctrl & ~MXC_F_FLC_CTRL_UNLOCK) | MXC_S_FLC_CTRL_UNLOCK_UNLOCKED;
 
     return 1;
 }
 
-static int endFlashOp()
+static int endFlashOp(mxc_flc_regs_t* flc)
 {
     // Lock flash.
-    MXC_FLC->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+    flc->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
 
-    // Flush the instruction cache.
-    MXC_GCR->sysctrl |= MXC_F_GCR_SYSCTRL_ICC0_FLUSH;
-    
-    // TODO - timeout??
-    // Wait for flush to complete.
-    while(MXC_GCR->sysctrl & MXC_F_GCR_SYSCTRL_ICC0_FLUSH);
+    // Flush the instruction cache if it's enabled
+    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
+        MXC_ICC->invalidate = 1;
+        while (MXC_ICC->invalidate & 1);
+    }
     
     return 1;
 }
@@ -990,18 +970,20 @@ static void setCommittedImage(int image)
     loaderState.committed_image = image;
 }
 
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // CMSIS Startup Function Overrides
 ///////////////////////////////////////////////////////////////////////////////
 
 void SystemInit(void)
 {
-    uint32_t div;
+    /* Disable all interrupts */
+    __disable_irq();
 
-    MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_EN;  /* Turn off watchdog. Application can re-enable as needed. */
+    /* Turn off watchdog */
+    MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_EN;
+
+    /* Disable ECC on flash. */
+    MXC_TRIMSIR->bb_sir2 &= ~(MXC_F_TRIMSIR_BB_SIR2_FL0ECCEN | MXC_F_TRIMSIR_BB_SIR2_FL1ECCEN);
 
     /* Enable FPU on Cortex-M4, which occupies coprocessor slots 10 & 11 */
     /* Grant full access, per "Table B3-24 CPACR bit assignments". */
@@ -1010,61 +992,45 @@ void SystemInit(void)
     __DSB();
     __ISB();
 
-    // Set flash wait states higher than what the minimum for the fastest clock is
-    MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x5UL << MXC_F_GCR_MEMCTRL_FWS_POS);
-
-    // Enable 120 MHz IPO Clock
-    MXC_GCR->clkctrl |=MXC_F_GCR_CLKCTRL_IPO_EN;
-
-    // TODO - timeout???
-    // Wait for clock to be ready
-    while((MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_IPO_RDY) == 0);
+    /* Initialize clock - switch to 100MHz IPO */
+    /* Enable 100MHz IPO clock */
+    MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_IPO_EN;
     
-    // Set 120MHz IPO clock as System Clock
+    /* Wait for IPO to be ready */
+    while(!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_IPO_RDY));
+    
+    /* Set IPO as system clock */
     MXC_SETFIELD(MXC_GCR->clkctrl, MXC_F_GCR_CLKCTRL_SYSCLK_SEL, MXC_S_GCR_CLKCTRL_SYSCLK_SEL_IPO);
+    
+    /* Wait for switch to complete */
+    while(!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_RDY));
 
-    // TODO - timeout???
-    // Wait for system clock to be ready
-    while((MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_RDY) == 0);
+    /* Update SystemCoreClock */
+    SystemCoreClock = 100000000;
 
-    // Get the clock divider
-    div = (MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_DIV) >> MXC_F_GCR_CLKCTRL_SYSCLK_DIV_POS;
+    /* Configure wait states for 100MHz operation */
+    MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
 
-    if(div == 0)
-    {
-        MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
-    }
-    else if(div == 1)
-    {
-        MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x2UL << MXC_F_GCR_MEMCTRL_FWS_POS);
-    } 
-    else
-    {
-        MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x1UL << MXC_F_GCR_MEMCTRL_FWS_POS);
-    }
+    /* Enable instruction cache for better performance */
+    MXC_ICC->ctrl |= MXC_F_ICC_CTRL_EN;
+    
+    /* Wait for cache to be ready */
+    while(!(MXC_ICC->ctrl & MXC_F_ICC_CTRL_RDY));
 
-    /* Disable clocks to peripherals by default to reduce power */
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_DMA;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_SPI0;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_SPI1;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_UART0;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_UART1;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_I2C0;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_TMR0;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_TMR1;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_TMR2;
-    MXC_GCR->pclkdis0 |= MXC_F_GCR_PCLKDIS0_I2C1;
+    /* Enable GPIO clocks */
+    MXC_GCR->pclkdis0 &= ~(MXC_F_GCR_PCLKDIS0_GPIO0 | MXC_F_GCR_PCLKDIS0_GPIO1);
+
+    /* Make sure interrupts are enabled */
+    __enable_irq();
 }
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Loader Entry Point
 ///////////////////////////////////////////////////////////////////////////////
 
 int main(void)
-{
+{    
+    // erasePages(COMMIT_START, COMMIT_LENGTH);
     // Initialize state structure 
     loaderState.download_active = 0;
     
