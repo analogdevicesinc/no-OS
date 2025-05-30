@@ -32,32 +32,33 @@
 *******************************************************************************/
 
 #include "no_os_mutex.h"
+#include "no_os_util.h"
 
 /**
  * @brief Initialize mutex.
  * @param ptr - Pointer toward the mutex.
  * @return None.
  */
-__attribute__((weak)) void no_os_mutex_init(void **mutex) {}
+__no_os_weak__((weak)) void no_os_mutex_init(void **mutex) {}
 
 /**
  * @brief Lock mutex.
  * @param ptr - Pointer toward the mutex.
  * @return None.
  */
-__attribute__((weak)) void no_os_mutex_lock(void *mutex) {}
+__no_os_weak__((weak)) void no_os_mutex_lock(void *mutex) {}
 
 /**
  * @brief Unlock mutex.
  * @param ptr - Pointer toward the mutex.
  * @return None.
  */
-__attribute((weak)) void no_os_mutex_unlock(void *mutex) {}
+__no_os_weak__((weak)) void no_os_mutex_unlock(void *mutex) {}
 
 /**
  * @brief Remove mutex.
  * @param ptr - Pointer toward the mutex.
  * @return None.
  */
-__attribute__((weak)) void no_os_mutex_remove(void *mutex) {}
+__no_os_weak__((weak)) void no_os_mutex_remove(void *mutex) {}
 
