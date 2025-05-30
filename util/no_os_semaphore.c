@@ -32,32 +32,33 @@
 *******************************************************************************/
 
 #include "no_os_semaphore.h"
+#include "no_os_util.h"
 
 /**
  * @brief Initialize semaphore.
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute__((weak)) void no_os_semaphore_init(void **semaphore) {}
+__no_os_weak__((weak)) void no_os_semaphore_init(void **semaphore) {}
 
 /**
  * @brief Take token from semaphore.
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute__((weak)) void no_os_semaphore_take(void *semaphore) {}
+__no_os_weak__((weak)) void no_os_semaphore_take(void *semaphore) {}
 
 /**
  * @brief Give token to semaphore
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute((weak)) void no_os_semaphore_give(void *semaphore) {}
+__no_os_weak__((weak)) void no_os_semaphore_give(void *semaphore) {}
 
 /**
  * @brief Remove semaphore.
  * @param ptr - Pointer toward the semaphore.
  * @return None.
  */
-__attribute__((weak)) void no_os_semaphore_remove(void *semaphore) {}
+__no_os_weak__((weak)) void no_os_semaphore_remove(void *semaphore) {}
 
