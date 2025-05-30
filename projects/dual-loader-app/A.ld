@@ -32,22 +32,25 @@
  ******************************************************************************/
 
 MEMORY {
-    FLASH (rx) : ORIGIN = 0x10008000, LENGTH = 128K - 16      /* Save 16 bytes at end for CRC and image length (only last 8 are needed) */
-    FOOTER (rx) : ORIGIN = 0x10027ff0, LENGTH = 16
-    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 1M - 4 /* Save 4 bytes at end for loader working area */
+    /* Bank 0: Bootloader (8K) + Image A (128K) */
+    /* Image A starts after 1 page (8K) bootloader */
+    FLASH (rx) : ORIGIN = 0x10002000, LENGTH = 128K - 16      /* Save 16 bytes at end for CRC and image length */
+    FOOTER (rx) : ORIGIN = 0x10021ff0, LENGTH = 16
+    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 160K - 4 /* MAX32672 has 160KB SRAM, save 4 bytes for loader working area */
 }
 
-LDR_StartDownload           = 0x10003f80;
-LDR_DownloadImageBlock      = 0x10003f84;
-LDR_AbortUpgrade            = 0x10003f88;
-LDR_CompleteDownload        = 0x10003f8c;
-LDR_RunImageA               = 0x10003f90;
-LDR_RunImageB               = 0x10003f94;
-LDR_CommitImageA            = 0x10003f98;
-LDR_CommitImageB            = 0x10003f9c;
-LDR_GetImageStatus          = 0x10003fa0;
-LDR_GetVersion              = 0x10003fa4;
-LDR_GetBuildDate            = 0x10003fa8;
+/* Bootloader API addresses - adjusted for 8K page size */
+LDR_StartDownload           = 0x10001f80;
+LDR_DownloadImageBlock      = 0x10001f84;
+LDR_AbortUpgrade            = 0x10001f88;
+LDR_CompleteDownload        = 0x10001f8c;
+LDR_RunImageA               = 0x10001f90;
+LDR_RunImageB               = 0x10001f94;
+LDR_CommitImageA            = 0x10001f98;
+LDR_CommitImageB            = 0x10001f9c;
+LDR_GetImageStatus          = 0x10001fa0;
+LDR_GetVersion              = 0x10001fa4;
+LDR_GetBuildDate            = 0x10001fa8;
 
 SECTIONS {
     .text :
