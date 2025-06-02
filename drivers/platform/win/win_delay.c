@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   util/no_os_alloc.c
- *   @brief  Implementation of no-OS memory allocation functions.
- *   @author GMois (george.mois@analog.com)
+/***************************************************************************//**
+ *   @file   win_delay.c
+ *   @brief  Implementation of Windows platform Delay Driver.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,39 +30,23 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#include "no_os_alloc.h"
-#include "no_os_util.h"
+#include <stdint.h>
+#include <unistd.h>
 
 /**
- * @brief Allocate memory and return a pointer to it.
- * @param size - Size of the memory block, in bytes.
- * @return Pointer to the allocated memory, or NULL if the request fails.
+ * @brief Generate microseconds delay.
+ * @param usecs - Delay in microseconds.
  */
-__no_os_weak__((weak)) void *no_os_malloc(size_t size)
+void no_os_udelay(uint32_t usecs)
 {
-	return malloc(size);
+	usleep(usecs);
 }
 
 /**
- * @brief Allocate memory and return a pointer to it, set memory to 0.
- * @param nitems - Number of elements to be allocated.
- * @param size - Size of elements.
- * @return Pointer to the allocated memory, or NULL if the request fails.
+ * @brief Generate miliseconds delay.
+ * @param msecs - Delay in miliseconds.
  */
-__no_os_weak__((weak)) void *no_os_calloc(size_t nitems, size_t size)
+void no_os_mdelay(uint32_t msecs)
 {
-	return calloc(nitems, size);
-}
-
-/**
- * @brief Deallocate memory previously allocated by a call to no_os_calloc
- * 		  or no_os_malloc.
- * @param ptr - Pointer to a memory block previously allocated by a call
- * 		  to no_os_calloc or no_os_malloc.
- * @return None.
- */
-__no_os_weak__((weak)) void no_os_free(void *ptr)
-{
-	free(ptr);
+	usleep(msecs * 1000);
 }

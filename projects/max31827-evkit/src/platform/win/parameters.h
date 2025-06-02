@@ -1,9 +1,9 @@
 /*******************************************************************************
- *   @file   util/no_os_alloc.c
- *   @brief  Implementation of no-OS memory allocation functions.
- *   @author GMois (george.mois@analog.com)
-********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ *   @file   parameters.h
+ *   @brief  Definition of linux platform data used by max31827 project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
+ *******************************************************************************
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,40 +29,29 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ ******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "no_os_alloc.h"
-#include "no_os_util.h"
+#ifdef FTD2XX
+#include "ftd2xx_uart.h"
+#include "ftd2xx_i2c.h"
 
-/**
- * @brief Allocate memory and return a pointer to it.
- * @param size - Size of the memory block, in bytes.
- * @return Pointer to the allocated memory, or NULL if the request fails.
- */
-__no_os_weak__((weak)) void *no_os_malloc(size_t size)
-{
-	return malloc(size);
-}
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID	0
+#endif
+#define UART_IRQ_ID	0
+#define UART_DEVICE_ID	0
+#define UART_BAUDRATE	0
+#define UART_EXTRA      NULL
 
-/**
- * @brief Allocate memory and return a pointer to it, set memory to 0.
- * @param nitems - Number of elements to be allocated.
- * @param size - Size of elements.
- * @return Pointer to the allocated memory, or NULL if the request fails.
- */
-__no_os_weak__((weak)) void *no_os_calloc(size_t nitems, size_t size)
-{
-	return calloc(nitems, size);
-}
+#define I2C_DEVICE_ID   0
 
-/**
- * @brief Deallocate memory previously allocated by a call to no_os_calloc
- * 		  or no_os_malloc.
- * @param ptr - Pointer to a memory block previously allocated by a call
- * 		  to no_os_calloc or no_os_malloc.
- * @return None.
- */
-__no_os_weak__((weak)) void no_os_free(void *ptr)
-{
-	free(ptr);
-}
+#define I2C_OPS         &ftd2xx_i2c_ops
+#define UART_OPS        &ftd2xx_uart_ops
+
+#define I2C_EXTRA       &max31827_i2c_extra
+extern struct ftd2xx_i2c_init max31827_i2c_extra;
+#endif
+
+#endif /* __PARAMETERS_H__ */

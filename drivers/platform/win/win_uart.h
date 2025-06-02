@@ -1,9 +1,9 @@
 /*******************************************************************************
- *   @file   util/no_os_alloc.c
- *   @brief  Implementation of no-OS memory allocation functions.
- *   @author GMois (george.mois@analog.com)
+ *   @file   win_uart.h
+ *   @brief  Header containing extra types used by the UART driver.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,39 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef WIN_UART_H_
+#define WIN_UART_H_
 
-#include "no_os_alloc.h"
-#include "no_os_util.h"
-
-/**
- * @brief Allocate memory and return a pointer to it.
- * @param size - Size of the memory block, in bytes.
- * @return Pointer to the allocated memory, or NULL if the request fails.
- */
-__no_os_weak__((weak)) void *no_os_malloc(size_t size)
-{
-	return malloc(size);
-}
+#include "no_os_uart.h"
 
 /**
- * @brief Allocate memory and return a pointer to it, set memory to 0.
- * @param nitems - Number of elements to be allocated.
- * @param size - Size of elements.
- * @return Pointer to the allocated memory, or NULL if the request fails.
+ * @struct win_uart_init_param
+ * @brief Structure holding the initialization parameters for Windows platform
+ * specific UART parameters.
  */
-__no_os_weak__((weak)) void *no_os_calloc(size_t nitems, size_t size)
-{
-	return calloc(nitems, size);
-}
+struct win_uart_init_param {
+	/** COM device ID */
+	const char *device_id;
+};
 
 /**
- * @brief Deallocate memory previously allocated by a call to no_os_calloc
- * 		  or no_os_malloc.
- * @param ptr - Pointer to a memory block previously allocated by a call
- * 		  to no_os_calloc or no_os_malloc.
- * @return None.
+ * @brief Windows platform specific UART platform ops structure
  */
-__no_os_weak__((weak)) void no_os_free(void *ptr)
-{
-	free(ptr);
-}
+extern const struct no_os_uart_platform_ops win_uart_ops;
+
+#endif // WIN_UART_H_

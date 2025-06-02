@@ -1,9 +1,9 @@
 /*******************************************************************************
- *   @file   util/no_os_alloc.c
- *   @brief  Implementation of no-OS memory allocation functions.
- *   @author GMois (george.mois@analog.com)
-********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ *   @file   main.c
+ *   @brief  Main file for linux platform of max31827 project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
+ *******************************************************************************
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,40 +29,21 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ ******************************************************************************/
+#include "common_data.h"
 
-#include "no_os_alloc.h"
-#include "no_os_util.h"
+extern int example_main();
 
-/**
- * @brief Allocate memory and return a pointer to it.
- * @param size - Size of the memory block, in bytes.
- * @return Pointer to the allocated memory, or NULL if the request fails.
- */
-__no_os_weak__((weak)) void *no_os_malloc(size_t size)
+/******************************************************************************
+ * @brief Main function execution for FTD2XX platform.
+ *
+ * @return ret - Result of the enabled examples execution.
+ *****************************************************************************/
+int main()
 {
-	return malloc(size);
-}
+#ifndef FTD2XX
+#error MAX31827 project example works on WIN platform only if FTD2XX library is used!
+#endif
 
-/**
- * @brief Allocate memory and return a pointer to it, set memory to 0.
- * @param nitems - Number of elements to be allocated.
- * @param size - Size of elements.
- * @return Pointer to the allocated memory, or NULL if the request fails.
- */
-__no_os_weak__((weak)) void *no_os_calloc(size_t nitems, size_t size)
-{
-	return calloc(nitems, size);
-}
-
-/**
- * @brief Deallocate memory previously allocated by a call to no_os_calloc
- * 		  or no_os_malloc.
- * @param ptr - Pointer to a memory block previously allocated by a call
- * 		  to no_os_calloc or no_os_malloc.
- * @return None.
- */
-__no_os_weak__((weak)) void no_os_free(void *ptr)
-{
-	free(ptr);
+	return example_main();
 }
