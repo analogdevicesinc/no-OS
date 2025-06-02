@@ -154,7 +154,8 @@
 #define AD4858_DEF_CHN_OFFSET       0x0
 #define AD4858_DEF_CHN_GAIN         0x8000
 #define AD4858_DEF_CHN_PHASE        0x0
-#define AD4858_DEF_CHN_OR           0x7ffff0
+#define AD4858_DEF_CHN_OR_16_BIT    0x7fff00
+#define AD4858_DEF_CHN_OR_20_BIT    0x7ffff0
 #define AD4858_DEF_CHN_UR           0x800000
 
 /**

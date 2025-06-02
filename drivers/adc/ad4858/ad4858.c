@@ -571,8 +571,14 @@ int ad4858_set_chn_or_limit(struct ad4858_dev *dev, uint8_t chn,
 	if (!dev || (chn >= AD4858_NUM_CHANNELS))
 		return -EINVAL;
 
-	/* OR limit value is spanned over bits [24:4] */
-	ret = ad4858_reg_write(dev, AD4858_REG_CH_OR(chn), (or_limit << 4));
+	if (dev->prod_id == AD4855_PROD_ID_L) {
+		/* OR limit value is spanned over bits [23:8] */
+		ret = ad4858_reg_write(dev, AD4858_REG_CH_OR(chn), (or_limit << 8));
+	} else {
+		/* OR limit value is spanned over bits [23:4] */
+		ret = ad4858_reg_write(dev, AD4858_REG_CH_OR(chn), (or_limit << 4));
+	}
+
 	if (ret)
 		return ret;
 
@@ -596,8 +602,14 @@ int ad4858_set_chn_ur_limit(struct ad4858_dev *dev, uint8_t chn,
 	if (!dev || (chn >= AD4858_NUM_CHANNELS))
 		return -EINVAL;
 
-	/* UR limit value is spanned over bits [24:4] */
-	ret = ad4858_reg_write(dev, AD4858_REG_CH_UR(chn), (ur_limit << 4));
+	if (dev->prod_id == AD4855_PROD_ID_L) {
+		/* UR limit value is spanned over bits [23:8] */
+		ret = ad4858_reg_write(dev, AD4858_REG_CH_UR(chn), (ur_limit << 8));
+	} else {
+		/* UR limit value is spanned over bits [23:4] */
+		ret = ad4858_reg_write(dev, AD4858_REG_CH_UR(chn), (ur_limit << 4));
+	}
+
 	if (ret)
 		return ret;
 
@@ -907,9 +919,13 @@ static int ad4858_config(struct ad4858_dev *dev,
 		if (ret)
 			return ret;
 
-		if (init_param->use_default_chn_configs)
-			temp = AD4858_DEF_CHN_OR;
-		else
+		if (init_param->use_default_chn_configs) {
+			if (dev->prod_id == AD4855_PROD_ID_L) {
+				temp = AD4858_DEF_CHN_OR_16_BIT;
+			} else {
+				temp = AD4858_DEF_CHN_OR_20_BIT;
+			}
+		} else
 			temp = init_param->chn_or[chn_cnt];
 
 		ret = ad4858_set_chn_or_limit(dev, chn_cnt, temp);
