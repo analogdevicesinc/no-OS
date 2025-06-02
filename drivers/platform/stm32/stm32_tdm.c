@@ -136,7 +136,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 				    SAI_FIRSTBIT_MSB;
 	tdesc->hsai.Init.ClockStrobing = param->rising_edge_sampling ?
 					 SAI_CLOCKSTROBING_RISINGEDGE : SAI_CLOCKSTROBING_FALLINGEDGE;
-	tdesc->hsai.Init.Synchro = SAI_ASYNCHRONOUS;
+	tdesc->hsai.Init.Synchro = tinit->synchronous;
 	tdesc->hsai.Init.OutputDrive = SAI_OUTPUTDRIVE_DISABLE;
 	tdesc->hsai.Init.FIFOThreshold = SAI_FIFOTHRESHOLD_EMPTY;
 	tdesc->hsai.Init.SynchroExt = SAI_SYNCEXT_DISABLE;
@@ -154,7 +154,7 @@ int32_t stm32_tdm_init(struct no_os_tdm_desc **desc,
 	tdesc->hsai.SlotInit.FirstBitOffset = param->data_offset;
 	tdesc->hsai.SlotInit.SlotSize = SAI_SLOTSIZE_DATASIZE;
 	tdesc->hsai.SlotInit.SlotNumber = param->slots_per_frame;
-	tdesc->hsai.SlotInit.SlotActive = (1u << param->slots_per_frame) - 1u;
+	tdesc->hsai.SlotInit.SlotActive = param->active_slots;
 	if (HAL_SAI_Init(&tdesc->hsai) != HAL_OK) {
 		ret = -EIO;
 		goto error;
@@ -239,6 +239,19 @@ int32_t stm32_tdm_remove(struct no_os_tdm_desc *desc)
 	HAL_SAI_DeInit(&tdesc->hsai);
 	no_os_free(desc->extra);
 	no_os_free(desc);
+
+	if (tdesc->nvic_rx_halfcplt) {
+		no_os_irq_ctrl_remove(tdesc->nvic_rx_halfcplt);
+		no_os_irq_unregister_callback(tdesc->nvic_rxcplt, desc->irq_id,
+					      (void *)tdesc->nvic_rx_halfcplt);
+	}
+
+	if (tdesc->nvic_rxcplt) {
+		no_os_irq_ctrl_remove(tdesc->nvic_rxcplt);
+		no_os_irq_unregister_callback(tdesc->nvic_rxcplt, desc->irq_id,
+					      (void *)tdesc->nvic_rxcplt);
+	}
+
 
 	return 0;
 }

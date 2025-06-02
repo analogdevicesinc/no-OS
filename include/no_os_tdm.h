@@ -65,6 +65,8 @@ struct no_os_tdm_init_param {
 	bool data_lsb_first;
 	/** Number of slots in a frame */
 	uint8_t slots_per_frame;
+	/** Active slots */
+	uint32_t active_slots;
 	/** Frame sync polarity specifier (default: FS active high) */
 	bool fs_active_low;
 	/** Frame sync active length specified in number of bits */
