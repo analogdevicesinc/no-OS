@@ -6,12 +6,12 @@ ADMFM2000 no-OS driver
 Supported Devices
 -----------------
 
-`ADMFM2000 <www.analog.com/en/products/admfm2000.html>`_
+`ADMFM2000 <https://www.analog.com/en/products/admfm2000.html>`_
 
 Overview
 --------
 
-The `ADMFM2000 <www.analog.com/en/products/admfm2000.html>`_ is a dual-channel
+The `ADMFM2000 <https://www.analog.com/en/products/admfm2000.html>`_ is a dual-channel
 microwave downconverter, with
 input RF and local oscillator (LO) frequency ranges covering 5 GHz
 to 32 GHz, with an output intermediate frequency (IF) frequency
@@ -23,7 +23,7 @@ conversion path consists of a low noise amplifier (LNA), a mixer, an
 IF filter, a digital step attenuator (DSA), and an IF amplifier
 
 Fabricated using a combination of surface mount and bare die
-components, the `ADMFM2000 <www.analog.com/en/products/admfm2000.html>`_
+components, the `ADMFM2000 <https://www.analog.com/en/products/admfm2000.html>`_
 provides precise gain adjustment capabilities with low distortion performance.
 The ADMFM2000 comes in a compact, shielded 20.00 mm × 14.00 mm, 179-ball
 chip scale package ball grid array (CSP_BGA) and operates over a temperature
