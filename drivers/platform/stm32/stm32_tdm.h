@@ -39,6 +39,17 @@
 #include "no_os_irq.h"
 
 /**
+ * @enum stm32_tdm_synchonous
+ * @brief Enum holding the permissible values for synchronization
+ * specific TDM parameters.
+ */
+enum stm32_tdm_synchonous {
+	ASYNCHRONOUS,
+	INTERNAL_SYNC,
+	EXTERNAL_SYNC
+};
+
+/**
  * @struct stm32_tdm_init_param
  * @brief Structure holding the initialization parameters for stm32 platform
  * specific TDM parameters.
@@ -46,6 +57,8 @@
 struct stm32_tdm_init_param {
 	/** Device ID */
 	SAI_Block_TypeDef *base;
+	/** Synchronous */
+	enum stm32_tdm_synchonous synchronous;
 	/** Interrupt controller descriptor */
 	//struct no_os_irq_ctrl_desc *nvic;
 };
