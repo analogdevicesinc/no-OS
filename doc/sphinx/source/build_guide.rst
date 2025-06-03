@@ -43,3 +43,11 @@ WIN
     :maxdepth: 1
 
     build_guides/build_win
+
+MAC
+======
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_mac
+
