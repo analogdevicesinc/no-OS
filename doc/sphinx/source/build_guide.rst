@@ -36,3 +36,11 @@ FTD2XX
     :maxdepth: 1
 
     build_guides/build_ftd2xx
+
+MAC
+======
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_mac
+
