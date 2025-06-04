@@ -14,10 +14,7 @@
 #include <trimsir_regs.h>
 #include "loader.h"
 
-/* HAL includes */
-#include "flc.h"
-#include "icc.h"
-#include "mxc_sys.h"
+/* No HAL includes needed - using direct register access */
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local Definitions
@@ -167,13 +164,47 @@ static uint32_t getNextRecord(void);
 // Returns the CRC of the given memory range.
 static uint32_t doCRC(uint8_t* buff, uint32_t len);
 
-// HAL flash functions handle RAM execution internally
-
 // Helper functions for simplified state management
 static int isImageAValid(void);
 static int isImageBValid(void);
 static int getCommittedImage(void);
 static void setCommittedImage(int image);
+
+// Flash operation helper functions
+static int startFlashOp(mxc_flc_regs_t* flc);
+static int endFlashOp(mxc_flc_regs_t* flc);
+
+///////////////////////////////////////////////////////////////////////////////
+// Flash Operation Helper Functions
+///////////////////////////////////////////////////////////////////////////////
+
+static int startFlashOp(mxc_flc_regs_t* flc)
+{
+    // The flash controller requires a 1MHz internal clock for write and erase operations.
+    flc->clkdiv = SystemCoreClock / 1000000;
+
+    // Check if the flash controller is busy.
+    while(flc->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+
+    // Unlock flash.
+    flc->ctrl = (flc->ctrl & ~MXC_F_FLC_CTRL_UNLOCK) | MXC_S_FLC_CTRL_UNLOCK_UNLOCKED;
+
+    return 1;
+}
+
+static int endFlashOp(mxc_flc_regs_t* flc)
+{
+    // Lock flash.
+    flc->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+
+    // Flush the instruction cache if it's enabled
+    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
+        MXC_ICC->invalidate = 1;
+        while (MXC_ICC->invalidate & 1);
+    }
+    
+    return 1;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // API Function Implementations
@@ -679,11 +710,15 @@ static void startImageA()
 {
     // Ensure flash controllers are idle before jumping
     while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#if defined(TARGET_MAX32672)
     while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#endif
     
-    // Lock both flash controllers
+    // Lock flash controllers
     MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#if defined(TARGET_MAX32672)
     MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#endif
     
     // Invalidate instruction cache
     if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
@@ -709,11 +744,15 @@ static void startImageB()
 {
     // Ensure flash controllers are idle before jumping
     while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#if defined(TARGET_MAX32672)
     while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#endif
     
-    // Lock both flash controllers
+    // Lock flash controllers
     MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#if defined(TARGET_MAX32672)
     MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#endif
     
     // Invalidate instruction cache
     if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
@@ -809,8 +848,8 @@ static uint32_t getNextRecord()
 
 static int writeFlash(uint32_t addr, uint32_t val[4])
 {
-    int ret = 1;
-    int err;
+    mxc_flc_regs_t* flc;
+    int i;
     
     // Make sure address is on a 128-bit boundary.
     if(addr & 0xf) 
@@ -818,20 +857,50 @@ static int writeFlash(uint32_t addr, uint32_t val[4])
         return 0;
     }
 
-    // Use HAL function to write 128-bit word
-    err = MXC_FLC_Write128(addr, val);
-    if(err != E_NO_ERROR)
+    // Get the correct flash controller instance
+    flc = GET_FLC_INSTANCE(addr);
+    
+    // Start flash operation
+    if(!startFlashOp(flc))
     {
-        ret = 0;
+        return 0;
     }
-
-    return ret;
+    
+    // Clear interrupt flags
+    flc->intr = (MXC_F_FLC_INTR_DONE | MXC_F_FLC_INTR_AF);
+    
+    // Write address
+    flc->addr = addr;
+    
+    // Write the 128-bit data
+    flc->data[0] = val[0];
+    flc->data[1] = val[1];
+    flc->data[2] = val[2];
+    flc->data[3] = val[3];
+    
+    // Start write operation
+    flc->ctrl |= MXC_F_FLC_CTRL_WR;
+    
+    // Wait for write to complete
+    while(!(flc->intr & MXC_F_FLC_INTR_DONE));
+    
+    // Check for errors
+    if(flc->intr & MXC_F_FLC_INTR_AF)
+    {
+        endFlashOp(flc);
+        return 0;
+    }
+    
+    // End flash operation
+    endFlashOp(flc);
+    
+    return 1;
 }
 
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
 {
-    int ret = 1;
-    int err;
+    uint32_t* wordBuff = (uint32_t*)buff;
+    int i;
     
     // Make sure address is on a 128-bit boundary.
     if(addr & 0xf) 
@@ -845,33 +914,57 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
         return 0;
     }
     
-    // Use HAL function to write data
-    err = MXC_FLC_Write(addr, len, (uint32_t*)buff);
-    if(err != E_NO_ERROR)
+    // Write 128 bits at a time
+    for(i = 0; i < len; i += 16)
     {
-        ret = 0;
+        if(!writeFlash(addr + i, &wordBuff[i/4]))
+        {
+            return 0;
+        }
     }
 
-    return ret;
+    return 1;
 }
 
 static int erasePages(uint32_t addr, uint32_t len)
 {
-    int ret = 1;
-    int err;
+    mxc_flc_regs_t* flc;
     
     // Align start address on a page boundary.
     addr &= ~(PAGE_SIZE - 1);
     
     while(len > 0)
     {
-        // Use HAL function to erase page
-        err = MXC_FLC_PageErase(addr);
-        if(err != E_NO_ERROR)
+        // Get the correct flash controller instance
+        flc = GET_FLC_INSTANCE(addr);
+        
+        // Start flash operation
+        if(!startFlashOp(flc))
         {
-            ret = 0;
-            break;
+            return 0;
         }
+        
+        // Clear interrupt flags
+        flc->intr = (MXC_F_FLC_INTR_DONE | MXC_F_FLC_INTR_AF);
+        
+        // Write page address
+        flc->addr = addr;
+        
+        // Start page erase operation
+        flc->ctrl |= MXC_F_FLC_CTRL_PGE;
+        
+        // Wait for erase to complete
+        while(!(flc->intr & MXC_F_FLC_INTR_DONE));
+        
+        // Check for errors
+        if(flc->intr & MXC_F_FLC_INTR_AF)
+        {
+            endFlashOp(flc);
+            return 0;
+        }
+        
+        // End flash operation
+        endFlashOp(flc);
         
         // Go to next page.
         addr += PAGE_SIZE;
@@ -882,7 +975,7 @@ static int erasePages(uint32_t addr, uint32_t len)
         }
     }
     
-    return ret;
+    return 1;
 }
 
 // CRC-32
@@ -904,34 +997,6 @@ static uint32_t doCRC(uint8_t* data, uint32_t len)
         }
     }
     return(crc ^ 0xFFFFFFFFUL);
-}
-
-static int startFlashOp(mxc_flc_regs_t* flc)
-{
-    // The flash controller requires a 1MHz internal clock for write and erase operations.
-    flc->clkdiv = SystemCoreClock / 1000000;
-
-    // Check if the flash controller is busy.
-    while(flc->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
-
-    // Unlock flash.
-    flc->ctrl = (flc->ctrl & ~MXC_F_FLC_CTRL_UNLOCK) | MXC_S_FLC_CTRL_UNLOCK_UNLOCKED;
-
-    return 1;
-}
-
-static int endFlashOp(mxc_flc_regs_t* flc)
-{
-    // Lock flash.
-    flc->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
-
-    // Flush the instruction cache if it's enabled
-    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
-        MXC_ICC->invalidate = 1;
-        while (MXC_ICC->invalidate & 1);
-    }
-    
-    return 1;
 }
 
 // Helper function implementations
@@ -985,8 +1050,8 @@ void SystemInit(void)
     __DSB();
     __ISB();
 
-    /* Initialize clock - switch to 100MHz IPO */
-    /* Enable 100MHz IPO clock */
+    /* Initialize clock */
+    /* Enable IPO clock */
     MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_IPO_EN;
     
     /* Wait for IPO to be ready */
@@ -998,11 +1063,17 @@ void SystemInit(void)
     /* Wait for switch to complete */
     while(!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_RDY));
 
-    /* Update SystemCoreClock */
+#if defined(TARGET_MAX32672)
+    /* Update SystemCoreClock for MAX32672 (100MHz) */
     SystemCoreClock = 100000000;
-
-    /* Configure wait states for 100MHz operation */
+    /* Configure wait states for 100MHz operation (4 wait states) */
     MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
+#elif defined(TARGET_MAX32690)
+    /* Update SystemCoreClock for MAX32690 (120MHz) */
+    SystemCoreClock = 120000000;
+    /* Configure wait states for 120MHz operation (5 wait states) */
+    MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x5UL << MXC_F_GCR_MEMCTRL_FWS_POS);
+#endif
 
     /* Enable GPIO clocks */
     MXC_GCR->pclkdis0 &= ~(MXC_F_GCR_PCLKDIS0_GPIO0 | MXC_F_GCR_PCLKDIS0_GPIO1);
@@ -1094,7 +1165,7 @@ int main(void)
     }
 }
 
-// Custom flash functions removed - using HAL functions instead
+// Custom flash functions implemented - direct register access without HAL
 ///////////////////////////////////////////////////////////////////////////////
 // PreInit function - called by CMSIS startup before RAM initialization
 ///////////////////////////////////////////////////////////////////////////////
