@@ -55,13 +55,16 @@
 #endif
 
 /***** Globals *****/
-bool led_state[3] = {0};
+bool led_state[2] = {0};
 struct max_gpio_init_param xgpio = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
 struct no_os_gpio_desc *led[3];
 
+// Target-specific LED pin definitions
+#if defined(TARGET_MAX32672)
+// MAX32672 EvKit LED pins
 struct no_os_gpio_init_param led0_cfg = {
 	.port = 0,
 	.number = 22,
@@ -76,12 +79,22 @@ struct no_os_gpio_init_param led1_cfg = {
 	.extra = &xgpio,
 };
 
-struct no_os_gpio_init_param led2_cfg = {
-	.port = 0,
-	.number = 12,
+#elif defined(TARGET_MAX32690)
+// MAX32690 EvKit LED pins - need to verify these
+struct no_os_gpio_init_param led0_cfg = {
+	.port = 2,
+	.number = 1,
 	.platform_ops = &max_gpio_ops,
 	.extra = &xgpio,
 };
+
+struct no_os_gpio_init_param led1_cfg = {
+	.port = 0,
+	.number = 11,
+	.platform_ops = &max_gpio_ops,
+	.extra = &xgpio,
+};
+#endif
 
 /***** Functions *****/
 
@@ -93,8 +106,6 @@ int led_init(void)
 	no_os_gpio_direction_output(led[0], NO_OS_GPIO_LOW);
 	no_os_gpio_get(&led[1], &led1_cfg);
 	no_os_gpio_direction_output(led[1], NO_OS_GPIO_LOW);
-	no_os_gpio_get(&led[2], &led2_cfg);
-	no_os_gpio_direction_output(led[2], NO_OS_GPIO_LOW);
 }
 
 int led_toggle(int num)
@@ -167,8 +178,7 @@ enable_usage_fault_handler();
     		}
     	}
     	led_toggle(0);
-	led_toggle(1);
-	led_toggle(2);
+	    led_toggle(1);
     }
 }
 

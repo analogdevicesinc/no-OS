@@ -27,32 +27,56 @@
 #define REV_MINOR               2
 
 // Flash page size in bytes (8KB for MAX32672)
-#define PAGE_SIZE               0x2000      // 8K Bytes
+// Target-specific configuration
+#if defined(TARGET_MAX32672)
+    #define PAGE_SIZE               0x2000      // 8K Bytes
+    #define LOADER_PAGES            1           // 8KB
+    #define COMMIT_PAGES            1           // 8KB
+    #define IMAGE_A_PAGES           16          // 128KB / 8KB = 16 pages
+    #define IMAGE_B_PAGES           16          // 128KB / 8KB = 16 pages
+    
+    // MAX32672 memory layout:
+    // Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
+    // Bank 1 (0x10080000-0x100FFFFF): Commit + Image B
+    #define LOADER_START            (0x10000000)
+    #define IMAGE_A_START           (LOADER_START + LOADER_LENGTH)
+    #define COMMIT_START            (0x10080000)
+    #define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
+    
+    // Manual flash controller selection
+    #define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
+    
+#elif defined(TARGET_MAX32690)
+    #define PAGE_SIZE               0x4000      // 16K Bytes
+    #define LOADER_PAGES            1           // 16KB
+    #define COMMIT_PAGES            2           // 32KB
+    #define IMAGE_A_PAGES           8           // 128KB / 16KB = 8 pages
+    #define IMAGE_B_PAGES           8           // 128KB / 16KB = 8 pages
+    
+    // MAX32690 memory layout (all in Bank 0):
+    // BOOT: 1 page (16K) at 0x10000000
+    // COMMIT: 2 pages (32K) at 0x10004000
+    // IMAGE A: 8 pages (128K) at 0x1000C000
+    // IMAGE B: 8 pages (128K) at 0x1002C000
+    #define LOADER_START            (0x10000000)
+    #define COMMIT_START            (0x10004000)
+    #define IMAGE_A_START           (0x1000C000)
+    #define IMAGE_B_START           (0x1002C000)
+    
+    // MAX32690 has only one flash controller
+    #define GET_FLC_INSTANCE(addr)  (MXC_FLC0)
+    
+#else
+    #error "TARGET must be defined as TARGET_MAX32672 or TARGET_MAX32690"
+#endif
+
 #define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 128)
 
-// Number of pages used by each region
-#define LOADER_PAGES            1   // 8KB
-#define COMMIT_PAGES            1   // 8KB
-#define IMAGE_A_PAGES           16  // 128KB / 8KB = 16 pages
-#define IMAGE_B_PAGES           16  // 128KB / 8KB = 16 pages
-
-// Length of each region in bytes
+// Length of each region in bytes (common calculation)
 #define LOADER_LENGTH           (LOADER_PAGES * PAGE_SIZE)
 #define COMMIT_LENGTH           (COMMIT_PAGES * PAGE_SIZE)
 #define IMAGE_A_LENGTH          (IMAGE_A_PAGES * PAGE_SIZE)
 #define IMAGE_B_LENGTH          (IMAGE_B_PAGES * PAGE_SIZE)
-
-// Starting address of each region
-// Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
-#define LOADER_START            (0x10000000)
-#define IMAGE_A_START           (LOADER_START + LOADER_LENGTH)
-
-// Bank 1 (0x10080000-0x100FFFFF): Commit + Image B
-#define COMMIT_START            (0x10080000)
-#define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
-
-// Manual flash controller selection to avoid HAL issues
-#define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
 
 // Simple loader state tracking
 typedef struct {
@@ -949,8 +973,10 @@ void SystemInit(void)
     /* Turn off watchdog */
     MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_EN;
 
-    /* Disable ECC on flash. */
+#if defined(TARGET_MAX32672)
+    /* Disable ECC on flash - MAX32672 only */
     MXC_TRIMSIR->bb_sir2 &= ~(MXC_F_TRIMSIR_BB_SIR2_FL0ECCEN | MXC_F_TRIMSIR_BB_SIR2_FL1ECCEN);
+#endif
 
     /* Enable FPU on Cortex-M4, which occupies coprocessor slots 10 & 11 */
     /* Grant full access, per "Table B3-24 CPACR bit assignments". */
@@ -991,7 +1017,7 @@ void SystemInit(void)
 
 int main(void)
 {    
-     //erasePages(COMMIT_START, COMMIT_LENGTH);
+    //erasePages(COMMIT_START, COMMIT_LENGTH);
     // Initialize state structure 
     loaderState.download_active = 0;
     
