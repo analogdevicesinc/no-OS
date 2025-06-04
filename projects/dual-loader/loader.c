@@ -14,10 +14,9 @@
 #include <trimsir_regs.h>
 #include "loader.h"
 
-/* HAL includes */
-#include "flc.h"
-#include "icc.h"
-#include "mxc_sys.h"
+/* HAL includes for flash operations */
+#include <flc.h>
+#include <mxc_sys.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local Definitions
@@ -27,32 +26,56 @@
 #define REV_MINOR               2
 
 // Flash page size in bytes (8KB for MAX32672)
-#define PAGE_SIZE               0x2000      // 8K Bytes
+// Target-specific configuration
+#if defined(TARGET_MAX32672)
+    #define PAGE_SIZE               0x2000      // 8K Bytes
+    #define LOADER_PAGES            1           // 8KB
+    #define COMMIT_PAGES            1           // 8KB
+    #define IMAGE_A_PAGES           16          // 128KB / 8KB = 16 pages
+    #define IMAGE_B_PAGES           16          // 128KB / 8KB = 16 pages
+    
+    // MAX32672 memory layout:
+    // Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
+    // Bank 1 (0x10080000-0x100FFFFF): Commit + Image B
+    #define LOADER_START            (0x10000000)
+    #define IMAGE_A_START           (LOADER_START + LOADER_LENGTH)
+    #define COMMIT_START            (0x10080000)
+    #define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
+    
+    // Manual flash controller selection
+    #define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
+    
+#elif defined(TARGET_MAX32690)
+    #define PAGE_SIZE               0x4000      // 16K Bytes
+    #define LOADER_PAGES            1           // 16KB
+    #define COMMIT_PAGES            2           // 32KB
+    #define IMAGE_A_PAGES           8           // 128KB / 16KB = 8 pages
+    #define IMAGE_B_PAGES           8           // 128KB / 16KB = 8 pages
+    
+    // MAX32690 memory layout (all in Bank 0):
+    // BOOT: 1 page (16K) at 0x10000000
+    // COMMIT: 2 pages (32K) at 0x10004000
+    // IMAGE A: 8 pages (128K) at 0x1000C000
+    // IMAGE B: 8 pages (128K) at 0x1002C000
+    #define LOADER_START            (0x10000000)
+    #define COMMIT_START            (0x10004000)
+    #define IMAGE_A_START           (0x1000C000)
+    #define IMAGE_B_START           (0x1002C000)
+    
+    // MAX32690 has only one flash controller
+    #define GET_FLC_INSTANCE(addr)  (MXC_FLC0)
+    
+#else
+    #error "TARGET must be defined as TARGET_MAX32672 or TARGET_MAX32690"
+#endif
+
 #define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 128)
 
-// Number of pages used by each region
-#define LOADER_PAGES            1   // 8KB
-#define COMMIT_PAGES            1   // 8KB
-#define IMAGE_A_PAGES           16  // 128KB / 8KB = 16 pages
-#define IMAGE_B_PAGES           16  // 128KB / 8KB = 16 pages
-
-// Length of each region in bytes
+// Length of each region in bytes (common calculation)
 #define LOADER_LENGTH           (LOADER_PAGES * PAGE_SIZE)
 #define COMMIT_LENGTH           (COMMIT_PAGES * PAGE_SIZE)
 #define IMAGE_A_LENGTH          (IMAGE_A_PAGES * PAGE_SIZE)
 #define IMAGE_B_LENGTH          (IMAGE_B_PAGES * PAGE_SIZE)
-
-// Starting address of each region
-// Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
-#define LOADER_START            (0x10000000)
-#define IMAGE_A_START           (LOADER_START + LOADER_LENGTH)
-
-// Bank 1 (0x10080000-0x100FFFFF): Commit + Image B
-#define COMMIT_START            (0x10080000)
-#define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
-
-// Manual flash controller selection to avoid HAL issues
-#define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
 
 // Simple loader state tracking
 typedef struct {
@@ -128,13 +151,13 @@ static int imageAEmpty(void);
 // Checks if image B is empty/erased.  Returns 1 on empty.
 static int imageBEmpty(void);
 
-// Erase the range given.
+// Erase the range given - wrapper for HAL
 static int erasePages(uint32_t addr, uint32_t len);
 
-// Writes the given 128-bit word to flash.
-static int writeFlash(uint32_t addr, uint32_t val[4]);
+// Writes the given 128-bit word to flash - wrapper for HAL
+static int writeFlash(uint32_t addr, const uint32_t *val);
 
-// Writes the given array to flash.
+// Writes the given array to flash - wrapper for HAL
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len);
 
 // Returns the next available address in the commit list.
@@ -143,13 +166,14 @@ static uint32_t getNextRecord(void);
 // Returns the CRC of the given memory range.
 static uint32_t doCRC(uint8_t* buff, uint32_t len);
 
-// HAL flash functions handle RAM execution internally
-
 // Helper functions for simplified state management
 static int isImageAValid(void);
 static int isImageBValid(void);
 static int getCommittedImage(void);
 static void setCommittedImage(int image);
+
+// No flash helper functions needed - using HAL
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // API Function Implementations
@@ -510,6 +534,7 @@ uint32_t LDR_GetBuildDate()
 static int commitImageA()
 {
     uint32_t recordLoc;
+    const uint32_t zeros[4] = {0, 0, 0, 0};
     
     // Get location next commit record should be written.
     recordLoc = getNextRecord();
@@ -522,12 +547,13 @@ static int commitImageA()
     }
     
     // Write the commit record.
-    return writeFlash(recordLoc, (uint32_t[]){0, 0, 0, 0});
+    return writeFlash(recordLoc, zeros);
 }
 
 static int commitImageB()
 {
     uint32_t recordLoc;
+    const uint32_t zeros[4] = {0, 0, 0, 0};
     
     // Get location next commit record should be written.
     recordLoc = getNextRecord();
@@ -540,7 +566,7 @@ static int commitImageB()
     }
     
     // Write the commit record.
-    return writeFlash(recordLoc, (uint32_t[]){0, 0, 0, 0});
+    return writeFlash(recordLoc, zeros);
 }
 
 static int eraseImageA()
@@ -655,11 +681,15 @@ static void startImageA()
 {
     // Ensure flash controllers are idle before jumping
     while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#if defined(TARGET_MAX32672)
     while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#endif
     
-    // Lock both flash controllers
+    // Lock flash controllers
     MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#if defined(TARGET_MAX32672)
     MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#endif
     
     // Invalidate instruction cache
     if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
@@ -685,11 +715,15 @@ static void startImageB()
 {
     // Ensure flash controllers are idle before jumping
     while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#if defined(TARGET_MAX32672)
     while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+#endif
     
-    // Lock both flash controllers
+    // Lock flash controllers
     MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#if defined(TARGET_MAX32672)
     MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+#endif
     
     // Invalidate instruction cache
     if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
@@ -783,10 +817,9 @@ static uint32_t getNextRecord()
 }
 
 
-static int writeFlash(uint32_t addr, uint32_t val[4])
+static int writeFlash(uint32_t addr, const uint32_t *val)
 {
-    int ret = 1;
-    int err;
+    int result;
     
     // Make sure address is on a 128-bit boundary.
     if(addr & 0xf) 
@@ -794,20 +827,15 @@ static int writeFlash(uint32_t addr, uint32_t val[4])
         return 0;
     }
 
-    // Use HAL function to write 128-bit word
-    err = MXC_FLC_Write128(addr, val);
-    if(err != E_NO_ERROR)
-    {
-        ret = 0;
-    }
-
-    return ret;
+    // Use HAL to write 128-bit data
+    result = MXC_FLC_Write128(addr, val);
+    
+    return (result == E_NO_ERROR) ? 1 : 0;
 }
 
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
 {
-    int ret = 1;
-    int err;
+    int result;
     
     // Make sure address is on a 128-bit boundary.
     if(addr & 0xf) 
@@ -821,32 +849,33 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
         return 0;
     }
     
-    // Use HAL function to write data
-    err = MXC_FLC_Write(addr, len, (uint32_t*)buff);
-    if(err != E_NO_ERROR)
+    // Use HAL to write the buffer
+    result = MXC_FLC_Write(addr, len, (uint32_t*)buff);
+    
+    if(result != E_NO_ERROR)
     {
-        ret = 0;
+        return 0;
     }
 
-    return ret;
+    // HAL includes verification, so no need to verify manually
+    return 1;
 }
 
 static int erasePages(uint32_t addr, uint32_t len)
 {
-    int ret = 1;
-    int err;
+    int result;
     
     // Align start address on a page boundary.
     addr &= ~(PAGE_SIZE - 1);
     
     while(len > 0)
     {
-        // Use HAL function to erase page
-        err = MXC_FLC_PageErase(addr);
-        if(err != E_NO_ERROR)
+        // Use HAL to erase one page
+        result = MXC_FLC_PageErase(addr);
+        
+        if(result != E_NO_ERROR)
         {
-            ret = 0;
-            break;
+            return 0;
         }
         
         // Go to next page.
@@ -858,7 +887,7 @@ static int erasePages(uint32_t addr, uint32_t len)
         }
     }
     
-    return ret;
+    return 1;
 }
 
 // CRC-32
@@ -880,34 +909,6 @@ static uint32_t doCRC(uint8_t* data, uint32_t len)
         }
     }
     return(crc ^ 0xFFFFFFFFUL);
-}
-
-static int startFlashOp(mxc_flc_regs_t* flc)
-{
-    // The flash controller requires a 1MHz internal clock for write and erase operations.
-    flc->clkdiv = SystemCoreClock / 1000000;
-
-    // Check if the flash controller is busy.
-    while(flc->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
-
-    // Unlock flash.
-    flc->ctrl = (flc->ctrl & ~MXC_F_FLC_CTRL_UNLOCK) | MXC_S_FLC_CTRL_UNLOCK_UNLOCKED;
-
-    return 1;
-}
-
-static int endFlashOp(mxc_flc_regs_t* flc)
-{
-    // Lock flash.
-    flc->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
-
-    // Flush the instruction cache if it's enabled
-    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
-        MXC_ICC->invalidate = 1;
-        while (MXC_ICC->invalidate & 1);
-    }
-    
-    return 1;
 }
 
 // Helper function implementations
@@ -949,8 +950,10 @@ void SystemInit(void)
     /* Turn off watchdog */
     MXC_WDT0->ctrl &= ~MXC_F_WDT_CTRL_EN;
 
-    /* Disable ECC on flash. */
+#if defined(TARGET_MAX32672)
+    /* Disable ECC on flash - MAX32672 only */
     MXC_TRIMSIR->bb_sir2 &= ~(MXC_F_TRIMSIR_BB_SIR2_FL0ECCEN | MXC_F_TRIMSIR_BB_SIR2_FL1ECCEN);
+#endif
 
     /* Enable FPU on Cortex-M4, which occupies coprocessor slots 10 & 11 */
     /* Grant full access, per "Table B3-24 CPACR bit assignments". */
@@ -959,8 +962,8 @@ void SystemInit(void)
     __DSB();
     __ISB();
 
-    /* Initialize clock - switch to 100MHz IPO */
-    /* Enable 100MHz IPO clock */
+    /* Initialize clock */
+    /* Enable IPO clock */
     MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_IPO_EN;
     
     /* Wait for IPO to be ready */
@@ -972,11 +975,17 @@ void SystemInit(void)
     /* Wait for switch to complete */
     while(!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_RDY));
 
-    /* Update SystemCoreClock */
+#if defined(TARGET_MAX32672)
+    /* Update SystemCoreClock for MAX32672 (100MHz) */
     SystemCoreClock = 100000000;
-
-    /* Configure wait states for 100MHz operation */
+    /* Configure wait states for 100MHz operation (4 wait states) */
     MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
+#elif defined(TARGET_MAX32690)
+    /* Update SystemCoreClock for MAX32690 (120MHz) */
+    SystemCoreClock = 120000000;
+    /* Configure wait states for 120MHz operation (5 wait states) */
+    MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x5UL << MXC_F_GCR_MEMCTRL_FWS_POS);
+#endif
 
     /* Enable GPIO clocks */
     MXC_GCR->pclkdis0 &= ~(MXC_F_GCR_PCLKDIS0_GPIO0 | MXC_F_GCR_PCLKDIS0_GPIO1);
@@ -991,7 +1000,7 @@ void SystemInit(void)
 
 int main(void)
 {    
-     //erasePages(COMMIT_START, COMMIT_LENGTH);
+    //erasePages(COMMIT_START, COMMIT_LENGTH);
     // Initialize state structure 
     loaderState.download_active = 0;
     
@@ -1002,10 +1011,12 @@ int main(void)
     uint32_t commitAddr = getNextRecord();
     if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 16))
     {
+        const uint32_t zeros[4] = {0, 0, 0, 0};
+        
         // First boot - validate and commit image A as default
         if(isImageAValid())
         {
-            writeFlash(commitAddr, (uint32_t[]){0, 0, 0, 0});
+            writeFlash(commitAddr, zeros);
             loaderState.committed_image = 0; // A
             loaderState.running_image = 0;   // A
             startImageA();
@@ -1013,7 +1024,7 @@ int main(void)
         else if(isImageBValid())
         {
             // A invalid, try B
-            writeFlash(commitAddr - 16, (uint32_t[]){0, 0, 0, 0});
+            writeFlash(commitAddr - 16, zeros);
             loaderState.committed_image = 1; // B
             loaderState.running_image = 1;   // B
             startImageB();
@@ -1068,7 +1079,7 @@ int main(void)
     }
 }
 
-// Custom flash functions removed - using HAL functions instead
+// Custom flash functions implemented - direct register access without HAL
 ///////////////////////////////////////////////////////////////////////////////
 // PreInit function - called by CMSIS startup before RAM initialization
 ///////////////////////////////////////////////////////////////////////////////
