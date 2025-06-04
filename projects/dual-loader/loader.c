@@ -14,6 +14,11 @@
 #include <trimsir_regs.h>
 #include "loader.h"
 
+/* HAL includes */
+#include "flc.h"
+#include "icc.h"
+#include "mxc_sys.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 // Local Definitions
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +51,7 @@
 #define COMMIT_START            (0x10080000)
 #define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
 
-// Dual flash controller support
+// Manual flash controller selection to avoid HAL issues
 #define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
 
 // Simple loader state tracking
@@ -129,9 +134,6 @@ static int erasePages(uint32_t addr, uint32_t len);
 // Writes the given 128-bit word to flash.
 static int writeFlash(uint32_t addr, uint32_t val[4]);
 
-// Writes the given 128-bit word to flash.
-static int write128(mxc_flc_regs_t* flc, uint32_t addr, uint32_t val[4]);
-
 // Writes the given array to flash.
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len);
 
@@ -141,11 +143,7 @@ static uint32_t getNextRecord(void);
 // Returns the CRC of the given memory range.
 static uint32_t doCRC(uint8_t* buff, uint32_t len);
 
-// Prepares flash for an operation.
-static int startFlashOp(mxc_flc_regs_t* flc);
-
-// Completes flash operation.
-static int endFlashOp(mxc_flc_regs_t* flc);
+// HAL flash functions handle RAM execution internally
 
 // Helper functions for simplified state management
 static int isImageAValid(void);
@@ -655,6 +653,20 @@ static int validateImageB()
 
 static void startImageA()
 {
+    // Ensure flash controllers are idle before jumping
+    while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+    while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+    
+    // Lock both flash controllers
+    MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+    MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+    
+    // Invalidate instruction cache
+    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
+        MXC_ICC->invalidate = 1;
+        while (MXC_ICC->invalidate & 1);
+    }
+    
     // Reset all peripherals and GPIO
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
     
@@ -671,6 +683,20 @@ static void startImageA()
 
 static void startImageB()
 {
+    // Ensure flash controllers are idle before jumping
+    while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+    while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
+    
+    // Lock both flash controllers
+    MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+    MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
+    
+    // Invalidate instruction cache
+    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
+        MXC_ICC->invalidate = 1;
+        while (MXC_ICC->invalidate & 1);
+    }
+    
     // Reset all peripherals and GPIO
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
     
@@ -756,58 +782,32 @@ static uint32_t getNextRecord()
     return (COMMIT_START + COMMIT_LENGTH - 16);
 }
 
-static int write128(mxc_flc_regs_t* flc, uint32_t addr, uint32_t val[4])
-{
-    // write the data
-    flc->addr = addr;
-    flc->data[0] = val[0];
-    flc->data[1] = val[1];
-    flc->data[2] = val[2];
-    flc->data[3] = val[3];
-    flc->ctrl |= MXC_F_FLC_CTRL_WR;
-
-    // Wait until flash operation is complete.
-    while (flc->ctrl & MXC_F_FLC_CTRL_WR);
-    
-    return 1;
-}
 
 static int writeFlash(uint32_t addr, uint32_t val[4])
 {
+    int ret = 1;
+    int err;
+    
     // Make sure address is on a 128-bit boundary.
     if(addr & 0xf) 
     {
         return 0;
     }
 
-    // Get the appropriate flash controller instance
-    mxc_flc_regs_t* flc = GET_FLC_INSTANCE(addr);
-
-    // Prepare flash controller for writes.
-    if(!startFlashOp(flc))
+    // Use HAL function to write 128-bit word
+    err = MXC_FLC_Write128(addr, val);
+    if(err != E_NO_ERROR)
     {
-        return 0;
+        ret = 0;
     }
 
-    // Do the write.
-    if(!write128(flc, addr, val))
-    {
-        return 0;
-    }
-
-    // Lock the flash and flush the caches.
-    if(!endFlashOp(flc))
-    {
-        return 0;
-    }
-
-    return 1;
+    return ret;
 }
 
 static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
 {
-    uint32_t i;
-    uint32_t* mem = (uint32_t*)buff;
+    int ret = 1;
+    int err;
     
     // Make sure address is on a 128-bit boundary.
     if(addr & 0xf) 
@@ -821,60 +821,34 @@ static int writeBytes(uint32_t addr, uint8_t* buff, uint32_t len)
         return 0;
     }
     
-    // Get the appropriate flash controller instance
-    mxc_flc_regs_t* flc = GET_FLC_INSTANCE(addr);
-    
-    // Prepare flash controller for writes.
-    if(!startFlashOp(flc))
+    // Use HAL function to write data
+    err = MXC_FLC_Write(addr, len, (uint32_t*)buff);
+    if(err != E_NO_ERROR)
     {
-        return 0;
+        ret = 0;
     }
 
-    // Process 16 bytes (4 words) at a time
-    for(i = 0; i < len; i += 16)
-    {
-        uint32_t word_idx = i / 4;  // Convert byte index to word index
-        if(!write128(flc, addr, &mem[word_idx]))
-        {
-            return 0;
-        }
-        addr += 16;
-    }
-
-    // Lock the flash and flush the caches.
-    if(!endFlashOp(flc))
-    {
-        return 0;
-    }
-
-    return 1;
+    return ret;
 }
 
 static int erasePages(uint32_t addr, uint32_t len)
 {
-    // Get the appropriate flash controller instance
-    mxc_flc_regs_t* flc = GET_FLC_INSTANCE(addr);
-    
-    // Prepare flash controller for the erase.
-    if(!startFlashOp(flc))
-    {
-        return 0;
-    }
+    int ret = 1;
+    int err;
     
     // Align start address on a page boundary.
     addr &= ~(PAGE_SIZE - 1);
-    while(len)
+    
+    while(len > 0)
     {
-        // Write page erase code
-        flc->ctrl = (flc->ctrl & ~MXC_F_FLC_CTRL_ERASE_CODE) | MXC_S_FLC_CTRL_ERASE_CODE_ERASEPAGE;
-
-        // Issue page erase command
-        flc->addr = addr;
-        flc->ctrl |= MXC_F_FLC_CTRL_PGE;
-
-        // Wait until flash operation is complete.
-        while(flc->ctrl & MXC_F_FLC_CTRL_PGE);
-
+        // Use HAL function to erase page
+        err = MXC_FLC_PageErase(addr);
+        if(err != E_NO_ERROR)
+        {
+            ret = 0;
+            break;
+        }
+        
         // Go to next page.
         addr += PAGE_SIZE;
         if (len >= PAGE_SIZE) {
@@ -884,14 +858,7 @@ static int erasePages(uint32_t addr, uint32_t len)
         }
     }
     
-    // Lock the flash and flush the caches.
-    if(!endFlashOp(flc))
-    {
-        return 0;
-    }
-    
-    // All necessary data erased.
-    return 1;
+    return ret;
 }
 
 // CRC-32
@@ -1011,12 +978,6 @@ void SystemInit(void)
     /* Configure wait states for 100MHz operation */
     MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
 
-    /* Enable instruction cache for better performance */
-    MXC_ICC->ctrl |= MXC_F_ICC_CTRL_EN;
-    
-    /* Wait for cache to be ready */
-    while(!(MXC_ICC->ctrl & MXC_F_ICC_CTRL_RDY));
-
     /* Enable GPIO clocks */
     MXC_GCR->pclkdis0 &= ~(MXC_F_GCR_PCLKDIS0_GPIO0 | MXC_F_GCR_PCLKDIS0_GPIO1);
 
@@ -1030,7 +991,7 @@ void SystemInit(void)
 
 int main(void)
 {    
-    // erasePages(COMMIT_START, COMMIT_LENGTH);
+     //erasePages(COMMIT_START, COMMIT_LENGTH);
     // Initialize state structure 
     loaderState.download_active = 0;
     
@@ -1105,4 +1066,25 @@ int main(void)
             while(1); // TODO: Implement recovery mechanism
         }
     }
+}
+
+// Custom flash functions removed - using HAL functions instead
+///////////////////////////////////////////////////////////////////////////////
+// PreInit function - called by CMSIS startup before RAM initialization
+///////////////////////////////////////////////////////////////////////////////
+
+// Weak function that can be overridden
+__attribute__((weak))
+int PreInit(void)
+{
+    // Return 0 to indicate RAM should be initialized normally
+    // Return non-zero to skip RAM initialization
+    return 0;
+}
+
+// Dummy implementation of libc_init_array for bootloader
+// We don't need C++ constructor support in the bootloader
+void __libc_init_array(void)
+{
+    // Empty - no constructors to call
 }
