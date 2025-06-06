@@ -37,6 +37,7 @@
 #include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
+#include "no_os_delay.h"
 
 const uint8_t standard_pin_ctrl_mode_sel[3][4] = {
 //		MCLK/1,	MCLK/2,	MCLK/4,	MCLK/8
@@ -700,22 +701,22 @@ int32_t ad7768_setup_finish(ad7768_dev *dev,
 {
 	int32_t ret = 0;
 
-	ret |= no_os_gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
-	ret |= no_os_gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
-	ret |= no_os_gpio_get(&dev->gpio_mode2, &init_param.gpio_mode2);
-	ret |= no_os_gpio_get(&dev->gpio_mode3, &init_param.gpio_mode3);
+	if (dev->pin_spi_ctrl == AD7768_PIN_CTRL) {
+		ret |= no_os_gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
+		ret |= no_os_gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
+		ret |= no_os_gpio_get(&dev->gpio_mode2, &init_param.gpio_mode2);
+		ret |= no_os_gpio_get(&dev->gpio_mode3, &init_param.gpio_mode3);
 
-	if (dev->gpio_reset)
-		ret |= no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
-
-	if (dev->gpio_mode0)
 		ret |= no_os_gpio_direction_output(dev->gpio_mode0, NO_OS_GPIO_LOW);
-	if (dev->gpio_mode1)
 		ret |= no_os_gpio_direction_output(dev->gpio_mode1, NO_OS_GPIO_LOW);
-	if (dev->gpio_mode2)
 		ret |= no_os_gpio_direction_output(dev->gpio_mode2, NO_OS_GPIO_LOW);
-	if (dev->gpio_mode3)
 		ret |= no_os_gpio_direction_output(dev->gpio_mode3, NO_OS_GPIO_LOW);
+	}
+
+	ret |= no_os_gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);
+
+	/* Delay to ensure device is out of reset */
+	no_os_mdelay(2);
 
 	dev->sleep_mode = init_param.sleep_mode;
 	dev->mclk_div = init_param.mclk_div;
@@ -734,10 +735,12 @@ int32_t ad7768_setup_finish(ad7768_dev *dev,
 	ad7768_set_conv_op(dev, dev->conv_op);
 
 	if (ret) {
-		no_os_gpio_remove(dev->gpio_mode0);
-		no_os_gpio_remove(dev->gpio_mode1);
-		no_os_gpio_remove(dev->gpio_mode2);
-		no_os_gpio_remove(dev->gpio_mode3);
+		if (dev->pin_spi_ctrl == AD7768_PIN_CTRL) {
+			no_os_gpio_remove(dev->gpio_mode0);
+			no_os_gpio_remove(dev->gpio_mode1);
+			no_os_gpio_remove(dev->gpio_mode2);
+			no_os_gpio_remove(dev->gpio_mode3);
+		}
 	} else
 		printf("AD7768 successfully initialized\n");
 
@@ -914,10 +917,13 @@ int ad7768_remove(ad7768_dev *dev)
 	no_os_spi_remove(dev->spi_desc);
 
 	no_os_gpio_remove(dev->gpio_reset);
-	no_os_gpio_remove(dev->gpio_mode0);
-	no_os_gpio_remove(dev->gpio_mode1);
-	no_os_gpio_remove(dev->gpio_mode2);
-	no_os_gpio_remove(dev->gpio_mode3);
+
+	if (dev->pin_spi_ctrl == AD7768_PIN_CTRL) {
+		no_os_gpio_remove(dev->gpio_mode0);
+		no_os_gpio_remove(dev->gpio_mode1);
+		no_os_gpio_remove(dev->gpio_mode2);
+		no_os_gpio_remove(dev->gpio_mode3);
+	}
 
 	no_os_free(dev);
 
