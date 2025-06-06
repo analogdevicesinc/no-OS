@@ -393,7 +393,7 @@ $(foreach file,$(BUILD_FILES), \
 	$(eval $(file): $(filter %/$(notdir $(file)),$(SRC_FILES))) \
 )
 
-$(BUILD_FILES): % :
+$(BUILD_FILES): % : | make_dirs
 	$(call update_file,$<,$@)
 	-@TS=$(shell stat --format=%Y $< 2> /dev/null); touch -h -d @$${TS} $@ 2> /dev/null
 
