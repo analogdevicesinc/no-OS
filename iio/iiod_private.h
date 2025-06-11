@@ -153,6 +153,7 @@ struct iiod_run_cmd_result {
 	bool write_val;
 	/* If buf.len != 0 buf has to be sent */
 	struct iiod_buff buf;
+	bool second_write;
 };
 
 /* Internal structure to handle a connection state */
