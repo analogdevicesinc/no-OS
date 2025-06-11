@@ -43,7 +43,6 @@ INCS += $(INCLUDE)/no_os_delay.h     		\
 	$(INCLUDE)/no_os_clk.h 			\
 	$(INCLUDE)/no_os_axi_io.h 		\
         $(INCLUDE)/no_os_alloc.h
-
 		
 INCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h 	\
 	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h 	\
@@ -69,7 +68,12 @@ SRCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c 	\
 	$(NO-OS)/jesd204/jesd204-core.c 			\
 	$(NO-OS)/jesd204/jesd204-fsm.c
 
+SRC_DIRS += $(DRIVERS)/rf-transceiver/apollo
+
 INCS += $(DRIVERS)/frequency/adf4382/adf4382.h			\
-	$(DRIVERS)/frequency/hmc7044/hmc7044.h	
+	$(DRIVERS)/frequency/hmc7044/hmc7044.h			\
+	$(DRIVERS)/rf-transceiver/apollo/ad9088.h
+	
 SRCS += $(DRIVERS)/frequency/adf4382/adf4382.c			\
-	$(DRIVERS)/frequency/hmc7044/hmc7044.c	
+	$(DRIVERS)/frequency/hmc7044/hmc7044.c			\
+	$(DRIVERS)/rf-transceiver/apollo/ad9088.c

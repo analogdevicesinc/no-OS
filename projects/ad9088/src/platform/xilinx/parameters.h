@@ -55,19 +55,25 @@
 #ifdef _XPARAMETERS_PS_H_
 #define UART_DEVICE_ID			XPAR_XUARTPSV_0_DEVICE_ID
 #define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
-#define SPI_DEVICE_ID			XPAR_XSPIPS_0_DEVICE_ID
+#define CLK_SPI_DEVICE_ID		XPAR_XSPIPS_0_DEVICE_ID
+#define APOLLO_SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
 #define GPIO_DEVICE_ID			XPAR_XGPIOPS_0_DEVICE_ID
 #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
 #endif // _XPARAMETERS_PS_H_
 
 extern struct xil_uart_init_param	platform_uart_extra_ip;
 extern struct xil_spi_init_param	clk_spi_extra_ip;
+extern struct xil_spi_init_param	apollo_spi_extra_ip;
 extern struct xil_gpio_init_param	xil_gpio_param;
 
 #define SPI_OPS_CLK			&xil_spi_ops
 #define SPI_EXTRA_CLK			&clk_spi_extra_ip
 #define SPI_CS_ADF4382			0
 #define SPI_CS_HMC7044			1
+
+#define SPI_OPS_APOLLO			&xil_spi_ops
+#define SPI_EXTRA_APOLLO		&apollo_spi_extra_ip
+#define SPI_CS_APOLLO			0
 
 #define GPIO_OPS			&xil_gpio_ops
 #define GPIO_EXTRA			&xil_gpio_param

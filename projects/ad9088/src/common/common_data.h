@@ -36,6 +36,7 @@
 #include "platform_includes.h"
 #include "adf4382.h"
 #include "hmc7044.h"
+#include "ad9088.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include "no_os_uart.h"
@@ -45,22 +46,28 @@
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 
+#include "apollo_cpu_device_profile_types.h"
+
 /*UC42*/
-#define AD9084_RX_JESD_F			2
-#define AD9084_RX_JESD_K			128
-#define AD9084_RX_JESD_SUBCLASS			0
+#define AD9088_RX_JESD_F			2
+#define AD9088_RX_JESD_K			128
+#define AD9088_RX_JESD_SUBCLASS			0
 
-#define AD9084_TX_JESD_F			2
-#define AD9084_TX_JESD_K			128
-#define AD9084_TX_JESD_M 			4
-#define AD9084_TX_JESD_N			16
-#define AD9084_TX_JESD_NP			16
-#define AD9084_TX_JESD_HD			0
-#define AD9084_TX_JESD_CS			0
-#define AD9084_TX_JESD_SUBCLASS			0
+#define AD9088_TX_JESD_F			2
+#define AD9088_TX_JESD_K			128
+#define AD9088_TX_JESD_M 			4
+#define AD9088_TX_JESD_N			16
+#define AD9088_TX_JESD_NP			16
+#define AD9088_TX_JESD_HD			0
+#define AD9088_TX_JESD_CS			0
+#define AD9088_TX_JESD_SUBCLASS			0
 
-#define AD9084_DEVICE_CLK_KHZ			20000000
-#define AD9084_LANE_RATE_KHZ			20625000
+#define AD9088_DEVICE_CLK_KHZ			20000000
+#define AD9088_LANE_RATE_KHZ			20625000
+
+#define AD9088_MULTIDEVICE_INST_CNT		1
+#define AD9088_NYQUIST_ZONE			1
+#define AD9088_LOGICAL_LANE_MAPPING		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
 
 extern struct no_os_spi_init_param		adf4382_spi_param;
 extern struct adf4382_init_param 		adf4382_ip;
@@ -71,6 +78,7 @@ extern struct axi_dmac_init 			rx_dmac_ip;
 extern struct axi_dmac_init 			tx_dmac_ip;
 extern struct jesd204_rx_init			rx_jesd204_ip;
 extern struct jesd204_tx_init			tx_jesd204_ip;
+extern struct ad9088_init_param			ad9088_ip;
 
 
 #endif /* __COMMON_DATA_H__ */

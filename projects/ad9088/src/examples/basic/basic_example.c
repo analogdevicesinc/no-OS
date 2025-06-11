@@ -50,6 +50,7 @@ int basic_example_main()
 	struct axi_jesd204_tx *tx_jesd;
 	struct axi_dmac *rx_dmac;
 	struct axi_dmac *tx_dmac;
+	struct ad9088_phy *ad9088_phy;
 	
 	int ret = 0;
 
@@ -91,8 +92,14 @@ int basic_example_main()
 		goto error_6;
 	}
 
-	pr_info("Project configured\n");
+	ret = ad9088_init(&ad9088_phy, &ad9088_ip);
+	if (ret) {
+		pr_info("AD9088 initialization failed\n");
+		goto error_7;
+	}
 
+	pr_info("Project configured\n");
+error_7:
 error_6:
 	axi_jesd204_tx_remove(tx_jesd);
 error_5:

@@ -46,7 +46,7 @@ struct no_os_uart_init_param platform_uart_ip = {
 };
 
 struct no_os_spi_init_param adf4382_spi_ip = {
-	.device_id = SPI_DEVICE_ID,
+	.device_id = CLK_SPI_DEVICE_ID,
 	.max_speed_hz = 1500000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
@@ -56,13 +56,23 @@ struct no_os_spi_init_param adf4382_spi_ip = {
 };
 
 struct no_os_spi_init_param hmc7044_spi_ip = {
-	.device_id = SPI_DEVICE_ID,
+	.device_id = CLK_SPI_DEVICE_ID,
 	.max_speed_hz = 1000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = SPI_OPS_CLK,
 	.extra = SPI_EXTRA_CLK,
 	.chip_select = SPI_CS_HMC7044,
+};
+
+struct no_os_spi_init_param ad9088_spi_ip = {
+	.device_id = APOLLO_SPI_DEVICE_ID,
+	.max_speed_hz = 13000000,
+	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+	.mode = NO_OS_SPI_MODE_0,
+	.platform_ops = SPI_OPS_APOLLO,
+	.extra = SPI_EXTRA_APOLLO,
+	.chip_select = SPI_CS_APOLLO,
 };
 
 struct no_os_gpio_init_param gpio_reset_param = {
@@ -84,6 +94,7 @@ struct adf4382_init_param adf4382_ip = {
 	.ld_count = 10,
 	.id = ID_ADF4382A,
 };
+
 
 struct hmc7044_chan_spec chan_spec[] = {
 	{
@@ -153,24 +164,51 @@ struct axi_dmac_init tx_dmac_ip = {
 struct jesd204_rx_init rx_jesd204_ip = {
 	.name = "rx_jesd",
 	.base = RX_JESD_BASEADDR,
-	.octets_per_frame = AD9084_RX_JESD_F,
-	.frames_per_multiframe = AD9084_RX_JESD_K,
-	.subclass = AD9084_RX_JESD_SUBCLASS,
-	.device_clk_khz = AD9084_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9084_LANE_RATE_KHZ	
+	.octets_per_frame = AD9088_RX_JESD_F,
+	.frames_per_multiframe = AD9088_RX_JESD_K,
+	.subclass = AD9088_RX_JESD_SUBCLASS,
+	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ	
 };
 
 struct jesd204_tx_init tx_jesd204_ip = {
 	.name = "tx_jesd",
 	.base = TX_JESD_BASEADDR,
-	.octets_per_frame = AD9084_TX_JESD_F,
-	.frames_per_multiframe = AD9084_TX_JESD_K,
-	.converters_per_device = AD9084_TX_JESD_M,
-	.converter_resolution = AD9084_TX_JESD_N,
-	.bits_per_sample = AD9084_TX_JESD_NP,
-	.high_density = AD9084_TX_JESD_HD,
-	.control_bits_per_sample = AD9084_TX_JESD_CS,
-	.subclass = AD9084_TX_JESD_SUBCLASS,
-	.device_clk_khz = AD9084_DEVICE_CLK_KHZ,
-	.lane_clk_khz = AD9084_LANE_RATE_KHZ
+	.octets_per_frame = AD9088_TX_JESD_F,
+	.frames_per_multiframe = AD9088_TX_JESD_K,
+	.converters_per_device = AD9088_TX_JESD_M,
+	.converter_resolution = AD9088_TX_JESD_N,
+	.bits_per_sample = AD9088_TX_JESD_NP,
+	.high_density = AD9088_TX_JESD_HD,
+	.control_bits_per_sample = AD9088_TX_JESD_CS,
+	.subclass = AD9088_TX_JESD_SUBCLASS,
+	.device_clk_khz = AD9088_DEVICE_CLK_KHZ,
+	.lane_clk_khz = AD9088_LANE_RATE_KHZ
+};
+
+struct ad9088_init_param ad9088_ip = {
+	.spi_init = &ad9088_spi_ip, // to be set by the user
+	.gpio_reset = NULL, // to be set by the user
+	.gpio_tri_req = NULL, // to be set by the user
+	.gpio_rx1_en = NULL, // to be set by the user
+	.gpio_rx2_en = NULL, // to be set by the user
+	.gpio_tx1_en = NULL, // to be set by the user
+	.gpio_tx2_en = NULL, // to be set by the user
+	.versal_xvr_reset = NULL, // to be set by the user
+	.spi_3wire_en = false,
+	.rx_real_channel_en = false,
+	.tx_real_channel_en = false,
+	.side_b_use_own_tpl_en = false,
+	.multidevice_instance_count = AD9088_MULTIDEVICE_INST_CNT,
+	.trig_sync_en = false,
+	.standalone_en = false,
+	.nyquist_zone = AD9088_NYQUIST_ZONE,
+	.subclass = AD9088_TX_JESD_SUBCLASS,
+	.jtx0_logical_lane_mapping = AD9088_LOGICAL_LANE_MAPPING,
+	.jtx1_logical_lane_mapping = AD9088_LOGICAL_LANE_MAPPING,
+	.jrx0_logical_lane_mapping = AD9088_LOGICAL_LANE_MAPPING,
+	.jrx1_logical_lane_mapping = AD9088_LOGICAL_LANE_MAPPING,
+	.jtx_ser_amplitude = ADI_APOLLO_JESD_DRIVE_SWING_VTT_100,
+	.jtx_ser_pre_emphasis = ADI_APOLLO_JESD_PRE_TAP_LEVEL_6_DB,
+	.jtx_ser_post_emphasis = ADI_APOLLO_JESD_POST_TAP_LEVEL_3_DB
 };

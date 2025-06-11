@@ -52,6 +52,11 @@ struct xil_spi_init_param clk_spi_extra_ip = {
 	.type = SPI_PS
 };
 
+struct xil_spi_init_param apollo_spi_extra_ip = {
+ 	.flags = 0,
+	.type = SPI_PL
+};
+
 struct xil_gpio_init_param xil_gpio_param = {
 	.device_id = GPIO_DEVICE_ID,
 	.type = GPIO_PS,

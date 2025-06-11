@@ -1,3 +1,5 @@
+CFLAGS += -DB0 -I$(BUILD_DIR)/app/noos/drivers/rf-transceiver/apollo/private/inc/bitfields/b0/
+
 ifeq (y,$(strip $(BASIC_EXAMPLE)))
 CFLAGS += -DBASIC_EXAMPLE
 SRCS += $(PROJECT)/src/examples/basic/basic_example.c
