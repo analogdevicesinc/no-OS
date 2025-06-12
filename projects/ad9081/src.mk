@@ -58,8 +58,8 @@ SRCS += $(NO-OS)/iio/iio_app/iio_app.c \
 endif
 INCS +=	$(PROJECT)/src/app_clock.h \
 	$(PROJECT)/src/app_jesd.h \
-	$(PROJECT)/src/app_config.h \
 	$(PROJECT)/src/parameters.h \
+	$(PROJECT)/profiles/$(PROFILE)/app_config.h \
 	$(DRIVERS)/adc/ad9081/ad9081.h \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_ad9081.h \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_impala_tc.h \
