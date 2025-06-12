@@ -6,12 +6,12 @@ LTC4296 no-OS driver
 Supported Devices
 -----------------
 
-`LTC4296-1 <www.analog.com/en/products/ltc4296-1.html>`_
+`LTC4296-1 <https://www.analog.com/en/products/ltc4296-1.html>`_
 
 Overview
 --------
 
-The `LTC4296-1 <www.analog.com/en/products/ltc4296-1.html>`_ is an IEEE
+The `LTC4296-1 <https://www.analog.com/en/products/ltc4296-1.html>`_ is an IEEE
 802.3cg-compliant, five port, single-pair power over Ethernet (SPoE), power
 sourcing equipment (PSE) controller. SPoE simplifies system design and
 installation with standardized power and Ethernet data over a single-pair cable.
