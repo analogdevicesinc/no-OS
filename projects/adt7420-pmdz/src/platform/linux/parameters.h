@@ -1,10 +1,10 @@
-/*******************************************************************************
- *   @file   linux/linux_i2c.h
- *   @brief  Header containing extra types used by the I2C driver.
- *   @author Dragos Bogdan (dragos.bogdan@analog.com)
+/***************************************************************************//**
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Linux platform used by adt7420-pmdz
+ *           project.
  *   @author Jamila Macagba (Jamila.Macagba@analog.com)
 ********************************************************************************
- * Copyright 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,24 +31,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef LINUX_I2C_H_
-#define LINUX_I2C_H_
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include <stdint.h>
+#include "linux_i2c.h"
 
-/**
- * @struct linux_i2c_init_param
- * @brief Structure holding the initialization parameters for Linux platform
- * specific I2C parameters.
- */
-struct linux_i2c_init_param {
-	/** I2C bus ID (/dev/i2c-"device_id") */
-	uint32_t device_id;
-};
+#define I2C_DEVICE_ID   1
+#define I2C_EXTRA	&adt7420_i2c_extra
+#define I2C_OPS		&linux_i2c_ops
 
-/**
- * @brief Linux specific I2C platform ops structure
- */
-extern const struct no_os_i2c_platform_ops linux_i2c_ops;
+extern struct linux_i2c_init_param adt7420_i2c_extra;
 
-#endif // LINUX_I2C_H_
+#endif /* __PARAMETERS_H__ */
