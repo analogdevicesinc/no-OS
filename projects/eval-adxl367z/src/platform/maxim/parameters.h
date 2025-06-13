@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   common_data.c
- *   @brief  Defines common data to be used by eval-adxl367z examples.
- *   @author Andrei Porumb (andrei.porumb@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definition of Maxim platform data used by eval-adxl367z project.
+ *   @author Radu Sabau (radu.sabau@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,21 +30,40 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "common_data.h"
+#include "maxim_irq.h"
+#include "maxim_gpio_irq.h"
+#include "maxim_spi.h"
+#include "maxim_gpio.h"
+#include "maxim_uart.h"
+#include "maxim_uart_stdio.h"
 
-const struct no_os_spi_init_param spi_ip = {
-	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = 100000,
-	.mode = NO_OS_SPI_MODE_0,
-	.chip_select = 0U,
-	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-	.platform_ops = SPI_OPS,
-	.extra = &spi_extra
-};
+#define UART_IRQ_ID		UART0_IRQn
+#define UART_DEVICE_ID		0
+#define UART_BAUDRATE		57600
+#define UART_EXTRA		&adxl367_uart_extra_ip
+#define UART_OPS		&max_uart_ops
 
-struct adxl367_init_param init_param = {
-	.spi_init = spi_ip,
-	.comm_type = ADXL367_SPI_COMM,
-	.id = ADXL367_ID,
-};
+#define SPI_DEVICE_ID		4
+#define SPI_CS			0
+#define SPI_BAUDRATE		8000000
+#define SPI_OPS			&max_spi_ops
+
+#define GPIO_INT1_PORT_NUM	2
+#define GPIO_INT1_PIN_NUM	21
+#define GPIO_OPS		&max_gpio_ops
+#define GPIO_EXTRA		&adxl367_gpio_extra_ip
+
+#define GPIO_IRQ_OPS		&max_gpio_irq_ops
+#define GPIO_IRQ_EXTRA		NULL
+
+#define GPIO_IRQ_ID		2
+#define NVIC_GPIO_IRQ		GPIO2_IRQn
+
+extern struct max_uart_init_param adxl367_uart_extra_ip;
+extern struct max_gpio_init_param adxl367_gpio_extra_ip;
+extern struct max_spi_init_param spi_extra;
+
+#endif /* __PARAMETERS_H__ */

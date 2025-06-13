@@ -1,6 +1,7 @@
 # Select the example you want to enable by choosing y for enabling and n for disabling
 IIO_EXAMPLE = n
-DUMMY_EXAMPLE = y
+DUMMY_EXAMPLE = n
+TRIPLE_TAP_EXAMPLE = y
 
 # Uncomment to use the desired platform
 # PLATFORM = xilinx
