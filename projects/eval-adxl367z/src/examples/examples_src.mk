@@ -11,6 +11,15 @@ SRCS += $(PROJECT)/src/examples/dummy/dummy_example.c
 INCS += $(PROJECT)/src/examples/dummy/dummy_example.h
 endif
 
+ifeq (y,$(strip $(TRIPLE_TAP_EXAMPLE)))
+ifneq 'maxim' '$(PLATFORM)'
+$(error Triple Tap Example can only be run on Maxim platform at the moment!)
+endif
+CFLAGS += -DTRIPLE_TAP_EXAMPLE
+SRCS += $(PROJECT)/src/examples/triple_tap/triple_tap_example.c
+INCS += $(PROJECT)/src/examples/triple_tap/triple_tap_example.h
+endif
+
 ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 

@@ -39,6 +39,10 @@
 #include <xil_cache.h>
 #endif
 
+#ifdef MAXIM_PLATFORM
+#include "maxim/parameters.h"
+#endif
+
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
 #endif
