@@ -36,7 +36,8 @@ MEMORY {
     /* Image A starts after 1 page (8K) bootloader */
     FLASH (rx) : ORIGIN = 0x10002000, LENGTH = 128K - 16      /* Save 16 bytes at end for CRC and image length */
     FOOTER (rx) : ORIGIN = 0x10021ff0, LENGTH = 16
-    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 160K - 4 /* MAX32672 has 160KB SRAM, save 4 bytes for loader working area */
+    /* Start SRAM after bootloader's RAM usage (0x800 bytes) + alignment */
+    SRAM (rwx) : ORIGIN = 0x20000800, LENGTH = 160K - 0x800 - 4 /* MAX32672 has 160KB SRAM, reserve first 2KB for bootloader + 4 bytes for loader state */
 }
 
 /* Bootloader API addresses - adjusted for 8K page size */
