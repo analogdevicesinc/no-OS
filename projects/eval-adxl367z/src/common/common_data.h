@@ -37,6 +37,8 @@
 #include "adxl367.h"
 
 extern const struct no_os_spi_init_param spi_ip;
+extern struct no_os_uart_init_param uart_ip;
+extern struct no_os_gpio_init_param int1_gpio_param;
 
 extern struct adxl367_init_param init_param;
 
