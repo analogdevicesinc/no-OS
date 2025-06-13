@@ -26,6 +26,7 @@ SRCS += $(PROJECT)/src/app.c \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c \
 	$(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_gpio.c \
@@ -57,8 +58,8 @@ SRCS += $(NO-OS)/iio/iio_app/iio_app.c \
 endif
 INCS +=	$(PROJECT)/src/app_clock.h \
 	$(PROJECT)/src/app_jesd.h \
-	$(PROJECT)/src/app_config.h \
 	$(PROJECT)/src/parameters.h \
+	$(PROJECT)/profiles/$(PROFILE)/app_config.h \
 	$(DRIVERS)/adc/ad9081/ad9081.h \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_ad9081.h \
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_impala_tc.h \
@@ -85,6 +86,7 @@ INCS +=	$(PROJECT)/src/app_clock.h \
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
+	$(DRIVERS)/axi_core/jesd204/jesd204_clk.h \
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h \
 	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \

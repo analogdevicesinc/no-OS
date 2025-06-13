@@ -609,6 +609,24 @@ typedef enum {
 } adi_ad9081_adc_pfir_gain_e;
 
 /*!
+*@brief Enumerates ADC PFIR Coefficient Load Select
+*/
+typedef enum {
+	AD9081_ADC_PFIR_REAL_I_LOAD =
+		0x1, /*!< Set the coefficients streamed type to real I */
+	AD9081_ADC_PFIR_REAL_Q_LOAD =
+		0x2, /*!< Set the coefficients streamed type to real Q */
+	AD9081_ADC_PFIR_REAL_CROSS_I_LOAD =
+		0x4, /*!< Set the coefficients streamed type to real cross I */
+	AD9081_ADC_PFIR_REAL_CROSS_Q_LOAD =
+		0x8, /*!< Set the coefficients streamed type to real cross Q */
+	AD9081_ADC_PFIR_COMPLEX_LOAD =
+		0x10, /*!< Set the coefficients streamed type to complex mode */
+	AD9081_ADC_PFIR_COEFF_CLEAR =
+		0x20 /*!< Clear currently selected main coefficient bank */
+} adi_ad9081_adc_pfir_coeff_load_sel_e;
+
+/*!
  *@brief Enumerates ADC Bypass mode
  */
 typedef enum {
@@ -773,6 +791,21 @@ typedef enum {
 	AD9081_CAL_MODE_BYPASS =
 		2 /*!< Bypass 204C QR Calibration and load CTLE Coefficients*/
 } adi_ad9081_cal_mode_e;
+
+/*!
+ * @brief Programmable gain scaling on PFIR Structure
+ */
+typedef struct {
+	adi_ad9081_adc_pfir_gain_e
+		ix_gain; /*!< Programmable scalar gain at the output of A(z) FIR filter  */
+	adi_ad9081_adc_pfir_gain_e
+		iy_gain; /*!< Programmable scalar gain at the output of B(z) FIR filter  */
+	adi_ad9081_adc_pfir_gain_e
+		qx_gain; /*!< Programmable scalar gain at the output of C(z) FIR filter  */
+	adi_ad9081_adc_pfir_gain_e
+		qy_gain; /*!< Programmable scalar gain at the output of D(z) FIR filter  */
+} adi_ad9081_adc_pfir_gain_t;
+
 /*!
  * @brief Per lane JESD Serializer Settings
  */
@@ -805,7 +838,7 @@ typedef struct {
 	uint8_t ctle_coeffs[8][4]; /*Per lane CTLE coefficient settings */
 	uint8_t lane_mapping
 		[2]
-		[8]; /*Deserialise Lane Mapping, Map Virtual Converter to Physical Lane, index is logical lane, value is physical lane*/
+		[8]; /*Deserialise Lane Mapping, Map Virtual Converter to Physical Lane, index is physical lane, value is logical lane, register flip adjusted for in funct*/
 } adi_ad9081_des_settings_t;
 
 /*!
@@ -1171,6 +1204,7 @@ int32_t adi_ad9081_device_main_auto_clk_gen_enable(adi_ad9081_device_t *device,
  * @ingroup tx_data_path_setup
  * @brief  System Top Level API. \n Startup Tx As NCO Test Mode
  *         This API will be called after adi_ad9081_device_clk_config_set().
+ * @deprecated call adi_ad9081_device_startup_nco_test_mode
  *
  * @param  device         Pointer to the device structure
  * @param  main_interp    Main interpolator
@@ -1188,6 +1222,28 @@ adi_ad9081_device_startup_nco_test(adi_ad9081_device_t *device,
 				   uint8_t main_interp, uint8_t chan_interp,
 				   uint8_t dac_chan[4], int64_t main_shift[4],
 				   int64_t chan_shift[8], uint16_t dc_offset);
+
+/**
+ * @ingroup tx_data_path_setup
+ * @brief  System Top Level API. \n Startup Tx As NCO Test Mode
+ *         This API will be called after adi_ad9081_device_clk_config_set().
+ *
+ * @param  device         Pointer to the device structure
+ * @param  main_interp    Main interpolator
+ * @param  chan_interp    Channel interpolator
+ * @param  dac_chan       Enabled channels for each DAC
+ * @param  main_shift     Main NCO shift
+ * @param  chan_shift     Channel NCO shift
+ * @param  jesd_param     JRX JESD link settings
+ * @param  dc_offset      DC offset for NCO test mode
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_device_startup_nco_test_mode(
+	adi_ad9081_device_t *device, uint8_t main_interp, uint8_t chan_interp,
+	uint8_t dac_chan[4], int64_t main_shift[4], int64_t chan_shift[8],
+	adi_cms_jesd_param_t *jesd_param, uint16_t dc_offset);
 
 /**
  * @ingroup tx_data_path_setup
@@ -1562,6 +1618,23 @@ int32_t adi_ad9081_dac_duc_channel_nco_ftw_get(adi_ad9081_device_t *device,
 					       uint64_t *acc_modulus,
 					       uint64_t *acc_delta);
 
+/**
+ * @ingroup tx_nco_setup
+ * @brief  Enable Frequency Inversion (Opposite Sideband Selection) on DAC Main and Channels datapaths
+ *
+ * @param  device   Pointer to the device structure
+ * @param  dacs     DAC mask
+ * @param  channels Channel mask
+ * @param  enable   Frequency inversion enable
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_dac_duc_sel_sideband_enable_set(adi_ad9081_device_t *device,
+						   uint8_t dacs,
+						   uint8_t channels,
+						   uint8_t enable);
+
 /*===== 2 . 5 . 1   T R A N S M I T  P A T H  F F H =====*/
 /**
  * @ingroup tx_nco_ffh_setup
@@ -1843,6 +1916,20 @@ int32_t adi_ad9081_dac_duc_main_dsa_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @ingroup tx_pa_protect_setup
+ * @brief Configure DAC digital gain in main datapath
+ *
+ * @param device    Pointer to the device structure
+ * @param dacs      Target DAC Channel to enable data output
+ * @param gain      12 bit data path digital gain
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_dac_duc_main_dig_gain_set(adi_ad9081_device_t *device,
+					     uint8_t dacs, uint16_t gain);
+
+/**
+ * @ingroup tx_pa_protect_setup
  * @brief  Configure DAC DSA
  *
  * @param  device  Pointer to the device structure
@@ -1859,6 +1946,23 @@ int32_t adi_ad9081_dac_duc_main_dsa_set(adi_ad9081_device_t *device,
 					uint8_t dacs, uint8_t code,
 					uint8_t cutover, uint8_t boost,
 					uint16_t gain);
+
+/**
+ * @ingroup tx_pa_protect_setup
+ * @brief Disables DLL clock control, SWD clock control, and mushi decoder/control for each specified DAC
+ *
+ * @param device            Pointer to the device structure
+ * @param dacs              0bXXXX, set X==1 to control corresponding DAC :
+ *                                  Bit 3: DAC 3  (MSB)
+ *                                  Bit 2: DAC 2
+ *                                  Bit 1: DAC 1
+ *                                  Bit 0: DAC 0  (LSB)
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_dac_dll_power_down(adi_ad9081_device_t *device,
+				      uint8_t dacs);
 
 /*===== 2 . 7   T X  P A T H  H E L P E R  A P I =====*/
 /**
@@ -2764,6 +2868,29 @@ int32_t adi_ad9081_adc_pfir_config_set(
 	adi_ad9081_adc_pfir_gain_e iy_gain, adi_ad9081_adc_pfir_gain_e qx_gain,
 	adi_ad9081_adc_pfir_gain_e qy_gain, uint8_t coeff_load_sel,
 	uint16_t *coeffs, uint8_t coeffs_size);
+
+/**
+ * @ingroup rx_pfilt_low_level_setup
+ * @brief  Set PFIR config as per coefficients mode table
+ *
+ * @param  device         Pointer to the device structure
+ * @param  ctl_pages      PFIR control pages @see adi_ad9081_adc_pfir_ctl_page_e
+ * @param  coeff_pages    PFIR coefficient pages @see adi_ad9081_adc_pfir_ctl_page_e
+ * @param  i_mode         PFIR i-mode @see adi_ad9081_adc_pfir_i_mode_e
+ * @param  q_mode         PFIR q-mode @see adi_ad9081_adc_pfir_q_mode_e
+ * @param  gain           PFIR gain structure for each filter @see adi_ad9081_adc_pfir_gain_e
+ * @param  coeffs         Coefficient value array pointer, must contain 192 elements
+ * @param  clear_coeffs   Clear coefficients in bank enable, Disable if bank hopping
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_pfir_coeff_table_load_set(
+	adi_ad9081_device_t *device, adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+	adi_ad9081_adc_pfir_coeff_page_e coeff_pages,
+	adi_ad9081_adc_pfir_i_mode_e i_mode,
+	adi_ad9081_adc_pfir_q_mode_e q_mode, adi_ad9081_adc_pfir_gain_t *gain,
+	int16_t *coeffs, uint8_t clear_coeffs);
 
 /*===== 3 . 4   R E C E I V E  P A T H  N C O S =====*/
 /**
@@ -4224,7 +4351,6 @@ int32_t adi_ad9081_jesd_rx_link_select_set(adi_ad9081_device_t *device,
  * @param  device          Pointer to the device structure
  * @param  links           Target link
  * @param  logical_lanes   Logical lane to physical lane mapping array (0~7)
- *                          Where the index is logical lane, value is physical lane
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -5001,7 +5127,7 @@ int32_t adi_ad9081_jesd_rx_qr_vertical_eye_scan(adi_ad9081_device_t *device,
  */
 int32_t adi_ad9081_jesd_rx_qr_two_dim_eye_scan(adi_ad9081_device_t *device,
 					       uint8_t lane,
-					       uint16_t eye_scan_data[96]);
+					       int16_t eye_scan_data[99]);
 
 /**
  * @ingroup appdx_serdes_jrx_tm
@@ -5038,7 +5164,7 @@ int32_t adi_ad9081_jesd_rx_hr_vertical_eye_scan(
 int32_t adi_ad9081_jesd_rx_hr_two_dim_eye_scan(
 	adi_ad9081_device_t *device, uint8_t lane,
 	adi_cms_jesd_prbs_pattern_e prbs_pattern, uint32_t prbs_delay_ms,
-	uint16_t eye_scan_data[192]);
+	int16_t eye_scan_data[195]);
 
 /*===== A 1 . 2   J T X  S E R D E S  L I N K  T E S T  M O D E S   =====*/
 /**
@@ -5676,6 +5802,7 @@ int32_t adi_ad9081_sync_calc_jtx_lmfc_lemc(uint64_t adc_clk,
  *
  * @param device                        Pointer to device struct
  * @param sysref_freq                   Pointer to variable that holds calculated lmfc/lemc (JESD204B/JESD204C) value
+ * @param dev_ref                       Variable that holds the current device reference clock freq in Hz
  * @param dac_clk                       Variable that holds current dac clock freq in Hz
  * @param adc_clk                       Variable that holds current adc clock freq in Hz
  * @param main_interp                   Main interpolator
@@ -5690,9 +5817,9 @@ int32_t adi_ad9081_sync_calc_jtx_lmfc_lemc(uint64_t adc_clk,
  * @return <0                           Failed. @see adi_cms_error_e for details.
  */
 int32_t adi_ad9081_sync_sysref_frequency_set(
-	adi_ad9081_device_t *device, uint64_t *sysref_freq, uint64_t dac_clk,
-	uint64_t adc_clk, uint8_t main_interp, uint8_t ch_interp,
-	uint8_t cddc_dcm[4], uint8_t fddc_dcm[8],
+	adi_ad9081_device_t *device, uint64_t *sysref_freq, uint64_t dev_ref,
+	uint64_t dac_clk, uint64_t adc_clk, uint8_t main_interp,
+	uint8_t ch_interp, uint8_t cddc_dcm[4], uint8_t fddc_dcm[8],
 	adi_ad9081_jesd_link_select_e jtx_links,
 	adi_cms_jesd_param_t *jrx_param, adi_cms_jesd_param_t jtx_param[2]);
 
