@@ -60,7 +60,7 @@ def exit_loader_mode(ser: serial.Serial):
     ser.write(b"13\n")
     time.sleep(0.5)
 
-def upload_firmware(port: str, baudrate: int, filename: str, offset: int, chunk_size: int = 16384):
+def upload_firmware(port: str, baudrate: int, filename: str, offset: int, chunk_size: int = 65536):
     """Upload firmware to device"""
     
     # Validate input file
@@ -201,14 +201,14 @@ def main():
         print("  baudrate:   Baud rate (e.g., 115200)")
         print("  firmware:   Binary file to upload")
         print("  offset:     Start offset in flash (hex format, e.g., 0x8000)")
-        print("  chunk_size: Optional chunk size in bytes (default: 16384)")
+        print("  chunk_size: Optional chunk size in bytes (default: 65536)")
         sys.exit(1)
     
     port = sys.argv[1]
     baudrate = int(sys.argv[2])
     filename = sys.argv[3]
     offset = int(sys.argv[4], 16)  # Parse as hexadecimal
-    chunk_size = int(sys.argv[5]) if len(sys.argv) > 5 else 16384
+    chunk_size = int(sys.argv[5]) if len(sys.argv) > 5 else 65536
     
     success = upload_firmware(port, baudrate, filename, offset, chunk_size)
     sys.exit(0 if success else 1)
