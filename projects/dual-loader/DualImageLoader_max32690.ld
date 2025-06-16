@@ -35,3 +35,7 @@ SECTIONS {
 
 /* Ensure bootloader doesn't exceed 16KB - 128 bytes */
 ASSERT((_etext <= 0x10003F80), "Bootloader text exceeds 16KB - 128 bytes!")
+
+/* Ensure bootloader's data+bss doesn't exceed the reserved 4KB */
+/* _ebss is the end of BSS section, which should be the last RAM usage by bootloader */
+ASSERT((_ebss <= 0x20001000), "Bootloader RAM usage exceeds reserved 4KB! End of BSS: _ebss. Reduce bootloader RAM usage or increase reserved RAM in app linker scripts.")
