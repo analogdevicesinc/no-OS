@@ -23,6 +23,7 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/pulsar_adc
    drivers/ad7768
    drivers/ad7768-1
+   drivers/ad9081
    drivers/ad9083
    drivers/ad9208
 
