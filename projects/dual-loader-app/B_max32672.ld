@@ -34,8 +34,8 @@
 MEMORY {
     /* Bank 1: Commit area (8K) + Image B (128K) */
     /* Image B starts after 1 page (8K) commit area in Bank 1 */
-    FLASH (rx) : ORIGIN = 0x10082000, LENGTH = 128K - 16      /* Save 16 bytes at end for CRC and image length */
-    FOOTER (rx) : ORIGIN = 0x100a1ff0, LENGTH = 16
+    FLASH (rx) : ORIGIN = 0x10082000, LENGTH = 504K - 16      /* Bank 1: 512KB - 8KB commit area = 504KB for image */
+    FOOTER (rx) : ORIGIN = 0x100FFFF0, LENGTH = 16  /* End of bank 1 */
     /* Start SRAM after bootloader's RAM usage (0x1000 bytes) */
     SRAM (rwx) : ORIGIN = 0x20001000, LENGTH = 160K - 0x1000 - 4 /* MAX32672 has 160KB SRAM, reserve first 4KB for bootloader + 4 bytes for loader state */
 }

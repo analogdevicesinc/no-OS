@@ -34,8 +34,8 @@
 MEMORY {
     /* Bank 0: Bootloader (8K) + Image A (128K) */
     /* Image A starts after 1 page (8K) bootloader */
-    FLASH (rx) : ORIGIN = 0x10002000, LENGTH = 128K - 16      /* Save 16 bytes at end for CRC and image length */
-    FOOTER (rx) : ORIGIN = 0x10021ff0, LENGTH = 16
+    FLASH (rx) : ORIGIN = 0x10002000, LENGTH = 504K - 16      /* Bank 0: 512KB - 8KB bootloader = 504KB for image */
+    FOOTER (rx) : ORIGIN = 0x1007FFF0, LENGTH = 16  /* End of bank 0 */
     /* Start SRAM after bootloader's RAM usage (0x1000 bytes) */
     SRAM (rwx) : ORIGIN = 0x20001000, LENGTH = 160K - 0x1000 - 4 /* MAX32672 has 160KB SRAM, reserve first 4KB for bootloader + 4 bytes for loader state */
 }

@@ -32,9 +32,9 @@
  ******************************************************************************/
 
 MEMORY {
-    /* MAX32690: Image A starts at 0x1000C000 (after bootloader + commit area) */
-    FLASH (rx) : ORIGIN = 0x1000C000, LENGTH = 128K - 16      /* Save 16 bytes at end for CRC and image length */
-    FOOTER (rx) : ORIGIN = 0x1002BFF0, LENGTH = 16
+    /* MAX32690: Image A starts at 0x10008000 (after 16KB bootloader + 16KB commit area) */
+    FLASH (rx) : ORIGIN = 0x10008000, LENGTH = 496K - 16      /* Save 16 bytes at end for CRC and image length */
+    FOOTER (rx) : ORIGIN = 0x10083FF0, LENGTH = 16  /* End of 496KB image */
     /* Start SRAM after bootloader's RAM usage (0x1000 bytes) */
     SRAM (rwx) : ORIGIN = 0x20001000, LENGTH = 256K - 0x1000 - 4  /* MAX32690 has 256KB SRAM, reserve first 4KB for bootloader + 4 bytes for loader state */
 }

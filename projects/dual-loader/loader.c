@@ -31,8 +31,8 @@
     #define PAGE_SIZE               0x2000      // 8K Bytes
     #define LOADER_PAGES            1           // 8KB
     #define COMMIT_PAGES            1           // 8KB
-    #define IMAGE_A_PAGES           16          // 128KB / 8KB = 16 pages
-    #define IMAGE_B_PAGES           16          // 128KB / 8KB = 16 pages
+    #define IMAGE_A_PAGES           63          // 504KB / 8KB = 63 pages
+    #define IMAGE_B_PAGES           63          // 504KB / 8KB = 63 pages
     
     // MAX32672 memory layout:
     // Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
@@ -48,19 +48,19 @@
 #elif defined(TARGET_MAX32690)
     #define PAGE_SIZE               0x4000      // 16K Bytes
     #define LOADER_PAGES            1           // 16KB
-    #define COMMIT_PAGES            2           // 32KB
-    #define IMAGE_A_PAGES           8           // 128KB / 16KB = 8 pages
-    #define IMAGE_B_PAGES           8           // 128KB / 16KB = 8 pages
+    #define COMMIT_PAGES            1           // 16KB
+    #define IMAGE_A_PAGES           31          // 496KB / 16KB = 31 pages
+    #define IMAGE_B_PAGES           31          // 496KB / 16KB = 31 pages
     
     // MAX32690 memory layout (all in Bank 0):
     // BOOT: 1 page (16K) at 0x10000000
-    // COMMIT: 2 pages (32K) at 0x10004000
-    // IMAGE A: 8 pages (128K) at 0x1000C000
-    // IMAGE B: 8 pages (128K) at 0x1002C000
+    // COMMIT: 1 page (16K) at 0x10004000
+    // IMAGE A: 31 pages (496K) at 0x10008000
+    // IMAGE B: 31 pages (496K) at 0x10084000
     #define LOADER_START            (0x10000000)
     #define COMMIT_START            (0x10004000)
-    #define IMAGE_A_START           (0x1000C000)
-    #define IMAGE_B_START           (0x1002C000)
+    #define IMAGE_A_START           (0x10008000)
+    #define IMAGE_B_START           (0x10084000)
     
     // MAX32690 has only one flash controller
     #define GET_FLC_INSTANCE(addr)  (MXC_FLC0)
