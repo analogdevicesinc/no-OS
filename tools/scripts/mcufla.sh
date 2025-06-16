@@ -108,7 +108,7 @@ build_prerequisites_maxim() {
 		git clone --recursive -b 0.12.0-1.0.0 https://github.com/analogdevicesinc/openocd.git ~/.mcuflash/maxim/openocd &&
 		pushd ~/.mcuflash/maxim/openocd &&
 		./bootstrap &&
-		./configure --enable-cmsis-dap &&
+		CFLAGS="-Wno-error=calloc-transposed-args" ./configure --enable-cmsis-dap &&
 		make SHELL='sh' -j$HALF_CORES &&
 		popd
 		
