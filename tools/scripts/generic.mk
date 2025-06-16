@@ -305,7 +305,8 @@ $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
 	$(AS) -c @$(ASFLAGS_FILE) $< -o $@
 
 ifneq ($(strip $(LSCRIPT)),)
-LSCRIPT_FLAG = -T$(LSCRIPT)
+# Handle multiple linker scripts by prepending -T to each one
+LSCRIPT_FLAG = $(foreach script,$(LSCRIPT),-T$(script))
 endif
 
 define generate_cflags_func
