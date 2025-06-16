@@ -43,7 +43,7 @@ void consolePrepare(mxc_uart_regs_t* uart)
     // Save the UART to use
     console_uart = uart;
 
-    MXC_UART_Init(uart, 115200, MXC_UART_APB_CLK);
+    MXC_UART_Init(uart, 921600, MXC_UART_APB_CLK);
 }
 
 void consoleStrOut(char* str)
