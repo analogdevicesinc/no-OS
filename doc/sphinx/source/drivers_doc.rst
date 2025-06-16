@@ -25,6 +25,7 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/ad7768-1
    drivers/ad9083
    drivers/ad9208
+   
 
 ADC / DAC
 ==========
@@ -59,6 +60,7 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/ad8460
    drivers/max22017
+   drivers/ad917x
 
 FREQUENCY GENERATORS
 ====================
