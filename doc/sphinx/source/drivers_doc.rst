@@ -25,6 +25,7 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/ad7768-1
    drivers/ad9083
    drivers/ad9208
+   drivers/ad917x
 
 ADC / DAC
 ==========
