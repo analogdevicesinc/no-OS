@@ -175,6 +175,15 @@ enum ad4858_prod_id {
 };
 
 /**
+ * @enum ad4858_prod_res
+ * @brief AD485X Product resolution
+ */
+enum ad4858_prod_res {
+	AD4858_16_BIT_RES,
+	AD4858_20_BIT_RES
+};
+
+/**
  * @enum ad4858_operating_mode
  * @brief Operating modes
  */
@@ -362,6 +371,8 @@ struct ad4858_dev {
 	struct no_os_gpio_desc *gpio_busy;
 	/** AD458X Product ID */
 	enum ad4858_prod_id prod_id;
+	/** AD458X Product Resolution */
+	enum ad4858_prod_res prod_res;
 	/** Address ascension enable status. */
 	bool addr_ascension_enable;
 	/** Operating mode. */

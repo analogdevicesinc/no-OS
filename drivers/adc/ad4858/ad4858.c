@@ -339,15 +339,15 @@ int ad4858_set_packet_format(struct ad4858_dev *dev,
 	int ret;
 	uint32_t val;
 
-	if (!dev || (dev->prod_id == AD4858_PROD_ID_L
+	if (!dev || (dev->prod_res == AD4858_20_BIT_RES
 		     && packet_format < AD4858_PACKET_20_BIT)
-	    || (dev->prod_id == AD4855_PROD_ID_L && (packet_format == AD4858_PACKET_20_BIT
+	    || (dev->prod_res == AD4858_16_BIT_RES && (packet_format == AD4858_PACKET_20_BIT
 			    || packet_format == AD4858_PACKET_32_BIT)))
 		return -EINVAL;
 
 	val = no_os_field_prep(AD4858_PACKET_FORMAT_MSK, packet_format);
 
-	if (dev->prod_id == AD4855_PROD_ID_L)
+	if (dev->prod_res == AD4858_16_BIT_RES)
 		ret = ad4858_reg_mask(dev,
 				      AD4858_REG_PACKET,
 				      AD4858_PACKET_FORMAT_MSK,
@@ -494,7 +494,7 @@ int ad4858_set_chn_offset(struct ad4858_dev *dev, uint8_t chn, uint32_t offset)
 	if (!dev || (chn >= AD4858_NUM_CHANNELS))
 		return -EINVAL;
 
-	if (dev->prod_id == AD4855_PROD_ID_L) {
+	if (dev->prod_res == AD4858_16_BIT_RES) {
 		/* Offset value is spanned over bits [23:8] */
 		ret = ad4858_reg_write(dev, AD4858_REG_CH_OFFSET(chn), (offset << 8));
 	} else {
@@ -571,7 +571,7 @@ int ad4858_set_chn_or_limit(struct ad4858_dev *dev, uint8_t chn,
 	if (!dev || (chn >= AD4858_NUM_CHANNELS))
 		return -EINVAL;
 
-	if (dev->prod_id == AD4855_PROD_ID_L) {
+	if (dev->prod_res == AD4858_16_BIT_RES) {
 		/* OR limit value is spanned over bits [23:8] */
 		ret = ad4858_reg_write(dev, AD4858_REG_CH_OR(chn), (or_limit << 8));
 	} else {
@@ -602,7 +602,7 @@ int ad4858_set_chn_ur_limit(struct ad4858_dev *dev, uint8_t chn,
 	if (!dev || (chn >= AD4858_NUM_CHANNELS))
 		return -EINVAL;
 
-	if (dev->prod_id == AD4855_PROD_ID_L) {
+	if (dev->prod_res == AD4858_16_BIT_RES) {
 		/* UR limit value is spanned over bits [23:8] */
 		ret = ad4858_reg_write(dev, AD4858_REG_CH_UR(chn), (ur_limit << 8));
 	} else {
@@ -720,8 +720,8 @@ int ad4858_spi_data_read(struct ad4858_dev *dev, struct ad4858_conv_data *data)
 	if (ret)
 		return ret;
 
-	switch (dev->prod_id) {
-	case AD4855_PROD_ID_L:
+	switch (dev->prod_res) {
+	case AD4858_16_BIT_RES:
 		switch (dev->packet_format) {
 		case AD4858_PACKET_16_BIT:
 			/* 16-bit conversion result */
@@ -750,7 +750,7 @@ int ad4858_spi_data_read(struct ad4858_dev *dev, struct ad4858_conv_data *data)
 
 		break;
 
-	case AD4858_PROD_ID_L:
+	case AD4858_20_BIT_RES:
 		switch (dev->packet_format) {
 		case AD4858_PACKET_20_BIT:
 			/* 20-bit conversion result */
@@ -920,7 +920,7 @@ static int ad4858_config(struct ad4858_dev *dev,
 			return ret;
 
 		if (init_param->use_default_chn_configs) {
-			if (dev->prod_id == AD4855_PROD_ID_L) {
+			if (dev->prod_res == AD4858_16_BIT_RES) {
 				temp = AD4858_DEF_CHN_OR_16_BIT;
 			} else {
 				temp = AD4858_DEF_CHN_OR_20_BIT;
@@ -1123,6 +1123,28 @@ int ad4858_init(struct ad4858_dev **device,
 	    || (product_id_h != AD485X_PRODUCT_ID_H)) {
 		pr_err("Product ID mismatch \r\n");
 		return -EFAULT;
+	}
+
+	/* Assign the product resolution according to their IDs */
+	switch (dev->prod_id) {
+	case AD4851_PROD_ID_L:
+	case AD4853_PROD_ID_L:
+	case AD4855_PROD_ID_L:
+	case AD4857_PROD_ID_L:
+		dev->prod_res = AD4858_16_BIT_RES;
+		break;
+
+	case AD4852_PROD_ID_L:
+	case AD4854_PROD_ID_L:
+	case AD4856_PROD_ID_L:
+	case AD4858_PROD_ID_L:
+	case AD4858I_PROD_ID_L:
+		dev->prod_res = AD4858_20_BIT_RES;
+		break;
+
+	default:
+		ret = -EINVAL;
+		goto error_spi;
 	}
 
 	/* Configure rest of the device parameters */
