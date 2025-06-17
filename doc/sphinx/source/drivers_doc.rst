@@ -17,14 +17,14 @@ ANALOG TO DIGITAL CONVERTERS
 .. toctree::
    :maxdepth: 1
 
-   drivers/adm1177
    drivers/ad405x
-   drivers/ad796x
-   drivers/pulsar_adc
    drivers/ad7768
    drivers/ad7768-1
+   drivers/ad796x
    drivers/ad9083
    drivers/ad9208
+   drivers/adm1177
+   drivers/pulsar_adc
 
 ADC / DAC
 ==========
@@ -65,11 +65,11 @@ FREQUENCY GENERATORS
 .. toctree::
    :maxdepth: 1
 
-   drivers/adf4382
+   drivers/adf4030
    drivers/adf4368
    drivers/adf4377
+   drivers/adf4382
    drivers/adf5611
-   drivers/adf4030
    drivers/admfm2000
 
 INERTIAL MEASUREMENT UNITS
@@ -108,8 +108,8 @@ TEMPERATURE
 .. toctree::
    :maxdepth: 1
 
-   drivers/max31827
    drivers/ltc2983
+   drivers/max31827
    drivers/max31855
 
 POWER MANAGEMENT
@@ -121,17 +121,17 @@ POWER MANAGEMENT
    drivers/adp1050
    drivers/adp1055
    drivers/adp5055
+   drivers/lt3074
+   drivers/lt7170
+   drivers/lt7182s
+   drivers/lt8491
+   drivers/lt8722
    drivers/ltc2992
    drivers/ltc4162l
    drivers/ltc4296
    drivers/ltc7841
    drivers/ltc7871
    drivers/ltm4686
-   drivers/lt3074
-   drivers/lt7170
-   drivers/lt7182s
-   drivers/lt8491
-   drivers/lt8722
    drivers/ltp8800
    drivers/max17851
    drivers/max42500
