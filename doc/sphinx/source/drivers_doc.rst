@@ -10,6 +10,7 @@ ACCELEROMETERS
    :maxdepth: 1
 
    drivers/adxl355
+
    drivers/adxl38x
 
 ANALOG TO DIGITAL CONVERTERS
@@ -18,12 +19,19 @@ ANALOG TO DIGITAL CONVERTERS
    :maxdepth: 1
 
    drivers/ad405x
+
    drivers/ad7768
+
    drivers/ad7768-1
+
    drivers/ad796x
+
    drivers/ad9083
+
    drivers/ad9208
+
    drivers/adm1177
+
    drivers/pulsar_adc
 
 ADC / DAC
@@ -46,10 +54,15 @@ DIGITAL INPUT/OUTPUT
    :maxdepth: 1
 
    drivers/max14914
+
    drivers/max14919
+
    drivers/max149x6
+
    drivers/max22190
+
    drivers/max22196
+
    drivers/max22200
 
 DIGITAL TO ANALOG CONVERTERS
@@ -58,6 +71,7 @@ DIGITAL TO ANALOG CONVERTERS
    :maxdepth: 1
 
    drivers/ad8460
+
    drivers/max22017
 
 FREQUENCY GENERATORS
@@ -66,10 +80,15 @@ FREQUENCY GENERATORS
    :maxdepth: 1
 
    drivers/adf4030
+
    drivers/adf4368
+
    drivers/adf4377
+
    drivers/adf4382
+
    drivers/adf5611
+
    drivers/admfm2000
 
 INERTIAL MEASUREMENT UNITS
@@ -92,7 +111,9 @@ METER
    :maxdepth: 1
 
    drivers/ade7816
+
    drivers/ade7913
+
    drivers/ade9113
 
 RF TRANSCEIVER
@@ -101,6 +122,7 @@ RF TRANSCEIVER
    :maxdepth: 1
 
    drivers/madura
+
    drivers/talise
 
 TEMPERATURE
@@ -109,7 +131,9 @@ TEMPERATURE
    :maxdepth: 1
 
    drivers/ltc2983
+
    drivers/max31827
+
    drivers/max31855
 
 POWER MANAGEMENT
@@ -118,22 +142,39 @@ POWER MANAGEMENT
    :maxdepth: 1
 
    drivers/ades1754
+
    drivers/adp1050
+
    drivers/adp1055
+
    drivers/adp5055
+
    drivers/lt3074
+
    drivers/lt7170
+
    drivers/lt7182s
+
    drivers/lt8491
+
    drivers/lt8722
+
    drivers/ltc2992
+
    drivers/ltc4162l
+
    drivers/ltc4296
+
    drivers/ltc7841
+
    drivers/ltc7871
+
    drivers/ltm4686
+
    drivers/ltp8800
+
    drivers/max17851
+
    drivers/max42500
 
 POTENTIOMETER
@@ -156,4 +197,3 @@ GYROSCOPES
    :maxdepth: 1
 
    drivers/adxrs290
-   
