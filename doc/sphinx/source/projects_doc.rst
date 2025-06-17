@@ -9,13 +9,13 @@ ANALOG TO DIGITAL CONVERTERS
 .. toctree::
    :maxdepth: 1
 
+   projects/ad469x_evb
    projects/ad7091r8-sdz
    projects/ad7606x-fmc
    projects/ad7616-st
+   projects/ad7768-1fmcz
    projects/ad796x_fmcz
    projects/pulsar-adc
-   projects/ad469x_evb
-   projects/ad7768-1fmcz
 
 ADC / DAC
 ==========
@@ -29,11 +29,11 @@ FREQUENCY GENERATORS
 .. toctree::
    :maxdepth: 1
 
-   projects/adf4382
-   projects/adf4377_sdz
-   projects/adf4368
-   projects/adf5611
    projects/adf4030
+   projects/adf4368
+   projects/adf4377_sdz
+   projects/adf4382
+   projects/adf5611
 
 INERTIAL MEASUREMENT UNITS
 ==========================
@@ -52,8 +52,8 @@ METER
 .. toctree::
    :maxdepth: 1
 
-   projects/eval-ade9430
    projects/eval-ade7913
+   projects/eval-ade9430
 
 RF TRANSCEIVER
 ==============
@@ -87,15 +87,15 @@ POWER MANAGEMENT
    projects/adp1055
    projects/adp5055
    projects/dc2703a
+   projects/lt3074
+   projects/lt7170
+   projects/lt7182s
+   projects/lt8722
    projects/ltc4162l
    projects/ltc4296
    projects/ltc7841
    projects/ltc7871
    projects/ltm4686
-   projects/lt3074
-   projects/lt7170
-   projects/lt7182s
-   projects/lt8722
    projects/ltp8800
    projects/max42500
 
@@ -112,8 +112,8 @@ TEMPERATURE
 .. toctree::
    :maxdepth: 1
 
-   projects/max31827-evkit
    projects/ltc2983
+   projects/max31827-evkit
 
 GYROSCOPES
 ============
