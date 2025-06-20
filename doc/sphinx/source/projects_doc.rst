@@ -23,6 +23,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/pulsar-adc
 
+   projects/ad9467
+
 ADC / DAC
 ==========
 .. toctree::
