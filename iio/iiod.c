@@ -813,6 +813,90 @@ end:
 	return ret;
 }
 
+static int32_t iiod_read_cmd_header(struct iiod_desc *desc,
+				    struct iiod_conn_priv *conn)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	uint8_t *ch = (uint8_t *)&conn->cmd_data_bin;
+
+	uint8_t len = sizeof(struct iiod_binary_cmd);
+
+	while (len > 0) {
+		ret = desc->ops.recv(&ctx, ch, len);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (ret == -EAGAIN)
+				continue;
+			else
+				return ret;
+		}
+		if (ret <= sizeof(struct iiod_binary_cmd)) {
+			// if ret is less than the size of the command, it means that we have
+			// not received the full command yet, so we need to read more data
+			len -= ret;
+			ch += ret;
+			continue;
+		}
+	}
+
+	return 0;
+}
+
+static int32_t iiod_read_cmd_header_2(struct iiod_desc *desc,
+				      struct iiod_conn_priv *conn)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	uint8_t *ch = (uint8_t *)&conn->cmd_data_bin;
+
+	uint8_t len = sizeof(struct iiod_binary_cmd);
+
+	while (len > 0) {
+		ret = desc->ops.recv(&ctx, ch, 1);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (ret == -EAGAIN)
+				continue;
+			else
+				return ret;
+		}
+		len -= ret;
+		ch += ret;
+	}
+
+	return 0;
+}
+
+static int32_t iiod_read_generic(struct iiod_desc *desc,
+				 struct iiod_conn_priv *conn, uint8_t* buff, uint8_t len)
+{
+	struct iiod_ctx ctx = {
+		.instance = desc->app_instance,
+		.conn = conn->conn
+	};
+	int32_t ret;
+	uint8_t *ch = (uint8_t *)buff;
+
+	while (len > 0) {
+		ret = desc->ops.recv(&ctx, ch, 1);
+		if (NO_OS_IS_ERR_VALUE(ret)) {
+			if (ret == -EAGAIN)
+				continue;
+			else
+				return ret;
+		}
+		len -= ret;
+		ch += ret;
+	}
+
+	return 0;
+}
+
 static int32_t iiod_read_binary_cmd(struct iiod_desc *desc,
 				    struct iiod_conn_priv *conn)
 {
@@ -1042,9 +1126,19 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 
 	memset(&cmd, 0, sizeof(struct iiod_binary_cmd));
 
+#if 0
 	ret = desc->ops.recv(&ctx, (uint8_t *)&cmd, sizeof(cmd));
 	if (NO_OS_IS_ERR_VALUE(ret))
 		return ret;
+
+	conn->cmd_data.op_code = cmd.op;
+#else
+	ret = iiod_read_cmd_header_2(desc, conn);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		return ret;
+
+	memcpy(&cmd, &conn->cmd_data_bin, sizeof(struct iiod_binary_cmd));
+#endif
 
 	// if (cmd.length > 0){
 	// 	ret = desc->ops.recv(&ctx, (uint8_t *)conn->payload_buf,
@@ -1053,7 +1147,7 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 	// 		return ret;
 	// }
 
-	conn->cmd_data.op_code = cmd.op;
+
 
 	memset(&conn->cmd_response_data, 0, sizeof(conn->cmd_response_data));
 //	conn->cmd_response_data.client_id = 0;
@@ -1064,6 +1158,7 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 	static uint8_t cl_id = 1;
 
 	switch (cmd.op) {
+		//switch(conn->cmd_data_bin.op) {
 		uint8_t len;
 	case IIOD_OP_TIMEOUT: //2: //timeout
 		conn->res.val = 0;
@@ -1122,10 +1217,18 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 		break;
 
 	case IIOD_OP_CREATE_BUFFER: //13: //create buffer
+#if 0
 		ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.mask,
 				     4); //read mask in next header
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
+#else
+		ret = iiod_read_generic(desc, conn, (uint8_t *)&conn->cmd_data.mask,
+					4);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#endif
+
 		conn->res.val = 0;
 		conn->res.write_val = 1;
 		conn->state = IIOD_READING_LINE; //IIOD_WRITING_BIN_RESPONSE;
@@ -1142,9 +1245,16 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 		sprintf(conn->cmd_data.block_id[curr], "%d", (int16_t)(cmd.code >> 16));
 
 		//  receive block size
+#if 0
 		ret = desc->ops.recv(&ctx, (uint8_t *)&conn->cmd_data.block_size[curr], 8);
 		if (NO_OS_IS_ERR_VALUE(ret))
 			return ret;
+#else
+		ret = iiod_read_generic(desc, conn, (uint8_t *)&conn->cmd_data.block_size[curr],
+					8);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+#endif
 
 
 		conn->res.val = 0;

@@ -165,6 +165,8 @@ struct iiod_conn_priv {
 
 	/* Command data after parsed */
 	struct comand_desc cmd_data;
+
+	struct iiod_binary_cmd cmd_data_bin;
 	/* Result of an executed cmd */
 	struct iiod_run_cmd_result res;
 	/* IIOD States */
