@@ -141,8 +141,8 @@ struct iiod_buff {
 
 struct iiod_binary_cmd {
 	uint16_t client_id;
-    uint8_t op;
-    uint8_t dev;
+	uint8_t op;
+	uint8_t dev;
 	int32_t code;
 };
 
@@ -227,10 +227,10 @@ struct iiod_desc {
 };
 
 struct iiod_binary_resp {
-    uint8_t cmd_id;
-    uint8_t status;
-    uint16_t length;
-    uint8_t payload[];
+	uint8_t cmd_id;
+	uint8_t status;
+	uint16_t length;
+	uint8_t payload[];
 };
 
 #endif //IIOD_PRIVATE_H
