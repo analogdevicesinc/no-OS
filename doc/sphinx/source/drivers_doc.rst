@@ -74,6 +74,8 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/max22017
 
+   drivers/ad3552r
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
