@@ -89,7 +89,7 @@ $(PLATFORM)_project:
 	@echo SetStructure Advanced >> $(BINARY).cubemx
 	@echo project generate >> $(BINARY).cubemx
 	@echo exit >> $(BINARY).cubemx
-	java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
+	$(STM32CUBEMX)/jre/bin/java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
 	$(call remove_file,$(BINARY).cubemx) $(HIDE)
 	$(MAKE) --no-print-directory $(PROJECT)_configure
 
