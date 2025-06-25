@@ -214,6 +214,23 @@ struct iio_buffer {
 	struct iio_cyclic_buffer_info cyclic_info;
 };
 
+struct iio_block {
+	struct iio_buffer *buffer;
+	uint8_t *data;
+	uint32_t size;
+	uint16_t cl_id;
+
+	uint32_t bytes_used;
+};
+
+struct iio_stream {
+	struct iio_buffer *buffer;
+	struct iio_block **blocks;
+	uint32_t nb_blocks;
+	uint8_t curr;
+	bool started, buf_enabled, all_enqueued;
+};
+
 struct iio_device_data {
 	void *dev;
 	struct iio_buffer *buffer;

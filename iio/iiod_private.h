@@ -126,9 +126,9 @@ struct comand_desc {
 	char trigger[MAX_TRIG_ID];
 	enum iio_attr_type type;
 	enum iiod_opcode op_code;
-	uint16_t block_id[4];
-	uint32_t block_size[4]; //todo: 64?
-	uint32_t bytes_size[4]; //todo: 64?
+	uint16_t block_id[MAX_NUM_BLOCKS];
+	uint32_t block_size[MAX_NUM_BLOCKS];
+	uint32_t bytes_size[MAX_NUM_BLOCKS];
 	uint8_t curr;
 };
 
