@@ -181,6 +181,20 @@ generation.
 Calibration. '1' enables LUT calibration. '0' disables LUT calibration and
 reverts to normal auto calibration.
 
+ADF4382 Fast Calibration
+------------------------
+Fast calibration uses **adf4382_set_en_fast_calibration** to initialized Fast 
+calibration. It computes the minimum NDIV value and the minimum VCO frequency
+is readback through the frequency counter only if the device is ADF4382A, 
+else the minimum is defined and used to generate the fast calibration Look up Table.
+This function runs only once after the driver initialization and
+**adf4382_set_en_fast_calibration** should not be called again after the
+initialization.
+
+**adf4382_set_en_lut_calibration** function enables/disables the lookup table 
+Calibration. '1' enables LUT calibration. '0' disables LUT calibration and
+reverts to normal auto calibration.
+
 Synchronization Enable Configuration
 ------------------------------------
 
@@ -307,11 +321,11 @@ The attributes are:
 * ezsync_setup - enables ezsync setup for synchronization with external signal.
 * timed_sync_setup - enables timed sync setup for synchronization with external 
 					 signal.
+* fastcal_lut_en - toggles between fast calibration and normal auto
+				   calibration.
 * fastcal_en - this enables fast calibration feature post initialization.
 			   It enables the Lookup Table LUT Calibration after fast calibration
 			   initialzation routine is complete.
-* fastcal_lut_en - toggles between fast calibration and normal auto
-				   calibration.
 
 Device Channels
 ---------------
