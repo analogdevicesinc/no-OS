@@ -664,24 +664,6 @@ static int validate_image_b()
 
 static void start_image_a()
 {
-    // Ensure flash controllers are idle before jumping
-    while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
-#if defined(TARGET_MAX32672)
-    while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
-#endif
-    
-    // Lock flash controllers
-    MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
-#if defined(TARGET_MAX32672)
-    MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
-#endif
-    
-    // Invalidate instruction cache
-    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
-        MXC_ICC->invalidate = 1;
-        while (MXC_ICC->invalidate & 1);
-    }
-    
     // Reset all peripherals and GPIO
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
     
@@ -698,24 +680,6 @@ static void start_image_a()
 
 static void start_image_b()
 {
-    // Ensure flash controllers are idle before jumping
-    while(MXC_FLC0->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
-#if defined(TARGET_MAX32672)
-    while(MXC_FLC1->ctrl & (MXC_F_FLC_CTRL_WR | MXC_F_FLC_CTRL_ME | MXC_F_FLC_CTRL_PGE));
-#endif
-    
-    // Lock flash controllers
-    MXC_FLC0->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
-#if defined(TARGET_MAX32672)
-    MXC_FLC1->ctrl &= ~MXC_F_FLC_CTRL_UNLOCK;
-#endif
-    
-    // Invalidate instruction cache
-    if (MXC_ICC->ctrl & MXC_F_ICC_CTRL_EN) {
-        MXC_ICC->invalidate = 1;
-        while (MXC_ICC->invalidate & 1);
-    }
-    
     // Reset all peripherals and GPIO
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
     
@@ -981,7 +945,6 @@ void SystemInit(void)
 
 int main(void)
 {    
-    //erase_pages(COMMIT_START, COMMIT_LENGTH);
     // Initialize state structure 
     loaderState.download_active = 0;
     
