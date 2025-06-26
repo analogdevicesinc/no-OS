@@ -136,6 +136,8 @@ TEMPERATURE
 
    drivers/max31855
 
+   drivers/adt75
+
 POWER MANAGEMENT
 ================
 .. toctree::
