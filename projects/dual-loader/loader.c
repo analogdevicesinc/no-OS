@@ -314,9 +314,9 @@ int dl_commit_image_a(void)
     }
     
     // Only allow committing A if A is running
-    // if(loaderState.running_image != 0) {
-    //     return DL_IMAGE_RUNNING;
-    // }
+    if(loaderState.running_image != 0) {
+        return DL_IMAGE_RUNNING;
+    }
     
     // Check if A is already committed
     if(loaderState.committed_image == 0) {
@@ -345,9 +345,9 @@ int dl_commit_image_b(void)
     }
     
     // Only allow committing B if B is running
-    // if(loaderState.running_image != 1) {
-    //     return DL_IMAGE_RUNNING;
-    // }
+    if(loaderState.running_image != 1) {
+        return DL_IMAGE_RUNNING;
+    }
     
     // Check if B is already committed
     if(loaderState.committed_image == 1) {
