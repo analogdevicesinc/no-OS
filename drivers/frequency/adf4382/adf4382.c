@@ -1073,7 +1073,7 @@ int adf4382_set_en_fast_calibration(struct adf4382_dev *dev, bool en_fast_cal)
 	if (ret)
 		return ret;
 
-	dev->en_lut_gen = 0;
+	dev->en_lut_gen = !en_fast_cal;
 	ret = adf4382_spi_update_bits(dev, 0x36, ADF4382_EN_LUT_GEN_MSK,
 				      no_os_field_prep
 				      (ADF4382_EN_LUT_GEN_MSK,
@@ -1153,26 +1153,6 @@ int adf4382_set_en_fast_calibration(struct adf4382_dev *dev, bool en_fast_cal)
 		if (ret)
 			return ret;
 	}
-
-	dev->en_lut_cal = en_fast_cal;
-	adf4382_spi_update_bits(dev, 0x36, ADF4382_EN_LUT_CAL_MSK,
-				dev->en_lut_cal);
-	if (ret)
-		return ret;
-
-	ret = adf4382_spi_update_bits(dev, 0x15, ADF4382_INT_MODE_MSK,
-				      no_os_field_prep(ADF4382_INT_MODE_MSK, 0));
-	if (ret)
-		return ret;
-
-	ret = adf4382_spi_update_bits(dev, 0x2A, ADF4382_PD_CALGEN_MSK,
-				      no_os_field_prep(ADF4382_PD_CALGEN_MSK, 1));
-	if (ret)
-		return ret;
-
-	return adf4382_spi_update_bits(dev, 0x38, ADF4382_CAL_VTUNE_TO_LSB_MSK,
-				       no_os_field_prep(
-					       ADF4382_CAL_VTUNE_TO_LSB_MSK, 0));
 }
 
 /**
@@ -2224,6 +2204,9 @@ int adf4382_init(struct adf4382_dev **dev,
 	if (ret)
 		goto error_spi;
 	*dev = device;
+	ret = adf4382_set_en_fast_calibration(device, true);
+	if (ret)
+		goto error_spi;
 
 	return ret;
 error_spi:

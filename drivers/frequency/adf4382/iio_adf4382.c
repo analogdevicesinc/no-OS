@@ -210,15 +210,6 @@ static int adf4382_iio_read_dev_attr(void *dev, char *buf, uint32_t len,
 		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 		break;
 
-	case ADF4382_IIO_DEV_ATTR_FASTCAL_EN:
-		ret = adf4382_get_en_lut_calibration(adf4382, &en);
-		if (ret)
-			return ret;
-
-		val = en;
-		ret = iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
-		break;
-
 	case ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN:
 		ret = adf4382_get_en_lut_calibration(adf4382, &en);
 		if (ret)
@@ -338,13 +329,6 @@ static int adf4382_iio_write_dev_attr(void *dev, char *buf, uint32_t len,
 
 		en = val;
 		ret = adf4382_set_en_ref_doubler(adf4382, val);
-		break;
-
-	case ADF4382_IIO_DEV_ATTR_FASTCAL_EN:
-		iio_parse_value(buf, IIO_VAL_INT, &val, NULL);
-
-		en = val;
-		ret = adf4382_set_en_fast_calibration(adf4382, en);
 		break;
 
 	case ADF4382_IIO_DEV_ATTR_FASTCAL_LUT_EN:
@@ -590,13 +574,6 @@ static struct iio_attribute adf4382_iio_attrs[] = {
 		.name = "timed_sync_setup",
 		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4382_IIO_DEV_ATTR_TIMED_SYNC,
-		.show = adf4382_iio_read_dev_attr,
-		.store = adf4382_iio_write_dev_attr,
-	},
-	{
-		.name = "fastcal_en",
-		.shared = IIO_SHARED_BY_ALL,
-		.priv = ADF4382_IIO_DEV_ATTR_FASTCAL_EN,
 		.show = adf4382_iio_read_dev_attr,
 		.store = adf4382_iio_write_dev_attr,
 	},
