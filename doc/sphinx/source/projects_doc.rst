@@ -80,6 +80,8 @@ RF TRANSCEIVER
 
    projects/adrv902x
 
+   projects/adrv9001
+
 EVAL BOARDS
 ==============
 .. toctree::
