@@ -194,13 +194,16 @@ int adf4382_reg_dump(struct adf4382_dev *dev)
 /**
  * @brief Set the desired reference frequency and reset everything over to maximum
  * supported value of 5GHz to the max. value and everything under the minimum
- * supported value of 10MHz to the min. value.
+ * supported value of 10MHz to the min. value. This should also update the
+ * frequency and the VCO calibration values.
  * @param dev 		- The device structure.
  * @param val		- The desired reference frequency in Hz.
  * @return    		- 0 in case of success or negative error code.
  */
 int adf4382_set_ref_clk(struct adf4382_dev *dev, uint64_t val)
 {
+	int ret;
+
 	if (!dev)
 		return -EINVAL;
 
@@ -212,7 +215,10 @@ int adf4382_set_ref_clk(struct adf4382_dev *dev, uint64_t val)
 	if (val < ADF4382_REF_CLK_MIN)
 		dev->ref_freq_hz = ADF4382_REF_CLK_MIN;
 
-	return adf4382_set_freq(dev);
+	ret = adf4382_set_freq(dev);
+	if (ret)
+		return ret;
+	return adf4382_set_vco_cal_timeout(dev);
 }
 
 /**
@@ -234,19 +240,24 @@ int adf4382_get_ref_clk(struct adf4382_dev *dev, uint64_t *val)
 /**
  * @brief Set the reference doubler to enable or disable based on the passed
  * parameter. If the parameter is different then 0 it will set the doubler to
- * enable.
+ * enable. This should also update the frequency and the VCO calibration values.
  * @param dev 		- The device structure.
  * @param en	 	- The enable or disable value of the reference doubler.
  * @return    		- 0 in case of success or negative error code.
  */
 int adf4382_set_en_ref_doubler(struct adf4382_dev *dev, bool en)
 {
+	int ret;
+
 	if (!dev)
 		return -EINVAL;
 
 	dev->ref_doubler_en = en;
 
-	return adf4382_set_freq(dev);
+	ret = adf4382_set_freq(dev);
+	if (ret)
+		return ret;
+	return adf4382_set_vco_cal_timeout(dev);
 }
 
 /**
@@ -280,6 +291,8 @@ int adf4382_get_en_ref_doubler(struct adf4382_dev *dev, bool *en)
  */
 int adf4382_set_ref_div(struct adf4382_dev *dev, int32_t div)
 {
+	int ret;
+
 	if (!dev)
 		return -EINVAL;
 
@@ -288,7 +301,10 @@ int adf4382_set_ref_div(struct adf4382_dev *dev, int32_t div)
 	if (div > ADF4382_REF_DIV_MAX)
 		dev->ref_div = ADF4382_REF_DIV_MAX;
 
-	return adf4382_set_freq(dev);
+	ret = adf4382_set_freq(dev);
+	if (ret)
+		return ret;
+	return adf4382_set_vco_cal_timeout(dev);
 }
 
 /**
@@ -984,7 +1000,8 @@ int adf4382_get_en_lut_calibration(struct adf4382_dev *dev, bool *en)
 int adf4382_set_en_lut_calibration(struct adf4382_dev *dev, bool en_lut_cal)
 {
 	int ret;
-	uint8_t vptat_calgen, vctat_calgen, pd_calgen, cal_vtune_to;
+	uint8_t vptat_calgen, vctat_calgen, pd_calgen;
+	uint32_t cal_vtune_to;
 
 	dev->en_lut_cal = en_lut_cal;
 
@@ -992,7 +1009,7 @@ int adf4382_set_en_lut_calibration(struct adf4382_dev *dev, bool en_lut_cal)
 		vptat_calgen = ADF4382_VPTAT_CALGEN;
 		vctat_calgen = ADF4382_VCTAT_CALGEN;
 		pd_calgen = 0;
-		cal_vtune_to = ADF4382_CAL_VTUNE_TO;
+		cal_vtune_to = dev->cal_vtune_to;
 	} else {
 		vptat_calgen = ADF4382_FASTCAL_VPTAT_CALGEN;
 		vctat_calgen = ADF4382_FASTCAL_VCTAT_CALGEN;
@@ -1024,9 +1041,20 @@ int adf4382_set_en_lut_calibration(struct adf4382_dev *dev, bool en_lut_cal)
 	if (ret)
 		return ret;
 
-	return adf4382_spi_update_bits(dev, 0x36, ADF4382_EN_LUT_CAL_MSK,
-				       no_os_field_prep(ADF4382_EN_LUT_CAL_MSK,
-						       dev->en_lut_cal));
+	ret = adf4382_spi_update_bits(dev, 0x39, ADF4382_CAL_VTUNE_TO_MSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_MSB_MSK,
+						      cal_vtune_to >> 8));
+	if (ret)
+		return ret;
+
+	ret = adf4382_spi_update_bits(dev, 0x36, ADF4382_EN_LUT_CAL_MSK,
+				      no_os_field_prep(ADF4382_EN_LUT_CAL_MSK,
+						      dev->en_lut_cal));
+	if (ret)
+		return ret;
+
+	return adf4382_spi_update_bits(dev, 0x15, ADF4382_INT_MODE_MSK,
+				       no_os_field_prep(ADF4382_INT_MODE_MSK, 0));
 }
 
 /**
@@ -1845,6 +1873,62 @@ int adf4382_get_sw_sync(struct adf4382_dev *dev, bool *sw_sync)
 }
 
 /**
+ * @brief Computes and sets the VCO Calibration Timeout values.
+ * @param dev 	- The device structure.
+ * @return 	- 0 in case of success or negative error code.
+ */
+int adf4382_set_vco_cal_timeout(struct adf4382_dev *dev)
+{
+	uint32_t cal_count_to, cal_vtune_to, cal_vco_to;
+	uint32_t cal_count_to_time = 235; // Default value in 23.5us steps
+	uint8_t dclk_div1, dclk_div, val;
+	uint64_t pfd_freq;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	pfd_freq = adf4382_pfd_compute(dev);
+
+	// Read DCLK_DIV1 once
+	ret = adf4382_spi_read(dev, 0x24, &val);
+	if (ret)
+		return ret;
+	dclk_div1 = no_os_field_get(val, ADF4382_DCLK_DIV1_MSK);
+	dclk_div = 1 << dclk_div1;
+
+	// VCO Calibration Count Timeout
+	cal_count_to = NO_OS_DIV_ROUND_CLOSEST_ULL((cal_count_to_time * pfd_freq),
+			(10 * MHZ * dclk_div * 16));
+	ret = adf4382_spi_write(dev, 0x37,
+				(cal_count_to & ADF4382_CAL_COUNT_TO_MSK));
+	if (ret)
+		return ret;
+
+	cal_vtune_to = NO_OS_DIV_ROUND_CLOSEST_ULL
+		       (dev->max_lpf_cap_value_uf * 80000ULL * pfd_freq,
+			420000000000ULL * dclk_div);
+	dev->cal_vtune_to = cal_vtune_to & ADF4382_CAL_VTUNE_TO_LSB_MSK;
+	ret = adf4382_spi_write(dev, 0x38, dev->cal_vtune_to);
+	if (ret)
+		return ret;
+	ret = adf4382_spi_update_bits(dev, 0x39, ADF4382_CAL_VTUNE_TO_MSB_MSK,
+				      no_os_field_prep(ADF4382_CAL_VTUNE_TO_MSB_MSK,
+						      dev->cal_vtune_to >> 8));
+	if (ret)
+		return ret;
+
+	// VCO Calibration VCO Timeout
+	cal_vco_to = NO_OS_DIV_ROUND_CLOSEST_ULL(pfd_freq, MHZ * dclk_div);
+	ret = adf4382_spi_write(dev, 0x3A, cal_vco_to);
+	if (ret)
+		return ret;
+	return adf4382_spi_update_bits(dev, 0x3B, ADF4382_CAL_VCO_TO_MSB_MSK,
+				       no_os_field_prep(ADF4382_CAL_VCO_TO_MSB_MSK,
+						       cal_vco_to >> 8));
+}
+
+/**
  * @brief ADF4382 SPI Scratchpad check.
  * @param dev 	- The device structure.
  * @return 	- 0 in case of success or negative error code.
@@ -1928,6 +2012,7 @@ int adf4382_init(struct adf4382_dev **dev,
 	device->bleed_word = init_param->bleed_word;
 	device->ld_count = init_param->ld_count;
 	device->phase_adj = 0;
+	device->max_lpf_cap_value_uf = init_param->max_lpf_cap_value_uf;
 
 	switch (init_param->id) {
 	case ID_ADF4382:
@@ -1994,6 +2079,10 @@ int adf4382_init(struct adf4382_dev **dev,
 	}
 
 	ret = adf4382_set_freq(device);
+	if (ret)
+		goto error_spi;
+
+	ret = adf4382_set_vco_cal_timeout(device);
 	if (ret)
 		goto error_spi;
 
