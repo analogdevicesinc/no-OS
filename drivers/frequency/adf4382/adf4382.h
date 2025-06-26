@@ -540,6 +540,7 @@ struct adf4382_init_param {
 	uint8_t				ld_count;
 	uint8_t				en_lut_gen;
 	uint8_t				en_lut_cal;
+	uint8_t				max_lpf_cap_value_uf;
 	enum adf4382_dev_id		id;
 };
 
@@ -567,6 +568,8 @@ struct adf4382_dev {
 	uint64_t			freq_max;
 	uint64_t			freq_min;
 	uint8_t				clkout_div_reg_val_max;
+	uint8_t				max_lpf_cap_value_uf;
+	uint32_t			cal_vtune_to;
 	// N_INT variable to trigger auto calibration
 	uint16_t			n_int;
 };
@@ -633,7 +636,7 @@ static const struct reg_sequence adf4382_reg_defaults[] = {
 	{ 0x040, 0x00 },
 	{ 0x03f, 0x82 },
 	{ 0x03e, 0x4E },
-	{ 0x03d, 0x20 },
+	{ 0x03d, 0x00 },
 	{ 0x03c, 0x00 },
 	{ 0x03b, 0x00 },
 	{ 0x03a, 0xFA },
@@ -792,6 +795,9 @@ int adf4382_set_sw_sync(struct adf4382_dev *dev, bool sw_sync);
 
 /** ADF4382 Get sw_sync attribute */
 int adf4382_get_sw_sync(struct adf4382_dev *dev, bool *sw_sync);
+
+/** ADF4382 Set VCO calibration settings attributes */
+int adf4382_set_vco_cal_timeout(struct adf4382_dev *dev);
 
 /** ADF4382 Initialization */
 int adf4382_init(struct adf4382_dev **device,
