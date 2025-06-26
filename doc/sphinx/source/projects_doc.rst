@@ -144,6 +144,8 @@ DAC
 
    projects/max22017
 
+   projects/ad3552r_fmcz
+
 TEMPERATURE
 ==============
 .. toctree::
