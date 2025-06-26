@@ -59,6 +59,7 @@ struct adf4382_init_param adf4382_ip = {
 	.spi_init = &adf4382_spi_ip,
 	.spi_3wire_en = false,
 	.cmos_3v3 = false,
+	.max_lpf_cap_value_uf = 10,
 	.ref_freq_hz = 125000000,
 	.freq = 20000000000,
 	.ref_doubler_en = 1,

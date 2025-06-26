@@ -38,7 +38,7 @@ struct mbed_uart_init_param adf4382_uart_extra_ip = {
 	.uart_rx_pin = UART_RX_PIN
 };
 
-extern struct mbed_spi_init_param adf4382_spi_extra = {
+struct mbed_spi_init_param adf4382_spi_extra = {
 	.spi_miso_pin = SDP_SPI_MISO,
 	.spi_mosi_pin = SDP_SPI_MOSI,
 	.spi_clk_pin = SDP_SPI_SCK,
