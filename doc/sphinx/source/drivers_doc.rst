@@ -25,7 +25,7 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/ad7768-1
 
    drivers/ad796x
-
+         
    drivers/ad9083
 
    drivers/ad9208
@@ -33,6 +33,8 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/adm1177
 
    drivers/pulsar_adc
+
+   drivers/ad9265
 
 ADC / DAC
 ==========
