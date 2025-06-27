@@ -198,7 +198,7 @@ application requirements.
 Device Initialization Example
 -----------------------------
 
-.. code-block::C
+.. code-block:: C
 
     #include "no_os_spi.h"
     #include "xilinx_spi.h"

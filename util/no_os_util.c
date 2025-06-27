@@ -465,6 +465,46 @@ uint32_t no_os_get_unaligned_le32(uint8_t *buf)
 	       | ((uint32_t)buf[3] << 24);
 }
 
+void no_os_put_unaligned_be64(uint64_t val, uint8_t *buf)
+{
+	buf[7] = val & 0xFF;
+	buf[6] = (val >> 8) & 0xFF;
+	buf[5] = (val >> 16) & 0xFF;
+	buf[4] = (val >> 24) & 0xFF;
+	buf[3] = (val >> 32) & 0xFF;
+	buf[2] = (val >> 40) & 0xFF;
+	buf[1] = (val >> 48) & 0xFF;
+	buf[0] = val >> 56;
+}
+
+uint64_t no_os_get_unaligned_be64(uint8_t *buf)
+{
+	return buf[7] | ((uint16_t)buf[6] << 8) | ((uint32_t)buf[5] << 16)
+	       | ((uint32_t)buf[4] << 24) | ((uint64_t)buf[3] << 32)
+	       | ((uint64_t)buf[2] << 40) | ((uint64_t)buf[1] << 48)
+	       | ((uint64_t)buf[0] << 56);
+}
+
+void no_os_put_unaligned_le64(uint64_t val, uint8_t *buf)
+{
+	buf[0] = val & 0xFF;
+	buf[1] = (val >> 8) & 0xFF;
+	buf[2] = (val >> 16) & 0xFF;
+	buf[3] = (val >> 24) & 0xFF;
+	buf[4] = (val >> 32) & 0xFF;
+	buf[5] = (val >> 40) & 0xFF;
+	buf[6] = (val >> 48) & 0xFF;
+	buf[7] = val >> 56;
+}
+
+uint64_t no_os_get_unaligned_le64(uint8_t *buf)
+{
+	return buf[0] | ((uint16_t)buf[1] << 8) | ((uint32_t)buf[2] << 16)
+	       | ((uint32_t)buf[3] << 24) | ((uint64_t)buf[4] << 32)
+	       | ((uint64_t)buf[5] << 40) | ((uint64_t)buf[6] << 48)
+	       | ((uint64_t)buf[7] << 56);
+}
+
 int16_t no_os_sign_extend16(uint16_t value, int index)
 {
 	uint8_t shift = 15 - index;

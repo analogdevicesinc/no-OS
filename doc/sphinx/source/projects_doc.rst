@@ -80,6 +80,8 @@ RF TRANSCEIVER
 
    projects/adrv902x
 
+   projects/adrv9001
+
 EVAL BOARDS
 ==============
 .. toctree::
@@ -141,6 +143,8 @@ DAC
    projects/eval-ad8460
 
    projects/max22017
+
+   projects/ad3552r_fmcz
 
 TEMPERATURE
 ==============
