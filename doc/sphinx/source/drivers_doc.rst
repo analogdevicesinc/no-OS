@@ -116,6 +116,8 @@ METER
 
    drivers/ade9113
 
+   drivers/ade9000
+
 RF TRANSCEIVER
 ==============
 .. toctree::
