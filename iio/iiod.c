@@ -1143,6 +1143,7 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 	static struct no_os_list_desc *event_list;
 	static struct lf256fifo *fifo_stream;
 	struct iiod_event_desc *evt_data;
+	static struct iiod_buff buff;
 
 	struct iiod_event_data data = {
 		.channel_id = 0,
@@ -1376,8 +1377,20 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 					     sizeof(conn->cmd_response_data));
 
 			//Now send the response back buffer payload req bytes
-			ret = desc->ops.send(&ctx, stream->blocks[buf_id]->data,
-					     stream->blocks[buf_id]->size);
+			// ret = desc->ops.send(&ctx, stream->blocks[buf_id]->data,
+			// 		     stream->blocks[buf_id]->size);
+			// if (NO_OS_IS_ERR_VALUE(ret))
+			// 	return ret;
+
+			buff.buf = stream->blocks[buf_id]->data;
+			buff.len = stream->blocks[buf_id]->size;
+			buff.idx = 0;
+
+			do {
+				ret = rw_iiod_buff(desc, conn,
+						   &buff,
+						   IIOD_WR);
+			} while (ret == -EAGAIN);
 			if (NO_OS_IS_ERR_VALUE(ret))
 				return ret;
 		}
@@ -1403,7 +1416,6 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 
 		//transfer here
 		for (int i = 0; i < stream->nb_blocks; i++) {
-			no_os_mdelay(1);
 
 			ret = lf256fifo_read(fifo_stream, &buf_id);
 			if (NO_OS_IS_ERR_VALUE(ret))
@@ -1415,10 +1427,23 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 					     sizeof(conn->cmd_response_data));
 
 			//Now send the response back buffer payload req bytes
-			ret = desc->ops.send(&ctx, stream->blocks[buf_id]->data,
-					     stream->blocks[buf_id]->size);
+			// ret = desc->ops.send(&ctx, stream->blocks[buf_id]->data,
+			// 		     stream->blocks[buf_id]->size);
+			// if (NO_OS_IS_ERR_VALUE(ret))
+			// 	return ret;
+
+			buff.buf = stream->blocks[buf_id]->data;
+			buff.len = stream->blocks[buf_id]->size;
+			buff.idx = 0;
+
+			do {
+				ret = rw_iiod_buff(desc, conn,
+						   &buff,
+						   IIOD_WR);
+			} while (ret == -EAGAIN);
 			if (NO_OS_IS_ERR_VALUE(ret))
 				return ret;
+
 		}
 
 		break;
