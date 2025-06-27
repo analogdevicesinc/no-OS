@@ -37,6 +37,10 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include "no_os_fifo.h"
+#include "no_os_list.h"
+#include "no_os_alloc.h"
+
 #include "iiod.h"
 #include "iiod_private.h"
 
@@ -94,6 +98,12 @@ static const uint32_t priority_array[] = {
 
 static_assert(NO_OS_ARRAY_SIZE(cmds) == NO_OS_ARRAY_SIZE(priority_array),
 	      "Arrays must have the same size");
+
+static int32_t iio_event_cmp(void *data1, void *data2)
+{
+	return ((struct iiod_event_desc *)data1)->client_id -
+	       ((struct iiod_event_desc *)data2)->client_id;
+}
 
 /* Set res->cmd to corresponding cmd and return the processed length of buf */
 static int32_t parse_cmd(const char *token, struct comand_desc *res)
@@ -701,8 +711,12 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		conn->res.write_val = 1;
 		conn->res.buf.buf = desc->xml;
 		conn->res.buf.len = desc->xml_len;
+		break;
+	case IIOD_CMD_BINARY:
+		conn->is_binary_protocol = true;
 
-
+		conn->res.write_val = 1;
+		conn->res.val = 0;
 		break;
 	case IIOD_CMD_VERSION:
 		conn->res.buf.buf = IIOD_VERSION;
@@ -1126,8 +1140,20 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 	struct iiod_binary_cmd cmd;
 	static uint8_t *blocks[16];
 	static struct iio_stream *stream;
-
+	static struct no_os_list_desc *event_list;
 	static struct lf256fifo *fifo_stream;
+	struct iiod_event_desc *evt_data;
+
+	struct iiod_event_data data = {
+		.channel_id = 0,
+		.diff_channel_id = 0,
+		.channel_type = IIO_VOLTAGE,
+		.modifier = IIO_NO_MOD,
+		.event_dir = IIO_EV_DIR_NONE,
+		.is_differential = 0,
+		.event_type = IIO_EV_TYPE_THRESH,
+		.timestamp = 1
+	};
 
 	memset(&cmd, 0, sizeof(struct iiod_binary_cmd));
 
@@ -1162,6 +1188,7 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 	static uint8_t curr, curr_1;
 	static uint8_t cl_id = 1;
 	static uint8_t buf_id;
+	struct iiod_event_desc evt_data_key = {.client_id = cmd.client_id};
 
 	switch (cmd.op) {
 		//switch(conn->cmd_data_bin.op) {
@@ -1373,8 +1400,11 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 
 		//memset(buffer, 0x10, sizeof(buffer));
 
+
 		//transfer here
 		for (int i = 0; i < stream->nb_blocks; i++) {
+			no_os_mdelay(1);
+
 			ret = lf256fifo_read(fifo_stream, &buf_id);
 			if (NO_OS_IS_ERR_VALUE(ret))
 				return ret;
@@ -1434,6 +1464,101 @@ static int32_t iiod_read_binary_cmd_new(struct iiod_desc *desc,
 		// only when previous deque fails
 		break;
 
+	case IIOD_OP_CREATE_EVSTREAM:
+		/* Create a list of events, if not done already */
+		if (!event_list) {
+			ret = no_os_list_init(&event_list, NO_OS_LIST_PRIORITY_LIST,
+					      iio_event_cmp);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+		}
+
+		/* Find the element for the Client ID */
+		ret = no_os_list_read_find(event_list, (void **)&evt_data, &evt_data_key);
+
+		/* If no event data is found insert a new one */
+		if (ret) {
+			evt_data = (struct iiod_event_desc *) no_os_calloc(1, sizeof(*evt_data));
+			if (!evt_data)
+				return -ENOMEM;
+
+			evt_data->client_id = cmd.client_id;
+			evt_data->event_data = NULL;
+
+			ret = no_os_list_add_last(event_list, evt_data);
+			if (ret)
+				goto free_action;
+		} else {
+			return -EINVAL;
+		}
+
+		conn->cmd_response_data.client_id = cmd.client_id;
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+		break;
+free_action:
+		no_os_free(evt_data);
+		return -EINVAL;
+	case IIOD_OP_FREE_EVSTREAM:
+		struct iiod_event_desc discard_evt_key = {.client_id = cmd.client_id};
+		struct iiod_event_desc *discard_evt;
+		if (!event_list) {
+			return -EINVAL;
+		}
+
+		/* Find the element for the Client ID */
+		ret = no_os_list_read_find(event_list, (void **)&discard_evt, &discard_evt_key);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		while (discard_evt->event_data) {
+			discard_evt->event_data = no_os_fifo_remove(discard_evt->event_data);
+		}
+
+		no_os_free(discard_evt);
+
+		//Send response cmd
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+				     sizeof(conn->cmd_response_data));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+		break;
+	case IIOD_OP_READ_EVENT:
+		if (!event_list) {
+			return -EINVAL;
+		}
+
+		/* Find the element for the Client ID */
+		ret = no_os_list_read_find(event_list, (void **)&evt_data, &evt_data_key);
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		no_os_fifo_insert(&evt_data->event_data, &data, sizeof(data));
+
+		if (evt_data->event_data != NULL) {
+			conn->cmd_response_data.client_id = cmd.client_id;
+			conn->cmd_response_data.code = evt_data->event_data->len;
+			//Send response cmd
+			ret = desc->ops.send(&ctx, (uint8_t *)&conn->cmd_response_data,
+					     sizeof(conn->cmd_response_data));
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			//Send response payload
+			ret = desc->ops.send(&ctx, (uint8_t *)evt_data->event_data->data,
+					     evt_data->event_data->len);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+
+			evt_data->event_data = no_os_fifo_remove(evt_data->event_data);
+		} else {
+			evt_data->event_read_count++;
+		}
+
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -1464,22 +1589,6 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			if (NO_OS_IS_ERR_VALUE(ret))
 				return ret;
 
-			if (strcmp(conn->parser_buf, "BINARY\r\n") == 0) {
-				conn->is_binary_protocol = true;
-
-				// int32_t ack = 0;
-				// ret = desc->ops.send(&ctx, (uint8_t *)&ack,
-				// 		     sizeof(ack));
-				conn->res.write_val = 1;
-				conn->res.val = 0;
-				conn->state = IIOD_WRITING_CMD_RESULT; //see
-				return 0;
-			}
-#if 0
-//			if(strcmp(conn->parser_buf, "PRINT")==0){
-//				printf("I'm here\r\n");
-//			}
-
 			/* Fill struct comand_desc with data from line. No I/O */
 			ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
 					      &conn->strtok_ctx);
@@ -1497,7 +1606,6 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			} else {
 				conn->state = IIOD_RUNNING_CMD;
 			}
-#endif
 		} else {
 			// ret = iiod_parse_binary_cmd(conn, (struct iiod_binary_cmd *)conn->parser_buf);
 			// if (NO_OS_IS_ERR_VALUE(ret)) {

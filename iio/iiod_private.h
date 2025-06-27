@@ -235,4 +235,21 @@ struct iiod_binary_resp {
 	uint8_t payload[];
 };
 
+struct iiod_event_desc {
+	uint16_t client_id;
+	uint16_t event_read_count;
+	struct no_os_fifo_element *event_data;
+};
+
+struct __attribute__((packed)) iiod_event_data {
+	uint64_t channel_id: 16;
+	uint64_t diff_channel_id: 16;
+	uint64_t channel_type: 8;
+	uint64_t modifier: 8;
+	uint64_t event_dir: 7;
+	uint64_t is_differential: 1;
+	uint64_t event_type: 8;
+	int64_t timestamp: 64;
+};
+
 #endif //IIOD_PRIVATE_H
