@@ -3,6 +3,7 @@
  *   @brief  Header file for adf4377 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author  Jude Osemene (jude.osemene@analog.com)
+ *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
  *
@@ -229,8 +230,8 @@
 #define ADF4377_1V8_LOGIC               0x0
 #define ADF4377_3V3_LOGIC               0x1
 
-#define ADF4377_R_DEL_MIN               0x00
-#define ADF4377_R_DEL_MAX               0x7F
+#define ADF4377_R_N_DEL_MIN               0x00
+#define ADF4377_R_N_DEL_MAX               0x7F
 
 /* ADF4377 REG0019 Map */
 #define ADF4377_CLKOUT2_OP_MSK		NO_OS_GENMASK(7, 6)
@@ -800,8 +801,23 @@ int adf4377_set_en_sysref_monitor(struct adf4377_dev *dev, bool en);
 /** ADF4377 Get sysref Monitoring attribute */
 int adf4377_get_en_sysref_monitor(struct adf4377_dev *dev, bool *en);
 
+/** ADF4377 Set NDEL (N divider Delay) register value */
+int adf4377_set_ndel(struct adf4377_dev *dev, int32_t val);
+
+/** ADF4377 Get NDEL (N divider Delay) register value */
+int adf4377_get_ndel(struct adf4377_dev *dev, int32_t *val);
+
+/** ADF4377 Set RDEL (R divider Delay) register value */
+int adf4377_set_rdel(struct adf4377_dev *dev, int32_t val);
+
+/** ADF4377 Get RDEL (R divider Delay) register value */
+int adf4377_get_rdel(struct adf4377_dev *dev, int32_t *val);
+
 /* Set Output frequency */
 int adf4377_set_freq(struct adf4377_dev *dev);
+
+/* Soft reseting device and Load default registers */
+int adf4377_soft_reset(struct adf4377_dev *dev, bool spi_4wire);
 
 /** ADF4377 Initialization */
 int32_t adf4377_init(struct adf4377_dev **device,

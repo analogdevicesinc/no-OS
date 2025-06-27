@@ -3,6 +3,7 @@
  *   @brief  Implementation of IIO ADF4377 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Jude Osemene (jude.osemene@analog.com)
+ *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
  *
@@ -61,9 +62,12 @@ enum adf4377_iio_dev_attr_id {
 	ADF4377_IIO_DEV_ATTR_CP_AVAIL,
 	ADF4377_IIO_DEV_ATTR_BLEED_CURRENT,
 	ADF4377_IIO_DEV_ATTR_REF_DOUBLER_EN,
+	ADF4377_IIO_DEV_ATTR_NDEL,
+	ADF4377_IIO_DEV_ATTR_RDEL,
 	ADF4377_IIO_DEV_ATTR_SR_DEL_ADJ,
 	ADF4377_IIO_DEV_ATTR_SR_INV_ADJ,
 	ADF4377_IIO_DEV_ATTR_SR_MONITORING,
+	ADF4377_IIO_DEV_ATTR_DEFAULT_REG,
 };
 
 int adf4377_iio_init(struct adf4377_iio_dev **iio_dev,
