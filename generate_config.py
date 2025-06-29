@@ -4,6 +4,8 @@ import os
 import argparse
 from pathlib import Path
 
+print("Running generate_config.py")
+
 parser = argparse.ArgumentParser(description="Generate config.cmake from defconfig files")
 
 parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory", default=Path(__file__).parent.resolve())
@@ -15,21 +17,24 @@ args = parser.parse_args(sys.argv[1:])
 print(args.update)
 
 capi_dir = args.root_dir
+os.environ["srctree"] = str(capi_dir)
+
 kconf = kconfiglib.Kconfig(capi_dir.joinpath("Kconfig"))
 
 if args.update:
-        main_config = capi_dir.joinpath(".config")
+        main_config = capi_dir.joinpath("build/.config")
         if not os.path.exists(main_config):
                 os.mknod(main_config)
 
         kconf.load_config(main_config)
 
-for defconfig in args.defconfig:
-        kconf.load_config(capi_dir.joinpath(defconfig), replace=False)
+if args.defconfig != None:
+        for defconfig in args.defconfig:
+                kconf.load_config(capi_dir.joinpath(defconfig), replace=False)
 
-kconf.write_config(capi_dir.joinpath(".config"))
+kconf.write_config(capi_dir.joinpath("build/.config"))
 
-with open(capi_dir.joinpath("config.cmake"), "w") as cmake_file:
+with open(capi_dir.joinpath("config.cmake"), "w+") as cmake_file:
         cmake_file.write("#Generated based on .config\n")
 
         for sym in kconf.unique_defined_syms: 
@@ -46,5 +51,6 @@ print("Generated config.cmake")
 
 if True:
         print("Config files used:")
-        for defconfig in args.defconfig:
-                print("{}".format(defconfig))
+        if args.defconfig != None:
+                for defconfig in args.defconfig:
+                        print("{}".format(defconfig))
