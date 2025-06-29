@@ -1,7 +1,19 @@
 cmake_minimum_required(VERSION 3.28)
-project(eval-adxl355-pmdz C ASM)
+
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        6910c9d9165801d8827d628cb72eb7ea9dd538c5 # release-1.16.0
+  )
+
+FetchContent_MakeAvailable(googletest)
 
 message(STATUS "Args ${CMAKE_TOOLCHAIN_FILE}")
+  
+project(eval-adxl355-pmdz C ASM)
+
 
 add_library(eval-adxl355-pmdz-common STATIC)
 
