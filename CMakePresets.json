@@ -10,7 +10,7 @@
                 {
                         "name": "default",
                         "description": "Default config",
-                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake"
+                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake"
                 },
                 {
                         "name": "max78000_fthr",
@@ -22,7 +22,7 @@
                                 "PLATFORM": "maxim",
                                 "TARGET": "max78000",
                                 "TARGET_NUM": "max78000",
-                                "DEFAULT_DEFCONFIG": "board_configs/maxim/max78000_fthr_defconfig"
+                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/max78000_fthr_defconfig"
                         }
                 },
                 {
@@ -35,7 +35,7 @@
                                 "PLATFORM": "maxim",
                                 "TARGET": "max32650",
                                 "TARGET_NUM": "32650",
-                                "DEFAULT_DEFCONFIG": "board_configs/maxim/max32650_fthr_defconfig"
+                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/max32650_fthr_defconfig"
                         }
                 }
         ]
