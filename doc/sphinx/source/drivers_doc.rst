@@ -113,6 +113,7 @@ METER
    :maxdepth: 1
 
    drivers/ade7816
+   drivers/ade9153a
 
    drivers/ade7913
 
