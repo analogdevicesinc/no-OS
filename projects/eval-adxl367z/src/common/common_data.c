@@ -43,6 +43,18 @@ const struct no_os_spi_init_param spi_ip = {
 	.extra = &spi_extra
 };
 
+struct no_os_uart_init_param uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size = NO_OS_UART_CS_8,
+	.platform_ops = UART_OPS,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_EXTRA,
+};
+
 struct adxl367_init_param init_param = {
 	.spi_init = spi_ip,
 	.comm_type = ADXL367_SPI_COMM,

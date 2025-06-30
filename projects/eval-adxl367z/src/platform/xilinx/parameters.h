@@ -43,8 +43,10 @@
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID 	XPAR_SCUGIC_SINGLE_DEVICE_ID
 #define UART_IRQ_ID     XPAR_XUARTPS_1_INTR
-#define UART_DEVICE_ID      XPAR_XUARTPS_0_DEVICE_ID
-#define UART_BAUDRATE  115200
+#define UART_DEVICE_ID	XPAR_XUARTPS_0_DEVICE_ID
+#define UART_BAUDRATE	115200
+#define UART_OPS	NULL
+#define UART_EXTRA	NULL
 #endif
 
 extern struct xil_spi_init_param spi_extra;

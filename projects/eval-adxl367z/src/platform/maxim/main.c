@@ -32,8 +32,19 @@
 *******************************************************************************/
 #include "platform_includes.h"
 #include "common_data.h"
-#include "triple_tap_example.h"
 #include "no_os_error.h"
+
+#ifdef TRIPLE_TAP_EXAMPLE
+#include "triple_tap_example.h"
+#endif
+
+#ifdef DUMMY_EXAMPLE
+#include "dummy_example.h"
+#endif
+
+#ifdef IIO_EXAMPLE
+#include "iio_example.h"
+#endif
 
 /***************************************************************************//**
  * @brief Main function execution for XILINX platform.
@@ -45,18 +56,8 @@ int main()
 	int ret = -EINVAL;
 
 	struct no_os_uart_desc *uart_desc;
-	struct no_os_uart_init_param uart_ip = {
-		.device_id = UART_DEVICE_ID,
-		.irq_id = UART_IRQ_ID,
-		.asynchronous_rx = true,
-		.baud_rate = UART_BAUDRATE,
-		.size = NO_OS_UART_CS_8,
-		.platform_ops = UART_OPS,
-		.parity = NO_OS_UART_PAR_NO,
-		.stop = NO_OS_UART_STOP_1_BIT,
-		.extra = UART_EXTRA,
-	};
 
+#ifdef TRIPLE_TAP_EXAMPLE
 	/* NVIC Interrupt Controller specific for Maxim platform. */
 	struct no_os_irq_ctrl_desc *nvic_desc;
 	struct no_os_irq_init_param nvic_desc_param = {
@@ -79,10 +80,32 @@ int main()
 
 	ret = triple_tap_example_main();
 
-irq_ctrl_remove:
-	no_os_irq_ctrl_remove(nvic_desc);
 uart_remove:
 	no_os_uart_remove(uart_desc);
+irq_ctrl_remove:
+	no_os_irq_ctrl_remove(nvic_desc);
+#endif
+
+#ifdef DUMMY_EXAMPLE
+	ret = no_os_uart_init(&uart_desc, &uart_ip);
+	if (ret)
+		return ret;
+
+	no_os_uart_stdio(uart_desc);
+
+	ret = dummy_example_main();
+
+	no_os_uart_remove(uart_desc);
+#endif
+
+#ifdef IIO_EXAMPLE
+	ret = iio_example_main();
+#endif
+
+#if (BASIC_EXAMPLE + IIO_EXAMPLE + TRIPLE_TAP_EXAMPLE > 1)
+#error Selected example projects cannot be enabled at the same time. \
+Please enable ony one example and rebuild thhe project.
+#endif
 
 	return ret;
 }

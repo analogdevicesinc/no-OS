@@ -70,5 +70,31 @@ int iio_example_main()
 		}
 	};
 
+#ifdef MAXIM_PLATFORM
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uart_ip;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto remove_iio_adxl367;
+
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+
+remove_iio_adxl367:
+	adxl367_iio_remove(adxl367_iio_desc);
+exit:
+	if (ret)
+		printf("Error!\n");
+	return ret;
+#endif
+
+#ifdef XILINX_PLATFORM
 	return iio_app_run(NULL, 0, iio_devices, NO_OS_ARRAY_SIZE(iio_devices));
+#endif
 }
