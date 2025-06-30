@@ -938,7 +938,7 @@ int adf4377_set_en_sysref_monitor(struct adf4377_dev *dev, bool en)
 		return -EINVAL;
 
 	ret = adf4377_spi_update_bit(dev, 0x42, ADF4377_PD_SR_MON_MSK,
-				     ADF4377_PD_SR_MON(en));
+				     ADF4377_PD_SR_MON(!en));
 	if (ret)
 		return ret;
 
@@ -974,7 +974,7 @@ int adf4377_get_en_sysref_monitor(struct adf4377_dev *dev, bool *en)
 	if (ret)
 		return ret;
 
-	dev->sysrefout = no_os_field_get(ADF4377_PD_SR_MON_MSK, tmp);
+	dev->sysrefout = !(no_os_field_get(ADF4377_PD_SR_MON_MSK, tmp));
 	*en = dev->sysrefout;
 
 	return 0;
