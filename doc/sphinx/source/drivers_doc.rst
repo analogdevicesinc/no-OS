@@ -124,6 +124,7 @@ RF TRANSCEIVER
    :maxdepth: 1
 
    drivers/madura
+   drivers/navassa
 
    drivers/talise
 
