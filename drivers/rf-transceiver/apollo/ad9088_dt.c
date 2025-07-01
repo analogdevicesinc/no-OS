@@ -7,13 +7,10 @@
 //#define DEBUG
 
 #include "ad9088.h"
-#include "no_os_error.h"
-#include "no_os_print_log.h"
 
-static void ad9088_jesd_lane_setup(struct ad9088_phy **device, 
+static void ad9088_jesd_lane_setup(struct ad9088_phy *phy, 
 				      const struct ad9088_init_param *init_param)
 {	
-	struct ad9088_phy *phy;
 	uint32_t lane_xbar[12];
 	int i;
 
@@ -76,7 +73,6 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy **device,
 				phy->profile.jtx[1].common_link_cfg.lane_enables |= (1 << i);
 	}
 
-	*device = phy;
 	return 0;
 }
 
@@ -95,10 +91,19 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	if (!phy)
 		return -ENOMEM;
 
-	phy->spi =no_os_spi_init(init_param->spi_init);
-	if (!phy->spi) {
-		no_os_free(phy);
-		return -ENOMEM;
+	ret = no_os_spi_init(&phy->spi, init_param->spi_init);
+	if (ret) {
+		goto error_dev;
+	}
+
+	ret = no_os_gpio_get(&phy->reset_gpio, init_param->gpio_reset);
+	if (ret) {
+		goto error_spi;
+	}
+
+	ret = no_os_gpio_direction_output(phy->reset_gpio, NO_OS_GPIO_HIGH);
+	if (ret) {
+		goto error_reset;
 	}
 
 	phy->spi_3wire_en = init_param->spi_3wire_en;
@@ -108,6 +113,7 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	phy->multidevice_instance_count = init_param->multidevice_instance_count;
 	phy->trig_sync_en = init_param->trig_sync_en;
 	phy->standalone = init_param->standalone_en;
+	nz = init_param->nyquist_zone;
 
 	if (nz != 1 && nz != 2) {
 		pr_err("Invalid Nyquist zone %u\n", nz);
@@ -127,6 +133,14 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 
 	*device = phy;
 	return 0;
+
+error_reset:
+	no_os_gpio_remove(phy->reset_gpio);
+error_spi:
+	no_os_spi_remove(phy->spi);
+error_dev:
+	no_os_free(phy);
+	return ret;
 }
 
 EXPORT_SYMBOL(ad9088_parse_dt);

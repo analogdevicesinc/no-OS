@@ -70,12 +70,12 @@ struct no_os_spi_init_param ad9088_spi_ip = {
 	.max_speed_hz = 13000000,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
-	.platform_ops = SPI_OPS_APOLLO,
+	.platform_ops = SPI_OPS_CLK,
 	.extra = SPI_EXTRA_APOLLO,
 	.chip_select = SPI_CS_APOLLO,
 };
 
-struct no_os_gpio_init_param gpio_reset_param = {
+struct no_os_gpio_init_param gpio_reset_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = GPIO_EXTRA,
 	.number = GPIO_OFFSET + GPIO_RESET_N,
@@ -188,7 +188,7 @@ struct jesd204_tx_init tx_jesd204_ip = {
 
 struct ad9088_init_param ad9088_ip = {
 	.spi_init = &ad9088_spi_ip, // to be set by the user
-	.gpio_reset = NULL, // to be set by the user
+	.gpio_reset = &gpio_reset_ip, // to be set by the user
 	.gpio_tri_req = NULL, // to be set by the user
 	.gpio_rx1_en = NULL, // to be set by the user
 	.gpio_rx2_en = NULL, // to be set by the user

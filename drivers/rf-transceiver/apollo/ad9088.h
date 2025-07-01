@@ -7,6 +7,9 @@
 //#define DEBUG
 
 
+#include "no_os_error.h"
+#include "no_os_gpio.h"
+#include "no_os_print_log.h"
 #include "no_os_spi.h"
 
 #include "jesd204.h"
@@ -191,7 +194,7 @@ struct ad9088_phy {
 	struct no_os_gpio_desc *tx1_en_gpio;
 	struct no_os_gpio_desc *tx2_en_gpio;
 	struct no_os_gpio_desc *triq_req_gpio;
-	struct no_os_gpio_desc *transceiver_reset_gpio;
+	struct no_os_gpio_desc *reset_gpio;
 	// struct regulator *supply_reg;
 
 	// struct clk *clks[NUM_AD9088_CLKS];
