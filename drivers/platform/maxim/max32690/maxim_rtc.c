@@ -2,8 +2,9 @@
  *   @file   maxim_rtc.c
  *   @brief  Implementation of RTC driver.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
+ * 	 @author Francis Roi Manabat (francisroi.manabat@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -48,8 +49,8 @@
  * @param init_param - The structure that contains the RTC initialization.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t no_os_rtc_init(struct no_os_rtc_desc **device,
-		       struct no_os_rtc_init_param *init_param)
+int32_t max_rtc_init(struct no_os_rtc_desc **device,
+		     struct no_os_rtc_init_param *init_param)
 {
 	int32_t ret;
 	struct no_os_rtc_desc *dev;
@@ -86,7 +87,7 @@ error:
  * @param dev - The RTC descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
+int32_t max_rtc_remove(struct no_os_rtc_desc *dev)
 {
 	if (!dev)
 		return -EINVAL;
@@ -101,9 +102,11 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
  * @param dev - The RTC descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
+int32_t max_rtc_start(struct no_os_rtc_desc *dev)
 {
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	MXC_RTC_Start();
 
 	return 0;
@@ -114,9 +117,11 @@ int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
  * @param dev - The RTC descriptor.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
+int32_t max_rtc_stop(struct no_os_rtc_desc *dev)
 {
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	MXC_RTC_Stop();
 
 	return 0;
@@ -128,7 +133,7 @@ int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
  * @param tmr_cnt - Pointer where the read counter will be stored.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t no_os_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt)
+int32_t max_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt)
 {
 	*tmr_cnt = MXC_RTC_GetSecond();
 
@@ -141,7 +146,7 @@ int32_t no_os_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt)
  * @param tmr_cnt - New value of the timer counter.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
+int32_t max_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 {
 	mxc_rtc_regs_t *rtc_regs;
 
@@ -150,19 +155,29 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 
 	rtc_regs = MXC_RTC;
 
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	rtc_regs->ctrl |= MXC_F_RTC_REVA_CTRL_WR_EN;
 
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	no_os_rtc_stop(dev);
 
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	rtc_regs->sec = tmr_cnt;
 
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	no_os_rtc_start(dev);
 
-	MXC_RTC_Wait_BusyToClear();
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for the RTC to be ready */
+	};
 	rtc_regs->ctrl &= ~MXC_F_RTC_REVA_CTRL_WR_EN;
 
 	return 0;
@@ -174,9 +189,21 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
  * @param irq_time - The number of seconds at which the interrupt must occur.
  * @return 0
  */
-int32_t no_os_rtc_set_irq_time(struct no_os_rtc_desc *dev, uint32_t irq_time)
+int32_t max_rtc_set_irq_time(struct no_os_rtc_desc *dev, uint32_t irq_time)
 {
-	MXC_RTC_SetTimeofdayAlarm(irq_time);
+	if (MXC_RTC_SetTimeofdayAlarm(irq_time) != E_NO_ERROR) {
+		return -EINVAL;
+	}
 
 	return 0;
 }
+
+const struct no_os_rtc_platform_ops max_rtc_ops = {
+	.init = &max_rtc_init,
+	.remove = &max_rtc_remove,
+	.start = &max_rtc_start,
+	.stop = &max_rtc_stop,
+	.get_cnt = &max_rtc_get_cnt,
+	.set_cnt = &max_rtc_set_cnt,
+	.set_irq_time = &max_rtc_set_irq_time,
+};
