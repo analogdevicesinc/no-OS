@@ -3,7 +3,6 @@
             "demo": {
                   "flags": "",
                   "hardware": [
-                        "daq2_kc705",
                         "daq2_kcu105",
                         "daq2_zc706",
                         "daq2_zcu102"
@@ -12,7 +11,6 @@
             "dma_example": {
                   "flags" : "NEW_CFLAGS=-DDMA_EXAMPLE",
                   "hardware": [
-                        "daq2_kc705",
                         "daq2_kcu105",
                         "daq2_zc706",
                         "daq2_zcu102"
@@ -21,7 +19,6 @@
             "iio": {
                   "flags": "IIOD=y",
                   "hardware": [
-                        "daq2_kc705",
                         "daq2_kcu105",
                         "daq2_zc706",
                         "daq2_zcu102"
