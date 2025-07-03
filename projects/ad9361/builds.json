@@ -3,9 +3,7 @@
             "demo": {
                   "flags": "",
                   "hardware": [
-                        "fmcomms2_kc705",
                         "fmcomms2_kcu105",
-                        "fmcomms2_vc707",
                         "fmcomms2_zc702",
                         "fmcomms2_zc706",
                         "fmcomms2_zcu102",
@@ -15,9 +13,7 @@
             "iio": {
                   "flags": "IIOD=y",
                   "hardware": [
-                        "fmcomms2_kc705",
                         "fmcomms2_kcu105",
-                        "fmcomms2_vc707",
                         "fmcomms2_zc702",
                         "fmcomms2_zc706",
                         "fmcomms2_zcu102",
@@ -27,9 +23,7 @@
             "dma-example": {
                   "flags": "NEW_CFLAGS=-DDMA_EXAMPLE",
                   "hardware": [
-                        "fmcomms2_kc705",
                         "fmcomms2_kcu105",
-                        "fmcomms2_vc707",
                         "fmcomms2_zc702",
                         "fmcomms2_zc706",
                         "fmcomms2_zcu102",
@@ -39,9 +33,7 @@
             "dma-irq-example": {
                   "flags": "NEW_CFLAGS=-DDMA_EXAMPLE\\-DDMA_IRQ_ENABLE",
                   "hardware": [
-                        "fmcomms2_kc705",
                         "fmcomms2_kcu105",
-                        "fmcomms2_vc707",
                         "fmcomms2_zc702",
                         "fmcomms2_zc706",
                         "fmcomms2_zcu102",

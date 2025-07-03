@@ -3,14 +3,12 @@
             "demo": {
                   "flags": "",
                   "hardware": [
-                        "fmcadc2_vc707",
                         "fmcadc2_zc706"
                   ]
             },
             "iio": {
                   "flags": "IIOD=y",
                   "hardware": [
-                        "fmcadc2_vc707",
                         "fmcadc2_zc706"
                   ]
             }
