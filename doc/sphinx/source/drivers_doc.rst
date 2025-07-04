@@ -95,6 +95,8 @@ FREQUENCY GENERATORS
 
    drivers/admfm2000
 
+   drivers/adf4350
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
