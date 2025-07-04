@@ -501,12 +501,21 @@ int32_t adi_apollo_private_bmem_awg_sram_set(adi_apollo_device_t *device, adi_ap
     int32_t err;
     uint8_t i;
     uint32_t regmap_base_addr = 0;
+    adi_apollo_hal_protocol_e ap;
     calc_bmem_base_f calc_sram_base, calc_bmem_base;
 
     ADI_CMS_NULL_PTR_CHECK(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_CMS_NULL_PTR_CHECK(data);
     ADI_APOLLO_BMEM_BLK_SEL_MASK(bmems);
+
+    /* Only SPI transactions can be used for writing BMEM AWG */
+    err = adi_apollo_hal_active_protocol_get(device, &ap);
+    ADI_CMS_ERROR_RETURN(err);
+    
+    if (ap != ADI_APOLLO_HAL_PROTOCOL_SPI0) {
+        ADI_CMS_ERROR_RETURN(API_CMS_ERROR_PROTOCOL_OP_NOT_SUPPORTED);
+    }
 
     calc_sram_base = calc_sram_base_func(bmem_loc);
     calc_bmem_base = calc_bmem_base_func(bmem_loc);

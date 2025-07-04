@@ -53,6 +53,11 @@ uint64_t adi_api_utils_gcd_64(uint64_t u, uint64_t v)
 uint32_t adi_api_utils_lcm(uint32_t p, uint32_t q)
 {
     uint32_t gcd, lcm, i, min_p_q;
+
+    if (p == 0 || q == 0) {
+        return 0;
+    }
+
     min_p_q = (p <= q) ? p : q;
 
     i = min_p_q;

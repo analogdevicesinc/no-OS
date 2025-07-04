@@ -95,20 +95,13 @@ int32_t adi_apollo_fduc_pgm(adi_apollo_device_t *device, adi_apollo_blk_sel_t fd
 int32_t adi_apollo_fduc_inspect(adi_apollo_device_t *device, adi_apollo_blk_sel_t fduc, adi_apollo_fduc_inspect_t *fduc_inspect);
 
 /**
- * \brief  Sets the fine DUC auto decode bypass  TODO: may not be customer facing API
- *
- * \param[in]  device       Context variable - Pointer to the APOLLO device data structure
- * \param[in]  fducs        Fine DUC selection. \ref adi_apollo_fduc_select_e
- * \param[in]  enable       1 to enable
- *
- * \return API_CMS_ERROR_OK                     API Completed Successfully
- * \return <0                                   Failed. \ref adi_cms_error_e for details.
- */
-int32_t adi_apollo_fduc_auto_decode_bypass_enable(adi_apollo_device_t *device, adi_apollo_blk_sel_t fducs, uint8_t enable);
-
-/**
  * \brief Enable or disable register control for setting a FDUC's active state
  *
+ *  This method allows FDUC enabling using SPI, which overrides FDUC enables auto decoded 
+ *  by summer configuration.
+ * 
+ * fduc_spien_en must be set for fduc_spi_en to have an effect.
+ * 
  * \param[in]  device           Context variable - Pointer to the APOLLO device data structure
  * \param[in]  fducs            Coarse FUC selection. \ref adi_apollo_fduc_select_e
  * \param[in]  fduc_spien_en    Enables(1) or disables(0) register control of FDUC active state. Bypasses auto decode. (Typically disabled)

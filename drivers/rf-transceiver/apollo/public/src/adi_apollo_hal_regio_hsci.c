@@ -316,20 +316,33 @@ static int32_t hsci_poll_read(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t a
 
 static int32_t stream_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint8_t *data, adi_apollo_hal_regio_hsci_bus_size_e bus_size, uint32_t stream_bytes, uint8_t is_cont)
 {
-    int32_t err, i;
+    int32_t err;
+    uint32_t i;
     uint32_t xfer_sz_bytes = 0;
+    
+    uint32_t in_data_len;
     adi_apollo_hal_txn_config_t stream_txn_cfgs = {.addr_len = 4, .data_len = 1, .stream_len = stream_bytes};        /* Continuous 8-bit transaction */
-#ifdef __KERNEL__
-    uint8_t *in_data = desc->ptr_data_buf;
-    if (desc->ptr_data_buf == NULL)
-        ADI_APOLLO_ERROR_RETURN(API_CMS_ERROR_NULL_PARAM);
-#else
-    uint8_t in_data[4 + 32763] = {0};
-#endif
 
-    if(stream_bytes > 32763)
-    {
-        return API_CMS_ERROR_ERROR; //Chuck size not supported
+#if defined(__KERNEL__) || defined(ADI_MIN_STACK_ALLOC)
+    uint8_t *in_data;
+    /* Take optional buffer in case it exists and size can, at least, transmit HSCI header */
+    if (desc->buff != NULL) {
+        if (desc->buff_len > ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD) {
+            in_data_len = desc->buff_len - ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD;
+            in_data = desc->buff;            
+        } else {
+            return API_CMS_ERROR_ERROR; // Chuck size not supported
+        }            
+    } else {
+        return API_CMS_ERROR_NULL_PARAM;
+    }
+#else
+    uint8_t in_data[ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_SIZE];
+    in_data_len = ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_PAYLOAD_SIZE;
+#endif
+    
+    if (stream_bytes > in_data_len) {
+        return API_CMS_ERROR_ERROR; // Chuck size not supported
     }
 
     /* Assign 32-bit reg address */
@@ -337,12 +350,12 @@ static int32_t stream_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg
     in_data[1] = (reg >> 8) & 0xFF;
     in_data[2] = (reg >> 16) & 0xFF;
     in_data[3] = (reg >> 24) & 0xFF;
-    xfer_sz_bytes += 4;
+    xfer_sz_bytes += ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD;
     xfer_sz_bytes += stream_bytes;
 
     for (i=0; i<stream_bytes; i++)
     {
-        in_data[i+4] =  *(data+i);
+        in_data[i+ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD] =  *(data+i);
     }
 
     /* write method takes precedence over xfer if both defined */
@@ -363,22 +376,34 @@ static int32_t stream_write(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg
 
 static int32_t stream_read(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg, uint8_t *data, adi_apollo_hal_regio_hsci_bus_size_e bus_size, uint32_t stream_bytes, uint8_t is_cont)
 {
-    int32_t err, i;
-    uint8_t xfer_sz_bytes = 0;
+    int32_t err;
+    uint32_t i;
+    uint32_t xfer_sz_bytes = 0;
     uint8_t in_data[8] = {0};
+    uint32_t out_data_len;
 
     adi_apollo_hal_txn_config_t stream_txn_cfgs = {.addr_len = 4, .data_len = 1, .stream_len = stream_bytes};        /* Continuous 8-bit transaction */
-#ifdef __KERNEL__
-    uint8_t *out_data = desc->ptr_data_buf;
-    if (desc->ptr_data_buf == NULL)
-        ADI_APOLLO_ERROR_RETURN(API_CMS_ERROR_NULL_PARAM);
+
+#if defined(__KERNEL__) || defined(ADI_MIN_STACK_ALLOC)
+    uint8_t *out_data;
+    /* Take optional buffer in case it exists and size can, at least, transmit HSCI header */
+    if (desc->buff != NULL) {
+        if (desc->buff_len > ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD) {
+            out_data_len = desc->buff_len - ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD;
+            out_data = desc->buff;            
+        } else {
+            return API_CMS_ERROR_ERROR; // Chuck size not supported
+        }            
+    } else {
+        return API_CMS_ERROR_NULL_PARAM;
+    }
 #else
-    uint8_t out_data[4 + 32767] = {0};
+    uint8_t out_data[ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_SIZE];
+    out_data_len = ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_PAYLOAD_SIZE;
 #endif
 
-    if(stream_bytes > 32767)
-    {
-        return API_CMS_ERROR_ERROR; //Chuck size not supported
+    if (stream_bytes > out_data_len) {
+        return API_CMS_ERROR_ERROR; // Chuck size not supported
     }
 
     /* Assign 32-bit reg address */
@@ -386,7 +411,7 @@ static int32_t stream_read(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg,
     in_data[1] = (reg >> 8) & 0xFF;
     in_data[2] = (reg >> 16) & 0xFF;
     in_data[3] = (reg >> 24) & 0xFF;
-    xfer_sz_bytes += 4;
+    xfer_sz_bytes += ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD;
     xfer_sz_bytes += stream_bytes;
 
     /* read method takes precedence over xfer if both defined */
@@ -404,7 +429,7 @@ static int32_t stream_read(adi_apollo_hal_regio_hsci_desc_t *desc, uint32_t reg,
 
     for (i=0; i<stream_bytes; i++)
     {
-        *(data+i) = out_data[i+4];
+        *(data+i) = out_data[i+ ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD];
     }
 
     return err;

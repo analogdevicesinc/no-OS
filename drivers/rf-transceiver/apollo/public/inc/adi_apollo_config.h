@@ -47,14 +47,24 @@
     adi_apollo_hal_log_write(device, ADI_CMS_LOG_SPI, "apollo: r32@%.4x = %.8x", addr, data)
 #define ADI_APOLLO_LOG_SPIW32(addr, data) \
     adi_apollo_hal_log_write(device, ADI_CMS_LOG_SPI, "apollo: w32@%.4x = %.8x", addr, data)
+
 #define ADI_APOLLO_LOG_VAR(type, msg, ...) \
     adi_apollo_hal_log_write(device, type, msg, ##__VA_ARGS__)
+
 #define ADI_APOLLO_LOG_MSG(msg) \
     adi_apollo_hal_log_write(device, ADI_CMS_LOG_MSG, msg)
+#define ADI_APOLLO_LOG_MSG_VAR(msg, ...) \
+    ADI_APOLLO_LOG_VAR(ADI_CMS_LOG_MSG, msg, ##__VA_ARGS__)
+
 #define ADI_APOLLO_LOG_WARN(msg) \
     adi_apollo_hal_log_write(device, ADI_CMS_LOG_WARN, msg)
+#define ADI_APOLLO_LOG_WARN_VAR(msg, ...) \
+    ADI_APOLLO_LOG_VAR(ADI_CMS_LOG_WARN, msg, ##__VA_ARGS__)
+
 #define ADI_APOLLO_LOG_ERR(msg) \
     adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, msg)
+#define ADI_APOLLO_LOG_ERR_VAR(msg, ...) \
+    ADI_APOLLO_LOG_VAR(ADI_CMS_LOG_ERR, msg, ##__VA_ARGS__)
 
 /* var error check */
 #define ADI_APOLLO_LOG_ERROR_RETURN_CODE(err, msg, code) \
@@ -74,6 +84,30 @@
         return r; \
     } \
 }
+
+#define ADI_APOLLO_LOG_ERROR_RETURN_VAR(r, msg, ...) \
+{ \
+    if (r != API_CMS_ERROR_OK) { \
+        adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, msg, ##__VA_ARGS__); \
+        return r; \
+    } \
+}
+
+#define ADI_APOLLO_ERROR_GOTO(r, label) \
+{ \
+    if (r != API_CMS_ERROR_OK) { \
+        goto label; \
+    } \
+}
+
+#define ADI_APOLLO_LOG_ERROR_GOTO_VAR(r, label, msg, ...) \
+{ \
+    if (r != API_CMS_ERROR_OK) { \
+        adi_apollo_hal_log_write(device, ADI_CMS_LOG_ERR, msg, ##__VA_ARGS__); \
+        goto label; \
+    } \
+}
+
 #define ADI_APOLLO_NULL_POINTER_RETURN(p) \
 { \
     if(p == NULL) { \
@@ -81,6 +115,7 @@
         return API_CMS_ERROR_NULL_PARAM; \
     } \
 }
+
 #define ADI_APOLLO_INVALID_PARAM_RETURN(r) \
 { \
     if(r) { \
@@ -88,12 +123,22 @@
         return API_CMS_ERROR_INVALID_PARAM; \
     } \
 }
+
+#define ADI_APOLLO_NOT_IMPLEMENTED_RETURN(r) \
+{ \
+    if(r) { \
+        ADI_APOLLO_ERROR_REPORT(API_CMS_ERROR_NOT_IMPLEMENTED, r, "Not implemented feature or param."); \
+        return API_CMS_ERROR_NOT_IMPLEMENTED; \
+    } \
+}
+
 #define ADI_APOLLO_INVALID_PARAM_WARN(r) \
 { \
     if(r) { \
         ADI_APOLLO_WARN_REPORT(r, "Invalid param passed."); \
     } \
 }
+
 #define ADI_APOLLO_DEV_FEAT_LOCKOUT_RETURN(term, feat) \
 { \
     if (adi_apollo_private_device_lockout_get(device, term, feat)) { \
@@ -101,6 +146,7 @@
         return API_CMS_ERROR_FEAT_LOCKOUT; \
     } \
 }
+
 /*============= E X P O R T S ==============*/
 #ifdef __cplusplus
 extern "C" {

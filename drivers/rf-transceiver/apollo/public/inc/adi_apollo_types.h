@@ -46,6 +46,7 @@
 #include "adi_apollo_fnco.h"
 #include "adi_apollo_smon.h"
 #include "adi_apollo_rxen.h"
+#include "adi_apollo_startup.h"
 #include "adi_apollo_trigts.h"
 #include "adi_apollo_txen.h"
 #include "adi_apollo_txmisc.h"

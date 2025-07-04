@@ -22,6 +22,7 @@
 #include "apollo_cpu_device_profile_types.h"
 #include "adi_apollo_hal_regio_spi_types.h"
 #include "adi_apollo_hal_regio_hsci_types.h"
+#include "adi_apollo_startup_types.h"
 
 /*============= D E F I N E S ==============*/
 #define USE_PRIVATE_BF
@@ -432,7 +433,7 @@ typedef struct {
     adi_apollo_hal_open_t hw_open;                  /*!< Platform hal open (optional) */
     adi_apollo_hal_close_t hw_close;                /*!< Platform hal close (optional) */
     adi_apollo_hal_delay_us_t delay_us;             /*!< Platform hal delay us (required) */
-    adi_apollo_hal_reset_pin_ctrl_t reset_pin_ctrl; /*!< Platform hal reset pin control (optional) */
+    adi_apollo_hal_reset_pin_ctrl_t reset_pin_ctrl; /*!< Platform hal reset pin control (required) */
     adi_apollo_hal_log_write_t log_write;           /*!< Platform hal log write function (optional) */
 } adi_apollo_hal_t;
 
@@ -452,12 +453,31 @@ typedef struct {
 } adi_apollo_info_t;
 
 /*!
- * \brief Device Structure
+ * \brief Device startup sequence information structure
+ *
+ * The adi_apollo_hal_fw_provider_t data struct, along with open, close and get methods, create an interface for providing 
+ * FW binaries during adi_apollo_startup_execute() execution. This provides a platform agnostic interface for loading
+ * the Apollo firmware.
+ * 
+ * All memory management, file I/O, etc. is handled in user app space.
  */
 typedef struct {
+    adi_apollo_fw_provider_t *fw_provider;          /*!< Platform FW image provider. Used in startup sequence */
+
+    adi_apollo_fw_provider_open_t open;             /*!< Called from adi_apollo_startup_execute() before 'get' when writing a FW binary to ARM (may be NULL) */
+    adi_apollo_fw_provider_close_t close;           /*!< Called from adi_apollo_startup_execute() after 'get' when writing a FW binary ARM (may be NULL) */
+    adi_apollo_fw_provider_get_t get;               /*!< Called from adi_apollo_startup_execute() to obtain binary data to be loaded to ARM. Required. */
+} adi_apollo_startup_t;
+
+/*!
+* \brief Device Structure
+*/
+typedef struct adi_apollo_device_t {
     adi_apollo_hal_t  hal_info;
     adi_apollo_info_t dev_info;
+    adi_apollo_startup_t startup_info;
 } adi_apollo_device_t;
+
 
 #endif /* CLIENT_IGNORE*/
 

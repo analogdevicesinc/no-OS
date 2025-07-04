@@ -18,6 +18,7 @@
 #include "adi_apollo_config.h"
 #include "adi_apollo_cfg.h"
 #include "adi_apollo_hal.h"
+#include "adi_apollo_private_device.h"
 #include "adi_apollo_ddc_local.h"
 
 /*==================== P U B L I C   A P I   C O D E ====================*/
@@ -52,21 +53,27 @@ int32_t adi_apollo_rx_configure(adi_apollo_device_t *device, adi_apollo_sides_e 
     ADI_APOLLO_ERROR_RETURN(err);
 
     /* PFILT CONFIG */
-    for(i = 0; i < ADI_APOLLO_PFILTS_PER_SIDE; i ++) {
-        err = adi_apollo_rx_pfilt_configure(device, side, (adi_apollo_pfilt_idx_e)i, &(config->rx_pfilt[i]));
-        ADI_APOLLO_ERROR_RETURN(err);
+    if (!adi_apollo_private_device_lockout_get(device, ADI_APOLLO_RX, ADI_APOLLO_EC_PFILT_LOCK)) {
+        for(i = 0; i < ADI_APOLLO_PFILTS_PER_SIDE; i ++) {
+            err = adi_apollo_rx_pfilt_configure(device, side, (adi_apollo_pfilt_idx_e)i, &(config->rx_pfilt[i]));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
     }
 
     /* CFIR config */
-    for(i = 0; i < ADI_APOLLO_CFIRS_PER_SIDE; i ++) {
-        err = adi_apollo_rx_cfir_configure(device, side, (adi_apollo_cfir_idx_e)i, &(config->rx_cfir[i]));
-        ADI_APOLLO_ERROR_RETURN(err);
+    if (!adi_apollo_private_device_lockout_get(device, ADI_APOLLO_RX, ADI_APOLLO_EC_CFIR_LOCK)) {
+        for(i = 0; i < ADI_APOLLO_CFIRS_PER_SIDE; i ++) {
+            err = adi_apollo_rx_cfir_configure(device, side, (adi_apollo_cfir_idx_e)i, &(config->rx_cfir[i]));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
     }
 
    /* FSRC config */
-   for(i = 0; i < ADI_APOLLO_FSRCS_PER_SIDE; i ++) {
-       err = adi_apollo_rx_fsrc_configure(device, side, (adi_apollo_fsrc_idx_e)i, &(config->rx_fsrc[i]));
-       ADI_APOLLO_ERROR_RETURN(err);
+   if (!adi_apollo_private_device_lockout_get(device, ADI_APOLLO_RX, ADI_APOLLO_EC_FSRC_LOCK)) {
+        for(i = 0; i < ADI_APOLLO_FSRCS_PER_SIDE; i ++) {
+            err = adi_apollo_rx_fsrc_configure(device, side, (adi_apollo_fsrc_idx_e)i, &(config->rx_fsrc[i]));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
    }
 
    /* DFORMAT config */

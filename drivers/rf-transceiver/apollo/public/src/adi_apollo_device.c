@@ -25,9 +25,11 @@
 #include "adi_apollo_private_device.h"
 #include "adi_apollo_private_blk_sel.h"
 #include "adi_apollo_bf_ec.h"
+#include "adi_apollo_rxmisc.h"
+#include "adi_apollo_txmisc.h"
 
 /*============= D A T A ====================*/
-static uint16_t apollo_api_revision[3] = { 0, 4, 58 };
+static uint16_t apollo_api_revision[3] = { 0, 5, 0 };
 
 static adi_apollo_mailbox_cmd_set_enabled_temp_sensors_t temp_senors_cmd = {
         .temp_sensor_mask = ADI_APOLLO_DEVTEMP_MASK_SERDESPLL |
@@ -87,7 +89,17 @@ int32_t adi_apollo_device_reset(adi_apollo_device_t *device, adi_apollo_reset_e 
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_INVALID_PARAM_RETURN(reset_opt > ADI_APOLLO_HARD_RESET_AND_INIT);
 
-    /* do reset */
+    /* Datapath reset - mitigates power supply current change */
+    err = adi_apollo_rxmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 1);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_txmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 1);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_rxmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+    err = adi_apollo_txmisc_dp_reset(device, ADI_APOLLO_SIDE_ALL, 0);
+    ADI_APOLLO_ERROR_RETURN(err);
+
+    /* Device reset */
     if ((reset_opt == ADI_APOLLO_SOFT_RESET) || (reset_opt == ADI_APOLLO_SOFT_RESET_AND_INIT)) {
         err = adi_apollo_hal_reg_set(device, REG_SPI_IFACE_CONFIG_A_ADDR, 0x81);
         ADI_APOLLO_ERROR_RETURN(err);
@@ -385,7 +397,7 @@ int32_t adi_apollo_device_tmu_get(adi_apollo_device_t *device, adi_apollo_device
     err = adi_apollo_mailbox_get_device_temperature(device, &get_temp_cmd, &get_temp_resp);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    //Extract values to the tmu_data struct
+    // Extract values to the tmu_data struct
     tmu_data->avg_mask = get_temp_resp.temp_data.avg_mask;
     tmu_data->max_temp_degrees_celsius = get_temp_resp.temp_data.max_temp_degrees_celsius;
     tmu_data->min_temp_degrees_celsius = get_temp_resp.temp_data.min_temp_degrees_celsius;

@@ -26,7 +26,6 @@
 #define SIM_BF_RAM_BOOT_STATUS                              REG_ALT_BOOT_ADDR(21), 0x00000800
 #define SIM_BF_RAM_BOOT_ERROR                               REG_ALT_BOOT_ADDR(22), 0x00000800
 
-static int32_t arm_debug_print(adi_apollo_device_t *device, const char *fmt, ...);
 static int32_t adi_apollo_arm_fw_load_check(adi_apollo_device_t *device, uint8_t *status);
 static int32_t adi_apollo_arm_profile_load_check(adi_apollo_device_t *device, uint8_t *status);
 static int32_t adi_apollo_arm_boot_status_clear(adi_apollo_device_t *device);
@@ -42,21 +41,14 @@ static int32_t device_feat_lockout_set(adi_apollo_device_t *device);
 int32_t adi_apollo_arm_boot_status(adi_apollo_device_t *device, uint8_t *status)
 {
     int32_t err;
-    //uint8_t core0_status = 0;
-    //uint8_t *core0_status_p = &core0_status;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
 
-    // Core0 Boot Status - display only
-    //err = adi_apollo_hal_bf_get(device, BF_RAM_BOOT_CORE0_STATUS, core0_status_p, 1);
-    //ADI_APOLLO_ERROR_RETURN(err);
-    //arm_debug_print(device, "Core 0 Ram Boot Status @ 0x%X: 0x%02X.", REG_ADDR_EXTRACT(BF_RAM_BOOT_CORE0_STATUS), *core0_status_p);
-
     // Core1 Boot Status
     err = adi_apollo_hal_bf_get(device, BF_RAM_BOOT_CORE1_STATUS, status, 1);
     ADI_APOLLO_ERROR_RETURN(err);
-    arm_debug_print(device, "Core 1 Ram Boot Status @ 0x%X: 0x%02X.", REG_ADDR_EXTRACT(BF_RAM_BOOT_CORE1_STATUS), *status);
+    ADI_APOLLO_LOG_MSG_VAR("Core 1 Ram Boot Status @ 0x%X: 0x%02X.", REG_ADDR_EXTRACT(BF_RAM_BOOT_CORE1_STATUS), *status);
 
     return API_CMS_ERROR_OK;
 }
@@ -74,7 +66,7 @@ int32_t adi_apollo_arm_ram_boot_error_check(adi_apollo_device_t *device)
     ADI_APOLLO_ERROR_RETURN(err);
     /* boot errors are stored under the system category */
     status = cpu_errors.system;
-    arm_debug_print(device, "REG_RAM_BOOT_ERROR 0x%X\n", status);
+    ADI_APOLLO_LOG_MSG_VAR("REG_RAM_BOOT_ERROR 0x%X", status);
 
     /* use only 16-bits of status */
     status = status & 0xFFFF;
@@ -114,8 +106,8 @@ int32_t adi_apollo_arm_rom_ec_transfer_check(adi_apollo_device_t *device)
         err = API_CMS_ERROR_ERROR;
     }
 
-    arm_debug_print(device, "EC Transfer Flag : %d.", status);
-    arm_debug_print(device, "EC Transfer Check : %s.", (status >= ADI_APOLLO_ROM_BOOT_STEP_EC_TRANSFER) ? "Passed" : "*** FAILED ***");
+    ADI_APOLLO_LOG_MSG_VAR("EC Transfer Flag : %d.", status);
+    ADI_APOLLO_LOG_MSG_VAR("EC Transfer Check : %s.", (status >= ADI_APOLLO_ROM_BOOT_STEP_EC_TRANSFER) ? "Passed" : "*** FAILED ***");
 
     return err;
 }
@@ -183,7 +175,7 @@ int32_t adi_apollo_arm_fwload_post_config(adi_apollo_device_t *device)
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
 
-    /* Reset core0. */
+    /* Reset core 0 */
     err = adi_apollo_arm_core_reset(device, ADI_APOLLO_CPU_ID_0);
     ADI_APOLLO_ERROR_RETURN(err);
 
@@ -198,7 +190,7 @@ int32_t adi_apollo_arm_fwload_post_config(adi_apollo_device_t *device)
     // Delay 100ms to start the core
     err = adi_apollo_hal_delay_us(device, 100000);
 
-    /* Check the FW boot status */
+    /* Check the FW boot status is waiting for device profile config */
     err = adi_apollo_arm_fw_load_check(device, &status);
     ADI_APOLLO_ERROR_RETURN(err);
 
@@ -362,6 +354,8 @@ int32_t adi_apollo_arm_memload(adi_apollo_device_t *device, adi_apollo_arm_binar
 
     data_ptr = binary_info->binary_ptr;
 
+    ADI_APOLLO_LOG_MSG_VAR("Loading %d bytes", pending_bytes);
+
     /* Send data in chunk_sz_bytes */
     while (pending_bytes > 0 && pending_bytes / chunk_sz_bytes > 0) {
         err = adi_apollo_hal_stream_reg32_set(device, cpu_address_to_load, (uint32_t *)data_ptr, chunk_sz_bytes / 4, binary_info->is_cont);
@@ -371,8 +365,6 @@ int32_t adi_apollo_arm_memload(adi_apollo_device_t *device, adi_apollo_arm_binar
         binary_info->is_cont = 1;
         data_ptr += chunk_sz_bytes;
         cpu_address_to_load += chunk_sz_bytes;
-        arm_debug_print(device, "\rRemaining %d of %d (%d)", pending_bytes, \
-            binary_info->binary_sz_bytes, 100 - ((pending_bytes*100)/binary_info->binary_sz_bytes));
     }
 
     /* send remaining bytes */
@@ -485,17 +477,6 @@ int32_t adi_apollo_arm_fw_irq_out_clear(adi_apollo_device_t *device)
     return err;
 }
 
-static int32_t arm_debug_print(adi_apollo_device_t *device, const char *fmt, ...)
-{
-    char str[1000];
-    va_list arg;
-    va_start(arg, fmt);
-    vsprintf(str, fmt, arg);
-    va_end(arg);
-    ADI_APOLLO_LOG_MSG(str);
-    return 0;
-}
-
 /* Wait for firmware boot status to be wait_for_config */
 static int32_t adi_apollo_arm_fw_load_check(adi_apollo_device_t *device, uint8_t *status)
 {
@@ -516,7 +497,7 @@ static int32_t adi_apollo_arm_fw_load_check(adi_apollo_device_t *device, uint8_t
                 ADI_APOLLO_RAM_BOOT_STEP_WAIT_FOR_CONFIG, 0xff);
         ADI_APOLLO_ERROR_RETURN(err);
 
-        arm_debug_print(device, "BF_RAM_BOOT_CORE1_STATUS: %d.", *status);
+        ADI_APOLLO_LOG_MSG_VAR("BF_RAM_BOOT_CORE1_STATUS: %d.", *status);
 
         if (*status >= ADI_APOLLO_RAM_BOOT_STEP_WAIT_FOR_CONFIG || !desc->poll_read_returns_val) {
             return API_CMS_ERROR_OK;
@@ -610,9 +591,7 @@ static int32_t adi_apollo_arm_tye_bootstage_check(adi_apollo_device_t *device, u
     err = adi_apollo_hal_bf_get(device, error_reg_addr, error_bf_info, &error, 1);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    // arm_debug_print(device, "SECURE_BOOT_STAGE_%d: %d.", stage, status);
-    arm_debug_print(device, "SECURE_BOOT_STAGE_%d CHECK: %s.", stage, (status == expected_value) ? "Passed" : "*** FAILED ***");
-    // arm_debug_print(device, "ERROR_CODE_%d: %d.", stage, error);
+    ADI_APOLLO_LOG_MSG_VAR( "SECURE_BOOT_STAGE_%d CHECK: %s.", stage, (status == expected_value) ? "Passed" : "*** FAILED ***");
 
     if (status != expected_value) {
         err = API_CMS_ERROR_ERROR;
@@ -729,7 +708,7 @@ static int32_t adi_apollo_arm_stack_ptr_boot_addr_set(adi_apollo_device_t *devic
     err = adi_apollo_hal_bf_set(device, reg_addr, bf_info, reg_val);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    arm_debug_print(device, "Core%d Stack Pointer: \treg_addr: 0x%08X.\treg_val: 0x%08X.", core, reg_addr, reg_val);
+    ADI_APOLLO_LOG_MSG_VAR("Core%d Stack Pointer: \treg_addr: 0x%08X.\treg_val: 0x%08X.", core, reg_addr, reg_val);
 
 
     /* Extract Boot address and update */
@@ -741,7 +720,7 @@ static int32_t adi_apollo_arm_stack_ptr_boot_addr_set(adi_apollo_device_t *devic
     err = adi_apollo_hal_bf_set(device, reg_addr, bf_info, reg_val);
     ADI_APOLLO_ERROR_RETURN(err);
 
-    arm_debug_print(device, "Core%d Boot Addr: \treg_addr: 0x%08X.\treg_val: 0x%08X.", core, reg_addr, reg_val);
+    ADI_APOLLO_LOG_MSG_VAR("Core%d Boot Addr: \treg_addr: 0x%08X.\treg_val: 0x%08X.", core, reg_addr, reg_val);
 
     return API_CMS_ERROR_OK;
 }
@@ -753,7 +732,7 @@ static int32_t get_cpu_device_profile_start_address(adi_apollo_device_t *device,
 
     err = adi_apollo_hal_reg32_get(device, address, cpu_device_profile_addr);
     ADI_APOLLO_ERROR_RETURN(err);
-    arm_debug_print(device, "Device Profile address: 0x%x\n", *cpu_device_profile_addr);
+    ADI_APOLLO_LOG_MSG_VAR("Device Profile address: 0x%x\n", *cpu_device_profile_addr);
 
     return API_CMS_ERROR_OK;
 }

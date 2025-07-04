@@ -488,6 +488,34 @@ int32_t adi_apollo_hal_error_report(adi_apollo_device_t* device, adi_cms_log_typ
     int32_t error, const char* file_name, const char* func_name, uint32_t line_num,
     const char* var_name, const char* comment);
 
+/**
+ * \brief Assigns user allocated memory for use by HAL APIs
+ *
+ * \note Currently only applicable for HSCI protocol
+ *
+ * \param[in] device    Context variable - Pointer to the APOLLO device data structure
+ * \param[in] protocol  Protocol to assign buffer to. See \ref adi_apollo_hal_protocol_e
+ * \param[in] buff      Pointer to user allocated memory
+ * \param[in] buff_len  Nummber of bytes in 'buff'. Max 32K, Min 128
+ *  
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_hal_buffer_set(adi_apollo_device_t* device, adi_apollo_hal_protocol_e protocol, uint8_t *buff, uint32_t buff_len);
+
+/**
+ * \brief Gets pointer to user allocated memory that is used by API for various transactions
+ *
+ * \param[in] device    Context variable - Pointer to the APOLLO device data structure
+ * \param[in] protocol  Protocol to get buffer from. See \ref adi_apollo_hal_protocol_e
+ * \param[out] buff     Pointer to user allocated memory
+ * \param[out] buff_len Nummber of bytes in 'buff'.
+ *  
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_hal_buffer_get(adi_apollo_device_t* device, adi_apollo_hal_protocol_e protocol, uint8_t **buff, uint32_t *buff_len);
+
 #endif /* CLIENT_IGNORE*/
 
 #ifdef __cplusplus

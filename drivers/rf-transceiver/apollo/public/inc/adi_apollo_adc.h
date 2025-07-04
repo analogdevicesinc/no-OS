@@ -45,7 +45,33 @@ int32_t adi_apollo_adc_cal(adi_apollo_device_t *device, adi_apollo_blk_sel_t adc
  * \return <0                                   Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_adc_init_cal(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs, adi_apollo_init_cal_cfg_e init_cal_cfg);
+
+/**
+ * @brief Start the ADC initialization calibration process without waiting for completion.
+ *
+ * This function initializes and starts the ADC foreground calibration for the specified ADC blocks.
+ * It sets up the calibration configuration and issues the necessary mailbox commands to begin calibration.
+ *
+ * \param[in] device        Context variable - Pointer to the APOLLO device data structure
+ * \param[in] adcs          Target ADC selector \ref adi_apollo_adc_select_e
+ * \param[in] init_cal_cfg  Initial cal configuration. Specify init defaults, NVM or user defined. \ref adi_apollo_init_cal_cfg_e
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
 int32_t adi_apollo_adc_init_cal_start(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs, adi_apollo_init_cal_cfg_e init_cal_cfg);
+
+/**
+ * @brief Wait for ADC initialization calibration to complete.
+ *
+ * It logs progress and detailed error information if the calibration fails or times out.
+ *
+ * \param[in] device        Context variable - Pointer to the APOLLO device data structure
+ * \param[in] adcs          Target ADC selector \ref adi_apollo_adc_select_e
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
 int32_t adi_apollo_adc_init_cal_complete(adi_apollo_device_t *device, adi_apollo_blk_sel_t adcs);
 
 /**

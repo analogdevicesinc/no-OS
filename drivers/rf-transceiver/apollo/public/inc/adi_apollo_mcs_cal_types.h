@@ -291,7 +291,7 @@ typedef struct {
  *
  * firstPassDone is only relevant to ADI_APOLLO_MCS_MODE4 and identifies step 1 or step 2
  * alignDone identifies measurement or remeasurement phase
- * event is the event being waited for in MCS_EVENT_WAIT state
+ * event_waiting is the event being waited for in MCS_EVENT_WAIT state
  */
 ADI_APOLLO_PACKED(
 typedef struct {
@@ -307,6 +307,8 @@ typedef struct {
     uint8_t isDone;                         /*!< Is MCS Operation Done */
     uint8_t extraSyncStep;                  /*!< Extra sync phase for modes 2 and 4 */
     uint8_t partial_alignment_done;         /*!< Counter Measure for Extra rotations from divG */
+    uint8_t tdc_precondition_is_completed;  /*!< Flag that will indicate if we alredy completed the TDC precondition */
+    uint8_t pad8_cal_state[3];              /*!< Padding */
 } adi_apollo_mcs_cal_state_t;)
 
 #ifndef CLIENT_IGNORE    

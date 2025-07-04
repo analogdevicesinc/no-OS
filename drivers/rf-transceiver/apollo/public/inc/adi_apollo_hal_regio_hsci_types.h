@@ -20,6 +20,13 @@
 
 #define ADI_APOLLO_HAL_REGIO_HSCI_NO_MASK 0
 
+/* Default payload buffer size in case no optional buffer is provided for stream_read and stream_write and multiple of 4 */
+#define ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_PAYLOAD_SIZE   (32760U)
+/* 4 Bytes header overhead to stream bytes*/
+#define ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD        (4U)
+/* Default total buffer size in case no optional buffer is provided for stream_read and stream_write and multiple of 4 */
+#define ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_SIZE           (ADI_APOLLO_HAL_REGIO_HSCI_STREAM_DEFAULT_PAYLOAD_SIZE + ADI_APOLLO_HAL_REGIO_HSCI_STREAM_HEADER_OVERHEAD)
+
 /*!
  * \brief HSCI transaction data size
  */
@@ -48,10 +55,12 @@ typedef struct {
 
     adi_apollo_device_hsci_settings_t hsci_config;      /*!< Device hsci settings. \ref adi_apollo_device_hsci_settings_t */
     void                       *dev_obj;                /*!< Platform defined object */
-    uint8_t                    *ptr_data_buf;       /*!< Optional user allocated buffer of size 4 + 32767 bytes */
 
     /* Internal API fields */
     adi_apollo_hal_regio_t     base_regio;              /*!< Pointer to base register I/O */
+    
+    uint8_t                    *buff;                   /*!< User allocated memory for stream transaction usage. */
+    uint32_t                   buff_len;                /*!< Length of allocated memory for stream transaction usage. */
 } adi_apollo_hal_regio_hsci_desc_t;
 #endif /* CLIENT_IGNORE*/
 

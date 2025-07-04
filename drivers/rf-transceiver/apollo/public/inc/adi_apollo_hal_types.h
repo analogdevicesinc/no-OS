@@ -19,6 +19,13 @@
 
 /*============= D E F I N E S ==============*/
 
+/* Max len for addresss supported for either SPI or HSCI transactions */
+#define ADI_APOLLO_HAL_BUFFER_LEN_HSCI_ADDR     (4U)
+/* Max len allocatable for user space by HAL API: 32KB + ADI_APOLLO_HAL_BUFFER_LEN_HSCI_ADDR */
+#define ADI_APOLLO_HAL_BUFFER_LEN_MAX           (32768U + ADI_APOLLO_HAL_BUFFER_LEN_HSCI_ADDR)
+/* Min len allocatable for user space by HAL API: 128B */
+#define ADI_APOLLO_HAL_BUFFER_LEN_MIN           (128U)
+
 /*!
  * \brief Enumerates HAL protocol selection
  */

@@ -42,7 +42,7 @@ int32_t adi_apollo_jrx_link_enable_set(adi_apollo_device_t *device,
  *
  * \param[in]   device     Context variable - Pointer to the APOLLO device data structure
  * \param[in]   link       Target link from adi_apollo_jesd_link_select_e
- * \param[in]   lane       Target serdes lane
+ * \param[in]   lane       Target serdes lane. Valid values from 0 to ADI_APOLLO_JESD_DESER_COUNT-1 \ref adi_apollo_common_types.h
  * \param[out]  status     Pointer to jrx 204c lane status
  *                              bit[2:0]    -   Current Link State.
  *                                               3'b0    :   ENUM000 :   RESET.
@@ -92,7 +92,7 @@ int32_t adi_apollo_jrx_link_status_get(adi_apollo_device_t *device,
  *
  * \param[in]   device     Context variable - Pointer to the APOLLO device data structure
  * \param[in]   link       Target link adi_apollo_jesd_link_select_e
- * \param[in]   lane       Target serdes lane
+ * \param[in]   lane       Target serdes lane. Valid values from 0 to ADI_APOLLO_JESD_DESER_COUNT-1 \ref adi_apollo_common_types.h
  * \param[out]  status     Pointer to jrx link status
  *                              bit0    -   the End of Frame
  *                              bit1    -   the End of Multi-Frame
@@ -132,7 +132,7 @@ int32_t adi_apollo_jrx_lr_adapt_get(adi_apollo_device_t *device,
  *
  * \param[in]   device     Context variable - Pointer to the APOLLO device data structure
  * \param[in]   link       Target link adi_apollo_jesd_link_select_e
- * \param[in]   lane       Target serdes lane
+ * \param[in]   lane       Target serdes lane. Valid values from 0 to ADI_APOLLO_JESD_DESER_COUNT-1 \ref adi_apollo_common_types.h
  * \param[out]  status     Pointer to jrx link status
  *                              bit0    -   bad disparity error. 0=NORMAL, 1=ERROR
  *                              bit1    -   code group sync (CGS) error. 0=FAIL, 1=PASS
@@ -239,7 +239,7 @@ int32_t adi_apollo_jrx_clear_fec_errors(adi_apollo_device_t *device,
  *
  * \param[in]   device     Context variable - Pointer to the APOLLO device data structure
  * \param[in]   link      Target link. Only 1 link selection per call. adi_apollo_jesd_link_select_e
- * \param[in]   lane       Target serdes lane
+ * \param[in]   lane       Target serdes lane. Valid values from 0 to ADI_APOLLO_JESD_DESER_COUNT-1 \ref adi_apollo_common_types.h
  * \param[out]  fec_errors Pointer to jrx fec errors structure
  *
  * \return API_CMS_ERROR_OK                     API Completed Successfully

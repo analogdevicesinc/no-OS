@@ -739,7 +739,7 @@ int32_t adi_apollo_cfir_inspect(adi_apollo_device_t *device, adi_apollo_terminal
 {
     int32_t err;
     adi_apollo_blk_sel_t cfir;
-    uint8_t i, j, k, dp;
+    uint8_t i, j, k, dp, is_bypassed;
     uint32_t regmap_base_addr = 0, regmap_coeff_base_addr = 0;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
@@ -755,8 +755,11 @@ int32_t adi_apollo_cfir_inspect(adi_apollo_device_t *device, adi_apollo_terminal
             regmap_base_addr = calc_cfir_base(terminal, i);
 
             /* cfir_pgm */
-            err = adi_apollo_hal_bf_get(device, BF_CFIR_BYPASS_INFO(regmap_base_addr), (uint8_t*)&(cfir_inspect->dp_cfg.enable), 1);
+            err = adi_apollo_hal_bf_get(device, BF_CFIR_BYPASS_INFO(regmap_base_addr), &is_bypassed, 1);
             ADI_APOLLO_ERROR_RETURN(err);
+            
+            cfir_inspect->dp_cfg.enable = !is_bypassed;      // not-bypassed means cfir is enabled
+
             err = adi_apollo_hal_bf_get(device, BF_CFIR_SPARSE_FILT_EN_INFO(regmap_base_addr), (uint8_t*)&(cfir_inspect->dp_cfg.sparse_mode), 1);
             ADI_APOLLO_ERROR_RETURN(err);
             err = adi_apollo_hal_bf_get(device, BF_CFIR_32TAPS_EN_INFO(regmap_base_addr), (uint8_t*)&(cfir_inspect->dp_cfg.cfir_mode), 1);

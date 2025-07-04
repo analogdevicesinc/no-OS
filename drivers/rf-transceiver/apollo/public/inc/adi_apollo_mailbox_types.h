@@ -207,6 +207,12 @@ typedef enum
     APOLLO_CPU_MCS_SYSREF_WITHIN_KEEPOUT_WINDOW_ERROR            = 0x40d, /*< code: 0x40d err: External SysRef is within the Keep-Out Window, cause: SysRef Alignment did not complete, recovery: Provide an updated time-difference offset, Increase decRate, or adjust the timing of External SysRef and clock to ensure External SysRef is well-sampled */
     APOLLO_CPU_MCS_GPIO_MISCONFIGURATION_ERROR                   = 0x40e, /*< code: 0x40e err: DELADJ or DELSTR GPIO numbers are not valid, cause: The provided GPIO configuration is not supported., recovery: Check GPIO configuration */
     APOLLO_CPU_MCS_MEASUREMENT_ERROR                             = 0x40f, /*< code: 0x40f err: MCS measurement error, cause: MCS module was not able to complete a measurement., recovery: Check MCS configuration */
+    APOLLO_CPU_LINEARX_RX_ALREADY_RUNNING_CAL_ERROR              = 0x580, /*< code: 0x580 err: Requested to run a cal when in the middle of a cal, cause: Must wait until currently running cal completes, recovery: Check interface */
+    APOLLO_CPU_LINEARX_RX_CAL_TIMEOUT_ERROR                      = 0x581, /*< code: 0x581 err: Cal timed-out, cause: Unexpected HW behavior; Cal did not finish in expected time; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
+    APOLLO_CPU_LINEARX_RX_CTRL_FSM_CMD_NOT_SUPPORTED_ERROR       = 0x582, /*< code: 0x582 err: Command not supported, cause: The used parameter is not supported, recovery: Correct the parameter and rerun */
+    APOLLO_CPU_LINEARX_RX_CTRL_SET_FSM_CMD_ERROR                 = 0x583, /*< code: 0x583 err: Wrong command sequence, cause: Unexpected command sequence or wrong pre-conditions, recovery: Check interface */
+    APOLLO_CPU_LINEARX_RX_CTRL_RUN_ERROR                         = 0x584, /*< code: 0x584 err: Control wrapper error, cause: Wrong configuration or signal conditioning., recovery: Review error and status registers. */
+    APOLLO_CPU_LINEARX_RX_DISABLED_ERROR                         = 0x585, /*< code: 0x585 err: The ctrl or config cmd only works when Linearx is enabled, cause: cmd only works when Linearx is enabled, recovery: Check feature */
     APOLLO_CPU_CFG_DEVICE_PROFILE_CRC_ERROR                      = 0x8001, /*< code: 0x8001 err: Failed CRC verification, cause: Programmed image is corrupted. Original image may be invalid or may have been corrupted during SPI transfer., recovery: Reprogram the device profile image. */
     APOLLO_CPU_CFG_DEVICE_PROFILE_MISSING_DATA_ERROR             = 0x8002, /*< code: 0x8002 err: Missing data for enabled channel, cause: Invalid device profile, recovery: invalid parameter passed */
     APOLLO_CPU_CFG_DEVICE_PROFILE_VERSION_MISMATCH_ERROR         = 0x8003, /*< code: 0x8003 err: Version mismatch, cause: Invalid device profile, recovery: invalid parameter passed */
@@ -412,12 +418,11 @@ typedef enum
     APOLLO_CPU_SYSTEM_BOOT_2ND_REG_INIT_ERROR                    = 0xff7d, /*< code: 0xff7d err: secondary register initialization error, cause: 2nd secondary register initialization, recovery: Reset device If the problem persists contact ADI. */
     APOLLO_CPU_SYSTEM_BOOT_EC_TRANSFER_ERROR                     = 0xff7e, /*< code: 0xff7e err: boot EC transfer error, cause: boot EC transfer, recovery: Reset device If the problem persists contact ADI. */
     APOLLO_CPU_SYSTEM_BOOT_NVM_READ_ERROR                        = 0xff7f, /*< code: 0xff7f err: boot NVM read error, cause: boot EC transfer , recovery: Reset device If the problem persists contact ADI. */
-    APOLLO_CPU_LINEARX_RX_ALREADY_RUNNING_CAL_ERROR              = 0x580, /*< code: 0x580 err: Requested to run a cal when in the middle of a cal, cause: Must wait until currently running cal completes, recovery: Check interface */
-    APOLLO_CPU_LINEARX_RX_CAL_TIMEOUT_ERROR                      = 0x581, /*< code: 0x581 err: Cal timed-out, cause: Unexpected HW behavior; Cal did not finish in expected time; report to ADI, recovery: Reset device. If the problem persists contact ADI. */
-    APOLLO_CPU_LINEARX_RX_CTRL_FSM_CMD_NOT_SUPPORTED_ERROR       = 0x582, /*< code: 0x582 err: Command not supported, cause: The used parameter is not supported, recovery: Correct the parameter and rerun */
-    APOLLO_CPU_LINEARX_RX_CTRL_SET_FSM_CMD_ERROR                 = 0x583, /*< code: 0x583 err: Wrong command sequence, cause: Unexpected command sequence or wrong pre-conditions, recovery: Check interface */
-    APOLLO_CPU_LINEARX_RX_CTRL_RUN_ERROR                         = 0x584, /*< code: 0x584 err: Control wrapper error, cause: Wrong configuration or signal conditioning., recovery: Review error and status registers. */
-    APOLLO_CPU_LINEARX_RX_DISABLED_ERROR                         = 0x585  /*< code: 0x585 err: The ctrl or config cmd only works when Linearx is enabled, cause: cmd only works when Linearx is enabled, recovery: Check feature */
+    APOLLO_CPU_SYSTEM_INVALID_SW_TRIM_ERROR                      = 0xff80, /*< code: 0xff80 err: Invalid SW trim in profile., cause: invalid sw_trim in profile error, recovery: no recovery */
+    APOLLO_CPU_SYSTEM_SW3_TRIM_MISMATCH_SW1_PART_ERROR           = 0xff81, /*< code: 0xff81 err: SW3 trim in profile mismatches SW1 part., cause: sw3_trim in profile mismatches SW1 part error, recovery: no recovery */
+    APOLLO_CPU_SYSTEM_SW5_TRIM_MISMATCH_SW1_PART_ERROR           = 0xff82, /*< code: 0xff82 err: SW5 trim in profile mismatches SW1 part., cause: sw5_trim in profile mismatches SW1 part error, recovery: no recovery */
+    APOLLO_CPU_SYSTEM_SW5_TRIM_MISMATCH_SW3_PART_ERROR           = 0xff83, /*< code: 0xff83 err: SW5 trim in profile mismatches SW3 part., cause: sw5_trim in profile mismatches SW3 part error, recovery: no recovery */
+
     //APOLLO_CPU_CAL_EXIT_OCCURRED_ERROR                           = 0xffff, /*< code: 0xffff calibration exit occurred */
     //APOLLO_CPU_FORCE_UINT32                                      = (int32_t)0xffffffff  /*< code: (int32_t)0xffffffff used to force enumeration to be 32bits in width */
 } adi_apollo_mailbox_cpu_error_code_e;

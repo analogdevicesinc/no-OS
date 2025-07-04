@@ -78,7 +78,7 @@ int32_t adi_apollo_mailbox_read(adi_apollo_device_t *device, adi_apollo_mailbox_
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_NULL_POINTER_RETURN(ptr_resp);
-    ADI_APOLLO_LOG_FUNC();
+    // ADI_APOLLO_LOG_FUNC();
 
     /* Wait for non-busy state */
     err = adi_apollo_mailbox_busy_wait(device);
@@ -103,7 +103,7 @@ int32_t adi_apollo_mailbox_write(adi_apollo_device_t *device, adi_apollo_mailbox
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     if (size_cmd != 0)
         ADI_APOLLO_NULL_POINTER_RETURN(ptr_cmd);
-    ADI_APOLLO_LOG_FUNC();
+    // ADI_APOLLO_LOG_FUNC();
 
     /* Wait for non-busy state */
     err = adi_apollo_mailbox_busy_wait(device);
@@ -136,7 +136,7 @@ int32_t adi_apollo_mailbox_xfer(adi_apollo_device_t *device, adi_apollo_mailbox_
     if (size_cmd != 0)
         ADI_APOLLO_NULL_POINTER_RETURN(ptr_cmd);
     ADI_APOLLO_NULL_POINTER_RETURN(ptr_resp);
-    ADI_APOLLO_LOG_FUNC();
+    // ADI_APOLLO_LOG_FUNC();
     
     err = adi_apollo_mailbox_write(device, cmd_id, ptr_cmd, size_cmd);
     ADI_APOLLO_ERROR_RETURN(err);

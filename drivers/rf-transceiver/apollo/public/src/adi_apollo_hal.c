@@ -50,10 +50,8 @@ int32_t adi_apollo_hal_reset_pin_ctrl(adi_apollo_device_t *device, uint8_t enabl
 {
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_NULL_POINTER_RETURN(device->hal_info.reset_pin_ctrl);
-    if (device->hal_info.reset_pin_ctrl != NULL) {
-        if (API_CMS_ERROR_OK != device->hal_info.reset_pin_ctrl(device->hal_info.user_data, enable)){
-            return API_CMS_ERROR_RESET_PIN_CTRL;
-        }
+    if (API_CMS_ERROR_OK != device->hal_info.reset_pin_ctrl(device->hal_info.user_data, enable)){
+        return API_CMS_ERROR_RESET_PIN_CTRL;
     }
 
     return API_CMS_ERROR_OK;
@@ -713,6 +711,42 @@ static int32_t bf_wait(adi_apollo_device_t *device, uint32_t reg, uint32_t info,
     }
 
     return API_CMS_ERROR_OPERATION_TIMEOUT;
+}
+
+int32_t adi_apollo_hal_buffer_set(adi_apollo_device_t* device, adi_apollo_hal_protocol_e protocol, uint8_t *buff, uint32_t buff_len)
+{
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_NULL_POINTER_RETURN(buff);
+    ADI_APOLLO_INVALID_PARAM_RETURN(buff_len > ADI_APOLLO_HAL_BUFFER_LEN_MAX);
+    ADI_APOLLO_INVALID_PARAM_RETURN(buff_len < ADI_APOLLO_HAL_BUFFER_LEN_MIN);
+
+    if (protocol == ADI_APOLLO_HAL_PROTOCOL_HSCI) {
+        device->hal_info.hsci_desc.buff = buff;
+        device->hal_info.hsci_desc.buff_len = buff_len;
+    } else {
+        return API_CMS_ERROR_NOT_SUPPORTED;
+    }
+
+    return API_CMS_ERROR_OK;
+}
+
+
+int32_t adi_apollo_hal_buffer_get(adi_apollo_device_t* device, adi_apollo_hal_protocol_e protocol, uint8_t **buff, uint32_t *buff_len)
+{
+    ADI_APOLLO_NULL_POINTER_RETURN(device);
+    ADI_APOLLO_NULL_POINTER_RETURN(buff);
+    ADI_APOLLO_NULL_POINTER_RETURN(buff_len);
+
+    if (protocol == ADI_APOLLO_HAL_PROTOCOL_HSCI) {
+        *buff = device->hal_info.hsci_desc.buff;
+        *buff_len = device->hal_info.hsci_desc.buff_len;
+    } else {
+        *buff = NULL;
+        *buff_len = 0;
+        return API_CMS_ERROR_NOT_SUPPORTED;
+    }
+
+    return API_CMS_ERROR_OK;
 }
 
 /*! @} */

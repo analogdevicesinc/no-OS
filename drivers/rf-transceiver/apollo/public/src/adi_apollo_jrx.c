@@ -84,22 +84,14 @@ int32_t adi_apollo_jrx_lane_fifo_status(adi_apollo_device_t *device,
     uint32_t res = 0x00;
     uint16_t lane_fifo_empty;
     uint16_t lane_fifo_full;
-    uint8_t i;
-    uint8_t link_count = 0;
     uint8_t link_index = 0;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(status);
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /*Reading status for only one link*/
-            link_count++;
-            link_index = i;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
 
     regmap_base_addr = calc_jrx_wrapper_base(link_index);
 
@@ -124,24 +116,16 @@ int32_t adi_apollo_jrx_rm_fifo_status(adi_apollo_device_t *device,
     uint32_t regmap_base_addr = 0;
     uint16_t res = 0x00;
     uint8_t  reg8;
-    uint8_t i;
-    uint8_t link_count = 0;
     uint8_t link_index = 0;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(status);
-
     //ADI_APOLLO_INVALID_PARAM_RETURN(link_side > ADI_APOLLO_NUM_JRX_LINKS_PER_SIDE);
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /*Reading status for only one link*/
-            link_count++;
-            link_index = i;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
+    
 
     regmap_base_addr = calc_jrx_wrapper_base(link_index);
 
@@ -195,30 +179,19 @@ int32_t adi_apollo_jrx_j204c_lane_status_get(adi_apollo_device_t *device,
     uint32_t regmap_base_addr = 0;
     uint16_t res = 0x00;
     uint8_t  reg8;
-    uint8_t i;
-    uint8_t link_count = 0;
     uint8_t link_index = 0;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(status);
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /* Reading status for only one link */
-            link_count++;
-            link_index = i;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
-
-    if (lane >= ADI_APOLLO_JESD_DESER_COUNT) {
-        return API_CMS_ERROR_INVALID_PARAM;
-    }
+    ADI_APOLLO_INVALID_PARAM_RETURN(lane >= ADI_APOLLO_JESD_DESER_COUNT); // Check if lane is in range
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
 
     regmap_base_addr = calc_jrx_dl_204c_base(link_index);
 
-    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_STATE_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status */
+    err = adi_apollo_hal_bf_get(device, BF_JRX_DL_204C_STATE_INFO(regmap_base_addr, lane), &reg8, 1); /*  204C Lane status register */
     ADI_APOLLO_ERROR_RETURN(err);
     res |= (reg8 & 0x07);
 
@@ -252,23 +225,14 @@ int32_t adi_apollo_jrx_link_status_get(adi_apollo_device_t *device,
     uint32_t regmap_base_addr = 0;
     uint8_t  reg8;
     uint16_t res = 0x00;
-    uint8_t i;
-    uint8_t link_count = 0;
     uint8_t link_index = 0;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(status);
-
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /*Reading status for only one link*/
-            link_count++;
-            link_index = i;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
 
     regmap_base_addr = calc_jrx_wrapper_base(link_index);
 
@@ -306,31 +270,19 @@ int32_t adi_apollo_jrx_j204b_lane_status_get(adi_apollo_device_t *device,
 {
     int32_t  err;
     uint32_t regmap_base_addr = 0;
-    uint8_t  reg8;
     uint16_t res = 0x00;
-    uint8_t link_count = 0, lane_count = 0;
-    uint8_t i;
+    uint8_t  reg8;
+    uint8_t link_index = 0; 
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(status);
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /*Reading status for only one link*/
-            link_count++;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
-
-    for(i=0; i<ADI_APOLLO_JESD_DESER_COUNT; i++) {
-        if ((1 << i) & lane) {
-            lane_count++;
-            ADI_APOLLO_INVALID_PARAM_RETURN(lane_count > 1);
-        }
-    }
-
-    regmap_base_addr = calc_jrx_dl_204b_base(link);
+    ADI_APOLLO_INVALID_PARAM_RETURN(lane >= ADI_APOLLO_JESD_DESER_COUNT); // Check if lane is in range
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
+    
+    regmap_base_addr = calc_jrx_dl_204b_base(link_index);
 
     err = adi_apollo_hal_reg_get(device, REG_JRX_DL_204B_LANE_STATUS_ADDR(regmap_base_addr, lane), &reg8);
 
@@ -351,34 +303,22 @@ int32_t adi_apollo_jrx_j204b_lane_error_get(adi_apollo_device_t *device,
     uint32_t regmap_base_addr = 0;
     uint8_t  reg8;
     uint16_t res = 0x00;
-    uint8_t link_count = 0, lane_count = 0;
-    uint8_t i;
+    uint8_t link_index = 0;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(status);
+    ADI_APOLLO_INVALID_PARAM_RETURN(lane >= ADI_APOLLO_JESD_DESER_COUNT); // Check if lane is in range
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
 
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /*Reading status for only one link*/
-            link_count++;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
-
-    for(i=0; i<ADI_APOLLO_JESD_DESER_COUNT; i++) {
-        if ((1 << i) & lane) {
-            lane_count++;
-            ADI_APOLLO_INVALID_PARAM_RETURN(lane_count > 1);
-        }
-    }
-
-    regmap_base_addr = calc_jrx_dl_204b_base(link);
+    regmap_base_addr = calc_jrx_dl_204b_base(link_index);
 
     err = adi_apollo_hal_reg_get(device, REG_JRX_DL_204B_LANE_ERR_STATUS_ADDR(regmap_base_addr, lane), &reg8);
 
     ADI_APOLLO_ERROR_RETURN(err);
-    res |= reg8 & 0x3F;
+    res |= reg8;
 
     *status = res;
 
@@ -461,29 +401,15 @@ int32_t adi_apollo_jrx_fec_errors(adi_apollo_device_t *device,
     int32_t  err;
     uint32_t regmap_base_addr = 0;
     uint8_t  reg8;
-    uint8_t link_count = 0, lane_count = 0;
     uint8_t link_index = 0;
-    uint8_t i;
 
     ADI_APOLLO_NULL_POINTER_RETURN(device);
     ADI_APOLLO_LOG_FUNC();
     ADI_APOLLO_NULL_POINTER_RETURN(fec_errors);
-
-    for (i = 0; i < ADI_APOLLO_NUM_JRX_LINKS; i++) {
-        if ((1 << i) & link) {
-            /*Reading status for only one link*/
-            link_count++;
-            link_index = i;
-            ADI_APOLLO_INVALID_PARAM_RETURN(link_count > 1);
-        }
-    }
-
-    for(i=0; i<ADI_APOLLO_JESD_DESER_COUNT; i++) {
-        if ((1 << i) & lane) {
-            lane_count++;
-            ADI_APOLLO_INVALID_PARAM_RETURN(lane_count > 1);
-        }
-    }
+    ADI_APOLLO_INVALID_PARAM_RETURN(lane >= ADI_APOLLO_JESD_DESER_COUNT); // Check if lane is in range
+    ADI_APOLLO_INVALID_PARAM_RETURN(adi_api_utils_num_selected(link) != 1); // Check if only one link is selected
+    
+    link_index  = adi_api_utils_select_lsb_get(link);
 
     regmap_base_addr = calc_jrx_dl_204c_base(link_index);
 

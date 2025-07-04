@@ -94,6 +94,9 @@ typedef enum {
     API_CMS_ERROR_FILE_WRITE                = -90, /*!< File write error */
     API_CMS_ERROR_FILE_OPERATION            = -91, /*!< General file error (e.g. seek) */
     API_CMS_ERROR_PLATFORM_IMAGE_LOAD       = -92, /*!< Error loading platform FPGA image */
+    API_CMS_ERROR_NOT_IMPLEMENTED           = -93, /*!< Feature not currently implemented */
+    API_CMS_ERROR_STRUCT_UNPOPULATED        = -94, /*!< Struct not populated */
+    API_CMS_ERROR_PROTOCOL_OP_NOT_SUPPORTED = -95, /*!< Protocol not supported for operation */
 
     API_CMS_ERROR_MEM_ALLOC                 = -100, /*!< memory allocation error */
     API_CMS_ERROR_MMAP                      = -101, /*!< memory mapping error */
@@ -117,7 +120,15 @@ typedef enum {
     API_CMS_ERROR_ADC_TRACK_CAL_ERROR       = -135,  /*!< ADC Tracking Cal related error */
     API_CMS_ERROR_ADC_CAL_TIMEOUT           = -136,  /*!< ADC Cal run or status check response timed out error */
 
-    API_CMS_ERROR_BAD_STATE                 = -140   /*!< Device is not in appropriate state to perform operation */
+    API_CMS_ERROR_BAD_STATE                 = -140,  /*!< Device is not in appropriate state to perform operation */
+    
+    API_CMS_ERROR_STARTUP_FW_RDY_FOR_PROFILE_ERROR = -150,   /*!< FW did not reach ready for profile config state */
+    API_CMS_ERROR_STARTUP_FW_MAILBOX_RDY_ERROR = -151,  /*!< FW did not reach mailbox ready state */
+
+    API_CMS_ERROR_PLATFORM_CAPTURE_INVALID_CONFIG = -200, /*!< Invalid platform capture configuration */
+                                               
+                                              
+                              
 } adi_cms_error_e;
 
 /*!

@@ -232,7 +232,7 @@ int32_t adi_apollo_clk_mcs_trig_reset_disable(adi_apollo_device_t *device);
  * \brief Read back the phase value of input trigger wrt the internal SYSREF.
  *
  * \param[in] device        Context variable - Pointer to the APOLLO device data structure
- * \param[in] trig			Index of trigger (ADI_APOLLO_TRIG_PIN_A0, _A1, _B0, _B1) \ref adi_apollo_trig_pin_e 
+ * \param[in] trig			Index of trigger (ADI_APOLLO_TRIG_PIN_A0, _A1, _B0, _B1) \ref adi_apollo_trig_pin_e
  * \param[out] phase_0      A side phase val for dual clock mode, else center phase val
  * \param[out] phase_1      B side phase val for dual clock, else 0 for single
  *
@@ -295,14 +295,24 @@ int32_t adi_apollo_clk_mcs_lpbk_fifo_reset_disable(adi_apollo_device_t *device);
 int32_t adi_apollo_clk_mcs_oneshot_sync(adi_apollo_device_t *device);
 
 /**
+ * \brief Dynamic sync.
+ *
+ * \param[in] device        Context variable - Pointer to the APOLLO device data structure
+ *
+ * \return API_CMS_ERROR_OK                     API Completed Successfully
+ * \return <0                                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_clk_mcs_dynamic_sync(adi_apollo_device_t *device);
+
+/**
  * \brief Manual reconfiguration sync.
- * 
+ *
  * Sync modes	    Key behaviors
  * ----------       -------------
  * oneshot_sync	    HW state machine controlled sync flow, with HW based sysref alignment operation.
  * dyn_cfg_sync	    Programmable HW state machine controlled sync flow only (no sysref alignment).
  * manual_sync	    SPI controlled single step sync.
- * trigger_sync	    Trigger controlled/selected single step or continuous sync. 
+ * trigger_sync	    Trigger controlled/selected single step or continuous sync.
 
  * \param[in] device        Context variable - Pointer to the APOLLO device data structure
  *
@@ -320,6 +330,16 @@ int32_t adi_apollo_clk_mcs_man_reconfig_sync(adi_apollo_device_t *device);
  * \return <0                   Failed. \ref adi_cms_error_e for details.
  */
 int32_t adi_apollo_clk_mcs_dyn_sync_sequence_run(adi_apollo_device_t *device);
+
+/**
+ * \brief Run JTx and JRx SerDes Link Dynamic Sync Sequence with digital root clks masked.
+ *
+ * \param[in] device        Context variable - Pointer to the APOLLO device data structure
+ *
+ * \return API_CMS_ERROR_OK     API Completed Successfully
+ * \return <0                   Failed. \ref adi_cms_error_e for details.
+ */
+int32_t adi_apollo_clk_mcs_dyn_sync_rxtxlinks_sequence_run(adi_apollo_device_t *device);
 
 /**
  * \brief Set the SYSREF receiver enable
@@ -412,8 +432,8 @@ int32_t adi_apollo_clk_mcs_sysref_phase_get(adi_apollo_device_t *device, uint32_
 
 /**
  * \brief Number of SYSREFs to ignore before using one as a proper phase sampling instant
- * 
- * Assuming that the first several sysrefs arriving at the device will be noisy or invalid in time. 
+ *
+ * Assuming that the first several sysrefs arriving at the device will be noisy or invalid in time.
  * Ask the device to wait a predetermined number of pulses before using one to use as a
  * proper phase sample of the internal counter.
  *

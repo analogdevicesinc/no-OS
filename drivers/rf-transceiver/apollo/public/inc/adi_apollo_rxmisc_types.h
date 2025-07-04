@@ -33,7 +33,7 @@ typedef enum {
 * \brief RX MISC programming data
 */
 typedef struct {
-    adi_apollo_datapath_clk_e datapath_clk;          /*!< \ref adi_apollo_datapath_clk_e */
+    uint8_t datapath_clk;                            /*!< \ref adi_apollo_datapath_clk_e */
     uint8_t low_samp_en;                             /*!< 1: the lower sample case is enabled, 0: Disabled */
 } adi_apollo_rx_misc_pgm_t;
 

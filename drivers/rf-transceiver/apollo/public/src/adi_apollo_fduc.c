@@ -233,70 +233,6 @@ int32_t adi_apollo_fduc_inspect(adi_apollo_device_t *device, adi_apollo_blk_sel_
     return API_CMS_ERROR_OK;
 }
 
-int32_t adi_apollo_fduc_auto_decode_bypass_enable(adi_apollo_device_t *device, adi_apollo_blk_sel_t fducs, uint8_t enable) {
-
-    int32_t err;
-    uint16_t i;
-    adi_apollo_blk_sel_t fduc;
-    uint32_t regmap_base_addr = 0;
-    uint8_t sel_mask = (1 << ADI_APOLLO_FDUC_PER_SIDE_NUM)-1;
-    uint16_t fducs_a, fducs_b;
-    uint8_t fduc_en;
-    uint16_t j;
-
-    ADI_APOLLO_NULL_POINTER_RETURN(device);
-    ADI_APOLLO_LOG_FUNC();
-    ADI_APOLLO_FDUC_BLK_SEL_MASK(fducs);
-
-    for (i = 0; i < ADI_APOLLO_FDUC_NUM; i++) {
-        fduc = fducs & (ADI_APOLLO_FDUC_A0 << i);
-
-        if (fduc > 0) {
-
-            if (i < ADI_APOLLO_FDUC_PER_SIDE_NUM) {
-                regmap_base_addr = calc_tx_misc_base(0);
-
-                err = adi_apollo_hal_bf_set(device, BF_FDUC_SPI_EN_INFO(regmap_base_addr), enable);
-                ADI_APOLLO_ERROR_RETURN(err);
-
-                fduc_en = 0;
-                fducs_a = fducs & sel_mask;
-                for (j = 0; j < ADI_APOLLO_FDUC_PER_SIDE_NUM; j+=2) {
-                    fduc_en |= (fducs_a & (ADI_APOLLO_FDUC_A0 << j) << (j * 2));
-                    fduc_en |= (fducs_a & (ADI_APOLLO_FDUC_A0 << (j + 1)) << ((j * 2) + 1));
-                }
-
-                err = adi_apollo_hal_bf_set(device, BF_FDUC_EN_INFO(regmap_base_addr), fducs_a);
-                ADI_APOLLO_ERROR_RETURN(err);
-
-                i = ADI_APOLLO_FDUC_PER_SIDE_NUM - 1;
-
-                continue;
-            } else {
-                regmap_base_addr = calc_tx_misc_base(1);
-
-                err = adi_apollo_hal_bf_set(device, BF_FDUC_SPI_EN_INFO(regmap_base_addr), enable);
-                ADI_APOLLO_ERROR_RETURN(err);
-
-                fduc_en = 0;
-                fducs_b = (fducs >> ADI_APOLLO_FDUC_PER_SIDE_NUM) & sel_mask;
-                for (j = 0; j < ADI_APOLLO_FDUC_PER_SIDE_NUM; j += 2) {
-                    fduc_en |= (fducs_b & (ADI_APOLLO_FDUC_A0 << j) << (j * 2));
-                    fduc_en |= (fducs_b & (ADI_APOLLO_FDUC_A0 << (j + 1)) << ((j * 2) + 1));
-                }
-
-                err = adi_apollo_hal_bf_set(device, BF_FDUC_EN_INFO(regmap_base_addr), fducs_b);
-                ADI_APOLLO_ERROR_RETURN(err);
-
-                break;
-            }
-
-        }
-    }
-
-    return API_CMS_ERROR_OK;
-}
-
 int32_t adi_apollo_fduc_enable_set(adi_apollo_device_t *device, adi_apollo_blk_sel_t fducs, uint8_t fduc_spien_en, uint8_t fduc_spi_en)
 {
     int32_t err;
@@ -336,7 +272,7 @@ int32_t adi_apollo_fduc_enable_set(adi_apollo_device_t *device, adi_apollo_blk_s
             /* Only modify selected FDUCs */
             if (fduc) {
                 fduc_en_reg_mask |= fduc_sel_to_reg_bit[j];
-                fduc_en_reg_val |= (fduc_sel_to_reg_bit[j] & (fduc_spien_en ? 0xFF : 00));
+                fduc_en_reg_val |= (fduc_sel_to_reg_bit[j] & (fduc_spi_en ? 0xFF : 00));
             }
         }
 

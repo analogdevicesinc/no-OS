@@ -21,6 +21,7 @@
 #include "adi_apollo_duc_local.h"
 #include "adi_apollo_dac.h"
 #include "adi_apollo_jrx.h"
+#include "adi_apollo_private_device.h"
 
 /*==================== P U B L I C   A P I   C O D E ====================*/
 int32_t adi_apollo_tx_configure(adi_apollo_device_t *device, adi_apollo_sides_e side, adi_apollo_txpath_t *config, adi_apollo_jesd_rx_cfg_t* jrx_config)
@@ -54,21 +55,27 @@ int32_t adi_apollo_tx_configure(adi_apollo_device_t *device, adi_apollo_sides_e 
     ADI_APOLLO_ERROR_RETURN(err);
 
     /* PFILT config */
-    for (i = 0; i < ADI_APOLLO_PFILTS_PER_SIDE; i ++) {
-        err = adi_apollo_tx_pfilt_configure(device, side, (adi_apollo_pfilt_idx_e)i, &(config->tx_pfilt[i]));
-        ADI_APOLLO_ERROR_RETURN(err);
+    if (!adi_apollo_private_device_lockout_get(device, ADI_APOLLO_TX, ADI_APOLLO_EC_PFILT_LOCK)) {
+        for (i = 0; i < ADI_APOLLO_PFILTS_PER_SIDE; i ++) {
+            err = adi_apollo_tx_pfilt_configure(device, side, (adi_apollo_pfilt_idx_e)i, &(config->tx_pfilt[i]));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
     }
 
     /* CFIR config */
-    for(i = 0; i < ADI_APOLLO_CFIRS_PER_SIDE; i ++) {
-        err = adi_apollo_tx_cfir_configure(device, side, (adi_apollo_cfir_idx_e)i, &(config->tx_cfir[i]));
-        ADI_APOLLO_ERROR_RETURN(err);
+    if (!adi_apollo_private_device_lockout_get(device, ADI_APOLLO_TX, ADI_APOLLO_EC_CFIR_LOCK)) {
+        for(i = 0; i < ADI_APOLLO_CFIRS_PER_SIDE; i ++) {
+            err = adi_apollo_tx_cfir_configure(device, side, (adi_apollo_cfir_idx_e)i, &(config->tx_cfir[i]));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
     }
 
     /* FSRC config */
-    for(i = 0; i < ADI_APOLLO_FSRCS_PER_SIDE; i ++) {
-        err = adi_apollo_tx_fsrc_configure(device, side, (adi_apollo_fsrc_idx_e)i, &(config->tx_fsrc[i]), &(jrx_config->rx_link_cfg[i]));
-        ADI_APOLLO_ERROR_RETURN(err);
+    if (!adi_apollo_private_device_lockout_get(device, ADI_APOLLO_TX, ADI_APOLLO_EC_FSRC_LOCK)) {
+        for(i = 0; i < ADI_APOLLO_FSRCS_PER_SIDE; i ++) {
+            err = adi_apollo_tx_fsrc_configure(device, side, (adi_apollo_fsrc_idx_e)i, &(config->tx_fsrc[i]), &(jrx_config->rx_link_cfg[i]));
+            ADI_APOLLO_ERROR_RETURN(err);
+        }
     }
 
     /* Inverse SINC config */

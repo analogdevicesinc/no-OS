@@ -110,7 +110,7 @@ int32_t adi_apollo_device_deinit(adi_apollo_device_t *device);
  *         via the SPI register (soft).
  *         Resetting all SPI registers to default and triggering the required
  *         initialization sequence.
- *         adi_apollo_device_reset() will be called if operation is ADI_APOLLO_SOFT_RESET_AND_INIT or
+ *         adi_apollo_device_init() will be called if operation is ADI_APOLLO_SOFT_RESET_AND_INIT or
  *         ADI_APOLLO_HARD_RESET_AND_INIT.
  *
  * \param[in]  device    Context variable - Pointer to the APOLLO device data structure
