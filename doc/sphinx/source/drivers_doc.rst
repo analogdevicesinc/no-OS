@@ -34,6 +34,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/pulsar_adc
 
+   drivers/ad9625
+
 ADC / DAC
 ==========
 .. toctree::
