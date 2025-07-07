@@ -1,15 +1,15 @@
 /***************************************************************************//**
- *   @file   maxim_rtc.h
- *   @brief  Header file of RTC driver.
+ *   @file   basic_example.c
+ *   @brief  Implementation of the basic example for RTC.
  *   @author Francis Roi Manabat (francisroi.manabat@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following discl aimer.
+ *    this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
@@ -31,24 +31,63 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef MAXIM_RTC_H_
-#define MAXIM_RTC_H_
+#include "common_data.h"
+#include "maxim_gpio.h"
+#include "maxim_spi.h"
+#include "maxim_uart.h"
+#include "maxim_irq.h"
+#include "no_os_rtc.h"
+#include "no_os_uart.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
+#include "no_os_alloc.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
+#include "maxim_rtc.h"
 
-extern const struct no_os_rtc_platform_ops max_rtc_ops;
+struct max_uart_init_param uart_extra_ip = {
+	.flow = MAX_UART_FLOW_DIS
+};
 
-int32_t max_rtc_init(struct no_os_rtc_desc **device,
-		     struct no_os_rtc_init_param *init_param);
+struct no_os_uart_init_param uart_ip = {
+	.device_id = 2,
+	.asynchronous_rx = false,
+	.baud_rate = 115200,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = &uart_extra_ip,
+	.platform_ops = &max_uart_ops,
+};
 
-int32_t max_rtc_remove(struct no_os_rtc_desc *dev);
+struct no_os_rtc_init_param rtc_ip = {
+	.freq = 1,
+	.load = 0,
+	.platform_ops = &max_rtc_ops,
+	.extra = NULL
+};
 
-int32_t max_rtc_start(struct no_os_rtc_desc *dev);
+struct no_os_gpio_init_param led_ip = {
+	.port = 0,
+	.number = 14,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &gpio_extra_ip,
+};
+struct no_os_gpio_init_param button_ip = {
+	.port = 4,
+	.number = 0,
+	.pull = NO_OS_PULL_UP,
+	.platform_ops = &max_gpio_ops,
+	.extra = &gpio_extra_ip,
+};
 
-int32_t max_rtc_stop(struct no_os_rtc_desc *dev);
+struct max_gpio_init_param gpio_extra_ip = {
+	.vssel = 1,
+};
 
-int32_t max_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt);
-
-int32_t max_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt);
-
-int32_t max_rtc_set_irq_time(struct no_os_rtc_desc *dev, uint32_t irq_time);
-
-#endif
+struct no_os_irq_init_param rtc_irq_ip = {
+	.irq_ctrl_id = 19,
+	.platform_ops = &max_irq_ops,
+	.extra = NULL,
+};
