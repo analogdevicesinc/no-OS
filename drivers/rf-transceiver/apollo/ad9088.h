@@ -280,9 +280,9 @@ struct ad9088_phy {
 	uint8_t lb1_blend[ADI_APOLLO_NUM_SIDES];
 };
 
-extern const uint8_t _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_start[];
-extern const uint8_t _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
-extern const uint8_t _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
+extern const uint8_t _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
 
 int ad9088_parse_struct(struct ad9088_phy **device, 
 			const struct ad9088_init_param *init_param);

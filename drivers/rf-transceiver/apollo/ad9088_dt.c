@@ -80,8 +80,8 @@ int ad9088_get_profile(struct ad9088_phy *phy,
 		       const struct ad9088_init_param *init_param)
 {
 	adi_apollo_top_t *p = &phy->profile;
-	size_t firmware_size = (size_t)_binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_size;
-	const uint8_t *firmware_ptr = _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_start;
+	size_t firmware_size = (size_t)_binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_size;
+	const uint8_t *firmware_ptr = _binary_drivers_rf_transceiver_apollo_firmware_usecase_bin_start;
 	
 	if (sizeof(*p) != firmware_size) {
 		pr_err("Invalid size of profile structure %zu, expected %zu\n",
