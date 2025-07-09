@@ -1318,6 +1318,20 @@ static int hmc7044_jesd204_clks_sync3(struct jesd204_dev *jdev,
 		if (ret < 0)
 			return ret;
 
+		if (hmc->sync_pin_mode) {
+			while (HMC7044_SYSREF_SYNC_STAT(val)) {
+				no_os_mdelay(2);
+
+				ret = hmc7044_read(hmc, HMC7044_REG_ALARM_READBACK, &val);
+				if (ret < 0) {
+					pr_err("Error reading alarm status.\n");
+					return ret;
+				}
+				if (!HMC7044_SYSREF_SYNC_STAT(val))
+					break;
+			}
+		}
+
 		if (!HMC7044_CLK_OUT_PH_STATUS(val))
 			pr_warning(
 				"%s: SYSREF of the HMC7044 is not valid; that is, its phase output is not stable (0x%X)\n",
