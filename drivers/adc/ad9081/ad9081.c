@@ -215,7 +215,7 @@ int adi_ad9081_device_gpio_set_highz(adi_ad9081_device_t *device,
 static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 {
 	int ret;
-	uint8_t m = 1;
+	uint8_t m = 0;
 
 	ret = adi_ad9081_device_nco_sync_pre(&phy->ad9081);
 	if (ret != 0)
@@ -224,21 +224,21 @@ static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 	/* trigger_src  0: sysref, 1: lmfc rising edge, 2: lmfc falling edge */
 
 	if (m)
-		printf("Sync 6 master\n");
+		printf("Sync 9 master\n");
 	else {
 		/* We need to make sure the master-slave master GPIO is enabled before we move on */
 		ret = adi_ad9081_device_nco_sync_gpio_set(&phy->ad9081, phy->sync_ms_gpio_num,
 				0);
 		if (ret != 0)
 			return ret;
-		printf("Sync 6 slave\n");
+		printf("Sync 9 slave\n");
 	}
 
-	uint8_t value = 0;
-	no_os_gpio_set_value(phy->pin, 1);
-	do {
-		no_os_gpio_get_value(phy->input_pin, &value);
-	} while (!value);
+//	uint8_t value = 0;
+//	no_os_gpio_set_value(phy->pin, 1);
+//	do {
+//		no_os_gpio_get_value(phy->input_pin, &value);
+//	} while (!value);
 
 	if (phy->nco_sync_direct_sysref_mode_en)
 		return adi_ad9081_adc_nco_sync(&phy->ad9081,
@@ -1476,31 +1476,31 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	if (phy->ms_sync_en_gpio)
 		no_os_gpio_direction_output(phy->ms_sync_en_gpio, 0);
 
-	struct xil_gpio_init_param  xil_gpio_param = {
-		.type = GPIO_PS,
-		.device_id = 0
-	};
-	struct no_os_gpio_init_param init_pin  = {
-			.number = 109,
-			.platform_ops = &xil_gpio_ops,
-			.extra = &xil_gpio_param
-	};
-
-	init_pin.number = 107;
-	ret = no_os_gpio_get(&phy->input_pin, &init_pin);
-	if (ret < 0)
-		printf("ERR\n");
-	ret = no_os_gpio_direction_input(phy->input_pin);
-	if (ret < 0)
-		printf("ERR\n");
-
-	init_pin.number = 108;
-	ret = no_os_gpio_get(&phy->pin, &init_pin);
-	if (ret < 0)
-		printf("ERR\n");
-	ret = no_os_gpio_direction_output(phy->pin, 0);
-	if (ret < 0)
-		printf("ERR\n");
+//	struct xil_gpio_init_param  xil_gpio_param = {
+//		.type = GPIO_PS,
+//		.device_id = 0
+//	};
+//	struct no_os_gpio_init_param init_pin  = {
+//			.number = 109,
+//			.platform_ops = &xil_gpio_ops,
+//			.extra = &xil_gpio_param
+//	};
+//
+//	init_pin.number = 107;
+//	ret = no_os_gpio_get(&phy->input_pin, &init_pin);
+//	if (ret < 0)
+//		printf("ERR\n");
+//	ret = no_os_gpio_direction_input(phy->input_pin);
+//	if (ret < 0)
+//		printf("ERR\n");
+//
+//	init_pin.number = 108;
+//	ret = no_os_gpio_get(&phy->pin, &init_pin);
+//	if (ret < 0)
+//		printf("ERR\n");
+//	ret = no_os_gpio_direction_output(phy->pin, 0);
+//	if (ret < 0)
+//		printf("ERR\n");
 
 	phy->dev_clk = init_param->dev_clk;
 	phy->jesd_rx_clk = init_param->jesd_rx_clk;

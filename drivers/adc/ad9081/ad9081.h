@@ -64,8 +64,8 @@ struct ad9081_phy {
 	struct no_os_spi_desc		*spi_desc;
 	struct no_os_gpio_desc		*gpio_reset;
 	struct no_os_gpio_desc		*ms_sync_en_gpio;
-	struct no_os_gpio_desc *pin;
-	struct no_os_gpio_desc *input_pin;
+//	struct no_os_gpio_desc *pin;
+//	struct no_os_gpio_desc *input_pin;
 	struct no_os_clk		*jesd_rx_clk;
 	struct no_os_clk		*jesd_tx_clk;
 	struct no_os_clk		*dev_clk;
