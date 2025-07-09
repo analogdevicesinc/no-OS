@@ -1252,10 +1252,12 @@ reseed:
 		no_os_mdelay(10);
 	}
 
-	ret = hmc7044_toggle_bit(hmc, HMC7044_REG_REQ_MODE_0,
-				 HMC7044_RESEED_REQ, 1000);
-	if (ret)
-		return ret;
+	if (!hmc->sync_pin_mode) {
+		ret = hmc7044_toggle_bit(hmc, HMC7044_REG_REQ_MODE_0,
+					 HMC7044_RESEED_REQ, 1000);
+		if (ret)
+			return ret;
+	}
 
 	if (cont_mode)
 		hmc7044_write(hmc, HMC7044_REG_PULSE_GEN,
@@ -1317,6 +1319,20 @@ static int hmc7044_jesd204_clks_sync3(struct jesd204_dev *jdev,
 		ret = hmc7044_read(hmc, HMC7044_REG_ALARM_READBACK, &val);
 		if (ret < 0)
 			return ret;
+
+		if (hmc->sync_pin_mode) {
+			while (HMC7044_SYSREF_SYNC_STAT(val)) {
+				no_os_mdelay(2);
+
+				ret = hmc7044_read(hmc, HMC7044_REG_ALARM_READBACK, &val);
+				if (ret < 0) {
+					pr_err("Error reading alarm status.\n");
+					return ret;
+				}
+				if (!HMC7044_SYSREF_SYNC_STAT(val))
+					break;
+			}
+		}
 
 		if (!HMC7044_CLK_OUT_PH_STATUS(val))
 			pr_warning(
