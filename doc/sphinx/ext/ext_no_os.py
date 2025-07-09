@@ -30,7 +30,7 @@ def manage_no_os_doxygen_links(env):
 
     def get_exclusions(file):
         if not path.isfile(file):
-            logger.warning(f"'{file}' does not exist!")
+            logger.warning(f"no-os-doxygen: '{file}' does not exist!")
             return
 
         ctime = path.getctime(file)
@@ -56,7 +56,7 @@ def manage_no_os_doxygen_links(env):
         file = path.join(doxypath, f"{p}_page.html")
         if not path.isfile(file):
             if dxy[p]['warn']:
-                logger.warning(f"'{file}' does not exist!")
+                logger.warning(f"no-os-doxygen: '{file}' does not exist!")
                 dxy[p]['warn'] = False
             continue
 
@@ -75,7 +75,8 @@ def manage_no_os_doxygen_links(env):
                 if prev.tag == "h1":
                     title = ''.join(prev.itertext()).strip().lower()
                 else:
-                    logger.warning(f"List in '{file}' missing title h1.")
+                    logger.warning(f"no-os-doxygen: List in '{file}'"
+                                   " missing title h1.")
                     continue
 
                 links = le.xpath("./li/a")
@@ -84,8 +85,8 @@ def manage_no_os_doxygen_links(env):
                 dxy[p]['list'][title] = dict(links_)
         else:
             if len(link_elements) != 1:
-                logger.warning(f"number of lists for '{p}' is 1, "
-                               f"got {len(link_elements)}.")
+                logger.warning(f"no-os-doxygen: number of lists for '{p}'"
+                               f" is 1, got {len(link_elements)}.")
                 continue
 
             links = link_elements[0].xpath("./li/a")
@@ -136,8 +137,8 @@ class directive_no_os_doxygen(Directive):
             lf = [k, *lk]
 
         if lf[0] not in env.no_os_doxygen:
-            logger.warning(f"Entry '{lf[0]}' from doc '{env.docname}' "
-                           "doesn't exist.")
+            logger.warning(f"no-os-doxygen: Entry '{lf[0]}' from doc"
+                           " '{env.docname}' doesn't exist.")
             return []
 
         if env.no_os_doxygen[lf[0]]['list'] is None:
@@ -145,15 +146,15 @@ class directive_no_os_doxygen(Directive):
 
         if lf[1] not in env.no_os_doxygen[lf[0]]['list']:
             if lf[1] not in env.no_os_doxygen[lf[0]]['exclude']:
-                logger.warning(f"Entry '{lf[1]}' doesn't exist in "
-                               "'{lf[0]}'")
+                logger.warning(f"no-os-doxygen: Entry '{lf[1]}' doesn't exist"
+                               f" in '{lf[0]}'")
             return []
 
         elif (len(lf) == 3 and
               lf[2] not in env.no_os_doxygen[lf[0]]['list'][lf[1]]):
             if lf[2] not in env.no_os_doxygen[lf[0]]['exclude']:
-                logger.warning(f"Entry '{lf[2]}' doesn't exist in "
-                               f"'{lf[0]}/{lf[1]}'")
+                logger.warning(f"no-os-doxygen: Entry '{lf[2]}' doesn't exist"
+                               f" in '{lf[0]}/{lf[1]}'")
             return []
 
         if lf[0] == "drivers":
