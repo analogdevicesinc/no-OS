@@ -6,6 +6,8 @@
  */
 //#define DEBUG
 
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "no_os_error.h"
 #include "no_os_gpio.h"
@@ -157,6 +159,7 @@ struct ad9088_init_param {
 	struct no_os_gpio_init_param *gpio_tx1_en; //
 	struct no_os_gpio_init_param *gpio_tx2_en; //
 	struct no_os_gpio_init_param *versal_xvr_reset; //
+	const char *device_profile_fw_name;
 	// struct no_os_regulator_init_param *supply_reg;
 	bool spi_3wire_en; //
 	bool rx_real_channel_en; //
@@ -276,6 +279,10 @@ struct ad9088_phy {
 	uint8_t loopback_mode[ADI_APOLLO_NUM_SIDES];
 	uint8_t lb1_blend[ADI_APOLLO_NUM_SIDES];
 };
+
+extern const uint8_t _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_start[];
+extern const uint8_t _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_end[];
+extern const uint8_t _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_size[];
 
 int ad9088_parse_struct(struct ad9088_phy **device, 
 			const struct ad9088_init_param *init_param);

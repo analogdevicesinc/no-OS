@@ -195,6 +195,7 @@ struct ad9088_init_param ad9088_ip = {
 	.gpio_tx1_en = NULL, // to be set by the user
 	.gpio_tx2_en = NULL, // to be set by the user
 	.versal_xvr_reset = NULL, // to be set by the user
+	.device_profile_fw_name = "id01_uc42_ce_vck190.bin",
 	.spi_3wire_en = false,
 	.rx_real_channel_en = false,
 	.tx_real_channel_en = false,

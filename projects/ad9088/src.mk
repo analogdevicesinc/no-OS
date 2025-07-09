@@ -68,7 +68,8 @@ SRCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c 	\
 	$(NO-OS)/jesd204/jesd204-core.c 			\
 	$(NO-OS)/jesd204/jesd204-fsm.c
 
-SRC_DIRS += $(DRIVERS)/rf-transceiver/apollo
+SRC_DIRS += $(DRIVERS)/rf-transceiver/apollo			\
+	    $(DRIVERS)/rf-transceiver/apollo/firmware
 
 INCS += $(DRIVERS)/frequency/adf4382/adf4382.h			\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.h			\

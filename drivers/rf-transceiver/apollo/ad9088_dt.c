@@ -76,6 +76,24 @@ static void ad9088_jesd_lane_setup(struct ad9088_phy *phy,
 	return 0;
 }
 
+int ad9088_get_profile(struct ad9088_phy *phy, 
+		       const struct ad9088_init_param *init_param)
+{
+	adi_apollo_top_t *p = &phy->profile;
+	size_t firmware_size = (size_t)_binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_size;
+	const uint8_t *firmware_ptr = _binary____noos_drivers_rf_transceiver_apollo_firmware_usecase_bin_start;
+	
+	if (sizeof(*p) != firmware_size) {
+		pr_err("Invalid size of profile structure %zu, expected %zu\n",
+		       sizeof(*p), firmware_size);
+		return -EINVAL;
+	}
+
+	memcpy(p, firmware_ptr, firmware_size);
+
+	return 0;
+}
+
 int ad9088_parse_struct(struct ad9088_phy **device, 
 			const struct ad9088_init_param *init_param)
 {
@@ -123,6 +141,12 @@ int ad9088_parse_struct(struct ad9088_phy **device,
 	for (i = 0; i < ADI_APOLLO_NUM_SIDES; i++)
 		for (j = 0; j < MAX_NUM_MAIN_DATAPATHS; j++)
 			phy->rx_nyquist_zone[i][j] = nz - 1;
+
+	ret = ad9088_get_profile(phy, init_param);
+	if (ret) {
+		pr_err("Failed to get profile: %d\n", ret);
+		goto error_reset;
+	}
 
 	ad9088_jesd_lane_setup(&phy, init_param);
 	
