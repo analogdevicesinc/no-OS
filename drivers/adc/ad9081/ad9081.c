@@ -42,6 +42,9 @@
 #include "no_os_print_log.h"
 #include "ad9081.h"
 
+#include "no_os_gpio.h"
+#include "xilinx_gpio.h"
+
 #define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
@@ -90,12 +93,12 @@ static int32_t ad9081_nco_sync_master_slave(struct ad9081_phy *phy,
 	if (ret != 0)
 		return ret;
 
-	ret = adi_ad9081_dac_nco_master_slave_gpio_set(&phy->ad9081, 0, master);
+	ret = adi_ad9081_dac_nco_master_slave_gpio_set(&phy->ad9081, 4, master);
 	if (ret < 0)
 		return ret;
 	/* source  0: sysref, 1: lmfc rising edge, 2: lmfc falling edge */
 	ret = adi_ad9081_dac_nco_master_slave_trigger_source_set(
-		      &phy->ad9081, 1); /* REG 0xCC */
+		      &phy->ad9081, 0); /* REG 0xCC */
 	if (ret < 0)
 		return ret;
 
@@ -212,6 +215,7 @@ int adi_ad9081_device_gpio_set_highz(adi_ad9081_device_t *device,
 static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 {
 	int ret;
+	uint8_t m = 1;
 
 	ret = adi_ad9081_device_nco_sync_pre(&phy->ad9081);
 	if (ret != 0)
@@ -219,15 +223,35 @@ static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 
 	/* trigger_src  0: sysref, 1: lmfc rising edge, 2: lmfc falling edge */
 
+	if (m)
+		printf("Sync 6 master\n");
+	else {
+		/* We need to make sure the master-slave master GPIO is enabled before we move on */
+		ret = adi_ad9081_device_nco_sync_gpio_set(&phy->ad9081, phy->sync_ms_gpio_num,
+				0);
+		if (ret != 0)
+			return ret;
+		printf("Sync 6 slave\n");
+	}
+
+	uint8_t value = 0;
+	no_os_gpio_set_value(phy->pin, 1);
+	do {
+		no_os_gpio_get_value(phy->input_pin, &value);
+	} while (!value);
+
 	if (phy->nco_sync_direct_sysref_mode_en)
 		return adi_ad9081_adc_nco_sync(&phy->ad9081,
 					       0, phy->nco_sync_ms_extra_lmfc_num);
 	else
-		return adi_ad9081_adc_nco_master_slave_sync(&phy->ad9081,
-				master,
-				1, /* trigger_src */
-				phy->sync_ms_gpio_num, /* gpio_index */
-				phy->nco_sync_ms_extra_lmfc_num);
+//		return adi_ad9081_dac_nco_master_slave_sync(&phy->ad9081,
+//				1,
+//				0, /* trigger_src */
+//				phy->sync_ms_gpio_num, /* gpio_index */
+//				phy->nco_sync_ms_extra_lmfc_num);
+		return ad9081_nco_sync_master_slave(phy, m);
+
+	return 0;
 }
 
 static int ad9081_jesd_tx_link_dig_reset(adi_ad9081_device_t *device,
@@ -520,12 +544,23 @@ static int ad9081_setup_tx(struct ad9081_phy *phy)
 	       sizeof(phy->jrx_link_tx[1].logiclane_mapping));
 
 	/* start txfe tx */
-	ret = adi_ad9081_device_startup_tx(
+//	ret = adi_ad9081_device_startup_tx(
+//		      &phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
+//		      phy->tx_chan_interp == 1 ? phy->tx_dac_chan_xbar_1x_non1x :
+//		      phy->tx_dac_chan_xbar,
+//		      phy->tx_main_shift, phy->tx_chan_shift,
+//		      &phy->jrx_link_tx[0].jesd_param);
+//
+//	if (ret != 0)
+//		return ret;
+
+	/* start txfe tx */
+	ret = adi_ad9081_device_startup_nco_test(
 		      &phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
 		      phy->tx_chan_interp == 1 ? phy->tx_dac_chan_xbar_1x_non1x :
 		      phy->tx_dac_chan_xbar,
 		      phy->tx_main_shift, phy->tx_chan_shift,
-		      &phy->jrx_link_tx[0].jesd_param);
+		      2300);
 
 	if (ret != 0)
 		return ret;
@@ -1439,7 +1474,33 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	if (ret < 0)
 		goto error_1;
 	if (phy->ms_sync_en_gpio)
-		no_os_gpio_set_value(phy->ms_sync_en_gpio, 0);
+		no_os_gpio_direction_output(phy->ms_sync_en_gpio, 0);
+
+	struct xil_gpio_init_param  xil_gpio_param = {
+		.type = GPIO_PS,
+		.device_id = 0
+	};
+	struct no_os_gpio_init_param init_pin  = {
+			.number = 109,
+			.platform_ops = &xil_gpio_ops,
+			.extra = &xil_gpio_param
+	};
+
+	init_pin.number = 107;
+	ret = no_os_gpio_get(&phy->input_pin, &init_pin);
+	if (ret < 0)
+		printf("ERR\n");
+	ret = no_os_gpio_direction_input(phy->input_pin);
+	if (ret < 0)
+		printf("ERR\n");
+
+	init_pin.number = 108;
+	ret = no_os_gpio_get(&phy->pin, &init_pin);
+	if (ret < 0)
+		printf("ERR\n");
+	ret = no_os_gpio_direction_output(phy->pin, 0);
+	if (ret < 0)
+		printf("ERR\n");
 
 	phy->dev_clk = init_param->dev_clk;
 	phy->jesd_rx_clk = init_param->jesd_rx_clk;

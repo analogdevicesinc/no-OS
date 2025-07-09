@@ -81,11 +81,18 @@ int main(void)
 #endif
 		.device_id = GPIO_DEVICE_ID
 	};
-	struct no_os_gpio_init_param	gpio_phy_resetb = {
+	struct no_os_gpio_init_param gpio_phy_resetb = {
 		.number = PHY_RESET,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
+
+	struct no_os_gpio_init_param gpio_ms_sync = {
+		.number = 114,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+
 	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
@@ -139,6 +146,7 @@ int main(void)
 	};
 	struct ad9081_init_param phy_param = {
 		.gpio_reset = &gpio_phy_resetb,
+//		.ms_sync_enable = &gpio_ms_sync,
 		.spi_init = &phy_spi_init_param,
 		.dev_clk = &app_clk[0],
 		.jesd_tx_clk = &jesd_clk[1],
@@ -152,7 +160,7 @@ int main(void)
 		.config_sync_0a_cmos_enable = false,
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
-		.nco_sync_ms_extra_lmfc_num = 0,
+		.nco_sync_ms_extra_lmfc_num = 10,
 		.nco_sync_direct_sysref_mode_enable = 0,
 		.sysref_average_cnt_exp = 7,
 		.continuous_sysref_mode_disable = 0,
@@ -194,6 +202,7 @@ int main(void)
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
+		.master_slave_sync_gpio_num = 4,
 	};
 
 	struct axi_adc_init rx_adc_init = {
@@ -311,7 +320,7 @@ int main(void)
 			.jdev = hmc7044_dev->jdev,
 			.link_ids = {FRAMER_LINK0_RX, DEFRAMER_LINK0_TX},
 			.links_number = 2,
-			.is_sysref_provider = true,
+//			.is_sysref_provider = true,
 		},
 		{
 			.jdev = rx_jesd->jdev,
