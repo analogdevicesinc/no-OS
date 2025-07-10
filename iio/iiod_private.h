@@ -44,7 +44,8 @@
 #define IIOD_STR(cmd) {(cmd), sizeof(cmd) - 1}
 
 #define IIOD_CTX(desc, conn) {.instance = (desc)->app_instance,\
-			      .conn = (conn)->conn}
+			      .conn = (conn)->conn,\
+				  .binary = (conn)->is_binary_protocol}
 
 
 /* Used to store a string and its size */
@@ -120,15 +121,27 @@ struct comand_desc {
 	uint32_t bytes_count;
 	uint32_t count;
 	bool cyclic;
-	char device[MAX_DEV_ID];
-	char channel[MAX_CHN_ID];
-	char attr[MAX_ATTR_NAME];
-	char trigger[MAX_TRIG_ID];
+	union {
+		struct {
+			char device[MAX_DEV_ID];
+			char channel[MAX_CHN_ID];
+			char attr[MAX_ATTR_NAME];
+			char trigger[MAX_TRIG_ID];
+		};
+		struct {
+			uint16_t device;
+			uint16_t channel;
+			uint16_t attr;
+			uint16_t trigger;
+			uint16_t buffer;
+		} binary_data;
+	};
 	enum iio_attr_type type;
 	enum iiod_opcode op_code;
 	uint16_t block_id[MAX_NUM_BLOCKS];
 	uint32_t block_size[MAX_NUM_BLOCKS];
 	uint32_t bytes_size[MAX_NUM_BLOCKS];
+	struct no_os_list_desc *event;
 	uint8_t curr;
 };
 
@@ -210,6 +223,8 @@ struct iiod_conn_priv {
 	// flag for binary protocol indication
 	bool is_binary_protocol;
 	struct iiod_binary_cmd cmd_response_data;
+	/* Buffer to store the event data for transfer */
+	uint8_t event_data[16];
 };
 
 /* Private iiod information */
@@ -238,7 +253,7 @@ struct iiod_binary_resp {
 struct iiod_event_desc {
 	uint16_t client_id;
 	uint16_t event_read_count;
-	struct no_os_fifo_element *event_data;
+	struct lf256fifo *event_data;
 };
 
 struct __attribute__((packed)) iiod_event_data {
