@@ -1004,6 +1004,91 @@ static int iio_read_attr(struct iiod_ctx *ctx, const void *device,
 
 /**
  * @brief Write global attribute of a device.
+ * @param device - Index to the device.
+ * @param ctx - IIO instance and conn instance
+ * @param attr - String containing attribute name.
+ * @param buf - Value to be written.
+ * @param len - Length of data.
+ * @return Number of written bytes.
+ */
+static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
+			  struct iiod_attr *attr, char *buf, uint32_t len)
+{
+	struct iio_desc *desc;
+	struct attr_fun_params	params;
+	struct iio_attribute	*attributes;
+	struct iio_ch_info ch_info;
+	struct iio_trig_priv *trig_dev = NULL;
+	struct iio_dev_priv *dev = NULL;
+	struct iio_channel *ch = NULL;
+	int8_t ch_out;
+
+	desc = ctx->instance;
+	if (*device < desc->nb_devs)
+		dev = &desc->devs[desc->sorted_devs[*device]];
+
+	/* If IIO device with given name is found, handle writing of attributes */
+	if (dev) {
+
+		// if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+		//     strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
+		// 	if (dev->dev_descriptor->debug_reg_write)
+		// 		return debug_reg_write(dev, buf, len);
+		// 	return -ENOENT;
+		// }
+
+		if (attr->ch_id != -1) {
+			if (attr->ch_id < desc->nb_devs)
+				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels[attr->ch_id]];
+			else
+				ch = NULL;
+
+			if (!ch)
+				return -ENOENT;
+
+			ch_info.ch_out = ch_out;
+			ch_info.ch_num = ch->channel;
+			ch_info.type = ch->ch_type;
+			ch_info.differential = ch->diferential;
+			ch_info.address = ch->address;
+			params.ch_info = &ch_info;
+		} else {
+			params.ch_info = NULL;
+		}
+
+		params.buf = buf;
+		params.len = len;
+		params.dev_instance = dev->dev_instance;
+		// attributes = get_attributes(attr->type, dev, ch);
+		attributes = get_attribute(attr, dev, ch);
+		// if (!strcmp(attr->name, ""))
+		// 	return iio_write_all_attr(&params, attributes);
+		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
+	}
+
+	/* IIO device with given name is not found, verify if it corresponds to a trigger */
+	if (*device < desc->nb_trigs)
+		trig_dev = &desc->trigs[desc->sorted_trigs[*device]];
+
+	/* If IIO trigger with given name is found, handle writing of attributes */
+	if (trig_dev) {
+		params.ch_info = NULL; /* Triggers cannot have channels */
+		params.buf = (char *)buf;
+		params.len = len;
+		params.dev_instance = trig_dev->instance;
+		attributes = get_trig_attributes(attr->type, trig_dev);
+		// if (!strcmp(attr->name, ""))
+		// 	return iio_read_all_attr(&params, attributes);
+		return iio_rd_wr_attribute(&params, attributes, attr->name, 1);
+	}
+
+	/* No device and no trigger with given name were found */
+	return -ENODEV;
+}
+
+
+/**
+ * @brief Write global attribute of a device.
  * @param device - String containing device name.
  * @param ctx - IIO instance and conn instance
  * @param attr - String containing attribute name.
@@ -1021,6 +1106,9 @@ static int iio_write_attr(struct iiod_ctx *ctx, const void *device,
 	struct iio_ch_info ch_info;
 	struct iio_channel *ch = NULL;
 	int8_t ch_out;
+
+	if (ctx->binary)
+		return iio_write_attr_new(ctx, device, attr, buf, len);
 
 	dev = get_iio_device(ctx->instance, device);
 

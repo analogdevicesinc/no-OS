@@ -340,10 +340,32 @@ int32_t iiod_parse_command(char *buf, struct comand_desc *res)
 	/* Commands with payload */
 	switch (res->op_code) {
 		case IIOD_OP_WRITE_ATTR:
+			res->type = IIO_ATTR_TYPE_DEVICE;
+			res->binary_data.device = (uint16_t) cmd->dev;
+			res->binary_data.attr = (uint16_t) (cmd->code >> 16);
+			// TODO: iiod_client sends a 8byte length. Same for all write attribute Op.
+			res->bytes_count = *(uint32_t *)payload;
+			return 0;
 		case IIOD_OP_WRITE_DBG_ATTR:
+			res->type = IIO_ATTR_TYPE_BUFFER;
+			res->binary_data.device = (uint16_t) cmd->dev;
+			res->binary_data.attr = (uint16_t) (cmd->code >> 16);
+			res->bytes_count = *(uint32_t *)payload;
+			return 0;
 		case IIOD_OP_WRITE_BUF_ATTR:
+			res->type = IIO_ATTR_TYPE_BUFFER;
+			res->binary_data.device = (uint16_t) cmd->dev;
+			res->binary_data.attr = (uint16_t) (cmd->code >> 16);
+			res->binary_data.buffer = (uint16_t) cmd->code;
+			res->bytes_count = *(uint32_t *)payload;
+			return 0;
 		case IIOD_OP_WRITE_CHN_ATTR:
-			break; //TODO: See what to do.
+			res->type = IIO_ATTR_TYPE_CH_OUT;
+			res->binary_data.device = (uint16_t) cmd->dev;
+			res->binary_data.attr = (uint16_t) (cmd->code >> 16);
+			res->binary_data.channel = (uint16_t) cmd->code;
+			res->bytes_count = *(uint32_t *)payload;
+			return 0;
 		case IIOD_OP_CREATE_BUFFER:
 			res->mask = *(uint32_t *)payload;
 			return 0;
@@ -996,6 +1018,7 @@ static int32_t iiod_read_cmd_payload(struct iiod_desc *desc,
 	struct iiod_binary_cmd *cmd = (struct iiod_binary_cmd *) conn->parser_buf;
 	uint8_t *ch = (uint8_t *)conn->parser_buf + conn->parser_idx;
 	uint8_t payload_len;
+	uint64_t len;
 
 	switch (cmd->op) {
 		case IIOD_OP_PRINT:
@@ -1013,6 +1036,8 @@ static int32_t iiod_read_cmd_payload(struct iiod_desc *desc,
 		case IIOD_OP_WRITE_DBG_ATTR:
 		case IIOD_OP_WRITE_BUF_ATTR:
 		case IIOD_OP_WRITE_CHN_ATTR:
+			payload_len = 8;
+			break;
 		case IIOD_OP_GETTRIG:
 		case IIOD_OP_SETTRIG:
 			return 0; // TODO: Check what to do here
@@ -1830,10 +1855,10 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 					  conn->payload_buf,
 					  conn->payload_buf_len);
 		conn->res.write_val = 1;
-		conn->res.buf.idx = 0;
 		conn->res.second_write = false;
 		conn->cmd_response_data.code = ret;
 		if (ret) {
+			conn->res.buf.idx = 0;
 			conn->res.buf.buf = conn->payload_buf;
 			conn->res.buf.len = ret;
 			conn->res.second_write = true;
@@ -1844,6 +1869,18 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 	case IIOD_OP_WRITE_DBG_ATTR:
 	case IIOD_OP_WRITE_BUF_ATTR:
 	case IIOD_OP_WRITE_CHN_ATTR:
+		attr.idx = data->binary_data.attr;
+		if (command->op == IIOD_OP_WRITE_CHN_ATTR) {
+			attr.ch_id = data->binary_data.channel;
+		}
+		ret = desc->ops.write_attr(&ctx, &data->binary_data.device, &attr,
+					   conn->payload_buf,
+					   data->bytes_count);
+		conn->nb_buf.len = 0;
+		conn->res.val = ret;
+		conn->res.write_val = 1;
+		conn->res.second_write = false;
+		conn->state = IIOD_WRITING_BIN_RESPONSE;
 		break;
 
 	case IIOD_OP_CREATE_BUFFER: 
@@ -2155,7 +2192,8 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 				conn->res.write_val = 1;
 				conn->res.val = ret;
 				conn->state = IIOD_WRITING_CMD_RESULT;
-			} else if (conn->cmd_data.cmd == IIOD_CMD_WRITE) {
+			} else if ((conn->cmd_data.op_code >= IIOD_OP_WRITE_ATTR) &&
+					(conn->cmd_data.op_code <= IIOD_OP_WRITE_CHN_ATTR)){
 				/* Special case. Attribute needs to be read */
 				conn->nb_buf.buf = conn->payload_buf;
 				conn->nb_buf.len = conn->cmd_data.bytes_count;
@@ -2221,18 +2259,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			ret = iiod_parse_line(conn->parser_buf, &conn->cmd_data,
 					      &conn->strtok_ctx);
 		} else {
-			ret = iiod_run_state_bin(desc, conn);
-			// ret = iio_read_command(desc, conn);
-			// if (NO_OS_IS_ERR_VALUE(ret))
-			// 	return ret;
-			
-			// /* Fill struct comand_desc with data from line. No I/O */
-			// ret = iiod_parse_command(conn->parser_buf, &conn->cmd_data);
-//			ret = iiod_read_binary_cmd_new(desc, conn);
-//			if (NO_OS_IS_ERR_VALUE(ret))
-//				return ret;
-			//conn->state = IIOD_READING_LINE; //IIOD_RUNNING_CMD;
-			//}
+			return iiod_run_state_bin(desc, conn);
 		}
 		if (NO_OS_IS_ERR_VALUE(ret)) {
 			/* Parsing line failed */
