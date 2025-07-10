@@ -425,6 +425,14 @@ int stm32_irq_register_callback(struct no_os_irq_ctrl_desc *desc,
 
 			break;
 
+		case HAL_DMA_XFER_HALFCPLT_CB_ID:
+			pDmaCallback.XferHalfCpltCallback = _DMA_HalfCpltCallback;
+			ret = HAL_DMA_RegisterCallback(cb->handle, hal_event,
+						       pDmaCallback.XferHalfCpltCallback);
+			if (ret != HAL_OK)
+				return -EFAULT;
+			break;
+
 		default:
 			return -EINVAL;
 		};
