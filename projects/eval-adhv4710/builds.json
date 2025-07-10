@@ -1,0 +1,7 @@
+{
+    "maxim": {
+      "adhv4710_example": {
+        "flags" : "TARGET=max32690"
+      }
+    }
+  }
