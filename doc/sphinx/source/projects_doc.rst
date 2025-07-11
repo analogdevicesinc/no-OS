@@ -148,6 +148,8 @@ DAC
 
    projects/ad3552r_fmcz
 
+   projects/ad9739a-fmc-ebz
+
 TEMPERATURE
 ==============
 .. toctree::
