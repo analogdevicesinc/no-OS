@@ -2,3 +2,9 @@ config ACCEL_ADXL355
     depends on SPI
     bool "Enable the ADXL355 driver"
     default n
+
+config ACCEL_IIO_ADXL355
+    depends on SPI
+    select ACCEL_ADXL355
+    bool "Enable the ADXL355 IIO driver"
+    default n

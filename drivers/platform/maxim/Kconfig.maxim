@@ -27,5 +27,5 @@ config GPIO_MAXIM
         default n
 
 config GPIO_IRQ_MAXIM
-        bool "Enable the Maxim GPIO driver"
+        bool "Enable the Maxim GPIO IRQ driver"
         default n
