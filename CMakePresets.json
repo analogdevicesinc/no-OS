@@ -37,6 +37,32 @@
                                 "TARGET_NUM": "32650",
                                 "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/max32650_fthr_defconfig"
                         }
+                },
+                {
+                        "name": "apard32690",
+                        "description": "Config for APARD32690 board",
+                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake",
+                        "cacheVariables": {
+                                "BOARD": "APARD32690",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "maxim",
+                                "TARGET": "max32690",
+                                "TARGET_NUM": "32690",
+                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/apard32690_defconfig"
+                        }
+                },
+                {
+                        "name": "stm32f756_nucleo",
+                        "description": "Config for STM32F756",
+                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/stm32/toolchain.cmake",
+                        "cacheVariables": {
+                                "BOARD": "STM32F756_NUCLEO",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "stm32",
+                                "TARGET": "stm32f756",
+                                "TARGET_NUM": "stm32f756",
+                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/stm32/stm32f756_nucleo_defconfig"
+                        }
                 }
         ]
 }
