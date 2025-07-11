@@ -8,7 +8,8 @@ print("Running generate_config.py")
 
 parser = argparse.ArgumentParser(description="Generate config.cmake from defconfig files")
 
-parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory", default=Path(__file__).parent.resolve())
+parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory")
+parser.add_argument("--build_dir", type=str, help="Path to the build directory")
 parser.add_argument("--defconfig", type=str, help="Path to a defconfig file", nargs='+')
 parser.add_argument("--update", action='store_true', help="Append the defconfig file to the existing .config file")
 parser.add_argument("--verbose", type=bool, help="Enable verbose output", default=False)
@@ -16,13 +17,13 @@ parser.add_argument("--verbose", type=bool, help="Enable verbose output", defaul
 args = parser.parse_args(sys.argv[1:])
 print(args.update)
 
-capi_dir = args.root_dir
-os.environ["srctree"] = str(capi_dir)
+src_dir = Path(args.root_dir)
+build_dir = Path(args.build_dir)
 
-kconf = kconfiglib.Kconfig(capi_dir.joinpath("Kconfig"))
+kconf = kconfiglib.Kconfig(src_dir.joinpath("Kconfig"))
 
 if args.update:
-        main_config = capi_dir.joinpath("build/.config")
+        main_config = build_dir.joinpath(".config")
         if not os.path.exists(main_config):
                 os.mknod(main_config)
 
@@ -30,12 +31,14 @@ if args.update:
 
 if args.defconfig != None:
         for defconfig in args.defconfig:
-                kconf.load_config(capi_dir.joinpath(defconfig), replace=False)
+                kconf.load_config(src_dir.joinpath(defconfig), replace=False)
 
-kconf.write_config(capi_dir.joinpath("build/.config"))
+kconf.write_config(build_dir.joinpath(".config"))
 
-with open(capi_dir.joinpath("config.cmake"), "w+") as cmake_file:
+with open(build_dir.joinpath("config.cmake"), "w+") as cmake_file:
         cmake_file.write("#Generated based on .config\n")
+        if len(kconf.unique_defined_syms) == 0:
+                print("Empty .config?")
 
         for sym in kconf.unique_defined_syms: 
                 if sym.str_value:
