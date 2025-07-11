@@ -45,8 +45,7 @@
 
 #define IIOD_CTX(desc, conn) {.instance = (desc)->app_instance,\
 			      .conn = (conn)->conn,\
-				  .binary = (conn)->is_binary_protocol}
-
+				  .binary = (conn)->protocol}
 
 /* Used to store a string and its size */
 struct iiod_str {
@@ -109,40 +108,60 @@ enum iiod_opcode {
 	IIOD_NB_OPCODES,
 };
 
+enum iiod_protocol {
+	IIOD_ASCII_COMMAND,
+	IIOD_BINARY_COMMAND,
+};
+
+struct command_data_ascii {
+	/* IIOD Command */
+	enum iiod_cmd cmd;
+	/* Device Name */
+	char device[MAX_DEV_ID];
+	/* Channel Name */
+	char channel[MAX_CHN_ID];
+	/* Attribute Name */
+	char attr[MAX_ATTR_NAME];
+	/* Trigger Name */
+	char trigger[MAX_TRIG_ID];
+};
+
+struct command_data_binary {
+	/* Client ID */
+	uint16_t client_id;
+	/* OP Code */
+	enum iiod_opcode op_code;
+	/* Code Value */
+	 int32_t code; // TODO: Remove this variable. Parse the value and keep in different variables
+	/* Device ID */
+	uint16_t device;
+	/* Channel ID */
+	uint16_t channel;
+	/* Attribute ID */
+	uint16_t attr;
+	/* Trigger ID */
+	uint16_t trigger;
+	/* Buffer ID */
+	uint16_t buffer;
+	uint16_t block_id[MAX_NUM_BLOCKS];
+	uint32_t block_size[MAX_NUM_BLOCKS];
+	uint32_t bytes_size[MAX_NUM_BLOCKS];
+	uint8_t curr;
+};
+
 /*
  * Structure to be filled after a command is parsed.
  * Depending of cmd some fields are set or not
  */
 struct comand_desc {
-	enum iiod_cmd cmd;
 	uint32_t mask;
 	uint32_t timeout;
 	uint32_t sample_count;
 	uint32_t bytes_count;
 	uint32_t count;
 	bool cyclic;
-	union {
-		struct {
-			char device[MAX_DEV_ID];
-			char channel[MAX_CHN_ID];
-			char attr[MAX_ATTR_NAME];
-			char trigger[MAX_TRIG_ID];
-		};
-		struct {
-			uint16_t device;
-			uint16_t channel;
-			uint16_t attr;
-			uint16_t trigger;
-			uint16_t buffer;
-		} binary_data;
-	};
+	void *command_data;
 	enum iio_attr_type type;
-	enum iiod_opcode op_code;
-	uint16_t block_id[MAX_NUM_BLOCKS];
-	uint32_t block_size[MAX_NUM_BLOCKS];
-	uint32_t bytes_size[MAX_NUM_BLOCKS];
-	struct no_os_list_desc *event;
-	uint8_t curr;
 };
 
 /* Used to store buffer indexes for non blocking transfers */
@@ -152,7 +171,7 @@ struct iiod_buff {
 	uint32_t len;
 };
 
-struct iiod_binary_cmd {
+struct iiod_command {
 	uint16_t client_id;
 	uint8_t op;
 	uint8_t dev;
@@ -166,7 +185,6 @@ struct iiod_run_cmd_result {
 	bool write_val;
 	/* If buf.len != 0 buf has to be sent */
 	struct iiod_buff buf;
-	bool second_write;
 };
 
 /* Internal structure to handle a connection state */
@@ -179,7 +197,6 @@ struct iiod_conn_priv {
 	/* Command data after parsed */
 	struct comand_desc cmd_data;
 
-	struct iiod_binary_cmd cmd_data_bin;
 	/* Result of an executed cmd */
 	struct iiod_run_cmd_result res;
 	/* IIOD States */
@@ -220,9 +237,11 @@ struct iiod_conn_priv {
 	char *strtok_ctx;
 	/* True if the device was open with cyclic buffer flag */
 	bool is_cyclic_buffer;
-	// flag for binary protocol indication
-	bool is_binary_protocol;
-	struct iiod_binary_cmd cmd_response_data;
+	/* IIOD Command Format */
+	enum iiod_protocol protocol;
+	struct iiod_command res_header;
+	/* Event List */
+	struct no_os_list_desc *event;
 	/* Buffer to store the event data for transfer */
 	uint8_t event_data[16];
 };
@@ -241,13 +260,9 @@ struct iiod_desc {
 	uint32_t xml_len;
 	/* Backend used by IIOD */
 	enum physical_link_type phy_type;
-};
-
-struct iiod_binary_resp {
-	uint8_t cmd_id;
-	uint8_t status;
-	uint16_t length;
-	uint8_t payload[];
+	/* State Machine */
+	int32_t (*run_state)(struct iiod_desc *,
+			      struct iiod_conn_priv *);
 };
 
 struct iiod_event_desc {
@@ -266,5 +281,6 @@ struct __attribute__((packed)) iiod_event_data {
 	uint64_t event_type: 8;
 	int64_t timestamp: 64;
 };
+
 
 #endif //IIOD_PRIVATE_H
