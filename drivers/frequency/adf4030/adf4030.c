@@ -390,7 +390,7 @@ static int adf4030_set_vco_cal(struct adf4030_dev *dev, bool en)
 
 /**
  * @brief Set Temperature Readback feature's initial state.
- * This feature should be disabled after reading temperature.
+ * This function should be called before reading temperature to trigger measurement.
  * @param dev 		- The device structure.
  * @param en	 	- The enable or disable Temperature readback feature.
  * @return    		- 0 in case of success or negative error code.
@@ -414,13 +414,15 @@ int adf4030_set_temperature(struct adf4030_dev *dev, bool en)
 		      no_os_field_prep(ADF4030_EN_ADC_CNV, true) |
 		      no_os_field_prep(ADF4030_EN_ADC_CLK, true) |
 		      no_os_field_prep(ADF4030_EN_ADC, true);
-		msk = ADF4030_MANUAL_MODE | ADF4030_EN_ALIGN |
+		msk = ADF4030_ADC_CLK_SEL | ADF4030_EN_ADC_CNV |
 		      ADF4030_EN_ADC_CLK | ADF4030_EN_ADC;
 		ret = adf4030_spi_update_bits(dev, 0x61, msk, val);
 		if (ret)
 			return ret;
-
-		return adf4030_spi_write(dev, 0x72, ADF4030_SPI_DUMMY_DATA);
+		ret = adf4030_spi_write(dev, 0x62, ADF4030_ADC_CLK_DIV);
+		if (ret)
+			return ret;
+		return adf4030_spi_update_bits(dev, 0x72, ADF4030_ADC_ST_CNV, 0xFF);
 
 	} else {
 		ret = adf4030_spi_update_bits(dev, 0x61,
@@ -446,6 +448,10 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature)
 
 	if (!dev)
 		return -EINVAL;
+
+	ret = adf4030_spi_update_bits(dev, 0x72, ADF4030_ADC_ST_CNV, 0x0);
+	if (ret)
+		return ret;
 
 	ret = adf4030_spi_read(dev, 0x93, &tmp);
 	if (ret)
