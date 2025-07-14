@@ -29,6 +29,7 @@ ANALOG TO DIGITAL CONVERTERS
    drivers/ad9083
 
    drivers/ad9208
+   
 
    drivers/adm1177
 
@@ -75,6 +76,7 @@ DIGITAL TO ANALOG CONVERTERS
    drivers/ad8460
 
    drivers/max22017
+   drivers/ad917x
 
    drivers/ad3552r
 
