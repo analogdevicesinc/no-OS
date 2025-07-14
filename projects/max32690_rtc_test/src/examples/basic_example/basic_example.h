@@ -1,15 +1,15 @@
 /***************************************************************************//**
- *   @file   maxim_rtc.h
- *   @brief  Header file of RTC driver.
+ *   @file   basic_example.c
+ *   @brief  Implementation of the basic example for RTC.
  *   @author Francis Roi Manabat (francisroi.manabat@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following discl aimer.
+ *    this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
@@ -30,25 +30,11 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __BASIC_EXAMPLE_H__
+#define __BASIC_EXAMPLE_H__
 
-#ifndef MAXIM_RTC_H_
-#define MAXIM_RTC_H_
+#define RTC_IRQ_ID 3
 
-extern const struct no_os_rtc_platform_ops max_rtc_ops;
+int basic_example_main();
 
-int32_t max_rtc_init(struct no_os_rtc_desc **device,
-		     struct no_os_rtc_init_param *init_param);
-
-int32_t max_rtc_remove(struct no_os_rtc_desc *dev);
-
-int32_t max_rtc_start(struct no_os_rtc_desc *dev);
-
-int32_t max_rtc_stop(struct no_os_rtc_desc *dev);
-
-int32_t max_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt);
-
-int32_t max_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt);
-
-int32_t max_rtc_set_irq_time(struct no_os_rtc_desc *dev, uint32_t irq_time);
-
-#endif
+#endif /* __BASIC_EXAMPLE_H__ */
