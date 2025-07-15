@@ -50,6 +50,9 @@
 #include "parameters.h"
 #include "app_config.h"
 #include "xil_cache.h"
+#ifdef MCS_CONTINUOUS_SYSREF
+#include "mcs_gpio.h"
+#endif
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -96,6 +99,12 @@ int main(void)
 
 	struct no_os_gpio_init_param gpio_lf_input_pin_init = {
 		.number = 107,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+
+	struct no_os_gpio_init_param gpio_req_init = {
+		.number = PHY_SYNC,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
@@ -250,8 +259,18 @@ int main(void)
 		TX_DMA_BASEADDR,
 		IRQ_DISABLED
 	};
+
+#ifdef MCS_CONTINUOUS_SYSREF
+	struct mcs_gpio_init_param mcs_gpio_init_params = {
+		.gpio_req = &gpio_req_init,
+	};
+#endif
+
 	struct axi_dmac *tx_dmac;
 	struct ad9081_phy* phy[MULTIDEVICE_INSTANCE_COUNT];
+#ifdef MCS_CONTINUOUS_SYSREF
+	struct mcs_gpio_dev *mcs_dev;
+#endif
 	int32_t status;
 	int32_t i;
 
@@ -337,6 +356,12 @@ int main(void)
 					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
 
+#ifdef MCS_CONTINUOUS_SYSREF
+	status = mcs_gpio_init(&mcs_dev, &mcs_gpio_init_params);
+	if (status)
+		printf("mcs_gpio_init() error: %" PRId32 "\n", status);
+#endif
+
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
 		{
@@ -355,6 +380,13 @@ int main(void)
 			.link_ids = {DEFRAMER_LINK0_TX},
 			.links_number = 1,
 		},
+#ifdef MCS_CONTINUOUS_SYSREF
+		{
+			.jdev = mcs_dev->jdev,
+			.link_ids = {DEFRAMER_LINK0_TX},
+			.links_number = 1,
+		},
+#endif
 #if MULTIDEVICE_INSTANCE_COUNT == 4
 		{
 			.jdev = phy[0]->jdev,
@@ -510,6 +542,10 @@ int main(void)
 	Xil_DCacheDisable();
 	/* Disable the data cache. */
 	Xil_ICacheDisable();
+
+#ifdef MCS_CONTINUOUS_SYSREF
+	mcs_gpio_remove(mcs_dev);
+#endif
 
 	return 0;
 #endif
