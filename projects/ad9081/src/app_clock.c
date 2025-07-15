@@ -278,17 +278,31 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.pll1_cp_current = 0,
 		.pll2_freq = 3000000000,
 		.pll1_loop_bw = 200,
+#ifndef MCS_CONTINUOUS_SYSREF
 		.sysref_timer_div = 1024,
+#else
+		.sysref_timer_div = 3072,
+#endif
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x15},
 		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
 		.gpo_ctrl = {0x37, 0x33, 0x00, 0x00},
 		.num_channels = sizeof(chan_spec) /
 		sizeof(struct hmc7044_chan_spec),
+#ifndef MCS_CONTINUOUS_SYSREF
 		.pll1_ref_prio_ctrl = 0xe4,
+#else
+		.pll1_ref_prio_ctrl = 0x55,
+#endif
 		.pll1_ref_autorevert_en = false,
 		.sync_pin_mode = 0x1,
+#ifndef MCS_CONTINUOUS_SYSREF
 		.high_performance_mode_clock_dist_en = false,
 		.pulse_gen_mode = 0x0,
+#else
+		.high_performance_mode_clock_dist_en = true,
+		.hmc_two_level_tree_sync_en = true,
+		.pulse_gen_mode = 0x7,
+#endif
 		.channels = chan_spec
 	};
 #endif

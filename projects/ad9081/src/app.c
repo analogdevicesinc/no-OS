@@ -86,6 +86,21 @@ int main(void)
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
+
+#ifdef MCS_CONTINUOUS_SYSREF
+	struct no_os_gpio_init_param gpio_lf_output_pin_init = {
+		.number = 108,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+
+	struct no_os_gpio_init_param gpio_lf_input_pin_init = {
+		.number = 107,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+#endif
+
 	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
@@ -140,6 +155,10 @@ int main(void)
 	struct ad9081_init_param phy_param = {
 		.gpio_reset = &gpio_phy_resetb,
 		.spi_init = &phy_spi_init_param,
+#ifdef MCS_CONTINUOUS_SYSREF
+		.lf_input_pin = &gpio_lf_input_pin_init,
+		.lf_output_pin = &gpio_lf_output_pin_init,
+#endif
 		.dev_clk = &app_clk[0],
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
@@ -152,7 +171,11 @@ int main(void)
 		.config_sync_0a_cmos_enable = false,
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
+#ifndef MCS_CONTINUOUS_SYSREF
 		.nco_sync_ms_extra_lmfc_num = 0,
+#else
+		.nco_sync_ms_extra_lmfc_num = 10,
+#endif
 		.nco_sync_direct_sysref_mode_enable = 0,
 		.sysref_average_cnt_exp = 7,
 		.continuous_sysref_mode_disable = 0,
@@ -194,6 +217,15 @@ int main(void)
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
+#ifdef MCS_CONTINUOUS_SYSREF
+		.master_slave_sync_gpio_num = 4,
+		.leader_follower_sync = true,
+		.leader = false,
+		.nco_test = true,
+#else
+		.leader_follower_sync = false,
+		.nco_test = false,
+#endif
 	};
 
 	struct axi_adc_init rx_adc_init = {
