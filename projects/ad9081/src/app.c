@@ -50,6 +50,9 @@
 #include "parameters.h"
 #include "app_config.h"
 #include "xil_cache.h"
+#ifdef MCS_CONTINUOUS_SYSREF
+#include "mcs_gpio.h"
+#endif
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -86,6 +89,28 @@ int main(void)
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
+
+#ifdef MCS_CONTINUOUS_SYSREF
+	printf("MCS Continuous SysRef is enabled!\n");
+	struct no_os_gpio_init_param gpio_lf_output_pin_init = {
+		.number = LF_GPIO_OUT,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+
+	struct no_os_gpio_init_param gpio_lf_input_pin_init = {
+		.number = LF_GPIO_IN,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+
+	struct no_os_gpio_init_param gpio_req_init = {
+		.number = PHY_SYNC,
+		.platform_ops = &xil_gpio_ops,
+		.extra = &xil_gpio_param
+	};
+#endif
+
 	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
@@ -140,6 +165,10 @@ int main(void)
 	struct ad9081_init_param phy_param = {
 		.gpio_reset = &gpio_phy_resetb,
 		.spi_init = &phy_spi_init_param,
+#ifdef MCS_CONTINUOUS_SYSREF
+		.lf_input_pin = &gpio_lf_input_pin_init,
+		.lf_output_pin = &gpio_lf_output_pin_init,
+#endif
 		.dev_clk = &app_clk[0],
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
@@ -152,7 +181,11 @@ int main(void)
 		.config_sync_0a_cmos_enable = false,
 #endif
 		.lmfc_delay_dac_clk_cycles = 0,
+#ifndef MCS_CONTINUOUS_SYSREF
 		.nco_sync_ms_extra_lmfc_num = 0,
+#else
+		.nco_sync_ms_extra_lmfc_num = 10,
+#endif
 		.nco_sync_direct_sysref_mode_enable = 0,
 		.sysref_average_cnt_exp = 7,
 		.continuous_sysref_mode_disable = 0,
@@ -194,6 +227,15 @@ int main(void)
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jtx_link_rx[0] = &jtx_link_rx,
 		.jtx_link_rx[1] = NULL,
+#ifdef MCS_CONTINUOUS_SYSREF
+		.master_slave_sync_gpio_num = 4,
+		.leader_follower_sync = true,
+		.leader = MXFE_SYNC_LEADER,
+		.nco_test = true,
+#else
+		.leader_follower_sync = false,
+		.nco_test = false,
+#endif
 	};
 
 	struct axi_adc_init rx_adc_init = {
@@ -218,8 +260,18 @@ int main(void)
 		TX_DMA_BASEADDR,
 		IRQ_DISABLED
 	};
+
+#ifdef MCS_CONTINUOUS_SYSREF
+	struct mcs_gpio_init_param mcs_gpio_init_params = {
+		.gpio_req = &gpio_req_init,
+	};
+#endif
+
 	struct axi_dmac *tx_dmac;
 	struct ad9081_phy* phy[MULTIDEVICE_INSTANCE_COUNT];
+#ifdef MCS_CONTINUOUS_SYSREF
+	struct mcs_gpio_dev *mcs_dev;
+#endif
 	int32_t status;
 	int32_t i;
 
@@ -305,6 +357,14 @@ int main(void)
 					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
 
+#ifdef MCS_CONTINUOUS_SYSREF
+	status = mcs_gpio_init(&mcs_dev, &mcs_gpio_init_params);
+	if (status) {
+		printf("mcs_gpio_init() error: %" PRId32 "\n", status);
+		return ret;
+	}
+#endif
+
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
 		{
@@ -323,6 +383,13 @@ int main(void)
 			.link_ids = {DEFRAMER_LINK0_TX},
 			.links_number = 1,
 		},
+#ifdef MCS_CONTINUOUS_SYSREF
+		{
+			.jdev = mcs_dev->jdev,
+			.link_ids = {DEFRAMER_LINK0_TX},
+			.links_number = 1,
+		},
+#endif
 #if MULTIDEVICE_INSTANCE_COUNT == 4
 		{
 			.jdev = phy[0]->jdev,
@@ -478,6 +545,10 @@ int main(void)
 	Xil_DCacheDisable();
 	/* Disable the data cache. */
 	Xil_ICacheDisable();
+
+#ifdef MCS_CONTINUOUS_SYSREF
+	mcs_gpio_remove(mcs_dev);
+#endif
 
 	return 0;
 #endif
