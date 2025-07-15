@@ -63,6 +63,7 @@
 
 #else
 #define PHY_RESET		(GPIO_OFFSET + 55)
+#define PHY_SYNC		(GPIO_OFFSET + 31)
 #endif
 
 #if defined(PLATFORM_MB)
