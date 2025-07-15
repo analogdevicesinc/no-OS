@@ -987,10 +987,17 @@ int32_t stm32_pwm_disable(struct no_os_pwm_desc *desc)
 		if (sparam->dma_enable)
 			__HAL_TIM_DISABLE_DMA(htimer,  timer_map[sparam->timer_chn]);
 
-		if (sparam->complementary_channel)
-			ret = HAL_TIMEx_PWMN_Stop(htimer, chn_num);
-		else
-			ret = HAL_TIM_PWM_Stop(htimer, chn_num);
+		if (desc->irq_id) {
+			if (sparam->complementary_channel)
+				ret = HAL_TIMEx_PWMN_Stop_IT(htimer, chn_num);
+			else
+				ret = HAL_TIM_PWM_Stop_IT(htimer, chn_num);
+		} else {
+			if (sparam->complementary_channel)
+				ret = HAL_TIMEx_PWMN_Stop(htimer, chn_num);
+			else
+				ret = HAL_TIM_PWM_Stop(htimer, chn_num);
+		}
 
 		if (ret != HAL_OK) {
 			return -EIO;
