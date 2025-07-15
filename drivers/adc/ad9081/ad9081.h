@@ -64,11 +64,16 @@ struct ad9081_phy {
 	struct no_os_spi_desc		*spi_desc;
 	struct no_os_gpio_desc		*gpio_reset;
 	struct no_os_gpio_desc		*ms_sync_en_gpio;
+	struct no_os_gpio_desc		*lf_input_pin;
+	struct no_os_gpio_desc		*lf_output_pin;
 	struct no_os_clk		*jesd_rx_clk;
 	struct no_os_clk		*jesd_tx_clk;
 	struct no_os_clk		*dev_clk;
 	struct jesd204_dev		*jdev;
 	uint8_t		sync_ms_gpio_num;
+	/* Leader in leader-follower configuration */
+	bool		l_f_sync;
+	bool		leader;
 	bool		sysref_coupling_ac_en;
 	bool 		sysref_cmos_input_en;
 	uint8_t 	sysref_cmos_single_end_term_pos;
@@ -87,6 +92,7 @@ struct ad9081_phy {
 	bool		is_initialized;
 	bool		tx_disable;
 	bool		rx_disable;
+	bool		nco_test;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */
@@ -149,10 +155,14 @@ struct ad9081_init_param {
 	struct no_os_spi_init_param	*spi_init;
 	struct no_os_gpio_init_param	*gpio_reset;
 	struct no_os_gpio_init_param	*ms_sync_enable;
+	struct no_os_gpio_init_param	*lf_input_pin;
+	struct no_os_gpio_init_param	*lf_output_pin;
 	struct no_os_clk	*dev_clk;
 	struct no_os_clk	*jesd_rx_clk;
 	struct no_os_clk	*jesd_tx_clk;
 	uint8_t		master_slave_sync_gpio_num;
+	bool		leader_follower_sync;
+	bool		leader;
 	bool		sysref_coupling_ac_en;
 	bool		sysref_cmos_input_enable;
 	uint8_t 	sysref_cmos_single_end_term_pos;
@@ -167,6 +177,7 @@ struct ad9081_init_param {
 	bool		continuous_sysref_mode_disable;
 	bool		tx_disable;
 	bool		rx_disable;
+	bool		nco_test;
 	/* TX */
 	uint64_t	dac_frequency_hz;
 	/* The 4 DAC Main Datapaths */

@@ -225,7 +225,7 @@ static int ad9081_nco_sync(struct ad9081_phy *phy, bool master)
 	else
 		return adi_ad9081_adc_nco_master_slave_sync(&phy->ad9081,
 				master,
-				1, /* trigger_src */
+				0, /* trigger_src */
 				phy->sync_ms_gpio_num, /* gpio_index */
 				phy->nco_sync_ms_extra_lmfc_num);
 }
@@ -520,12 +520,20 @@ static int ad9081_setup_tx(struct ad9081_phy *phy)
 	       sizeof(phy->jrx_link_tx[1].logiclane_mapping));
 
 	/* start txfe tx */
-	ret = adi_ad9081_device_startup_tx(
-		      &phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
-		      phy->tx_chan_interp == 1 ? phy->tx_dac_chan_xbar_1x_non1x :
-		      phy->tx_dac_chan_xbar,
-		      phy->tx_main_shift, phy->tx_chan_shift,
-		      &phy->jrx_link_tx[0].jesd_param);
+	if (!phy->nco_test)
+		ret = adi_ad9081_device_startup_tx(
+			      &phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
+			      phy->tx_chan_interp == 1 ? phy->tx_dac_chan_xbar_1x_non1x :
+			      phy->tx_dac_chan_xbar,
+			      phy->tx_main_shift, phy->tx_chan_shift,
+			      &phy->jrx_link_tx[0].jesd_param);
+	else
+		ret = adi_ad9081_device_startup_nco_test(
+			      &phy->ad9081, phy->tx_main_interp, phy->tx_chan_interp,
+			      phy->tx_chan_interp == 1 ? phy->tx_dac_chan_xbar_1x_non1x :
+			      phy->tx_dac_chan_xbar,
+			      phy->tx_main_shift, phy->tx_chan_shift,
+			      2300);
 
 	if (ret != 0)
 		return ret;
@@ -946,6 +954,8 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	int32_t i;
 
 	phy->sync_ms_gpio_num = init_param->master_slave_sync_gpio_num;
+	phy->l_f_sync = init_param->leader_follower_sync;
+	phy->leader = init_param->leader;
 	phy->sysref_coupling_ac_en = init_param->sysref_coupling_ac_en;
 	phy->sysref_cmos_input_en = init_param->sysref_cmos_input_enable;
 	phy->sysref_cmos_single_end_term_pos = init_param->sysref_cmos_input_enable;
@@ -961,6 +971,7 @@ int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 	phy->sysref_continuous_dis = init_param->continuous_sysref_mode_disable;
 	phy->tx_disable = init_param->tx_disable;
 	phy->rx_disable = init_param->rx_disable;
+	phy->nco_test = init_param->nco_test;
 
 	/* TX */
 	phy->dac_frequency_hz = init_param->dac_frequency_hz;
@@ -1317,6 +1328,7 @@ static int ad9081_jesd204_setup_stage2(struct jesd204_dev *jdev,
 {
 	struct ad9081_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct ad9081_phy *phy = priv->phy;
+	uint8_t val = 0;
 	int ret;
 
 	if (reason != JESD204_STATE_OP_REASON_INIT)
@@ -1326,10 +1338,25 @@ static int ad9081_jesd204_setup_stage2(struct jesd204_dev *jdev,
 		 jesd204_state_op_reason_str(reason));
 
 	/* NCO Sync */
+	if (phy->l_f_sync && phy->leader) {
+		do {
+			ret = no_os_gpio_get_value(phy->lf_input_pin, &val);
+		} while (!val);
+	}
 
-	ret = ad9081_nco_sync(phy, jesd204_dev_is_top(jdev));
+	if (phy->l_f_sync)
+		ret = ad9081_nco_sync(phy, phy->leader);
+	else
+		ret = ad9081_nco_sync(phy, jesd204_dev_is_top(jdev));
 	if (ret != 0)
 		return ret;
+	if (phy->lf_output_pin)
+		ret = no_os_gpio_set_value(phy->lf_output_pin, 1);
+	if (phy->l_f_sync && !phy->leader)
+		do {
+			ret = no_os_gpio_get_value(phy->lf_input_pin, &val);
+		} while (!val);
+
 
 	return JESD204_STATE_CHANGE_DONE;
 }
@@ -1440,6 +1467,20 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 		goto error_1;
 	if (phy->ms_sync_en_gpio)
 		no_os_gpio_set_value(phy->ms_sync_en_gpio, 0);
+
+	ret = no_os_gpio_get_optional(&phy->lf_input_pin, init_param->lf_input_pin);
+	if (ret)
+		goto error_1;
+	ret = no_os_gpio_direction_input(phy->lf_input_pin);
+	if (ret)
+		goto error_1;
+
+	ret = no_os_gpio_get_optional(&phy->lf_output_pin, init_param->lf_output_pin);
+	if (ret)
+		goto error_1;
+	ret = no_os_gpio_direction_output(phy->lf_output_pin, 0);
+	if (ret)
+		goto error_1;
 
 	phy->dev_clk = init_param->dev_clk;
 	phy->jesd_rx_clk = init_param->jesd_rx_clk;
@@ -1567,6 +1608,12 @@ error_3:
 error_2:
 	no_os_gpio_remove(phy->gpio_reset);
 error_1:
+	if (phy->ms_sync_en_gpio)
+		no_os_gpio_remove(phy->gpio_reset);
+	if (phy->lf_output_pin)
+		no_os_gpio_remove(phy->lf_output_pin);
+	if (phy->lf_input_pin)
+		no_os_gpio_remove(phy->lf_input_pin);
 	no_os_free(phy);
 
 	return ret;
