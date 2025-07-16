@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description="Generate config.cmake from defconf
 parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory")
 parser.add_argument("--build_dir", type=str, help="Path to the build directory")
 parser.add_argument("--defconfig", type=str, help="Path to a defconfig file", nargs='+')
-parser.add_argument("--update", action='store_true', help="Append the defconfig file to the existing .config file")
+parser.add_argument("--update", action='store_true', help="Append the defconfig file to the existing .config file", default=False)
 parser.add_argument("--verbose", type=bool, help="Enable verbose output", default=False)
 
 args = parser.parse_args(sys.argv[1:])
@@ -22,35 +22,39 @@ build_dir = Path(args.build_dir)
 
 kconf = kconfiglib.Kconfig(src_dir.joinpath("Kconfig"))
 
+main_config = build_dir.joinpath(".config")
+if not os.path.exists(main_config):
+        os.mknod(main_config)
+
+kconf.load_config(main_config)
+
 if args.update:
-        main_config = build_dir.joinpath(".config")
-        if not os.path.exists(main_config):
-                os.mknod(main_config)
+        if args.defconfig != None:
+                for defconfig in args.defconfig:
+                        kconf.load_config(src_dir.joinpath(defconfig), replace=False)
+        kconf.write_config(build_dir.joinpath(".config"))
 
-        kconf.load_config(main_config)
+try:
+        print("Opening config.cmake")
+        with open(build_dir.joinpath("config.cmake"), "w") as cmake_file:
+                cmake_file.write("#Generated based on .config\n")
+                if len(kconf.unique_defined_syms) == 0:
+                        print("Empty .config?")
 
-if args.defconfig != None:
-        for defconfig in args.defconfig:
-                kconf.load_config(src_dir.joinpath(defconfig), replace=False)
+                for sym in kconf.unique_defined_syms: 
+                        if sym.str_value:
+                                value = sym.str_value
+                        elif sym.tri_value == 2:
+                                value = "ON"
+                        elif sym.tri_value == 0:
+                                value = "OFF"
 
-kconf.write_config(build_dir.joinpath(".config"))
+                        cmake_file.write(f"set(CONFIG_{sym.name} {value})\n")
+                print("Generated config.cmake")
 
-with open(build_dir.joinpath("config.cmake"), "w+") as cmake_file:
-        cmake_file.write("#Generated based on .config\n")
-        if len(kconf.unique_defined_syms) == 0:
-                print("Empty .config?")
+except Exception as e:
+        print(e)
 
-        for sym in kconf.unique_defined_syms: 
-                if sym.str_value:
-                        value = sym.str_value
-                elif sym.tri_value == 2:
-                        value = "ON"
-                elif sym.tri_value == 0:
-                        value = "OFF"
-
-                cmake_file.write(f"set(CONFIG_{sym.name} {value})\n")
-
-print("Generated config.cmake")
 
 if True:
         print("Config files used:")
