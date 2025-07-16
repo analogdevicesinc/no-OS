@@ -22,6 +22,35 @@ function(stm32_platform_sdk BUILD_TARGET)
         )
 endfunction()
 
+if(${PLATFORM} STREQUAL "stm32")
+        if (NOT EXISTS "${CMAKE_BINARY_DIR}/test_build")
+                execute_process(
+                        COMMAND /home/xvr/STM32CubeMX/jre/bin/java -jar /home/xvr/STM32CubeMX/STM32CubeMX -q "/mnt/drive/testing/no-OS/projects/iio_demo/iio_demo.cubemx"
+                        COMMENT "Generating STM32CubeMX project..."
+                )
+
+                execute_process(
+                        COMMAND ${CMAKE_COMMAND}
+                        -D CMAKE_FILE_TO_PATCH=${CMAKE_BINARY_DIR}/test_build/app/cmake/stm32cubemx/CMakeLists.txt
+                        -P "${CMAKE_SOURCE_DIR}/cmake/stm32_patch_cubemx.cmake"
+                        COMMENT "Generating STM32CubeMX project..."
+                )
+        endif()
+
+        add_subdirectory(${CMAKE_BINARY_DIR}/test_build/app/cmake/stm32cubemx ${CMAKE_BINARY_DIR}/build/test_build/app/cmake/stm32cubemx/build)
+endif()
+
+# add_custom_target(generate_cubemx_project
+#     # Ensure the output directory is clean before generating
+#     # COMMAND ${CMAKE_COMMAND} -E rm -rf "${GENERATED_PROJECT_DIR}"
+#     # Run CubeMX, telling it to output into our specific directory
+#     COMMAND /home/xvr/STM32CubeMX/jre/bin/java -jar /home/xvr/STM32CubeMX/STM32CubeMX -q "/mnt/drive/testing/no-OS/projects/iio_demo/iio_demo.cubemx"
+#     COMMAND ${CMAKE_COMMAND}
+#         -D CMAKE_FILE_TO_PATCH=${CMAKE_BINARY_DIR}/test_build/app/cmake/stm32cubemx/CMakeLists.txt
+#         -P "${CMAKE_SOURCE_DIR}/cmake/stm32_patch_cubemx.cmake"
+#     COMMAND ${CMAKE_COMMAND} -S ${CMAKE_SOURCE_DIR} -B ${CMAKE_BINARY_DIR}
+# )
+
 # function(add_platform_sdk BUILD_TARGET)
 #         # if(PLATFORM STREQUAL "stm32")
 #         stm32_platform_sdk(${BUILD_TARGET})
