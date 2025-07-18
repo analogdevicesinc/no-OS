@@ -4,19 +4,19 @@
 file(READ ${CMAKE_FILE_TO_PATCH} FILE_CONTENTS)
 
 # Replace all instances of the incorrect variable with the correct one
-string(REPLACE "\${CMAKE_SOURCE_DIR}" "/mnt/drive/testing/no-OS/build/test_build/app"
+string(REPLACE "\${CMAKE_SOURCE_DIR}" "${STM32_PROJECT_BUILD}"
      PATCHED_CONTENTS "${FILE_CONTENTS}")
 
 # Write the corrected content back to the file
 file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
 
-file(READ "/mnt/drive/testing/no-OS/build/test_build/app/Core/Src/main.c" MAIN_FILE_CONTENTS)
+file(READ "${STM32_PROJECT_BUILD}/Core/Src/main.c" MAIN_FILE_CONTENTS)
 
 # Replace all instances of the incorrect variable with the correct one
 string(REPLACE "main(" "stm32_init("
      MAIN_PATCHED_CONTENTS "${MAIN_FILE_CONTENTS}")
 
-file(WRITE "/mnt/drive/testing/no-OS/build/test_build/app/Core/Src/main.c" "${MAIN_PATCHED_CONTENTS}")
+file(WRITE "${STM32_PROJECT_BUILD}/Core/Src/main.c" "${MAIN_PATCHED_CONTENTS}")
 
 # Write the corrected content back to the file
 
