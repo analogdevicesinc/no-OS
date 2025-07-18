@@ -1,0 +1,1 @@
+.. include:: ../../../../../projects/fmcdaq3/README.rst
