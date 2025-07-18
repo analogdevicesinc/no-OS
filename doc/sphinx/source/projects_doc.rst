@@ -91,6 +91,8 @@ EVAL BOARDS
 
    projects/apard32690
 
+   projects/fmcdaq3
+
 DIGITAL-IO
 ==========
 .. toctree::
