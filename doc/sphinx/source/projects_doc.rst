@@ -27,6 +27,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/ad9081
 
+   projects/ad9208
+
 ADC / DAC
 ==========
 .. toctree::
