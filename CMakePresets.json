@@ -57,7 +57,7 @@
                         "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/stm32/toolchain.cmake",
                         "cacheVariables": {
                                 "BOARD": "sdp-ck1z",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "USE_VENDOR_TOOLCHAIN": "OFF",
                                 "PLATFORM": "stm32",
                                 "TARGET": "stm32f756",
                                 "TARGET_NUM": "stm32f756",
