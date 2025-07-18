@@ -1,0 +1,6 @@
+file(READ ${STM32_TEMPLATE_FILE} OLD_CONTENT)
+
+set(CUBEMX_CONFIG_NAME "config load ${SOURCE_DIR}/${BOARD}.ioc\n")
+set(CUBEMX_PROJECT_PATH "project path ${STM32_TARGET_BUILD}/${BOARD}_build\n")
+
+file(WRITE "${STM32_TARGET_BUILD}/stm32cubemx_config.cubemx" "${CUBEMX_CONFIG_NAME}${CUBEMX_PROJECT_PATH}${OLD_CONTENT}")

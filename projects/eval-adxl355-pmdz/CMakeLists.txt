@@ -32,4 +32,19 @@ target_include_directories(eval-adxl355-pmdz-dummy PUBLIC ${CMAKE_CURRENT_SOURCE
 target_include_directories(eval-adxl355-pmdz-iio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example)
 target_include_directories(eval-adxl355-pmdz-iio-trigger PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example)
 
+config_platform_sdk(eval-adxl355-pmdz-dummy)
+config_platform_sdk(eval-adxl355-pmdz-iio)
+config_platform_sdk(eval-adxl355-pmdz-iio-trigger)
+
+add_flash_target(eval-adxl355-pmdz-dummy)
+add_flash_target(eval-adxl355-pmdz-iio)
+add_flash_target(eval-adxl355-pmdz-iio-trigger)
+
+add_custom_command(
+    TARGET eval-adxl355-pmdz-dummy
+    POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:eval-adxl355-pmdz-dummy> eval-adxl355-pmdz-dummy.hex
+    COMMENT "Generating eval-adxl355-pmdz-dummy.hex"
+)
+
 message(STATUS "Running make for eval-adxl355-pmdz")

@@ -56,7 +56,7 @@
                         "description": "Config for STM32F756",
                         "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/stm32/toolchain.cmake",
                         "cacheVariables": {
-                                "BOARD": "STM32F756_NUCLEO",
+                                "BOARD": "sdp-ck1z",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
                                 "PLATFORM": "stm32",
                                 "TARGET": "stm32f756",
