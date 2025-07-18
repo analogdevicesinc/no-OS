@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.27)
 
-# list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 
-if(NOT EXISTS "${CMAKE_BINARY_DIR}/CMakeCache.txt")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/CMakeCache.txt")
   set(IS_FRESH_CONFIGURE TRUE)
 else()
   set(IS_FRESH_CONFIGURE FALSE)
@@ -30,9 +30,9 @@ list(APPEND CONFIG_FILES ${DEFAULT_DEFCONFIG})
 message(STATUS "Project defconfig: ${PROJECT_DEFCONFIG}")
 
 set(NO_OS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(CONFIG_FILE ${CMAKE_BINARY_DIR}/.config)
-set(KCONFIG_VARS_FILE ${CMAKE_BINARY_DIR}/config.cmake)
-set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_BINARY_DIR}/create_dotconfig.cmake)
+set(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/.config)
+set(KCONFIG_VARS_FILE ${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
+set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_dotconfig.cmake)
 
 add_library(no-os STATIC)
 
@@ -43,7 +43,7 @@ list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
 if (DEFINED PROJECT_DEFCONFIG)
   message(ERROR "Adding project defconfig")
-  list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
+  list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_CURRENT_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
 endif()
 
 target_compile_options(no-os PRIVATE -Wall)
@@ -56,8 +56,8 @@ set_property(
   APPEND
   PROPERTY CMAKE_CONFIGURE_DEPENDS
   ${DEFAULT_DEFCONFIG}
-  ${CMAKE_BINARY_DIR}/config.cmake
-  ${CMAKE_BINARY_DIR}/.config
+  ${CMAKE_CURRENT_BINARY_DIR}/config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/.config
 )
 
 if(IS_FRESH_CONFIGURE)
@@ -67,32 +67,32 @@ endif()
 if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
-      srctree=${CMAKE_SOURCE_DIR}
-      ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/generate_config.py
+      srctree=${CMAKE_CURRENT_SOURCE_DIR}
+      ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
-        --root_dir ${CMAKE_SOURCE_DIR}
-        --build_dir ${CMAKE_BINARY_DIR}
+        --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
+        --build_dir ${CMAKE_CURRENT_BINARY_DIR}
         --update
   )
 else()
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
-      srctree=${CMAKE_SOURCE_DIR}
-      ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/generate_config.py
+      srctree=${CMAKE_CURRENT_SOURCE_DIR}
+      ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
-        --root_dir ${CMAKE_SOURCE_DIR}
-        --build_dir ${CMAKE_BINARY_DIR}
+        --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
+        --build_dir ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()
 
 if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
-      srctree=${CMAKE_SOURCE_DIR}
-      ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/generate_config.py
+      srctree=${CMAKE_CURRENT_SOURCE_DIR}
+      ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
-        --root_dir ${CMAKE_SOURCE_DIR}
-        --build_dir ${CMAKE_BINARY_DIR}
+        --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
+        --build_dir ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()
 
@@ -100,13 +100,13 @@ add_custom_command(
   OUTPUT ${KCONFIG_VARS_FILE}
 
   COMMAND ${CMAKE_COMMAND} -E env
-    srctree=${CMAKE_SOURCE_DIR}
-    ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/generate_config.py
+    srctree=${CMAKE_CURRENT_SOURCE_DIR}
+    ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
-    --root_dir ${CMAKE_SOURCE_DIR}
-    --build_dir ${CMAKE_BINARY_DIR}
+    --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
+    --build_dir ${CMAKE_CURRENT_BINARY_DIR}
 
-    DEPENDS ${CONFIG_FILE} ${CMAKE_SOURCE_DIR}/generate_config.py
+    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     COMMENT "Generating CMake config variables from .config"
 )
 
@@ -124,20 +124,20 @@ add_custom_target(KconfigVars ALL
 add_custom_target(
   menuconfig
   COMMAND ${CMAKE_COMMAND} -E env
-    srctree=${CMAKE_SOURCE_DIR}
+    srctree=${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_EXECUTABLE} -m menuconfig
   COMMAND ${CMAKE_COMMAND} -E env
-    srctree=${CMAKE_SOURCE_DIR}
-    ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/generate_config.py
-    --root_dir ${CMAKE_SOURCE_DIR}
-    --build_dir ${CMAKE_BINARY_DIR}
+    srctree=${CMAKE_CURRENT_SOURCE_DIR}
+    ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+    --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
+    --build_dir ${CMAKE_CURRENT_BINARY_DIR}
   USES_TERMINAL
   VERBATIM
 )
 
 add_custom_target(
   distclean
-  COMMAND make clean && rm -f ${CMAKE_BINARY_DIR}/.config && rm -f ${CMAKE_BINARY_DIR}/config.cmake
+  COMMAND make clean && rm -f ${CMAKE_CURRENT_BINARY_DIR}/.config && rm -f ${CMAKE_CURRENT_BINARY_DIR}/config.cmake
   VERBATIM
 )
 

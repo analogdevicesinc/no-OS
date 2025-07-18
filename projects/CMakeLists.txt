@@ -14,7 +14,7 @@ include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 
 function(config_platform_sdk BUILD_TARGET)
         if(${PLATFORM} STREQUAL "stm32")
-                set(EXTI_SCRIPT ${CMAKE_SOURCE_DIR}/tools/scripts/platform/stm32/exti_script.py)
+                set(EXTI_SCRIPT ${NO_OS_DIR}/tools/scripts/platform/stm32/exti_script.py)
                 set(EXTI_GEN_FILE ${CMAKE_CURRENT_BINARY_DIR}/stm32_gpio_irq_generated.c)
                 set(STARTUP_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/startup_stm32f469xx.s)
                 if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build")
@@ -24,7 +24,7 @@ function(config_platform_sdk BUILD_TARGET)
                                 -D STM32_TARGET_BUILD=${CMAKE_CURRENT_BINARY_DIR}
                                 -D SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                                 -D BOARD=${BOARD}
-                                -P "${CMAKE_SOURCE_DIR}/cmake/stm32_patch_cubemx_config.cmake"
+                                -P "${NO_OS_DIR}/cmake/stm32_patch_cubemx_config.cmake"
                                 COMMENT "Patching STM32CubeMX config file..."
                         )
 
@@ -37,7 +37,7 @@ function(config_platform_sdk BUILD_TARGET)
                                 COMMAND ${CMAKE_COMMAND}
                                 -D CMAKE_FILE_TO_PATCH=${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/cmake/stm32cubemx/CMakeLists.txt
                                 -D STM32_PROJECT_BUILD=${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}
-                                -P "${CMAKE_SOURCE_DIR}/cmake/stm32_patch_cubemx.cmake"
+                                -P "${NO_OS_DIR}/cmake/stm32_patch_cubemx.cmake"
                                 COMMENT "Generating STM32CubeMX project..."
                         )
 
