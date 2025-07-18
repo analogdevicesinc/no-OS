@@ -327,6 +327,8 @@ struct iio_device {
 	/* Write device register */
 	int32_t (*debug_reg_write)(void *dev, uint32_t reg, uint32_t writeval);
 
+	int32_t (*create_block)(struct iio_device_data *dev, void **buff, uint32_t block_size_bytes);
+
 };
 
 #endif /* IIO_TYPES_H_ */

@@ -108,6 +108,17 @@ int lf256fifo_read(struct lf256fifo * fifo, uint8_t *c)
 	return 0;
 }
 
+int lf256fifo_get(struct lf256fifo * fifo, uint8_t *c)
+{
+	if (lf256fifo_is_empty(fifo))
+		return -1; // buffer empty
+
+	*c = fifo->data[fifo->ffilled];
+	//fifo->ffilled++; // intended overflow at 256 (data size is 256)
+
+	return 0;
+}
+
 /**
 * @brief Write char to fifo.
 * @param fifo - pointer to fifo descriptor.

@@ -202,7 +202,8 @@ struct iiod_conn_priv {
 	/* IIOD States */
 	enum {
 		/* Reading line until \n */
-		IIOD_READING_LINE,
+		IIOD_READING_LINE, //named as this but this is to check data to be sent
+		IIOD_READING_LINE_OLD,
 		/* Execut cmd without I/O operations */
 		IIOD_RUNNING_CMD,
 		/* Write result of executed cmd */
@@ -244,6 +245,9 @@ struct iiod_conn_priv {
 	struct no_os_list_desc *event;
 	/* Buffer to store the event data for transfer */
 	uint8_t event_data[16];
+
+	struct no_os_lf256fifo *fifo_stream;
+	struct iio_stream *stream;
 };
 
 /* Private iiod information */

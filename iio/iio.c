@@ -146,6 +146,7 @@ struct iio_buffer_priv {
 	bool			initalized;
 	/* Set when no_os_calloc was used to initalize cb.buf */
 	bool			allocated;
+	uint8_t 		block_ids[MAX_NUM_BLOCKS];
 };
 
 struct channel_sort_priv {
@@ -1560,6 +1561,23 @@ static int iio_refill_buffer(struct iiod_ctx *ctx, const void *device)
 	return iio_call_submit(ctx, device, IIO_DIRECTION_INPUT);
 }
 
+static int iio_pre_enable(struct iiod_ctx *ctx, const void *device,
+			 uint32_t mask)
+{
+	struct iio_desc *desc;
+	struct iio_dev_priv *dev = NULL;
+
+	desc = ctx->instance;
+	if (*(const uint16_t *)device < desc->nb_devs)
+		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+	if (dev->dev_descriptor->pre_enable) {
+		return dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
+	}
+
+	return 0;
+}
+
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
  * "iio_transfer_dev_to_mem()" first.
@@ -1635,6 +1653,20 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const void *device,
 		return ret;
 
 	return bytes;
+}
+
+static int iio_create_block(struct iiod_ctx *ctx, const void *device, char **buff, uint32_t block_size_bytes){
+	struct iio_desc *desc;
+	struct iio_dev_priv *dev = NULL;
+
+	desc = ctx->instance;
+	if (*(const uint16_t *)device < desc->nb_devs)
+		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+	return dev->dev_descriptor->create_block ?
+		dev->dev_descriptor->create_block(dev->dev_instance, buff, block_size_bytes) :
+		-ENOSYS;
+
 }
 
 int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
@@ -2371,6 +2403,8 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->send = iio_send;
 	ops->recv = iio_recv;
 	ops->set_buffers_count = iio_set_buffers_count;
+	ops->create_block = iio_create_block;
+	ops->pre_enable = iio_pre_enable;
 
 	iiod_param.instance = ldesc;
 	iiod_param.ops = ops;
