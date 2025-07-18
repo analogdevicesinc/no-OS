@@ -1,7 +1,7 @@
 find_package(Python3 COMPONENTS Interpreter)
 
 function(add_jlink_flash_target TARGET_NAME)
-	set(FLASH_SCRIPT "${CMAKE_SOURCE_DIR}/tools/scripts/jlink.py")
+	set(FLASH_SCRIPT "${NO_OS_DIR}/tools/scripts/jlink.py")
 	set(HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.hex")
 
 	add_custom_target(flash_${TARGET_NAME}
