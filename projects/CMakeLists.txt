@@ -14,6 +14,9 @@ include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 
 function(config_platform_sdk BUILD_TARGET)
         if(${PLATFORM} STREQUAL "stm32")
+                set(EXTI_SCRIPT ${CMAKE_SOURCE_DIR}/tools/scripts/platform/stm32/exti_script.py)
+                set(EXTI_GEN_FILE ${CMAKE_CURRENT_BINARY_DIR}/stm32_gpio_irq_generated.c)
+                set(STARTUP_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/startup_stm32f469xx.s)
                 if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build")
                         execute_process(
                                 COMMAND ${CMAKE_COMMAND}
@@ -26,7 +29,7 @@ function(config_platform_sdk BUILD_TARGET)
                         )
 
                         execute_process(
-                                COMMAND /home/xvr/STM32CubeMX/jre/bin/java -jar /home/xvr/STM32CubeMX/STM32CubeMX -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
+                                COMMAND ${STM32CUBEMX_JAVA} -jar ${STM32CUBEMX_EXECUTABLE} -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
                                 COMMENT "Generating STM32CubeMX project..."
                         )
 
@@ -37,18 +40,31 @@ function(config_platform_sdk BUILD_TARGET)
                                 -P "${CMAKE_SOURCE_DIR}/cmake/stm32_patch_cubemx.cmake"
                                 COMMENT "Generating STM32CubeMX project..."
                         )
-                endif()
 
+                        execute_process(
+                                COMMAND ${Python3_EXECUTABLE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
+                        )
+                endif()
+                        
                 if(NOT TARGET STM32_Drivers)
                         add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/cmake/stm32cubemx ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/cmake/stm32cubemx/build)
                 endif()
 
+                target_sources(${BUILD_TARGET} PRIVATE ${EXTI_GEN_FILE})
                 target_link_options(${BUILD_TARGET} PRIVATE -T${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/STM32F469XX_FLASH.ld)
                 target_link_libraries(${BUILD_TARGET} STM32_Drivers)
                 target_compile_definitions(${BUILD_TARGET} PRIVATE -DSTM32_PLATFORM=1)
         endif()
 endfunction()
 
-# add_subdirectory(eval-adxl355-pmdz)
-add_subdirectory(template)
-add_subdirectory(iio_demo)
+get_filename_component(SELECTED_PROJECT ${PROJECT_DEFCONFIG} DIRECTORY)
+
+function(no_os_project_ifdef PROJECT_TARGET)
+        if(${PROJECT_TARGET} STREQUAL ${SELECTED_PROJECT})
+                add_subdirectory(${PROJECT_TARGET})
+        endif()
+endfunction()
+
+no_os_project_ifdef(eval-adxl355-pmdz)
+no_os_project_ifdef(template)
+no_os_project_ifdef(iio_demo)

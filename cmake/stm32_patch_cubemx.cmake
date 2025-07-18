@@ -18,6 +18,4 @@ string(REPLACE "main(" "stm32_init("
 
 file(WRITE "${STM32_PROJECT_BUILD}/Core/Src/main.c" "${MAIN_PATCHED_CONTENTS}")
 
-# Write the corrected content back to the file
-
 message(STATUS "Patched ${CMAKE_FILE_TO_PATCH} to use CMAKE_CURRENT_SOURCE_DIR.")

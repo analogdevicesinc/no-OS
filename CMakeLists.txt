@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.27)
 
+# list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 
@@ -11,7 +14,6 @@ endif()
 
 message(STATUS "🦨🦨🦨 No-OS build 🦨🦨🦨")
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 find_package (Python3 COMPONENTS Interpreter Development)
 find_package(Git)
 
@@ -58,10 +60,8 @@ set_property(
   ${CMAKE_BINARY_DIR}/.config
 )
 
-message(STATUS "Using default defconfig: ${PROJECT_DEFCONFIG}")
-
 if(IS_FRESH_CONFIGURE)
-file(REMOVE ${CONFIG_FILE})
+  file(REMOVE ${CONFIG_FILE})
 endif()
 
 if(NOT EXISTS "${CONFIG_FILE}")

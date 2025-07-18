@@ -3,6 +3,12 @@ message(STATUS "STM32")
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
+find_package(STM32CubeMX REQUIRED)
+
+if(${USE_VENDOR_TOOLCHAIN})
+  find_package(STM32CubeIDE REQUIRED)
+endif()
+
 if (${USE_VENDOR_TOOLCHAIN})
 
 # Specify the cross compiler
