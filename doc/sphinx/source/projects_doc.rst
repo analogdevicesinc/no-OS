@@ -27,6 +27,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/ad9081
 
+   projects/ad9265-fmc-125ebz
+
 ADC / DAC
 ==========
 .. toctree::
