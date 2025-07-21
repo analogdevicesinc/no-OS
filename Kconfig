@@ -25,3 +25,4 @@ config DMA
 
 source "iio/Kconfig"
 source "drivers/Kconfig"
+source "libraries/Kconfig"

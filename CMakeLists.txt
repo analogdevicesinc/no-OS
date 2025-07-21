@@ -112,6 +112,7 @@ add_custom_command(
 
 include(${KCONFIG_VARS_FILE})
 
+add_subdirectory(libraries)
 add_subdirectory(network)
 add_subdirectory(util)
 add_subdirectory(iio)
