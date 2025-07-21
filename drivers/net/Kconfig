@@ -1,0 +1,4 @@
+config ADIN1110
+    depends on SPI
+    bool "Enable the ADIN1110 driver"
+    default n

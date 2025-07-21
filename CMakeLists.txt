@@ -24,6 +24,13 @@ function(no_os_sources_ifdef feature_toggle source)
   endif()
 endfunction()
 
+function(no_os_include_dir_ifdef feature_toggle include_dir)
+  if(${feature_toggle})
+    message(STATUS "Adding ${include_dir}")
+    target_include_directories(no-os PRIVATE ${include_dir})
+  endif()
+endfunction()
+
 # Board specific defconfig
 list(APPEND CONFIG_FILES ${DEFAULT_DEFCONFIG})
 
