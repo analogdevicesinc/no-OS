@@ -36,6 +36,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/ad9625
 
+   drivers/adaq7980
+
 ADC / DAC
 ==========
 .. toctree::
