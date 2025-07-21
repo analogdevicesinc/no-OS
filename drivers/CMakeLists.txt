@@ -3,6 +3,7 @@ add_subdirectory(platform)
 add_subdirectory(accel)
 add_subdirectory(adc)
 add_subdirectory(dac)
+add_subdirectory(net)
 
 # add_subdirectory(accel)
 # add_subdirectory(adc-dac)
