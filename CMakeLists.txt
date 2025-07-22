@@ -59,8 +59,6 @@ endif()
 target_compile_options(no-os PRIVATE -Wall)
 target_link_options(no-os PRIVATE -Wl,--gc-sections)
 
-add_subdirectory(projects)
-
 set_property(
   DIRECTORY
   APPEND
@@ -122,6 +120,7 @@ add_custom_command(
 
 include(${KCONFIG_VARS_FILE})
 
+add_subdirectory(projects)
 add_subdirectory(libraries)
 add_subdirectory(network)
 add_subdirectory(util)
