@@ -29,3 +29,6 @@ config GPIO_STM32
 config GPIO_IRQ_STM32
         bool "Enable the STM32 GPIO IRQ driver"
         default n
+
+config STM32_IOC_PATH
+        string "Path to a STM32 CubeMX configuration file that will be used to generate the HAL drivers"

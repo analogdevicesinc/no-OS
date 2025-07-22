@@ -6,6 +6,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 
+# Check whether the build was started from the No-OS root or the library was included as a module
+cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
+
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/CMakeCache.txt")
   set(IS_FRESH_CONFIGURE TRUE)
 else()
