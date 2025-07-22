@@ -38,8 +38,8 @@
 #include "libmpsse_i2c.h"
 #include "ftd2xx_platform.h"
 
-static uint8_t ftd2xx_gpio_pins_dir[FTD2XX_MAX_PORT_NB] = { 0 };
-static uint8_t ftd2xx_gpio_pins_val[FTD2XX_MAX_PORT_NB] = { 0 };
+uint8_t ftd2xx_gpio_pins_dir[FTD2XX_MAX_PORT_NB];
+uint8_t ftd2xx_gpio_pins_val[FTD2XX_MAX_PORT_NB];
 
 /**
  * @brief Obtain the GPIO decriptor.
@@ -51,6 +51,7 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 			const struct no_os_gpio_init_param *param)
 {
 	struct ftd2xx_gpio_desc *extra_desc;
+	struct ftd2xx_gpio_init *extra_init;
 	struct no_os_gpio_desc *descriptor;
 	FT_STATUS status;
 	bool gpio_dir;
@@ -71,6 +72,7 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 		goto error;
 	}
 
+	extra_init = param->extra;
 	if (ftHandle[param->port] == NULL) {
 		Init_libMPSSE();
 		status = FT_Open(param->port, &extra_desc->ftHandle);
@@ -78,6 +80,14 @@ int32_t ftd2xx_gpio_get(struct no_os_gpio_desc **desc,
 			ret = status;
 			goto free_extra;
 		}
+
+		status = FT_SetBitMode(extra_desc->ftHandle, extra_init->extra_pins_dir, 0x02);
+		if (status != FT_OK) {
+			ret = status;
+			goto free_extra;
+		}
+
+		ftd2xx_gpio_pins_dir[param->port] = extra_init->extra_pins_dir;
 		ftHandle[param->port] = extra_desc->ftHandle;
 	} else {
 		extra_desc->ftHandle = ftHandle[param->port];
@@ -147,14 +157,17 @@ int32_t ftd2xx_gpio_direction_input(struct no_os_gpio_desc *desc)
 	FT_STATUS status;
 	uint8_t dir;
 	int32_t ret;
+	uint8_t data[3] = {0x80, 0x00, 0x00};
+	uint8_t bytes_transferred;
 
 	extra_desc = desc->extra;
 
 	dir = ftd2xx_gpio_pins_dir[desc->port];
 	dir &= ~NO_OS_BIT(desc->number);
 	dir |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number), 0);
-	status = FT_WriteGPIO(extra_desc->ftHandle, (UCHAR)dir,
-			      ftd2xx_gpio_pins_val[desc->port]);
+	data[2] = dir;
+	data[1] = ftd2xx_gpio_pins_val;
+	status = FT_Write(extra_desc->ftHandle, data, sizeof(data), &bytes_transferred);
 	if (status != FT_OK) {
 		ret = status;
 		return ret;
@@ -180,6 +193,8 @@ int32_t ftd2xx_gpio_direction_output(struct no_os_gpio_desc *desc,
 	FT_STATUS status;
 	uint8_t dir, val;
 	int32_t ret;
+	uint8_t data[3] = {0x80, 0x00, 0x00};
+	uint8_t bytes_transferred;
 
 	extra_desc = desc->extra;
 	dir = ftd2xx_gpio_pins_dir[desc->port];
@@ -189,7 +204,10 @@ int32_t ftd2xx_gpio_direction_output(struct no_os_gpio_desc *desc,
 	val &= ~NO_OS_BIT(desc->number);
 	val |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number),
 			value);
-	status = FT_WriteGPIO(extra_desc->ftHandle, (UCHAR)dir, (UCHAR)val);
+
+	data[2] = dir;
+	data[1] = val;
+	status = FT_Write(extra_desc->ftHandle, data, sizeof(data), &bytes_transferred);
 	if (status != FT_OK) {
 		ret = status;
 		return ret;
@@ -235,6 +253,8 @@ int32_t ftd2xx_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 	FT_STATUS status;
 	uint8_t val;
 	int32_t ret;
+	uint8_t data[3] = {0x80, 0x00, 0x00};
+	uint8_t bytes_transferred;
 
 	if (no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
 			    ftd2xx_gpio_pins_dir[desc->port]) == 0)
@@ -246,6 +266,9 @@ int32_t ftd2xx_gpio_set_value(struct no_os_gpio_desc *desc, uint8_t value)
 	val &= ~NO_OS_BIT(desc->number);
 	val |= NO_OS_BIT(desc->number) & no_os_field_prep(NO_OS_BIT(desc->number),
 			value);
+
+	data[2] = ftd2xx_gpio_pins_dir;
+	data[1] = val;
 	status = FT_WriteGPIO(extra_desc->ftHandle, ftd2xx_gpio_pins_dir[desc->port],
 			      val);
 	if (status != FT_OK) {
@@ -271,17 +294,32 @@ int32_t ftd2xx_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 	FT_STATUS status;
 	UCHAR val = 0;
 	int32_t ret;
+	UCHAR buffer[1] = {0x83};
+	DWORD bytesWritten, bytesRead;
 
 	extra_desc = desc->extra;
+
+	status = FT_Write(extra_desc->ftHandle, buffer, sizeof(buffer), &bytesWritten);
+	if (status != FT_OK) {
+		ret = status;
+		return ret;
+	}
 	if (no_os_field_get(FTD2XX_GPIO_PIN(desc->number),
 			    ftd2xx_gpio_pins_dir[desc->port]) == NO_OS_GPIO_IN) {
-		status = FT_ReadGPIO(extra_desc->ftHandle, &val);
+		status = FT_Read(extra_desc->ftHandle, buffer, sizeof(buffer), &bytesRead);
 		if (status != FT_OK) {
 			ret = status;
 			return ret;
 		}
 
-		*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number), val);
+		if (bytesRead == 1) {
+			*value = (buffer[0] >> desc->number) & 1;
+
+			return 0;
+		} else {
+			ret = -EIO;
+			pr_err("Failed to read GPIO input\n");
+		}
 	}
 
 	*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number),

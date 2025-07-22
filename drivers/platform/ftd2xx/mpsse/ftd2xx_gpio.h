@@ -43,10 +43,21 @@
 #define FTD2XX_MAX_PIN_NB		7
 #define FTD2XX_MAX_PORT_NB		4
 
+extern uint8_t ftd2xx_gpio_pins_dir[FTD2XX_MAX_PORT_NB];
+extern uint8_t ftd2xx_gpio_pins_val[FTD2XX_MAX_PORT_NB];
+
 /**
  * @brief ftd2xx platform specific gpio platform ops structure
  */
 extern const struct no_os_gpio_platform_ops ftd2xx_gpio_ops;
+
+/**
+ * @struct ftd2xx_gpio_init
+ * @brief ftd2xx platform specific initialization parameter
+ */
+struct ftd2xx_gpio_init {
+	uint8_t extra_pins_dir;
+};
 
 /**
  * @struct ftd2xx_gpio_desc
