@@ -1516,6 +1516,18 @@ static int iio_call_submit(struct iiod_ctx *ctx, const void *device,
 {
 	struct iio_dev_priv *dev;
 
+	if (ctx->binary){
+		struct iio_desc *desc;
+
+		desc = ctx->instance;
+		if (*(const uint16_t *)device < desc->nb_devs)
+			dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+		if (dev->dev_descriptor->submit && dev->trig_idx == NO_TRIGGER)
+			return dev->dev_descriptor->submit(&dev->dev_data);
+	}
+
+
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev || !dev->buffer.initalized)
 		return -EINVAL;
@@ -1655,7 +1667,7 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const void *device,
 	return bytes;
 }
 
-static int iio_create_block(struct iiod_ctx *ctx, const void *device, char **buff, uint32_t block_size_bytes){
+static int iio_create_block(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes){
 	struct iio_desc *desc;
 	struct iio_dev_priv *dev = NULL;
 
@@ -1664,7 +1676,7 @@ static int iio_create_block(struct iiod_ctx *ctx, const void *device, char **buf
 		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
 
 	return dev->dev_descriptor->create_block ?
-		dev->dev_descriptor->create_block(dev->dev_instance, buff, block_size_bytes) :
+		dev->dev_descriptor->create_block(dev->dev_instance, block, block_size_bytes) :
 		-ENOSYS;
 
 }

@@ -154,7 +154,7 @@ struct iiod_ops {
 	int (*set_buffers_count)(struct iiod_ctx *ctx, const void *device,
 				 uint32_t buffers_count);
 
-	int (*create_block)(struct iiod_ctx *ctx, const void *device, char **buff, uint32_t block_size_bytes);
+	int (*create_block)(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes);
 	int (*pre_enable)(struct iiod_ctx *ctx, const void *device, uint32_t mask);
 };
 

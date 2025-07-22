@@ -427,6 +427,14 @@ static int dummy_set_buffers_count(struct iiod_ctx *ctx, const void *device,
 	return -EINVAL;
 }
 
+static int dummy_create_block(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes){
+	return -EINVAL;
+}
+
+static int dummy_pre_enable(struct iiod_ctx *ctx, const void *device, uint32_t mask){
+	return -EINVAL;
+}
+
 int32_t iiod_copy_ops(struct iiod_ops *ops, struct iiod_ops *new_ops)
 {
 	if (!new_ops->recv || !new_ops->send)
@@ -450,6 +458,8 @@ int32_t iiod_copy_ops(struct iiod_ops *ops, struct iiod_ops *new_ops)
 					       dummy_close);
 	ops->push_buffer = SET_DUMMY_IF_NULL(new_ops->push_buffer,
 					     dummy_close);
+	ops->create_block = SET_DUMMY_IF_NULL(new_ops->create_block, dummy_create_block);
+	ops->pre_enable = SET_DUMMY_IF_NULL(new_ops->pre_enable, dummy_pre_enable);
 
 	return 0;
 }
@@ -502,16 +512,6 @@ int32_t iiod_init(struct iiod_desc **desc, struct iiod_init_param *param)
 	ldesc->xml_len = param->xml_len;
 	ldesc->app_instance = param->instance;
 	ldesc->phy_type = param->phy_type;
-
-	ret = lf256fifo_init(&ldesc->conns[0].fifo_stream);
-
-	ldesc->conns[0].stream = calloc(1, sizeof(struct iio_stream));
-	// if (!stream)
-	// 	return -ENOMEM;
-
-	ldesc->conns[0].stream->blocks = calloc(MAX_NUM_BLOCKS, sizeof(*ldesc->conns[0].stream->blocks));
-	// if (!stream->blocks)
-	// 	return -ENOMEM;
 
 	*desc = ldesc;
 
@@ -568,6 +568,16 @@ int32_t iiod_conn_add(struct iiod_desc *desc, struct iiod_conn_data *data,
 			conn->payload_buf = data->buf;
 			conn->payload_buf_len = data->len;
 			*new_conn_id = i;
+
+			ret = lf256fifo_init(&conn->fifo_stream);
+
+			conn->stream = calloc(1, sizeof(struct iio_stream));
+			// if (!stream)
+			// 	return -ENOMEM;
+
+			conn->stream->blocks = calloc(MAX_NUM_BLOCKS, sizeof(conn->stream->blocks));
+			// if (!stream->blocks)
+			// 	return -ENOMEM;
 
 			ret = iiod_set_protocol(conn, IIOD_ASCII_COMMAND);
 			if (NO_OS_IS_ERR_VALUE(ret)) {
@@ -1212,8 +1222,9 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		if (!stream->blocks[curr])
 			return -ENOMEM;
 
-		ret = desc->ops.create_block(&ctx, &data->device,
-						 &stream->blocks[curr]->data, data->block_size[curr]);
+		if(desc->ops.create_block)
+			ret = desc->ops.create_block(&ctx, &data->device,
+							 stream->blocks[curr], data->block_size[curr]);
 
 		stream->blocks[curr]->cl_id = data->client_id;
 		stream->blocks[curr]->size = data->block_size[curr];
@@ -1452,40 +1463,10 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 {
 	int32_t ret;
 	struct command_data_binary *data = (struct command_data_binary *)conn->cmd_data.command_data;
-	uint8_t c;
-	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
-	static struct iiod_buff buff;
+
 
 	switch (conn->state) {
-		case IIOD_READING_LINE:
-			if(conn->stream->started){
-				if(!lf256fifo_is_empty(conn->fifo_stream))
-					lf256fifo_get(conn->fifo_stream, &c);
-					if(conn->stream->blocks[c]->bytes_used == conn->stream->blocks[c]->size) {
-						conn->res_header.client_id = conn->stream->blocks[c]->cl_id;
-						conn->res_header.code = conn->stream->blocks[c]->size;
 
-						ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-								 sizeof(conn->res_header));
-
-						buff.buf = conn->stream->blocks[c]->data;
-						buff.len = conn->stream->blocks[c]->size;
-						buff.idx = 0;
-
-						do {
-							ret = rw_iiod_buff(desc, conn,
-									&buff,
-									IIOD_WR);
-						} while (ret == -EAGAIN);
-
-						ret = lf256fifo_read(conn->fifo_stream, &c);
-						if (NO_OS_IS_ERR_VALUE(ret))
-							return ret;
-					}
-			}
-
-			conn->state = IIOD_READING_LINE_OLD;
-			return 0;
 
 			
 		case IIOD_READING_LINE_OLD:
@@ -1539,8 +1520,46 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 	struct iiod_ctx ctx = IIOD_CTX(desc, conn);
 	struct command_data_ascii *data = (struct command_data_ascii *)conn->cmd_data.command_data;
 
+	uint8_t c;
+	static struct iiod_buff buff;
+
 	switch (conn->state) {
 	case IIOD_READING_LINE:
+		if(conn->stream->started){
+			if(!lf256fifo_is_empty(conn->fifo_stream)){
+				lf256fifo_get(conn->fifo_stream, &c);
+				if(conn->stream->blocks[c]->bytes_used == conn->stream->blocks[c]->size) {
+					conn->res_header.client_id = conn->stream->blocks[c]->cl_id;
+					conn->res_header.code = conn->stream->blocks[c]->size;
+
+					ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
+							 sizeof(conn->res_header));
+
+					buff.buf = conn->stream->blocks[c]->data;
+					buff.len = conn->stream->blocks[c]->size;
+					buff.idx = 0;
+
+					do {
+						ret = rw_iiod_buff(desc, conn,
+								&buff,
+								IIOD_WR);
+					} while (ret == -EAGAIN);
+
+					conn->stream->blocks[c]->bytes_used = 0;
+
+					ret = lf256fifo_read(conn->fifo_stream, &c);
+					if (NO_OS_IS_ERR_VALUE(ret))
+						return ret;
+				}else{
+					conn->state = IIOD_READING_LINE;
+				}
+			}
+		}
+
+		conn->state = IIOD_READING_LINE_OLD;
+		return 0;
+
+	case IIOD_READING_LINE_OLD:
 		if (conn->protocol == IIOD_ASCII_COMMAND) {
 			/* Read input data until \n. I/O Calls */
 			ret = iiod_read_line(desc, conn);
@@ -1569,6 +1588,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 		}
 
 		return 0;
+
 	case IIOD_RUNNING_CMD:
 		/* Execute or call necessary ops depending on cmd. No I/O */
 
