@@ -49,8 +49,8 @@
 extern const struct no_os_gpio_platform_ops ftd2xx_gpio_ops;
 
 /**
- * @struct stm32_gpio_desc
- * @brief stm32 platform specific gpio descriptor
+ * @struct ftd2xx_gpio_desc
+ * @brief ftd2xx platform specific gpio descriptor
  */
 struct ftd2xx_gpio_desc {
 	/** Specific device handle */
