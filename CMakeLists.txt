@@ -40,6 +40,10 @@ list(APPEND CONFIG_FILES ${DEFAULT_DEFCONFIG})
 message(STATUS "Project defconfig: ${PROJECT_DEFCONFIG}")
 
 set(NO_OS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+if(NOT ${NATIVE_BUILD})
+  set(NO_OS_DIR ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+endif()
+
 set(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/.config)
 set(KCONFIG_VARS_FILE ${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
 set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_dotconfig.cmake)
@@ -55,6 +59,7 @@ if (DEFINED PROJECT_DEFCONFIG)
   message(ERROR "Adding project defconfig")
   if(${NATIVE_BUILD})
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_CURRENT_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
+    list(APPEND GENERATE_CONFIG_ARGS --native)
   else()
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR}/${PROJECT_DEFCONFIG})
   endif()
@@ -105,6 +110,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}
+        --native ${NATIVE_BUILD}
   )
 endif()
 
@@ -143,6 +149,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+    ${GENERATE_CONFIG_ARGS}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}
   USES_TERMINAL
