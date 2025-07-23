@@ -12,6 +12,7 @@ parser.add_argument("--root_dir", type=str, help="Path to the CAPI directory")
 parser.add_argument("--build_dir", type=str, help="Path to the build directory")
 parser.add_argument("--defconfig", type=str, help="Path to a defconfig file", nargs='+')
 parser.add_argument("--update", action='store_true', help="Append the defconfig file to the existing .config file", default=False)
+parser.add_argument("--native", action='store_true', help="Is No-OS the top directory?", default=False)
 parser.add_argument("--verbose", type=bool, help="Enable verbose output", default=False)
 
 args = parser.parse_args(sys.argv[1:])
@@ -50,6 +51,9 @@ try:
                                 value = "OFF"
 
                         cmake_file.write(f"set(CONFIG_{sym.name} {value})\n")
+                        if args.native:
+                                cmake_file.write(f"set(CONFIG_{sym.name} {value} PARENT_SCOPE)\n")
+
                 print("Generated config.cmake")
 
 except Exception as e:
