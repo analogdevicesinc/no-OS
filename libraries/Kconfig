@@ -7,9 +7,10 @@ config FREERTOS_CONF_PATH
         string "Path to the FreeRTOSConfig.h file"
 
 config FREERTOS_HEAP_ALLOCATOR
-        depends on FREERTOS
-        default 2
         int "Select the FreeRTOS heap memory allocator implementation"
+        default 2
+        range 1 5
+        depends on FREERTOS
 
 config LWIP
         bool "Enable LWIP"
