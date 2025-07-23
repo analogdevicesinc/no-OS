@@ -332,7 +332,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 
 		adf4371_hw[i].dev = adf4371_dev[i];
 		adf4371_hw[i].dev_clk_recalc_rate = adf4371_clk_recalc_rate_chan;
-		adf4371_hw[i].dev_clk_round_rate = adf4371_clk_round_rate_chan;
+		adf4371_hw[i].dev_clk_round_rate = adf4371_clk_round_rate_dev;
 		adf4371_hw[i].dev_clk_set_rate = adf4371_clk_set_rate_chan;
 
 		dev_refclk[i].hw = &adf4371_hw[i];
