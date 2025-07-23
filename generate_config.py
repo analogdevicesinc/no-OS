@@ -42,8 +42,10 @@ try:
                 if len(kconf.unique_defined_syms) == 0:
                         print("Empty .config?")
 
-                for sym in kconf.unique_defined_syms: 
-                        if sym.str_value:
+                for sym in kconf.unique_defined_syms:
+                        if sym.orig_type is kconfiglib.STRING:
+                                value = sym.str_value
+                        elif sym.orig_type is kconfiglib.INT:
                                 value = sym.str_value
                         elif sym.tri_value == 2:
                                 value = "ON"
@@ -51,7 +53,7 @@ try:
                                 value = "OFF"
 
                         cmake_file.write(f"set(CONFIG_{sym.name} {value})\n")
-                        if args.native:
+                        if args.native == False:
                                 cmake_file.write(f"set(CONFIG_{sym.name} {value} PARENT_SCOPE)\n")
 
                 print("Generated config.cmake")

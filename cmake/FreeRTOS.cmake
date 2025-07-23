@@ -14,7 +14,7 @@ endif()
 
 add_library(freertos_config INTERFACE)
 
-if(NOT ${CONFIG_FREERTOS_CONF_PATH})
+if(NOT CONFIG_FREERTOS_CONF_PATH)
   target_include_directories(freertos_config SYSTEM
           INTERFACE
           ${NO_OS_DIR}/drivers/platform/freeRTOS

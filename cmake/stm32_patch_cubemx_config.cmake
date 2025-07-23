@@ -1,6 +1,6 @@
 file(READ ${STM32_TEMPLATE_FILE} OLD_CONTENT)
 
-if(${STM32_IOC_PATH} AND (STM32_IOC_PATH MATCHES ""))
+if(${STM32_IOC_PATH} MATCHES "")
         if(IS_ABSOLUTE ${STM32_IOC_PATH})
                 set(CUBEMX_CONFIG_NAME "config load ${STM32_IOC_PATH}\n")
         else()
