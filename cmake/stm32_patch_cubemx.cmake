@@ -10,6 +10,13 @@ string(REPLACE "\${CMAKE_SOURCE_DIR}" "${STM32_PROJECT_BUILD}"
 # Write the corrected content back to the file
 file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
 
+file(READ ${CMAKE_FILE_TO_PATCH} FILE_CONTENTS)
+
+string(REPLACE "\${CMAKE_PROJECT_NAME}" "no-os"
+     PATCHED_CONTENTS "${FILE_CONTENTS}")
+
+file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
+
 file(READ "${STM32_PROJECT_BUILD}/Core/Src/main.c" MAIN_FILE_CONTENTS)
 
 # Replace all instances of the incorrect variable with the correct one
