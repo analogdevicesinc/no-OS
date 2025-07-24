@@ -40,11 +40,15 @@ add_flash_target(eval-adxl355-pmdz-dummy)
 add_flash_target(eval-adxl355-pmdz-iio)
 add_flash_target(eval-adxl355-pmdz-iio-trigger)
 
-add_custom_command(
-    TARGET eval-adxl355-pmdz-dummy
-    POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:eval-adxl355-pmdz-dummy> eval-adxl355-pmdz-dummy.hex
-    COMMENT "Generating eval-adxl355-pmdz-dummy.hex"
-)
+post_build_config(eval-adxl355-pmdz-dummy)
+post_build_config(eval-adxl355-pmdz-iio)
+post_build_config(eval-adxl355-pmdz-iio-trigger)
 
-message(STATUS "Running make for eval-adxl355-pmdz")
+# add_custom_command(
+#     TARGET eval-adxl355-pmdz-dummy
+#     POST_BUILD
+#     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:eval-adxl355-pmdz-dummy> eval-adxl355-pmdz-dummy.hex
+#     COMMENT "Generating eval-adxl355-pmdz-dummy.hex"
+# )
+
+# message(STATUS "Running make for eval-adxl355-pmdz")
