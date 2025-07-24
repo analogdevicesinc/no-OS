@@ -23,6 +23,10 @@ config DMA
     bool "Enable DMA"
     default n
 
+config USB_UART
+    bool "Enable USB UART"
+    default n
+
 source "iio/Kconfig"
 source "drivers/Kconfig"
 source "libraries/Kconfig"
