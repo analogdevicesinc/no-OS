@@ -7,6 +7,7 @@ add_executable(iio_demo
 
 config_platform_sdk(iio_demo)
 add_flash_target(iio_demo)
+post_build_config(iio_demo)
 
 target_include_directories(iio_demo PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example

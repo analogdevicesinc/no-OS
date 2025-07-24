@@ -163,3 +163,6 @@ add_custom_target(
 )
 
 add_dependencies(no-os KconfigVars)
+
+# Define the variables that will be substituted into the templates
+# set(SVD_FILE_PATH "${CMAKE_SOURCE_DIR}/svd/STM32F756.svd" CACHE FILEPATH "Path to SVD file")
