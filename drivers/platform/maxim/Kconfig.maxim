@@ -13,6 +13,11 @@ config UART_MAXIM
         bool "Enable Maxim UART driver"
         default n
 
+config USB_UART_MAXIM
+        depends on USB_UART
+        bool "Enable Maxim USB ACM driver"
+        default n
+
 config UART_STDIO_MAXIM
         bool "Enable Maxim UART STDIO driver"
         default n
