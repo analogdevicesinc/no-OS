@@ -3,6 +3,22 @@ include(FlashTools)
 set(GENERATED_SOURCES_CMAKE "${CMAKE_CURRENT_BINARY_DIR}/generated_sources.cmake")
 include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 
+function(post_build_config PROJECT_TARGET)
+        set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
+        add_custom_command(
+                TARGET ${PROJECT_TARGET}
+                POST_BUILD
+                COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${PROJECT_TARGET}.hex
+                COMMAND ${CMAKE_COMMAND}
+                        -DELF_PATH=$<TARGET_FILE:${PROJECT_TARGET}>
+                        -DNO_OS_DIR=${NO_OS_DIR}
+                        -DPROJECT_HOME=${PROJECT_DIR}
+                        -DTARGET=${TARGET}
+                        -P "${NO_OS_DIR}/cmake/vscode_config.cmake"
+                COMMENT "Generating ${PROJECT_TARGET}.hex"
+        )
+endfunction()
+
 function(config_platform_sdk BUILD_TARGET)
         if(${NATIVE_BUILD})
                 set(PROJECT_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR})

@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "J-Link Debug",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "jlink",
+            "executable": "@ELF_PATH@",
+            "device": "@TARGET@",
+            "runToEntryPoint": "main"
+        }
+    ]
+}
