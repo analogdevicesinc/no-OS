@@ -56,7 +56,7 @@ function(config_platform_sdk BUILD_TARGET)
 
                         file(GLOB STARTUP_FILE ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/*/startup_*.s)
                         execute_process(
-                                COMMAND ${Python3_EXECUTABLE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
+                                COMMAND ${VENV_PYTHON_EXE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
                         )
                 endif()
                         

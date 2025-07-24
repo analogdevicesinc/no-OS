@@ -48,6 +48,22 @@ set(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/.config)
 set(KCONFIG_VARS_FILE ${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
 set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_dotconfig.cmake)
 
+set(VENV_DIR "${CMAKE_CURRENT_BINARY_DIR}/.no_os_venv")
+if(WIN32)
+  set(VENV_PYTHON_EXE "${VENV_DIR}/Scripts/python3.exe")
+else()
+  set(VENV_PYTHON_EXE "${VENV_DIR}/bin/python3")
+endif()
+
+if(NOT EXISTS "${VENV_PYTHON_EXE}")
+  message(STATUS "Creating Python virtual environment in ${VENV_DIR}")
+  execute_process(COMMAND ${Python3_EXECUTABLE} -m venv ${VENV_DIR})
+
+  set(REQS_FILE "${NO_OS_DIR}/tools/scripts/requirements.txt")
+  message(STATUS "Installing Python dependencies from ${REQS_FILE}")
+  execute_process(COMMAND ${VENV_PYTHON_EXE} -m pip install -r ${REQS_FILE})
+endif()
+
 add_library(no-os STATIC)
 
 include_directories(
@@ -85,7 +101,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
-      ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+      ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}
@@ -95,7 +111,7 @@ else()
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
-      ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+      ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}
@@ -106,7 +122,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
-      ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+      ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}
@@ -119,7 +135,7 @@ add_custom_command(
 
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
-    ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+    ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}
@@ -145,10 +161,10 @@ add_custom_target(
   menuconfig
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
-    ${Python3_EXECUTABLE} -m menuconfig
+    ${VENV_PYTHON_EXE} -m menuconfig
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
-    ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+    ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}
