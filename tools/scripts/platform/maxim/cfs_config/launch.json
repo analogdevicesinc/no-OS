@@ -1,0 +1,80 @@
+{
+  "configurations": [
+    {
+      "name": "CFS: Debug with GDB and OpenOCD (ARM Embedded)",
+      "executable": "${config:cfs.programFile}",
+      "cwd": "${config:cfs.debugPath}",
+      "request": "launch",
+      "type": "cortex-debug",
+      "runToEntryPoint": "main",
+      "servertype": "openocd",
+      "serverpath": "${config:cfs.openocd.path}/bin/openocd",
+      "linux": {
+        "gdbPath": "${config:cfs.toolchain.armAArch32GCC.path}/bin/arm-none-eabi-gdb"
+      },
+      "windows": {
+        "gdbPath": "${config:cfs.toolchain.armAArch32GCC.path}/bin/arm-none-eabi-gdb.exe"
+      },
+      "osx": {
+        "gdbPath": "${config:cfs.toolchain.armAArch32GCC.path}/bin/arm-none-eabi-gdb"
+      },
+      "svdPath": "${config:cfs.cmsis.svdFile}",
+      "searchDir": ["${config:cfs.openocd.path}/share/openocd/scripts"],
+      "configFiles": [
+        "${config:cfs.openocd.interface}",
+        "${config:cfs.openocd.target}"
+      ],
+      "gdbTarget": "localhost:3333",
+      "preLaunchCommands": [
+        "set logging overwrite on",
+        "set logging file debug-arm.log",
+        "set logging on",
+        "tbreak abort",
+        "tbreak _exit",
+        "set remotetimeout 60"
+      ],
+      "preLaunchTask": "CFS: No-OS build"
+    },
+    {
+      "name": "CFS: Debug with JlinkGDBServer and JLink (ARM Embedded)",
+      "executable": "${config:cfs.programFile}",
+      "cwd": "${config:cfs.debugPath}",
+      "request": "launch",
+      "type": "cortex-debug",
+      "runToEntryPoint": "main",
+      "servertype": "jlink",
+      "linux": {
+        "serverpath": "${command:cfs.jlink.setJlinkPath}/JLinkGDBServerCLExe",
+        "gdbPath": "${config:cfs.toolchain.armAArch32GCC.path}/bin/arm-none-eabi-gdb"
+      },
+      "windows": {
+        "serverpath": "${command:cfs.jlink.setJlinkPath}/JLinkGDBServerCL.exe",
+        "gdbPath": "${config:cfs.toolchain.armAArch32GCC.path}/bin/arm-none-eabi-gdb.exe"
+      },
+      "osx": {
+        "serverpath": "${command:cfs.jlink.setJlinkPath}/JLinkGDBServerCLExe",
+        "gdbPath": "${config:cfs.toolchain.armAArch32GCC.path}/bin/arm-none-eabi-gdb"
+      },
+      "device": "${config:cfs.jlink.device}",
+      "interface": "swd",
+      "svdPath": "${config:cfs.cmsis.svdFile}",
+      "gdbTarget": "localhost:2331",
+      "preLaunchCommands": [
+        "set logging overwrite on",
+        "set logging file debug-arm.log",
+        "set logging on",
+        "tbreak abort",
+        "tbreak _exit",
+        "set remotetimeout 60"
+      ],
+      "preLaunchTask": "CFS: No-OS build",
+      "overrideLaunchCommands": [
+        "monitor halt",
+        "monitor reset",
+        "-target-download"
+      ],
+      "overrideResetCommands": ["monitor reset"],
+      "overrideRestartCommands": ["monitor reset"]
+    }
+  ]
+}

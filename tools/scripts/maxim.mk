@@ -15,7 +15,7 @@ OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
 PYTHON = python
-ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../../../Tools/gcc/arm-none-eabi -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
+ARM_COMPILER_PATH ?= $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
@@ -51,10 +51,10 @@ include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGE
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
-PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_assert.c
-PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_delay.c
-PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/nvic_table.c
-PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_lock.c
+SRCS += $(MAXIM_LIBRARIES)/PeriphDrivers/Source/SYS/mxc_assert.c
+SRCS += $(MAXIM_LIBRARIES)/PeriphDrivers/Source/SYS/mxc_delay.c
+SRCS += $(MAXIM_LIBRARIES)/PeriphDrivers/Source/SYS/nvic_table.c
+SRCS += $(MAXIM_LIBRARIES)/PeriphDrivers/Source/SYS/mxc_lock.c
 
 HEX=$(basename $(BINARY)).hex
 TARGET_REV=0x4131
@@ -144,6 +144,38 @@ $(PLATFORM)_project:
 	$(call set_one_time_rule,$@)
 	$(MAKE) --no-print-directory $(PROJECT_TARGET)_configure
 
+ifeq ($(IDE),CFS)
+
+CFS_SETTINGSJSON := $(VSCODE_CFG_DIR)/settings.json
+CFS_LAUNCHJSON := $(VSCODE_CFG_DIR)/launch.json
+CFS_TASKSJSON := $(VSCODE_CFG_DIR)/tasks.json
+CFS_FLASHGDB := $(VSCODE_CFG_DIR)/flash.gdb
+CFS_SETTINGS_TEMPLATE := $(NO-OS)/tools/scripts/platform/maxim/cfs_config/settings.json
+CFS_LAUNCH_TEMPLATE := $(NO-OS)/tools/scripts/platform/maxim/cfs_config/launch.json
+CFS_TASKS_TEMPLATE := $(NO-OS)/tools/scripts/platform/maxim/cfs_config/tasks.json
+CFS_FLASH_TEMPLATE := $(NO-OS)/tools/scripts/platform/maxim/cfs_config/flash.gdb
+
+CFS_VSC_SETTINGS_CONTENT := $(file < $(CFS_SETTINGS_TEMPLATE))
+CFS_VSC_SETTINGS_CONTENT := $(subst TARGET_UPPER,$(TARGET_UCASE),$(CFS_VSC_SETTINGS_CONTENT))
+CFS_VSC_SETTINGS_CONTENT := $(subst TARGET_LOWER,$(TARGET_LCASE),$(CFS_VSC_SETTINGS_CONTENT))
+CFS_VSC_LAUNCH_CONTENT := $(file < $(CFS_LAUNCH_TEMPLATE))
+CFS_VSC_TASKS_CONTENT := $(file < $(CFS_TASKS_TEMPLATE))
+CFS_VSC_FLASH_CONTENT := $(file < $(CFS_FLASH_TEMPLATE))
+
+$(PROJECT_TARGET)_configure:
+	$(file > $(CFS_FLASHGDB).default,$(CFS_VSC_FLASH_CONTENT))
+	$(file > $(CFS_SETTINGSJSON).default,$(CFS_VSC_SETTINGS_CONTENT))
+	$(file > $(CFS_LAUNCHJSON).default,$(CFS_VSC_LAUNCH_CONTENT))
+	$(file > $(CFS_TASKSJSON).default,$(CFS_VSC_TASKS_CONTENT))
+
+	[ -s $(CFS_FLASHGDB) ]	&& echo '.vscode/flash.gdb already exists, not overwriting'	|| cp $(CFS_FLASHGDB).default $(CFS_FLASHGDB)
+	[ -s $(CFS_SETTINGSJSON) ] 	&& echo '.vscode/settings.json already exists, not overwriting'			|| cp $(CFS_SETTINGSJSON).default $(CFS_SETTINGSJSON)
+	[ -s $(CFS_LAUNCHJSON) ] 	&& echo '.vscode/launch.json already exists, not overwriting'			|| cp $(CFS_LAUNCHJSON).default $(CFS_LAUNCHJSON)
+	[ -s $(CFS_TASKSJSON) ] 	&& echo '.vscode/tasks.json already exists, not overwriting'			|| cp $(CFS_TASKSJSON).default $(CFS_TASKSJSON)
+
+	rm $(CFS_FLASHGDB).default $(CFS_SETTINGSJSON).default $(CFS_LAUNCHJSON).default $(CFS_TASKSJSON).default
+
+else
 $(PROJECT_TARGET)_configure:
 	$(file > $(CPP_PROP_JSON).default,$(CPP_FINAL_CONTENT))
 	$(file > $(SETTINGSJSON).default,$(VSC_SET_CONTENT))
@@ -156,6 +188,7 @@ $(PROJECT_TARGET)_configure:
 	[ -s $(TASKSJSON) ] 	&& echo '.vscode/tasks.json already exists, not overwriting'			|| cp $(TASKSJSON).default $(TASKSJSON)
 
 	rm $(CPP_PROP_JSON).default $(SETTINGSJSON).default $(LAUNCHJSON).default $(TASKSJSON).default
+endif
 
 $(PLATFORM)_sdkopen:
 	code $(PROJECT)

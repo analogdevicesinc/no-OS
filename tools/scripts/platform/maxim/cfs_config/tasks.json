@@ -1,0 +1,130 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "command": "make clean",
+      "options": {
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: No-OS clean"
+    },
+    {
+      "type": "shell",
+      "command": "arm-none-eabi-gdb --cd=\"${workspaceFolder}\" --se=\"${config:cfs.programFile}\" --symbols=${config:cfs.programFile} -x=\"${workspaceFolder}/.vscode/flash.gdb\" --ex=\"flash_m4 ${config:cfs.openocd.path} ${config:cfs.openocd.interface} ${config:cfs.openocd.target}\" --batch",
+      "options": {
+        "env": {
+          "PATH": "${config:cfs.sdk.path}/Utils/cfsutil/bin:${config:cfs.sdk.path}/Tools/cmake/bin:${config:cfs.sdk.path}/Tools/dtc/bin:${config:cfs.sdk.path}/Tools/gcc/arm-none-eabi/bin:${config:cfs.sdk.path}/Tools/gcc/riscv-none-elf/bin:${config:cfs.sdk.path}/Tools/git/cmd:${config:cfs.sdk.path}/Tools/git/bin:${config:cfs.sdk.path}/Tools/git/usr/bin:${config:cfs.sdk.path}/Tools/openocd/bin:${config:cfs.sdk.path}/Tools/python:${config:cfs.sdk.path}/Tools/python/bin:${config:cfs.sdk.path}/Tools/python/Scripts:${config:cfs.sdk.path}/Tools/zephyr-sdk/arm-zephyr-eabi/bin:${config:cfs.sdk.path}:${env:PATH}"
+        },
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: No-OS flash (OpenOCD)"
+    },
+    {
+      "type": "shell",
+      "command": "(echo loadfile ${config:cfs.programFile} && echo q) | \"${command:cfs.jlink.setJlinkPath}/JLinkExe\" -device ${config:cfs.jlink.device} -if SWD -speed 4000 -autoconnect 1 -NoGui 1 -ExitOnError 1",
+      "options": {
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: No-OS flash (JLink)"
+    },
+        {
+      "type": "shell",
+      "command": "arm-none-eabi-gdb --cd=\"${workspaceFolder}\" --se=\"${config:cfs.programFile}\" --symbols=${config:cfs.programFile} -x=\"${workspaceFolder}/.vscode/flash.gdb\" --ex=\"flash_m4_run ${config:cfs.openocd.path} ${config:cfs.openocd.interface} ${config:cfs.openocd.target}\" --batch",
+      "options": {
+        "env": {
+          "PATH": "${config:cfs.sdk.path}/Utils/cfsutil/bin:${config:cfs.sdk.path}/Tools/cmake/bin:${config:cfs.sdk.path}/Tools/dtc/bin:${config:cfs.sdk.path}/Tools/gcc/arm-none-eabi/bin:${config:cfs.sdk.path}/Tools/gcc/riscv-none-elf/bin:${config:cfs.sdk.path}/Tools/git/cmd:${config:cfs.sdk.path}/Tools/git/bin:${config:cfs.sdk.path}/Tools/git/usr/bin:${config:cfs.sdk.path}/Tools/openocd/bin:${config:cfs.sdk.path}/Tools/python:${config:cfs.sdk.path}/Tools/python/bin:${config:cfs.sdk.path}/Tools/python/Scripts:${config:cfs.sdk.path}/Tools/zephyr-sdk/arm-zephyr-eabi/bin:${config:cfs.sdk.path}:${env:PATH}"
+        },
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: No-OS flash & run (OpenOCD)"
+    },
+    {
+      "type": "shell",
+      "command": "(echo rst 0 && echo loadfile ${config:cfs.programFile} && echo r && echo q) | \"${command:cfs.jlink.setJlinkPath}/JLinkExe\" -device ${config:cfs.jlink.device} -if SWD -speed 4000 -autoconnect 1 -NoGui 1 -ExitOnError 1",
+      "options": {
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: No-OS flash & run (JLink)"
+    },
+    {
+      "type": "shell",
+      "command": "make",
+      "options": {
+        "env": {
+          "MAXIM_LIBRARIES": "${config:cfs.sdk.path}/SDK/MAX/Libraries",
+          "ARM_COMPILER_PATH": "${config:cfs.toolchain.armAArch32GCC.path}/bin"
+        },
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: No-OS build"
+    },
+        {
+      "type": "shell",
+      "command": "openocd -s ${config:cfs.openocd.path}/share/openocd/scripts -f ${config:cfs.openocd.interface} -f ${config:cfs.openocd.target} -c \"init; reset halt; max32xxx mass_erase 0;\" -c exit",
+      "options": {
+        "env": {
+          "PATH": "${config:cfs.sdk.path}/Utils/cfsutil/bin:${config:cfs.sdk.path}/Tools/cmake/bin:${config:cfs.sdk.path}/Tools/dtc/bin:${config:cfs.sdk.path}/Tools/gcc/arm-none-eabi/bin:${config:cfs.sdk.path}/Tools/gcc/riscv-none-elf/bin:${config:cfs.sdk.path}/Tools/git/cmd:${config:cfs.sdk.path}/Tools/git/bin:${config:cfs.sdk.path}/Tools/git/usr/bin:${config:cfs.sdk.path}/Tools/openocd/bin:${config:cfs.sdk.path}/Tools/python:${config:cfs.sdk.path}/Tools/python/bin:${config:cfs.sdk.path}/Tools/python/Scripts:${config:cfs.sdk.path}/Tools/zephyr-sdk/arm-zephyr-eabi/bin:${config:cfs.sdk.path}:${env:PATH}"
+        },
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: erase (OpenOCD)"
+    },
+    {
+      "type": "shell",
+      "command": "(echo erase && echo q) | \"${command:cfs.jlink.setJlinkPath}/JLinkExe\" -device ${config:cfs.jlink.device} -if SWD -speed 4000 -autoconnect 1 -NoGui 1 -ExitOnError 1",
+      "options": {
+        "shell": {
+          "args": [
+            "-c"
+          ],
+          "executable": "bash"
+        }
+      },
+      "group": "build",
+      "label": "CFS: erase (JLink)"
+    }
+  ]
+}
