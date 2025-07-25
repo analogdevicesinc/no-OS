@@ -1,0 +1,14 @@
+{
+  "C_Cpp.default.forcedInclude": [
+    "${workspaceFolder}/build/project_defines.h"
+  ],
+  "cfs.project.target": "TARGET_UPPER",
+  "cfs.jlink.device": "TARGET_UPPER",
+  "cfs.programFile": "${workspaceFolder}/build/${workspaceFolderBasename}.elf",
+  "cfs.debugPath": "${workspaceFolder}/build",
+  "cfs.configureWorkspace": "Yes",
+  "cfs.project.firmwarePlatform": "MSDK",
+  "cfs.openocd.target": "target/TARGET_LOWER.cfg",
+  "cfs.openocd.interface": "interface/cmsis-dap.cfg",
+  "cfs.cmsis.svdFile": "${config:cfs.sdk.path}/SDK/MAX/Libraries/CMSIS/Device/Maxim/TARGET_UPPER/Include/TARGET_LOWER.svd"
+}
