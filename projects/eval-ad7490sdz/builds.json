@@ -1,0 +1,10 @@
+{
+  "maxim": {
+    "basic_example": {
+      "flags" : "EXAMPLE=basic TARGET=max32690"
+    },
+    "iio_example": {
+      "flags" : "EXAMPLE=iio_example TARGET=max32690"
+    }
+  }
+}
