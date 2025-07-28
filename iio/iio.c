@@ -1448,7 +1448,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const void *device,
 	}
 
 	if (dev->dev_descriptor->pre_enable) {
-		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
+		ret = dev->dev_descriptor->pre_enable(dev->dev_instance, mask, NULL);
 		if (NO_OS_IS_ERR_VALUE(ret)) {
 			if (dev->buffer.allocated) {
 				no_os_free(dev->buffer.cb.buff);
@@ -1580,23 +1580,37 @@ static int iio_push_buffer(struct iiod_ctx *ctx, const void *device)
 	return iio_call_submit(ctx, device, IIO_DIRECTION_OUTPUT);
 }
 
-static int iio_refill_buffer(struct iiod_ctx *ctx, const void *device)
+static int iio_refill_buffer(struct iiod_ctx *ctx, const void *device, uint8_t block_id)
 {
+	struct iio_dev_priv *dev;
+
+	if (ctx->binary){
+		struct iio_desc *desc;
+
+		desc = ctx->instance;
+		if (*(const uint16_t *)device < desc->nb_devs)
+			dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+		if (dev->dev_descriptor->transfer_block && dev->trig_idx == NO_TRIGGER)
+			return dev->dev_descriptor->transfer_block(&dev->dev_data, block_id);
+	}
+
 	return iio_call_submit(ctx, device, IIO_DIRECTION_INPUT);
 }
 
 static int iio_pre_enable(struct iiod_ctx *ctx, const void *device,
-			 uint32_t mask)
+			 uint32_t samples, uint32_t mask, uint16_t *block_ids)
 {
 	struct iio_desc *desc;
 	struct iio_dev_priv *dev = NULL;
+	uint16_t num;
 
 	desc = ctx->instance;
 	if (*(const uint16_t *)device < desc->nb_devs)
 		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
 
 	if (dev->dev_descriptor->pre_enable) {
-		return dev->dev_descriptor->pre_enable(dev->dev_instance, mask);
+		return dev->dev_descriptor->pre_enable(dev->dev_instance, mask, block_ids);
 	}
 
 	return 0;

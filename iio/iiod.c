@@ -368,12 +368,13 @@ int32_t iiod_parse_command(char *buf, struct comand_desc *res)
 			return 0;
 		case IIOD_OP_DISABLE_BUFFER:
 		case IIOD_OP_CREATE_BLOCK:
-			data->block_id[curr] = (int16_t)(cmd->code >> 16);
+			// data->block_id[curr] = (int16_t)(cmd->code >> 16);
 			data->block_size[curr] = *(uint32_t *)payload; //TODO: Is this correct. We read 8 bytes payload but only use 4?
 			return 0;
 		case IIOD_OP_FREE_BLOCK:
 		case IIOD_OP_FREE_BUFFER:
 		case IIOD_OP_TRANSFER_BLOCK:
+			data->block_id[curr_1] = (int16_t)(cmd->code >> 16);
 			data->code = cmd->code;
 //			res->bytes_size[curr_1] = *(uint32_t *)payload;
 			//TODO: need to see what to do here
@@ -890,7 +891,7 @@ static int32_t iiod_run_cmd(struct iiod_desc *desc,
 		break;
 	case IIOD_CMD_READBUF:
 		conn->res.write_val = 1;
-		ret = desc->ops.refill_buffer(&ctx, cmd_det->device);
+		ret = desc->ops.refill_buffer(&ctx, cmd_det->device, 0);
 		if (NO_OS_IS_ERR_VALUE(ret)) {
 			conn->res.val = ret;
 			break;
@@ -1083,6 +1084,8 @@ end:
 	return ret;
 }
 
+static uint16_t block_ids[16];
+
 static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 					struct iiod_conn_priv *conn)
 {
@@ -1108,6 +1111,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 	struct lf256fifo *fifo_stream = conn->fifo_stream;
 	struct iiod_event_desc *event_desc;
 	static struct iiod_buff buff;
+
 
 	struct iiod_event_data evt_data = {
 		.channel_id = 0,
@@ -1203,21 +1207,6 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		//new responder io is created in the client..  so create a corresponding one in here
 		conn->res_header.client_id = data->client_id;
 
-		//malloc buffers of size given
-		if (!curr) {
-			// stream = calloc(1, sizeof(*stream));
-			// if (!stream)
-			// 	return -ENOMEM;
-
-			// stream->blocks = calloc(MAX_NUM_BLOCKS, sizeof(*stream->blocks));
-			// if (!stream->blocks)
-			// 	return -ENOMEM;
-
-			// ret = lf256fifo_init(&fifo_stream);
-			// if (NO_OS_IS_ERR_VALUE(ret))
-			// 	return ret;
-		}
-
 		stream->blocks[curr] = calloc(1, sizeof(*stream->blocks[curr]));
 		if (!stream->blocks[curr])
 			return -ENOMEM;
@@ -1228,16 +1217,8 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 
 		stream->blocks[curr]->cl_id = data->client_id;
 		stream->blocks[curr]->size = data->block_size[curr];
-		// stream->blocks[curr]->data = (uint8_t *)calloc(1,
-		// 		data->block_size[curr] * sizeof(uint8_t));
-		// if (!stream->blocks[curr]->data)
-		// 	return -ENOMEM;
 
 		stream->nb_blocks++;
-
-		//Dummy data for transfers
-		// memset(stream->blocks[curr]->data, (curr + 1) << 4,
-		// 		data->block_size[curr]);
 
 		curr = (curr + 1) % MAX_NUM_BLOCKS;
 		break;
@@ -1246,17 +1227,21 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		/* get block index, client id from cmd and block size from cmd payload */
 		//take block index from (cmd.code>>16)
 		// TODO: Remove the code dependency and use a different variable.
-		uint8_t wr = (uint8_t)(int16_t)(data->code >> 16);
+		uint8_t wr = data->block_id[curr_1];
+		block_ids[curr_1] = wr;
 
 		//enqueue buf idx
 		lf256fifo_write(fifo_stream, wr);
 
 		if (stream->started) {
-			ret = desc->ops.refill_buffer(&ctx, &data->device);
+			lf256fifo_get(fifo_stream, &wr);
+			ret = desc->ops.refill_buffer(&ctx, &data->device, wr);
 			if (NO_OS_IS_ERR_VALUE(ret))	
 				return ret;
 		}
-		//curr_1++;
+
+		curr_1 = (curr_1 + 1)%stream->nb_blocks;
+
 		conn->state = IIOD_READING_LINE;
 
 		break;
@@ -1264,46 +1249,15 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 	case IIOD_OP_ENABLE_BUFFER:
 		conn->state = IIOD_WRITING_BIN_RESPONSE;
 		conn->res.write_val = 1;
+		uint8_t id;
+		lf256fifo_get(fifo_stream, &id);
+		ret = desc->ops.pre_enable(&ctx, &data->device, cmd_desc->mask, block_ids);
 
-		ret = desc->ops.pre_enable(&ctx, &data->device, cmd_desc->mask);
-
-		ret = desc->ops.refill_buffer(&ctx, &data->device);
-
-		// //Send response cmd
-		// ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-		// 		     sizeof(conn->res_header));
-		// if (NO_OS_IS_ERR_VALUE(ret))
-		// 	return ret;
+		ret = desc->ops.refill_buffer(&ctx, &data->device, id);
 
 		conn->res.val = 0; //dummy op
 		stream->started = true;
 
-		//memset(buffer, 0x10, sizeof(buffer));
-
-		//transfer here
-		// for (int i = 0; i < stream->nb_blocks; i++) {
-
-		// 	ret = lf256fifo_read(fifo_stream, &buf_id);
-		// 	if (NO_OS_IS_ERR_VALUE(ret))
-		// 		return ret;
-		// 	conn->res_header.client_id = stream->blocks[buf_id]->cl_id;
-		// 	conn->res_header.code = stream->blocks[buf_id]->size;
-		// 	//before payload.. header to be sent again with corresponding cl id and code
-		// 	ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-		// 			     sizeof(conn->res_header));
-
-		// 	buff.buf = stream->blocks[buf_id]->data;
-		// 	buff.len = stream->blocks[buf_id]->size;
-		// 	buff.idx = 0;
-
-		// 	do {
-		// 		ret = rw_iiod_buff(desc, conn,
-		// 				   &buff,
-		// 				   IIOD_WR);
-		// 	} while (ret == -EAGAIN);
-		// 	if (NO_OS_IS_ERR_VALUE(ret))
-		// 		return ret;
-		// }
 		break;
 
 	case IIOD_OP_FREE_BLOCK:
@@ -1335,6 +1289,8 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		conn->res.write_val = 1;
 		conn->res.buf.len = 0;
 		conn->state = IIOD_WRITING_BIN_RESPONSE;
+		curr=0;
+		curr_1=0;
 		//dealloc buffer
 
 		break;
@@ -1470,9 +1426,6 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 
 
 	switch (conn->state) {
-
-
-			
 		case IIOD_READING_LINE_OLD:
 			ret = iio_read_command(desc, conn);
 			if (NO_OS_IS_ERR_VALUE(ret))

@@ -314,7 +314,7 @@ struct iio_device {
 
 	/* Bufer callbacks */
 	/** Called before enabling buffer */
-	int32_t (*pre_enable)(void *dev, uint32_t mask);
+	int32_t (*pre_enable)(void *dev, uint32_t mask, uint16_t *block_ids);
 	/** Called after disabling buffer */
 	int32_t (*post_disable)(void *dev);
 	/** Called when buffer ready to transfer. Write/read to/from dev */
@@ -328,6 +328,7 @@ struct iio_device {
 	int32_t (*debug_reg_write)(void *dev, uint32_t reg, uint32_t writeval);
 
 	int32_t (*create_block)(struct iio_device_data *dev, void **buff, uint32_t block_size_bytes);
+	int32_t	(*transfer_block)(struct iio_device_data *dev, uint8_t block_id);
 
 };
 
