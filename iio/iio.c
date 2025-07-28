@@ -1481,6 +1481,18 @@ static int iio_close_dev(struct iiod_ctx *ctx, const void *device)
 	struct iio_trig_priv *trig;
 	int ret = 0;
 
+	if (ctx->binary){
+			struct iio_desc *desc;
+
+			desc = ctx->instance;
+			if (*(const uint16_t *)device < desc->nb_devs)
+				dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+			if (dev->dev_descriptor->post_disable)
+				return dev->dev_descriptor->post_disable(&dev->dev_instance);
+		}
+
+
 	dev = get_iio_device(ctx->instance, device);
 	if (!dev)
 		return -1;

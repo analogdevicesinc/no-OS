@@ -572,12 +572,12 @@ int32_t iiod_conn_add(struct iiod_desc *desc, struct iiod_conn_data *data,
 			ret = lf256fifo_init(&conn->fifo_stream);
 
 			conn->stream = calloc(1, sizeof(struct iio_stream));
-			// if (!stream)
-			// 	return -ENOMEM;
+			 if (!conn->stream)
+			 	return -ENOMEM;
 
 			conn->stream->blocks = calloc(MAX_NUM_BLOCKS, sizeof(conn->stream->blocks));
-			// if (!stream->blocks)
-			// 	return -ENOMEM;
+			 if (!conn->stream->blocks)
+			 	return -ENOMEM;
 
 			ret = iiod_set_protocol(conn, IIOD_ASCII_COMMAND);
 			if (NO_OS_IS_ERR_VALUE(ret)) {
@@ -1308,6 +1308,10 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 
 	case IIOD_OP_FREE_BLOCK:
 		//Dealloc blocks created
+		stream->started = false;
+
+		ret = desc->ops.close(&ctx, &data->device);
+
 		conn->res.val = 0;
 		conn->res.write_val = 1;
 		conn->res.buf.len = 0;
@@ -1552,6 +1556,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 						return ret;
 				}else{
 					conn->state = IIOD_READING_LINE;
+					return 0;
 				}
 			}
 		}
