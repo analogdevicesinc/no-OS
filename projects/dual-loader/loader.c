@@ -12,6 +12,7 @@
 #include <wdt_regs.h>
 #include <pwrseq_regs.h>
 #include <trimsir_regs.h>
+#include <string.h>
 #include "loader.h"
 
 /* HAL includes for flash operations */
@@ -664,33 +665,103 @@ static int validate_image_b()
 
 static void start_image_a()
 {
-    // Reset all peripherals and GPIO
+    // Complete interrupt system reset - CRITICAL for FreeRTOS
+    __disable_irq();
+    
+    // Reset SysTick (FreeRTOS scheduler dependency)
+    SysTick->CTRL = 0;
+    SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
+    
+    // Reset NVIC completely
+    for(int i = 0; i < 8; i++) {
+        NVIC->ICER[i] = 0xFFFFFFFF;  // Disable all interrupts
+        NVIC->ICPR[i] = 0xFFFFFFFF;  // Clear pending interrupts
+    }
+    
+    // Reset interrupt priorities to default
+    for(int i = 0; i < 240; i++) {
+        NVIC->IP[i] = 0;
+    }
+    
+    // Note: Removed dangerous memory clearing - was destroying active task stacks
+    
+    // Set VTOR first, before any resets
+    SCB->VTOR = IMAGE_A_START;
+    __DSB(); __ISB();  // Ensure VTOR is set
+    
+    // Validate vector table before using it
+    uint32_t stack_ptr = *(uint32_t*)IMAGE_A_START;
+    uint32_t reset_addr = *(uint32_t*)(IMAGE_A_START + 4);
+    
+    // Basic validation: stack should be in SRAM, reset in flash
+    if ((stack_ptr & 0xF0000000) != 0x20000000 || (reset_addr & 0xF0000000) != 0x10000000) {
+        // Invalid vector table, halt
+        while(1);
+    }
+    
+    // Reset all peripherals and GPIO AFTER setting VTOR
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
     
-    // Set VTOR to point to Image A
-    SCB->VTOR = IMAGE_A_START;
+    // Wait for reset to complete (add delay)
+    for(volatile int i = 0; i < 1000; i++);
+    __DSB(); __ISB();  // Memory barriers
     
     // Load stack pointer and reset handler from Image A vector table
-    __set_MSP(*(uint32_t*)IMAGE_A_START);
+    __set_MSP(stack_ptr);
     
     // Jump to Image A reset handler
-    void (*resetHandler)(void) = (void (*)(void))(*(uint32_t*)(IMAGE_A_START + 4));
+    void (*resetHandler)(void) = (void (*)(void))reset_addr;
     resetHandler();
 }
 
 static void start_image_b()
 {
-    // Reset all peripherals and GPIO
+    // Complete interrupt system reset - CRITICAL for FreeRTOS
+    __disable_irq();
+    
+    // Reset SysTick (FreeRTOS scheduler dependency)
+    SysTick->CTRL = 0;
+    SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
+    
+    // Reset NVIC completely
+    for(int i = 0; i < 8; i++) {
+        NVIC->ICER[i] = 0xFFFFFFFF;  // Disable all interrupts
+        NVIC->ICPR[i] = 0xFFFFFFFF;  // Clear pending interrupts
+    }
+    
+    // Reset interrupt priorities to default
+    for(int i = 0; i < 240; i++) {
+        NVIC->IP[i] = 0;
+    }
+    
+    // Note: Removed dangerous memory clearing - was destroying active task stacks
+    
+    // Set VTOR first, before any resets
+    SCB->VTOR = IMAGE_B_START;
+    __DSB(); __ISB();  // Ensure VTOR is set
+    
+    // Validate vector table before using it
+    uint32_t stack_ptr = *(uint32_t*)IMAGE_B_START;
+    uint32_t reset_addr = *(uint32_t*)(IMAGE_B_START + 4);
+    
+    // Basic validation: stack should be in SRAM, reset in flash
+    if ((stack_ptr & 0xF0000000) != 0x20000000 || (reset_addr & 0xF0000000) != 0x10000000) {
+        // Invalid vector table, halt
+        while(1);
+    }
+    
+    // Reset all peripherals and GPIO AFTER setting VTOR
     MXC_GCR->rst0 |= MXC_F_GCR_RST0_SOFT;
     
-    // Set VTOR to point to Image B
-    SCB->VTOR = IMAGE_B_START;
+    // Wait for reset to complete (add delay)
+    for(volatile int i = 0; i < 1000; i++);
+    __DSB(); __ISB();  // Memory barriers
     
     // Load stack pointer and reset handler from Image B vector table
-    __set_MSP(*(uint32_t*)IMAGE_B_START);
+    __set_MSP(stack_ptr);
     
     // Jump to Image B reset handler
-    void (*resetHandler)(void) = (void (*)(void))(*(uint32_t*)(IMAGE_B_START + 4));
+    void (*resetHandler)(void) = (void (*)(void))reset_addr;
     resetHandler();
 }
 
