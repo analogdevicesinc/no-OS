@@ -1263,7 +1263,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 
 	case IIOD_OP_ENABLE_BUFFER:
 		conn->state = IIOD_WRITING_BIN_RESPONSE;
-		conn->res.write_val = 1;
+		// conn->res.write_val = 1;
 		uint8_t id;
 		lf256fifo_get(fifo_stream, &id);
 		ret = desc->ops.pre_enable(&ctx, &data->device, cmd_desc->mask, block_ids);
@@ -1282,7 +1282,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		ret = desc->ops.close(&ctx, &data->device);
 
 		conn->res.val = 0;
-		conn->res.write_val = 1;
+		// conn->res.write_val = 1;
 		conn->res.buf.len = 0;
 		if (stream && stream->blocks) {
 			for (int i = 0; i < stream->nb_blocks; i++) {
@@ -1547,7 +1547,7 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 
 		if ((data->op_code == IIOD_OP_TRANSFER_BLOCK) ||
 			(data->op_code == IIOD_OP_READ_EVENT))
-			conn->state = IIOD_READING_LINE; // IIOD_LINE_DONE;
+			conn->state = IIOD_LINE_DONE; //READ
 		else
 			conn->state = IIOD_WRITING_BIN_RESPONSE;
 		return 0;
@@ -1581,40 +1581,6 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			return iiod_run_state_bin(desc, conn);
 		}
 		__attribute__((fallthrough));
-//		if(conn->stream->started){
-//			if(!lf256fifo_is_empty(conn->fifo_stream)){
-//				lf256fifo_get(conn->fifo_stream, &c);
-//				if(conn->stream->blocks[c]->bytes_used == conn->stream->blocks[c]->size) {
-//					conn->res_header.client_id = conn->stream->blocks[c]->cl_id;
-//					conn->res_header.code = conn->stream->blocks[c]->size;
-//
-//					ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-//							 sizeof(conn->res_header));
-//
-//					buff.buf = conn->stream->blocks[c]->data;
-//					buff.len = conn->stream->blocks[c]->size;
-//					buff.idx = 0;
-//
-//					do {
-//						ret = rw_iiod_buff(desc, conn,
-//								&buff,
-//								IIOD_WR);
-//					} while (ret == -EAGAIN);
-//
-//					conn->stream->blocks[c]->bytes_used = 0;
-//
-//					ret = lf256fifo_read(conn->fifo_stream, &c);
-//					if (NO_OS_IS_ERR_VALUE(ret))
-//						return ret;
-//				}else{
-//					conn->state = IIOD_READING_LINE;
-//					return 0;
-//				}
-//			}
-//		}
-//
-//		conn->state = IIOD_READING_LINE;
-//		return 0;
 
 	case IIOD_READING_LINE:
 		if (conn->protocol == IIOD_ASCII_COMMAND) {
@@ -1738,7 +1704,7 @@ static int32_t iiod_run_state(struct iiod_desc *desc,
 			}
 		}
 
-		conn->state = IIOD_READING_LINE; //IIOD_LINE_DONE;
+		conn->state = IIOD_LINE_DONE; //IIOD_READING_LINE;
 		return 0;
 
 	case IIOD_RW_BUF:
