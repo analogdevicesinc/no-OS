@@ -32,6 +32,7 @@
 *******************************************************************************/
 #include <stdio.h>
 #include "no_os_esh.h"
+#include "shell.h"
 
 void esh_write_char(char c)
 {
