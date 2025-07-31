@@ -187,6 +187,20 @@ struct iiod_run_cmd_result {
 	struct iiod_buff buf;
 };
 
+struct iiod_event_desc {
+	/* Number of clients */
+	uint16_t num_clients;
+	/* List of clients */
+	struct no_os_list_desc *clients;
+};
+
+struct iiod_event_client {
+	uint16_t client_id;
+	uint16_t dev_id;
+	uint16_t event_read_count;
+	struct lf256fifo *event_data;
+};
+
 /* Internal structure to handle a connection state */
 struct iiod_conn_priv {
 	/* User instance of the connection to be sent in iiod_ctx */
@@ -201,10 +215,13 @@ struct iiod_conn_priv {
 	struct iiod_run_cmd_result res;
 	/* IIOD States */
 	enum {
+		/* Write buffer if available */
+		IIOD_WRITING_BUF_DATA,
+		/* Write Event Data if available */
+		IIOD_WRITING_EVENT_DATA,
 		/* Reading line until \n */
-		IIOD_READING_LINE, //named as this but this is to check data to be sent
-		IIOD_READING_LINE_OLD,
-		/* Execut cmd without I/O operations */
+		IIOD_READING_LINE,
+		/* Execute cmd without I/O operations */
 		IIOD_RUNNING_CMD,
 		/* Write result of executed cmd */
 		IIOD_WRITING_CMD_RESULT,
@@ -241,12 +258,12 @@ struct iiod_conn_priv {
 	/* IIOD Command Format */
 	enum iiod_protocol protocol;
 	struct iiod_command res_header;
-	/* Event List */
-	struct no_os_list_desc *event;
+	/* Event Descriptor */
+	struct iiod_event_desc events;
 	/* Buffer to store the event data for transfer */
 	uint8_t event_data[16];
 
-	struct no_os_lf256fifo *fifo_stream;
+	struct lf256fifo *fifo_stream;
 	struct iio_stream *stream;
 };
 
@@ -268,23 +285,5 @@ struct iiod_desc {
 	int32_t (*run_state)(struct iiod_desc *,
 			      struct iiod_conn_priv *);
 };
-
-struct iiod_event_desc {
-	uint16_t client_id;
-	uint16_t event_read_count;
-	struct lf256fifo *event_data;
-};
-
-struct __attribute__((packed)) iiod_event_data {
-	uint64_t channel_id: 16;
-	uint64_t diff_channel_id: 16;
-	uint64_t channel_type: 8;
-	uint64_t modifier: 8;
-	uint64_t event_dir: 7;
-	uint64_t is_differential: 1;
-	uint64_t event_type: 8;
-	int64_t timestamp: 64;
-};
-
 
 #endif //IIOD_PRIVATE_H

@@ -156,6 +156,10 @@ struct iiod_ops {
 
 	int (*create_block)(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes);
 	int (*pre_enable)(struct iiod_ctx *ctx, const void *device, uint32_t mask, uint16_t *block_ids);
+
+	int (*create_event_stream)(struct iiod_ctx *ctx, const void *device, const uint32_t priv);
+	int (*read_event)(struct iiod_ctx *ctx, const void *device, const uint32_t priv, uint8_t *buf);
+	int (*free_event_stream)(struct iiod_ctx *ctx, const void *device, const uint32_t priv);
 };
 
 /*

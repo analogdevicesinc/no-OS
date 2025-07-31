@@ -266,6 +266,17 @@ struct iio_stream {
 	bool started, buf_enabled, all_enqueued;
 };
 
+struct __attribute__((packed)) iio_event {
+	uint64_t channel_id: 16;
+	uint64_t diff_channel_id: 16;
+	uint64_t channel_type: 8;
+	uint64_t modifier: 8;
+	uint64_t event_dir: 7;
+	uint64_t is_differential: 1;
+	uint64_t event_type: 8;
+	int64_t timestamp: 64;
+};
+
 struct iio_device_data {
 	void *dev;
 	struct iio_buffer *buffer;

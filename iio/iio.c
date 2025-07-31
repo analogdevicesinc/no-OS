@@ -43,6 +43,7 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "no_os_circular_buffer.h"
+#include "no_os_lf256fifo.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -149,6 +150,12 @@ struct iio_buffer_priv {
 	uint8_t 		block_ids[MAX_NUM_BLOCKS];
 };
 
+struct iio_event_priv {
+	uint32_t iiod_priv;
+	struct lf256fifo *event;
+	uint32_t count;
+};
+
 struct channel_sort_priv {
 	/** Number of channel attributes */
 	uint16_t num_attr;
@@ -171,6 +178,8 @@ struct iio_sorted_priv {
 	uint16_t *debug_attributes;
 	/** Number of buffer attributes */
 	uint32_t num_buffer_attr;
+	/** Index of REG_ACCESS_ATTRIBUTE in sorted debug attributes */
+	uint16_t reg_access_attr;
 	/** Array of sorted buffer attributes. */
 	uint16_t *buffer_attributes;
 	/** Array of sorted channel attributes */
@@ -201,6 +210,8 @@ struct iio_dev_priv {
 	uint32_t		trig_idx;
 	/* Structure storing sorted details of the device */
 	struct iio_sorted_priv sorted_data;
+	/* Array to store the event fifo */
+	struct iio_event_priv event_list[16];
 };
 
 /**
@@ -811,6 +822,9 @@ static struct iio_attribute *get_attribute(struct iiod_attr *attr,
 
 	/* Search attribute */
 	if ((attr->idx != -1) && sorted_attr) {
+		if ((attr->type == IIO_ATTR_TYPE_DEBUG) &&
+			(attr->idx > dev->sorted_data.reg_access_attr))
+			return &attributes[sorted_attr[attr->idx - 1]];
 		return &attributes[sorted_attr[attr->idx]];
 	} else if(attr->name) {
 		while (attributes[i].name) {
@@ -870,12 +884,13 @@ static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 	/* If IIO device with given name is found, handle reading of attributes */
 	if (dev) {
-//		if (attr->type == IIO_ATTR_TYPE_DEBUG &&
-//			strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
-//			if (dev->dev_descriptor->debug_reg_read)
-//				return debug_reg_read(dev, buf, len);
-//			return -ENOENT;
-//		}
+
+		if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+			attr->idx == dev->sorted_data.reg_access_attr) {
+			if (dev->dev_descriptor->debug_reg_read)
+				return debug_reg_read(dev, buf, len);
+			return -ENOENT;
+		}
 
 		if (attr->ch_id != -1) {
 			if (attr->ch_id < desc->nb_devs)
@@ -1031,12 +1046,12 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 	/* If IIO device with given name is found, handle writing of attributes */
 	if (dev) {
 
-		// if (attr->type == IIO_ATTR_TYPE_DEBUG &&
-		//     strcmp(attr->name, REG_ACCESS_ATTRIBUTE) == 0) {
-		// 	if (dev->dev_descriptor->debug_reg_write)
-		// 		return debug_reg_write(dev, buf, len);
-		// 	return -ENOENT;
-		// }
+		if (attr->type == IIO_ATTR_TYPE_DEBUG &&
+			attr->idx == dev->sorted_data.reg_access_attr) {
+			if (dev->dev_descriptor->debug_reg_write)
+				return debug_reg_write(dev, buf, len);
+			return -ENOENT;
+		}
 
 		if (attr->ch_id != -1) {
 			if (attr->ch_id < desc->nb_devs)
@@ -1616,6 +1631,106 @@ static int iio_pre_enable(struct iiod_ctx *ctx, const void *device,
 	return 0;
 }
 
+static int iio_create_event_stream (struct iiod_ctx *ctx, const void *device,
+		const uint32_t priv)
+{
+	struct iio_desc *desc;
+	struct iio_dev_priv *dev = NULL;
+	uint32_t i;
+	int ret;
+
+	if (!ctx || !device)
+		return -EINVAL;
+	if (!ctx->binary)
+		return -ENOSYS;
+
+	desc = ctx->instance;
+	if (*(const uint16_t *)device < desc->nb_devs)
+		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
+		if ((dev->event_list[i].event) &&
+			(dev->event_list[i].iiod_priv == priv)) {
+				/* Already created */
+				return -EEXIST;
+		}
+	}
+	
+	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
+		if (!dev->event_list[i].event) {
+			ret = (int) lf256fifo_init(&dev->event_list[i].event);
+			if (NO_OS_IS_ERR_VALUE(ret))
+				return ret;
+			dev->event_list[i].iiod_priv = priv;
+			return 0;
+		}
+	}
+
+	return -ENOMEM;
+}
+
+static int iio_read_event (struct iiod_ctx *ctx, const void *device, 
+			const uint32_t priv, uint8_t *buf)
+{
+	struct iio_desc *desc;
+	struct iio_dev_priv *dev;
+	int	ret;
+	uint32_t i, j;
+
+	if (!ctx || !device)
+		return -EINVAL;
+	if (!ctx->binary)
+		return -ENOSYS; /* ASCII mode not supported */
+
+	desc = ctx->instance;
+	if (*(const uint16_t *)device < desc->nb_devs)
+		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
+		if (dev->event_list[i].iiod_priv == priv) {
+			if (dev->event_list[i].count) {
+				for (j = 0, ret = 0; (j < sizeof(struct iio_event)) && !ret; j++) {
+					ret = lf256fifo_read(dev->event_list[i].event,
+							buf + j);
+				}
+				dev->event_list[i].count--;
+				return sizeof(struct iio_event);
+			} else {
+				return -EAGAIN;
+			}
+		}
+	}
+
+	return -EINVAL;
+}
+
+static int iio_free_event_stream (struct iiod_ctx *ctx, const void *device,
+		const uint32_t priv)
+{
+	struct iio_desc *desc;
+	struct iio_dev_priv *dev;
+	uint32_t i;
+
+	if (!ctx || !device)
+		return -EINVAL;
+	if (!ctx->binary)
+		return -ENOSYS; /* ASCII mode not supported */
+
+	desc = ctx->instance;
+	if (*(const uint16_t *)device < desc->nb_devs)
+		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
+		if (dev->event_list[i].iiod_priv == priv) {
+			lf256fifo_remove(dev->event_list[i].event);
+			dev->event_list[i].event = NULL;
+			return 0;
+		}
+	}
+
+	return -EINVAL;
+}
+
 /**
  * @brief Read chunk of data from RAM to pbuf. Call
  * "iio_transfer_dev_to_mem()" first.
@@ -1802,6 +1917,39 @@ close_socket:
 	return ret;
 }
 #endif
+
+/**
+ * @brief Store the event data 
+ * @param desc - IIO descriptor
+ * @param device - IIO device descriptor
+ * @param event - Event generated
+ * @return 0 in case of success or negative value otherwise. 
+ */
+int iio_set_event(struct iio_desc *desc, struct iio_device *device, struct iio_event *event)
+{
+	uint32_t i, j, k;
+	int32_t ret;
+
+	if (!desc || !event)
+		return -EINVAL;
+	
+	struct iio_dev_priv *dev;
+
+	for (i = 0; i < desc->nb_devs; i++) {
+		dev = desc->devs + i;
+		if (dev->dev_descriptor != device)
+			continue;
+		for (j = 0; j < NO_OS_ARRAY_SIZE(dev->event_list); j++) {
+			if ((dev->event_list[j].event) &&
+				(!lf256fifo_is_full(dev->event_list[j].event))) {
+				for (k = 0, ret = 0; (k < sizeof(struct iio_event)) && !ret; k++) {
+					ret = lf256fifo_write(dev->event_list[j].event, ((char *)event)[k]);
+				}
+				dev->event_list[j].count++;
+			}
+		}
+	}
+}
 
 /**
  * @brief Execute an iio step
@@ -2221,6 +2369,7 @@ static int32_t sort_dev_data(struct iio_dev_priv *dev)
 	uint32_t i;
 	struct iio_device *desc = dev->dev_descriptor;
 	struct iio_channel *channel;
+	struct iio_attribute *attr;
 
 	memset(&dev->sorted_data, 0, sizeof(dev->sorted_data));
 
@@ -2267,22 +2416,7 @@ static int32_t sort_dev_data(struct iio_dev_priv *dev)
 				       dev->sorted_data.attributes);
 		}
 	}
-	if (desc->debug_attributes) {
-		while (desc->debug_attributes[dev->sorted_data.num_debug_attr].name)
-			dev->sorted_data.num_debug_attr++;
 
-		if (dev->sorted_data.num_debug_attr) {
-			dev->sorted_data.debug_attributes = (uint16_t *) calloc(
-					dev->sorted_data.num_debug_attr,
-					sizeof(uint16_t));
-			if (!dev->sorted_data.debug_attributes)
-				goto fail_sort_data;
-			
-			sort_attribute(desc->debug_attributes,
-				       dev->sorted_data.num_debug_attr,
-				       dev->sorted_data.debug_attributes);
-		}
-	}
 	if (desc->buffer_attributes) {
 		while (desc->buffer_attributes[dev->sorted_data.num_buffer_attr].name)
 			dev->sorted_data.num_buffer_attr++;
@@ -2297,6 +2431,31 @@ static int32_t sort_dev_data(struct iio_dev_priv *dev)
 			sort_attribute(desc->buffer_attributes,
 				       dev->sorted_data.num_buffer_attr,
 				       dev->sorted_data.buffer_attributes);
+		}
+	}
+
+	if (desc->debug_attributes) {
+		while (desc->debug_attributes[dev->sorted_data.num_debug_attr].name)
+			dev->sorted_data.num_debug_attr++;
+
+		dev->sorted_data.debug_attributes = (uint16_t *) calloc(
+				dev->sorted_data.num_debug_attr,
+				sizeof(uint16_t));
+		if (!dev->sorted_data.debug_attributes)
+			goto fail_sort_data;
+
+		sort_attribute(desc->debug_attributes,
+				   dev->sorted_data.num_debug_attr,
+				   dev->sorted_data.debug_attributes);
+
+		if (dev->dev_descriptor->debug_reg_read || dev->dev_descriptor->debug_reg_write) {
+			for (i = 0; i < dev->sorted_data.num_debug_attr; i++) {
+				attr = &desc->debug_attributes[dev->sorted_data.debug_attributes[i]];
+				if (strcmp(REG_ACCESS_ATTRIBUTE, attr->name) < 0) {
+					dev->sorted_data.reg_access_attr = i;
+					break;
+				}
+			}
 		}
 	}
 
@@ -2443,6 +2602,9 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->set_buffers_count = iio_set_buffers_count;
 	ops->create_block = iio_create_block;
 	ops->pre_enable = iio_pre_enable;
+	ops->create_event_stream = iio_create_event_stream;
+	ops->read_event = iio_read_event;
+	ops->free_event_stream = iio_free_event_stream;
 
 	iiod_param.instance = ldesc;
 	iiod_param.ops = ops;

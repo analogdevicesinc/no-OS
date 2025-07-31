@@ -140,4 +140,8 @@ int iio_buffer_push_scan(struct iio_buffer *buffer, void *data);
 /* Read from buffer iio_buffer.bytes_per_scan bytes into data */
 int iio_buffer_pop_scan(struct iio_buffer *buffer, void *data);
 
+/* Event functions. */
+int iio_set_event(struct iio_desc *desc, struct iio_device *device,
+			struct iio_event *event);
+
 #endif /* IIO_H_ */
