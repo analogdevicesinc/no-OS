@@ -34,5 +34,6 @@
 #define __NO_OS_ESH_H__
 
 void prompt();
+void initial_setup();
 
 #endif // __NO_OS_ESH_H__
