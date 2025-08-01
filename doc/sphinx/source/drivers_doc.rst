@@ -112,6 +112,13 @@ INERTIAL MEASUREMENT UNITS
 
    drivers/imu
 
+IO-LINK
+=======
+.. toctree::
+   :maxdepth: 1
+
+   drivers/max22516
+
 LED
 ===
 .. toctree::
