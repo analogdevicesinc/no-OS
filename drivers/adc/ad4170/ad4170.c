@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   ad4170.c
- *   @brief  Source file for the ad4170 driver.
+ *   @brief  Source file for the AD4170, AD4190 driver.
  *   @author Darius Berghe (darius.berghe@analog.com)
  *   @author Janani Sunil (janani.sunil@analog.com)
  *   @author Mahesh Phalke (mahesh.phalke@analog.com)
