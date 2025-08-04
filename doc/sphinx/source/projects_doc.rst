@@ -29,6 +29,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/ad9208
 
+   projects/eval-ad7490sdz
+
 ADC / DAC
 ==========
 .. toctree::
