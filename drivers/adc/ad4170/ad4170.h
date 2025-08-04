@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   ad4170.h
- *   @brief  Header file for the ad4170 driver.
+ *   @brief  Header file for the AD4170, AD4190 driver.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
  * Copyright 2020, 2023(c) Analog Devices, Inc.
