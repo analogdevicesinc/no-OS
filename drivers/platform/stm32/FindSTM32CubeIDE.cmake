@@ -13,4 +13,17 @@ find_package_handle_standard_args(
   REQUIRED_VARS STM32CUBEIDE_EXECUTABLE
 )
 
+get_filename_component(
+  CUBEIDE_DIR
+  ${STM32CUBEIDE_EXECUTABLE}
+  DIRECTORY
+)
+
 mark_as_advanced(STM32CUBEIDE_EXECUTABLE)
+
+file(GLOB_RECURSE OPENOCD_PATH ${CUBEIDE_DIR}/plugins/*/openocd)
+file(GLOB_RECURSE OPENOCD_SCRIPTS ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
+
+if(OPENOCD_SCRIPTS)
+  cmake_path(GET OPENOCD_SCRIPTS PARENT_PATH OPENOCD_SCRIPTS)
+endif()
