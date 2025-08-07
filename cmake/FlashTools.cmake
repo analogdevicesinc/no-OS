@@ -5,12 +5,12 @@ function(add_jlink_flash_target TARGET_NAME)
 	set(HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.hex")
 
 	add_custom_target(flash_${TARGET_NAME}
-	COMMAND "${VENV_PYTHON_EXE}" "${FLASH_SCRIPT}"
-		--device "${TARGET}"
-		--file "${HEX_FILE}"
-	DEPENDS ${TARGET_NAME} # Ensures the elf and hex are built first
-	COMMENT "Flashing ${TARGET}..."
-	VERBATIM
+		COMMAND "${VENV_PYTHON_EXE}" "${FLASH_SCRIPT}"
+			--device "${TARGET}"
+			--file "${HEX_FILE}"
+		DEPENDS ${TARGET_NAME} # Ensures the elf and hex are built first
+		COMMENT "Flashing ${TARGET}..."
+		VERBATIM
 	)
 endfunction()
 

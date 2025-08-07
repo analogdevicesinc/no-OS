@@ -64,9 +64,15 @@ if(NOT EXISTS "${VENV_PYTHON_EXE}")
   execute_process(COMMAND ${VENV_PYTHON_EXE} -m pip install -r ${REQS_FILE})
 endif()
 
+if(NOT ${NATIVE_BUILD})
+  set(VENV_PYTHON_EXE ${VENV_PYTHON_EXE} PARENT_SCOPE)
+endif()
+
 add_library(no-os STATIC)
 
-include_directories(
+target_include_directories(
+        no-os
+        PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
