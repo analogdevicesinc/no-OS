@@ -42,4 +42,11 @@ message(STATUS "MAXIM_LIBRARIES in toolchain: ${MAXIM_LIBRARIES}")
 
 set(CMAKE_ASM_FLAGS "-x assembler-with-cpp")
 
-set(OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/OpenOCD)
+# set(OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/OpenOCD)
+
+file(GLOB_RECURSE OPENOCD_PATH /home/xvr/MaximSDK_v2/Tools/*/openocd)
+file(GLOB_RECURSE OPENOCD_SCRIPTS /home/xvr/MaximSDK_v2/Tools/*/mem_helper.tcl)
+
+list(GET OPENOCD_SCRIPTS 0 OPENOCD_SCRIPTS)
+list(GET OPENOCD_PATH 0 OPENOCD_PATH)
+cmake_path(GET OPENOCD_SCRIPTS PARENT_PATH OPENOCD_SCRIPTS)
