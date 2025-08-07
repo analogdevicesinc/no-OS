@@ -80,6 +80,8 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/ad3552r
 
+   drivers/ad9152
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
