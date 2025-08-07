@@ -38,6 +38,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/adaq7980
 
+   drivers/max9611pmb
+
 ADC / DAC
 ==========
 .. toctree::
