@@ -377,12 +377,12 @@ int32_t iiod_parse_command(char *buf, struct comand_desc *res)
 		case IIOD_OP_DISABLE_BUFFER:
 		case IIOD_OP_CREATE_BLOCK:
 			// data->block_id[curr] = (int16_t)(cmd->code >> 16);
-			data->block_size[curr] = *(uint32_t *)payload; //TODO: Is this correct. We read 8 bytes payload but only use 4?
+			data->bytes_size = *(uint32_t *)payload; //TODO: Is this correct. We read 8 bytes payload but only use 4?
 			return 0;
 		case IIOD_OP_FREE_BLOCK:
 		case IIOD_OP_FREE_BUFFER:
 		case IIOD_OP_TRANSFER_BLOCK:
-			data->block_id[curr_1] = (int16_t)(cmd->code >> 16);
+			data->block_id = (int16_t)(cmd->code >> 16);
 			data->code = cmd->code;
 //			res->bytes_size[curr_1] = *(uint32_t *)payload;
 			//TODO: need to see what to do here
@@ -1109,8 +1109,6 @@ end:
 	return ret;
 }
 
-static uint16_t block_ids[16];
-
 static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 					struct iiod_conn_priv *conn)
 {
@@ -1217,7 +1215,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		conn->res.buf.len = 0;
 
 		/* Send response with block size as code created and cl id */
-		conn->res_header.code = data->block_size[curr];
+		conn->res_header.code = data->bytes_size;
 
 		//new responder io is created in the client..  so create a corresponding one in here
 		conn->res_header.client_id = data->client_id;
@@ -1228,10 +1226,10 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 
 		if(desc->ops.create_block)
 			ret = desc->ops.create_block(&ctx, &data->device,
-							 stream->blocks[curr], data->block_size[curr]);
+							 stream->blocks[curr], data->bytes_size);
 
 		stream->blocks[curr]->cl_id = data->client_id;
-		stream->blocks[curr]->size = data->block_size[curr];
+		stream->blocks[curr]->size = data->bytes_size;
 
 		stream->nb_blocks++;
 
@@ -1242,8 +1240,8 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		/* get block index, client id from cmd and block size from cmd payload */
 		//take block index from (cmd.code>>16)
 		// TODO: Remove the code dependency and use a different variable.
-		uint8_t wr = data->block_id[curr_1];
-		block_ids[curr_1] = wr;
+		uint8_t wr = data->block_id;
+		conn->block_ids[curr_1] = wr;
 
 		//enqueue buf idx
 		lf256fifo_write(fifo_stream, wr);
@@ -1266,7 +1264,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		// conn->res.write_val = 1;
 		uint8_t id;
 		lf256fifo_get(fifo_stream, &id);
-		ret = desc->ops.pre_enable(&ctx, &data->device, cmd_desc->mask, block_ids);
+		ret = desc->ops.pre_enable(&ctx, &data->device, cmd_desc->mask, conn->block_ids);
 
 		ret = desc->ops.refill_buffer(&ctx, &data->device, id);
 

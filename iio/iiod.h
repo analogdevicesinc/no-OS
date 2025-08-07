@@ -49,6 +49,7 @@
 #define MAX_CHN_ID		64
 #define MAX_ATTR_NAME		256
 #define MAX_NUM_BLOCKS 16
+#define MAX_NUM_EVENTS 16
 
 enum iio_attr_type {
 	IIO_ATTR_TYPE_DEBUG,

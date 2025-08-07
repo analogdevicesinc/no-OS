@@ -143,9 +143,8 @@ struct command_data_binary {
 	uint16_t trigger;
 	/* Buffer ID */
 	uint16_t buffer;
-	uint16_t block_id[MAX_NUM_BLOCKS];
-	uint32_t block_size[MAX_NUM_BLOCKS];
-	uint32_t bytes_size[MAX_NUM_BLOCKS];
+	uint16_t block_id;
+	uint32_t bytes_size;
 	uint8_t curr;
 };
 
@@ -261,7 +260,8 @@ struct iiod_conn_priv {
 	/* Event Descriptor */
 	struct iiod_event_desc events;
 	/* Buffer to store the event data for transfer */
-	uint8_t event_data[16];
+	uint8_t event_data[MAX_NUM_EVENTS];
+	uint16_t block_ids[MAX_NUM_BLOCKS];
 
 	struct lf256fifo *fifo_stream;
 	struct iio_stream *stream;
