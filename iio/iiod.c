@@ -1129,7 +1129,6 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		.ch_id = -1
 	};
 
-	static uint8_t *blocks[16];
 	struct iio_stream *stream = conn->stream;
 	struct lf256fifo *fifo_stream = conn->fifo_stream;
 	struct iiod_event_client *client_desc;

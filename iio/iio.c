@@ -1613,8 +1613,7 @@ static int iio_refill_buffer(struct iiod_ctx *ctx, const void *device, uint8_t b
 	return iio_call_submit(ctx, device, IIO_DIRECTION_INPUT);
 }
 
-static int iio_pre_enable(struct iiod_ctx *ctx, const void *device,
-			 uint32_t samples, uint32_t mask, uint16_t *block_ids)
+static int iio_pre_enable(struct iiod_ctx *ctx, const void *device, uint32_t mask, uint16_t *block_ids)
 {
 	struct iio_desc *desc;
 	struct iio_dev_priv *dev = NULL;
