@@ -51,8 +51,7 @@ int max14919_set_out(struct max14919_desc *desc, enum max14919_out_state *state)
 		return -EINVAL;
 
 	for (i = 0; i < MAX14919_OUT_CHANNELS; i++) {
-		ret = no_os_gpio_set_value(desc->in_desc[i],
-					   state[i] ? NO_OS_GPIO_LOW : NO_OS_GPIO_HIGH);
+		ret = no_os_gpio_set_value(desc->in_desc[i], state[i]);
 		if (ret)
 			return ret;
 
