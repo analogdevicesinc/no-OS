@@ -9,6 +9,9 @@ ifeq ($(wildcard $(NO-OS)/libraries/ftd2xx/release),)
         endif
 endif
 
+TARGET = mpsse
+EXTRA_LIBS += libmpsse.a, ftd2xx
+
 CFLAGS += -DFT_VER_MAJOR
 CFLAGS += -DFT_VER_MINOR
 CFLAGS += -DFT_VER_BUILD
