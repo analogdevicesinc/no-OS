@@ -37,6 +37,12 @@
 #include <stdint.h>
 
 /**
+* @struct no_os_rtc_platform_ops
+* @brief Structure holding RTC platform operations.
+*/
+struct no_os_rtc_platform_ops ;
+
+/**
  * @struct no_os_rtc_desc
  * @brief Structure holding RTC descriptor.
  */
@@ -49,6 +55,8 @@ struct no_os_rtc_desc {
 	uint32_t load;
 	/** Device specific RTC parameters. */
 	void *extra;
+	/** RTC Platform Ops */
+	const struct no_os_rtc_platform_ops *platform_ops;
 };
 
 /**
@@ -64,6 +72,26 @@ struct no_os_rtc_init_param {
 	uint32_t load;
 	/** Device specific RTC parameters. */
 	void *extra;
+	/** RTC Platform Ops */
+	const struct no_os_rtc_platform_ops *platform_ops;
+};
+
+struct no_os_rtc_platform_ops {
+	/** Initialize the RTC peripheral. */
+	int32_t (*init)(struct no_os_rtc_desc **,
+			struct no_os_rtc_init_param *);
+	/** Free the resources allocated by no_os_rtc_init(). */
+	int32_t (*remove)(struct no_os_rtc_desc *);
+	/** Start the real time clock. */
+	int32_t (*start)(struct no_os_rtc_desc *);
+	/** Stop the real time clock. */
+	int32_t (*stop)(struct no_os_rtc_desc *);
+	/** Get the current count for the real time clock. */
+	int32_t (*get_cnt)(struct no_os_rtc_desc *, uint32_t *);
+	/** Set the current count for the real time clock. */
+	int32_t (*set_cnt)(struct no_os_rtc_desc *, uint32_t);
+	/** Set the time at which an interrupt will occur */
+	int32_t (*set_irq_time)(struct no_os_rtc_desc *, uint32_t);
 };
 
 /** Initialize the RTC peripheral. */
