@@ -38,6 +38,8 @@
 #include "no_os_alloc.h"
 #include "usbd_cdc.h"
 
+//#define TEST_UART_DMA	//uncomment to test with DMA and UART
+
 #ifndef STM32_USB_CDC_ACM_RXBUF_LEN
 #define STM32_USB_CDC_ACM_RXBUF_LEN 512
 #endif
@@ -46,8 +48,13 @@
 #define STM32_USB_CDC_ACM_TXBUF_LEN 512
 #endif
 
+#if defined(TEST_UART_DMA)
+static uint8_t rxbuf[STM32_USB_CDC_ACM_RXBUF_LEN] __attribute__((aligned(4)));
+static uint8_t txbuf[STM32_USB_CDC_ACM_TXBUF_LEN] __attribute__((aligned(4)));
+#else
 static uint8_t rxbuf[STM32_USB_CDC_ACM_RXBUF_LEN];
 static uint8_t txbuf[STM32_USB_CDC_ACM_TXBUF_LEN];
+#endif
 
 USBD_HandleTypeDef *gusbdevice;
 
@@ -232,6 +239,57 @@ static int32_t stm32_usb_uart_write(struct no_os_uart_desc *desc,
 				    uint32_t bytes_number)
 {
 	int ret;
+
+
+#if defined(TEST_UART_DMA)
+#if 0
+	uint32_t bytes_sent = 0;
+	uint32_t chunk;
+
+	while (bytes_sent < bytes_number) {
+		chunk = no_os_min(bytes_number - bytes_sent, STM32_USB_CDC_ACM_TXBUF_LEN);
+
+		// Wait for previous transfer to complete
+		while (tx_pending);
+
+		tx_pending = 1;
+		ret = CDC_Transmit((uint8_t *)&data[bytes_sent], chunk);
+		if (ret) {
+			tx_pending = 0;
+			return -EFAULT;
+		}
+
+		no_os_udelay(50);
+
+		// Wait for this transfer to complete
+		while (tx_pending);
+
+		bytes_sent += chunk;
+
+		no_os_udelay(50);
+	}
+
+	return bytes_sent;
+#else
+	unsigned int len = no_os_min(bytes_number, STM32_USB_CDC_ACM_TXBUF_LEN);
+
+	no_os_udelay(500);
+
+	tx_pending = 1;
+	ret = CDC_Transmit(data, len);
+	if (ret) {
+		tx_pending = 0;
+		return -EFAULT;
+	}
+
+	no_os_udelay(500);
+
+	while (tx_pending)
+		;
+
+	return len;
+#endif
+#else
 	unsigned int len = no_os_min(bytes_number, STM32_USB_CDC_ACM_TXBUF_LEN);
 
 	tx_pending = 1;
@@ -245,6 +303,7 @@ static int32_t stm32_usb_uart_write(struct no_os_uart_desc *desc,
 		;
 
 	return len;
+#endif
 }
 
 /**

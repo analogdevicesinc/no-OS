@@ -236,7 +236,7 @@ struct iiod_conn_priv {
 	} state;
 
 	/* Buffer to store received line */
-	char parser_buf[IIOD_PARSER_MAX_BUF_SIZE];
+	char parser_buf[IIOD_PARSER_MAX_BUF_SIZE] __attribute__((aligned(4)));
 	/* Index in parser_buf. For nonblocking operation */
 	uint32_t parser_idx;
 	/* Buffer to store raw data (attributes or buffer data).*/
