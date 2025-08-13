@@ -49,6 +49,10 @@
 #define CONFIG_OA_CHUNK_BUFFER_SIZE	1514
 #endif
 
+#ifndef CONFIG_OA_TC6_PROTECTION
+#define CONFIG_OA_TC6_PROTECTION	0
+#endif
+
 #define OA_TX_FRAME_BUFF_NUM		CONFIG_OA_TX_FRAME_BUFF_NUM
 #define OA_RX_FRAME_BUFF_NUM		CONFIG_OA_RX_FRAME_BUFF_NUM
 
@@ -180,7 +184,7 @@ struct oa_tc6_frame_buffer {
  */
 struct oa_tc6_desc {
 	struct no_os_spi_desc *comm_desc;
-	uint8_t ctrl_chunks[12];
+	uint8_t ctrl_chunks[16];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
 
 	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
