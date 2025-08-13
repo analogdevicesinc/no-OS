@@ -2,8 +2,9 @@
  *   @file   ad4080.c
  *   @brief  Implementation of AD4080 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2023-2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -39,6 +40,24 @@
 /******************************************************************************/
 
 /**
+ * @brief Read from the AD4080 FIFO.
+ * @param dev - The device structure.
+ * @param buf - Receive data buffer.
+ * @param len - Length of the buf.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad4080_read_data(struct ad4080_dev *dev, uint8_t *buf, size_t len)
+{
+	int err;
+	if (dev->data.ss)
+		no_os_gpio_set_value(dev->data.ss, NO_OS_GPIO_LOW);
+	err = no_os_spi_write_and_read(dev->data.spi, buf, len);
+	if (dev->data.ss)
+		no_os_gpio_set_value(dev->data.ss, NO_OS_GPIO_HIGH);
+	return err;
+}
+
+/**
  * @brief Write device register.
  * @param dev- The device structure.
  * @param reg_addr - The register address.
@@ -48,6 +67,7 @@
 int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val)
 {
 	uint8_t buff[3];
+	int err;
 
 	if (!dev)
 		return -EINVAL;
@@ -56,7 +76,12 @@ int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val)
 	buff[1] = no_os_field_get(BYTE_ADDR_L, reg_addr);
 	buff[2] = reg_val;
 
-	return no_os_spi_write_and_read(dev->spi_desc, buff, 3);
+	if (dev->cfg.ss)
+		no_os_gpio_set_value(dev->cfg.ss, NO_OS_GPIO_LOW);
+	err = no_os_spi_write_and_read(dev->cfg.spi, buff, 3);
+	if (dev->cfg.ss)
+		no_os_gpio_set_value(dev->cfg.ss, NO_OS_GPIO_HIGH);
+	return err;
 }
 
 /**
@@ -77,7 +102,12 @@ int ad4080_read(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t *reg_val)
 	buff[0] = no_os_field_get(BYTE_ADDR_H, reg_addr) | AD4080_SPI_READ;
 	buff[1] = no_os_field_get(BYTE_ADDR_L, reg_addr);
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, buff, 3);
+	if (dev->cfg.ss)
+		no_os_gpio_set_value(dev->cfg.ss, NO_OS_GPIO_LOW);
+	ret = no_os_spi_write_and_read(dev->cfg.spi, buff, 3);
+	if (dev->cfg.ss)
+		no_os_gpio_set_value(dev->cfg.ss, NO_OS_GPIO_HIGH);
+
 	if (ret)
 		return ret;
 
@@ -934,21 +964,14 @@ int ad4080_set_gpio_output_enable(struct ad4080_dev *dev,
 				  enum ad4080_gpio gpio,
 				  enum ad4080_gpio_op_enable gpio_op_enable)
 {
-	int ret;
 	if (!dev || (gpio >= NUM_AD4080_GPIO)
 	    || (gpio_op_enable > AD4080_GPIO_OUTPUT))
 		return -EINVAL;
 
-	ret = ad4080_update_bits(dev,
-				 AD4080_REG_GPIO_CONFIG_A,
-				 AD4080_GPIO_EN_MSK(gpio),
-				 no_os_field_prep(AD4080_GPIO_EN_MSK(gpio), gpio_op_enable));
-	if (ret)
-		return ret;
-
-	dev->gpio_op_enable[gpio] = gpio_op_enable;
-
-	return 0;
+	return ad4080_update_bits(dev,
+				  AD4080_REG_GPIO_CONFIG_A,
+				  AD4080_GPIO_EN_MSK(gpio),
+				  no_os_field_prep(AD4080_GPIO_EN_MSK(gpio), gpio_op_enable));
 }
 
 /**
@@ -958,10 +981,10 @@ int ad4080_set_gpio_output_enable(struct ad4080_dev *dev,
  * @param gpio_func - The function to be selected for the GPIO.
  * @return 0 in case of success, negative error code otherwise
  */
-int ad4080_set_gpio_output_func(struct ad4080_dev *dev, enum ad4080_gpio gpio,
+int ad4080_set_gpio_output_func(struct ad4080_dev *dev, 
+				enum ad4080_gpio gpio,
 				enum ad4080_gpio_op_func_sel gpio_func)
 {
-	int ret;
 	uint16_t gpio_config_register = AD4080_REG_GPIO_CONFIG_B;
 
 	if (!dev || (gpio >= NUM_AD4080_GPIO)
@@ -971,16 +994,10 @@ int ad4080_set_gpio_output_func(struct ad4080_dev *dev, enum ad4080_gpio gpio,
 	if (gpio >= AD4080_GPIO_2)
 		gpio_config_register = AD4080_REG_GPIO_CONFIG_C;
 
-	ret = ad4080_update_bits(dev,
-				 gpio_config_register,
-				 AD4080_GPIO_SEL_MSK(gpio),
-				 no_os_field_prep(AD4080_GPIO_SEL_MSK(gpio), gpio_func));
-	if (ret)
-		return ret;
-
-	dev->gpio_op_func_sel[gpio] = gpio_func;
-
-	return 0;
+	return ad4080_update_bits(dev,
+				  gpio_config_register,
+				  AD4080_GPIO_SEL_MSK(gpio),
+				  no_os_field_prep(AD4080_GPIO_SEL_MSK(gpio), gpio_func));
 }
 
 /**
@@ -1124,6 +1141,35 @@ int ad4080_data_intf_init(struct ad4080_dev *dev,
 	return ad4080_set_fifo_mode(dev, init_param.fifo_mode);
 }
 
+static void ad4080_fini_spi(struct ad4080_spi_desc *desc)
+{
+	no_os_spi_remove(desc->spi);
+	if (desc->ss)
+		no_os_gpio_remove(desc->ss);
+	return;
+}
+
+static int ad4080_init_spi(struct ad4080_spi_desc *desc,
+		struct ad4080_spi_init_param *init_param)
+{
+	int err;
+	err = no_os_spi_init(&desc->spi, init_param->spi);
+	if (err)
+		return err;
+
+	/* we "optionally" initialize the software chip select when user 
+	 * passes a gpio init parameter */
+	desc->ss = NULL;
+	if (init_param->ss) {
+		err = no_os_gpio_get(&desc->ss, init_param->ss);
+		if (err) {
+			no_os_spi_remove(desc->spi);
+		}
+		no_os_gpio_direction_output(desc->ss, NO_OS_GPIO_HIGH);
+	}
+	return err;
+}
+
 /**
  * @brief Initialize the device.
  * @param device - The device structure.
@@ -1136,31 +1182,35 @@ int ad4080_init(struct ad4080_dev **device,
 {
 	struct ad4080_dev *dev;
 	uint8_t data;
-	enum ad4080_gpio gpio;
 	int ret;
 
-	dev = (struct ad4080_dev *)calloc(1, sizeof(*dev));
+	dev = (struct ad4080_dev *)calloc(1, sizeof(*dev) + init_param.privdata_len);
 	if (!dev)
 		return -ENOMEM;
 
-	/* SPI Initialization*/
-	ret = no_os_spi_init(&dev->spi_desc, init_param.spi_init);
+	/* init the config spi */
+	ret = ad4080_init_spi(&dev->cfg, &init_param.cfg);
 	if (ret)
 		goto error_dev;
 
+	/* init the data spi */
+	ret = ad4080_init_spi(&dev->data, &init_param.data);
+	if (ret)
+		goto error_cfg_spi;
+
 	ret = ad4080_read(dev, AD4080_REG_CHIP_TYPE, &data);
 	if (ret)
-		goto error_spi;
+		goto error_data_spi;
 
 	if (data != AD4080_CHIP_ID) {
 		ret = -EINVAL;
-		goto error_spi;
+		goto error_data_spi;
 	}
 
 	/* Software Reset */
 	ret = ad4080_soft_reset(dev);
 	if (ret)
-		goto error_spi;
+		goto error_data_spi;
 
 	dev->spi3wire = init_param.spi3wire;
 	dev->addr_asc = init_param.addr_asc;
@@ -1171,42 +1221,35 @@ int ad4080_init(struct ad4080_dev **device,
 				 no_os_field_prep(AD4080_SDO_ENABLE_MSK, dev->spi3wire) |
 				 no_os_field_prep(AD4080_ADDR_ASC_MSK, dev->addr_asc));
 	if (ret)
-		goto error_spi;
+		goto error_data_spi;
 
 	/* Set Operation mode */
 	ret = ad4080_set_op_mode(dev, init_param.op_mode);
 	if (ret)
-		goto error_spi;
+		goto error_data_spi;
 
 	/* Configuration SPI Interface Initialization */
 	ret = ad4080_configuration_intf_init(dev, init_param);
 	if (ret)
-		goto error_spi;
+		goto error_data_spi;
 
-	/* GPIO Initialization */
-	for (gpio = AD4080_GPIO_0; gpio < NUM_AD4080_GPIO; gpio++) {
-		/* Apply GPIO Output Enable state */
-		ret = ad4080_set_gpio_output_enable(dev, gpio, init_param.gpio_op_enable[gpio]);
-		if (ret)
-			goto error_spi;
-
-		/* Apply GPIO Output Function selection */
-		ret = ad4080_set_gpio_output_func(dev, gpio, init_param.gpio_op_func_sel[gpio]);
-		if (ret)
-			goto error_spi;
-	}
+	/* During power on or a software reset, GPI0 is the default config SDO.
+	 * AD4080 driver will defer GP initialization and will not make 
+	 * assumptions on what the other GPs are for what function. */
 
 	/* Data Interface Initialization */
 	ret = ad4080_data_intf_init(dev, init_param);
 	if (ret)
-		goto error_spi;
+		goto error_data_spi;
 
 	*device = dev;
 
 	return 0;
 
-error_spi:
-	no_os_spi_remove(dev->spi_desc);
+error_data_spi:
+	ad4080_fini_spi(&dev->data);
+error_cfg_spi:
+	ad4080_fini_spi(&dev->cfg);
 error_dev:
 	free(dev);
 
@@ -1220,16 +1263,10 @@ error_dev:
  */
 int ad4080_remove(struct ad4080_dev *dev)
 {
-	int ret;
-
 	if (!dev)
 		return -EINVAL;
-
-	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret)
-		return ret;
-
+	ad4080_fini_spi(&dev->data);
+	ad4080_fini_spi(&dev->cfg);
 	free(dev);
-
-	return ret;
+	return 0;
 }
