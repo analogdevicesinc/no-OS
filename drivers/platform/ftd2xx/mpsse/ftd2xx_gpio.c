@@ -305,20 +305,13 @@ int32_t ftd2xx_gpio_get_value(struct no_os_gpio_desc *desc, uint8_t *value)
 			return ret;
 		}
 
-		status = FT_Read(extra_desc->ftHandle, &val, val, &bytesRead);
+		status = FT_Read(extra_desc->ftHandle, &val, 1, &bytesRead);
 		if (status != FT_OK) {
 			ret = status;
 			return ret;
 		}
 
-		if (bytesRead == 1) {
-			*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number), val);
-
-			return 0;
-		} else {
-			ret = -EIO;
-			pr_err("Failed to read GPIO input\n");
-		}
+		*value = no_os_field_get(FTD2XX_GPIO_PIN(desc->number), val);
 	} else
 		return -EINVAL;
 
