@@ -20,6 +20,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/ad405x
 
+   drivers/ad4080
+
    drivers/ad7768
 
    drivers/ad7768-1
