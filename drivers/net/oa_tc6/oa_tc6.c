@@ -95,6 +95,11 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
 	no_os_put_unaligned_be32(val, &desc->ctrl_chunks[OA_HEADER_LEN]);
 
+	if (CONFIG_OA_TC6_PROTECTION) {
+		no_os_put_unaligned_be32(val ^ NO_OS_GENMASK(31, 0),
+					 &desc->ctrl_chunks[OA_HEADER_LEN + OA_REG_LEN]);
+	}
+
 	desc->ctrl_tx_credit++;
 }
 
@@ -107,6 +112,7 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
  */
 int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 {
+	uint32_t comp_val;
 	int ret;
 
 	if (!desc)
@@ -119,6 +125,12 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 
 	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks[2 * OA_HEADER_LEN]);
 	desc->ctrl_rx_credit = 0;
+
+	if (CONFIG_OA_TC6_PROTECTION) {
+		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks[3 * OA_HEADER_LEN]);
+		if (*val != (comp_val ^ NO_OS_GENMASK(31, 0)))
+			return -EINVAL;
+	}
 
 	return 0;
 }
@@ -582,7 +594,11 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		xfer.tx_buff = desc->ctrl_chunks;
 		xfer.rx_buff = desc->ctrl_chunks;
 		xfer.cs_change = 1;
-		xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
+
+		if (CONFIG_OA_TC6_PROTECTION)
+			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
+		else
+			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
 
 		return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
 	}
