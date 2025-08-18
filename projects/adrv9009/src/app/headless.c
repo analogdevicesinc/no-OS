@@ -345,7 +345,7 @@ int main(void)
 	}
 
 	size_t s_i;
-	for (s_i = 0; s_i < 60; s_i++) {
+	for (s_i = 0; s_i < 10; s_i++) {
 		printf("-------------\n");
 		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
 			printf("TALISE_%c: ", 'A' + t);

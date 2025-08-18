@@ -69,38 +69,37 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 	int32_t status;
 	uint32_t rx_lane_rate_khz = rx_div40_rate_hz / 1000 * 40;
 	struct jesd204_rx_init rx_jesd_init = {
-		"rx_jesd",
-		RX_JESD_BASEADDR,
-		4,
-		32,
-		1,
-		rx_div40_rate_hz / 1000,
-		rx_lane_rate_khz
+		.name = "rx_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = 4, // F
+		.frames_per_multiframe = 32, // K
+		.subclass = 1,
+		.device_clk_khz = rx_div40_rate_hz / 1000,
+		.lane_clk_khz =rx_lane_rate_khz
 	};
 	uint32_t tx_lane_rate_khz = tx_div40_rate_hz / 1000 * 40;
 	struct jesd204_tx_init tx_jesd_init = {
-		"tx_jesd",
-		TX_JESD_BASEADDR,
-		2,
-		32,
-		4,
-		14,
-		16,
-		true,
-		2,
-		1,
-		tx_div40_rate_hz / 1000,
-		tx_lane_rate_khz
+		.name = "tx_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = 4, // F
+		.frames_per_multiframe = 32, // K
+		.converters_per_device = 4, // M
+		.converter_resolution = 16, // Np
+		.control_bits_per_sample = true,
+		.high_density = false,
+		.subclass = 1,
+		.device_clk_khz = tx_div40_rate_hz / 1000,
+		.lane_clk_khz = tx_lane_rate_khz
 	};
 	uint32_t rx_os_lane_rate_khz = rx_os_div40_rate_hz / 1000 * 40;
 	struct jesd204_rx_init rx_os_jesd_init = {
-		"rx_os_jesd",
-		RX_OS_JESD_BASEADDR,
-		2,
-		32,
-		1,
-		rx_os_div40_rate_hz / 1000,
-		rx_os_lane_rate_khz,
+		.name = "rx_os_jesd",
+		.base = RX_OS_JESD_BASEADDR,
+		.octets_per_frame = 2, // F
+		.frames_per_multiframe = 32, // K
+		.subclass = 1,
+		.device_clk_khz = rx_os_div40_rate_hz / 1000,
+		.lane_clk_khz = rx_os_lane_rate_khz,
 	};
 
 	/* Initialize JESD */
