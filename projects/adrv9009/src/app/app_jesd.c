@@ -71,7 +71,7 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 	struct jesd204_rx_init rx_jesd_init = {
 		.name = "rx_jesd",
 		.base = RX_JESD_BASEADDR,
-		.octets_per_frame = 4, // F
+		.octets_per_frame = 8, // F
 		.frames_per_multiframe = 32, // K
 		.subclass = 1,
 		.device_clk_khz = rx_div40_rate_hz / 1000,

@@ -254,7 +254,8 @@ taliseInit_t talInit =
             .lane0Id = 0,                    /* JESD204B Configuration starting Lane ID.  If more than one lane used, each lane will increment from the Lane0 ID. (Valid 0..31) */
             .M = 2,                            /* number of ADCs (0, 2, or 4) - 2 ADCs per receive chain */
             .K = 32,                        /* number of frames in a multiframe (default=32), F*K must be a multiple of 4. (F=2*M/numberOfLanes) */
-            .F = 4,                            /* F (number of bytes per frame) */
+            // .F = 4,                            /* F (number of bytes per frame) */
+            .F = 8,                            /* F (number of bytes per frame) */
             .Np = 16,                            /* Np (converter sample resolution) */
             .scramble = 1,                    /* scrambling off if framerScramble= 0, if framerScramble>0 scramble is enabled. */
             .externalSysref = 1,            /* 0=use internal SYSREF, 1= use external SYSREF */
