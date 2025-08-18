@@ -488,6 +488,14 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		goto error_0;
 	}
 
+	talAction = TALISE_setRxGainControlMode(pd, TAL_AGCSLOW);
+	if (talAction != TALACT_NO_ACTION) {
+		/*** < User: decide what to do based on Talise recovery action returned > ***/
+		printf("error: TALISE_setRxGainControlMode() failed\n");
+		goto error_11;
+	}
+
+
 	return ADIHAL_OK;
 
 error_11:
@@ -767,4 +775,66 @@ void talise_shutdown(taliseDevice_t * const pd)
 	if(talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 	}
+}
+
+
+void print_framer_deframer_status(taliseDevice_t * pd){
+
+	uint16_t deframerAStatus = 0;
+	uint16_t deframerBStatus = 0;
+	uint8_t framerAStatus = 0;
+	uint8_t framerBStatus = 0;
+
+	int ret = 0;
+
+	char buffer[300];
+
+	/************************************/
+	/**** Check Talise Framer Status ***/
+	/************************************/
+	if (talInit.jesd204Settings.framerA.M) {
+		ret = TALISE_readFramerStatus(pd, TAL_FRAMER_A, &framerAStatus);
+		if (ret != TALACT_NO_ACTION) {
+			printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+			ret = -1;
+			return;
+		}
+
+		// if ((framerAStatus & 0x07) != 0x05)
+		// 	printf("TAL_FRAMER_A framerStatus 0x%X\n", framerAStatus);
+	}
+	/************************************/
+	/**** Check Talise Framer Status ***/
+	/************************************/
+	if (talInit.jesd204Settings.framerB.M) {
+		ret = TALISE_readFramerStatus(pd, TAL_FRAMER_B, &framerBStatus);
+		if (ret != TALACT_NO_ACTION) {
+			printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+			ret = -1;
+			return;
+		}
+
+		// if ((framerBStatus & 0x07) != 0x05)
+		// 	printf("TAL_FRAMER_B framerStatus 0x%X\n", framerBStatus);
+	}
+
+
+	// Check Deframer Status
+	if (talInit.jesd204Settings.deframerA.M) {
+	ret = TALISE_readDeframerStatus(pd, TAL_DEFRAMER_A,
+					&deframerAStatus);
+	if (ret != TALACT_NO_ACTION) {
+		printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+		ret = -1;
+		return;
+	}
+	// if ((deframerAStatus & 0xF7) != 0x86)
+	// 	printf("TAL_DEFRAMER_A deframerStatus 0x%X\n", deframerStatus);
+	}
+
+
+	printf("TAL_FRAMER_A framerStatus 0x%X | ", framerAStatus);
+	printf("TAL_FRAMER_B framerStatus 0x%X | ", framerBStatus);
+	printf("TAL_DEFRAMER_A deframerStatus 0x%X \n", deframerAStatus);
+
 }

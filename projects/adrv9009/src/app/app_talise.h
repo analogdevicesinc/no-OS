@@ -62,4 +62,6 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step);
 void talise_shutdown(taliseDevice_t * const pd);
 bool adrv9009_check_sysref_rate(uint32_t lmfc, uint32_t sysref);
 
+void print_framer_deframer_status(taliseDevice_t *pd);
+
 #endif /* __APP_TALISE_H */

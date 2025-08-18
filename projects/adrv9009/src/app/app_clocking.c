@@ -116,7 +116,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.spi_init = NULL,
 		.clkin_freq = {30720000, 30720000, 0, 0},
 		.vcxo_freq = 122880000,
-		.pll2_freq = 2949120000,
+		// .pll2_freq = 2949120000,
+		.pll2_freq = 2640000000,
 		.pll1_loop_bw = 200,
 		.sysref_timer_div = 3840,
 		.in_buf_mode = {0x09, 0x09, 0x00, 0x00, 0x15},
@@ -129,15 +130,26 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.pulse_gen_mode = 0x0,
 	};
 
+// 'DEV_REFCLK_A',          attr 'frequency', value '55000000' |  48
+// 'FPGA_SYSREF_TX_OBS_AB', attr 'frequency', value '2578125'  |  1024
+// 'CORE_CLK_RX_AB',        attr 'frequency', value '82500000' |  32
+// 'JESD_REFCLK_RX_AB',     attr 'frequency', value '82500000' |  32
+// 'FPGA_SYSREF_RX_AB',     attr 'frequency', value '2578125'  |  1024
+// 'JESD_REFCLK_TX_OBS_AB', attr 'frequency', value '165000000' |  16
+// 'DEV_SYSREF_B',          attr 'frequency', value '2578125'  |  1024
+// 'DEV_SYSREF_A',          attr 'frequency', value '2578125'  |  1024
+// 'CORE_CLK_TX_OBS_AB',    attr 'frequency', value '82500000' |  32
+// 'DEV_REFCLK_B',          attr 'frequency', value '55000000' |  48
+
 	struct hmc7044_chan_spec chan_spec[10] = {
 		/* DEV_REFCLK_A */
 		{
-			.disable = 0, .num = 0, .divider = 12, .driver_mode = 2,
+			.disable = 0, .num = 0, .divider = 32, .driver_mode = 2,
 			.coarse_delay = 15
 		},
 		/* DEV_SYSREF_A */
 		{
-			.disable = 0, .num = 1, .divider = 3840, .driver_mode = 1,
+			.disable = 0, .num = 1, .divider = 1024, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
 			.output_control0_rb4_enable = true,
@@ -146,12 +158,12 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		},
 		/* DEV_REFCLK_B */
 		{
-			.disable = 0, .num = 2,  .divider = 12, .driver_mode = 2,
+			.disable = 0, .num = 2,  .divider = 32, .driver_mode = 2,
 			.coarse_delay = 15
 		},
 		/* DEV_SYSREF_B */
 		{
-			.disable = 0, .num = 3,  .divider = 3840, .driver_mode = 1,
+			.disable = 0, .num = 3,  .divider = 1024, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
 			.output_control0_rb4_enable = true,
@@ -160,30 +172,33 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		},
 		/* JESD_REFCLK_TX_OBS_AB */
 		{
-			.disable = 0, .num = 4,  .divider = 12, .driver_mode = 1
+			.disable = 0, .num = 4,  .divider = 32, .driver_mode = 1
 		},
 		/* JESD_REFCLK_RX_AB */
 		{
-			.disable = 0, .num = 5,  .divider = 12, .driver_mode = 1
+			.disable = 0, .num = 5,  .divider = 32, .driver_mode = 1
 		},
 #if defined(ZU11EG)
 		/* CORE_CLK_TX_OBS_AB */
 		{
 			.disable = 0, .num = 6,
-			.divider = hmc7044_param.pll2_freq / tx_div40_rate_hz,
+			.divider = 32,
+			// .divider = hmc7044_param.pll2_freq / tx_div40_rate_hz,
 			.driver_mode = 0,
 			.driver_impedance = 1
 		},
 		/* CORE_CLK_RX_AB */
 		{
 			.disable = 0, .num = 7,
-			.divider = hmc7044_param.pll2_freq / rx_div40_rate_hz,
+			.divider = 32,
+			// .divider = hmc7044_param.pll2_freq / rx_div40_rate_hz,
+			// .divider = hmc7044_param.pll2_freq / rx_div40_rate_hz,
 			.driver_mode = 0,
 			.driver_impedance = 1
 		},
 		/* FPGA_SYSREF_TX_OBS_AB */
 		{
-			.disable = 0, .num = 8, .divider = 3840, .driver_mode = 1,
+			.disable = 0, .num = 8, .divider = 1024, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
 			.output_control0_rb4_enable = true,
@@ -191,7 +206,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		},
 		/* FPGA_SYSREF_RX_AB */
 		{
-			.disable = 0, .num = 9, .divider = 3840, .driver_mode = 1,
+			.disable = 0, .num = 9, .divider = 1024, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
 			.output_control0_rb4_enable = true,
@@ -250,7 +265,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.spi_init = NULL,
 		.clkin_freq = {122880000, 30720000, 0, 38400000},
 		.vcxo_freq = 122880000,
-		.pll2_freq = 2949120000,
+		.pll2_freq = 2640000000,
 		.pll1_loop_bw = 200,
 		.sysref_timer_div = 3840,
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x11, 0x15},
@@ -487,6 +502,9 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	fmc_clk = ad9528_clk_round_rate(clkchip_device, FMC_CLK,
 					device_clock_khz * 1000);
 #endif
+
+		return 0;////////////
+
 	if (dev_clk > 0 && fmc_clk > 0 && fmc_clk == dev_clk &&
 	    (dev_clk / 1000) == device_clock_khz) {
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)

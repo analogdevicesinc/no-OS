@@ -343,6 +343,16 @@ int main(void)
 				goto error_3;
 		}
 	}
+
+	size_t s_i;
+	for (s_i = 0; s_i < 60; s_i++) {
+		printf("-------------\n");
+		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
+			print_framer_deframer_status(&tal[t]);
+		}
+		no_os_mdelay(500);
+	}
+
 #endif
 	ADIHAL_sysrefReq(tal[TALISE_A].devHalInfo, SYSREF_CONT_ON);
 
@@ -431,7 +441,8 @@ int main(void)
 #ifdef IIO_SUPPORT
 		.cyclic = CYCLIC,
 #else
-		.cyclic = NO,
+		// .cyclic = NO,
+		.cyclic = 1,
 #endif
 		// Address of data source
 		.src_addr = (uintptr_t)DAC_DDR_BASEADDR,
