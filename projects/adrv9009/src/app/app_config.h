@@ -41,7 +41,7 @@
 #define APP_CONFIG_H_
 
 /* Uncomment if using adrv2crr-fmc + adrv9009-zu11eg: */
-// #define ZU11EG
+#define ZU11EG
 
 /* Uncomment if using zcu102 + fmcomms8: */
 // #define FMCOMMS8_ZCU102
@@ -55,7 +55,7 @@
 //#define ADRV9008_2
 
 /* To build a specific example, uncomment one (only one) of the lines below: */
-// #define DMA_EXAMPLE
+#define DMA_EXAMPLE
 // #define IIO_SUPPORT
 
 #endif /* APP_CONFIG_H_ */
