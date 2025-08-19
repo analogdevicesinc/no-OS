@@ -452,7 +452,7 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 				    uint32_t len)
 {
 	uint32_t footer = 0;
-	uint32_t swo;
+	uint32_t sbo;
 	uint32_t ebo;
 	uint32_t ev;
 	uint32_t sv;
@@ -467,37 +467,63 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 	for (uint32_t i = 0; i < len; i++) {
 		footer = no_os_get_unaligned_be32(&chunks[OA_CHUNK_SIZE]);
 
+		ev = footer & OA_DATA_FOOTER_EV_MASK;
+		sv = footer & OA_DATA_FOOTER_SV_MASK;
+		ebo = no_os_field_get(OA_DATA_FOOTER_EBO_MASK, footer);
+
+		/*
+		 * The footer contains an SWO (Start WORD offset). Convert to a start
+		 * BYTE offset to be used directly in buffer access and math
+		 */
+		sbo = no_os_field_get(OA_DATA_FOOTER_SWO_MASK, footer) * 4;
+
 		if (!(footer & OA_DATA_FOOTER_DV_MASK)) {
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 			continue;
 		}
 
-		ev = footer & OA_DATA_FOOTER_EV_MASK;
-		sv = footer & OA_DATA_FOOTER_SV_MASK;
-
 		if (sv && ev) {
-			ebo = no_os_field_get(OA_DATA_FOOTER_EBO_MASK, footer);
-			swo = no_os_field_get(OA_DATA_FOOTER_SWO_MASK, footer);
-
-			if (swo < ebo) {
-				memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo - swo + 1);
-				frame_buffer->index += ebo - swo + 1;
+			if (sbo > ebo) {
+				/* There are 2 frames in the current chunk. Finish the existing. */
+				memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
+				frame_buffer->index += ebo + 1;
 				frame_buffer->len = frame_buffer->index;
 				frame_buffer->state = OA_BUFF_RX_COMPLETE;
-				frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
+
+				/* Now get a new buffer for the second frame */
+				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
+				if (ret)
+					return ret;
+
+				/*
+				 * Overwrite the EBO to be the end of the chunk so the next
+				 * block of code is generic
+				 */
+				ebo = OA_CHUNK_SIZE - 1;
+
+				/* Next frame will be in progress */
+				frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
+			} else {
+				/* A single frame in current chunk. It will be completed */
+				frame_buffer->state = OA_BUFF_RX_COMPLETE;
 			}
 
-			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
-			if (ret) {
-				printf("No empty buffer\n");
-				return ret;
-			}
+			/*
+			 * At this point it is either a single frame encapsulated in the
+			 * chunk, or the start of the 2nd Frame. EBO should be set
+			 * accordingly above.
+			 */
+			memcpy(&frame_buffer->data[frame_buffer->index], &chunks[sbo],
+				ebo - sbo + 1);
+			frame_buffer->index += ebo - sbo + 1;
+			frame_buffer->len = frame_buffer->index;
+			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
 
-			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
-			/* There are 2 frames in the current chunk */
-			if (swo > ebo) {
-				memcpy(frame_buffer->data, &chunks[swo], OA_CHUNK_SIZE - swo);
-				frame_buffer->index += OA_CHUNK_SIZE - swo;
+			if(frame_buffer->state == OA_BUFF_RX_COMPLETE) {
+				/* Get a new buffer for the next iteration */
+				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
+				if (ret)
+					return ret;
 			}
 
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
@@ -509,11 +535,10 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 			/* The current chunk may be shorter than chunk_size, since it contains the end of a frame */
 			memcpy(&(frame_buffer->data[frame_buffer->index]), chunks, ebo + 1);
-
 			frame_buffer->len = frame_buffer->index + ebo + 1;
 			frame_buffer->state = OA_BUFF_RX_COMPLETE;
-			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
 
+			/* Get a new buffer for the next iteration */
 			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
 			if (ret)
 				return ret;
@@ -525,25 +550,26 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 		}
 
 		if (sv) {
-			swo = no_os_field_get(OA_DATA_FOOTER_SWO_MASK, footer);
 			/* The current chunk contains the start of a frame at offset SWO */
-			memcpy(&frame_buffer->data[frame_buffer->index], &chunks[swo],
-			       OA_CHUNK_SIZE - swo);
+			memcpy(&frame_buffer->data[frame_buffer->index], &chunks[sbo],
+			       OA_CHUNK_SIZE - sbo);
 
-			frame_buffer->index += OA_CHUNK_SIZE - swo;
+			frame_buffer->index += OA_CHUNK_SIZE - sbo;
 			frame_buffer->len = frame_buffer->index;
-
+			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
+			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 			continue;
 		}
 
-		if (!ev && !sv) {
+		if ((!ev && !sv) && (frame_buffer->state == OA_BUFF_RX_IN_PROGRESS)) {
 			/*
 			 * The current chunk does not contain either the start or end of a frame,
 			 * and the contains valid data for each byte
 			 */
 			memcpy(&frame_buffer->data[frame_buffer->index], chunks, OA_CHUNK_SIZE);
 			frame_buffer->index += OA_CHUNK_SIZE;
+			frame_buffer->len = frame_buffer->index;
 		}
 
 		chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
@@ -667,12 +693,14 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	descriptor->comm_desc = param->comm_desc;
 	descriptor->prote_spi = param->prote_spi;
 
+#if CONFIG_OA_ZERO_SWO_ONLY
 	/* For now, we'll only support receiving frames with SWO = 0 */
 	ret = oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
 				OA_TC6_CONFIG0_ZARFE_MASK,
 				OA_TC6_CONFIG0_ZARFE_MASK);
 	if (ret)
 		goto error;
+#endif
 
 	*desc = descriptor;
 
