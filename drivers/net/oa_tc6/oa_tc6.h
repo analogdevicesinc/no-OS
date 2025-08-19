@@ -90,8 +90,11 @@
 #define OA_DATA_FOOTER_DV_MASK		NO_OS_BIT(21)
 #define OA_DATA_FOOTER_SV_MASK		NO_OS_BIT(20)
 #define OA_DATA_FOOTER_SWO_MASK		NO_OS_GENMASK(19, 16)
+#define OA_DATA_FOOTER_FD_MASK		NO_OS_BIT(15)
 #define OA_DATA_FOOTER_EV_MASK		NO_OS_BIT(14)
 #define OA_DATA_FOOTER_EBO_MASK		NO_OS_GENMASK(13, 8)
+#define OA_DATA_FOOTER_RTSA_MASK    NO_OS_BIT(7)
+#define OA_DATA_FOOTER_RTSP_MASK    NO_OS_BIT(6)
 #define OA_DATA_FOOTER_TXC_MASK		NO_OS_GENMASK(5, 1)
 #define OA_DATA_FOOTER_P_MASK		NO_OS_BIT(0)
 
@@ -185,6 +188,10 @@ struct oa_tc6_frame_buffer {
 	uint8_t data[CONFIG_OA_CHUNK_BUFFER_SIZE];
 	enum oa_tc6_user_buffer_state state;
 	uint8_t vs;
+
+	bool frame_drop; /**< Frame should be dropped (is invalid). Rx Only */
+	bool rtsa;       /**< Timestamp added. Rx Only */
+	bool rtsp;       /**< Timestamp parity. Rx Only */
 };
 
 /**
