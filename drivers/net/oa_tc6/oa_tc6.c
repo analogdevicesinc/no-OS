@@ -477,6 +477,12 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 		 */
 		sbo = no_os_field_get(OA_DATA_FOOTER_SWO_MASK, footer) * 4;
 
+		/* Always update the transfer flags, even if DV=0 */
+		desc->xfer_flags.flags_valid = true;
+		desc->xfer_flags.exst |= !!(footer & OA_DATA_FOOTER_EXST_MASK); /* Latched */
+		desc->xfer_flags.hdrb |= !!(footer & OA_DATA_FOOTER_HDRB_MASK); /* Latched */
+		desc->xfer_flags.sync = !!(footer & OA_DATA_FOOTER_SYNC_MASK);  /* Instantaneous */
+
 		if (!(footer & OA_DATA_FOOTER_DV_MASK)) {
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 			continue;
@@ -597,6 +603,27 @@ static int oa_tc6_update_stats(struct oa_tc6_desc *desc)
 
 	desc->data_tx_credit = no_os_field_get(OA_TC6_BUFSTS_TXC_MASK, reg_val);
 	desc->data_rx_credit = no_os_field_get(OA_TC6_BUFSTS_RCA_MASK, reg_val);
+
+	return 0;
+}
+
+/**
+ * @brief Gets the latched transfer flags that are read from the data chunk
+ * footer. Optionally clears the latched values
+ * @param desc - the OA TC6 descriptor
+ * @param flags - Storage location for flag values
+ * @param clear - If set, clears the latch and valid
+ * @return 0 in case of success, negative error code otherwise
+ */
+int oa_tc6_get_xfer_flags(struct oa_tc6_desc *desc, struct oa_tc6_flags *flags, bool clear)
+{
+	if (!desc || !flags)
+		return -EINVAL;
+
+	memcpy(flags, &desc->xfer_flags, sizeof(struct oa_tc6_flags));
+
+	if (clear)
+		memset(&desc->xfer_flags, 0, sizeof(struct oa_tc6_flags));
 
 	return 0;
 }

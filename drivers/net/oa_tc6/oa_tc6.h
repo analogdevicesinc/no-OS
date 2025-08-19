@@ -188,6 +188,18 @@ struct oa_tc6_frame_buffer {
 };
 
 /**
+ * @brief Stores the status flags which are provided as part of the footer
+ * during data transfers. These flags will be latched by the driver and can be
+ * cleared by the user when reading.
+ */
+struct oa_tc6_flags {
+	bool flags_valid; /**< Indicates the flags are latched and valid */
+	bool exst;        /**< Latched high until cleared */
+	bool hdrb;        /**< Latched high until cleared */
+	bool sync;        /**< Instantaneous value */
+};
+
+/**
  * @brief Holds the frame buffers and the communication descriptor for the OA TC6 driver.
  */
 struct oa_tc6_desc {
@@ -203,6 +215,8 @@ struct oa_tc6_desc {
 
 	uint32_t ctrl_tx_credit;
 	uint32_t ctrl_rx_credit;
+
+	struct oa_tc6_flags	xfer_flags;
 	bool	 prote_spi;
 };
 
@@ -241,6 +255,9 @@ int oa_tc6_get_tx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer **);
 
 /* Mark the frame buffer as filled and ready for transmission */
 int oa_tc6_put_tx_frame(struct oa_tc6_desc *, struct oa_tc6_frame_buffer *);
+
+/* Gets the latched transfer flags, and optionally clears the latch */
+int oa_tc6_get_xfer_flags(struct oa_tc6_desc *, struct oa_tc6_flags *, bool);
 
 /*
  * Transmit all the frames in the OA_BUFF_TX_READY state and receive the
