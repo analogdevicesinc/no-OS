@@ -423,16 +423,17 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 		frame_buffer->state = OA_BUFF_FREE;
 	} while (1);
 
-	if (rx_nchunks > chunks_written) {
-		/*
-		 * The TX queue may be empty, there is no space in the SPI buffer, or we're out of tx credits.
-		 * If rx_chunks > tx_chunks, we need to add dummy chunks (DV = 0).
-		 */
+	/*
+	 * The TX queue may be empty, there is no space in the SPI buffer,
+	 * or we're out of tx credits.
+	 * If rx_chunks > tx_chunks, we need to add dummy chunks (DV = 0) as long
+	 * as there is enough room in the buffer.
+	 */
+	while ((rx_nchunks > chunks_written) && (chunks_written < chunks_limit)) {
 		header = no_os_field_prep(OA_DATA_HEADER_DNC_MASK, 1);
-		for (i = 0; i < rx_nchunks - chunks_written; i++) {
-			no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
-			spi_buffer_index += OA_CHUNK_SIZE + OA_HEADER_LEN;
-		}
+		no_os_put_unaligned_be32(header, &tx_buffer[spi_buffer_index]);
+		spi_buffer_index += OA_CHUNK_SIZE + OA_HEADER_LEN;
+		chunks_written++;
 	}
 
 	*tx_written = spi_buffer_index;
