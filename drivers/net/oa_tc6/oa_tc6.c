@@ -642,7 +642,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 		rx_limit++;
 
-		if (rx_limit > 5)
+		if (rx_limit > CONFIG_OA_THREAD_RX_LIMIT)
 			break;
 	}
 
