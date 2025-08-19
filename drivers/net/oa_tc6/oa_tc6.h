@@ -49,15 +49,15 @@
 #define CONFIG_OA_CHUNK_BUFFER_SIZE	1514
 #endif
 
-#ifndef CONFIG_OA_TC6_PROTECTION
-#define CONFIG_OA_TC6_PROTECTION	0
-#endif
-
 #define OA_TX_FRAME_BUFF_NUM		CONFIG_OA_TX_FRAME_BUFF_NUM
 #define OA_RX_FRAME_BUFF_NUM		CONFIG_OA_RX_FRAME_BUFF_NUM
 
 /* Space for one full frame + 24 chunk headers (68 * 24)*/
 #define OA_SPI_BUFF_LEN		1632
+
+/* Space for 2 Header + Reg Data + Inverse Reg Data (PROTE) */
+#define OA_SPI_CTRL_LEN		16
+
 #define OA_CHUNK_SIZE		64
 #define OA_REG_LEN		4
 #define OA_HEADER_LEN		4
@@ -184,7 +184,7 @@ struct oa_tc6_frame_buffer {
  */
 struct oa_tc6_desc {
 	struct no_os_spi_desc *comm_desc;
-	uint8_t ctrl_chunks[16];
+	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
 
 	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
@@ -195,6 +195,7 @@ struct oa_tc6_desc {
 
 	uint32_t ctrl_tx_credit;
 	uint32_t ctrl_rx_credit;
+	bool	 prote_spi;
 };
 
 /**
@@ -202,6 +203,9 @@ struct oa_tc6_desc {
  */
 struct oa_tc6_init_param {
 	struct no_os_spi_desc *comm_desc;
+
+	/* The OASPI device uses Protected SPI for control transactions */
+	bool prote_spi;
 };
 
 /* Read a register from the MAC device */

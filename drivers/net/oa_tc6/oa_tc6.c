@@ -95,7 +95,7 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	no_os_put_unaligned_be32(header, desc->ctrl_chunks);
 	no_os_put_unaligned_be32(val, &desc->ctrl_chunks[OA_HEADER_LEN]);
 
-	if (CONFIG_OA_TC6_PROTECTION) {
+	if (desc->prote_spi) {
 		no_os_put_unaligned_be32(val ^ NO_OS_GENMASK(31, 0),
 					 &desc->ctrl_chunks[OA_HEADER_LEN + OA_REG_LEN]);
 	}
@@ -126,7 +126,7 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 	*val = no_os_get_unaligned_be32(&desc->ctrl_chunks[2 * OA_HEADER_LEN]);
 	desc->ctrl_rx_credit = 0;
 
-	if (CONFIG_OA_TC6_PROTECTION) {
+	if (desc->prote_spi) {
 		comp_val = no_os_get_unaligned_be32(&desc->ctrl_chunks[3 * OA_HEADER_LEN]);
 		if (*val != (comp_val ^ NO_OS_GENMASK(31, 0)))
 			return -EINVAL;
@@ -595,7 +595,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 		xfer.rx_buff = desc->ctrl_chunks;
 		xfer.cs_change = 1;
 
-		if (CONFIG_OA_TC6_PROTECTION)
+		if (desc->prote_spi)
 			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
 		else
 			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
@@ -664,6 +664,7 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 		return -ENOMEM;
 
 	descriptor->comm_desc = param->comm_desc;
+	descriptor->prote_spi = param->prote_spi;
 
 	/* For now, we'll only support receiving frames with SWO = 0 */
 	ret = oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
