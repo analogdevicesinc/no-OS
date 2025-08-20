@@ -1644,6 +1644,18 @@ static int hmc7044_recalc_rate(struct no_os_clk_desc *desc, uint64_t *rate)
 }
 
 /**
+ * @brief Enable clock.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int hmc7044_clk_enable(struct no_os_clk_desc *desc)
+{
+	return 0;
+}
+
+/**
  * @brief Round the desired rate.
  *
  * @param desc - The CLK descriptor.
@@ -1679,6 +1691,7 @@ int32_t hmc7044_set_rate(struct no_os_clk_desc *desc,
  */
 const struct no_os_clk_platform_ops hmc7044_clk_ops = {
 	.clk_recalc_rate = &hmc7044_recalc_rate,
+	.clk_enable = &hmc7044_clk_enable,
 	.clk_round_rate = &hmc7044_round_rate,
 	.clk_set_rate = &hmc7044_set_rate,
 };
