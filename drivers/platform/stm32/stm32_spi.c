@@ -601,7 +601,6 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 {
 	struct no_os_spi_desc* desc = ctx;
 	struct stm32_spi_desc* sdesc = desc->extra;
-	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
 
 	/* if more xfers pending dont do anything */
 	if (next_xfer)
@@ -617,13 +616,6 @@ void stm32_spi_dma_callback(struct no_os_dma_xfer_desc *old_xfer,
 
 	/* Perform abort SPI transfers */
 	no_os_spi_transfer_abort(desc);
-
-	/* Free the allocated memory for tx and rx transfers */
-	no_os_free(sdesc->tx_ch_xfer);
-	no_os_free(sdesc->rx_ch_xfer);
-
-	/* put CS pin back into gpio mode */
-	stm32_spi_altrnate_cs_enable(desc, false);
 
 	sdesc->stm32_spi_dma_done = true;
 
@@ -734,6 +726,13 @@ int32_t stm32_spi_transfer_abort(struct no_os_spi_desc* desc)
 #else
 	*(volatile uint8_t *)&SPIx->DR;
 #endif
+
+	/* Free the allocated memory for tx and rx transfers */
+	no_os_free(sdesc->tx_ch_xfer);
+	no_os_free(sdesc->rx_ch_xfer);
+
+	/* put CS pin back into gpio mode */
+	stm32_spi_altrnate_cs_enable(desc, false);
 
 	return 0;
 }
