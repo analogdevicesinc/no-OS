@@ -493,6 +493,7 @@ int stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	void *discard  = NULL;
 	struct irq_action key;
 	uint32_t hal_event = _events[cb->event].hal_event;
+	uint32_t list_size;
 
 	switch (cb->peripheral) {
 	case NO_OS_UART_IRQ:
@@ -545,6 +546,17 @@ int stm32_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 
 	if (discard)
 		no_os_free(discard);
+
+	/* Get size of the list */
+	ret = no_os_list_get_size(_events[cb->event].actions, &list_size);
+	if (ret)
+		return ret;
+
+	/* If list is empty, remove the list */
+	if (list_size == 0) {
+		no_os_list_remove(_events[cb->event].actions);
+		_events[cb->event].actions = NULL;
+	}
 
 	return ret;
 }
