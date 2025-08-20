@@ -66,16 +66,14 @@ int iio_hw_trig_init(struct iio_hw_trig **iio_trig,
 	trig_desc->irq_id = init_param->irq_id;
 	trig_desc->irq_trig_lvl = init_param->irq_trig_lvl;
 
-	struct no_os_callback_desc irq_cb = {
-		.callback = iio_hw_trig_handler,
-		.ctx = trig_desc,
-		.event = init_param->cb_info.event,
-		.handle = init_param->cb_info.handle,
-		.peripheral = init_param->cb_info.peripheral
-	};
+	trig_desc->irq_cb.callback = iio_hw_trig_handler;
+	trig_desc->irq_cb.ctx = trig_desc;
+	trig_desc->irq_cb.event = init_param->cb_info.event;
+	trig_desc->irq_cb.handle = init_param->cb_info.handle;
+	trig_desc->irq_cb.peripheral = init_param->cb_info.peripheral;
 
 	ret = no_os_irq_register_callback(trig_desc->irq_ctrl,
-					  trig_desc->irq_id, &irq_cb);
+					  trig_desc->irq_id, &trig_desc->irq_cb);
 	if (ret)
 		goto error;
 
@@ -153,8 +151,20 @@ void iio_hw_trig_handler(void *trig)
 */
 int iio_hw_trig_remove(struct iio_hw_trig *trig)
 {
-	if (trig)
+	int ret;
+
+	if (trig) {
+		ret = no_os_irq_unregister_callback(trig->irq_ctrl,
+						    trig->irq_id, &trig->irq_cb);
+		if (ret)
+			return ret;
+
+		ret = no_os_irq_disable(trig->irq_ctrl, trig->irq_id);
+		if (ret)
+			return ret;
+
 		no_os_free(trig);
+	}
 
 	return 0;
 }

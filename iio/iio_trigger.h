@@ -55,6 +55,8 @@ struct iio_hw_trig {
 	enum no_os_irq_trig_level irq_trig_lvl;
 	/** Device trigger name */
 	char name[TRIG_MAX_NAME_SIZE + 1];
+	/* IRQ Callback descriptor */
+	struct no_os_callback_desc irq_cb;
 };
 
 /**
