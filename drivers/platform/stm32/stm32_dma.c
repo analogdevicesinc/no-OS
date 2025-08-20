@@ -245,10 +245,7 @@ int stm32_dma_xfer_abort(struct no_os_dma_desc* desc,
 
 	sdma_chan = chan->extra;
 
-	if (chan->irq_num)
-		ret = HAL_DMA_Abort_IT(sdma_chan->hdma);
-	else
-		ret = HAL_DMA_Abort(sdma_chan->hdma);
+	ret = HAL_DMA_Abort(sdma_chan->hdma);
 
 	if (ret != HAL_OK)
 		return -EINVAL;
