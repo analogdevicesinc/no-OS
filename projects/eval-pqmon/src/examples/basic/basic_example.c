@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
+#include "no_os_alloc.h"
 #ifdef BASIC_EXAMPLE
 #include "basic_example.h"
 #endif
