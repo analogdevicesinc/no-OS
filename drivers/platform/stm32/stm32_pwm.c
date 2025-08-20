@@ -818,7 +818,7 @@ int32_t stm32_pwm_remove(struct no_os_pwm_desc *desc)
 	if (ret)
 		return ret;
 
-	if (desc->irq_id) {
+	if (desc->pwm_callback) {
 		ret = no_os_irq_unregister_callback(extra->nvic_tim, desc->irq_id,
 						    &extra->timer_callback);
 		if (ret)
