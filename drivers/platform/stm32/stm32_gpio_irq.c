@@ -436,11 +436,20 @@ static int stm32_gpio_irq_set_priority(struct no_os_irq_ctrl_desc *desc,
 static int stm32_irq_clear_pending(struct no_os_irq_ctrl_desc* desc,
 				   uint32_t irq_id)
 {
+	IRQn_Type nvic_irq_id;
+	int ret;
+
 	if (!desc || !desc->extra || !IS_EXTI_GPIO_PIN(desc->irq_ctrl_id))
 		return -EINVAL;
 
 	if (__HAL_GPIO_EXTI_GET_IT(1 << (desc->irq_ctrl_id)))
 		__HAL_GPIO_EXTI_CLEAR_IT(1 << (desc->irq_ctrl_id));
+
+	ret = stm32_get_exti_irq_id_from_pin(desc->irq_ctrl_id, &nvic_irq_id);
+	if (ret)
+		return ret;
+
+	HAL_NVIC_ClearPendingIRQ(nvic_irq_id);
 
 	return 0;
 }
