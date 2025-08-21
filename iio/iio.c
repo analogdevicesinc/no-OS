@@ -156,34 +156,26 @@ struct iio_event_priv {
 	uint32_t count;
 };
 
-struct channel_sort_priv {
-	/** Number of channel attributes */
-	uint16_t num_attr;
-	/** Array of sorted channel attributes. */
-	uint16_t *attributes;
+struct sort_data_priv {
+	/** Number of sorted items */
+	uint16_t num_items;
+	/** Array of sorted items indices. */
+	uint16_t *items;
 };
 
-struct iio_sorted_priv {
-	/** Number of channels */
-	uint32_t num_ch;
-	/** List of sorted channels */
-	uint16_t *channels;
-	/** Number of attributes */
-	uint32_t num_attr;
-	/** Array of sorted attributes. */
-	uint16_t *attributes;
-	/** Number of debug attributes */
-	uint32_t num_debug_attr;
-	/** Array of sorted debug attributes. */
-	uint16_t *debug_attributes;
-	/** Number of buffer attributes */
-	uint32_t num_buffer_attr;
+struct iio_sorted_dev_priv {
+	/** Sorted channel data */
+	struct sort_data_priv channels;
+	/** Sorted attribute data */
+	struct sort_data_priv attributes;
+	/** Sorted debug attribute data */
+	struct sort_data_priv debug_attributes;
+	/** Sorted buffer attribute data */
+	struct sort_data_priv buffer_attributes;
 	/** Index of REG_ACCESS_ATTRIBUTE in sorted debug attributes */
 	uint16_t reg_access_attr;
-	/** Array of sorted buffer attributes. */
-	uint16_t *buffer_attributes;
 	/** Array of sorted channel attributes */
-	struct channel_sort_priv *channel_attributes;
+	struct sort_data_priv *channel_attributes;
 };
 
 /**
@@ -209,7 +201,7 @@ struct iio_dev_priv {
 	/* Set to -1 when no trigger is set*/
 	uint32_t		trig_idx;
 	/* Structure storing sorted details of the device */
-	struct iio_sorted_priv sorted_data;
+	struct iio_sorted_dev_priv sorted_data;
 	/* Array to store the event fifo */
 	struct iio_event_priv event_list[16];
 };
@@ -228,6 +220,8 @@ struct iio_trig_priv {
 	void	*instance;
 	/** Trigger descriptor(describes type of trigger and its attributes) */
 	struct iio_trigger *descriptor;
+	/** Sorted trigger attribute data */
+	struct sort_data_priv sort_attr;
 	/** Set to true when the triggering condition is met */
 	bool	triggered;
 };
@@ -239,13 +233,12 @@ struct iio_desc {
 	char			*xml_desc;
 	uint32_t		xml_size;
 	struct iio_ctx_attr	*ctx_attrs;
-	int16_t sorted_attrs[16];
 	uint32_t		nb_ctx_attr;
 	struct iio_dev_priv	*devs;
-	int16_t sorted_devs[16];
+	struct sort_data_priv sorted_dev;
 	uint32_t		nb_devs;
 	struct iio_trig_priv	*trigs;
-	int16_t sorted_trigs[16];
+	struct sort_data_priv sorted_trig;
 	uint32_t		nb_trigs;
 	struct no_os_uart_desc	*uart_desc;
 	int (*recv)(void *conn, uint8_t *buf, uint32_t len);
@@ -258,6 +251,391 @@ struct iio_desc {
 	struct tcp_socket_desc	*server;
 #endif
 };
+
+/*
+ * @brief Sort an array using a comparison function with context, similar to qsort_r.
+ * @param base - Pointer to the first element of the array to be sorted.
+ * @param num - Number of elements in the array.
+ * @param size - Size of each element in the array.
+ * @param cmp - Comparison function that takes a third argument (context) and
+ *              returns a negative value if the first element is less than the second,
+ *              zero if they are equal, and a positive value if the first element is greater.
+ * @param context - Additional context passed to the comparison function.
+ */
+static inline void no_os_sort(void *base, size_t num, size_t size,
+							  int (*cmp)(const void *, const void *, void *),
+							  void *context)
+{
+	if (!base || !cmp || !size || !num)
+		return;
+	char *arr = (char *)base;
+	char *temp = (char *)malloc(size);
+	if (!temp)
+		return;
+
+	for (size_t i = 0; i < num - 1; i++) {
+		for (size_t j = 0; j < num - i - 1; j++) {
+			if (cmp(arr + j * size, arr + (j + 1) * size, context) > 0) {
+				memcpy(temp, arr + j * size, size);
+				memcpy(arr + j * size, arr + (j + 1) * size, size);
+				memcpy(arr + (j + 1) * size, temp, size);
+			}
+		}
+	}
+
+	free(temp);
+}
+
+static int iio_channel_compare(const void *a, const void *b, void *context)
+{
+	const struct iio_channel *channels = (struct iio_channel *)context;
+	uint16_t idx1 = *(const uint16_t *)a;
+	uint16_t idx2 = *(const uint16_t *)b;
+	return strcmp(channels[idx1].name, channels[idx2].name);
+}
+
+static int iio_device_compare(const void *a, const void *b, void *context)
+{
+	const struct iio_dev_priv *devs = (struct iio_dev_priv *)context;
+	uint16_t idx1 = *(const uint16_t *)a;
+	uint16_t idx2 = *(const uint16_t *)b;
+	return strcmp(devs[idx1].dev_id, devs[idx2].dev_id);
+}
+
+static int iio_trigger_compare(const void *a, const void *b, void *context)
+{
+	const struct iio_trig_priv *trig = (struct iio_trig_priv *)context;
+	uint16_t idx1 = *(const uint16_t *)a;
+	uint16_t idx2 = *(const uint16_t *)b;
+	return strcmp(trig[idx1].name, trig[idx2].name);
+}
+
+static int iio_attr_compare(const void *a, const void *b, void *context)
+{
+	const struct iio_attribute *attributes = (struct iio_attribute *)context;
+	uint16_t idx1 = *(const uint16_t *)a;
+	uint16_t idx2 = *(const uint16_t *)b;
+	return strcmp(attributes[idx1].name, attributes[idx2].name);
+}
+
+/*
+ * @brief Quick sort function to sort indices of an array alphabetically.
+ * @param channel - Array of iio_channel structures to be sorted.
+ * @param size - Number of elements in the array.
+ * @param indices - Array of indices to be sorted.
+ */
+static void iio_sort_channels(struct iio_channel *channels, size_t size, uint16_t *indices)
+{
+	if (!channels || !indices || !size)
+		return;
+
+	for (size_t i = 0; i < size; i++) {
+		indices[i] = i; // Initialize indices
+	}
+
+	no_os_sort(indices, size, sizeof(uint16_t), iio_channel_compare, (void *) channels);
+}
+
+/*
+ * @brief Quick sort function to sort indices of an array alphabetically.
+ * @param devices - Array of iio_dev_priv structures to be sorted.
+ * @param size - Number of elements in the array.
+ * @param indices - Array of indices to be sorted.
+ */
+static void iio_sort_devices(struct iio_dev_priv *devices, size_t size, uint16_t *indices)
+{
+	if (!devices || !indices || !size)
+		return;
+
+	for (size_t i = 0; i < size; i++) {
+		indices[i] = i; // Initialize indices
+	}
+
+	no_os_sort(indices, size, sizeof(uint16_t), iio_device_compare, (void *)devices);
+}
+
+/*
+ * @brief Quick sort function to sort indices of an array alphabetically.
+ * @param triggers - Array of iio_trig_priv structures to be sorted.
+ * @param size - Number of elements in the array.
+ * @param indices - Array of indices to be sorted.
+ */
+static void iio_sort_triggers(struct iio_trig_priv *triggers, size_t size, uint16_t *indices)
+{
+	if (!triggers || !indices || !size)
+		return;
+
+	for (size_t i = 0; i < size; i++) {
+		indices[i] = i; // Initialize indices
+	}
+
+	no_os_sort(indices, size, sizeof(uint16_t), iio_trigger_compare, (void *)triggers);
+}
+
+/*
+ * @brief Quick sort function to sort indices of an array alphabetically.
+ * @param attributes - Array of iio_attribute structures to be sorted.
+ * @param size - Number of elements in the array.
+ * @param indices - Array of indices to be sorted.
+ */
+static void iio_sort_attrs(struct iio_attribute *attributes, size_t size, uint16_t *indices)
+{
+	if (!attributes || !indices || !size)
+		return;
+
+	for (size_t i = 0; i < size; i++) {
+		indices[i] = i; // Initialize indices
+	}
+
+	no_os_sort(indices, size, sizeof(uint16_t), iio_attr_compare, (void *)attributes);
+}
+
+static int32_t sort_channel_attributes(struct iio_channel *channel,
+					struct sort_data_priv *ch_priv)
+{
+	ch_priv->num_items = 0;
+	while(channel->attributes[ch_priv->num_items].name) {
+		ch_priv->num_items++;
+	}
+	ch_priv->items = (uint16_t *)calloc(ch_priv->num_items,
+						 sizeof(uint16_t));
+	if (!ch_priv->items)
+		return -ENOMEM;
+
+	iio_sort_attrs(channel->attributes, ch_priv->num_items,
+		       ch_priv->items);
+
+	return 0;
+}
+
+static int32_t remove_sort_dev_data(struct iio_dev_priv *dev)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (dev->sorted_data.channel_attributes) {
+		for (uint32_t i = 0; i < dev->sorted_data.channels.num_items; i++) {
+			if (dev->sorted_data.channel_attributes[i].items) {
+				no_os_free(dev->sorted_data.channel_attributes[i].items);
+			}
+		}
+		no_os_free(dev->sorted_data.channel_attributes);
+		dev->sorted_data.channel_attributes = NULL;
+	}
+	if (dev->sorted_data.channels.items) {
+		no_os_free(dev->sorted_data.channels.items);
+		dev->sorted_data.channels.items = NULL;
+		dev->sorted_data.channels.num_items = 0;
+	}
+	if (dev->sorted_data.attributes.items) {
+		no_os_free(dev->sorted_data.attributes.items);
+		dev->sorted_data.attributes.items = NULL;
+		dev->sorted_data.attributes.num_items = 0;
+	}
+	if (dev->sorted_data.debug_attributes.items) {
+		no_os_free(dev->sorted_data.debug_attributes.items);
+		dev->sorted_data.debug_attributes.items = NULL;
+		dev->sorted_data.debug_attributes.num_items = 0;
+	}
+	if (dev->sorted_data.buffer_attributes.items) {
+		no_os_free(dev->sorted_data.buffer_attributes.items);
+		dev->sorted_data.buffer_attributes.items = NULL;
+		dev->sorted_data.buffer_attributes.num_items = 0;
+	}
+
+	return 0;
+}
+
+static int32_t sort_dev_data(struct iio_dev_priv *dev)
+{
+	int32_t ret;
+	uint32_t i;
+	struct iio_device *desc = dev->dev_descriptor;
+	struct iio_channel *channel;
+	struct iio_attribute *attr;
+
+	dev->sorted_data.channels.num_items = 0;
+	if (desc->channels && desc->num_ch) {
+		dev->sorted_data.channels.num_items = desc->num_ch;
+
+		dev->sorted_data.channels.items = (uint16_t *)
+			no_os_calloc(dev->sorted_data.channels.num_items,
+				   sizeof(uint16_t));
+		if (!dev->sorted_data.channels.items)
+			goto fail_sort_data;
+
+		iio_sort_channels(desc->channels, dev->sorted_data.channels.num_items,
+				dev->sorted_data.channels.items);
+
+		dev->sorted_data.channel_attributes = (struct sort_data_priv *)
+			no_os_calloc(dev->sorted_data.channels.num_items,
+				   sizeof(struct sort_data_priv));
+		if (!dev->sorted_data.channel_attributes)
+			goto fail_sort_data;
+
+		for (i = 0; i < dev->sorted_data.channels.num_items; i++) {
+			channel = &desc->channels[dev->sorted_data.channels.items[i]];
+			if (channel->attributes) {
+				ret = sort_channel_attributes(channel,
+					&dev->sorted_data.channel_attributes[i]);
+				if (ret)
+					goto fail_sort_data;
+			}
+		}
+	}
+	if (desc->attributes) {
+		while (desc->attributes[dev->sorted_data.attributes.num_items].name)
+			dev->sorted_data.attributes.num_items++;
+
+		if (dev->sorted_data.attributes.num_items) {
+			dev->sorted_data.attributes.items = (uint16_t *) no_os_calloc(
+					dev->sorted_data.attributes.num_items,
+					sizeof(uint16_t));
+			if (!dev->sorted_data.attributes.items)
+				goto fail_sort_data;
+
+			iio_sort_attrs(desc->attributes,
+				       dev->sorted_data.attributes.num_items,
+				       dev->sorted_data.attributes.items);
+		}
+	}
+
+	if (desc->buffer_attributes) {
+		while (desc->buffer_attributes[dev->sorted_data.buffer_attributes.num_items].name)
+			dev->sorted_data.buffer_attributes.num_items++;
+
+		if (dev->sorted_data.buffer_attributes.num_items) {
+			dev->sorted_data.buffer_attributes.items = (uint16_t *) no_os_calloc(
+					dev->sorted_data.buffer_attributes.num_items,
+					sizeof(uint16_t));
+			if (!dev->sorted_data.buffer_attributes.items)
+				goto fail_sort_data;
+
+			iio_sort_attrs(desc->buffer_attributes,
+				       dev->sorted_data.buffer_attributes.num_items,
+				       dev->sorted_data.buffer_attributes.items);
+		}
+	}
+
+	if (desc->debug_attributes) {
+		while (desc->debug_attributes[dev->sorted_data.debug_attributes.num_items].name)
+			dev->sorted_data.debug_attributes.num_items++;
+
+		if (dev->sorted_data.debug_attributes.num_items) {
+			dev->sorted_data.debug_attributes.items = (uint16_t *) no_os_calloc(
+					dev->sorted_data.debug_attributes.num_items,
+					sizeof(uint16_t));
+			if (!dev->sorted_data.debug_attributes.items)
+				goto fail_sort_data;
+
+			iio_sort_attrs(desc->debug_attributes,
+					   dev->sorted_data.debug_attributes.num_items,
+					   dev->sorted_data.debug_attributes.items);
+		}
+
+		if (dev->dev_descriptor->debug_reg_read || dev->dev_descriptor->debug_reg_write) {
+			for (i = 0; i < dev->sorted_data.debug_attributes.num_items; i++) {
+				attr = &desc->debug_attributes[dev->sorted_data.debug_attributes.items[i]];
+				if (strcmp(REG_ACCESS_ATTRIBUTE, attr->name) < 0) {
+					dev->sorted_data.reg_access_attr = i;
+					break;
+				}
+			}
+		}
+	}
+
+	return 0;
+
+fail_sort_data:
+	remove_sort_dev_data(dev);
+	return -ENOMEM;
+}
+
+static void iio_sort_remove(struct iio_desc *desc)
+{
+	int i;
+	struct iio_dev_priv *dev;
+
+	if (!desc)
+		return;
+
+	if (desc->sorted_dev.num_items) {
+
+		for (i = 0; i < desc->nb_devs; i++) {
+			dev = desc->devs + i;
+			remove_sort_dev_data(dev);
+		}
+
+		no_os_free(desc->sorted_dev.items);
+		desc->sorted_dev.items = NULL;
+		desc->sorted_dev.num_items = 0;
+	}
+	if (desc->sorted_trig.num_items) {
+
+		for (i = 0; i < desc->nb_trigs; i++) {
+			no_os_free(desc->trigs[i].sort_attr.items);
+			desc->trigs[i].sort_attr.items = NULL;
+			desc->trigs[i].sort_attr.num_items = 0;
+		}
+
+		no_os_free(desc->sorted_trig.items);
+		desc->sorted_trig.items = NULL;
+		desc->sorted_trig.num_items = 0;
+	}
+}
+
+static int32_t iio_sort(struct iio_desc *desc)
+{
+	uint32_t i;
+	int32_t ret;
+
+	if (!desc)
+		return -EINVAL;
+
+	if (desc->nb_devs) {
+		for (i = 0; i < desc->nb_devs; i++) {
+			ret = sort_dev_data(&desc->devs[i]);
+			if (ret)
+				goto fail_iio_sort;
+		}
+
+		desc->sorted_dev.num_items = desc->nb_devs;
+		desc->sorted_dev.items = (uint16_t *)no_os_calloc(desc->nb_devs, sizeof(uint16_t));
+		if (!desc->sorted_dev.items)
+			goto fail_iio_sort;
+
+		iio_sort_devices(desc->devs, desc->nb_devs, desc->sorted_dev.items);
+	}
+	if (desc->nb_trigs) {
+		for (i = 0; i < desc->nb_trigs; i++) {
+			desc->trigs[i].sort_attr.num_items = 0;
+			while (desc->trigs[i].descriptor->attributes[desc->trigs[i].sort_attr.num_items].name)
+				desc->trigs[i].sort_attr.num_items++;
+
+			if (desc->trigs[i].sort_attr.num_items) {
+				desc->trigs[i].sort_attr.items = (uint16_t *) no_os_calloc(
+						desc->trigs[i].sort_attr.num_items,
+						sizeof(uint16_t));
+				if (!desc->trigs[i].sort_attr.items)
+					goto fail_iio_sort;
+
+				iio_sort_attrs(desc->trigs[i].descriptor->attributes,
+							desc->trigs[i].sort_attr.num_items,
+							desc->trigs[i].sort_attr.items);
+			}
+		}
+		desc->sorted_trig.num_items = desc->nb_trigs;
+		desc->sorted_trig.items = (uint16_t *) no_os_calloc(desc->nb_trigs, sizeof(uint16_t));
+		if (desc->sorted_trig.items)
+			goto fail_iio_sort;
+		iio_sort_triggers(desc->trigs, desc->nb_trigs, desc->sorted_trig.items);
+	}
+
+	return 0;
+fail_iio_sort:
+	iio_sort_remove(desc);
+	return -ENOMEM;
+}
 
 static inline int32_t _pop_conn(struct iio_desc *desc, uint32_t *conn_id)
 {
@@ -345,18 +723,29 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 
 /**
  * @brief Find interface with "device_name".
- * @param device_name - Device name.
+ * @param device - Device name/id.
  * @param iio_dev_privs - List of interfaces.
+ * @param binary - Boolean to indicate binary protocol
  * @return Interface pointer if interface is found, NULL otherwise.
  */
 static struct iio_dev_priv *get_iio_device(struct iio_desc *desc,
-		const char *device_name)
+		const void *device, bool binary)
 {
 	uint32_t i;
+	const char *device_name;
+	const uint16_t *device_id;
 
-	for (i = 0; i < desc->nb_devs; i++) {
-		if (strcmp(desc->devs[i].dev_id, device_name) == 0)
-			return &desc->devs[i];
+	if (binary) {
+		device_id = (const uint16_t *) device;
+		if (*device_id < desc->nb_devs)
+			return &desc->devs[desc->sorted_dev.items[*device_id]];
+
+	} else {
+		device_name = (const char *) device;
+		for (i = 0; i < desc->nb_devs; i++) {
+			if (strcmp(desc->devs[i].dev_id, device_name) == 0)
+				return &desc->devs[i];
+		}
 	}
 
 	return NULL;
@@ -393,7 +782,7 @@ static int iio_set_buffers_count(struct iiod_ctx *ctx, const void *device,
 {
 	struct iio_desc *desc = ctx->instance;
 
-	if (!get_iio_device(desc, device))
+	if (!get_iio_device(desc, device, ctx->binary))
 		return -ENODEV;
 
 	/* Our implementation uses a circular buffer to send/receive data so
@@ -804,20 +1193,20 @@ static struct iio_attribute *get_attribute(struct iiod_attr *attr,
 	switch (attr->type) {
 	case IIO_ATTR_TYPE_DEBUG:
 		attributes = dev->dev_descriptor->debug_attributes;
-		sorted_attr = dev->sorted_data.debug_attributes;
+		sorted_attr = dev->sorted_data.debug_attributes.items;
 		break;
 	case IIO_ATTR_TYPE_DEVICE:
 		attributes = dev->dev_descriptor->attributes;
-		sorted_attr = dev->sorted_data.attributes;
+		sorted_attr = dev->sorted_data.attributes.items;
 		break;
 	case IIO_ATTR_TYPE_BUFFER:
 		attributes = dev->dev_descriptor->buffer_attributes;
-		sorted_attr = dev->sorted_data.buffer_attributes;
+		sorted_attr = dev->sorted_data.buffer_attributes.items;
 		break;
 	case IIO_ATTR_TYPE_CH_IN:
 	case IIO_ATTR_TYPE_CH_OUT:
 		attributes = ch->attributes;
-		sorted_attr = dev->sorted_data.channel_attributes[attr->ch_id].attributes;
+		sorted_attr = dev->sorted_data.channel_attributes[attr->ch_id].items;
 	}
 
 	/* Search attribute */
@@ -880,7 +1269,7 @@ static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 	desc = ctx->instance;
 	if (*device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*device]];
+		dev = &desc->devs[desc->sorted_dev.items[*device]];
 
 	/* If IIO device with given name is found, handle reading of attributes */
 	if (dev) {
@@ -894,7 +1283,7 @@ static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 		if (attr->ch_id != -1) {
 			if (attr->ch_id < desc->nb_devs)
-				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels[attr->ch_id]];
+				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels.items[attr->ch_id]];
 			else
 				ch = NULL;
 
@@ -922,7 +1311,7 @@ static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 	/* IIO device with given name is not found, verify if it corresponds to a trigger */
 	if (*device < desc->nb_trigs)
-		trig_dev = &desc->trigs[desc->sorted_trigs[*device]];
+		trig_dev = &desc->trigs[desc->sorted_trig.items[*device]];
 
 	/* If IIO trigger with given name is found, handle reading of attributes */
 	if (trig_dev) {
@@ -963,7 +1352,7 @@ static int iio_read_attr(struct iiod_ctx *ctx, const void *device,
 	if (ctx->binary)
 		return iio_read_attr_new(ctx, device, attr, buf, len);
 
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 
 	/* If IIO device with given name is found, handle reading of attributes */
 	if (dev) {
@@ -1041,7 +1430,7 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 	desc = ctx->instance;
 	if (*device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*device]];
+		dev = &desc->devs[desc->sorted_dev.items[*device]];
 
 	/* If IIO device with given name is found, handle writing of attributes */
 	if (dev) {
@@ -1055,7 +1444,7 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 		if (attr->ch_id != -1) {
 			if (attr->ch_id < desc->nb_devs)
-				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels[attr->ch_id]];
+				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels.items[attr->ch_id]];
 			else
 				ch = NULL;
 
@@ -1084,7 +1473,7 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 
 	/* IIO device with given name is not found, verify if it corresponds to a trigger */
 	if (*device < desc->nb_trigs)
-		trig_dev = &desc->trigs[desc->sorted_trigs[*device]];
+		trig_dev = &desc->trigs[desc->sorted_trig.items[*device]];
 
 	/* If IIO trigger with given name is found, handle writing of attributes */
 	if (trig_dev) {
@@ -1126,7 +1515,7 @@ static int iio_write_attr(struct iiod_ctx *ctx, const void *device,
 	if (ctx->binary)
 		return iio_write_attr_new(ctx, device, attr, buf, len);
 
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 
 	/* If IIO device with given name is found, handle writing of attributes */
 	if (dev) {
@@ -1247,7 +1636,7 @@ static int iio_get_trigger(struct iiod_ctx *ctx, const void *device,
 	if (trig)
 		return -ENOENT;
 
-	dev = get_iio_device(desc, device);
+	dev = get_iio_device(desc, device, ctx->binary);
 	if (!dev)
 		return -ENODEV;
 
@@ -1285,7 +1674,7 @@ static int iio_set_trigger(struct iiod_ctx *ctx, const void *device,
 	if (trig)
 		return -ENOENT;
 
-	dev = get_iio_device(desc, device);
+	dev = get_iio_device(desc, device, ctx->binary);
 	if (!dev)
 		return -ENODEV;
 
@@ -1412,7 +1801,7 @@ static int iio_open_dev(struct iiod_ctx *ctx, const void *device,
 	int8_t *buf;
 	uint32_t buf_size;
 
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 	if (!dev)
 		return -ENODEV;
 
@@ -1496,19 +1885,7 @@ static int iio_close_dev(struct iiod_ctx *ctx, const void *device)
 	struct iio_trig_priv *trig;
 	int ret = 0;
 
-	if (ctx->binary){
-			struct iio_desc *desc;
-
-			desc = ctx->instance;
-			if (*(const uint16_t *)device < desc->nb_devs)
-				dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
-
-			if (dev->dev_descriptor->post_disable)
-				return dev->dev_descriptor->post_disable(&dev->dev_instance);
-		}
-
-
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 	if (!dev)
 		return -1;
 
@@ -1543,19 +1920,7 @@ static int iio_call_submit(struct iiod_ctx *ctx, const void *device,
 {
 	struct iio_dev_priv *dev;
 
-	if (ctx->binary){
-		struct iio_desc *desc;
-
-		desc = ctx->instance;
-		if (*(const uint16_t *)device < desc->nb_devs)
-			dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
-
-		if (dev->dev_descriptor->submit && dev->trig_idx == NO_TRIGGER)
-			return dev->dev_descriptor->submit(&dev->dev_data);
-	}
-
-
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 	if (!dev || !dev->buffer.initalized)
 		return -EINVAL;
 
@@ -1600,11 +1965,9 @@ static int iio_refill_buffer(struct iiod_ctx *ctx, const void *device, uint8_t b
 	struct iio_dev_priv *dev;
 
 	if (ctx->binary){
-		struct iio_desc *desc;
-
-		desc = ctx->instance;
-		if (*(const uint16_t *)device < desc->nb_devs)
-			dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+		dev = get_iio_device(ctx->instance, device, ctx->binary);
+		if (!dev || !dev->buffer.initalized)
+			return -EINVAL;
 
 		if (dev->dev_descriptor->transfer_block && dev->trig_idx == NO_TRIGGER)
 			return dev->dev_descriptor->transfer_block(&dev->dev_data, block_id);
@@ -1615,13 +1978,16 @@ static int iio_refill_buffer(struct iiod_ctx *ctx, const void *device, uint8_t b
 
 static int iio_pre_enable(struct iiod_ctx *ctx, const void *device, uint32_t mask, uint16_t *block_ids)
 {
-	struct iio_desc *desc;
-	struct iio_dev_priv *dev = NULL;
-	uint16_t num;
+	struct iio_dev_priv *dev;
 
-	desc = ctx->instance;
-	if (*(const uint16_t *)device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+	if (!ctx || !device)
+		return -EINVAL;
+	if (!ctx->binary)
+		return -ENOSYS;
+
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
+	if (!dev)
+		return -EINVAL;
 
 	if (dev->dev_descriptor->pre_enable) {
 		return dev->dev_descriptor->pre_enable(dev->dev_instance, mask, block_ids);
@@ -1633,7 +1999,6 @@ static int iio_pre_enable(struct iiod_ctx *ctx, const void *device, uint32_t mas
 static int iio_create_event_stream (struct iiod_ctx *ctx, const void *device,
 		const uint32_t priv)
 {
-	struct iio_desc *desc;
 	struct iio_dev_priv *dev = NULL;
 	uint32_t i;
 	int ret;
@@ -1643,9 +2008,9 @@ static int iio_create_event_stream (struct iiod_ctx *ctx, const void *device,
 	if (!ctx->binary)
 		return -ENOSYS;
 
-	desc = ctx->instance;
-	if (*(const uint16_t *)device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
+	if (!dev)
+		return -EINVAL;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
 		if ((dev->event_list[i].event) &&
@@ -1671,7 +2036,6 @@ static int iio_create_event_stream (struct iiod_ctx *ctx, const void *device,
 static int iio_read_event (struct iiod_ctx *ctx, const void *device, 
 			const uint32_t priv, uint8_t *buf)
 {
-	struct iio_desc *desc;
 	struct iio_dev_priv *dev;
 	int	ret;
 	uint32_t i, j;
@@ -1681,9 +2045,9 @@ static int iio_read_event (struct iiod_ctx *ctx, const void *device,
 	if (!ctx->binary)
 		return -ENOSYS; /* ASCII mode not supported */
 
-	desc = ctx->instance;
-	if (*(const uint16_t *)device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
+	if (!dev)
+		return -EINVAL;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
 		if (dev->event_list[i].iiod_priv == priv) {
@@ -1706,7 +2070,6 @@ static int iio_read_event (struct iiod_ctx *ctx, const void *device,
 static int iio_free_event_stream (struct iiod_ctx *ctx, const void *device,
 		const uint32_t priv)
 {
-	struct iio_desc *desc;
 	struct iio_dev_priv *dev;
 	uint32_t i;
 
@@ -1715,9 +2078,9 @@ static int iio_free_event_stream (struct iiod_ctx *ctx, const void *device,
 	if (!ctx->binary)
 		return -ENOSYS; /* ASCII mode not supported */
 
-	desc = ctx->instance;
-	if (*(const uint16_t *)device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
+	if (!dev)
+		return -EINVAL;
 
 	for (i = 0; i < NO_OS_ARRAY_SIZE(dev->event_list); i++) {
 		if (dev->event_list[i].iiod_priv == priv) {
@@ -1746,7 +2109,7 @@ static int iio_read_buffer(struct iiod_ctx *ctx, const void *device, char *buf,
 	int32_t			ret;
 	uint32_t		size;
 
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 	if (!dev || !dev->buffer.initalized)
 		return -EINVAL;
 
@@ -1790,7 +2153,7 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const void *device,
 	uint32_t		available;
 	uint32_t		size;
 
-	dev = get_iio_device(ctx->instance, device);
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 	if (!dev || !dev->buffer.initalized)
 		return -EINVAL;
 
@@ -1807,18 +2170,23 @@ static int iio_write_buffer(struct iiod_ctx *ctx, const void *device,
 	return bytes;
 }
 
-static int iio_create_block(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes){
-	struct iio_desc *desc;
+static int iio_create_block(struct iiod_ctx *ctx, const void *device, struct iio_block *block, uint32_t block_size_bytes)
+{
 	struct iio_dev_priv *dev = NULL;
 
-	desc = ctx->instance;
-	if (*(const uint16_t *)device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_devs[*(const uint16_t *)device]];
+	if (!ctx || !device)
+		return -EINVAL;
+	if (!ctx->binary)
+		return -ENOSYS; /* ASCII mode not supported */
 
-	return dev->dev_descriptor->create_block ?
-		dev->dev_descriptor->create_block(dev->dev_instance, block, block_size_bytes) :
-		-ENOSYS;
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
+	if (!dev)
+		return -EINVAL;
 
+	if (dev->dev_descriptor->create_block)
+		return dev->dev_descriptor->create_block(dev->dev_instance, block, block_size_bytes);
+
+	return -ENOSYS;
 }
 
 int iio_buffer_get_block(struct iio_buffer *buffer, void **addr)
@@ -2258,219 +2626,10 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 	return 0;
 }
 
-static void *context;
-//static int compare_channel(const void *a, const void *b, void *context)
-static int compare_channel(const void *a, const void *b)
-{
-	const struct iio_channel *channels = (struct iio_channel *)context;
-	uint16_t idx1 = *(const uint16_t *)a;
-	uint16_t idx2 = *(const uint16_t *)b;
-	return strcmp(channels[idx1].name, channels[idx2].name);
-}
-
-//static int compare_attribute(const void *a, const void *b, void *context)
-static int compare_attribute(const void *a, const void *b)
-{
-	const struct iio_attribute *attributes = (struct iio_attribute *)context;
-	uint16_t idx1 = *(const uint16_t *)a;
-	uint16_t idx2 = *(const uint16_t *)b;
-	return strcmp(attributes[idx1].name, attributes[idx2].name);
-}
-
-/*
- * @brief Quick sort function to sort indices of an array alphabetically.
- * @param channel - Array of iio_channel structures to be sorted.
- * @param size - Number of elements in the array.
- * @param indices - Array of indices to be sorted.
- */
-static void sort_channel(struct iio_channel *channel, size_t size, uint16_t *indices)
-{
-	for (size_t i = 0; i < size; i++) {
-		indices[i] = i; // Initialize indices
-	}
-	context = (void *)channel;
-	qsort(indices, size, sizeof(uint16_t), compare_channel);
-//	qsort_r(indices, size, sizeof(uint16_t), compare_channel, (void *)channel);
-}
-
-/*
- * @brief Quick sort function to sort indices of an array alphabetically.
- * @param attributes - Array of iio_attribute structures to be sorted.
- * @param size - Number of elements in the array.
- * @param indices - Array of indices to be sorted.
- */
-static void sort_attribute(struct iio_attribute *attributes, size_t size, uint16_t *indices)
-{
-	for (size_t i = 0; i < size; i++) {
-		indices[i] = i; // Initialize indices
-	}
-	context = (void *)attributes;
-	qsort(indices, size, sizeof(uint16_t), compare_attribute);
-//	qsort_r(indices, size, sizeof(uint16_t), compare_attribute, (void *)attributes);
-}
-
-static int32_t sort_channel_attributes(struct iio_channel *channel,
-					struct channel_sort_priv *ch_priv)
-{
-	ch_priv->num_attr = 0;
-	while(channel->attributes[ch_priv->num_attr].name) {
-		ch_priv->num_attr++;
-	}
-	ch_priv->attributes = (uint16_t *)calloc(ch_priv->num_attr,
-						 sizeof(uint16_t));
-	if (!ch_priv->attributes)
-		return -ENOMEM;
-	
-	sort_attribute(channel->attributes, ch_priv->num_attr,
-		       ch_priv->attributes);
-	
-	return 0;
-}
-
-static int32_t remove_sort_dev_data(struct iio_dev_priv *dev)
-{
-	if (!dev)
-		return -EINVAL;
-	
-	if (dev->sorted_data.channel_attributes) {
-		for (uint32_t i = 0; i < dev->sorted_data.num_ch; i++) {
-			if (dev->sorted_data.channel_attributes[i].attributes) {
-				no_os_free(dev->sorted_data.channel_attributes[i].attributes);
-				dev->sorted_data.channel_attributes[i].attributes = NULL;
-			}
-		}
-		no_os_free(dev->sorted_data.channel_attributes);
-		dev->sorted_data.channel_attributes = NULL;
-	}
-	if (dev->sorted_data.channels) {
-		no_os_free(dev->sorted_data.channels);
-		dev->sorted_data.channels = NULL;
-	}
-	if (dev->sorted_data.attributes) {
-		no_os_free(dev->sorted_data.attributes);
-		dev->sorted_data.attributes = NULL;
-	}
-	if (dev->sorted_data.debug_attributes) {
-		no_os_free(dev->sorted_data.debug_attributes);
-		dev->sorted_data.debug_attributes = NULL;
-	}
-	if (dev->sorted_data.buffer_attributes) {
-		no_os_free(dev->sorted_data.buffer_attributes);
-		dev->sorted_data.buffer_attributes = NULL;
-	}
-
-	return 0;
-}
-
-static int32_t sort_dev_data(struct iio_dev_priv *dev)
-{
-	int32_t ret;
-	uint32_t i;
-	struct iio_device *desc = dev->dev_descriptor;
-	struct iio_channel *channel;
-	struct iio_attribute *attr;
-
-	memset(&dev->sorted_data, 0, sizeof(dev->sorted_data));
-
-	if (desc->channels) {
-		dev->sorted_data.num_ch = desc->num_ch;
-
-		if (dev->sorted_data.num_ch) {
-			dev->sorted_data.channels = (uint16_t *)
-				calloc(dev->sorted_data.num_ch,
-				       sizeof(uint16_t));
-			if (!dev->sorted_data.channels)
-				return -ENOMEM;
-			
-			sort_channel(desc->channels, dev->sorted_data.num_ch,
-					dev->sorted_data.channels);
-
-			dev->sorted_data.channel_attributes = (struct channel_sort_priv *)
-				calloc(dev->sorted_data.num_ch,
-				       sizeof(struct channel_sort_priv));
-			for (i = 0; i < dev->sorted_data.num_ch; i++) {
-				channel = &desc->channels[dev->sorted_data.channels[i]];
-				if (channel->attributes) {
-					ret = sort_channel_attributes(channel,
-						&dev->sorted_data.channel_attributes[i]);
-					if (ret)
-						goto fail_sort_data;
-				}
-			}
-		}
-	}
-	if (desc->attributes) {
-		while (desc->attributes[dev->sorted_data.num_attr].name)
-			dev->sorted_data.num_attr++;
-
-		if (dev->sorted_data.num_attr) {
-			dev->sorted_data.attributes = (uint16_t *) calloc(
-					dev->sorted_data.num_attr,
-					sizeof(uint16_t));
-			if (!dev->sorted_data.attributes)
-				goto fail_sort_data;
-			
-			sort_attribute(desc->attributes,
-				       dev->sorted_data.num_attr,
-				       dev->sorted_data.attributes);
-		}
-	}
-
-	if (desc->buffer_attributes) {
-		while (desc->buffer_attributes[dev->sorted_data.num_buffer_attr].name)
-			dev->sorted_data.num_buffer_attr++;
-
-		if (dev->sorted_data.num_buffer_attr) {
-			dev->sorted_data.buffer_attributes = (uint16_t *) calloc(
-					dev->sorted_data.num_buffer_attr,
-					sizeof(uint16_t));
-			if (!dev->sorted_data.buffer_attributes)
-				goto fail_sort_data;
-
-			sort_attribute(desc->buffer_attributes,
-				       dev->sorted_data.num_buffer_attr,
-				       dev->sorted_data.buffer_attributes);
-		}
-	}
-
-	if (desc->debug_attributes) {
-		while (desc->debug_attributes[dev->sorted_data.num_debug_attr].name)
-			dev->sorted_data.num_debug_attr++;
-
-		dev->sorted_data.debug_attributes = (uint16_t *) calloc(
-				dev->sorted_data.num_debug_attr,
-				sizeof(uint16_t));
-		if (!dev->sorted_data.debug_attributes)
-			goto fail_sort_data;
-
-		sort_attribute(desc->debug_attributes,
-				   dev->sorted_data.num_debug_attr,
-				   dev->sorted_data.debug_attributes);
-
-		if (dev->dev_descriptor->debug_reg_read || dev->dev_descriptor->debug_reg_write) {
-			for (i = 0; i < dev->sorted_data.num_debug_attr; i++) {
-				attr = &desc->debug_attributes[dev->sorted_data.debug_attributes[i]];
-				if (strcmp(REG_ACCESS_ATTRIBUTE, attr->name) < 0) {
-					dev->sorted_data.reg_access_attr = i;
-					break;
-				}
-			}
-		}
-	}
-
-	return 0;
-
-fail_sort_data:
-	remove_sort_dev_data(dev);
-	return -ENOMEM;
-}
-
 static int32_t iio_init_devs(struct iio_desc *desc,
 			     struct iio_device_init *devs, uint32_t n)
 {
 	uint32_t i;
-	uint32_t j;
-	int32_t ret;
 	struct iio_dev_priv *ldev;
 	struct iio_device_init *ndev;
 
@@ -2501,19 +2660,9 @@ static int32_t iio_init_devs(struct iio_desc *desc,
 		} else {
 			ldev->buffer.initalized = 0;
 		}
-
-		ret = sort_dev_data(ldev);
-		if (ret)
-			goto fail_sort;
 	}
 
 	return 0;
-fail_sort:
-	for (j = 0; j < i; j++) {
-		ldev = desc->devs + j;
-		remove_sort_dev_data(ldev);
-	}
-	return ret;
 }
 
 /**
@@ -2584,6 +2733,11 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	if (NO_OS_IS_ERR_VALUE(ret))
 		goto free_trigs;
 
+	/* Sort device, trigger and attributes */
+	ret = iio_sort(ldesc);
+	if (NO_OS_IS_ERR_VALUE(ret))
+		goto free_xml;
+
 	/* device operations */
 	ops = &ldesc->iiod_ops;
 	ops->read_attr = iio_read_attr;
@@ -2613,7 +2767,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	ret = iiod_init(&ldesc->iiod, &iiod_param);
 	if (NO_OS_IS_ERR_VALUE(ret))
-		goto free_xml;
+		goto free_sort;
 
 	ret = no_os_cb_init(&ldesc->conns,
 			    sizeof(uint32_t) * (IIOD_MAX_CONNECTIONS + 1));
@@ -2681,6 +2835,8 @@ free_conns:
 	no_os_cb_remove(ldesc->conns);
 free_iiod:
 	iiod_remove(ldesc->iiod);
+free_sort:
+	iio_sort_remove(ldesc);
 free_xml:
 	no_os_free(ldesc->xml_desc);
 free_trigs:
