@@ -134,7 +134,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.disable = 0, .num = 1, .divider = 3840, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
-			.output_control0_rb4_enable = true,
 			.force_mute_enable = true,
 			.driver_impedance = 1
 		},
@@ -148,7 +147,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.disable = 0, .num = 3,  .divider = 3840, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
-			.output_control0_rb4_enable = true,
 			.force_mute_enable = true,
 			.driver_impedance = 1
 		},
@@ -180,7 +178,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.disable = 0, .num = 8, .divider = 3840, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
-			.output_control0_rb4_enable = true,
 			.force_mute_enable = true
 		},
 		/* FPGA_SYSREF_RX_AB */
@@ -188,7 +185,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.disable = 0, .num = 9, .divider = 3840, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
-			.output_control0_rb4_enable = true,
 			.force_mute_enable = true
 		}
 #elif defined(FMCOMMS8_ZCU102)
@@ -197,7 +193,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.disable = 0, .num = 6, .divider = 3840, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
-			.output_control0_rb4_enable = true,
 			.force_mute_enable = true
 		},
 		/* FPGA_SYSREF_RX_AB */
@@ -205,7 +200,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.disable = 0, .num = 7, .divider = 3840, .driver_mode = 1,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
-			.output_control0_rb4_enable = true,
 			.force_mute_enable = true
 		},
 		/* CORE_CLK_TX_OBS_AB */
