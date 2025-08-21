@@ -128,7 +128,7 @@ static void adrv9009_info(struct adrv9009_rf_phy *phy)
 			     &api_vers[3]);
 	TALISE_getDeviceRev(phy->talDevice, &rev);
 
-	pr_info("%s: %s Rev %d, Firmware %u.%u.%u API version: %u.%u.%u.%u successfully initialized%s",
+	pr_info("%s: %s Rev %d, Firmware %u.%u.%u API version: %u.%u.%u.%u successfully initialized%s\n",
 		__func__, "adrv9009-phy", rev, talArmVersionInfo.majorVer,
 		talArmVersionInfo.minorVer, talArmVersionInfo.rcVer,
 		api_vers[0], api_vers[1], api_vers[2], api_vers[3],
