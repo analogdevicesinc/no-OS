@@ -9,7 +9,7 @@ endif()
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
-include("/mnt/drive/testing/no-OS/drivers/platform/maxim/max32690/memory_layout.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/max32690/memory_layout.cmake")
 
 if (${USE_VENDOR_TOOLCHAIN})
 
@@ -44,8 +44,8 @@ set(CMAKE_ASM_FLAGS "-x assembler-with-cpp")
 
 # set(OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/OpenOCD)
 
-file(GLOB_RECURSE OPENOCD_PATH /home/xvr/MaximSDK_v2/Tools/*/openocd)
-file(GLOB_RECURSE OPENOCD_SCRIPTS /home/xvr/MaximSDK_v2/Tools/*/mem_helper.tcl)
+file(GLOB_RECURSE OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/*/openocd)
+file(GLOB_RECURSE OPENOCD_SCRIPTS ${MAXIM_LIBRARIES}/../Tools/*/mem_helper.tcl)
 
 list(GET OPENOCD_SCRIPTS 0 OPENOCD_SCRIPTS)
 list(GET OPENOCD_PATH 0 OPENOCD_PATH)
