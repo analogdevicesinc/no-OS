@@ -15,7 +15,7 @@
                 {
                         "name": "max78000_fthr",
                         "description": "Config for MAX78000 feather board",
-                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake",
+                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
                         "cacheVariables": {
                                 "BOARD": "MAX78000_FTHR",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
@@ -28,7 +28,7 @@
                 {
                         "name": "max32650_fthr",
                         "description": "Config for MAX78000 feather board",
-                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake",
+                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
                         "cacheVariables": {
                                 "BOARD": "MAX32650_FTHR",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
@@ -41,7 +41,8 @@
                 {
                         "name": "apard32690",
                         "description": "Config for APARD32690 board",
-                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/maxim/toolchain.cmake",
+                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
+                        "binaryDir": "${sourceDir}/build",
                         "cacheVariables": {
                                 "BOARD": "APARD32690",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
@@ -54,7 +55,7 @@
                 {
                         "name": "stm32f756_nucleo",
                         "description": "Config for STM32F756",
-                        "toolchainFile": "/mnt/drive/testing/no-OS/drivers/platform/stm32/toolchain.cmake",
+                        "toolchainFile": "${sourceDir}/drivers/platform/stm32/toolchain.cmake",
                         "cacheVariables": {
                                 "BOARD": "sdp-ck1z",
                                 "USE_VENDOR_TOOLCHAIN": "OFF",
