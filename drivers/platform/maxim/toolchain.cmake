@@ -13,11 +13,19 @@ include("${CMAKE_CURRENT_LIST_DIR}/max32690/memory_layout.cmake")
 
 if (${USE_VENDOR_TOOLCHAIN})
 
-# Specify the cross compiler
-set(CMAKE_C_COMPILER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-g++)
-set(CMAKE_ASM_COMPILER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-gcc)
-set(CMAKE_LINKER ${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin/arm-none-eabi-ld)
+set(CROSS_COMPILER_BIN "${MAXIM_LIBRARIES}/../Tools/GNUTools/10.3/bin")
+
+find_program(CMAKE_C_COMPILER arm-none-eabi-gcc
+             HINTS ${CROSS_COMPILER_BIN})
+
+find_program(CMAKE_CXX_COMPILER arm-none-eabi-g++
+             HINTS ${CROSS_COMPILER_BIN})
+
+find_program(CMAKE_CXX_COMPILER arm-none-eabi-gcc
+             HINTS ${CROSS_COMPILER_BIN})
+
+find_program(CMAKE_LINKER arm-none-eabi-ld
+             HINTS ${CROSS_COMPILER_BIN})
 
 else()
 
@@ -48,5 +56,4 @@ file(GLOB_RECURSE OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/*/openocd)
 file(GLOB_RECURSE OPENOCD_SCRIPTS ${MAXIM_LIBRARIES}/../Tools/*/mem_helper.tcl)
 
 list(GET OPENOCD_SCRIPTS 0 OPENOCD_SCRIPTS)
-list(GET OPENOCD_PATH 0 OPENOCD_PATH)
 cmake_path(GET OPENOCD_SCRIPTS PARENT_PATH OPENOCD_SCRIPTS)
