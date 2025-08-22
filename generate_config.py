@@ -25,7 +25,7 @@ kconf = kconfiglib.Kconfig(src_dir.joinpath("Kconfig"))
 
 main_config = build_dir.joinpath(".config")
 if not os.path.exists(main_config):
-        os.mknod(main_config)
+        Path(main_config).touch()
 
 kconf.load_config(main_config)
 
