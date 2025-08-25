@@ -10,12 +10,13 @@
                 {
                         "name": "default",
                         "description": "Default config",
-                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake"
+                        "generator": "Ninja"
                 },
                 {
                         "name": "max78000_fthr",
                         "description": "Config for MAX78000 feather board",
                         "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
+                        "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "MAX78000_FTHR",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
@@ -29,6 +30,7 @@
                         "name": "max32650_fthr",
                         "description": "Config for MAX78000 feather board",
                         "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
+                        "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "MAX32650_FTHR",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
@@ -43,6 +45,7 @@
                         "description": "Config for APARD32690 board",
                         "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
                         "binaryDir": "${sourceDir}/build",
+                        "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "APARD32690",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
@@ -56,6 +59,7 @@
                         "name": "stm32f756_nucleo",
                         "description": "Config for STM32F756",
                         "toolchainFile": "${sourceDir}/drivers/platform/stm32/toolchain.cmake",
+                        "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "sdp-ck1z",
                                 "USE_VENDOR_TOOLCHAIN": "OFF",
@@ -64,6 +68,30 @@
                                 "TARGET_NUM": "stm32f756",
                                 "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/stm32/stm32f756_nucleo_defconfig"
                         }
+                }
+        ],
+        "buildPresets": [
+                {
+                        "name": "default",
+                        "displayName": "Project Blinky (for apard32690)",
+                        "configurePreset": "apard32690",
+                        "targets": [ "no-os" ]
+                }
+        ],
+        "workflowPresets": [
+                {
+                        "name": "build-no-os",
+                        "displayName": "Configure and Build Blinky for Board Alpha",
+                        "steps": [
+                                {
+                                        "type": "configure",
+                                        "name": "apard32690"
+                                },
+                                {
+                                        "type": "build",
+                                        "name": "default"
+                                }
+                        ]
                 }
         ]
 }
