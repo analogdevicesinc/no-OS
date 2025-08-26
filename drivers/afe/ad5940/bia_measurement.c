@@ -515,8 +515,8 @@ static int AppBiaRtiaCal(struct ad5940_dev *dev)
 		}
 		AppBiaCfg.RtiaCurrValue[AppBiaCfg.SweepCfg.SweepIndex] =
 			AppBiaCfg.RtiaCalTable[i][0];
-		AppBiaCfg.RtiaCurrValue[AppBiaCfg.SweepCfg.SweepIndex] =
-			AppBiaCfg.RtiaCalTable[i][0];
+		AppBiaCfg.RtiaCurrValue[AppBiaCfg.SweepCfg.SweepIndex+1] =
+			AppBiaCfg.RtiaCalTable[i][1];
 		AppBiaCfg.SweepCfg.SweepIndex = 0; /* Reset index */
 	} else {
 		hsrtia_cal.fFreq = AppBiaCfg.SinFreq;
