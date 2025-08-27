@@ -10,7 +10,7 @@
                 {
                         "name": "default",
                         "description": "Default config",
-                        "generator": "Ninja"
+                        "generator": "Unix Makefiles"
                 },
                 {
                         "name": "max78000_fthr",
@@ -19,10 +19,10 @@
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "MAX78000_FTHR",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "USE_VENDOR_TOOLCHAIN": "OFF",
                                 "PLATFORM": "maxim",
                                 "TARGET": "max78000",
-                                "TARGET_NUM": "max78000",
+                                "TARGET_NUM": "78000",
                                 "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/max78000_fthr_defconfig"
                         }
                 },
