@@ -34,6 +34,7 @@
 #include "no_os_util.h"
 #include "mxc_delay.h"
 #include "mxc_sys.h"
+#include "lvgl.h"
 
 static volatile unsigned long long _system_ticks = 0;
 
