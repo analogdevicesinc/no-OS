@@ -19,6 +19,22 @@ if(NOT CONFIG_FREERTOS_CONF_PATH)
           INTERFACE
           ${NO_OS_DIR}/drivers/platform/freeRTOS
   )
+else()
+  # Handle CONFIG_FREERTOS_CONF_PATH - make it relative to appropriate base directory
+  # For native builds, use NO_OS_DIR; for external builds, use CMAKE_SOURCE_DIR
+  if("${CMAKE_SOURCE_DIR}" STREQUAL "${NO_OS_DIR}")
+    # Native build - path relative to NO_OS_DIR
+    target_include_directories(freertos_config SYSTEM
+            INTERFACE
+            ${NO_OS_DIR}/${CONFIG_FREERTOS_CONF_PATH}
+    )
+  else()
+    # External build - path relative to CMAKE_SOURCE_DIR
+    target_include_directories(freertos_config SYSTEM
+            INTERFACE
+            ${CMAKE_SOURCE_DIR}/${CONFIG_FREERTOS_CONF_PATH}
+    )
+  endif()
 endif()
 
 message(STATUS "Cloning FreeRTOS... 📥")
