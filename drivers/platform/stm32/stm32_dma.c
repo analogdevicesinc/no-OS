@@ -245,12 +245,12 @@ int stm32_dma_xfer_abort(struct no_os_dma_desc* desc,
 
 	sdma_chan = chan->extra;
 
-	if (chan->irq_num)
-		ret = HAL_DMA_Abort_IT(sdma_chan->hdma);
-	else
-		ret = HAL_DMA_Abort(sdma_chan->hdma);
+	ret = HAL_DMA_Abort(sdma_chan->hdma);
 
-	if (ret != HAL_OK)
+	/* If transfer already completed, the state changes to READY
+	 * and hence aborting again would lead to error from HAL */
+	if ((ret != HAL_OK) &&
+	    (sdma_chan->hdma->ErrorCode != HAL_DMA_ERROR_NO_XFER))
 		return -EINVAL;
 
 	return 0;
