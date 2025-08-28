@@ -95,6 +95,10 @@ EVAL BOARDS
 
    projects/apard32690
 
+   
+
+   projects/ad-acevsecrdset-sl
+
 DIGITAL-IO
 ==========
 .. toctree::
