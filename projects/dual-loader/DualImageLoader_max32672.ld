@@ -9,7 +9,7 @@
 /* Define additional memory regions that don't conflict with default */
 MEMORY {
     /* Function table at end of first 8KB page */
-    FLASH_BOOT_TABLE (rx) : ORIGIN = 0x10001F80, LENGTH = 128
+    FLASH_BOOT_TABLE (rx) : ORIGIN = 0x10003FC0, LENGTH = 64
     /* Loader state at very end of SRAM */
     LDR_STATE (rwx)       : ORIGIN = 0x20027FFC, LENGTH = 4
 }
@@ -34,7 +34,7 @@ SECTIONS {
 }
 
 /* Ensure bootloader doesn't exceed 8KB - 128 bytes */
-ASSERT((_etext <= 0x10001F80), "Bootloader text exceeds 8KB - 128 bytes!")
+ASSERT((_etext <= 0x10003FC0), "Bootloader text exceeds 8KB - 128 bytes!")
 
 /* Ensure bootloader's data+bss doesn't exceed the reserved 4KB */
 /* _ebss is the end of BSS section, which should be the last RAM usage by bootloader */

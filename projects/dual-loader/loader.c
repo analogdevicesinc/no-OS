@@ -1,69 +1,66 @@
 /*******************************************************************************
  * MAX32672 Dual Bank Flash Bootloader
  * 
- * Bank 0 (FLC0): Bootloader (8KB) + Image A
- * Bank 1 (FLC1): Commit area (8KB) + Image B
+ * MEMORY LAYOUT:
+ * 
+ * MAX32672 (Dual Bank Configuration):
+ * Bank 0 (0x10000000-0x1007FFFF): Bootloader (8KB) + Image A (504KB)
+ * Bank 1 (0x10080000-0x100FFFFF): Commit (8KB) + Protected (8KB) + Image B (496KB)
+ * 
+ * 
+ * MEMORY REGIONS:
+ * - BOOTLOADER: Contains this bootloader code and function table
+ * - COMMIT: Stores commit records to track which image should run on boot
+ * - PROTECTED: Hardware configuration storage, preserved across all operations
+ * - IMAGE A/B: Application firmware images with CRC validation
+ * 
+ * PROTECTED AREA FEATURES:
+ * - One dedicated page for hardware configuration data
+ * - NEVER erased by commit operations or image management functions
+ * - Only accessible via dl_flash_write() and dl_flash_read()
+ * - Survives all bootloader operations, image swaps, and firmware updates
+ * - Contains persistent configuration that applications can read/write
  ******************************************************************************/
 
 #include <mxc_device.h>
-#include <flc_regs.h>
 #include <gcr_regs.h>
-#include <icc_regs.h>
 #include <wdt_regs.h>
-#include <pwrseq_regs.h>
 #include <trimsir_regs.h>
 #include <string.h>
 #include "loader.h"
-
-/* HAL includes for flash operations */
+#include "icc.h"
 #include <flc.h>
 #include <mxc_sys.h>
 
 #define REV_MAJOR               0
-#define REV_MINOR               2
+#define REV_MINOR               3
 
 // Flash page size in bytes (8KB for MAX32672)
 // Target-specific configuration
 #if defined(TARGET_MAX32672)
     #define PAGE_SIZE               0x2000      // 8K Bytes
-    #define LOADER_PAGES            1           // 8KB
-    #define COMMIT_PAGES            1           // 8KB
-    #define IMAGE_A_PAGES           63          // 504KB / 8KB = 63 pages
-    #define IMAGE_B_PAGES           63          // 504KB / 8KB = 63 pages
-    
+    #define LOADER_PAGES            2           // 16KB
+    #define COMMIT_PAGES            1           // 8KB (for commit records only)
+    #define PROTECTED_A_PAGES       1           // 8KB (extra protected page)
+    #define PROTECTED_B_PAGES       2           // 16KB (extra protected page)
+    #define IMAGE_A_PAGES           61          // 488KB / 8KB = 61 pages
+    #define IMAGE_B_PAGES           61          // 488KB / 8KB = 61 pages
+
     // MAX32672 memory layout:
-    // Bank 0 (0x10000000-0x1007FFFF): Bootloader + Image A
-    // Bank 1 (0x10080000-0x100FFFFF): Commit + Image B
+    // Bank 0 (0x10000000-0x1007FFFF): Bootloader + Protected_A + Image A
+    // Bank 1 (0x10080000-0x100FFFFF): Commit + Protected_B + Image B
     #define LOADER_START            (0x10000000)
-    #define IMAGE_A_START           (LOADER_START + LOADER_LENGTH)
+    #define PROTECTED_A_START       (LOADER_START + LOADER_LENGTH)
+    #define IMAGE_A_START           (PROTECTED_A_START + PROTECTED_A_LENGTH)
     #define COMMIT_START            (0x10080000)
-    #define IMAGE_B_START           (COMMIT_START + COMMIT_LENGTH)
-    
+    #define PROTECTED_B_START       (COMMIT_START + COMMIT_LENGTH)
+    #define IMAGE_B_START           (PROTECTED_B_START + PROTECTED_B_LENGTH)
+
     // Manual flash controller selection
     #define GET_FLC_INSTANCE(addr)  ((addr) < 0x10080000 ? MXC_FLC0 : MXC_FLC1)
-    
-#elif defined(TARGET_MAX32690)
-    #define PAGE_SIZE               0x4000      // 16K Bytes
-    #define LOADER_PAGES            1           // 16KB
-    #define COMMIT_PAGES            1           // 16KB
-    #define IMAGE_A_PAGES           31          // 496KB / 16KB = 31 pages
-    #define IMAGE_B_PAGES           31          // 496KB / 16KB = 31 pages
-    
-    // MAX32690 memory layout (all in Bank 0):
-    // BOOT: 1 page (16K) at 0x10000000
-    // COMMIT: 1 page (16K) at 0x10004000
-    // IMAGE A: 31 pages (496K) at 0x10008000
-    // IMAGE B: 31 pages (496K) at 0x10084000
-    #define LOADER_START            (0x10000000)
-    #define COMMIT_START            (0x10004000)
-    #define IMAGE_A_START           (0x10008000)
-    #define IMAGE_B_START           (0x10084000)
-    
-    // MAX32690 has only one flash controller
-    #define GET_FLC_INSTANCE(addr)  (MXC_FLC0)
-    
+
 #else
-    #error "TARGET must be defined as TARGET_MAX32672 or TARGET_MAX32690"
+    #error "TARGET must be defined as TARGET_MAX32672"
 #endif
 
 #define LOADER_FUNCTION_TABLE   (PAGE_SIZE - 128)
@@ -71,6 +68,8 @@
 // Length of each region in bytes (common calculation)
 #define LOADER_LENGTH           (LOADER_PAGES * PAGE_SIZE)
 #define COMMIT_LENGTH           (COMMIT_PAGES * PAGE_SIZE)
+#define PROTECTED_A_LENGTH      (PROTECTED_A_PAGES * PAGE_SIZE)  // Protected from all operations except config access
+#define PROTECTED_B_LENGTH      (PROTECTED_B_PAGES * PAGE_SIZE)  // Protected from all operations except config access
 #define IMAGE_A_LENGTH          (IMAGE_A_PAGES * PAGE_SIZE)
 #define IMAGE_B_LENGTH          (IMAGE_B_PAGES * PAGE_SIZE)
 
@@ -93,81 +92,87 @@ typedef struct {
 #define VALID_B     0x01
 #define INVALID_B   0x02
 
-// Defines header that is found at the beginning of each image
+// Image footer structure located at the end of each firmware image
+// Contains metadata for image validation and integrity checking
 typedef struct
 {
-    uint32_t reserved[2];
-    uint32_t crc;
-    uint32_t len;
+    uint32_t reserved[2];   // Reserved fields for future use
+    uint32_t crc;          // CRC-32 checksum of the image data
+    uint32_t len;          // Length of image data in bytes (excluding footer)
 } image_footer_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local Variables
 ///////////////////////////////////////////////////////////////////////////////
 
-// Variable holding the current state.
+// Bootloader state structure stored in dedicated SRAM section
+// Tracks current running image, committed image, and download status
 static dl_state_t __attribute__((section (".loaderVariables"))) loaderState;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Local Function Prototypes
 ///////////////////////////////////////////////////////////////////////////////
 
-// Write the commit record for image A.  Returns 0 on failure.
+// Write the commit record for image A. Returns 0 on failure.
 static int commit_image_a(void);
 
-// Write the commit record for image B.  Returns 0 on failure.
+// Write the commit record for image B. Returns 0 on failure.
 static int commit_image_b(void);
 
-// Erases and invalidates image A.  Returns 0 on failure.
+// Erases and invalidates image A. Returns 0 on failure.
 static int erase_image_a(void);
 
-// Erases and invalidates image B.  Returns 0 on failure.
+// Erases and invalidates image B. Returns 0 on failure.
 static int erase_image_b(void);
 
-// Write given data to image A.  Returns 0 on failure.
+// Write given data to image A using relative offset. Returns 0 on failure.
+// offset: Relative offset from start of Image A (0-based)
 static int write_image_a(uint32_t offset, uint8_t* buff, uint32_t length);
 
-// Write given data to image B.  Returns 0 on failure.
+// Write given data to image B using relative offset. Returns 0 on failure.
+// offset: Relative offset from start of Image B (0-based)
 static int write_image_b(uint32_t offset, uint8_t* buff, uint32_t length);
 
-// Checks the CRC of image A.  Returns 0 on failure.
+// Validates the CRC of image A. Returns 0 on failure.
 static int validate_image_a(void);
 
-// Checks the CRC of image B.  Returns 0 on failure.
+// Validates the CRC of image B. Returns 0 on failure.
 static int validate_image_b(void);
 
-// Resets and runs image A.
+// Resets and transfers control to image A.
 static void start_image_a(void);
 
-// Resets and runs image B.
+// Resets and transfers control to image B.
 static void start_image_b(void);
 
-// Checks if image A is empty/erased.  Returns 1 on empty.
+// Checks if image A is empty/erased. Returns 1 if empty.
 static int image_a_empty(void);
 
-// Checks if image B is empty/erased.  Returns 1 on empty.
+// Checks if image B is empty/erased. Returns 1 if empty.
 static int image_b_empty(void);
 
-// Erase the range given - wrapper for HAL
+// Erase flash pages at given address and length. Returns 0 on failure.
 static int erase_pages(uint32_t addr, uint32_t len);
 
-// Writes the given 128-bit word to flash - wrapper for HAL
+// Writes 128-bit aligned data to flash. Returns 0 on failure.
 static int write_flash(uint32_t addr, const uint32_t *val);
 
-// Writes the given array to flash - wrapper for HAL
+// Writes byte array to flash with proper alignment. Returns 0 on failure.
 static int write_bytes(uint32_t addr, uint8_t* buff, uint32_t len);
 
-// Returns the next available address in the commit list.
+// Returns the next available address in the commit area for new records.
 static uint32_t get_next_record(void);
 
-// Returns the CRC of the given memory range.
+// Calculates CRC-32 of given memory buffer.
 static uint32_t do_crc(uint8_t* buff, uint32_t len);
 
-// Helper functions for simplified state management
+// Helper functions for image validation and state management
 static int is_image_a_valid(void);
 static int is_image_b_valid(void);
 static int get_committed_image(void);
-static void set_committed_image(int image);
+
+// Protected area access validation
+static uint8_t is_address_in_protected_area(uint32_t addr, uint32_t len);
 
 int dl_start_download(void) 
 {
@@ -209,6 +214,8 @@ int dl_download_image_block(uint32_t offset, uint8_t* buff, uint32_t length)
     }
     
     // Write to the opposite of the running image
+    // NOTE: offset parameter is RELATIVE to image start (0-based)
+    // The write_image_x functions convert this to absolute addresses
     int target_image = 1 - loaderState.running_image;
     int result;
     
@@ -573,14 +580,14 @@ static int write_image_a(uint32_t offset, uint8_t* buff, uint32_t length)
         return 0;  // Cannot write to running image
     }
 
-    // Check if offset is in the valid range for Image A
-    if(offset < IMAGE_A_START || offset >= (IMAGE_A_START + IMAGE_A_LENGTH))
+    // Convert relative offset to absolute address
+    uint32_t absolute_addr = offset;
+
+    // Check if absolute address is in the valid range for Image A
+    if(absolute_addr < IMAGE_A_START || absolute_addr >= (IMAGE_A_START + IMAGE_A_LENGTH))
     {
         return 0;
     }
-
-    // Convert absolute address to relative offset
-    uint32_t relative_offset = offset - IMAGE_A_START;
 
     // Is the length in range?
     if(length > IMAGE_A_LENGTH)
@@ -588,14 +595,14 @@ static int write_image_a(uint32_t offset, uint8_t* buff, uint32_t length)
         return 0;
     }
     
-    // Are the two together in range?
-    if((relative_offset + length) > IMAGE_A_LENGTH)
+    // Are the offset and length together in range?
+    if((length) > IMAGE_A_LENGTH)
     {
         return 0;
     }
     
     // Write the bytes to image A using the absolute address
-    return write_bytes(offset, buff, length);
+    return write_bytes(absolute_addr, buff, length);
 }
 
 static int write_image_b(uint32_t offset, uint8_t* buff, uint32_t length)
@@ -606,14 +613,15 @@ static int write_image_b(uint32_t offset, uint8_t* buff, uint32_t length)
         return 0;  // Cannot write to running image
     }
 
-    // Check if offset is in the valid range for Image B
-    if(offset < IMAGE_B_START || offset >= (IMAGE_B_START + IMAGE_B_LENGTH))
+    // Convert relative offset to absolute address
+    // uint32_t absolute_addr = IMAGE_B_START + offset;
+    uint32_t absolute_addr = offset;
+
+    // Check if absolute address is in the valid range for Image B
+    if(absolute_addr < IMAGE_B_START || absolute_addr >= (IMAGE_B_START + IMAGE_B_LENGTH))
     {
         return 0;
     }
-
-    // Convert absolute address to relative offset
-    uint32_t relative_offset = offset - IMAGE_B_START;
 
     // Is the length in range?
     if(length > IMAGE_B_LENGTH)
@@ -621,14 +629,14 @@ static int write_image_b(uint32_t offset, uint8_t* buff, uint32_t length)
         return 0;
     }
     
-    // Are the two together in range?
-    if((relative_offset + length) > IMAGE_B_LENGTH)
+    // Are the offset and length together in range?
+    if( length > IMAGE_B_LENGTH)
     {
         return 0;
     }
     
     // Write the bytes to image B using the absolute address
-    return write_bytes(offset, buff, length);
+    return write_bytes(absolute_addr, buff, length);
 }
 
 static int validate_image_a()
@@ -665,8 +673,6 @@ static int validate_image_b()
 
 static void start_image_a()
 {
-    // Complete interrupt system reset - CRITICAL for FreeRTOS
-    __disable_irq();
     
     // Reset SysTick (FreeRTOS scheduler dependency)
     SysTick->CTRL = 0;
@@ -716,8 +722,6 @@ static void start_image_a()
 
 static void start_image_b()
 {
-    // Complete interrupt system reset - CRITICAL for FreeRTOS
-    __disable_irq();
     
     // Reset SysTick (FreeRTOS scheduler dependency)
     SysTick->CTRL = 0;
@@ -807,10 +811,10 @@ static uint32_t get_next_record()
 {
     int i;
     
-    // Get a pointer to the flash memory.
+    // Get a pointer to the flash memory - ONLY scan the commit area
     uint32_t* mem = (uint32_t*)COMMIT_START;
     
-    // Look at the flash 4 bytes at a time.
+    // Look at the flash 4 bytes at a time - ONLY within commit area
     for(i = 0; i < COMMIT_LENGTH / 4; i+=4)
     {
         // Check if this 128-bit block is a commit record (all zeros)
@@ -820,7 +824,7 @@ static uint32_t get_next_record()
             // See if commit region is full.
             if(i == 0)
             {
-                // Erase commit area and start over
+                // Erase ONLY commit area, NOT protected area
                 erase_pages(COMMIT_START, COMMIT_LENGTH);
                 break;
             }
@@ -832,7 +836,7 @@ static uint32_t get_next_record()
         }
     }
     
-    // Commit area is empty, return byte address of the last 32-bit word.
+    // Commit area is empty, return byte address of the last 32-bit word in COMMIT area only.
     return (COMMIT_START + COMMIT_LENGTH - 16);
 }
 
@@ -847,8 +851,13 @@ static int write_flash(uint32_t addr, const uint32_t *val)
         return 0;
     }
 
+    // Disable ICC before flash operations
+    MXC_ICC_Disable();
+
     // Use HAL to write 128-bit data
-    result = MXC_FLC_Write128(addr, val);
+    result = MXC_FLC_Write128(addr, (uint32_t*)val);
+    
+    MXC_ICC_Enable();
     
     return (result == E_NO_ERROR) ? 1 : 0;
 }
@@ -869,8 +878,13 @@ static int write_bytes(uint32_t addr, uint8_t* buff, uint32_t len)
         return 0;
     }
     
+    // Disable ICC before flash operations
+    MXC_ICC_Disable();
+    
     // Use HAL to write the buffer
     result = MXC_FLC_Write(addr, len, (uint32_t*)buff);
+    
+    MXC_ICC_Enable();
     
     if(result != E_NO_ERROR)
     {
@@ -885,6 +899,9 @@ static int erase_pages(uint32_t addr, uint32_t len)
 {
     int result;
     
+    // Disable ICC before flash operations
+    MXC_ICC_Disable();
+    
     // Align start address on a page boundary.
     addr &= ~(PAGE_SIZE - 1);
     
@@ -895,6 +912,7 @@ static int erase_pages(uint32_t addr, uint32_t len)
         
         if(result != E_NO_ERROR)
         {
+            MXC_ICC_Enable();
             return 0;
         }
         
@@ -907,10 +925,12 @@ static int erase_pages(uint32_t addr, uint32_t len)
         }
     }
     
+    MXC_ICC_Enable();
     return 1;
 }
 
-// CRC-32
+// CRC-32 implementation using standard polynomial 0xEDB88320
+// Used for validating firmware image integrity
 #define poly 0xEDB88320UL
 static uint32_t do_crc(uint8_t* data, uint32_t len)
 {
@@ -953,9 +973,66 @@ static int get_committed_image(void)
     return (commitAddr & 16) ? 1 : 0; // A=0, B=1
 }
 
-static void set_committed_image(int image)
+///////////////////////////////////////////////////////////////////////////////
+// Hardware Configuration Management
+///////////////////////////////////////////////////////////////////////////////
+
+// Protected area access validation
+static uint8_t is_address_in_protected_area(uint32_t addr, uint32_t len)
 {
-    loaderState.committed_image = image;
+    // Check if address range is completely within protected area
+    if (!((addr >= PROTECTED_A_START && addr < (PROTECTED_A_START + PROTECTED_A_LENGTH)) || (addr >= PROTECTED_B_START && addr < (PROTECTED_B_START + PROTECTED_B_LENGTH)))) {
+        return 0;  // Address starts outside of protected area
+    }
+   
+    if (len == 0 || len > PAGE_SIZE) {
+        return 0;  // Invalid size
+    }
+    
+    return 1;  // Address range is valid
+}
+
+
+// Hardware configuration storage address - uses the entire protected page
+// This area is isolated from all other bootloader operations and survives
+// firmware updates, image swaps, and commit operations
+#define HW_CONFIG_ADDR      (PROTECTED_A_START)  // Use the entire protected page
+
+int dl_flash_write(uint32_t addr, void *data, uint32_t len)
+{
+    if(is_address_in_protected_area(addr, len))
+    {
+        // Erase the protected area (this is the ONLY function allowed to do this)
+        // Disable ICC for the erase operation
+        MXC_ICC_Disable();
+        int erase_result = MXC_FLC_PageErase(addr);
+        MXC_ICC_Enable();
+        
+        if (erase_result != E_NO_ERROR) {
+            return DL_FLASH_ERROR;
+        }
+
+        // Write the configuration data to protected area using aligned buffer
+        // Use the write_bytes function which has proper ICC protection
+        if (!write_bytes(addr, (uint8_t*)data, len)) {
+            return DL_FLASH_ERROR;
+        }
+
+        return DL_SUCCESS;
+    }
+    return DL_FLASH_ERROR;
+}
+
+int dl_flash_read(uint32_t addr, void *data, uint32_t len)
+{
+    if(is_address_in_protected_area(addr, len))
+    {
+        // Read from protected area
+        // Note: Flash reads typically don't require ICC disable
+        MXC_FLC_Read(addr, (uint8_t*)data, len);
+        return DL_SUCCESS;
+    }
+    return DL_FLASH_ERROR;
 }
 
 void SystemInit(void)
@@ -991,17 +1068,10 @@ void SystemInit(void)
     /* Wait for switch to complete */
     while(!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_SYSCLK_RDY));
 
-#if defined(TARGET_MAX32672)
     /* Update SystemCoreClock for MAX32672 (100MHz) */
     SystemCoreClock = 100000000;
     /* Configure wait states for 100MHz operation (4 wait states) */
     MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x4UL << MXC_F_GCR_MEMCTRL_FWS_POS);
-#elif defined(TARGET_MAX32690)
-    /* Update SystemCoreClock for MAX32690 (120MHz) */
-    SystemCoreClock = 120000000;
-    /* Configure wait states for 120MHz operation (5 wait states) */
-    MXC_GCR->memctrl = (MXC_GCR->memctrl & ~(MXC_F_GCR_MEMCTRL_FWS)) | (0x5UL << MXC_F_GCR_MEMCTRL_FWS_POS);
-#endif
 
     /* Enable GPIO clocks */
     MXC_GCR->pclkdis0 &= ~(MXC_F_GCR_PCLKDIS0_GPIO0 | MXC_F_GCR_PCLKDIS0_GPIO1);
@@ -1010,10 +1080,36 @@ void SystemInit(void)
     __enable_irq();
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
-// Loader Entry Point
+// Syscall Stubs
 ///////////////////////////////////////////////////////////////////////////////
 
+// These functions provide stubs for newlib syscalls to eliminate linker warnings
+// Bootloader doesn't use file operations, so these just return appropriate values
+int _close(int file) { return -1; }
+int _lseek(int file, int ptr, int dir) { return 0; }
+int _read(int file, char *ptr, int len) { return 0; }
+int _write(int file, char *ptr, int len) { return len; }
+
+///////////////////////////////////////////////////////////////////////////////
+// Bootloader Entry Point
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief Main bootloader entry point
+ * 
+ * Determines which image to boot based on:
+ * 1. Commit records in flash (which image is committed)
+ * 2. Image validation (CRC checks)
+ * 3. Fallback logic if primary image is invalid
+ * 
+ * Boot sequence:
+ * - Initialize bootloader state
+ * - Read commit area to determine committed image
+ * - Validate images and boot the appropriate one
+ * - Handle first boot and recovery scenarios
+ */
 int main(void)
 {    
     // Initialize state structure 
@@ -1027,7 +1123,11 @@ int main(void)
     if(commitAddr == (COMMIT_START + COMMIT_LENGTH - 16))
     {
         const uint32_t zeros[4] = {0, 0, 0, 0};
-        
+        const uint8_t global_config_data[40] = {0x33, 0x03, 0x28, 0x00, 0xC0, 0x00, 0x00, 0x80, 0x90, 0x05, 0x10, 0x00, 0x64, 0x55, 0x0C, 0x03, 0xA0, 0x0F, 0xE8, 0x03, 0x04, 0x01, 0xEA, 0x01, 0x5A, 0x00, 0x00, 0x00, 0x00, 0xBF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x32, 0x00};
+            (HW_CONFIG_ADDR, global_config_data, sizeof(global_config_data));
+        const uint16_t current_lut[1024] = {0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144, 148, 152, 156, 160, 164, 168, 172, 176, 180, 184, 188, 192, 196, 200, 204, 208, 212, 216, 220, 224, 228, 232, 236, 240, 244, 248, 252, 256, 260, 264, 268, 272, 276, 280, 284, 288, 292, 296, 300, 304, 308, 312, 316, 320, 324, 328, 332, 336, 340, 344, 348, 352, 356, 360, 364, 368, 372, 376, 380, 384, 388, 392, 396, 400, 404, 408, 412, 416, 420, 424, 428, 432, 436, 440, 444, 448, 452, 456, 460, 464, 468, 472, 476, 480, 484, 488, 492, 496, 500, 504, 508, 512, 516, 520, 524, 528, 532, 536, 540, 544, 548, 552, 556, 560, 564, 568, 572, 576, 580, 584, 588, 592, 596, 600, 604, 608, 612, 616, 620, 624, 628, 632, 636, 640, 644, 648, 652, 656, 660, 664, 668, 672, 676, 680, 684, 688, 692, 696, 700, 704, 708, 712, 716, 720, 724, 728, 732, 736, 740, 744, 748, 752, 756, 760, 764, 768, 772, 776, 780, 784, 788, 792, 796, 800, 804, 808, 812, 816, 820, 824, 828, 832, 836, 840, 844, 848, 852, 856, 860, 864, 868, 872, 876, 880, 884, 888, 892, 896, 900, 904, 908, 912, 916, 920, 924, 928, 932, 936, 940, 944, 948, 952, 956, 960, 964, 968, 972, 976, 980, 984, 988, 992, 996, 1000, 1004, 1008, 1012, 1016, 1020, 1024, 1028, 1032, 1036, 1040, 1044, 1048, 1052, 1056, 1060, 1064, 1068, 1072, 1076, 1080, 1084, 1088, 1092, 1096, 1100, 1104, 1108, 1112, 1116, 1120, 1124, 1128, 1132, 1136, 1140, 1144, 1148, 1152, 1156, 1160, 1164, 1168, 1172, 1176, 1180, 1184, 1188, 1192, 1196, 1200, 1204, 1208, 1212, 1216, 1220, 1224, 1228, 1232, 1236, 1240, 1244, 1248, 1252, 1256, 1260, 1264, 1268, 1272, 1276, 1280, 1284, 1288, 1292, 1296, 1300, 1304, 1308, 1312, 1316, 1320, 1324, 1328, 1332, 1336, 1340, 1344, 1348, 1352, 1356, 1360, 1364, 1368, 1372, 1376, 1380, 1384, 1388, 1392, 1396, 1400, 1404, 1408, 1412, 1416, 1420, 1424, 1428, 1432, 1436, 1440, 1444, 1448, 1452, 1456, 1460, 1464, 1468, 1472, 1476, 1480, 1484, 1488, 1492, 1496, 1500, 1504, 1508, 1512, 1516, 1520, 1524, 1528, 1532, 1536, 1540, 1544, 1548, 1552, 1556, 1560, 1564, 1568, 1572, 1576, 1580, 1584, 1588, 1592, 1596, 1600, 1604, 1608, 1612, 1616, 1620, 1624, 1628, 1632, 1636, 1640, 1644, 1648, 1652, 1656, 1660, 1664, 1668, 1672, 1676, 1680, 1684, 1688, 1692, 1696, 1700, 1704, 1708, 1712, 1716, 1720, 1724, 1728, 1732, 1736, 1740, 1744, 1748, 1752, 1756, 1760, 1764, 1768, 1772, 1776, 1780, 1784, 1788, 1792, 1796, 1800, 1804, 1808, 1812, 1816, 1820, 1824, 1828, 1832, 1836, 1840, 1844, 1848, 1852, 1856, 1860, 1864, 1868, 1872, 1876, 1880, 1884, 1888, 1892, 1896, 1900, 1904, 1908, 1912, 1916, 1920, 1924, 1928, 1932, 1936, 1940, 1944, 1948, 1952, 1956, 1960, 1964, 1968, 1972, 1976, 1980, 1984, 1988, 1992, 1996, 2000, 2004, 2008, 2012, 2016, 2020, 2024, 2028, 2032, 2036, 2040, 2044, 2048, 2052, 2056, 2060, 2064, 2068, 2072, 2076, 2080, 2084, 2088, 2092, 2096, 2100, 2104, 2108, 2112, 2116, 2120, 2124, 2128, 2132, 2136, 2140, 2144, 2148, 2152, 2156, 2160, 2164, 2168, 2172, 2176, 2180, 2184, 2188, 2192, 2196, 2200, 2204, 2208, 2212, 2216, 2220, 2224, 2228, 2232, 2236, 2240, 2244, 2248, 2252, 2256, 2260, 2264, 2268, 2272, 2276, 2280, 2284, 2288, 2292, 2296, 2300, 2304, 2308, 2312, 2316, 2320, 2324, 2328, 2332, 2336, 2340, 2344, 2348, 2352, 2356, 2360, 2364, 2368, 2372, 2376, 2380, 2384, 2388, 2392, 2396, 2400, 2404, 2408, 2412, 2416, 2420, 2424, 2428, 2432, 2436, 2440, 2444, 2448, 2452, 2456, 2460, 2464, 2468, 2472, 2476, 2480, 2484, 2488, 2492, 2496, 2500, 2504, 2508, 2512, 2516, 2520, 2524, 2528, 2532, 2536, 2540, 2544, 2548, 2552, 2556, 2560, 2564, 2568, 2572, 2576, 2580, 2584, 2588, 2592, 2596, 2600, 2604, 2608, 2612, 2616, 2620, 2624, 2628, 2632, 2636, 2640, 2644, 2648, 2652, 2656, 2660, 2664, 2668, 2672, 2676, 2680, 2684, 2688, 2692, 2696, 2700, 2704, 2708, 2712, 2716, 2720, 2724, 2728, 2732, 2736, 2740, 2744, 2748, 2752, 2756, 2760, 2764, 2768, 2772, 2776, 2780, 2784, 2788, 2792, 2796, 2800, 2804, 2808, 2812, 2816, 2820, 2824, 2828, 2832, 2836, 2840, 2844, 2848, 2852, 2856, 2860, 2864, 2868, 2872, 2876, 2880, 2884, 2888, 2892, 2896, 2900, 2904, 2908, 2912, 2916, 2920, 2924, 2928, 2932, 2936, 2940, 2944, 2948, 2952, 2956, 2960, 2964, 2968, 2972, 2976, 2980, 2984, 2988, 2992, 2996, 3000, 3004, 3008, 3012, 3016, 3020, 3024, 3028, 3032, 3036, 3040, 3044, 3048, 3052, 3056, 3060, 3064, 3068, 3072, 3076, 3080, 3084, 3088, 3092, 3096, 3100, 3104, 3108, 3112, 3116, 3120, 3124, 3128, 3132, 3136, 3140, 3144, 3148, 3152, 3156, 3160, 3164, 3168, 3172, 3176, 3180, 3184, 3188, 3192, 3196, 3200, 3204, 3208, 3212, 3216, 3220, 3224, 3228, 3232, 3236, 3240, 3244, 3248, 3252, 3256, 3260, 3264, 3268, 3272, 3276, 3280, 3284, 3288, 3292, 3296, 3300, 3304, 3308, 3312, 3316, 3320, 3324, 3328, 3332, 3336, 3340, 3344, 3348, 3352, 3356, 3360, 3364, 3368, 3372, 3376, 3380, 3384, 3388, 3392, 3396, 3400, 3404, 3408, 3412, 3416, 3420, 3424, 3428, 3432, 3436, 3440, 3444, 3448, 3452, 3456, 3460, 3464, 3468, 3472, 3476, 3480, 3484, 3488, 3492, 3496, 3500, 3504, 3508, 3512, 3516, 3520, 3524, 3528, 3532, 3536, 3540, 3544, 3548, 3552, 3556, 3560, 3564, 3568, 3572, 3576, 3580, 3584, 3588, 3592, 3596, 3600, 3604, 3608, 3612, 3616, 3620, 3624, 3628, 3632, 3636, 3640, 3644, 3648, 3652, 3656, 3660, 3664, 3668, 3672, 3676, 3680, 3684, 3688, 3692, 3696, 3700, 3704, 3708, 3712, 3716, 3720, 3724, 3728, 3732, 3736, 3740, 3744, 3748, 3752, 3756, 3760, 3764, 3768, 3772, 3776, 3780, 3784, 3788, 3792, 3796, 3800, 3804, 3808, 3812, 3816, 3820, 3824, 3828, 3832, 3836, 3840, 3844, 3848, 3852, 3856, 3860, 3864, 3868, 3872, 3876, 3880, 3884, 3888, 3892, 3896, 3900, 3904, 3908, 3912, 3916, 3920, 3924, 3928, 3932, 3936, 3940, 3944, 3948, 3952, 3956, 3960, 3964, 3968, 3972, 3976, 3980, 3984, 3988, 3992, 3996, 4000, 4004, 4008, 4012, 4016, 4020, 4024, 4028, 4032, 4036, 4040, 4044, 4048, 4052, 4056, 4060, 4064, 4068, 4072, 4076, 4080, 4084, 4088, 4092};
+        write_bytes(HW_CONFIG_ADDR + (PAGE_SIZE / 2), (void *)current_lut, sizeof(current_lut));
+
         // First boot - validate and commit image A as default
         if(is_image_a_valid())
         {

@@ -23,5 +23,7 @@ Loader_Function_Table:
     b.w (dl_get_image_status + 1)
     b.w (dl_get_version + 1)
     b.w (dl_get_build_date + 1)
+    b.w (dl_flash_write + 1)
+    b.w (dl_flash_read + 1)
 
     .end

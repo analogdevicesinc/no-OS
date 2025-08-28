@@ -13,6 +13,7 @@ else
 $(error Unsupported TARGET: $(TARGET). Use max32672 or max32690)
 endif
 
+
 include src.mk
 
 include ../../tools/scripts/generic.mk
