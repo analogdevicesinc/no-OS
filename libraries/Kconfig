@@ -15,3 +15,7 @@ config FREERTOS_HEAP_ALLOCATOR
 config LWIP
         bool "Enable LWIP"
         default n
+
+config CORDIO
+        bool "Enable CORDIO"
+        default n
