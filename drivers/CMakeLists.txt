@@ -1,4 +1,3 @@
-add_subdirectory(api)
 add_subdirectory(platform)
 add_subdirectory(api)
 add_subdirectory(accel)
