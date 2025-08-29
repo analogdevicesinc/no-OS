@@ -1429,9 +1429,7 @@ int ade9153a_clear_pf_rdy(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_PF_RDY_MSK,
-				    no_os_field_prep(ADE9153A_PF_RDY_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_PF_RDY_MSK);
 }
 
 /**
@@ -1444,9 +1442,7 @@ int ade9153a_clear_crc_chg(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_CRC_CHG_MSK,
-				    no_os_field_prep(ADE9153A_CRC_CHG_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_CRC_CHG_MSK);
 }
 
 /**
@@ -1459,9 +1455,7 @@ int ade9153a_clear_crc_done(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_CRC_DONE_MSK,
-				    no_os_field_prep(ADE9153A_CRC_DONE_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_CRC_DONE_MSK);
 }
 
 /**
@@ -1474,9 +1468,7 @@ int ade9153a_clear_zxtoav(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_ZXTOAV_MSK,
-				    no_os_field_prep(ADE9153A_ZXTOAV_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_ZXTOAV_MSK);
 }
 
 /**
@@ -1489,9 +1481,7 @@ int ade9153a_clear_zxbi(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_ZXBI_MSK,
-				    no_os_field_prep(ADE9153A_ZXBI_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_ZXBI_MSK);
 }
 
 /**
@@ -1504,9 +1494,7 @@ int ade9153a_clear_zxai(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_ZXAI_MSK,
-				    no_os_field_prep(ADE9153A_ZXAI_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_ZXAI_MSK);
 }
 
 /**
@@ -1519,9 +1507,7 @@ int ade9153a_clear_zxav(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_ZXAV_MSK,
-				    no_os_field_prep(ADE9153A_ZXAV_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_ZXAV_MSK);
 }
 
 /**
@@ -1534,9 +1520,7 @@ int ade9153a_clear_rstdone(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_RSTDONE_MSK,
-				    no_os_field_prep(ADE9153A_RSTDONE_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_RSTDONE_MSK);
 }
 
 /**
@@ -1549,9 +1533,7 @@ int ade9153a_clear_fvarnl(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_FVARNL_MSK,
-				    no_os_field_prep(ADE9153A_FVARNL_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_FVARNL_MSK);
 }
 
 /**
@@ -1564,9 +1546,7 @@ int ade9153a_clear_vanl(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_VANL_MSK,
-				    no_os_field_prep(ADE9153A_VANL_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_VANL_MSK);
 }
 
 /**
@@ -1579,9 +1559,7 @@ int ade9153a_clear_wattnl(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_WATTNL_MSK,
-				    no_os_field_prep(ADE9153A_WATTNL_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_WATTNL_MSK);
 }
 
 /**
@@ -1594,9 +1572,7 @@ int ade9153a_clear_temp_rdy(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_TEMP_RDY_MSK,
-				    no_os_field_prep(ADE9153A_TEMP_RDY_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_TEMP_RDY_MSK);
 }
 
 /**
@@ -1609,11 +1585,8 @@ int ade9153a_clear_rms_oc_rdy(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_RMS_OC_RDY_MSK,
-				    no_os_field_prep(ADE9153A_RMS_OC_RDY_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_RMS_OC_RDY_MSK);
 }
-
 /**
  * @brief Clear power values registers update int mask.
  * @param dev - The device structure.
@@ -1624,9 +1597,7 @@ int ade9153a_clear_pwrrdy(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_PWRRDY_MSK,
-				    no_os_field_prep(ADE9153A_PWRRDY_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_PWRRDY_MSK);
 }
 
 /**
@@ -1639,9 +1610,7 @@ int ade9153a_clear_dready(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_DREADY_MSK,
-				    no_os_field_prep(ADE9153A_DREADY_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_DREADY_MSK);
 }
 
 /**
@@ -1654,9 +1623,7 @@ int ade9153a_clear_egyrdy(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_EGYRDY_MSK,
-				    no_os_field_prep(ADE9153A_EGYRDY_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_EGYRDY_MSK);
 }
 
 /**
@@ -1669,9 +1636,7 @@ int ade9153a_clear_cf2(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_CF2_MSK,
-				    no_os_field_prep(ADE9153A_CF2_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_CF2_MSK);
 }
 
 /**
@@ -1684,9 +1649,7 @@ int ade9153a_clear_cf1(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_CF1_MSK,
-				    no_os_field_prep(ADE9153A_CF1_MSK, ENABLE));
-
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_CF1_MSK);
 }
 
 /**
@@ -1699,8 +1662,7 @@ int ade9153a_clear_cf2_chg(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_REVPCF2_MSK,
-				    no_os_field_prep(ADE9153A_REVPCF2_MSK, ENABLE));
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_REVPCF2_MSK);
 }
 
 /**
@@ -1713,8 +1675,7 @@ int ade9153a_clear_cf1_chg(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_REVPCF1_MSK,
-				    no_os_field_prep(ADE9153A_REVPCF1_MSK, ENABLE));
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_REVPCF1_MSK);
 }
 
 /**
@@ -1727,8 +1688,7 @@ int ade9153a_clear_rpa_chg_sgn(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_REVRPA_MSK,
-				    no_os_field_prep(ADE9153A_REVRPA_MSK, ENABLE));
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_REVRPA_MSK);
 }
 
 /**
@@ -1741,8 +1701,7 @@ int ade9153a_clear_apa_chg_sgn(struct ade9153a_dev *dev)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_update_bits(dev, ADE9153A_REG_STATUS, ADE9153A_REVAPA_MSK,
-				    no_os_field_prep(ADE9153A_REVAPA_MSK, ENABLE));
+	return ade9153a_write(dev, ADE9153A_REG_STATUS, ADE9153A_REVAPA_MSK);
 }
 
 /**
@@ -1770,7 +1729,7 @@ int ade9153a_clear_chip_stat(struct ade9153a_dev *dev, uint32_t *reg_val)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_read(dev, ADE9153A_CHIP_STAT_MSK, &reg_val);
+	return ade9153a_read(dev, ADE9153A_REG_CHIP_STATUS, &reg_val);
 }
 
 /**
@@ -1798,7 +1757,7 @@ int ade9153a_clear_event_stat(struct ade9153a_dev *dev, uint32_t *reg_val)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_read(dev, ADE9153A_EVENT_STAT_MSK, &reg_val);
+	return ade9153a_read(dev, ADE9153A_REG_EVENT_STATUS, &reg_val);
 }
 
 /**
@@ -1826,7 +1785,7 @@ int ade9153a_clear_ms_stat(struct ade9153a_dev *dev, uint32_t *reg_val)
 	if (!dev)
 		return -ENODEV;
 
-	return ade9153a_read(dev, ADE9153A_MS_STAT_MSK, &reg_val);
+	return ade9153a_read(dev, ADE9153A_REG_MS_STATUS_IRQ, &reg_val);
 }
 
 /**
