@@ -785,7 +785,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	dev->read_bytes_no = dev->capture_data_width / 8;
 
-	if (dev->device_id == ID_ADAQ4224) {
+	if (dev->device_id == ID_ADAQ4224 || dev->device_id == ID_ADAQ4216) {
 		dev->has_pgia = true;
 		ad463x_fill_scale_tbl(dev);
 	} else {
