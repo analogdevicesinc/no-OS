@@ -4,6 +4,13 @@ no-OS drivers list
 
 The following sections contain code documentation for ADI no-OS drivers.
 
+AMPLIFIERS
+==========
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adl8113
+
 ACCELEROMETERS
 ==============
 .. toctree::
