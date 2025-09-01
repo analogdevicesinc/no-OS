@@ -31,6 +31,10 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/ad9208
 
+   
+
+   projects/ad7768-evb
+
 ADC / DAC
 ==========
 .. toctree::
