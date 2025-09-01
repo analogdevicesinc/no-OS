@@ -31,6 +31,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    projects/ad9208
 
+   projects/ad9434-fmc-500ebz
+
 ADC / DAC
 ==========
 .. toctree::
