@@ -137,6 +137,13 @@ METER
 
    drivers/ade9113
 
+MUX
+===
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adg2404
+
 RF TRANSCEIVER
 ==============
 .. toctree::
