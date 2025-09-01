@@ -160,6 +160,8 @@ enum ad463x_id {
 	ID_AD4632_16,
 	/** AD4030 device */
 	ID_AD4030,
+	/** ADAQ4216 device */
+	ID_ADAQ4216,
 	/** ADAQ4224 device */
 	ID_ADAQ4224,
 };

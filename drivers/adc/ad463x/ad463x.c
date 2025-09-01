@@ -756,7 +756,13 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	switch (dev->output_mode) {
 	case AD463X_24_DIFF:
-		dev->real_bits_precision = 24;
+		switch (dev->device_id) {
+		case ID_ADAQ4216:
+			dev->real_bits_precision = 16;
+			break;
+		default:
+			dev->real_bits_precision = 24;
+		}
 		break;
 
 	case AD463X_16_DIFF_8_COM:
@@ -782,7 +788,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	dev->read_bytes_no = dev->capture_data_width / 8;
 
-	if (dev->device_id == ID_ADAQ4224) {
+	if (dev->device_id == ID_ADAQ4224 || dev->device_id == ID_ADAQ4216) {
 		dev->has_pgia = true;
 		ad463x_fill_scale_tbl(dev);
 	} else {
