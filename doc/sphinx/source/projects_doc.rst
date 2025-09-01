@@ -30,8 +30,10 @@ ANALOG TO DIGITAL CONVERTERS
    projects/ad9081
 
    projects/ad9208
-
+   
    projects/eval-ad7490sdz
+
+   projects/ad9434-fmc-500ebz
 
 ADC / DAC
 ==========
