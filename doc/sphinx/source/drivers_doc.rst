@@ -148,6 +148,13 @@ RF TRANSCEIVER
 
    drivers/talise
 
+SWITCH
+======
+.. toctree::
+   :maxdepth: 1
+
+   drivers/adg1712
+
 TEMPERATURE
 ==============
 .. toctree::
