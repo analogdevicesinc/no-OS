@@ -19,3 +19,6 @@
 [submodule "libraries/lvgl/lvgl"]
 	path = libraries/lvgl/lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "libraries/zstd/zstd"]
+	path = libraries/zstd/zstd
+	url = https://github.com/facebook/zstd.git
