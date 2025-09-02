@@ -380,7 +380,7 @@ int32_t iiod_parse_command(char *buf, struct comand_desc *res)
 			res->bytes_count = *(uint32_t *)payload;
 			return 0;
 		case IIOD_OP_CREATE_BUFFER:
-			res->mask = *(uint32_t *)payload;
+			res->mask = ((uint32_t *)payload)[2];
 			return 0;
 		case IIOD_OP_DISABLE_BUFFER:
 		case IIOD_OP_CREATE_BLOCK:
@@ -1039,7 +1039,9 @@ static int32_t iiod_read_cmd_payload(struct iiod_desc *desc,
 		case IIOD_OP_SETTRIG:
 			return 0; // TODO: Check what to do here
 		case IIOD_OP_CREATE_BUFFER:
-			payload_len = 4;
+			//TODO: This'll only be valid for 32 channels. The format of data is
+			// dma_allocator(4B), mask_count (4B), masks (LSB ... MSB)
+			payload_len = 12;
 			break;
 		case IIOD_OP_DISABLE_BUFFER:
 		case IIOD_OP_CREATE_BLOCK:
@@ -1387,7 +1389,7 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 	uint8_t c;
 	static struct iiod_buff buff;
 	switch (conn->state) {
-		case IIOD_WRITING_EVENT_DATA:	
+		case IIOD_WRITING_EVENT_DATA:
 			uint32_t i;
 			struct iiod_event_client *client;
 			for (i = 0; i < conn->events.num_clients; i++) {
@@ -1471,7 +1473,7 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 				if ((ret == -EAGAIN) && (conn->parser_idx)) {
 					return ret;
 				} else if (ret == -EAGAIN) {
-					conn->state = IIOD_LINE_DONE;
+					conn->state = IIOD_WRITING_EVENT_DATA;
 					return 0;
 				}
 				if (!strncmp(conn->parser_buf, "BINARY\r\n", 8)) {
@@ -1481,7 +1483,8 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 					 * client disconnects and a new client appears. */
 					conn->res.val = 0;
 					conn->res.write_val = 1;
-					conn->state = IIOD_WRITING_BIN_RESPONSE;
+					conn->nb_buf.len = 0;
+					conn->state = IIOD_WRITING_CMD_RESULT;
 
 					return 0;
 				}
@@ -1554,38 +1557,21 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 		return 0;
 
 	case IIOD_WRITING_BIN_RESPONSE:
-		if (conn->res.write_val) {
-			if (conn->nb_buf.len == 0) {
-				conn->nb_buf.buf = conn->parser_buf;
-				ret = sprintf(conn->nb_buf.buf, "%"PRIi32,
-					      conn->res.val);
-				conn->nb_buf.len = ret;
-				conn->nb_buf.idx = 0;
-			}
-			/* Non-blocking. Will enter here until val is sent */
-			if (conn->nb_buf.idx < conn->nb_buf.len) {
-				ret = rw_iiod_buff(desc, conn, &conn->nb_buf,
-						   IIOD_WR | IIOD_ENDL);
+		ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
+					 sizeof(conn->res_header));
+		if (NO_OS_IS_ERR_VALUE(ret))
+			return ret;
+
+		if (conn->res.buf.len) {
+			/* Send buf from result. Non blocking */
+			if (conn->res.buf.buf &&
+				conn->res.buf.idx < conn->res.buf.len) {
+				do {
+					ret = rw_iiod_buff(desc, conn, &conn->res.buf,
+							   IIOD_WR);
+				} while (ret == -EAGAIN);
 				if (NO_OS_IS_ERR_VALUE(ret))
 					return ret;
-			}
-		} else {
-			ret = desc->ops.send(&ctx, (uint8_t *)&conn->res_header,
-					     sizeof(conn->res_header));
-			if (NO_OS_IS_ERR_VALUE(ret))
-				return ret;
-
-			if (conn->res.buf.len) {
-				/* Send buf from result. Non blocking */
-				if (conn->res.buf.buf &&
-				    conn->res.buf.idx < conn->res.buf.len) {
-					do {
-						ret = rw_iiod_buff(desc, conn, &conn->res.buf,
-								   IIOD_WR);
-					} while (ret == -EAGAIN);
-					if (NO_OS_IS_ERR_VALUE(ret))
-						return ret;
-				}
 			}
 		}
 
