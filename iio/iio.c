@@ -36,6 +36,7 @@
 #include "iio_types.h"
 #include "iiod.h"
 #include "ctype.h"
+#include <zstd.h>
 #include "no_os_util.h"
 #include "no_os_list.h"
 #include "no_os_error.h"
@@ -2622,6 +2623,30 @@ static int32_t iio_init_xml(struct iio_desc *desc)
 	}
 
 	strcpy(desc->xml_desc + of, header_end);
+
+	char *zstd_xml_desc;
+	uint32_t zstd_xml_size;
+	int32_t ret;
+
+	zstd_xml_size = ZSTD_compressBound((size_t) desc->xml_size);
+	zstd_xml_desc = no_os_calloc(1, zstd_xml_size);
+	if (!zstd_xml_desc) {
+		no_os_free(desc->xml_desc);
+		return -ENOMEM;
+	}
+
+	ret = ZSTD_compress(zstd_xml_desc, zstd_xml_size, desc->xml_desc, desc->xml_size, 1);
+
+	if (ZSTD_isError(ret)) {
+		no_os_free(zstd_xml_desc);
+		no_os_free(desc->xml_desc);
+		return ret;
+	}
+
+	no_os_free(desc->xml_desc);
+
+	desc->xml_desc = zstd_xml_desc;
+	desc->xml_size = ret;
 
 	return 0;
 }
