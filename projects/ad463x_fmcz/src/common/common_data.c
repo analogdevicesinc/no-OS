@@ -145,6 +145,11 @@ struct ad463x_init_param ad463x_init_param = {
 	.device_id = ID_ADAQ4224, /* dev_id */
 	.gpio_pgia_a0 = &ad463x_pgia_a0,
 	.gpio_pgia_a1 = &ad463x_pgia_a1,
+#elif ADAQ4216_DEV
+	.vref = 4096 * 1000UL,
+	.device_id = ID_ADAQ4216, /* dev_id */
+	.gpio_pgia_a0 = &ad463x_pgia_a0,
+	.gpio_pgia_a1 = &ad463x_pgia_a1,
 #elif AD4030_DEV
 	.vref = 5000 * 1000UL,
 	.device_id = ID_AD4030, /* dev_id */
