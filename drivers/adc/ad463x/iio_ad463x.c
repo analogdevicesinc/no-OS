@@ -210,7 +210,7 @@ static int ad463x_iio_store_scale(void *dev, char *buf, uint32_t len,
 {
 	struct iio_ad463x *iio_desc = dev;
 	struct ad463x_dev *ad463x_dev;
-	int32_t gain_idx;
+	enum ad463x_pgia_gain gain_idx;
 	int ret;
 	int32_t vals[2];
 
