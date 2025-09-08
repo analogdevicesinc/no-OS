@@ -155,6 +155,8 @@ SWITCH
 
    drivers/adg1712
 
+   drivers/adgm3121
+
 TEMPERATURE
 ==============
 .. toctree::
