@@ -277,8 +277,7 @@ static int32_t _iio_ad463x_read_dev(struct iio_ad463x *desc, uint32_t *buff,
 				    uint32_t nb_samples)
 {
 	int ret;
-	uint32_t *data;
-	uint32_t i, j, ch;
+	uint32_t i, j;
 
 	if (!desc)
 		return -EINVAL;
