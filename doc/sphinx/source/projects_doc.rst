@@ -167,6 +167,8 @@ TEMPERATURE
 
    projects/max31827-evkit
 
+   projects/adt75
+
 GYROSCOPES
 ============
 
