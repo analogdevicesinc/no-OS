@@ -284,7 +284,7 @@ int32_t ad463x_set_ch_gain(struct ad463x_dev *dev, uint8_t ch_idx,
 	int32_t ret;
 	uint32_t g;
 
-	if (gain < 0 || gain > AD463X_GAIN_MAX_VAL_SCALED)
+	if (gain > AD463X_GAIN_MAX_VAL_SCALED)
 		return -EINVAL;
 
 	g = ((gain * 0xFFFF) / AD463X_GAIN_MAX_VAL_SCALED);
