@@ -648,9 +648,6 @@ static void ad463x_fill_scale_tbl(struct ad463x_dev *dev)
 	unsigned int i;
 	int64_t tmp2;
 
-	if (!dev)
-		return -EINVAL;
-
 	val2 = dev->real_bits_precision;
 	for (i = 0; i < NO_OS_ARRAY_SIZE(ad463x_gains); i++) {
 		val = (dev->vref * 2) / MILLI;
