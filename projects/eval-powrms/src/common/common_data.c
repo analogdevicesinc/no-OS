@@ -56,8 +56,8 @@ struct no_os_uart_init_param demo_uart_ip = {
 };
 
 struct no_os_i2c_init_param oled_display_i2c_init_param = {
-    .device_id = 1,
-    .max_speed_hz = 400000,
+    .device_id = I2C_DEVICE_ID,
+    .max_speed_hz = I2C_SPEED,
     .slave_address = SSD1306_I2C_ADDR,
     .platform_ops = I2C_OPS,
     .extra = I2C_EXTRA_DISPLAY,
@@ -69,16 +69,16 @@ ssd_1306_extra oled_display_extra = {
 };
 
 struct display_init_param oled_display_ini_param = {
-    .cols_nb = 128,
-    .rows_nb = 64,
+    .cols_nb = DISPLAY_HOR_REZ,
+    .rows_nb = DISPLAY_VER_REZ,
     .controller_ops = &ssd1306_ops,
     .extra = &oled_display_extra,
 };
 
 struct no_os_i2c_init_param	adc_i2c_ini_param = {
-    .device_id = 1,
-    .max_speed_hz = 400000,
-    .slave_address = 0x20,
+    .device_id = I2C_DEVICE_ID,
+    .max_speed_hz = I2C_SPEED,
+    .slave_address = ADC_I2C_SLAVE_ADDRESS,
     .platform_ops = I2C_OPS,
     .extra = I2C_EXTRA_ADC,
 };

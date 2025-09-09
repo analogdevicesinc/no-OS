@@ -50,6 +50,8 @@
 #define UART_EXTRA              &demo_uart_extra_ip
 #define UART_OPS                &max_uart_ops
 
+#define I2C_DEVICE_ID           1
+#define I2C_SPEED               400000
 #define I2C_OPS                 &max_i2c_ops
 #define I2C_EXTRA_ADC           &oled_display_i2c_maxim_extra_param
 #define I2C_EXTRA_DISPLAY       &oled_display_i2c_maxim_extra_param

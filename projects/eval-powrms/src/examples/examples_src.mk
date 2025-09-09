@@ -25,6 +25,8 @@ INCS += ${PROJECT}/src/examples/screens/main_menu_screen.h		\
 
 # Utils
 INCS += ${PROJECT}/src/examples/example/powrms_utils.h			\
-		${PROJECT}/src/examples/example/powrms_variables.h
+		${PROJECT}/src/examples/example/powrms_variables.h		\
+		${PROJECT}/src/examples/example/buttons.h
 SRCS += ${PROJECT}/src/examples/example/powrms_utils.c			\
-		${PROJECT}/src/examples/example/powrms_variables.c
+		${PROJECT}/src/examples/example/powrms_variables.c		\
+		${PROJECT}/src/examples/example/buttons.c

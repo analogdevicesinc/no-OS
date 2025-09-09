@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "example.h"
+#include "buttons.h"
 #include "malloc.h"
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
@@ -311,6 +312,12 @@ int example_main(void)
     ret  = configure_gpios();
     if (ret) {
         printf("Failed to initialize GPIOs.\n\r");
+        return ret;
+    }
+
+    ret = buttons_init();
+    if (ret) {
+        printf("Failed to initialize buttons.\n\r");
         return ret;
     }
 

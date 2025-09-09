@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by ssd1306 example.
+ *   @file   buttons.h
+ *   @brief  Button handling definitions and declarations.
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,51 +30,44 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef __BUTTONS_H__
+#define __BUTTONS_H__
 
-#include "platform_includes.h"
-#include "no_os_util.h"
-#include "display.h"
-#include "ssd_1306.h"
-#include "no_os_delay.h"
-#include "no_os_i2c.h"
-#include "maxim_i2c.h"
-#include "ad7091r5.h"
+#include "no_os_gpio.h"
 
-#define DISPLAY_HOR_REZ             128
-#define DISPLAY_VER_REZ             64
+/**
+ * @brief Initialize interrupt-based button handling
+ * 
+ * Configures GPIO pins 0.16, 0.17, and 0.18 as input pins and sets up
+ * interrupt handlers for falling edge detection. Each button press will
+ * trigger an interrupt that sets a flag for later processing.
+ * 
+ * @return 0 on success, negative error code on failure
+ */
+int buttons_init(void);
 
-#define ADC_I2C_SLAVE_ADDRESS       0x20
+/**
+ * @brief Read button states using interrupt flags
+ * 
+ * Checks for button press events detected by interrupt handlers.
+ * This function clears the interrupt flag when a button press is detected.
+ * Call this function regularly to check for button presses.
+ * 
+ * @return Button press code:
+ *         - 0: No button pressed
+ *         - 1: NEXT button pressed (GPIO 0.16)
+ *         - 2: BACK button pressed (GPIO 0.17)
+ *         - 3: ENTER button pressed (GPIO 0.18)
+ */
+int buttons_read(void);
 
-// Display related data
-extern struct display_dev *oled_display;
-extern ssd_1306_extra oled_display_extra;
-extern struct no_os_i2c_desc *oled_display_i2c_desc;
-extern struct display_init_param oled_display_ini_param;
-extern struct no_os_i2c_init_param oled_display_i2c_init_param;
+/**
+ * @brief Clean up button interrupt resources
+ * 
+ * Disables interrupts, unregisters callbacks, and releases GPIO and IRQ
+ * controller resources. Should be called when button functionality is
+ * no longer needed.
+ */
+void buttons_cleanup(void);
 
-// Debug related data
-extern struct no_os_uart_desc *demo_uart_desc;
-extern struct no_os_uart_init_param demo_uart_ip;
-
-// ADC related data
-extern struct no_os_i2c_init_param	adc_i2c_ini_param;
-extern struct no_os_gpio_init_param	adc_gpio_ini_param;
-extern struct ad7091r5_init_param adc_ini_param;
-extern struct ad7091r5_dev *adc_desc;
-
-// LTC3556 data
-extern struct no_os_i2c_desc *ltc3556_i2c_desc;
-extern struct no_os_i2c_init_param ltc3556_i2c_init_param;
-
-// GPIOs
-extern struct no_os_gpio_desc *mcu_led_gpio_desc;
-extern struct no_os_gpio_desc *en_adc_5v_gpio_desc;
-extern struct no_os_gpio_desc *en_adc_vdrive_gpio_desc;
-
-extern struct no_os_gpio_init_param mcu_led_ip;
-extern struct no_os_gpio_init_param en_adc_5v_ip;
-extern struct no_os_gpio_init_param en_adc_vdrive_ip;
-
-#endif /* __COMMON_DATA_H__ */
+#endif /* __BUTTONS_H__ */

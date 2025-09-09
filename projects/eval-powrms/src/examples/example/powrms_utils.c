@@ -32,11 +32,24 @@
 *******************************************************************************/
 
 #include "powrms_utils.h"
+#include "buttons.h"
 
 uint8_t read_input()
 {
     char input_char;
+    int button_state;
+    
+    // Check for button input first (hardware buttons take priority)
+    button_state = buttons_read();
+    if (button_state > 0) {
+#ifdef POWRMS_UART_DEBUG
+        const char* btn_names[] = {"", "NEXT", "BACK", "ENTER"};
+        printf("Button %s pressed\n\r", btn_names[button_state]);
+#endif
+        return button_state;
+    }
 
+    // Fall back to UART input for debugging/development
     if (no_os_uart_read(demo_uart_desc, &input_char, 1) > 0) {
         if (input_char == 'q') {
 #ifdef POWRMS_UART_DEBUG
