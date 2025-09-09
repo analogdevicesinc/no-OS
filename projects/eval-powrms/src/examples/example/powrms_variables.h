@@ -72,7 +72,7 @@ struct powrms_variables {
     uint8_t nr_of_int_digits;
     uint8_t nr_of_float_digits;
     char digits[NUMERIC_LENGTH];
-    char unit[4]
+    char unit[4];
 };
 
 extern struct powrms_variables input_variables[VARIABLE_NUMBER];

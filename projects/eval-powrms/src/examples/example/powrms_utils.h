@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   example.h
- *   @brief  Ssd1306 example header for ssd1306 project
+ *   @file   powrms_utils.h
+ *   @brief  Utility functions header for input handling and data conversion in eval-powrms project
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -37,9 +37,40 @@
 #include <stdint.h>
 #include "common_data.h"
 
+/**
+ * @brief Read and decode user input from UART
+ *
+ * @return uint8_t Input command code:
+ *         - 0: No input received
+ *         - 1: 'q' - Next/Navigate forward
+ *         - 2: 'w' - Back/Increment (context dependent)
+ *         - 3: 'e' - Enter/Confirm
+ */
 uint8_t read_input();
-void powrms_float_to_str(float var, char* text_buf, uint8_t, uint8_t);
+
+/**
+ * @brief Convert float value to string representation
+ *
+ * @param var Float value to convert
+ * @param text_buf Output buffer for string representation
+ * @param int_digits Number of integer digits
+ * @param float_digits Number of decimal digits
+ */
+void powrms_float_to_str(float var, char* text_buf, uint8_t int_digits, uint8_t float_digits);
+
+/**
+ * @brief Convert integer value to string representation
+ *
+ * @param var Integer value to convert
+ * @param text_buf Output buffer for string representation
+ */
 void powrms_int_to_str(int var, char* text_buf);
+
+/**
+ * @brief Update ADC data by reading from hardware
+ *
+ * @return int 0 on success, negative error code on failure
+ */
 int update_adc_data();
 
 #endif /* POWRMS_UTILS_H */

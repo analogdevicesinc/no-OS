@@ -93,4 +93,7 @@ void main_menu_screen()
             break;
         }
     }
+
+    // Cleanup screen if we exit the loop abnormally
+    lv_obj_del(scr);
 }

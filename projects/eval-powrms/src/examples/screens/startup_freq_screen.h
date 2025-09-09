@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   example.h
- *   @brief  Ssd1306 example header for ssd1306 project
+ *   @file   startup_freq_screen.h
+ *   @brief  Startup frequency input screen header for eval-powrms project
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -40,11 +40,31 @@
 #define FREQ_INTEGER_NUMERIC_LENGTH	4
 #define FREQ_FLOATING_POINT_LENGTH	2
 
+// Grid layout constants for improved readability
+#define FREQ_GRID_LABEL_WIDTH       26  // Width fraction for frequency label column
+#define FREQ_GRID_DIGIT_WIDTH       1   // Width fraction for each digit column
+#define FREQ_GRID_ROW_HEIGHT        10  // Height fraction for each row
+
 extern char freq_input_variable[FREQ_NUMERIC_LENGTH];
 extern float startup_frequency;
 extern uint8_t freq_pointer_poz_x;
 extern bool freq_enter_pressed;
 
-void start_freq_menu();
+/**
+ * @brief Display and handle the startup frequency input screen
+ *
+ * This function creates an interactive GUI for setting the initial frequency
+ * value at startup. Users can edit a single frequency value in AAAA.BB format
+ * (4 integer digits + 2 decimal places) with real-time validation and feedback.
+ *
+ * Navigation:
+ * - 'q': Move to next digit (wraps around)
+ * - 'w': Increment digit (when in edit mode) or go back to menu (when not editing)
+ * - 'e': Enter/exit edit mode, save value and proceed to main menu
+ *
+ * @note This screen is typically shown on first startup or when frequency
+ *       configuration is required before proceeding to main application
+ */
+void startup_freq_screen();
 
 #endif // __STARTUP_FREQ_SCREEN_H__

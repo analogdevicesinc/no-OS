@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   example.h
- *   @brief  Ssd1306 example header for ssd1306 project
+ *   @file   settings_screen.c
+ *   @brief  Settings screen implementation for configuring input variables in eval-powrms project
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -37,7 +37,7 @@ uint8_t pointer_poz_x = 0;
 uint8_t pointer_poz_y = 0;
 
 
-void value_settings_screen()
+void settings_screen()
 {
     enter_pressed = false;
     pointer_poz_x = 0;
@@ -75,32 +75,69 @@ void value_settings_screen()
     lv_obj_t *value_labels[NR_OF_INPUT_VARIABLES][NUMERIC_LENGTH];
 
     for (int row = 0; row < NR_OF_INPUT_VARIABLES ; row++) {
-        // Name label
+        // Name label with error checking
         lv_obj_t *label_name = lv_label_create(screen);
+        if (label_name == NULL) {
+#ifdef POWRMS_UART_DEBUG
+            printf("Error: Failed to create name label for row %d\n\r", row);
+#endif
+            continue; // Skip this row if label creation failed
+        }
         lv_label_set_text(label_name, first_column[row]);
         lv_obj_set_grid_cell(label_name, LV_GRID_ALIGN_START, 0, 1,
                              LV_GRID_ALIGN_START, row, 1);
         lv_obj_set_style_text_font(label_name, &lv_font_montserrat_12, 0);
 
         uint8_t col = 1;
+#ifdef POWRMS_UART_DEBUG
+        printf("Row %d: Starting digit placement at col=%d\n\r", row, col);
+#endif
         for (uint8_t var = 0; var < NUMERIC_LENGTH; var++) {
             if (var == INTEGER_NUMERIC_LENGTH) {
-                // Comma label
+                // Comma label with error checking
+#ifdef POWRMS_UART_DEBUG
+                printf("Row %d: Placing comma at col=%d\n\r", row, col);
+#endif
                 lv_obj_t *comma_label = lv_label_create(screen);
+                if (comma_label == NULL) {
+#ifdef POWRMS_UART_DEBUG
+                    printf("Error: Failed to create comma label\n\r");
+#endif
+                    continue; // Skip this digit if label creation failed
+                }
                 lv_label_set_text(comma_label, ",");
                 lv_obj_set_grid_cell(comma_label, LV_GRID_ALIGN_START, col++, 1,
                                      LV_GRID_ALIGN_START, row, 1);
                 lv_obj_set_style_text_font(comma_label, &lv_font_montserrat_12, 0);
             }
 
+#ifdef POWRMS_UART_DEBUG
+            printf("Row %d: Placing digit %d ('%c') at col=%d\n\r", row, var, input_variables[row].digits[var], col);
+#endif
             value_labels[row][var] = lv_label_create(screen);
+            if (value_labels[row][var] == NULL) {
+#ifdef POWRMS_UART_DEBUG
+                printf("Error: Failed to create value label for row %d, var %d\n\r", row, var);
+#endif
+                continue; // Skip this digit if label creation failed
+            }
             char text[2] = {input_variables[row].digits[var], '\0'};
             lv_label_set_text(value_labels[row][var], text);
             lv_obj_set_grid_cell(value_labels[row][var], LV_GRID_ALIGN_START, col++, 1,
                                  LV_GRID_ALIGN_START, row, 1);
         }
-        // Unit label
+        // Unit label with error checking
+#ifdef POWRMS_UART_DEBUG
+        printf("Row %d: Final col before unit placement: %d\n\r", row, col);
+        printf("Row %d: Placing unit '%s' at col=%d\n\r", row, input_variables[row].unit, col);
+#endif
         lv_obj_t *unit_label = lv_label_create(screen);
+        if (unit_label == NULL) {
+#ifdef POWRMS_UART_DEBUG
+            printf("Error: Failed to create unit label for row %d\n\r", row);
+#endif
+            continue; // Skip this row's unit if label creation failed
+        }
         lv_label_set_text(unit_label, input_variables[row].unit);
         lv_obj_set_grid_cell(unit_label, LV_GRID_ALIGN_START, col, 1,
                              LV_GRID_ALIGN_START, row, 1);
@@ -159,5 +196,8 @@ void value_settings_screen()
             break;
         }
     }
+
+    // Cleanup screen if we exit the loop abnormally
+    lv_obj_del(screen);
 }
 

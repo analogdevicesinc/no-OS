@@ -34,7 +34,7 @@
 #include "startup_freq_screen.h"
 
 
-void start_freq_menu()
+void startup_freq_screen()
 {
     bool enter_pressed = false;
     // extern display_entry_t display_entry;
@@ -42,24 +42,24 @@ void start_freq_menu()
 
 // ------------------ SETUP SCREEN ------------------
 
-    // Grid descriptors
+    // Grid descriptors using defined constants
     static lv_coord_t col_dsc[] = {
-        LV_GRID_FR(12),  // Name column
-        LV_GRID_FR(1),   // Digit 1
-        LV_GRID_FR(1),   // Digit 2
-        LV_GRID_FR(1),   // Digit 3
-        LV_GRID_FR(1),   // Digit 4
-        LV_GRID_FR(1),   // Comma
-        LV_GRID_FR(1),   // Digit 5
-        LV_GRID_FR(1),   // Digit 6
-        LV_GRID_FR(1),   // Empty
+        LV_GRID_FR(12),                    // Name column
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 1
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 2
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 3
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 4
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Decimal point
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 5
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 6
+        LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Empty space
         LV_GRID_FR(20),  // Unit
         LV_GRID_TEMPLATE_LAST
     };
     static lv_coord_t row_dsc[] = {
-        LV_GRID_FR(1),   // Row 1 (all on same row)
-        LV_GRID_FR(1),   // Row 2
-        LV_GRID_FR(1),   // Row 3
+        LV_GRID_FR(FREQ_GRID_ROW_HEIGHT), // Row 1 (frequency input row)
+        LV_GRID_FR(FREQ_GRID_ROW_HEIGHT), // Row 2 (spacing)
+        LV_GRID_FR(FREQ_GRID_ROW_HEIGHT), // Row 3 (instructions)
         LV_GRID_TEMPLATE_LAST
     };
 
@@ -148,4 +148,7 @@ void start_freq_menu()
             break;
         }
     }
+
+    // Cleanup screen if we exit the loop abnormally
+    lv_obj_del(screen);
 }

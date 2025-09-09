@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   example.h
- *   @brief  Ssd1306 example header for ssd1306 project
+ *   @file   show_screen.h
+ *   @brief  Measurement display screen header for showing ADC values in eval-powrms project
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -57,7 +57,20 @@ struct adc_data {
 
 extern struct adc_data adc_data_input;
 
-
+/**
+ * @brief Display and continuously update ADC measurement values
+ *
+ * This function creates a real-time display showing ADC measurement results
+ * for VRMSF (RMS Forward Voltage) and VRMSR (RMS Reverse Voltage).
+ * The screen continuously updates with live ADC readings and provides
+ * a user interface to return to the main menu.
+ *
+ * Navigation:
+ * - 'w': Return to main menu
+ *
+ * @note This function runs in a continuous loop, updating ADC values
+ *       in real-time until the user chooses to exit
+ */
 void show_screen();
 
 #endif // __SHOW_SCREEN_H__

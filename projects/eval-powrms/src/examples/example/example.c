@@ -179,7 +179,7 @@ void screen_while()
     while (1) {
         switch (display_entry) {
         case DISPLAY_INPUT_FREQUENCY:
-            start_freq_menu();
+            startup_freq_screen();
             break;
         case DISPLAY_ENTRY_MENU:
             main_menu_screen();
@@ -188,7 +188,7 @@ void screen_while()
             show_screen();
             break;
         case DISPLAY_ENTRY_SETTINGS:
-            value_settings_screen();
+            settings_screen();
             break;
         default:
             return;

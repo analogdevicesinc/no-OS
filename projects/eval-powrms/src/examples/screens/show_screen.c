@@ -100,11 +100,14 @@ void show_screen()
         case 2: // BACK
             display_entry = DISPLAY_ENTRY_MENU;
             lv_obj_del(scr);
-            break;
+            return;
         case 3: // ENTER
             break;
         default:
             break;
         }
     }
+
+    // Cleanup screen if we exit the loop abnormally
+    lv_obj_del(scr);
 }
