@@ -64,15 +64,15 @@ static const struct ad7124_init_param ad7124_ip = {
 	.spi_rdy_poll_cnt = AD7124_SPI_RDY_POL_CNT,
 	.mode = AD7124_CONTINUOUS,
 	.active_device = ID_AD7124_4,
-	.ref_en = false,
+	.ref_en = true,
 	.power_mode = AD7124_HIGH_POWER,
 	.setups = {
 		/* Configuration for setup 0 only */
 		{
-			AD7124_BIPOLAR_MODE,
-			AD7124_BUFF_REF,
-			AD7124_BUFF_AIN,
-			EXTERNAL_REFIN1
+			.bi_unipolar = AD7124_BIPOLAR_MODE,
+			.ref_buff = AD7124_BUFF_REF,
+			.ain_buff = AD7124_BUFF_AIN,
+			.ref_source = INTERNAL_REF,
 		},
 	},
 	.chan_map = {
