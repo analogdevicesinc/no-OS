@@ -1924,13 +1924,13 @@ int adf4368_init(struct adf4368_dev **dev,
 	if (ret)
 		goto error_spi;
 
-	ret = adf4368_check_scratchpad(device);
+	ret = adf4368_spi_write(device, 0x15,
+				no_os_field_prep(ADF4368_CMOS_OV_MSK,
+						device->cmos_3v3));
 	if (ret)
 		goto error_spi;
 
-	ret = adf4368_spi_write(device, 0x3D,
-				no_os_field_prep(ADF4368_CMOS_OV_MSK,
-						device->cmos_3v3));
+	ret = adf4368_check_scratchpad(device);
 	if (ret)
 		goto error_spi;
 
