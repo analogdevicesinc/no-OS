@@ -46,6 +46,7 @@ typedef struct ad9172_dev {
 	struct no_os_gpio_desc	*gpio_txen0;
 	struct no_os_gpio_desc	*gpio_txen1;
 	struct ad9172_state *st;
+	struct jesd204_dev *jdev;
 } ad9172_dev;
 
 enum chip_id {
@@ -70,10 +71,17 @@ struct ad9172_state {
 	uint32_t jesd_dual_link_mode;
 	uint32_t jesd_subclass;
 	uint32_t clock_output_config;
+	uint32_t scrambling;
+	uint32_t sysref_mode;
+	bool pll_bypass;
 	signal_type_t syncoutb_type;
 	signal_coupling_t sysref_coupling;
 	uint8_t nco_main_enable;
 	uint8_t nco_channel_enable;
+	uint8_t logic_lanes[8];
+	struct no_os_clk_desc *dac_clk;
+	struct no_os_clk_desc *clk_data;
+	struct ad9172_dev *parent;
 };
 
 typedef struct ad9172_init_param {
@@ -83,6 +91,8 @@ typedef struct ad9172_init_param {
 	struct no_os_gpio_init_param gpio_txen0;
 	struct no_os_gpio_init_param gpio_txen1;
 	struct no_os_gpio_init_param gpio_reset;
+	struct no_os_clk_desc *dac_clk;
+	struct no_os_clk_desc *clk_data;
 	uint32_t dac_rate_khz;
 	uint32_t dac_clkin_Hz;
 	uint32_t jesd_link_mode;
@@ -90,8 +100,14 @@ typedef struct ad9172_init_param {
 	uint32_t dac_interpolation;
 	uint32_t channel_interpolation;
 	uint32_t clock_output_config;
+	uint32_t scrambling;
+	uint32_t sysref_mode;
+	bool pll_bypass;
 	signal_type_t syncoutb_type;
 	signal_coupling_t sysref_coupling;
+	uint8_t logic_lanes_mapping;
+	uint8_t logic_lanes[8];
+	bool use_jesd_fsm;
 } ad9172_init_param;
 
 int32_t ad9172_init(ad9172_dev **device,
