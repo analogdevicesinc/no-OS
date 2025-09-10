@@ -38,4 +38,6 @@
 
 //#define IIO_SUPPORT
 
+#define USE_JESD_FSM
+
 #endif /* APP_CONFIG_H_ */
