@@ -37,36 +37,39 @@
 
 /**
  * @brief Initialize interrupt-based button handling
- * 
- * Configures GPIO pins 0.16, 0.17, and 0.18 as input pins and sets up
- * interrupt handlers for falling edge detection. Each button press will
- * trigger an interrupt that sets a flag for later processing.
- * 
+ *
+ * Configures GPIO pins 0.16, 0.17, and 0.18 as input pins with pull-up resistors
+ * for button functionality and sets up GPIO interrupt handlers for falling edge
+ * detection. Uses the Maxim GPIO IRQ interface (max_gpio_irq_ops) for proper
+ * interrupt support on the Maxim platform. Also enables the GPIO interrupt
+ * controller at the NVIC level for proper interrupt handling.
+ *
  * @return 0 on success, negative error code on failure
  */
 int buttons_init(void);
 
 /**
  * @brief Read button states using interrupt flags
- * 
- * Checks for button press events detected by interrupt handlers.
+ *
+ * Checks for button press events detected by GPIO interrupt handlers.
  * This function clears the interrupt flag when a button press is detected.
  * Call this function regularly to check for button presses.
- * 
+ *
  * @return Button press code:
  *         - 0: No button pressed
  *         - 1: NEXT button pressed (GPIO 0.16)
  *         - 2: BACK button pressed (GPIO 0.17)
  *         - 3: ENTER button pressed (GPIO 0.18)
+ *         - 4: SPECIAL pin rising edge (GPIO 0.15)
+ *         - 5: SPECIAL pin falling edge (GPIO 0.15) - triggers blank screen
  */
 int buttons_read(void);
 
 /**
  * @brief Clean up button interrupt resources
- * 
- * Disables interrupts, unregisters callbacks, and releases GPIO and IRQ
- * controller resources. Should be called when button functionality is
- * no longer needed.
+ *
+ * Disables GPIO interrupts, unregisters callbacks, and releases GPIO and IRQ
+ * controller resources. Should be called when button functionality is no longer needed.
  */
 void buttons_cleanup(void);
 

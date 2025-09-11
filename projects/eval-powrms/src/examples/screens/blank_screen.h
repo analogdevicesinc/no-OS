@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Definitions specific to Maxim platform used by ssd1306
- *           project.
+ *   @file   blank_screen.h
+ *   @brief  Blank screen header for blanking display in eval-powrms project
  *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -20,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -31,38 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
-#include "maxim_irq.h"
-#include "maxim_uart.h"
-#include "maxim_gpio.h"
-#include "maxim_uart_stdio.h"
-#include "maxim_timer.h"
-#include "common_data.h"
-#include "no_os_util.h"
-#include "no_os_timer.h"
+#ifndef __BLANK_SCREEN_H__
+#define __BLANK_SCREEN_H__
 
-// Used for debug purposes
-#define UART_DEVICE_ID	        0
-#define UART_BAUDRATE	        115200
-#define UART_IRQ_ID    	        UART0_IRQn
-#define UART_EXTRA              &demo_uart_extra_ip
-#define UART_OPS                &max_uart_ops
+#include "example.h"
 
-#define I2C_DEVICE_ID           0
-#define I2C_SPEED               400000
-#define I2C_OPS                 &max_i2c_ops
-#define I2C_EXTRA_ADC           &oled_display_i2c_maxim_extra_param
-#define I2C_EXTRA_DISPLAY       &oled_display_i2c_maxim_extra_param
+/**
+ * @brief Display a blank screen (black/empty display)
+ *
+ * This function creates a completely blank screen, effectively turning off
+ * the display content while keeping the display hardware active. Used for
+ * screen blanking functionality triggered by GPIO 0.15 falling edge.
+ *
+ * Navigation:
+ * - Any button press: Return to previous screen/exit blank mode
+ *
+ * @note This screen is automatically triggered when GPIO 0.15 falling edge is detected
+ */
+void blank_screen(void);
 
-#define GPIO_ADC_RESET		    0
-#define GPIO_OPS                &max_gpio_ops
-#define GPIO_EXTRA              &adc_gpio_extra_param
-
-extern struct max_uart_init_param demo_uart_extra_ip;
-extern struct max_i2c_init_param oled_display_i2c_maxim_extra_param;
-extern struct max_gpio_init_param adc_gpio_extra_param;
-
-
-#endif /* __PARAMETERS_H__ */
+#endif // __BLANK_SCREEN_H__

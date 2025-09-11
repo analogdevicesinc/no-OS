@@ -39,10 +39,12 @@
 #define INTEGER_PRECISION			2
 #define FLOATING_POINT_PRECISION	3
 
-#define OUTPUT_VARIABLE_NAMES  	{"Vrmsf:", "Vrmsr:"}
+#define OUTPUT_VARIABLE_NAMES  	{"VIN0:", "VIN1:", "Vrmsf:", "Vrmsr:"}
 
 #define ADC_VRMSF_CHANNEL_NO	0
 #define ADC_VRMSR_CHANNEL_NO	1
+#define ADC_VIN0_CHANNEL_NO		0  // VIN0 maps to channel 0
+#define ADC_VIN1_CHANNEL_NO		1  // VIN1 maps to channel 1
 
 #define ADC_V_REF				4.096
 #define ADC_V_REF_GND			0.0
@@ -51,8 +53,12 @@
 struct adc_data {
     uint16_t adc_vrmsf_raw;
     uint16_t adc_vrmsr_raw;
+    uint16_t adc_vin0_raw;    // Direct VIN0 reading
+    uint16_t adc_vin1_raw;    // Direct VIN1 reading
     float adc_vrmsf;
     float adc_vrmsr;
+    float adc_vin0_voltage;   // VIN0 in volts
+    float adc_vin1_voltage;   // VIN1 in volts
 };
 
 extern struct adc_data adc_data_input;

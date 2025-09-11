@@ -53,7 +53,7 @@ void startup_freq_screen()
         LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 5
         LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Digit 6
         LV_GRID_FR(FREQ_GRID_DIGIT_WIDTH), // Empty space
-        LV_GRID_FR(20),  // Unit
+        LV_GRID_FR(25),  // Unit
         LV_GRID_TEMPLATE_LAST
     };
     static lv_coord_t row_dsc[] = {
@@ -144,6 +144,10 @@ void startup_freq_screen()
         case 3: // ENTER
             enter_pressed = !enter_pressed;
             break;
+        case 4:
+            display_entry = DISPLAY_ENTRY_BLANK;
+            lv_obj_del(screen);
+            return;
         default:
             break;
         }

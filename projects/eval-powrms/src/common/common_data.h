@@ -45,7 +45,7 @@
 #define DISPLAY_HOR_REZ             128
 #define DISPLAY_VER_REZ             64
 
-#define ADC_I2C_SLAVE_ADDRESS       0x20
+#define ADC_I2C_SLAVE_ADDRESS       0x2A
 
 // Display related data
 extern struct display_dev *oled_display;
@@ -72,6 +72,7 @@ extern struct no_os_i2c_init_param ltc3556_i2c_init_param;
 extern struct no_os_gpio_desc *mcu_led_gpio_desc;
 extern struct no_os_gpio_desc *en_adc_5v_gpio_desc;
 extern struct no_os_gpio_desc *en_adc_vdrive_gpio_desc;
+extern struct no_os_gpio_desc *en_latch_gpio_desc;
 
 extern struct no_os_gpio_init_param mcu_led_ip;
 extern struct no_os_gpio_init_param en_adc_5v_ip;

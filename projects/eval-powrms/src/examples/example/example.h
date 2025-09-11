@@ -85,9 +85,13 @@ enum display_entry_t {
     DISPLAY_INPUT_FREQUENCY,
     DISPLAY_ENTRY_MENU,
     DISPLAY_ENTRY_SHOW,
-    DISPLAY_ENTRY_SETTINGS
+    DISPLAY_ENTRY_SETTINGS,
+    DISPLAY_ENTRY_BLANK
 };
 
 int example_main();
+
+int _write_ltc3556_i2c_init_command(struct no_os_i2c_desc *param);
+int _get_en_latch_val(void);
 
 #endif /* __SSD1306_EXAMPLE__ */

@@ -41,6 +41,8 @@ struct no_os_i2c_desc *ltc3556_i2c_desc;
 struct no_os_gpio_desc *mcu_led_gpio_desc;
 struct no_os_gpio_desc *en_adc_5v_gpio_desc;
 struct no_os_gpio_desc *en_adc_vdrive_gpio_desc;
+struct no_os_gpio_desc *en_latch_gpio_desc;
+
 
 
 struct no_os_uart_init_param demo_uart_ip = {
@@ -95,8 +97,8 @@ struct ad7091r5_init_param adc_ini_param = {
 };
 
 struct no_os_i2c_init_param ltc3556_i2c_init_param = {
-    .device_id = 1,
-    .max_speed_hz = 400000,
+    .device_id = I2C_DEVICE_ID,
+    .max_speed_hz = I2C_SPEED,
     .slave_address = 0x09,
     .platform_ops = I2C_OPS,
     .extra = GPIO_EXTRA,

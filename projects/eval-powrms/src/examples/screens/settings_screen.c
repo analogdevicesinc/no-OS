@@ -58,7 +58,7 @@ void settings_screen()
         LV_GRID_FR(1),   // Comma
         LV_GRID_FR(1),   // Digit 5
         LV_GRID_FR(1),   // Digit 6
-        LV_GRID_FR(20),  // Unit
+        LV_GRID_FR(25),  // Unit
         LV_GRID_TEMPLATE_LAST
     };
     static lv_coord_t row_dsc[] = {
@@ -192,6 +192,10 @@ void settings_screen()
             enter_pressed = !enter_pressed;
             // update_values(&input_variables[pointer_poz_y]);
             break;
+        case 4:
+            display_entry = DISPLAY_ENTRY_BLANK;
+            lv_obj_del(screen);
+            return;
         default:
             break;
         }

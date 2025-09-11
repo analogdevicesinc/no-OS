@@ -38,7 +38,7 @@ uint8_t read_input()
 {
     char input_char;
     int button_state;
-    
+
     // Check for button input first (hardware buttons take priority)
     button_state = buttons_read();
     if (button_state > 0) {
@@ -74,30 +74,36 @@ uint8_t read_input()
 
 void powrms_float_to_str(float var, char* text_buf, uint8_t int_precision, uint8_t float_precision)
 {
-    uint8_t i = -1;
+    uint8_t i = 0;
     if (!text_buf)
         return;
+
+    // Handle negative numbers
+    if (var < 0) {
+        text_buf[i++] = '-';
+        var = -var;
+    }
+
     // Integer part
     int int_part = (int)var;
-    int abs_int_part = int_part < 0 ? -int_part : int_part;
 
     for (uint8_t j = int_precision; j > 0; j--) {
         int divisor = 1;
         for (uint8_t k = 1; k < j; k++)
             divisor *= 10;
-        text_buf[++i] = '0' + (abs_int_part / divisor) % 10;
+        text_buf[i++] = '0' + (int_part / divisor) % 10;
     }
-    // text_buf[++i] = '.';
+
+    // Add decimal point
+    text_buf[i++] = '.';
 
     // Fractional part
     float frac = var - (float)int_part;
-    if (frac < 0)
-        frac = -frac;
     for (uint8_t j = 1; j <= float_precision; j++) {
         frac *= 10;
-        text_buf[++i] = '0' + ((int)frac % 10);
+        text_buf[i++] = '0' + ((int)frac % 10);
     }
-    text_buf[++i] = '\0';
+    text_buf[i] = '\0';
 }
 
 void powrms_int_to_str(int var, char* text_buf)

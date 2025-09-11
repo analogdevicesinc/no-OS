@@ -89,6 +89,10 @@ void main_menu_screen()
                 return;
             }
             break;
+        case 4:
+            display_entry = DISPLAY_ENTRY_BLANK;
+            lv_obj_del(scr);
+            return;
         default:
             break;
         }

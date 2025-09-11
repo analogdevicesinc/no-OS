@@ -33,6 +33,7 @@
 #include "example.h"
 #include "buttons.h"
 #include "malloc.h"
+#include "../screens/blank_screen.h"
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
 #define LV_ATTRIBUTE_MEM_ALIGN
@@ -176,6 +177,7 @@ int configure_display()
 
 void screen_while()
 {
+    int ret;
     char input_char;
     while (1) {
         switch (display_entry) {
@@ -191,10 +193,28 @@ void screen_while()
         case DISPLAY_ENTRY_SETTINGS:
             settings_screen();
             break;
+        case DISPLAY_ENTRY_BLANK:
+            blank_screen();
+            break;
         default:
             return;
         }
     }
+}
+
+int _write_ltc3556_i2c_init_command(struct no_os_i2c_desc *param)
+{
+    uint8_t data_to_write[2] = {0xFF, 0x85};
+    int ret;
+
+    ret = no_os_i2c_write(param, data_to_write, sizeof(data_to_write), 1);
+    if (ret) {
+        printf("Failed to write data to LTC3556.\n\r");
+        return ret;
+    }
+
+    no_os_mdelay(500);
+    return 0;
 }
 
 /**
@@ -213,16 +233,20 @@ int configure_ltc3556()
         return ret;
     }
 
+    uint8_t data_to_write[2] = {0xFF, 0x81};
+    ret = no_os_i2c_write(ltc3556_i2c_desc, data_to_write, sizeof(data_to_write), 1);
+    if (ret) {
+        printf("Failed to write data to LTC3556.\n\r");
+        return ret;
+    }
 
-    uint8_t data_to_write[2] = {0xFF, 0x9F};
+    no_os_mdelay(500);
 
-    // ret = no_os_i2c_write(ltc3556_i2c_desc, data_to_write, sizeof(data_to_write), 1);
-    // if (ret) {
-    //     printf("Failed to write data to LTC3556.\n\r");
-    //     return ret;
-    // }
-
-    no_os_mdelay(100);
+    ret = _write_ltc3556_i2c_init_command(ltc3556_i2c_desc);
+    if (ret) {
+        printf("Failed to initialize LTC3556.\n\r");
+        return ret;
+    }
 
 
     printf("LTC3556 initialized successfully.\n\r");
@@ -230,6 +254,19 @@ int configure_ltc3556()
     return 0;
 }
 
+int _get_en_latch_val(void)
+{
+    int ret;
+    uint8_t gpio_val;
+
+    ret = no_os_gpio_get_value(en_latch_gpio_desc, &gpio_val);
+    if (ret) {
+        printf("Failed to get EN_LATCH GPIO value.\n\r");
+        return ret;
+    }
+
+    return gpio_val;
+}
 int configure_gpios()
 {
     int ret;
@@ -259,7 +296,7 @@ int configure_gpios()
     }
 
     // Wait for 50 msec
-    no_os_mdelay(50);
+    no_os_mdelay(500);
 
     // Set EN_ADC_VDRIVE to HIGH
     ret = no_os_gpio_get(&en_adc_vdrive_gpio_desc, &en_adc_vdrive_ip);
@@ -275,7 +312,6 @@ int configure_gpios()
 
     // Wait for 100 msec
     no_os_mdelay(100);
-
     return 0;
 }
 
@@ -296,28 +332,22 @@ int example_main(void)
         return ret;
     }
 
-// 	ret = configure_adc();
-// 	if (ret) {
-// 		printf("Failed to initialize ADC.\n\r");
-// 		return ret;
-// 	}
-
-// LTC3556 initialize
+    // LTC3556 initialize
     ret = configure_ltc3556();
     if (ret) {
         printf("Failed to initialize LTC3556.\n\r");
         return ret;
     }
 
-    ret  = configure_gpios();
+    ret = configure_gpios();
     if (ret) {
         printf("Failed to initialize GPIOs.\n\r");
         return ret;
     }
 
-    ret = buttons_init();
+    ret = configure_adc();
     if (ret) {
-        printf("Failed to initialize buttons.\n\r");
+        printf("Failed to initialize ADC.\n\r");
         return ret;
     }
 
@@ -330,6 +360,12 @@ int example_main(void)
     ret = display_task();
     if (ret) {
         printf("Failed to initialize display task.\n\r");
+        return ret;
+    }
+
+    ret = buttons_init();
+    if (ret) {
+        printf("Failed to initialize buttons.\n\r");
         return ret;
     }
 

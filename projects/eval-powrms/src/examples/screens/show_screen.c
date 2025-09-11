@@ -32,13 +32,18 @@
 *******************************************************************************/
 
 #include "show_screen.h"
+#include "ad7091r5.h"
 
 // Define the global ADC data structure
 struct adc_data adc_data_input = {
     .adc_vrmsf_raw = 0,
     .adc_vrmsr_raw = 0,
+    .adc_vin0_raw = 0,
+    .adc_vin1_raw = 0,
     .adc_vrmsf = 0.0,
     .adc_vrmsr = 0.0,
+    .adc_vin0_voltage = 0.0,
+    .adc_vin1_voltage = 0.0,
 };
 
 void show_screen()
@@ -50,16 +55,16 @@ void show_screen()
 
 // --------------------- SETUP SCREEN ------------------
 
-    // Define grid: 2 columns (label, value) and 2 rows (for 2 items)
+    // Define grid: 2 columns (label, value) and 4 rows (for 4 items)
     static lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    static lv_coord_t row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
+    static lv_coord_t row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(scr, col_dsc, row_dsc);
 
     // Measurement names and value labels
     const char *names[] = OUTPUT_VARIABLE_NAMES;
-    lv_obj_t *label_values[2];  // Store references to value labels
+    lv_obj_t *label_values[4];  // Store references to value labels (VIN0, VIN1, VRMSF, VRMSR)
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
         // Name label (left column)
         lv_obj_t *label_name = lv_label_create(scr);
         lv_label_set_text(label_name, names[i]);
@@ -85,11 +90,30 @@ void show_screen()
         printf(".");
 #endif
 
+// Read values from ADC
+        // Read VIN0 (Channel 0)
+        if (ad7091r5_read_one(adc_desc, ADC_VIN0_CHANNEL_NO, &adc_data_input.adc_vin0_raw) == 0) {
+            // Convert raw ADC value to voltage (12-bit ADC, 4.096V reference)
+            adc_data_input.adc_vin0_voltage = ((float)adc_data_input.adc_vin0_raw * ADC_V_REF) / ADC_COUNTER_MAX;
+        }
+
+        // Read VIN1 (Channel 1)
+        if (ad7091r5_read_one(adc_desc, ADC_VIN1_CHANNEL_NO, &adc_data_input.adc_vin1_raw) == 0) {
+            // Convert raw ADC value to voltage (12-bit ADC, 4.096V reference)
+            adc_data_input.adc_vin1_voltage = ((float)adc_data_input.adc_vin1_raw * ADC_V_REF) / ADC_COUNTER_MAX;
+        }
+
+        // Display VIN0 and VIN1 voltage readings (now first in order)
+        powrms_float_to_str(adc_data_input.adc_vin0_voltage, out_text, INTEGER_PRECISION, FLOATING_POINT_PRECISION);
+        lv_label_set_text(label_values[0], out_text);
+        powrms_float_to_str(adc_data_input.adc_vin1_voltage, out_text, INTEGER_PRECISION, FLOATING_POINT_PRECISION);
+        lv_label_set_text(label_values[1], out_text);
+
         if (!update_adc_data()) {
             powrms_float_to_str(adc_data_input.adc_vrmsf, out_text, INTEGER_PRECISION, FLOATING_POINT_PRECISION);
-            lv_label_set_text(label_values[0], out_text);
+            lv_label_set_text(label_values[2], out_text);
             powrms_float_to_str(adc_data_input.adc_vrmsr, out_text, INTEGER_PRECISION, FLOATING_POINT_PRECISION);
-            lv_label_set_text(label_values[1], out_text);
+            lv_label_set_text(label_values[3], out_text);
             lv_timer_handler();  // Process LVGL updates
         }
 
@@ -103,6 +127,10 @@ void show_screen()
             return;
         case 3: // ENTER
             break;
+        case 4:
+            display_entry = DISPLAY_ENTRY_BLANK;
+            lv_obj_del(scr);
+            return;
         default:
             break;
         }
