@@ -169,6 +169,22 @@ int main(void)
 		.use_jesd_fsm = false
 	};
 
+#ifdef JESD_MODE_10
+	tx_jesd_init.octets_per_frame = 1;
+	tx_jesd_init.converters_per_device = 2;
+	tx_jesd_init.device_clk_khz *= 2;
+	tx_jesd_init.lane_clk_khz *= 2;
+
+	tx_adxcvr_init.out_clk_sel = ADXCVR_REFCLK;
+	tx_adxcvr_init.lane_rate_khz *= 2;
+
+	ad9172_param.dac_rate_khz = 2949120;
+	ad9172_param.jesd_link_mode = 10;
+	ad9172_param.dac_interpolation = 1;
+	ad9172_param.channel_interpolation = 1;
+	ad9172_param.clock_output_config = 1;
+#endif
+
 	struct axi_dac_channel chan_spec_dac[4] = {
 		{.dds_frequency_0 = 40000000, .dds_phase_0 = 0, .dds_scale_0 = 50 * 1000},
 		{.dds_frequency_0 = 40000000, .dds_phase_0 = 90000, .dds_scale_0 = 50 * 1000},
