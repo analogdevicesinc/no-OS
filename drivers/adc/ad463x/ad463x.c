@@ -284,7 +284,7 @@ int32_t ad463x_set_ch_gain(struct ad463x_dev *dev, uint8_t ch_idx,
 	int32_t ret;
 	uint32_t g;
 
-	if (gain < 0 || gain > AD463X_GAIN_MAX_VAL_SCALED)
+	if (gain > AD463X_GAIN_MAX_VAL_SCALED)
 		return -EINVAL;
 
 	g = ((gain * 0xFFFF) / AD463X_GAIN_MAX_VAL_SCALED);
@@ -648,9 +648,6 @@ static void ad463x_fill_scale_tbl(struct ad463x_dev *dev)
 	unsigned int i;
 	int64_t tmp2;
 
-	if (!dev)
-		return -EINVAL;
-
 	val2 = dev->real_bits_precision;
 	for (i = 0; i < NO_OS_ARRAY_SIZE(ad463x_gains); i++) {
 		val = (dev->vref * 2) / MILLI;
@@ -759,7 +756,13 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	switch (dev->output_mode) {
 	case AD463X_24_DIFF:
-		dev->real_bits_precision = 24;
+		switch (dev->device_id) {
+		case ID_ADAQ4216:
+			dev->real_bits_precision = 16;
+			break;
+		default:
+			dev->real_bits_precision = 24;
+		}
 		break;
 
 	case AD463X_16_DIFF_8_COM:
@@ -785,7 +788,7 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	dev->read_bytes_no = dev->capture_data_width / 8;
 
-	if (dev->device_id == ID_ADAQ4224) {
+	if (dev->device_id == ID_ADAQ4224 || dev->device_id == ID_ADAQ4216) {
 		dev->has_pgia = true;
 		ad463x_fill_scale_tbl(dev);
 	} else {
