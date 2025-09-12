@@ -38,4 +38,9 @@
 
 //#define IIO_SUPPORT
 
+#define USE_JESD_FSM
+
+// Mode 4 default, uncomment the following line for mode 10
+#define JESD_MODE_10
+
 #endif /* APP_CONFIG_H_ */
