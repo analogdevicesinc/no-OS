@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/power/ltm4686/README.rst

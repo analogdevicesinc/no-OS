@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/max31827-evkit/README.rst

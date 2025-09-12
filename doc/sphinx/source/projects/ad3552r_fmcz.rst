@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/ad3552r_fmcz/README.rst

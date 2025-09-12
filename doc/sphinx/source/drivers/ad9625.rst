@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/adc/ad9625/README.rst

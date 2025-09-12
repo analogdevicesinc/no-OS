@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/adc/ad9208/README.rst

@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/gyro/adxrs290/README.rst

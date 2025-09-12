@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/accel/adxl38x/README.rst

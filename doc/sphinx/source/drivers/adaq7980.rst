@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/adc/adaq7980/README.rst

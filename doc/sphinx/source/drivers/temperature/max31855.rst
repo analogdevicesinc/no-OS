@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/temperature/max31855/README.rst

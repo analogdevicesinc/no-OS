@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/adc/ad7490/README.rst

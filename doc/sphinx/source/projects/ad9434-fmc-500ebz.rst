@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/ad9434-fmc-500ebz/README.rst

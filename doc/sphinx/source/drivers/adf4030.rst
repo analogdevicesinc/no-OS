@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/frequency/adf4030/README.rst

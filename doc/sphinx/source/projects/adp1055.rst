@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/adp1055/README.rst
