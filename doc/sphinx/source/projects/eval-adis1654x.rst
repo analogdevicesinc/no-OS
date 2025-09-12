@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/eval-adis1654x/README.rst

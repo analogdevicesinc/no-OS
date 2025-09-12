@@ -62,25 +62,28 @@ check_sphinx_doc() {
         do
                 if [ $(basename "$file") = "README.rst" ]
                 then
-                        errors_found=0
                         local fn_dir=$(basename "$(dirname "$file")")
                         local sphinx_path="doc/sphinx/source"
                         local top_dir=$(echo "$file" | cut -d'/' -f1)
+                        local second_dir=$(echo "$file" | cut -d'/' -f2)
 
-                        if ! [ -f "$sphinx_path/$top_dir/$fn_dir.rst" ];
-                        then
-                                echo_red "Missing $fn_dir.rst file at $sphinx_path/$top_dir"
-                                errors_found=1
-                        fi
-
-                        if ! grep -q "$top_dir/$fn_dir" "$sphinx_path/${top_dir}_doc.rst"
-                        then
-                                echo_red "Missing $top_dir/$fn_dir link inside $sphinx_path/${top_dir}_doc.rst"
-                                errors_found=1
-                        fi
-
-                        if [ "$errors_found" -eq "1" ]
-                        then
+                        # Check if the corresponding .rst file exists in the expected subdirectory
+                        if [ -f "$sphinx_path/$top_dir/$second_dir/$fn_dir.rst" ]; then
+                                # File exists in the expected subdirectory, now check if category is in toctree
+                                wildcard_pattern="$top_dir/$second_dir/\*"
+                                if ! grep -q "$wildcard_pattern" "$sphinx_path/${top_dir}_doc.rst"; then
+                                        echo_red "Missing wildcard pattern '$wildcard_pattern' in $sphinx_path/${top_dir}_doc.rst"
+                                        exit 1
+                                fi
+                        elif find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | grep -q .; then
+                                # File exists but in wrong subdirectory
+                                actual_location=$(find "$sphinx_path/$top_dir" -name "$fn_dir.rst" -type f | head -1)
+                                expected_location="$sphinx_path/$top_dir/$second_dir/$fn_dir.rst"
+                                echo_red "File $fn_dir.rst found at $actual_location but expected at $expected_location"
+                                exit 1
+                        else
+                                # File doesn't exist at all
+                                echo_red "Missing $fn_dir.rst file under $sphinx_path/$top_dir"
                                 exit 1
                         fi
                 fi

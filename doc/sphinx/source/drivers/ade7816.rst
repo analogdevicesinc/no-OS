@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/meter/ade7816/README.rst

@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/temperature/adt75/README.rst

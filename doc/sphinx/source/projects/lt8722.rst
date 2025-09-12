@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/lt8722/README.rst

@@ -8,111 +8,65 @@ AMPLIFIERS
 ==========
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adl8113
+   drivers/amplifiers/*
 
 ACCELEROMETERS
 ==============
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adxl355
-
-   drivers/adxl38x
+   drivers/accel/*
 
 ANALOG TO DIGITAL CONVERTERS
 ============================
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/ad405x
-
-   drivers/ad7490
-
-   drivers/ad7768
-
-   drivers/ad7768-1
-
-   drivers/ad796x
-
-   drivers/ad9083
-
-   drivers/ad9208
-
-   drivers/adm1177
-
-   drivers/pulsar_adc
-
-   drivers/ad9625
-
-   drivers/adaq7980
-
-   drivers/max9611pmb
+   drivers/adc/*
 
 ADC / DAC
 ==========
 .. toctree::
    :maxdepth: 1
+   :glob:
    
-   drivers/ad74416h
+   drivers/adc-dac/*
 
 AXI CORES
 =========
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/axi_sysid
+   drivers/axi/*
 
 DIGITAL INPUT/OUTPUT
 ==========================
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/max14914
-
-   drivers/max14919
-
-   drivers/max149x6
-
-   drivers/max22190
-
-   drivers/max22196
-
-   drivers/max22200
+   drivers/digital-io/*
 
 DIGITAL TO ANALOG CONVERTERS
 ============================
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/ad8460
-
-   drivers/max22017
-
-   drivers/ad3552r
-
-   drivers/ad9152
+   drivers/dac/*
 
 FREQUENCY GENERATORS
 ====================
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adf4030
-
-   drivers/adf4368
-
-   drivers/adf4377
-
-   drivers/adf4382
-
-   drivers/adf5611
-
-   drivers/admfm2000
-
-   drivers/adf4350
-
-   drivers/ad9523
+   drivers/frequency/*
 
 INERTIAL MEASUREMENT UNITS
 ==========================
@@ -125,123 +79,86 @@ IO-LINK
 =======
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/max22516
+   drivers/io-link/*
 
 LED
 ===
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/max25603
+   drivers/led/*
 
 METER
 =====
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/ade7816
-
-   drivers/ade7913
-
-   drivers/ade9113
+   drivers/meter/*
 
 MUX
 ===
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adg2404
+   drivers/mux/*
 
 RF TRANSCEIVER
 ==============
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/madura
-
-   drivers/talise
+   drivers/rf-transceiver/*
 
 SWITCH
 ======
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adg1712
-
-   drivers/adg1736
+   drivers/switch/*
 
 TEMPERATURE
 ==============
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/ltc2983
-
-   drivers/max31827
-
-   drivers/max31855
-
-   drivers/adt75
+   drivers/temperature/*
 
 POWER MANAGEMENT
 ================
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/ades1754
-
-   drivers/adp1050
-
-   drivers/adp1055
-
-   drivers/adp5055
-
-   drivers/lt3074
-
-   drivers/lt7170
-
-   drivers/lt7182s
-
-   drivers/lt8491
-
-   drivers/lt8722
-
-   drivers/ltc2992
-
-   drivers/ltc4162l
-
-   drivers/ltc4296
-
-   drivers/ltc7841
-
-   drivers/ltc7871
-
-   drivers/ltm4686
-
-   drivers/ltp8800
-
-   drivers/max17851
-
-   drivers/max42500
+   drivers/power/*
 
 POTENTIOMETER
 ================
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/ad5293
+   drivers/potentiometer/*
 
 ETHERNET
 ========
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adin1110
+   drivers/ethernet/*
 
 GYROSCOPES
 ============
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   drivers/adxrs290
+   drivers/gyroscope/*

@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/led/max25603/README.rst
