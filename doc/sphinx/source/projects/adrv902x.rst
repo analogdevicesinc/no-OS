@@ -1,1 +1,0 @@
-.. include:: ../../../../projects/adrv902x/README.rst

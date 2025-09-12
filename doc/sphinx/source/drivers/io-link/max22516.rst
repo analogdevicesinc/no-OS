@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/io-link/max22516/README.rst

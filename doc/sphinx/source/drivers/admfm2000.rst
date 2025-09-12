@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/frequency/admfm2000/README.rst

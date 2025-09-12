@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/adc/max9611pmb/README.rst

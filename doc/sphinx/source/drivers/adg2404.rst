@@ -1,1 +1,0 @@
-.. include:: ../../../../drivers/mux/adg2404/README.rst
