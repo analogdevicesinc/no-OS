@@ -64,6 +64,19 @@
                                 "TARGET_NUM": "stm32f756",
                                 "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
                         }
+                },
+                {
+                        "name": "adin1110ebz",
+                        "description": "ADIN1110-EBZ board",
+                        "inherits": "default",
+                        "cacheVariables": {
+                                "BOARD": "adin1110ebz",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "stm32",
+                                "TARGET": "stm32l4",
+                                "TARGET_NUM": "stm32l4",
+                                "BOARD_CONFIG_FILE": "adin1110ebz_defconfig"
+                        }
                 }
         ],
         "buildPresets": [
