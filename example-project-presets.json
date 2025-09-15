@@ -1,0 +1,87 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "comment": "Example preset file for out-of-tree projects. Copy this to your project directory and modify as needed.",
+
+    "configurePresets": [
+        {
+            "name": "default",
+            "description": "Default config",
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "max78000_fthr-fetchcontent",
+            "description": "MAX78000 with FetchContent no-OS",
+            "inherits": "default",
+            "toolchainFile": "_deps/no-os-core-src/drivers/platform/maxim/toolchain.cmake",
+            "cacheVariables": {
+                "BOARD": "MAX78000_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "OFF",
+                "PLATFORM": "maxim",
+                "TARGET": "max78000",
+                "TARGET_NUM": "78000",
+                "DEFAULT_DEFCONFIG": "board_configs/maxim/max78000_fthr_defconfig",
+                "PROJECT_DEFCONFIG": "project.conf"
+            }
+        },
+        {
+            "name": "max78000_fthr-local",
+            "description": "MAX78000 with local no-OS (set NO_OS_PATH env var)",
+            "inherits": "default",
+            "toolchainFile": "${env:NO_OS_PATH}/drivers/platform/maxim/toolchain.cmake",
+            "cacheVariables": {
+                "BOARD": "MAX78000_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "OFF",
+                "PLATFORM": "maxim",
+                "TARGET": "max78000",
+                "TARGET_NUM": "78000",
+                "DEFAULT_DEFCONFIG": "${env:NO_OS_PATH}/board_configs/maxim/max78000_fthr_defconfig",
+                "PROJECT_DEFCONFIG": "project.conf",
+                "NO_OS_PATH": "${env:NO_OS_PATH}"
+            }
+        },
+        {
+            "name": "max32650_fthr-fetchcontent",
+            "description": "MAX32650 with FetchContent no-OS",
+            "inherits": "default",
+            "toolchainFile": "_deps/no-os-core-src/drivers/platform/maxim/toolchain.cmake",
+            "cacheVariables": {
+                "BOARD": "MAX32650_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32650",
+                "TARGET_NUM": "32650",
+                "DEFAULT_DEFCONFIG": "board_configs/maxim/max32650_fthr_defconfig",
+                "PROJECT_DEFCONFIG": "project.conf"
+            }
+        },
+        {
+            "name": "max32650_fthr-local",
+            "description": "MAX32650 with local no-OS (set NO_OS_PATH env var)",
+            "inherits": "default",
+            "toolchainFile": "${env:NO_OS_PATH}/drivers/platform/maxim/toolchain.cmake",
+            "cacheVariables": {
+                "BOARD": "MAX32650_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32650",
+                "TARGET_NUM": "32650",
+                "DEFAULT_DEFCONFIG": "${env:NO_OS_PATH}/board_configs/maxim/max32650_fthr_defconfig",
+                "PROJECT_DEFCONFIG": "project.conf",
+                "NO_OS_PATH": "${env:NO_OS_PATH}"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "my_project",
+            "displayName": "My Project",
+            "description": "Build my project (change target name as needed)",
+            "targets": ["my_project"]
+        }
+    ]
+}
