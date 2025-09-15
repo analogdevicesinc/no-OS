@@ -123,8 +123,6 @@ SWITCH
 
    drivers/switch/*
 
-   drivers/adgm3121
-
 TEMPERATURE
 ==============
 .. toctree::
