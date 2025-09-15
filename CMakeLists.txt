@@ -9,29 +9,33 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
     message(STATUS "In-tree build detected")
     set(NO_OS_TOOLCHAIN_PATH "drivers/platform/${PLATFORM}/toolchain.cmake")
     set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
-    set(PROJECT_CONF_PATH "${PROJECT_NAME}/project.conf")
 
 elseif(EXISTS "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src")
     # Out-of-tree build with FetchContent
     message(STATUS "Out-of-tree build with FetchContent detected")
     set(NO_OS_TOOLCHAIN_PATH "_deps/no-os-core-src/drivers/platform/${PLATFORM}/toolchain.cmake")
     set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
-    set(PROJECT_CONF_PATH "project.conf")
 
 elseif(DEFINED NO_OS_PATH AND EXISTS "${NO_OS_PATH}")
     # Out-of-tree build with local no-OS
     message(STATUS "Out-of-tree build with local no-OS: ${NO_OS_PATH}")
     set(NO_OS_TOOLCHAIN_PATH "${NO_OS_PATH}/drivers/platform/${PLATFORM}/toolchain.cmake")
     set(NO_OS_DEFCONFIG_PATH "${NO_OS_PATH}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
-    set(PROJECT_CONF_PATH "project.conf")
 endif()
 
-# Set DEFAULT_DEFCONFIG and PROJECT_DEFCONFIG based on detected paths
+# Set DEFAULT_DEFCONFIG based on detected paths
 if(DEFINED NO_OS_DEFCONFIG_PATH)
     set(DEFAULT_DEFCONFIG "${NO_OS_DEFCONFIG_PATH}")
 endif()
-if(DEFINED PROJECT_CONF_PATH AND DEFINED PROJECT_NAME)
-    set(PROJECT_DEFCONFIG "${PROJECT_CONF_PATH}")
+
+# Extract PROJECT_NAME from PROJECT_DEFCONFIG path if provided
+if(DEFINED PROJECT_DEFCONFIG)
+    # Extract project name from path like "ftc_workshop/project.conf" -> "ftc_workshop"
+    get_filename_component(PROJECT_DEFCONFIG_DIR "${PROJECT_DEFCONFIG}" DIRECTORY)
+    if(NOT "${PROJECT_DEFCONFIG_DIR}" STREQUAL "")
+        set(PROJECT_NAME "${PROJECT_DEFCONFIG_DIR}")
+        message(STATUS "Extracted PROJECT_NAME '${PROJECT_NAME}' from PROJECT_DEFCONFIG '${PROJECT_DEFCONFIG}'")
+    endif()
 endif()
 
 # Set toolchain file if not already set
@@ -40,37 +44,7 @@ if(DEFINED NO_OS_TOOLCHAIN_PATH AND NOT CMAKE_TOOLCHAIN_FILE)
 endif()
 
 # Board compatibility checking
-if(DEFINED PROJECT_NAME)
-    # Define compatibility matrix
-    set(PROJECT_SUPPORTED_PLATFORMS_iio_demo "maxim;stm32;aducm3029;pico;linux;xilinx")
-    set(PROJECT_SUPPORTED_PLATFORMS_eval-adxl355-pmdz "maxim;stm32;aducm3029;pico")
-    set(PROJECT_SUPPORTED_PLATFORMS_ftc_workshop "maxim")
-
-    # Check if project supports the selected platform
-    set(SUPPORTED_PLATFORMS_VAR "PROJECT_SUPPORTED_PLATFORMS_${PROJECT_NAME}")
-    if(DEFINED ${SUPPORTED_PLATFORMS_VAR})
-        list(FIND ${SUPPORTED_PLATFORMS_VAR} "${PLATFORM}" PLATFORM_INDEX)
-        if(PLATFORM_INDEX EQUAL -1)
-            message(FATAL_ERROR
-                "❌ Board compatibility error!\n"
-                "   Project: ${PROJECT_NAME}\n"
-                "   Platform: ${PLATFORM}\n"
-                "   Board: ${BOARD}\n\n"
-                "Project '${PROJECT_NAME}' does not support platform '${PLATFORM}'.\n"
-                "Supported platforms: ${${SUPPORTED_PLATFORMS_VAR}}\n\n"
-                "Board compatibility matrix:\n"
-                "  iio_demo: maxim, stm32, aducm3029, pico, linux, xilinx\n"
-                "  eval-adxl355-pmdz: maxim, stm32, aducm3029, pico\n"
-                "  ftc_workshop: maxim ONLY\n\n"
-                "Available boards by platform:\n"
-                "  maxim: max78000_fthr, max32650_fthr, apard32690\n"
-                "  stm32: stm32f756_nucleo\n"
-            )
-        else()
-            message(STATUS "✅ Board compatibility: ${PROJECT_NAME} supports ${PLATFORM} platform")
-        endif()
-    endif()
-endif()
+include(BoardCompatibility)
 
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
@@ -147,7 +121,7 @@ target_include_directories(
 list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
 if (DEFINED PROJECT_DEFCONFIG)
-  message(ERROR "Adding project defconfig")
+  message(STATUS "Adding project defconfig: ${PROJECT_DEFCONFIG}")
   if(${NATIVE_BUILD})
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_CURRENT_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
     list(APPEND GENERATE_CONFIG_ARGS --native)
