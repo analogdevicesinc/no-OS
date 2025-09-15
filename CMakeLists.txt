@@ -70,7 +70,7 @@ else()
   set(IS_FRESH_CONFIGURE FALSE)
 endif()
 
-message(STATUS "🦨🦨🦨 No-OS build 🦨🦨🦨")
+message(STATUS "No-OS build")
 
 find_package (Python3 COMPONENTS Interpreter Development)
 find_package(Git)
