@@ -3,6 +3,42 @@ cmake_minimum_required(VERSION 3.27)
 # list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# Auto-detect build context and set toolchain paths for unified presets
+if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
+    # In-tree build (full no-OS repo)
+    message(STATUS "In-tree build detected")
+    set(NO_OS_TOOLCHAIN_PATH "drivers/platform/${PLATFORM}/toolchain.cmake")
+    set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
+    set(PROJECT_CONF_PATH "${PROJECT_NAME}/project.conf")
+
+elseif(EXISTS "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src")
+    # Out-of-tree build with FetchContent
+    message(STATUS "Out-of-tree build with FetchContent detected")
+    set(NO_OS_TOOLCHAIN_PATH "_deps/no-os-core-src/drivers/platform/${PLATFORM}/toolchain.cmake")
+    set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
+    set(PROJECT_CONF_PATH "project.conf")
+
+elseif(DEFINED NO_OS_PATH AND EXISTS "${NO_OS_PATH}")
+    # Out-of-tree build with local no-OS
+    message(STATUS "Out-of-tree build with local no-OS: ${NO_OS_PATH}")
+    set(NO_OS_TOOLCHAIN_PATH "${NO_OS_PATH}/drivers/platform/${PLATFORM}/toolchain.cmake")
+    set(NO_OS_DEFCONFIG_PATH "${NO_OS_PATH}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
+    set(PROJECT_CONF_PATH "project.conf")
+endif()
+
+# Set DEFAULT_DEFCONFIG and PROJECT_DEFCONFIG based on detected paths
+if(DEFINED NO_OS_DEFCONFIG_PATH)
+    set(DEFAULT_DEFCONFIG "${NO_OS_DEFCONFIG_PATH}")
+endif()
+if(DEFINED PROJECT_CONF_PATH AND DEFINED PROJECT_NAME)
+    set(PROJECT_DEFCONFIG "${PROJECT_CONF_PATH}")
+endif()
+
+# Set toolchain file if not already set
+if(DEFINED NO_OS_TOOLCHAIN_PATH AND NOT CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
+endif()
+
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 

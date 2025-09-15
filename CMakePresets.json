@@ -14,8 +14,7 @@
                 },
                 {
                         "name": "max78000_fthr",
-                        "description": "Config for MAX78000 feather board",
-                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
+                        "description": "MAX78000 feather board (auto-detects in-tree/out-of-tree)",
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "MAX78000_FTHR",
@@ -23,13 +22,12 @@
                                 "PLATFORM": "maxim",
                                 "TARGET": "max78000",
                                 "TARGET_NUM": "78000",
-                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/max78000_fthr_defconfig"
+                                "BOARD_CONFIG_FILE": "max78000_fthr_defconfig"
                         }
                 },
                 {
                         "name": "max32650_fthr",
-                        "description": "Config for MAX78000 feather board",
-                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
+                        "description": "MAX32650 feather board (auto-detects in-tree/out-of-tree)",
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "MAX32650_FTHR",
@@ -37,13 +35,12 @@
                                 "PLATFORM": "maxim",
                                 "TARGET": "max32650",
                                 "TARGET_NUM": "32650",
-                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/max32650_fthr_defconfig"
+                                "BOARD_CONFIG_FILE": "max32650_fthr_defconfig"
                         }
                 },
                 {
                         "name": "apard32690",
-                        "description": "Config for APARD32690 board",
-                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake",
+                        "description": "APARD32690 board (auto-detects in-tree/out-of-tree)",
                         "binaryDir": "${sourceDir}/build",
                         "inherits": "default",
                         "cacheVariables": {
@@ -52,13 +49,12 @@
                                 "PLATFORM": "maxim",
                                 "TARGET": "max32690",
                                 "TARGET_NUM": "32690",
-                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/maxim/apard32690_defconfig"
+                                "BOARD_CONFIG_FILE": "apard32690_defconfig"
                         }
                 },
                 {
                         "name": "stm32f756_nucleo",
-                        "description": "Config for STM32F756",
-                        "toolchainFile": "${sourceDir}/drivers/platform/stm32/toolchain.cmake",
+                        "description": "STM32F756 Nucleo board (auto-detects in-tree/out-of-tree)",
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "sdp-ck1z",
@@ -66,7 +62,7 @@
                                 "PLATFORM": "stm32",
                                 "TARGET": "stm32f756",
                                 "TARGET_NUM": "stm32f756",
-                                "DEFAULT_DEFCONFIG": "${sourceDir}/board_configs/stm32/stm32f756_nucleo_defconfig"
+                                "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
                         }
                 }
         ],
@@ -76,6 +72,20 @@
                         "displayName": "Project Blinky (for apard32690)",
                         "configurePreset": "apard32690",
                         "targets": [ "no-os" ]
+                },
+                {
+                        "name": "iio_demo",
+                        "displayName": "IIO Demo Project",
+                        "description": "Build IIO Demo project (requires prior configure)",
+                        "inherits": "default",
+                        "targets": [ "iio_demo" ]
+                },
+                {
+                        "name": "ftc_workshop",
+                        "displayName": "FTC Workshop Project",
+                        "description": "Build FTC Workshop project (requires prior configure)",
+                        "inherits": "default",
+                        "targets": [ "ftc_workshop" ]
                 }
         ],
         "workflowPresets": [
