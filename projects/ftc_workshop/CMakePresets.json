@@ -5,7 +5,7 @@
         "minor": 28,
         "patch": 0
     },
-    "comment": "IIO Demo project presets - supports: maxim, stm32, aducm3029, pico, linux, xilinx",
+    "comment": "FTC Workshop project presets - supports: maxim ONLY",
 
     "configurePresets": [
         {
@@ -54,28 +54,14 @@
                 "TARGET_NUM": "32690",
                 "BOARD_CONFIG_FILE": "apard32690_defconfig"
             }
-        },
-        {
-            "name": "stm32f756_nucleo",
-            "displayName": "STM32F756 Nucleo (STM32)",
-            "description": "STM32F756 Nucleo board - auto-detects FetchContent vs local no-OS",
-            "inherits": "default",
-            "cacheVariables": {
-                "BOARD": "sdp-ck1z",
-                "USE_VENDOR_TOOLCHAIN": "OFF",
-                "PLATFORM": "stm32",
-                "TARGET": "stm32f756",
-                "TARGET_NUM": "stm32f756",
-                "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
-            }
         }
     ],
     "buildPresets": [
         {
-            "name": "iio_demo",
-            "displayName": "IIO Demo",
-            "description": "Build the IIO Demo application",
-            "targets": ["iio_demo"]
+            "name": "ftc_workshop",
+            "displayName": "FTC Workshop",
+            "description": "Build the FTC Workshop application",
+            "targets": ["ftc_workshop"]
         }
     ]
 }
