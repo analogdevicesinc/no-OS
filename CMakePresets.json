@@ -10,7 +10,7 @@
                 {
                         "name": "default",
                         "description": "Default config",
-                        "generator": "Unix Makefiles"
+                        "generator": "Ninja"
                 },
                 {
                         "name": "max78000_fthr",
