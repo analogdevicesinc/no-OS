@@ -1,5 +1,5 @@
-config load /mnt/drive/testing/no-OS/projects/eval-adxl355-pmdz/stm32f756_nucleo.ioc
-project path /mnt/drive/testing/no-OS/projects/eval-adxl355-pmdz/stm32f756_nucleo_build
+config load /mnt/drive/testing/no-OS/projects/eval-adxl355-pmdz/adin1110ebz.ioc
+project path /mnt/drive/testing/no-OS/projects/eval-adxl355-pmdz/adin1110ebz_build
 project name app
 project toolchain CMake
 SetCopyLibrary "copy all"
