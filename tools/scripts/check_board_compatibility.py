@@ -80,7 +80,7 @@ class BoardCompatibilityChecker:
                 boards_str = ", ".join(boards)
                 print(f"{project:<25} | {boards_str}")
             else:
-                print(f"{project:<25} | ⚠️  No boards.conf (accepts any)")
+                print(f"{project:<25} | ⚠️  No boards/ directory (accepts any)")
 
         print()
         print(f"Available boards: {', '.join(all_boards)}")
@@ -94,7 +94,7 @@ class BoardCompatibilityChecker:
 
         md = ["# Board Compatibility Matrix", ""]
         md.append("This matrix shows which boards are supported by each project.")
-        md.append("Generated automatically from `projects/*/boards.conf` files.")
+        md.append("Generated automatically from `projects/*/boards/*.conf` files.")
         md.append("")
 
         # Summary table
@@ -171,7 +171,7 @@ def main():
             if supported:
                 print(f"Supported boards: {', '.join(supported)}")
             else:
-                print("No boards.conf file found - project accepts any board")
+                print("No boards/ directory found - project accepts any board")
             sys.exit(1)
 
     if args.generate_docs:
