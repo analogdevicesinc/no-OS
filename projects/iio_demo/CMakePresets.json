@@ -1,0 +1,81 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "comment": "IIO Demo project presets - auto-detects build context in CMake",
+
+    "configurePresets": [
+        {
+            "name": "default",
+            "description": "Default config",
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "max78000_fthr",
+            "displayName": "MAX78000 Feather",
+            "description": "MAX78000 feather board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "MAX78000_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "OFF",
+                "PLATFORM": "maxim",
+                "TARGET": "max78000",
+                "TARGET_NUM": "78000",
+                "BOARD_CONFIG_FILE": "max78000_fthr_defconfig"
+            }
+        },
+        {
+            "name": "max32650_fthr",
+            "displayName": "MAX32650 Feather",
+            "description": "MAX32650 feather board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "MAX32650_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32650",
+                "TARGET_NUM": "32650",
+                "BOARD_CONFIG_FILE": "max32650_fthr_defconfig"
+            }
+        },
+        {
+            "name": "apard32690",
+            "displayName": "APARD32690",
+            "description": "APARD32690 board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "APARD32690",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32690",
+                "TARGET_NUM": "32690",
+                "BOARD_CONFIG_FILE": "apard32690_defconfig"
+            }
+        },
+        {
+            "name": "stm32f756_nucleo",
+            "displayName": "STM32F756 Nucleo",
+            "description": "STM32F756 Nucleo board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "sdp-ck1z",
+                "USE_VENDOR_TOOLCHAIN": "OFF",
+                "PLATFORM": "stm32",
+                "TARGET": "stm32f756",
+                "TARGET_NUM": "stm32f756",
+                "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "iio_demo",
+            "displayName": "IIO Demo",
+            "description": "Build the IIO Demo application",
+            "targets": ["iio_demo"]
+        }
+    ]
+}
