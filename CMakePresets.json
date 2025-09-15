@@ -17,7 +17,7 @@
                         "description": "MAX78000 feather board (auto-detects in-tree/out-of-tree)",
                         "inherits": "default",
                         "cacheVariables": {
-                                "BOARD": "MAX78000_FTHR",
+                                "BOARD": "max78000_fthr",
                                 "USE_VENDOR_TOOLCHAIN": "OFF",
                                 "PLATFORM": "maxim",
                                 "TARGET": "max78000",
@@ -30,7 +30,7 @@
                         "description": "MAX32650 feather board (auto-detects in-tree/out-of-tree)",
                         "inherits": "default",
                         "cacheVariables": {
-                                "BOARD": "MAX32650_FTHR",
+                                "BOARD": "max32650_fthr",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
                                 "PLATFORM": "maxim",
                                 "TARGET": "max32650",
@@ -44,7 +44,7 @@
                         "binaryDir": "${sourceDir}/build",
                         "inherits": "default",
                         "cacheVariables": {
-                                "BOARD": "APARD32690",
+                                "BOARD": "apard32690",
                                 "USE_VENDOR_TOOLCHAIN": "ON",
                                 "PLATFORM": "maxim",
                                 "TARGET": "max32690",
@@ -57,7 +57,7 @@
                         "description": "STM32F756 Nucleo board (auto-detects in-tree/out-of-tree) - NOT compatible with ftc_workshop",
                         "inherits": "default",
                         "cacheVariables": {
-                                "BOARD": "sdp-ck1z",
+                                "BOARD": "stm32f756_nucleo",
                                 "USE_VENDOR_TOOLCHAIN": "OFF",
                                 "PLATFORM": "stm32",
                                 "TARGET": "stm32f756",
