@@ -102,6 +102,26 @@ The system auto-detects the build context:
 - `example-project-presets.json` - Template for out-of-tree projects
 - `UNIFIED_PRESETS_README.md` - This documentation
 
+## 🎯 Board Compatibility Enforcement
+
+**NEW**: The system now automatically enforces board compatibility! Each project only supports a subset of available boards:
+
+| Project | Supported Boards | Notes |
+|---------|------------------|-------|
+| **iio_demo** | max78000_fthr, max32650_fthr, apard32690, stm32f756_nucleo | ✅ Most compatible |
+| **eval-adxl355-pmdz** | max78000_fthr, max32650_fthr, apard32690, stm32f756_nucleo | ❌ No linux/xilinx |
+| **ftc_workshop** | max78000_fthr, max32650_fthr, apard32690 | ❌ Maxim only |
+
+If you try an invalid combination, you'll get a clear error:
+```bash
+cmake --preset stm32f756_nucleo -DPROJECT_NAME=ftc_workshop
+# ❌ Board compatibility error!
+#    Project 'ftc_workshop' does not support platform 'stm32'
+#    Supported platforms: maxim
+```
+
+See [BOARD_COMPATIBILITY.md](BOARD_COMPATIBILITY.md) for the complete matrix and details.
+
 ## Testing
 
 Test the workflow with:
@@ -116,4 +136,8 @@ cmake --list-presets=build
 
 # Test manual configuration
 cmake -B test-build --preset max78000_fthr -DPROJECT_NAME=iio_demo
+
+# Test compatibility enforcement
+cmake --preset stm32f756_nucleo -DPROJECT_NAME=ftc_workshop  # Should fail
+cmake --preset max78000_fthr -DPROJECT_NAME=ftc_workshop     # Should succeed
 ```

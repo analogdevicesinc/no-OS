@@ -9,19 +9,28 @@ PROJECT=${2:-iio_demo}
 TARGET=${3:-}
 CONFIG=${4:-}
 
-if [ "$#" -lt 1 ]; then
+# Board compatibility matrix
+declare -A PROJECT_BOARDS
+PROJECT_BOARDS[iio_demo]="max78000_fthr max32650_fthr apard32690 stm32f756_nucleo"
+PROJECT_BOARDS[eval-adxl355-pmdz]="max78000_fthr max32650_fthr apard32690 stm32f756_nucleo"
+PROJECT_BOARDS[ftc_workshop]="max78000_fthr max32650_fthr apard32690"
+
+show_help() {
     echo "Usage: $0 <board> [project] [target] [config]"
     echo ""
-    echo "Available boards:"
-    echo "  max78000_fthr     - MAX78000 feather board"
-    echo "  max32650_fthr     - MAX32650 feather board"
-    echo "  apard32690        - APARD32690 board"
-    echo "  stm32f756_nucleo  - STM32F756 Nucleo board"
+    echo "📋 Board Compatibility Matrix:"
     echo ""
-    echo "Available projects:"
-    echo "  iio_demo               - IIO Demo project (default)"
-    echo "  eval-adxl355-pmdz      - ADXL355 PMDZ project (multiple targets available)"
-    echo "  ftc_workshop           - FTC Workshop project"
+    echo "Project               | Supported Boards"
+    echo "----------------------|------------------------------------------"
+    echo "iio_demo              | max78000_fthr max32650_fthr apard32690 stm32f756_nucleo"
+    echo "eval-adxl355-pmdz     | max78000_fthr max32650_fthr apard32690 stm32f756_nucleo"
+    echo "ftc_workshop          | max78000_fthr max32650_fthr apard32690 (Maxim only)"
+    echo ""
+    echo "Board Details:"
+    echo "  max78000_fthr     - MAX78000 feather board (Maxim)"
+    echo "  max32650_fthr     - MAX32650 feather board (Maxim)"
+    echo "  apard32690        - APARD32690 board (Maxim)"
+    echo "  stm32f756_nucleo  - STM32F756 Nucleo board (STM32)"
     echo ""
     echo "ADXL355 targets (when project=eval-adxl355-pmdz):"
     echo "  dummy                  - Dummy example (default)"
@@ -33,7 +42,16 @@ if [ "$#" -lt 1 ]; then
     echo "  $0 max78000_fthr iio_demo"
     echo "  $0 max32650_fthr eval-adxl355-pmdz dummy"
     echo "  $0 apard32690 eval-adxl355-pmdz iio project.conf"
-    echo "  $0 stm32f756_nucleo ftc_workshop"
+    echo "  $0 stm32f756_nucleo iio_demo  # Note: ftc_workshop not supported on STM32"
+}
+
+if [ "$#" -lt 1 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    show_help
+    exit 1
+fi
+
+# Check board compatibility
+if ! check_compatibility "$PROJECT" "$BOARD"; then
     exit 1
 fi
 
