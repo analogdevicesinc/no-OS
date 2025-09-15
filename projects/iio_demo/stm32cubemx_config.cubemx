@@ -1,0 +1,8 @@
+config load /mnt/drive/testing/no-OS/projects/iio_demo/stm32f756_nucleo.ioc
+project path /mnt/drive/testing/no-OS/projects/iio_demo/stm32f756_nucleo_build
+project name app
+project toolchain CMake
+SetCopyLibrary "copy all"
+SetStructure Advanced
+project generate
+exit
