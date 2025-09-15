@@ -28,13 +28,25 @@ if(DEFINED NO_OS_DEFCONFIG_PATH)
     set(DEFAULT_DEFCONFIG "${NO_OS_DEFCONFIG_PATH}")
 endif()
 
-# Extract PROJECT_NAME from PROJECT_DEFCONFIG path if provided
-if(DEFINED PROJECT_DEFCONFIG)
-    # Extract project name from path like "ftc_workshop/project.conf" -> "ftc_workshop"
-    get_filename_component(PROJECT_DEFCONFIG_DIR "${PROJECT_DEFCONFIG}" DIRECTORY)
-    if(NOT "${PROJECT_DEFCONFIG_DIR}" STREQUAL "")
-        set(PROJECT_NAME "${PROJECT_DEFCONFIG_DIR}")
-        message(STATUS "Extracted PROJECT_NAME '${PROJECT_NAME}' from PROJECT_DEFCONFIG '${PROJECT_DEFCONFIG}'")
+# Handle PROJECT_DEFCONFIG based on build context
+if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
+    # In-tree build: Extract PROJECT_NAME from PROJECT_DEFCONFIG path
+    if(DEFINED PROJECT_DEFCONFIG)
+        get_filename_component(PROJECT_DEFCONFIG_DIR "${PROJECT_DEFCONFIG}" DIRECTORY)
+        if(NOT "${PROJECT_DEFCONFIG_DIR}" STREQUAL "")
+            set(PROJECT_NAME "${PROJECT_DEFCONFIG_DIR}")
+            message(STATUS "Extracted PROJECT_NAME '${PROJECT_NAME}' from PROJECT_DEFCONFIG '${PROJECT_DEFCONFIG}'")
+        endif()
+    endif()
+else()
+    # Out-of-tree build: Check for project.conf or use override
+    if(NOT DEFINED PROJECT_DEFCONFIG)
+        if(EXISTS "${CMAKE_SOURCE_DIR}/project.conf")
+            set(PROJECT_DEFCONFIG "project.conf")
+            message(STATUS "Using default project.conf for out-of-tree build")
+        endif()
+    else()
+        message(STATUS "Using custom PROJECT_DEFCONFIG: ${PROJECT_DEFCONFIG}")
     endif()
 endif()
 
