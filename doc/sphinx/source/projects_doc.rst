@@ -60,6 +60,10 @@ EVAL BOARDS
 
    projects/eval/*
 
+   
+
+   projects/ad-acevsecrdset-sl
+
 DIGITAL-IO
 ==========
 .. toctree::
