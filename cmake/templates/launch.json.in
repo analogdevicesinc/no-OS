@@ -9,6 +9,21 @@
             "executable": "@ELF_PATH@",
             "device": "@TARGET@",
             "runToEntryPoint": "main"
+        },
+        {
+            "name": "OpenOCD Debug",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "openocd",
+            "executable": "@ELF_PATH@",@OPENOCD_PATH_CONFIG@
+            "configFiles": [
+                "@OPENOCD_CONFIG@"
+            ],
+            "searchDir": [
+                "@OPENOCD_SEARCH@"
+            ],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none"
         }
     ]
 }
