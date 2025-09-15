@@ -3,7 +3,16 @@
 
 # Function to read supported boards from a project's boards/ directory
 function(load_project_boards PROJECT_NAME OUTPUT_VAR)
-    set(BOARDS_DIR "${CMAKE_SOURCE_DIR}/projects/${PROJECT_NAME}/boards")
+    # For out-of-tree builds, look in current source directory
+    # For in-tree builds, look in projects/PROJECT_NAME/boards
+    if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
+        # In-tree build
+        set(BOARDS_DIR "${CMAKE_SOURCE_DIR}/projects/${PROJECT_NAME}/boards")
+    else()
+        # Out-of-tree build
+        set(BOARDS_DIR "${CMAKE_SOURCE_DIR}/boards")
+    endif()
+
     set(SUPPORTED_BOARDS "")
 
     if(EXISTS "${BOARDS_DIR}" AND IS_DIRECTORY "${BOARDS_DIR}")
@@ -22,7 +31,15 @@ endfunction()
 
 # Function to load board-specific configuration
 function(load_board_config PROJECT_NAME BOARD_NAME)
-    set(BOARD_CONFIG_FILE "${CMAKE_SOURCE_DIR}/projects/${PROJECT_NAME}/boards/${BOARD_NAME}.conf")
+    # For out-of-tree builds, look in current source directory
+    # For in-tree builds, look in projects/PROJECT_NAME/boards
+    if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
+        # In-tree build
+        set(BOARD_CONFIG_FILE "${CMAKE_SOURCE_DIR}/projects/${PROJECT_NAME}/boards/${BOARD_NAME}.conf")
+    else()
+        # Out-of-tree build
+        set(BOARD_CONFIG_FILE "${CMAKE_SOURCE_DIR}/boards/${BOARD_NAME}.conf")
+    endif()
 
     if(EXISTS "${BOARD_CONFIG_FILE}")
         # Read the board config file and set variables
