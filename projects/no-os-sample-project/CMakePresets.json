@@ -1,0 +1,44 @@
+{
+        "version": 8,
+        "cmakeMinimumRequired": {
+                "major": 3,
+                "minor": 28,
+                "patch": 0
+        },
+
+        "configurePresets": [
+                {
+                        "name": "default",
+                        "description": "Default config",
+                        "toolchainFile": "${sourceDir}/drivers/platform/maxim/toolchain.cmake"
+                },
+                {
+                        "name": "apard32690",
+                        "description": "APARD32690 board (out-of-tree build with FetchContent)",
+                        "binaryDir": "${sourceDir}/build",
+                        "toolchainFile": "_deps/no-os-core-src/drivers/platform/maxim/toolchain.cmake",
+                        "cacheVariables": {
+                                "BOARD": "apard32690",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "maxim",
+                                "TARGET": "max32690",
+                                "TARGET_NUM": "32690",
+                                "BOARD_CONFIG_FILE": "apard32690_defconfig"
+                        }
+                },
+                {
+                        "name": "stm32f756_nucleo",
+                        "description": "STM32F756 Nucleo board (out-of-tree build with FetchContent)",
+                        "binaryDir": "${sourceDir}/build",
+                        "toolchainFile": "_deps/no-os-core-src/drivers/platform/stm32/toolchain.cmake",
+                        "cacheVariables": {
+                                "BOARD": "stm32f756_nucleo",
+                                "USE_VENDOR_TOOLCHAIN": "OFF",
+                                "PLATFORM": "stm32",
+                                "TARGET": "stm32f756",
+                                "TARGET_NUM": "stm32f756",
+                                "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+                        }
+                }
+        ]
+}
