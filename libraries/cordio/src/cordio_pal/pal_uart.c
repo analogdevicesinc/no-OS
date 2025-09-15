@@ -38,6 +38,7 @@
 *******************************************************************************/
 // #include "common_data.h"
 #include "no_os_uart.h"
+#include "no_os_util.h"
 #include "pal_uart.h"
 #include "maxim_uart.h"
 

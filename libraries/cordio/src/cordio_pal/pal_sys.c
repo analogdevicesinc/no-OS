@@ -61,12 +61,12 @@ void PalSysAssertTrap()
 
 void PalEnterCs()
 {
-	__disable_irq();
+	// __disable_irq();
 }
 
 void PalExitCs()
 {
-	__enable_irq();
+	// __enable_irq();
 }
 
 void PalSysInit()
