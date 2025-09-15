@@ -62,14 +62,14 @@ foreach(src_dir ${CORDIO_SRC_DIRS})
 endforeach()
 
 # Add specific platform sources
-if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32655/sources/pal_crypto.c)
-    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32655/sources/pal_crypto.c)
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_crypto.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_crypto.c)
 endif()
-if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32655/sources/pal_timer.c)
-    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32655/sources/pal_timer.c)
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_timer.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_timer.c)
 endif()
-if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32655/sources/pal_cfg.c)
-    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32655/sources/pal_cfg.c)
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_cfg.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_cfg.c)
 endif()
 
 # Remove ignored files
@@ -103,7 +103,10 @@ target_compile_definitions(no-os PRIVATE
 )
 
 # Add compiler flags
-target_compile_options(no-os PRIVATE -fomit-frame-pointer)
+target_compile_options(no-os PRIVATE -fomit-frame-pointer -fno-common)
+
+target_link_libraries(no-os ${MAXIM_LIBRARIES}/BlePhy/MAX32690/libphy_hard.a)
+target_link_libraries(no-os m)
 
 # Link cordio library to no-os target
 # target_link_libraries(no-os cordio)

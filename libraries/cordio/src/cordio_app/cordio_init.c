@@ -156,8 +156,8 @@ static void mainWsfInit(void)
 	WsfHeapAlloc(memUsed);
 	WsfCsExit();
 
-	WsfOsInit();
-	WsfTimerInit();
+	// WsfOsInit();
+	// WsfTimerInit();
 #if (WSF_TOKEN_ENABLED == TRUE) || (WSF_TRACE_ENABLED == TRUE)
 	WsfTraceRegisterHandler(WsfBufIoWrite);
 	WsfTraceEnable(TRUE);
@@ -206,14 +206,14 @@ int cordio_init(void)
 {
 	mainWsfInit();
 
-	while (1) {
-		/* Run the WSF OS */
-		wsfOsDispatcher();
+	// while (1) {
+	// 	/* Run the WSF OS */
+	// 	wsfOsDispatcher();
 
-		if (!WsfOsActive()) {
-			/* No WSF tasks are active, optionally sleep */
-		}
-	}
+	// 	if (!WsfOsActive()) {
+	// 		/* No WSF tasks are active, optionally sleep */
+	// 	}
+	// }
 
 	return 0;
 }
