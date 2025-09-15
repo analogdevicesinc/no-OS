@@ -1,0 +1,83 @@
+cmake_minimum_required(VERSION 3.28)
+
+# Auto-detect build context and include no-OS
+if(DEFINED NO_OS_PATH AND EXISTS "${NO_OS_PATH}")
+    # Out-of-tree build with local no-OS
+    message(STATUS "Using local no-OS from: ${NO_OS_PATH}")
+    set(CMAKE_TOOLCHAIN_FILE ${NO_OS_PATH}/drivers/platform/${PLATFORM}/toolchain.cmake)
+    add_subdirectory(${NO_OS_PATH} ${CMAKE_BINARY_DIR}/no-os-core-build)
+
+elseif(EXISTS "${CMAKE_SOURCE_DIR}/../../drivers")
+    # In-tree build (project is in projects/ subdirectory)
+    message(STATUS "In-tree build detected")
+    set(NO_OS_ROOT "${CMAKE_SOURCE_DIR}/../..")
+    set(CMAKE_TOOLCHAIN_FILE ${NO_OS_ROOT}/drivers/platform/${PLATFORM}/toolchain.cmake)
+    add_subdirectory(${NO_OS_ROOT} ${CMAKE_BINARY_DIR}/no-os-core-build)
+
+else()
+    # Out-of-tree build with FetchContent
+    message(STATUS "FetchContent build - downloading no-OS...")
+    include(FetchContent)
+    set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+    FetchContent_Declare(
+        no-os-core
+        GIT_REPOSITORY https://github.com/analogdevicesinc/no-OS.git
+        GIT_TAG dev/cmake
+        GIT_SHALLOW TRUE
+        GIT_SUBMODULES ""
+    )
+
+    set(FETCHCONTENT_QUIET OFF)
+    FetchContent_MakeAvailable(no-os-core)
+    set(CMAKE_TOOLCHAIN_file ${no-os-core_SOURCE_DIR}/drivers/platform/${PLATFORM}/toolchain.cmake)
+endif()
+
+project(eval-adxl355-pmdz VERSION 1.0 LANGUAGES C CXX ASM)
+
+# Create common library
+add_library(eval-adxl355-pmdz-common STATIC)
+
+# Create executables
+add_executable(eval-adxl355-pmdz-dummy ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy/dummy_example.c)
+target_link_libraries(eval-adxl355-pmdz-dummy eval-adxl355-pmdz-common)
+
+add_executable(eval-adxl355-pmdz-iio ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example/iio_example.c)
+target_link_libraries(eval-adxl355-pmdz-iio eval-adxl355-pmdz-common)
+
+add_executable(eval-adxl355-pmdz-iio-trigger ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example/iio_trigger_example.c)
+target_link_libraries(eval-adxl355-pmdz-iio-trigger eval-adxl355-pmdz-common)
+target_link_libraries(eval-adxl355-pmdz-common no-os)
+
+# Combined target
+add_custom_target(eval-adxl355-pmdz DEPENDS eval-adxl355-pmdz-dummy eval-adxl355-pmdz-iio eval-adxl355-pmdz-iio-trigger)
+
+# Common source files
+target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/common/common_data.c)
+target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/main.c)
+target_sources(eval-adxl355-pmdz-common PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}/parameters.c)
+
+# Include directories
+target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform)
+target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/common)
+target_include_directories(eval-adxl355-pmdz-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM})
+
+target_compile_definitions(eval-adxl355-pmdz-dummy PRIVATE -DADXL355_DEV=1)
+target_compile_definitions(eval-adxl355-pmdz-iio PRIVATE -DADXL355_DEV=1)
+target_compile_definitions(eval-adxl355-pmdz-iio-trigger PRIVATE -DADXL355_DEV=1)
+
+target_include_directories(eval-adxl355-pmdz-dummy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy)
+target_include_directories(eval-adxl355-pmdz-iio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_example)
+target_include_directories(eval-adxl355-pmdz-iio-trigger PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/iio_trigger_example)
+
+# Platform configuration
+config_platform_sdk(eval-adxl355-pmdz-dummy)
+config_platform_sdk(eval-adxl355-pmdz-iio)
+config_platform_sdk(eval-adxl355-pmdz-iio-trigger)
+
+add_flash_target(eval-adxl355-pmdz-dummy)
+add_flash_target(eval-adxl355-pmdz-iio)
+add_flash_target(eval-adxl355-pmdz-iio-trigger)
+
+post_build_config(eval-adxl355-pmdz-dummy)
+post_build_config(eval-adxl355-pmdz-iio)
+post_build_config(eval-adxl355-pmdz-iio-trigger)
