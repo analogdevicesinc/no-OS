@@ -25,6 +25,7 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SYS/mxc_loc
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/FLC/flc_me18.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/FLC/flc_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/FLC/flc_common.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/LP/lp_me18.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC/icc_reva.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC/icc_me18.c)
 target_include_directories(no-os PRIVATE ${MAXIM_LIBRARIES}/PeriphDrivers/Source/ICC)
