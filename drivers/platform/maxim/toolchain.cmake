@@ -53,7 +53,12 @@ set(CMAKE_ASM_FLAGS "-x assembler-with-cpp")
 # set(OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/OpenOCD)
 
 file(GLOB_RECURSE OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/*/openocd)
-file(GLOB_RECURSE OPENOCD_SCRIPTS ${MAXIM_LIBRARIES}/../Tools/*/mem_helper.tcl)
+list(GET OPENOCD_PATH 0 OPENOCD_PATH)
 
-list(GET OPENOCD_SCRIPTS 0 OPENOCD_SCRIPTS)
-cmake_path(GET OPENOCD_SCRIPTS PARENT_PATH OPENOCD_SCRIPTS)
+# Set OpenOCD scripts directory using cmake_path for cross-platform compatibility
+cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "${MAXIM_LIBRARIES}/../Tools/OpenOCD/scripts")
+
+# OpenOCD configuration for debugging
+set(OPENOCD_INTERFACE "interface/cmsis-dap.cfg")
+set(OPENOCD_CHIPNAME ${TARGET})
+set(OPENOCD_TARGETCFG "target/${TARGET}.cfg")

@@ -52,6 +52,11 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common)
 target_compile_definitions(no-os PUBLIC -DMXC_SPI_VERSION=v1)
 target_compile_definitions(no-os PUBLIC -DTARGET_REV=0x4131)
 
+configure_file(
+    "${NO_OS_DIR}/cmake/templates/openocd.in"
+    "${CMAKE_BINARY_DIR}/openocd.cfg"
+  )
+
 # if(OPENOCD_PATH)
 #         set(OPENOCD_INTERFACE "interface/cmsis-dap.cfg")
 #         set(OPENOCD_CHIPNAME "max32690")
