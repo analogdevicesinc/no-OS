@@ -3,8 +3,26 @@ include(FlashTools)
 set(GENERATED_SOURCES_CMAKE "${CMAKE_CURRENT_BINARY_DIR}/generated_sources.cmake")
 include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 
+function(generate_openocd_config)
+        # Generate OpenOCD configuration file for debugging
+        if(DEFINED OPENOCD_INTERFACE AND DEFINED OPENOCD_CHIPNAME AND DEFINED OPENOCD_TARGETCFG)
+                configure_file(
+                        "${NO_OS_DIR}/cmake/templates/openocd.in"
+                        "${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg"
+                        @ONLY
+                )
+                message(STATUS "Generated OpenOCD config: ${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg")
+        else()
+                message(STATUS "OpenOCD config variables not set, skipping openocd.cfg generation")
+        endif()
+endfunction()
+
 function(post_build_config PROJECT_TARGET)
         set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
+        
+        # Generate OpenOCD config file
+        generate_openocd_config()
+        
         add_custom_command(
                 TARGET ${PROJECT_TARGET}
                 POST_BUILD
