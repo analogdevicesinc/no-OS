@@ -10,6 +10,11 @@
 
 #include "platform/maxim/maxim_platform.h"
 
+#if defined(CONFIG_CORDIO)
+#include "cordio_uart.h"
+#include "cordio_init.h"
+#endif
+
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   115200
 #define UART_IRQ_ID     UART0_IRQn
@@ -20,13 +25,13 @@ struct max_uart_init_param uart_extra_ip = {
 
 struct no_os_uart_init_param uart_init_param = {
 	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
+	.irq_id = USB_IRQn,
 	.asynchronous_rx = true,
 	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
 	.stop = NO_OS_UART_STOP_1_BIT,
-	.platform_ops = &max_uart_ops,
+	.platform_ops = &max_usb_uart_ops,
 	.extra = &uart_extra_ip,
 };
 
@@ -34,10 +39,12 @@ struct no_os_uart_init_param uart_init_param = {
  * @brief First thread function
  * @param pvParameters - Thread parameters
  */
-void thread1_task(void *pvParameters)
+void bt_task(void *pvParameters)
 {
-	while (1) {
-		printf("Tick 1\n");
+	cordio_init();
+	while(1){
+		// wsfOsDispatcher();
+		printf("Tick bt\n");
 		no_os_mdelay(1000);
 	}
 }
@@ -64,17 +71,17 @@ int create_tasks(void)
 	TaskHandle_t thread1_handle = NULL;
 	TaskHandle_t thread2_handle = NULL;
 
-	ret = xTaskCreate(thread1_task, "Thread1", configMINIMAL_STACK_SIZE,
+	ret = xTaskCreate(bt_task, "BT task", configMINIMAL_STACK_SIZE,
 			  NULL, tskIDLE_PRIORITY + 1, &thread1_handle);
 	if (ret != pdPASS) {
 		goto error_thread1;
 	}
 
-	ret = xTaskCreate(thread2_task, "Thread2", configMINIMAL_STACK_SIZE,
-			  NULL, tskIDLE_PRIORITY + 1, &thread2_handle);
-	if (ret != pdPASS) {
-		goto error_thread2;
-	}
+	// ret = xTaskCreate(thread2_task, "Thread2", configMINIMAL_STACK_SIZE,
+	// 		  NULL, tskIDLE_PRIORITY + 2, &thread2_handle);
+	// if (ret != pdPASS) {
+	// 	goto error_thread2;
+	// }
 
 	vTaskStartScheduler();
 
