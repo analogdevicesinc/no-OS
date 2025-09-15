@@ -39,6 +39,39 @@ if(DEFINED NO_OS_TOOLCHAIN_PATH AND NOT CMAKE_TOOLCHAIN_FILE)
     set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/${NO_OS_TOOLCHAIN_PATH}")
 endif()
 
+# Board compatibility checking
+if(DEFINED PROJECT_NAME)
+    # Define compatibility matrix
+    set(PROJECT_SUPPORTED_PLATFORMS_iio_demo "maxim;stm32;aducm3029;pico;linux;xilinx")
+    set(PROJECT_SUPPORTED_PLATFORMS_eval-adxl355-pmdz "maxim;stm32;aducm3029;pico")
+    set(PROJECT_SUPPORTED_PLATFORMS_ftc_workshop "maxim")
+
+    # Check if project supports the selected platform
+    set(SUPPORTED_PLATFORMS_VAR "PROJECT_SUPPORTED_PLATFORMS_${PROJECT_NAME}")
+    if(DEFINED ${SUPPORTED_PLATFORMS_VAR})
+        list(FIND ${SUPPORTED_PLATFORMS_VAR} "${PLATFORM}" PLATFORM_INDEX)
+        if(PLATFORM_INDEX EQUAL -1)
+            message(FATAL_ERROR
+                "❌ Board compatibility error!\n"
+                "   Project: ${PROJECT_NAME}\n"
+                "   Platform: ${PLATFORM}\n"
+                "   Board: ${BOARD}\n\n"
+                "Project '${PROJECT_NAME}' does not support platform '${PLATFORM}'.\n"
+                "Supported platforms: ${${SUPPORTED_PLATFORMS_VAR}}\n\n"
+                "Board compatibility matrix:\n"
+                "  iio_demo: maxim, stm32, aducm3029, pico, linux, xilinx\n"
+                "  eval-adxl355-pmdz: maxim, stm32, aducm3029, pico\n"
+                "  ftc_workshop: maxim ONLY\n\n"
+                "Available boards by platform:\n"
+                "  maxim: max78000_fthr, max32650_fthr, apard32690\n"
+                "  stm32: stm32f756_nucleo\n"
+            )
+        else()
+            message(STATUS "✅ Board compatibility: ${PROJECT_NAME} supports ${PLATFORM} platform")
+        endif()
+    endif()
+endif()
+
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 

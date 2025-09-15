@@ -54,7 +54,7 @@
                 },
                 {
                         "name": "stm32f756_nucleo",
-                        "description": "STM32F756 Nucleo board (auto-detects in-tree/out-of-tree)",
+                        "description": "STM32F756 Nucleo board (auto-detects in-tree/out-of-tree) - NOT compatible with ftc_workshop",
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "sdp-ck1z",
@@ -76,42 +76,42 @@
                 {
                         "name": "iio_demo",
                         "displayName": "IIO Demo Project",
-                        "description": "Build IIO Demo project",
+                        "description": "Build IIO Demo project (supports: maxim, stm32, aducm3029, pico, linux, xilinx)",
                         "inherits": "default",
                         "targets": [ "iio_demo" ]
                 },
                 {
                         "name": "eval_adxl355_pmdz_dummy",
                         "displayName": "ADXL355 Dummy Example",
-                        "description": "Build ADXL355 dummy example",
+                        "description": "Build ADXL355 dummy example (supports: maxim, stm32, aducm3029, pico)",
                         "inherits": "default",
                         "targets": [ "eval-adxl355-pmdz-dummy" ]
                 },
                 {
                         "name": "eval_adxl355_pmdz_iio",
                         "displayName": "ADXL355 IIO Example",
-                        "description": "Build ADXL355 IIO example",
+                        "description": "Build ADXL355 IIO example (supports: maxim, stm32, aducm3029, pico)",
                         "inherits": "default",
                         "targets": [ "eval-adxl355-pmdz-iio" ]
                 },
                 {
                         "name": "eval_adxl355_pmdz_iio_trigger",
                         "displayName": "ADXL355 IIO Trigger Example",
-                        "description": "Build ADXL355 IIO trigger example",
+                        "description": "Build ADXL355 IIO trigger example (supports: maxim, stm32, aducm3029, pico)",
                         "inherits": "default",
                         "targets": [ "eval-adxl355-pmdz-iio-trigger" ]
                 },
                 {
                         "name": "eval_adxl355_pmdz_all",
                         "displayName": "All ADXL355 Examples",
-                        "description": "Build all ADXL355 examples",
+                        "description": "Build all ADXL355 examples (supports: maxim, stm32, aducm3029, pico)",
                         "inherits": "default",
                         "targets": [ "eval-adxl355-pmdz" ]
                 },
                 {
                         "name": "ftc_workshop",
                         "displayName": "FTC Workshop Project",
-                        "description": "Build FTC Workshop project",
+                        "description": "Build FTC Workshop project (supports: maxim ONLY)",
                         "inherits": "default",
                         "targets": [ "ftc_workshop" ]
                 }

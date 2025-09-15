@@ -5,7 +5,7 @@
         "minor": 28,
         "patch": 0
     },
-    "comment": "ADXL355 PMDZ project presets - auto-detects build context in CMake",
+    "comment": "ADXL355 PMDZ project presets - supports: maxim, stm32, aducm3029, pico (no linux/xilinx)",
 
     "configurePresets": [
         {
