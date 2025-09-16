@@ -1,11 +1,29 @@
-config AD74413R
-        bool "AD74413R driver"
-        help
-          Enable support for AD74413R Quad-Channel Software Configurable Input/Output.
+menuconfig ADC_DAC
+    bool "ADC-DAC Drivers"
+    default n
+    help
+      Enable support for combined ADC-DAC converter drivers.
 
-config IIO_AD74413R
-        bool "AD74413R IIO driver"
-        depends on AD74413R
-        depends on IIO
-        help
-          Enable support for AD74413R IIO driver.
+      This section contains drivers for devices that provide both
+      ADC and DAC functionality in a single chip.
+
+if ADC_DAC
+
+config ADC_DAC_AD5592R
+    bool "Enable AD5592R ADC-DAC driver"
+    default n
+
+config ADC_DAC_AD74413R
+    bool "Enable AD74413R ADC-DAC driver"
+    default n
+
+config ADC_DAC_IIO_AD74413R
+    select ADC_DAC_AD74413R
+    bool "Enable AD74413R IIO driver"
+    default n
+
+config ADC_DAC_AD74416H
+    bool "Enable AD74416H ADC-DAC driver"
+    default n
+
+endif # ADC_DAC
