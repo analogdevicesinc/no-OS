@@ -42,6 +42,7 @@
 #include "no_os_delay.h"
 #include "ad7124.h"
 #include "ad7124_regs.h"
+#include "temperature_api.h"
 
 static const struct max_spi_init_param spi_extra = {
 	.num_slaves = 1,
@@ -73,14 +74,18 @@ static const struct ad7124_init_param ad7124_ip = {
 			.ref_buff = AD7124_BUFF_REF,
 			.ain_buff = AD7124_BUFF_AIN,
 			.ref_source = INTERNAL_REF,
+            .pga = AD7124_PGA_16,
 		},
 	},
 	.chan_map = {
 		/* Configuration for channel 0 only */
 		{
-			AD7124_CH0_ENABLE,
-			AD7124_CH0_SETUP_SEL,
-			AD7124_CH0_AIN_PINS,
+			.channel_enable = AD7124_CH0_ENABLE,
+			.setup_sel = AD7124_CH0_SETUP_SEL,
+			.ain = {
+                .ainp = AD7124_AIN1,
+                .ainm = AD7124_AIN3,
+            },
 		},
 	},
 };
@@ -99,6 +104,19 @@ int ad7124_app_main(void)
     int32_t ret = 0;                /* Return value */
     int32_t sample;                 /* Stores raw value read from the ADC */
     uint32_t ch_id;                 /* Conversion channel ID */
+    float temperature;
+
+    temp_convert_t temperature_config = {
+        .input = TEMP_UNIT_LSB_RAW,
+        .output = TEMP_UNIT_CELSIUS,
+    };
+
+    temp_api_handle_t temp_handle = {
+        .calib_value = {
+            .gain = 1,
+            .offset = 0
+        },
+    };
 
     ret = no_os_uart_init(&uart_desc, &uart_ip);
     if (ret)
@@ -123,6 +141,10 @@ int ad7124_app_main(void)
     if (ret != 0)
         return ret;
 
+    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_PDSW, AD7124_IO_CTRL1_REG_PDSW);
+    if (ret != 0)
+        return ret;
+
     /* Enable saturation error diagnostic */
     ad7124_regs[AD7124_Error_En].value = 0x10000;
 
@@ -136,6 +158,10 @@ int ad7124_app_main(void)
         if (ret != 0)
             return ret;
     }
+
+    // ret = ad7124_set_odr(dev, 50, 0);
+    // if (ret != 0)
+    //     return ret;
 
     printf("    AD7124_ID: 0x%08x\n\r", ad7124_regs[AD7124_ID].value);
     printf("    AD7124_Status: 0x%08x\n\r", ad7124_regs[AD7124_Status].value);
@@ -178,7 +204,9 @@ int ad7124_app_main(void)
         if (ret != 0)
             return ret;
 
-        printf("    Channel %d, DATA = %d, ERROR = 0x%08x\n", ch_id, sample, ad7124_regs[AD7124_Error].value);
+        ret = conversion(&temp_handle, &temperature_config, &sample, &temperature);
+
+        printf("    Channel %d, TEMP = %.3f (C) ERROR = 0x%08x\n", ch_id, temperature, ad7124_regs[AD7124_Error].value);
 
         no_os_mdelay(500);
     }
