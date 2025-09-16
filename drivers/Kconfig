@@ -1,5 +1,6 @@
 source "drivers/accel/Kconfig"
 source "drivers/adc/Kconfig"
+source "drivers/adc-dac/Kconfig"
 source "drivers/dac/Kconfig"
 source "drivers/net/Kconfig"
 source "drivers/platform/maxim/Kconfig.maxim"
