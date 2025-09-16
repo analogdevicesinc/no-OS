@@ -1,43 +1,38 @@
-message(STATUS "STM32")
+message(STATUS "STM32 Platform")
 
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 find_package(STM32CubeMX REQUIRED)
-find_package(STM32CubeIDE REQUIRED)
 
-if(${USE_VENDOR_TOOLCHAIN})
-  find_package(STM32CubeIDE REQUIRED)
+if(USE_VENDOR_TOOLCHAIN)
+    find_package(STM32CubeIDE REQUIRED)
 endif()
-
-if (${USE_VENDOR_TOOLCHAIN})
-
-# Specify the cross compiler
-set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
-set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
-set(CMAKE_LINKER arm-none-eabi-ld)
-
-else()
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
 set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
 set(CMAKE_LINKER arm-none-eabi-ld)
-
-endif()
 
 set(CMAKE_EXECUTABLE_SUFFIX_ASM ".elf")
 set(CMAKE_EXECUTABLE_SUFFIX_C ".elf")
 set(CMAKE_EXECUTABLE_SUFFIX_CXX ".elf")
 
-set(CMAKE_C_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -MD -g3")
-set(CMAKE_ASM_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
-set(CMAKE_EXE_LINKER_FLAGS "-mthumb -mcpu=cortex-m4 -specs=nosys.specs -Wl,--gc-sections -mfpu=fpv4-sp-d16 ${MCU_LINKER_FLAGS} \
-                            --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
+# Detect MCU type and set appropriate flags
+if(${TARGET} MATCHES "^stm32f7" OR ${TARGET} MATCHES "^stm32h7")
+    # Cortex-M7 MCUs
+    set(STM32_MCU_FLAGS "-mthumb -mcpu=cortex-m7 -mfloat-abi=hard -mfpu=fpv5-d16")
+    message(STATUS "Detected Cortex-M7 MCU: ${TARGET}")
+else()
+    # Cortex-M4 MCUs (default for F4, L4, etc.)
+    set(STM32_MCU_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
+    message(STATUS "Detected Cortex-M4 MCU: ${TARGET}")
+endif()
 
-set(CMAKE_ASM_FLAGS "-x assembler-with-cpp")
+set(CMAKE_C_FLAGS "${STM32_MCU_FLAGS} -ffunction-sections -fdata-sections -MD -g3")
+set(CMAKE_ASM_FLAGS "${STM32_MCU_FLAGS} -x assembler-with-cpp")
+set(CMAKE_EXE_LINKER_FLAGS "${STM32_MCU_FLAGS} -specs=nosys.specs -Wl,--gc-sections ${MCU_LINKER_FLAGS} --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
 # OpenOCD configuration for debugging
 set(OPENOCD_INTERFACE "interface/stlink.cfg")
