@@ -7,6 +7,7 @@ PLATFORM=maxim
 TARGET=max32690
 
 LIB_FLAGS += -lm
+LDFLAGS += -u_printf_float
 
 ifeq (y,$(strip $(HP_STATIC_IP)))
 NO_OS_IP=192.168.97.60
