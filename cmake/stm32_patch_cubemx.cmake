@@ -19,9 +19,22 @@ file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
 
 file(READ "${STM32_PROJECT_BUILD}/Core/Src/main.c" MAIN_FILE_CONTENTS)
 
-# Replace all instances of the incorrect variable with the correct one
+# Replace main function name with stm32_init
 string(REPLACE "main(" "stm32_init("
      MAIN_PATCHED_CONTENTS "${MAIN_FILE_CONTENTS}")
+
+# Remove the infinite loop that prevents stm32_init() from returning
+# Replace the entire while(1) section with just a return statement
+string(REPLACE "  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */" "  /* Initialization complete, return to caller */
+  return 0;" MAIN_PATCHED_CONTENTS "${MAIN_PATCHED_CONTENTS}")
 
 file(WRITE "${STM32_PROJECT_BUILD}/Core/Src/main.c" "${MAIN_PATCHED_CONTENTS}")
 
