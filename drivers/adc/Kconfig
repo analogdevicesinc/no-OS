@@ -1,3 +1,278 @@
+menuconfig ADC
+    bool "ADC Drivers"
+    default n
+    help
+      Enable support for Analog-to-Digital Converter (ADC) drivers.
+
+      This section contains drivers for various ADC devices from
+      Analog Devices, Linear Technology, and Maxim Integrated.
+
+if ADC
+
+config ADC_AD405X
+    bool "Enable AD405X ADC driver"
+    default n
+
+config ADC_AD4080
+    bool "Enable AD4080 ADC driver"
+    default n
+
+config ADC_AD4170
+    bool "Enable AD4170 ADC driver"
+    default n
+
+config ADC_AD463X
+    bool "Enable AD463X ADC driver"
+    default n
+
+config ADC_IIO_AD463X
+    select ADC_AD463X
+    bool "Enable AD463X IIO driver"
+    default n
+
+config ADC_AD469X
+    bool "Enable AD469X ADC driver"
+    default n
+
+config ADC_AD4858
+    bool "Enable AD4858 ADC driver"
+    default n
+
+config ADC_AD6673
+    bool "Enable AD6673 ADC driver"
+    default n
+
+config ADC_AD6676
+    bool "Enable AD6676 ADC driver"
+    default n
+
+config ADC_AD7091R
+    bool "Enable AD7091R ADC driver"
+    default n
+
+config ADC_AD7091R5
+    bool "Enable AD7091R5 ADC driver"
+    default n
+
+config ADC_AD7091R8
+    bool "Enable AD7091R8 ADC driver"
+    default n
+
+config ADC_IIO_AD7091R8
+    select ADC_AD7091R8
+    bool "Enable AD7091R8 IIO driver"
+    default n
+
+config ADC_AD7124
+    bool "Enable AD7124 ADC driver"
+    default n
+
+config ADC_IIO_AD7124
+    select ADC_AD7124
+    bool "Enable AD7124 IIO driver"
+    default n
+
+config ADC_AD713X
+    bool "Enable AD713X ADC driver"
+    default n
+
+config ADC_IIO_AD713X
+    select ADC_AD713X
+    bool "Enable AD713X IIO driver"
+    default n
+
+config ADC_AD717X
+    bool "Enable AD717X ADC driver"
+    default n
+
+config ADC_AD719X
+    bool "Enable AD719X ADC driver"
+    default n
+
+config ADC_AD7280A
+    bool "Enable AD7280A ADC driver"
+    default n
+
+config ADC_AD738X
+    bool "Enable AD738X ADC driver"
+    default n
+
+config ADC_IIO_AD738X
+    select ADC_AD738X
+    bool "Enable AD738X IIO driver"
+    default n
+
+config ADC_AD74XX
+    bool "Enable AD74XX ADC driver"
+    default n
+
+config ADC_AD7606
+    bool "Enable AD7606 ADC driver"
+    default n
+
+config ADC_IIO_AD7606
+    select ADC_AD7606
+    bool "Enable AD7606 IIO driver"
+    default n
+
+config ADC_AD7616
+    bool "Enable AD7616 ADC driver"
+    default n
+
+config ADC_IIO_AD7616
+    select ADC_AD7616
+    bool "Enable AD7616 IIO driver"
+    default n
+
+config ADC_AD7689
+    bool "Enable AD7689 ADC driver"
+    default n
+
+config ADC_AD7768
+    bool "Enable AD7768 ADC driver"
+    default n
+
+config ADC_AD7768_1
+    bool "Enable AD7768-1 ADC driver"
+    default n
+
+config ADC_AD7779
+    bool "Enable AD7779 ADC driver"
+    default n
+
+config ADC_AD7780
+    bool "Enable AD7780 ADC driver"
+    default n
+
+config ADC_AD7799
+    bool "Enable AD7799 ADC driver"
+    default n
+
+config ADC_IIO_AD7799
+    select ADC_AD7799
+    bool "Enable AD7799 IIO driver"
+    default n
+
+config ADC_AD796X
+    bool "Enable AD796X ADC driver"
+    default n
+
+config ADC_AD7980
+    bool "Enable AD7980 ADC driver"
+    default n
+
+config ADC_AD799X
+    bool "Enable AD799X ADC driver"
+    default n
+
+config ADC_AD9081
+    bool "Enable AD9081 ADC driver"
+    default n
+
+config ADC_AD9083
+    bool "Enable AD9083 ADC driver"
+    default n
+
+config ADC_IIO_AD9083
+    select ADC_AD9083
+    bool "Enable AD9083 IIO driver"
+    default n
+
+config ADC_AD9208
+    bool "Enable AD9208 ADC driver"
+    default n
+
+config ADC_AD9250
+    bool "Enable AD9250 ADC driver"
+    default n
+
+config ADC_AD9265
+    bool "Enable AD9265 ADC driver"
+    default n
+
+config ADC_AD9434
+    bool "Enable AD9434 ADC driver"
+    default n
+
+config ADC_AD9467
+    bool "Enable AD9467 ADC driver"
+    default n
+
+config ADC_AD9625
+    bool "Enable AD9625 ADC driver"
+    default n
+
+config ADC_AD9656
+    bool "Enable AD9656 ADC driver"
+    default n
+
+config ADC_AD9680
+    bool "Enable AD9680 ADC driver"
+    default n
+
+config ADC_IIO_AD9680
+    select ADC_AD9680
+    bool "Enable AD9680 IIO driver"
+    default n
+
+config ADC_ADAQ7980
+    bool "Enable ADAQ7980 ADC driver"
+    default n
+
+config ADC_ADAQ8092
+    bool "Enable ADAQ8092 ADC driver"
+    default n
+
 config ADC_DEMO
     bool "Enable ADC demo driver"
     default n
+
+config ADC_IIO_DEMO
+    select ADC_DEMO
+    bool "Enable ADC demo IIO driver"
+    default n
+
+config ADC_ADM1177
+    bool "Enable ADM1177 ADC driver"
+    default n
+
+config ADC_IIO_ADM1177
+    select ADC_ADM1177
+    bool "Enable ADM1177 IIO driver"
+    default n
+
+config ADC_LTC2312
+    bool "Enable LTC2312 ADC driver"
+    default n
+
+config ADC_LTC2358
+    bool "Enable LTC2358 ADC driver"
+    default n
+
+config ADC_MAX11205
+    bool "Enable MAX11205 ADC driver"
+    default n
+
+config ADC_IIO_MAX11205
+    select ADC_MAX11205
+    bool "Enable MAX11205 IIO driver"
+    default n
+
+config ADC_MAX14001
+    bool "Enable MAX14001 ADC driver"
+    default n
+
+config ADC_MAX9611PMB
+    bool "Enable MAX9611PMB ADC driver"
+    default n
+
+config ADC_PULSAR_ADC
+    bool "Enable Pulsar ADC driver"
+    default n
+
+config ADC_IIO_PULSAR_ADC
+    select ADC_PULSAR_ADC
+    bool "Enable Pulsar ADC IIO driver"
+    default n
+
+endif # ADC
