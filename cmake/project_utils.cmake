@@ -7,12 +7,28 @@ include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 function(generate_openocd_config)
         # For STM32 platform, try to extract OpenOCD config from project .ioc file
         if(PLATFORM STREQUAL "stm32" AND DEFINED NO_OS_PROJECT_NAME)
-                # Look for .ioc files in the project directory
-                file(GLOB IOC_FILES "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/*.ioc")
+                # Determine which .ioc file to use (following same pattern as CubeMX config)
+                set(IOC_FILE "")
+                if(DEFINED CONFIG_STM32_IOC_PATH AND NOT "${CONFIG_STM32_IOC_PATH}" STREQUAL "")
+                        # Use user-specified .ioc file
+                        message(STATUS "DEBUG: Using CONFIG_STM32_IOC_PATH=${CONFIG_STM32_IOC_PATH}")
+                        if(IS_ABSOLUTE "${CONFIG_STM32_IOC_PATH}")
+                                set(IOC_FILE "${CONFIG_STM32_IOC_PATH}")
+                        else()
+                                set(IOC_FILE "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/${CONFIG_STM32_IOC_PATH}")
+                        endif()
+                        message(STATUS "DEBUG: Resolved IOC_FILE=${IOC_FILE}")
+                else()
+                        # Fallback to board-named .ioc file
+                        set(IOC_FILE "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/${BOARD}.ioc")
+                        message(STATUS "DEBUG: Using fallback IOC_FILE=${IOC_FILE}")
+                endif()
 
-                if(IOC_FILES)
-                        list(GET IOC_FILES 0 IOC_FILE)  # Use first .ioc file found
+                if(EXISTS "${IOC_FILE}")
                         message(STATUS "Found .ioc file: ${IOC_FILE}")
+                else()
+                        message(STATUS "DEBUG: .ioc file not found at: ${IOC_FILE}")
+                endif()
 
                         # Read .ioc file and extract MCU info using CMake
                         file(READ "${IOC_FILE}" IOC_CONTENT)
@@ -48,7 +64,6 @@ function(generate_openocd_config)
                         if(OPENOCD_CHIPNAME AND OPENOCD_TARGETCFG)
                                 message(STATUS "Extracted OpenOCD config from .ioc: chip=${OPENOCD_CHIPNAME}, target=${OPENOCD_TARGETCFG}")
                         endif()
-                endif()
         endif()
 
         # Set fallback defaults if not already set (for STM32 or when .ioc parsing fails)
@@ -111,6 +126,8 @@ function(config_platform_sdk BUILD_TARGET)
         endif()
 
         if(${PLATFORM} STREQUAL "stm32")
+                # Extract IOC name without extension for directory naming
+                get_filename_component(IOC_NAME "${CONFIG_STM32_IOC_PATH}" NAME_WE)
                 set(EXTI_SCRIPT ${NO_OS_DIR}/tools/scripts/platform/stm32/exti_script.py)
                 set(EXTI_GEN_FILE ${CMAKE_CURRENT_BINARY_DIR}/stm32_gpio_irq_generated.c)
                 if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build")
@@ -132,8 +149,8 @@ function(config_platform_sdk BUILD_TARGET)
 
                         execute_process(
                                 COMMAND ${CMAKE_COMMAND}
-                                -D CMAKE_FILE_TO_PATCH=${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/cmake/stm32cubemx/CMakeLists.txt
-                                -D STM32_PROJECT_BUILD=${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}
+                                -D CMAKE_FILE_TO_PATCH=${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${IOC_NAME}/cmake/stm32cubemx/CMakeLists.txt
+                                -D STM32_PROJECT_BUILD=${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${IOC_NAME}
                                 -P "${NO_OS_DIR}/cmake/stm32_patch_cubemx.cmake"
                                 COMMENT "Generating STM32CubeMX project..."
                         )
@@ -145,7 +162,7 @@ function(config_platform_sdk BUILD_TARGET)
                 endif()
                         
                 if(NOT TARGET STM32_Drivers)
-                        add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/cmake/stm32cubemx ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${BOARD}/cmake/stm32cubemx/build)
+                        add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${IOC_NAME}/cmake/stm32cubemx ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${IOC_NAME}/cmake/stm32cubemx/build)
                 endif()
 
                 target_sources(no-os PRIVATE ${EXTI_GEN_FILE})
