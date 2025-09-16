@@ -5,6 +5,71 @@ set(GENERATED_SOURCES_CMAKE "${CMAKE_CURRENT_BINARY_DIR}/generated_sources.cmake
 include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 
 function(generate_openocd_config)
+        # For STM32 platform, try to extract OpenOCD config from project .ioc file
+        if(PLATFORM STREQUAL "stm32" AND DEFINED NO_OS_PROJECT_NAME)
+                # Look for .ioc files in the project directory
+                file(GLOB IOC_FILES "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/*.ioc")
+
+                if(IOC_FILES)
+                        list(GET IOC_FILES 0 IOC_FILE)  # Use first .ioc file found
+                        message(STATUS "Found .ioc file: ${IOC_FILE}")
+
+                        # Read .ioc file and extract MCU info using CMake
+                        file(READ "${IOC_FILE}" IOC_CONTENT)
+
+                        # Extract Mcu.CPN (Complete Part Number) for chip name
+                        string(REGEX MATCH "Mcu\\.CPN=([^\r\n]+)" MCU_CPN_MATCH "${IOC_CONTENT}")
+                        if(MCU_CPN_MATCH)
+                                set(OPENOCD_CHIPNAME "${CMAKE_MATCH_1}")
+                        endif()
+
+                        # Extract Mcu.Family for target config mapping
+                        string(REGEX MATCH "Mcu\\.Family=([^\r\n]+)" MCU_FAMILY_MATCH "${IOC_CONTENT}")
+                        if(MCU_FAMILY_MATCH)
+                                set(MCU_FAMILY "${CMAKE_MATCH_1}")
+                                string(TOLOWER "${MCU_FAMILY}" MCU_FAMILY_LOWER)
+
+                                # Map family to OpenOCD target config
+                                if(MCU_FAMILY_LOWER MATCHES "stm32f4")
+                                        set(OPENOCD_TARGETCFG "target/stm32f4x.cfg")
+                                elseif(MCU_FAMILY_LOWER MATCHES "stm32f7")
+                                        set(OPENOCD_TARGETCFG "target/stm32f7x.cfg")
+                                elseif(MCU_FAMILY_LOWER MATCHES "stm32h7")
+                                        set(OPENOCD_TARGETCFG "target/stm32h7x.cfg")
+                                elseif(MCU_FAMILY_LOWER MATCHES "stm32l4")
+                                        set(OPENOCD_TARGETCFG "target/stm32l4x.cfg")
+                                elseif(MCU_FAMILY_LOWER MATCHES "stm32g4")
+                                        set(OPENOCD_TARGETCFG "target/stm32g4x.cfg")
+                                else()
+                                        set(OPENOCD_TARGETCFG "target/${MCU_FAMILY_LOWER}x.cfg")
+                                endif()
+                        endif()
+
+                        if(OPENOCD_CHIPNAME AND OPENOCD_TARGETCFG)
+                                message(STATUS "Extracted OpenOCD config from .ioc: chip=${OPENOCD_CHIPNAME}, target=${OPENOCD_TARGETCFG}")
+                        endif()
+                endif()
+        endif()
+
+        # Set fallback defaults if not already set (for STM32 or when .ioc parsing fails)
+        if(PLATFORM STREQUAL "stm32" AND NOT DEFINED OPENOCD_CHIPNAME)
+                set(OPENOCD_CHIPNAME ${TARGET})
+
+                if(${TARGET} MATCHES "^stm32f4")
+                        set(OPENOCD_TARGETCFG "target/stm32f4x.cfg")
+                elseif(${TARGET} MATCHES "^stm32f7")
+                        set(OPENOCD_TARGETCFG "target/stm32f7x.cfg")
+                elseif(${TARGET} MATCHES "^stm32l4")
+                        set(OPENOCD_TARGETCFG "target/stm32l4x.cfg")
+                elseif(${TARGET} MATCHES "^stm32h7")
+                        set(OPENOCD_TARGETCFG "target/stm32h7x.cfg")
+                else()
+                        set(OPENOCD_TARGETCFG "target/${TARGET}.cfg")
+                endif()
+
+                message(STATUS "Using fallback OpenOCD config: chip=${OPENOCD_CHIPNAME}, target=${OPENOCD_TARGETCFG}")
+        endif()
+
         # Generate OpenOCD configuration file for debugging
         if(DEFINED OPENOCD_INTERFACE AND DEFINED OPENOCD_CHIPNAME AND DEFINED OPENOCD_TARGETCFG)
                 configure_file(
