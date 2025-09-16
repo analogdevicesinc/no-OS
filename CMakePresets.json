@@ -127,6 +127,13 @@
                         "description": "Build FTC Workshop project (supports: maxim ONLY)",
                         "inherits": "default",
                         "targets": [ "ftc_workshop" ]
+                },
+                {
+                        "name": "ad74413r",
+                        "displayName": "AD74413R Example",
+                        "description": "Build AD74413R example (supports: maxim, stm32)",
+                        "inherits": "default",
+                        "targets": [ "ad74413r" ]
                 }
         ],
         "workflowPresets": [
