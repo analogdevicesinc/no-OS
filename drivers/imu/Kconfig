@@ -1,0 +1,85 @@
+menuconfig IMU
+    bool "IMU Drivers"
+    default n
+    help
+      Enable support for Inertial Measurement Unit (IMU) drivers.
+
+      This section contains drivers for various ADIS family IMU devices
+      from Analog Devices, providing 6-axis and 10-axis motion sensing.
+
+if IMU
+
+config IMU_ADIS
+    bool "Enable ADIS core driver"
+    default n
+    help
+      Core driver for ADIS family IMU devices. Required by all ADIS variants.
+
+config IMU_ADIS1646X
+    select IMU_ADIS
+    bool "Enable ADIS1646X IMU driver"
+    default n
+
+config IMU_IIO_ADIS1646X
+    select IMU_ADIS1646X
+    bool "Enable ADIS1646X IIO driver"
+    default n
+
+config IMU_ADIS1647X
+    select IMU_ADIS
+    bool "Enable ADIS1647X IMU driver"
+    default n
+
+config IMU_IIO_ADIS1647X
+    select IMU_ADIS1647X
+    bool "Enable ADIS1647X IIO driver"
+    default n
+
+config IMU_ADIS1650X
+    select IMU_ADIS
+    bool "Enable ADIS1650X IMU driver"
+    default n
+
+config IMU_IIO_ADIS1650X
+    select IMU_ADIS1650X
+    bool "Enable ADIS1650X IIO driver"
+    default n
+
+config IMU_ADIS1654X
+    select IMU_ADIS
+    bool "Enable ADIS1654X IMU driver"
+    default n
+
+config IMU_IIO_ADIS1654X
+    select IMU_ADIS1654X
+    bool "Enable ADIS1654X IIO driver"
+    default n
+
+config IMU_ADIS1655X
+    select IMU_ADIS
+    bool "Enable ADIS1655X IMU driver"
+    default n
+
+config IMU_IIO_ADIS1655X
+    select IMU_ADIS1655X
+    bool "Enable ADIS1655X IIO driver"
+    default n
+
+config IMU_ADIS1657X
+    select IMU_ADIS
+    bool "Enable ADIS1657X IMU driver"
+    default n
+
+config IMU_IIO_ADIS1657X
+    select IMU_ADIS1657X
+    bool "Enable ADIS1657X IIO driver"
+    default n
+
+config IMU_IIO_ADIS_COMMON
+    bool "Enable ADIS common IIO functionality"
+    default n
+    help
+      Common IIO functionality shared across ADIS IIO drivers.
+      Automatically enabled when any ADIS IIO driver is selected.
+
+endif # IMU
