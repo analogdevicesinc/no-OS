@@ -108,6 +108,7 @@ function(post_build_config PROJECT_TARGET)
                 TARGET ${PROJECT_TARGET}
                 POST_BUILD
                 COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${PROJECT_TARGET}.hex
+                COMMAND ${CMAKE_SIZE} --format=Berkeley $<TARGET_FILE:${PROJECT_TARGET}> ${PROJECT_TARGET}.hex 2>/dev/null || true
                 COMMAND ${CMAKE_COMMAND}
                         -DELF_PATH=$<TARGET_FILE:${PROJECT_TARGET}>
                         -DNO_OS_DIR=${NO_OS_DIR}
