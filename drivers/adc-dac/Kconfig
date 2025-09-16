@@ -1,0 +1,11 @@
+config AD74413R
+        bool "AD74413R driver"
+        help
+          Enable support for AD74413R Quad-Channel Software Configurable Input/Output.
+
+config IIO_AD74413R
+        bool "AD74413R IIO driver"
+        depends on AD74413R
+        depends on IIO
+        help
+          Enable support for AD74413R IIO driver.
