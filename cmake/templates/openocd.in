@@ -1,5 +1,4 @@
 source [find @OPENOCD_INTERFACE@]
-transport select "dapdirect_swd"
 set CHIPNAME @OPENOCD_CHIPNAME@
 set ENABLE_LOW_POWER 1
 set STOP_WATCHDOG 1
@@ -8,5 +7,5 @@ reset_config srst_only srst_nogate connect_assert_srst
 set CONNECT_UNDER_RESET 1
 set CORE_RESET 0
 set AP_NUM 0
-gdb_port 3333
+gdb_port 50000
 source [find @OPENOCD_TARGETCFG@]
