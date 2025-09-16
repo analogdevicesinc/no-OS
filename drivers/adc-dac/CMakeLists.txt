@@ -1,4 +1,12 @@
-no_os_sources_ifdef(CONFIG_AD74413R ${CMAKE_CURRENT_SOURCE_DIR}/ad74413r/ad74413r.c)
-no_os_sources_ifdef(CONFIG_IIO_AD74413R ${CMAKE_CURRENT_SOURCE_DIR}/ad74413r/iio_ad74413r.c)
+# AD5592R
+no_os_sources_ifdef(CONFIG_ADC_DAC_AD5592R ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r/ad5592r.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad5592r)
 
+# AD74413R
+no_os_sources_ifdef(CONFIG_ADC_DAC_AD74413R ${CMAKE_CURRENT_SOURCE_DIR}/ad74413r/ad74413r.c)
+no_os_sources_ifdef(CONFIG_ADC_DAC_IIO_AD74413R ${CMAKE_CURRENT_SOURCE_DIR}/ad74413r/iio_ad74413r.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad74413r)
+
+# AD74416H
+no_os_sources_ifdef(CONFIG_ADC_DAC_AD74416H ${CMAKE_CURRENT_SOURCE_DIR}/ad74416h/ad74416h.c)
+target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ad74416h)
