@@ -136,6 +136,21 @@ target_include_directories(
 )
 list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
+
+# Add board-specific config if available
+if(DEFINED NO_OS_PROJECT_NAME AND DEFINED BOARD)
+  if(${NATIVE_BUILD})
+    set(BOARD_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/boards/${BOARD}.conf")
+  else()
+    set(BOARD_CONFIG_FILE "${CMAKE_SOURCE_DIR}/boards/${BOARD}.conf")
+  endif()
+
+  if(EXISTS "${BOARD_CONFIG_FILE}")
+    message(STATUS "Adding board defconfig: ${BOARD_CONFIG_FILE}")
+    list(APPEND GENERATE_CONFIG_ARGS "${BOARD_CONFIG_FILE}")
+  endif()
+endif()
+
 if (DEFINED PROJECT_DEFCONFIG)
   message(STATUS "Adding project defconfig: ${PROJECT_DEFCONFIG}")
   if(${NATIVE_BUILD})
