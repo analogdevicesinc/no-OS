@@ -1,3 +1,159 @@
-config DAC_DEMO
-    bool "Enable ADC demo driver"
+menuconfig DAC
+    bool "DAC Drivers"
     default n
+    help
+      Enable support for Digital-to-Analog Converter (DAC) drivers.
+
+      This section contains drivers for various DAC devices from
+      Analog Devices, Linear Technology, and Maxim Integrated.
+
+if DAC
+
+config DAC_AD3530R
+    bool "Enable AD3530R DAC driver"
+    default n
+
+config DAC_AD3552R
+    bool "Enable AD3552R DAC driver"
+    default n
+
+config DAC_IIO_AD3552R
+    select DAC_AD3552R
+    bool "Enable AD3552R IIO driver"
+    default n
+
+config DAC_AD5421
+    bool "Enable AD5421 DAC driver"
+    default n
+
+config DAC_AD5446
+    bool "Enable AD5446 DAC driver"
+    default n
+
+config DAC_AD5449
+    bool "Enable AD5449 DAC driver"
+    default n
+
+config DAC_AD5460
+    bool "Enable AD5460 DAC driver"
+    default n
+
+config DAC_AD5628
+    bool "Enable AD5628 DAC driver"
+    default n
+
+config DAC_AD5629R
+    bool "Enable AD5629R DAC driver"
+    default n
+
+config DAC_AD5686
+    bool "Enable AD5686 DAC driver"
+    default n
+
+config DAC_AD5754R
+    bool "Enable AD5754R DAC driver"
+    default n
+
+config DAC_AD5755
+    bool "Enable AD5755 DAC driver"
+    default n
+
+config DAC_AD5758
+    bool "Enable AD5758 DAC driver"
+    default n
+
+config DAC_AD5761R
+    bool "Enable AD5761R DAC driver"
+    default n
+
+config DAC_AD5766
+    bool "Enable AD5766 DAC driver"
+    default n
+
+config DAC_AD5770R
+    bool "Enable AD5770R DAC driver"
+    default n
+
+config DAC_AD5791
+    bool "Enable AD5791 DAC driver"
+    default n
+
+config DAC_IIO_AD5791
+    select DAC_AD5791
+    bool "Enable AD5791 IIO driver"
+    default n
+
+config DAC_AD7293
+    bool "Enable AD7293 DAC driver"
+    default n
+
+config DAC_AD7303
+    bool "Enable AD7303 DAC driver"
+    default n
+
+config DAC_AD8460
+    bool "Enable AD8460 DAC driver"
+    default n
+
+config DAC_IIO_AD8460
+    select DAC_AD8460
+    bool "Enable AD8460 IIO driver"
+    default n
+
+config DAC_AD9144
+    bool "Enable AD9144 DAC driver"
+    default n
+
+config DAC_IIO_AD9144
+    select DAC_AD9144
+    bool "Enable AD9144 IIO driver"
+    default n
+
+config DAC_AD9152
+    bool "Enable AD9152 DAC driver"
+    default n
+
+config DAC_IIO_AD9152
+    select DAC_AD9152
+    bool "Enable AD9152 IIO driver"
+    default n
+
+config DAC_AD917X
+    bool "Enable AD917X DAC driver"
+    default n
+
+config DAC_AD9739A
+    bool "Enable AD9739A DAC driver"
+    default n
+
+config DAC_DEMO
+    bool "Enable DAC demo driver"
+    default n
+
+config DAC_IIO_DEMO
+    select DAC_DEMO
+    bool "Enable DAC demo IIO driver"
+    default n
+
+config DAC_LTC2672
+    bool "Enable LTC2672 DAC driver"
+    default n
+
+config DAC_LTC268X
+    bool "Enable LTC268X DAC driver"
+    default n
+
+config DAC_MAX22017
+    bool "Enable MAX22017 DAC driver"
+    default n
+
+config DAC_IIO_MAX22017
+    select DAC_MAX22017
+    bool "Enable MAX22017 IIO driver"
+    default n
+
+config DAC_MAX538X
+    bool "Enable MAX538X DAC driver"
+    default n
+
+endif # DAC
