@@ -47,19 +47,6 @@ set(CMAKE_CXX_FLAGS "${STM32_MCU_FLAGS} -ffunction-sections -fdata-sections -MD 
 set(CMAKE_ASM_FLAGS "${STM32_MCU_FLAGS} -x assembler-with-cpp")
 set(CMAKE_EXE_LINKER_FLAGS "${STM32_MCU_FLAGS} -specs=nosys.specs -Wl,--gc-sections ${MCU_LINKER_FLAGS} --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
-# OpenOCD configuration for debugging
+# OpenOCD interface configuration
 set(OPENOCD_INTERFACE "interface/stlink.cfg")
-set(OPENOCD_CHIPNAME ${TARGET})
-# Map TARGET to appropriate OpenOCD target config
-if(${TARGET} MATCHES "^stm32f4")
-    set(OPENOCD_TARGETCFG "target/stm32f4x.cfg")
-elseif(${TARGET} MATCHES "^stm32f7")
-    set(OPENOCD_TARGETCFG "target/stm32f7x.cfg")
-elseif(${TARGET} MATCHES "^stm32l4")
-    set(OPENOCD_TARGETCFG "target/stm32l4x.cfg")
-elseif(${TARGET} MATCHES "^stm32h7")
-    set(OPENOCD_TARGETCFG "target/stm32h7x.cfg")
-else()
-    # Generic fallback - user may need to adjust manually
-    set(OPENOCD_TARGETCFG "target/${TARGET}.cfg")
-endif()
+
