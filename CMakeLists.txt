@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.27)
 # list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# Enable colored output globally
+include(ColoredOutput)
+
 # Auto-detect build context and set toolchain paths for unified presets
 if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
     # In-tree build (full no-OS repo)
@@ -60,6 +63,7 @@ include(BoardCompatibility)
 
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
+
 
 # Check whether the build was started from the No-OS root or the library was included as a module
 cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)

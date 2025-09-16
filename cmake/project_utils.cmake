@@ -1,4 +1,5 @@
 include(FlashTools)
+include(ColoredOutput)
 
 set(GENERATED_SOURCES_CMAKE "${CMAKE_CURRENT_BINARY_DIR}/generated_sources.cmake")
 include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
