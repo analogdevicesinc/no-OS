@@ -1,0 +1,73 @@
+menuconfig PLATFORM_STM32
+	bool "STM32 Platform Drivers"
+	default n
+	help
+	  Enable support for STM32 platform drivers.
+
+	  This section contains low-level platform drivers for STM32
+	  microcontrollers including GPIO, SPI, I2C, UART, PWM, DMA,
+	  interrupt handling, and other peripheral drivers.
+
+if PLATFORM_STM32
+
+config GPIO_STM32
+	bool "Enable STM32 GPIO driver"
+	default n
+
+config GPIO_IRQ_STM32
+	bool "Enable STM32 GPIO IRQ driver"
+	default n
+
+config I2C_STM32
+	bool "Enable STM32 I2C driver"
+	default n
+
+config I3C_STM32
+	bool "Enable STM32 I3C driver"
+	default n
+
+config SPI_STM32
+	bool "Enable STM32 SPI driver"
+	default n
+
+config XSPI_STM32
+	bool "Enable STM32 XSPI driver"
+	default n
+
+config UART_STM32
+	bool "Enable STM32 UART driver"
+	default n
+
+config UART_STDIO_STM32
+	bool "Enable STM32 UART STDIO driver"
+	default n
+
+config USB_UART_STM32
+	bool "Enable STM32 USB UART driver"
+	default n
+
+config IRQ_STM32
+	bool "Enable STM32 IRQ driver"
+	default n
+
+config PWM_STM32
+	bool "Enable STM32 PWM driver"
+	default n
+
+config TIMER_STM32
+	bool "Enable STM32 Timer driver"
+	default n
+
+config DMA_STM32
+	bool "Enable STM32 DMA driver"
+	default n
+
+config GPDMA_STM32
+	bool "Enable STM32 GPDMA driver"
+	default n
+
+config TDM_STM32
+	bool "Enable STM32 TDM driver"
+	default n
+
+endif # PLATFORM_STM32
