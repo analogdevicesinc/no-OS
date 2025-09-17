@@ -692,7 +692,7 @@ extern
  * Streaming speeds up the memory access when there is large number of bytes to be written.
  */
 #ifndef ADI_ADRV9025_SPI_WRITE_STREAMING_ENABLE
-#define ADI_ADRV9025_SPI_WRITE_STREAMING_ENABLE  1
+#define ADI_ADRV9025_SPI_WRITE_STREAMING_ENABLE  0
 #endif
 
 
