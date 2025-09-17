@@ -1,4 +1,4 @@
-menuconfig PLATFORM_MAXIM
+menuconfig MAXIM
 	bool "Maxim Platform Drivers"
 	default n
 	help
@@ -9,7 +9,7 @@ menuconfig PLATFORM_MAXIM
 	  interrupt handling, USB UART, RTC, Timer, and other peripheral
 	  drivers across multiple Maxim chip families.
 
-if PLATFORM_MAXIM
+if MAXIM
 
 config GPIO_MAXIM
 	bool "Enable Maxim GPIO driver"
@@ -67,4 +67,4 @@ config INIT_MAXIM
 	bool "Enable Maxim Init driver"
 	default n
 
-endif # PLATFORM_MAXIM
+endif # MAXIM
