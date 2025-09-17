@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adrv9025_shared_resource_manager_types.h
  * \brief Contains ADRV9025 shared resource related private data prototypes for
  *        adrv9025_shared_resource_manager.c
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
  /**
@@ -15,9 +16,7 @@
 #ifndef _ADRV9025_SHARED_RESOURCE_MANAGER_TYPES_H_
 #define _ADRV9025_SHARED_RESOURCE_MANAGER_TYPES_H_
 
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
+#include "adi_common_user.h"
 
 #ifdef __cplusplus
 extern "C" {

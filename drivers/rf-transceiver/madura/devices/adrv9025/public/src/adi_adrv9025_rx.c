@@ -1,9 +1,10 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adi_adrv9025_rx.c
 * \brief Contains Rx features related function implementation defined in
 * adi_adrv9025_rx.h
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -1796,10 +1797,6 @@ int32_t adi_adrv9025_RxGainSetRangeCheck(adi_adrv9025_Device_t* device,
 
     return device->common.error.newAction;
 }
-
-
-
-
 
 int32_t adi_adrv9025_RxGainSet(adi_adrv9025_Device_t* device,
                                adi_adrv9025_RxGain_t  rxGain[],

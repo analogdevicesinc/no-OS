@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adrv9025_bf_deser_types.h Automatically generated file with generator ver 0.0.1.0.
  *
  * \brief Contains BitField functions to support ADRV9025 transciever device.
@@ -46,3 +47,4 @@ typedef enum adrv9025_BfDeserRxdivrateLcpllRs
 #endif // __ADRV9025_BF_DESER_TYPES_H__
 
 /*  EOF: adrv9025_bf_deser_types.h */
+

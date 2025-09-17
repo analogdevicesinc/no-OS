@@ -1,9 +1,10 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adi_adrv9025_gpio.c
 * \brief Contains gpio features related function implementation defined in
 * adi_adrv9025_gpio.h
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /*

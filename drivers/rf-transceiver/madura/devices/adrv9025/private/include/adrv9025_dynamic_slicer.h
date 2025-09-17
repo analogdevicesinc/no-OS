@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adrv9025_dynamic_slicer.h
 * \brief Contains ADRV9025 private function prototypes for
 *        adrv9025_dynamic_slicer.c that helps adi_adrv9025_dynamic_slicer.c
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**

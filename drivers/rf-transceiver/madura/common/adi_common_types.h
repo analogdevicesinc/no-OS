@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_common_types.h
 * \brief Contains ADI common types.
 *
@@ -38,3 +39,4 @@ typedef uint32_t adi_iter_t;
 }
 #endif
 #endif  /* _ADI_COMMON_TYPES_H_ */
+

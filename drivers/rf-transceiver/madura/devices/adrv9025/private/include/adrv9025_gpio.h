@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adrv9025_gpio.h
 * \brief Contains ADRV9025 transmit related function prototypes for
 *        adrv9025_gpio.c
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 *
 * Copyright 2015-2019 Analog Devices Inc.
 * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.pdf" file.

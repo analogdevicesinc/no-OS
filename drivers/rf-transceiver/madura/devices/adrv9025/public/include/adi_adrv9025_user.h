@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_adrv9025_user.h
 * \brief Contains ADRV9025 API macro definitions and global structure declarations for adi_adrv9025_user.c
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -691,9 +692,7 @@ extern
  * Streaming speeds up the memory access when there is large number of bytes to be written.
  */
 #ifndef ADI_ADRV9025_SPI_WRITE_STREAMING_ENABLE
-
-#define ADI_ADRV9025_SPI_WRITE_STREAMING_ENABLE  0
-
+#define ADI_ADRV9025_SPI_WRITE_STREAMING_ENABLE  1
 #endif
 
 
@@ -753,10 +752,17 @@ extern
 #endif
 
 #ifndef ADI_ADRV9025_HW_RMW_ENABLE
-
 #define ADI_ADRV9025_HW_RMW_ENABLE    1    /* Enable/Disable HW_RMW for ADRV9025 */
-
 #endif
+
+
+/**
+ * Set to 1 to disable any code that uses floating point types
+ */
+#ifndef ADI_ADRV9025_RM_FLOATS
+#define ADI_ADRV9025_RM_FLOATS  0
+#endif
+
 
 #ifdef __cplusplus
 }

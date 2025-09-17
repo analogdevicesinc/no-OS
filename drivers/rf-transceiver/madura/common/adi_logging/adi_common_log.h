@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_common_log.h
 * \brief Contains ADI Hardware Abstraction layer function prototypes and type definitions for adi_common_log.c
 *
@@ -14,9 +15,7 @@
 #ifndef _ADI_COMMON_LOG_H_
 #define _ADI_COMMON_LOG_H_
 
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
+#include "adi_common_user.h"
 #include "adi_common_log_types.h"
 #include "adi_common_macros.h"
 #include "adi_common_error.h"
@@ -52,7 +51,7 @@ extern "C" {
 * \param commonDev pointer to adi_common_Device_t
 * \param logLevel of type adi_common_LogLevel_e
 * \param message const char pointer that represents the message to be logged
-* \param ... variable argument passed to adi_common_Logwrite
+* \param ... variable argument passed to adrv9025_LogWrite
 */
 #define ADI_FUNCTION_ENTRY_VARIABLE_LOG(commonDev, logLevel, message, ...) \
     adrv9025_LogWrite(commonDev, logLevel, message, __FUNCTION__, ##__VA_ARGS__)
@@ -136,7 +135,7 @@ void adi_common_LogLevelGet(adi_common_Device_t* commonDev,
 * \param commonDev pointer to adi_common_Device_t
 * \param logLevel of type adi_common_LogLevel_e
 * \param comment const char pointer that represents the message to be logged
-* \param ... variable argument passed to adi_common_Logwrite
+* \param ... variable argument passed to adrv9025_LogWrite
 */
 void adrv9025_LogWrite(adi_common_Device_t*  commonDev,
                          adi_common_LogLevel_e logLevel,

@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_common_log_types.h
 * \brief Contains ADI common log types.
 *

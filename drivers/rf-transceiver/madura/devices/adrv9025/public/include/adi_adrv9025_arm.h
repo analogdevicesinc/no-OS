@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adi_adrv9025_arm.h
  * \brief Contains ADRV9025 ARM related function prototypes for adi_adrv9025_arm.c
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -172,8 +173,8 @@ int32_t adi_adrv9025_AdcProfilesWrite(adi_adrv9025_Device_t*            device,
 /**
  * \brief Read from the ADRV9025 ARM program or data memory
  *
- * Valid memory addresses are: Program Memory (0x01018000 - 0x0104FFFF),
- * Data Memory (0x20028000 - 0x2004FFFF).
+ * Valid memory addresses are: Program Memory (0x01000000 - 0x0104FFFF),
+ * Data Memory (0x20000000 - 0x2004FFFF).
  *
  * \pre This function is private and is not called directly by the user.
  *
@@ -201,8 +202,8 @@ int32_t adi_adrv9025_ArmMemRead(adi_adrv9025_Device_t* device,
 /**
  * \brief Write to the ADRV9025 ARM program or data memory
  *
- * Valid memory addresses are: Program Memory (0x01018000 - 0x0104FFFF),
- * Data Memory (0x20028000 - 0x2004FFFF).
+ * Valid memory addresses are: Program Memory (0x01000000 - 0x0104FFFF),
+ * Data Memory (0x20000000 - 0x2004FFFF).
  *
  * \pre This function is private and is not called directly by the user.
  *

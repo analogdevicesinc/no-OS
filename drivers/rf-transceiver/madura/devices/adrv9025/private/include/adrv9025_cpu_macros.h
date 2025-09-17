@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adrv9025_cpu_macros.h
  * \brief Contains ADRV9025 API miscellaneous macro definitions for CPU
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -13,10 +14,6 @@
 
 #ifndef _ADRV_9025_CPU_MACROS_H_
 #define _ADRV_9025_CPU_MACROS_H_
-
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -97,6 +94,8 @@ extern "C"
 #define ADRV9025_CPU_OBJECTID_RXGAINPHASECAL_INIT         0x1B
 #define ADRV9025_CPU_OBJECTID_CFR_INIT                    0x1D
 
+#define ADRV9025_CPU_OBJECTID_CFR_INIT_NO_FLOAT           0x2F
+
 #define ADRV9025_CPU_OBJECTID_RXQEC_TRACKING              0x30
 #define ADRV9025_CPU_OBJECTID_ORXQEC_TRACKING             0x31
 #define ADRV9025_CPU_OBJECTID_TXLOL_TRACKING              0x32
@@ -106,6 +105,9 @@ extern "C"
 #define ADRV9025_CPU_OBJECTID_VSWR_TRACKING               0x36
 #define ADRV9025_CPU_OBJECTID_RXHD2_TRACKING              0x37
 #define ADRV9025_CPU_OBJECTID_DES_TRACKING                0x38
+
+#define ADRV9025_CPU_OBJECTID_DPD_TRACKING_NO_FLOAT       0x3E
+#define ADRV9025_CPU_OBJECTID_CLGC_TRACKING_NO_FLOAT      0x3F
 
 #define ADRV9025_CPU_OBJECTID_TEMP_SENSOR                 0x40
 #define ADRV9025_CPU_OBJECTID_RSSI                        0x41
@@ -172,29 +174,30 @@ extern "C"
 #define ADRV9025_CPU_OBJECTID_SYSTEM_CONFIG               0xFF
 
 /* CPU-C memory map */
-#define ADRV9025_CPU_C_ADDR_PROG_START                    0x01018000
+#define ADRV9025_CPU_C_ADDR_PROG_START                    0x01010000
 #define ADRV9025_CPU_C_ADDR_PROG_END                      0x0104FFFF
-#define ADRV9025_CPU_C_ADDR_DATA_START                    0x20028000
+#define ADRV9025_CPU_C_ADDR_DATA_START                    0x20024000
 #define ADRV9025_CPU_C_ADDR_DATA_END                      0x2004FFFF
-#define ADRV9025_CPU_C_ADDR_VERSION                       0x01018240
-#define ADRV9025_CPU_C_ADDR_CFR_PULSE                     0x010182A8
-#define ADRV9025_CPU_C_ADDR_DEV_PROFILE                   0x01018274
-#define ADRV9025_CPU_C_ADDR_ADC_PROFILE                   0x01018278
-#define ADRV9025_CPU_C_ADDR_DEBUG_PTR                     0x0101827C
-#define ADRV9025_CPU_C_ADDR_BUILD_CHKSUM                  0x01047FFC
-#define ADRV9025_CPU_C_ADDR_CALC_CHKSUM_PTR               0x01018270
-#define ADRV9025_CPU_C_ADDR_MAILBOX_SET                   0x20028000
-#define ADRV9025_CPU_C_ADDR_MAILBOX_GET                   0x20028100
-#define ADRV9025_CPU_C_ADDR_MAILBOX_RUN_INIT              0x20028200
-#define ADRV9025_CPU_C_ADDR_MAILBOX_FHM                   0x20028208
+#define ADRV9025_CPU_C_ADDR_VERSION                       (ADRV9025_CPU_C_ADDR_PROG_START + 0x240)
+#define ADRV9025_CPU_C_ADDR_CFR_PULSE                     (ADRV9025_CPU_C_ADDR_PROG_START + 0x2A8)
+#define ADRV9025_CPU_C_ADDR_DEV_PROFILE                   (ADRV9025_CPU_C_ADDR_PROG_START + 0x274)
+#define ADRV9025_CPU_C_ADDR_ADC_PROFILE                   (ADRV9025_CPU_C_ADDR_PROG_START + 0x278)
+#define ADRV9025_CPU_C_ADDR_DEBUG_PTR                     (ADRV9025_CPU_C_ADDR_PROG_START + 0x27C)
+#define ADRV9025_CPU_C_ADDR_BUILD_CHKSUM                  (ADRV9025_CPU_C_ADDR_PROG_END - 3)
+#define ADRV9025_CPU_C_ADDR_CALC_CHKSUM_PTR               (ADRV9025_CPU_C_ADDR_PROG_START + 0x270)
+#define ADRV9025_CPU_C_ADDR_MAILBOX_SET                   (ADRV9025_CPU_C_ADDR_DATA_START)
+#define ADRV9025_CPU_C_ADDR_MAILBOX_GET                   (ADRV9025_CPU_C_ADDR_DATA_START + 0x100)
+#define ADRV9025_CPU_C_ADDR_MAILBOX_RUN_INIT              (ADRV9025_CPU_C_ADDR_DATA_START + 0x200)
+#define ADRV9025_CPU_C_ADDR_MAILBOX_FHM                   (ADRV9025_CPU_C_ADDR_DATA_START + 0x208)
+#define ADRV9025_CPU_C_ADDR_EXCEPTION_FLAG                (ADRV9025_CPU_C_ADDR_DATA_START + 0x210)
 
 /* CPU-D memory map */
 #define ADRV9025_CPU_D_INVALID_ADDRESS                    0xFFFFFFFF
 #define ADRV9025_CPU_D_ADDR_PROG_START                    0x01000000
-#define ADRV9025_CPU_D_ADDR_PROG_END                      0x01017FFF
+#define ADRV9025_CPU_D_ADDR_PROG_END                      (ADRV9025_CPU_C_ADDR_PROG_START - 1)
 #define ADRV9025_CPU_D_ADDR_DATA_START                    0x20000000
-#define ADRV9025_CPU_D_ADDR_DATA_END                      0x20027FFF
-#define ADRV9025_CPU_D_ADDR_VERSION                       0x01000240
+#define ADRV9025_CPU_D_ADDR_DATA_END                      (ADRV9025_CPU_C_ADDR_DATA_START - 1)
+#define ADRV9025_CPU_D_ADDR_VERSION                       (ADRV9025_CPU_D_ADDR_PROG_START + 0x240)
 #define ADRV9025_CPU_D_ADDR_CFR_PULSE                     ADRV9025_CPU_D_INVALID_ADDRESS /* ARM-D doesn't have this address */
 #define ADRV9025_CPU_D_ADDR_DEBUG_PTR                     ADRV9025_CPU_D_INVALID_ADDRESS /* ARM-D doesn't have this address */
 #define ADRV9025_CPU_D_ADDR_BUILD_CHKSUM                  ADRV9025_CPU_D_INVALID_ADDRESS /* ARM-D doesn't have this address */
@@ -203,9 +206,11 @@ extern "C"
 #define ADRV9025_CPU_D_ADDR_MAILBOX_GET                   ADRV9025_CPU_D_INVALID_ADDRESS /* ARM-D doesn't have this address */
 #define ADRV9025_CPU_D_ADDR_MAILBOX_RUN_INIT              ADRV9025_CPU_D_INVALID_ADDRESS /* ARM-D doesn't have this address */
 #define ADRV9025_CPU_D_ADDR_MAILBOX_FHM                   ADRV9025_CPU_D_INVALID_ADDRESS /* ARM-D doesn't have this address */
+#define ADRV9025_CPU_D_ADDR_EXCEPTION_FLAG                (ADRV9025_CPU_D_ADDR_DATA_START)
+#define ADRV9025_CPI_D_ADDR_CUSTOM_WAVEFORM_BUF           0x01005000
 
 /* ARM average temperature measurement */
-#define ADRV9025_CPU_ADDR_AVG_TEMP_ADDR                   0x010002B0
+#define ADRV9025_CPU_ADDR_AVG_TEMP_ADDR                   (ADRV9025_CPU_C_ADDR_PROG_START + 0x2B0)
 
 /*StringVersion address in ARM*/
 #define ADRV9025_CPU_ADDR_STREAM_VERSION                    0x2004E808

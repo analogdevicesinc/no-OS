@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 #include "adi_adrv9025_user.h"
 #include "adi_adrv9025_gpio.h"
 #include "adi_adrv9025_hal.h"

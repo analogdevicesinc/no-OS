@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_common_macros.h
 * \brief Contains ADI Transceiver general purpose macros.
 *
@@ -24,7 +25,9 @@ extern "C" {
 #define ADI_TRUE  1U
 #define ADI_FALSE 0U
 
+#ifndef ADI_ENABLE
 #define ADI_ENABLE  1U
+#endif
 #define ADI_DISABLE 0U
 
 #define ADI_ON  1U

@@ -1,8 +1,9 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adrv9025_utilities.c
 * \brief Contains Utility features related private function implementations
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -13,12 +14,6 @@
 
 #include "adi_adrv9025_user.h"
 #include "../include/adrv9025_utilities.h"
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#include <linux/ctype.h>
-#endif
-#include <ctype.h>
-#include <string.h>
 #include "adi_adrv9025_error.h"
 #include "adi_adrv9025_hal.h"
 #include "adi_adrv9025_cpu.h"

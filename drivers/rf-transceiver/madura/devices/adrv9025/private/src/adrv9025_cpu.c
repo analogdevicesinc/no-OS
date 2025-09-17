@@ -1,7 +1,8 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adrv9025_cpu.c
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -15,11 +16,8 @@
 * \brief Contains CPU private features related function implementation defined in
 *        adrv9025_cpu.h
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
 
 #include "adi_adrv9025_user.h"
 #include "adi_adrv9025_hal.h"
@@ -40,6 +38,9 @@
 
 #define ADRV9025_PROFILE_CHUNK_MAX 256u
 
+/*****************************************************************************/
+/***** Local data types ******************************************************/
+/*****************************************************************************/
 enum adrv9025_CpuErrorFlag
 {
     ADRV9025_CPU_ERROR_FLAG_INVALID = 0,
@@ -52,6 +53,9 @@ enum adrv9025_CpuErrorFlag
     ADRV9025_CPU_ERROR_FLAG_7
 };
 
+/*****************************************************************************/
+/***** Helper functions' prototypes ******************************************/
+/*****************************************************************************/
 static uint8_t adrv9025_cpuTypeIsValid(
     adi_adrv9025_CpuType_e type);
 
@@ -178,6 +182,10 @@ static int32_t adrv9025_SpiCfgSet(
 static uint8_t adrv9025_DesCfgHasData(
     adi_adrv9025_Device_t*      device,
     adi_adrv9025_DesCfg_t*      config);
+
+/*****************************************************************************/
+/***** Helper functions' definition ******************************************/
+/*****************************************************************************/
 
 int32_t adrv9025_SpiCfgSet(adi_adrv9025_Device_t*      device,
                            adi_adrv9025_SpiSettings_t* spi)
@@ -1544,7 +1552,6 @@ const char* adrv9025_CpuErrMsgGet(
 
         *mailboxErrCodeRet = mailboxErrCode;
     }
-
     errCode = ((errCode & (ADRV9025_CPU_OPCODE_MASK | ADRV9025_CPU_OBJ_ID_MASK)) | cpuErrorFlag);
 
     if (cpuErrorFlag > 0)
@@ -1914,6 +1921,9 @@ uint8_t adrv9025_cpuTypeIsValid(adi_adrv9025_CpuType_e type)
     return result;
 }
 
+/*****************************************************************************/
+/***** Public functions' definition ******************************************/
+/*****************************************************************************/
 adi_adrv9025_CpuAddr_t* adrv9025_CpuAddrGet(
     adi_adrv9025_Cpu_t*    cpu,
     adi_adrv9025_CpuType_e cpuType)
@@ -2049,7 +2059,7 @@ int32_t adrv9025_CpuDmaMemWrite(
             /* Streaming with custom hal layer function(adi_hal_CustomSpiStreamWrite) */
             ADRV9025_SPIWRITEWORDDMASTREAMWITHCUSTOMHALFUNCTION("DMA_MEM_WRITE_STREAM", ADRV9025_CPU_ADDR_DMA_DATA3, data, byteCount);
 #else
-            /* Streaming with standard hal layer function(adrv9025_hal_SpiWrite) */
+            /* Streaming with standard hal layer function */
             ADRV9025_SPIWRITEWORDDMASTREAM("DMA_MEM_WRITE_STREAM",
                                            ADRV9025_CPU_ADDR_DMA_DATA3,
                                            data,
@@ -2261,7 +2271,7 @@ int32_t adrv9025_CpuDmaMemRead(
         /* Streaming with custom hal layer function(adi_hal_CustomSpiStreamRead) */
         ADRV9025_SPIREADWORDDMASTREAMWITHCUSTOMHALFUNCTION("DMA_MEM_READ_STREAM", ADRV9025_CPU_ADDR_DMA_DATA3, returnData, byteCount);
 #else
-        /* Streaming with standard hal layer function(adrv9025_hal_SpiRead) */
+        /* Streaming with standard hal layer function */
         ADRV9025_SPIREADWORDDMASTREAM("DMA_MEM_READ_STREAM",
                                       ADRV9025_CPU_ADDR_DMA_DATA3,
                                       returnData,
@@ -2519,7 +2529,7 @@ int32_t adrv9025_CpuAdcProfilesWrite(adi_adrv9025_Device_t*            device,
     uint32_t checksum                                 = 0;
     uint32_t start                                    = 0;
 
-    static const uint32_t ADRV9025_ADDR_DEVICE_PROFILE = 0x20000000;
+    static const uint32_t ADRV9025_ADDR_DEVICE_PROFILE = ADRV9025_CPU_D_ADDR_DATA_START;
     static const uint32_t ADRV9025_ADC_PROFILE_MAX     = 684;
 
     ADI_NULL_DEVICE_PTR_RETURN(device);
@@ -2770,7 +2780,7 @@ int32_t adrv9025_CpuProfileWrite(adi_adrv9025_Device_t*     device,
     uint32_t i                                        = 0;
     uint8_t  cfgData[ADRV9025_PROFILE_CHUNK_MAX + 10] = {0};
 
-    static const uint32_t ADRV9025_ADDR_DEVICE_PROFILE = 0x20000000;
+    static const uint32_t ADRV9025_ADDR_DEVICE_PROFILE = ADRV9025_CPU_D_ADDR_DATA_START;
     static const uint32_t ADRV9025_PROFILE_MAX         = 1352;
 
     static const uint32_t ADRV9025_PROFILE_TX  = 40;

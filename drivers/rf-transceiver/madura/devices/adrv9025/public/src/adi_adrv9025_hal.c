@@ -1,10 +1,11 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adi_adrv9025_hal.c
 * \brief Contains ADI Transceiver Hardware Abstraction functions
 *        Analog Devices maintains and provides updates to this code layer.
 *        The end user should not modify this file or any code in this directory.
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /* Intermediate platform HAL layer maintained by Analog Devices */
@@ -1120,3 +1121,4 @@ int32_t adi_adrv9025_HwVerify(adi_adrv9025_Device_t *device)
 
     return adi_common_hal_HwVerify(&device->common);
 }
+
