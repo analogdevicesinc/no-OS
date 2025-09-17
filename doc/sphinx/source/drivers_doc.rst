@@ -68,6 +68,8 @@ FREQUENCY GENERATORS
 
    drivers/frequency/*
 
+   drivers/ad9553
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
