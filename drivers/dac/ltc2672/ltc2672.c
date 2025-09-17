@@ -33,10 +33,13 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "ltc2672.h"
 #include "no_os_spi.h"
+#include "no_os_gpio.h"
+#include "no_os_delay.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
@@ -44,34 +47,39 @@
 /******************************************************************************/
 
 /**
- * @brief Device and communication init function
- * @param device - ltc2672 descriptor to be initialized
- * @param init_param - Initial parameter for descriptor
- * @return 0 in case of success, errno errors otherwise
+ * @brief Deallocate memory for the GPIOs assigned.
+ * @param device - ltc2672 descriptor
+ * @return 0 in case of success, negative error code otherwise.
  */
-int ltc2672_init(struct ltc2672_dev **device,
-		 struct ltc2672_init_param *init_param)
+static int ltc2672_remove_gpio(struct ltc2672_dev *device)
 {
 	int ret;
-	struct ltc2672_dev *descriptor;
 
-	descriptor = (struct ltc2672_dev *)no_os_calloc(1, sizeof(*descriptor));
-	if (!descriptor)
-		return -ENOMEM;
+	if (device->gpio_clear) {
+		ret = no_os_gpio_remove(device->gpio_clear);
+		if (ret)
+			return ret;
+	}
 
-	ret = no_os_spi_init(&descriptor->comm_desc, &init_param->spi_init);
-	if (ret)
-		goto error_init;
+	if (device->gpio_tgp) {
+		ret = no_os_gpio_remove(device->gpio_tgp);
+		if (ret)
+			return ret;
+	}
 
-	descriptor->id = init_param->id;
+	if (device->gpio_ldac) {
+		ret = no_os_gpio_remove(device->gpio_ldac);
+		if (ret)
+			return ret;
+	}
 
-	*device = descriptor;
+	if (device->gpio_fault) {
+		ret = no_os_gpio_remove(device->gpio_fault);
+		if (ret)
+			return ret;
+	}
 
 	return 0;
-
-error_init:
-	no_os_free(descriptor);
-	return ret;
 }
 
 /**
@@ -86,11 +94,56 @@ int ltc2672_remove(struct ltc2672_dev *device)
 	if (!device)
 		return -ENODEV;
 
+	ret = ltc2672_remove_gpio(device);
+	if (ret)
+		return ret;
+
 	ret = no_os_spi_remove(device->comm_desc);
+	if (ret)
+		return ret;
 
 	no_os_free(device);
 
 	return ret;
+}
+
+/**
+ * @brief Device configuration reset.
+ * @param device - ltc2672 descriptor
+ * @return 0 in case of success, -1 otherwise.
+ */
+static int ltc2672_cfg_reset(struct ltc2672_dev *device)
+{
+	memset(device->max_currents, 0, sizeof(device->max_currents));
+	memset(device->out_spans, LTC2672_OFF, sizeof(device->out_spans));
+	device->global_toggle = false;
+
+	return 0;
+}
+
+/**
+ * @brief Perform reset using clear GPIO.
+ * @param device - ltc2672 descriptor
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ltc2672_reset(struct ltc2672_dev *device)
+{
+	int ret;
+
+	ret = no_os_gpio_set_value(device->gpio_clear, NO_OS_GPIO_LOW);
+	if (ret)
+		return ret;
+
+	no_os_udelay(1);
+
+	ret = no_os_gpio_set_value(device->gpio_clear, NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+
+	/* Default interface configuration after reset */
+	return (ltc2672_cfg_reset(device));
+
+	return 0;
 }
 
 /**
@@ -103,7 +156,7 @@ int ltc2672_remove(struct ltc2672_dev *device)
 int ltc2672_transaction(struct ltc2672_dev *device, uint32_t comm, bool is_32)
 {
 	int ret, i, bytes;
-	uint8_t raw_array[4]; // highest bytes transmitted is 4 bytes
+	uint8_t raw_array[LTC2672_COMMAND_MAX_BYTES];
 	uint32_t read_back = 0;
 
 	if (is_32)
@@ -139,7 +192,7 @@ uint32_t ltc2672_current_to_code(struct ltc2672_dev *device,
 {
 	uint32_t current_code;
 
-	if (device->id == LTC2672_12)
+	if (device->id == LTC2672_12 || device->id == LTC2662_12)
 		current_code = ((dac_current * LTC2672_12BIT_RESO) /
 				device->max_currents[out_ch]);
 	else
@@ -161,28 +214,30 @@ int ltc2672_set_code_channel(struct ltc2672_dev *device, uint16_t code,
 {
 	uint32_t command;
 
-	if ((device->id == LTC2672_12 && code > LTC2672_12BIT_RESO)
-	    || (device->id == LTC2672_16 && code > LTC2672_16BIT_RESO)
+	if (((device->id == LTC2672_12 || device->id == LTC2662_12)
+	     && code > LTC2672_12BIT_RESO)
+	    || ((device->id == LTC2672_16 || device->id == LTC2662_16)
+		&& code > LTC2672_16BIT_RESO)
 	    || out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	/* Switching to V- results in constant -80mA output */
 	if (device->out_spans[out_ch] == LTC2672_VMINUS_VREF) {
-		command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_X,
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_X,
 						     out_ch,
 						     LTC2672_DUMMY);
 
-		return ltc2672_transaction(device, command, false);
+		return ltc2672_transaction(device, command, true);
 	}
 
-	if (device->id == LTC2672_12)
+	if (device->id == LTC2672_12 || device->id == LTC2662_12)
 		code <<= LTC2672_BIT_SHIFT_12BIT;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_X,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_X,
 					     out_ch,
 					     code);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -198,8 +253,8 @@ int ltc2672_set_current_channel(struct ltc2672_dev *device,
 {
 	uint32_t current_code;
 
-	if (current > device->max_currents[out_ch] || current < LTC2672_OFF_CURRENT
-	    || out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+	if (current > device->max_currents[out_ch] || out_ch < LTC2672_DAC0
+	    || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
 	current_code = ltc2672_current_to_code(device, current, out_ch);
@@ -217,26 +272,28 @@ int ltc2672_set_code_all_channels(struct ltc2672_dev *device, uint16_t code)
 {
 	uint32_t command;
 
-	if ((device->id == LTC2672_12 && code > LTC2672_12BIT_RESO)
-	    || (device->id == LTC2672_16 && code > LTC2672_16BIT_RESO))
+	if (((device->id == LTC2672_12 || device->id == LTC2662_12)
+	     && code > LTC2672_12BIT_RESO)
+	    || ((device->id == LTC2672_16 || device->id == LTC2662_16)
+		&& code > LTC2672_16BIT_RESO))
 		return -EINVAL;
 
 	if (device->out_spans[0] == LTC2672_VMINUS_VREF) {
-		command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_ALL,
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_ALL,
 						     LTC2672_DAC0,
 						     LTC2672_DUMMY);
 
-		return ltc2672_transaction(device, command, false);
+		return ltc2672_transaction(device, command, true);
 	}
 
-	if (device->id == LTC2672_12)
+	if (device->id == LTC2672_12 || device->id == LTC2662_12)
 		code <<= LTC2672_BIT_SHIFT_12BIT;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_ALL,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_PWRUP_UPD_CHANNEL_ALL,
 					     LTC2672_DAC0,
 					     (uint32_t)code);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -250,16 +307,13 @@ int ltc2672_set_current_all_channels(struct ltc2672_dev *device,
 {
 	int i;
 	uint32_t current_code;
-	enum ltc2672_out_range out_range_sum = 0;
-
-	for (i = 0; i < LTC2672_TOTAL_CHANNELS; i++)
-		out_range_sum += device->out_spans[i];
-
-	out_range_sum /= LTC2672_TOTAL_CHANNELS;
 
 	/* Check if all channels have same span */
-	if (out_range_sum != device->out_spans[0])
-		return -EINVAL;
+	for (i = 1; i < LTC2672_TOTAL_CHANNELS; i++) {
+		if (device->out_spans[i] != device->out_spans[0]) {
+			return -EINVAL;
+		}
+	}
 
 	current_code = ltc2672_current_to_code(device, current, 0);
 
@@ -288,9 +342,9 @@ int ltc2672_set_span_channel(struct ltc2672_dev *device,
 
 	span = LTC2672_SPAN_SET(ch_span);
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_SPAN_TO_CHANNEL_X, out_ch, span);
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_SPAN_TO_CHANNEL_X, out_ch, span);
 
-	ret = ltc2672_transaction(device, command, false);
+	ret = ltc2672_transaction(device, command, true);
 	if (ret)
 		return ret;
 
@@ -339,10 +393,10 @@ int ltc2672_set_span_all_channels(struct ltc2672_dev *device,
 
 	span = LTC2672_SPAN_SET(ch_span);
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_SPAN_TO_CHANNEL_ALL, LTC2672_DAC0,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_SPAN_TO_CHANNEL_ALL, LTC2672_DAC0,
 					     span);
 
-	ret = ltc2672_transaction(device, command, false);
+	ret = ltc2672_transaction(device, command, true);
 	if (ret)
 		return ret;
 
@@ -379,10 +433,10 @@ int ltc2672_chip_power_down(struct ltc2672_dev *device)
 {
 	uint32_t command;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_PWRDWN_DEV, LTC2672_DAC0,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRDWN_DEV, LTC2672_DAC0,
 					     LTC2672_DUMMY);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -399,10 +453,10 @@ int ltc2672_power_down_channel(struct ltc2672_dev *device,
 	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_PWRDWN_CHANNEL_X, out_ch,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRDWN_CHANNEL_X, out_ch,
 					     LTC2672_DUMMY);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -417,10 +471,10 @@ int ltc2672_power_down_all_channels(struct ltc2672_dev *device)
 	enum ltc2672_dac_ch i;
 
 	for (i = LTC2672_DAC0; i < LTC2672_TOTAL_CHANNELS; i++) {
-		command = LTC2672_COMMAND24_GENERATE(LTC2672_PWRDWN_CHANNEL_X, i,
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRDWN_CHANNEL_X, i,
 						     LTC2672_DUMMY);
 
-		ret = ltc2672_transaction(device, command, false);
+		ret = ltc2672_transaction(device, command, true);
 		if (ret)
 			return ret;
 	}
@@ -445,9 +499,9 @@ int ltc2672_monitor_mux(struct ltc2672_dev *device,
 
 	mux = LTC2672_MUX_SET(mux_comm);
 
-	command = LTC2672_MUX24_GENERATE(LTC2672_MON_MUX, mux);
+	command = LTC2672_MUX32_GENERATE(LTC2672_MON_MUX, mux);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -471,50 +525,196 @@ int ltc2672_setup_toggle_channel(struct ltc2672_dev *device,
 	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
 		return -EINVAL;
 
-	if ((current_reg_a < 0 && device->out_spans[out_ch] != LTC2672_VMINUS_VREF)
-	    || (current_reg_b < 0 && device->out_spans[out_ch] != LTC2672_VMINUS_VREF)
-	    || (current_reg_a > device->max_currents[out_ch])
+	if ((current_reg_a > device->max_currents[out_ch])
 	    || (current_reg_b > device->max_currents[out_ch]))
 		return -EINVAL;
 
 	/* Write code to Register A of out_ch */
 	current_code = ltc2672_current_to_code(device, current_reg_a, out_ch);
 
-	if (device->id == LTC2672_12)
+	if (device->id == LTC2672_12 || device->id == LTC2662_12)
 		current_code <<= LTC2672_BIT_SHIFT_12BIT;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch, current_code);
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch, current_code);
 
-	ret = ltc2672_transaction(device, command, false);
+	ret = ltc2672_transaction(device, command, true);
 	if (ret)
 		return ret;
 
 	/* Toggle to enable register B*/
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, NO_OS_BIT(out_ch));
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, NO_OS_BIT(out_ch));
 
-	ret = ltc2672_transaction(device, command, false);
+	ret = ltc2672_transaction(device, command, true);
 	if (ret)
 		return ret;
 
 	/* Write code to Register B of out_ch */
 	current_code = ltc2672_current_to_code(device, current_reg_b, out_ch);
 
-	if (device->id == LTC2672_12)
+	if (device->id == LTC2672_12 || device->id == LTC2662_12)
 		current_code <<= LTC2672_BIT_SHIFT_12BIT;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,
 					     current_code);
 
-	ret = ltc2672_transaction(device, command, false);
+	ret = ltc2672_transaction(device, command, true);
 	if (ret)
 		return ret;
 
 	/* Toggle to enable register A*/
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, NO_OS_BIT(out_ch));
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, NO_OS_BIT(out_ch));
 
 	command &= ~NO_OS_BIT(out_ch);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
+}
+
+/**
+ * @brief writes to the input register of a channel
+ * @param device - ltc2672 descriptor
+ * @param out_ch - channel to set the current
+ * @param current_reg - current to write in register
+ * @param is_reg_a - flag to select register A or B
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_write_input_register_channel(struct ltc2672_dev *device,
+		enum ltc2672_dac_ch out_ch,
+		uint32_t current_reg,
+		bool is_reg_a)
+{
+	int ret;
+	uint32_t current_code;
+	uint32_t command;
+
+	if (device->out_spans[out_ch] == LTC2672_VMINUS_VREF
+	    || device->out_spans[out_ch] == LTC2672_OFF)
+		return -EINVAL;
+
+	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
+
+	if (current_reg > device->max_currents[out_ch])
+		return -EINVAL;
+
+	if (is_reg_a) {
+		/* Write code to Register A of out_ch */
+		current_code = ltc2672_current_to_code(device, current_reg, out_ch);
+
+		if (device->id == LTC2672_12  || device->id == LTC2662_12)
+			current_code <<= LTC2672_BIT_SHIFT_12BIT;
+
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_TO_CHANNEL_X, out_ch,
+						     current_code);
+
+		ret = ltc2672_transaction(device, command, true);
+		if (ret) {
+			return ret;
+		}
+	} else {
+		/* Toggle to enable register B*/
+		ret = ltc2672_enable_toggle_channel(device, NO_OS_BIT(out_ch));
+		if (ret) {
+			return ret;
+		}
+
+		/* Write code to Register B of out_ch */
+		current_code = ltc2672_current_to_code(device, current_reg, out_ch);
+
+		if (device->id == LTC2672_12 || device->id == LTC2662_12)
+			current_code <<= LTC2672_BIT_SHIFT_12BIT;
+
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_TO_CHANNEL_X,
+						     out_ch,
+						     current_code);
+
+		ret = ltc2672_transaction(device, command, true);
+		if (ret) {
+			return ret;
+		}
+
+		/* Toggle to enable register A*/
+		ret = ltc2672_enable_toggle_channel(device, 0);
+		if (ret) {
+			return ret;
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * @brief writes to the input registers of all channels
+ * @param device - ltc2672 descriptor
+ * @param current_reg - current to write in register
+ * @param is_reg_a - flag to select register A or B
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_write_input_register_all_channels(struct ltc2672_dev *device,
+		uint32_t current_reg,
+		bool is_reg_a)
+{
+	int ret;
+	int i;
+	uint32_t current_code;
+	uint32_t command;
+
+	if (device->out_spans[0] == LTC2672_VMINUS_VREF
+	    || device->out_spans[0] == LTC2672_OFF)
+		return -EINVAL;
+
+	if (current_reg > device->max_currents[0])
+		return -EINVAL;
+
+	for (i = 1; i < LTC2672_TOTAL_CHANNELS; i++) {
+		if (device->out_spans[i] != device->out_spans[0]) {
+			return -EINVAL;
+		}
+	}
+
+	if (is_reg_a) {
+		/* Write code to Register A */
+		current_code = ltc2672_current_to_code(device, current_reg, LTC2672_DAC0);
+
+		if (device->id == LTC2672_12  || device->id == LTC2662_12)
+			current_code <<= LTC2672_BIT_SHIFT_12BIT;
+
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_TO_CHANNEL_ALL, LTC2672_DAC0,
+						     current_code);
+
+		ret = ltc2672_transaction(device, command, true);
+		if (ret) {
+			return ret;
+		}
+	} else {
+		/* Toggle to enable register B */
+		ret = ltc2672_enable_toggle_channel(device, LTC2672_MAX_TOGGLE_MASK);
+		if (ret) {
+			return ret;
+		}
+
+		/* Write code to Register B */
+		current_code = ltc2672_current_to_code(device, current_reg, LTC2672_DAC0);
+
+		if (device->id == LTC2672_12 || device->id == LTC2662_12)
+			current_code <<= LTC2672_BIT_SHIFT_12BIT;
+
+		command = LTC2672_COMMAND32_GENERATE(LTC2672_CODE_TO_CHANNEL_ALL,
+						     LTC2672_DAC0,
+						     current_code);
+
+		ret = ltc2672_transaction(device, command, true);
+		if (ret) {
+			return ret;
+		}
+
+		/* Toggle to enable register A*/
+		ret = ltc2672_enable_toggle_channel(device, 0);
+		if (ret) {
+			return ret;
+		}
+	}
+
+	return ret;
 }
 
 /**
@@ -530,9 +730,9 @@ int ltc2672_enable_toggle_channel(struct ltc2672_dev *device, uint32_t mask)
 	if (mask > LTC2672_MAX_TOGGLE_MASK)
 		return -EINVAL;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, mask);
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_TOGGLE_SEL, LTC2672_DAC0, mask);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -547,10 +747,10 @@ int ltc2672_global_toggle(struct ltc2672_dev *device, bool is_enable)
 
 	device->global_toggle = is_enable;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_TOGGLE_GLBL, LTC2672_DAC0,
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_TOGGLE_GLBL, LTC2672_DAC0,
 					     (uint8_t)device->global_toggle);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
 }
 
 /**
@@ -566,7 +766,147 @@ int ltc2672_config_command(struct ltc2672_dev *device, uint8_t mask)
 	if (mask > LTC2672_MAX_CONFIG_MASK)
 		return -EINVAL;
 
-	command = LTC2672_COMMAND24_GENERATE(LTC2672_CNFG_CMD, LTC2672_DAC0, mask);
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_CNFG_CMD, LTC2672_DAC0, mask);
 
-	return ltc2672_transaction(device, command, false);
+	return ltc2672_transaction(device, command, true);
+}
+
+/**
+ * @brief updates the channel
+ * @param device - ltc2672 descriptor
+ * @param out_ch - channel to update
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_update_channel(struct ltc2672_dev *device,
+			   enum ltc2672_dac_ch out_ch)
+{
+	uint32_t command;
+
+	if (out_ch < LTC2672_DAC0 || out_ch > LTC2672_DAC4)
+		return -EINVAL;
+
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRUP_UPD_CHANNEL_X, out_ch,
+					     LTC2672_DUMMY);
+
+	return ltc2672_transaction(device, command, true);
+}
+
+/**
+ * @brief updates all the channels
+ * @param device - ltc2672 descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_update_all_channels(struct ltc2672_dev *device)
+{
+	uint32_t command;
+
+	command = LTC2672_COMMAND32_GENERATE(LTC2672_PWRUP_UPD_CHANNEL_ALL,
+					     LTC2672_DAC0, LTC2672_DUMMY);
+
+	return ltc2672_transaction(device, command, true);
+}
+
+/**
+ * @brief updates all the channels using the LDAC pin
+ * @param device - ltc2672 descriptor
+ * @return 0 in case of success, negative error code otherwise
+ */
+int ltc2672_hw_ldac_update(struct ltc2672_dev *device)
+{
+	int ret;
+
+	ret = no_os_gpio_set_value(device->gpio_ldac, NO_OS_GPIO_LOW);
+	if (ret)
+		return ret;
+
+	no_os_udelay(1);
+
+	ret = no_os_gpio_set_value(device->gpio_ldac, NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+
+	return 0;
+}
+
+/**
+ * @brief Device and communication init function
+ * @param device - ltc2672 descriptor to be initialized
+ * @param init_param - Initial parameter for descriptor
+ * @return 0 in case of success, errno errors otherwise
+ */
+int ltc2672_init(struct ltc2672_dev **device,
+		 struct ltc2672_init_param *init_param)
+{
+	int ret;
+	struct ltc2672_dev *descriptor;
+
+	descriptor = (struct ltc2672_dev *)no_os_calloc(1, sizeof(*descriptor));
+	if (!descriptor)
+		return -ENOMEM;
+
+	ret = no_os_spi_init(&descriptor->comm_desc, &init_param->spi_init);
+	if (ret)
+		goto error_init;
+
+	ret = no_os_gpio_get_optional(&descriptor->gpio_clear, init_param->gpio_clear);
+	if (ret)
+		goto error_spi;
+
+	/* Reset */
+	if (descriptor->gpio_clear) {
+		ret = no_os_gpio_direction_output(descriptor->gpio_clear, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto error_gpio;
+
+		ret = ltc2672_reset(descriptor);
+		if (ret)
+			goto error_gpio;
+	}
+
+	ret = no_os_gpio_get_optional(&descriptor->gpio_tgp, init_param->gpio_tgp);
+	if (ret)
+		goto error_gpio;
+
+	if (descriptor->gpio_tgp) {
+		ret = no_os_gpio_direction_output(descriptor->gpio_tgp, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto error_gpio;
+	}
+
+	ret = no_os_gpio_get_optional(&descriptor->gpio_ldac, init_param->gpio_ldac);
+	if (ret)
+		goto error_gpio;
+
+	if (descriptor->gpio_ldac) {
+		ret = no_os_gpio_direction_output(descriptor->gpio_ldac, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto error_gpio;
+	}
+
+	ret = no_os_gpio_get_optional(&descriptor->gpio_fault, init_param->gpio_fault);
+	if (ret)
+		goto error_gpio;
+
+	if (descriptor->gpio_fault) {
+		ret = no_os_gpio_direction_input(descriptor->gpio_fault);
+		if (ret)
+			goto error_gpio;
+	}
+
+	descriptor->id = init_param->id;
+
+	*device = descriptor;
+
+	return 0;
+
+error_gpio:
+	ltc2672_remove_gpio(descriptor);
+
+error_spi:
+	no_os_spi_remove(descriptor->comm_desc);
+
+error_init:
+	no_os_free(descriptor);
+
+	return ret;
 }
