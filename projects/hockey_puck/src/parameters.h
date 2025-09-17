@@ -101,7 +101,7 @@
 #endif
 #define AD7124_SPI_CLK_SPEED	1000000
 #define AD7124_SPI_RDY_POL_CNT	25000
-#define AD7124_BIPOLAR_MODE	true
+#define AD7124_BIPOLAR_MODE	false
 #define AD7124_BUFF_REF		true
 #define AD7124_BUFF_AIN		true
 #define AD7124_CH0_ENABLE	true
