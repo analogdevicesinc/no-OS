@@ -41,13 +41,13 @@
 #include <inttypes.h>
 
 // Device specific attributes
-#define ATTR_U2                         0
-#define ATTR_U0                         1
+#define NEG_UNB_VOLTAGE_RATIO           0
+#define ZERO_UNB_VOLTAGE_RATIO          1
 #define SNEG_VOLTAGE                    2
 #define SPOS_VOLTAGE                    3
 #define SZRO_VOLTAGE                    4
-#define ATTR_I2                         5
-#define ATTR_I0                         6
+#define NEG_UNB_CURRENT_RATIO           5
+#define ZERO_UNB_CURRENT_RATIO          6
 #define SNEG_CURRENT                    7
 #define SPOS_CURRENT                    8
 #define SZRO_CURRENT                    9
@@ -75,6 +75,12 @@
 #define NOMINAL_FREQUENCY_AVAILABLE     31
 #define PROCESS_DATA                    32
 #define FW_VERSION_NR                   33
+#define SNEG_VOLTAGE_ANGLE              34
+#define SPOS_VOLTAGE_ANGLE              35
+#define SZRO_VOLTAGE_ANGLE              36
+#define SNEG_CURRENT_ANGLE              37
+#define SPOS_CURRENT_ANGLE              38
+#define SZRO_CURRENT_ANGLE              39
 
 // Channel specific attributes
 #define CHAN_RMS                        0
