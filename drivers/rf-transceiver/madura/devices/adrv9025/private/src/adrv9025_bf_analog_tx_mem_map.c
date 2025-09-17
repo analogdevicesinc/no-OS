@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
  * \file Automatically generated file: adrv9025_bf_analog_tx_mem_map.c
  *

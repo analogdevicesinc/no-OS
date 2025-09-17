@@ -1,8 +1,9 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
  * \file adrv9025_init.c
  * \brief Contains ADRV9025 init related private function implementations
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -19,8 +20,6 @@
 #include "../devices/adrv9025/private/include/adrv9025_rx.h"
 #include "../devices/adrv9025/private/include/adrv9025_reg_addr_macros.h"
 #include "../devices/adrv9025/private/include/adrv9025_cpu_macros.h"
-
-#include "no_os_util.h"
 
 #line __LINE__ "adrv9025_init.c"
 
@@ -72,9 +71,7 @@ int32_t adrv9025_LdoEnable(adi_adrv9025_Device_t* device,
 
         /* Allow time for internal LDOs to power up */
 
-
         ADI_ERROR_RETURN(device->common.error.newAction);
-
     }
     else /* Report Error if LDO Select is not either 0 or 1 */
     {
@@ -1538,7 +1535,7 @@ int32_t adrv9025_RxOverloadProtectionSet(adi_adrv9025_Device_t*    device,
     static const uint8_t  AGC_ADC_HIGH_OVRG_EXCEEDED_CNTR_REG_VAL        = 0x03;
     static const uint16_t AGC_ADC_HIGH_OVRG_EXCEEDED_CNTR_REG_RX_OFFSET  = 0x70;
     static const uint16_t AGC_ADC_HIGH_OVRG_EXCEEDED_CNTR_REG_ORX_OFFSET = 0x8D;
-    static const uint64_t AGC_GAIN_UPDATE_CNTR_uS                        = 500;
+    /* static const uint32_t AGC_GAIN_UPDATE_CNTR_uS                     = 500; */
     static const uint32_t MAX_AGC_GAIN_UPDATE_CNTR_REG_VAL               = 0x03FFFFFF;
     static const uint16_t AGC_GAIN_UPDATE_CNTR1_RX_OFFSET                = 0x77;
     static const uint16_t AGC_GAIN_UPDATE_CNTR2_RX_OFFSET                = 0x78;
@@ -1576,7 +1573,7 @@ int32_t adrv9025_RxOverloadProtectionSet(adi_adrv9025_Device_t*    device,
     static const uint8_t  TIA_VALID_OVERRIDE_SHIFT                       = 0x01;
 
     uint32_t                             agcClkRate_kHz                   = (device->devStateInfo.hsDigClk_kHz >> device->devStateInfo.clkDivideRatios.agcClkDivideRatio);
-    uint64_t                             agcGainUpdateCounter             = NO_OS_DIV_U64((AGC_GAIN_UPDATE_CNTR_uS * agcClkRate_kHz), 1000);
+    uint32_t                             agcGainUpdateCounter             = agcClkRate_kHz / 2u; /* ((AGC_GAIN_UPDATE_CNTR_uS * agcClkRate_kHz) / 1000) */
     uint8_t                              agcGainUpdateCntr1RegVal         = (uint8_t)(agcGainUpdateCounter & (uint32_t)0x000000FF);
     uint8_t                              agcGainUpdateCntr2RegVal         = (uint8_t)((uint32_t)(agcGainUpdateCounter & (uint32_t)0x0000FF00) >> 8);
     uint8_t                              agcGainUpdateCntr3RegVal         = (uint8_t)((uint32_t)(agcGainUpdateCounter & (uint32_t)0x00FF0000) >> 16);
@@ -1626,7 +1623,7 @@ int32_t adrv9025_RxOverloadProtectionSet(adi_adrv9025_Device_t*    device,
                          ADI_COMMON_ERRSRC_API,
                          ADI_COMMON_ERR_INV_PARAM,
                          ADI_COMMON_ACT_ERR_CHECK_PARAM,
-                         AGC_GAIN_UPDATE_CNTR_uS,
+                         agcGainUpdateCounter,
                          "AGC Gain Update counter interval too large for the given agc clk rate. Max allowed value = 0x03FFFFFF.");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }

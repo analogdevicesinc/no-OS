@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file Automatically generated file: adrv9025_bf_tx.h
  *
  * \brief Contains BitField functions to support ADRV9025 transceiver device.

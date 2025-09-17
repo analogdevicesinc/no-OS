@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adrv9025_dfe.h
 * \brief Contains ADRV9025 DFE related function prototypes for
 *        adrv9025_dfe.c
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -22,6 +23,7 @@
 extern "C" {
 #endif
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Performs range check on the DPD model config params
 *
@@ -110,6 +112,96 @@ int32_t adrv9025_DpdStatusDeserialize(adi_adrv9025_Device_t*    device,
                                       adi_adrv9025_DpdStatus_t* dpdStatus,
                                       uint8_t*                  buf,
                                       uint8_t                   bufSize);
+#endif
+
+/**
+* \brief Performs range check on the DPD model config params, without floats
+*
+* \pre This function is automatically called as part of adi_adrv9025_DpdModelConfigSet_v2
+*      if macro ADI_ADRV9025_DPD_RANGE_CHECK is set to 1
+*
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param dpdModelConfig Pointer to the dpd model config structure consisting of the dpd model config settings.
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_DpdModelConfigSetRangeCheck_v2(adi_adrv9025_Device_t*            device,
+                                                adi_adrv9025_DpdModelConfig_v2_t* dpdModelConfig);
+
+/**
+* \brief Encodes the dpd model into config data format as expected by ADRV9025 firmware, without floats
+*
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param dpdModelConfig Pointer to the dpd model config structure consisting of the dpd model config settings.
+* \param armConfigData Array which will be updated with the encoded dpd model config data
+* \param arraySize Size of the armConfigData array in bytes
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_DpdModelConfigEncode_v2(adi_adrv9025_Device_t*            device,
+                                         adi_adrv9025_DpdModelConfig_v2_t* dpdModelConfig,
+                                         uint8_t                           armConfigData[],
+                                         uint16_t                          arraySize);
+
+/**
+* \brief Decodes the dpd model config data received from ADRV9025 firmware and updates
+*        the dpd model config structure, without floats
+*
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param armConfigData Array consisiting of the DPD model config data received from ADRV9025 firmware
+* \param arraySize Size of the armConfigData array in bytes
+* \param dpdModelConfig Pointer to the dpd model config structure which will be updated with
+*        the DPD model config settings retrieved from the ADRV9025 device.
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_DpdModelConfigDecode_v2(adi_adrv9025_Device_t*            device,
+                                         uint8_t                           armConfigData[],
+                                         uint16_t                          arraySize,
+                                         adi_adrv9025_DpdModelConfig_v2_t* dpdModelConfig);
+
+/**
+* \brief Deserialize raw data of DPD status into the structure, without floats
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param dpdStatus Pointer to adi_adrv9025_DpdStatus_v2_t where it will be populated with data deserialized from buffer
+* \param buf Pointer to buffer containing the raw data
+* \param size size of buffer
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_DpdStatusDeserialize_v2(adi_adrv9025_Device_t*       device,
+                                         adi_adrv9025_DpdStatus_v2_t* dpdStatus,
+                                         uint8_t*                     buf,
+                                         uint8_t                      bufSize);
 
 /**
 * \brief Performs range check on the DPD gain monitor config
@@ -311,6 +403,7 @@ int32_t adrv9025_DpdRecoveryActionGet(adi_adrv9025_Device_t*                  de
                                       adi_adrv9025_DpdErrorState_e            dpdErrorState,
                                       adi_adrv9025_DpdRecoveryActionConfig_t* recoveryActionConfig);
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Performs range check on the CFR Hard clipper threshold
 *
@@ -333,6 +426,30 @@ int32_t adrv9025_DpdRecoveryActionGet(adi_adrv9025_Device_t*                  de
 int32_t adrv9025_CfrHardClipperConfigSetRangeCheck(adi_adrv9025_Device_t*              device,
                                                    adi_adrv9025_CfrHardClipperConfig_t cfrHardClipperConfig[],
                                                    uint8_t                             cfrHardClipperCfgArraySize);
+#endif
+
+/**
+* \brief Performs range check on the CFR Hard clipper threshold, without floats
+*
+* \pre This function is automatically called as part of adi_adrv9025_CfrHardClipperConfigSet_v2
+*      if macro ADI_ADRV9025_CFR_RANGE_CHECK is set to 1
+*
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param cfrHardClipperConfig Pointer to the CFR hard clipper config structure consisting of the hard clipper config settings.
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_CfrHardClipperConfigSetRangeCheck_v2(adi_adrv9025_Device_t*              device,
+                                                      adi_adrv9025_CfrHardClipperConfig_v2_t cfrHardClipperConfig[],
+                                                      uint8_t                                cfrHardClipperCfgArraySize);
 
 /**
 * \brief Performs range check on the CFR correction pulse write parameters
@@ -360,6 +477,7 @@ int32_t adrv9025_CfrCorrectionPulseWriteRangeCheck(adi_adrv9025_Device_t*       
                                                    adi_adrv9025_CfrCorrectionPulse_t cfrCorrectionPulses[],
                                                    uint8_t                           numCorrectionPulses);
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Performs range check on the CFR core ctrl config params
 *
@@ -383,6 +501,31 @@ int32_t adrv9025_CfrCorrectionPulseWriteRangeCheck(adi_adrv9025_Device_t*       
 int32_t adrv9025_CfrCtrlConfigSetRangeCheck(adi_adrv9025_Device_t*       device,
                                             adi_adrv9025_CfrCtrlConfig_t cfrCtrlConfig[],
                                             uint8_t                      cfrCtrlCfgArraySize);
+#endif
+
+/**
+* \brief Performs range check on the CFR core ctrl config params, without floats
+*
+* \pre This function is automatically called as part of adi_adrv9025_CfrCtrlConfigSet
+*      if macro ADI_ADRV9025_CFR_RANGE_CHECK is set to 1
+*
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param cfrCtrlConfig Array of CFR core ctrl config structures
+* \param cfrCtrlCfgArraySize No. of elements in the cfrCtrlConfig array
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_CfrCtrlConfigSetRangeCheck_v2(adi_adrv9025_Device_t*          device,
+                                               adi_adrv9025_CfrCtrlConfig_v2_t cfrCtrlConfig[],
+                                               uint8_t                         cfrCtrlCfgArraySize);
 
 /**
 * \brief Performs range check on the CFR core ctrl config params
@@ -541,6 +684,7 @@ int32_t adrv9025_CfrCorrectionPulsesConcatenate(adi_adrv9025_Device_t*          
                                                 uint8_t                            numCorrectionPulses,
                                                 adi_adrv9025_CfrCorrectionPulse_t* cfrCorrPulseConcatenated);
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Performs range check on the CLGC config parameters
 *
@@ -586,6 +730,53 @@ int32_t adrv9025_ClgcConfigSetRangeCheck(adi_adrv9025_Device_t*    device,
 */
 int32_t adrv9025_ClgcConfigSet(adi_adrv9025_Device_t*     device,
                                adi_adrv9025_ClgcConfig_t* clgcConfig);
+#endif
+
+/**
+* \brief Performs range check on the CLGC config parameters, without floats
+*
+* This function is automatically called as part of adi_adrv9025_ClgcConfigSet_v2() API if ADI_ADRV9025_CLGC_RANGE_CHECK is set to 1
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization
+*
+* \param device Pointer to the device settings structure
+* \param clgcConfig An array of CLGC control configurations to be applied to the requested Tx channels
+* \param clgcConfigArraySize No. of configurations contained in clgcConfig array
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_ClgcConfigSetRangeCheck_v2(adi_adrv9025_Device_t*       device,
+                                            adi_adrv9025_ClgcConfig_v2_t clgcConfig[],
+                                            uint8_t                      clgcConfigArraySize);
+
+/**
+* \brief Configures the closed loop gain control(CLGC) DFE settings prior to enabling the CLGC tracking cal, without floats
+*
+* This function is automatically called as part of adi_adrv9025_ClgcConfigSet_v2() API to write the CLGC configuration to the ARM mailbox
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization
+*
+* \param device Pointer to the device settings structure
+* \param clgcConfig Pointer to the CLGC config to be applied to the requested Tx channels
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_ADRV9025_ACT_ERR_RESET_SPI Recovery action for SPI reset required
+* \retval ADI_ADI_COMMON_ACT_ERR_RESET_ARM Recovery action for ARM reset required
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_ClgcConfigSet_v2(adi_adrv9025_Device_t*        device,
+                                  adi_adrv9025_ClgcConfig_v2_t* clgcConfig);
 
 /**
 * \brief This function can be used to program the complex co-efficients of the final CFR correction pulse. This function is intended to be
@@ -662,16 +853,14 @@ int32_t adrv9025_CfrCorrectionPulseRead(adi_adrv9025_Device_t*    device,
                                         uint16_t                  numCoeffs);
 
 /**
-* \brief This function is used to encapsulate the process of writing both the dpd and enhanced dpd tracking config structures to the fw
+* \brief This function is used to encapsulate the process of writing the dpd tracking config structure to the fw
 *
 * \dep_begin
 * \dep{device->halDevInfo}
 * \dep_end
 *
 * \param device Pointer to the device settings structure
-* \param trackingConfig Target Tx channel whose correction pulse coefficients are requested
-* \param enhancedTrackingConfig An array which will be updated with the Real part of the complex CFR correction pulse coefficients programmed in the device
-* \param useEnhanced True or false flag indicating whether its enhanced dpd or not i.e. true for enhanced
+* \param trackingConfig tracking config
 *
 * \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
@@ -680,11 +869,10 @@ int32_t adrv9025_CfrCorrectionPulseRead(adi_adrv9025_Device_t*    device,
 * \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
 */
 int32_t adrv9025_dpdTrackingConfigSet(adi_adrv9025_Device_t*                    device,
-                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig,
-                                      adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig,
-                                      uint8_t                                   useEnhanced);
+                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig);
+
 /**
-* \brief This function is used to encapsulate the process of read either the dpd or enhanced dpd tracking config structures from the fw
+* \brief This function is used to encapsulate the process of reading the dpd tracking config structure from the fw
 *
 * \dep_begin
 * \dep{device->halDevInfo}
@@ -692,9 +880,7 @@ int32_t adrv9025_dpdTrackingConfigSet(adi_adrv9025_Device_t*                    
 *
 * \param device Pointer to the device settings structure
 * \param txChannel tx channel to set configuration on
-* \param trackingConfig Target Tx channel whose correction pulse coefficients are requested
-* \param enhancedTrackingConfig An array which will be updated with the Real part of the complex CFR correction pulse coefficients programmed in the device
-* \param useEnhanced True or false flag indicating whether its enhanced dpd or not i.e. true for enhanced
+* \param trackingConfig Target Tx channel whose tracking config is requested
 *
 * \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
 * \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
@@ -704,9 +890,48 @@ int32_t adrv9025_dpdTrackingConfigSet(adi_adrv9025_Device_t*                    
 */
 int32_t adrv9025_dpdTrackingConfigGet(adi_adrv9025_Device_t*                    device,
                                       adi_adrv9025_TxChannels_e                 txChannel,
-                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig,
-                                      adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig,
-                                      uint8_t                                   useEnhanced);
+                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig);
+
+#if (ADI_ADRV9025_RM_FLOATS == 0)
+/**
+* \brief This function is used to encapsulate the process of writing the enhanced dpd tracking config structure to the fw
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param enhancedTrackingConfig enhanced tracking config
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_ADRV9025_ACT_ERR_RESET_SPI Recovery action for SPI reset required
+* \retval ADI_ADI_COMMON_ACT_ERR_RESET_ARM Recovery action for ARM reset required
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_dpdEnhancedTrackingConfigSet(adi_adrv9025_Device_t*                    device,
+                                              adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig);
+
+/**
+* \brief This function is used to encapsulate the process of read either the dpd or enhanced dpd tracking config structures from the fw
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param txChannel tx channel to set configuration on
+* \param enhancedTrackingConfig Target Tx channel whose enhanced DPD tracking config is requested
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_ADRV9025_ACT_ERR_RESET_SPI Recovery action for SPI reset required
+* \retval ADI_ADI_COMMON_ACT_ERR_RESET_ARM Recovery action for ARM reset required
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_dpdEnhancedTrackingConfigGet(adi_adrv9025_Device_t*                    device,
+                                              adi_adrv9025_TxChannels_e                 txChannel,
+                                              adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig);
 /**
 * \brief Performs range check on the DPD tracking config
 *
@@ -727,6 +952,69 @@ int32_t adrv9025_dpdTrackingConfigGet(adi_adrv9025_Device_t*                    
 */
 int32_t adrv9025_EnhancedDpdTrackingConfigRangeCheck(adi_adrv9025_Device_t*            device,
                                                      adi_adrv9025_EnhancedDpdTrackingConfig_t* dpdTrackingConfig);
+#endif
+
+/**
+* \brief This function is used to encapsulate the process of writing the enhanced dpd tracking config structure to the fw, without floats
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param enhancedTrackingConfig enhanced tracking config
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_ADRV9025_ACT_ERR_RESET_SPI Recovery action for SPI reset required
+* \retval ADI_ADI_COMMON_ACT_ERR_RESET_ARM Recovery action for ARM reset required
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_dpdEnhancedTrackingConfigSet_v2(adi_adrv9025_Device_t*                       device,
+                                                 adi_adrv9025_EnhancedDpdTrackingConfig_v2_t* enhancedTrackingConfig);
+
+/**
+* \brief This function is used to encapsulate the process of read either the dpd or enhanced dpd tracking config structures from the fw, without floats
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param txChannel tx channel to set configuration on
+* \param enhancedTrackingConfig Target Tx channel whose enhanced DPD tracking config is requested
+*
+* \retval ADI_COMMON_ACT_WARN_RESET_LOG Recovery action for log reset
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_ADRV9025_ACT_ERR_RESET_SPI Recovery action for SPI reset required
+* \retval ADI_ADI_COMMON_ACT_ERR_RESET_ARM Recovery action for ARM reset required
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_dpdEnhancedTrackingConfigGet_v2(adi_adrv9025_Device_t*                       device,
+                                                 adi_adrv9025_TxChannels_e                    txChannel,
+                                                 adi_adrv9025_EnhancedDpdTrackingConfig_v2_t* enhancedTrackingConfig);
+
+/**
+* \brief Performs range check on the DPD tracking config, without floats
+*
+* \pre This function is automatically called as part of adrv9025_DpdTrackingConfigSet
+*      if macro ADI_ADRV9025_DPD_RANGE_CHECK is set to 1
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep{device->devStateInfo}
+* \dep_end
+*
+* \param device Pointer to the device settings structure
+* \param dpdTrackingConfig Pointer to the Enhanced DPD tracking config structure consisting of the DPD tracking config settings.
+*
+* \retval ADI_COMMON_ERR_NULL_PARAM Recovery action for NULL parameter check
+* \retval ADI_COMMON_ACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+* \retval ADI_COMMON_ACT_NO_ACTION Function completed successfully, no action required
+*/
+int32_t adrv9025_EnhancedDpdTrackingConfigRangeCheck_v2(adi_adrv9025_Device_t*            device,
+                                                        adi_adrv9025_EnhancedDpdTrackingConfig_v2_t* dpdTrackingConfig);
+
 #ifdef __cplusplus
 }
 #endif

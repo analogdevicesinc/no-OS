@@ -1,9 +1,10 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adrv9025_dynamic_slicer.c
 * \brief Contains ADRV9025 dynamic slicer related private function implementation
 *        defined in adrv9025_dynamic_slicer.h
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**

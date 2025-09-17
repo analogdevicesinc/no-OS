@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
  * \file adi_common_error.c
  * \brief Contains common API error handling functions implementations
@@ -17,12 +18,6 @@
 #include "adi_common_error.h"
 #include "adi_common_log.h"
 #include "adi_platform.h"
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#else
-#include <stdint.h>
-#include <stdio.h>
-#endif
 
 void adrv9025_ErrorReport(adi_common_Device_t*    commonDev,
                             adi_common_ErrSources_e errSrc,

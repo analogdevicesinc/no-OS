@@ -1,8 +1,9 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adrv9025_dfe.c
 * \brief Contains ADRV9025 dfe related private function implementations
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -19,6 +20,7 @@
 #include "../../private/include/adrv9025_dfe.h"
 #include "../../private/include/adrv9025_cpu_macros.h"
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 int32_t adrv9025_DpdModelConfigSetRangeCheck(adi_adrv9025_Device_t*         device,
                                              adi_adrv9025_DpdModelConfig_t* dpdModelConfig)
 {
@@ -450,6 +452,419 @@ int32_t adrv9025_DpdStatusDeserialize(adi_adrv9025_Device_t*    device,
         ((uint32_t)buf[87] << 24));
     fpDeserializerPtr                         = (float*)&fpDeserializerTemp;
     dpdStatus->dpdStatistics.dpdIndirectError = *fpDeserializerPtr;
+
+    dpdStatus->dpdErrorStatus0.dpdMetricsMask           = (uint16_t)(((uint16_t)buf[88]) | ((uint16_t)buf[89] << 8));
+    dpdStatus->dpdPersistentErrorStatus0.dpdMetricsMask = (uint16_t)(((uint16_t)buf[90]) | ((uint16_t)buf[91] << 8));
+    dpdStatus->dpdErrorStatus1.dpdMetricsMask           = (uint16_t)(((uint16_t)buf[92]) | ((uint16_t)buf[93] << 8));
+    dpdStatus->dpdPersistentErrorStatus1.dpdMetricsMask = (uint16_t)(((uint16_t)buf[94]) | ((uint16_t)buf[95] << 8));
+
+    dpdStatus->reservedPR = (uint32_t)(((uint32_t)buf[96]) |
+        ((uint32_t)buf[97] << 8) |
+        ((uint32_t)buf[98] << 16) |
+        ((uint32_t)buf[99] << 24));
+
+    dpdStatus->dpdErrorStatus0.dpdActionMask           = (uint16_t)(((uint16_t)buf[100]) | ((uint16_t)buf[101] << 8));
+    dpdStatus->dpdPersistentErrorStatus0.dpdActionMask = (uint16_t)(((uint16_t)buf[102]) | ((uint16_t)buf[103] << 8));
+    dpdStatus->dpdErrorStatus1.dpdActionMask           = (uint16_t)(((uint16_t)buf[104]) | ((uint16_t)buf[105] << 8));
+    dpdStatus->dpdPersistentErrorStatus1.dpdActionMask = (uint16_t)(((uint16_t)buf[106]) | ((uint16_t)buf[107] << 8));
+
+    dpdStatus->dpdSyncStatus = (adi_adrv9025_TrackingCalSyncStatus_e)(((uint32_t)buf[108]) |
+        ((uint32_t)buf[109] << 8) |
+        ((uint32_t)buf[110] << 16) |
+        ((uint32_t)buf[111] << 24));
+
+    return ADI_COMMON_ACT_NO_ACTION;
+}
+#endif
+
+int32_t adrv9025_DpdModelConfigSetRangeCheck_v2(adi_adrv9025_Device_t*            device,
+                                                adi_adrv9025_DpdModelConfig_v2_t* dpdModelConfig)
+{
+    static const uint8_t MAX_I_VAL = 15;
+    static const uint8_t MAX_J_VAL = 15;
+    static const uint8_t MAX_K_VAL = 15;
+
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint8_t featureIndex   = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        dpdModelConfig);
+
+    if (dpdModelConfig->dpdNumFeatures > ADI_ADRV9025_MAX_DPD_FEATURES)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdModelConfig->dpdNumFeatures,
+                         "The no. of features for the DPD model cannot exceed ADI_ADRV9025_MAX_DPD_FEATURES");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    for (featureIndex = 0; featureIndex < dpdModelConfig->dpdNumFeatures; featureIndex++)
+    {
+        if (dpdModelConfig->dpdFeatures[featureIndex].i > MAX_I_VAL)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             dpdModelConfig->dpdFeatures[featureIndex].i,
+                             "The memory term(i) in the DPD feature exceeds the maximum allowed value");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (dpdModelConfig->dpdFeatures[featureIndex].j > MAX_J_VAL)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             dpdModelConfig->dpdFeatures[featureIndex].j,
+                             "The cross term(j) in the DPD feature exceeds the maximum allowed value");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (dpdModelConfig->dpdFeatures[featureIndex].k > MAX_K_VAL)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             dpdModelConfig->dpdFeatures[featureIndex].k,
+                             "The power term(k) in the DPD feature exceeds the maximum allowed value");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if ((dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT0) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT1) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT2) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT3) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT4) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT5) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT6) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT7) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT8) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT9) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT10) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT11) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT12) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT13) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT14) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT15) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT16) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT17) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT18) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT19) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT20) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT21) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT22) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT23) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT24) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT25) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT26) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT27) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT28) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT29) &&
+            (dpdModelConfig->dpdFeatures[featureIndex].lut != ADI_ADRV9025_DPD_LUT30))
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             dpdModelConfig->dpdFeatures[featureIndex].lut,
+                             "The LUT assignment in the DPD feature in the feature set is invalid");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+    }
+
+    return recoveryAction;
+}
+
+int32_t adrv9025_DpdModelConfigEncode_v2(adi_adrv9025_Device_t*            device,
+                                         adi_adrv9025_DpdModelConfig_v2_t* dpdModelConfig,
+                                         uint8_t                           armConfigData[],
+                                         uint16_t                          arraySize)
+{
+    static const uint16_t ARM_CONFIG_DATA_SIZE_BYTES = (uint16_t)ADI_ADRV9025_NUM_BYTES_DPD_MODEL_CONFIG;
+    static const uint8_t  DPD_BANK_INDEX             = 0; /* Value hardcoded for firmware. This is most likely to be removed for */
+    static const uint8_t DPD_MODEL_INDEX             = 0; /* Value hardcoded for firmware. */
+
+    int32_t  recoveryAction     = ADI_COMMON_ACT_NO_ACTION;
+    uint16_t armConfigDataIndex = 0;
+    uint8_t  featureIndex       = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API_PRIV);
+
+    ADI_NULL_PTR_RETURN(&device->common, dpdModelConfig);
+
+    ADI_NULL_PTR_RETURN(&device->common, armConfigData);
+
+    if (arraySize != ARM_CONFIG_DATA_SIZE_BYTES)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         arraySize,
+                         "Invalid ARM config data size encountered while attempting to encode DPD model config");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    /* Encode DPD model metadata */
+    armConfigData[armConfigDataIndex++] = dpdModelConfig->dpdNumFeatures;
+    armConfigData[armConfigDataIndex++] = DPD_MODEL_INDEX;
+    armConfigData[armConfigDataIndex++] = DPD_BANK_INDEX;
+    armConfigData[armConfigDataIndex++] = ADI_ADRV9025_DPD_ACT_COMPANDER_8_BITS;
+
+    /* Encode valid DPD features */
+    for (featureIndex = 0; featureIndex < dpdModelConfig->dpdNumFeatures; featureIndex++)
+    {
+        armConfigData[armConfigDataIndex++] = dpdModelConfig->dpdFeatures[featureIndex].i;
+        armConfigData[armConfigDataIndex++] = dpdModelConfig->dpdFeatures[featureIndex].j;
+        armConfigData[armConfigDataIndex++] = dpdModelConfig->dpdFeatures[featureIndex].k;
+        armConfigData[armConfigDataIndex++] = (uint8_t)dpdModelConfig->dpdFeatures[featureIndex].lut;
+
+        armConfigData[armConfigDataIndex++] = (uint8_t)(dpdModelConfig->dpdFeatures[featureIndex].coeffReal_xM & 0xFF);
+        armConfigData[armConfigDataIndex++] = (uint8_t)((dpdModelConfig->dpdFeatures[featureIndex].coeffReal_xM >> 8) & 0xFF);
+        armConfigData[armConfigDataIndex++] = (uint8_t)((dpdModelConfig->dpdFeatures[featureIndex].coeffReal_xM >> 16) & 0xFF);
+        armConfigData[armConfigDataIndex++] = (uint8_t)((dpdModelConfig->dpdFeatures[featureIndex].coeffReal_xM >> 24) & 0xFF);
+
+        armConfigData[armConfigDataIndex++] = (uint8_t)(dpdModelConfig->dpdFeatures[featureIndex].coeffImaginary_xM & 0xFF);
+        armConfigData[armConfigDataIndex++] = (uint8_t)((dpdModelConfig->dpdFeatures[featureIndex].coeffImaginary_xM >> 8) & 0xFF);
+        armConfigData[armConfigDataIndex++] = (uint8_t)((dpdModelConfig->dpdFeatures[featureIndex].coeffImaginary_xM >> 16) & 0xFF);
+        armConfigData[armConfigDataIndex++] = (uint8_t)((dpdModelConfig->dpdFeatures[featureIndex].coeffImaginary_xM >> 24) & 0xFF);
+    }
+
+    /* Zero out uninitialized features */
+    for (featureIndex = dpdModelConfig->dpdNumFeatures; featureIndex < (uint8_t)ADI_ADRV9025_MAX_DPD_FEATURES; featureIndex++)
+    {
+        /* Zero out the feature indices */
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+
+        /* Zero out the coefficients */
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+        armConfigData[armConfigDataIndex++] = (uint8_t)0;
+    }
+
+    return recoveryAction;
+}
+
+int32_t adrv9025_DpdModelConfigDecode_v2(adi_adrv9025_Device_t*            device,
+                                         uint8_t                           armConfigData[],
+                                         uint16_t                          arraySize,
+                                         adi_adrv9025_DpdModelConfig_v2_t* dpdModelConfig)
+{
+    static const uint16_t ARM_CONFIG_DATA_SIZE_BYTES = (uint16_t)ADI_ADRV9025_NUM_BYTES_DPD_MODEL_CONFIG;
+
+    uint16_t armConfigDataIndex = 0;
+    uint8_t  featureIndex       = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        dpdModelConfig);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        armConfigData);
+
+    if (arraySize != ARM_CONFIG_DATA_SIZE_BYTES)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         arraySize,
+                         "Invalid ARM config data size encountered while attempting to decode DPD model config");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    /* Decode DPD model metadata */
+    dpdModelConfig->dpdNumFeatures = armConfigData[armConfigDataIndex++];
+    armConfigDataIndex++; /* Skip Model Index */
+    armConfigDataIndex++; /* Skip Bank Index */
+    armConfigDataIndex++; /* Skip Compander Size */
+
+    /* Decode valid DPD features */
+    for (featureIndex = 0; featureIndex < ADI_ADRV9025_MAX_DPD_FEATURES; featureIndex++)
+    {
+        dpdModelConfig->dpdFeatures[featureIndex].i   = armConfigData[armConfigDataIndex++];
+        dpdModelConfig->dpdFeatures[featureIndex].j   = armConfigData[armConfigDataIndex++];
+        dpdModelConfig->dpdFeatures[featureIndex].k   = armConfigData[armConfigDataIndex++];
+        dpdModelConfig->dpdFeatures[featureIndex].lut = (adi_adrv9025_DpdLut_e)armConfigData[armConfigDataIndex++];
+
+        dpdModelConfig->dpdFeatures[featureIndex].coeffReal_xM = (uint32_t)((uint32_t)armConfigData[armConfigDataIndex] |
+            ((uint32_t)armConfigData[armConfigDataIndex + 1] << 8) |
+            ((uint32_t)armConfigData[armConfigDataIndex + 2] << 16) |
+            ((uint32_t)armConfigData[armConfigDataIndex + 3] << 24));
+        armConfigDataIndex += 4;
+
+        dpdModelConfig->dpdFeatures[featureIndex].coeffImaginary_xM = (uint32_t)((uint32_t)armConfigData[armConfigDataIndex] |
+            ((uint32_t)armConfigData[armConfigDataIndex + 1] << 8) |
+            ((uint32_t)armConfigData[armConfigDataIndex + 2] << 16) |
+            ((uint32_t)armConfigData[armConfigDataIndex + 3] << 24));
+        armConfigDataIndex += 4;
+    }
+
+    return ADI_COMMON_ACT_NO_ACTION;
+}
+
+int32_t adrv9025_DpdStatusDeserialize_v2(adi_adrv9025_Device_t*       device,
+                                         adi_adrv9025_DpdStatus_v2_t* dpdStatus,
+                                         uint8_t*                     buf,
+                                         uint8_t                      bufSize)
+{
+    static const uint8_t DPD_STATUS_SIZE    = 112u;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        dpdStatus);
+    ADI_NULL_PTR_RETURN(&device->common,
+                        buf);
+
+    if (bufSize < DPD_STATUS_SIZE)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         size,
+                         "Invalid buffer size. Buffer needs to be 112 bytes or larger");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    dpdStatus->dpdErrorCode = (adi_adrv9025_DpdError_e)(((uint32_t)buf[0]) |
+        ((uint32_t)buf[1] << 8) |
+        ((uint32_t)buf[2] << 16) |
+        ((uint32_t)buf[3] << 24));
+
+    dpdStatus->dpdPercentComplete = (uint32_t)(((uint32_t)buf[4]) |
+        ((uint32_t)buf[5] << 8) |
+        ((uint32_t)buf[6] << 16) |
+        ((uint32_t)buf[7] << 24));
+
+    dpdStatus->dpdPerformanceMetric = (uint32_t)(((uint32_t)buf[8]) |
+        ((uint32_t)buf[9] << 8) |
+        ((uint32_t)buf[10] << 16) |
+        ((uint32_t)buf[11] << 24));
+
+    dpdStatus->dpdIterCount = (uint32_t)(((uint32_t)buf[12]) |
+        ((uint32_t)buf[13] << 8) |
+        ((uint32_t)buf[14] << 16) |
+        ((uint32_t)buf[15] << 24));
+
+    dpdStatus->dpdUpdateCount = (uint32_t)(((uint32_t)buf[16]) |
+        ((uint32_t)buf[17] << 8) |
+        ((uint32_t)buf[18] << 16) |
+        ((uint32_t)buf[19] << 24));
+
+    /* Not yet implemented in FW */
+    /*dpdStatus->dpdCurrentMinTxSampleLevel = (uint32_t)(((uint32_t)buf[20]) |
+                                                      ((uint32_t)buf[21] << 8) |
+                                                      ((uint32_t)buf[22] << 16) |
+                                                      ((uint32_t)buf[23] << 24));
+
+    dpdStatus->dpdModelErrorAverage = (uint32_t)(((uint32_t)buf[24]) |
+                                                ((uint32_t)buf[25] << 8) |
+                                                ((uint32_t)buf[26] << 16) |
+                                                ((uint32_t)buf[27] << 24));
+
+    dpdStatus->dpdMaxAdaptationCurrent = (uint32_t)(((uint32_t)buf[28]) |
+                                                   ((uint32_t)buf[29] << 8));
+
+    dpdStatus->dpdMaxAdaptation = (uint32_t)(((uint32_t)buf[30]) |
+                                             ((uint32_t)buf[31] << 8));
+
+    dpdStatus->dpdDeltaActuatorDb = (uint32_t)(((uint32_t)buf[32]) |
+                                              ((uint32_t)buf[33] << 8) |
+                                              ((uint32_t)buf[34] << 16) |
+                                              ((uint32_t)buf[35] << 24));*/
+
+    dpdStatus->reservedPM = (uint32_t)(((uint32_t)buf[36]) |
+        ((uint32_t)buf[37] << 8) |
+        ((uint32_t)buf[38] << 16) |
+        ((uint32_t)buf[39] << 24));
+
+    dpdStatus->reservedTP = (uint32_t)(((uint32_t)buf[40]) |
+        ((uint32_t)buf[41] << 8) |
+        ((uint32_t)buf[42] << 16) |
+        ((uint32_t)buf[43] << 24));
+
+    dpdStatus->dpdModelTable = (adi_adrv9025_DpdModelTableSel_e)buf[44];
+
+    dpdStatus->dpdStatistics.dpdMeanTuPower_mdB = (uint32_t)(((uint32_t)buf[48]) |
+        ((uint32_t)buf[49] << 8) |
+        ((uint32_t)buf[50] << 16) |
+        ((uint32_t)buf[51] << 24));
+
+    dpdStatus->dpdStatistics.dpdPeakTuPower_mdB = (uint32_t)(((uint32_t)buf[52]) |
+        ((uint32_t)buf[53] << 8) |
+        ((uint32_t)buf[54] << 16) |
+        ((uint32_t)buf[55] << 24));
+
+    dpdStatus->dpdStatistics.dpdMeanTxPower_mdB = (uint32_t)(((uint32_t)buf[56]) |
+        ((uint32_t)buf[57] << 8) |
+        ((uint32_t)buf[58] << 16) |
+        ((uint32_t)buf[59] << 24));
+
+    dpdStatus->dpdStatistics.dpdPeakTxPower_mdB = (uint32_t)(((uint32_t)buf[60]) |
+        ((uint32_t)buf[61] << 8) |
+        ((uint32_t)buf[62] << 16) |
+        ((uint32_t)buf[63] << 24));
+
+    dpdStatus->dpdStatistics.dpdMeanOrxPower_mdB = (uint32_t)(((uint32_t)buf[64]) |
+        ((uint32_t)buf[65] << 8) |
+        ((uint32_t)buf[66] << 16) |
+        ((uint32_t)buf[67] << 24));
+
+    dpdStatus->dpdStatistics.dpdPeakOrxPower_mdB = (uint32_t)(((uint32_t)buf[68]) |
+        ((uint32_t)buf[69] << 8) |
+        ((uint32_t)buf[70] << 16) |
+        ((uint32_t)buf[71] << 24));
+
+    dpdStatus->dpdStatistics.dpdDirectEvm_xM = (uint32_t)(((uint32_t)buf[72]) |
+        ((uint32_t)buf[73] << 8) |
+        ((uint32_t)buf[74] << 16) |
+        ((uint32_t)buf[75] << 24));
+
+    dpdStatus->dpdStatistics.dpdIndirectEvm_xM = (uint32_t)(((uint32_t)buf[76]) |
+        ((uint32_t)buf[77] << 8) |
+        ((uint32_t)buf[78] << 16) |
+        ((uint32_t)buf[79] << 24));
+
+    dpdStatus->dpdStatistics.dpdSelectError_xM = (uint32_t)(((uint32_t)buf[80]) |
+        ((uint32_t)buf[81] << 8) |
+        ((uint32_t)buf[82] << 16) |
+        ((uint32_t)buf[83] << 24));
+
+    dpdStatus->dpdStatistics.dpdIndirectError_xM = (uint32_t)(((uint32_t)buf[84]) |
+        ((uint32_t)buf[85] << 8) |
+        ((uint32_t)buf[86] << 16) |
+        ((uint32_t)buf[87] << 24));
 
     dpdStatus->dpdErrorStatus0.dpdMetricsMask           = (uint16_t)(((uint16_t)buf[88]) | ((uint16_t)buf[89] << 8));
     dpdStatus->dpdPersistentErrorStatus0.dpdMetricsMask = (uint16_t)(((uint16_t)buf[90]) | ((uint16_t)buf[91] << 8));
@@ -1380,6 +1795,7 @@ int32_t adrv9025_DpdRecoveryActionGet(adi_adrv9025_Device_t*                  de
     return recoveryAction;
 }
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 int32_t adrv9025_CfrHardClipperConfigSetRangeCheck(adi_adrv9025_Device_t*              device,
                                                    adi_adrv9025_CfrHardClipperConfig_t cfrHardClipperConfig[],
                                                    uint8_t                             cfrHardClipperCfgArraySize)
@@ -1529,6 +1945,170 @@ int32_t adrv9025_CfrCtrlConfigSetRangeCheck(adi_adrv9025_Device_t*       device,
                              ADI_COMMON_ACT_ERR_CHECK_PARAM,
                              cfrCtrlConfig[cfrCfgCtrlIndex].cfrCorrectionThresholdScaler,
                              "Invalid CFR correction threshold threshold scaler encountered while attempting to program the CFR control config. Correction threshold scaler is expected to be in the range 0 to 1.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrTxDelay > MAX_CFR_TX_DELAY ||
+            cfrCtrlConfig[cfrCfgCtrlIndex].cfrTxDelay < MIN_CFR_TX_DELAY)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrTxDelay,
+                             "Invalid CFR Tx delay while attempting to program the CFR control config. Tx delay is expected to be in the range 129 to 511.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine1MaxNumOfPeaks > 5 ||
+            cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine2MaxNumOfPeaks > 5 ||
+            cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine3MaxNumOfPeaks > 5)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             maxNumberOfPeaks,
+                             "Invalid maximum number of peaks parameters. Valid range is [0-5]");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+    }
+
+    return ADI_COMMON_ACT_NO_ACTION;
+}
+#endif
+
+int32_t adrv9025_CfrHardClipperConfigSetRangeCheck_v2(adi_adrv9025_Device_t*                 device,
+                                                      adi_adrv9025_CfrHardClipperConfig_v2_t cfrHardClipperConfig[],
+                                                      uint8_t                                cfrHardClipperCfgArraySize)
+{
+    static const uint32_t CFR_HARD_CLIPPER_MAX_THRESH = 1000000;
+    uint8_t               i                           = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        cfrHardClipperConfig);
+
+    for (i = 0; i < cfrHardClipperCfgArraySize; i++)
+    {
+        if ((cfrHardClipperConfig[i].cfrHardClipperEnable > 0) &&
+            (cfrHardClipperConfig[i].txChannelMask != (uint32_t)ADI_ADRV9025_TXOFF))
+        {
+            if (cfrHardClipperConfig[i].cfrHardClipperThreshold_xM > CFR_HARD_CLIPPER_MAX_THRESH)
+            {
+                ADI_ERROR_REPORT(&device->common,
+                                 ADI_COMMON_ERRSRC_API,
+                                 ADI_COMMON_ERR_INV_PARAM,
+                                 ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                                 cfrHardClipperConfig[i].cfrHardClipperThreshold_xM,
+                                 "Invalid CFR Hard clipper threshold encountered. Valid range is 0 to 1000000");
+                ADI_ERROR_RETURN(device->common.error.newAction);
+            }
+        }
+    }
+
+    return ADI_COMMON_ACT_NO_ACTION;
+}
+
+int32_t adrv9025_CfrCtrlConfigSetRangeCheck_v2(adi_adrv9025_Device_t*          device,
+                                               adi_adrv9025_CfrCtrlConfig_v2_t cfrCtrlConfig[],
+                                               uint8_t                         cfrCtrlCfgArraySize)
+{
+    static const uint32_t MAX_CFR_THRESH   = 1000000;
+    static const uint16_t MAX_CFR_TX_DELAY = 511u;
+    static const uint16_t MIN_CFR_TX_DELAY = 129u;
+    uint8_t               cfrCfgCtrlIndex  = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        cfrCtrlConfig);
+
+    for (cfrCfgCtrlIndex = 0; cfrCfgCtrlIndex < cfrCtrlCfgArraySize; cfrCfgCtrlIndex++)
+    {
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrMode != ADI_ADRV9025_CFR_MODE1)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrMode,
+                             "Invalid CFR mode encountered while attempting to program the CFR control config. Only Mode1 is supported.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if ((cfrCtrlConfig[cfrCfgCtrlIndex].cfrInterpolationFactor != ADI_ADRV9025_CFR_INTERPOLATION_1X) &&
+            (cfrCtrlConfig[cfrCfgCtrlIndex].cfrInterpolationFactor != ADI_ADRV9025_CFR_INTERPOLATION_2X) &&
+            (cfrCtrlConfig[cfrCfgCtrlIndex].cfrInterpolationFactor != ADI_ADRV9025_CFR_INTERPOLATION_4X))
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrInterpolationFactor,
+                             "Invalid CFR interpolation factor encountered while attempting to program the CFR control config. Interpolation factors supported are 1x, 2x and 4x.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrPeakThreshold_xM > MAX_CFR_THRESH)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrPeakThreshold_xM,
+                             "Invalid CFR peak threshold encountered while attempting to program the CFR control config. Peak threshold is expected to be in the range 0 to 1000000.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine1PeakThresholdScaler_xM > MAX_CFR_THRESH)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine1PeakThresholdScaler_xM,
+                             "Invalid CFR engine 1 peak threshold scaler encountered while attempting to program the CFR control config. Engine 1 peak threshold scaler is expected to be in the range 0 to 1000000.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine2PeakThresholdScaler_xM > MAX_CFR_THRESH)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine2PeakThresholdScaler_xM,
+                             "Invalid CFR engine 2 peak threshold scaler encountered while attempting to program the CFR control config. Engine 2 peak threshold scaler is expected to be in the range 0 to 1000000.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine3PeakThresholdScaler_xM > MAX_CFR_THRESH)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrEngine3PeakThresholdScaler_xM,
+                             "Invalid CFR engine 3 peak threshold scaler encountered while attempting to program the CFR control config. Engine 3 peak threshold scaler is expected to be in the range 0 to 1000000.");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (cfrCtrlConfig[cfrCfgCtrlIndex].cfrCorrectionThresholdScaler_xM > MAX_CFR_THRESH)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             cfrCtrlConfig[cfrCfgCtrlIndex].cfrCorrectionThresholdScaler_xM,
+                             "Invalid CFR correction threshold threshold scaler encountered while attempting to program the CFR control config. Correction threshold scaler is expected to be in the range 0 to 1000000.");
             ADI_ERROR_RETURN(device->common.error.newAction);
         }
 
@@ -2339,6 +2919,7 @@ int32_t adrv9025_CfrCorrectionPulsesConcatenate(adi_adrv9025_Device_t*          
     return (device->common.error.newAction);
 }
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 int32_t adrv9025_ClgcConfigSetRangeCheck(adi_adrv9025_Device_t*    device,
                                          adi_adrv9025_ClgcConfig_t clgcConfig[],
                                          uint8_t                   clgcConfigArraySize)
@@ -2529,6 +3110,198 @@ int32_t adrv9025_ClgcConfigSet(adi_adrv9025_Device_t*     device,
             recoveryAction = adi_adrv9025_CpuConfigWrite(device,
                                                          ADI_ADRV9025_CPU_TYPE_C,
                                                          ADRV9025_CPU_OBJECTID_CLGC_TRACKING,
+                                                         clgcConfigOffsetBytes,
+                                                         &armConfigData[0],
+                                                         sizeof(armConfigData));
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+    }
+
+    return recoveryAction;
+}
+#endif
+
+int32_t adrv9025_ClgcConfigSetRangeCheck_v2(adi_adrv9025_Device_t*       device,
+                                            adi_adrv9025_ClgcConfig_v2_t clgcConfig[],
+                                            uint8_t                      clgcConfigArraySize)
+{
+    static const int32_t MAX_TX_ATTEN_STEP_SIZE_mdB = 6000;
+
+    uint8_t clgcConfigIndex = 0;
+
+    /* Check device pointer is not null */
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    /* Check that clgcConfig is not null */
+    ADI_NULL_PTR_RETURN(&device->common,
+                        clgcConfig);
+
+    for (clgcConfigIndex = 0; clgcConfigIndex < clgcConfigArraySize; clgcConfigIndex++)
+    {
+        if (clgcConfig[clgcConfigIndex].clgcMaxGainAdjustmentStepSize_mdB > MAX_TX_ATTEN_STEP_SIZE_mdB)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             clgcConfig[clgcConfigIndex].clgcMaxGainAdjustmentStepSize_mdB,
+                             "Invalid Tx atten adjustment step requested for CLGC control loop. The step size must be in the range 0-6dB");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+
+        if (clgcConfig[clgcConfigIndex].clgcMinTxAttenAdjust_mdB > clgcConfig[clgcConfigIndex].clgcMaxTxAttenAdjust_mdB)
+        {
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             ADI_COMMON_ERR_INV_PARAM,
+                             ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                             clgcConfig[clgcConfigIndex].clgcMinTxAttenAdjust_mdB,
+                             "Minimum Tx attenuation adjustment cannot be larger than the maximum value configured");
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+    }
+
+    return (device->common.error.newAction);
+}
+
+int32_t adrv9025_ClgcConfigSet_v2(adi_adrv9025_Device_t*        device,
+                                  adi_adrv9025_ClgcConfig_v2_t* clgcConfig)
+{
+#define ADRV9025_CLGC_CONFIG_SIZE_BYTES_NO_FLOAT 48u /* Last 4 variables in config struct shouldn't be written by API. But offset should remain 56 */
+#define ADRV9025_CLGC_CONFIG_OFFSET_BYTES 56u
+    static const uint8_t                   PA_PROTECTION_EN                              = 1u;
+    static const uint8_t                   CLGC_DPD_SYNC_EN                              = 1u;
+    static const int16_t                   FRACTIONAL_TUNING_DELAY                       = 0;
+    static const uint32_t                  CLGC_MAX_SAMPLES_BATCHES_PER_CLGC_RUN_DEFAULT = 514u;
+    static const int32_t                   ORX_NOISE_DENSITY_dBFS_PER_Hz                 = -153000;
+    static const int32_t                   EXPECTED_LOOP_GAIN_RIPPLE_mdB                 = 50;
+    static const uint32_t                  DAMPING_PARAM_M                              = 100000;
+    static const adi_adrv9025_TxChannels_e txChannelsArr[]                               = {
+        ADI_ADRV9025_TX1,
+        ADI_ADRV9025_TX2,
+        ADI_ADRV9025_TX3,
+        ADI_ADRV9025_TX4
+    };
+
+    int32_t  recoveryAction                                 = ADI_COMMON_ACT_NO_ACTION;
+    uint16_t clgcConfigOffsetBytes                          = 0u;
+    uint8_t  armConfigData[ADRV9025_CLGC_CONFIG_SIZE_BYTES_NO_FLOAT] = {0};
+    uint32_t txChannelIndex                                 = 0u;
+
+    /* Check device pointer is not null */
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    /* Check that clgcConfig is not null */
+    ADI_NULL_PTR_RETURN(&device->common,
+                        clgcConfig);
+
+    for (txChannelIndex = 0; txChannelIndex < (uint32_t)(sizeof(txChannelsArr) / sizeof(txChannelsArr[0])); txChannelIndex++)
+    {
+        if ((clgcConfig->txChannelMask & (uint32_t)txChannelsArr[txChannelIndex]) != ADI_ADRV9025_TXOFF)
+        {
+            switch (txChannelsArr[txChannelIndex])
+            {
+            case(ADI_ADRV9025_TX1):
+            {
+                clgcConfigOffsetBytes = 0u;
+                break;
+            }
+            case(ADI_ADRV9025_TX2):
+            {
+                clgcConfigOffsetBytes = (uint16_t)ADRV9025_CLGC_CONFIG_OFFSET_BYTES;
+                break;
+            }
+            case(ADI_ADRV9025_TX3):
+            {
+                clgcConfigOffsetBytes = (uint16_t)ADRV9025_CLGC_CONFIG_OFFSET_BYTES * 2;
+                break;
+            }
+            case(ADI_ADRV9025_TX4):
+            {
+                clgcConfigOffsetBytes = (uint16_t)ADRV9025_CLGC_CONFIG_OFFSET_BYTES * 3;
+                break;
+            }
+            default:
+            {
+                ADI_ERROR_REPORT(&device->common,
+                                 ADI_COMMON_ERRSRC_API,
+                                 ADI_COMMON_ERR_INV_PARAM,
+                                 ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                                 clgcConfig->txChannelMask,
+                                 "Invalid target Tx channel selected for CLGC config set. Valid Tx channels are Tx1-Tx4");
+                ADI_ERROR_RETURN(device->common.error.newAction);
+                break;
+            }
+            }
+
+            /* Serialize the clgc config */
+            armConfigData[0] = (uint8_t)(clgcConfig->clgcMeasurementBatchTime_us & 0xFF);
+            armConfigData[1] = (uint8_t)((clgcConfig->clgcMeasurementBatchTime_us >> 8) & 0xFF);
+            armConfigData[2]  = (uint8_t)((uint16_t)FRACTIONAL_TUNING_DELAY & 0xFF);
+            armConfigData[3]  = (uint8_t)(((uint16_t)FRACTIONAL_TUNING_DELAY >> 8) & 0xFF);
+            armConfigData[4]  = (uint8_t)(clgcConfig->clgcEnableGainControl & 0xFF);
+            armConfigData[5]  = 0;
+            armConfigData[6]  = CLGC_DPD_SYNC_EN;
+            armConfigData[7]  = PA_PROTECTION_EN;
+            armConfigData[8]  = (uint8_t)(CLGC_MAX_SAMPLES_BATCHES_PER_CLGC_RUN_DEFAULT & 0xFF);
+            armConfigData[9]  = (uint8_t)((CLGC_MAX_SAMPLES_BATCHES_PER_CLGC_RUN_DEFAULT >> 8) & 0xFF);
+            armConfigData[10] = (uint8_t)((CLGC_MAX_SAMPLES_BATCHES_PER_CLGC_RUN_DEFAULT >> 16) & 0xFF);
+            armConfigData[11] = (uint8_t)((CLGC_MAX_SAMPLES_BATCHES_PER_CLGC_RUN_DEFAULT >> 24) & 0xFF);
+            armConfigData[12]  = (uint8_t)(ORX_NOISE_DENSITY_dBFS_PER_Hz & 0xFF);
+            armConfigData[13]  = (uint8_t)((ORX_NOISE_DENSITY_dBFS_PER_Hz >> 8) & 0xFF);
+            armConfigData[14] = (uint8_t)((ORX_NOISE_DENSITY_dBFS_PER_Hz >> 16) & 0xFF);
+            armConfigData[15] = (uint8_t)((ORX_NOISE_DENSITY_dBFS_PER_Hz >> 24) & 0xFF);
+
+            armConfigData[16] = (uint8_t)(clgcConfig->clgcTxQualifyingThreshold_mdB & 0xFF);
+            armConfigData[17] = (uint8_t)((clgcConfig->clgcTxQualifyingThreshold_mdB >> 8) & 0xFF);
+            armConfigData[18] = (uint8_t)((clgcConfig->clgcTxQualifyingThreshold_mdB >> 16) & 0xFF);
+            armConfigData[19] = (uint8_t)((clgcConfig->clgcTxQualifyingThreshold_mdB >> 24) & 0xFF);
+
+            armConfigData[20] = (uint8_t)(clgcConfig->clgcOrxQualifyingThreshold_mdB & 0xFF);
+            armConfigData[21] = (uint8_t)((clgcConfig->clgcOrxQualifyingThreshold_mdB >> 8) & 0xFF);
+            armConfigData[22] = (uint8_t)((clgcConfig->clgcOrxQualifyingThreshold_mdB >> 16) & 0xFF);
+            armConfigData[23] = (uint8_t)((clgcConfig->clgcOrxQualifyingThreshold_mdB >> 24) & 0xFF);
+
+            armConfigData[24] = (uint8_t)(EXPECTED_LOOP_GAIN_RIPPLE_mdB & 0xFF);
+            armConfigData[25] = (uint8_t)((EXPECTED_LOOP_GAIN_RIPPLE_mdB >> 8) & 0xFF);
+            armConfigData[26] = (uint8_t)((EXPECTED_LOOP_GAIN_RIPPLE_mdB >> 16) & 0xFF);
+            armConfigData[27] = (uint8_t)((EXPECTED_LOOP_GAIN_RIPPLE_mdB >> 24) & 0xFF);
+
+            armConfigData[28] = (uint8_t)(clgcConfig->clgcExpectedLoopGain_mdB & 0xFF);
+            armConfigData[29] = (uint8_t)((clgcConfig->clgcExpectedLoopGain_mdB >> 8) & 0xFF);
+            armConfigData[30] = (uint8_t)((clgcConfig->clgcExpectedLoopGain_mdB >> 16) & 0xFF);
+            armConfigData[31] = (uint8_t)((clgcConfig->clgcExpectedLoopGain_mdB >> 24) & 0xFF);
+
+            armConfigData[32] = (uint8_t)(clgcConfig->clgcMaxGainAdjustmentStepSize_mdB & 0xFF);
+            armConfigData[33] = (uint8_t)((clgcConfig->clgcMaxGainAdjustmentStepSize_mdB >> 8) & 0xFF);
+            armConfigData[34] = (uint8_t)((clgcConfig->clgcMaxGainAdjustmentStepSize_mdB >> 16) & 0xFF);
+            armConfigData[35] = (uint8_t)((clgcConfig->clgcMaxGainAdjustmentStepSize_mdB >> 24) & 0xFF);
+
+            armConfigData[36] = (uint8_t)(clgcConfig->clgcMinTxAttenAdjust_mdB & 0xFF);
+            armConfigData[37] = (uint8_t)((clgcConfig->clgcMinTxAttenAdjust_mdB >> 8) & 0xFF);
+            armConfigData[38] = (uint8_t)((clgcConfig->clgcMinTxAttenAdjust_mdB >> 16) & 0xFF);
+            armConfigData[39] = (uint8_t)((clgcConfig->clgcMinTxAttenAdjust_mdB >> 24) & 0xFF);
+
+            armConfigData[40] = (uint8_t)(clgcConfig->clgcMaxTxAttenAdjust_mdB & 0xFF);
+            armConfigData[41] = (uint8_t)((clgcConfig->clgcMaxTxAttenAdjust_mdB >> 8) & 0xFF);
+            armConfigData[42] = (uint8_t)((clgcConfig->clgcMaxTxAttenAdjust_mdB >> 16) & 0xFF);
+            armConfigData[43] = (uint8_t)((clgcConfig->clgcMaxTxAttenAdjust_mdB >> 24) & 0xFF);
+
+            armConfigData[44] = (uint8_t)(DAMPING_PARAM_M & 0xFF);
+            armConfigData[45] = (uint8_t)((DAMPING_PARAM_M >> 8) & 0xFF);
+            armConfigData[46] = (uint8_t)((DAMPING_PARAM_M >> 16) & 0xFF);
+            armConfigData[47] = (uint8_t)((DAMPING_PARAM_M >> 24) & 0xFF);
+
+            /* Pass the CLGC config to ARM */
+            recoveryAction = adi_adrv9025_CpuConfigWrite(device,
+                                                         ADI_ADRV9025_CPU_TYPE_C,
+                                                         ADRV9025_CPU_OBJECTID_CLGC_TRACKING_NO_FLOAT,
                                                          clgcConfigOffsetBytes,
                                                          &armConfigData[0],
                                                          sizeof(armConfigData));
@@ -2793,9 +3566,7 @@ int32_t adrv9025_CfrCorrectionPulseRead(adi_adrv9025_Device_t*    device,
 }
 
 int32_t adrv9025_dpdTrackingConfigSet(adi_adrv9025_Device_t*                    device,
-                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig,
-                                      adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig,
-                                      uint8_t                                   useEnhanced)
+                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig)
 {
     static const uint8_t DPD_SET_TRACKING_CONFIG_CTRL_PARAM = 0x13;
     static const uint8_t ARM_ERR_CODE = 0x0E;
@@ -2831,235 +3602,105 @@ int32_t adrv9025_dpdTrackingConfigSet(adi_adrv9025_Device_t*                    
     uint8_t cmdStatusByte = 0;
     uint8_t i = 0;
     uint32_t txChannelMask = 0;
-    uint32_t* fpSerializerPtr = NULL;
-    uint32_t  fpSerializerTmp = 0;
 
     ADI_NULL_DEVICE_PTR_RETURN(device);
 
-
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
 
-    if (useEnhanced == ADI_FALSE)
+    ADI_NULL_PTR_RETURN(&device->common, trackingConfig);
+    #if ADI_ADRV9025_DPD_RANGE_CHECK > 0
+        recoveryAction = adrv9025_DpdTrackingConfigRangeCheck(device, trackingConfig);
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    #endif
+
+    txChannelMask = trackingConfig->txChannelMask;
+    armData[0] = 0u; /* offset within the structure to be set */
+    armData[1] = DPD_TRACKING_CONFIG_LEN; /* number of bytes within the structures to be set */
+    armData[2] = (uint8_t)(DPD_MODEL_DEFAULT & 0xFF);
+    armData[3] = (uint8_t)((DPD_MODEL_DEFAULT >> 8) & 0xFF);
+    armData[4] = (uint8_t)(trackingConfig->dpdUpdateMode);
+    armData[5] = (DPD_TX_POW_SEL_DEFAULT & 0xFF);
+    armData[6] = (uint8_t)(DPD_DELTA_DEFAULT);
+    armData[7] = (uint8_t)(DPD_DECAY_P_DEFAULT);
+    armData[8] = (uint8_t)(DPD_MAG_SQ_DEFAULT & 0xFF);
+    armData[9] = (uint8_t)((DPD_MAG_SQ_DEFAULT >> 8) & 0xFF);
+    armData[10] = (uint8_t)(trackingConfig->dpdMThreshold & 0xFF);
+    armData[11] = (uint8_t)((trackingConfig->dpdMThreshold >> 8) & 0xFF);
+    armData[12] = (uint8_t)((trackingConfig->dpdMThreshold >> 16) & 0xFF);
+    armData[13] = (uint8_t)((trackingConfig->dpdMThreshold >> 24) & 0xFF);
+    armData[14] = (uint8_t)(trackingConfig->dpdSamples & 0xFF);
+    armData[15] = (uint8_t)((trackingConfig->dpdSamples >> 8) & 0xFF);
+    armData[16] = (uint8_t)(trackingConfig->dpdFilterSel & 0xFF);
+    armData[17] = (uint8_t)((trackingConfig->dpdFilterSel >> 8) & 0xFF);
+    armData[18] = (uint8_t)(SELECTED_ERR_SAMPLES_DEFAULT & 0xFF);
+    armData[19] = (uint8_t)((SELECTED_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
+    armData[20] = (uint8_t)(DPD_INDIRECT_ERR_SAMPLES_DEFAULT & 0xFF);
+    armData[21] = (uint8_t)((DPD_INDIRECT_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
+    armData[22] = (uint8_t)(DPD_SATURATION_THRES_DEFAULT & 0xFF);
+    armData[23] = (uint8_t)((DPD_SATURATION_THRES_DEFAULT >> 8) & 0xFF);
+    armData[24] = (uint8_t)(DPD_OUTLIER_THRES_DEFAULT & 0xFF);
+    armData[25] = (uint8_t)((DPD_OUTLIER_THRES_DEFAULT >> 8) & 0xFF);
+    armData[26] = (uint8_t)(DPD_SAT_TX_COUNT_LIM_DEFAULT & 0xFF);
+    armData[27] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[28] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[29] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[30] = (uint8_t)(DPD_SAT_ORX_COUNT_LIM_DEFAULT & 0xFF);
+    armData[31] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[32] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[33] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[34] = (uint8_t)(DPD_ERR_COUNT_LIM_DEFAULT & 0xFF);
+    armData[35] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[36] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[37] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[38] = (uint8_t)(DPD_PART_SUB_ITERATION_COUNT_DEFAULT & 0xFF);
+    armData[39] = (uint8_t)((DPD_PART_SUB_ITERATION_COUNT_DEFAULT >> 8) & 0xFF);
+    armData[40] = (uint8_t)(DPD_LINEAR_TERM_DEFAULT & 0xFF);
+    armData[41] = (uint8_t)((DPD_LINEAR_TERM_DEFAULT >> 8) & 0xFF);
+
+    for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
     {
-        ADI_NULL_PTR_RETURN(&device->common, trackingConfig);
-        #if ADI_ADRV9025_DPD_RANGE_CHECK > 0
-            recoveryAction = adrv9025_DpdTrackingConfigRangeCheck(device, trackingConfig);
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        #endif
-
-        txChannelMask = trackingConfig->txChannelMask;
-        armData[0] = 0u; /* offset within the structure to be set */
-        armData[1] = DPD_TRACKING_CONFIG_LEN; /* number of bytes within the structures to be set */
-        armData[2] = (uint8_t)(DPD_MODEL_DEFAULT & 0xFF);
-        armData[3] = (uint8_t)((DPD_MODEL_DEFAULT >> 8) & 0xFF);
-        armData[4] = (uint8_t)(trackingConfig->dpdUpdateMode);
-        armData[5] = (DPD_TX_POW_SEL_DEFAULT & 0xFF);
-        armData[6] = (uint8_t)(DPD_DELTA_DEFAULT);
-        armData[7] = (uint8_t)(DPD_DECAY_P_DEFAULT);
-        armData[8] = (uint8_t)(DPD_MAG_SQ_DEFAULT & 0xFF);
-        armData[9] = (uint8_t)((DPD_MAG_SQ_DEFAULT >> 8) & 0xFF);
-        armData[10] = (uint8_t)(trackingConfig->dpdMThreshold & 0xFF);
-        armData[11] = (uint8_t)((trackingConfig->dpdMThreshold >> 8) & 0xFF);
-        armData[12] = (uint8_t)((trackingConfig->dpdMThreshold >> 16) & 0xFF);
-        armData[13] = (uint8_t)((trackingConfig->dpdMThreshold >> 24) & 0xFF);
-        armData[14] = (uint8_t)(trackingConfig->dpdSamples & 0xFF);
-        armData[15] = (uint8_t)((trackingConfig->dpdSamples >> 8) & 0xFF);
-        armData[16] = (uint8_t)(trackingConfig->dpdFilterSel & 0xFF);
-        armData[17] = (uint8_t)((trackingConfig->dpdFilterSel >> 8) & 0xFF);
-        armData[18] = (uint8_t)(SELECTED_ERR_SAMPLES_DEFAULT & 0xFF);
-        armData[19] = (uint8_t)((SELECTED_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
-        armData[20] = (uint8_t)(DPD_INDIRECT_ERR_SAMPLES_DEFAULT & 0xFF);
-        armData[21] = (uint8_t)((DPD_INDIRECT_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
-        armData[22] = (uint8_t)(DPD_SATURATION_THRES_DEFAULT & 0xFF);
-        armData[23] = (uint8_t)((DPD_SATURATION_THRES_DEFAULT >> 8) & 0xFF);
-        armData[24] = (uint8_t)(DPD_OUTLIER_THRES_DEFAULT & 0xFF);
-        armData[25] = (uint8_t)((DPD_OUTLIER_THRES_DEFAULT >> 8) & 0xFF);
-        armData[26] = (uint8_t)(DPD_SAT_TX_COUNT_LIM_DEFAULT & 0xFF);
-        armData[27] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
-        armData[28] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
-        armData[29] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
-        armData[30] = (uint8_t)(DPD_SAT_ORX_COUNT_LIM_DEFAULT & 0xFF);
-        armData[31] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
-        armData[32] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
-        armData[33] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
-        armData[34] = (uint8_t)(DPD_ERR_COUNT_LIM_DEFAULT & 0xFF);
-        armData[35] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 8) & 0xFF);
-        armData[36] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 16) & 0xFF);
-        armData[37] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 24) & 0xFF);
-        armData[38] = (uint8_t)(DPD_PART_SUB_ITERATION_COUNT_DEFAULT & 0xFF);
-        armData[39] = (uint8_t)((DPD_PART_SUB_ITERATION_COUNT_DEFAULT >> 8) & 0xFF);
-        armData[40] = (uint8_t)(DPD_LINEAR_TERM_DEFAULT & 0xFF);
-        armData[41] = (uint8_t)((DPD_LINEAR_TERM_DEFAULT >> 8) & 0xFF);
-
-        for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
-        {
-            armData[42 + (i * 2)] = (uint8_t)(trackingConfig->dpdFilterCoeffWeight[i].real);
-            armData[42 + (i * 2) + 1] = (uint8_t)(trackingConfig->dpdFilterCoeffWeight[i].imag);
-        }
-
-        armData[72] = (uint8_t)(DPD_STARTUP_ITER_COUNT_DEFAULT & 0xFF);
-        armData[73] = (uint8_t)((DPD_STARTUP_ITER_COUNT_DEFAULT >> 8) & 0xFF);
-        armData[74] = trackingConfig->dpdDirectRegularizationValue;
-        armData[75] = (uint8_t)(trackingConfig->dpdIndirectRegularizationValue);
-
-        armData[76] = (uint8_t)(trackingConfig->minAvgSignalLevel & 0xFF);
-        armData[77] = (uint8_t)((trackingConfig->minAvgSignalLevel >> 8) & 0xFF);
-        armData[78] = (uint8_t)(DPD_SELECTED_SIGNAL_LEVEL_DEFAULT & 0xFF);
-        armData[79] = (uint8_t)((DPD_SELECTED_SIGNAL_LEVEL_DEFAULT >> 8) & 0xFF);
-        armData[80] = (uint8_t)(trackingConfig->minAvgSignalLevelOrx & 0xFF);
-        armData[81] = (uint8_t)((trackingConfig->minAvgSignalLevelOrx >> 8) & 0xFF);
-        /* eDpd configuration */
-        armData[82] = (uint8_t)(EDPD_PEAK_SEARCH_SIZE_DEFAULT & 0xFF);
-        armData[83] = (uint8_t)((EDPD_PEAK_SEARCH_SIZE_DEFAULT >> 8) & 0xFF);
-        armData[84] = (uint8_t)(EDPD_CAPTURE_DEFAULT & 0xFF);
-        armData[85] = (uint8_t)((EDPD_CAPTURE_DEFAULT >> 8) & 0xFF);
-        armData[86] = (uint8_t)(EDPD_MIN_RAND_CAPTURE_DELAY_DEFAULT & 0xFF);
-        armData[87] = (uint8_t)((EDPD_MIN_RAND_CAPTURE_DELAY_DEFAULT >> 8) & 0xFF);
-
-        armData[88] = (uint8_t)(DPD_XCORR_TIMEOUT_DEFAULT & 0xFF);
-        armData[89] = (uint8_t)((DPD_XCORR_TIMEOUT_DEFAULT >> 8) & 0xFF);
-        armData[90] = (uint8_t)(trackingConfig->dpdPeakSearchWindowSize & 0xFF);
-        armData[91] = (uint8_t)((trackingConfig->dpdPeakSearchWindowSize >> 8) & 0xFF);
-        armData[92] = (uint8_t)((trackingConfig->dpdPeakSearchWindowSize >> 16) & 0xFF);
-        armData[93] = (uint8_t)((trackingConfig->dpdPeakSearchWindowSize >> 24) & 0xFF);
-        armData[94] = (uint8_t)(trackingConfig->dpdMu);
-        armData[95] = (uint8_t)(trackingConfig->enableDirectLearning);
-
-        armData[96] = (uint8_t)(EDPD_SAMPLES_PER_CAPTURE_DEFAULT & 0xFF);
-        armData[97] = (uint8_t)((EDPD_SAMPLES_PER_CAPTURE_DEFAULT >> 8) & 0xFF);
-        armData[98] = (uint8_t)(EDPD_MAX_RAND_CAPTURE_DELAY_DEFAULT & 0xFF);
-        armData[99] = (uint8_t)((EDPD_MAX_RAND_CAPTURE_DELAY_DEFAULT >> 8) & 0xFF);
-
-        armData[100] = (uint8_t)(DPD_CLGC_SYNC_EN_DEFAULT & 0xFF);
-        armData[101] = (uint8_t)((DPD_CLGC_SYNC_EN_DEFAULT >> 8 ) & 0xFF);
-        armData[102] = (uint8_t)(trackingConfig->dpdIndirectRegularizationLowPowerValue & 0xFF);
-        armData[103] = (uint8_t)((trackingConfig->dpdIndirectRegularizationLowPowerValue >> 8 ) & 0xFF);
-    } /* end tracking config*/
-    else
-    {
-        ADI_NULL_PTR_RETURN(&device->common, enhancedTrackingConfig);
-        #if ADI_ADRV9025_DPD_RANGE_CHECK > 0
-            recoveryAction = adrv9025_EnhancedDpdTrackingConfigRangeCheck(device, enhancedTrackingConfig);
-            ADI_ERROR_RETURN(device->common.error.newAction);
-        #endif
-
-        txChannelMask = enhancedTrackingConfig->txChannelMask;
-
-        armData[0] = 0u; /* offset within the structure to be set */
-        armData[1] = DPD_TRACKING_CONFIG_LEN; /* number of bytes within the structures to be set */
-        armData[2] = (uint8_t)(DPD_MODEL_DEFAULT & 0xFF);
-        armData[3] = (uint8_t)((DPD_MODEL_DEFAULT >> 8) & 0xFF);
-        armData[4] = (uint8_t)(enhancedTrackingConfig->dpdUpdateMode);
-        armData[5] = (DPD_TX_POW_SEL_DEFAULT & 0xFF);
-        armData[6] = (uint8_t)(DPD_DELTA_DEFAULT);
-        armData[7] = (uint8_t)(DPD_DECAY_P_DEFAULT);
-        armData[8] = (uint8_t)(DPD_MAG_SQ_DEFAULT & 0xFF);
-        armData[9] = (uint8_t)((DPD_MAG_SQ_DEFAULT >> 8) & 0xFF);
-        armData[10] = (uint8_t)(enhancedTrackingConfig->dpdMThreshold & 0xFF);
-        armData[11] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 8) & 0xFF);
-        armData[12] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 16) & 0xFF);
-        armData[13] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 24) & 0xFF);
-        armData[14] = (uint8_t)(enhancedTrackingConfig->dpdSamples & 0xFF);
-        armData[15] = (uint8_t)((enhancedTrackingConfig->dpdSamples >> 8) & 0xFF);
-        armData[16] = (uint8_t)(enhancedTrackingConfig->dpdFilterSel & 0xFF);
-        armData[17] = (uint8_t)((enhancedTrackingConfig->dpdFilterSel >> 8) & 0xFF);
-        armData[18] = (uint8_t)(SELECTED_ERR_SAMPLES_DEFAULT & 0xFF);
-        armData[19] = (uint8_t)((SELECTED_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
-        armData[20] = (uint8_t)(DPD_INDIRECT_ERR_SAMPLES_DEFAULT & 0xFF);
-        armData[21] = (uint8_t)((DPD_INDIRECT_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
-        armData[22] = (uint8_t)(DPD_SATURATION_THRES_DEFAULT & 0xFF);
-        armData[23] = (uint8_t)((DPD_SATURATION_THRES_DEFAULT >> 8) & 0xFF);
-        armData[24] = (uint8_t)(DPD_OUTLIER_THRES_DEFAULT & 0xFF);
-        armData[25] = (uint8_t)((DPD_OUTLIER_THRES_DEFAULT >> 8) & 0xFF);
-        armData[26] = (uint8_t)(DPD_SAT_TX_COUNT_LIM_DEFAULT & 0xFF);
-        armData[27] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
-        armData[28] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
-        armData[29] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
-        armData[30] = (uint8_t)(DPD_SAT_ORX_COUNT_LIM_DEFAULT & 0xFF);
-        armData[31] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
-        armData[32] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
-        armData[33] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
-        armData[34] = (uint8_t)(DPD_ERR_COUNT_LIM_DEFAULT & 0xFF);
-        armData[35] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 8) & 0xFF);
-        armData[36] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 16) & 0xFF);
-        armData[37] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 24) & 0xFF);
-        armData[38] = (uint8_t)(DPD_PART_SUB_ITERATION_COUNT_DEFAULT & 0xFF);
-        armData[39] = (uint8_t)((DPD_PART_SUB_ITERATION_COUNT_DEFAULT >> 8) & 0xFF);
-        armData[40] = (uint8_t)(DPD_LINEAR_TERM_DEFAULT & 0xFF);
-        armData[41] = (uint8_t)((DPD_LINEAR_TERM_DEFAULT >> 8) & 0xFF);
-
-        for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
-        {
-            armData[42 + (i * 2)] = (uint8_t)(enhancedTrackingConfig->dpdFilterCoeffWeight[i].real);
-            armData[42 + (i * 2) + 1] = (uint8_t)(enhancedTrackingConfig->dpdFilterCoeffWeight[i].imag);
-        }
-
-        armData[72] = (uint8_t)(DPD_STARTUP_ITER_COUNT_DEFAULT & 0xFF);
-        armData[73] = (uint8_t)((DPD_STARTUP_ITER_COUNT_DEFAULT >> 8) & 0xFF);
-        armData[74] = enhancedTrackingConfig->dpdDirectRegularizationValue;
-        armData[75] = (uint8_t)(enhancedTrackingConfig->dpdIndirectRegularizationValue);
-
-        armData[76] = (uint8_t)(enhancedTrackingConfig->minAvgSignalLevel & 0xFF);
-        armData[77] = (uint8_t)((enhancedTrackingConfig->minAvgSignalLevel >> 8) & 0xFF);
-        armData[78] = (uint8_t)(DPD_SELECTED_SIGNAL_LEVEL_DEFAULT & 0xFF);
-        armData[79] = (uint8_t)((DPD_SELECTED_SIGNAL_LEVEL_DEFAULT >> 8) & 0xFF);
-        armData[80] = (uint8_t)(enhancedTrackingConfig->minAvgSignalLevelOrx & 0xFF);
-        armData[81] = (uint8_t)((enhancedTrackingConfig->minAvgSignalLevelOrx >> 8) & 0xFF);
-
-        /* eDpd configuration */
-        armData[82] = (uint8_t)(enhancedTrackingConfig->enhancedDpdPeakSearchSize & 0xFF);
-        armData[83] = (uint8_t)((enhancedTrackingConfig->enhancedDpdPeakSearchSize >> 8) & 0xFF);
-        armData[84] = (uint8_t)(enhancedTrackingConfig->enhancedDPDCaptures & 0xFF);
-        armData[85] = (uint8_t)((enhancedTrackingConfig->enhancedDPDCaptures >> 8) & 0xFF);
-        armData[86] = (uint8_t)(enhancedTrackingConfig->enhancedDPDMinRandCapDelay & 0xFF);
-        armData[87] = (uint8_t)((enhancedTrackingConfig->enhancedDPDMinRandCapDelay >> 8) & 0xFF);
-
-        armData[88] = (uint8_t)(DPD_XCORR_TIMEOUT_DEFAULT & 0xFF);
-        armData[89] = (uint8_t)((DPD_XCORR_TIMEOUT_DEFAULT >> 8) & 0xFF);
-        armData[90] = (uint8_t)(enhancedTrackingConfig->dpdPeakSearchWindowSize & 0xFF);
-        armData[91] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 8) & 0xFF);
-        armData[92] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 16) & 0xFF);
-        armData[93] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 24) & 0xFF);
-        armData[94] = (uint8_t)(enhancedTrackingConfig->dpdMu);
-        armData[95] = (uint8_t)(enhancedTrackingConfig->enableDirectLearning);
-
-        armData[96] = (uint8_t)(enhancedTrackingConfig->samplesPerCap & 0xFF);
-        armData[97] = (uint8_t)((enhancedTrackingConfig->samplesPerCap >> 8) & 0xFF);
-        armData[98] = (uint8_t)(enhancedTrackingConfig->enhancedDPDMaxRandCapDelay & 0xFF);
-        armData[99] = (uint8_t)((enhancedTrackingConfig->enhancedDPDMaxRandCapDelay >> 8) & 0xFF);
-
-        armData[100] = (uint8_t)(DPD_CLGC_SYNC_EN_DEFAULT & 0xFF);
-        armData[101] = (uint8_t)((DPD_CLGC_SYNC_EN_DEFAULT >> 8 ) & 0xFF);
-        armData[102] = (uint8_t)(enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue & 0xFF);
-        armData[103] = (uint8_t)((enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue >> 8 ) & 0xFF);
-
-        armData[104] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[0] & 0xFF);
-        armData[105] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[0] >> 8) & 0xFF);
-        armData[106] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[1] & 0xFF);
-        armData[107] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[1] >> 8) & 0xFF);
-        armData[108] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[2] & 0xFF);
-        armData[109] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[2] >> 8) & 0xFF);
-        armData[110] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[3] & 0xFF);
-        armData[111] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[3] >> 8) & 0xFF);
-        armData[112] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelBDelay & 0xFF);
-        armData[113] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelBDelay >> 8) & 0xFF);
-        armData[114] = enhancedTrackingConfig->enableTddLutSwitch;
-        armData[115] = enhancedTrackingConfig->enableWidebandRegularization;
-        armData[116] = enhancedTrackingConfig->widebandRegularizationDnSampleRate;
-
-        fpSerializerPtr = (uint32_t*)(&(enhancedTrackingConfig->widebandRegularizationFactor));
-        fpSerializerTmp = *fpSerializerPtr;
-        armData[118] = (uint8_t)(fpSerializerTmp & 0xFF);
-        armData[119] = (uint8_t)((fpSerializerTmp >> 8) & 0xFF);
-        armData[120] = (uint8_t)((fpSerializerTmp >> 16) & 0xFF);
-        armData[121] = (uint8_t)((fpSerializerTmp >> 24) & 0xFF);
-        fpSerializerPtr = (uint32_t*)(&(enhancedTrackingConfig->widebandRegularizationFactorAlpha));
-        fpSerializerTmp = *fpSerializerPtr;
-        armData[122] = (uint8_t)(fpSerializerTmp & 0xFF);
-        armData[123] = (uint8_t)((fpSerializerTmp >> 8) & 0xFF);
-        armData[124] = (uint8_t)((fpSerializerTmp >> 16) & 0xFF);
-        armData[125] = (uint8_t)((fpSerializerTmp >> 24) & 0xFF);
+        armData[42 + (i * 2)] = (uint8_t)(trackingConfig->dpdFilterCoeffWeight[i].real);
+        armData[42 + (i * 2) + 1] = (uint8_t)(trackingConfig->dpdFilterCoeffWeight[i].imag);
     }
+
+    armData[72] = (uint8_t)(DPD_STARTUP_ITER_COUNT_DEFAULT & 0xFF);
+    armData[73] = (uint8_t)((DPD_STARTUP_ITER_COUNT_DEFAULT >> 8) & 0xFF);
+    armData[74] = trackingConfig->dpdDirectRegularizationValue;
+    armData[75] = (uint8_t)(trackingConfig->dpdIndirectRegularizationValue);
+
+    armData[76] = (uint8_t)(trackingConfig->minAvgSignalLevel & 0xFF);
+    armData[77] = (uint8_t)((trackingConfig->minAvgSignalLevel >> 8) & 0xFF);
+    armData[78] = (uint8_t)(DPD_SELECTED_SIGNAL_LEVEL_DEFAULT & 0xFF);
+    armData[79] = (uint8_t)((DPD_SELECTED_SIGNAL_LEVEL_DEFAULT >> 8) & 0xFF);
+    armData[80] = (uint8_t)(trackingConfig->minAvgSignalLevelOrx & 0xFF);
+    armData[81] = (uint8_t)((trackingConfig->minAvgSignalLevelOrx >> 8) & 0xFF);
+    /* eDpd configuration */
+    armData[82] = (uint8_t)(EDPD_PEAK_SEARCH_SIZE_DEFAULT & 0xFF);
+    armData[83] = (uint8_t)((EDPD_PEAK_SEARCH_SIZE_DEFAULT >> 8) & 0xFF);
+    armData[84] = (uint8_t)(EDPD_CAPTURE_DEFAULT & 0xFF);
+    armData[85] = (uint8_t)((EDPD_CAPTURE_DEFAULT >> 8) & 0xFF);
+    armData[86] = (uint8_t)(EDPD_MIN_RAND_CAPTURE_DELAY_DEFAULT & 0xFF);
+    armData[87] = (uint8_t)((EDPD_MIN_RAND_CAPTURE_DELAY_DEFAULT >> 8) & 0xFF);
+
+    armData[88] = (uint8_t)(DPD_XCORR_TIMEOUT_DEFAULT & 0xFF);
+    armData[89] = (uint8_t)((DPD_XCORR_TIMEOUT_DEFAULT >> 8) & 0xFF);
+    armData[90] = (uint8_t)(trackingConfig->dpdPeakSearchWindowSize & 0xFF);
+    armData[91] = (uint8_t)((trackingConfig->dpdPeakSearchWindowSize >> 8) & 0xFF);
+    armData[92] = (uint8_t)((trackingConfig->dpdPeakSearchWindowSize >> 16) & 0xFF);
+    armData[93] = (uint8_t)((trackingConfig->dpdPeakSearchWindowSize >> 24) & 0xFF);
+    armData[94] = (uint8_t)(trackingConfig->dpdMu);
+    armData[95] = (uint8_t)(trackingConfig->enableDirectLearning);
+
+    armData[96] = (uint8_t)(EDPD_SAMPLES_PER_CAPTURE_DEFAULT & 0xFF);
+    armData[97] = (uint8_t)((EDPD_SAMPLES_PER_CAPTURE_DEFAULT >> 8) & 0xFF);
+    armData[98] = (uint8_t)(EDPD_MAX_RAND_CAPTURE_DELAY_DEFAULT & 0xFF);
+    armData[99] = (uint8_t)((EDPD_MAX_RAND_CAPTURE_DELAY_DEFAULT >> 8) & 0xFF);
+
+    armData[100] = (uint8_t)(DPD_CLGC_SYNC_EN_DEFAULT & 0xFF);
+    armData[101] = (uint8_t)((DPD_CLGC_SYNC_EN_DEFAULT >> 8 ) & 0xFF);
+    armData[102] = (uint8_t)(trackingConfig->dpdIndirectRegularizationLowPowerValue & 0xFF);
+    armData[103] = (uint8_t)((trackingConfig->dpdIndirectRegularizationLowPowerValue >> 8 ) & 0xFF);
+
     for (i = 0; i < ADRV9025_NUMBER_OF_TX_CHANNELS; i++)
     {
         if ((txChannelMask & (0x1 << i)) != 0)
@@ -3129,9 +3770,363 @@ int32_t adrv9025_dpdTrackingConfigSet(adi_adrv9025_Device_t*                    
 
 int32_t adrv9025_dpdTrackingConfigGet(adi_adrv9025_Device_t*                    device,
                                       adi_adrv9025_TxChannels_e                 txChannel,
-                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig,
-                                      adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig,
-                                      uint8_t                                   useEnhanced)
+                                      adi_adrv9025_DpdTrackingConfig_t*         trackingConfig)
+{
+    static const uint8_t DPD_GET_TRACKING_CONFIG_CTRL_PARAM = 0x03;
+    static const uint8_t ARM_ERR_CODE = 0x0E;
+    static const uint8_t DPD_TRACKING_CONFIG_LEN = 124u;
+
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint8_t extData[4]     = { ADRV9025_CPU_OBJECTID_TRACKING_CAL_CTRL, ADRV9025_CPU_OBJECTID_DPD_TRACKING, (uint8_t)txChannel, DPD_GET_TRACKING_CONFIG_CTRL_PARAM };
+    uint8_t armData[124] = { 0 }; /* 124 should be DPD_TRACKING_CONFIG_LEN */
+    uint8_t cmdStatusByte  = 0;
+    uint8_t i              = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
+
+    armData[0] = 0;
+    armData[1] = DPD_TRACKING_CONFIG_LEN;
+
+    /* Write offset and size of tracking config to get to ARM mailbox */
+    recoveryAction = adi_adrv9025_CpuMemWrite(device,
+                                              (uint32_t)ADRV9025_CPU_C_ADDR_MAILBOX_SET,
+                                              &armData[0],
+                                              2u,
+                                              ADI_ADRV9025_CPU_MEM_AUTO_INCR);
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     armData,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    /* Executing tracking config set Arm Command */
+    recoveryAction = adi_adrv9025_CpuCmdWrite(device,
+                                              ADI_ADRV9025_CPU_TYPE_C,
+                                              (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                              &extData[0],
+                                              sizeof(extData));
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     extData,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    /* Wait for command to finish executing */
+    recoveryAction = adi_adrv9025_CpuCmdStatusWait(device,
+                                                   ADI_ADRV9025_CPU_TYPE_C,
+                                                   (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                                   &cmdStatusByte,
+                                                   (uint32_t)ADI_ADRV9025_GETDPDTRACKCONFIG_TIMEOUT_US,
+                                                   (uint32_t)ADI_ADRV9025_GETDPDTRACKCONFIG_INTERVAL_US);
+
+    /* If cmdStatusByte is non-zero then flag an ARM error */
+    if ((cmdStatusByte & ARM_ERR_CODE) > 0)
+    {
+        adrv9025_CpuCmdErrorHandler(device,
+                                    ADI_ADRV9025_CPU_TYPE_C,
+                                    ADI_ADRV9025_SRC_CPUCMD,
+                                    ADRV9025_CPU_CMD_ERRCODE(ADRV9025_CPU_SET_OPCODE,
+                                                             extData[0],
+                                                             cmdStatusByte),
+                                    recoveryAction);
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     cmdStatusByte,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    /* Read the tracking config from ARM mailbox */
+    recoveryAction = adi_adrv9025_CpuMemRead(device,
+                                             (uint32_t)ADRV9025_CPU_C_ADDR_MAILBOX_SET,
+                                             &armData[0],
+                                             sizeof(armData),
+                                             ADI_ADRV9025_CPU_MEM_AUTO_INCR);
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     armData,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    trackingConfig->txChannelMask = txChannel;
+    /* Deserialize data tracking config */
+    trackingConfig->dpdUpdateMode = (adi_adrv9025_DpdTrackingUpdateMode_e)armData[2];
+    trackingConfig->dpdMThreshold = (uint32_t)((uint32_t)armData[8] |
+                                                (uint32_t)armData[9] << 8 |
+                                                (uint32_t)armData[10] << 16 |
+                                                (uint32_t)armData[11] << 24);
+    trackingConfig->dpdSamples = (uint16_t)((uint16_t)armData[12] | ((uint16_t)armData[13] << 8));
+
+    trackingConfig->dpdFilterSel = (uint16_t)((uint16_t)armData[14] | ((uint16_t)armData[15] << 8));
+    for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
+    {
+        trackingConfig->dpdFilterCoeffWeight[i].real = armData[40 + (i * 2)];
+        trackingConfig->dpdFilterCoeffWeight[i].imag = armData[40 + (i * 2) + 1];
+    }
+
+    trackingConfig->dpdDirectRegularizationValue = armData[72];
+    trackingConfig->dpdIndirectRegularizationValue = armData[73];
+
+    trackingConfig->minAvgSignalLevel = (uint16_t)((uint16_t)armData[74] | ((uint16_t)armData[75] << 8));
+    trackingConfig->minAvgSignalLevelOrx = (uint16_t)((uint16_t)armData[78] | ((uint16_t)armData[79] << 8));
+
+    trackingConfig->dpdPeakSearchWindowSize = (uint32_t)((uint32_t)armData[88] |
+                                                            (uint32_t)armData[89] << 8 |
+                                                            (uint32_t)armData[90] << 16 |
+                                                            (uint32_t)armData[91] << 24);
+
+    trackingConfig->dpdMu = armData[92];
+    trackingConfig->enableDirectLearning = armData[93];
+    trackingConfig->dpdIndirectRegularizationLowPowerValue = (uint16_t)((uint16_t)armData[100] | ((uint16_t)armData[101] << 8));
+
+    return recoveryAction;
+}
+
+#if (ADI_ADRV9025_RM_FLOATS == 0)
+int32_t adrv9025_dpdEnhancedTrackingConfigSet(adi_adrv9025_Device_t*                    device,
+                                              adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig)
+{
+    static const uint8_t DPD_SET_TRACKING_CONFIG_CTRL_PARAM = 0x13;
+    static const uint8_t ARM_ERR_CODE = 0x0E;
+    static const uint8_t DPD_TRACKING_CONFIG_LEN = 124u;
+    static const uint8_t DPD_DELTA_DEFAULT = 2u; /* 0.2dB */
+    static const uint8_t DPD_DECAY_P_DEFAULT = 2u; /* 0.2dB */
+    static const uint8_t DPD_TX_POW_SEL_DEFAULT = 0u; /* 0 = mean, 1 = median, 2 = max */
+    static const uint16_t DPD_MODEL_DEFAULT = 0x0010;
+    static const uint16_t DPD_MAG_SQ_DEFAULT = 0x40;
+    static const uint16_t SELECTED_ERR_SAMPLES_DEFAULT = 128u;
+    static const uint16_t DPD_INDIRECT_ERR_SAMPLES_DEFAULT = 256u;
+    static const uint16_t DPD_SATURATION_THRES_DEFAULT = 40000u;
+    static const uint16_t DPD_CLGC_SYNC_EN_DEFAULT = 1u;
+    static const uint16_t DPD_OUTLIER_THRES_DEFAULT          = 32768u;
+    /* threshold for sample in AM-AM plot outside of 1:1 line to be thrown out. (default: `100%' = 32768) */
+    static const uint16_t DPD_LINEAR_TERM_DEFAULT = 1u;
+    static const uint16_t DPD_STARTUP_ITER_COUNT_DEFAULT = 3u;
+    static const uint16_t DPD_XCORR_TIMEOUT_DEFAULT = 1000u;
+    static const uint32_t DPD_SAT_TX_COUNT_LIM_DEFAULT = 1u;
+    static const uint32_t DPD_SAT_ORX_COUNT_LIM_DEFAULT = 3u;
+    static const uint32_t DPD_ERR_COUNT_LIM_DEFAULT = 2u;
+    static const uint16_t DPD_PART_SUB_ITERATION_COUNT_DEFAULT = 0x0001;
+    static const uint16_t DPD_SELECTED_SIGNAL_LEVEL_DEFAULT    = 1024;
+
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint8_t extData[4] = { ADRV9025_CPU_OBJECTID_TRACKING_CAL_CTRL, ADRV9025_CPU_OBJECTID_DPD_TRACKING, (uint8_t)0, DPD_SET_TRACKING_CONFIG_CTRL_PARAM };
+    uint8_t armData[126] = { 0 }; /* 126 should be DPD_TRACKING_CONFIG_LEN + 2 */
+    uint8_t cmdStatusByte = 0;
+    uint8_t i = 0;
+    uint32_t txChannelMask = 0;
+    uint32_t* fpSerializerPtr = NULL;
+    uint32_t  fpSerializerTmp = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
+
+    ADI_NULL_PTR_RETURN(&device->common, enhancedTrackingConfig);
+    #if ADI_ADRV9025_DPD_RANGE_CHECK > 0
+        recoveryAction = adrv9025_EnhancedDpdTrackingConfigRangeCheck(device, enhancedTrackingConfig);
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    #endif
+
+    txChannelMask = enhancedTrackingConfig->txChannelMask;
+
+    armData[0] = 0u; /* offset within the structure to be set */
+    armData[1] = DPD_TRACKING_CONFIG_LEN; /* number of bytes within the structures to be set */
+    armData[2] = (uint8_t)(DPD_MODEL_DEFAULT & 0xFF);
+    armData[3] = (uint8_t)((DPD_MODEL_DEFAULT >> 8) & 0xFF);
+    armData[4] = (uint8_t)(enhancedTrackingConfig->dpdUpdateMode);
+    armData[5] = (DPD_TX_POW_SEL_DEFAULT & 0xFF);
+    armData[6] = (uint8_t)(DPD_DELTA_DEFAULT);
+    armData[7] = (uint8_t)(DPD_DECAY_P_DEFAULT);
+    armData[8] = (uint8_t)(DPD_MAG_SQ_DEFAULT & 0xFF);
+    armData[9] = (uint8_t)((DPD_MAG_SQ_DEFAULT >> 8) & 0xFF);
+    armData[10] = (uint8_t)(enhancedTrackingConfig->dpdMThreshold & 0xFF);
+    armData[11] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 8) & 0xFF);
+    armData[12] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 16) & 0xFF);
+    armData[13] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 24) & 0xFF);
+    armData[14] = (uint8_t)(enhancedTrackingConfig->dpdSamples & 0xFF);
+    armData[15] = (uint8_t)((enhancedTrackingConfig->dpdSamples >> 8) & 0xFF);
+    armData[16] = (uint8_t)(enhancedTrackingConfig->dpdFilterSel & 0xFF);
+    armData[17] = (uint8_t)((enhancedTrackingConfig->dpdFilterSel >> 8) & 0xFF);
+    armData[18] = (uint8_t)(SELECTED_ERR_SAMPLES_DEFAULT & 0xFF);
+    armData[19] = (uint8_t)((SELECTED_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
+    armData[20] = (uint8_t)(DPD_INDIRECT_ERR_SAMPLES_DEFAULT & 0xFF);
+    armData[21] = (uint8_t)((DPD_INDIRECT_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
+    armData[22] = (uint8_t)(DPD_SATURATION_THRES_DEFAULT & 0xFF);
+    armData[23] = (uint8_t)((DPD_SATURATION_THRES_DEFAULT >> 8) & 0xFF);
+    armData[24] = (uint8_t)(DPD_OUTLIER_THRES_DEFAULT & 0xFF);
+    armData[25] = (uint8_t)((DPD_OUTLIER_THRES_DEFAULT >> 8) & 0xFF);
+    armData[26] = (uint8_t)(DPD_SAT_TX_COUNT_LIM_DEFAULT & 0xFF);
+    armData[27] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[28] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[29] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[30] = (uint8_t)(DPD_SAT_ORX_COUNT_LIM_DEFAULT & 0xFF);
+    armData[31] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[32] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[33] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[34] = (uint8_t)(DPD_ERR_COUNT_LIM_DEFAULT & 0xFF);
+    armData[35] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[36] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[37] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[38] = (uint8_t)(DPD_PART_SUB_ITERATION_COUNT_DEFAULT & 0xFF);
+    armData[39] = (uint8_t)((DPD_PART_SUB_ITERATION_COUNT_DEFAULT >> 8) & 0xFF);
+    armData[40] = (uint8_t)(DPD_LINEAR_TERM_DEFAULT & 0xFF);
+    armData[41] = (uint8_t)((DPD_LINEAR_TERM_DEFAULT >> 8) & 0xFF);
+
+    for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
+    {
+        armData[42 + (i * 2)] = (uint8_t)(enhancedTrackingConfig->dpdFilterCoeffWeight[i].real);
+        armData[42 + (i * 2) + 1] = (uint8_t)(enhancedTrackingConfig->dpdFilterCoeffWeight[i].imag);
+    }
+
+    armData[72] = (uint8_t)(DPD_STARTUP_ITER_COUNT_DEFAULT & 0xFF);
+    armData[73] = (uint8_t)((DPD_STARTUP_ITER_COUNT_DEFAULT >> 8) & 0xFF);
+    armData[74] = enhancedTrackingConfig->dpdDirectRegularizationValue;
+    armData[75] = (uint8_t)(enhancedTrackingConfig->dpdIndirectRegularizationValue);
+
+    armData[76] = (uint8_t)(enhancedTrackingConfig->minAvgSignalLevel & 0xFF);
+    armData[77] = (uint8_t)((enhancedTrackingConfig->minAvgSignalLevel >> 8) & 0xFF);
+    armData[78] = (uint8_t)(DPD_SELECTED_SIGNAL_LEVEL_DEFAULT & 0xFF);
+    armData[79] = (uint8_t)((DPD_SELECTED_SIGNAL_LEVEL_DEFAULT >> 8) & 0xFF);
+    armData[80] = (uint8_t)(enhancedTrackingConfig->minAvgSignalLevelOrx & 0xFF);
+    armData[81] = (uint8_t)((enhancedTrackingConfig->minAvgSignalLevelOrx >> 8) & 0xFF);
+
+    /* eDpd configuration */
+    armData[82] = (uint8_t)(enhancedTrackingConfig->enhancedDpdPeakSearchSize & 0xFF);
+    armData[83] = (uint8_t)((enhancedTrackingConfig->enhancedDpdPeakSearchSize >> 8) & 0xFF);
+    armData[84] = (uint8_t)(enhancedTrackingConfig->enhancedDPDCaptures & 0xFF);
+    armData[85] = (uint8_t)((enhancedTrackingConfig->enhancedDPDCaptures >> 8) & 0xFF);
+    armData[86] = (uint8_t)(enhancedTrackingConfig->enhancedDPDMinRandCapDelay & 0xFF);
+    armData[87] = (uint8_t)((enhancedTrackingConfig->enhancedDPDMinRandCapDelay >> 8) & 0xFF);
+
+    armData[88] = (uint8_t)(DPD_XCORR_TIMEOUT_DEFAULT & 0xFF);
+    armData[89] = (uint8_t)((DPD_XCORR_TIMEOUT_DEFAULT >> 8) & 0xFF);
+    armData[90] = (uint8_t)(enhancedTrackingConfig->dpdPeakSearchWindowSize & 0xFF);
+    armData[91] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 8) & 0xFF);
+    armData[92] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 16) & 0xFF);
+    armData[93] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 24) & 0xFF);
+    armData[94] = (uint8_t)(enhancedTrackingConfig->dpdMu);
+    armData[95] = (uint8_t)(enhancedTrackingConfig->enableDirectLearning);
+
+    armData[96] = (uint8_t)(enhancedTrackingConfig->samplesPerCap & 0xFF);
+    armData[97] = (uint8_t)((enhancedTrackingConfig->samplesPerCap >> 8) & 0xFF);
+    armData[98] = (uint8_t)(enhancedTrackingConfig->enhancedDPDMaxRandCapDelay & 0xFF);
+    armData[99] = (uint8_t)((enhancedTrackingConfig->enhancedDPDMaxRandCapDelay >> 8) & 0xFF);
+
+    armData[100] = (uint8_t)(DPD_CLGC_SYNC_EN_DEFAULT & 0xFF);
+    armData[101] = (uint8_t)((DPD_CLGC_SYNC_EN_DEFAULT >> 8 ) & 0xFF);
+    armData[102] = (uint8_t)(enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue & 0xFF);
+    armData[103] = (uint8_t)((enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue >> 8 ) & 0xFF);
+
+    armData[104] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[0] & 0xFF);
+    armData[105] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[0] >> 8) & 0xFF);
+    armData[106] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[1] & 0xFF);
+    armData[107] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[1] >> 8) & 0xFF);
+    armData[108] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[2] & 0xFF);
+    armData[109] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[2] >> 8) & 0xFF);
+    armData[110] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[3] & 0xFF);
+    armData[111] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[3] >> 8) & 0xFF);
+    armData[112] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelBDelay & 0xFF);
+    armData[113] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelBDelay >> 8) & 0xFF);
+    armData[114] = enhancedTrackingConfig->enableTddLutSwitch;
+    armData[115] = enhancedTrackingConfig->enableWidebandRegularization;
+    armData[116] = enhancedTrackingConfig->widebandRegularizationDnSampleRate;
+
+    fpSerializerPtr = (uint32_t*)(&(enhancedTrackingConfig->widebandRegularizationFactor));
+    fpSerializerTmp = *fpSerializerPtr;
+    armData[118] = (uint8_t)(fpSerializerTmp & 0xFF);
+    armData[119] = (uint8_t)((fpSerializerTmp >> 8) & 0xFF);
+    armData[120] = (uint8_t)((fpSerializerTmp >> 16) & 0xFF);
+    armData[121] = (uint8_t)((fpSerializerTmp >> 24) & 0xFF);
+    fpSerializerPtr = (uint32_t*)(&(enhancedTrackingConfig->widebandRegularizationFactorAlpha));
+    fpSerializerTmp = *fpSerializerPtr;
+    armData[122] = (uint8_t)(fpSerializerTmp & 0xFF);
+    armData[123] = (uint8_t)((fpSerializerTmp >> 8) & 0xFF);
+    armData[124] = (uint8_t)((fpSerializerTmp >> 16) & 0xFF);
+    armData[125] = (uint8_t)((fpSerializerTmp >> 24) & 0xFF);
+
+    for (i = 0; i < ADRV9025_NUMBER_OF_TX_CHANNELS; i++)
+    {
+        if ((txChannelMask & (0x1 << i)) != 0)
+        {
+            extData[2] = 0x1 << i;
+            /* Write the tracking config to ARM mailbox */
+            recoveryAction = adi_adrv9025_CpuMemWrite(device,
+                                                      (uint32_t)ADRV9025_CPU_C_ADDR_MAILBOX_SET,
+                                                      &armData[0],
+                                                      sizeof(armData),
+                                                      ADI_ADRV9025_CPU_MEM_AUTO_INCR);
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             device->common.error.errCode,
+                             recoveryAction,
+                             armData,
+                             device->common.error.errormessage);
+            ADI_ERROR_RETURN(device->common.error.newAction);
+
+            /* Executing tracking config set Arm Command */
+            recoveryAction = adi_adrv9025_CpuCmdWrite(device,
+                                                      ADI_ADRV9025_CPU_TYPE_C,
+                                                      (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                                      &extData[0],
+                                                      sizeof(extData));
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             device->common.error.errCode,
+                             recoveryAction,
+                             extData,
+                             device->common.error.errormessage);
+            ADI_ERROR_RETURN(device->common.error.newAction);
+
+            /* Wait for command to finish executing */
+            recoveryAction = adi_adrv9025_CpuCmdStatusWait(device,
+                                                           ADI_ADRV9025_CPU_TYPE_C,
+                                                           (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                                           &cmdStatusByte,
+                                                           (uint32_t)ADI_ADRV9025_SETDPDTRACKCONFIG_TIMEOUT_US,
+                                                           (uint32_t)ADI_ADRV9025_SETDPDTRACKCONFIG_INTERVAL_US);
+
+            /* If cmdStatusByte is non-zero then flag an ARM error */
+            if ((cmdStatusByte & ARM_ERR_CODE) > 0)
+            {
+                adrv9025_CpuCmdErrorHandler(device,
+                                            ADI_ADRV9025_CPU_TYPE_C,
+                                            ADI_ADRV9025_SRC_CPUCMD,
+                                            ADRV9025_CPU_CMD_ERRCODE(ADRV9025_CPU_SET_OPCODE,
+                                                                     extData[0],
+                                                                     cmdStatusByte),
+                                            recoveryAction);
+                ADI_ERROR_RETURN(device->common.error.newAction);
+            }
+
+            ADI_ERROR_REPORT(&device->common,
+                                ADI_COMMON_ERRSRC_API,
+                                device->common.error.errCode,
+                                recoveryAction,
+                                cmdStatusByte,
+                                device->common.error.errormessage);
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+    }
+
+    return recoveryAction;
+}
+
+int32_t adrv9025_dpdEnhancedTrackingConfigGet(adi_adrv9025_Device_t*                    device,
+                                              adi_adrv9025_TxChannels_e                 txChannel,
+                                              adi_adrv9025_EnhancedDpdTrackingConfig_t* enhancedTrackingConfig)
 {
     static const uint8_t DPD_GET_TRACKING_CONFIG_CTRL_PARAM = 0x03;
     static const uint8_t ARM_ERR_CODE = 0x0E;
@@ -3222,110 +4217,663 @@ int32_t adrv9025_dpdTrackingConfigGet(adi_adrv9025_Device_t*                    
                      armData,
                      device->common.error.errormessage);
     ADI_ERROR_RETURN(device->common.error.newAction);
-    if (useEnhanced == ADI_FALSE)
+
+    ADI_NULL_PTR_RETURN(&device->common, enhancedTrackingConfig);
+
+    enhancedTrackingConfig->txChannelMask = txChannel;
+    /* Deserialize data tracking config */
+    enhancedTrackingConfig->dpdUpdateMode = (adi_adrv9025_DpdTrackingUpdateMode_e)armData[2];
+    enhancedTrackingConfig->dpdMThreshold = (uint32_t)((uint32_t)armData[8] |
+                                                        (uint32_t)armData[9] << 8 |
+                                                        (uint32_t)armData[10] << 16 |
+                                                        (uint32_t)armData[11] << 24);
+    enhancedTrackingConfig->dpdSamples = (uint16_t)((uint16_t)armData[12] | ((uint16_t)armData[13] << 8));
+
+    enhancedTrackingConfig->dpdFilterSel = (uint16_t)((uint16_t)armData[14] | ((uint16_t)armData[15] << 8));
+    for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
     {
-
-        trackingConfig->txChannelMask = txChannel;
-        /* Deserialize data tracking config */
-        trackingConfig->dpdUpdateMode = (adi_adrv9025_DpdTrackingUpdateMode_e)armData[2];
-        trackingConfig->dpdMThreshold = (uint32_t)((uint32_t)armData[8] |
-                                                   (uint32_t)armData[9] << 8 |
-                                                   (uint32_t)armData[10] << 16 |
-                                                   (uint32_t)armData[11] << 24);
-        trackingConfig->dpdSamples = (uint16_t)((uint16_t)armData[12] | ((uint16_t)armData[13] << 8));
-
-        trackingConfig->dpdFilterSel = (uint16_t)((uint16_t)armData[14] | ((uint16_t)armData[15] << 8));
-        for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
-        {
-            trackingConfig->dpdFilterCoeffWeight[i].real = armData[40 + (i * 2)];
-            trackingConfig->dpdFilterCoeffWeight[i].imag = armData[40 + (i * 2) + 1];
-        }
-
-        trackingConfig->dpdDirectRegularizationValue = armData[72];
-        trackingConfig->dpdIndirectRegularizationValue = armData[73];
-
-        trackingConfig->minAvgSignalLevel = (uint16_t)((uint16_t)armData[74] | ((uint16_t)armData[75] << 8));
-        trackingConfig->minAvgSignalLevelOrx = (uint16_t)((uint16_t)armData[78] | ((uint16_t)armData[79] << 8));
-
-        trackingConfig->dpdPeakSearchWindowSize = (uint32_t)((uint32_t)armData[88] |
-                                                             (uint32_t)armData[89] << 8 |
-                                                             (uint32_t)armData[90] << 16 |
-                                                             (uint32_t)armData[91] << 24);
-
-        trackingConfig->dpdMu = armData[92];
-        trackingConfig->enableDirectLearning = armData[93];
-        trackingConfig->dpdIndirectRegularizationLowPowerValue = (uint16_t)((uint16_t)armData[100] | ((uint16_t)armData[101] << 8));
+        enhancedTrackingConfig->dpdFilterCoeffWeight[i].real = armData[40 + (i * 2)];
+        enhancedTrackingConfig->dpdFilterCoeffWeight[i].imag = armData[40 + (i * 2) + 1];
     }
-    else
-    {
-       ADI_NULL_PTR_RETURN(&device->common, enhancedTrackingConfig);
 
-        enhancedTrackingConfig->txChannelMask = txChannel;
-        /* Deserialize data tracking config */
-        enhancedTrackingConfig->dpdUpdateMode = (adi_adrv9025_DpdTrackingUpdateMode_e)armData[2];
-        enhancedTrackingConfig->dpdMThreshold = (uint32_t)((uint32_t)armData[8] |
-                                                           (uint32_t)armData[9] << 8 |
-                                                           (uint32_t)armData[10] << 16 |
-                                                           (uint32_t)armData[11] << 24);
-        enhancedTrackingConfig->dpdSamples = (uint16_t)((uint16_t)armData[12] | ((uint16_t)armData[13] << 8));
+    enhancedTrackingConfig->dpdDirectRegularizationValue = armData[72];
+    enhancedTrackingConfig->dpdIndirectRegularizationValue = armData[73];
 
-        enhancedTrackingConfig->dpdFilterSel = (uint16_t)((uint16_t)armData[14] | ((uint16_t)armData[15] << 8));
-        for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
-        {
-            enhancedTrackingConfig->dpdFilterCoeffWeight[i].real = armData[40 + (i * 2)];
-            enhancedTrackingConfig->dpdFilterCoeffWeight[i].imag = armData[40 + (i * 2) + 1];
-        }
+    enhancedTrackingConfig->minAvgSignalLevel = (uint16_t)((uint16_t)armData[74] | ((uint16_t)armData[75] << 8));
+    enhancedTrackingConfig->minAvgSignalLevelOrx = (uint16_t)((uint16_t)armData[78] | ((uint16_t)armData[79] << 8));
 
-        enhancedTrackingConfig->dpdDirectRegularizationValue = armData[72];
-        enhancedTrackingConfig->dpdIndirectRegularizationValue = armData[73];
+    enhancedTrackingConfig->enhancedDpdPeakSearchSize = (uint16_t)((uint16_t)armData[80] | ((uint16_t)armData[81] << 8));
+    enhancedTrackingConfig->enhancedDPDCaptures = (uint16_t)((uint16_t)armData[82] | ((uint16_t)armData[83] << 8));
+    enhancedTrackingConfig->enhancedDPDMinRandCapDelay = (uint16_t)((uint16_t)armData[84] | ((uint16_t)armData[85] << 8));
 
-        enhancedTrackingConfig->minAvgSignalLevel = (uint16_t)((uint16_t)armData[74] | ((uint16_t)armData[75] << 8));
-        enhancedTrackingConfig->minAvgSignalLevelOrx = (uint16_t)((uint16_t)armData[78] | ((uint16_t)armData[79] << 8));
+    enhancedTrackingConfig->dpdPeakSearchWindowSize = (uint32_t)((uint32_t)armData[88] |
+                                                                    (uint32_t)armData[89] << 8 |
+                                                                    (uint32_t)armData[90] << 16 |
+                                                                    (uint32_t)armData[91] << 24);
 
-        enhancedTrackingConfig->enhancedDpdPeakSearchSize = (uint16_t)((uint16_t)armData[80] | ((uint16_t)armData[81] << 8));
-        enhancedTrackingConfig->enhancedDPDCaptures = (uint16_t)((uint16_t)armData[82] | ((uint16_t)armData[83] << 8));
-        enhancedTrackingConfig->enhancedDPDMinRandCapDelay = (uint16_t)((uint16_t)armData[84] | ((uint16_t)armData[85] << 8));
+    enhancedTrackingConfig->dpdMu = armData[92];
+    enhancedTrackingConfig->enableDirectLearning = armData[93];
 
-        enhancedTrackingConfig->dpdPeakSearchWindowSize = (uint32_t)((uint32_t)armData[88] |
-                                                                     (uint32_t)armData[89] << 8 |
-                                                                     (uint32_t)armData[90] << 16 |
-                                                                     (uint32_t)armData[91] << 24);
+    enhancedTrackingConfig->samplesPerCap = (adi_adrv9025_dpdSamplesPerCapture_e)(uint32_t)(((uint16_t)armData[94] | ((uint16_t)armData[95] << 8)));
+    enhancedTrackingConfig->enhancedDPDMaxRandCapDelay = (uint16_t)((uint16_t)armData[96] | ((uint16_t)armData[97] << 8));
 
-        enhancedTrackingConfig->dpdMu = armData[92];
-        enhancedTrackingConfig->enableDirectLearning = armData[93];
+    enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue = (uint16_t)((uint16_t)armData[100] | ((uint16_t)armData[101] << 8));
 
-        enhancedTrackingConfig->samplesPerCap = (adi_adrv9025_dpdSamplesPerCapture_e)(uint32_t)(((uint16_t)armData[94] | ((uint16_t)armData[95] << 8)));
-        enhancedTrackingConfig->enhancedDPDMaxRandCapDelay = (uint16_t)((uint16_t)armData[96] | ((uint16_t)armData[97] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[0] = (uint16_t)((uint16_t)armData[102] | ((uint16_t)armData[103] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[1] = (uint16_t)((uint16_t)armData[104] | ((uint16_t)armData[105] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[2] = (uint16_t)((uint16_t)armData[106] | ((uint16_t)armData[107] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[3] = (uint16_t)((uint16_t)armData[108] | ((uint16_t)armData[109] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelBDelay = (uint16_t)((uint16_t)armData[110] | ((uint16_t)armData[111] << 8));
+    enhancedTrackingConfig->enableTddLutSwitch = armData[112];
+    enhancedTrackingConfig->enableWidebandRegularization = armData[113];
+    enhancedTrackingConfig->widebandRegularizationDnSampleRate = armData[114];
 
-        enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue = (uint16_t)((uint16_t)armData[100] | ((uint16_t)armData[101] << 8));
+    fpDeserializerTmp = (uint32_t)((uint32_t)armData[116] |
+                                    (uint32_t)armData[117] << 8 |
+                                    (uint32_t)armData[118] << 16 |
+                                    (uint32_t)armData[119] << 24);
+    fpDeserializerPtr = (float*)&fpDeserializerTmp;
+    enhancedTrackingConfig->widebandRegularizationFactor = *fpDeserializerPtr;
+    fpDeserializerTmp = (uint32_t)((uint32_t)armData[120] |
+                                    (uint32_t)armData[121] << 8 |
+                                    (uint32_t)armData[122] << 16 |
+                                    (uint32_t)armData[123] << 24);
+    fpDeserializerPtr = (float*)&fpDeserializerTmp;
+    enhancedTrackingConfig->widebandRegularizationFactorAlpha = *fpDeserializerPtr;
 
-        enhancedTrackingConfig->tddLutSwitchModelADelay[0] = (uint16_t)((uint16_t)armData[102] | ((uint16_t)armData[103] << 8));
-        enhancedTrackingConfig->tddLutSwitchModelADelay[1] = (uint16_t)((uint16_t)armData[104] | ((uint16_t)armData[105] << 8));
-        enhancedTrackingConfig->tddLutSwitchModelADelay[2] = (uint16_t)((uint16_t)armData[106] | ((uint16_t)armData[107] << 8));
-        enhancedTrackingConfig->tddLutSwitchModelADelay[3] = (uint16_t)((uint16_t)armData[108] | ((uint16_t)armData[109] << 8));
-        enhancedTrackingConfig->tddLutSwitchModelBDelay = (uint16_t)((uint16_t)armData[110] | ((uint16_t)armData[111] << 8));
-        enhancedTrackingConfig->enableTddLutSwitch = armData[112];
-        enhancedTrackingConfig->enableWidebandRegularization = armData[113];
-        enhancedTrackingConfig->widebandRegularizationDnSampleRate = armData[114];
-
-        fpDeserializerTmp = (uint32_t)((uint32_t)armData[116] |
-                                       (uint32_t)armData[117] << 8 |
-                                       (uint32_t)armData[118] << 16 |
-                                       (uint32_t)armData[119] << 24);
-        fpDeserializerPtr = (float*)&fpDeserializerTmp;
-        enhancedTrackingConfig->widebandRegularizationFactor = *fpDeserializerPtr;
-        fpDeserializerTmp = (uint32_t)((uint32_t)armData[120] |
-                                       (uint32_t)armData[121] << 8 |
-                                       (uint32_t)armData[122] << 16 |
-                                       (uint32_t)armData[123] << 24);
-        fpDeserializerPtr = (float*)&fpDeserializerTmp;
-        enhancedTrackingConfig->widebandRegularizationFactorAlpha = *fpDeserializerPtr;
-    }
     return recoveryAction;
 }
 
 int32_t adrv9025_EnhancedDpdTrackingConfigRangeCheck(adi_adrv9025_Device_t*                    device,
                                                      adi_adrv9025_EnhancedDpdTrackingConfig_t* dpdTrackingConfig)
+{
+    static const uint8_t  DPD_TRACKING_CONFIG_MAX_REGULARIZATION_VALUE = 63u;
+    static const uint32_t DPD_TRACKING_CONFIG_MAX_M_THRESH             = 2147483647u;
+    static const uint32_t DPD_TRACKING_CONFIG_MAX_PEAK_WINDOW_SIZE     = 0x4B0000;
+    static const uint16_t DPD_TRACKING_CONFIG_MAX_MIN_AVG_SIGNAL_LEVEL = 32768;
+    static const uint16_t EDPD_PEAK_SEARCH_MAX = 65535;
+    static const uint8_t  EDPD_MAX_CAPTURES = 16;
+    static const uint16_t EDPD_MAX_CAPTURE_DELAY = 65535;
+    static const uint8_t  TDD_LUT_SWITCH_ENABLE = 1u;
+    static const uint8_t  WB_REGULARIZATION_ENABLE = 1u;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common,
+                           ADI_COMMON_LOG_API_PRIV);
+
+    ADI_NULL_PTR_RETURN(&device->common,
+                        dpdTrackingConfig);
+
+    /* Check that the target Tx channel is valid */
+    if (dpdTrackingConfig->txChannelMask < ADI_ADRV9025_TX1 ||
+        dpdTrackingConfig->txChannelMask > ADI_ADRV9025_TXALL)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->txChannelMask,
+                         "Invalid Tx channel mask encountered while attempting to set DPD tracking config.");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    /* Check that update mode is valid */
+    if ((dpdTrackingConfig->dpdUpdateMode != ADI_ADRV9025_DPD_TRACKING_UPDATE_MODE_0) &&
+        (dpdTrackingConfig->dpdUpdateMode != ADI_ADRV9025_DPD_TRACKING_UPDATE_MODE_1) &&
+        (dpdTrackingConfig->dpdUpdateMode != ADI_ADRV9025_DPD_TRACKING_UPDATE_MODE_2))
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdUpdateMode,
+                         "Invalid update mode encountered while attempting to set DPD tracking config.");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    /* Check that M threshold is valid */
+    if (dpdTrackingConfig->dpdMThreshold >= DPD_TRACKING_CONFIG_MAX_M_THRESH)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdMThreshold,
+                         "M threshold should be less than 2147483648");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    /* Check that indirect regularization value is valid */
+    if (dpdTrackingConfig->dpdIndirectRegularizationValue >= DPD_TRACKING_CONFIG_MAX_REGULARIZATION_VALUE)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdIndirectRegularizationValue,
+                         "Indirect regularization value should be less than 64");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    /* Check that peak search window size is valid */
+    if (dpdTrackingConfig->dpdPeakSearchWindowSize > DPD_TRACKING_CONFIG_MAX_PEAK_WINDOW_SIZE)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdPeakSearchWindowSize,
+                         "Peak search window size value should be less than 0x4B0000");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    if (dpdTrackingConfig->minAvgSignalLevel > DPD_TRACKING_CONFIG_MAX_MIN_AVG_SIGNAL_LEVEL)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->minAvgSignalLevel,
+                         "Min average signal level should be less than 32768");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    if (dpdTrackingConfig->minAvgSignalLevelOrx > DPD_TRACKING_CONFIG_MAX_MIN_AVG_SIGNAL_LEVEL)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->minAvgSignalLevelOrx,
+                         "ORX Min average signal level should be less than 32768");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    if (dpdTrackingConfig->dpdFilterSel > 1)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdFilterSel,
+                         "OBW filter select valid values 0-1");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enableDirectLearning > 1)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enableDirectLearning,
+                         "enable direct learning valid values 0 - disabled  and enabled - 1");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->dpdMu > 100)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdMu,
+                         "Valid values for DPDmu are between 0-100");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->dpdIndirectRegularizationLowPowerValue > DPD_TRACKING_CONFIG_MAX_REGULARIZATION_VALUE)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->dpdIndirectRegularizationLowPowerValue,
+                         "Valid values for dpdIndirectRegularizationLowPowerValue are between 0-63");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enhancedDpdPeakSearchSize > EDPD_PEAK_SEARCH_MAX)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enhancedDpdPeakSearchSize,
+                         "Valid values for enhancedDpdPeakSearchSize are between 0-65535");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enhancedDPDCaptures > EDPD_MAX_CAPTURES)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enhancedDPDCaptures,
+                         "Valid values for enhancedDPDCaptures are between 0-16");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enhancedDPDMinRandCapDelay > EDPD_MAX_CAPTURE_DELAY)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enhancedDPDMinRandCapDelay,
+                         "Valid values for enhancedDPDMinRandCapDelay are between 0-65535");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enhancedDPDMaxRandCapDelay > EDPD_MAX_CAPTURE_DELAY)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enhancedDPDMaxRandCapDelay,
+                         "Valid values for enhancedDPDMaxRandCapDelay are between 0-65535");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enableTddLutSwitch > TDD_LUT_SWITCH_ENABLE)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enableTddLutSwitch,
+                         "Valid values for enableTddLutSwitch is 0 or 1");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+    if (dpdTrackingConfig->enableWidebandRegularization > WB_REGULARIZATION_ENABLE)
+    {
+        ADI_ERROR_REPORT(&device->common,
+                         ADI_COMMON_ERRSRC_API,
+                         ADI_COMMON_ERR_INV_PARAM,
+                         ADI_COMMON_ACT_ERR_CHECK_PARAM,
+                         dpdTrackingConfig->enableTddLutSwitch,
+                         "Valid values for enableWidebandRegularization is 0 or 1");
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    return ADI_COMMON_ACT_NO_ACTION;
+}
+#endif
+
+int32_t adrv9025_dpdEnhancedTrackingConfigSet_v2(adi_adrv9025_Device_t*                       device,
+                                                 adi_adrv9025_EnhancedDpdTrackingConfig_v2_t* enhancedTrackingConfig)
+{
+    static const uint8_t DPD_SET_TRACKING_CONFIG_CTRL_PARAM_NO_FLOAT = 0x16;
+    static const uint8_t ARM_ERR_CODE = 0x0E;
+    static const uint8_t DPD_TRACKING_CONFIG_LEN = 124u;
+    static const uint8_t DPD_DELTA_DEFAULT = 2u; /* 0.2dB */
+    static const uint8_t DPD_DECAY_P_DEFAULT = 2u; /* 0.2dB */
+    static const uint8_t DPD_TX_POW_SEL_DEFAULT = 0u; /* 0 = mean, 1 = median, 2 = max */
+    static const uint16_t DPD_MODEL_DEFAULT = 0x0010;
+    static const uint16_t DPD_MAG_SQ_DEFAULT = 0x40;
+    static const uint16_t SELECTED_ERR_SAMPLES_DEFAULT = 128u;
+    static const uint16_t DPD_INDIRECT_ERR_SAMPLES_DEFAULT = 256u;
+    static const uint16_t DPD_SATURATION_THRES_DEFAULT = 40000u;
+    static const uint16_t DPD_CLGC_SYNC_EN_DEFAULT = 1u;
+    static const uint16_t DPD_OUTLIER_THRES_DEFAULT          = 32768u;
+    /* threshold for sample in AM-AM plot outside of 1:1 line to be thrown out. (default: `100%' = 32768) */
+    static const uint16_t DPD_LINEAR_TERM_DEFAULT = 1u;
+    static const uint16_t DPD_STARTUP_ITER_COUNT_DEFAULT = 3u;
+    static const uint16_t DPD_XCORR_TIMEOUT_DEFAULT = 1000u;
+    static const uint32_t DPD_SAT_TX_COUNT_LIM_DEFAULT = 1u;
+    static const uint32_t DPD_SAT_ORX_COUNT_LIM_DEFAULT = 3u;
+    static const uint32_t DPD_ERR_COUNT_LIM_DEFAULT = 2u;
+    static const uint16_t DPD_PART_SUB_ITERATION_COUNT_DEFAULT = 0x0001;
+    static const uint16_t DPD_SELECTED_SIGNAL_LEVEL_DEFAULT    = 1024;
+
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint8_t extData[4] = { ADRV9025_CPU_OBJECTID_TRACKING_CAL_CTRL, ADRV9025_CPU_OBJECTID_DPD_TRACKING, (uint8_t)0, DPD_SET_TRACKING_CONFIG_CTRL_PARAM_NO_FLOAT };
+    uint8_t armData[126] = { 0 }; /* 126 should be DPD_TRACKING_CONFIG_LEN + 2 */
+    uint8_t cmdStatusByte = 0;
+    uint8_t i = 0;
+    uint32_t txChannelMask = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
+
+    ADI_NULL_PTR_RETURN(&device->common, enhancedTrackingConfig);
+    #if ADI_ADRV9025_DPD_RANGE_CHECK > 0
+        recoveryAction = adrv9025_EnhancedDpdTrackingConfigRangeCheck_v2(device, enhancedTrackingConfig);
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    #endif
+
+    txChannelMask = enhancedTrackingConfig->txChannelMask;
+
+    armData[0] = 0u; /* offset within the structure to be set */
+    armData[1] = DPD_TRACKING_CONFIG_LEN; /* number of bytes within the structures to be set */
+    armData[2] = (uint8_t)(DPD_MODEL_DEFAULT & 0xFF);
+    armData[3] = (uint8_t)((DPD_MODEL_DEFAULT >> 8) & 0xFF);
+    armData[4] = (uint8_t)(enhancedTrackingConfig->dpdUpdateMode);
+    armData[5] = (DPD_TX_POW_SEL_DEFAULT & 0xFF);
+    armData[6] = (uint8_t)(DPD_DELTA_DEFAULT);
+    armData[7] = (uint8_t)(DPD_DECAY_P_DEFAULT);
+    armData[8] = (uint8_t)(DPD_MAG_SQ_DEFAULT & 0xFF);
+    armData[9] = (uint8_t)((DPD_MAG_SQ_DEFAULT >> 8) & 0xFF);
+    armData[10] = (uint8_t)(enhancedTrackingConfig->dpdMThreshold & 0xFF);
+    armData[11] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 8) & 0xFF);
+    armData[12] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 16) & 0xFF);
+    armData[13] = (uint8_t)((enhancedTrackingConfig->dpdMThreshold >> 24) & 0xFF);
+    armData[14] = (uint8_t)(enhancedTrackingConfig->dpdSamples & 0xFF);
+    armData[15] = (uint8_t)((enhancedTrackingConfig->dpdSamples >> 8) & 0xFF);
+    armData[16] = (uint8_t)(enhancedTrackingConfig->dpdFilterSel & 0xFF);
+    armData[17] = (uint8_t)((enhancedTrackingConfig->dpdFilterSel >> 8) & 0xFF);
+    armData[18] = (uint8_t)(SELECTED_ERR_SAMPLES_DEFAULT & 0xFF);
+    armData[19] = (uint8_t)((SELECTED_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
+    armData[20] = (uint8_t)(DPD_INDIRECT_ERR_SAMPLES_DEFAULT & 0xFF);
+    armData[21] = (uint8_t)((DPD_INDIRECT_ERR_SAMPLES_DEFAULT >> 8) & 0xFF);
+    armData[22] = (uint8_t)(DPD_SATURATION_THRES_DEFAULT & 0xFF);
+    armData[23] = (uint8_t)((DPD_SATURATION_THRES_DEFAULT >> 8) & 0xFF);
+    armData[24] = (uint8_t)(DPD_OUTLIER_THRES_DEFAULT & 0xFF);
+    armData[25] = (uint8_t)((DPD_OUTLIER_THRES_DEFAULT >> 8) & 0xFF);
+    armData[26] = (uint8_t)(DPD_SAT_TX_COUNT_LIM_DEFAULT & 0xFF);
+    armData[27] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[28] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[29] = (uint8_t)((DPD_SAT_TX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[30] = (uint8_t)(DPD_SAT_ORX_COUNT_LIM_DEFAULT & 0xFF);
+    armData[31] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[32] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[33] = (uint8_t)((DPD_SAT_ORX_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[34] = (uint8_t)(DPD_ERR_COUNT_LIM_DEFAULT & 0xFF);
+    armData[35] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 8) & 0xFF);
+    armData[36] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 16) & 0xFF);
+    armData[37] = (uint8_t)((DPD_ERR_COUNT_LIM_DEFAULT >> 24) & 0xFF);
+    armData[38] = (uint8_t)(DPD_PART_SUB_ITERATION_COUNT_DEFAULT & 0xFF);
+    armData[39] = (uint8_t)((DPD_PART_SUB_ITERATION_COUNT_DEFAULT >> 8) & 0xFF);
+    armData[40] = (uint8_t)(DPD_LINEAR_TERM_DEFAULT & 0xFF);
+    armData[41] = (uint8_t)((DPD_LINEAR_TERM_DEFAULT >> 8) & 0xFF);
+
+    for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
+    {
+        armData[42 + (i * 2)] = (uint8_t)(enhancedTrackingConfig->dpdFilterCoeffWeight[i].real);
+        armData[42 + (i * 2) + 1] = (uint8_t)(enhancedTrackingConfig->dpdFilterCoeffWeight[i].imag);
+    }
+
+    armData[72] = (uint8_t)(DPD_STARTUP_ITER_COUNT_DEFAULT & 0xFF);
+    armData[73] = (uint8_t)((DPD_STARTUP_ITER_COUNT_DEFAULT >> 8) & 0xFF);
+    armData[74] = enhancedTrackingConfig->dpdDirectRegularizationValue;
+    armData[75] = (uint8_t)(enhancedTrackingConfig->dpdIndirectRegularizationValue);
+
+    armData[76] = (uint8_t)(enhancedTrackingConfig->minAvgSignalLevel & 0xFF);
+    armData[77] = (uint8_t)((enhancedTrackingConfig->minAvgSignalLevel >> 8) & 0xFF);
+    armData[78] = (uint8_t)(DPD_SELECTED_SIGNAL_LEVEL_DEFAULT & 0xFF);
+    armData[79] = (uint8_t)((DPD_SELECTED_SIGNAL_LEVEL_DEFAULT >> 8) & 0xFF);
+    armData[80] = (uint8_t)(enhancedTrackingConfig->minAvgSignalLevelOrx & 0xFF);
+    armData[81] = (uint8_t)((enhancedTrackingConfig->minAvgSignalLevelOrx >> 8) & 0xFF);
+
+    /* eDpd configuration */
+    armData[82] = (uint8_t)(enhancedTrackingConfig->enhancedDpdPeakSearchSize & 0xFF);
+    armData[83] = (uint8_t)((enhancedTrackingConfig->enhancedDpdPeakSearchSize >> 8) & 0xFF);
+    armData[84] = (uint8_t)(enhancedTrackingConfig->enhancedDPDCaptures & 0xFF);
+    armData[85] = (uint8_t)((enhancedTrackingConfig->enhancedDPDCaptures >> 8) & 0xFF);
+    armData[86] = (uint8_t)(enhancedTrackingConfig->enhancedDPDMinRandCapDelay & 0xFF);
+    armData[87] = (uint8_t)((enhancedTrackingConfig->enhancedDPDMinRandCapDelay >> 8) & 0xFF);
+
+    armData[88] = (uint8_t)(DPD_XCORR_TIMEOUT_DEFAULT & 0xFF);
+    armData[89] = (uint8_t)((DPD_XCORR_TIMEOUT_DEFAULT >> 8) & 0xFF);
+    armData[90] = (uint8_t)(enhancedTrackingConfig->dpdPeakSearchWindowSize & 0xFF);
+    armData[91] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 8) & 0xFF);
+    armData[92] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 16) & 0xFF);
+    armData[93] = (uint8_t)((enhancedTrackingConfig->dpdPeakSearchWindowSize >> 24) & 0xFF);
+    armData[94] = (uint8_t)(enhancedTrackingConfig->dpdMu);
+    armData[95] = (uint8_t)(enhancedTrackingConfig->enableDirectLearning);
+
+    armData[96] = (uint8_t)(enhancedTrackingConfig->samplesPerCap & 0xFF);
+    armData[97] = (uint8_t)((enhancedTrackingConfig->samplesPerCap >> 8) & 0xFF);
+    armData[98] = (uint8_t)(enhancedTrackingConfig->enhancedDPDMaxRandCapDelay & 0xFF);
+    armData[99] = (uint8_t)((enhancedTrackingConfig->enhancedDPDMaxRandCapDelay >> 8) & 0xFF);
+
+    armData[100] = (uint8_t)(DPD_CLGC_SYNC_EN_DEFAULT & 0xFF);
+    armData[101] = (uint8_t)((DPD_CLGC_SYNC_EN_DEFAULT >> 8 ) & 0xFF);
+    armData[102] = (uint8_t)(enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue & 0xFF);
+    armData[103] = (uint8_t)((enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue >> 8 ) & 0xFF);
+
+    armData[104] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[0] & 0xFF);
+    armData[105] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[0] >> 8) & 0xFF);
+    armData[106] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[1] & 0xFF);
+    armData[107] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[1] >> 8) & 0xFF);
+    armData[108] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[2] & 0xFF);
+    armData[109] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[2] >> 8) & 0xFF);
+    armData[110] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelADelay[3] & 0xFF);
+    armData[111] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelADelay[3] >> 8) & 0xFF);
+    armData[112] = (uint8_t)(enhancedTrackingConfig->tddLutSwitchModelBDelay & 0xFF);
+    armData[113] = (uint8_t)((enhancedTrackingConfig->tddLutSwitchModelBDelay >> 8) & 0xFF);
+    armData[114] = enhancedTrackingConfig->enableTddLutSwitch;
+    armData[115] = enhancedTrackingConfig->enableWidebandRegularization;
+    armData[116] = enhancedTrackingConfig->widebandRegularizationDnSampleRate;
+
+    armData[118] = (uint8_t)(enhancedTrackingConfig->widebandRegularizationFactor_xM & 0xFF);
+    armData[119] = (uint8_t)((enhancedTrackingConfig->widebandRegularizationFactor_xM >> 8) & 0xFF);
+    armData[120] = (uint8_t)((enhancedTrackingConfig->widebandRegularizationFactor_xM >> 16) & 0xFF);
+    armData[121] = (uint8_t)((enhancedTrackingConfig->widebandRegularizationFactor_xM >> 24) & 0xFF);
+    armData[122] = (uint8_t)(enhancedTrackingConfig->widebandRegularizationFactorAlpha_xM & 0xFF);
+    armData[123] = (uint8_t)((enhancedTrackingConfig->widebandRegularizationFactorAlpha_xM >> 8) & 0xFF);
+    armData[124] = (uint8_t)((enhancedTrackingConfig->widebandRegularizationFactorAlpha_xM >> 16) & 0xFF);
+    armData[125] = (uint8_t)((enhancedTrackingConfig->widebandRegularizationFactorAlpha_xM >> 24) & 0xFF);
+
+    for (i = 0; i < ADRV9025_NUMBER_OF_TX_CHANNELS; i++)
+    {
+        if ((txChannelMask & (0x1 << i)) != 0)
+        {
+            extData[2] = 0x1 << i;
+            /* Write the tracking config to ARM mailbox */
+            recoveryAction = adi_adrv9025_CpuMemWrite(device,
+                                                      (uint32_t)ADRV9025_CPU_C_ADDR_MAILBOX_SET,
+                                                      &armData[0],
+                                                      sizeof(armData),
+                                                      ADI_ADRV9025_CPU_MEM_AUTO_INCR);
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             device->common.error.errCode,
+                             recoveryAction,
+                             armData,
+                             device->common.error.errormessage);
+            ADI_ERROR_RETURN(device->common.error.newAction);
+
+            /* Executing tracking config set Arm Command */
+            recoveryAction = adi_adrv9025_CpuCmdWrite(device,
+                                                      ADI_ADRV9025_CPU_TYPE_C,
+                                                      (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                                      &extData[0],
+                                                      sizeof(extData));
+            ADI_ERROR_REPORT(&device->common,
+                             ADI_COMMON_ERRSRC_API,
+                             device->common.error.errCode,
+                             recoveryAction,
+                             extData,
+                             device->common.error.errormessage);
+            ADI_ERROR_RETURN(device->common.error.newAction);
+
+            /* Wait for command to finish executing */
+            recoveryAction = adi_adrv9025_CpuCmdStatusWait(device,
+                                                           ADI_ADRV9025_CPU_TYPE_C,
+                                                           (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                                           &cmdStatusByte,
+                                                           (uint32_t)ADI_ADRV9025_SETDPDTRACKCONFIG_TIMEOUT_US,
+                                                           (uint32_t)ADI_ADRV9025_SETDPDTRACKCONFIG_INTERVAL_US);
+
+            /* If cmdStatusByte is non-zero then flag an ARM error */
+            if ((cmdStatusByte & ARM_ERR_CODE) > 0)
+            {
+                adrv9025_CpuCmdErrorHandler(device,
+                                            ADI_ADRV9025_CPU_TYPE_C,
+                                            ADI_ADRV9025_SRC_CPUCMD,
+                                            ADRV9025_CPU_CMD_ERRCODE(ADRV9025_CPU_SET_OPCODE,
+                                                                     extData[0],
+                                                                     cmdStatusByte),
+                                            recoveryAction);
+                ADI_ERROR_RETURN(device->common.error.newAction);
+            }
+
+            ADI_ERROR_REPORT(&device->common,
+                                ADI_COMMON_ERRSRC_API,
+                                device->common.error.errCode,
+                                recoveryAction,
+                                cmdStatusByte,
+                                device->common.error.errormessage);
+            ADI_ERROR_RETURN(device->common.error.newAction);
+        }
+    }
+
+    return recoveryAction;
+}
+
+int32_t adrv9025_dpdEnhancedTrackingConfigGet_v2(adi_adrv9025_Device_t*                       device,
+                                                 adi_adrv9025_TxChannels_e                    txChannel,
+                                                 adi_adrv9025_EnhancedDpdTrackingConfig_v2_t* enhancedTrackingConfig)
+{
+    static const uint8_t DPD_GET_TRACKING_CONFIG_CTRL_PARAM_NO_FLOAT = 0x06;
+    static const uint8_t ARM_ERR_CODE = 0x0E;
+    static const uint8_t DPD_TRACKING_CONFIG_LEN = 124u;
+
+    int32_t recoveryAction = ADI_COMMON_ACT_NO_ACTION;
+    uint8_t extData[4]     = { ADRV9025_CPU_OBJECTID_TRACKING_CAL_CTRL, ADRV9025_CPU_OBJECTID_DPD_TRACKING, (uint8_t)txChannel, DPD_GET_TRACKING_CONFIG_CTRL_PARAM_NO_FLOAT };
+    uint8_t armData[124] = { 0 }; /* 124 should be DPD_TRACKING_CONFIG_LEN */
+    uint8_t cmdStatusByte  = 0;
+    uint8_t i              = 0;
+
+    ADI_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_COMMON_LOG_API);
+
+    armData[0] = 0;
+    armData[1] = DPD_TRACKING_CONFIG_LEN;
+
+    /* Write offset and size of tracking config to get to ARM mailbox */
+    recoveryAction = adi_adrv9025_CpuMemWrite(device,
+                                              (uint32_t)ADRV9025_CPU_C_ADDR_MAILBOX_SET,
+                                              &armData[0],
+                                              2u,
+                                              ADI_ADRV9025_CPU_MEM_AUTO_INCR);
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     armData,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    /* Executing tracking config set Arm Command */
+    recoveryAction = adi_adrv9025_CpuCmdWrite(device,
+                                              ADI_ADRV9025_CPU_TYPE_C,
+                                              (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                              &extData[0],
+                                              sizeof(extData));
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     extData,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    /* Wait for command to finish executing */
+    recoveryAction = adi_adrv9025_CpuCmdStatusWait(device,
+                                                   ADI_ADRV9025_CPU_TYPE_C,
+                                                   (uint8_t)ADRV9025_CPU_SET_OPCODE,
+                                                   &cmdStatusByte,
+                                                   (uint32_t)ADI_ADRV9025_GETDPDTRACKCONFIG_TIMEOUT_US,
+                                                   (uint32_t)ADI_ADRV9025_GETDPDTRACKCONFIG_INTERVAL_US);
+
+    /* If cmdStatusByte is non-zero then flag an ARM error */
+    if ((cmdStatusByte & ARM_ERR_CODE) > 0)
+    {
+        adrv9025_CpuCmdErrorHandler(device,
+                                    ADI_ADRV9025_CPU_TYPE_C,
+                                    ADI_ADRV9025_SRC_CPUCMD,
+                                    ADRV9025_CPU_CMD_ERRCODE(ADRV9025_CPU_SET_OPCODE,
+                                                             extData[0],
+                                                             cmdStatusByte),
+                                    recoveryAction);
+        ADI_ERROR_RETURN(device->common.error.newAction);
+    }
+
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     cmdStatusByte,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    /* Read the tracking config from ARM mailbox */
+    recoveryAction = adi_adrv9025_CpuMemRead(device,
+                                             (uint32_t)ADRV9025_CPU_C_ADDR_MAILBOX_SET,
+                                             &armData[0],
+                                             sizeof(armData),
+                                             ADI_ADRV9025_CPU_MEM_AUTO_INCR);
+    ADI_ERROR_REPORT(&device->common,
+                     ADI_COMMON_ERRSRC_API,
+                     device->common.error.errCode,
+                     recoveryAction,
+                     armData,
+                     device->common.error.errormessage);
+    ADI_ERROR_RETURN(device->common.error.newAction);
+
+    ADI_NULL_PTR_RETURN(&device->common, enhancedTrackingConfig);
+
+    enhancedTrackingConfig->txChannelMask = txChannel;
+    /* Deserialize data tracking config */
+    enhancedTrackingConfig->dpdUpdateMode = (adi_adrv9025_DpdTrackingUpdateMode_e)armData[2];
+    enhancedTrackingConfig->dpdMThreshold = (uint32_t)((uint32_t)armData[8] |
+                                                        (uint32_t)armData[9] << 8 |
+                                                        (uint32_t)armData[10] << 16 |
+                                                        (uint32_t)armData[11] << 24);
+    enhancedTrackingConfig->dpdSamples = (uint16_t)((uint16_t)armData[12] | ((uint16_t)armData[13] << 8));
+
+    enhancedTrackingConfig->dpdFilterSel = (uint16_t)((uint16_t)armData[14] | ((uint16_t)armData[15] << 8));
+    for (i = 0; i < ADI_ADRV9025_MAX_DPD_FILTER; i++)
+    {
+        enhancedTrackingConfig->dpdFilterCoeffWeight[i].real = armData[40 + (i * 2)];
+        enhancedTrackingConfig->dpdFilterCoeffWeight[i].imag = armData[40 + (i * 2) + 1];
+    }
+
+    enhancedTrackingConfig->dpdDirectRegularizationValue = armData[72];
+    enhancedTrackingConfig->dpdIndirectRegularizationValue = armData[73];
+
+    enhancedTrackingConfig->minAvgSignalLevel = (uint16_t)((uint16_t)armData[74] | ((uint16_t)armData[75] << 8));
+    enhancedTrackingConfig->minAvgSignalLevelOrx = (uint16_t)((uint16_t)armData[78] | ((uint16_t)armData[79] << 8));
+
+    enhancedTrackingConfig->enhancedDpdPeakSearchSize = (uint16_t)((uint16_t)armData[80] | ((uint16_t)armData[81] << 8));
+    enhancedTrackingConfig->enhancedDPDCaptures = (uint16_t)((uint16_t)armData[82] | ((uint16_t)armData[83] << 8));
+    enhancedTrackingConfig->enhancedDPDMinRandCapDelay = (uint16_t)((uint16_t)armData[84] | ((uint16_t)armData[85] << 8));
+
+    enhancedTrackingConfig->dpdPeakSearchWindowSize = (uint32_t)((uint32_t)armData[88] |
+                                                                    (uint32_t)armData[89] << 8 |
+                                                                    (uint32_t)armData[90] << 16 |
+                                                                    (uint32_t)armData[91] << 24);
+
+    enhancedTrackingConfig->dpdMu = armData[92];
+    enhancedTrackingConfig->enableDirectLearning = armData[93];
+
+    enhancedTrackingConfig->samplesPerCap = (adi_adrv9025_dpdSamplesPerCapture_e)(uint32_t)(((uint16_t)armData[94] | ((uint16_t)armData[95] << 8)));
+    enhancedTrackingConfig->enhancedDPDMaxRandCapDelay = (uint16_t)((uint16_t)armData[96] | ((uint16_t)armData[97] << 8));
+
+    enhancedTrackingConfig->dpdIndirectRegularizationLowPowerValue = (uint16_t)((uint16_t)armData[100] | ((uint16_t)armData[101] << 8));
+
+    enhancedTrackingConfig->tddLutSwitchModelADelay[0] = (uint16_t)((uint16_t)armData[102] | ((uint16_t)armData[103] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[1] = (uint16_t)((uint16_t)armData[104] | ((uint16_t)armData[105] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[2] = (uint16_t)((uint16_t)armData[106] | ((uint16_t)armData[107] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelADelay[3] = (uint16_t)((uint16_t)armData[108] | ((uint16_t)armData[109] << 8));
+    enhancedTrackingConfig->tddLutSwitchModelBDelay = (uint16_t)((uint16_t)armData[110] | ((uint16_t)armData[111] << 8));
+    enhancedTrackingConfig->enableTddLutSwitch = armData[112];
+    enhancedTrackingConfig->enableWidebandRegularization = armData[113];
+    enhancedTrackingConfig->widebandRegularizationDnSampleRate = armData[114];
+
+    enhancedTrackingConfig->widebandRegularizationFactor_xM = (uint32_t)((uint32_t)armData[116] |
+                                                            (uint32_t)armData[117] << 8 |
+                                                            (uint32_t)armData[118] << 16 |
+                                                            (uint32_t)armData[119] << 24);
+    enhancedTrackingConfig->widebandRegularizationFactorAlpha_xM = (uint32_t)((uint32_t)armData[120] |
+                                                            (uint32_t)armData[121] << 8 |
+                                                            (uint32_t)armData[122] << 16 |
+                                                            (uint32_t)armData[123] << 24);
+
+    return recoveryAction;
+}
+
+int32_t adrv9025_EnhancedDpdTrackingConfigRangeCheck_v2(adi_adrv9025_Device_t*                       device,
+                                                        adi_adrv9025_EnhancedDpdTrackingConfig_v2_t* dpdTrackingConfig)
 {
     static const uint8_t  DPD_TRACKING_CONFIG_MAX_REGULARIZATION_VALUE = 63u;
     static const uint32_t DPD_TRACKING_CONFIG_MAX_M_THRESH             = 2147483647u;

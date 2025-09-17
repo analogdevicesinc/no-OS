@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_adrv9025_dfe_types.h
 * \brief Contains ADRV9025 API DFE data types
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -14,9 +15,6 @@
 #ifndef _ADI_ADRV9025_DFE_TYPES_H_
 #define _ADI_ADRV9025_DFE_TYPES_H_
 
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
 #include "adi_adrv9025_cals_types.h"
 #include "adi_adrv9025_user.h"
 
@@ -302,11 +300,12 @@ typedef enum adi_adrv9025_ClgcCaptureStatus
 */
 typedef enum adi_adrv9025_dpdSamplesPerCapture
 {
-    ADI_ADRV9025_SAMPLES_PER_CAP_1024 = 1024,   /*!< Captures 1024 samples per batch for eDPD adaptation and total number of smaples specified by adi_adrv9025_EnhancedDpdTrackingConfig_t.dpdSamples*/
-    ADI_ADRV9025_SAMPLES_PER_CAP_2048 = 2048,   /*!< Captures 2048 samples per batch for eDPD adaptation and total number of smaples specified by adi_adrv9025_EnhancedDpdTrackingConfig_t.dpdSamples*/
-    ADI_ADRV9025_SAMPLES_PER_CAP_4096 = 4096    /*!< Captures 4096 samples per batch for eDPD adaptation and total number of smaples specified by adi_adrv9025_EnhancedDpdTrackingConfig_t.dpdSamples*/
+    ADI_ADRV9025_SAMPLES_PER_CAP_1024 = 1024,   /*!< Captures 1024 samples per batch for eDPD adaptation and total number of samples specified by dpdSamples in enhanced DPD tracking config*/
+    ADI_ADRV9025_SAMPLES_PER_CAP_2048 = 2048,   /*!< Captures 2048 samples per batch for eDPD adaptation and total number of samples specified by dpdSamples in enhanced DPD tracking config*/
+    ADI_ADRV9025_SAMPLES_PER_CAP_4096 = 4096    /*!< Captures 4096 samples per batch for eDPD adaptation and total number of samples specified by dpdSamples in enhanced DPD tracking config*/
 } adi_adrv9025_dpdSamplesPerCapture_e;
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Data structure to hold Tx DPD Feature Row
 *        This structure holds the configuration details for every feature in the DPD model,
@@ -334,6 +333,35 @@ typedef struct adi_adrv9025_DpdModelConfig
     uint8_t dpdNumFeatures;                                               /*!< No. of features contained in the DPD model. Currently 190 features are supported */
     adi_adrv9025_DpdFeature_t dpdFeatures[ADI_ADRV9025_MAX_DPD_FEATURES]; /*!< Array consisting of the set of basis features to be initialized for DPD adaptation */
 } adi_adrv9025_DpdModelConfig_t;
+#endif
+
+/**
+* \brief Data structure to hold Tx DPD Feature Row
+*        This structure holds the configuration details for every feature in the DPD model,
+*        where {i, j, k} represent the various delay and power terms associated with an "alpha" coefficient
+*        in the generalized memory polynomial(GMP).
+*        The structure also holds the LUT associated with a given feature, as well as the real and
+*        imaginary parts of any preloaded coefficients, represented using integers
+*/
+typedef struct adi_adrv9025_DpdFeature_v2
+{
+    uint8_t i;                    /*!< Memory term of the DPD feature */
+    uint8_t j;                    /*!< Cross term of the DPD feature */
+    uint8_t k;                    /*!< Power term of the DPD feature */
+    adi_adrv9025_DpdLut_e lut;    /*!< Target LUT index for this feature. Valid values are LUT0 - LUT30 */
+    int32_t coeffReal_xM;         /*!< Real part of the complex co-efficient for this feature. Units = 0.000001 */
+    int32_t coeffImaginary_xM;    /*!< Imaginary part of the complex co-efficient for this feature. Units = 0.000001 */
+} adi_adrv9025_DpdFeature_v2_t;
+
+/**
+* \brief Data structure to hold Tx DPD Model initialization parameters, without floats
+*/
+typedef struct adi_adrv9025_DpdModelConfig_v2
+{
+    uint32_t txChannelMask;                                                  /*!< Reserved Param. Currently Tx channel mask is not supported. Settings are applied to the channel for which DPD init cal was run */
+    uint8_t dpdNumFeatures;                                                  /*!< No. of features contained in the DPD model. Currently 190 features are supported */
+    adi_adrv9025_DpdFeature_v2_t dpdFeatures[ADI_ADRV9025_MAX_DPD_FEATURES]; /*!< Array consisting of the set of basis features to be initialized for DPD adaptation */
+} adi_adrv9025_DpdModelConfig_v2_t;
 
 /**
 * \brief Data structure to hold Dpd metrics mask and recovery actions mask associated with it
@@ -362,6 +390,7 @@ typedef struct adi_adrv9025_DpdMetricActionPair
                                  *   ADI_ADRV9025_DPD_RECOVERY_ACTION_RESET_FIRST_DPD_FLAG   = 0x0400 */
 } adi_adrv9025_DpdMetricActionPair_t;
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Data structure to hold DPD Statistics
 */
@@ -400,6 +429,46 @@ typedef struct adi_adrv9025_DpdStatus
     uint32_t reservedTP; /*!< Reserved for future use */
     uint32_t reservedPR; /*!< Reserved for future use */
 } adi_adrv9025_DpdStatus_t;
+#endif
+
+/**
+* \brief Data structure to hold DPD Statistics, without floats
+*/
+typedef struct adi_adrv9025_DpdStatistics_v2
+{
+    int32_t dpdMeanTuPower_mdB;  /*!< Measured absolute pre-DPD Tx power averaged in one update duration, in milli dBFS */
+    int32_t dpdPeakTuPower_mdB;  /*!< Measured absolute pre-DPD Tx power peaked in one update duration, in milli dBFS */
+    int32_t dpdMeanTxPower_mdB;  /*!< Measured absolute post-DPD Tx power averaged in one update duration, in milli dBFS */
+    int32_t dpdPeakTxPower_mdB;  /*!< Measured absolute post-DPD Tx power peaked in one update duration, in milli dBFS */
+    int32_t dpdMeanOrxPower_mdB; /*!< Measured absolute ORx power averaged in one update duration, in milli dBFS */
+    int32_t dpdPeakOrxPower_mdB; /*!< Measured absolute ORx power peaked in one update duration, in milli dBFS */
+    uint32_t dpdDirectEvm_xM;     /*!< EVM error between pre-DPD actuator data and the ORx data in one update duration. Divide by 10,000 to get value in % */
+    uint32_t dpdIndirectEvm_xM;   /*!< EVM error between post-DPD actuator data and the ORx data in one update duration. Divide by 10,000 to get value in % */
+    uint32_t dpdSelectError_xM;   /*!< Select error is same as indirect error, but computed on samples with rms power greater than -30dBFS. Divide by 10,000 to get value in % */
+    uint32_t dpdIndirectError_xM; /*!< Indirect error indicates if the pre-distorted samples match the expected result after experiencing PA distortion. Divide by 10,000 to get value in % */
+} adi_adrv9025_DpdStatistics_v2_t;
+
+/**
+* \brief Data structure to hold Tx DPD Status, without floats
+*/
+typedef struct adi_adrv9025_DpdStatus_v2
+{
+    adi_adrv9025_DpdError_e dpdErrorCode; /*!< Error code from Tx DPD tracking calibration. If the DPD is functioning correctly, this parameter should return ADI_ADRV9025_DPD_NO_ERROR.*/
+    uint32_t dpdPercentComplete;          /*!< Percentage completion of DPD adaptation. Range 0 to 100 */
+    uint32_t dpdIterCount;                /*!< Running counter that increments each time the DPD adaptation is scheduled to run */
+    uint32_t dpdUpdateCount;              /*!< Running counter that increments each time the cal updates the correction/actuator hardware successfully*/
+    adi_adrv9025_TrackingCalSyncStatus_e dpdSyncStatus; /*!< Enum to denote the status of CLGC and DPD synchronization. This member returns SYNC_OK if both DPD and CLGC are synchronized. If CLGC is not enabled, then this field can be ignored. */
+    adi_adrv9025_DpdModelTableSel_e dpdModelTable;      /*!< DPD Model table currently active  DPD model(M-Table/C-Table/U-Table) */
+    adi_adrv9025_DpdStatistics_v2_t dpdStatistics;      /*!< DPD Statistics */
+    adi_adrv9025_DpdMetricActionPair_t dpdErrorStatus0; /*!< Error status containing error state and recovery actions taken based on threshold 0, specified in DPD stability config */
+    adi_adrv9025_DpdMetricActionPair_t dpdErrorStatus1; /*!< Error status containing error state and recovery actions taken based on threshold 1, specified in DPD stability config */
+    adi_adrv9025_DpdMetricActionPair_t dpdPersistentErrorStatus0; /*!< Persistent error status containing error state and recovery actions taken based on threshold 0 and persistent count specified in DPD stability config */
+    adi_adrv9025_DpdMetricActionPair_t dpdPersistentErrorStatus1; /*!< Persistent error status containing error state and recovery actions taken based on threshold 1 and persistent count specified in DPD stability config */
+    uint32_t dpdPerformanceMetric; /*!< Reserved for future use */
+    uint32_t reservedPM; /*!< Reserved for future use */
+    uint32_t reservedTP; /*!< Reserved for future use */
+    uint32_t reservedPR; /*!< Reserved for future use */
+} adi_adrv9025_DpdStatus_v2_t;
 
 /**
 * \brief Data structure to hold Tx DPD Filter Coefficient Weight
@@ -427,10 +496,11 @@ typedef struct adi_adrv9025_DpdTrackingConfig
     uint8_t dpdMu;                              /*!< DPD direct learning step size values range from 0 to 100 a value of 0 will stop the tracking of DPD in direct learning mode.Default value is 50 */
     uint16_t minAvgSignalLevelOrx;              /*!< DPD ORx low power threshold ORX in linear scale below which DPD stops tracking. The default value is -36dBFS. It can be converted to dBFS as 20log10(minAvgSignalLevel/FULL_SCALE) */
     uint16_t dpdFilterSel;                      /*!< OBW filter select either  0.5*fs or 0.8*fs (valid values 0-1 respectively). This filter is only applicable in 983 MHz actuator rate profiles + direct learning cases. */
-    uint8_t  enableDirectLearning;              /*!< Option to enable direct learning (defaulte 0 which is off , set to 1 to enable direct learning If the no. of DPD coefficients in a DPD model specified by adi_adrv9025_DpdModelConfig_t.dpdNumFeatures exceeds 95 coefficients, DPD direct learning is automatically enforced regardless of the value configured for this parameter.*/
+    uint8_t  enableDirectLearning;              /*!< Option to enable direct learning (default 0 which is off , set to 1 to enable direct learning If the no. of DPD coefficients in a DPD model specified by dpdNumFeatures exceeds 95 coefficients, DPD direct learning is automatically enforced regardless of the value configured for this parameter.*/
     uint16_t  dpdIndirectRegularizationLowPowerValue;       /*!< Indirect Learning Mode low power regularization value applied to C table, only valid when in DPD mode 2, Maximum value of 63 Default value is 20*/
 } adi_adrv9025_DpdTrackingConfig_t;
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 typedef struct adi_adrv9025_EnhancedDpdTrackingConfig
 {
     uint32_t txChannelMask;                     /*!< Tx channels to which DPD tracking config is applied. There is only 1 DPD tracking config shared across channels */
@@ -445,7 +515,7 @@ typedef struct adi_adrv9025_EnhancedDpdTrackingConfig
     uint8_t  dpdMu;                             /*!< DPD direct learning step size values range from 0 to 100 */
     uint16_t minAvgSignalLevelOrx;              /*!< DPD ORx low power threshold ORX in linear scale below which DPD stops tracking. The default value is -36dBFS. It can be converted to dBFS as 20log10(minAvgSignalLevel/FULL_SCALE) */
     uint16_t dpdFilterSel;                      /*!< OBW filter select either  0.5*fs or 0.8*fs (valid values 0-1 respectively)*/
-    uint8_t  enableDirectLearning;              /*!< Option to enable direct learning (defaulte 0 which is off , set to 1 to enable direct learning If the no. of DPD coefficients in a DPD model specified by adi_adrv9025_DpdModelConfig_t.dpdNumFeatures exceeds 95 coefficients, DPD direct learning is automatically enforced regardless of the value configured for this parameter.*/
+    uint8_t  enableDirectLearning;              /*!< Option to enable direct learning (default 0 which is off , set to 1 to enable direct learning If the no. of DPD coefficients in a DPD model specified by dpdNumFeatures exceeds 95 coefficients, DPD direct learning is automatically enforced regardless of the value configured for this parameter.*/
     uint16_t dpdIndirectRegularizationLowPowerValue;   /*!< Indirect Learning Mode low power regularization value applied to C table, only valid when in DPD mode 2, Maximum value of 63 Default value is 20*/
     uint16_t enhancedDpdPeakSearchSize;                /*!< 0-65535 eDPD EVM search window size */
     uint16_t enhancedDPDCaptures;                      /*!< 0-16 eDPD EVM captures (0: DPD, >= 1: eDPD) */
@@ -460,6 +530,38 @@ typedef struct adi_adrv9025_EnhancedDpdTrackingConfig
     float    widebandRegularizationFactorAlpha;  /*!< Wideband regularization weighting factor alpha that defines how much wideband reg training signals to mix with the DPD capture samples, The wideband regularization training signal is programmed through the API adi_adrv9025_EnhancedDpdWidebandRegularizationConfigSet() , range from 0 to 1 default value is 0.0001, step: 0.00001 */
     uint8_t  widebandRegularizationDnSampleRate; /*!< Wideband regularization down sampling ratio for loop gain estimating */
 } adi_adrv9025_EnhancedDpdTrackingConfig_t;
+#endif
+
+typedef struct adi_adrv9025_EnhancedDpdTrackingConfig_v2
+{
+    uint32_t txChannelMask;                     /*!< Tx channels to which DPD tracking config is applied. There is only 1 DPD tracking config shared across channels */
+    uint8_t  dpdIndirectRegularizationValue;    /*!< Regularization value when DPD indirect learning mode is enabled. Increasing DPD regularization makes the DPD coefficient estimation less sensitive to missing data and prevent over-fitting at the cost of ACLR performance Maximum value of 63. Default value is 20 */
+    uint8_t  dpdDirectRegularizationValue;      /*!< Regularization value when DPD indirect learning mode is enabled. Increasing DPD regularization makes the DPD coefficient estimation less sensitive to missing data and prevent over-fitting at the cost of ACLR performance Maximum value of 63. Default value is 35 */
+    uint16_t dpdSamples;                        /*!< Number of samples to capture per adaptation */
+    uint32_t dpdMThreshold;                     /*!< M table threshold when ADI_ADRV9025_DPD_TRACKING_UPDATE_MODE_2 (hybrid) is used. Maximum value of 2147483648, This parameter takes a linear scale value squared. To convert the MThreshold value from dBFS to Linear scale use ((10^MThreshold_dBFS/20)*FULL_SCALE_CODE)^2 */
+    uint32_t dpdPeakSearchWindowSize;           /*!< Number of samples at Tx IQ rate to search for a peak to perform DPD sample capture. Maximum value of 16777215 */
+    adi_adrv9025_DpdTrackingUpdateMode_e dpdUpdateMode; /*!< Update mode of DPD tracking. 0: simple, 1: simple + max, 2: hybrid */
+    adi_adrv9025_DpdFilterCoeffWeight_t dpdFilterCoeffWeight[ADI_ADRV9025_MAX_DPD_FILTER]; /*!< Reserved for future use Please use the default value returned by the API adi_adrv9025_DpdTrackingConfigGet().*/
+    uint16_t minAvgSignalLevel;                 /*!< DPD Tx low power threshold in linear scale below which DPD stops tracking. The default value is -36dBFS. It can be converted to dBFS as 20log10(minAvgSignalLevel/FULL_SCALE) */
+    uint8_t  dpdMu;                             /*!< DPD direct learning step size values range from 0 to 100 */
+    uint16_t minAvgSignalLevelOrx;              /*!< DPD ORx low power threshold ORX in linear scale below which DPD stops tracking. The default value is -36dBFS. It can be converted to dBFS as 20log10(minAvgSignalLevel/FULL_SCALE) */
+    uint16_t dpdFilterSel;                      /*!< OBW filter select either  0.5*fs or 0.8*fs (valid values 0-1 respectively)*/
+    uint8_t  enableDirectLearning;              /*!< Option to enable direct learning (default 0 which is off , set to 1 to enable direct learning If the no. of DPD coefficients in a DPD model specified by dpdNumFeatures exceeds 95 coefficients, DPD direct learning is automatically enforced regardless of the value configured for this parameter.*/
+    uint16_t dpdIndirectRegularizationLowPowerValue;   /*!< Indirect Learning Mode low power regularization value applied to C table, only valid when in DPD mode 2, Maximum value of 63 Default value is 20*/
+    uint16_t enhancedDpdPeakSearchSize;                /*!< 0-65535 eDPD EVM search window size */
+    uint16_t enhancedDPDCaptures;                      /*!< 0-16 eDPD EVM captures (0: DPD, >= 1: eDPD) */
+    uint16_t enhancedDPDMinRandCapDelay;               /*!< 0-65535 eDPD minimum randomizer capture delay */
+    adi_adrv9025_dpdSamplesPerCapture_e samplesPerCap; /*!< eDPD number of samples per capture */
+    uint16_t enhancedDPDMaxRandCapDelay;               /*!< 0-65535 eDPD maximum randomizer capture delay */
+    uint16_t tddLutSwitchModelADelay[ADI_ADRV9025_MAX_TDD_LUT_MODELA_DELAY]; /*!< TDD LUT switch Model A delay array, value unit: us */
+    uint16_t tddLutSwitchModelBDelay;          /*!< TDD LUT switch Model B delay value, unit: us */
+    uint8_t  enableTddLutSwitch;               /*!< TDD LUT switch feature enable, (1: enable, 0: disable) */
+    uint8_t  enableWidebandRegularization;     /*!< Wideband regularization feature enable  (1: enable, 0: disable) for maintaining channel gain flatness under dynamic signaling conditions*/
+    uint32_t widebandRegularizationFactor_xM;  /*!< Wideband regularization weighting factor beta that defines how much wideband reg training signals to mix with the DPD capture samples, The wideband regularization training signal is programmed through the API adi_adrv9025_EnhancedDpdWidebandRegularizationConfigSet(). Divide by 1,000,000. Range from 0 to 1 default value is 0.0001, step: 0.00001 */
+    uint32_t widebandRegularizationFactorAlpha_xM;  /*!< Wideband regularization weighting factor alpha that defines how much wideband reg training signals to mix with the DPD capture samples, The wideband regularization training signal is programmed through the API adi_adrv9025_EnhancedDpdWidebandRegularizationConfigSet(). Divide by 1,000,000. Range from 0 to 1 default value is 0.0001, step: 0.00001 */
+    uint8_t  widebandRegularizationDnSampleRate; /*!< Wideband regularization down sampling ratio for loop gain estimating */
+} adi_adrv9025_EnhancedDpdTrackingConfig_v2_t;
+
 /**
 * \brief Data structure to hold DPD fault condition settings
 */
@@ -469,7 +571,7 @@ typedef struct adi_adrv9025_DpdFaultCondition
     adi_adrv9025_DpdComparator_e comparator;/*!< less than or greater than. Operation to be done between metric's value and threshold's value to cause fault condition. 0 = less than, 1 = greater than */
     int16_t threshold0;                     /*!< One of two thresholds for fault condition to occur. Threshold 0 is intended to be a warning when metric's value crosses this threshold. For power, threshold will be in dBFS, for EVM, select and indirect error, threshold will be in % */
     int16_t threshold1;                     /*!< One of two thresholds for fault condition to occur. Threshold 1 is intended to be an error when metric's value crosses this threshold. For power, threshold will be in dBFS, for EVM, select and indirect error, threshold will be in % */
-    uint16_t persistentCount;               /*!< When threshold0/1 has been crossed this many times, dpdPersistentErrorStatus0/1 that can be found in adi_adrv9025_DpdStatus_t for that particular metric and threshold will be raised */
+    uint16_t persistentCount;               /*!< When threshold0/1 has been crossed this many times, dpdPersistentErrorStatus0/1 that can be found in the DPD status structure for that particular metric and threshold will be raised */
 } adi_adrv9025_DpdFaultCondition_t;
 
 /**
@@ -522,6 +624,7 @@ typedef struct adi_adrv9025_DpdActGainMonitorConfig
     adi_adrv9025_DpdActGainMonitorThresh_t dpdGainMonitorThresh; /*!< Sets up the gain monitoring threshold qualifying limit, upper gain threshold and the lower gain threshold */
 } adi_adrv9025_DpdActGainMonitorConfig_t;
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Data structure to hold CFR Hard Clipper config
 */
@@ -553,6 +656,39 @@ typedef struct adi_adrv9025_CfrCtrlConfig
     uint8_t cfrEngine2MaxNumOfPeaks;                           /*!< Sets the maximum number of peaks to remove in one group for CFR engine 2. Range [0-5]. Default value is 5. User needs to set this to 0 when engine is disabled. It's suggested to have descending order of max number of peaks where Engine1 has the highest value */
     uint8_t cfrEngine3MaxNumOfPeaks;                           /*!< Sets the maximum number of peaks to remove in one group for CFR engine 3. Range [0-5]. Default value is 5. User needs to set this to 0 when engine is disabled. It's suggested to have descending order of max number of peaks where Engine1 has the highest value */
 } adi_adrv9025_CfrCtrlConfig_t;
+#endif
+
+/**
+* \brief Data structure to hold CFR Hard Clipper config, without floats
+*/
+typedef struct adi_adrv9025_CfrHardClipperConfig_v2
+{
+    uint32_t txChannelMask; /*!< Mask consisting of 'OR'ed Tx channels for which the hard clipper config will be applied */
+    uint8_t  cfrHardClipperEnable; /*!< 1- Enable hard clipper on the channels requested, 0 - Disable hard clipper */
+    uint32_t cfrHardClipperThreshold_xM; /*!< Normalized threshold for the hard clipper in the range 0 to 1 (divide by 1,000,000).
+                                           The threshold is relative to 0dBFS which means that a threshold value of 1 corresponds to 0dBFS.
+                                           The threshold is applied to an approximation of SQRT(I^2 + Q^2). The hard clipper threshold can
+                                           be calculated as cfrHardClipperThreshold = 10^(threshold_dBFS/20)*/
+} adi_adrv9025_CfrHardClipperConfig_v2_t;
+
+/**
+* \brief Data structure to hold CFR Core control config settings, without floats
+*/
+typedef struct adi_adrv9025_CfrCtrlConfig_v2
+{
+    uint32_t txChannelMask;                                    /*!< Mask consisting of 'OR'ed Tx channels for which the CFR core config will be applied */
+    adi_adrv9025_CfrModeSel_e cfrMode;                         /*!< Selects the mode in which CFR is required to operate in. Currently, Mode 1 is the only mode supported */
+    uint16_t cfrTxDelay;                                       /*!< Sets CFR delay per engine in units of samples at the CFR input rate (JESD 204b Tx rate) */
+    uint32_t cfrPeakThreshold_xM;                              /*!< Sets the target CFR peak detection and correction threshold. The threshold is calculated as cfrPeakThreshold = 10^(Target PAR_dB / 20) * RMS_Input. The peak threshold is set to 0.79 by default. Divide by 1,000,000 */
+    uint32_t cfrEngine1PeakThresholdScaler_xM;                 /*!< Threshold Scaler for engine CFR engine 1. Divide by 1,000,000 */
+    uint32_t cfrEngine2PeakThresholdScaler_xM;                 /*!< Threshold Scaler for engine CFR engine 2. Divide by 1,000,000 */
+    uint32_t cfrEngine3PeakThresholdScaler_xM;                 /*!< Threshold Scaler for engine CFR engine 3. Divide by 1,000,000 */
+    uint32_t cfrCorrectionThresholdScaler_xM;                  /*!< Threshold Scaler for CFR correction. Divide by 1,000,000 */
+    adi_adrv9025_CfrInterpolationSel_e cfrInterpolationFactor; /*!< Selects the interpolation factor to be applied to CFR input before peak detection. The CFR peak detectors can run at a higher (interpolated) rate to enable better peak detection */
+    uint8_t cfrEngine1MaxNumOfPeaks;                           /*!< Sets the maximum number of peaks to remove in one group for CFR engine 1. Range [0-5]. Default value is 5. User needs to set this to 0 when engine is disabled. It's suggested to have descending order of max number of peaks where Engine1 has the highest value */
+    uint8_t cfrEngine2MaxNumOfPeaks;                           /*!< Sets the maximum number of peaks to remove in one group for CFR engine 2. Range [0-5]. Default value is 5. User needs to set this to 0 when engine is disabled. It's suggested to have descending order of max number of peaks where Engine1 has the highest value */
+    uint8_t cfrEngine3MaxNumOfPeaks;                           /*!< Sets the maximum number of peaks to remove in one group for CFR engine 3. Range [0-5]. Default value is 5. User needs to set this to 0 when engine is disabled. It's suggested to have descending order of max number of peaks where Engine1 has the highest value */
+} adi_adrv9025_CfrCtrlConfig_v2_t;
 
 /**
 * \brief Data structure to hold CFR engine enable/disable config for the 3 CFR engines
@@ -601,6 +737,7 @@ typedef struct adi_adrv9025_CfrCorrectionPulse
     uint16_t numCoeffs; /*!< No. of coefficients contained in coeffReal and coeffImaginary arrays */
 } adi_adrv9025_CfrCorrectionPulse_t;
 
+#if (ADI_ADRV9025_RM_FLOATS == 0)
 /**
 * \brief Data structure to hold Closed Loop Gain Control(CLGC) configuration
 */
@@ -642,6 +779,46 @@ typedef struct adi_adrv9025_ClgcStatus
     adi_adrv9025_TrackingCalSyncStatus_e clgcSyncStatus;        /*!< Enum to denote the status of CLGC and DPD synchronization */
     adi_adrv9025_ClgcRunState_e clgcState;                      /*!< Enum to denote the current CLGC runtime state */
 } adi_adrv9025_ClgcStatus_t;
+#endif
+
+/**
+* \brief Data structure to hold Closed Loop Gain Control(CLGC) configuration, without floats
+*/
+typedef struct adi_adrv9025_ClgcConfig_v2
+{
+    uint32_t txChannelMask;                    /*!< Mask consisting of 'OR'ed Tx channels for which the CLGC config will be applied */
+    uint8_t  clgcEnableGainControl;            /*!< This parameter enables the tracking and adjustment of loop gain in CLGC.
+                                                   If this is set to 0, the CLGC tracking cal only measures the power levels and does not
+                                                   execute loop gain control */
+    uint16_t clgcMeasurementBatchTime_us;      /*!< CLGC sampling period in microseconds */
+    uint32_t clgcMaxSampleBatchesPerClgcRun;   /*!< Unused */
+    int32_t  clgcExpectedLoopGain_mdB;         /*!< Expected loop gain setting (ORx Power/Tx Power) for Closed Loop Gain Control */
+    int32_t  clgcExpectedLoopGainRipple_mdB;   /*!< Unused */
+    int32_t  clgcTxQualifyingThreshold_mdB;    /*!< Minimum threshold for the Tx signal required to run CLGC tracking */
+    int32_t  clgcOrxQualifyingThreshold_mdB;   /*!< Minimum threshold for the Orx signal required to run CLGC tracking */
+    int32_t  clgcOrxMinimumSnr_mdB;            /*!< Unused */
+    int32_t  clgcMaxGainAdjustmentStepSize_mdB;/*!< Maximum loop gain adjustment step size(Range 0 to 6dB) for Tx Attenuation in dB */
+    int32_t  clgcDampingParam_xM;              /*!< Unused */
+    int32_t  clgcMinTxAttenAdjust_mdB;         /*!< Minimum Tx attenuation in dB allowed to adjust to */
+    int32_t  clgcMaxTxAttenAdjust_mdB;         /*!< Maximum Tx attenuation in dB allowed to adjust to */
+} adi_adrv9025_ClgcConfig_v2_t;
+
+/**
+* \brief Data structure to hold Closed Loop Gain Control(CLGC) Tx and ORx power measurements and tracking cal status, without floats
+*/
+typedef struct adi_adrv9025_ClgcStatus_v2
+{
+    int32_t clgcLoopGain_mdB;           /*!< Represents the Tx - ORx loop gain equal to (ORx RMS Power)/(Tx RMS Power), in milli dBFS */
+    int32_t clgcTxRmsPower_mdB;         /*!< Measured absolute Tx RMS power by the CLGC module during the previous measurement cycle, in milli dBFS */
+    int32_t clgcOrxRmsPower_mdB;        /*!< Measured absolute Orx RMS power by the CLGC module during the previous measurement cycle, in milli dBFS */
+    uint16_t activeTxAttenIndex;        /*!< Active Tx attenuation table index applied to the Tx path.
+                                            If using the default attenuation table, the attenuation applied to the Tx channel is equal to (activeTxAttenIndex x 0.05) dB */
+    uint8_t  activeOrxGainIndex;        /*!< Active gain index of the ORx channel mapped to the Tx channel for which measurements are requested */
+    adi_adrv9025_ClgcTrackingCalStatus_t clgcTrackingCalStatus; /*!< Contains the CLGC tracking cal status */
+    adi_adrv9025_ClgcCaptureStatus_e clgcCaptureStatus;         /*!< Enum to denote the CLGC Tx-ORx data capture status for loop gain control/power measurement */
+    adi_adrv9025_TrackingCalSyncStatus_e clgcSyncStatus;        /*!< Enum to denote the status of CLGC and DPD synchronization */
+    adi_adrv9025_ClgcRunState_e clgcState;                      /*!< Enum to denote the current CLGC runtime state */
+} adi_adrv9025_ClgcStatus_v2_t;
 
 #ifdef __cplusplus
 }

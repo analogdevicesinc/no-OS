@@ -1,9 +1,10 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adi_adrv9025_utilities.c
 * \brief Contains Utility features related function implementation defined in
 * adi_adrv9025_utilities.h
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -13,11 +14,6 @@
 */
 
 #include "adi_adrv9025_user.h"
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#include <linux/string.h>
-#endif
-#include <string.h>
 #include "adi_adrv9025_utilities.h"
 #include "adi_adrv9025_error.h"
 #include "adi_adrv9025_hal.h"
@@ -39,13 +35,12 @@
 #include "../../private/include/adrv9025_bf_hal.h"
 #include "../../private/include/adrv9025_crc32.h"
 
-#include "adi_platform.h"
 #ifdef _RELEASE_BUILD_
     #line __LINE__ "adi_adrv9025_utilities.c"
 #endif
 
-#define ADI_ADRV9025_CPU_C_BINARY_IMAGE_FILE_SIZE_BYTES (7*32*1024u) /* 7 blocks of 32kB memory */
-#define ADI_ADRV9025_CPU_D_BINARY_IMAGE_FILE_SIZE_BYTES (3*32*1024u) /* 3 blocks of 32kB memory */
+#define ADI_ADRV9025_CPU_C_BINARY_IMAGE_FILE_SIZE_BYTES (ADRV9025_CPU_C_ADDR_PROG_END + 1 - ADRV9025_CPU_C_ADDR_PROG_START)
+#define ADI_ADRV9025_CPU_D_BINARY_IMAGE_FILE_SIZE_BYTES (ADRV9025_CPU_D_ADDR_PROG_END + 1 - ADRV9025_CPU_D_ADDR_PROG_START)
 #define ADI_ADRV9025_STREAM_BINARY_IMAGE_FILE_SIZE_BYTES (22*1024)
 #define ADI_ADRV9025_RX_GAIN_TABLE_SIZE_ROWS 256
 #define ADI_ADRV9025_TX_ATTEN_TABLE_SIZE_ROWS 1024
@@ -159,8 +154,8 @@ int32_t adi_adrv9025_CpuImageLoad(adi_adrv9025_Device_t *device, const char *fwI
             ADI_ERROR_CLOSE_RETURN(device->common.error.newAction, fwImageFilePointer);
         }
 
-        /*Check that FW binary file size does not exceed maximum size*/
-        if (fileSize > (((adi_adrv9025_CpuType_e)i == ADI_ADRV9025_CPU_TYPE_C) ? ADI_ADRV9025_CPU_C_BINARY_IMAGE_FILE_SIZE_BYTES : ADI_ADRV9025_CPU_D_BINARY_IMAGE_FILE_SIZE_BYTES))
+        /*Check that FW binary file is exact size*/
+        if (fileSize != (((adi_adrv9025_CpuType_e)i == ADI_ADRV9025_CPU_TYPE_C) ? ADI_ADRV9025_CPU_C_BINARY_IMAGE_FILE_SIZE_BYTES : ADI_ADRV9025_CPU_D_BINARY_IMAGE_FILE_SIZE_BYTES))
         {
             ADI_ERROR_REPORT(&device->common,
                 ADI_COMMON_ERRSRC_API,
@@ -453,8 +448,8 @@ int32_t adi_adrv9025_CpuImageLoad(adi_adrv9025_Device_t* device,
                                    fwImageFilePointer);
         }
 
-        /*Check that FW binary file size does not exceed maximum size*/
-        if (fileSize > (((adi_adrv9025_CpuType_e)j == ADI_ADRV9025_CPU_TYPE_C) ? ADI_ADRV9025_CPU_C_BINARY_IMAGE_FILE_SIZE_BYTES
+        /*Check that FW binary file is exact size*/
+        if (fileSize != (((adi_adrv9025_CpuType_e)j == ADI_ADRV9025_CPU_TYPE_C) ? ADI_ADRV9025_CPU_C_BINARY_IMAGE_FILE_SIZE_BYTES
                             : ADI_ADRV9025_CPU_D_BINARY_IMAGE_FILE_SIZE_BYTES))
         {
             ADI_ERROR_REPORT(&device->common,
@@ -2772,7 +2767,7 @@ int32_t adi_adrv9025_CpuMemDump(adi_adrv9025_Device_t* device,
     adi_adrv9025_CpuAddr_t* cpuAddr                                           = NULL;
     uint8_t                 binaryRead[ADI_ADRV9025_MEM_DUMP_CHUNK_SIZE + 10] = {0};
 
-    const uint32_t armExceptionAddr = 0x20028210; /* Exception Flag Memory */
+    const uint32_t armExceptionAddr = ADRV9025_CPU_C_ADDR_EXCEPTION_FLAG; /* Exception Flag Memory */
 
     ADI_NULL_PTR_RETURN(&device->common,
                         binaryFilename);
@@ -3816,3 +3811,4 @@ int32_t adi_adrv9025_ApiArmStreamVersionCompare(adi_adrv9025_Device_t           
 
     return ADI_COMMON_ACT_NO_ACTION;
 }
+

@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adi_adrv9025_cals.h
  * \brief Contains ADRV9025 calibration related function prototypes for
  *        adi_adrv9025_cals.c
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -219,7 +220,7 @@ int32_t adi_adrv9025_InitCalsDetailedStatusGet(adi_adrv9025_Device_t*        dev
  *
  *        Example : To ENABLE TRACKING_CAL_RX1_QEC and TRACKING_CAL_TX1_QEC
  *                  This API should be called with
- *			    mask = 0x0101, enableDisableFlag = ADI_ADRV9025_TRACKING_CAL_ENABLE
+ *		    	    mask = 0x0101, enableDisableFlag = ADI_ADRV9025_TRACKING_CAL_ENABLE
  *			        To DISABLE TRACKING_CAL_RX1_QEC and TRACKING_CAL_TX1_QEC
  *			        This API should be called with
  *			        mask = 0x0101, enableDisableFlag = ADI_ADRV9025_TRACKING_CAL_DISABLE

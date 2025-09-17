@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adrv9025_bf_pll_mem_map_types.h Automatically generated file with generator ver 0.0.1.0.
  *
  * \brief Contains BitField functions to support ADRV9025 transciever device.
@@ -150,3 +151,4 @@ typedef enum adrv9025_BfPllMemMapVcoCalInitDel
 #endif // __ADRV9025_BF_PLL_MEM_MAP_TYPES_H__
 
 /*  EOF: adrv9025_bf_pll_mem_map_types.h */
+

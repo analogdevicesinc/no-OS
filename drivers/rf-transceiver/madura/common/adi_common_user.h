@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_common_user.h
 *
 * User modifiable defines
@@ -17,16 +18,15 @@
 #ifndef _ADI_COMMON_USER_H_
 #define _ADI_COMMON_USER_H_
 
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
+/* Includes that user can modify with their own libraries as long as the function prototypes matches */
+#include "adi_platform_types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #ifndef ADI_COMMON_HAL_SPIARRAYSIZE
-    #define ADI_COMMON_HAL_SPIARRAYSIZE 16
+    #define ADI_COMMON_HAL_SPIARRAYSIZE 256
 #endif
 
 #ifdef __cplusplus

@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adi_adrv9025_data_interface.h
  * \brief Contains ADRV9025 JESD204b data path related function prototypes for
  *        adi_adrv9025_jesd204.c
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -1282,7 +1283,7 @@ int32_t adi_adrv9025_DfrmPhaseDiffGet(adi_adrv9025_Device_t       *device,
 *
 * This function uses the ARM firmware to generate information about the signal eye related to a particular profile
 * This method produces a multi level eye, this eye is generated using information based on intersymbol interference post cursors
-* ADRV9025 uses a Baud Rate Phase detection method to determine signal eye layout this is to account for higher lane rates which are possible in madura
+* ADRV9025 uses a Baud Rate Phase detection method to determine signal eye layout this is to account for higher lane rates which are possible in ADRV9025
 * This will produce eyediagram output which is reffered to as a 4 level eye.
 *
 * /pre Dependancies are as follows:

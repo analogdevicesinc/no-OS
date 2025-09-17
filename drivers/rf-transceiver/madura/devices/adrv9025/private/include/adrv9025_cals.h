@@ -1,7 +1,8 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adrv9025_cals.h
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -15,7 +16,7 @@
  * \brief Contains ADRV9025 calibration related private function prototypes for
  *        adrv9025_cals.c
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**

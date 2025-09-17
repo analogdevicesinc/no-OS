@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adrv9025_utilities.h
 * \brief Contains Utility features related private function definitions
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -15,9 +16,6 @@
 #define _ADRV9025_UTILITIES_H_
 
 #include "adi_adrv9025_utilities_types.h"
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#endif
 
 #define ADRV9025_MAX_FILE_BUFFER 128
 

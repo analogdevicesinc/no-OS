@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_adrv9025_agc_types.h
 * \brief Contains ADRV9025 API AGC data types
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -20,11 +21,7 @@ extern
  {
 #endif
 
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#else
-#include <stdint.h>
-#endif
+#include "adi_common_user.h"
 
 /**
 *  \brief Data structure to hold AGC peak settings

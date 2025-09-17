@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adi_adrv9025_rx.h
  * \brief Contains ADRV9025 receive related function prototypes for
  *        adi_adrv9025_rx.c
  *
- * ADRV9025 API Version: 6.4.0.14
+ * ADRV9025 API Version: 7.0.0.14
  */
 
 /**
@@ -1225,10 +1226,6 @@ int32_t adi_adrv9025_RxAgcClkModeSet(adi_adrv9025_Device_t     *device,
 int32_t adi_adrv9025_RxAgcClkModeGet(adi_adrv9025_Device_t     *device,
                                      adi_adrv9025_RxChannels_e  rxChannel,
                                      uint8_t                   *agcMode);
-
-
-
-
 /**
 * \brief This function maps Rx channels to a GPIO to enable
 * the gain counter sync pulse feature, as such the Gain Update Counter

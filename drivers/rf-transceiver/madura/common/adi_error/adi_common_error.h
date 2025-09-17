@@ -1,4 +1,5 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
  * \file adi_common_error.h
  * \brief Contains Common API error handling function prototypes and macros
  * that will be used by the API and will call functions in adi_common_error.c
@@ -18,11 +19,7 @@
 #ifndef _ADI_COMMON_ERROR_H_
 #define _ADI_COMMON_ERROR_H_
 
-#ifdef __KERNEL__
-#include <linux/kernel.h>
-#else
-#include <stdlib.h>
-#endif
+#include "adi_common_user.h"
 #include "adi_common_error_types.h"
 #include "adi_common_types.h"
 #include "adi_common_macros.h"

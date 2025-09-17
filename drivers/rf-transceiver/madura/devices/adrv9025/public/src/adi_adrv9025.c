@@ -1,9 +1,10 @@
+/* SPDX-License-Identifier: GPL-2.0 */
 /**
 * \file adi_adrv9025.c
 * \brief Contains Adrv9025 features related function implementation defined in
 * adi_adrv9025.h
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -60,10 +61,7 @@ int32_t adi_adrv9025_HwOpen(adi_adrv9025_Device_t*      device,
     adi_common_LogLevelSet(&device->common,
                            ADI_ADRV9025_LOGGING);
 
-
     recoveryAction = adi_common_hal_HwOpen(&device->common);
-
-
 
     if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
     {
@@ -77,6 +75,7 @@ int32_t adi_adrv9025_HwOpen(adi_adrv9025_Device_t*      device,
                              NULL,
                              "SPI error");
             ADI_ERROR_RETURN(device->common.error.newAction);
+            break;
         case ADI_COMMON_HAL_GPIO_FAIL:
             ADI_ERROR_REPORT(&device->common,
                              ADI_COMMON_ERRSRC_ADI_HAL,
@@ -85,6 +84,7 @@ int32_t adi_adrv9025_HwOpen(adi_adrv9025_Device_t*      device,
                              NULL,
                              "GPIO error");
             ADI_ERROR_RETURN(device->common.error.newAction);
+            break;
         case ADI_COMMON_HAL_TIMER_FAIL:
             ADI_ERROR_REPORT(&device->common,
                              ADI_COMMON_ERRSRC_ADI_HAL,
@@ -93,6 +93,7 @@ int32_t adi_adrv9025_HwOpen(adi_adrv9025_Device_t*      device,
                              NULL,
                              "Timer error");
             ADI_ERROR_RETURN(device->common.error.newAction);
+            break;
         case ADI_COMMON_HAL_GEN_SW: /* fall through */
         default:
             ADI_ERROR_REPORT(&device->common,
@@ -113,7 +114,6 @@ int32_t adi_adrv9025_HwOpen(adi_adrv9025_Device_t*      device,
     device->spiSettings.msbFirst           = spiSettings->msbFirst;
 
     /* Toggle RESETB pin, Configure and Verify SPI */
-
     recoveryAction = adi_adrv9025_HwReset(device);
     ADI_ERROR_REPORT(&device->common,
                      ADI_COMMON_ERRSRC_API,
@@ -122,7 +122,6 @@ int32_t adi_adrv9025_HwOpen(adi_adrv9025_Device_t*      device,
                      NULL,
                      "Failed to reset device and set SPI Config");
     ADI_ERROR_RETURN(device->common.error.newAction);
-
     return (device->common.error.newAction);
 }
 
@@ -138,8 +137,6 @@ int32_t adi_adrv9025_HwClose(adi_adrv9025_Device_t* device)
     ADRV9025_BUGINFO(__FUNCTION__);
 
     recoveryAction = adi_common_hal_HwClose(&device->common);
-
-
     if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
     {
         switch (recoveryAction)
@@ -152,6 +149,7 @@ int32_t adi_adrv9025_HwClose(adi_adrv9025_Device_t* device)
                              NULL,
                              "SPI error");
             ADI_ERROR_RETURN(device->common.error.newAction);
+            break;
         case ADI_COMMON_HAL_GPIO_FAIL:
             ADI_ERROR_REPORT(&device->common,
                              ADI_COMMON_ERRSRC_ADI_HAL,
@@ -160,6 +158,7 @@ int32_t adi_adrv9025_HwClose(adi_adrv9025_Device_t* device)
                              NULL,
                              "GPIO error");
             ADI_ERROR_RETURN(device->common.error.newAction);
+            break;
         case ADI_COMMON_HAL_TIMER_FAIL:
             ADI_ERROR_REPORT(&device->common,
                              ADI_COMMON_ERRSRC_ADI_HAL,
@@ -168,6 +167,7 @@ int32_t adi_adrv9025_HwClose(adi_adrv9025_Device_t* device)
                              NULL,
                              "Timer error");
             ADI_ERROR_RETURN(device->common.error.newAction);
+            break;
         case ADI_COMMON_HAL_GEN_SW: /* fall through */
         default:
             ADI_ERROR_REPORT(&device->common,
@@ -217,12 +217,8 @@ int32_t adi_adrv9025_HwReset(adi_adrv9025_Device_t* device)
                          "GPIO Reset error");
         ADI_ERROR_RETURN(device->common.error.newAction);
     }
-
     recoveryAction = adi_common_hal_Wait_ms(&device->common,
                                             RESETB_WAIT_MS);
-
-
-
 
     if (recoveryAction != ADI_COMMON_ACT_NO_ACTION)
     {
@@ -531,8 +527,6 @@ int32_t adi_adrv9025_Initialize(adi_adrv9025_Device_t* device,
 
     adrv9025_CpuInitialize(device);
 
-
-
     adrv9025_MasterBiasSet(device);
     ADI_ERROR_RETURN(device->common.error.newAction);
 
@@ -757,8 +751,6 @@ int32_t adi_adrv9025_MultichipSyncSet(adi_adrv9025_Device_t* device,
                                       &cmdStatusByte,
                                       ADI_ADRV9025_SETCPUBOOTUPMCS_TIMEOUT_US,
                                       ADI_ADRV9025_SETCPUBOOTUPMCS_INTERVAL_US);
-
-
 
         ADI_ERROR_RETURN(device->common.error.newAction);
 
@@ -1099,7 +1091,6 @@ int32_t adi_adrv9025_SpiVerify(adi_adrv9025_Device_t* device)
     ADRV9025_SPIREADBYTE("VENDOR_ID_0",
                          ADRV9025_ADDR_VENDOR_ID_0,
                          &spiReg);
-
     if (spiReg != VENDOR_ID_0)
     {
         ADI_ERROR_REPORT(&device->common,
@@ -1116,8 +1107,6 @@ int32_t adi_adrv9025_SpiVerify(adi_adrv9025_Device_t* device)
     ADRV9025_SPIREADBYTE("VENDOR_ID_1",
                          ADRV9025_ADDR_VENDOR_ID_1,
                          &spiReg);
-
-
 
     if (spiReg != VENDOR_ID_1)
     {
@@ -1140,8 +1129,6 @@ int32_t adi_adrv9025_SpiVerify(adi_adrv9025_Device_t* device)
                          ADRV9025_ADDR_SCRATCH_PAD,
                          &spiReg);
 
-
-
     if (spiReg != SCRATCH_PAD_1)
     {
         ADI_ERROR_REPORT(&device->common,
@@ -1162,8 +1149,6 @@ int32_t adi_adrv9025_SpiVerify(adi_adrv9025_Device_t* device)
     ADRV9025_SPIREADBYTE("SCRATCH_PAD",
                          ADRV9025_ADDR_SCRATCH_PAD,
                          &spiReg);
-
-
 
     if (spiReg != SCRATCH_PAD_2)
     {
@@ -1186,8 +1171,6 @@ int32_t adi_adrv9025_SpiVerify(adi_adrv9025_Device_t* device)
                          ADRV9025_ADDR_SCRATCH_PAD_UPPER_ADDRESS_SPACE,
                          &spiReg);
 
-
-
     if (spiReg != SCRATCH_PAD_1)
     {
         ADI_ERROR_REPORT(&device->common,
@@ -1208,8 +1191,6 @@ int32_t adi_adrv9025_SpiVerify(adi_adrv9025_Device_t* device)
     ADRV9025_SPIREADBYTE("SCRATCH_PAD_UPPER_ADDR",
                          ADRV9025_ADDR_SCRATCH_PAD_UPPER_ADDRESS_SPACE,
                          &spiReg);
-
-
 
     if (spiReg != SCRATCH_PAD_2)
     {

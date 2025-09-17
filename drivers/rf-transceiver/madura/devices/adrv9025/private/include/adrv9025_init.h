@@ -1,9 +1,10 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adrv9025_init.h
 * \brief Contains ADRV9025 init related private function prototypes for
 *        adrv9025_init.c that helps adi_adrv9025_init.c
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -17,20 +18,13 @@
 
 #include "adi_adrv9025.h"
 
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define ADRV9025_BUGINFO(x)
 #define ADRV9025_BUGINFO_NUM(x,n)
-
 #define ADRV9025_DMAINFO(text, addr, count)
-
 #define ADRV9025_SPIDMAINFO(s,a,b,c)
-
 
 #define ADRV9025_SPIWRITEBYTESDMA(text, addr, addrArray, dataArray, count) \
 {\
@@ -99,8 +93,6 @@ extern "C" {
     ADI_ERROR_RETURN(device->common.error.newAction); \
     ADRV9025_SPIDMAINFO("MESSAGE:READ STREAM: %30s: addr=0x%04x, count=0x%02x \n", (text), (addr), (byteCount)); \
 }
-
-
 #define ADRV9025_SPIWRITEBYTEDMA(text, addr, data) \
 {\
     recoveryAction = adi_adrv9025_SpiByteWrite(device, (addr), (data)); \
@@ -108,7 +100,6 @@ extern "C" {
     ADI_ERROR_RETURN(device->common.error.newAction); \
     ADRV9025_SPIDMAINFO("MESSAGE: WRITE: %30s: addr=0x%04x, data=0x%02x \n", (text), (addr), (data)); \
 }
-
 #define ADRV9025_SPIREADBYTEDMA(text, addr, data) \
 {\
     recoveryAction = adi_adrv9025_SpiByteRead(device, (addr), (data)); \
@@ -116,10 +107,8 @@ extern "C" {
     ADI_ERROR_RETURN(device->common.error.newAction); \
     ADRV9025_SPIDMAINFO("MESSAGE:  READ: %30s: addr=0x%04x, data=0x%02x \n", (text), (addr), (*(uint8_t*)(data))); \
 }
-
 #define ADRV9025_SPIINFO(s,a,b,c)
 #define ADRV9025_SPI_FIELD_INFO(s,a,b,c,d)
-
 #define ADRV9025_SPIWRITEBYTE(text, addr, data) \
 {\
     int32_t recAct = 0; \
@@ -128,7 +117,6 @@ extern "C" {
     ADI_ERROR_RETURN(device->common.error.newAction); \
     ADRV9025_SPIINFO("MESSAGE: WRITE: %30s: addr=0x%04x, data=0x%02x \n", (text), (addr), (data)); \
 }
-
 #define ADRV9025_SPIREADBYTE(text, addr, data) \
 {\
     int32_t recAct = 0; \
@@ -137,7 +125,6 @@ extern "C" {
     ADI_ERROR_REPORT(&device->common, ADI_COMMON_ERRSRC_API, ADI_COMMON_ERR_API_FAIL, recAct, NULL, "Error while reading byte from Spi"); \
     ADRV9025_SPIINFO("MESSAGE:  READ: %30s: addr=0x%04x, data=0x%02x \n", (text), (addr), (*(uint8_t*)(data))); \
 }
-
 #define ADRV9025_SPIFIELDWRITE(device, addr, fieldVal, mask, startBit, text) \
 { \
     int32_t recAct = 0; \

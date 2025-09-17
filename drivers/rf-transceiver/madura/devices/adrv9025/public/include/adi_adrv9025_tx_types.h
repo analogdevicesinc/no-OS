@@ -1,8 +1,9 @@
-/*/**
+/* SPDX-License-Identifier: GPL-2.0 */
+/**
 * \file adi_adrv9025_tx_types.h
 * \brief Contains ADRV9025 API Tx datapath data types
 *
-* ADRV9025 API Version: 6.4.0.14
+* ADRV9025 API Version: 7.0.0.14
 */
 
 /**
@@ -295,9 +296,9 @@ typedef struct adi_adrv9025_TxPaProtectCfg
     uint8_t                   avgDuration;  /*!< PA Protection Average Power Measurement Duration. */
     uint8_t                   peakDuration; /*!< PA Protection Peak Power Measurement Duration */
     uint8_t                   txAttenStep;
-    /*!< PA Protection Attenuation gain step. Gain step down is not allowed for Tokelau device. This field is not being used actively. */
+    /*!< PA Protection Attenuation gain step. Gain step down is not allowed for ADRV9010 device. This field is not being used actively. */
     uint8_t gainStepDownEn;
-    /*!< PA Protection Gain Step Down Enable. Gain step down is not allowed for Tokelau device. This field is not being used actively.*/
+    /*!< PA Protection Gain Step Down Enable. Gain step down is not allowed for ADRV9010 device. This field is not being used actively.*/
     uint16_t powerThreshold; /*!< PA Protection Average Power Threshold. */
     uint8_t  peakCount;      /*!< Peak Count Causing PA Error. */
     uint16_t peakThreshold;  /*!< PA Protection Peak Power Threshold. Max value for Silicon A: 255  Max Value for Silicon B: 8191 */
