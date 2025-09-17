@@ -1,0 +1,70 @@
+menuconfig PLATFORM_MAXIM
+	bool "Maxim Platform Drivers"
+	default n
+	help
+	  Enable support for Maxim platform drivers.
+
+	  This section contains low-level platform drivers for Maxim
+	  microcontrollers including GPIO, SPI, I2C, UART, PWM, DMA,
+	  interrupt handling, USB UART, RTC, Timer, and other peripheral
+	  drivers across multiple Maxim chip families.
+
+if PLATFORM_MAXIM
+
+config GPIO_MAXIM
+	bool "Enable Maxim GPIO driver"
+	default n
+
+config GPIO_IRQ_MAXIM
+	bool "Enable Maxim GPIO IRQ driver"
+	default n
+
+config I2C_MAXIM
+	bool "Enable Maxim I2C driver"
+	default n
+
+config SPI_MAXIM
+	bool "Enable Maxim SPI driver"
+	default n
+
+config UART_MAXIM
+	bool "Enable Maxim UART driver"
+	default n
+
+config UART_STDIO_MAXIM
+	bool "Enable Maxim UART STDIO driver"
+	default n
+
+config USB_UART_MAXIM
+	bool "Enable Maxim USB UART driver"
+	default n
+
+config IRQ_MAXIM
+	bool "Enable Maxim IRQ driver"
+	default n
+
+config PWM_MAXIM
+	bool "Enable Maxim PWM driver"
+	default n
+
+config TIMER_MAXIM
+	bool "Enable Maxim Timer driver"
+	default n
+
+config RTC_MAXIM
+	bool "Enable Maxim RTC driver"
+	default n
+
+config TRNG_MAXIM
+	bool "Enable Maxim TRNG driver"
+	default n
+
+config DMA_MAXIM
+	bool "Enable Maxim DMA driver"
+	default n
+
+config INIT_MAXIM
+	bool "Enable Maxim Init driver"
+	default n
+
+endif # PLATFORM_MAXIM
