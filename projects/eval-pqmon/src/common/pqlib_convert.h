@@ -58,6 +58,20 @@ typedef enum {
 float convert_rms_type(ADI_AFE_RMS_TYPE mag, float scale);
 
 /**
+ * @brief Converts ADI_AFE_FRACT_TYPR to angle
+ * @param[in] angle - angle value
+ * @return angle in radians
+ */
+float convert_fract_angle_type(ADI_PQLIB_FRACT_TYPE angle);
+
+/**
+ * @brief Converts ADI_PQLIB_FRACT_TYPE to float
+ * @param[in] fractValue - Value for conversion
+ * @return Equivalent float value
+ */
+float convert_fract_type(ADI_PQLIB_FRACT_TYPE fractValue);
+
+/**
  * @brief Converts ADI_PQLIB_PCT_TYPE to percentage
  * @param[in] val - Value for conversion
  * @return Equivalent percentage value

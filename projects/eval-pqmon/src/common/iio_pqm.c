@@ -204,6 +204,90 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 			return snprintf(buf, len, "%s", (processData) ? "1" : "0");
 		case FW_VERSION_NR:
 			return snprintf(buf, len, "%.1f", FW_VERSION);
+			/* only if zero sequence enabled */
+#if ADI_PQLIB_CFG_DISABLE_SYMM_COMP == 0
+		case NEG_UNB_VOLTAGE_RATIO:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_pct_type(pqlibExample.output->params1012Cycles
+							.voltageUnb.negUnbRatio));
+		case ZERO_UNB_VOLTAGE_RATIO:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_pct_type(pqlibExample.output->params1012Cycles
+							.voltageUnb.zeroUnbRatio));
+		case SZRO_VOLTAGE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_type(pqlibExample.output->params1012Cycles
+							  .voltageUnb.zeroSeqMag));
+		case SZRO_VOLTAGE_ANGLE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
+								.voltageUnb.zeroSeqAngle));
+		case SPOS_VOLTAGE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_type(pqlibExample.output->params1012Cycles
+							  .voltageUnb.posSeqMag));
+		case SPOS_VOLTAGE_ANGLE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
+								.voltageUnb.posSeqAngle));
+		case SNEG_VOLTAGE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_type(pqlibExample.output->params1012Cycles
+							  .voltageUnb.negSeqMag));
+		case SNEG_VOLTAGE_ANGLE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
+								.voltageUnb.negSeqAngle));
+		case NEG_UNB_CURRENT_RATIO:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_pct_type(pqlibExample.output->params1012Cycles
+							.currentUnb.negUnbRatio));
+		case ZERO_UNB_CURRENT_RATIO:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_pct_type(pqlibExample.output->params1012Cycles
+							.currentUnb.zeroUnbRatio));
+		case SZRO_CURRENT:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_type(pqlibExample.output->params1012Cycles
+							  .currentUnb.zeroSeqMag));
+		case SZRO_CURRENT_ANGLE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
+								.currentUnb.zeroSeqAngle));
+		case SPOS_CURRENT:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_type(pqlibExample.output->params1012Cycles
+							  .currentUnb.posSeqMag));
+		case SPOS_CURRENT_ANGLE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
+								.currentUnb.posSeqAngle));
+		case SNEG_CURRENT:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_type(pqlibExample.output->params1012Cycles
+							  .currentUnb.negSeqMag));
+		case SNEG_CURRENT_ANGLE:
+			return snprintf(
+				       buf, len, "%.2f",
+				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
+								.currentUnb.negSeqAngle));
+#endif
+
 		default:
 			return snprintf(buf, len, "%.2f", desc->pqm_global_attr[attr_id]);
 		}
@@ -441,7 +525,6 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 							.voltageParams[channel->ch_num]
 							.udod.uRmsOver,
 							pqlibExample.exampleConfig.voltageScale));
-
 		case CHAN_VOLTAGE_MAGNITUDE1012:
 			return snprintf(buf, len, "%" PRIu16 "",
 					pqlibExample.output->msvMagnitude[channel->ch_num].magnitude1012);
@@ -787,15 +870,16 @@ struct iio_attribute current_pqm_attributes[] = {
 }; // current channel attributes
 
 struct iio_attribute global_pqm_attributes[] = {
+#if ADI_PQLIB_CFG_DISABLE_SYMM_COMP == 0
 	{
 		.name = "u2",
 		.show = read_pqm_attr,
-		.priv = ATTR_U2,
+		.priv = NEG_UNB_VOLTAGE_RATIO,
 	},
 	{
 		.name = "u0",
 		.show = read_pqm_attr,
-		.priv = ATTR_U0,
+		.priv = ZERO_UNB_VOLTAGE_RATIO,
 	},
 	{
 		.name = "sneg_voltage",
@@ -813,16 +897,6 @@ struct iio_attribute global_pqm_attributes[] = {
 		.priv = SZRO_VOLTAGE,
 	},
 	{
-		.name = "i2",
-		.show = read_pqm_attr,
-		.priv = ATTR_I2,
-	},
-	{
-		.name = "i0",
-		.show = read_pqm_attr,
-		.priv = ATTR_I0,
-	},
-	{
 		.name = "sneg_current",
 		.show = read_pqm_attr,
 		.priv = SNEG_CURRENT,
@@ -837,6 +911,47 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.priv = SZRO_CURRENT,
 	},
+	{
+		.name = "i2",
+		.show = read_pqm_attr,
+		.priv = NEG_UNB_CURRENT_RATIO,
+	},
+	{
+		.name = "i0",
+		.show = read_pqm_attr,
+		.priv = ZERO_UNB_CURRENT_RATIO,
+	},
+	{
+		.name = "sneg_voltage_angle",
+		.show = read_pqm_attr,
+		.priv = SNEG_VOLTAGE_ANGLE,
+	},
+	{
+		.name = "spos_voltage_angle",
+		.show = read_pqm_attr,
+		.priv = SPOS_VOLTAGE_ANGLE,
+	},
+	{
+		.name = "szro_voltage_angle",
+		.show = read_pqm_attr,
+		.priv = SZRO_VOLTAGE_ANGLE,
+	},
+	{
+		.name = "sneg_current_angle",
+		.show = read_pqm_attr,
+		.priv = SNEG_CURRENT_ANGLE,
+	},
+	{
+		.name = "spos_current_angle",
+		.show = read_pqm_attr,
+		.priv = SPOS_CURRENT_ANGLE,
+	},
+	{
+		.name = "szro_current_angle",
+		.show = read_pqm_attr,
+		.priv = SZRO_CURRENT_ANGLE,
+	},
+#endif
 	{
 		.name = "nominal_voltage",
 		.show = read_pqm_attr,
