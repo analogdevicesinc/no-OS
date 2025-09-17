@@ -1,0 +1,17 @@
+menuconfig PLATFORM_DRIVERS
+	bool "Platform Drivers"
+	default n
+	help
+	  Enable support for platform-specific drivers.
+
+	  This section contains low-level platform drivers for various
+	  microcontrollers and processors including STM32, Maxim, and
+	  other hardware platforms. These drivers provide hardware
+	  abstraction for peripherals like GPIO, SPI, I2C, UART, etc.
+
+if PLATFORM_DRIVERS
+
+source "drivers/platform/stm32/Kconfig"
+source "drivers/platform/maxim/Kconfig"
+
+endif # PLATFORM_DRIVERS
