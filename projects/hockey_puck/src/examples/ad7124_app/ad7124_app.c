@@ -73,8 +73,8 @@ static const struct ad7124_init_param ad7124_ip = {
 			.bi_unipolar = AD7124_BIPOLAR_MODE,
 			.ref_buff = AD7124_BUFF_REF,
 			.ain_buff = AD7124_BUFF_AIN,
-			.ref_source = INTERNAL_REF,
             .pga = AD7124_PGA_16,
+            .ref_source = EXTERNAL_REFIN1,
 		},
 	},
 	.chan_map = {
@@ -138,6 +138,16 @@ int ad7124_app_main(void)
 
     /* Enable excitation current 250uA on AIN0 */
     ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT0(3), AD7124_IO_CTRL1_REG_IOUT0(0x7));
+    if (ret != 0)
+        return ret;
+
+    /* Set IOUT1 on AIN4 */
+    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT_CH1(4), AD7124_IO_CTRL1_REG_IOUT_CH1(0xF));
+    if (ret != 0)
+        return ret;
+
+    /* Enable excitation current 250uA on AIN4 */
+    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT1(3), AD7124_IO_CTRL1_REG_IOUT1(0x7));
     if (ret != 0)
         return ret;
 
