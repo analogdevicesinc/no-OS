@@ -19,6 +19,12 @@ elseif(EXISTS "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src")
     set(NO_OS_TOOLCHAIN_PATH "_deps/no-os-core-src/drivers/platform/${PLATFORM}/toolchain.cmake")
     set(NO_OS_DEFCONFIG_PATH "${CMAKE_SOURCE_DIR}/_deps/no-os-core-src/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
 
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/drivers")
+    # Out-of-tree build using add_subdirectory (no-OS as subdirectory)
+    message(STATUS "Out-of-tree build with no-OS as subdirectory detected")
+    set(NO_OS_TOOLCHAIN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/drivers/platform/${PLATFORM}/toolchain.cmake")
+    set(NO_OS_DEFCONFIG_PATH "${CMAKE_CURRENT_SOURCE_DIR}/board_configs/${PLATFORM}/${BOARD_CONFIG_FILE}")
+
 elseif(DEFINED NO_OS_PATH AND EXISTS "${NO_OS_PATH}")
     # Out-of-tree build with local no-OS
     message(STATUS "Out-of-tree build with local no-OS: ${NO_OS_PATH}")
