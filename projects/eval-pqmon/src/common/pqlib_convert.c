@@ -53,6 +53,16 @@ float convert_rms_type(ADI_AFE_RMS_TYPE mag, float scale)
 	return rms;
 }
 
+float convert_fract_type(ADI_PQLIB_FRACT_TYPE fractValue)
+{
+	return (float)fractValue / (float)(1 << ADI_PQLIB_FRACT_BITS);
+}
+
+float convert_fract_angle_type(ADI_PQLIB_FRACT_TYPE angle)
+{
+	return (float)angle * (2.0f * (float)M_PI / (float)0x7FFF);
+}
+
 float convert_pct_type(ADI_PQLIB_PCT_TYPE val)
 {
 	float pct = (float)val / 100.0f;
