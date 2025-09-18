@@ -6,7 +6,7 @@
 BASIC_EXAMPLE = n
 IIO_EXAMPLE = y
 
-# AD4630 Family = 0 | AD4030 Family = 1 | ADAQ4224 = 2
+# AD4630 Family = 0 | AD4030 Family = 1 | ADAQ4224 = 2 | ADAQ4216 = 3
 AD463X_ID=0
 
 include ../../tools/scripts/generic_variables.mk
