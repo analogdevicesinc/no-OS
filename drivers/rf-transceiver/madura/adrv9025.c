@@ -837,6 +837,8 @@ static int adrv9025_jesd204_link_running(struct jesd204_dev *jdev,
 			       phy->madDevice,
 			       priv->link[lnk->link_id].source_id,
 			       &deframerLinkCondition);
+		if (ret)
+			return adrv9025_dev_err(phy);
 
 		if ((deframerStatus.status & 0x7F) != 0x7) /* Ignore Valid ILAS checksum */
 			pr_warning("Link%u deframerStatus 0x%X\n",
