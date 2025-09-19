@@ -404,6 +404,7 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 	struct adrv9025_rf_phy *phy = priv->phy;
 	adi_adrv9025_FrmCfg_t *framer = NULL;
 	adi_adrv9025_DfrmCfg_t *deframer = NULL;
+	unsigned int id;
 	uint32_t rate;
 	int ret;
 
@@ -482,6 +483,8 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 				    JESD204_VERSION_B;
 		lnk->subclass = JESD204_SUBCLASS_1;
 		lnk->is_transmit = false;
+		for (id = 0; id < lnk->num_lanes; id++)
+			lnk->lane_ids[id] = id;
 	} else if (deframer) {
 		lnk->num_converters = deframer->jesd204M;
 		lnk->num_lanes = no_os_hweight8(deframer->deserializerLanesEnabled);
@@ -497,7 +500,9 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 				    JESD204_VERSION_B;
 		lnk->subclass = JESD204_SUBCLASS_1;
 		lnk->is_transmit = true;
-	};
+		for (id = 0; id < lnk->num_lanes; id++)
+			lnk->lane_ids[id] = id;
+	}
 
 	return JESD204_STATE_CHANGE_DONE;
 }
