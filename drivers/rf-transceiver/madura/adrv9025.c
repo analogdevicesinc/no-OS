@@ -450,6 +450,7 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 		ret = adrv9025_RxLinkSamplingRateFind(phy->madDevice, &phy->deviceInitStruct,
 						      ADI_ADRV9025_FRAMER_1,
 						      &rate);
+		phy->orx_iqRate_kHz = rate;
 		break;
 	case FRAMER2_LINK_RX:
 		framer = &phy->deviceInitStruct.dataInterface.framer[2];
@@ -884,6 +885,8 @@ static int adrv9025_jesd204_post_running_stage(struct jesd204_dev *jdev,
 		return adrv9025_dev_err(phy);
 
 	no_os_clk_set_rate(phy->clks[ADRV9025_RX_SAMPL_CLK], phy->rx_iqRate_kHz * 1000);
+	no_os_clk_set_rate(phy->clks[ADRV9025_ORX_SAMPL_CLK],
+			   phy->orx_iqRate_kHz * 1000);
 	no_os_clk_set_rate(phy->clks[ADRV9025_TX_SAMPL_CLK], phy->tx_iqRate_kHz * 1000);
 
 	ret = adi_adrv9025_AgcCfgSet(phy->madDevice, phy->agcConfig, 1);
@@ -1318,8 +1321,9 @@ static const struct no_os_clk_platform_ops adrv9025_bb_clk_ops = {
 int adrv9025_setup(struct adrv9025_rf_phy *phy)
 {
 	const char *names[NUM_ADRV9025_CLKS] = {
-		"-rx_sampl_clk", "-tx_sampl_clk"
+		"-rx_sampl_clk", "-tx_sampl_clk", "-orx_sampl_clk"
 	};
+	struct no_os_clk_desc *orx_sample_clk = NULL;
 	struct no_os_clk_desc *rx_sample_clk = NULL;
 	struct no_os_clk_desc *tx_sample_clk = NULL;
 	struct no_os_clk_init_param clk_init;
@@ -1404,6 +1408,19 @@ int adrv9025_setup(struct adrv9025_rf_phy *phy)
 
 	phy->clks[ADRV9025_TX_SAMPL_CLK] = tx_sample_clk;
 
+	orx_sample_clk = no_os_calloc(1, sizeof(orx_sample_clk));
+	if (!orx_sample_clk)
+		goto tx_out_clk_init_error;
+
+	/* Initialize clk component */
+	clk_init.name = names[ADRV9025_ORX_SAMPL_CLK];
+
+	ret = no_os_clk_init(&orx_sample_clk, &clk_init);
+	if (ret)
+		goto orx_out_clk_init_error;
+
+	phy->clks[ADRV9025_ORX_SAMPL_CLK] = orx_sample_clk;
+
 	adi_adrv9025_ApiVersionGet(phy->madDevice, &apiVersion);
 	adi_adrv9025_Shutdown(phy->madDevice);
 	adi_adrv9025_HwClose(phy->madDevice);
@@ -1415,6 +1432,8 @@ int adrv9025_setup(struct adrv9025_rf_phy *phy)
 
 	return 0;
 
+orx_out_clk_init_error:
+	no_os_free(orx_sample_clk);
 tx_out_clk_init_error:
 	no_os_free(tx_sample_clk);
 rx_out_clk_init_error:

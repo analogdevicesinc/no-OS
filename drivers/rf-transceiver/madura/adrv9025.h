@@ -68,6 +68,7 @@ enum adrv9025_device_id {
 enum adrv9025_clocks {
 	ADRV9025_RX_SAMPL_CLK,
 	ADRV9025_TX_SAMPL_CLK,
+	ADRV9025_ORX_SAMPL_CLK,
 	NUM_ADRV9025_CLKS,
 };
 
@@ -89,6 +90,7 @@ struct adrv9025_rf_phy {
 	void				*lock;
 	uint32_t			tx_iqRate_kHz;
 	uint32_t			rx_iqRate_kHz;
+	uint32_t			orx_iqRate_kHz;
 
 	struct no_os_clk_desc		*dev_clk;
 
@@ -102,6 +104,7 @@ struct adrv9025_rf_phy {
 
 	struct axi_adc			*rx_adc;
 	struct axi_dac			*tx_dac;
+	struct axi_adc			*orx_adc;
 };
 
 struct adrv9025_init_param {
