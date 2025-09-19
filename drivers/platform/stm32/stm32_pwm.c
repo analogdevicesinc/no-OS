@@ -56,7 +56,7 @@ static uint32_t _compute_period_ticks(uint32_t (*get_timer_clock)(void),
 				      uint32_t prescaler,
 				      uint32_t period_ns)
 {
-	float pwm_frequency;
+	double pwm_frequency;
 	uint32_t timer_frequency_hz;
 	uint32_t period;
 
