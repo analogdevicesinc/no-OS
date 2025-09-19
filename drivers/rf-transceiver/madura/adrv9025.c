@@ -144,10 +144,10 @@ int adrv9025_spi_write(struct no_os_spi_desc *spi, uint32_t reg,
 	return 0;
 }
 
-int adrv9025_RxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
-				    adi_adrv9025_Init_t *adrv9025Init,
-				    adi_adrv9025_FramerSel_e framerSel,
-				    uint32_t *iqRate_kHz)
+static int adrv9025_RxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
+		adi_adrv9025_Init_t *adrv9025Init,
+		adi_adrv9025_FramerSel_e framerSel,
+		uint32_t *iqRate_kHz)
 {
 	int recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 	adi_adrv9025_AdcSampleXbarSel_e conv = ADI_ADRV9025_ADC_RX1_Q;
@@ -242,10 +242,10 @@ int adrv9025_RxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
 	return recoveryAction;
 }
 
-int adrv9025_TxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
-				    adi_adrv9025_Init_t *adrv9025Init,
-				    adi_adrv9025_DeframerSel_e deframerSel,
-				    uint32_t *iqRate_kHz)
+static int adrv9025_TxLinkSamplingRateFind(adi_adrv9025_Device_t *device,
+		adi_adrv9025_Init_t *adrv9025Init,
+		adi_adrv9025_DeframerSel_e deframerSel,
+		uint32_t *iqRate_kHz)
 {
 	int recoveryAction = ADI_COMMON_ACT_NO_ACTION;
 	uint32_t deframerIndex = 0;
@@ -361,8 +361,8 @@ struct adrv9025_jesd204_priv {
 	struct adrv9025_jesd204_link link[5];
 };
 
-int adrv9025_jesd204_link_pre_setup(struct jesd204_dev *jdev,
-				    enum jesd204_state_op_reason reason)
+static int adrv9025_jesd204_link_pre_setup(struct jesd204_dev *jdev,
+		enum jesd204_state_op_reason reason)
 {
 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct adrv9025_rf_phy *phy = priv->phy;
@@ -502,8 +502,8 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 	return JESD204_STATE_CHANGE_DONE;
 }
 
-int adrv9025_jesd204_link_setup(struct jesd204_dev *jdev,
-				enum jesd204_state_op_reason reason)
+static int adrv9025_jesd204_link_setup(struct jesd204_dev *jdev,
+				       enum jesd204_state_op_reason reason)
 {
 	struct adrv9025_jesd204_priv *priv = jesd204_dev_priv(jdev);
 	struct adrv9025_rf_phy *phy = priv->phy;
