@@ -1779,7 +1779,6 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->vref = init_param.vref;
 	dev->mclk = init_param.mclk;
 	dev->sample_rate = init_param.sample_rate;
-	dev->data_frame_byte = init_param.data_frame_byte;
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
 	if (ret < 0) {
