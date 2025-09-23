@@ -476,6 +476,9 @@ int32_t no_os_HwOpen(void *devHalCfg)
 	struct no_os_gpio_init_param gip_gpio_reset_n = { 0 };
 	struct no_os_spi_init_param sip = { 0 };
 
+	if (devHalCfg == NULL)
+		return (int32_t)ADI_HAL_NULL_PTR;
+
 	/* sysref req GPIO configuration */
 	gip_gpio_reset_n.number = ADRV9025_RESET_B;
 	gip_gpio_reset_n.extra = clkchip_gpio_init_param.extra;
