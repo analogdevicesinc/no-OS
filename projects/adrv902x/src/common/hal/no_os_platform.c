@@ -461,7 +461,7 @@ int32_t no_os_TimerWait_ms(void *devHalCfg, uint32_t time_ms)
 }
 
 /**
- * \brief Opens all neccessary files and device drivers for a specific device
+ * \brief Opens all necessary files and device drivers for a specific device
  *
  * \param devHalCfg Pointer to device instance specific platform settings
  *
