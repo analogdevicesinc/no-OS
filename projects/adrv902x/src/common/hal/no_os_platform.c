@@ -510,6 +510,53 @@ int32_t no_os_HwOpen(void *devHalCfg)
 }
 
 /**
+ * \brief Checks that hardware is available to read from or write to.
+ *
+ * \param devHalCfg Pointer to device instance specific platform settings
+ *
+ * \retval ADI_HAL_OK Function completed successfully, no action required
+ * \retval ADI_HAL_NULL_PTR The function has been called with a null pointer
+ * \retval errors returned by other function calls.
+ */
+int32_t no_os_HwVerify(void *devHalCfg)
+{
+	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
+	static const uint8_t SCRATCH_PAD_DATA = 0xBA; /* DATA 10111010 */
+	uint16_t scratch_addr = 0x000A;
+	uint8_t  write_flag = 0x00;
+	uint8_t wrData[3] = { 0 };
+	uint8_t rxData[3] = { 0 };
+	int ret;
+
+	if (devHalCfg == NULL)
+		return (int32_t)ADI_HAL_NULL_PTR;
+
+	/* Check SPI write - SCRATCHPAD : Data = 10111010 */
+	wrData[0] = (uint8_t)(((write_flag & 0x01) << 7) | ((scratch_addr >> 8) &
+			      0x7F));
+	wrData[1] = (uint8_t)(scratch_addr);
+	wrData[2] = (uint8_t)SCRATCH_PAD_DATA;
+	ret = no_os_SpiWrite(&phal->spi, wrData, 3);
+	if (ret)
+		return ret;
+
+	wrData[0] = (uint8_t)(((~write_flag & 0x01) << 7) | ((scratch_addr >> 8) &
+			      0x7F));
+	wrData[1] = (uint8_t)(scratch_addr);
+	wrData[2] = 0;
+
+	ret = no_os_SpiRead(&phal->spi, wrData, rxData, 3);
+	if (ret)
+		return ret;
+
+	if (rxData[2] != SCRATCH_PAD_DATA) {
+		return ADI_HAL_SPI_FAIL;
+	}
+
+	return ADI_HAL_OK;
+}
+
+/**
  * \brief Gracefully shuts down the the hardware closing any open resources
  *        such as log files, I2C, SPI, GPIO drivers, timer resources, etc.
  *
@@ -599,7 +646,7 @@ int32_t (*adi_hal_SpiInit)(void *devHalCfg) =
 void *(*adi_hal_DevHalCfgCreate)(uint32_t interfaceMask, uint8_t spiChipSelect,
 				 const char *logFilename) = NULL;
 int32_t (*adi_hal_DevHalCfgFree)(void *devHalCfg) = NULL;
-int32_t (*adi_hal_HwVerify)(void *devHalCfg) = no_os_HwOpen;
+int32_t (*adi_hal_HwVerify)(void *devHalCfg) = no_os_HwVerify;
 
 /* SPI Interface */
 int32_t (*adrv9025_hal_SpiWrite)(void *devHalCfg, const uint8_t txData[],
