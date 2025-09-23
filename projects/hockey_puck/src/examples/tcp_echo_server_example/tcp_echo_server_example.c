@@ -48,8 +48,8 @@ const struct max_spi_init_param spi_extra = {
 };
 
 const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
-	.port = 0,
-	.number = 15,
+	.port = ADIN1110_RESET_PORT,
+	.number = ADIN1110_RESET_PIN,
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
 	.extra = &(struct max_gpio_init_param){
@@ -58,12 +58,12 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 };
 
 const struct no_os_spi_init_param adin1110_spi_ip = {
-	.device_id = 3,
-	.max_speed_hz = 25000000,
+	.device_id = ADIN1110_SPI_DEVICE_ID,
+	.max_speed_hz = ADIN1110_SPI_CLK_SPEED,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = &max_spi_ops,
-	.chip_select = 0,
+	.chip_select = ADIN1110_SPI_CHIP_SEL,
 	.extra = &spi_extra,
 };
 
