@@ -562,7 +562,6 @@ struct ad77681_init_param {
 	uint16_t                        vref;
 	uint16_t                        mclk;
 	uint32_t                        sample_rate;
-	uint8_t                         data_frame_byte;
 };
 
 uint8_t ad77681_compute_crc8(uint8_t *data,
