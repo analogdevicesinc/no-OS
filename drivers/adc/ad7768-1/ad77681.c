@@ -448,7 +448,8 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 
 	/* Finding out decimation ratio */
 	switch (dev->filter) {
-	case (AD77681_SINC5 | AD77681_FIR):
+	case AD77681_SINC5:
+	case AD77681_FIR:
 		/* Decimation ratio of FIR or SINC5 (x32 to x1024) */
 		switch (dev->decimate) {
 		case AD77681_SINC5_FIR_DECx32:
