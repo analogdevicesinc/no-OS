@@ -512,6 +512,39 @@ int32_t no_os_HwOpen(void *devHalCfg)
 }
 
 /**
+ * \brief Checks that hardware is available to read from or write to.
+ *
+ * \param devHalCfg Pointer to device instance specific platform settings
+ *
+ * \retval ADI_HAL_OK Function completed successfully, no action required
+ * \retval ADI_HAL_NULL_PTR The function has been called with a null pointer
+ * \retval errors returned by other function calls.
+ */
+int32_t no_os_HwVerify(void *devHalCfg)
+{
+	int32_t halError = (int32_t)ADI_HAL_OK;
+	struct adrv9025_hal_cfg *phal = NULL;
+	if (devHalCfg == NULL) {
+		halError = (int32_t)ADI_HAL_NULL_PTR;
+		return halError;
+	}
+
+	phal = (struct adrv9025_hal_cfg *)devHalCfg;
+
+	/* throw an error if SPI pointer is NULL */
+	if (phal->spi == NULL) {
+		halError = (int32_t)ADI_HAL_SPI_FAIL;
+		return halError;
+	}
+
+	/* throw an error if GPIO pointer is NULL */
+	if (phal->gpio_reset_n == NULL)
+		halError = (int32_t)ADI_HAL_GPIO_FAIL;
+
+	return halError;
+}
+
+/**
  * \brief Gracefully shuts down the the hardware closing any open resources
  *        such as log files, I2C, SPI, GPIO drivers, timer resources, etc.
  *
@@ -609,7 +642,7 @@ int32_t (*adi_hal_SpiInit)(void *devHalCfg) =
 void *(*adi_hal_DevHalCfgCreate)(uint32_t interfaceMask, uint8_t spiChipSelect,
 				 const char *logFilename) = NULL;
 int32_t (*adi_hal_DevHalCfgFree)(void *devHalCfg) = NULL;
-int32_t (*adi_hal_HwVerify)(void *devHalCfg) = no_os_HwOpen;
+int32_t (*adi_hal_HwVerify)(void *devHalCfg) = no_os_HwVerify;
 
 /* SPI Interface */
 int32_t (*adrv9025_hal_SpiWrite)(void *devHalCfg, const uint8_t txData[],
