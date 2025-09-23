@@ -471,10 +471,15 @@ int32_t no_os_TimerWait_ms(void *devHalCfg, uint32_t time_ms)
  */
 int32_t no_os_HwOpen(void *devHalCfg)
 {
-	int32_t ret;
-	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
 	struct no_os_gpio_init_param gip_gpio_reset_n = { 0 };
 	struct no_os_spi_init_param sip = { 0 };
+	struct adrv9025_hal_cfg *phal = NULL;
+	int32_t ret;
+
+	if (devHalCfg == NULL)
+		return (int32_t)ADI_HAL_NULL_PTR;
+
+	phal = (struct adrv9025_hal_cfg *)devHalCfg;
 
 	/* sysref req GPIO configuration */
 	gip_gpio_reset_n.number = ADRV9025_RESET_B;
@@ -518,7 +523,13 @@ int32_t no_os_HwOpen(void *devHalCfg)
 int32_t no_os_HwClose(void *devHalCfg)
 {
 	int32_t ret;
-	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
+	struct adrv9025_hal_cfg *phal = NULL;
+	if (devHalCfg == NULL) {
+		return (int32_t)ADI_HAL_NULL_PTR;
+	}
+
+	phal = (struct adrv9025_hal_cfg *)devHalCfg;
+
 	ret = no_os_gpio_remove(phal->gpio_reset_n);
 	if (ret)
 		return ret;
@@ -545,11 +556,13 @@ int32_t no_os_HwClose(void *devHalCfg)
  */
 int32_t no_os_HwReset(void *devHalCfg, uint8_t pinLevel)
 {
-	struct adrv9025_hal_cfg *phal = (struct adrv9025_hal_cfg *)devHalCfg;
+	struct adrv9025_hal_cfg *phal = NULL;
 
 	if (devHalCfg == NULL) {
 		return ADI_HAL_NULL_PTR;
 	}
+
+	phal = (struct adrv9025_hal_cfg *)devHalCfg;
 
 	no_os_gpio_set_value(phal->gpio_reset_n, pinLevel);
 
