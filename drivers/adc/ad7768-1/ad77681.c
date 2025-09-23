@@ -83,6 +83,9 @@ uint8_t ad77681_compute_xor(uint8_t *data,
 	uint8_t buf[3];
 	uint8_t i;
 
+	if (data_size > 3)
+		return -EINVAL;
+
 	for (i = 0; i < data_size; i++) {
 		buf[i] = *data;
 		crc ^= buf[i];
