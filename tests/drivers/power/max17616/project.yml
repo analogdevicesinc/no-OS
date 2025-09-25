@@ -1,0 +1,106 @@
+---
+:project:
+  :use_exceptions: FALSE
+  :use_test_preprocessor: :all
+  :use_auxiliary_dependencies: TRUE
+  :build_root: build
+#  :release_build: TRUE
+  :test_file_prefix: test_
+  :which_ceedling: gem
+  :ceedling_version: 1.0.1
+  :default_tasks:
+    - test:all
+
+:environment:
+
+:extension:
+  :executable: .out
+
+:paths:
+  :test:
+    - test
+  :source:
+    - ../../../../drivers/power/max17616/
+  :include:
+    - ../../../../include/**
+    - ../../../../drivers/power/max17616/**
+    - ../../../../iio/**
+  :support:
+    - test/support
+  :libraries: []
+
+:files:
+  :test:
+    - test/test_max17616.c
+    - test/test_iio_max17616.c
+  :source:
+    - ../../../../drivers/power/max17616/max17616.c
+    - ../../../../drivers/power/max17616/iio_max17616.c
+  :support:
+    - test/support/test_max17616_support.c
+    - test/support/test_iio_max17616_support.c
+
+:defines:
+  # Original driver specific defines
+  :common: &common_defines []
+  :test:
+    - *common_defines
+    - TEST
+  :test_preprocess:
+    - *common_defines
+    - TEST
+
+:cmock:
+  :mock_prefix: mock_
+  :when_no_prototypes: :warn
+  :callback_include_count: TRUE
+  :callback_after_arg_check: TRUE
+  :enforce_strict_ordering: TRUE
+  :plugins:
+    - :ignore
+    - :callback
+  :treat_as:
+    uint8:    HEX8
+    uint16:   HEX16
+    uint32:   UINT32
+    int8:     INT8
+    bool:     UINT8
+
+# Add -gcov to the plugins list to make sure of the gcov plugin
+# You will need to have gcov and gcovr both installed to make it work.
+# For more information on these options, see docs in plugins/gcov
+:gcov:
+  :reports:
+    - HtmlDetailed
+  :gcovr:
+    :html_medium_threshold: 75
+    :html_high_threshold: 90
+    :report_include: "../../../../drivers/power/max17616/.*"
+
+#:tools:
+# Ceedling defaults to using gcc for compiling, linking, etc.
+# As [:tools] is blank, gcc will be used (so long as it's in your system path)
+# See documentation to configure a given toolchain for use
+
+# LIBRARIES
+# These libraries are automatically injected into the build process. Those specified as
+# common will be used in all types of builds. Otherwise, libraries can be injected in just
+# tests or releases. These options are MERGED with the options in supplemental yaml files.
+:libraries:
+  :placement: :end
+  :flag: "-l${1}"
+  :path_flag: "-L ${1}"
+  :system: []    # for example, you might list 'm' to grab the math library
+  :test: []
+  :release: []
+
+:junit_tests_report:
+  :artifact_filename: report_junit_original.xml
+
+:plugins:
+  :enabled:
+    - report_tests_pretty_stdout
+    - module_generator
+    - report_tests_raw_output_log
+    - gcov
+    - report_tests_log_factory
