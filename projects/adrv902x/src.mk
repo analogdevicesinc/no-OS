@@ -14,6 +14,7 @@ include $(PROJECT)/src/examples/examples_src.mk
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 INCS += $(PROJECT)/src/common/common_data.h \
+	$(PROJECT)/src/common/clkgen_routines.h \
 	$(PROJECT)/src/common/app_config.h \
 	$(PROJECT)/src/common/ADRV9025_RxGainTable.h \
 	$(PROJECT)/src/common/ADRV9025_TxAttenTable.h \
@@ -25,6 +26,7 @@ INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/firmware/ActiveUtilInit_profile.h
 
 SRCS += $(PROJECT)/src/common/common_data.c \
+	$(PROJECT)/src/common/clkgen_routines.c \
 	$(PROJECT)/src/common/hal/no_os_platform.c
 
 INCS += $(PROJECT)/src/platform/platform_includes.h \
