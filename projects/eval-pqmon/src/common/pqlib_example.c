@@ -102,7 +102,7 @@ int pqm_start_measurement(bool waitingForSync)
 	return status;
 }
 
-int pqm_one_cycle(void)
+int pqm_one_cycle(void *)
 {
 	if (configChanged) {
 		printf("Recallibrating\n\r");
