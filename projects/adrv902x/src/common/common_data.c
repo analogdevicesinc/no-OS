@@ -45,7 +45,7 @@ const struct no_os_spi_init_param ad9528_spi_param = {
 };
 
 /* Initialize the clkchip GPIO structure */
-const struct no_os_gpio_init_param clkchip_gpio_init_param = {
+struct no_os_gpio_init_param clkchip_gpio_init_param = {
 	.number = AD9528_RESET_B,
 	.platform_ops = &xil_gpio_ops,
 	.extra = &xil_gpio_param

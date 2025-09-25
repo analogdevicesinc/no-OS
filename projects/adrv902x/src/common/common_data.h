@@ -38,6 +38,6 @@
 #include "no_os_spi.h"
 
 extern const struct no_os_spi_init_param ad9528_spi_param;
-extern const struct no_os_gpio_init_param clkchip_gpio_init_param;
+extern struct no_os_gpio_init_param clkchip_gpio_init_param;
 
 #endif /* __COMMON_DATA_H__ */
