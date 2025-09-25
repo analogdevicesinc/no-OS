@@ -60,6 +60,8 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/dac/*
 
+   drivers/ad9739a
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
