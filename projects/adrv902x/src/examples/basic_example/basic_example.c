@@ -55,6 +55,7 @@
 #include "xilinx_gpio.h"
 #include "xilinx_spi.h"
 
+#include "clkgen_routines.h"
 #include "adrv9025.h"
 #include "ad9528.h"
 
@@ -71,6 +72,9 @@ int basic_example_main(void)
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
 	struct ad9528_init_param ad9528_param;
+	struct axi_clkgen *orx_clkgen = NULL;
+	struct axi_clkgen *rx_clkgen = NULL;
+	struct axi_clkgen *tx_clkgen = NULL;
 	struct ad9528_dev* ad9528_device;
 	struct adrv9025_rf_phy *phy;
 	int status;
@@ -303,18 +307,22 @@ int basic_example_main(void)
 		goto error_8;
 	}
 
+	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen);
+	if (status)
+		goto error_9;
+
 	// Set DDS data
 	axi_dac_data_setup(phy->tx_dac);
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init tx init error: %d\n", status);
-		goto error_8;
+		goto error_9;
 	}
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init rx init error: %d\n", status);
-		goto error_9;
+		goto error_10;
 	}
 
 	struct jesd204_topology *topology;
@@ -346,7 +354,7 @@ int basic_example_main(void)
 	status = adi_adrv9025_HwOpen(phy->madDevice, &phy->spiSettings);
 	if (status) {
 		pr_err("error: adi_adrv9025_HwOpen() failed\n");
-		goto error_8;
+		goto error_11;
 	}
 
 	jesd204_topology_init(&topology, devs,
@@ -357,9 +365,13 @@ int basic_example_main(void)
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
 
+error_11:
 	axi_dmac_remove(rx_dmac);
-error_9:
+error_10:
 	axi_dmac_remove(tx_dmac);
+error_9:
+	if (!status)
+		clkgen_remove(rx_clkgen, tx_clkgen, orx_clkgen);
 error_8:
 	axi_adc_remove(phy->rx_adc);
 error_7:
