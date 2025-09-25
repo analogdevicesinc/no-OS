@@ -524,8 +524,12 @@ int adxl371_reset(struct adxl371_dev *dev)
  *				 ADXL371_FIFO_TRIGGERED
  *				 ADXL371_FIFO_OLD_SAVED
  * @param format - FIFO Format. Specifies which data is stored in the FIFO buffer.
+<<<<<<< HEAD
  *		Accepted values:
  				 ADXL371_XYZ_FIFO
+=======
+ *		Accepted values: ADXL371_XYZ_FIFO
+>>>>>>> c08359952 (accel: adxl371: Add ADXL371 driver)
  *				 ADXL371_X_FIFO
  *				 ADXL371_Y_FIFO
  *				 ADXL371_XY_FIFO
@@ -536,6 +540,7 @@ int adxl371_reset(struct adxl371_dev *dev)
  * @param fifo_samples - FIFO Samples. Watermark number of FIFO samples that
  *			triggers a FIFO_FULL condition when reached.
  *			Values range from 0 to 512.
+<<<<<<< HEAD
  * @param op_mode - Device Operational Mode. Impacts sampling & power consumption.
  * 		Acceptable values:
  * 		 ADXL371_STANDBY,
@@ -543,6 +548,9 @@ int adxl371_reset(struct adxl371_dev *dev)
  * 		 ADXL371_INSTANT_ON,
  * 		 ADXL371_FULL_BW_MEASUREMENT
  *
+=======
+
+>>>>>>> c08359952 (accel: adxl371: Add ADXL371 driver)
  * @return 0 in case of success, negative error code otherwise.
  */
 int adxl371_configure_fifo(struct adxl371_dev *dev, enum adxl371_fifo_mode mode,
