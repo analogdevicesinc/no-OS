@@ -381,7 +381,7 @@ int dma_example_main(void)
 		// Transfer done flag
 		.transfer_done = 0,
 		// Signal transfer mode
-		.cyclic = CYCLIC,
+		.cyclic = NO,
 		// Address of data source
 		.src_addr = (uintptr_t)dac_buffer_dma,
 		// Address of data destination
@@ -391,7 +391,7 @@ int dma_example_main(void)
 	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
 		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(dac_buffer_dma),
 		tx_dac_init.num_channels,
-		8 * sizeof(dac_buffer_dma[0]));
+		8 * sizeof(dac_buffer_dma[0]) / 2);
 
 	/* Transfer the data. */
 	axi_dmac_transfer_start(tx_dmac, &transfer);
