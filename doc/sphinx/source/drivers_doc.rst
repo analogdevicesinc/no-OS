@@ -107,6 +107,8 @@ MUX
 
    drivers/mux/*
 
+   drivers/ade9000
+
 RF TRANSCEIVER
 ==============
 .. toctree::
