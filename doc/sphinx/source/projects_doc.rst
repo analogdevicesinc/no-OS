@@ -60,6 +60,8 @@ EVAL BOARDS
 
    projects/eval/*
 
+   projects/fmcdaq3
+
 DIGITAL-IO
 ==========
 .. toctree::
