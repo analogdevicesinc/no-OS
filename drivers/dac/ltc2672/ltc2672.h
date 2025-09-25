@@ -44,9 +44,10 @@
 #define LTC2672_16_DONT_CARE 	0xFFF0
 #define LTC2672_MUX_DONT_CARE 	0xFFFE0
 #define LTC2672_DUMMY		 	0xFFFF
-#define LTC2672_FAULT_REG_MASK	0xFF0000
+#define LTC2672_FAULT_REG_MASK	0xFF000000
 
 /* LTC2672 Constants */
+#define LTC2672_COMMAND_MAX_BYTES       4
 #define LTC2672_BASE_CURRENT 			3.125 // base current in mA
 #define LTC2672_VMINUS_FIXED_CURRENT 	-80	// Fixed V- Current as per data sheet
 #define LTC2672_OFF_CURRENT 			0
@@ -57,9 +58,7 @@
 #define LTC2672_MAX_CONFIG_MASK  		15
 #define LTC2672_MAX_TOGGLE_MASK  		31
 #define LTC2672_BIT_SHIFT_12BIT			4
-#define LTC2672_NUM_MUX_SELECTS			22
 #define LTC2672_NUM_CURRENT_SPANS		10
-#define LTC2672_NUM_FAULTS				7
 
 enum ltc2672_commands {
 	LTC2672_CODE_TO_CHANNEL_X,
@@ -99,6 +98,8 @@ enum ltc2672_commands {
 
 /* Device Family */
 enum ltc2672_device_id {
+	LTC2662_12,
+	LTC2662_16,
 	LTC2672_12,
 	LTC2672_16
 };
@@ -143,7 +144,8 @@ enum ltc2672_mux_commands {
 	LTC2672_MUX_VDD2,
 	LTC2672_MUX_VDD3,
 	LTC2672_MUX_VDD4,
-	LTC2672_MUX_VMINUS = 0X16,
+	LTC2672_MUX_VPLUS, // Not present in LTC2672
+	LTC2672_MUX_VMINUS,
 	LTC2672_MUX_GND,
 	LTC2672_MUX_VOUT0,
 	LTC2672_MUX_VOUT1,
@@ -160,7 +162,7 @@ enum ltc2672_faults {
 	LTC2672_OPEN_OUT3, // Open circuit CH0
 	LTC2672_OPEN_OUT4, // Open circuit CH0
 	LTC2672_OVER_TEMP, // Over-temperature (T > 175 deg C)
-	LTC2672_UNUSED, // Unused fault register bit
+	LTC2672_POW_LIM, // Power limit (VDDX − VOUTX > 10 V), Unused in LTC2672
 	LTC2672_INV_LENGTH, // Invalid SPI Length (len != 24 or 32 * n)
 };
 
@@ -171,6 +173,11 @@ enum ltc2672_faults {
 struct ltc2672_dev {
 	/* SPI descriptor */
 	struct no_os_spi_desc *comm_desc;
+	/* GPIOs */
+	struct no_os_gpio_desc *gpio_clear;
+	struct no_os_gpio_desc *gpio_ldac;
+	struct no_os_gpio_desc *gpio_tgp;
+	struct no_os_gpio_desc *gpio_fault;
 	/* Device Variant indicator */
 	enum ltc2672_device_id id;
 	/* DAC Channel Spans */
@@ -190,15 +197,20 @@ struct ltc2672_dev {
 struct ltc2672_init_param {
 	/* SPI descriptor */
 	struct no_os_spi_init_param spi_init;
+	/* GPIOs */
+	struct no_os_gpio_init_param *gpio_clear;
+	struct no_os_gpio_init_param *gpio_ldac;
+	struct no_os_gpio_init_param *gpio_tgp;
+	struct no_os_gpio_init_param *gpio_fault;
 	/* Device Variant indicator */
 	enum ltc2672_device_id id;
 };
 
-/** Device and communication init function */
-int ltc2672_init(struct ltc2672_dev **, struct ltc2672_init_param *);
-
 /** Free resources allocated by the init function */
 int ltc2672_remove(struct ltc2672_dev *);
+
+/* Perform reset using clear GPIO */
+int ltc2672_reset(struct ltc2672_dev *);
 
 /** Configure LTC2672 and get response */
 int ltc2672_transaction(struct ltc2672_dev *device, uint32_t, bool);
@@ -244,6 +256,14 @@ int ltc2672_monitor_mux(struct ltc2672_dev *, enum ltc2672_mux_commands);
 int ltc2672_setup_toggle_channel(struct ltc2672_dev *, enum ltc2672_dac_ch,
 				 uint32_t, uint32_t);
 
+/** Writes to the input register of a selected DAC channel */
+int ltc2672_write_input_register_channel(struct ltc2672_dev *,
+		enum ltc2672_dac_ch, uint32_t, bool);
+
+/** Writes to the input register of all DAC channels */
+int ltc2672_write_input_register_all_channels(struct ltc2672_dev *, uint32_t,
+		bool);
+
 /** Enable channel/s to toggle */
 int ltc2672_enable_toggle_channel(struct ltc2672_dev *, uint32_t);
 
@@ -252,5 +272,17 @@ int ltc2672_global_toggle(struct ltc2672_dev *, bool);
 
 /** Configures the fault/s to be detected */
 int ltc2672_config_command(struct ltc2672_dev *, uint8_t);
+
+/** Update a selected DAC channel */
+int ltc2672_update_channel(struct ltc2672_dev *, enum ltc2672_dac_ch);
+
+/** Update all DAC channels */
+int ltc2672_update_all_channels(struct ltc2672_dev *);
+
+/** Update all DAC channels using the LDAC pin */
+int ltc2672_hw_ldac_update(struct ltc2672_dev *);
+
+/** Device and communication init function */
+int ltc2672_init(struct ltc2672_dev **, struct ltc2672_init_param *);
 
 #endif // __LTC2672_H__
