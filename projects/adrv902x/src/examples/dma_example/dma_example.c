@@ -56,6 +56,7 @@
 #include "xilinx_spi.h"
 #include "xil_cache.h"
 
+#include "clkgen_routines.h"
 #include "adrv9025.h"
 #include "ad9528.h"
 
@@ -76,6 +77,9 @@ int dma_example_main(void)
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
 	struct ad9528_init_param ad9528_param;
+	struct axi_clkgen *orx_clkgen = NULL;
+	struct axi_clkgen *rx_clkgen = NULL;
+	struct axi_clkgen *tx_clkgen = NULL;
 	struct ad9528_dev* ad9528_device;
 	struct adrv9025_rf_phy *phy;
 	int status;
@@ -308,15 +312,19 @@ int dma_example_main(void)
 		goto error_8;
 	}
 
+	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen);
+	if (status)
+		goto error_9;
+
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init tx init error: %d\n", status);
-		goto error_8;
+		goto error_9;
 	}
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init rx init error: %d\n", status);
-		goto error_9;
+		goto error_10;
 	}
 
 	Xil_DCacheFlush();
@@ -412,7 +420,7 @@ int dma_example_main(void)
 	/* Wait until transfer finishes */
 	status = axi_dmac_transfer_wait_completion(rx_dmac, 1000);
 	if (status)
-		goto error_10;
+		goto error_11;
 
 	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma, sizeof(adc_buffer_dma));
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
@@ -420,10 +428,13 @@ int dma_example_main(void)
 		rx_adc_init.num_channels,
 		8 * sizeof(adc_buffer_dma[0]));
 
-error_10:
+error_11:
 	axi_dmac_remove(rx_dmac);
-error_9:
+error_10:
 	axi_dmac_remove(tx_dmac);
+error_9:
+	if (!status)
+		clkgen_remove(rx_clkgen, tx_clkgen, orx_clkgen);
 error_8:
 	axi_adc_remove(phy->rx_adc);
 error_7:

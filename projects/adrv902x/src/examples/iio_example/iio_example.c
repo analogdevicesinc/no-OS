@@ -57,6 +57,7 @@
 #include "xilinx_spi.h"
 #include "xil_cache.h"
 
+#include "clkgen_routines.h"
 #include "adrv9025.h"
 #include "ad9528.h"
 
@@ -87,6 +88,9 @@ int iio_example_main(void)
 	struct ad9528_platform_data ad9528_pdata = { 0 };
 	struct ad9528_channel_spec ad9528_channels[14];
 	struct ad9528_init_param ad9528_param;
+	struct axi_clkgen *orx_clkgen = NULL;
+	struct axi_clkgen *rx_clkgen = NULL;
+	struct axi_clkgen *tx_clkgen = NULL;
 	struct ad9528_dev* ad9528_device;
 	struct adrv9025_rf_phy *phy;
 	int status;
@@ -325,15 +329,19 @@ int iio_example_main(void)
 	// Set DDS data
 	axi_dac_data_setup(phy->tx_dac);
 
+	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen);
+	if (status)
+		goto error_9;
+
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init tx init error: %d\n", status);
-		goto error_8;
+		goto error_9;
 	}
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if (status) {
 		printf("axi_dmac_init rx init error: %d\n", status);
-		goto error_9;
+		goto error_10;
 	}
 
 	struct jesd204_topology *topology;
@@ -365,7 +373,7 @@ int iio_example_main(void)
 	status = adi_adrv9025_HwOpen(phy->madDevice, &phy->spiSettings);
 	if (status) {
 		pr_err("error: adi_adrv9025_HwOpen() failed\n");
-		goto error_8;
+		goto error_11;
 	}
 
 	jesd204_topology_init(&topology, devs,
@@ -382,7 +390,7 @@ int iio_example_main(void)
 	status = adi_adrv9025_RxGainCtrlModeSet(phy->madDevice, &gainMode, 1);
 	if (status) {
 		printf("adi_adrv9025_RxGainCtrlModeSet failed: %d\n", status);
-		goto error_9;
+		goto error_11;
 	}
 
 	/**
@@ -454,7 +462,7 @@ int iio_example_main(void)
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if (status < 0)
-		goto error_10;
+		goto error_11;
 
 	struct iio_data_buffer read_buff = {
 		.buff = (void *)adc_buffer,
@@ -472,7 +480,7 @@ int iio_example_main(void)
 
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
 	if (status < 0)
-		goto error_11;
+		goto error_12;
 	struct iio_data_buffer write_buff = {
 		.buff = (void *)dac_buffer,
 		.size = sizeof(dac_buffer),
@@ -492,18 +500,21 @@ int iio_example_main(void)
 
 	status = iio_app_init(&app, app_init_param);
 	if (status)
-		goto error_12;
+		goto error_13;
 
 	return iio_app_run(app);
 
-error_12:
+error_13:
 	iio_axi_dac_remove(iio_axi_dac_desc);
-error_11:
+error_12:
 	iio_axi_adc_remove(iio_axi_adc_desc);
-error_10:
+error_11:
 	axi_dmac_remove(rx_dmac);
-error_9:
+error_10:
 	axi_dmac_remove(tx_dmac);
+error_9:
+	if (!status)
+		clkgen_remove(rx_clkgen, tx_clkgen, orx_clkgen);
 error_8:
 	axi_adc_remove(phy->rx_adc);
 error_7:
