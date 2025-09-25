@@ -83,6 +83,9 @@ uint8_t ad77681_compute_xor(uint8_t *data,
 	uint8_t buf[3];
 	uint8_t i;
 
+	if (data_size > 3)
+		return -EINVAL;
+
 	for (i = 0; i < data_size; i++) {
 		buf[i] = *data;
 		crc ^= buf[i];
@@ -445,7 +448,8 @@ int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 
 	/* Finding out decimation ratio */
 	switch (dev->filter) {
-	case (AD77681_SINC5 | AD77681_FIR):
+	case AD77681_SINC5:
+	case AD77681_FIR:
 		/* Decimation ratio of FIR or SINC5 (x32 to x1024) */
 		switch (dev->decimate) {
 		case AD77681_SINC5_FIR_DECx32:
@@ -1776,7 +1780,6 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->vref = init_param.vref;
 	dev->mclk = init_param.mclk;
 	dev->sample_rate = init_param.sample_rate;
-	dev->data_frame_byte = init_param.data_frame_byte;
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
 	if (ret < 0) {
