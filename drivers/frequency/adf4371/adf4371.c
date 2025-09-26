@@ -575,9 +575,8 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
 	if (dev->spi_3wire_en)
 		en = false;
 
-	ret = adf4371_update(dev, ADF4371_REG(0x0),
-			     ADF4371_SDO_ACT_MSK | ADF4371_SDO_ACT_R_MSK,
-			     ADF4371_SDO_ACT(en) | ADF4371_SDO_ACT_R(en));
+	ret = adf4371_write(dev, ADF4371_REG(0x0),
+			    ADF4371_SDO_ACT(en) | ADF4371_SDO_ACT_R(en));
 	if (ret < 0)
 		return ret;
 
