@@ -4,8 +4,8 @@ DMA_EXAMPLE = n
 IIO_EXAMPLE = y
 
 # Select by placing y for the use of the desired profile
-JESD204B_NO_ORX_PROFILE = n
-JESD204B_ORX_PROFILE = y
+JESD204B_NO_ORX_PROFILE = y
+JESD204B_ORX_PROFILE = n
 
 # Uncomment to use the desired platform
 PLATFORM = xilinx
