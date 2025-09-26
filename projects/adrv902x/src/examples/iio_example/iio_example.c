@@ -208,14 +208,14 @@ int iio_example_main(void)
 	struct axi_adc_init rx_adc_init = {
 		.name = "rx_adc",
 		.base = RX_CORE_BASEADDR,
-		.num_channels = 8
+		.num_channels = ADRV9025_RX_JESD_CONVS_PER_DEVICE
 	};
 	struct axi_dac_init tx_dac_init = {
 		.name = "tx_dac",
 		.base = TX_CORE_BASEADDR,
 		.channels = NULL,
 		.rate = 3,
-		.num_channels = 8
+		.num_channels = ADRV9025_TX_JESD_CONVS_PER_DEVICE
 	};
 
 	struct jesd204_tx_init tx_jesd_init = {

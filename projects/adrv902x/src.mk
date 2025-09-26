@@ -22,8 +22,15 @@ INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/firmware/ADRV9025_DPDCORE_FW.h \
 	$(PROJECT)/src/common/firmware/ADRV9025_FW.h \
 	$(PROJECT)/src/common/firmware/ADRV9025_stream_image.h \
-	$(PROJECT)/src/common/firmware/ActiveUseCase_profile.h \
 	$(PROJECT)/src/common/firmware/ActiveUtilInit_profile.h
+
+ifeq (y,$(strip $(JESD204B_NO_ORX_PROFILE)))
+INCS += $(PROJECT)/src/common/firmware/JESD204B_no_ORx/ActiveUseCase_profile.h
+else
+ifeq (y,$(strip $(JESD204B_ORX_PROFILE)))
+INCS += $(PROJECT)/src/common/firmware/JESD204B_ORx/ActiveUseCase_profile.h
+endif
+endif
 
 SRCS += $(PROJECT)/src/common/common_data.c \
 	$(PROJECT)/src/common/clkgen_routines.c \
