@@ -62,7 +62,7 @@
 /***************************************************************************//**
  * @brief Basic example main execution.
  *
- * @return ret - Result of the example execution.
+ * @return status - Result of the example execution.
 *******************************************************************************/
 int basic_example_main(void)
 {
