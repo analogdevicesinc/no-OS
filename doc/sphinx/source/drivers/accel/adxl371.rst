@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/accel/adxl371/README.rst
