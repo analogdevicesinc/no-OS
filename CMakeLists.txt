@@ -170,6 +170,15 @@ endif()
 target_compile_options(no-os PRIVATE -Wall)
 target_link_options(no-os PRIVATE -Wl,--gc-sections)
 
+# Collect all Kconfig files for dependency tracking
+file(GLOB_RECURSE ALL_KCONFIG_FILES
+  ${CMAKE_CURRENT_SOURCE_DIR}/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/*/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/*/*/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/*/*/*/Kconfig
+  ${CMAKE_CURRENT_SOURCE_DIR}/*/*/*/*/Kconfig
+)
+
 set_property(
   DIRECTORY
   APPEND
@@ -177,6 +186,7 @@ set_property(
   ${DEFAULT_DEFCONFIG}
   ${CMAKE_CURRENT_BINARY_DIR}/config.cmake
   ${CMAKE_CURRENT_BINARY_DIR}/.config
+  ${ALL_KCONFIG_FILES}
 )
 
 if(IS_FRESH_CONFIGURE)
@@ -226,7 +236,7 @@ add_custom_command(
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}
 
-    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
+    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py ${ALL_KCONFIG_FILES}
     COMMENT "Generating CMake config variables from .config"
 )
 

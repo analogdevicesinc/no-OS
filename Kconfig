@@ -30,3 +30,4 @@ config USB_UART
 source "iio/Kconfig"
 source "drivers/Kconfig"
 source "libraries/Kconfig"
+source "projects/Kconfig"

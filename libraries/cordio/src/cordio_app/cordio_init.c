@@ -129,8 +129,8 @@ static void mainWsfInit(void)
 
 	uint32_t memUsed;
 	WsfCsEnter();
-	memUsed = WsfBufIoUartInit(WsfHeapGetFreeStartAddress(),
-				   PLATFORM_UART_TERMINAL_BUFFER_SIZE);
+	// memUsed = WsfBufIoUartInit(WsfHeapGetFreeStartAddress(),
+	// 			   PLATFORM_UART_TERMINAL_BUFFER_SIZE);
 	WsfHeapAlloc(memUsed);
 	WsfCsExit();
 
@@ -156,8 +156,8 @@ static void mainWsfInit(void)
 	WsfHeapAlloc(memUsed);
 	WsfCsExit();
 
-	// WsfOsInit();
-	// WsfTimerInit();
+	WsfOsInit();
+	WsfTimerInit();
 #if (WSF_TOKEN_ENABLED == TRUE) || (WSF_TRACE_ENABLED == TRUE)
 	WsfTraceRegisterHandler(WsfBufIoWrite);
 	WsfTraceEnable(TRUE);
@@ -176,7 +176,8 @@ static void mainWsfInit(void)
 				.freeMemAvail = WsfHeapCountAvailable()
 			      };
 
-	memUsed = LlInit(&llCfg);
+	// memUsed = LlInit(&llCfg);
+	memUsed = LlInitControllerInit(&llCfg);
 	WsfHeapAlloc(memUsed);
 	WsfCsExit();
 

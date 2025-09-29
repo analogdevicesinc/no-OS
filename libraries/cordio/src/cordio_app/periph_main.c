@@ -40,6 +40,8 @@
 #include "app_ui.h"
 #include "svc_ch.h"
 #include "svc_core.h"
+#include "svc_batt.h"
+#include "svc_dis.h"
 #include "svc_wp.h"
 #include "util/calc128.h"
 #include "gatt/gatt_api.h"
