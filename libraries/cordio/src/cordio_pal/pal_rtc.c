@@ -47,3 +47,22 @@ uint32_t PalRtcCounterGet(void)
 {
 	return 0;
 }
+
+void PalRtcCompareSet(uint8_t channelId, uint32_t value)
+{
+	// Stub implementation for RTC compare
+	(void)channelId;
+	(void)value;
+}
+
+void PalRtcEnableCompareIrq(uint8_t channelId)
+{
+	// Stub implementation for enabling RTC compare interrupt
+	(void)channelId;
+}
+
+void PalRtcDisableCompareIrq(uint8_t channelId)
+{
+	// Stub implementation for disabling RTC compare interrupt
+	(void)channelId;
+}

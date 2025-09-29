@@ -58,8 +58,8 @@ static const struct max_uart_init_param uart_extra_ip = {
 };
 
 static const struct no_os_uart_init_param hci_uart_ip = {
-	.device_id = 2,
-	.irq_id = UART2_IRQn,
+	.device_id = 3,
+	.irq_id = UART3_IRQn,
 	.asynchronous_rx = true,
 	.baud_rate = 1000000,
 	.size = NO_OS_UART_CS_8,
@@ -70,8 +70,8 @@ static const struct no_os_uart_init_param hci_uart_ip = {
 };
 
 static const struct no_os_uart_init_param terminal_uart_ip = {
-	.device_id = 0,
-	.irq_id = UART0_IRQn,
+	.device_id = 2,
+	.irq_id = UART2_IRQn,
 	.asynchronous_rx = true,
 	.baud_rate = 9600,
 	.size = NO_OS_UART_CS_8,

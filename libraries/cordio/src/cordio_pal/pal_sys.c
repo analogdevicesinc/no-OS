@@ -38,6 +38,7 @@
 *******************************************************************************/
 #include "pal_sys.h"
 #include "max32690.h"
+#include "wsf_types.h"
 
 void LED_On()
 {
@@ -72,4 +73,57 @@ void PalExitCs()
 void PalSysInit()
 {
 	return;
+}
+
+static uint32_t palSysBusyCount = 0;
+
+void PalSysSetBusy(void)
+{
+	PalEnterCs();
+	palSysBusyCount++;
+	PalExitCs();
+}
+
+void PalSysSetIdle(void)
+{
+	PalEnterCs();
+	if (palSysBusyCount) {
+		palSysBusyCount--;
+	}
+	PalExitCs();
+}
+
+void PalSysSetTrap(bool_t enable)
+{
+	// Stub implementation
+	(void)enable;
+}
+
+uint32_t PalSysGetStackUsage(void)
+{
+	// Return a dummy value for stack usage
+	return 0;
+}
+
+uint32_t PalSysGetAssertCount(void)
+{
+	// Return a dummy assert count
+	return 0;
+}
+
+bool_t PalSysIsBusy(void)
+{
+	// Check if system is busy based on our busy count
+	return (palSysBusyCount > 0) ? TRUE : FALSE;
+}
+
+void PalSysSleep(void)
+{
+	// Simple sleep implementation using ARM Wait For Interrupt
+	// __WFI(); // Wait For Interrupt - ARM Cortex-M instruction
+}
+
+void PalLedDeInit(void)
+{
+	// Stub implementation for LED de-initialization
 }

@@ -82,7 +82,10 @@ set(CORDIO_PLATFORM_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/stack_periph.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_rtc.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_sys.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_codec.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_uart.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_flash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_btn.c
 )
 list(APPEND CORDIO_SOURCES ${CORDIO_PLATFORM_SOURCES})
 
@@ -92,7 +95,7 @@ if(CORDIO_SOURCES)
 endif()
 
 # Add compile definitions
-target_compile_definitions(no-os PRIVATE
+target_compile_definitions(no-os PUBLIC
     BT_ENABLED
     CHCI_TR_UART=1
     HCI_TR_EXACTLE=1
