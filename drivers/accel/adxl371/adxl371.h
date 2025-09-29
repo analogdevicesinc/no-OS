@@ -439,7 +439,7 @@ int32_t adxl371_set_activity_threshold(struct adxl371_dev *dev,
 				       uint16_t thresh,
 				       bool referenced,
 				       bool enable);
-enum adxl371_op_mode adxl371_get_op_mode( struct adxl371_dev *dev);
+enum adxl371_op_mode adxl371_get_op_mode(struct adxl371_dev *dev);
 int32_t adxl371_set_op_mode(struct adxl371_dev *dev,
 			    enum adxl371_op_mode op_mode);
 int32_t adxl371_set_autosleep(struct adxl371_dev *dev, bool enable);

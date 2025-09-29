@@ -182,7 +182,7 @@ int32_t adxl371_set_op_mode(struct adxl371_dev *dev,
  * @param dev ADXL device data structure
  * @return enum adxl371_op_mode
  */
-enum adxl371_op_mode adxl371_get_op_mode( struct adxl371_dev *dev)
+enum adxl371_op_mode adxl371_get_op_mode(struct adxl371_dev *dev)
 {
 	uint8_t reg_data;
 	adxl371_read_reg(dev, ADXL371_POWER_CTL, &reg_data);
@@ -594,7 +594,7 @@ int32_t adxl371_set_internal_sync(struct adxl371_dev *dev)
  */
 bool adxl371_get_internal_sync(struct adxl371_dev *dev)
 {
-	uint8_t timing_reg=0x0;
+	uint8_t timing_reg = 0x0;
 	adxl371_read_reg(dev, ADXL371_TIMING, &timing_reg);
 
 	return (!(timing_reg && 1));
