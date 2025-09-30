@@ -112,7 +112,7 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
 	.extra = &(struct max_gpio_init_param){
-		.vssel = 1
+		.vssel =0
 	},
 };
 
@@ -126,7 +126,7 @@ const struct no_os_spi_init_param adin1110_spi_ip = {
 	.extra = &(struct max_spi_init_param){
         .num_slaves = 1,
         .polarity = SPI_SS_POL_LOW,
-        .vssel = MXC_GPIO_VSSEL_VDDIOH,
+        .vssel = MXC_GPIO_VSSEL_VDDIO,
     },
 };
 
