@@ -28,6 +28,14 @@ ACCELEROMETERS
 
    projects/accel/*
 
+ANALOG FRONT-ENDS
+=================
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/afe/*
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
