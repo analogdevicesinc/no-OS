@@ -387,15 +387,17 @@ int dma_example_main(void)
 		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 #endif
 
-	status = adrv9025_post_setup(phy);
-	if (status) {
-		pr_err("error: adrv9025_post_setup() failed\n");
-		goto error_11;
-	}
+	no_os_mdelay(100);
 
 	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen);
 	if (status)
+		goto error_11;
+
+	status = adrv9025_post_setup(phy);
+	if (status) {
+		pr_err("error: adrv9025_post_setup() failed\n");
 		goto error_12;
+	}
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status) {
