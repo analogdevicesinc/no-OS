@@ -113,7 +113,7 @@ int ad7124_app_main(void)
 
     temp_api_handle_t temp_handle = {
         .calib_value = {
-            .gain = 1,
+            .gain = 16,
             .offset = 0
         },
     };
