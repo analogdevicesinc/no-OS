@@ -376,15 +376,17 @@ int basic_example_main(void)
 		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 #endif
 
-	status = adrv9025_post_setup(phy);
-	if (status) {
-		pr_err("error: adrv9025_post_setup() failed\n");
-		goto error_11;
-	}
+	no_os_mdelay(100);
 
 	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen);
 	if (status)
+		goto error_11;
+
+	status = adrv9025_post_setup(phy);
+	if (status) {
+		pr_err("error: adrv9025_post_setup() failed\n");
 		goto error_12;
+	}
 
 	// Set DDS data
 	axi_dac_data_setup(phy->tx_dac);
