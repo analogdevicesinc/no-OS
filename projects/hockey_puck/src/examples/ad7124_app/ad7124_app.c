@@ -66,15 +66,15 @@ static const struct ad7124_init_param ad7124_ip = {
 	.mode = AD7124_CONTINUOUS,
 	.active_device = ID_AD7124_4,
 	.ref_en = true,
-	.power_mode = AD7124_HIGH_POWER,
+	.power_mode = AD7124_MID_POWER,
 	.setups = {
 		/* Configuration for setup 0 only */
 		{
 			.bi_unipolar = AD7124_BIPOLAR_MODE,
 			.ref_buff = AD7124_BUFF_REF,
 			.ain_buff = AD7124_BUFF_AIN,
-            .pga = AD7124_PGA_16,
-            .ref_source = EXTERNAL_REFIN1,
+			.pga = AD7124_PGA_16,
+			.ref_source = EXTERNAL_REFIN1,
 		},
 	},
 	.chan_map = {
@@ -83,9 +83,9 @@ static const struct ad7124_init_param ad7124_ip = {
 			.channel_enable = AD7124_CH0_ENABLE,
 			.setup_sel = AD7124_CH0_SETUP_SEL,
 			.ain = {
-                .ainp = AD7124_AIN1,
-                .ainm = AD7124_AIN3,
-            },
+				.ainp = AD7124_AIN1,
+				.ainm = AD7124_AIN3,
+			},
 		},
 	},
 };
@@ -97,127 +97,134 @@ static const struct ad7124_init_param ad7124_ip = {
 *******************************************************************************/
 int ad7124_app_main(void)
 {
-    struct no_os_uart_desc *uart_desc;
-    struct ad7124_dev *dev;         /* A driver handle to pass around */
-    enum ad7124_registers reg_nr;   /* Variable to iterate through registers */
-    uint32_t timeout = 10000;       /* Conversion wait timeout */
-    int32_t ret = 0;                /* Return value */
-    int32_t sample;                 /* Stores raw value read from the ADC */
-    uint32_t ch_id;                 /* Conversion channel ID */
-    float temperature;
+	struct no_os_uart_desc *uart_desc;
+	struct ad7124_dev *dev;         /* A driver handle to pass around */
+	enum ad7124_registers reg_nr;   /* Variable to iterate through registers */
+	uint32_t timeout = 10000;       /* Conversion wait timeout */
+	int32_t ret = 0;                /* Return value */
+	int32_t sample;                 /* Stores raw value read from the ADC */
+	uint32_t ch_id;                 /* Conversion channel ID */
+	float temperature;
 
-    temp_convert_t temperature_config = {
-        .input = TEMP_UNIT_LSB_RAW,
-        .output = TEMP_UNIT_CELSIUS,
-    };
+	temp_convert_t temperature_config = {
+		.input = TEMP_UNIT_LSB_RAW,
+		.output = TEMP_UNIT_CELSIUS,
+	};
 
-    temp_api_handle_t temp_handle = {
-        .calib_value = {
-            .gain = 16,
-            .offset = 0
-        },
-    };
+	temp_api_handle_t temp_handle = {
+		.calib_value = {
+			.gain = 16,
+			.offset = 0
+		},
+	};
 
-    ret = no_os_uart_init(&uart_desc, &uart_ip);
-    if (ret)
-        return ret;
+	ret = no_os_uart_init(&uart_desc, &uart_ip);
+	if (ret)
+		return ret;
 
-    no_os_uart_stdio(uart_desc);
+	no_os_uart_stdio(uart_desc);
 
-    printf("AD7124-4 Example Application\n\r");
+	printf("AD7124-4 Example Application\n\r");
 
-    /* Initialize AD7124 device */
-    ret = ad7124_setup(&dev, &ad7124_ip);
-    if (ret != 0)
-        return ret;
+	/* Initialize AD7124 device */
+	ret = ad7124_setup(&dev, &ad7124_ip);
+	if (ret != 0)
+		return ret;
 
-    /* Set PGA gain to 16 for setup 0 */
-    ret = ad7124_reg_write_msk(dev, AD7124_CFG0_REG, AD7124_CFG_REG_PGA(4), AD7124_CFG_REG_PGA(0x7));
-    if (ret != 0)
-        return ret;
+	/* Set PGA gain to 16 for setup 0 */
+	ret = ad7124_reg_write_msk(dev, AD7124_CFG0_REG, AD7124_CFG_REG_PGA(4),
+				   AD7124_CFG_REG_PGA(0x7));
+	if (ret != 0)
+		return ret;
 
-    /* Enable excitation current 250uA on AIN0 */
-    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT0(3), AD7124_IO_CTRL1_REG_IOUT0(0x7));
-    if (ret != 0)
-        return ret;
+	/* Enable excitation current 250uA on AIN0 */
+	ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT0(3),
+				   AD7124_IO_CTRL1_REG_IOUT0(0x7));
+	if (ret != 0)
+		return ret;
 
-    /* Set IOUT1 on AIN4 */
-    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT_CH1(4), AD7124_IO_CTRL1_REG_IOUT_CH1(0xF));
-    if (ret != 0)
-        return ret;
+	/* Set IOUT1 on AIN4 */
+	ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT_CH1(4),
+				   AD7124_IO_CTRL1_REG_IOUT_CH1(0xF));
+	if (ret != 0)
+		return ret;
 
-    /* Enable excitation current 250uA on AIN4 */
-    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT1(3), AD7124_IO_CTRL1_REG_IOUT1(0x7));
-    if (ret != 0)
-        return ret;
+	/* Enable excitation current 250uA on AIN4 */
+	ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT1(3),
+				   AD7124_IO_CTRL1_REG_IOUT1(0x7));
+	if (ret != 0)
+		return ret;
 
-    ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_PDSW, AD7124_IO_CTRL1_REG_PDSW);
-    if (ret != 0)
-        return ret;
+	ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_PDSW,
+				   AD7124_IO_CTRL1_REG_PDSW);
+	if (ret != 0)
+		return ret;
 
-    /* Enable saturation error diagnostic */
-    ad7124_regs[AD7124_Error_En].value = 0x10000;
+	/* Enable saturation error diagnostic */
+	ad7124_regs[AD7124_Error_En].value = 0x10000;
 
-    ret = ad7124_write_register(dev, ad7124_regs[AD7124_Error_En]);
-    if (ret != 0)
-        return ret;
+	ret = ad7124_write_register(dev, ad7124_regs[AD7124_Error_En]);
+	if (ret != 0)
+		return ret;
 
-    /* Read all registers for sanity */
-    for (reg_nr = AD7124_Status; (reg_nr < AD7124_REG_NO) && !(ret < 0); reg_nr++) {
-        ret = ad7124_read_register(dev, &ad7124_regs[reg_nr]);
-        if (ret != 0)
-            return ret;
-    }
+	/* Read all registers for sanity */
+	for (reg_nr = AD7124_Status; (reg_nr < AD7124_REG_NO) && !(ret < 0); reg_nr++) {
+		ret = ad7124_read_register(dev, &ad7124_regs[reg_nr]);
+		if (ret != 0)
+			return ret;
+	}
 
-    // ret = ad7124_set_odr(dev, 50, 0);
-    // if (ret != 0)
-    //     return ret;
+	// ret = ad7124_set_odr(dev, 50, 0);
+	// if (ret != 0)
+	//     return ret;
 
-    printf("    AD7124_ID: 0x%08x\n\r", ad7124_regs[AD7124_ID].value);
-    printf("    AD7124_Status: 0x%08x\n\r", ad7124_regs[AD7124_Status].value);
-    printf("    AD7124_ADC_Control: 0x%08x\n\r", ad7124_regs[AD7124_ADC_Control].value);
-    printf("    AD7124_IOCon1: 0x%08x\n\r", ad7124_regs[AD7124_IOCon1].value);
-    printf("    AD7124_IOCon2: 0x%08x\n\r", ad7124_regs[AD7124_IOCon2].value);
-    printf("    AD7124_Channel_0: 0x%08x\n\r", ad7124_regs[AD7124_Channel_0].value);
-    printf("    AD7124_Channel_1: 0x%08x\n\r", ad7124_regs[AD7124_Channel_1].value);
-    printf("    AD7124_Config_0: 0x%08x\n\r", ad7124_regs[AD7124_Config_0].value);
-    printf("    AD7124_Config_1: 0x%08x\n\r", ad7124_regs[AD7124_Config_1].value);
-    printf("    AD7124_Offset_0: 0x%08x\n\r", ad7124_regs[AD7124_Offset_0].value);
-    printf("    AD7124_Gain_0: 0x%08x\n\r", ad7124_regs[AD7124_Gain_0].value);
-    printf("    AD7124_Error_En: 0x%08x\n\r", ad7124_regs[AD7124_Error_En].value);
-    printf("    AD7124_Error: 0x%08x\n\r", ad7124_regs[AD7124_Error].value);
+	printf("    AD7124_ID: 0x%08x\n\r", ad7124_regs[AD7124_ID].value);
+	printf("    AD7124_Status: 0x%08x\n\r", ad7124_regs[AD7124_Status].value);
+	printf("    AD7124_ADC_Control: 0x%08x\n\r",
+	       ad7124_regs[AD7124_ADC_Control].value);
+	printf("    AD7124_IOCon1: 0x%08x\n\r", ad7124_regs[AD7124_IOCon1].value);
+	printf("    AD7124_IOCon2: 0x%08x\n\r", ad7124_regs[AD7124_IOCon2].value);
+	printf("    AD7124_Channel_0: 0x%08x\n\r", ad7124_regs[AD7124_Channel_0].value);
+	printf("    AD7124_Channel_1: 0x%08x\n\r", ad7124_regs[AD7124_Channel_1].value);
+	printf("    AD7124_Config_0: 0x%08x\n\r", ad7124_regs[AD7124_Config_0].value);
+	printf("    AD7124_Config_1: 0x%08x\n\r", ad7124_regs[AD7124_Config_1].value);
+	printf("    AD7124_Offset_0: 0x%08x\n\r", ad7124_regs[AD7124_Offset_0].value);
+	printf("    AD7124_Gain_0: 0x%08x\n\r", ad7124_regs[AD7124_Gain_0].value);
+	printf("    AD7124_Error_En: 0x%08x\n\r", ad7124_regs[AD7124_Error_En].value);
+	printf("    AD7124_Error: 0x%08x\n\r", ad7124_regs[AD7124_Error].value);
 
-    printf("Conversion results:\n\r");
+	printf("Conversion results:\n\r");
 
-    while (1) {
-        /* Wait for conversion */
-        ret = ad7124_wait_for_conv_ready(dev, timeout);
+	while (1) {
+		/* Wait for conversion */
+		ret = ad7124_wait_for_conv_ready(dev, timeout);
 
-        if (ret != 0)
-            return ret;
+		if (ret != 0)
+			return ret;
 
-        /* Read data from the ADC */
-        sample = 0xffffffff;
-        ret = ad7124_read_data(dev, &sample);
+		/* Read data from the ADC */
+		sample = 0xffffffff;
+		ret = ad7124_read_data(dev, &sample);
 
-        if (ret != 0)
-            return ret;
+		if (ret != 0)
+			return ret;
 
-        /* Read channel ID and error from the last conversion */
+		/* Read channel ID and error from the last conversion */
 		ret = ad7124_get_read_chan_id(dev, &ch_id);
 
-        if (ret != 0)
-            return ret;
+		if (ret != 0)
+			return ret;
 
-        ret = ad7124_read_register(dev, &ad7124_regs[AD7124_Error]);
+		ret = ad7124_read_register(dev, &ad7124_regs[AD7124_Error]);
 
-        if (ret != 0)
-            return ret;
+		if (ret != 0)
+			return ret;
 
-        ret = conversion(&temp_handle, &temperature_config, &sample, &temperature);
+		ret = conversion(&temp_handle, &temperature_config, &sample, &temperature);
 
-        printf("    Channel %d, TEMP = %.3f (C) ERROR = 0x%08x\n", ch_id, temperature, ad7124_regs[AD7124_Error].value);
+		printf("    Channel %d, TEMP = %.3f (C) ERROR = 0x%08x\n", ch_id, temperature,
+		       ad7124_regs[AD7124_Error].value);
 
-        no_os_mdelay(500);
-    }
+		no_os_mdelay(500);
+	}
 }
