@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/rf-transceiver/hmc630x/README.rst
