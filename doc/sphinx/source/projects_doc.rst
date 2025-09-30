@@ -92,6 +92,8 @@ TEMPERATURE
 
    projects/temperature/*
 
+   projects/adt75
+
 GYROSCOPES
 ============
 .. toctree::
