@@ -34,10 +34,6 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
-//#define IIO_SUPPORT
-
-//#define DMA_EXAMPLE
-
 #ifdef PLATFORM_MB
 #define UART_BAUDRATE                                   115200
 #else

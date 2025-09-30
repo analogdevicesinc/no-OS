@@ -96,7 +96,6 @@
 #if defined(DMA_EXAMPLE) || defined(IIO_SUPPORT)
 #define DAC_BUFFER_SAMPLES              8192
 #define ADC_BUFFER_SAMPLES              16384
-#define ADC_CHANNELS                    4
 #endif
 
 #define AD9528_CS			1
