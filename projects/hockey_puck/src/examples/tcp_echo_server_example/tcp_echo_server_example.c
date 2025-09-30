@@ -52,7 +52,8 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	.number = ADIN1110_RESET_PIN,
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
-	.extra = &(struct max_gpio_init_param){
+	.extra = &(struct max_gpio_init_param)
+	{
 		.vssel = 0
 	},
 };
