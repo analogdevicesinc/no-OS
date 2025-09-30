@@ -90,6 +90,33 @@ static const struct ad7124_init_param ad7124_ip = {
 	},
 };
 
+static int ad7124_calibrate(struct ad7124_dev *ad7124)
+{
+	uint32_t timeout = 100000;
+	int ret;
+
+	printf("Performing ADC calibration...\n");
+	ret = ad7124_set_adc_mode(ad7124, AD7124_IN_FULL_SCALE_GAIN);
+	if (ret)
+		return ret;
+
+	ret = ad7124_wait_for_conv_ready(ad7124, timeout);
+	if (ret)
+		return ret;
+
+	ret = ad7124_set_adc_mode(ad7124, AD7124_IN_ZERO_SCALE_OFF);
+	if (ret)
+		return ret;
+
+	ret = ad7124_wait_for_conv_ready(ad7124, timeout);
+	if (ret)
+		return ret;
+
+	printf("Calibration done!\n");
+
+	return 0;
+}
+
 /***************************************************************************//**
  * @brief Basic example main execution.
  *
@@ -136,6 +163,10 @@ int ad7124_app_main(void)
 				   AD7124_CFG_REG_PGA(0x7));
 	if (ret != 0)
 		return ret;
+
+	ret = ad7124_calibrate(dev);
+	if (ret)
+		printf("ADC calibration failed! (%d)\n", ret);
 
 	/* Enable excitation current 250uA on AIN0 */
 	ret = ad7124_reg_write_msk(dev, AD7124_IOCon1, AD7124_IO_CTRL1_REG_IOUT0(3),
@@ -194,6 +225,10 @@ int ad7124_app_main(void)
 	printf("    AD7124_Error: 0x%08x\n\r", ad7124_regs[AD7124_Error].value);
 
 	printf("Conversion results:\n\r");
+
+	ret = ad7124_set_adc_mode(dev, AD7124_CONTINUOUS);
+	if (ret)
+		return ret;
 
 	while (1) {
 		/* Wait for conversion */
