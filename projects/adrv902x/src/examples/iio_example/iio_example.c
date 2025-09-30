@@ -67,8 +67,8 @@
 
 
 uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
-uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
-			aligned(1024)));
+uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADRV9025_RX_JESD_CONVS_PER_DEVICE]
+__attribute__((aligned(1024)));
 
 /***************************************************************************//**
  * @brief Set AGC parameters in initialization structure.
