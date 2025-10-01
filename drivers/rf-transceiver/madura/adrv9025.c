@@ -479,9 +479,12 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 		lnk->scrambling = framer->scramble;
 		lnk->bits_per_sample = framer->jesd204Np;
 		lnk->converter_resolution = framer->jesd204Np;
+		lnk->num_of_multiblocks_in_emb = framer->jesd204E;
 		lnk->ctrl_bits_per_sample = 0;
 		lnk->jesd_version = framer->enableJesd204C ? JESD204_VERSION_C :
 				    JESD204_VERSION_B;
+		lnk->jesd_encoder = framer->enableJesd204C ? JESD204_ENCODER_64B66B :
+				    JESD204_ENCODER_8B10B;
 		lnk->subclass = JESD204_SUBCLASS_1;
 		lnk->is_transmit = false;
 		for (id = 0; id < lnk->num_lanes; id++)
@@ -496,9 +499,12 @@ static int adrv9025_jesd204_link_init(struct jesd204_dev *jdev,
 		lnk->scrambling = deframer->scramble;
 		lnk->bits_per_sample = deframer->jesd204Np;
 		lnk->converter_resolution = deframer->jesd204Np;
+		lnk->num_of_multiblocks_in_emb = deframer->jesd204E;
 		lnk->ctrl_bits_per_sample = 0;
 		lnk->jesd_version = deframer->enableJesd204C ? JESD204_VERSION_C :
 				    JESD204_VERSION_B;
+		lnk->jesd_encoder = deframer->enableJesd204C ? JESD204_ENCODER_64B66B :
+				    JESD204_ENCODER_8B10B;
 		lnk->subclass = JESD204_SUBCLASS_1;
 		lnk->is_transmit = true;
 		for (id = 0; id < lnk->num_lanes; id++)
@@ -824,10 +830,15 @@ static int adrv9025_jesd204_link_running(struct jesd204_dev *jdev,
 		if (ret)
 			return adrv9025_dev_err(phy);
 
-
-		if ((framerStatus.status & 0x0F) != 0x0A)
-			pr_warning("Link%u framerStatus 0x%X\n",
-				   lnk->link_id, framerStatus.status);
+		if (lnk->jesd_version != JESD204_VERSION_C) {
+			if ((framerStatus.status & 0x0F) != 0x0A)
+				pr_warning("Link%u framerStatus 0x%X",
+					   lnk->link_id, framerStatus.status);
+		} else {
+			if (framerStatus.status != 0x01)
+				pr_warning("Link%u framerStatus 0x%X",
+					   lnk->link_id, framerStatus.status);
+		}
 	} else {
 		ret = adi_adrv9025_DeframerStatusGet(phy->madDevice,
 						     priv->link[lnk->link_id].source_id, &deframerStatus);
@@ -841,9 +852,15 @@ static int adrv9025_jesd204_link_running(struct jesd204_dev *jdev,
 		if (ret)
 			return adrv9025_dev_err(phy);
 
-		if ((deframerStatus.status & 0x7F) != 0x7) /* Ignore Valid ILAS checksum */
-			pr_warning("Link%u deframerStatus 0x%X\n",
-				   lnk->link_id, deframerStatus.status);
+		if (lnk->jesd_version != JESD204_VERSION_C) {
+			if ((deframerStatus.status & 0x7F) != 0x7) /* Ignore Valid ILAS checksum */
+				pr_warning("Link%u deframerStatus 0x%X",
+					   lnk->link_id, deframerStatus.status);
+		} else {
+			if ((deframerStatus.status & 0x7) != 0x6)
+				pr_warning("Link%u deframerStatus 0x%X",
+					   lnk->link_id, deframerStatus.status);
+		}
 
 		/* Kick off SERDES tracking cal if lanes are up */
 		ret = adi_adrv9025_TrackingCalsEnableSet(
@@ -853,10 +870,8 @@ static int adrv9025_jesd204_link_running(struct jesd204_dev *jdev,
 			return adrv9025_dev_err(phy);
 	};
 
-
 	return JESD204_STATE_CHANGE_DONE;
 }
-
 
 static int adrv9025_jesd204_post_running_stage(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason)
