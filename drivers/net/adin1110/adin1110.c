@@ -1002,6 +1002,7 @@ int adin1110_init(struct adin1110_desc **desc,
 
 	if (descriptor->oa_tc6_spi) {
 		oa_param.comm_desc = descriptor->comm_desc;
+		oa_param.prote_spi = param->oa_tc6_prote;
 		ret = oa_tc6_init(&descriptor->oa_desc, &oa_param);
 		if (ret)
 			goto free_spi;

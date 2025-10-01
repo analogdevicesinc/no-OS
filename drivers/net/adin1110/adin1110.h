@@ -225,6 +225,7 @@ struct adin1110_init_param {
 	uint8_t mac_address[ADIN1110_ETH_ALEN];
 	bool append_crc;
 	bool oa_tc6_spi;
+	bool oa_tc6_prote;
 };
 
 /**
