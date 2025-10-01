@@ -128,7 +128,7 @@ const LV_ATTRIBUTE_MEM_ALIGN uint8_t star_wars_logo[] = {
 };
 
 void my_flush_cb(lv_display_t * disp, const lv_area_t * area,
-		 lv_color_t * color_p)
+		 uint8_t * color_p)
 {
 	int ret;
 
@@ -151,7 +151,7 @@ int display_task()
 {
 	int ret;
 	lv_init();
-	memset(display_buffer[8], 0x00, sizeof(display_buffer) - 8);
+	memset(&display_buffer[8], 0x00, sizeof(display_buffer) - 8);
 	lv_display_t * disp = lv_display_create(SSD1306_HOR_REZ, SSD1306_VER_REZ);
 	lv_display_set_flush_cb(disp, my_flush_cb);
 	lv_display_set_buffers(disp, display_buffer, NULL, sizeof(display_buffer),
@@ -243,7 +243,7 @@ void startup_screen()
 	}
 	lv_display_t * disp = lv_display_get_default();
 	lv_area_t area = {0, 0, SSD1306_HOR_REZ - 1, SSD1306_VER_REZ - 1};
-	my_flush_cb(disp, &area, (lv_color_t *)&display_buffer[8]);
+	my_flush_cb(disp, &area, &display_buffer[8]);
 	no_os_mdelay(5000);
 	lv_refr_now(NULL);
 }

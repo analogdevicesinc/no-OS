@@ -40,6 +40,7 @@
 #include "no_os_delay.h"
 #include "no_os_i2c.h"
 #include "maxim_i2c.h"
+#include "example.h"
 
 extern struct display_dev *oled_display;
 extern struct no_os_i2c_desc *oled_display_i2c_desc;
