@@ -29,6 +29,10 @@ INCS += $(PROJECT)/src/common/firmware/JESD204B_no_ORx/ActiveUseCase_profile.h
 else
 ifeq (y,$(strip $(JESD204B_ORX_PROFILE)))
 INCS += $(PROJECT)/src/common/firmware/JESD204B_ORx/ActiveUseCase_profile.h
+else
+ifeq (y,$(strip $(JESD204C_ORX_PROFILE)))
+INCS += $(PROJECT)/src/common/firmware/JESD204C_ORx/ActiveUseCase_profile.h
+endif
 endif
 endif
 
