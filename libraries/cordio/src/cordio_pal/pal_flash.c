@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   pal_sys.c
- *   @brief  Interrupt related functions used by Cordio.
+ *   @file   pal_flash.c
+ *   @brief  Flash platform specific implementation used by Cordio.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright (c) 2024 Analog Devices, Inc.
@@ -17,7 +17,7 @@
  *    distribution.
  *  - Neither the name of Analog Devices, Inc. nor the names of its
  *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ *    from this software without specific written permission.
  *  - The use of this software may or may not infringe the patent rights
  *    of one or more patent holders.  This license does not release you
  *    from the requirement that you obtain separate licenses from these
@@ -36,94 +36,59 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "pal_sys.h"
-#include "wsf_types.h"
-#include "max32655.h"
+#include "pal_flash.h"
+#include <string.h>
 
-void LED_On()
+static uint8_t flash_memory[1024 * 16]; // 16KB simulated flash
+
+void PalFlashInit(PalFlashCback_t actCback)
 {
-
+	(void)actCback;
+	memset(flash_memory, 0xFF, sizeof(flash_memory));
 }
 
-void PalLedOn()
-{
-
-}
-
-void PalLedOff()
-{
-
-}
-
-void PalSysAssertTrap()
-{
-
-}
-
-void PalEnterCs()
-{
-	__disable_irq();
-}
-
-void PalExitCs()
-{
-	__enable_irq();
-}
-
-void PalSysInit()
-{
-	return;
-}
-
-static uint32_t palSysBusyCount = 0;
-
-void PalSysSetBusy(void)
-{
-	PalEnterCs();
-	palSysBusyCount++;
-	PalExitCs();
-}
-
-void PalSysSetIdle(void)
-{
-	PalEnterCs();
-	if (palSysBusyCount) {
-		palSysBusyCount--;
-	}
-	PalExitCs();
-}
-
-void PalSysSetTrap(bool_t enable)
+void PalFlashDeInit(void)
 {
 	// Stub implementation
-	(void)enable;
 }
 
-uint32_t PalSysGetStackUsage(void)
+PalFlashState_t PalNvmGetState(void)
 {
-	// Return a dummy value for stack usage
-	return 0;
+	return PAL_FLASH_STATE_READY;
 }
 
-uint32_t PalSysGetAssertCount(void)
+uint32_t PalNvmGetTotalSize(void)
 {
-	// Return a dummy assert count
-	return 0;
+	return sizeof(flash_memory);
 }
 
-bool_t PalSysIsBusy(void)
+uint32_t PalNvmGetSectorSize(void)
 {
-	// Check if system is busy based on our busy count
-	return (palSysBusyCount > 0) ? TRUE : FALSE;
+	return 4096; // 4KB sectors
 }
 
-void PalSysSleep(void)
+void PalFlashRead(void *pBuf, uint32_t size, uint32_t srcAddr)
 {
-	// Simple sleep implementation using ARM Wait For Interrupt
-	// __WFI(); // Wait For Interrupt - ARM Cortex-M instruction
+	if (srcAddr + size <= sizeof(flash_memory)) {
+		memcpy(pBuf, &flash_memory[srcAddr], size);
+	}
 }
 
-void PalLedDeInit(void)
+void PalFlashWrite(void *pBuf, uint32_t size, uint32_t dstAddr)
 {
-	// Stub implementation for LED de-initialization
+	if (dstAddr + size <= sizeof(flash_memory)) {
+		memcpy(&flash_memory[dstAddr], pBuf, size);
+	}
+}
+
+void PalFlashEraseSector(uint32_t size, uint32_t startAddr)
+{
+	if (startAddr + size <= sizeof(flash_memory)) {
+		memset(&flash_memory[startAddr], 0xFF, size);
+	}
+}
+
+void PalFlashEraseChip(void)
+{
+	memset(flash_memory, 0xFF, sizeof(flash_memory));
 }

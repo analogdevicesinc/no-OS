@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   pal_sys.c
- *   @brief  Interrupt related functions used by Cordio.
+ *   @file   pal_codec.c
+ *   @brief  Audio codec functions used by Cordio.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright (c) 2024 Analog Devices, Inc.
@@ -36,94 +36,53 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "pal_sys.h"
-#include "wsf_types.h"
-#include "max32655.h"
+#include "pal_codec.h"
 
-void LED_On()
+void PalCodecReadLocalSupportedCodecs(uint8_t *pNumStd, AudioStdCodecInfo_t stdCodecs[],
+                                      uint8_t *pNumVs, AudioVsCodecInfo_t vsCodecs[])
 {
-
+    // Stub implementation - no codecs supported
+    if (pNumStd) {
+        *pNumStd = 0;
+    }
+    if (pNumVs) {
+        *pNumVs = 0;
+    }
+    (void)stdCodecs;
+    (void)vsCodecs;
 }
 
-void PalLedOn()
+bool_t PalCodecReadLocalSupportedCodecCapabilities(uint8_t codingFmt, uint16_t compId, uint16_t vsCodecId, PalAudioDir_t dir)
 {
-
+    // Stub implementation - no capabilities supported
+    (void)codingFmt;
+    (void)compId;
+    (void)vsCodecId;
+    (void)dir;
+    return FALSE;
 }
 
-void PalLedOff()
+bool_t PalCodecReadLocalSupportedControllerDelay(uint8_t codingFmt, uint16_t compId, uint16_t vsCodecId, PalAudioDir_t dir,
+                                                 uint32_t *pMinDly, uint32_t *pMaxDly)
 {
-
+    // Stub implementation - no controller delay supported
+    (void)codingFmt;
+    (void)compId;
+    (void)vsCodecId;
+    (void)dir;
+    if (pMinDly) {
+        *pMinDly = 0;
+    }
+    if (pMaxDly) {
+        *pMaxDly = 0;
+    }
+    return FALSE;
 }
 
-void PalSysAssertTrap()
+bool_t PalCodecConfigureDataPath(PalAudioDir_t dir, uint8_t dataPathId)
 {
-
-}
-
-void PalEnterCs()
-{
-	__disable_irq();
-}
-
-void PalExitCs()
-{
-	__enable_irq();
-}
-
-void PalSysInit()
-{
-	return;
-}
-
-static uint32_t palSysBusyCount = 0;
-
-void PalSysSetBusy(void)
-{
-	PalEnterCs();
-	palSysBusyCount++;
-	PalExitCs();
-}
-
-void PalSysSetIdle(void)
-{
-	PalEnterCs();
-	if (palSysBusyCount) {
-		palSysBusyCount--;
-	}
-	PalExitCs();
-}
-
-void PalSysSetTrap(bool_t enable)
-{
-	// Stub implementation
-	(void)enable;
-}
-
-uint32_t PalSysGetStackUsage(void)
-{
-	// Return a dummy value for stack usage
-	return 0;
-}
-
-uint32_t PalSysGetAssertCount(void)
-{
-	// Return a dummy assert count
-	return 0;
-}
-
-bool_t PalSysIsBusy(void)
-{
-	// Check if system is busy based on our busy count
-	return (palSysBusyCount > 0) ? TRUE : FALSE;
-}
-
-void PalSysSleep(void)
-{
-	// Simple sleep implementation using ARM Wait For Interrupt
-	// __WFI(); // Wait For Interrupt - ARM Cortex-M instruction
-}
-
-void PalLedDeInit(void)
-{
-	// Stub implementation for LED de-initialization
+    // Stub implementation - no data path configuration supported
+    (void)dir;
+    (void)dataPathId;
+    return FALSE;
 }

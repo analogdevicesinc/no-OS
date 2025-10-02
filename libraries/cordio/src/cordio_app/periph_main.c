@@ -280,19 +280,27 @@ bool_t PeriphTXData(uint8_t *data, uint16_t len)
 {
 	/* Make sure we're connected */
 	if (!periphCb.connected) {
+		printf("Not connected\n");
+
 		return FALSE;
 	}
 
-	/* Check if a client characteristic configuration descriptor is enabled and if
-	   the characteristic's security level has been met. */
-	if (AttsCccEnabled(periphCb.connId, PERIPH_WP_DAT_CCC_IDX)) {
-		/* send notification */
-		AttsHandleValueNtf(periphCb.connId, WP_DAT_HDL, len, data);
+	AttsHandleValueNtf(periphCb.connId, WP_DAT_HDL, len, data);
 
-		return TRUE;
-	}
+	printf("Sent notification to %d\n", periphCb.connId);
 
-	return FALSE;
+	return TRUE;
+
+	// /* Check if a client characteristic configuration descriptor is enabled and if
+	//    the characteristic's security level has been met. */
+	// if (AttsCccEnabled(periphCb.connId, PERIPH_WP_DAT_CCC_IDX)) {
+	// 	/* send notification */
+	// 	AttsHandleValueNtf(periphCb.connId, WP_DAT_HDL, len, data);
+
+	// 	return TRUE;
+	// }
+
+	// return FALSE;
 }
 
 /*************************************************************************************************/
@@ -321,12 +329,12 @@ void PeriphRegisterRXCallback(periphRxCb_t cb)
 void PeriphHandlerInit(wsfHandlerId_t handlerId)
 {
 	uint8_t addr[6] = { 0 };
-	APP_TRACE_INFO0("PeriphHandlerInit");
+	printf("PeriphHandlerInit");
 	AppGetBdAddr(addr);
-	APP_TRACE_INFO6("MAC Addr: %02x:%02x:%02x:%02x:%02x:%02x", addr[5], addr[4],
+	printf("MAC Addr: %02x:%02x:%02x:%02x:%02x:%02x", addr[5], addr[4],
 			addr[3], addr[2],
 			addr[1], addr[0]);
-	APP_TRACE_INFO1("Adv local name: %s", &periphAdvDataDisc[5]);
+	printf("Adv local name: %s", &periphAdvDataDisc[5]);
 
 	/* store handler ID */
 	periphCb.handlerId = handlerId;
