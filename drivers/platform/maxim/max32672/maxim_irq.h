@@ -69,6 +69,6 @@ void max_uart_callback(mxc_uart_req_t *, int);
 /**
  * @brief irq_action compare function
  */
-int irq_action_cmp(void *data1, void *data2);
+int32_t irq_action_cmp(void *data1, void *data2);
 
 #endif
