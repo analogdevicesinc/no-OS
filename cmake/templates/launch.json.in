@@ -15,6 +15,7 @@
             "type": "cortex-debug",
             "request": "launch",
             "servertype": "openocd",
+            "device": "cmsis-dap",
             "executable": "@ELF_PATH@",@OPENOCD_PATH_CONFIG@
             "configFiles": [
                 "@OPENOCD_CONFIG@"

@@ -6,7 +6,7 @@ file(MAKE_DIRECTORY ${VSCODE_DIR})
 
 # Set OpenOCD configuration based on platform
 if("${PLATFORM}" STREQUAL "maxim")
-    set(OPENOCD_CONFIG "\"interface/cmsis-dap.cfg\",\n                \"target/${TARGET}.cfg\"")
+    set(OPENOCD_CONFIG "interface/cmsis-dap.cfg\",\n                \"target/${TARGET}.cfg")
 else()
     set(OPENOCD_CONFIG ${CMAKE_BINARY_DIR}/openocd.cfg)
 endif()
@@ -25,11 +25,11 @@ else()
 endif()
 
 # Set OpenOCD path configuration for cortex-debug
-if(DEFINED OPENOCD_PATH AND NOT "${OPENOCD_PATH}" STREQUAL "")
-    set(OPENOCD_PATH_CONFIG "\n            \"openocdPath\": \"${OPENOCD_PATH}\",")
-else()
-    set(OPENOCD_PATH_CONFIG "")
-endif()
+# if(DEFINED OPENOCD_PATH AND NOT "${OPENOCD_PATH}" STREQUAL "")
+#     set(OPENOCD_PATH_CONFIG "${OPENOCD_PATH}\",")
+# else()
+#     set(OPENOCD_PATH_CONFIG "")
+# endif()
 
 file(REMOVE "${VSCODE_DIR}/launch.json")
 file(REMOVE "${VSCODE_DIR}/settings.json")
