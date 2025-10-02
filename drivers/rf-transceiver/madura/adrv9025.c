@@ -854,11 +854,11 @@ static int adrv9025_jesd204_link_running(struct jesd204_dev *jdev,
 
 		if (lnk->jesd_version != JESD204_VERSION_C) {
 			if ((deframerStatus.status & 0x7F) != 0x7) /* Ignore Valid ILAS checksum */
-				pr_warning("Link%u deframerStatus 0x%X",
+				pr_warning("Link%u deframerStatus 0x%X\n",
 					   lnk->link_id, deframerStatus.status);
 		} else {
 			if ((deframerStatus.status & 0x7) != 0x6)
-				pr_warning("Link%u deframerStatus 0x%X",
+				pr_warning("Link%u deframerStatus 0x%X\n",
 					   lnk->link_id, deframerStatus.status);
 		}
 
