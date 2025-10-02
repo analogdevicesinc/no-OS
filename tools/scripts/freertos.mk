@@ -30,9 +30,10 @@ SRCS += $(RTOS_SRCS)
 INCS += $(RTOS_INCS)
 
 # Include freeRTOS platform specifics
-SRCS += $(NO-OS)/drivers/platform/freeRTOS/freertos_mutex.c \
+SRCS += $(NO-OS)/drivers/platform/freeRTOS/freertos_alloc.c \
+        $(NO-OS)/drivers/platform/freeRTOS/freertos_mutex.c \
         $(NO-OS)/drivers/platform/freeRTOS/freertos_semaphore.c \
-        $(NO-OS)/drivers/platform/freeRTOS/freertos_delay.c 
+        $(NO-OS)/drivers/platform/freeRTOS/freertos_delay.c
 
 # Include FreeRTOS specific configurations
 ifeq ($(wildcard $(FREERTOS_CONFIG_PATH)),)
