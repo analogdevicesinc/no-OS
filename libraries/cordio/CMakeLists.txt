@@ -62,14 +62,17 @@ foreach(src_dir ${CORDIO_SRC_DIRS})
 endforeach()
 
 # Add specific platform sources
-if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_crypto.c)
-    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_crypto.c)
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_crypto.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_crypto.c)
 endif()
-if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_timer.c)
-    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_timer.c)
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_timer.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_timer.c)
 endif()
-if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_cfg.c)
-    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/max32690/sources/pal_cfg.c)
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_rtc.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_rtc.c)
+endif()
+if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_cfg.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_cfg.c)
 endif()
 
 # Remove ignored files
@@ -80,7 +83,11 @@ set(CORDIO_PLATFORM_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/cordio_init.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/periph_main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/stack_periph.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_rtc.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/stack_dats.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/dats_main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/fit_main.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/stack_fit.c
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_rtc.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_sys.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_codec.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_uart.c
@@ -96,19 +103,25 @@ endif()
 
 # Add compile definitions
 target_compile_definitions(no-os PUBLIC
-    BT_ENABLED
+    BT_ENABLED=1
     CHCI_TR_UART=1
     HCI_TR_EXACTLE=1
     BT_VER=11
     uECC_ASM=2
     PAL_TMR_IDX=4
     PAL_SLEEP_TMR_IDX=5
+    INIT_PERIPHERAL=1
+    INIT_CENTRAL=0
+    INIT_BROADCASTER=0
+    INIT_OBSERVER=0
+    WSF_TRACE_ENABLED=TRUE
+    WSF_TRACE_ENABLED_VERBOSE=0
 )
 
 # Add compiler flags
 target_compile_options(no-os PRIVATE -fomit-frame-pointer -fno-common)
 
-target_link_libraries(no-os ${MAXIM_LIBRARIES}/BlePhy/MAX32690/libphy_hard.a)
+target_link_libraries(no-os ${MAXIM_LIBRARIES}/BlePhy/MAX${TARGET_NUM}/libphy.a)
 target_link_libraries(no-os m)
 
 # Link cordio library to no-os target

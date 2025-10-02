@@ -129,8 +129,8 @@ static void mainWsfInit(void)
 
 	uint32_t memUsed;
 	WsfCsEnter();
-	// memUsed = WsfBufIoUartInit(WsfHeapGetFreeStartAddress(),
-	// 			   PLATFORM_UART_TERMINAL_BUFFER_SIZE);
+	memUsed = WsfBufIoUartInit(WsfHeapGetFreeStartAddress(),
+				   PLATFORM_UART_TERMINAL_BUFFER_SIZE);
 	WsfHeapAlloc(memUsed);
 	WsfCsExit();
 
@@ -163,7 +163,7 @@ static void mainWsfInit(void)
 	WsfTraceEnable(TRUE);
 #endif
 
-	AppTerminalInit();
+	// AppTerminalInit();
 
 #if defined(HCI_TR_EXACTLE) && (HCI_TR_EXACTLE == 1)
 	WsfCsEnter();
@@ -176,8 +176,7 @@ static void mainWsfInit(void)
 				.freeMemAvail = WsfHeapCountAvailable()
 			      };
 
-	// memUsed = LlInit(&llCfg);
-	memUsed = LlInitControllerInit(&llCfg);
+	memUsed = LlInit(&llCfg);
 	WsfHeapAlloc(memUsed);
 	WsfCsExit();
 
@@ -186,10 +185,16 @@ static void mainWsfInit(void)
 	LlSetBdAddr((uint8_t *)&bdAddr);
 #endif
 
-	StackInitPeriph();
-	PeriphStart();
+	StackInitFit();
+	FitStart();
 
-	PeriphRegisterRXCallback(appRxCallback);
+	// StackInitDats();
+	// DatsStart();
+
+	// StackInitPeriph();
+	// PeriphStart();
+
+	// PeriphRegisterRXCallback(appRxCallback);
 }
 
 /*************************************************************************************************/
@@ -207,14 +212,17 @@ int cordio_init(void)
 {
 	mainWsfInit();
 
-	// while (1) {
-	// 	/* Run the WSF OS */
-	// 	wsfOsDispatcher();
-
-	// 	if (!WsfOsActive()) {
-	// 		/* No WSF tasks are active, optionally sleep */
-	// 	}
-	// }
-
 	return 0;
+}
+
+void cordio_step()
+{
+	while (1) {
+		wsfOsDispatcher();
+
+		if (!WsfOsActive()) {
+			/* No WSF tasks are active, optionally sleep */
+			return;
+		}
+	}
 }

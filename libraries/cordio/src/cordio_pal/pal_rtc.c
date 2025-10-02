@@ -37,6 +37,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "pal_rtc.h"
+#include "no_os_delay.h"
 
 void PalRtcInit(void)
 {
@@ -45,7 +46,9 @@ void PalRtcInit(void)
 
 uint32_t PalRtcCounterGet(void)
 {
-	return 0;
+	struct no_os_time time = no_os_get_time();
+
+	return (time.s * 1000 + time.us / 1000);
 }
 
 void PalRtcCompareSet(uint8_t channelId, uint32_t value)

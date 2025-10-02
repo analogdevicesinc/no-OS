@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   pal_sys.c
- *   @brief  Interrupt related functions used by Cordio.
+ *   @file   pal_btn.c
+ *   @brief  Button platform specific implementation used by Cordio.
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright (c) 2024 Analog Devices, Inc.
@@ -17,7 +17,7 @@
  *    distribution.
  *  - Neither the name of Analog Devices, Inc. nor the names of its
  *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
+ *    from this software without specific written permission.
  *  - The use of this software may or may not infringe the patent rights
  *    of one or more patent holders.  This license does not release you
  *    from the requirement that you obtain separate licenses from these
@@ -36,94 +36,10 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "pal_sys.h"
-#include "wsf_types.h"
-#include "max32655.h"
+#include "pal_btn.h"
 
-void LED_On()
+void PalBtnInit(void (*handler)(uint8_t, PalBtnPos_t))
 {
-
-}
-
-void PalLedOn()
-{
-
-}
-
-void PalLedOff()
-{
-
-}
-
-void PalSysAssertTrap()
-{
-
-}
-
-void PalEnterCs()
-{
-	__disable_irq();
-}
-
-void PalExitCs()
-{
-	__enable_irq();
-}
-
-void PalSysInit()
-{
-	return;
-}
-
-static uint32_t palSysBusyCount = 0;
-
-void PalSysSetBusy(void)
-{
-	PalEnterCs();
-	palSysBusyCount++;
-	PalExitCs();
-}
-
-void PalSysSetIdle(void)
-{
-	PalEnterCs();
-	if (palSysBusyCount) {
-		palSysBusyCount--;
-	}
-	PalExitCs();
-}
-
-void PalSysSetTrap(bool_t enable)
-{
-	// Stub implementation
-	(void)enable;
-}
-
-uint32_t PalSysGetStackUsage(void)
-{
-	// Return a dummy value for stack usage
-	return 0;
-}
-
-uint32_t PalSysGetAssertCount(void)
-{
-	// Return a dummy assert count
-	return 0;
-}
-
-bool_t PalSysIsBusy(void)
-{
-	// Check if system is busy based on our busy count
-	return (palSysBusyCount > 0) ? TRUE : FALSE;
-}
-
-void PalSysSleep(void)
-{
-	// Simple sleep implementation using ARM Wait For Interrupt
-	// __WFI(); // Wait For Interrupt - ARM Cortex-M instruction
-}
-
-void PalLedDeInit(void)
-{
-	// Stub implementation for LED de-initialization
+	// Stub implementation for button initialization
+	(void)handler;
 }
