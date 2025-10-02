@@ -493,21 +493,6 @@ set(CORDIO_SOURCES
     ${CORDIO_ROOT}/controller/sources/common/sch/sch_list.c
     ${CORDIO_ROOT}/controller/sources/common/sch/sch_main.c
 
-    # wsf/sources/targets/baremetal
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_assert.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_buf.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_bufio.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_cs.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_detoken.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_efs.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_heap.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_msg.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_nvm.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_os.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_queue.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_timer.c
-    ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_trace.c
-
     # wsf/sources/util
     ${CORDIO_ROOT}/wsf/sources/util/bda.c
     ${CORDIO_ROOT}/wsf/sources/util/bstream.c
@@ -523,6 +508,41 @@ set(CORDIO_SOURCES
     ${CORDIO_ROOT}/thirdparty/uecc/uECC.c
     ${CORDIO_ROOT}/thirdparty/uecc/uECC_ll.c
 )
+
+# Add WSF target sources conditionally based on CONFIG_FREERTOS
+if(CONFIG_FREERTOS)
+    list(APPEND CORDIO_SOURCES
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_assert.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_buf.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_bufio.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_cs.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_detoken.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_efs.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_heap.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_msg.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_nvm.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_os.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_queue.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_timer.c
+        ${CORDIO_ROOT}/wsf/sources/targets/freertos/wsf_trace.c
+    )
+else()
+    list(APPEND CORDIO_SOURCES
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_assert.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_buf.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_bufio.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_cs.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_detoken.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_efs.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_heap.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_msg.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_nvm.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_os.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_queue.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_timer.c
+        ${CORDIO_ROOT}/wsf/sources/targets/baremetal/wsf_trace.c
+    )
+endif()
 
 # Add specific platform sources
 if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_crypto.c)
