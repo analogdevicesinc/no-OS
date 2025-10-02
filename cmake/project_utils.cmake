@@ -114,6 +114,9 @@ function(post_build_config PROJECT_TARGET)
                         -DNO_OS_DIR=${NO_OS_DIR}
                         -DPROJECT_HOME=${PROJECT_DIR}
                         -DTARGET=${TARGET}
+                        -DPLATFORM=${PLATFORM}
+                        -DOPENOCD_PATH=${OPENOCD_PATH}
+                        -DOPENOCD_SCRIPTS=${OPENOCD_SCRIPTS}
                         -P "${NO_OS_DIR}/cmake/vscode_config.cmake"
                 COMMENT "Generating ${PROJECT_TARGET}.hex"
         )
