@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   maxim_delay.c
- *   @brief  Implementation of maxim delay functions.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/***************************************************************************//**
+ *   @file   example.h
+ *   @brief  Ssd1306 example header for ssd1306 project
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,61 +30,56 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "no_os_delay.h"
-#include "no_os_util.h"
-#include "mxc_delay.h"
-#include "mxc_sys.h"
-#include "lvgl.h"
 
-static volatile unsigned long long _system_ticks = 0;
+#ifndef POWRMS_VARIABLES_H
+#define POWRMS_VARIABLES_H
 
-extern void SysTick_Handler(void);
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+#include "example.h"
 
-/* ************************************************************************** */
-void SysTick_Handler(void)
-{
-	MXC_DelayHandler();
-	lv_tick_inc(1);
-	_system_ticks++;
-}
+// Format AAAA.BB
 
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
- */
-void no_os_udelay(uint32_t usecs)
-{
-	MXC_Delay(MXC_DELAY_USEC(usecs));
-}
+// indexing starting from 0
+enum variable_names {
+	INPUT_IMPEDANCE,
+	OUTPUT_IMPEDANCE,
+	SIGNAL_FREQUENCY,
+	NR_OF_INPUT_VARIABLES
+};
 
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- */
-void no_os_mdelay(uint32_t msecs)
-{
-	MXC_Delay(MXC_DELAY_MSEC(msecs));
-}
+#define VARIABLE_NAMES  		{"In:", "Out:", "Fq:"}
 
-/**
- * @brief Get current time.
- * @return Current time structure from system start (seconds, microseconds).
- */
-struct no_os_time no_os_get_time(void)
-{
-	struct no_os_time t;
-	uint64_t sub_ms;
-	uint32_t systick_val;
-	uint64_t ticks;
+// between 0 and 6
+extern uint8_t pointer_poz_x;
 
-	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
-	systick_val = SysTick->VAL;
-	ticks = _system_ticks;
-	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
 
-	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
-	t.s = ticks / 1000;
-	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
+extern uint8_t pointer_poz_y;
 
-	return t;
-}
+#define VARIABLE_NUMBER			3
+#define NUMERIC_LENGTH			6
+#define INTEGER_NUMERIC_LENGTH	4
+#define FLOATING_POINT_LENGTH	2
+#define UNIT_LENGTH				4
+
+
+struct powrms_variables {
+	enum variable_names name;
+	double value;
+	double min_possible_value;
+	double max_possible_value;
+	uint8_t nr_of_int_digits;
+	uint8_t nr_of_float_digits;
+	char digits[NUMERIC_LENGTH];
+	char unit[4];
+};
+
+extern struct powrms_variables input_variables[VARIABLE_NUMBER];
+
+extern bool enter_pressed;
+
+void update_values(struct powrms_variables *input_var, uint8_t increment_pos);
+
+
+#endif // POWRMS_VARIABLES_H

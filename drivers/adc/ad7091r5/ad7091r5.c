@@ -57,7 +57,7 @@ int32_t ad7091r5_i2c_reg_read(struct ad7091r5_dev *dev,
 	if (!dev || !reg_data)
 		return -EINVAL;
 
-	ret = no_os_i2c_write(dev->i2c_desc, &reg_addr, 1, 1);
+	ret = no_os_i2c_write(dev->i2c_desc, &reg_addr, 1, 0);
 	if (ret < 0)
 		return ret;
 
@@ -143,6 +143,9 @@ int32_t ad7091r5_i2c_write_mask(struct ad7091r5_dev *dev,
 
 	reg_data &= ~mask;
 	reg_data |= data;
+
+	// printf("I2C read succesfully\n\r");
+	no_os_udelay(100);
 
 	return ad7091r5_i2c_reg_write(dev, reg_addr, reg_data);
 }
@@ -444,7 +447,7 @@ int32_t ad7091r5_reset(struct ad7091r5_dev *dev, bool is_software)
 			return ret;
 
 		/* reset pulse width, at least 10 ns*/
-		no_os_udelay(1);
+		no_os_udelay(100);
 		return no_os_gpio_set_value(dev->gpio_resetn, NO_OS_GPIO_HIGH);
 	}
 }
@@ -499,9 +502,15 @@ int32_t ad7091r5_read_one(struct ad7091r5_dev *dev,
 	if (ret)
 		return ret;
 
+	printf("Channel set successfully\n\r");
+	no_os_udelay(100);
+
 	ret = ad7091r5_i2c_reg_read(dev, AD7091R5_REG_RESULT, &val);
 	if (ret)
 		return ret;
+
+	printf("val: %d, REG_RESULT_CH_ID(val): %d, channel: %d\n\r", val,
+	       REG_RESULT_CH_ID(val), channel);
 
 	if (REG_RESULT_CH_ID(val) != channel)
 		return -1;

@@ -1,9 +1,9 @@
-/*******************************************************************************
- *   @file   maxim_delay.c
- *   @brief  Implementation of maxim delay functions.
- *   @author Ciprian Regus (ciprian.regus@analog.com)
+/***************************************************************************//**
+ *   @file   example.h
+ *   @brief  Ssd1306 example header for ssd1306 project
+ *   @author Robert Budai (robert.budai@analog.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,61 +30,66 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "no_os_delay.h"
+#ifndef __SSD1306_EXAMPLE__
+#define __SSD1306_EXAMPLE__
+
+#include "common_data.h"
 #include "no_os_util.h"
-#include "mxc_delay.h"
-#include "mxc_sys.h"
+#include <stdint.h>
+#include <stdio.h>
+#include "no_os_delay.h"
+#include "no_os_i2c.h"
+#include "display.h"
+#include "ssd_1306.h"
 #include "lvgl.h"
+#include "lv_types.h"
+#include "lv_display.h"
+#include "lv_display_private.h"
+#include "no_os_init.h"
+#include <string.h>
+#include "no_os_display.h"
+#include "no_os_error.h"
 
-static volatile unsigned long long _system_ticks = 0;
+#include "powrms_utils.h"
+#include "subscreen_main_menu_screen.h"
+#include "subscreen_startup_freq_screen.h"
+#include "subscreen_show_screen.h"
+#include "subscreen_settings_screen.h"
+#include "powrms_variables.h"
 
-extern void SysTick_Handler(void);
+// #define POWRMS_UART_DEBUG
 
-/* ************************************************************************** */
-void SysTick_Handler(void)
-{
-	MXC_DelayHandler();
-	lv_tick_inc(1);
-	_system_ticks++;
-}
+// SSD1306 setup
+#define SSD1306_HOR_REZ			128
+#define SSD1306_VER_REZ			64
+#define SSD1306_BUFFER_SIZE ((SSD1306_HOR_REZ * SSD1306_VER_REZ) / 8 + 8)
 
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
- */
-void no_os_udelay(uint32_t usecs)
-{
-	MXC_Delay(MXC_DELAY_USEC(usecs));
-}
+// Buffer for UI usage - defined in example.c
+extern uint8_t display_buffer[SSD1306_HOR_REZ * SSD1306_VER_REZ / 8 + 8];
 
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- */
-void no_os_mdelay(uint32_t msecs)
-{
-	MXC_Delay(MXC_DELAY_MSEC(msecs));
-}
+
+// ----------------------- Global variables	-----------------------
 
 /**
- * @brief Get current time.
- * @return Current time structure from system start (seconds, microseconds).
+ * @brief Display descriptor
+ * 0 -> Startup Frequency Screen
+ * 1 -> Main Screen (ADC values)
+ * 2 -> Show Screen
+ * 3 -> Settings Screen
  */
-struct no_os_time no_os_get_time(void)
-{
-	struct no_os_time t;
-	uint64_t sub_ms;
-	uint32_t systick_val;
-	uint64_t ticks;
+extern enum display_entry_t display_entry;
 
-	SysTick->CTRL &= ~(SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
-	systick_val = SysTick->VAL;
-	ticks = _system_ticks;
-	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
+enum display_entry_t {
+	DISPLAY_INPUT_FREQUENCY,
+	DISPLAY_ENTRY_MENU,
+	DISPLAY_ENTRY_SHOW,
+	DISPLAY_ENTRY_SETTINGS,
+	DISPLAY_ENTRY_BLANK
+};
 
-	sub_ms = ((SysTick->LOAD - systick_val) * 1000) / SysTick->LOAD;
-	t.s = ticks / 1000;
-	t.us = (ticks - t.s * 1000) * 1000 + sub_ms;
+int example_main();
 
-	return t;
-}
+int ltc3556_write_init_command(struct no_os_i2c_desc *param);
+int get_en_latch_value(void);
+
+#endif /* __SSD1306_EXAMPLE__ */
