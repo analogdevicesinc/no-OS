@@ -400,9 +400,10 @@ int iio_example_main(void)
 		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
 #endif
 
-	no_os_mdelay(100);
+	no_os_mdelay(200);
 
-	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen);
+	status = clkgen_setup(&rx_clkgen, &tx_clkgen, &orx_clkgen,
+			      phy->deviceInitStruct.dataInterface.deframer[0].enableJesd204C);
 	if (status)
 		goto error_11;
 

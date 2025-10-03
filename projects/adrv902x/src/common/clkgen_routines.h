@@ -40,7 +40,7 @@
 
 /* Initialize clk_axi_clkgen components. */
 int clkgen_setup(struct axi_clkgen **rx_clkgen, struct axi_clkgen **tx_clkgen,
-		 struct axi_clkgen **orx_clkgen);
+		 struct axi_clkgen **orx_clkgen, uint8_t jesd204c_en);
 /* Remove clk_axi_clkgen components */
 int clkgen_remove(struct axi_clkgen *rx_clkgen, struct axi_clkgen *tx_clkgen,
 		  struct axi_clkgen *orx_clkgen);
