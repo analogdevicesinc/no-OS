@@ -26,6 +26,7 @@
 /*************************************************************************************************/
 
 #include <string.h>
+#include <stdio.h>
 #include "wsf_types.h"
 #include "util/bstream.h"
 #include "wsf_msg.h"
@@ -45,6 +46,7 @@
 #include "svc_dis.h"
 #include "svc_batt.h"
 #include "svc_rscs.h"
+#include "svc_wp.h"
 #include "gatt/gatt_api.h"
 #include "bas/bas_api.h"
 #include "hrps/hrps_api.h"
@@ -108,8 +110,8 @@ static const appSlaveCfg_t fitSlaveCfg = {
 /*! configurable parameters for security */
 static const appSecCfg_t fitSecCfg = {
     DM_AUTH_BOND_FLAG | DM_AUTH_SC_FLAG, /*! Authentication and bonding flags */
-    0, /*! Initiator key distribution flags */
-    DM_KEY_DIST_LTK, /*! Responder key distribution flags */
+    DM_KEY_DIST_IRK, /*! Initiator key distribution flags */
+    DM_KEY_DIST_LTK | DM_KEY_DIST_IRK, /*! Responder key distribution flags */
     FALSE, /*! TRUE if Out-of-band pairing data is present */
     TRUE /*! TRUE to initiate security upon connection */
 };
@@ -133,7 +135,7 @@ static const hrpsCfg_t fitHrpsCfg = {
 
 /*! battery measurement configuration */
 static const basCfg_t fitBasCfg = {
-    30, /*! Battery measurement timer expiration period in seconds */
+    1, /*! Battery measurement timer expiration period in seconds */
     1, /*! Perform battery measurement after this many timer periods */
     100 /*! Send battery level notification to peer when below this level. */
 };
@@ -220,6 +222,10 @@ static uint16_t fitRscmPeriod = FIT_DEFAULT_RSCM_PERIOD;
 
 /* Heart Rate Monitor feature flags */
 static uint8_t fitHrmFlags = CH_HRM_FLAGS_VALUE_8BIT | CH_HRM_FLAGS_ENERGY_EXP;
+
+/* Step counting variables */
+static uint32_t stepCount = 0;
+static uint32_t lastStepTime = 0;
 
 /*************************************************************************************************/
 /*!
@@ -327,6 +333,84 @@ static void fitSendRunningSpeedMeasurement(dmConnId_t connId)
     fitRscmTimer.msg.param = connId;
 
     WsfTimerStartSec(&fitRscmTimer, fitRscmPeriod);
+}
+
+/*************************************************************************************************/
+/*!
+ *  \brief  Simulate step detection algorithm.
+ *
+ *  \return Current step count.
+ */
+/*************************************************************************************************/
+static uint32_t simulateStepDetection(void)
+{
+    static uint32_t callCount = 0;
+
+    /* Use call counter as a simple timer - increment steps every ~10 calls */
+    callCount++;
+    if (callCount >= 10) {
+        stepCount++;
+        lastStepTime = callCount;
+        callCount = 0;
+        printf("Step detected! Total steps: %lu\n", stepCount);
+    }
+
+    return stepCount;
+}
+
+/*************************************************************************************************/
+/*!
+ *  \brief  Application ATTS write callback for Wireless Profile service.
+ *
+ *  \param  connId    Connection ID.
+ *  \param  handle    Handle.
+ *  \param  operation Operation.
+ *  \param  offset    Offset.
+ *  \param  len       Length.
+ *  \param  pValue    Value.
+ *  \param  pAttr     Attribute.
+ *
+ *  \return ATT status.
+ */
+/*************************************************************************************************/
+static uint8_t fitWpWriteCback(dmConnId_t connId, uint16_t handle, uint8_t operation,
+                              uint16_t offset, uint16_t len, uint8_t *pValue, attsAttr_t *pAttr)
+{
+    char stepData[50];
+    uint32_t currentSteps, currentTime;
+
+    printf("Phone wrote to Step Counter service: connId=%d, handle=0x%04X, len=%d\n",
+           connId, handle, len);
+
+    /* Process received data from phone */
+    if (len > 0) {
+        printf("Received command: ");
+        for (int i = 0; i < len && i < 20; i++) {
+            printf("%c", pValue[i]);
+        }
+        printf("\n");
+
+        /* Check for reset command */
+        if (len >= 5 && strncmp((char*)pValue, "reset", 5) == 0) {
+            stepCount = 0;
+            printf("Step counter reset!\n");
+        }
+    }
+
+    /* Update step count with simulation */
+    currentSteps = simulateStepDetection();
+    currentTime = stepCount; /* Use step count as simple timestamp */
+
+    /* Create step data response */
+    snprintf(stepData, sizeof(stepData),
+             "steps:%lu,time:%lu,status:walking",
+             currentSteps, currentTime);
+
+    /* Send step data back to phone */
+    AttsHandleValueNtf(connId, handle, strlen(stepData), (uint8_t*)stepData);
+    printf("Sent step data to phone: %s\n", stepData);
+
+    return ATT_SUCCESS;
 }
 
 /*************************************************************************************************/
@@ -537,6 +621,10 @@ static void fitProcMsg(fitMsg_t *pMsg)
     case FIT_RUNNING_TIMER_IND:
         fitSendRunningSpeedMeasurement((dmConnId_t)pMsg->ccc.hdr.param);
         break;
+    
+    case 16:
+        printf("Unhandled message???\n");
+        break;
 
     case FIT_HR_TIMER_IND:
         HrpsProcMsg(&pMsg->hdr);
@@ -557,7 +645,7 @@ static void fitProcMsg(fitMsg_t *pMsg)
 
     case DM_RESET_CMPL_IND:
         AttsCalculateDbHash();
-        DmSecGenerateEccKeyReq();
+        // DmSecGenerateEccKeyReq();
         fitSetup(pMsg);
         uiEvent = APP_UI_RESET_CMPL;
         break;
@@ -590,12 +678,15 @@ static void fitProcMsg(fitMsg_t *pMsg)
         break;
 
     case DM_SEC_PAIR_CMPL_IND:
-        DmSecGenerateEccKeyReq();
+        // DmSecGenerateEccKeyReq();
+        printf("----- PAIR Succeded! -----\n");
         uiEvent = APP_UI_SEC_PAIR_CMPL;
         break;
 
     case DM_SEC_PAIR_FAIL_IND:
-        DmSecGenerateEccKeyReq();
+        // DmSecGenerateEccKeyReq();
+        printf("----- PAIR Failed! -----\n");
+
         uiEvent = APP_UI_SEC_PAIR_FAIL;
         break;
 
@@ -793,6 +884,8 @@ void FitStart(void)
     SvcBattCbackRegister(BasReadCback, NULL);
     SvcBattAddGroup();
     SvcRscsAddGroup();
+    SvcWpCbackRegister(NULL, fitWpWriteCback);
+    SvcWpAddGroup();
 
     /* Set Service Changed CCCD index. */
     GattSetSvcChangedIdx(FIT_GATT_SC_CCC_IDX);
