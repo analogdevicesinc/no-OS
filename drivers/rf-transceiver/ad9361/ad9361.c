@@ -6646,7 +6646,7 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	/* 25uA/LSB, Offset 25uA */
 	icp_val = NO_OS_DIV_ROUND_CLOSEST((uint32_t)tmp, 25U) - 1;
 
-	icp_val = no_os_clamp(icp_val, 1, 64);
+	icp_val = no_os_clamp(icp_val, 1, 63);
 
 	ad9361_spi_write(spi, REG_CP_CURRENT, icp_val);
 	ad9361_spi_writem(spi, REG_LOOP_FILTER_3, lf_defaults,
