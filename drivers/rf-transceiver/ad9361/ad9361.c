@@ -1746,7 +1746,7 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 				     uint32_t ref_clk)
 {
 	struct no_os_spi_desc *spi = phy->spi;
-	const struct SynthLUT(*tab);
+	const struct SynthLUT(*tab) = NULL;
 	int32_t i = 0;
 	uint32_t range, offs = 0;
 
@@ -1773,6 +1773,12 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 			else
 				phy->current_rx_use_tdd_table = true;
 		}
+	}
+
+	if (tab == NULL) {
+		dev_err(&phy->spi->dev,
+			"%s: Failed to find suitable SynthLUT table", __func__);
+		return -EINVAL;
 	}
 
 	if (tx)
