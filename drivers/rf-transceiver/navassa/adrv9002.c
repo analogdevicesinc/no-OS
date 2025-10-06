@@ -1716,11 +1716,18 @@ static int adrv9002_radio_init(struct adrv9002_rf_phy *phy)
 	if (ret)
 		return ret;
 
-	if (phy->port_switch.enable) {
-		ret = api_call(phy, adi_adrv9001_Rx_PortSwitch_Configure, &phy->port_switch);
-		if (ret)
-			return ret;
-	}
+	// Values required so that the adi_adrv9001_Rx_PortSwitch_Configure passes
+	// (these values are checked even if port switching is not enabled)
+	phy->port_switch.minFreqPortA_Hz = 890000000;
+	phy->port_switch.maxFreqPortA_Hz = 910000000;
+	phy->port_switch.minFreqPortB_Hz = 1890000000;
+	phy->port_switch.maxFreqPortB_Hz = 1910000000;
+
+	// Required to make sure we can properly select port B for RX2 while RX1 is on A
+	// or the other way around
+	ret = api_call(phy, adi_adrv9001_Rx_PortSwitch_Configure, &phy->port_switch);
+	if (ret)
+		return ret;
 
 	for (chan = 0; chan < NO_OS_ARRAY_SIZE(phy->channels); chan++) {
 		struct adrv9002_chan *c = phy->channels[chan];
