@@ -43,3 +43,28 @@ void PalBtnInit(void (*handler)(uint8_t, PalBtnPos_t))
 	// Stub implementation for button initialization
 	(void)handler;
 }
+void LED_On()
+{
+
+}
+
+void PalLedOn()
+{
+
+}
+
+void PalLedOff()
+{
+
+}
+
+void PalLedInit(void)
+{
+	// Simple sleep implementation using ARM Wait For Interrupt
+	// __WFI(); // Wait For Interrupt - ARM Cortex-M instruction
+}
+
+void PalLedDeInit(void)
+{
+	// Stub implementation for LED de-initialization
+}

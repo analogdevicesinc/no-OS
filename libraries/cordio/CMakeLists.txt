@@ -546,6 +546,8 @@ endif()
 
 # Add specific platform sources
 if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_crypto.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_sys.c)
+    list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_flash.c)
     list(APPEND CORDIO_SOURCES ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_crypto.c)
 endif()
 if(EXISTS ${CORDIO_ROOT}/platform/targets/maxim/${TARGET}/sources/pal_timer.c)
@@ -571,10 +573,10 @@ set(CORDIO_PLATFORM_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/fit_main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_app/stack_fit.c
     # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_rtc.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_sys.c
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_sys.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_codec.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_uart.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_flash.c
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_flash.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_btn.c
 )
 list(APPEND CORDIO_SOURCES ${CORDIO_PLATFORM_SOURCES})
@@ -597,6 +599,7 @@ target_compile_definitions(no-os PUBLIC
     INIT_CENTRAL=0
     INIT_BROADCASTER=0
     INIT_OBSERVER=0
+    SMP_EXTRA_TRACE=TRUE
     WSF_TRACE_ENABLED=TRUE
     WSF_TRACE_ENABLED_VERBOSE=0
 )
