@@ -121,6 +121,7 @@ static void mainWsfInit(void)
 	/* Configurations must be persistent. */
 	static BbRtCfg_t mainBbRtCfg;
 
+	PalSysInit();
 	PalBbLoadCfg((PalBbCfg_t *)&mainBbRtCfg);
 	LlGetDefaultRunTimeCfg(&mainLlRtCfg);
 	PalCfgLoadData(PAL_CFG_ID_LL_PARAM, &mainLlRtCfg.maxAdvSets,
