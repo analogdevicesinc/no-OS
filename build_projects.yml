@@ -25,7 +25,24 @@ variables:
     value: $(Build.SourceBranchName)
 
 jobs:
+- job: CheckLabel
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - bash: |
+      sudo apt install curl
+      if curl -s "https://api.github.com/repos/$BUILD_REPOSITORY_ID/issues/$SYSTEM_PULLREQUEST_PULLREQUESTNUMBER/labels" | grep '"name": "documentation"'
+      then
+        echo "##vso[task.setvariable variable=prHasLabel;isOutput=true]true"
+        echo "[INFO] documentation label found, skipping build!"
+      fi
+    displayName: Check for documentation label on PR
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    name: checkPrLabel
+
 - job: Xilinx
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -61,6 +78,8 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: STM32
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -94,6 +113,8 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Maxim
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -127,6 +148,8 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Mbed
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -160,6 +183,8 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Pico
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -193,6 +218,8 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: ADuCM3029
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -226,6 +253,8 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Unit_tests
+  dependsOn: CheckLabel
+  condition: or(not(eq(variables['Build.Reason'], 'PullRequest')), not(eq(dependencies.build_and_static_validation.outputs['checkPrLabel.prHasLabel'], true)))
   pool:
     vmImage: ubuntu-latest
   steps:
