@@ -8,7 +8,5 @@ post_build_config(ftc_workshop)
 
 target_include_directories(ftc_workshop PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/services
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/profiles/mcs
 )
 target_link_libraries(ftc_workshop no-os)
