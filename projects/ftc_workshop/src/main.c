@@ -4,149 +4,121 @@
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_uart.h"
+#include "no_os_spi.h"
 #include "FreeRTOS.h"
 #include "FreeRTOSConfig.h"
 #include "task.h"
 
+#include "adxl355.h"
+
 #include "platform/maxim/maxim_platform.h"
 
-#if defined(NO_OS_USB_UART)
-#include "maxim_usb_uart.h"
-#endif
-
 #if defined(CONFIG_CORDIO)
-#include "cordio_uart.h"
 #include "cordio_init.h"
-#include "svc_batt.h"
-#include "svc_dis.h"
-#include "svc_core.h"
-#include "svc_wp.h"
-#include "att_api.h"
-#include "wsf_os.h"
-#include "util/bstream.h"
-#include "no_os_delay.h"
-#include "dm_api.h"
-extern int hci_cordio_init(void);
 #endif
 
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   115200
 #define UART_IRQ_ID     UART0_IRQn
 
-// BLE mode configuration - controlled by Kconfig (CONFIG_BLE_MODE_HCI_UART_ENABLED)
+#define STEP_WINDOW_SIZE 12
 
-#if defined(CONFIG_CORDIO)
-
-/* Battery level simulation */
-static uint8_t batteryLevel = 85;
-
-/* Sample sensor data */
-static char sensorData[50] = "Temp:25.3C,Hum:45%,Pressure:1013hPa";
-
-/* Custom service UUIDs */
-#define CUSTOM_SVC_UUID              0x1234
-#define CUSTOM_SENSOR_CH_UUID        0x2345
-#define CUSTOM_CONTROL_CH_UUID       0x2346
-
-/* Custom service data */
-static uint8_t customSensorValue[20] = "Hello BLE World!";
-static uint8_t customControlValue = 0;
-
-/* Custom service handles */
-#define CUSTOM_SVC_HDL               0x30
-#define CUSTOM_SENSOR_CH_HDL         0x31
-#define CUSTOM_SENSOR_VAL_HDL        0x32
-#define CUSTOM_CONTROL_CH_HDL        0x33
-#define CUSTOM_CONTROL_VAL_HDL       0x34
-
-/*************************************************************************************************/
-/*!
- *  \brief  Application ATTS write callback for WP service.
- */
-/*************************************************************************************************/
-static uint8_t ftcWpWriteCback(dmConnId_t connId, uint16_t handle, uint8_t operation,
-                              uint16_t offset, uint16_t len, uint8_t *pValue, attsAttr_t *pAttr)
+static void apply_lpf(int32_t *buffer, uint32_t len)
 {
-  printf("📱 Phone wrote to Wireless Profile: connId=%d, handle=0x%04X, len=%d\n", connId, handle, len);
-
-  /* Echo the data back with timestamp */
-  if (len > 0) {
-    printf("Received from phone: ");
-    for (int i = 0; i < len && i < 20; i++) {
-      printf("%c", pValue[i]);
-    }
-    printf("\n");
-
-    /* Update sensor data with dummy values */
-    uint32_t seconds = (uint32_t)(no_os_get_time() / 1000);
-    snprintf(sensorData, sizeof(sensorData), "Temp:%.1fC,Hum:%d%%,Time:%lu",
-             20.0f + (seconds % 15), 40 + (seconds % 30), seconds);
-
-    /* Send dummy sensor response back to phone */
-    AttsSendNtf(connId, handle, strlen(sensorData), (uint8_t*)sensorData);
-    printf("📱 Sent dummy sensor data to phone: %s\n", sensorData);
-  }
-
-  return ATT_SUCCESS;
+	for (int i = len - 1; i >= 3; i--){
+		buffer[i] = buffer[i] + buffer[i - 1] + buffer[i - 2] + buffer[i - 3];
+		buffer[i] /= 4;
+	}
 }
 
-/*************************************************************************************************/
-/*!
- *  \brief  ATTS read callback for battery service.
- */
-/*************************************************************************************************/
-static uint8_t battReadCback(dmConnId_t connId, uint16_t handle, uint8_t operation,
-                            uint16_t offset, attsAttr_t *pAttr)
+static int process_buffers(int32_t *max_buff, int32_t *min_buff)
 {
-  /* Update battery level with current timestamp for dummy data */
-  uint32_t seconds = (uint32_t)(no_os_get_time() / 1000);
-  batteryLevel = 50 + (seconds % 50); /* Battery level 50-99% based on time */
+	static uint32_t threshold = 0;
+	int32_t max_peak_val = max_buff[0];
+	uint32_t max_peak_idx = 0;
+	int32_t min_peak_val = min_buff[0];
+	uint32_t min_peak_idx = 0;
+	int32_t sensitivity = 150;
 
-  printf("📱 Phone reading battery: %d%% (dummy data)\n", batteryLevel);
+	apply_lpf(max_buff, STEP_WINDOW_SIZE);
+	apply_lpf(min_buff, STEP_WINDOW_SIZE);
 
-  /* Set the attribute value */
-  pAttr->pValue = &batteryLevel;
-  pAttr->len = 1;
+	for (int i = 1; i < STEP_WINDOW_SIZE; i++){
+		if (max_buff[i] > max_peak_val && max_buff[i] > threshold + sensitivity / 2){
+			max_peak_val = max_buff[i];
+			max_peak_idx = i;
+		}
+	}
 
-  return ATT_SUCCESS;
+	for (int i = 1; i < STEP_WINDOW_SIZE; i++){
+		if (min_buff[i] < min_peak_val && min_buff[i] < threshold - sensitivity / 2){
+			min_peak_val = min_buff[i];
+			min_peak_idx = i;
+		}
+	}
+
+	// if (max_peak_val < threshold + sensitivity / 2){
+	// 	printf("Not step: max_peak_val (%d) < %d\n", max_peak_val, threshold + sensitivity / 2);
+	// 	return 0;
+	// }
+
+	// if (min_peak_val > threshold - sensitivity / 2){
+	// 	printf("Not step: min_peak_val (%d) > %d\n", min_peak_val, threshold - sensitivity / 2);
+	// 	return 0;
+	// }
+
+	if (max_peak_val < min_peak_val){
+		// printf("Not Step: max = %d < min = %d\n", max_peak_val, min_peak_val);
+		return 0;
+	}
+
+	if (max_peak_val - min_peak_val > sensitivity){
+		threshold = max_peak_val - min_peak_val;
+		// printf("Step: max = %d min = %d\n", max_peak_val, min_peak_val);
+		return 1;
+	}
+
+	// printf("Not Step: max = %d min = %d\n", max_peak_val, min_peak_val);
+
+	return 0;
 }
 
-#endif
+static int step_count(int32_t *accel_data, uint32_t len)
+{
+	static int32_t accel_data_window[2 * STEP_WINDOW_SIZE];
+	static uint8_t buffer_write_index = 0;
+	int32_t *max_peak_buffer;
+	int32_t *min_peak_buffer;
+	static uint8_t w_index;
+	uint8_t current_steps;
+	uint8_t max_len;
+	int ret = 0;
 
-#if 1
-struct max_usb_uart_init_param usb_uart_extra_ip = {
-	.vid = 0x0B6B,
-	.pid = 0x003C
-};
+	while (len){
+		max_len = no_os_min(2 * STEP_WINDOW_SIZE - buffer_write_index, len);
+		memcpy(accel_data_window + buffer_write_index, accel_data, max_len * sizeof(*accel_data));
+		buffer_write_index += max_len;
+		len -= max_len;
 
-struct no_os_uart_init_param uart_init_param = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = USB_IRQn,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.platform_ops = &max_usb_uart_ops,
-	.extra = &usb_uart_extra_ip,
-};
-#else
-struct max_uart_init_param uart_extra_ip = {
-	.flow = MXC_UART_FLOW_DIS,
-};
+		if (buffer_write_index < 2 * STEP_WINDOW_SIZE)
+			return ret;
 
-struct no_os_uart_init_param uart_init_param = {
-	.device_id = UART_DEVICE_ID,
-	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
-	.baud_rate = UART_BAUDRATE,
-	.size = NO_OS_UART_CS_8,
-	.parity = NO_OS_UART_PAR_NO,
-	.stop = NO_OS_UART_STOP_1_BIT,
-	.platform_ops = &max_uart_ops,
-	.extra = &uart_extra_ip,
-};
-#endif
+		buffer_write_index = 0;
+		max_peak_buffer = accel_data_window;
+		min_peak_buffer = &accel_data_window[STEP_WINDOW_SIZE];
+
+		current_steps = process_buffers(max_peak_buffer, min_peak_buffer);
+		ret += current_steps;
+
+		/* No step detected. Look for a peak in the previous min buffer */
+		if (!current_steps){
+			memcpy(accel_data_window, min_peak_buffer, STEP_WINDOW_SIZE * sizeof(*accel_data));
+			buffer_write_index = STEP_WINDOW_SIZE;
+		}
+	}
+
+	return ret;
+}
 
 /**
  * @brief First thread function
@@ -154,29 +126,50 @@ struct no_os_uart_init_param uart_init_param = {
  */
 void bt_task(void *pvParameters)
 {
-#ifdef CONFIG_BLE_MODE_HCI_UART_ENABLED
-	printf("Starting BLE in HCI-UART mode\n");
-	hci_cordio_init();
+	uint8_t fifo_entries;
+	uint32_t total_step_count = 0;
+	uint32_t new_step = 0;
+	static struct adxl355_frac_repr x_accel[16];
+	static struct adxl355_frac_repr y_accel[16];
+	static struct adxl355_frac_repr z_accel[16];
+	static int32_t accel_sum[16];
+	struct no_os_spi_init_param adxl355_comm_param = {
+		.device_id = 0,
+		.max_speed_hz = 1000000,
+		.chip_select = 0,
+		.platform_ops = &max_spi_ops,
+		.extra = &(struct max_spi_init_param){
+			.num_slaves = 1,
+			.vssel = 1,
+		},
+	};
 
-	/* HCI service loop in FreeRTOS task */
-	while(1) {
-		/* Service the HCI transport - this needs to be declared */
-		extern bool ChciTrService(void);
-		ChciTrService();
+	struct adxl355_init_param adxl355_param = {
+		.comm_init.spi_init = adxl355_comm_param,
+		.comm_type = ADXL355_SPI_COMM,
+		.dev_type = ID_ADXL355
+	};
+	struct adxl355_dev *adxl355;
+	int ret;
 
-		/* Yield to other FreeRTOS tasks */
-		vTaskDelay(pdMS_TO_TICKS(1));
+	ret = adxl355_init(&adxl355, adxl355_param);
+	if (ret)
+		return ret;
 
-		/* Periodic status message */
-		static int tick_count = 0;
-		if (++tick_count >= 5000) {  // Every ~5 seconds
-			printf("HCI-UART service running\n");
-			tick_count = 0;
-		}
-	}
-#else
-	printf("Starting BLE in Peripheral mode\n");
+	ret = adxl355_soft_reset(adxl355);
+	if (ret)
+		return ret;
+
+	ret = adxl355_set_odr_lpf(adxl355, ADXL355_ODR_62_5HZ);
+	if (ret)
+		return ret;
+
+	ret = adxl355_set_op_mode(adxl355, ADXL355_MEAS_TEMP_ON_DRDY_OFF);
+	if (ret)
+		return ret;
+
 	cordio_init();
+	printf("Starting BLE in Peripheral mode\n");
 	printf("Cordio initialization completed - GATT services should be available\n");
 
 	printf("GATT services available:\n");
@@ -186,23 +179,42 @@ void bt_task(void *pvParameters)
 	printf("- Wireless Profile Service - read/write custom data\n");
 	printf("You can connect with your phone and read dummy data!\n");
 
-	/* Main BLE service loop */
-	uint32_t tick_counter = 0;
-	while(1){
-		extern void wsfOsDispatcher(void);
-		wsfOsDispatcher();
+	printf("accel\n");
 
-		/* Periodic updates */
-		tick_counter++;
-		if (tick_counter % 10000 == 0) {  /* Every ~10 seconds */
-			printf("BLE Peripheral running, Tick: %lu\n", tick_counter);
-			tick_counter = 0;  /* Reset to prevent overflow */
+	/* For FreeRTOS, WSF handles dispatching via its own tasks created in WsfOsInit() */
+	/* This task can now just handle periodic operations or exit */
+	while (1) {
+		ret = adxl355_get_fifo_data(adxl355, &fifo_entries, x_accel, y_accel, z_accel);
+		if (ret){
+			printf("Warning: adxl355_get_raw_xyz() = %d\n", ret);
+			vTaskDelay(pdMS_TO_TICKS(50));
 		}
 
-		/* Small delay to yield to other tasks */
-		vTaskDelay(pdMS_TO_TICKS(1));
+		fifo_entries /= 3;
+		for (int i = 0; i < fifo_entries; i++){
+			accel_sum[i] = x_accel[i].integer * 1000 + x_accel[i].fractional / 1000000
+			 	       + y_accel[i].integer * 1000 + y_accel[i].fractional / 1000000
+				       + z_accel[i].integer * 1000 + z_accel[i].fractional / 1000000;
+		
+			accel_sum[i] /= 10;
+			printf("%d\n", accel_sum[i]);
+		}
+
+		ret = step_count(accel_sum, fifo_entries);
+
+		if (ret){
+			total_step_count += ret;
+			// printf("Step count: %d\n", total_step_count);
+		}
+		// printf("Entries %d %d\n", accel_sum[0], total_step_count);
+
+		// printf("Accel X: %lld.%03d m/s^2\n", x_accel.integer, abs(x_accel.fractional));
+		// printf("Accel Y: %lld.%03d m/s^2\n", y_accel.integer, abs(y_accel.fractional));
+		// printf("Accel Z: %lld.%03d m/s^2\n", z_accel.integer, abs(z_accel.fractional));
+
+		/* Small delay to yield to other FreeRTOS tasks */
+		vTaskDelay(pdMS_TO_TICKS(50));
 	}
-#endif
 }
 
 /**
@@ -254,53 +266,20 @@ error_thread1:
 int main()
 {
 	int ret;
-	struct no_os_uart_desc *uart;
+	// struct no_os_uart_desc *uart;
 
-	ret = no_os_uart_init(&uart, &uart_init_param);
-	if (ret)
-		return ret;
+	// ret = no_os_uart_init(&uart, &uart_init_param);
+	// if (ret)
+	// 	return ret;
 
-	no_os_uart_stdio(uart);
+	// no_os_uart_stdio(uart);
 
-	printf("FTC Workshop - FreeRTOS Demo\n");
+	// printf("FTC Workshop - FreeRTOS Demo\n");
 
 	ret = create_tasks();
 
 	printf("create_tasks() - %d\n", ret);
 
-	no_os_uart_remove(uart);
+	// no_os_uart_remove(uart);
 	return ret;
 }
-
-
-/*************************************************************************************************/
-/*!
- * \brief   How to Add Custom GATT Attributes - Example Template
- *
- * To add custom GATT attributes to your BLE peripheral, you have several options:
- *
- * 1. MODIFY EXISTING SERVICES (Easiest):
- *    - Modify the existing ftcWpWriteCback() and battReadCback() functions above
- *    - The Wireless Profile (WP) service is already available for custom data
- *    - The Battery service can be customized to report your own sensor data
- *
- * 2. ADD CUSTOM SERVICE TO PERIPH_MAIN.C (Recommended):
- *    - Edit /libraries/cordio/src/cordio_app/periph_main.c
- *    - Add your service in the PeriphStart() function after existing services
- *    - Use the same pattern as SvcWpAddGroup() but with your custom service
- *
- * 3. CREATE SEPARATE SERVICE FILE (Advanced):
- *    - Create a new file like svc_custom.c in the cordio library
- *    - Follow the pattern used by existing services (svc_batt.c, svc_dis.c, etc.)
- *    - Add your service to the CMakeLists.txt and call it from PeriphStart()
- *
- * EXAMPLE - Modify Wireless Profile service for custom data:
- *
- * In ftcWpWriteCback() above, you can:
- * - Receive custom commands from BLE clients
- * - Process sensor readings
- * - Control hardware peripherals
- * - Send notifications back to clients using AttsSendNtf()
- *
- * The WP service already provides read/write/notify capabilities!
- */

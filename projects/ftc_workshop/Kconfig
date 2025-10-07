@@ -1,0 +1,61 @@
+menu "FTC Workshop BLE Configuration"
+	depends on CORDIO
+
+choice BLE_MODE
+	prompt "BLE Operation Mode"
+	default BLE_MODE_PERIPHERAL
+	help
+	  Select the Bluetooth Low Energy operation mode for the FTC Workshop project.
+
+config BLE_MODE_PERIPHERAL
+	bool "Peripheral Mode"
+	help
+	  Run as a BLE peripheral device that advertises and accepts connections.
+	  This mode implements a full BLE stack with GATT services and can be
+	  discovered and connected to by central devices.
+
+config BLE_MODE_HCI_UART
+	bool "HCI-UART Mode"
+	help
+	  Run as an HCI controller accessible via UART interface.
+	  This mode exposes the Bluetooth controller through HCI commands over UART,
+	  allowing external host applications to control the BLE functionality.
+	  Useful for sending custom BLE data and implementing host applications.
+
+endchoice
+
+config BLE_MODE_HCI_UART_ENABLED
+	bool
+	default y if BLE_MODE_HCI_UART
+	default n
+
+endmenu
+
+menu "UART Configuration"
+
+choice UART_TYPE
+	prompt "UART Type for printf"
+	default UART_TYPE_NORMAL
+	help
+	  Select which UART type to use for printf output.
+
+config UART_TYPE_NORMAL
+	bool "Normal UART"
+	select UART_MAXIM
+	help
+	  Use standard UART for printf output.
+
+config UART_TYPE_USB
+	bool "USB UART"
+	select USB_UART_MAXIM
+	help
+	  Use USB UART for printf output.
+
+endchoice
+
+config USE_USB_UART
+	bool
+	default y if UART_TYPE_USB
+	default n
+
+endmenu

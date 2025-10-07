@@ -53,6 +53,20 @@
                         }
                 },
                 {
+                        "name": "max32655_fthr",
+                        "description": "MAX32655 FTHR board",
+                        "binaryDir": "${sourceDir}/build",
+                        "inherits": "default",
+                        "cacheVariables": {
+                                "BOARD": "max32655_fthr",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "PLATFORM": "maxim",
+                                "TARGET": "max32655",
+                                "TARGET_NUM": "32655",
+                                "BOARD_CONFIG_FILE": "max32655_fthr_defconfig"
+                        }
+                },
+                {
                         "name": "stm32f756_nucleo",
                         "description": "STM32F756 Nucleo board",
                         "inherits": "default",

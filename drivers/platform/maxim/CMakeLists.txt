@@ -15,7 +15,6 @@ no_os_sources_ifdef(CONFIG_PWM_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim
 no_os_sources_ifdef(CONFIG_TIMER_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_timer.c)
 no_os_sources_ifdef(CONFIG_RTC_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_rtc.c)
 no_os_sources_ifdef(CONFIG_TRNG_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_trng.c)
-no_os_sources_ifdef(CONFIG_INIT_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_usb_uart.c)
 no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/core/musbhsfc/usb.c)
 no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/core/usb_event.c)
@@ -26,6 +25,8 @@ no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/devclass
 no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/enumerate/enumerate.c)
 
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
+
+target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
 
 # Delay (always included when not using FreeRTOS)
 if(NOT ${CONFIG_FREERTOS})
