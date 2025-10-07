@@ -237,6 +237,13 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
+
+	no_os_udelay(3U);
+	command[0] = 0xA6;
+	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
+	if (ret != 0)
+		return -1;
+
 	// set addressing mode
 	no_os_udelay(3U);
 	command[0] = 0x20;
@@ -389,4 +396,47 @@ int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer)
 	}
 
 	return 0;
+}
+
+/**
+ * @brief Print an icon at a specified position
+ *
+ * @param device - The device structure.
+ * @param icon_buffer - The icon bitmap buffer.
+ * @param width - Icon width in pixels.
+ * @param height - Icon height in pixels (must be a multiple of 8).
+ * @param row - Row to start (page address, 0 = top).
+ * @param col - Column to start (0 = left).
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t ssd_1306_print_icon(struct display_dev *device, const uint8_t *icon_buffer,
+                uint8_t width, uint8_t height, uint8_t row, uint8_t col)
+{
+    int32_t ret;
+    ssd_1306_extra *extra;
+
+    if (!device || !icon_buffer)
+        return -ENOMEM;
+
+    extra = device->extra;
+
+    // Move cursor to starting position
+    ret = ssd_1306_move_cursor(device, row, col);
+    if (ret != 0)
+        return ret;
+
+    uint8_t pages = height / 8; // Each page is 8 pixels high
+    for (uint8_t p = 0; p < pages; p++) {
+        ret = ssd1306_buffer_transmit(extra, (uint8_t *)&icon_buffer[p * width], width, SSD1306_DATA);
+        if (ret != 0)
+            return ret;
+        // Move to next page (row)
+        if (p < pages - 1) {
+            ret = ssd_1306_move_cursor(device, row + p + 1, col);
+            if (ret != 0)
+                return ret;
+        }
+    }
+
+    return 0;
 }
