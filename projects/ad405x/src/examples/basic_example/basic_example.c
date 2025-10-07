@@ -40,7 +40,6 @@
 #include "common_data.h"
 #include "no_os_print_log.h"
 #include "ad405x.h"
-#include "basic_example.h"
 
 /***************************************************************************//**
  * @brief Basic example main executiont.
