@@ -1,4 +1,4 @@
-EXAMPLE ?= basic
+EXAMPLE ?= basic_example
 
 # Select the device you want to enable, the following are supported:
 # AD4050, AD4052, AD4056, AD4058, AD4060, AD4062
