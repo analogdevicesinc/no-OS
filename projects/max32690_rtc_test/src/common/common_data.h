@@ -1,15 +1,15 @@
 /***************************************************************************//**
- *   @file   maxim_rtc.h
- *   @brief  Header file of RTC driver.
+ *   @file   basic_example.c
+ *   @brief  Implementation of the basic example for RTC.
  *   @author Francis Roi Manabat (francisroi.manabat@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following discl aimer.
+ *    this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
@@ -30,25 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef __COMMON_DATA_H__
+#define __COMMON_DATA_H__
 
-#ifndef MAXIM_RTC_H_
-#define MAXIM_RTC_H_
+#include "no_os_uart.h"
+#include "no_os_util.h"
+#include "no_os_error.h"
+#include "maxim_uart.h"
+#include "maxim_uart_stdio.h"
+#include "maxim_gpio.h"
+#include "maxim_spi.h"
 
-extern const struct no_os_rtc_platform_ops max_rtc_ops;
+extern struct max_uart_init_param uart_extra_ip;
+extern struct no_os_uart_init_param uart_ip;
+extern struct no_os_rtc_init_param rtc_ip;
+extern struct no_os_gpio_init_param led_ip;
+extern struct no_os_gpio_init_param button_ip;
+extern struct no_os_irq_init_param rtc_irq_ip;
+extern struct max_gpio_init_param gpio_extra_ip;
 
-int32_t max_rtc_init(struct no_os_rtc_desc **device,
-		     struct no_os_rtc_init_param *init_param);
 
-int32_t max_rtc_remove(struct no_os_rtc_desc *dev);
-
-int32_t max_rtc_start(struct no_os_rtc_desc *dev);
-
-int32_t max_rtc_stop(struct no_os_rtc_desc *dev);
-
-int32_t max_rtc_get_cnt(struct no_os_rtc_desc *dev, uint32_t *tmr_cnt);
-
-int32_t max_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt);
-
-int32_t max_rtc_set_irq_time(struct no_os_rtc_desc *dev, uint32_t irq_time);
-
-#endif
+#endif /* __COMMON_DATA_H__ */
