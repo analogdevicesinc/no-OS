@@ -298,6 +298,12 @@ int32_t ssd_1306_init(struct display_dev *device)
 	if (ret != 0)
 		return -1;
 
+	no_os_udelay(3U);
+	command[0] = SSD1306_CMD_DISPLAY_NORMAL;
+	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
+	if (ret != 0)
+		return -1;
+
 	// set addressing mode
 	no_os_udelay(3U);
 	command[0] = SSD1306_CMD_SET_MEMORY_MODE;
