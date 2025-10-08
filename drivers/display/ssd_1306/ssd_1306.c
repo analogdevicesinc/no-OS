@@ -48,6 +48,67 @@
 #define SSD1306_DISP_OFF   	0xAEU
 #define SSD1306_CHARSZ  	8U
 
+/******************************************************************************/
+/********************** SSD1306 Command Definitions *************************/
+/******************************************************************************/
+
+/* Display Control Commands */
+#define SSD1306_CMD_DISPLAY_OFF                 0xAE  /* Turn display OFF */
+#define SSD1306_CMD_DISPLAY_ON                  0xAF  /* Turn display ON */
+#define SSD1306_CMD_DISPLAY_NORMAL              0xA6  /* Normal display (non-inverted) */
+#define SSD1306_CMD_DISPLAY_INVERT              0xA7  /* Inverted display */
+#define SSD1306_CMD_DISPLAY_ALL_ON_RESUME       0xA4  /* Resume to RAM content display */
+#define SSD1306_CMD_DISPLAY_ALL_ON              0xA5  /* Entire display ON (ignore RAM) */
+
+/* Addressing Commands */
+#define SSD1306_CMD_SET_MEMORY_MODE             0x20  /* Set Memory Addressing Mode */
+#define SSD1306_CMD_SET_COLUMN_ADDR             0x21  /* Set Column Address */
+#define SSD1306_CMD_SET_PAGE_ADDR               0x22  /* Set Page Address */
+#define SSD1306_CMD_SET_PAGE_START_ADDR         0xB0  /* Set Page Start Address (0xB0-0xB7) */
+
+/* Hardware Configuration Commands */
+#define SSD1306_CMD_SET_DISPLAY_START_LINE      0x40  /* Set Display Start Line (0x40-0x7F) */
+#define SSD1306_CMD_SET_SEGMENT_REMAP_0         0xA0  /* Set Segment Re-map (column 0 mapped to SEG0) */
+#define SSD1306_CMD_SET_SEGMENT_REMAP_127       0xA1  /* Set Segment Re-map (column 127 mapped to SEG0) */
+#define SSD1306_CMD_SET_MULTIPLEX_RATIO         0xA8  /* Set Multiplex Ratio */
+#define SSD1306_CMD_SET_COM_OUTPUT_SCAN_UP      0xC0  /* Set COM Output Scan Direction (normal) */
+#define SSD1306_CMD_SET_COM_OUTPUT_SCAN_DOWN    0xC8  /* Set COM Output Scan Direction (remapped) */
+#define SSD1306_CMD_SET_DISPLAY_OFFSET          0xD3  /* Set Display Offset */
+#define SSD1306_CMD_SET_COM_PINS_CONFIG         0xDA  /* Set COM Pins Hardware Configuration */
+
+/* Timing & Driving Scheme Commands */
+#define SSD1306_CMD_SET_DISPLAY_CLOCK_DIV       0xD5  /* Set Display Clock Divide Ratio/Oscillator Frequency */
+#define SSD1306_CMD_SET_PRECHARGE_PERIOD        0xD9  /* Set Pre-charge Period */
+#define SSD1306_CMD_SET_VCOMH_DESELECT_LEVEL    0xDB  /* Set VCOMH Deselect Level */
+
+/* Charge Pump Commands */
+#define SSD1306_CMD_CHARGE_PUMP_SETTING         0x8D  /* Charge Pump Setting */
+
+/* Contrast Control Commands */
+#define SSD1306_CMD_SET_CONTRAST                0x81  /* Set Contrast Control */
+
+/* I2C Control Bytes */
+#define SSD1306_I2C_CMD_BYTE                    0x00  /* I2C command byte */
+#define SSD1306_I2C_DATA_BYTE                   0x40  /* I2C data byte */
+
+/* Memory Addressing Modes */
+#define SSD1306_MEMORY_MODE_HORIZONTAL          0x00  /* Horizontal Addressing Mode */
+#define SSD1306_MEMORY_MODE_VERTICAL            0x01  /* Vertical Addressing Mode */
+#define SSD1306_MEMORY_MODE_PAGE                0x02  /* Page Addressing Mode */
+
+/* Common Parameter Values */
+#define SSD1306_MULTIPLEX_RATIO_64              0x3F  /* 64MUX (for 128x64 display) */
+#define SSD1306_MULTIPLEX_RATIO_32              0x1F  /* 32MUX (for 128x32 display) */
+#define SSD1306_COM_PINS_CONFIG_SEQUENTIAL      0x02  /* Sequential COM pin configuration */
+#define SSD1306_COM_PINS_CONFIG_ALTERNATIVE     0x12  /* Alternative COM pin configuration */
+#define SSD1306_COM_PINS_CONFIG_ALTERNATIVE_64  0xD2  /* Alternative COM pin config for 64-row displays */
+#define SSD1306_CHARGE_PUMP_ENABLE              0x14  /* Enable charge pump */
+#define SSD1306_CHARGE_PUMP_DISABLE             0x10  /* Disable charge pump */
+#define SSD1306_DISPLAY_OFFSET_0                0x00  /* No display offset */
+#define SSD1306_DISPLAY_START_LINE_0            0x40  /* Start line 0 */
+#define SSD1306_CONTRAST_DEFAULT                0x7F  /* Default contrast value */
+#define SSD1306_CLOCK_DIV_DEFAULT               0x80  /* Default clock divide ratio */
+
 const struct display_controller_ops ssd1306_ops = {
 	.init = &ssd_1306_init,
 	.display_on_off = &ssd_1306_display_on_off,
@@ -66,9 +127,9 @@ int32_t ssd1306_buffer_transmit(ssd_1306_extra *extra_param, uint8_t *command,
 	case SSD1306_I2C: {
 		uint8_t buff_tmp[length + 1];
 		if (is_data == SSD1306_DATA)	/* Data transmit */
-			buff_tmp[0] = 0x40;
+			buff_tmp[0] = SSD1306_I2C_DATA_BYTE;
 		else							/* Command transmit */
-			buff_tmp[0] = 0x00;
+			buff_tmp[0] = SSD1306_I2C_CMD_BYTE;
 		memcpy(&buff_tmp[1], command, length);
 		return no_os_i2c_write(extra_param->i2c_desc, buff_tmp, length + 1, 1);
 	}
@@ -140,7 +201,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 			return -1;
 	}
 
-	command[0] = 0xAE;
+	command[0] = SSD1306_CMD_DISPLAY_OFF;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
@@ -160,87 +221,87 @@ int32_t ssd_1306_init(struct display_dev *device)
 	}
 
 	no_os_udelay(3U);
-	command[0] = 0xA8;
-	command[1] = 0x3F;
+	command[0] = SSD1306_CMD_SET_MULTIPLEX_RATIO;
+	command[1] = SSD1306_MULTIPLEX_RATIO_64;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xD3;
-	command[1] = 0x00;
+	command[0] = SSD1306_CMD_SET_DISPLAY_OFFSET;
+	command[1] = SSD1306_DISPLAY_OFFSET_0;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0x40;
+	command[0] = SSD1306_CMD_SET_DISPLAY_START_LINE;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xA1;
+	command[0] = SSD1306_CMD_SET_SEGMENT_REMAP_127;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xC8;
+	command[0] = SSD1306_CMD_SET_COM_OUTPUT_SCAN_DOWN;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xDA;
-	command[1] = 0xD2;
+	command[0] = SSD1306_CMD_SET_COM_PINS_CONFIG;
+	command[1] = SSD1306_COM_PINS_CONFIG_ALTERNATIVE_64;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0x81;
-	command[1] = 0x7F;
+	command[0] = SSD1306_CMD_SET_CONTRAST;
+	command[1] = SSD1306_CONTRAST_DEFAULT;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xA4;
+	command[0] = SSD1306_CMD_DISPLAY_ALL_ON_RESUME;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xA7;
+	command[0] = SSD1306_CMD_DISPLAY_INVERT;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xD5;
-	command[1] = 0x80;
+	command[0] = SSD1306_CMD_SET_DISPLAY_CLOCK_DIV;
+	command[1] = SSD1306_CLOCK_DIV_DEFAULT;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0x8D;
-	command[1] = 0x14;
+	command[0] = SSD1306_CMD_CHARGE_PUMP_SETTING;
+	command[1] = SSD1306_CHARGE_PUMP_ENABLE;
 	ret = ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	no_os_udelay(3U);
-	command[0] = 0xAF;
+	command[0] = SSD1306_CMD_DISPLAY_ON;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
 
 	// set addressing mode
 	no_os_udelay(3U);
-	command[0] = 0x20;
-	command[1] = 0x00;
+	command[0] = SSD1306_CMD_SET_MEMORY_MODE;
+	command[1] = SSD1306_MEMORY_MODE_HORIZONTAL;
 	return ssd1306_buffer_transmit(extra, command, 2U, SSD1306_CMD);
 }
 
@@ -280,13 +341,13 @@ int32_t ssd_1306_move_cursor(struct display_dev *device, uint8_t row,
 
 	extra = device->extra;
 
-	command[0] = 0x21;
+	command[0] = SSD1306_CMD_SET_COLUMN_ADDR;
 	command[1] = column * 8;
 	command[2] = device->cols_nb * 8 - 1U;
 	ret = ssd1306_buffer_transmit(extra, command, 3U, SSD1306_CMD);
 	if (ret != 0)
 		return -EFAULT;
-	command[0] = 0x22;
+	command[0] = SSD1306_CMD_SET_PAGE_ADDR;
 	command[1] = row;
 	command[2] = device->rows_nb - 1U;
 	ret = ssd1306_buffer_transmit(extra, command, 3U, SSD1306_CMD);
