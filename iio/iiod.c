@@ -1106,7 +1106,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 	};
 
 	struct iio_stream *stream = conn->stream;
-	uint32_t block_count;
+	uint32_t block_count = 0;
 	struct lf256fifo *fifo_stream = conn->fifo_stream;
 	struct iiod_event_client *client_desc;
 
@@ -1250,7 +1250,7 @@ static int32_t iiod_run_cmd_new(struct iiod_desc *desc,
 		if (stream && stream->blocks) {
 			for (i = 0; i < stream->nb_blocks; i++) {
 				if (stream->blocks[i]) {
-					if (stream->blocks[i]->cl_id == data->block_id) {
+					if (stream->blocks[i]->cl_id == (data->block_id + 1)) {
 //						no_os_free(stream->blocks[i]->data); // TODO: Call block free callback to delete the data.
 						no_os_free(stream->blocks[i]);
 						stream->blocks[i] = NULL;
@@ -1398,7 +1398,7 @@ static int32_t iiod_run_state_bin(struct iiod_desc *desc,
 					// TODO: Error. Dont know how to manage this.
 				}
 				if (client->event_read_count) {
-					ret = desc->ops.read_event(&ctx, &data->device,
+					ret = desc->ops.read_event(&ctx, &client->dev_id,
 								client->client_id, conn->event_data);
 					if (ret > 0) {
 						/* Event Found */

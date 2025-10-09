@@ -1268,9 +1268,7 @@ static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 	struct attr_fun_params params;
 	struct iio_attribute *attributes;
 
-	desc = ctx->instance;
-	if (*device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_dev.items[*device]];
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 
 	/* If IIO device with given name is found, handle reading of attributes */
 	if (dev) {
@@ -1283,7 +1281,7 @@ static int iio_read_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 		}
 
 		if (attr->ch_id != -1) {
-			if (attr->ch_id < desc->nb_devs)
+			if (attr->ch_id < dev->sorted_data.channels.num_items)
 				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels.items[attr->ch_id]];
 			else
 				ch = NULL;
@@ -1429,9 +1427,7 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 	struct iio_channel *ch = NULL;
 	int8_t ch_out;
 
-	desc = ctx->instance;
-	if (*device < desc->nb_devs)
-		dev = &desc->devs[desc->sorted_dev.items[*device]];
+	dev = get_iio_device(ctx->instance, device, ctx->binary);
 
 	/* If IIO device with given name is found, handle writing of attributes */
 	if (dev) {
@@ -1444,7 +1440,7 @@ static int iio_write_attr_new(struct iiod_ctx *ctx, const uint16_t *device,
 		}
 
 		if (attr->ch_id != -1) {
-			if (attr->ch_id < desc->nb_devs)
+			if (attr->ch_id < dev->sorted_data.channels.num_items)
 				ch = &dev->dev_descriptor->channels[dev->sorted_data.channels.items[attr->ch_id]];
 			else
 				ch = NULL;
@@ -2296,7 +2292,7 @@ close_socket:
 int iio_set_event(struct iio_desc *desc, struct iio_device *device, struct iio_event *event)
 {
 	uint32_t i, j, k;
-	int32_t ret;
+	int32_t ret = 0;
 
 	if (!desc || !event)
 		return -EINVAL;
@@ -2317,6 +2313,8 @@ int iio_set_event(struct iio_desc *desc, struct iio_device *device, struct iio_e
 			}
 		}
 	}
+
+	return ret;
 }
 
 /**
