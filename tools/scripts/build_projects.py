@@ -164,13 +164,18 @@ def process_blacklist():
 	return blacklist
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
+	config_path = os.path.expanduser('~') + '/configure_hdl_new.txt'
+	print(f"Reading configuration from: {config_path}")
 	try:
-		with open(os.path.expanduser('~') + '/configure_hdl_new.txt') as configure_file:
+		with open(config_path) as configure_file:
 			lines = configure_file.readlines()
 			server_base_path = lines[0].rstrip()
 			environment_path_files = lines[1].rstrip()
 	except OSError:
 		print("Configuration file needed")
+
+	sys.exit(1)
+
 
 	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 	blacklist = []
