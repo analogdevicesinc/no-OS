@@ -1,1 +1,0 @@
-.. include:: ../../../../../projects/ad9739a-fmc-ebz/README.rst
