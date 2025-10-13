@@ -50,6 +50,7 @@
 #include "parameters.h"
 #include "app_config.h"
 #include "xil_cache.h"
+#include "adi_ad9081_bf_ad9081.h"
 
 #ifdef IIO_SUPPORT
 #include "iio_app.h"
@@ -186,9 +187,9 @@ int main(void)
 		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_nco_mixer_mode = {
-			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
-			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
-			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF
+			AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF,
+			AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF,
+			AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF
 		},
 		.rx_channel_digital_gain_6db_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
@@ -297,6 +298,18 @@ int main(void)
 		status = ad9081_init(&phy[i], &phy_param);
 		if (status != 0)
 			printf("ad9081_init() error: %" PRId32 "\n", status);
+
+		status = adi_ad9081_device_direct_loopback_set(&phy[i]->ad9081, BF_DIRECT_LOOPBACK_MODE(0), 0xE4);
+		if (status != 0)
+			printf("device_direct_loopback_set() error: %" PRId32 "\n", status);
+		
+		status = adi_ad9081_jesd_loopback_mode_set(&phy[i]->ad9081, 1);
+		if (status != 0)
+			printf("jesd_loopback_mode_set() error: %" PRId32 "\n", status);
+
+		// status = adi_ad9081_device_direct_loopback_set(&phy[i]->ad9081, BF_DIRECT_LOOPBACK_MODE(1), 0xE4);
+		// if (status != 0)
+		// 	printf("device_direct_loopback_set() error: %" PRId32 "\n", status);
 
 		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
 					    phy[i]->jtx_link_rx[1].jesd_param.jesd_m;

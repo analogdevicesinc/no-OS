@@ -1,4 +1,4 @@
-IIOD ?= n
+IIOD ?= y
 QUAD_MXFE = n
 
 # Uncomment to select the profile:
