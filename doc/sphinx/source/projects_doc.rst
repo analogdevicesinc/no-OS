@@ -100,6 +100,14 @@ GYROSCOPES
 
    projects/gyroscope/*
 
+CAPACITANCE-TO-DIGITAL CONVERTER
+=================================
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/cdc/*
+
 LED
 ===
 .. toctree::
