@@ -10,6 +10,7 @@
 #include "task.h"
 
 #include "adxl355.h"
+#include "max20303.h"
 
 #include "platform/maxim/maxim_platform.h"
 
@@ -22,6 +23,35 @@
 #define UART_IRQ_ID     UART0_IRQn
 
 #define STEP_WINDOW_SIZE 12
+
+uint32_t total_step_count = 0;
+uint32_t battery_percentage = 0;
+
+static struct no_os_i2c_init_param max20303_comm_param = {
+	.device_id = 1,
+	.max_speed_hz = 400000,
+	.slave_address = 0x36,
+	.platform_ops = &max_i2c_ops,
+	.extra = &(struct max_i2c_init_param){
+		.vssel = MXC_GPIO_VSSEL_VDDIOH
+	},
+};
+
+static struct max20303_init_param max20303_param = {
+	.comm_param = &max20303_comm_param
+};
+
+static int max20303_test()
+{
+	struct max20303_desc *max20303;
+	int ret;
+
+	ret = max20303_init(&max20303, &max20303_param);
+	if (ret)
+		return ret;
+
+	return 0;
+}
 
 static void apply_lpf(int32_t *buffer, uint32_t len)
 {
@@ -126,16 +156,18 @@ static int step_count(int32_t *accel_data, uint32_t len)
  */
 void bt_task(void *pvParameters)
 {
+	uint32_t i = 0;
 	uint8_t fifo_entries;
-	uint32_t total_step_count = 0;
 	uint32_t new_step = 0;
+	uint32_t battery_uv;
+	struct max20303_desc *max20303;
 	static struct adxl355_frac_repr x_accel[16];
 	static struct adxl355_frac_repr y_accel[16];
 	static struct adxl355_frac_repr z_accel[16];
 	static int32_t accel_sum[16];
 	struct no_os_spi_init_param adxl355_comm_param = {
 		.device_id = 0,
-		.max_speed_hz = 1000000,
+		.max_speed_hz = 4000000,
 		.chip_select = 0,
 		.platform_ops = &max_spi_ops,
 		.extra = &(struct max_spi_init_param){
@@ -181,6 +213,12 @@ void bt_task(void *pvParameters)
 
 	printf("accel\n");
 
+	ret = max20303_init(&max20303, &max20303_param);
+	if (ret)
+		printf("max20303_init() error %d\n", ret);
+
+	max20303_set_hibernate(max20303, false);
+
 	/* For FreeRTOS, WSF handles dispatching via its own tasks created in WsfOsInit() */
 	/* This task can now just handle periodic operations or exit */
 	while (1) {
@@ -197,35 +235,26 @@ void bt_task(void *pvParameters)
 				       + z_accel[i].integer * 1000 + z_accel[i].fractional / 1000000;
 		
 			accel_sum[i] /= 10;
-			printf("%d\n", accel_sum[i]);
 		}
 
 		ret = step_count(accel_sum, fifo_entries);
-
-		if (ret){
+		if (ret)
 			total_step_count += ret;
-			// printf("Step count: %d\n", total_step_count);
+
+		if (i == 20){
+			max20303_read_vcell(max20303, &battery_uv);
+			printf("Battery voltage: %d mV\n", battery_uv / 1000);
+
+			ret = max20303_read_soc(max20303, &battery_percentage);
+			printf("Battery percentage: %hu (%d)\n", battery_percentage, ret);
+
+			/* Update the battery percentage variable sent over BLE */
+			AppHwBattTest(battery_percentage);
+			i = 0;
 		}
-		// printf("Entries %d %d\n", accel_sum[0], total_step_count);
 
-		// printf("Accel X: %lld.%03d m/s^2\n", x_accel.integer, abs(x_accel.fractional));
-		// printf("Accel Y: %lld.%03d m/s^2\n", y_accel.integer, abs(y_accel.fractional));
-		// printf("Accel Z: %lld.%03d m/s^2\n", z_accel.integer, abs(z_accel.fractional));
-
-		/* Small delay to yield to other FreeRTOS tasks */
+		i++;
 		vTaskDelay(pdMS_TO_TICKS(50));
-	}
-}
-
-/**
- * @brief Second thread function
- * @param pvParameters - Thread parameters
- */
-void thread2_task(void *pvParameters)
-{
-	while (1) {
-		printf("Tick 2\n");
-		no_os_mdelay(1000);
 	}
 }
 
@@ -240,22 +269,13 @@ int create_tasks(void)
 	TaskHandle_t thread2_handle = NULL;
 
 	ret = xTaskCreate(bt_task, "BT task", configMINIMAL_STACK_SIZE,
-			  NULL, tskIDLE_PRIORITY + 1, &thread1_handle);
+			NULL, tskIDLE_PRIORITY + 1, &thread1_handle);
 	if (ret != pdPASS) {
 		goto error_thread1;
 	}
 
-	// ret = xTaskCreate(thread2_task, "Thread2", configMINIMAL_STACK_SIZE,
-	// 		  NULL, tskIDLE_PRIORITY + 2, &thread2_handle);
-	// if (ret != pdPASS) {
-	// 	goto error_thread2;
-	// }
-
 	vTaskStartScheduler();
 
-error_thread2:
-	if (thread2_handle != NULL)
-		vTaskDelete(thread2_handle);
 error_thread1:
 	if (thread1_handle != NULL)
 		vTaskDelete(thread1_handle);
@@ -265,21 +285,5 @@ error_thread1:
 
 int main()
 {
-	int ret;
-	// struct no_os_uart_desc *uart;
-
-	// ret = no_os_uart_init(&uart, &uart_init_param);
-	// if (ret)
-	// 	return ret;
-
-	// no_os_uart_stdio(uart);
-
-	// printf("FTC Workshop - FreeRTOS Demo\n");
-
-	ret = create_tasks();
-
-	printf("create_tasks() - %d\n", ret);
-
-	// no_os_uart_remove(uart);
-	return ret;
+	return create_tasks();
 }
