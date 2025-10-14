@@ -1,0 +1,375 @@
+/******************************************************************************
+* Copyright (c) 2018 - 2021 Xilinx, Inc.  All rights reserved.
+* SPDX-License-Identifier: MIT
+******************************************************************************/
+
+/*****************************************************************************/
+/**
+* @file xparameters_ps.h
+*
+* @addtogroup r5_peripheral_definitions Cortex R5 peripheral definitions
+*
+* The xparameters_ps.h file contains the canonical definitions and constant
+* declarations for peripherals within hardblock, attached to the ARM Cortex R5
+* core. These definitions can be used by drivers or applications to access the
+* peripherals.
+*
+* @{
+* <pre>
+* MODIFICATION HISTORY:
+*
+* Ver   Who     Date     Changes
+* ----- ------- -------- ---------------------------------------------------
+* 7.00  mus  	01/25/18 Initial version
+*       mn      03/26/18 Change Interrupt IDs for versal
+*       mn      03/26/18 Update SLCR base address
+*       pm	02/04/20 Add Interrupt IDs for usb-versal
+*	sne	03/26/20 Add Interrupt ID's for WWDT
+*       pm	03/24/20 Add wakeup Interrupt IDs for usb-versal
+* </pre>
+*
+******************************************************************************/
+/**
+ *@cond nocomments
+ */
+
+#ifndef XPARAMETERS_PS_H_
+#define XPARAMETERS_PS_H_
+
+#ifndef ARMR5
+#define ARMR5 ARMR5
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/***************************** Include Files *********************************/
+
+/************************** Constant Definitions *****************************/
+
+/*
+ * This block contains constant declarations for the peripherals
+ * within the hardblock
+ */
+
+/* Canonical definitions for DDR MEMORY */
+#define XPAR_DDR_MEM_BASEADDR		0x00000000U
+#define XPAR_DDR_MEM_HIGHADDR		0x3FFFFFFFU
+
+/* Canonical definitions for Interrupts  */
+#define XPAR_XUARTPS_0_INTR		XPS_UART0_INT_ID
+#define XPAR_XUARTPS_1_INTR		XPS_UART1_INT_ID
+#define XPAR_XIICPS_0_INTR		XPS_I2C0_INT_ID
+#define XPAR_XIICPS_1_INTR		XPS_I2C1_INT_ID
+#define XPAR_XSPIPS_0_INTR		XPS_SPI0_INT_ID
+#define XPAR_XSPIPS_1_INTR		XPS_SPI1_INT_ID
+#define XPAR_XCANPS_0_INTR		XPS_CAN0_INT_ID
+#define XPAR_XCANPS_1_INTR		XPS_CAN1_INT_ID
+#define XPAR_XGWDT_0_INTR		XPS_LPD_GWDT_0_INT_ID
+#define XPAR_XGWDT_0_RST_INTR		XPS_LPD_GWDT_0_RST_INT_ID
+#define XPAR_XWWDT_0_INTR		XPS_LPD_WWDT_0_INT_ID
+#define XPAR_XWWDT_0_RST_PEND_INTR	XPS_LPD_WWDT_0_RST_PEND_INT_ID
+#define XPAR_XGWDT_1_INTR		XPS_FPD_GWDT_1_INT_ID
+#define XPAR_XGWDT_1_RST_INTR		XPS_FPD_GWDT_1_RST_INT_ID
+#define XPAR_XWWDT_1_INTR		XPS_FPD_WWDT_1_INT_ID
+#define XPAR_XWWDT_1_RST_PEND_INTR	XPS_FPD_WWDT_1_RST_PEND_INT_ID
+#define XPAR_XGPIOPS_0_INTR		XPS_GPIO_INT_ID
+#define XPAR_XEMACPS_0_INTR		XPS_GEM0_INT_ID
+#define XPAR_XEMACPS_0_WAKE_INTR	XPS_GEM0_WAKE_INT_ID
+#define XPAR_XEMACPS_1_INTR		XPS_GEM1_INT_ID
+#define XPAR_XEMACPS_1_WAKE_INTR	XPS_GEM1_WAKE_INT_ID
+#define XPAR_XSDIOPS_0_INTR		XPS_SDIO0_INT_ID
+#define XPAR_XQSPIPS_0_INTR		XPS_QSPI_INT_ID
+#define XPAR_XSDIOPS_1_INTR		XPS_SDIO1_INT_ID
+#define XPAR_XDCFG_0_INTR		XPS_DVC_INT_ID
+#define XPAR_XTTCPS_0_INTR		XPS_TTC0_0_INT_ID
+#define XPAR_XTTCPS_1_INTR		XPS_TTC0_1_INT_ID
+#define XPAR_XTTCPS_2_INTR		XPS_TTC0_2_INT_ID
+#define XPAR_XTTCPS_3_INTR		XPS_TTC1_0_INT_ID
+#define XPAR_XTTCPS_4_INTR		XPS_TTC1_1_INT_ID
+#define XPAR_XTTCPS_5_INTR		XPS_TTC1_2_INT_ID
+#define XPAR_XTTCPS_6_INTR		XPS_TTC2_0_INT_ID
+#define XPAR_XTTCPS_7_INTR		XPS_TTC2_1_INT_ID
+#define XPAR_XTTCPS_8_INTR		XPS_TTC2_2_INT_ID
+#define XPAR_XTTCPS_9_INTR		XPS_TTC3_0_INT_ID
+#define XPAR_XTTCPS_10_INTR		XPS_TTC3_1_INT_ID
+#define XPAR_XTTCPS_11_INTR		XPS_TTC3_2_INT_ID
+#define XPAR_XNANDPS8_0_INTR        	XPS_NAND_INT_ID
+#define XPAR_XADMAPS_0_INTR 		XPS_ADMA_CH0_INT_ID
+#define XPAR_XADMAPS_1_INTR 		XPS_ADMA_CH1_INT_ID
+#define XPAR_XADMAPS_2_INTR		XPS_ADMA_CH2_INT_ID
+#define XPAR_XADMAPS_3_INTR 		XPS_ADMA_CH3_INT_ID
+#define XPAR_XADMAPS_4_INTR		XPS_ADMA_CH4_INT_ID
+#define XPAR_XADMAPS_5_INTR 		XPS_ADMA_CH5_INT_ID
+#define XPAR_XADMAPS_6_INTR 		XPS_ADMA_CH6_INT_ID
+#define XPAR_XADMAPS_7_INTR 		XPS_ADMA_CH7_INT_ID
+#define XPAR_PSV_ADMA_0_INTR 		XPS_ADMA_CH0_INT_ID
+#define XPAR_PSV_ADMA_1_INTR 		XPS_ADMA_CH1_INT_ID
+#define XPAR_PSV_ADMA_2_INTR		XPS_ADMA_CH2_INT_ID
+#define XPAR_PSV_ADMA_3_INTR 		XPS_ADMA_CH3_INT_ID
+#define XPAR_PSV_ADMA_4_INTR		XPS_ADMA_CH4_INT_ID
+#define XPAR_PSV_ADMA_5_INTR 		XPS_ADMA_CH5_INT_ID
+#define XPAR_PSV_ADMA_6_INTR 		XPS_ADMA_CH6_INT_ID
+#define XPAR_PSV_ADMA_7_INTR 		XPS_ADMA_CH7_INT_ID
+#define XPAR_PSV_GDMA_0_INTR		XPS_ZDMA_CH0_INT_ID
+#define XPAR_PSV_GDMA_1_INTR		XPS_ZDMA_CH1_INT_ID
+#define XPAR_PSV_GDMA_2_INTR 		XPS_ZDMA_CH2_INT_ID
+#define XPAR_PSV_GDMA_3_INTR 		XPS_ZDMA_CH3_INT_ID
+#define XPAR_PSV_GDMA_4_INTR		XPS_ZDMA_CH4_INT_ID
+#define XPAR_PSV_GDMA_5_INTR 		XPS_ZDMA_CH5_INT_ID
+#define XPAR_PSV_GDMA_6_INTR 		XPS_ZDMA_CH6_INT_ID
+#define XPAR_PSV_GDMA_7_INTR 		XPS_ZDMA_CH7_INT_ID
+#define XPAR_PSV_PMC_GPIO_INTR          XPMC_GPIO_INT_ID
+#define XPAR_PSV_PMC_I2C_INTR           XPMC_I2C_INT_ID
+#define XPAR_PSV_PMC_DMA_0_INTR		XPS_PMCDMA0_INT_ID
+#define XPAR_PSV_PMC_DMA_1_INTR		XPS_PMCDMA1_INT_ID
+#define XPAR_XMPU_FPD_INTR 		XPS_XMPU_FPD_INT_ID
+#define XPAR_XCCI_FPD_INTR 		XPS_FPD_CCI_INT_ID
+#define XPAR_XSMMU_FPD_INTR 		XPS_FPD_SMMU_INT_ID
+#define XPAR_XUSBPS_0_INTR		XPS_USB3_0_ENDPT_INT_ID
+#define XPAR_XUSBPS_1_INTR		XPS_USB3_1_ENDPT_INT_ID
+#define XPAR_XUSBPS_0_WAKE_INTR		XPS_USB3_0_WAKE_INT_ID
+#define	XPAR_XRTCPSU_ALARM_INTR 	XPS_RTC_ALARM_INT_ID
+#define	XPAR_XRTCPSU_SECONDS_INTR	XPS_RTC_SEC_INT_ID
+#define XPAR_XSYSMONPSU_INTR		XPS_AMS_INT_ID
+
+/* Canonical definitions for SCU GIC */
+#define XPAR_SCUGIC_NUM_INSTANCES	1U
+#define XPAR_SCUGIC_SINGLE_DEVICE_ID	0U
+#define XPAR_SCUGIC_CPU_BASEADDR	(XPS_SCU_PERIPH_BASE + 0x00001000U)
+#define XPAR_SCUGIC_DIST_BASEADDR	(XPS_SCU_PERIPH_BASE + 0x00002000U)
+#define XPAR_SCUGIC_ACK_BEFORE		0U
+
+#define XPAR_CPU_CORTEXR5_CORE_CLOCK_FREQ_HZ	XPAR_CPU_CORTEXR5_0_CPU_CLK_FREQ_HZ
+
+
+/*
+ * This block contains constant declarations for the peripherals
+ * within the hardblock. These have been put for backwards compatibility
+ */
+
+#define XPS_SYS_CTRL_BASEADDR		0xF1060000U
+#define XPS_SCU_PERIPH_BASE		0xF9000000U
+#define XPS_CRP_BASEADDRESS		0xF1260000U
+#define XPS_PMC_GLOBAL_BASEADDRESS	0xF1110000U
+
+
+/* Shared Peripheral Interrupts (SPI) */
+#define XPS_FPGA0_INT_ID		121U
+#define XPS_FPGA1_INT_ID		122U
+#define XPS_FPGA2_INT_ID		123U
+#define XPS_FPGA3_INT_ID		124U
+#define XPS_FPGA4_INT_ID		125U
+#define XPS_FPGA5_INT_ID		126U
+#define XPS_FPGA6_INT_ID		127U
+#define XPS_FPGA7_INT_ID		128U
+#define XPS_FPGA8_INT_ID		136U
+#define XPS_FPGA9_INT_ID		137U
+#define XPS_FPGA10_INT_ID		138U
+#define XPS_FPGA11_INT_ID		139U
+#define XPS_FPGA12_INT_ID		140U
+#define XPS_FPGA13_INT_ID		141U
+#define XPS_FPGA14_INT_ID		142U
+#define XPS_FPGA15_INT_ID		143U
+
+/* Updated Interrupt-IDs */
+#define XPS_OCMINTR_INT_ID		(10U + 32U)
+
+#define XPS_OSPI_INT_ID			(124U + 32U)
+#define XPS_QSPI_INT_ID			(125U + 32U)
+#define XPS_GPIO_INT_ID			(13U + 32U)
+#define XPS_I2C0_INT_ID			(14U + 32U)
+#define XPS_I2C1_INT_ID			(15U + 32U)
+#define XPS_SPI0_INT_ID			(16U + 32U)
+#define XPS_SPI1_INT_ID			(17U + 32U)
+#define XPS_UART0_INT_ID		(18U + 32U)
+#define XPS_UART1_INT_ID		(19U + 32U)
+#define XPS_CAN0_INT_ID			(20U + 32U)
+#define XPS_CAN1_INT_ID			(21U + 32U)
+#define XPS_USB3_0_ENDPT_INT_ID		(22U + 32U)
+#define XPS_LPD_GWDT_0_INT_ID           (70U + 32U)
+#define XPS_LPD_GWDT_0_RST_INT_ID       (71U + 32U)
+#define XPS_LPD_WWDT_0_INT_ID           (49U + 32U)
+#define XPS_LPD_WWDT_0_RST_PEND_INT_ID  (69U + 32U)
+#define XPS_FPD_GWDT_1_INT_ID           (108U + 32U)
+#define XPS_FPD_GWDT_1_RST_INT_ID       (110U + 32U)
+#define XPS_FPD_WWDT_1_INT_ID           (100U + 32U)
+#define XPS_FPD_WWDT_1_RST_PEND_INT_ID  (109U + 32U)
+#define XPS_RTC_ALARM_INT_ID 		(142U + 32U)
+#define XPS_RTC_SEC_INT_ID	 	(143U + 32U)
+#define XPS_TTC0_0_INT_ID		(37U + 32U)
+#define XPS_TTC0_1_INT_ID		(38U + 32U)
+#define XPS_TTC0_2_INT_ID 		(39U + 32U)
+#define XPS_TTC1_0_INT_ID		(40U + 32U)
+#define XPS_TTC1_1_INT_ID		(41U + 32U)
+#define XPS_TTC1_2_INT_ID		(42U + 32U)
+#define XPS_TTC2_0_INT_ID		(43U + 32U)
+#define XPS_TTC2_1_INT_ID		(44U + 32U)
+#define XPS_TTC2_2_INT_ID		(45U + 32U)
+#define XPS_TTC3_0_INT_ID		(46U + 32U)
+#define XPS_TTC3_1_INT_ID		(47U + 32U)
+#define XPS_TTC3_2_INT_ID		(48U + 32U)
+#define XPS_SDIO0_INT_ID		(126U + 32U)
+#define XPS_SDIO0_WAKE_INT_ID		(127U + 32U)
+#define XPS_SDIO1_INT_ID		(128U + 32U)
+#define XPS_SDIO1_WAKE_INT_ID		(129U + 32U)
+#define XPS_AMS_INT_ID			(53U + 32U)
+#define XPS_GEM0_INT_ID			(56U + 32U)
+#define XPS_GEM0_WAKE_INT_ID		(57U + 32U)
+#define XPS_GEM1_INT_ID			(58U + 32U)
+#define XPS_GEM1_WAKE_INT_ID		(59U + 32U)
+#define XPS_ADMA_CH0_INT_ID		(60U + 32U)
+#define XPS_ADMA_CH1_INT_ID		(61U + 32U)
+#define XPS_ADMA_CH2_INT_ID		(62U + 32U)
+#define XPS_ADMA_CH3_INT_ID		(63U + 32U)
+#define XPS_ADMA_CH4_INT_ID		(64U + 32U)
+#define XPS_ADMA_CH5_INT_ID		(65U + 32U)
+#define XPS_ADMA_CH6_INT_ID		(66U + 32U)
+#define XPS_ADMA_CH7_INT_ID		(67U + 32U)
+#define XPS_XMPU_LPD_INT_ID		(68U + 32U)
+#define XPS_USB3_0_WAKE_INT_ID		(74U + 32U)
+#define XPS_XMPU_FPD_INT_ID		(102U + 32U)
+#define XPS_FPD_CCI_INT_ID		(106U + 32U)
+#define XPS_FPD_SMMU_INT_ID		(107U + 32U)
+#define XPMC_GPIO_INT_ID                (122U + 32U)
+#define XPMC_I2C_INT_ID                 (123U + 32U)
+#define XPS_PMCDMA0_INT_ID		(131U + 32U)
+#define XPS_PMCDMA1_INT_ID		(132U + 32U)
+
+/* REDEFINES for TEST APP */
+#define XPAR_PSV_SBSAUART_0_INTR        XPS_UART0_INT_ID
+#define XPAR_PSV_SBSAUART_1_INTR        XPS_UART1_INT_ID
+#define XPAR_PSV_USB_0_INTR		XPS_USB0_INT_ID
+#define XPAR_PSV_USB_1_INTR		XPS_USB1_INT_ID
+#define XPAR_PSV_I2C_0_INTR		XPS_I2C0_INT_ID
+#define XPAR_PSV_I2C_1_INTR		XPS_I2C1_INT_ID
+#define XPAR_PSV_SPI_0_INTR		XPS_SPI0_INT_ID
+#define XPAR_PSV_SPI_1_INTR		XPS_SPI1_INT_ID
+#define XPAR_PSV_CANFD_0_INTR		XPS_CAN0_INT_ID
+#define XPAR_PSV_CANFD_1_INTR		XPS_CAN1_INT_ID
+#define XPAR_PSV_GWDT_0_INTR            XPS_LPD_GWDT_0_INT_ID
+#define XPAR_PSV_GWDT_0_RST_INTR	XPS_LPD_GWDT_0_RST_INT_ID
+#define XPAR_PSV_WWDT_0_INTR		XPS_LPD_WWDT_0_INT_ID
+#define XPAR_PSV_WWDT_0_RST_PEND_INTR	XPS_LPD_WWDT_0_RST_PEND_INT_ID
+#define XPAR_PSV_GWDT_1_INTR		XPS_FPD_GWDT_1_INT_ID
+#define XPAR_PSV_GWDT_1_RST_INTR	XPS_FPD_GWDT_1_RST_INT_ID
+#define XPAR_PSV_WWDT_1_INTR		XPS_FPD_WWDT_1_INT_ID
+#define XPAR_PSV_WWDT_1_RST_PEND_INTR	XPS_FPD_WWDT_1_RST_PEND_INT_ID
+#define XPAR_PSV_GPIO_0_INTR		XPS_GPIO_INT_ID
+#define XPAR_PSV_ETHERNET_0_INTR	XPS_GEM0_INT_ID
+#define XPAR_PSV_ETHERNET_0_WAKE_INTR   XPS_GEM0_WAKE_INT_ID
+#define XPAR_PSV_ETHERNET_1_INTR	XPS_GEM1_INT_ID
+#define XPAR_PSV_ETHERNET_1_WAKE_INTR   XPS_GEM1_WAKE_INT_ID
+#define XPAR_PSV_ETHERNET_2_INTR	XPS_GEM2_INT_ID
+#define XPAR_PSV_ETHERNET_2_WAKE_INTR   XPS_GEM2_WAKE_INT_ID
+#define XPAR_PSV_ETHERNET_3_INTR	XPS_GEM3_INT_ID
+#define XPAR_PSV_ETHERNET_3_WAKE_INTR   XPS_GEM3_WAKE_INT_ID
+#define XPAR_PSV_QSPI_0_INTR		XPS_QSPI_INT_ID
+#define XPAR_PSV_XADC_0_INTR		XPS_SYSMON_INT_ID
+#define XPAR_PSV_TTC_0_INTR		XPS_TTC0_0_INT_ID
+#define XPAR_PSV_TTC_1_INTR		XPS_TTC0_1_INT_ID
+#define XPAR_PSV_TTC_2_INTR		XPS_TTC0_2_INT_ID
+#define XPAR_PSV_TTC_3_INTR		XPS_TTC1_0_INT_ID
+#define XPAR_PSV_TTC_4_INTR		XPS_TTC1_1_INT_ID
+#define XPAR_PSV_TTC_5_INTR		XPS_TTC1_2_INT_ID
+#define XPAR_PSV_TTC_6_INTR		XPS_TTC2_0_INT_ID
+#define XPAR_PSV_TTC_7_INTR		XPS_TTC2_1_INT_ID
+#define XPAR_PSV_TTC_8_INTR		XPS_TTC2_2_INT_ID
+#define XPAR_PSV_TTC_9_INTR		XPS_TTC3_0_INT_ID
+#define XPAR_PSV_TTC_10_INTR		XPS_TTC3_1_INT_ID
+#define XPAR_PSV_TTC_11_INTR		XPS_TTC3_2_INT_ID
+#define XPAR_PSV_AMS_INTR		XPS_AMS_INT_ID
+
+#define XPAR_XADCPS_NUM_INSTANCES 1U
+#define XPAR_XADCPS_0_DEVICE_ID   0U
+#define XPAR_XADCPS_0_BASEADDR	  (0xF8007000U)
+#define XPAR_XADCPS_INT_ID		XPS_SYSMON_INT_ID
+
+/* For backwards compatibility */
+#define XPAR_XUARTPS_0_CLOCK_HZ		XPAR_XUARTPS_0_UART_CLK_FREQ_HZ
+#define XPAR_XUARTPS_1_CLOCK_HZ		XPAR_XUARTPS_1_UART_CLK_FREQ_HZ
+#define XPAR_XTTCPS_0_CLOCK_HZ		XPAR_XTTCPS_0_TTC_CLK_FREQ_HZ
+#define XPAR_XTTCPS_1_CLOCK_HZ		XPAR_XTTCPS_1_TTC_CLK_FREQ_HZ
+#define XPAR_XTTCPS_2_CLOCK_HZ		XPAR_XTTCPS_2_TTC_CLK_FREQ_HZ
+#define XPAR_XTTCPS_3_CLOCK_HZ		XPAR_XTTCPS_3_TTC_CLK_FREQ_HZ
+#define XPAR_XTTCPS_4_CLOCK_HZ		XPAR_XTTCPS_4_TTC_CLK_FREQ_HZ
+#define XPAR_XTTCPS_5_CLOCK_HZ		XPAR_XTTCPS_5_TTC_CLK_FREQ_HZ
+#define XPAR_XIICPS_0_CLOCK_HZ		XPAR_XIICPS_0_I2C_CLK_FREQ_HZ
+#define XPAR_XIICPS_1_CLOCK_HZ		XPAR_XIICPS_1_I2C_CLK_FREQ_HZ
+
+#define XPAR_XQSPIPS_0_CLOCK_HZ		XPAR_XQSPIPS_0_QSPI_CLK_FREQ_HZ
+
+#ifdef XPAR_CPU_CORTEXR5_0_CPU_CLK_FREQ_HZ
+#define XPAR_CPU_CORTEXR5_CORE_CLOCK_FREQ_HZ	XPAR_CPU_CORTEXR5_0_CPU_CLK_FREQ_HZ
+#endif
+
+#ifdef XPAR_CPU_CORTEXR5_1_CPU_CLK_FREQ_HZ
+#define XPAR_CPU_CORTEXR5_CORE_CLOCK_FREQ_HZ	XPAR_CPU_CORTEXR5_1_CPU_CLK_FREQ_HZ
+#endif
+
+/*
+ * Defines for interrupt wrapper API
+ * For more details about usage please refer xinterrupt_wrap.h
+ * Here Bits[11:0] represents interrupt id
+ * Bits[15:12] represents interrupt trigger type and level flags
+ */
+#define XPAR_PSV_SBSAUART_0_INTERRUPT_ID   0x4012U
+#define XPAR_PSV_SBSAUART_1_INTERRUPT_ID   0x4013U
+#define XPAR_PSV_USB_0_INTERRUPT_ID        0x4016U
+#define XPAR_PSV_USB_1_INTERRUPT_ID        0x401AU
+#define XPAR_PSV_I2C_0_INTERRUPT_ID        0x400EU
+#define XPAR_PSV_I2C_1_INTERRUPT_ID        0x400FU
+#define XPAR_PSV_SPI_0_INTERRUPT_ID        0x4010U
+#define XPAR_PSV_SPI_1_INTERRUPT_ID        0x4011U
+#define XPAR_PSV_CANFD_0_INTERRUPT_ID      0x4014U
+#define XPAR_PSV_CANFD_1_INTERRUPT_ID      0x4015U
+#define XPAR_PSV_GWDT_0_INTERRUPT_ID       0x1046U
+#define XPAR_PSV_GWDT_0_RST_INTERRUPT_ID   0x1047U
+#define XPAR_PSV_WWDT_0_INTERRUPT_ID       0x1031U
+#define XPAR_PSV_WWDT_0_RST_PEND_INTERRUPT_ID 0x1045U
+#define XPAR_PSV_GWDT_1_INTERRUPT_ID       0x106CU
+#define XPAR_PSV_GWDT_1_RST_INTERRUPT_ID   0x106EU
+#define XPAR_PSV_WWDT_1_INTERRUPT_ID       0x1064U
+#define XPAR_PSV_WWDT_1_RST_PEND_INTERRUPT_ID 0x106DU
+#define XPAR_PSV_GPIO_0_INTERRUPT_ID       0x400DU
+#define XPAR_PSV_ETHERNET_0_INTERRUPT_ID   0x4038U
+#define XPAR_PSV_ETHERNET_0_WAKE_INTERRUPT_ID 0x4039U
+#define XPAR_PSV_ETHERNET_1_INTERRUPT_ID   0x403AU
+#define XPAR_PSV_ETHERNET_1_WAKE_INTERRUPT_ID 0x403BU
+#define XPAR_PSV_QSPI_0_INTERRUPT_ID       0x407DU
+#define XPAR_PSV_TTC_0_INTERRUPT_ID        0x4025U
+#define XPAR_PSV_TTC_1_INTERRUPT_ID        0x4026U
+#define XPAR_PSV_TTC_2_INTERRUPT_ID        0x4027U
+#define XPAR_PSV_TTC_3_INTERRUPT_ID        0x4028U
+#define XPAR_PSV_TTC_4_INTERRUPT_ID        0x4029U
+#define XPAR_PSV_TTC_5_INTERRUPT_ID        0x402AU
+#define XPAR_PSV_TTC_6_INTERRUPT_ID        0x402BU
+#define XPAR_PSV_TTC_7_INTERRUPT_ID        0x402CU
+#define XPAR_PSV_TTC_8_INTERRUPT_ID        0x402DU
+#define XPAR_PSV_TTC_9_INTERRUPT_ID        0x402EU
+#define XPAR_PSV_TTC_10_INTERRUPT_ID       0x402FU
+#define XPAR_PSV_TTC_11_INTERRUPT_ID       0x4030U
+#define XPAR_PSV_AMS_INTERRUPT_ID          0x4090U
+#define XPAR_PSV_ADMA_0_INTERRUPT_ID       0x403CU
+#define XPAR_PSV_ADMA_1_INTERRUPT_ID       0x403DU
+#define XPAR_PSV_ADMA_2_INTERRUPT_ID       0x403EU
+#define XPAR_PSV_ADMA_3_INTERRUPT_ID       0x403FU
+#define XPAR_PSV_ADMA_4_INTERRUPT_ID       0x4040U
+#define XPAR_PSV_ADMA_5_INTERRUPT_ID       0x4041U
+#define XPAR_PSV_ADMA_6_INTERRUPT_ID       0x4042U
+#define XPAR_PSV_ADMA_7_INTERRUPT_ID       0x4043U
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* protection macro */
+
+/**
+ *@endcond
+ */
+
+/**
+* @} End of "addtogroup r5_peripheral_definitions".
+*/

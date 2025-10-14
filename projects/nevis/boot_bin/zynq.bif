@@ -1,0 +1,6 @@
+the_ROM_image:
+{
+[bootloader] ./fsbl.elf
+./system_top.bit
+./u-boot_zynq_zc706.elf
+}

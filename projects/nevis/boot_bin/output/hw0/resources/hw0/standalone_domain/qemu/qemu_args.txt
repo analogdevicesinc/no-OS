@@ -1,0 +1,51 @@
+########################################################################
+# This is file which used to generate QEMU(which emulates A9 core) 
+# commandline(start_qemu.sh script) which used in Zynq HW-EMU. 
+# This is a template file which is packaged in platform and it gets 
+# processed by Vitis tool to generate meaningful file.
+#
+# This file contains flag and value pairs and they must be seperated 
+# into two lines value followed by flag. Below are the common/mandated 
+# flag and value pairs used for emulating Zynq. User can add more
+# commandline args to this file depends on requirements.
+# 
+# For more details on the QEMU commandline, please refer to 
+# the QEMU user guide UG1169.
+########################################################################
+#
+#
+# selects emulated machine
+-M
+arm-generic-fdt-7series
+#
+#
+# redirect the serial port to specified char dev (i.e stdio, tcp port, file etc)
+-serial
+/dev/null
+-serial
+mon:stdio
+#
+#
+# Register writes to SLCR block, to set PLL and CLK_CTRL regs (required for linux)
+-device
+loader,addr=0xf8000008,data=0xDF0D,data-len=4
+-device
+loader,addr=0xf8000140,data=0x00500801,data-len=4
+-device
+loader,addr=0xf800012c,data=0x1ed044d,data-len=4
+-device
+loader,addr=0xf8000108,data=0x0001e008,data-len=4
+-device
+loader,addr=0xF800025C,data=0x00000005,data-len=4
+-device
+loader,addr=0xF8000240,data=0x00000000,data-len=4
+#
+#
+# Boot device selection
+-boot
+mode=5
+#
+#
+# Guest software to load during boot up
+-kernel
+<elf>
