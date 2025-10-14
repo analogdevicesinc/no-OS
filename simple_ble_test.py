@@ -50,15 +50,18 @@ class FitDeviceMonitor:
 
         # Create connection status panel
         connection_text = Text()
-        if self.connection_status == "Connected":
+        if "Connected" in self.connection_status:
             connection_text.append("●", style="bright_green")
-            connection_text.append(" CONNECTED", style="bold bright_green")
-        elif self.connection_status == "Connecting":
+            connection_text.append(f" {self.connection_status.upper()}", style="bold bright_green")
+        elif "Connecting" in self.connection_status:
             connection_text.append("●", style="bright_yellow")
-            connection_text.append(" CONNECTING", style="bold bright_yellow")
+            connection_text.append(f" {self.connection_status.upper()}", style="bold bright_yellow")
+        elif "Reconnecting" in self.connection_status:
+            connection_text.append("●", style="bright_blue")
+            connection_text.append(f" {self.connection_status.upper()}", style="bold bright_blue")
         else:
             connection_text.append("●", style="bright_red")
-            connection_text.append(" DISCONNECTED", style="bold bright_red")
+            connection_text.append(f" {self.connection_status.upper()}", style="bold bright_red")
 
         connection_panel = Panel(
             Align.center(connection_text),
@@ -126,11 +129,15 @@ class FitDeviceMonitor:
 
         return layout
 
-    def update_connection_status(self, status, device_name="", device_address=""):
+    def update_connection_status(self, status, device_name="", device_address="", extra_info=""):
         self.connection_status = status
-        self.device_name = device_name
-        self.device_address = device_address
+        if device_name:
+            self.device_name = device_name
+        if device_address:
+            self.device_address = device_address
         self.last_update = datetime.now().strftime("%H:%M:%S")
+        if extra_info:
+            self.connection_status = f"{status} ({extra_info})"
 
     def update_battery(self, level):
         self.battery_level = f"{level}%"
@@ -166,12 +173,128 @@ async def scan_for_fit_device():
     console.print(f"[bold green] Found {len(fit_devices)} Fit device(s)[/]")
     return fit_devices[0]
 
+async def connect_and_monitor(monitor, live, fit_device):
+    """Connect to device and handle monitoring with connection state checks"""
+    battery_uuid = "00002a19-0000-1000-8000-00805f9b34fb"
+    rsc_uuid = "00002a53-0000-1000-8000-00805f9b34fb"
+
+    try:
+        monitor.update_connection_status("Connecting", fit_device.name, fit_device.address)
+        live.update(monitor.create_layout())
+
+        async with BleakClient(fit_device) as client:
+            # Wait for connection to be established
+            await asyncio.sleep(0.5)
+
+            if not client.is_connected:
+                raise Exception("Failed to establish connection")
+
+            monitor.update_connection_status("Connected", fit_device.name, fit_device.address)
+
+            # Discover services
+            services = client.services
+            monitor.set_services_count(len(list(services)))
+            live.update(monitor.create_layout())
+
+            # Set up notification handler for step data
+            def notification_handler(sender, data):
+                try:
+                    steps = int.from_bytes(data[2:4], byteorder='big', signed=False)
+                    monitor.update_steps(steps)
+                    live.update(monitor.create_layout())
+                except Exception as e:
+                    # If step parsing fails, just show raw data
+                    monitor.update_steps(f"Raw: {data.hex()}")
+                    live.update(monitor.create_layout())
+
+            # Read initial battery level
+            try:
+                battery_data = await client.read_gatt_char(battery_uuid)
+                battery_level = int.from_bytes(battery_data, byteorder='little')
+                monitor.update_battery(battery_level)
+                live.update(monitor.create_layout())
+            except Exception as e:
+                monitor.battery_level = f"Error: {str(e)}"
+                live.update(monitor.create_layout())
+
+            # Start step count notifications
+            try:
+                await client.start_notify(rsc_uuid, notification_handler)
+            except Exception as e:
+                monitor.step_count = f"Notify Error: {str(e)}"
+                live.update(monitor.create_layout())
+
+            # Main monitoring loop with connection state checks
+            connection_check_counter = 0
+            last_successful_read = asyncio.get_event_loop().time()
+            read_timeout_threshold = 15  # seconds - if no successful read in 15s, assume connection dead
+            consecutive_failures = 0
+            max_consecutive_failures = 3
+
+            while True:
+                current_time = asyncio.get_event_loop().time()
+
+                # Check connection state every few iterations
+                if connection_check_counter % 3 == 0:  # Every 9 seconds
+                    if not client.is_connected:
+                        raise Exception("Connection lost - client reports disconnected")
+
+                # Check for read timeout (no successful operations for too long)
+                if current_time - last_successful_read > read_timeout_threshold:
+                    raise Exception(f"Connection timeout - no successful reads for {read_timeout_threshold}s")
+
+                # Periodically refresh battery level (also serves as connection keep-alive)
+                await asyncio.sleep(3)
+
+                try:
+                    # Add timeout to the read operation to prevent hanging
+                    battery_data = await asyncio.wait_for(
+                        client.read_gatt_char(battery_uuid),
+                        timeout=5.0  # 5 second timeout for read operation
+                    )
+                    battery_level = int.from_bytes(battery_data, byteorder='little')
+                    monitor.update_battery(battery_level)
+                    live.update(monitor.create_layout())
+
+                    # Reset failure tracking on success
+                    consecutive_failures = 0
+                    last_successful_read = current_time
+                    connection_check_counter += 1
+
+                except asyncio.TimeoutError:
+                    consecutive_failures += 1
+                    raise Exception(f"Read operation timed out (attempt {consecutive_failures})")
+
+                except Exception as read_error:
+                    consecutive_failures += 1
+
+                    # If we have too many consecutive failures, assume connection is dead
+                    if consecutive_failures >= max_consecutive_failures:
+                        raise Exception(f"Too many consecutive read failures ({consecutive_failures}): {read_error}")
+
+                    # Battery read failed - check connection state
+                    if not client.is_connected:
+                        raise Exception(f"Connection lost during battery read: {read_error}")
+                    else:
+                        # Just a read error, continue monitoring but track failures
+                        connection_check_counter += 1
+                        # Don't update last_successful_read on failure
+
+    except KeyboardInterrupt:
+        raise  # Re-raise to be handled by caller
+    except Exception as e:
+        # Connection failed or was lost
+        raise Exception(f"Connection error: {str(e)}")
+
+
 async def monitor_fit_device():
     monitor = FitDeviceMonitor()
+    max_reconnect_attempts = 10
+    reconnect_delay = 5  # seconds
 
     # Initial scan
-    console.print("[bold cyan] BLE Fit Device Monitor[/]")
-    console.print("=" * 50)
+    console.print("[bold cyan] BLE Fit Device Monitor with Auto-Reconnect[/]")
+    console.print("=" * 60)
 
     fit_device = await scan_for_fit_device()
     if not fit_device:
@@ -181,71 +304,59 @@ async def monitor_fit_device():
 
     # Start the live display
     with Live(monitor.create_layout(), refresh_per_second=2, screen=True) as live:
-        try:
-            monitor.update_connection_status("Connecting", fit_device.name, fit_device.address)
-            live.update(monitor.create_layout())
+        attempt = 1
 
-            async with BleakClient(fit_device) as client:
-                monitor.update_connection_status("Connected", fit_device.name, fit_device.address)
+        while attempt <= max_reconnect_attempts:
+            try:
+                if attempt > 1:
+                    console.print(f"\n[bold yellow] Reconnection attempt {attempt}/{max_reconnect_attempts}[/]")
 
-                # Discover services
-                services = client.services
-                monitor.set_services_count(len(list(services)))
+                # Attempt to connect and monitor
+                await connect_and_monitor(monitor, live, fit_device)
+
+            except KeyboardInterrupt:
+                console.print("\n[yellow] Monitoring stopped by user[/]")
+                break
+
+            except Exception as e:
+                monitor.update_connection_status("Disconnected", extra_info=f"Attempt {attempt}")
+                monitor.battery_level = "Connection Lost"
+                monitor.step_count = "Connection Lost"
                 live.update(monitor.create_layout())
 
-                # Set up notification handler for step data
-                def notification_handler(sender, data):
-                    try:
-                        steps = int.from_bytes(data[2:4], byteorder='big', signed=False)
-                        monitor.update_steps(steps)
-                        live.update(monitor.create_layout())
-                    except Exception as e:
-                        # If step parsing fails, just show raw data
-                        monitor.update_steps(f"Raw: {data.hex()}")
-                        live.update(monitor.create_layout())
+                if attempt >= max_reconnect_attempts:
+                    console.print(f"\n[bold red] Max reconnection attempts reached. Final error: {e}[/]")
+                    break
 
-                # Read battery level
-                try:
-                    battery_uuid = "00002a19-0000-1000-8000-00805f9b34fb"
-                    battery_data = await client.read_gatt_char(battery_uuid)
-                    battery_level = int.from_bytes(battery_data, byteorder='little')
-                    monitor.update_battery(battery_level)
+                console.print(f"\n[bold red] Connection error: {e}[/]")
+                console.print(f"[yellow] Waiting {reconnect_delay} seconds before reconnection attempt {attempt + 1}...[/]")
+
+                # Show reconnecting status during wait
+                monitor.update_connection_status("Reconnecting", extra_info=f"in {reconnect_delay}s")
+                live.update(monitor.create_layout())
+
+                # Wait before reconnecting with countdown
+                for i in range(reconnect_delay, 0, -1):
+                    monitor.update_connection_status("Reconnecting", extra_info=f"in {i}s")
                     live.update(monitor.create_layout())
-                except Exception as e:
-                    monitor.battery_level = f"Error: {str(e)}"
-                    live.update(monitor.create_layout())
+                    await asyncio.sleep(1)
 
-                # Start step count notifications
-                try:
-                    rsc_uuid = "00002a53-0000-1000-8000-00805f9b34fb"
-                    await client.start_notify(rsc_uuid, notification_handler)
-                except Exception as e:
-                    monitor.step_count = f"Error: {str(e)}"
-                    live.update(monitor.create_layout())
+                attempt += 1
 
-                # Keep monitoring
-                try:
-                    while True:
-                        # Periodically refresh battery level
-                        await asyncio.sleep(30)  # Update every 30 seconds
-                        try:
-                            battery_data = await client.read_gatt_char(battery_uuid)
-                            battery_level = int.from_bytes(battery_data, byteorder='little')
-                            monitor.update_battery(battery_level)
-                            live.update(monitor.create_layout())
-                        except:
-                            pass  # Ignore battery read errors during monitoring
+                # Optionally rescan for device in case it moved or restarted
+                if attempt % 3 == 0:  # Every 3rd attempt, rescan
+                    console.print("[cyan] Rescanning for device...[/]")
+                    new_device = await scan_for_fit_device()
+                    if new_device:
+                        fit_device = new_device
+                        console.print(f"[green] Device found at: {fit_device.address}[/]")
 
-                except KeyboardInterrupt:
-                    console.print("\n[yellow] Monitoring stopped by user[/]")
-
-        except Exception as e:
-            monitor.update_connection_status("Disconnected")
-            monitor.battery_level = f"Connection Error"
-            monitor.step_count = f"Connection Error"
-            live.update(monitor.create_layout())
-            await asyncio.sleep(2)  # Show error state briefly
-            console.print(f"\n[bold red] Connection failed: {e}[/]")
+        if attempt > max_reconnect_attempts:
+            console.print(f"\n[bold red] Unable to maintain connection after {max_reconnect_attempts} attempts[/]")
+            console.print("[yellow] Please check:[/]")
+            console.print("- Device is powered on and in range")
+            console.print("- BLE firmware is running properly")
+            console.print("- No interference from other devices")
 
 if __name__ == "__main__":
     try:
