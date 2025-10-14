@@ -5,6 +5,7 @@
 #include "maxim_uart_stdio.h"
 #include "maxim_irq.h"
 #include "maxim_spi.h"
+#include "maxim_i2c.h"
 // #include "maxim_usb_uart.h"
 
 #endif
