@@ -5,7 +5,6 @@
         "minor": 28,
         "patch": 0
     },
-    "comment": "FTC Workshop project presets - supports: maxim ONLY",
 
     "configurePresets": [
         {

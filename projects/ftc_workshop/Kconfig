@@ -58,4 +58,33 @@ config USE_USB_UART
 	default y if UART_TYPE_USB
 	default n
 
+choice PROJECT_VERSION
+
+	prompt "Project version"
+	default EXERCISE_1
+	help
+	  Select which project version to compile.
+
+config EXERCISE_1
+	bool "Enable exercise 1"
+	help
+		Enable exercise 1.
+
+config EXERCISE_2
+	bool "Enable exercise 2"
+	help
+		Enable exercise 2.
+
+config EXERCISE_3
+	bool "Enable exercise 3"
+	help
+		Enable exercise 3.
+
+config EXERCISE_4
+	bool "Enable exercise 4"
+	help
+		Enable exercise 4.
+
+endchoice
+
 endmenu
