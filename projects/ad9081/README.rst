@@ -101,6 +101,7 @@ and running.
 #. Make sure that the `Makefile` is configured correctly for your platform.
    The default configuration is for the `AD9081-FMCA-EBZ` evaluation board, with
    the profile specified in profiles/vcu118_ad9081_m8_l4/app_config.h:
+
    .. code-block:: bash
 
      JESD_MODE=8B10B \ #JESD204B, subclass 1
