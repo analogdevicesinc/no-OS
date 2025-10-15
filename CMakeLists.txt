@@ -85,6 +85,10 @@ message(STATUS "No-OS build")
 find_package (Python3 COMPONENTS Interpreter Development)
 find_package(Git)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build/static-libs)
+
 function(no_os_sources_ifdef feature_toggle source)
   if(${feature_toggle})
     message(STATUS "Adding ${source}")
