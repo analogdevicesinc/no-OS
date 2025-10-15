@@ -26,4 +26,11 @@ file(GLOB_RECURSE OPENOCD_SCRIPTS ${CUBEIDE_DIR}/plugins/*/mem_helper.tcl)
 
 if(OPENOCD_SCRIPTS)
   cmake_path(GET OPENOCD_SCRIPTS PARENT_PATH OPENOCD_SCRIPTS)
+
+  # OpenOCD interface configuration
+  set(OPENOCD_INTERFACE "interface/stlink.cfg")
+
+  if (NOT PROBE)
+      set(PROBE "openocd")
+  endif()
 endif()
