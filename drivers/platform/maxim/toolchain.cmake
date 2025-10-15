@@ -48,4 +48,8 @@ if(OPENOCD_PATH)
     set(OPENOCD_INTERFACE "interface/cmsis-dap.cfg")
     set(OPENOCD_CHIPNAME ${TARGET})
     set(OPENOCD_TARGETCFG "target/${TARGET}.cfg")
+
+    if (NOT PROBE)
+        set(PROBE "openocd")
+    endif()
 endif()

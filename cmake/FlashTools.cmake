@@ -2,9 +2,9 @@ find_package(Python3 COMPONENTS Interpreter)
 
 function(add_jlink_flash_target TARGET_NAME)
 	set(FLASH_SCRIPT "${NO_OS_DIR}/tools/scripts/jlink.py")
-	set(HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.hex")
+	set(HEX_FILE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME}.hex")
 
-	add_custom_target(flash_${TARGET_NAME}
+	add_custom_target(flash
 		COMMAND "${VENV_PYTHON_EXE}" "${FLASH_SCRIPT}"
 			--device "${TARGET}"
 			--file "${HEX_FILE}"
@@ -16,40 +16,54 @@ endfunction()
 
 function(add_openocd_flash_target TARGET_NAME)
 	if(${PLATFORM} STREQUAL "maxim")
-		add_custom_target(flash_openocd_${TARGET_NAME}
+		add_custom_target(flash
 			COMMAND ${OPENOCD_PATH}
 				-s ${OPENOCD_SCRIPTS}
 				-f interface/cmsis-dap.cfg
 				-f target/${TARGET}.cfg
-				-c "program ${TARGET_NAME}.elf verify reset exit"
+				-c "program ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME}.elf verify reset exit"
 			DEPENDS ${TARGET_NAME} # Ensures the elf and hex are built first
 			COMMENT "Flashing ${TARGET}..."
 			VERBATIM
 		)
+
+		add_custom_target(erase
+			COMMAND ${OPENOCD_PATH}
+				-s ${OPENOCD_SCRIPTS}
+				-f interface/cmsis-dap.cfg
+				-f target/${TARGET}.cfg
+				-c "init; halt; flash erase_sector 0 0 last; exit"
+			DEPENDS ${TARGET_NAME} # Ensures the elf and hex are built first
+			COMMENT "Erasing..."
+			VERBATIM
+		)
 	elseif(${PLATFORM} STREQUAL "stm32")
-		add_custom_target(flash_openocd_${TARGET_NAME}
+		add_custom_target(flash
 			COMMAND ${OPENOCD_PATH}
 				-s ${OPENOCD_SCRIPTS}
 				-f ${CMAKE_BINARY_DIR}/openocd.cfg
-				-c "program ${TARGET_NAME}.elf verify reset exit"
+				-c "program ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME}.elf verify reset exit"
 			DEPENDS ${TARGET_NAME} # Ensures the elf and hex are built first
 			COMMENT "Flashing ${TARGET}..."
+			VERBATIM
+		)
+
+		add_custom_target(flash
+			COMMAND ${OPENOCD_PATH}
+				-s ${OPENOCD_SCRIPTS}
+				-f ${CMAKE_BINARY_DIR}/openocd.cfg
+				-c "init; halt; flash erase_sector 0 0 last; exit"
+			DEPENDS ${TARGET_NAME} # Ensures the elf and hex are built first
+			COMMENT "Erasing..."
 			VERBATIM
 		)
 	endif()
 endfunction()
 
 function(add_flash_target TARGET_NAME)
-	# This function reads the FLASH_METHOD variable and calls the correct helper.
-	# if(NOT DEFINED FLASH_METHOD OR FLASH_METHOD STREQUAL "")
-	# 	message(STATUS "No FLASH_METHOD specified, flash target for '${TARGET_NAME}' will not be created.")
-	# 	return()
-	# endif()
-
-	# if(FLASH_METHOD STREQUAL "JLINK")
-	add_jlink_flash_target(${TARGET_NAME})
-	add_openocd_flash_target(${TARGET_NAME})
-	# else()
-		# message(WARNING "Unsupported FLASH_METHOD: '${FLASH_METHOD}'. No flash target created for '${TARGET_NAME}'.")
-	# endif()
+	if(${PROBE} STREQUAL "jlink")
+		add_jlink_flash_target(${TARGET_NAME})
+	elseif(${PROBE} STREQUAL "openocd")
+		add_openocd_flash_target(${TARGET_NAME})
+	endif()
 endfunction()
