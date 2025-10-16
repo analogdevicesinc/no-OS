@@ -6,7 +6,7 @@ FetchContent_Declare(
         GIT_TAG STABLE-2_2_1_RELEASE
 )
 
-message(STATUS "Cloning lwip... 📥")
+message(STATUS "Cloning lwip...")
 FetchContent_MakeAvailable(lwip)
 
 set (LWIP_INCLUDE_DIRS

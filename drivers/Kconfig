@@ -1,8 +1,18 @@
+menu "Device Drivers"
+
 source "drivers/accel/Kconfig"
 source "drivers/adc/Kconfig"
 source "drivers/adc-dac/Kconfig"
+source "drivers/afe/Kconfig"
+source "drivers/charger/Kconfig"
 source "drivers/dac/Kconfig"
 source "drivers/imu/Kconfig"
-source "drivers/afe/Kconfig"
 source "drivers/net/Kconfig"
+
+endmenu
+
+menu "Platform Drivers"
+
 source "drivers/platform/Kconfig"
+
+endmenu
