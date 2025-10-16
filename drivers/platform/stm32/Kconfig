@@ -12,62 +12,121 @@ if STM32
 
 config GPIO_STM32
 	bool "Enable STM32 GPIO driver"
+	depends on GPIO
 	default n
+	help
+	  Enable STM32-specific GPIO driver implementation.
+	  Requires CONFIG_GPIO=y to be enabled.
 
 config GPIO_IRQ_STM32
 	bool "Enable STM32 GPIO IRQ driver"
+	depends on GPIO && IRQ
 	default n
+	help
+	  Enable STM32-specific GPIO interrupt driver implementation.
+	  Requires CONFIG_GPIO=y and CONFIG_IRQ=y to be enabled.
 
 config I2C_STM32
 	bool "Enable STM32 I2C driver"
+	depends on I2C
 	default n
+	help
+	  Enable STM32-specific I2C driver implementation.
+	  Requires CONFIG_I2C=y to be enabled.
 
 config I3C_STM32
 	bool "Enable STM32 I3C driver"
+	depends on I3C
 	default n
+	help
+	  Enable STM32-specific I3C driver implementation.
+	  Requires CONFIG_I3C=y to be enabled.
 
 config SPI_STM32
 	bool "Enable STM32 SPI driver"
+	depends on SPI
 	default n
+	help
+	  Enable STM32-specific SPI driver implementation.
+	  Requires CONFIG_SPI=y to be enabled.
 
 config XSPI_STM32
 	bool "Enable STM32 XSPI driver"
+	depends on SPI
 	default n
+	help
+	  Enable STM32-specific XSPI (Extended SPI) driver implementation.
+	  Requires CONFIG_SPI=y to be enabled.
 
 config UART_STM32
 	bool "Enable STM32 UART driver"
+	depends on UART
 	default n
+	help
+	  Enable STM32-specific UART driver implementation.
+	  Requires CONFIG_UART=y to be enabled.
 
 config UART_STDIO_STM32
 	bool "Enable STM32 UART STDIO driver"
+	depends on UART
 	default n
+	help
+	  Enable STM32-specific UART STDIO driver implementation.
+	  Requires CONFIG_UART=y to be enabled.
 
 config USB_UART_STM32
 	bool "Enable STM32 USB UART driver"
 	default n
+	help
+	  Enable STM32-specific USB UART driver implementation.
+	  Platform-specific USB UART functionality.
 
 config IRQ_STM32
 	bool "Enable STM32 IRQ driver"
+	depends on IRQ
 	default n
+	help
+	  Enable STM32-specific interrupt handling driver.
+	  Requires CONFIG_IRQ=y to be enabled.
 
 config PWM_STM32
 	bool "Enable STM32 PWM driver"
+	depends on PWM
 	default n
+	help
+	  Enable STM32-specific PWM driver implementation.
+	  Requires CONFIG_PWM=y to be enabled.
 
 config TIMER_STM32
 	bool "Enable STM32 Timer driver"
+	depends on TIMER
 	default n
+	help
+	  Enable STM32-specific Timer driver implementation.
+	  Requires CONFIG_TIMER=y to be enabled.
 
 config DMA_STM32
 	bool "Enable STM32 DMA driver"
+	depends on DMA
 	default n
+	help
+	  Enable STM32-specific DMA driver implementation.
+	  Requires CONFIG_DMA=y to be enabled.
 
 config GPDMA_STM32
 	bool "Enable STM32 GPDMA driver"
+	depends on DMA
 	default n
+	help
+	  Enable STM32-specific GPDMA (General Purpose DMA) driver implementation.
+	  Requires CONFIG_DMA=y to be enabled.
 
 config TDM_STM32
 	bool "Enable STM32 TDM driver"
+	depends on TDM
 	default n
+	help
+	  Enable STM32-specific TDM (Time Division Multiplexing) driver implementation.
+	  Requires CONFIG_TDM=y to be enabled.
 
 endif # STM32

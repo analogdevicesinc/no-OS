@@ -37,7 +37,7 @@ else()
   endif()
 endif()
 
-message(STATUS "Cloning FreeRTOS... 📥")
+message(STATUS "Cloning FreeRTOS...")
 FetchContent_MakeAvailable(freertos)
 
 target_link_libraries(no-os freertos_kernel)

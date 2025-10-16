@@ -13,58 +13,97 @@ if MAXIM
 
 config GPIO_MAXIM
 	bool "Enable Maxim GPIO driver"
+	depends on GPIO
 	default n
+	help
+	  Enable Maxim-specific GPIO driver implementation.
 
 config GPIO_IRQ_MAXIM
 	bool "Enable Maxim GPIO IRQ driver"
+	depends on GPIO && IRQ
 	default n
+	help
+	  Enable Maxim-specific GPIO interrupt driver implementation.
 
 config I2C_MAXIM
 	bool "Enable Maxim I2C driver"
+	depends on I2C
 	default n
+	help
+	  Enable Maxim-specific I2C driver implementation.
 
 config SPI_MAXIM
 	bool "Enable Maxim SPI driver"
+	depends on SPI
 	default n
+	help
+	  Enable Maxim-specific SPI driver implementation.
 
 config UART_MAXIM
 	bool "Enable Maxim UART driver"
+	depends on UART
 	default n
+	help
+	  Enable Maxim-specific UART driver implementation.
 
 config UART_STDIO_MAXIM
 	bool "Enable Maxim UART STDIO driver"
+	depends on UART
 	default n
+	help
+	  Enable Maxim-specific UART STDIO driver implementation.
 
 config USB_UART_MAXIM
 	bool "Enable Maxim USB UART driver"
 	default n
+	help
+	  Enable Maxim-specific USB UART driver implementation.
+	  Platform-specific USB UART functionality.
 
 config IRQ_MAXIM
 	bool "Enable Maxim IRQ driver"
+	depends on IRQ
 	default n
+	help
+	  Enable Maxim-specific interrupt handling driver.
 
 config PWM_MAXIM
 	bool "Enable Maxim PWM driver"
+	depends on PWM
 	default n
+	help
+	  Enable Maxim-specific PWM driver implementation.
+	  Requires CONFIG_PWM=y to be enabled.
 
 config TIMER_MAXIM
 	bool "Enable Maxim Timer driver"
+	depends on TIMER
 	default n
+	help
+	  Enable Maxim-specific Timer driver implementation.
+	  Requires CONFIG_TIMER=y to be enabled.
 
 config RTC_MAXIM
 	bool "Enable Maxim RTC driver"
+	depends on RTC
 	default n
+	help
+	  Enable Maxim-specific RTC driver implementation.
+	  Requires CONFIG_RTC=y to be enabled.
 
 config TRNG_MAXIM
 	bool "Enable Maxim TRNG driver"
+	depends on TRNG
 	default n
+	help
+	  Enable Maxim-specific TRNG (True Random Number Generator) driver.
+	  Requires CONFIG_TRNG=y to be enabled.
 
 config DMA_MAXIM
 	bool "Enable Maxim DMA driver"
+	depends on DMA
 	default n
-
-config INIT_MAXIM
-	bool "Enable Maxim Init driver"
-	default n
+	help
+	  Enable Maxim-specific DMA driver implementation.
 
 endif # MAXIM

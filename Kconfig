@@ -1,31 +1,155 @@
+menu "Hardware Interface Drivers"
+
+comment "Communication Interfaces"
+
 config SPI
-    select DMA
-    bool "Enable SPI"
-    default n
+	select DMA
+	bool "Enable SPI"
+	default n
+	help
+	  Enable Serial Peripheral Interface (SPI) support.
+	  API: drivers/api/no_os_spi.c, include/no_os_spi.h
+	  Automatically enables DMA support as SPI often requires it.
 
 config I2C
-    bool "Enable I2C"
-    default n
+	bool "Enable I2C"
+	default n
+	help
+	  Enable Inter-Integrated Circuit (I2C) bus support.
+	  API: drivers/api/no_os_i2c.c, include/no_os_i2c.h
+
+config I3C
+	bool "Enable I3C"
+	default n
+	help
+	  Enable MIPI I3C (Improved Inter-Integrated Circuit) bus support.
+	  API: drivers/api/no_os_i3c.c, include/no_os_i3c.h
 
 config UART
-    bool "Enable UART"
-    default n
+	bool "Enable UART"
+	default n
+	help
+	  Enable Universal Asynchronous Receiver-Transmitter (UART) support.
+	  API: drivers/api/no_os_uart.c, include/no_os_uart.h
+
+config TDM
+	bool "Enable TDM"
+	default n
+	help
+	  Enable Time Division Multiplexing (TDM) interface support.
+	  API: drivers/api/no_os_tdm.c, include/no_os_tdm.h
+
+config MDIO
+	bool "Enable MDIO"
+	default n
+	help
+	  Enable Management Data Input/Output (MDIO) interface support.
+	  API: drivers/api/no_os_mdio.c, include/no_os_mdio.h
+	  Used for managing Ethernet PHY devices.
+
+comment "Control and Timing"
 
 config GPIO
-    bool "Enable GPIO"
-    default n
+	bool "Enable GPIO"
+	default n
+	help
+	  Enable General Purpose Input/Output (GPIO) support.
+	  API: drivers/api/no_os_gpio.c, include/no_os_gpio.h
 
 config IRQ
-    bool "Enable IRQ"
-    default n
+	bool "Enable IRQ"
+	default n
+	help
+	  Enable interrupt request (IRQ) handling support.
+	  API: drivers/api/no_os_irq.c, include/no_os_irq.h
+
+config PWM
+	bool "Enable PWM"
+	default n
+	help
+	  Enable Pulse Width Modulation (PWM) support.
+	  API: drivers/api/no_os_pwm.c, include/no_os_pwm.h
+	  Used for motor control, LED dimming, and analog signal generation.
+
+config TIMER
+	bool "Enable Timer"
+	default n
+	help
+	  Enable hardware timer support.
+	  API: drivers/api/no_os_timer.c, include/no_os_timer.h
+	  Used for timing operations, delays, and periodic tasks.
+
+config CLK
+	bool "Enable Clock"
+	default n
+	help
+	  Enable clock management support.
+	  API: include/no_os_clk.h
+	  Used for clock tree configuration and frequency management.
+
+comment "Memory and Storage"
 
 config DMA
-    bool "Enable DMA"
-    default n
+	bool "Enable DMA"
+	default n
+	help
+	  Enable Direct Memory Access (DMA) support.
+	  API: drivers/api/no_os_dma.c, include/no_os_dma.h
+	  Allows peripherals to transfer data directly to/from memory without CPU.
 
-config USB_UART
-    bool "Enable USB UART"
-    default n
+config EEPROM
+	bool "Enable EEPROM"
+	default n
+	help
+	  Enable EEPROM interface support.
+	  API: drivers/api/no_os_eeprom.c, include/no_os_eeprom.h
+	  For Electrically Erasable Programmable Read-Only Memory devices.
+
+config FLASH
+	bool "Enable Flash"
+	default n
+	help
+	  Enable flash memory interface support.
+	  API: include/no_os_flash.h
+	  Used for external flash memory devices.
+
+comment "Analog and Mixed-Signal"
+
+config AIN
+	bool "Enable Analog Input"
+	default n
+	help
+	  Enable analog input interface support.
+	  API: include/no_os_ain.h
+	  For reading analog voltage/current values.
+
+config AOUT
+	bool "Enable Analog Output"
+	default n
+	help
+	  Enable analog output interface support.
+	  API: include/no_os_aout.h
+	  For generating analog voltage/current values.
+
+comment "System and Security"
+
+config RTC
+	bool "Enable RTC"
+	default n
+	help
+	  Enable Real-Time Clock (RTC) support.
+	  API: include/no_os_rtc.h
+	  Provides time and date keeping with battery backup capability.
+
+config TRNG
+	bool "Enable TRNG"
+	default n
+	help
+	  Enable True Random Number Generator (TRNG) support.
+	  API: drivers/api/no_os_trng.c, include/no_os_trng.h
+	  Hardware-based random number generation for cryptographic applications.
+
+endmenu
 
 source "iio/Kconfig"
 source "drivers/Kconfig"

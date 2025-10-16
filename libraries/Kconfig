@@ -1,21 +1,25 @@
+menu "External Libraries"
+
 config FREERTOS
-        bool "Enable FreeRTOS"
-        default n
+	bool "Enable FreeRTOS"
+	default n
 
 config FREERTOS_CONF_PATH
-        depends on FREERTOS
-        string "Path to the FreeRTOSConfig.h file"
+	depends on FREERTOS
+	string "Path to the FreeRTOSConfig.h file"
 
 config FREERTOS_HEAP_ALLOCATOR
-        int "Select the FreeRTOS heap memory allocator implementation"
-        default 2
-        range 1 5
-        depends on FREERTOS
+	int "Select the FreeRTOS heap memory allocator implementation"
+	default 2
+	range 1 5
+	depends on FREERTOS
 
 config LWIP
-        bool "Enable LWIP"
-        default n
+	bool "Enable LWIP"
+	default n
 
 config CORDIO
-        bool "Enable CORDIO"
-        default n
+	bool "Enable CORDIO"
+	default n
+
+endmenu

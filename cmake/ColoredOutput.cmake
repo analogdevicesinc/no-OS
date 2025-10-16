@@ -32,5 +32,3 @@ enable_colored_compiler_output()
 
 # Set a variable to indicate colored output is enabled
 set(NO_OS_COLORED_OUTPUT_ENABLED TRUE CACHE INTERNAL "Colored output is enabled")
-
-message(STATUS "🎨 Colored build output enabled globally")

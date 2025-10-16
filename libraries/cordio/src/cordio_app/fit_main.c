@@ -63,7 +63,7 @@
 #define FIT_MSG_START 0xA0
 
 /* Default Running Speed and Cadence Measurement period (seconds) */
-#define FIT_DEFAULT_RSCM_PERIOD 1
+#define FIT_DEFAULT_RSCM_PERIOD 3
 
 /*! WSF message event enumeration */
 enum {
@@ -79,6 +79,8 @@ enum {
 
 #define BTN_1_TMR MXC_TMR2
 #define BTN_2_TMR MXC_TMR3
+
+extern uint32_t total_step_count;
 
 /**************************************************************************************************
   Data Types
@@ -118,7 +120,7 @@ static const appSecCfg_t fitSecCfg = {
 
 /*! configurable parameters for connection parameter update */
 static const appUpdateCfg_t fitUpdateCfg = {
-	6000,
+	0,
 	/*! ^ Connection idle period in ms before attempting
 	connection parameter update; set to zero to disable */
 	640, /*! Minimum connection interval in 1.25ms units */
@@ -315,7 +317,7 @@ static void fitSendRunningSpeedMeasurement(dmConnId_t connId)
 		/* TODO: Set Running Speed and Cadence Measurement Parameters */
 
 		RscpsSetParameter(RSCP_SM_PARAM_SPEED, 1);
-		RscpsSetParameter(RSCP_SM_PARAM_CADENCE, 245);
+		RscpsSetParameter(RSCP_SM_PARAM_CADENCE, total_step_count);
 		RscpsSetParameter(RSCP_SM_PARAM_STRIDE_LENGTH, 3);
 		RscpsSetParameter(RSCP_SM_PARAM_TOTAL_DISTANCE, 4);
 
