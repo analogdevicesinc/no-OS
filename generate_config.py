@@ -61,6 +61,16 @@ try:
 except Exception as e:
         print(e)
 
+# Generate C header file with CONFIG_ defines using kconfiglib's built-in function
+try:
+        header_path = build_dir.joinpath("no_os_config.h")
+        header_comment = "/* Auto-generated configuration header */\n"
+        result = kconf.write_autoconf(filename=str(header_path), header=header_comment)
+        print(f"Generated no_os_config.h: {result}")
+
+except Exception as e:
+        print(f"Error generating no_os_config.h: {e}")
+
 
 if True:
         print("Config files used:")

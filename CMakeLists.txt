@@ -113,9 +113,13 @@ if(NOT ${NATIVE_BUILD})
   set(NO_OS_DIR ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
 endif()
 
-set(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/.config)
-set(KCONFIG_VARS_FILE ${CMAKE_CURRENT_BINARY_DIR}/config.cmake)
-set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_dotconfig.cmake)
+set(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/build/.config)
+set(KCONFIG_VARS_FILE ${CMAKE_CURRENT_BINARY_DIR}/build/config.cmake)
+set(CONFIG_HEADER_FILE ${CMAKE_CURRENT_BINARY_DIR}/build/no_os_config.h)
+set(CREATE_DOTCONFIG_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/build/create_dotconfig.cmake)
+
+# Create build directory during configure phase
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
 
 set(VENV_DIR "${CMAKE_CURRENT_BINARY_DIR}/.no_os_venv")
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
@@ -143,6 +147,7 @@ target_include_directories(
         no-os
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/build  # Make config.h accessible
 )
 list(APPEND GENERATE_CONFIG_ARGS "--defconfig")
 list(APPEND GENERATE_CONFIG_ARGS ${DEFAULT_DEFCONFIG})
@@ -204,7 +209,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-        --build_dir ${CMAKE_CURRENT_BINARY_DIR}
+        --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
         --update
   )
 else()
@@ -214,7 +219,7 @@ else()
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-        --build_dir ${CMAKE_CURRENT_BINARY_DIR}
+        --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
   )
 endif()
 
@@ -225,23 +230,23 @@ if(NOT EXISTS "${CONFIG_FILE}")
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-        --build_dir ${CMAKE_CURRENT_BINARY_DIR}
+        --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
         --native ${NATIVE_BUILD}
   )
 endif()
 
 add_custom_command(
-  OUTPUT ${KCONFIG_VARS_FILE}
+  OUTPUT ${KCONFIG_VARS_FILE} ${CONFIG_HEADER_FILE}
 
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
     ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-    --build_dir ${CMAKE_CURRENT_BINARY_DIR}
+    --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
 
     DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py ${ALL_KCONFIG_FILES}
-    COMMENT "Generating CMake config variables from .config"
+    COMMENT "Generating CMake config variables and C header from .config"
 )
 
 include(${KCONFIG_VARS_FILE})
@@ -254,7 +259,7 @@ add_subdirectory(iio)
 add_subdirectory(drivers)
 
 add_custom_target(KconfigVars ALL
-    DEPENDS ${KCONFIG_VARS_FILE}
+    DEPENDS ${KCONFIG_VARS_FILE} ${CONFIG_HEADER_FILE}
 )
 
 add_custom_target(
@@ -267,7 +272,7 @@ add_custom_target(
     ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-    --build_dir ${CMAKE_CURRENT_BINARY_DIR}
+    --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
   USES_TERMINAL
   VERBATIM
 )
