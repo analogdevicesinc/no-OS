@@ -6,6 +6,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Enable colored output globally
 include(ColoredOutput)
 
+# Check whether the build was started from the No-OS root or the library was included as a module
+cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
+
 # Auto-detect build context and set toolchain paths for unified presets
 if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
     # In-tree build (full no-OS repo)
@@ -205,6 +208,7 @@ endif()
 if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
+      KCONFIG_CONFIG=${CONFIG_FILE}
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
@@ -215,6 +219,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
 else()
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
+      KCONFIG_CONFIG=${CONFIG_FILE}
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
@@ -227,6 +232,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
+      KCONFIG_CONFIG=${CONFIG_FILE}
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
@@ -240,6 +246,7 @@ add_custom_command(
 
   COMMAND ${CMAKE_COMMAND} -E env
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
+    KCONFIG_CONFIG=${CONFIG_FILE}
     ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
@@ -265,6 +272,7 @@ add_custom_target(KconfigVars ALL
 add_custom_target(
   menuconfig
   COMMAND ${CMAKE_COMMAND} -E env
+    KCONFIG_CONFIG=${CONFIG_FILE}
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
     ${VENV_PYTHON_EXE} -m menuconfig
   COMMAND ${CMAKE_COMMAND} -E env
