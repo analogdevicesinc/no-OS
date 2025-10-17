@@ -277,12 +277,6 @@ add_custom_target(
   VERBATIM
 )
 
-add_custom_target(
-  distclean
-  COMMAND make clean && rm -f ${CMAKE_CURRENT_BINARY_DIR}/.config && rm -f ${CMAKE_CURRENT_BINARY_DIR}/config.cmake
-  VERBATIM
-)
-
 add_dependencies(no-os KconfigVars)
 
 # Define the variables that will be substituted into the templates
