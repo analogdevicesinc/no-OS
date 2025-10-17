@@ -10,7 +10,7 @@ include(ColoredOutput)
 cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
 
 # Auto-detect build context and set toolchain paths for unified presets
-if(EXISTS "${CMAKE_SOURCE_DIR}/drivers")
+if(${NATIVE_BUILD})
     # In-tree build (full no-OS repo)
     message(STATUS "In-tree build detected")
     set(NO_OS_TOOLCHAIN_PATH "drivers/platform/${PLATFORM}/toolchain.cmake")
@@ -73,10 +73,6 @@ include(BoardCompatibility)
 project(no-os VERSION 1.0 LANGUAGES C CXX ASM)
 include(FetchContent)
 
-
-# Check whether the build was started from the No-OS root or the library was included as a module
-cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
-
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/CMakeCache.txt")
   set(IS_FRESH_CONFIGURE TRUE)
 else()
@@ -88,9 +84,15 @@ message(STATUS "No-OS build")
 find_package (Python3 COMPONENTS Interpreter Development)
 find_package(Git)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/build/lib)
+if(${NATIVE_BUILD})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
+else()
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build PARENT_SCOPE)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
+endif()
 
 function(no_os_sources_ifdef feature_toggle source)
   if(${feature_toggle})
@@ -173,7 +175,7 @@ if (DEFINED PROJECT_DEFCONFIG)
   message(STATUS "Adding project defconfig: ${PROJECT_DEFCONFIG}")
   if(${NATIVE_BUILD})
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_CURRENT_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
-    list(APPEND GENERATE_CONFIG_ARGS --native)
+    list(APPEND GENERATE_CONFIG_ARGS "--native")
   else()
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR}/${PROJECT_DEFCONFIG})
   endif()
@@ -205,6 +207,7 @@ if(IS_FRESH_CONFIGURE)
   file(REMOVE ${CONFIG_FILE})
 endif()
 
+# Generate initial config during configure if it doesn't exist
 if(NOT EXISTS "${CONFIG_FILE}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env
@@ -222,7 +225,6 @@ else()
       KCONFIG_CONFIG=${CONFIG_FILE}
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
-        ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
   )
@@ -237,7 +239,6 @@ if(NOT EXISTS "${CONFIG_FILE}")
         ${GENERATE_CONFIG_ARGS}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
-        --native ${NATIVE_BUILD}
   )
 endif()
 
@@ -286,6 +287,3 @@ add_custom_target(
 )
 
 add_dependencies(no-os KconfigVars)
-
-# Define the variables that will be substituted into the templates
-# set(SVD_FILE_PATH "${CMAKE_SOURCE_DIR}/svd/STM32F756.svd" CACHE FILEPATH "Path to SVD file")
