@@ -48,7 +48,7 @@ function(add_openocd_flash_target TARGET_NAME)
 			VERBATIM
 		)
 
-		add_custom_target(flash
+		add_custom_target(erase
 			COMMAND ${OPENOCD_PATH}
 				-s ${OPENOCD_SCRIPTS}
 				-f ${CMAKE_BINARY_DIR}/openocd.cfg

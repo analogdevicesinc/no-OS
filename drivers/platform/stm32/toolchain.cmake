@@ -48,3 +48,7 @@ set(CMAKE_C_FLAGS "${STM32_MCU_FLAGS} -ffunction-sections -fdata-sections -MD -g
 set(CMAKE_CXX_FLAGS "${STM32_MCU_FLAGS} -ffunction-sections -fdata-sections -MD -g3")
 set(CMAKE_ASM_FLAGS "${STM32_MCU_FLAGS} -x assembler-with-cpp")
 set(CMAKE_EXE_LINKER_FLAGS "${STM32_MCU_FLAGS} -specs=nosys.specs -Wl,--gc-sections ${MCU_LINKER_FLAGS} --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
+
+if (NOT PROBE)
+    set(PROBE "openocd")
+endif()

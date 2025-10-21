@@ -131,8 +131,10 @@ function(config_platform_sdk BUILD_TARGET)
         endif()
 
         if(${PLATFORM} STREQUAL "stm32")
+                generate_openocd_config()
+
                 # Extract IOC name without extension for directory naming
-                get_filename_component(IOC_NAME "${CONFIG_STM32_IOC_PATH}" NAME_WE)
+                get_filename_component(IOC_NAME "${IOC_FILE}" NAME_WE)
                 set(EXTI_SCRIPT ${NO_OS_DIR}/tools/scripts/platform/stm32/exti_script.py)
                 set(EXTI_GEN_FILE ${CMAKE_CURRENT_BINARY_DIR}/stm32_gpio_irq_generated.c)
                 if (NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build")
@@ -165,7 +167,7 @@ function(config_platform_sdk BUILD_TARGET)
                                 COMMAND ${VENV_PYTHON_EXE} ${EXTI_SCRIPT} ${STARTUP_FILE} ${EXTI_GEN_FILE}
                         )
                 endif()
-                        
+
                 if(NOT TARGET STM32_Drivers)
                         add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${IOC_NAME}/cmake/stm32cubemx ${CMAKE_CURRENT_BINARY_DIR}/${BOARD}_build/${IOC_NAME}/cmake/stm32cubemx/build)
                 endif()
