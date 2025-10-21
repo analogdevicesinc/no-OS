@@ -31,6 +31,52 @@
 COMMIT_RANGE="$1"
 
 #################################################################
+# Check if new drivers/projects have README.rst files
+#################################################################
+check_new_components_readme() {
+	echo_green "Checking for new drivers/projects and their README.rst files..."
+
+	# Get all added files only
+	git diff --name-only --diff-filter=A $COMMIT_RANGE | while read -r file; do
+		# Check if this is a file in drivers/ or projects/ directory
+		if [[ "$file" == drivers/*/* ]] || [[ "$file" == projects/* ]]; then
+			local top_dir=$(echo "$file" | cut -d'/' -f1)
+			local component_dir=""
+
+			if [ "$top_dir" = "drivers" ]; then
+				# For drivers: drivers/category/driver_name/...
+				local category=$(echo "$file" | cut -d'/' -f2)
+				component_dir=$(echo "$file" | cut -d'/' -f3)
+				local component_path="drivers/$category/$component_dir"
+			elif [ "$top_dir" = "projects" ]; then
+				# For projects: projects/project_name/...
+				component_dir=$(echo "$file" | cut -d'/' -f2)
+				local component_path="projects/$component_dir"
+			fi
+
+			# Skip if we can't determine component directory
+			if [ -z "$component_dir" ]; then
+				continue
+			fi
+
+			# Check if this appears to be a new component (has source files)
+			if [[ "$file" == *".c" ]] || [[ "$file" == *".h" ]] || [[ "$file" == "Makefile" ]]; then
+				# Check if README.rst exists in the component directory
+				local readme_path="$component_path/README.rst"
+
+				if [ ! -f "$readme_path" ]; then
+					echo_red "ERROR: New component '$component_dir' in '$top_dir' is missing README.rst file"
+					echo_red "Please add a README.rst file at: $readme_path"
+					exit 1
+				else
+					echo_green "Found README.rst for new component: $component_dir"
+				fi
+			fi
+		fi
+	done
+}
+
+#################################################################
 # Check if the sphinx documentation is properly linked to the ToC
 #################################################################
 check_sphinx_doc() {
@@ -172,6 +218,8 @@ update_gh_pages() {
 }
 
 parse_commit_range
+
+check_new_components_readme
 
 check_sphinx_doc
 
