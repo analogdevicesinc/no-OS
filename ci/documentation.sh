@@ -34,29 +34,6 @@ COMMIT_RANGE="$1"
 # Check if the sphinx documentation is properly linked to the ToC
 #################################################################
 check_sphinx_doc() {
-        if [ -z "$COMMIT_RANGE" ]
-	then
-		COMMIT_RANGE="${COMMIT_RANGE}"
-	fi
-
-	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
-	then
-		git fetch --depth=50 origin $TARGET_BRANCH
-		git branch $TARGET_BRANCH origin/$TARGET_BRANCH
-		COMMIT_RANGE="${TARGET_BRANCH}.."
-	fi
-
-	if [ -z "$COMMIT_RANGE" ]
-	then
-		echo_green "Using only latest commit, since there is no Pull Request"
-		COMMIT_RANGE=HEAD~1
-	fi
-
-        if ! git rev-parse $COMMIT_RANGE ; then
-		echo_red "Failed to parse commit range '$COMMIT_RANGE'"
-		echo_green "Using only latest commit"
-		COMMIT_RANGE=HEAD~1
-	fi
 
         git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file
         do
@@ -193,6 +170,8 @@ update_gh_pages() {
                 echo_green "Documentation will be updated when this commit gets on main!"
         fi
 }
+
+parse_commit_range
 
 check_sphinx_doc
 
