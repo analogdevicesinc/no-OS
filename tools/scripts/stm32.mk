@@ -78,9 +78,27 @@ INCS += $(NO-OS)/drivers/platform/stm32/stm32_usb_uart.h
 endif
 
 $(PLATFORM)_project:
+	@echo "=== STM32 PROJECT BUILD START ==="
+	@echo "Build Directory: $(BUILD_DIR)"
+	@echo "Binary Name: $(BINARY)"
+	@echo "Hardware: $(HARDWARE)"
+	@echo "STM32CUBEMX Path: $(STM32CUBEMX)"
+	@echo "Current Working Directory: $(shell pwd)"
+	@echo "Current User: $(shell whoami)"
+	@echo "Current DISPLAY: $$DISPLAY"
+	@echo "Environment Variables:"
+	@env | grep -E "(DISPLAY|HOME|USER|TMPDIR)" || true
 	$(call print,Creating IDE project)
 	$(call mk_dir, $(BUILD_DIR))
 	$(call mk_dir, $(VSCODE_CFG_DIR))
+	@echo "=== Validating IOC file ==="
+	@test -f $(HARDWARE) && echo "✓ IOC file exists: $(HARDWARE)" || echo "✗ IOC file missing: $(HARDWARE)"
+	@ls -la $(HARDWARE) || echo "Cannot stat IOC file"
+	@file $(HARDWARE) || echo "Cannot determine file type"
+	@echo "IOC file first 5 lines:"
+	@head -5 $(HARDWARE) || echo "Cannot read IOC file"
+	@echo "IOC file size: $$(wc -c < $(HARDWARE) 2>/dev/null || echo 'unknown') bytes"
+	@echo "=== Creating CubeMX script file ==="
 	@echo config load $(HARDWARE) > $(BINARY).cubemx
 	@echo project name app >> $(BINARY).cubemx
 	@echo project toolchain STM32CubeIDE >> $(BINARY).cubemx
@@ -89,7 +107,38 @@ $(PLATFORM)_project:
 	@echo SetStructure Advanced >> $(BINARY).cubemx
 	@echo project generate >> $(BINARY).cubemx
 	@echo exit >> $(BINARY).cubemx
+	@echo "=== CubeMX script contents ==="
+	@cat $(BINARY).cubemx
+	@echo "=== Testing X11 connection ==="
+	@ps aux | grep -i xvfb | head -5
+	@echo "=== Checking Java and STM32CubeMX ==="
+	@echo "Java version:"
+	@$(STM32CUBEMX)/jre/bin/java -version
+	@echo "STM32CubeMX jar exists: $(shell test -f $(STM32CUBEMX)/$(MX) && echo YES || echo NO)"
+	@echo "STM32CubeMX jar path: $(STM32CUBEMX)/$(MX)"
+	@ls -la $(STM32CUBEMX)/$(MX) || echo "STM32CubeMX jar not found"
+	@echo "=== System Resources Before STM32CubeMX ==="
+	@free -h
+	@df -h /tmp
+	@echo "Open file descriptors: $$(lsof 2>/dev/null | wc -l || echo 'lsof not available')"
+	@echo "=== Starting process monitoring ==="
+	@(while pgrep -f "STM32CubeMX" > /dev/null 2>&1; do echo "[MONITOR] STM32CubeMX still running at $$(date)"; ps aux | grep STM32CubeMX | grep -v grep | head -3; sleep 5; done) &
+	@echo "=== Running STM32CubeMX (ORIGINAL COMMAND) ==="
+	@echo "Starting STM32CubeMX at: $$(date)"
 	$(STM32CUBEMX)/jre/bin/java -jar $(STM32CUBEMX)/$(MX) -q $(BINARY).cubemx $(HIDE)
+	@CUBEMX_EXIT_CODE=$$?; echo "=== STM32CubeMX completed at: $$(date), exit code: $$CUBEMX_EXIT_CODE ==="
+	@echo "=== Post-execution process check ==="
+	@ps aux | grep -E "(STM32CubeMX|java)" | grep -v grep || echo "No STM32CubeMX/Java processes found"
+	@echo "=== System Resources After STM32CubeMX ==="
+	@free -h
+	@df -h /tmp
+	@echo "=== Checking for temp files ==="
+	@find /tmp -name "*stm32*" -o -name "*cubemx*" -o -name "*STM32*" 2>/dev/null | head -10 || echo "No STM32 temp files found"
+	@echo "=== Checking generated files ==="
+	@ls -la $(BUILD_DIR)/ || echo "Build directory not found"
+	@ls -la $(PROJECT_BUILDROOT)/ || echo "Project buildroot not found"
+	@echo "=== Checking CubeMX log files ==="
+	@find /tmp -name "*.log" -exec ls -la {} \; 2>/dev/null | head -10 || echo "No log files found in /tmp"
 	$(call remove_file,$(BINARY).cubemx) $(HIDE)
 	$(MAKE) --no-print-directory $(PROJECT)_configure
 

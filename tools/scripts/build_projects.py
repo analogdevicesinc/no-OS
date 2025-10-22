@@ -346,6 +346,12 @@ def main():
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
 	(environment_path_files, builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
+	print(f"List of projects are: {os.listdir(projets)}")
+	print(f"FILTERS APPLIED: project={_project}, platform={_platform}, build_name={_build_name}, hardware={_hw}")
+	if _platform is not None:
+		print(f"WARNING: Platform filter '{_platform}' will skip projects that don't have this platform!")
+	projects_processed = 0
+	max_projects = 1
 	for project in os.listdir(projets):
 		binary_created = False
 		if _project is not None:
@@ -358,6 +364,23 @@ def main():
 
 		fp = open(build_file)
 		configs = json.loads(fp.read())
+		print(f"Found {len(configs)} platform configurations in {project}")
+
+		# Check if this project has the platform we're looking for before counting it
+		has_target_platform = False
+		if _platform is not None:
+			if _platform in configs:
+				has_target_platform = True
+		else:
+			has_target_platform = True  # No platform filter, so any project counts
+
+		if not has_target_platform:
+			print(f"  Skipping project {project} - no {_platform} platform found")
+			continue
+
+		# Only count projects that actually have the target platform
+		projects_processed += 1
+		print(f"Processing project {projects_processed}/{max_projects}: {project}")
 		ok = 1
 		for (platform, config) in configs.items():
 			if _platform is not None:
@@ -432,6 +455,11 @@ def main():
 			os.system("zip -mr -FS %s.zip . >> %s 2>&1" % ("../"+project, "../../"+log_file))
 			os.chdir(cwd)
 			run_cmd("rm -r %s" % project_export)
+
+		if projects_processed >= max_projects:
+			print(f"Reached maximum number of projects ({max_projects}). Stopping.")
+			break
+
 main()
 
 if ERR != 0:
