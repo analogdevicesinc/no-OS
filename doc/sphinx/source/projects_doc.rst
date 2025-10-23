@@ -20,6 +20,14 @@ ADC / DAC
    
    projects/adc-dac/*
 
+ACCELEROMETERS
+==============
+.. toctree::
+   :maxdepth: 1
+   :glob:
+   
+   projects/accel/*
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
