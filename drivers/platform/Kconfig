@@ -14,4 +14,8 @@ if PLATFORM_DRIVERS
 source "drivers/platform/stm32/Kconfig"
 source "drivers/platform/maxim/Kconfig"
 
+config PLATFORM_I2C_BITBANG
+	default n
+	bool "Enable the I2C bitbang driver"
+
 endif # PLATFORM_DRIVERS
