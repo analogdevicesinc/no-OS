@@ -326,21 +326,17 @@ void bt_task(void *pvParameters)
 
 	max20303_set_hibernate(max20303, false);
 
-	__disable_irq();
+	taskENTER_CRITICAL();
 	init_display();
-	__enable_irq();
+	taskEXIT_CRITICAL();
 
 	printf("Starting BLE in Peripheral mode\n");
 	printf("Cordio initialization completed - GATT services should be available\n");
 
 	printf("GATT services available:\n");
 	printf("- Core GATT services (GAP/GATT)\n");
-	printf("- Battery Service (0x180F) - read battery level\n");
-	printf("- Device Information Service (0x180A)\n");
-	printf("- Wireless Profile Service - read/write custom data\n");
-	printf("You can connect with your phone and read dummy data!\n");
-
-	printf("accel\n");
+	printf("- Battery Service - read battery level\n");
+	printf("- Running speed and cadence service - read battery level\n");
 
 	/* For FreeRTOS, WSF handles dispatching via its own tasks created in WsfOsInit() */
 	/* This task can now just handle periodic operations or exit */
@@ -376,16 +372,12 @@ void bt_task(void *pvParameters)
 			i = 0;
 
 			dummy_battery++;
-			// t1 = no_os_get_time();
-			__disable_irq();
+			taskENTER_CRITICAL();
 			ret = display_battery_level(oled_display, 10 * (dummy_battery % 10));
-			__enable_irq();
+			taskEXIT_CRITICAL();
 
 			if (ret)
 				printf("Display write error: %d\n", ret);
-			// t2 = no_os_get_time();
-
-			// printf("Time: %d\n", t2.us - t1.us);
 		}
 
 		i++;

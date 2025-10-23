@@ -1,5 +1,4 @@
 menu "FTC Workshop BLE Configuration"
-	depends on CORDIO
 
 config USE_USB_UART
 	bool

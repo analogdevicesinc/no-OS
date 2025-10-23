@@ -11,8 +11,8 @@ elseif (${CONFIG_EXERCISE_4})
         target_sources(project_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/exercise_4/main.c)
 endif()
 
-target_include_directories(ftc_workshop PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+target_include_directories(project_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/${PLATFORM}
 )
 
 target_link_libraries(project_lib no-os)
