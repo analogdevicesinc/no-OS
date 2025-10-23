@@ -910,7 +910,7 @@ const struct dpot_ops ad5142_dpot_ops = {
 	.dpot_copy_nvm_to_rdac = &ad5142_dpot_copy_nvm_to_rdac,
 	.dpot_rdac_linear_update = &ad5142_dpot_rdac_linear_update,
 	.dpot_rdac_6db_update = &ad5142_dpot_rdac_6db_update,
-	//.dpot_send_cmd = &ad5142_dpot_send_cmd,
+	.dpot_send_cmd = &ad5142_dpot_send_cmd,
 	.dpot_remove = &ad5142_dpot_remove,
 	.dpot_enable_top_bottom_scale = &ad5142_dpot_top_bottom_scale_enable
 };
