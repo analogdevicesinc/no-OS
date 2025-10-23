@@ -1,67 +1,86 @@
 /***************************************************************************//**
- *   @file   bitbang_i2c.h
- *   @brief  Header file for bitbang I2C driver
- *   @author Ciprian Regus (ciprian.regus@analog.com)
-********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *   @file   i2c_bitbang.h
+ *   @brief  Header file for I2C bitbang implementation
+ *   @author Generated with Claude Code
 *******************************************************************************/
 
-#ifndef BITBANG_I2C_H_
-#define BITBANG_I2C_H_
+#ifndef I2C_BITBANG_H_
+#define I2C_BITBANG_H_
+
+/******************************************************************************/
+/***************************** Include Files *********************************/
+/******************************************************************************/
 
 #include "no_os_i2c.h"
 #include "no_os_gpio.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions ********************/
+/******************************************************************************/
+
+/* I2C standard speeds */
+#define I2C_BITBANG_SPEED_STANDARD	100000  /* 100 kHz */
+#define I2C_BITBANG_SPEED_FAST		400000  /* 400 kHz */
+
+/* Timeout for clock stretching (microseconds) */
+#define I2C_BITBANG_TIMEOUT_US		100000  /* 100 ms */
+
+/******************************************************************************/
+/*************************** Types Declarations ******************************/
+/******************************************************************************/
+
 /**
- * @struct bitbang_i2c_init_param
- * @brief Structure holding the parameters for bitbang I2C initialization.
+ * @enum i2c_bitbang_pull_type
+ * @brief Pull-up configuration options
  */
-struct bitbang_i2c_init_param {
-	/** GPIO descriptor for SDA line */
-	struct no_os_gpio_desc *sda_gpio;
-	/** GPIO descriptor for SCL line */
-	struct no_os_gpio_desc *scl_gpio;
+enum i2c_bitbang_pull_type {
+	/** External pull-ups present, use open-drain */
+	I2C_BITBANG_PULL_EXTERNAL,
+	/** Use internal pull-ups */
+	I2C_BITBANG_PULL_INTERNAL,
+	/** No pull-ups, drive high/low actively */
+	I2C_BITBANG_PULL_NONE
 };
 
 /**
- * @struct bitbang_i2c_desc
- * @brief Structure holding bitbang I2C descriptor.
+ * @struct i2c_bitbang_init_param
+ * @brief I2C bitbang initialization parameters
  */
-struct bitbang_i2c_desc {
-	/** GPIO descriptor for SDA line */
-	struct no_os_gpio_desc *sda_gpio;
-	/** GPIO descriptor for SCL line */
-	struct no_os_gpio_desc *scl_gpio;
-	/** I2C frequency in Hz */
-	uint32_t frequency;
+struct i2c_bitbang_init_param {
+	/** GPIO initialization parameters for SDA */
+	struct no_os_gpio_init_param sda_init;
+	/** GPIO initialization parameters for SCL */
+	struct no_os_gpio_init_param scl_init;
+	/** Pull-up configuration */
+	enum i2c_bitbang_pull_type pull_type;
+	/** Clock stretching timeout in microseconds */
+	uint32_t timeout_us;
 };
 
-/* Bitbang I2C platform operations */
-extern const struct no_os_i2c_platform_ops bitbang_i2c_ops;
+/**
+ * @struct i2c_bitbang_desc
+ * @brief I2C bitbang descriptor
+ */
+struct i2c_bitbang_desc {
+	/** SDA GPIO descriptor */
+	struct no_os_gpio_desc *sda;
+	/** SCL GPIO descriptor */
+	struct no_os_gpio_desc *scl;
+	/** Half period delay in microseconds */
+	uint32_t half_period_us;
+	/** Quarter period delay in microseconds */
+	uint32_t quarter_period_us;
+	/** Pull-up configuration */
+	enum i2c_bitbang_pull_type pull_type;
+	/** Clock stretching timeout */
+	uint32_t timeout_us;
+};
 
-#endif /* BITBANG_I2C_H_ */
+/******************************************************************************/
+/************************ Functions Declarations ****************************/
+/******************************************************************************/
+
+/* I2C bitbang platform operations */
+extern const struct no_os_i2c_platform_ops i2c_bitbang_ops;
+
+#endif /* I2C_BITBANG_H_ */
