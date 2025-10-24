@@ -445,7 +445,7 @@ static int32_t max_uart_remove(struct no_os_uart_desc *desc)
 		lf256fifo_remove(desc->rx_fifo);
 		no_os_free(desc->rx_fifo);
 	}
-
+	MXC_UART_AbortAsync(MXC_UART_GET_UART(desc->device_id));
 	MXC_UART_Shutdown(MXC_UART_GET_UART(desc->device_id));
 	no_os_free(desc->extra);
 	no_os_free(desc);
