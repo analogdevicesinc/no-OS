@@ -116,7 +116,7 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 						  NO_OS_GPIO_LOW);
 		if (ret)
 			goto error;
-		no_os_mdelay(dev->info->timeouts->reset_ms);
+		no_os_mdelay(ip->info->timeouts->reset_ms);
 	}
 
 	dev->info = ip->info;
