@@ -615,18 +615,19 @@ int ad5144_dpot_chn_read(struct dpot_dev *desc,
 
 	return 0;
 }
+
 /**
- * @brief Enter/Exit the top scale  or Bottom scale .
+ * @brief Enter/Exit the top scale or Bottom scale .
  * @param desc - digipot descriptor.
  * @param chn  - digipot channel.
- * @param IsTopScale  - boolean flag to indicat top scale or bottom scale.
- * @param nEnable - Enter or exit the TS.
+ * @param is_top_scale  - boolean flag to indicate top scale or bottom scale.
+ * @param enable - Enter or exit the TS.
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad5144_dpot_top_bottom_scale_enable(struct dpot_dev *desc,
 					enum dpot_chn_type chn,
-					bool IsTopScale,
-					uint8_t nEnable)
+					bool is_top_scale,
+					uint8_t enable)
 {
 	int ret;
 	struct dpot_command cmd;
@@ -638,21 +639,16 @@ int ad5144_dpot_top_bottom_scale_enable(struct dpot_dev *desc,
 	if (ret)
 		return ret;
 
-	/* Write contents of serial register data to RDAC (command #1) */
-	cmd.control = 0x9;
+	/* Enter/Exit the top scale or Bottom scale (command #12 or command #13) */
+	cmd.control = EXTRACT_CMD_BITS(AD51XX_CMD_TOP_SCALE_EXIT);
 	cmd.address = ad5144_dpot_cmd_addr[chn];
-	cmd.data =  nEnable;
-	if (IsTopScale == true) {
-		cmd.data |= 0x80;
-	}
+	cmd.data =  enable;
+	if (is_top_scale == true)
+		cmd.data |= EXTRACT_DATA_BITS(AD51XX_CMD_TOP_SCALE_EXIT);
 
 	cmd.is_readback = false;
 
-	ret = ad5144_dpot_send_cmd(desc, &cmd);
-	if (ret)
-		return ret;
-
-	return 0;
+	return ad5144_dpot_send_cmd(desc, &cmd);
 }
 
 /**

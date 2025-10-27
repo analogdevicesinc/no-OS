@@ -560,6 +560,41 @@ int ad5142_dpot_chn_read(struct dpot_dev *desc,
 }
 
 /**
+ * @brief Enter/Exit the top scale or bottom scale .
+ * @param desc - digipot descriptor.
+ * @param chn  - digipot channel.
+ * @param is_top_scale  - boolean flag to indicate top scale or bottom scale.
+ * @param enable - Enter or exit the TS.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad5142_dpot_top_bottom_scale_enable(struct dpot_dev *desc,
+					enum dpot_chn_type chn,
+					bool is_top_scale,
+					uint8_t enable)
+{
+	int ret;
+	struct dpot_command cmd;
+
+	if (!desc)
+		return -EINVAL;
+
+	ret = ad5142_validate_chn(desc->extra, chn);
+	if (ret)
+		return ret;
+
+	/* Enter/Exit the top scale or bottom scale (command #12 or command #13) */
+	cmd.control = EXTRACT_CMD_BITS(AD51XX_CMD_TOP_SCALE_EXIT);
+	cmd.address = ad5142_dpot_cmd_addr[chn];
+	cmd.data =  enable;
+	if (is_top_scale == true)
+		cmd.data |= EXTRACT_DATA_BITS(AD51XX_CMD_TOP_SCALE_EXIT);
+
+	cmd.is_readback = false;
+
+	return ad5142_dpot_send_cmd(desc, &cmd);
+}
+
+/**
  * @brief Write to the digital potentiometer channel.
  * @param desc - digipot descriptor.
  * @param chn  - digipot channel.
@@ -877,4 +912,5 @@ const struct dpot_ops ad5142_dpot_ops = {
 	.dpot_rdac_6db_update = &ad5142_dpot_rdac_6db_update,
 	//.dpot_send_cmd = &ad5142_dpot_send_cmd,
 	.dpot_remove = &ad5142_dpot_remove,
+	.dpot_enable_top_bottom_scale = &ad5142_dpot_top_bottom_scale_enable
 };
