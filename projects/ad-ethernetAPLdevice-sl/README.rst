@@ -1,4 +1,4 @@
-Hockey Puck no-OS Example Project
+ad-ethernetAPLdevice-sl no-OS Example Project
 ======================================
 
 .. no-os-doxygen::
@@ -64,18 +64,18 @@ Make Flags
     * `y`: Configures the IP specified using the NO_OS_IP make variable. By default, it is 192.168.97.60
     * `n`: (Default) Let the DHCP server running on the host PC assign an IP to the device.
 * **BOARD_REV**: Selects the board revision.
-    * `HP_IS`: (Default) Configure the peripheral interfaces for the intrinsic safety version of the Hockey Puck
-    * `HP_NON_IS`: Configure the peripheral interfaces for the non intrinsic safety version of the Hockey Puck
+    * `HP_IS`: (Default) Configure the peripheral interfaces for the intrinsic safety version of the ad-ethernetAPLdevice-sl
+    * `HP_NON_IS`: Configure the peripheral interfaces for the non intrinsic safety version of the ad-ethernetAPLdevice-sl
 
 A successful build should end with the following terminal output:
 
 .. code-block:: bash
 
-    [11:11:27] [HEX] hockey_puck.hex
-    [11:11:27] hockey_puck.hex is ready
-    [11:11:21] Done (build/hockey_puck.elf)
+    [11:11:27] [HEX] ad-ethernetAPLdevice-sl.hex
+    [11:11:27] ad-ethernetAPLdevice-sl.hex is ready
+    [11:11:21] Done (build/ad-ethernetAPLdevice-sl.elf)
 
-The binary and executable files are now available in the `build` directory (`hockey_puck.hex` and `hockey_puck.elf` files).
+The binary and executable files are now available in the `build` directory (`ad-ethernetAPLdevice-sl.hex` and `ad-ethernetAPLdevice-sl.elf` files).
 
 Programming the MCU
 -------------------
@@ -110,4 +110,4 @@ The microcontroller may be programmed in 2 ways:
 	** Verified OK **
 	** Resetting Target **
 	shutdown command invoked
-	[11:27:42] hockey_puck.elf uploaded to board
+	[11:27:42] ad-ethernetAPLdevice-sl.elf uploaded to board
