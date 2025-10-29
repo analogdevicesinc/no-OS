@@ -70,6 +70,7 @@ enum iio_chan_type {
 	IIO_DELTA_ANGL,
 	IIO_DELTA_VELOCITY,
 	IIO_WEIGHT,
+	IIO_POWER,
 };
 
 /**
