@@ -66,6 +66,7 @@ int main()
 	int ret;
 	uint32_t buffer[20];
 	int32_t i;
+	int temp_ci;
 
 	/* SPI instance */
 	struct xil_spi_init_param spi_extra = {

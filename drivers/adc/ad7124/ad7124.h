@@ -43,6 +43,8 @@
 #define	AD7124_R  2   /* Read only */
 #define AD7124_W  3   /* Write only */
 
+#define TEST_CI 0x134
+
 /* Total Number of Setups */
 #define AD7124_MAX_SETUPS	8
 /* Maximum number of channels */

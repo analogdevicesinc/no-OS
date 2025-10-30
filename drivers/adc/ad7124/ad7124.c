@@ -62,6 +62,7 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 	uint8_t i = 0;
 	uint8_t check8 = 0, add_status_length = 0;
 	uint8_t msg_buf[8] = { 0 };
+	int temp_ci = 0;
 
 	if (!dev || !p_reg)
 		return -EINVAL;
