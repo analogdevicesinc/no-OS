@@ -460,6 +460,10 @@ struct adis_chip_info {
 	uint8_t					fir_coef_idx_max;
 	/** Chip specific internal clock frequency in Hertz. */
 	uint32_t 				int_clk;
+	/** Chip specific initial startup. */
+	int (*initial_startup)(struct adis_dev *adis);
+	/** Chip specific sensor self-test. */
+	int (*snsr_self_test)(struct adis_dev *adis);
 	/** Chip specific implementation to obtain the channel scale members. */
 	int (*get_scale)(struct adis_dev *adis,
 			 uint32_t *scale_m1, uint32_t *scale_m2,

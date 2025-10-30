@@ -41,6 +41,7 @@
 #endif
 
 #include "no_os_spi.h"
+#include "no_os_i2c.h"
 #include "no_os_util.h"
 #include <errno.h>
 #include <stdlib.h>
@@ -94,6 +95,8 @@ enum adis_device_id {
 	ADIS16576_3,
 	ADIS16577_2,
 	ADIS16577_3,
+	ADIS16607_2,
+	ADIS16607_3
 };
 
 /**
@@ -115,7 +118,6 @@ enum adis_axis_type {
 	ADIS_Y_AXIS,
 	ADIS_Z_AXIS,
 };
-
 
 /** @struct adis_diag_flags
  *  @brief Bitfield struct which maps on the diagnosis register
@@ -250,6 +252,34 @@ struct adis_burst_data {
 	uint16_t y_accel_msb;
 	uint16_t z_accel_lsb;
 	uint16_t z_accel_msb;
+	uint16_t x_deltang_lsb;
+	uint16_t x_deltang_msb;
+	uint16_t y_deltang_lsb;
+	uint16_t y_deltang_msb;
+	uint16_t z_deltang_lsb;
+	uint16_t z_deltang_msb;
+	uint16_t x_deltvel_lsb;
+	uint16_t x_deltvel_msb;
+	uint16_t y_deltvel_lsb;
+	uint16_t y_deltvel_msb;
+	uint16_t z_deltvel_lsb;
+	uint16_t z_deltvel_msb;
+};
+
+/**
+ * @brief SPI Duplex type for ADIS devices
+ */
+enum adis_spi_duplex_type {
+	ADIS_SPI_HALF_DUPLEX,
+	ADIS_SPI_FULL_DUPLEX,
+};
+
+/**
+ * @brief Communication type for ADIS devices
+ */
+enum adis_comm_type {
+	ADIS_SPI_COMM,
+	ADIS_I2C_COMM,
 };
 
 /** @struct adis_dev
@@ -258,6 +288,8 @@ struct adis_burst_data {
 struct adis_dev {
 	/** SPI descriptor used for SPI communication. */
 	struct no_os_spi_desc		*spi_desc;
+	/** I2C descriptor used for I2C communication. */
+	struct no_os_i2c_desc		*i2c_desc;
 	/** GPIO descriptor used to handle the reset pin. */
 	struct no_os_gpio_desc		*gpio_reset;
 	/** Specific chip information. */
@@ -286,6 +318,10 @@ struct adis_dev {
 	uint8_t				burst_sel;
 	/** Device is locked, only data readings are allowed, no configuration allowed. */
 	bool				is_locked;
+	/** Device SPI communication duplex type. */
+	enum adis_spi_duplex_type	duplex_type;
+	/** Communication type (SPI or I2C). */
+	enum adis_comm_type		comm_type;
 };
 
 /** @struct adis_init_param
@@ -296,6 +332,8 @@ struct adis_init_param {
 	const struct adis_chip_info *info;
 	/** SPI initialization parameters. */
 	struct no_os_spi_init_param 	*spi_init;
+	/** I2C initialization parameters. */
+	struct no_os_i2c_init_param 	*i2c_init;
 	/** GPIO initialization parameter for reset pin. */
 	struct no_os_gpio_init_param	*gpio_reset;
 	/** External clock frequency in Hertz to be configured at initialization
@@ -308,6 +346,12 @@ struct adis_init_param {
 	uint32_t			sync_mode;
 	/** Device id, specified by the user  */
 	enum adis_device_id		dev_id;
+	/** Device SPI communication duplex type. */
+	enum adis_spi_duplex_type	duplex_type;
+	/** Communication type (SPI or I2C). */
+	enum adis_comm_type		comm_type;
+	/** Indicate if FIFO will be used. */
+	bool use_fifo;
 };
 
 /*! Initialize adis device. */
