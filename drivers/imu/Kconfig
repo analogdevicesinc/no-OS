@@ -78,6 +78,17 @@ config IMU_IIO_ADIS1657X
     bool "Enable ADIS1657X IIO driver"
     default n
 
+config IMU_ADIS16607
+    select IMU_ADIS
+    select I2C
+    bool "Enable ADIS16607 IMU driver"
+    default n
+
+config IMU_IIO_ADIS16607
+    select IMU_ADIS16607
+    bool "Enable ADIS16607 IIO driver"
+    default n
+
 config IMU_IIO_ADIS_COMMON
     bool "Enable ADIS common IIO functionality"
     default n

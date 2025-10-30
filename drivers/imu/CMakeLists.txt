@@ -25,6 +25,10 @@ no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1655X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adi
 no_os_sources_ifdef(CONFIG_IMU_ADIS1657X ${CMAKE_CURRENT_SOURCE_DIR}/adis1657x.c)
 no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1657X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis1657x.c)
 
+# ADIS16607
+no_os_sources_ifdef(CONFIG_IMU_ADIS16607 ${CMAKE_CURRENT_SOURCE_DIR}/adis16607.c)
+no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS16607 ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis16607.c)
+
 # Common IIO functionality for ADIS drivers
 no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1646X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis.c)
 no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1647X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis.c)
@@ -39,6 +43,8 @@ no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1650X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adi
 no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1654X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis_trig.c)
 no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1655X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis_trig.c)
 no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS1657X ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis_trig.c)
+no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS16607 ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis.c)
+no_os_sources_ifdef(CONFIG_IMU_IIO_ADIS16607 ${CMAKE_CURRENT_SOURCE_DIR}/iio_adis_trig.c)
 
 # Include directories
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
