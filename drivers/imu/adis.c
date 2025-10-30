@@ -73,9 +73,43 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 	if (!dev)
 		return -ENOMEM;
 
-	ret = no_os_spi_init(&dev->spi_desc, ip->spi_init);
-	if (ret)
-		goto error_spi;
+	/*
+	 * ADIS16607 supports both SPI and I2C communication.
+	 * All other devices use SPI only.
+	 */
+	if (ip->dev_id >= ADIS16607_2 && ip->dev_id <= ADIS16607_3) {
+		switch (ip->comm_type) {
+		case ADIS_SPI_COMM:
+			if (!ip->spi_init) {
+				ret = -EINVAL;
+				goto error_comm;
+			}
+			ret = no_os_spi_init(&dev->spi_desc, ip->spi_init);
+			if (ret)
+				goto error_comm;
+			break;
+		case ADIS_I2C_COMM:
+			if (!ip->i2c_init) {
+				ret = -EINVAL;
+				goto error_comm;
+			}
+			ret = no_os_i2c_init(&dev->i2c_desc, ip->i2c_init);
+			if (ret)
+				goto error_comm;
+			break;
+		default:
+			ret = -EINVAL;
+			goto error_comm;
+		}
+		dev->comm_type = ip->comm_type;
+	} else {
+		ret = no_os_spi_init(&dev->spi_desc, ip->spi_init);
+		if (ret)
+			goto error_comm;
+		dev->comm_type = ADIS_SPI_COMM;
+	}
+
+	dev->duplex_type = ip->duplex_type;
 
 	if (ip->info->has_paging)
 		dev->current_page = -1;
@@ -98,6 +132,7 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 
 	dev->info = ip->info;
 	dev->int_clk = ip->info->int_clk;
+	dev->duplex_type = ip->duplex_type;
 	dev->is_locked = false;
 
 	ret = adis_initial_startup(dev);
@@ -114,8 +149,11 @@ int adis_init(struct adis_dev **adis, const struct adis_init_param *ip)
 
 error:
 	no_os_gpio_remove(dev->gpio_reset);
-	no_os_spi_remove(dev->spi_desc);
-error_spi:
+	if (dev->spi_desc)
+		no_os_spi_remove(dev->spi_desc);
+	if (dev->i2c_desc)
+		no_os_i2c_remove(dev->i2c_desc);
+error_comm:
 	no_os_free(dev);
 	return ret;
 }
@@ -132,6 +170,8 @@ void adis_remove(struct adis_dev *adis)
 		no_os_gpio_remove(adis->gpio_reset);
 	if (adis->spi_desc)
 		no_os_spi_remove(adis->spi_desc);
+	if (adis->i2c_desc)
+		no_os_i2c_remove(adis->i2c_desc);
 
 	no_os_free(adis);
 }
@@ -158,11 +198,15 @@ int adis_initial_startup(struct adis_dev *adis)
 			return ret;
 	}
 
-	ret = adis_cmd_snsr_self_test(adis);
-	if (ret)
-		return ret;
+	if (adis->info->initial_startup) {
+		return adis->info->initial_startup(adis);
+	} else {
+		ret = adis_cmd_snsr_self_test(adis);
+		if (ret)
+			return ret;
 
-	return adis_read_diag_stat(adis, &diag_flags);
+		return adis_read_diag_stat(adis, &diag_flags);
+	}
 }
 
 /**
@@ -3580,9 +3624,15 @@ int adis_cmd_snsr_self_test(struct adis_dev *adis)
 	int ret;
 	struct adis_field field = adis->info->field_map->snsr_self_test;
 
-	ret = adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
-	if (ret)
-		return ret;
+	if (adis->info->snsr_self_test) {
+		ret = adis->info->snsr_self_test(adis);
+		if (ret)
+			return ret;
+	} else {
+		ret = adis_write_reg(adis, field.reg_addr, field.field_mask, field.reg_size);
+		if (ret)
+			return ret;
+	}
 
 	no_os_mdelay(adis->info->timeouts->self_test_ms);
 
