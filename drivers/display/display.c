@@ -154,6 +154,9 @@ int32_t display_clear(struct display_dev *device)
 	if (!device)
 		return -EINVAL;
 
+	if (device->controller_ops->clear)
+		return device->controller_ops->clear(device);
+
 	for (i = 0; i < device->rows_nb; i++)
 		for (j = 0; j < device->cols_nb; j++) {
 			ret = device->controller_ops->print_char(device, ' ', i, j);
