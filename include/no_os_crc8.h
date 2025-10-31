@@ -42,6 +42,7 @@
 	static uint8_t _table[NO_OS_CRC8_TABLE_SIZE]
 
 void no_os_crc8_populate_msb(uint8_t * table, const uint8_t polynomial);
+void no_os_crc8_populate_lsb(uint8_t * table, const uint8_t polynomial);
 uint8_t no_os_crc8(const uint8_t * table, const uint8_t *pdata, size_t nbytes,
 		   uint8_t crc);
 

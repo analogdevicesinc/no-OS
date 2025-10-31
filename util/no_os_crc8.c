@@ -68,6 +68,41 @@ void no_os_crc8_populate_msb(uint8_t * table, const uint8_t polynomial)
 }
 
 /***************************************************************************//**
+ * @brief Creates the CRC-8 lookup table for a given polynomial.
+ *
+ * @param table      - Pointer to a CRC-8 lookup table to write to.
+ * @param polynomial - lsb-first representation of desired polynomial.
+ *
+ * Polynomials in CRC algorithms are typically represented as shown below.
+ *
+ *	poly = x^8 + x^2 + x^1 + 1
+ *
+ * Using lsb-first direction, x^0 maps to the lsb.
+ *
+ * 	lsb first: poly = 11111000(1) = 0x1F
+ *
+ * @return None.
+*******************************************************************************/
+void no_os_crc8_populate_lsb(uint8_t *table, const uint8_t polynomial)
+{
+	if (!table)
+		return;
+
+	for (int16_t n = 0; n < NO_OS_CRC8_TABLE_SIZE; n++) {
+		uint8_t curr_byte = (uint8_t)n;
+		for (uint8_t bit = 0; bit < 8; bit++) {
+			if (curr_byte & 0x01) {
+				curr_byte >>= 1;
+				curr_byte ^= polynomial;
+			} else {
+				curr_byte >>= 1;
+			}
+		}
+		table[n] = curr_byte;
+	}
+}
+
+/***************************************************************************//**
  * @brief Computes the CRC-8 over a buffer of data.
  *
  * @param table     - Pointer to a CRC-8 lookup table for the desired polynomial.
