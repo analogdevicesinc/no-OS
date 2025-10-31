@@ -54,7 +54,8 @@ const struct display_controller_ops ssd1306_ops = {
 	.move_cursor = &ssd_1306_move_cursor,
 	.print_char = &ssd_1306_print_ascii,
 	.remove = &ssd_1306_remove,
-	.print_buffer = &ssd_1306_print_buffer
+	.print_buffer = &ssd_1306_print_buffer,
+	.clear = ssd_1306_clear_display,
 };
 
 extern const uint8_t no_os_chr_8x8[128][8];
@@ -346,6 +347,26 @@ int32_t ssd_1306_remove(struct display_dev *device)
 		return no_os_spi_remove(extra->spi_desc);
 	else if (extra->comm_type == SSD1306_I2C)
 		return no_os_i2c_remove(extra->i2c_desc);
+
+	return 0;
+}
+
+int32_t ssd_1306_clear_display(struct display_dev *device)
+{
+	int32_t ret;
+	uint8_t clear_value = 0;
+	ssd_1306_extra *extra = device->extra;
+	uint32_t screen_len = device->cols_nb * device->rows_nb / 8;
+
+	ret = ssd_1306_move_cursor(device, 0, 0);
+	if (ret != 0)
+		return ret;
+
+	for (int i = 0; i < screen_len / 8; i++){
+		ret = ssd1306_buffer_transmit(extra, &no_os_chr_8x8[0], 8, SSD1306_DATA);
+		if (ret)
+			return ret;
+	}
 
 	return 0;
 }
