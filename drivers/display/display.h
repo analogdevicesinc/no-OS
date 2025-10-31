@@ -87,6 +87,8 @@ struct display_controller_ops {
 	int32_t (*remove)(struct display_dev *);
 	/** Print screen buffer */
 	int32_t (*print_buffer)(struct display_dev *, char *);
+	/** Clear the display */
+	int32_t (*clear)(struct display_dev *);
 };
 
 /** Initializes the display peripheral. */
