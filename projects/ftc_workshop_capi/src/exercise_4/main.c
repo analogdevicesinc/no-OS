@@ -308,6 +308,10 @@ void bt_task(void *pvParameters)
 	struct adxl355_dev *adxl355;
 	int ret;
 
+	// taskENTER_CRITICAL();
+	init_display();
+	// taskEXIT_CRITICAL();
+
 	cordio_init();
 
 	ret = adxl355_init(&adxl355, adxl355_param);
@@ -331,10 +335,6 @@ void bt_task(void *pvParameters)
 		printf("max20303_init() error %d\n", ret);
 
 	max20303_set_hibernate(max20303, false);
-
-	taskENTER_CRITICAL();
-	init_display();
-	taskEXIT_CRITICAL();
 
 	printf("Starting BLE in Peripheral mode\n");
 	printf("Cordio initialization completed - GATT services should be available\n");
@@ -381,11 +381,11 @@ void bt_task(void *pvParameters)
 			sprintf(battery_display_buffer, "%d \0", battery_percentage);
 
 			dummy_battery++;
-			taskENTER_CRITICAL();
+			// taskENTER_CRITICAL();
 			ret = display_battery_level(oled_display, 10 * (dummy_battery % 10));
 			display_print_string(oled_display, steps_display_buffer, 0, 6);
 			display_print_string(oled_display, battery_display_buffer, 2, 8);
-			taskEXIT_CRITICAL();
+			// taskEXIT_CRITICAL();
 
 			if (ret)
 				printf("Display write error: %d\n", ret);

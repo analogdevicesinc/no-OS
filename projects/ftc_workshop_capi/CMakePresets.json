@@ -1,0 +1,80 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+
+    "configurePresets": [
+        {
+            "name": "default",
+            "description": "Default config",
+            "generator": "Unix Makefiles"
+        },
+        {
+            "name": "max78000_fthr",
+            "displayName": "MAX78000 Feather (Maxim)",
+            "description": "MAX78000 feather board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "MAX78000_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "OFF",
+                "PLATFORM": "maxim",
+                "TARGET": "max78000",
+                "TARGET_NUM": "78000",
+                "BOARD_CONFIG_FILE": "max78000_fthr_defconfig"
+            }
+        },
+        {
+            "name": "max32650_fthr",
+            "displayName": "MAX32650 Feather (Maxim)",
+            "description": "MAX32650 feather board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "MAX32650_FTHR",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32650",
+                "TARGET_NUM": "32650",
+                "BOARD_CONFIG_FILE": "max32650_fthr_defconfig"
+            }
+        },
+        {
+            "name": "apard32690",
+            "displayName": "APARD32690 (Maxim)",
+            "description": "APARD32690 board - auto-detects FetchContent vs local no-OS",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "APARD32690",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32690",
+                "TARGET_NUM": "32690",
+                "BOARD_CONFIG_FILE": "apard32690_defconfig"
+            }
+        },
+        {
+            "name": "max32655_fthr",
+            "displayName": "MAX32655 Feather (Maxim) - FTC Workshop",
+            "description": "MAX32655 feather board for FTC Workshop project",
+            "inherits": "default",
+            "cacheVariables": {
+                "BOARD": "max32655_fthr",
+                "USE_VENDOR_TOOLCHAIN": "ON",
+                "PLATFORM": "maxim",
+                "TARGET": "max32655",
+                "TARGET_NUM": "32655",
+                "BOARD_CONFIG_FILE": "max32655_fthr_defconfig"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "ftc_workshop",
+            "displayName": "FTC Workshop",
+            "description": "Build the FTC Workshop application",
+            "targets": ["ftc_workshop"]
+        }
+    ]
+}
