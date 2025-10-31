@@ -33,6 +33,7 @@ libraries/ftd2xx
 *.xsa
 *.sof
 *.sopcinfo
+__pycache__/
 
 local_variables.mk
 *generated*
