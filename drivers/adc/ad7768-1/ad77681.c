@@ -39,6 +39,8 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_units.h"
+#include "no_os_util.h"
 
 /**
  * Compute CRC8 checksum.
@@ -1291,6 +1293,103 @@ int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 	return ret;
 }
 
+int32_t ad77681_set_sinc3_dec_rate(struct ad77681_dev *dev,
+				     uint32_t dec_rate)
+{
+	uint32_t dec_rate_msb, dec_rate_lsb, max_dec_rate;
+	int ret;
+
+	max_dec_rate = dev->mclk / 100;
+	dec_rate = no_os_clamp_t(unsigned int, dec_rate, 32, max_dec_rate);
+	/*
+	 * Calculate the equivalent value to sinc3 decimation ratio
+	 * to be written on the SINC3_DECIMATION_RATE register:
+	 *  Value = (DEC_RATE / 32) -1
+	 */
+	dec_rate = NO_OS_DIV_ROUND_UP(dec_rate, 32) - 1;
+	dec_rate_msb = no_os_field_get(AD77681_SINC3_DEC_RATE_MSB_MSK, dec_rate);
+	dec_rate_lsb = no_os_field_get(AD77681_SINC3_DEC_RATE_LSB_MSK, dec_rate);
+
+	ret = ad77681_spi_reg_write(dev, AD77681_REG_SINC3_DEC_RATE_MSB, dec_rate_msb);
+	if (ret)
+		return ret;
+
+	ret = ad77681_spi_reg_write(dev, AD77681_REG_SINC3_DEC_RATE_LSB, dec_rate_lsb);
+	if (ret)
+		return ret;
+	
+	dev->sinc3_osr = dec_rate;
+
+	return 0;
+}
+
+/**
+ * Compute the closest PGA gain index.
+ * @param dev The device structure.
+ * @param gain_int Integer part of desired gain.
+ * @param gain_fract Fractional part of desired gain.
+ * @param precision Fractional precision of gain_fract.
+ * @return Closest PGA gain index or negative error code.
+ */
+int32_t ad77681_calc_pga_gain(struct ad77681_dev *dev, int gain_int,
+				int gain_fract, int precision)
+{
+	uint64_t gain_nano, tmp;
+	int gain_idx;
+
+	precision--;
+	gain_nano = gain_int * NANO + gain_fract;
+	if (gain_nano > ADAQ776X_GAIN_MAX_NANO)
+		return -EINVAL;
+
+	tmp = NO_OS_DIV_ROUND_CLOSEST_ULL(gain_nano << precision, NANO);
+	gain_nano = NO_OS_DIV_ROUND_CLOSEST_ULL(dev->vref, tmp);
+	if (dev->has_variable_aaf)
+		/* remove the AAF gain from the gain */
+		gain_nano = NO_OS_DIV_ROUND_CLOSEST_ULL(gain_nano *  MILLI,
+						  ad7768_aaf_gains[dev->aaf_gain]);
+	tmp = dev->num_pga_modes;
+	gain_idx = no_os_find_closest((int32_t)gain_nano,
+			      (const int32_t *)dev->pga_gains, tmp);
+
+	return gain_idx;
+}
+
+/**
+ * Set the PGA gain mode for the AD7768 device.
+ * @param dev The device structure.
+ * @param gain_mode Desired PGA gain mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_pga_gain(struct ad77681_dev *dev, int gain_mode)
+{
+	int ret;
+	uint8_t check_val;
+	int pgia_pins_value = abs(gain_mode - dev->pgia_mode2pin_offset);
+
+	/* Check GPIO control register */
+	ret = ad77681_spi_reg_read(dev, AD77681_REG_GPIO_CONTROL, &check_val);
+	if (ret < 0)
+		return ret;
+
+	if ((check_val & AD77681_GPIO_PGIA_EN) != AD77681_GPIO_PGIA_EN) {
+		/* Enable PGIA GPIOs and set them as output */
+		ret = ad77681_spi_reg_write(dev, AD77681_REG_GPIO_CONTROL, AD77681_GPIO_PGIA_EN);
+		if (ret < 0)
+			return ret;
+	}
+
+	/* Write the respective gain values to GPIOs 0, 1, 2 */
+	ret = ad77681_spi_reg_write(dev, AD77681_REG_GPIO_WRITE,
+				   AD77681_GPIO_WRITE_ALL(pgia_pins_value));
+	if (ret < 0)
+		return ret;
+
+	dev->pga_gain_mode = gain_mode;
+
+	return 0;
+}
+
 /**
  * Read value from GPIOs present in AD7768-1 separately, or all GPIOS at once.
  * @param dev - The device structure.
@@ -1777,7 +1876,16 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->mclk = init_param.mclk;
 	dev->sample_rate = init_param.sample_rate;
 	dev->data_frame_byte = init_param.data_frame_byte;
-
+	dev->has_variable_aaf = init_param.has_variable_aaf;
+	dev->has_pga = init_param.has_pga;
+	dev->num_pga_modes = init_param.num_pga_modes;
+	dev->default_pga_mode = init_param.default_pga_mode;
+	dev->pgia_mode2pin_offset = init_param.pgia_mode2pin_offset;
+	dev->pga_gains = init_param.pga_gains;
+	dev->pga_gain_mode = init_param.default_pga_mode;
+	if (dev->has_variable_aaf)
+		dev->aaf_gain = init_param.aaf_gain;
+	
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
 	if (ret < 0) {
 		no_os_free(dev);
