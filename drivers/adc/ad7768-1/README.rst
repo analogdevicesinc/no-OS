@@ -7,6 +7,9 @@ Supported Devices
 -----------------
 
 - :adi:`AD7768-1`
+- :adi:`ADAQ7767-1`
+- :adi:`ADAQ7768-1`
+- :adi:`ADAQ7769-1`
 
 Overview
 --------
