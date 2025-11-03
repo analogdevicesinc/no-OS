@@ -1,0 +1,16 @@
+{
+  "xilinx": {
+    "basic": {
+      "flags": "BASIC_EXAMPLE=y IIO_EXAMPLE=n",
+      "hardware": [
+        "adaq77691_fmc_zed"
+      ]
+    },
+    "iio": {
+      "flags": "BASIC_EXAMPLE=n IIO_EXAMPLE=y",
+      "hardware": [
+        "adaq77691_fmc_zed"
+      ]
+    }
+  }
+}
