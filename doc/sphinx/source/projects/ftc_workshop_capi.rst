@@ -1,0 +1,1 @@
+.. include:: ../../../../projects/ftc_workshop_capi/README.rst
