@@ -24,6 +24,14 @@ no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/devclass
 no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/devclass/cdc_acm.c)
 no_os_sources_ifdef(CONFIG_USB_UART_MAXIM ${MAXIM_LIBRARIES}/MAXUSB/src/enumerate/enumerate.c)
 
+# CAPI driver sources
+no_os_sources_ifdef(CONFIG_CAPI_UART_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_uart.c)
+no_os_sources_ifdef(CONFIG_CAPI_UART_STDIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_uart_stdio.c)
+no_os_sources_ifdef(CONFIG_CAPI_GPIO_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_gpio.c)
+no_os_sources_ifdef(CONFIG_CAPI_TIMER_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_timer.c)
+no_os_sources_ifdef(CONFIG_CAPI_I2C_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_i2c.c)
+no_os_sources_ifdef(CONFIG_CAPI_SPI_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_spi.c)
+
 no_os_sources_ifdef(CONFIG_DMA_MAXIM ${CMAKE_CURRENT_SOURCE_DIR}/common/maxim_dma.c)
 
 target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/maxim_init.c)
@@ -45,9 +53,16 @@ if(${CONFIG_USB_UART_MAXIM})
         target_compile_definitions(no-os PUBLIC -DNO_OS_USB_UART=1)
 endif()
 
-# Include directories
-target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET})
-target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common)
+if(${CONFIG_MAXIM_CAPI})
+        target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi)
+        target_sources(no-os PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/capi/maxim_irq.c)
+else()
+        target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET})
+        target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common)
+endif()
+
+# CAPI include directories
+no_os_include_dir_ifdef(CONFIG_MAXIM_CAPI ${CMAKE_SOURCE_DIR}/include/capi)
 
 # Platform-specific compile definitions
 target_compile_definitions(no-os PUBLIC -DMXC_SPI_VERSION=v1)

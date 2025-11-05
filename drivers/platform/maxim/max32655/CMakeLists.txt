@@ -55,7 +55,8 @@ target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Source/TRNG)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA)
 
-target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Include)
+# target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Include)
+target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/5.9.0/Core/Include)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/MAX32655)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32655/Include)
 
@@ -65,3 +66,44 @@ target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32655/Sour
 
 target_compile_definitions(no-os PUBLIC -DTARGET_NUM=32655)
 target_compile_definitions(no-os PUBLIC -DTARGET=32655)
+
+# CAPI drivers
+if (CONFIG_CAPI_UART_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_uart.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_uart.c)
+endif ()
+
+if (CONFIG_CAPI_UART_STDIO_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_uart_stdio.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_uart_stdio.c)
+endif ()
+
+if (CONFIG_CAPI_GPIO_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_gpio.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_gpio.c)
+endif ()
+
+if (CONFIG_CAPI_TIMER_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_timer.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_timer.c)
+endif ()
+
+if (CONFIG_CAPI_I2C_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_i2c.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_i2c.c)
+endif ()
+
+if (CONFIG_CAPI_SPI_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_spi.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_spi.c)
+endif ()
+
+if (CONFIG_CAPI_DMA_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_dma.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_dma.c)
+endif ()
+
+if (CONFIG_CAPI_PINCTRL_MAXIM)
+	message(STATUS "Adding ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_pinctrl.c")
+	target_sources(no-os PRIVATE ${CMAKE_CURRENT_LIST_DIR}/capi/maxim_pinctrl.c)
+endif ()
