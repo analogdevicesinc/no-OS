@@ -188,14 +188,6 @@ static void mainWsfInit(void)
 
 	StackInitFit();
 	FitStart();
-
-	// StackInitDats();
-	// DatsStart();
-
-	// StackInitPeriph();
-	// PeriphStart();
-
-	// PeriphRegisterRXCallback(appRxCallback);
 }
 
 /*************************************************************************************************/
