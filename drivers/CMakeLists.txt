@@ -35,6 +35,10 @@ if(CONFIG_NET)
     add_subdirectory(net)
 endif()
 
+if(CONFIG_DISPLAY)
+    add_subdirectory(display)
+endif()
+
 # add_subdirectory(accel)
 # add_subdirectory(afe)
 # add_subdirectory(amplifiers)

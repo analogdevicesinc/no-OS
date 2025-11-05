@@ -8,6 +8,7 @@ source "drivers/charger/Kconfig"
 source "drivers/dac/Kconfig"
 source "drivers/imu/Kconfig"
 source "drivers/net/Kconfig"
+source "drivers/display/Kconfig"
 
 endmenu
 

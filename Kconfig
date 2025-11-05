@@ -2,6 +2,12 @@ menu "Hardware Interface Drivers"
 
 comment "Communication Interfaces"
 
+config CAPI
+	bool "Enable CAPI"
+	default n
+	help
+	  Enable the Common API instead of the no-OS one.
+
 config SPI
 	select DMA
 	bool "Enable SPI"
