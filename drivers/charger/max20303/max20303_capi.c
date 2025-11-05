@@ -22,10 +22,10 @@ int max20303_reg_write(struct max20303_capi_desc *desc, uint8_t addr, uint16_t v
 	frame[0] = addr;
 	no_os_put_unaligned_be16(val, &frame[1]);
 
-	transfer.sub_address = NULL;
-	transfer.sub_address_len = 0;
-	transfer.buf = frame;
-	transfer.len = 3;
+	transfer.sub_address = frame;
+	transfer.sub_address_len = 3;
+	transfer.buf = NULL;
+	transfer.len = 0;
 	transfer.no_stop = false;
 	transfer.repeated_start = false;
 
@@ -34,7 +34,7 @@ int max20303_reg_write(struct max20303_capi_desc *desc, uint8_t addr, uint16_t v
 
 int max20303_reg_read(struct max20303_capi_desc *desc, uint8_t addr, uint16_t *val)
 {
-	struct capi_i2c_transfer transfer;
+	struct capi_i2c_transfer transfer = {0};
 	uint8_t frame[2];
 	int ret;
 
@@ -46,7 +46,7 @@ int max20303_reg_read(struct max20303_capi_desc *desc, uint8_t addr, uint16_t *v
 	transfer.buf = frame;
 	transfer.len = 2;
 	transfer.no_stop = false;
-	transfer.repeated_start = true;
+	transfer.repeated_start = false;
 
 	ret = capi_i2c_receive(&desc->fg_i2c_device, &transfer);
 	if (ret)
