@@ -1,0 +1,5 @@
+menu "Project-Specific Configuration"
+
+source "projects/ftc_workshop_capi/Kconfig"
+
+endmenu
