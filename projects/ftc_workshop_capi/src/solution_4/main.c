@@ -258,15 +258,6 @@ static int init_display(void)
 	ssd_1306_capi_i2c_dev.speed = 400000;
 	ssd_1306_capi_i2c_dev.controller = bitbang_i2c;
 
-	/* Create no_os_i2c_desc wrapper for display driver compatibility */
-	// oled_i2c_desc = no_os_calloc(1, sizeof(*oled_i2c_desc));
-	// if (!oled_i2c_desc)
-	// 	return -ENOMEM;
-
-	// oled_i2c_desc->slave_address = 0x3C;
-	// /* Note: The display driver needs to be updated to use CAPI directly,
-	//  * but for now we create a wrapper */
-
 	oled_display_extra.i2c_desc = &ssd_1306_capi_i2c_dev;
 	ret = display_init(&oled_display, &oled_display_ini_param);
 	if (ret) {
@@ -499,9 +490,10 @@ error_thread1:
 
 int main()
 {
-	/* Note: Platform-specific CAPI controller initialization
-	 * (spi_controller, i2c_controller, gpio_port0) should be done
-	 * in platform-specific init code before calling create_tasks() */
-
+	/* 
+	 * FreeRTOS is partially integrated into the no-OS API (mutex, semaphore
+	 * and delay API). Other features (such as threads, queues and events operation)
+	 * need to be handled in the application layer using the FreeRTOS API directly.
+	 */
 	return create_tasks();
 }
