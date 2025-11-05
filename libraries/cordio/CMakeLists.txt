@@ -575,10 +575,16 @@ set(CORDIO_PLATFORM_SOURCES
     # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_rtc.c
     # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_sys.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_codec.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_uart.c
     # ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_flash.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_btn.c
 )
+
+if(${CONFIG_CAPI})
+    list(APPEND CORDIO_PLATFORM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_uart_capi.c)
+else()
+    list(APPEND CORDIO_PLATFORM_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/cordio_pal/pal_uart.c)
+endif()
+
 list(APPEND CORDIO_SOURCES ${CORDIO_PLATFORM_SOURCES})
 
 # Add sources to cordio library
