@@ -1,5 +1,6 @@
 menuconfig MAXIM
 	bool "Maxim Platform Drivers"
+	depends on !MAXIM_CAPI
 	default n
 	help
 	  Enable support for Maxim platform drivers.
@@ -107,3 +108,95 @@ config DMA_MAXIM
 	  Enable Maxim-specific DMA driver implementation.
 
 endif # MAXIM
+
+menuconfig MAXIM_CAPI
+	bool "CAPI Maxim Platform Drivers"
+	default n
+	help
+	  Enable support for CAPI Maxim platform drivers.
+
+	  Use the CAPI platform drivers in addition to or instead of
+	  the traditional no-OS drivers. 
+
+if MAXIM_CAPI
+
+config CAPI_UART_MAXIM
+	bool "Enable Maxim UART driver"
+	depends on UART
+	default n
+	help
+	  Enable Maxim-specific UART driver implementation.
+
+config CAPI_UART_STDIO_MAXIM
+	bool "Enable Maxim UART STDIO driver"
+	depends on CAPI_UART_MAXIM
+	default n
+	help
+	  Enable Maxim-specific UART STDIO driver implementation for CAPI.
+
+	  This redirects printf/scanf to use CAPI UART instead of
+	  the traditional no-OS UART API.
+
+config CAPI_GPIO_MAXIM
+	bool "Enable Maxim GPIO driver"
+	depends on GPIO
+	default n
+	help
+	  Enable Maxim-specific GPIO driver implementation.
+
+config CAPI_TIMER_MAXIM
+	bool "Enable Maxim Timer driver"
+	depends on TIMER
+	default n
+	help
+	  Enable Maxim-specific Timer driver implementation for CAPI.
+
+	  This provides timer functionality including counter operations,
+	  compare/capture modes, PWM generation, and interrupt handling
+	  through the CAPI timer interface.
+
+config CAPI_I2C_MAXIM
+	bool "Enable Maxim I2C driver"
+	depends on I2C
+	default n
+	help
+	  Enable Maxim-specific I2C driver implementation for CAPI.
+
+	  This provides I2C functionality including synchronous and
+	  asynchronous transfers, initiator and target modes, and
+	  interrupt handling through the CAPI I2C interface.
+
+config CAPI_SPI_MAXIM
+	bool "Enable Maxim SPI driver"
+	depends on SPI
+	default n
+	help
+	  Enable Maxim-specific SPI driver implementation for CAPI.
+
+	  This provides SPI functionality including synchronous and
+	  asynchronous transfers, multiple SPI modes, chip select control,
+	  and interrupt handling through the CAPI SPI interface.
+
+config CAPI_DMA_MAXIM
+	bool "Enable Maxim DMA driver"
+	depends on DMA
+	default n
+	help
+	  Enable Maxim-specific DMA driver implementation for CAPI.
+
+	  This provides DMA functionality including memory-to-memory,
+	  memory-to-device, and device-to-memory transfers with
+	  interrupt handling through the CAPI DMA interface.
+
+config CAPI_PINCTRL_MAXIM
+	bool "Enable Maxim PIN Control driver"
+	default n
+	help
+	  Enable Maxim-specific pin control driver implementation for CAPI.
+
+	  This provides pin control functionality including pin multiplexing,
+	  pad configuration (pull-up/pull-down), voltage selection, and
+	  drive strength control for MAX32655 and compatible devices
+	  through the CAPI pinctrl interface.
+
+endif
