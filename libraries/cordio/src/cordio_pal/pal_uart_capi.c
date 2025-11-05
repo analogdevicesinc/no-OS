@@ -10,12 +10,15 @@
  */
 
 #include <stddef.h>
+#include "no_os_util.h"
 #include "capi_uart.h"
+#include "maxim_uart.h"
 #include "pal_uart.h"
 
 struct pal_cb_ctx {
 	struct capi_uart_handle *uart;
-	void (*wsf_cb)(void);
+	void (*wsf_wr_cb)(void);
+	void (*wsf_rd_cb)(void);
 };
 
 static struct pal_cb_ctx terminal_rx_cb;
@@ -66,7 +69,7 @@ static const struct capi_uart_config terminal_uart_config = {
 	.clk_freq_hz = 0,  /* Use default */
 	.line_config = &terminal_line_config,
 	.extra = NULL,
-	.ops = NULL  /* Will be populated by build system */
+	.ops = &maxim_capi_uart_ops  /* Will be populated by build system */
 };
 
 void pal_get_terminal_uart(struct capi_uart_handle **terminal)
@@ -79,17 +82,17 @@ static void pal_uart_capi_callback(enum capi_uart_async_event event, void *arg, 
 {
 	struct pal_cb_ctx *ctx = (struct pal_cb_ctx *)arg;
 
-	if (!ctx || !ctx->wsf_cb)
+	if (!ctx || !ctx->wsf_wr_cb || !ctx->wsf_rd_cb)
 		return;
 
 	switch (event) {
 	case CAPI_UART_EVENT_RX_DONE:
 		/* Invoke user callback on RX complete */
-		ctx->wsf_cb();
+		ctx->wsf_rd_cb();
 		break;
 	case CAPI_UART_EVENT_TX_DONE:
 		/* Invoke user callback on TX complete */
-		ctx->wsf_cb();
+		ctx->wsf_wr_cb();
 		break;
 	case CAPI_UART_EVENT_RX_TIMEOUT:
 	case CAPI_UART_EVENT_TX_ABORTED:
@@ -119,17 +122,20 @@ void PalUartInit(PalUartId_t id, const PalUartConfig_t *pCfg)
 		if (ret)
 			return;
 
+		capi_uart_stdio(uart_terminal);
+
 		/* Set up callback context */
 		if (pCfg) {
-			terminal_rx_cb.uart = uart_terminal;
-			terminal_rx_cb.wsf_cb = pCfg->rdCback;
+			// terminal_rx_cb.uart = uart_terminal;
+			// terminal_rx_cb.wsf_cb = pCfg->rdCback;
 			terminal_tx_cb.uart = uart_terminal;
-			terminal_tx_cb.wsf_cb = pCfg->wrCback;
+			terminal_tx_cb.wsf_wr_cb = pCfg->wrCback;
+			terminal_tx_cb.wsf_rd_cb = pCfg->rdCback;
 
 			/* Register callback for async operations */
 			ret = capi_uart_register_callback(uart_terminal,
 							  pal_uart_capi_callback,
-							  &terminal_rx_cb);
+							  &terminal_tx_cb);
 			if (ret)
 				return;
 		}
@@ -196,6 +202,7 @@ PalUartState_t PalUartGetState(PalUartId_t id)
 {
 	struct capi_uart_handle *uart_handle;
 	uint16_t tx_count, rx_count;
+	mxc_uart_regs_t *maxim_uart;
 	int ret;
 
 	switch (id) {
@@ -212,14 +219,21 @@ PalUartState_t PalUartGetState(PalUartId_t id)
 	if (!uart_handle)
 		return PAL_UART_STATE_ERROR;
 
-	/* Check if TX or RX FIFO has pending data */
-	ret = capi_uart_get_tx_fifo_count(uart_handle, &tx_count);
-	if (ret == 0 && tx_count > 0)
-		return PAL_UART_STATE_BUSY;
+	maxim_uart = MXC_UART_GET_UART(0);
+	// while(maxim_uart->status & NO_OS_GENMASK(1, 0));
 
-	ret = capi_uart_get_rx_fifo_count(uart_handle, &rx_count);
-	if (ret == 0 && rx_count > 0)
+	if (maxim_uart->status & NO_OS_GENMASK(1, 0)){
 		return PAL_UART_STATE_BUSY;
+	}
+
+	// /* Check if TX or RX FIFO has pending data */
+	// ret = capi_uart_get_tx_fifo_count(uart_handle, &tx_count);
+	// if (ret == 0 && tx_count > 0)
+	// 	return PAL_UART_STATE_BUSY;
+
+	// ret = capi_uart_get_rx_fifo_count(uart_handle, &rx_count);
+	// if (ret == 0 && rx_count > 0)
+	// 	return PAL_UART_STATE_BUSY;
 
 	return PAL_UART_STATE_READY;
 }
