@@ -38,7 +38,7 @@
 #define configCPU_CLOCK_HZ ((uint32_t)120000000)
 #define configTICK_RATE_HZ ((portTickType)1000)
 #define configRTC_TICK_RATE_HZ (32768)
-#define configTOTAL_HEAP_SIZE ((size_t)(85 * 1024))
+#define configTOTAL_HEAP_SIZE ((size_t)(88 * 1024))
 #define configMINIMAL_STACK_SIZE ((uint16_t)1024)
 // #define configSUPPORT_STATIC_ALLOCATION 1
 #define configMAX_PRIORITIES 8

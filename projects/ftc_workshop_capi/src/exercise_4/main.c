@@ -15,13 +15,13 @@
 #include "FreeRTOSConfig.h"
 #include "task.h"
 
-#include "capi_spi.h"
-#include "capi_i2c.h"
-#include "capi_gpio.h"
+#include "capi/capi_spi.h"
+#include "capi/capi_i2c.h"
+#include "capi/capi_gpio.h"
 #include "adxl355_capi.h"
 #include "max20303_capi.h"
 #include "capi_i2c_bitbang.h"
-#include "ssd_1306.h"
+#include "ssd_1306_capi.h"
 
 #include "platform.h"
 
@@ -40,8 +40,17 @@ static struct capi_i2c_controller_handle *i2c_controller;
 static struct capi_i2c_bitbang_handle *bitbang_i2c;
 static struct capi_gpio_port_handle *gpio_port0;
 
+static struct capi_i2c_device ssd_1306_capi_i2c_dev;
+
+static struct capi_gpio_port_config gpio_port0_config = {
+	.identifier = 0,
+	.num_pins = 32,
+	.ops = &maxim_capi_gpio_ops,
+};
+
 /* SSD1306 OLED Display Setup using CAPI I2C bitbang */
-static ssd_1306_extra oled_display_extra = {
+static ssd_1306_capi_extra oled_display_extra = {
+	.i2c_desc = &ssd_1306_capi_i2c_dev,
 	.comm_type = SSD1306_I2C,
 };
 
@@ -169,7 +178,7 @@ static const uint8_t battery_empty_icon[] = {
 
 static uint8_t battery_icon[144]; // 48x24 pixels = 144 bytes
 
-extern int32_t ssd_1306_print_icon(struct display_dev *device, const uint8_t *icon_buffer,
+extern int32_t ssd_1306_capi_print_icon(struct display_dev *device, const uint8_t *icon_buffer,
 		uint8_t width, uint8_t height, uint8_t row, uint8_t col);
 
 // Function to display battery level (0-100)
@@ -196,7 +205,7 @@ static int display_battery_level(struct display_dev *display, uint8_t percentage
 		battery_icon[96 + 6 + i] |= 0x0F;  // 0000 1111 - fills the height except border pixels
 	}
 
-	return ssd_1306_print_icon(display, battery_icon, 48, 24, 0, 26);
+	return ssd_1306_capi_print_icon(display, battery_icon, 48, 24, 4, 0);
 }
 
 static int init_display(void)
@@ -204,7 +213,7 @@ static int init_display(void)
 	struct capi_gpio_pin sda_pin;
 	struct capi_gpio_pin scl_pin;
 	struct capi_i2c_bitbang_extra bitbang_extra;
-	struct capi_i2c_bitbang_config bitbang_config;
+	struct capi_i2c_config bitbang_config;
 	struct no_os_i2c_desc *oled_i2c_desc;
 	int ret;
 
@@ -217,12 +226,6 @@ static int init_display(void)
 	scl_pin.number = 31;
 	scl_pin.flags = CAPI_GPIO_ACTIVE_HIGH;
 
-	/* Configure I2C bitbang */
-	bitbang_extra.sda_pin = sda_pin;
-	bitbang_extra.scl_pin = scl_pin;
-	bitbang_extra.pull_type = CAPI_I2C_BITBANG_PULL_EXTERNAL;
-	bitbang_extra.timeout_us = 100000;
-
 	bitbang_config.ops = &capi_i2c_bitbang_ops;
 	bitbang_config.identifier = 0;
 	bitbang_config.clk_freq_hz = 400000;
@@ -232,22 +235,39 @@ static int init_display(void)
 	bitbang_config.dma_handle = NULL;
 	bitbang_config.extra = &bitbang_extra;
 
+	ret = capi_gpio_port_init(&gpio_port0, &gpio_port0_config);
+	if (ret)
+		return ret;
+
+	sda_pin.port_handle = gpio_port0;
+	scl_pin.port_handle = gpio_port0;
+
+	/* Configure I2C bitbang */
+	bitbang_extra.sda_pin = sda_pin;
+	bitbang_extra.scl_pin = scl_pin;
+	bitbang_extra.pull_type = CAPI_I2C_BITBANG_PULL_EXTERNAL;
+	bitbang_extra.timeout_us = 100000;
+
 	ret = capi_i2c_init((struct capi_i2c_controller_handle **)&bitbang_i2c, &bitbang_config);
 	if (ret) {
 		printf("Failed to initialize I2C bitbang: %d\n", ret);
 		return ret;
 	}
 
+	ssd_1306_capi_i2c_dev.address = 0x3C;
+	ssd_1306_capi_i2c_dev.speed = 400000;
+	ssd_1306_capi_i2c_dev.controller = bitbang_i2c;
+
 	/* Create no_os_i2c_desc wrapper for display driver compatibility */
-	oled_i2c_desc = no_os_calloc(1, sizeof(*oled_i2c_desc));
-	if (!oled_i2c_desc)
-		return -ENOMEM;
+	// oled_i2c_desc = no_os_calloc(1, sizeof(*oled_i2c_desc));
+	// if (!oled_i2c_desc)
+	// 	return -ENOMEM;
 
-	oled_i2c_desc->slave_address = 0x3C;
-	/* Note: The display driver needs to be updated to use CAPI directly,
-	 * but for now we create a wrapper */
+	// oled_i2c_desc->slave_address = 0x3C;
+	// /* Note: The display driver needs to be updated to use CAPI directly,
+	//  * but for now we create a wrapper */
 
-	oled_display_extra.i2c_desc = oled_i2c_desc;
+	oled_display_extra.i2c_desc = &ssd_1306_capi_i2c_dev;
 	ret = display_init(&oled_display, &oled_display_ini_param);
 	if (ret) {
 		printf("Failed to initialize display: %d\n", ret);
@@ -286,14 +306,16 @@ void bt_task(void *pvParameters)
 	static struct adxl355_capi_frac_repr z_accel[16];
 	static int32_t accel_sum[16];
 	struct capi_spi_config adxl355_spi_config = {
-		.clk_freq_hz = 4000000,
-		.mode = CAPI_SPI_MODE_0,
-		.bit_order = CAPI_SPI_BIT_ORDER_MSB_FIRST,
+		.identifier = 0,
+		.clk_freq_hz = 1000000,
+		.ops = &maxim_capi_spi_ops,
 	};
 
 	struct capi_spi_device adxl355_spi_dev = {
 		.controller = spi_controller,
-		.cs = 0,
+		.native_cs = 0,
+		.mode = CAPI_SPI_MODE_0,
+		.max_speed_hz = 1000000,
 	};
 
 	struct adxl355_capi_init_param adxl355_param = {
@@ -305,25 +327,44 @@ void bt_task(void *pvParameters)
 	struct adxl355_capi_dev *adxl355;
 	int ret;
 
+	ret = capi_spi_init(&spi_controller, &adxl355_spi_config);
+	if (ret)
+		return ret;
+
+	adxl355_param.spi_controller = spi_controller;
+	adxl355_spi_dev.controller = spi_controller;
+
 	// taskENTER_CRITICAL();
 	init_display();
 	// taskEXIT_CRITICAL();
 
 	cordio_init();
+	adxl355_param.spi_controller = spi_controller;
 
-	ret = adxl355_init(&adxl355, adxl355_param);
+	ret = adxl355_capi_init(&adxl355, adxl355_param);
 	if (ret)
 		return ret;
 
-	ret = adxl355_soft_reset(adxl355);
+	ret = adxl355_capi_soft_reset(adxl355);
 	if (ret)
 		return ret;
 
-	ret = adxl355_set_odr_lpf(adxl355, ADXL355_CAPI_ODR_62_5HZ);
+	ret = adxl355_capi_set_odr_lpf(adxl355, ADXL355_CAPI_ODR_62_5HZ);
 	if (ret)
 		return ret;
 
-	ret = adxl355_set_op_mode(adxl355, ADXL355_CAPI_MEAS_TEMP_ON_DRDY_OFF);
+	ret = adxl355_capi_set_op_mode(adxl355, ADXL355_CAPI_MEAS_TEMP_ON_DRDY_OFF);
+	if (ret)
+		return ret;
+
+	struct capi_i2c_config i2c_config = {
+		.identifier = 1,
+		.initiator = 1,
+		.clk_freq_hz = 400000,
+		.ops = &maxim_capi_i2c_ops,
+	};
+
+	ret = capi_i2c_init(&i2c_controller, &i2c_config);
 	if (ret)
 		return ret;
 
@@ -364,7 +405,7 @@ void bt_task(void *pvParameters)
 	/* For FreeRTOS, WSF handles dispatching via its own tasks created in WsfOsInit() */
 	/* This task can now just handle periodic operations or exit */
 	while (1) {
-		ret = adxl355_get_fifo_data(adxl355, &fifo_entries, x_accel, y_accel, z_accel);
+		ret = adxl355_capi_get_fifo_data(adxl355, &fifo_entries, x_accel, y_accel, z_accel);
 		if (ret){
 			printf("Warning: adxl355_get_raw_xyz() = %d\n", ret);
 			vTaskDelay(pdMS_TO_TICKS(50));
@@ -423,7 +464,7 @@ int create_tasks(void)
 	TaskHandle_t thread1_handle = NULL;
 	TaskHandle_t thread2_handle = NULL;
 
-	ret = xTaskCreate(bt_task, "BT task", configMINIMAL_STACK_SIZE,
+	ret = xTaskCreate(bt_task, "BT task", 2048,
 			NULL, tskIDLE_PRIORITY + 1, &thread1_handle);
 	if (ret != pdPASS) {
 		goto error_thread1;
