@@ -83,7 +83,6 @@ Hardware Connection Diagram
 
    I2C Configuration:
    - Speed: 400 kHz (Fast Mode)
-   - Pull-ups: External 4.7kΩ recommended
 
 Functional Description
 ----------------------
@@ -269,24 +268,13 @@ Display Integration
    // Display text
    display_print_string(oled_display, "Battery Voltage:", 0, 0);
 
-Memory Allocation
------------------
-
-This exercise combines static and limited dynamic allocation:
-
-- **Static**: Configuration structures, I2C devices, GPIO pins (stack)
-- **Dynamic**: Display driver internal buffers allocated via ``no_os_calloc()``
-- **Application**: No dynamic allocation in application code
-
-The display driver allocates a frame buffer internally to manage the pixel data before sending it to the OLED.
-
 Build and Run
 -------------
 
 Configuration
 ~~~~~~~~~~~~~
 
-The project configuration is defined in ``project_ex3.conf``:
+The project defconfig is defined in ``project_ex3.conf``:
 
 .. code-block:: kconfig
 
@@ -350,19 +338,13 @@ Running the Example
 Testing the System
 ~~~~~~~~~~~~~~~~~~
 
-1. **Without battery**: MAX20303 may report 0V or invalid readings - this is normal
+1. **Without battery**: MAX20303 may report 0V
 
 2. **With battery**:
 
    - Lithium battery: Expect 3.7-4.2V depending on charge state
    - Display updates every second
    - Voltage should be stable
-
-3. **Display functionality**:
-
-   - Check that text is readable
-   - Voltage numbers should update smoothly
-   - No flickering (display library handles buffering)
 
 Next Steps
 ----------
