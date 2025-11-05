@@ -306,7 +306,7 @@ static int capi_i2c_bitbang_init(struct capi_i2c_controller_handle **handle,
 	bitbang->timeout_us = extra->timeout_us ? extra->timeout_us : CAPI_I2C_BITBANG_TIMEOUT_US;
 
 	/* Calculate timing parameters from clock frequency */
-	speed_hz = config->clk_freq_hz ? config->clk_freq_hz : CAPI_I2C_BITBANG_SPEED_STANDARD;
+	speed_hz = config->clk_freq_hz ? config->clk_freq_hz : 100000;
 	bitbang->half_period_us = 1000000 / (2 * speed_hz);
 	bitbang->quarter_period_us = bitbang->half_period_us / 2;
 
