@@ -4,15 +4,7 @@ Exercise 1: GPIO Input with UART Output
 Overview
 --------
 
-Exercise 1 introduces the fundamentals of the CAPI framework by demonstrating GPIO input and UART communication. This exercise reads the state of two push buttons and displays their status via UART console output.
-
-**Learning Objectives:**
-
-- Initialize UART for console communication
-- Configure GPIO pins for input with internal pull-ups
-- Read digital input states
-- Use CAPI abstractions for portable peripheral access
-- Understand static memory allocation in embedded systems
+Exercise 1 introduces the CAPI interface by demonstrating GPIO input and UART communication. This exercise reads the state of two push buttons and displays their status via UART console output.
 
 Hardware Setup
 --------------
@@ -21,8 +13,6 @@ Required Components
 ~~~~~~~~~~~~~~~~~~~
 
 - MAX32655 FTHR development board
-- USB cable for programming and serial communication
-- Two push buttons (if not built into the board)
 
 Pin Connections
 ~~~~~~~~~~~~~~~
@@ -57,7 +47,6 @@ Hardware Connection Diagram
    │                                    │
    └────────────────────────────────────┘
 
-   Internal Pull-up Resistors Enabled
    Button Press = Logic Low (0)
    Button Release = Logic High (1)
 
@@ -220,22 +209,6 @@ Running the Example
 3. **Press the buttons** and observe the output change in real-time
 
 4. **Expected behavior**: Button state updates every second, showing "1" for released and "0" for pressed
-
-Troubleshooting
-~~~~~~~~~~~~~~~
-
-**No serial output:**
-
-- Check USB cable connection
-- Verify correct serial port (``ls /dev/tty*`` on Linux/macOS)
-- Confirm baud rate is 115200
-- Try pressing the reset button on the board
-
-**Button states always show 1:**
-
-- Internal pull-ups are enabled, so released buttons read as "1"
-- Press buttons to see "0" state
-- Check button connections (active-low configuration)
 
 Next Steps
 ----------
