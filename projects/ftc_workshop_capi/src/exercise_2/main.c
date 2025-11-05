@@ -1,0 +1,147 @@
+/*
+ * Copyright (c) 2025 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "no_os_error.h"
+#include "no_os_alloc.h"
+#include "no_os_delay.h"
+#include "no_os_util.h"
+
+#include "capi/capi_spi.h"
+#include "capi/capi_uart.h"
+#include "adxl355_capi.h"
+
+#include "platform.h"
+
+int main()
+{
+	struct adxl355_capi_frac_repr x_accel, y_accel, z_accel;
+	struct adxl355_capi_frac_repr temp;
+	struct adxl355_capi_dev *adxl355;
+	struct capi_spi_controller_handle *spi_controller = NULL;
+	struct capi_uart_handle *uart = CAPI_UART_HANDLE;
+	int ret;
+
+	/* Initialize UART for printf output */
+	struct capi_uart_config uart_config = {
+		.identifier = 0,
+		.clk_freq_hz = 115200,
+		.ops = &maxim_capi_uart_ops,
+	};
+
+	no_os_init();
+
+	ret = capi_uart_init(&uart, &uart_config);
+	if (ret) {
+		return ret;
+	}
+
+	capi_uart_stdio(uart);
+	printf("ADXL355 Accelerometer Exercise 2\n");
+
+	/* Initialize SPI controller */
+	struct capi_spi_config adxl355_spi_config = {
+		.identifier = 0,
+		.clk_freq_hz = 1000000,
+		.ops = &maxim_capi_spi_ops,
+	};
+
+	ret = capi_spi_init(&spi_controller, &adxl355_spi_config);
+	if (ret) {
+		printf("Error initializing SPI: %d\n", ret);
+		return ret;
+	}
+
+	/* Configure SPI device for ADXL355 */
+	struct capi_spi_device adxl355_spi_dev = {
+		.controller = spi_controller,
+		.native_cs = 0,
+		.mode = CAPI_SPI_MODE_0,
+		.max_speed_hz = 1000000,
+	};
+
+	/* Initialize ADXL355 */
+	struct adxl355_capi_init_param adxl355_param = {
+		.spi_controller = spi_controller,
+		.comm_param = adxl355_spi_config,
+		.dev_type = ID_ADXL355_CAPI,
+		.spi_dev = &adxl355_spi_dev,
+	};
+
+	ret = adxl355_capi_init(&adxl355, adxl355_param);
+	if (ret) {
+		printf("Error initializing ADXL355: %d\n", ret);
+		return ret;
+	}
+
+	printf("ADXL355 initialized successfully\n");
+
+	/* Perform soft reset */
+	ret = adxl355_capi_soft_reset(adxl355);
+	if (ret) {
+		printf("Error performing soft reset: %d\n", ret);
+		return ret;
+	}
+
+	/* Configure output data rate */
+	ret = adxl355_capi_set_odr_lpf(adxl355, ADXL355_CAPI_ODR_62_5HZ);
+	if (ret) {
+		printf("Error setting ODR: %d\n", ret);
+		return ret;
+	}
+
+	/* Set operation mode to measurement with temperature on */
+	ret = adxl355_capi_set_op_mode(adxl355, ADXL355_CAPI_MEAS_TEMP_ON_DRDY_OFF);
+	if (ret) {
+		printf("Error setting operation mode: %d\n", ret);
+		return ret;
+	}
+
+	printf("ADXL355 configured. Starting data acquisition...\n\n");
+
+	/* Main loop - read and print acceleration and temperature data */
+	while (1) {
+		/* Read acceleration data */
+		ret = adxl355_capi_get_xyz(adxl355, &x_accel, &y_accel, &z_accel);
+		if (ret) {
+			printf("Error reading acceleration data: %d\n", ret);
+		} else {
+			/* Print acceleration data in g */
+			printf("X: %lld.%03d g, ",
+			       (long long)x_accel.integer,
+			       abs(x_accel.fractional));
+			printf("Y: %lld.%03d g, ",
+			       (long long)y_accel.integer,
+			       abs(y_accel.fractional));
+			printf("Z: %lld.%03d g",
+			       (long long)z_accel.integer,
+			       abs(z_accel.fractional));
+		}
+
+		printf("\n");
+
+		/* Read temperature data */
+		ret = adxl355_capi_get_temp(adxl355, &temp);
+		if (ret) {
+			printf(" | Temp: Error %d\n", ret);
+		} else {
+			/* Print temperature in millidegrees Celsius */
+			printf(" | Temp: %lld.%03d C\n",
+			       (long long)temp.integer / 1000,
+			       abs((int)(temp.integer % 1000)));
+		}
+
+		/* Delay between readings */
+		no_os_mdelay(500);
+	}
+
+	/* Cleanup (this code is never reached in the infinite loop) */
+	adxl355_capi_remove(adxl355);
+
+	return 0;
+}
