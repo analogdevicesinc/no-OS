@@ -1,0 +1,18 @@
+menuconfig DISPLAY
+    bool "Display Drivers"
+    default n
+    help
+      Enable support for display drivers.
+
+if DISPLAY
+
+config DISPLAY_SSD1306
+    bool "Enable SSD1306 display driver"
+    default n
+
+config DISPLAY_SSD1306_CAPI
+    depends on CAPI && !DISPLAY_SSD1306
+    bool "Enable the SSD1306 display driver using the CAPI interface"
+    default n
+
+endif
