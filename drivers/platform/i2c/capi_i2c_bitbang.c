@@ -11,6 +11,24 @@
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 
+static uint32_t capi_i2c_speed_to_hz(enum capi_i2c_speed capi_speed)
+{
+	switch(capi_speed){
+	case CAPI_I2C_SPEED_STANDARD:
+		return 100000;
+	case CAPI_I2C_SPEED_FAST:
+		return 400000;
+	case CAPI_I2C_SPEED_FAST_PLUS:
+		return 1000000;
+	case CAPI_I2C_SPEED_HIGH:
+		return 3400000;
+	case CAPI_I2C_SPEED_ULTRA:
+		return 5000000;
+	default:
+		return 0;
+	}
+}
+
 /* Helper function to set SDA line state */
 static int capi_i2c_bitbang_set_sda(struct capi_i2c_bitbang_handle *desc, uint8_t state)
 {
@@ -306,7 +324,10 @@ static int capi_i2c_bitbang_init(struct capi_i2c_controller_handle **handle,
 	bitbang->timeout_us = extra->timeout_us ? extra->timeout_us : CAPI_I2C_BITBANG_TIMEOUT_US;
 
 	/* Calculate timing parameters from clock frequency */
-	speed_hz = config->clk_freq_hz ? config->clk_freq_hz : 100000;
+	speed_hz = capi_i2c_speed_to_hz(config->clk_freq_hz);
+	if (!speed_hz)
+		speed_hz = 100000;
+
 	bitbang->half_period_us = 1000000 / (2 * speed_hz);
 	bitbang->quarter_period_us = bitbang->half_period_us / 2;
 
