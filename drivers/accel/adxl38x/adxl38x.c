@@ -184,18 +184,30 @@ int adxl38x_init(struct adxl38x_dev **device,
 
 	ret = adxl38x_read_device_data(dev, ADXL38X_DEVID_AD,
 				       1, &reg_value);
-	if (ret || (reg_value != ADXL38X_RESET_DEVID_AD))
+	if (ret)
 		goto error_com;
+	if (reg_value != ADXL38X_RESET_DEVID_AD) {
+		ret = -EINVAL;
+		goto error_com;
+	}
 
 	ret = adxl38x_read_device_data(dev, ADXL38X_DEVID_MST,
 				       1, &reg_value);
-	if (ret || (reg_value != ADXL38X_RESET_DEVID_MST))
+	if (ret)
 		goto error_com;
+	if (reg_value != ADXL38X_RESET_DEVID_MST) {
+		ret = -EINVAL;
+		goto error_com;
+	}
 
 	ret = adxl38x_read_device_data(dev, ADXL38X_PART_ID,
 				       1, &reg_value);
-	if (ret || (reg_value != ADXL38X_RESET_PART_ID))
+	if (ret)
 		goto error_com;
+	if (reg_value != ADXL38X_RESET_PART_ID) {
+		ret = -EINVAL;
+		goto error_com;
+	}
 
 	/* Set device type 380/382 */
 	ret = adxl38x_read_device_data(dev, ADXL38X_MISC0,
@@ -221,7 +233,7 @@ error_com:
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
 	no_os_free(dev);
-	return -1;
+	return ret;
 error_dev:
 	no_os_free(dev);
 	return ret;
