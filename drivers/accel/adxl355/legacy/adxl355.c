@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   adxl355.c
- *   @brief  Implementation of ADXL355 CAPI Driver.
- *   @author Claude Code (noreply@anthropic.com)
+ *   @brief  Implementation of ADXL355 Driver.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -46,12 +46,12 @@ static const uint8_t adxl355_part_id[] = {
 };
 
 static uint32_t adxl355_accel_array_conv(struct adxl355_dev *dev,
-					       uint8_t *raw_array);
+		uint8_t *raw_array);
 static int64_t adxl355_accel_conv(struct adxl355_dev *dev, uint32_t raw_accel);
 static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp);
 
 /***************************************************************************//**
- * @brief Reads from the device using SPI.
+ * @brief Reads from the device.
  *
  * @param dev          - The device structure.
  * @param base_address - Address of the base register.
@@ -61,37 +61,28 @@ static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp);
  * @return ret         - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_read_device_data(struct adxl355_dev *dev, uint8_t base_address,
-				  uint16_t size, uint8_t *read_data)
+			     uint16_t size, uint8_t *read_data)
 {
-	struct capi_spi_transfer transfer = {0};
 	int ret;
 
-	if (!dev || !dev->spi_device || !read_data)
-		return -EINVAL;
+	if (dev->comm_type == ADXL355_SPI_COMM) {
+		dev->comm_buff[0] = ADXL355_SPI_READ | (base_address << 1);
+		ret = no_os_spi_write_and_read(dev->com_desc.spi_desc, dev->comm_buff,
+					       1 + size);
+		for (uint16_t idx = 0; idx < size; idx++)
+			read_data[idx] = dev->comm_buff[idx + 1];
+	} else {
+		ret = no_os_i2c_write(dev->com_desc.i2c_desc, &base_address, 1, 0);
+		if (ret)
+			return ret;
+		ret = no_os_i2c_read(dev->com_desc.i2c_desc, read_data, size, 1);
+	}
 
-	/* Prepare command byte for read operation */
-	dev->comm_buff[0] = ADXL355_SPI_READ | (base_address << 1);
-
-	/* Set up SPI transfer structure */
-	transfer.tx_buf = dev->comm_buff;
-	transfer.rx_buf = dev->comm_buff;
-	transfer.tx_size = 1 + size;
-	transfer.rx_size = 1 + size;
-
-	/* Perform SPI transaction */
-	ret = capi_spi_transceive(dev->spi_device, &transfer);
-	if (ret)
-		return ret;
-
-	/* Copy received data (skip command byte) */
-	for (uint16_t idx = 0; idx < size; idx++)
-		read_data[idx] = dev->comm_buff[idx + 1];
-
-	return 0;
+	return ret;
 }
 
 /***************************************************************************//**
- * @brief Writes to the device using CAPI SPI
+ * @brief Writes to the device
  *
  * @param dev          - The device structure.
  * @param base_address - Address of the base register.
@@ -102,35 +93,27 @@ int adxl355_read_device_data(struct adxl355_dev *dev, uint8_t base_address,
  * @return ret         - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_write_device_data(struct adxl355_dev *dev, uint8_t base_address,
-				   uint16_t size, uint8_t *write_data)
+			      uint16_t size, uint8_t *write_data)
 {
-	struct capi_spi_transfer transfer = {0};
 	int ret;
 
-	if (!dev || !dev->spi_device || !write_data)
-		return -EINVAL;
-
-	/* Prepare command byte for write operation */
-	dev->comm_buff[0] = ADXL355_SPI_WRITE | (base_address << 1);
-
-	/* Copy write data to communication buffer */
 	for (uint16_t idx = 0; idx < size; idx++)
 		dev->comm_buff[1 + idx] = write_data[idx];
 
-	/* Set up SPI transfer structure */
-	transfer.tx_buf = dev->comm_buff;
-	transfer.rx_buf = NULL;  /* Write-only operation */
-	transfer.tx_size = size + 1;
-	transfer.rx_size = 0;
-
-	/* Perform SPI transaction */
-	ret = capi_spi_transceive(dev->spi_device, &transfer);
+	if (dev->comm_type == ADXL355_SPI_COMM) {
+		dev->comm_buff[0] = ADXL355_SPI_WRITE | (base_address << 1);
+		ret = no_os_spi_write_and_read(dev->com_desc.spi_desc, dev->comm_buff,
+					       size + 1);
+	} else {
+		dev->comm_buff[0] = base_address;
+		ret = no_os_i2c_write(dev->com_desc.i2c_desc, dev->comm_buff, size + 1, 1);
+	}
 
 	return ret;
 }
 
 /***************************************************************************//**
- * @brief Initializes the SPI communication peripheral and checks if the ADXL355
+ * @brief Initializes the communication peripheral and checks if the ADXL355
  *        part is present.
  *
  * @param device     - The device structure.
@@ -140,14 +123,11 @@ int adxl355_write_device_data(struct adxl355_dev *dev, uint8_t base_address,
  * @return ret       - Result of the initialization procedure.
 *******************************************************************************/
 int adxl355_init(struct adxl355_dev **device,
-		      struct adxl355_init_param init_param)
+		 struct adxl355_init_param init_param)
 {
 	struct adxl355_dev *dev;
 	int ret;
 	uint8_t reg_value;
-
-	if (!device)
-		return -EINVAL;
 
 	switch (init_param.dev_type) {
 	case ID_ADXL355:
@@ -159,66 +139,70 @@ int adxl355_init(struct adxl355_dev **device,
 	}
 
 	dev = (struct adxl355_dev *)no_os_calloc(1, sizeof(*dev));
+
 	if (!dev)
 		return -ENOMEM;
 
-	/* Store SPI controller handle */
-	dev->spi_controller = init_param.spi_controller;
-	dev->spi_device = init_param.spi_dev;
+	dev->comm_type = init_param.comm_type;
+
+	if (dev->comm_type == ADXL355_SPI_COMM) {
+		ret = no_os_spi_init(&dev->com_desc.spi_desc, &(init_param.comm_init.spi_init));
+		if (ret)
+			goto error_dev;
+	} else {
+		ret = no_os_i2c_init(&dev->com_desc.i2c_desc, &init_param.comm_init.i2c_init);
+		if (ret)
+			goto error_dev;
+	}
+
 	dev->dev_type = init_param.dev_type;
 
-	/* Check device ID registers */
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_DEVID_AD),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_DEVID_AD), &reg_value);
-	if (ret)
+	if (ret || (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_AD)))
 		goto error_com;
-	if (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_AD)) {
-		ret = -EINVAL;
-		goto error_com;
-	}
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_DEVID_MST),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_DEVID_MST), &reg_value);
-	if (ret)
+	if (ret || (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_MST)))
 		goto error_com;
-	if (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_MST)) {
-		ret = -EINVAL;
-		goto error_com;
-	}
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_PARTID),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_PARTID), &reg_value);
-	if (ret)
-		goto error_com;
-	if (reg_value != adxl355_part_id[dev->dev_type]) {
-		ret = -EINVAL;
-		goto error_com;
-	}
 
-	/* Get shadow register values */
+	if (ret || reg_value != adxl355_part_id[dev->dev_type])
+		goto error_com;
+
+	// Get shadow register values
 	ret = adxl355_read_device_data(dev,
-					    ADXL355_ADDR(ADXL355_SHADOW_REGISTER_BASE_ADDR),
-					    GET_ADXL355_TRANSF_LEN(ADXL355_SHADOW_REGISTER_BASE_ADDR),
-					    &shadow_reg_val[0]);
+				       ADXL355_ADDR(ADXL355_SHADOW_REGISTER_BASE_ADDR),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_SHADOW_REGISTER_BASE_ADDR),
+				       &shadow_reg_val[0]);
 	if (ret)
-		goto error_dev;
+		goto error_com;
 
-	/* Initialize device default values */
+	// Default range is set
 	dev->range = GET_ADXL355_RESET_VAL(ADXL355_RANGE) & ADXL355_RANGE_FIELD_MSK;
+
+	// Default value for FIFO SAMPLES
 	dev->fifo_samples = GET_ADXL355_RESET_VAL(ADXL355_FIFO_SAMPLES);
+
+	// Default value for POWER_CTL
 	dev->op_mode = GET_ADXL355_RESET_VAL(ADXL355_POWER_CTL);
+
+	// Default activity count value
 	dev->act_cnt = GET_ADXL355_RESET_VAL(ADXL355_ACT_CNT);
 
 	*device = dev;
 
-	return 0;
+	return ret;
 error_com:
 	if (dev->comm_type == ADXL355_SPI_COMM)
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i2c_remove(dev->com_desc.i2c_desc);
 	no_os_free(dev);
-	return ret;
+	return -1;
 error_dev:
 	no_os_free(dev);
 	return ret;
@@ -233,12 +217,16 @@ error_dev:
 *******************************************************************************/
 int adxl355_remove(struct adxl355_dev *dev)
 {
-	if (!dev)
-		return -EINVAL;
+	int ret;
+
+	if (dev->comm_type == ADXL355_SPI_COMM)
+		ret = no_os_spi_remove(dev->com_desc.spi_desc);
+	else
+		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
 	no_os_free(dev);
 
-	return 0;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -252,13 +240,9 @@ int adxl355_remove(struct adxl355_dev *dev)
 int adxl355_set_op_mode(struct adxl355_dev *dev, enum adxl355_op_mode op_mode)
 {
 	int ret;
-	uint8_t mode_val = (uint8_t)op_mode;
-
-	if (!dev)
-		return -EINVAL;
 
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_POWER_CTL),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), &mode_val);
+					GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), &op_mode);
 
 	if (!ret)
 		dev->op_mode = op_mode;
@@ -275,21 +259,15 @@ int adxl355_set_op_mode(struct adxl355_dev *dev, enum adxl355_op_mode op_mode)
  * @return ret    - Result of the reading operation procedure.
 *******************************************************************************/
 int adxl355_get_op_mode(struct adxl355_dev *dev,
-			     enum adxl355_op_mode *op_mode)
+			enum adxl355_op_mode *op_mode)
 {
 	int ret;
-	uint8_t mode_val;
-
-	if (!dev || !op_mode)
-		return -EINVAL;
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_POWER_CTL),
-					    GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), &mode_val);
+				       GET_ADXL355_TRANSF_LEN(ADXL355_POWER_CTL), op_mode);
 
-	if (!ret) {
-		*op_mode = (enum adxl355_op_mode)mode_val;
+	if (!ret)
 		dev->op_mode = *op_mode;
-	}
 
 	return ret;
 }
@@ -309,42 +287,32 @@ int adxl355_soft_reset(struct adxl355_dev *dev)
 	uint8_t data = ADXL355_RESET_CODE;
 	union adxl355_sts_reg_flags flags;
 
-	if (!dev)
-		return -EINVAL;
-
-	/* Perform soft reset */
+	// Perform soft reset
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_RESET),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_RESET), &data);
+					GET_ADXL355_TRANSF_LEN(ADXL355_RESET), &data);
 	if (ret)
 		return ret;
 
-	/* After soft reset, the data in the shadow registers will be valid only after NVM is not busy anymore */
+	// After soft reset, the data in the shadow registers will be valid only after NVM is not busy anymore
 	ret = adxl355_get_sts_reg(dev, &flags);
 	while (flags.fields.NVM_BUSY && nb_of_retries) {
 		ret = adxl355_get_sts_reg(dev, &flags);
-		if (ret)
-			return ret;
 		nb_of_retries--;
 	}
+	if ((!nb_of_retries) || ret)
+		return -EAGAIN;
 
-	if (!nb_of_retries)
-		return -ETIMEDOUT;
+	// Delay is needed between soft reset command and shadow registers reading
+	no_os_mdelay(1);
 
-	/* Get shadow register values */
+	// Read the shadow registers
 	ret = adxl355_read_device_data(dev,
-					    ADXL355_ADDR(ADXL355_SHADOW_REGISTER_BASE_ADDR),
-					    GET_ADXL355_TRANSF_LEN(ADXL355_SHADOW_REGISTER_BASE_ADDR),
-					    &register_values[0]);
-
-	/* Update cached shadow register values */
-	for (uint8_t i = 0; i < 5; i++)
-		shadow_reg_val[i] = register_values[i];
-
-	/* Update device default values after reset */
-	dev->range = GET_ADXL355_RESET_VAL(ADXL355_RANGE) & ADXL355_RANGE_FIELD_MSK;
-	dev->fifo_samples = GET_ADXL355_RESET_VAL(ADXL355_FIFO_SAMPLES);
-	dev->op_mode = GET_ADXL355_RESET_VAL(ADXL355_POWER_CTL);
-	dev->act_cnt = GET_ADXL355_RESET_VAL(ADXL355_ACT_CNT);
+				       ADXL355_ADDR(ADXL355_SHADOW_REGISTER_BASE_ADDR),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_SHADOW_REGISTER_BASE_ADDR),
+				       &register_values[0]);
+	if (strncmp((const char*)register_values, (const char*)shadow_reg_val,
+		    GET_ADXL355_TRANSF_LEN(ADXL355_SHADOW_REGISTER_BASE_ADDR)))
+		ret = -EAGAIN;
 
 	return ret;
 }
@@ -354,45 +322,43 @@ int adxl355_soft_reset(struct adxl355_dev *dev)
  *
  * @param dev  - The device structure.
  *
- * @return ret - Result of the self-test enable procedure.
+ * @return ret - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_set_self_test(struct adxl355_dev *dev)
 {
 	uint8_t data = ADXL355_SELF_TEST_TRIGGER_VAL;
 
-	if (!dev)
-		return -EINVAL;
-
 	return adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_SELF_TEST),
-					      GET_ADXL355_TRANSF_LEN(ADXL355_SELF_TEST), &data);
+					 GET_ADXL355_TRANSF_LEN(ADXL355_SELF_TEST), &data);
 }
 
 /***************************************************************************//**
  * @brief Sets the measurement range register value.
  *
  * @param dev       - The device structure.
- * @param range_val - Range register value.
+ * @param range_val - Selected range.
  *
- * @return ret      - Result of the setting measurement range procedure.
+ * @return ret      - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_set_range(struct adxl355_dev *dev, enum adxl355_range range_val)
 {
 	int ret;
-	uint8_t range_reg_val;
-	uint8_t hpf_val = (shadow_reg_val[3] & ADXL355_HPF_FIELD_MSK) >> 4;
+	uint8_t range_reg;
 
-	if (!dev)
-		return -EINVAL;
+	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_RANGE),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_RANGE), &range_reg);
+	if (ret)
+		return ret;
 
-	range_reg_val = (range_val & ADXL355_RANGE_FIELD_MSK) | (hpf_val << 4);
-
+	// Reset range bits
+	range_reg &= ~ADXL355_RANGE_FIELD_MSK;
+	// Set only range bits inside range registers
+	range_reg |= range_val & ADXL355_RANGE_FIELD_MSK;
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_RANGE),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_RANGE), &range_reg_val);
+					GET_ADXL355_TRANSF_LEN(ADXL355_RANGE), &range_reg);
 
-	if (!ret) {
+	if (!ret)
 		dev->range = range_val;
-		shadow_reg_val[3] = range_reg_val;
-	}
 
 	return ret;
 }
@@ -401,104 +367,136 @@ int adxl355_set_range(struct adxl355_dev *dev, enum adxl355_range range_val)
  * @brief Writes the low-pass filter settings.
  *
  * @param dev         - The device structure.
- * @param odr_lpf_val - New ODR LPF value to be written.
+ * @param odr_lpf_val - Low-pass filter settings.
  *
  * @return ret        - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_set_odr_lpf(struct adxl355_dev *dev,
-			     enum adxl355_odr_lpf odr_lpf_val)
+			enum adxl355_odr_lpf odr_lpf_val)
 {
 	int ret;
-	uint8_t filter_reg_val;
-	uint8_t hpf_val = (shadow_reg_val[2] & ADXL355_HPF_FIELD_MSK) >> 4;
+	uint8_t reg_value;
+	enum adxl355_op_mode current_op_mode;
 
-	if (!dev)
-		return -EINVAL;
+	// The lpf settings cannot be changed when the device is in measurement mode.
+	// The lpf settings can be changed only when the device's operation mode is
+	// Standby.
 
-	filter_reg_val = (odr_lpf_val & ADXL355_ODR_LPF_FIELD_MSK) | (hpf_val << 4);
+	current_op_mode = dev->op_mode;
 
-	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &filter_reg_val);
-
-	if (!ret) {
-		dev->odr_lpf = odr_lpf_val;
-		shadow_reg_val[2] = filter_reg_val;
+	switch (current_op_mode) {
+	case ADXL355_MEAS_TEMP_ON_DRDY_ON:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_ON:
+	case ADXL355_MEAS_TEMP_ON_DRDY_OFF:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_OFF:
+		ret = adxl355_set_op_mode(dev, ADXL355_STDBY_TEMP_ON_DRDY_ON);
+		if (ret)
+			return ret;
+		break;
+	default:
+		break;
 	}
 
-	return ret;
+	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &reg_value);
+	if (ret)
+		return ret;
+
+	reg_value &= ~(ADXL355_ODR_LPF_FIELD_MSK);
+	reg_value |= odr_lpf_val & ADXL355_ODR_LPF_FIELD_MSK;
+	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
+					GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &reg_value);
+	if (ret)
+		return ret;
+
+	dev->odr_lpf = odr_lpf_val;
+
+	return adxl355_set_op_mode(dev, current_op_mode);
 }
 
 /***************************************************************************//**
  * @brief Writes the high-pass filter settings.
  *
- * @param dev             - The device structure.
- * @param hpf_corner_val  - New HPF corner frequency value to be written.
+ * @param dev            - The device structure.
+ * @param hpf_corner_val - High-pass filter settings.
  *
- * @return ret            - Result of the writing procedure.
+ * @return ret           - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_set_hpf_corner(struct adxl355_dev *dev,
-				enum adxl355_hpf_corner hpf_corner_val)
+			   enum adxl355_hpf_corner hpf_corner_val)
 {
 	int ret;
-	uint8_t filter_reg_val;
-	uint8_t odr_lpf_val = shadow_reg_val[2] & ADXL355_ODR_LPF_FIELD_MSK;
+	uint8_t reg_value;
+	enum adxl355_op_mode current_op_mode;
 
-	if (!dev)
-		return -EINVAL;
+	// Even though the hpf settings can be changed when the device is in
+	// measurement mode, it has been observed that the measurements are not
+	// correct when doing so. Because of this, the device will be set in standby
+	// mode also when changing the hpf value.
 
-	filter_reg_val = odr_lpf_val | ((hpf_corner_val << 4) & ADXL355_HPF_FIELD_MSK);
+	current_op_mode = dev->op_mode;
 
-	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &filter_reg_val);
-
-	if (!ret) {
-		dev->hpf_corner = hpf_corner_val;
-		shadow_reg_val[2] = filter_reg_val;
+	switch (current_op_mode) {
+	case ADXL355_MEAS_TEMP_ON_DRDY_ON:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_ON:
+	case ADXL355_MEAS_TEMP_ON_DRDY_OFF:
+	case ADXL355_MEAS_TEMP_OFF_DRDY_OFF:
+		ret = adxl355_set_op_mode(dev, ADXL355_STDBY_TEMP_ON_DRDY_ON);
+		if (ret)
+			return ret;
+		break;
+	default:
+		break;
 	}
 
-	return ret;
+	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &reg_value);
+	if (ret)
+		return ret;
+	reg_value &= ~(ADXL355_HPF_FIELD_MSK);
+	reg_value |= (hpf_corner_val << 4) & ADXL355_HPF_FIELD_MSK;
+
+	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_FILTER),
+					GET_ADXL355_TRANSF_LEN(ADXL355_FILTER), &reg_value);
+	if (!ret)
+		dev->hpf_corner = hpf_corner_val;
+
+	return adxl355_set_op_mode(dev, current_op_mode);
 }
 
 /***************************************************************************//**
  * @brief Sets an offset value for each axis (Offset Calibration).
  *
  * @param dev      - The device structure.
- * @param x_offset - X axis offset.
- * @param y_offset - Y axis offset.
- * @param z_offset - Z axis offset.
+ * @param x_offset - X-axis's offset.
+ * @param y_offset - Y-axis's offset.
+ * @param z_offset - Z-axis's offset.
  *
- * @return ret     - Result of the setting offset procedure.
+ * @return ret     - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_set_offset(struct adxl355_dev *dev, uint16_t x_offset,
-			    uint16_t y_offset, uint16_t z_offset)
+		       uint16_t y_offset, uint16_t z_offset)
 {
 	int ret;
-	uint8_t offset_array[2];
+	uint8_t data_offset_x[2] = {x_offset >> 8, (uint8_t)x_offset};
+	uint8_t data_offset_y[2] = {y_offset >> 8, (uint8_t)y_offset};
+	uint8_t data_offset_z[2] = {z_offset >> 8, (uint8_t)z_offset};
 
-	if (!dev)
-		return -EINVAL;
-
-	/* X offset */
-	offset_array[0] = (x_offset & 0xFF00) >> 8;
-	offset_array[1] = x_offset & 0x00FF;
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_OFFSET_X),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_OFFSET_X), offset_array);
+					GET_ADXL355_TRANSF_LEN(ADXL355_OFFSET_X),
+					(uint8_t*)data_offset_x);
 	if (ret)
 		return ret;
 
-	/* Y offset */
-	offset_array[0] = (y_offset & 0xFF00) >> 8;
-	offset_array[1] = y_offset & 0x00FF;
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_OFFSET_Y),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_OFFSET_Y), offset_array);
+					GET_ADXL355_TRANSF_LEN(ADXL355_OFFSET_Y),
+					(uint8_t*)data_offset_y);
 	if (ret)
 		return ret;
 
-	/* Z offset */
-	offset_array[0] = (z_offset & 0xFF00) >> 8;
-	offset_array[1] = z_offset & 0x00FF;
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_OFFSET_Z),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_OFFSET_Z), offset_array);
+					GET_ADXL355_TRANSF_LEN(ADXL355_OFFSET_Z),
+					(uint8_t*)data_offset_z);
 
 	if (!ret) {
 		dev->x_offset = x_offset;
@@ -507,85 +505,6 @@ int adxl355_set_offset(struct adxl355_dev *dev, uint16_t x_offset,
 	}
 
 	return ret;
-}
-
-/***************************************************************************//**
- * @brief Converts acceleration values from array to uint32.
- *
- * @param dev       - The device structure.
- * @param raw_array - Acceleration raw array.
- *
- * @return accel_data - Acceleration value as uint32.
-*******************************************************************************/
-static uint32_t adxl355_accel_array_conv(struct adxl355_dev *dev,
-					       uint8_t *raw_array)
-{
-	uint32_t raw_accel;
-
-	// raw_array[0] bits [7-0]: DATA bits [19:12]
-	// raw_array[1] bits [7-0]: DATA bits [11: 4]
-	// raw_array[2] bits [7-4]: DATA bits [ 3: 0]
-	// raw_array[2] bits i[3-0]: reserved
-	raw_accel = no_os_get_unaligned_be24(raw_array);
-
-	return (raw_accel >> 4);
-}
-
-/***************************************************************************//**
- * @brief Converts raw acceleration values to g.
- *
- * @param dev       - The device structure.
- * @param raw_accel - Raw acceleration value.
- *
- * @return accel_g  - Acceleration value in g * 10^9.
-*******************************************************************************/
-static int64_t adxl355_accel_conv(struct adxl355_dev *dev, uint32_t raw_accel)
-{
-	int accel_data;
-
-	// Raw acceleration is in two's complement
-	// Convert from two's complement to int
-
-	if ((raw_accel & NO_OS_BIT(19)) == NO_OS_BIT(19))
-		accel_data = raw_accel | ADXL355_NEG_ACC_MSK;
-	else
-		accel_data = raw_accel;
-
-	// Apply scale factor based on the selected range
-	switch (dev->dev_type) {
-	case ID_ADXL355:
-		return ((int64_t)(accel_data * ADXL355_ACC_SCALE_FACTOR_MUL *
-				  adxl355_scale_mul[dev->range]));
-	case ID_ADXL357:
-	case ID_ADXL359:
-		return ((int64_t)(accel_data * ADXL359_ACC_SCALE_FACTOR_MUL *
-				  adxl355_scale_mul[dev->range]));
-	default:
-		return 0;
-	}
-}
-
-/***************************************************************************//**
- * @brief Converts raw temperature to millidegrees Celsius.
- *
- * @param dev      - The device structure.
- * @param raw_temp - Raw temperature value.
- *
- * @return temp    - Temperature value in millidegrees Celsius * 10^6.
-*******************************************************************************/
-static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp)
-{
-	switch (dev->dev_type) {
-	case ID_ADXL355:
-	case ID_ADXL357:
-		return ((raw_temp * ADXL355_TEMP_OFFSET_DIV +  ADXL355_TEMP_OFFSET) *
-			(int64_t)ADXL355_TEMP_SCALE_FACTOR);
-	case ID_ADXL359:
-		return ((raw_temp * ADXL359_TEMP_OFFSET_DIV +  ADXL359_TEMP_OFFSET) *
-			(int64_t)ADXL359_TEMP_SCALE_FACTOR);
-	default:
-		return 0;
-	}
 }
 
 /***************************************************************************//**
@@ -599,7 +518,7 @@ static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp)
  * @return ret  - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_get_raw_xyz(struct adxl355_dev *dev, uint32_t *raw_x,
-			     uint32_t *raw_y, uint32_t *raw_z)
+			uint32_t *raw_y, uint32_t *raw_z)
 {
 	uint8_t array_raw_x[GET_ADXL355_TRANSF_LEN(ADXL355_XDATA)] = {0};
 	uint8_t array_raw_y[GET_ADXL355_TRANSF_LEN(ADXL355_YDATA)] = {0};
@@ -638,7 +557,7 @@ int adxl355_get_raw_xyz(struct adxl355_dev *dev, uint32_t *raw_x,
  * @return ret - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_get_xyz(struct adxl355_dev *dev, struct adxl355_frac_repr *x,
-			 struct adxl355_frac_repr *y, struct adxl355_frac_repr *z)
+		    struct adxl355_frac_repr *y, struct adxl355_frac_repr *z)
 {
 	uint32_t raw_accel_x;
 	uint32_t raw_accel_y;
@@ -660,36 +579,34 @@ int adxl355_get_xyz(struct adxl355_dev *dev, struct adxl355_frac_repr *x,
 }
 
 /***************************************************************************//**
- * @brief Reads the raw temperature data.
+ * @brief Reads the raw temperature.
  *
  * @param dev      - The device structure.
- * @param raw_temp - Raw temperature data.
+ * @param raw_temp - Raw temperature output data.
  *
  * @return ret     - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_get_raw_temp(struct adxl355_dev *dev, uint16_t *raw_temp)
 {
+	uint8_t raw_data[2];
 	int ret;
-	uint8_t temp_array[2];
-
-	if (!dev || !raw_temp)
-		return -EINVAL;
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_TEMP),
-					    GET_ADXL355_TRANSF_LEN(ADXL355_TEMP), temp_array);
-	if (ret)
-		return ret;
+				       GET_ADXL355_TRANSF_LEN(ADXL355_TEMP), raw_data);
+	if (!ret)
+		// raw_data[0] bits [7-4]: reserved
+		// raw_data[0] bits [3-0]: DATA bits [11: 8]
+		// raw_data[1] bits [7-0]: DATA bits [ 7: 0]
+		*raw_temp = ((raw_data[0] & NO_OS_GENMASK(3, 0)) << 8) | raw_data[1];
 
-	*raw_temp = ((uint16_t)temp_array[0] << 8) | temp_array[1];
-
-	return 0;
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Reads the raw temperature data and converts it to millidegrees Celsius.
  *
  * @param dev  - The device structure.
- * @param temp - Converted temperature data.
+ * @param temp - Temperature output data.
  *
  * @return ret - Result of the reading procedure.
 *******************************************************************************/
@@ -725,42 +642,44 @@ int adxl355_get_temp(struct adxl355_dev *dev, struct adxl355_frac_repr *temp)
  * @brief Reads the status register value.
  *
  * @param dev          - The device structure.
- * @param status_flags - Status register flags.
+ * @param status_flags - Register value.
  *
  * @return ret         - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_get_sts_reg(struct adxl355_dev *dev,
-			     union adxl355_sts_reg_flags *status_flags)
+			union adxl355_sts_reg_flags *status_flags)
 {
-	if (!dev || !status_flags)
-		return -EINVAL;
+	int ret;
+	uint8_t reg_value;
 
-	return adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_STATUS),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_STATUS), &status_flags->value);
+	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_STATUS),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_STATUS), &reg_value);
+
+	if (!ret)
+		status_flags->value = reg_value;
+
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Reads the number of FIFO entries register value.
  *
  * @param dev       - The device structure.
- * @param reg_value - FIFO entries register value.
+ * @param reg_value - Register value.
  *
  * @return ret      - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_get_nb_of_fifo_entries(struct adxl355_dev *dev, uint8_t *reg_value)
 {
-	if (!dev || !reg_value)
-		return -EINVAL;
-
 	return adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_FIFO_ENTRIES),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_FIFO_ENTRIES), reg_value);
+					GET_ADXL355_TRANSF_LEN(ADXL355_FIFO_ENTRIES), reg_value);
 }
 
 /***************************************************************************//**
  * @brief Sets the number of FIFO samples register value.
  *
  * @param dev       - The device structure.
- * @param reg_value - FIFO samples register value.
+ * @param reg_value - Register value.
  *
  * @return ret      - Result of the writing procedure.
 *******************************************************************************/
@@ -768,14 +687,11 @@ int adxl355_set_fifo_samples(struct adxl355_dev *dev, uint8_t reg_value)
 {
 	int ret;
 
-	if (!dev)
-		return -EINVAL;
-
 	if (reg_value > ADXL355_MAX_FIFO_SAMPLES_VAL)
 		return -EINVAL;
 
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_FIFO_SAMPLES),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_FIFO_SAMPLES), &reg_value);
+					GET_ADXL355_TRANSF_LEN(ADXL355_FIFO_SAMPLES), &reg_value);
 
 	if (!ret)
 		dev->fifo_samples = reg_value;
@@ -869,21 +785,19 @@ int adxl355_get_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
 /***************************************************************************//**
  * @brief Configures the activity enable register.
  *
- * @param dev        - The device structure.
- * @param act_config - Activity enable configuration.
+ * @param dev         - The device structure.
+ * @param act_config  - Activity enable mapping.
  *
- * @return ret       - Result of the writing procedure.
+ * @return ret         - Result of the configuration procedure.
 *******************************************************************************/
 int adxl355_conf_act_en(struct adxl355_dev *dev,
-			     union adxl355_act_en_flags act_config)
+			union adxl355_act_en_flags act_config)
 {
 	int ret;
-
-	if (!dev)
-		return -EINVAL;
+	uint8_t reg_val = act_config.value;
 
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_ACT_EN),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_ACT_EN), &act_config.value);
+					GET_ADXL355_TRANSF_LEN(ADXL355_ACT_EN), &reg_val);
 
 	if (!ret)
 		dev->act_en = act_config;
@@ -897,21 +811,15 @@ int adxl355_conf_act_en(struct adxl355_dev *dev,
  * @param dev     - The device structure.
  * @param act_thr - Activity threshold value.
  *
- * @return ret    - Result of the writing procedure.
+ * @return ret    - Result of the configuration procedure.
 *******************************************************************************/
 int adxl355_conf_act_thr(struct adxl355_dev *dev, uint16_t act_thr)
 {
 	int ret;
-	uint8_t act_thr_array[2];
-
-	if (!dev)
-		return -EINVAL;
-
-	act_thr_array[0] = (act_thr & 0xFF00) >> 8;
-	act_thr_array[1] = act_thr & 0x00FF;
+	uint8_t data[2] = {act_thr >> 8, (uint8_t)act_thr};
 
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_ACT_THRESH),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_ACT_THRESH), act_thr_array);
+					GET_ADXL355_TRANSF_LEN(ADXL355_ACT_THRESH), (uint8_t*)data);
 
 	if (!ret)
 		dev->act_thr = act_thr;
@@ -923,20 +831,15 @@ int adxl355_conf_act_thr(struct adxl355_dev *dev, uint16_t act_thr)
  * @brief Writes the activity count register value.
  *
  * @param dev     - The device structure.
- * @param act_cnt - Activity count register value.
+ * @param act_cnt - Register value.
  *
  * @return ret    - Result of the writing procedure.
 *******************************************************************************/
 int adxl355_set_act_cnt_reg(struct adxl355_dev *dev, uint8_t act_cnt)
 {
 	int ret;
-
-	if (!dev)
-		return -EINVAL;
-
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_ACT_CNT),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_ACT_CNT), &act_cnt);
-
+					GET_ADXL355_TRANSF_LEN(ADXL355_ACT_CNT), &act_cnt);
 	if (!ret)
 		dev->act_cnt = act_cnt;
 
@@ -947,45 +850,120 @@ int adxl355_set_act_cnt_reg(struct adxl355_dev *dev, uint8_t act_cnt)
  * @brief Configures the interrupt map for INT1 and INT2 pins.
  *
  * @param dev      - The device structure.
- * @param int_conf - Interrupt pins configuration.
+ * @param int_conf - Interrupt mapping.
  *
- * @return ret     - Result of the writing procedure.
+ * @return ret     - Result of the configuration procedure.
 *******************************************************************************/
 int adxl355_config_int_pins(struct adxl355_dev *dev,
-				 union adxl355_int_mask int_conf)
+			    union adxl355_int_mask int_conf)
 {
-	if (!dev)
-		return -EINVAL;
+	uint8_t reg_val = int_conf.value;
 
 	return adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_INT_MAP),
-					      GET_ADXL355_TRANSF_LEN(ADXL355_INT_MAP), &int_conf.value);
+					 GET_ADXL355_TRANSF_LEN(ADXL355_INT_MAP), &reg_val);
 }
 
 /***************************************************************************//**
- * @brief Configures the interrupt polarity.
+ * @brief Sets the interrupt polarity.
  *
  * @param dev     - The device structure.
  * @param int_pol - Interrupt polarity to be set.
  *
- * @return ret    - Result of the writing procedure.
+ * @return ret    - Result of the reading procedure.
 *******************************************************************************/
 int adxl355_set_int_pol(struct adxl355_dev *dev, enum adxl355_int_pol int_pol)
 {
 	int ret;
-	uint8_t range_reg_val;
-	uint8_t range_field_val = shadow_reg_val[3] & ADXL355_RANGE_FIELD_MSK;
-	uint8_t hpf_field_val = (shadow_reg_val[3] & ADXL355_HPF_FIELD_MSK) >> 4;
+	uint8_t reg_value;
 
-	if (!dev)
-		return -EINVAL;
-
-	range_reg_val = range_field_val | (hpf_field_val << 4) | ((int_pol << 6) & ADXL355_INT_POL_FIELD_MSK);
-
+	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_RANGE),
+				       GET_ADXL355_TRANSF_LEN(ADXL355_RANGE), &reg_value);
+	if (ret)
+		return ret;
+	reg_value &= ~(ADXL355_INT_POL_FIELD_MSK);
+	reg_value |= ((int_pol) << 6) & ADXL355_INT_POL_FIELD_MSK;
 	ret = adxl355_write_device_data(dev, ADXL355_ADDR(ADXL355_RANGE),
-					     GET_ADXL355_TRANSF_LEN(ADXL355_RANGE), &range_reg_val);
-
-	if (!ret)
-		shadow_reg_val[3] = range_reg_val;
+					GET_ADXL355_TRANSF_LEN(ADXL355_RANGE), &reg_value);
 
 	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Converts array of raw acceleration to uint32 data raw acceleration
+ *
+ * @param dev       - The device structure.
+ * @param raw_array - Raw acceleration array.
+ *
+ * @return ret      - Converted data.
+*******************************************************************************/
+static uint32_t adxl355_accel_array_conv(struct adxl355_dev *dev,
+		uint8_t *raw_array)
+{
+	uint32_t raw_accel;
+
+	// raw_array[0] bits [7-0]: DATA bits [19:12]
+	// raw_array[1] bits [7-0]: DATA bits [11: 4]
+	// raw_array[2] bits [7-4]: DATA bits [ 3: 0]
+	// raw_array[2] bits i[3-0]: reserved
+	raw_accel = no_os_get_unaligned_be24(raw_array);
+
+	return (raw_accel >> 4);
+}
+
+/***************************************************************************//**
+ * @brief Converts raw acceleration value to m/s^2 value.
+ *
+ * @param dev       - The device structure.
+ * @param raw_accel - Raw acceleration value.
+ *
+ * @return ret      - Converted data.
+*******************************************************************************/
+static int64_t adxl355_accel_conv(struct adxl355_dev *dev,
+				  uint32_t raw_accel)
+{
+	int accel_data;
+
+	// Raw acceleration is in two's complement
+	// Convert from two's complement to int
+
+	if ((raw_accel & NO_OS_BIT(19)) == NO_OS_BIT(19))
+		accel_data = raw_accel | ADXL355_NEG_ACC_MSK;
+	else
+		accel_data = raw_accel;
+
+	// Apply scale factor based on the selected range
+	switch (dev->dev_type) {
+	case ID_ADXL355:
+		return ((int64_t)(accel_data * ADXL355_ACC_SCALE_FACTOR_MUL *
+				  adxl355_scale_mul[dev->range]));
+	case ID_ADXL357:
+	case ID_ADXL359:
+		return ((int64_t)(accel_data * ADXL359_ACC_SCALE_FACTOR_MUL *
+				  adxl355_scale_mul[dev->range]));
+	default:
+		return 0;
+	}
+}
+
+/***************************************************************************//**
+ * @brief Converts raw temperature data to degrees Celsius data.
+ *
+ * @param dev      - The device structure.
+ * @param raw_temp - Raw temperature data.
+ *
+ * @return ret     - Converted data.
+*******************************************************************************/
+static int64_t adxl355_temp_conv(struct adxl355_dev *dev, uint16_t raw_temp)
+{
+	switch (dev->dev_type) {
+	case ID_ADXL355:
+	case ID_ADXL357:
+		return ((raw_temp * ADXL355_TEMP_OFFSET_DIV +  ADXL355_TEMP_OFFSET) *
+			(int64_t)ADXL355_TEMP_SCALE_FACTOR);
+	case ID_ADXL359:
+		return ((raw_temp * ADXL359_TEMP_OFFSET_DIV +  ADXL359_TEMP_OFFSET) *
+			(int64_t)ADXL359_TEMP_SCALE_FACTOR);
+	default:
+		return 0;
+	}
 }

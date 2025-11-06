@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   adxl355_capi.h
- *   @brief  Header file of ADXL355 CAPI Driver.
- *   @author Claude Code (noreply@anthropic.com)
+ *   @file   adxl355.h
+ *   @brief  Header file of ADXL355 Driver.
+ *   @author RBolboac (ramona.bolboaca@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2022(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,13 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __ADXL355_CAPI_H__
-#define __ADXL355_CAPI_H__
+#ifndef __ADXL355_H__
+#define __ADXL355_H__
 
 #include <stdint.h>
 #include <string.h>
 #include "no_os_util.h"
-#include "capi/capi_spi.h"
+#include "no_os_i2c.h"
+#include "no_os_spi.h"
 
 /* SPI commands */
 #define ADXL355_SPI_READ          0x01
@@ -142,76 +143,87 @@
 #define ADXL355_HPF_FIELD_MSK      NO_OS_GENMASK( 6,  4)
 #define ADXL355_INT_POL_FIELD_MSK  NO_OS_BIT(6)
 
-enum adxl355_capi_type {
-	ID_ADXL355_CAPI,
-	ID_ADXL357_CAPI,
-	ID_ADXL359_CAPI,
+enum adxl355_type {
+	ID_ADXL355,
+	ID_ADXL357,
+	ID_ADXL359,
 };
 
-enum adxl355_capi_op_mode {
-	ADXL355_CAPI_MEAS_TEMP_ON_DRDY_ON = 0,
-	ADXL355_CAPI_STDBY_TEMP_ON_DRDY_ON = 1,
-	ADXL355_CAPI_MEAS_TEMP_OFF_DRDY_ON = 2,
-	ADXL355_CAPI_STDBY_TEMP_OFF_DRDY_ON = 3,
-	ADXL355_CAPI_MEAS_TEMP_ON_DRDY_OFF = 4,
-	ADXL355_CAPI_STDBY_TEMP_ON_DRDY_OFF = 5,
-	ADXL355_CAPI_MEAS_TEMP_OFF_DRDY_OFF = 6,
-	ADXL355_CAPI_STDBY_TEMP_OFF_DRDY_OFF = 7
+enum adxl355_op_mode {
+	ADXL355_MEAS_TEMP_ON_DRDY_ON = 0,
+	ADXL355_STDBY_TEMP_ON_DRDY_ON = 1,
+	ADXL355_MEAS_TEMP_OFF_DRDY_ON = 2,
+	ADXL355_STDBY_TEMP_OFF_DRDY_ON = 3,
+	ADXL355_MEAS_TEMP_ON_DRDY_OFF = 4,
+	ADXL355_STDBY_TEMP_ON_DRDY_OFF = 5,
+	ADXL355_MEAS_TEMP_OFF_DRDY_OFF = 6,
+	ADXL355_STDBY_TEMP_OFF_DRDY_OFF = 7
 };
 
-enum adxl355_capi_hpf_corner {
-	ADXL355_CAPI_HPF_OFF,
-	ADXL355_CAPI_HPF_24_7,
-	ADXL355_CAPI_HPF_6_2084,
-	ADXL355_CAPI_HPF_1_5545,
-	ADXL355_CAPI_HPF_0_3862,
-	ADXL355_CAPI_HPF_0_0954,
-	ADXL355_CAPI_HPF_0_0238
+enum adxl355_comm_type {
+	ADXL355_SPI_COMM,
+	ADXL355_I2C_COMM
 };
 
-enum adxl355_capi_odr_lpf {
-	ADXL355_CAPI_ODR_4000HZ,
-	ADXL355_CAPI_ODR_2000HZ,
-	ADXL355_CAPI_ODR_1000HZ,
-	ADXL355_CAPI_ODR_500HZ,
-	ADXL355_CAPI_ODR_250HZ,
-	ADXL355_CAPI_ODR_125HZ,
-	ADXL355_CAPI_ODR_62_5HZ,
-	ADXL355_CAPI_ODR_31_25HZ,
-	ADXL355_CAPI_ODR_15_625HZ,
-	ADXL355_CAPI_ODR_7_813HZ,
-	ADXL355_CAPI_ODR_3_906HZ
+enum adxl355_hpf_corner {
+	ADXL355_HPF_OFF,
+	ADXL355_HPF_24_7,
+	ADXL355_HPF_6_2084,
+	ADXL355_HPF_1_5545,
+	ADXL355_HPF_0_3862,
+	ADXL355_HPF_0_0954,
+	ADXL355_HPF_0_0238
 };
 
-enum adxl355_capi_range {
-	ADXL355_CAPI_RANGE_2G = 1,
-	ADXL359_CAPI_RANGE_10G = 1,
-	ADXL355_CAPI_RANGE_4G = 2,
-	ADXL359_CAPI_RANGE_20G = 2,
-	ADXL355_CAPI_RANGE_8G = 3,
-	ADXL359_CAPI_RANGE_40G = 3,
+enum adxl355_odr_lpf {
+	ADXL355_ODR_4000HZ,
+	ADXL355_ODR_2000HZ,
+	ADXL355_ODR_1000HZ,
+	ADXL355_ODR_500HZ,
+	ADXL355_ODR_250HZ,
+	ADXL355_ODR_125HZ,
+	ADXL355_ODR_62_5HZ,
+	ADXL355_ODR_31_25HZ,
+	ADXL355_ODR_15_625HZ,
+	ADXL355_ODR_7_813HZ,
+	ADXL355_ODR_3_906HZ
 };
 
-enum adxl355_capi_int_pol {
-	ADXL355_CAPI_INT_ACTIVE_LOW = 0,
-	ADXL355_CAPI_INT_ACTIVE_HIGH = 1
+enum adxl355_range {
+	ADXL355_RANGE_2G = 1,
+	ADXL359_RANGE_10G = 1,
+	ADXL355_RANGE_4G = 2,
+	ADXL359_RANGE_20G = 2,
+	ADXL355_RANGE_8G = 3,
+	ADXL359_RANGE_40G = 3,
 };
+
+enum adxl355_int_pol {
+	ADXL355_INT_ACTIVE_LOW = 0,
+	ADXL355_INT_ACTIVE_HIGH = 1
+};
+
+union adxl355_comm_init_param {
+	/** I2C Initialization structure. */
+	struct no_os_i2c_init_param i2c_init;
+	/** SPI Initialization structure. */
+	struct no_os_spi_init_param spi_init;
+} ;
 
 /**
- * @struct adxl355_capi_init_param
- * @brief Structure holding the parameters for ADXL355 CAPI device initialization.
+ * @struct adxl355_init_param
+ * @brief Structure holding the parameters for ADXL355 device initialization.
  */
-struct adxl355_capi_init_param {
-	/** SPI controller handle */
-	struct capi_spi_controller_handle *spi_controller;
-	/** SPI device parameters */
-	struct capi_spi_config comm_param;
+struct adxl355_init_param {
+	/** Device Communication initialization structure: either SPI or I2C */
+	union adxl355_comm_init_param comm_init;
+	/** Device Communication type: ADXL355_SPI_COMM, ADXL355_I2C_COMM */
+	enum adxl355_comm_type comm_type;
 	/** Device type: ADXL355 or 359 */
-	enum adxl355_capi_type dev_type;
-	struct capi_spi_device *spi_dev;
+	enum adxl355_type dev_type;
 };
 
-struct _adxl355_capi_int_mask {
+struct _adxl355_int_mask {
 	uint8_t RDY_EN1 : 1;
 	uint8_t FULL_EN1 : 1;
 	uint8_t OVR_EN1 : 1;
@@ -222,12 +234,12 @@ struct _adxl355_capi_int_mask {
 	uint8_t ACT_EN2 : 1;
 };
 
-union adxl355_capi_int_mask {
-	struct _adxl355_capi_int_mask fields;
+union adxl355_int_mask {
+	struct _adxl355_int_mask fields;
 	uint8_t value;
 };
 
-struct _adxl355_capi_sts_reg_flags {
+struct _adxl355_sts_reg_flags {
 	uint8_t DATA_RDY : 1;
 	uint8_t FIFO_FULL : 1;
 	uint8_t FIFO_OVR : 1;
@@ -236,148 +248,143 @@ struct _adxl355_capi_sts_reg_flags {
 	uint8_t reserved : 3;
 };
 
-union adxl355_capi_sts_reg_flags {
-	struct _adxl355_capi_sts_reg_flags fields;
+union adxl355_sts_reg_flags {
+	struct _adxl355_sts_reg_flags fields;
 	uint8_t value;
 };
 
-struct _adxl355_capi_act_en_flags {
+struct _adxl355_act_en_flags {
 	uint8_t ACT_X    : 1;
 	uint8_t ACT_Y    : 1;
 	uint8_t ACT_Z    : 1;
 	uint8_t reserved : 4;
 };
 
-union adxl355_capi_act_en_flags {
-	struct _adxl355_capi_act_en_flags fields;
+union adxl355_act_en_flags {
+	struct _adxl355_act_en_flags fields;
 	uint8_t value;
 };
 
-struct adxl355_capi_frac_repr {
+struct adxl355_frac_repr {
 	int64_t integer;
 	int32_t fractional;
 } ;
 
+union adxl355_comm_desc {
+	/** I2C Descriptor */
+	struct no_os_i2c_desc *i2c_desc;
+	/** SPI Descriptor */
+	struct no_os_spi_desc *spi_desc;
+};
+
 /**
- * @struct adxl355_capi_dev
- * @brief ADXL355 CAPI Device structure.
+ * @struct adxl355_dev
+ * @brief ADXL355 Device structure.
  */
-struct adxl355_capi_dev {
+struct adxl355_dev {
 	/** Device type */
-	enum adxl355_capi_type dev_type;
-	/** SPI controller handle */
-	struct capi_spi_controller_handle *spi_controller;
-	/** SPI device handle */
-	struct capi_spi_device *spi_device;
-	/** Device operation mode */
-	enum adxl355_capi_op_mode op_mode;
-	/** Output data rate and low-pass filter setting */
-	enum adxl355_capi_odr_lpf odr_lpf;
-	/** High-pass filter corner frequency */
-	enum adxl355_capi_hpf_corner hpf_corner;
-	/** Measurement range */
-	enum adxl355_capi_range range;
-	/** X-axis offset */
+	enum adxl355_type dev_type;
+	/** Device communication descriptor */
+	union adxl355_comm_desc com_desc;
+	/** Device Communication type: ADXL355_SPI_COMM, ADXL355_I2C_COMM */
+	enum adxl355_comm_type comm_type;
+	enum adxl355_op_mode op_mode;
+	enum adxl355_odr_lpf odr_lpf;
+	enum adxl355_hpf_corner hpf_corner;
+	enum adxl355_range range;
 	uint16_t x_offset;
-	/** Y-axis offset */
 	uint16_t y_offset;
-	/** Z-axis offset */
 	uint16_t z_offset;
-	/** FIFO sample count */
 	uint8_t fifo_samples;
-	/** Activity enable flags */
-	union adxl355_capi_act_en_flags act_en;
-	/** Activity count threshold */
+	union adxl355_act_en_flags act_en;
 	uint8_t act_cnt;
-	/** Activity threshold */
 	uint16_t act_thr;
-	/** Communication buffer for SPI transactions */
 	uint8_t comm_buff[289];
 };
 
-/*! Init. the SPI peripheral and checks if the ADXL355 part is present. */
-int adxl355_capi_init(struct adxl355_capi_dev **device,
-		      struct adxl355_capi_init_param init_param);
+/*! Init. the comm. peripheral and checks if the ADXL355 part is present. */
+int adxl355_init(struct adxl355_dev **device,
+		 struct adxl355_init_param init_param);
 
-/*! Free the resources allocated by adxl355_capi_init(). */
-int adxl355_capi_remove(struct adxl355_capi_dev *dev);
+/*! Free the resources allocated by adxl355_init(). */
+int adxl355_remove(struct adxl355_dev *dev);
 
 /*! Places the device into the given operation mode. */
-int adxl355_capi_set_op_mode(struct adxl355_capi_dev *dev, enum adxl355_capi_op_mode op_mode);
+int adxl355_set_op_mode(struct adxl355_dev *dev, enum adxl355_op_mode op_mode);
 
 /*! Reads the device current operation mode. */
-int adxl355_capi_get_op_mode(struct adxl355_capi_dev *dev,
-			     enum adxl355_capi_op_mode *read_op_mode);
+int adxl355_get_op_mode(struct adxl355_dev *dev,
+			enum adxl355_op_mode *read_op_mode);
 
 /*! Performs soft reset of the device. */
-int adxl355_capi_soft_reset(struct adxl355_capi_dev *dev);
+int adxl355_soft_reset(struct adxl355_dev *dev);
 
 /*! Triggers the self-test feature. */
-int adxl355_capi_set_self_test(struct adxl355_capi_dev *dev);
+int adxl355_set_self_test(struct adxl355_dev *dev);
 
 /*! Sets the measurement range register value. */
-int adxl355_capi_set_range(struct adxl355_capi_dev *dev, enum adxl355_capi_range range_val);
+int adxl355_set_range(struct adxl355_dev *dev, enum adxl355_range range_val);
 
 /*! Writes the low-pass filter settings. */
-int adxl355_capi_set_odr_lpf(struct adxl355_capi_dev *dev,
-			     enum adxl355_capi_odr_lpf odr_lpf_val);
+int adxl355_set_odr_lpf(struct adxl355_dev *dev,
+			enum adxl355_odr_lpf odr_lpf_val);
 
 /*! Writes the high-pass filter settings. */
-int adxl355_capi_set_hpf_corner(struct adxl355_capi_dev *dev,
-				enum adxl355_capi_hpf_corner hpf_corner_val);
+int adxl355_set_hpf_corner(struct adxl355_dev *dev,
+			   enum adxl355_hpf_corner hpf_corner_val);
 
 /*! Sets an offset value for each axis (Offset Calibration). */
-int adxl355_capi_set_offset(struct adxl355_capi_dev *dev, uint16_t x_offset,
-			    uint16_t y_offset, uint16_t z_offset);
+int adxl355_set_offset(struct adxl355_dev *dev, uint16_t x_offset,
+		       uint16_t y_offset, uint16_t z_offset);
 
 /*! Reads the raw output data of each axis. */
-int adxl355_capi_get_raw_xyz(struct adxl355_capi_dev *dev, uint32_t *raw_x,
-			     uint32_t *raw_y, uint32_t *raw_z);
+int adxl355_get_raw_xyz(struct adxl355_dev *dev, uint32_t *raw_x,
+			uint32_t *raw_y, uint32_t *raw_z);
 
 /*! Reads the raw output data of each axis and converts it to g. */
-int adxl355_capi_get_xyz(struct adxl355_capi_dev *dev, struct adxl355_capi_frac_repr *x,
-			 struct adxl355_capi_frac_repr *y, struct adxl355_capi_frac_repr *z);
+int adxl355_get_xyz(struct adxl355_dev *dev, struct adxl355_frac_repr *x,
+		    struct adxl355_frac_repr *y, struct adxl355_frac_repr *z);
 
 /*! Reads the raw temperature data. */
-int adxl355_capi_get_raw_temp(struct adxl355_capi_dev *dev, uint16_t *raw_temp);
+int adxl355_get_raw_temp(struct adxl355_dev *dev, uint16_t *raw_temp);
 
 /*! Reads the raw temperature data and converts it to millidegrees Celsius. */
-int adxl355_capi_get_temp(struct adxl355_capi_dev *dev, struct adxl355_capi_frac_repr *temp);
+int adxl355_get_temp(struct adxl355_dev *dev, struct adxl355_frac_repr *temp);
 
 /*! Reads the status register value. */
-int adxl355_capi_get_sts_reg(struct adxl355_capi_dev *dev,
-			     union adxl355_capi_sts_reg_flags *status_flags);
+int adxl355_get_sts_reg(struct adxl355_dev *dev,
+			union adxl355_sts_reg_flags *status_flags);
 
 /*! Reads the number of FIFO entries register value. */
-int adxl355_capi_get_nb_of_fifo_entries(struct adxl355_capi_dev *dev, uint8_t *reg_value);
+int adxl355_get_nb_of_fifo_entries(struct adxl355_dev *dev, uint8_t *reg_value);
 
 /*! Sets the number of FIFO samples register value. */
-int adxl355_capi_set_fifo_samples(struct adxl355_capi_dev *dev, uint8_t reg_value);
+int adxl355_set_fifo_samples(struct adxl355_dev *dev, uint8_t reg_value);
 
 /*! Reads fifo data and returns the raw values. */
-int adxl355_capi_get_raw_fifo_data(struct adxl355_capi_dev *dev, uint8_t *fifo_entries,
-				   uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z);
+int adxl355_get_raw_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
+			      uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z);
 
 /*! Reads fifo data and returns the values converted in g. */
-int adxl355_capi_get_fifo_data(struct adxl355_capi_dev *dev, uint8_t *fifo_entries,
-			       struct adxl355_capi_frac_repr *x, struct adxl355_capi_frac_repr *y,
-			       struct adxl355_capi_frac_repr *z);
+int adxl355_get_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
+			  struct adxl355_frac_repr *x, struct adxl355_frac_repr *y,
+			  struct adxl355_frac_repr *z);
 
 /*! Configures the activity enable register. */
-int adxl355_capi_conf_act_en(struct adxl355_capi_dev *dev,
-			     union adxl355_capi_act_en_flags act_config);
+int adxl355_conf_act_en(struct adxl355_dev *dev,
+			union adxl355_act_en_flags act_config);
 
 /*! Configures the activity threshold registers. */
-int adxl355_capi_conf_act_thr(struct adxl355_capi_dev *dev, uint16_t act_thr);
+int adxl355_conf_act_thr(struct adxl355_dev *dev, uint16_t act_thr);
 
 /*! Writes the activity count register value. */
-int adxl355_capi_set_act_cnt_reg(struct adxl355_capi_dev *dev, uint8_t act_cnt);
+int adxl355_set_act_cnt_reg(struct adxl355_dev *dev, uint8_t act_cnt);
 
 /*! Configures the interrupt map for INT1 and INT2 pins. */
-int adxl355_capi_config_int_pins(struct adxl355_capi_dev *dev,
-				 union adxl355_capi_int_mask int_conf);
+int adxl355_config_int_pins(struct adxl355_dev *dev,
+			    union adxl355_int_mask int_conf);
 
 /*! Configures the interrupt polarity. */
-int adxl355_capi_set_int_pol(struct adxl355_capi_dev *dev, enum adxl355_capi_int_pol int_pol);
+int adxl355_set_int_pol(struct adxl355_dev *dev, enum adxl355_int_pol int_pol);
 
-#endif /* __ADXL355_CAPI_H__ */
+#endif /* __ADXL355_H__ */
