@@ -34,8 +34,8 @@
 #include <stdbool.h>
 #include "ssd_1306.h"
 #include "no_os_error.h"
-#include "no_os_spi.h"
-#include "no_os_i2c.h"
+#include "capi_spi.h"
+#include "capi_i2c.h"
 #include "no_os_delay.h"
 #include <string.h>
 
@@ -66,29 +66,40 @@ int32_t ssd1306_buffer_transmit(ssd_1306_extra *extra_param, uint8_t *command,
 	switch (extra_param->comm_type) {
 	case SSD1306_I2C: {
 		uint8_t buff_tmp[length + 1];
+		struct capi_i2c_transfer xfer = {
+			.buf = buff_tmp,
+			.len = length + 1,
+		};
+
 		if (is_data == SSD1306_DATA)	/* Data transmit */
 			buff_tmp[0] = 0x40;
 		else							/* Command transmit */
 			buff_tmp[0] = 0x00;
 		memcpy(&buff_tmp[1], command, length);
-		return no_os_i2c_write(extra_param->i2c_desc, buff_tmp, length + 1, 1);
+
+		return capi_i2c_transmit(extra_param->i2c_desc, &xfer);
 	}
 	case SSD1306_SPI: {
 		int32_t ret;
+		struct capi_spi_transfer xfer = {
+			.tx_buf = command,
+			.tx_size = length,
+		};
+
 		if (is_data == SSD1306_DATA) {	/* Data transmit */
 			if (extra_param->dc_pin) {
-				ret = no_os_gpio_set_value(extra_param->dc_pin, SSD1306_DC_DATA);
+				ret = capi_gpio_pin_set_value(extra_param->dc_pin, SSD1306_DC_DATA);
 				if (ret != 0)
 					return -EFAULT;
 			}
 		} else {						/* Command transmit */
 			if (extra_param->dc_pin) {
-				ret = no_os_gpio_set_value(extra_param->dc_pin, SSD1306_DC_CMD);
+				ret = capi_gpio_pin_set_value(extra_param->dc_pin, SSD1306_DC_CMD);
 				if (ret != 0)
 					return -EFAULT;
 			}
 		}
-		return no_os_spi_write_and_read(extra_param->spi_desc, command, length);
+		return capi_spi_transceive(extra_param->spi_desc, &xfer);
 	}
 	default:
 		return -EFAULT;
@@ -109,34 +120,14 @@ int32_t ssd_1306_init(struct display_dev *device)
 	ssd_1306_extra *extra;
 
 	extra = device->extra;
-	switch (extra->comm_type) {
-	case SSD1306_SPI:
-		ret = no_os_spi_init(&extra->spi_desc, extra->spi_ip);
-		break;
-	case SSD1306_I2C:
-		ret = no_os_i2c_init(&extra->i2c_desc, extra->i2c_ip);
-		break;
-	default:
-		ret = -EFAULT;
-		break;
-	}
-	if (ret != 0)
-		return ret;
-
-	if (extra->dc_pin_ip) {
-		ret = no_os_gpio_get(&extra->dc_pin, extra->dc_pin_ip);
-		if (ret != 0)
-			return -1;
-	}
-	if (extra->reset_pin_ip) {
-		ret = no_os_gpio_get(&extra->reset_pin, extra->reset_pin_ip);
-		if (ret != 0)
-			return -1;
-	}
 
 	// initial pin state
 	if (extra->reset_pin) {
-		ret = no_os_gpio_direction_output(extra->reset_pin, SSD1306_RST_OFF);
+		ret = capi_gpio_pin_set_direction(extra->reset_pin, CAPI_GPIO_OUTPUT);
+		if (ret != 0)
+			return -1;
+
+		ret = capi_gpio_pin_set_value(extra->reset_pin, SSD1306_RST_OFF);
 		if (ret != 0)
 			return -1;
 	}
@@ -147,7 +138,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 		return -1;
 
 	if (extra->reset_pin) {
-		ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_ON);
+		ret = capi_gpio_pin_set_value(extra->reset_pin, SSD1306_RST_ON);
 		if (ret != 0)
 			return -1;
 
@@ -155,7 +146,7 @@ int32_t ssd_1306_init(struct display_dev *device)
 	// Post reset delay, Treset=3us (See datasheet -> power on sequence)
 	no_os_udelay(3U);
 	if (extra->reset_pin) {
-		ret = no_os_gpio_set_value(extra->reset_pin, SSD1306_RST_OFF);
+		ret = capi_gpio_pin_set_value(extra->reset_pin, SSD1306_RST_OFF);
 		if (ret != 0)
 			return -1;
 	}
@@ -234,6 +225,12 @@ int32_t ssd_1306_init(struct display_dev *device)
 
 	no_os_udelay(3U);
 	command[0] = 0xAF;
+	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
+	if (ret != 0)
+		return -1;
+
+	no_os_udelay(3U);
+	command[0] = 0xA6;
 	ret = ssd1306_buffer_transmit(extra, command, 1U, SSD1306_CMD);
 	if (ret != 0)
 		return -1;
@@ -332,21 +329,22 @@ int32_t ssd_1306_remove(struct display_dev *device)
 	ssd_1306_extra *extra;
 
 	extra = device->extra;
-	if (extra->reset_pin) {
-		ret = no_os_gpio_remove(extra->reset_pin);
-		if (ret != 0)
-			return -EFAULT;
-	}
-	if (extra->dc_pin) {
-		ret = no_os_gpio_remove(extra->dc_pin);
-		if (ret != 0)
-			return -EFAULT;
-	}
+	/* Not initialized by this driver */
+	// if (extra->reset_pin) {
+	// 	ret = no_os_gpio_remove(extra->reset_pin);
+	// 	if (ret != 0)
+	// 		return -EFAULT;
+	// }
+	// if (extra->dc_pin) {
+	// 	ret = no_os_gpio_remove(extra->dc_pin);
+	// 	if (ret != 0)
+	// 		return -EFAULT;
+	// }
 
-	if (extra->comm_type == SSD1306_SPI)
-		return no_os_spi_remove(extra->spi_desc);
-	else if (extra->comm_type == SSD1306_I2C)
-		return no_os_i2c_remove(extra->i2c_desc);
+	// if (extra->comm_type == SSD1306_SPI)
+	// 	return no_os_spi_remove(extra->spi_desc);
+	// else if (extra->comm_type == SSD1306_I2C)
+	// 	return no_os_i2c_remove(extra->i2c_desc);
 
 	return 0;
 }
@@ -410,4 +408,47 @@ int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer)
 	}
 
 	return 0;
+}
+
+/**
+ * @brief Print an icon at a specified position
+ *
+ * @param device - The device structure.
+ * @param icon_buffer - The icon bitmap buffer.
+ * @param width - Icon width in pixels.
+ * @param height - Icon height in pixels (must be a multiple of 8).
+ * @param row - Row to start (page address, 0 = top).
+ * @param col - Column to start (0 = left).
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t ssd_1306_print_icon(struct display_dev *device, const uint8_t *icon_buffer,
+                uint8_t width, uint8_t height, uint8_t row, uint8_t col)
+{
+    int32_t ret;
+    ssd_1306_extra *extra;
+
+    if (!device || !icon_buffer)
+        return -ENOMEM;
+
+    extra = device->extra;
+
+    // Move cursor to starting position
+    ret = ssd_1306_move_cursor(device, row, col);
+    if (ret != 0)
+        return ret;
+
+    uint8_t pages = height / 8; // Each page is 8 pixels high
+    for (uint8_t p = 0; p < pages; p++) {
+        ret = ssd1306_buffer_transmit(extra, (uint8_t *)&icon_buffer[p * width], width, SSD1306_DATA);
+        if (ret != 0)
+            return ret;
+        // Move to next page (row)
+        if (p < pages - 1) {
+            ret = ssd_1306_move_cursor(device, row + p + 1, col);
+            if (ret != 0)
+                return ret;
+        }
+    }
+
+    return 0;
 }
