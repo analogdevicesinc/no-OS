@@ -14,15 +14,15 @@
 
 #include "capi/capi_spi.h"
 #include "capi/capi_uart.h"
-#include "adxl355_capi.h"
+#include "adxl355.h"
 
 #include "platform.h"
 
 int main()
 {
-	struct adxl355_capi_frac_repr x_accel, y_accel, z_accel;
-	struct adxl355_capi_frac_repr temp;
-	struct adxl355_capi_dev *adxl355;
+	struct adxl355_frac_repr x_accel, y_accel, z_accel;
+	struct adxl355_frac_repr temp;
+	struct adxl355_dev *adxl355;
 
 	/* Handle for the SPI controller. Will be dynamically allocated. */
 	struct capi_spi_controller_handle *spi_controller = NULL;
@@ -82,18 +82,18 @@ int main()
 	 * Initialization parameters specific for the ADXL355 driver.
 	 * The SPI device is passed in this struct.
 	 */
-	struct adxl355_capi_init_param adxl355_param = {
+	struct adxl355_init_param adxl355_param = {
 		.spi_controller = spi_controller,
 		.comm_param = adxl355_spi_config,
-		.dev_type = ID_ADXL355_CAPI,
+		.dev_type = ID_ADXL355,
 		.spi_dev = &adxl355_spi_dev,
 	};
 
 	/* 
 	 * TODO: Initialize the adxl355 descriptor.
-	 * Hint: Check the adxl355_capi.h file for the required function.
+	 * Hint: Check the adxl355.h file for the required function.
 	 */
-	ret = adxl355_capi_init(&adxl355, adxl355_param);
+	ret = adxl355_init(&adxl355, adxl355_param);
 	if (ret) {
 		printf("Error initializing ADXL355: %d\n", ret);
 		return ret;
@@ -102,21 +102,21 @@ int main()
 	printf("ADXL355 initialized successfully\n");
 
 	/* Perform soft reset */
-	ret = adxl355_capi_soft_reset(adxl355);
+	ret = adxl355_soft_reset(adxl355);
 	if (ret) {
 		printf("Error performing soft reset: %d\n", ret);
 		return ret;
 	}
 
 	/* Configure output data rate */
-	ret = adxl355_capi_set_odr_lpf(adxl355, ADXL355_CAPI_ODR_62_5HZ);
+	ret = adxl355_set_odr_lpf(adxl355, ADXL355_ODR_62_5HZ);
 	if (ret) {
 		printf("Error setting ODR: %d\n", ret);
 		return ret;
 	}
 
 	/* Set operation mode to measurement with temperature on */
-	ret = adxl355_capi_set_op_mode(adxl355, ADXL355_CAPI_MEAS_TEMP_ON_DRDY_OFF);
+	ret = adxl355_set_op_mode(adxl355, ADXL355_MEAS_TEMP_ON_DRDY_OFF);
 	if (ret) {
 		printf("Error setting operation mode: %d\n", ret);
 		return ret;
@@ -128,9 +128,9 @@ int main()
 	while (1) {
 		/* 
 		 * TODO: Read acceleration data.
-		 * Hint: Look into the adxl355_capi.h header for the adxl355_capi_get_xyz() function
+		 * Hint: Look into the adxl355.h header for the adxl355_get_xyz() function
 		 */
-		ret = adxl355_capi_get_xyz(adxl355, &x_accel, &y_accel, &z_accel);
+		ret = adxl355_get_xyz(adxl355, &x_accel, &y_accel, &z_accel);
 		if (ret) {
 			printf("Error reading acceleration data: %d\n", ret);
 		} else {
@@ -147,7 +147,7 @@ int main()
 		}
 
 		/* Read temperature data */
-		ret = adxl355_capi_get_temp(adxl355, &temp);
+		ret = adxl355_get_temp(adxl355, &temp);
 		if (ret) {
 			printf(" | Temp: Error %d\n", ret);
 		} else {
@@ -162,7 +162,7 @@ int main()
 	}
 
 	/* Cleanup (this code is never reached in the infinite loop) */
-	adxl355_capi_remove(adxl355);
+	adxl355_remove(adxl355);
 
 	return 0;
 }

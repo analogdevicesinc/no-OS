@@ -97,12 +97,18 @@ int main()
 		 * by the user.
 		 */
 
-		/* TODO: read the GPIO line for button 1 (gpio2 capi_gpio_pin) into the button1_val variable */
+		/* 
+		 * TODO: read the GPIO line for button 1 (gpio2 capi_gpio_pin) into the button1_val variable.
+		 * Hint: Check the capi_gpio.h header for the function to read the state of the pin.
+		 */
 		ret = capi_gpio_pin_get_value(&gpio2, &button1_val);
 		if (ret)
 			printf("Error reading the state of button 1 (%d)\n", ret);
 
-		/* TODO: read the GPIO line for button 1 (gpio2 capi_gpio_pin) into the button1_val variable */
+		/* 
+		 * TODO: read the GPIO line for button 2 (gpio3 capi_gpio_pin) into the button2_val variable.
+		 * Hint: Check the capi_gpio.h header for the function to read the state of the pin.
+		 */
 		ret = capi_gpio_pin_get_value(&gpio3, &button2_val);
 		if (ret)
 			printf("Error reading the state of button 2 (%d)\n", ret);

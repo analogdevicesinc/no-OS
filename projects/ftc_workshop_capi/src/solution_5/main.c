@@ -19,14 +19,20 @@
 #include "capi/capi_i2c.h"
 #include "capi/capi_gpio.h"
 #include "adxl355.h"
+#include "max20303.h"
 #include "i2c_bitbang.h"
 #include "ssd_1306.h"
 
 #include "platform.h"
 
+#if defined(CONFIG_CORDIO)
+#include "cordio_init.h"
+#endif
+
 #define STEP_WINDOW_SIZE 12
 
 uint32_t total_step_count = 0;
+uint16_t battery_percentage = 0;
 
 /* Global CAPI handles */
 static struct capi_spi_controller_handle *spi_controller;
@@ -91,14 +97,28 @@ static int process_buffers(int32_t *max_buff, int32_t *min_buff)
 		}
 	}
 
+	// if (max_peak_val < threshold + sensitivity / 2){
+	// 	printf("Not step: max_peak_val (%d) < %d\n", max_peak_val, threshold + sensitivity / 2);
+	// 	return 0;
+	// }
+
+	// if (min_peak_val > threshold - sensitivity / 2){
+	// 	printf("Not step: min_peak_val (%d) > %d\n", min_peak_val, threshold - sensitivity / 2);
+	// 	return 0;
+	// }
+
 	if (max_peak_val < min_peak_val){
+		// printf("Not Step: max = %d < min = %d\n", max_peak_val, min_peak_val);
 		return 0;
 	}
 
 	if (max_peak_val - min_peak_val > sensitivity){
 		threshold = max_peak_val - min_peak_val;
+		// printf("Step: max = %d min = %d\n", max_peak_val, min_peak_val);
 		return 1;
 	}
+
+	// printf("Not Step: max = %d min = %d\n", max_peak_val, min_peak_val);
 
 	return 0;
 }
@@ -138,6 +158,54 @@ static int step_count(int32_t *accel_data, uint32_t len)
 	}
 
 	return ret;
+}
+
+// 48x24 battery icon
+static const uint8_t battery_empty_icon[] = {
+    // First 8 rows (top third of battery)
+    0x00,0x00,0x00,0x00,0xF8,0xF8,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,
+    0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,
+    0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0x04,0xF8,0xF8,0x00,0x00,0x00,0x00,
+    // Middle 8 rows (middle third with battery tip)
+    0x00,0x00,0x00,0x00,0xFF,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0xFF,0xFF,0xFF,0x00,
+    // Last 8 rows (bottom third of battery)
+    0x00,0x00,0x00,0x00,0x1F,0x1F,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
+    0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
+    0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x1F,0x1F,0x00,0x00,0x00,0x00
+};
+
+static uint8_t battery_icon[144]; // 48x24 pixels = 144 bytes
+
+extern int32_t ssd_1306_print_icon(struct display_dev *device, const uint8_t *icon_buffer,
+		uint8_t width, uint8_t height, uint8_t row, uint8_t col);
+
+// Function to display battery level (0-100)
+static int display_battery_level(struct display_dev *display, uint8_t percentage) {
+	memcpy(battery_icon, battery_empty_icon, sizeof(battery_icon));
+
+	// Calculate how many columns to fill
+	int fill_columns = 0;
+	if (percentage >= 100) {
+		fill_columns = 35; // Maximum fillable columns (excluding borders)
+	} else if (percentage > 0) {
+		fill_columns = (percentage * 35) / 100;
+	}
+
+	// Fill the battery from left to right in all three sections
+	for (int i = 1; i < fill_columns; i++) {
+		// Fill in top section (0xFF for solid fill)
+		battery_icon[6 + i] |= 0xF0;  // 1111 0000 - fills the height except border pixels
+		// Fill in middle section (if not in the tip area)
+		if (i < 35) {  // Don't fill where the tip is
+		battery_icon[48 + 6 + i] |= 0xFF;  // 1111 1111 - fills entire height
+		}
+		// Fill in bottom section (0xFF for solid fill)
+		battery_icon[96 + 6 + i] |= 0x0F;  // 0000 1111 - fills the height except border pixels
+	}
+
+	return ssd_1306_print_icon(display, battery_icon, 48, 24, 4, 0);
 }
 
 static int init_display(void)
@@ -202,6 +270,7 @@ static int init_display(void)
 	display_on(oled_display);
 
 	display_print_string(oled_display, "Steps: ", 0, 0);
+	display_print_string(oled_display, "Battery: ", 2, 0);
 	display_print_string(oled_display, "0", 0, 6);
 
 	return 0;
@@ -216,9 +285,13 @@ void bt_task(void *pvParameters)
 	struct no_os_time t1, t2;
 
 	uint32_t i = 0;
+	uint32_t dummy_battery = 0;
 	uint8_t fifo_entries;
 	uint32_t new_step = 0;
+	uint32_t battery_uv;
+	struct max20303_desc *max20303;
 	char steps_display_buffer[4] = {0};
+	char battery_display_buffer[6] = {0};
 	static struct adxl355_frac_repr x_accel[16];
 	static struct adxl355_frac_repr y_accel[16];
 	static struct adxl355_frac_repr z_accel[16];
@@ -255,6 +328,13 @@ void bt_task(void *pvParameters)
 	init_display();
 
 	/* 
+	 * Configure the Cordio BLE stack. no-OS doesn't offer an API for controlling
+	 * BLE devices, thus we need to use the Cordio functions directly into the
+	 * application layer.
+	 */
+	cordio_init();
+
+	/* 
 	 * A disadvantage of dynamically allocating the memory used for the device
 	 * handles is that we cannot know (at compile time) the location in memory
 	 * where the descriptor will be stored. Thus, we need to assign that value
@@ -277,6 +357,51 @@ void bt_task(void *pvParameters)
 	ret = adxl355_set_op_mode(adxl355, ADXL355_MEAS_TEMP_ON_DRDY_OFF);
 	if (ret)
 		return;
+
+	struct capi_i2c_config i2c_config = {
+		.identifier = 1,
+		.initiator = 1,
+		.clk_freq_hz = 400000,
+		.ops = &maxim_capi_i2c_ops,
+	};
+
+	ret = capi_i2c_init(&i2c_controller, &i2c_config);
+	if (ret)
+		return;
+
+	struct capi_i2c_device max20303_i2c_dev = {
+		.controller = i2c_controller,
+		.address = MAX20303_I2C_ADDR,
+		.b10addr = false,
+		.speed = CAPI_I2C_SPEED_FAST,
+	};
+
+	struct capi_i2c_device max20303_fg_i2c_dev = {
+		.controller = i2c_controller,
+		.address = MAX20303_FG_I2C_ADDR,
+		.b10addr = false,
+		.speed = CAPI_I2C_SPEED_FAST,
+	};
+
+	struct max20303_init_param max20303_param = {
+		.i2c_controller = i2c_controller,
+		.i2c_device = &max20303_i2c_dev,
+		.fg_i2c_device = &max20303_fg_i2c_dev,
+	};
+
+	ret = max20303_init(&max20303, &max20303_param);
+	if (ret)
+		printf("max20303_init() error %d\n", ret);
+
+	max20303_set_hibernate(max20303, false);
+
+	printf("Starting BLE\n");
+	printf("Cordio initialization completed - GATT services should be available\n");
+
+	printf("GATT services available:\n");
+	printf("- Core GATT services (GAP/GATT)\n");
+	printf("- Battery Service - read battery level\n");
+	printf("- Running speed and cadence service - read the number of steps\n");
 
 	/* For FreeRTOS, WSF handles dispatching via its own tasks created in WsfOsInit() */
 	/* This task can now just handle periodic operations or exit */
@@ -301,10 +426,32 @@ void bt_task(void *pvParameters)
 			total_step_count += ret;
 
 		if (i >= 20){
+			max20303_read_vcell(max20303, &battery_uv);
+			printf("Battery voltage: %d mV\n", battery_uv / 1000);
+
+			ret = max20303_read_soc(max20303, &battery_percentage);
+			printf("Battery percentage: %hu (%d)\n", battery_percentage, ret);
+
+			/* Update the battery percentage variable sent over BLE */
+			AppHwBattTest(battery_percentage);
 			i = 0;
 
 			sprintf(steps_display_buffer, "%d\0", total_step_count % 1000);
+			sprintf(battery_display_buffer, "%d \0", battery_percentage);
+
+			dummy_battery++;
+			ret = display_battery_level(oled_display, 10 * (dummy_battery % 10));
+
+			/* 
+			 * TODO: Display the number of steps and the battery percentage on the display.
+			 * The values are stored in the steps_display_buffer and the battery_display_buffer
+			 * arrays.
+			 * 
+			 * Hint: display_print_string() can be used.
+			 */
+
 			display_print_string(oled_display, steps_display_buffer, 0, 6);
+			display_print_string(oled_display, battery_display_buffer, 2, 8);
 
 			if (ret)
 				printf("Display write error: %d\n", ret);
