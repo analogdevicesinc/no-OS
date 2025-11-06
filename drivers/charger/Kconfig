@@ -10,9 +10,4 @@ config CHARGER_MAX20303
     bool "Enable MAX20303 battery charger driver"
     default n
 
-config CHARGER_MAX20303_CAPI
-    depends on CAPI && !CHARGER_MAX20303
-    bool "Enable MAX20303 (using the CAPI interface) battery charger driver"
-    default n
-
 endif
