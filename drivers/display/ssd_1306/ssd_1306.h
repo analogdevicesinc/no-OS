@@ -37,7 +37,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "display.h"
-#include "no_os_gpio.h"
+
+#include "capi_gpio.h"
+#include "capi_i2c.h"
+#include "capi_spi.h"
 
 enum comm_type {
 	SSD1306_I2C,
@@ -57,23 +60,19 @@ enum transmit_type {
  */
 typedef struct ssd_1306_extra {
 	/** Data/Command pin gpio initial param */
-	struct no_os_gpio_init_param	   *dc_pin_ip;
+	struct capi_gpio_pin *dc_pin;
+
 	/** RESET pin gpio initial param */
-	struct no_os_gpio_init_param     *reset_pin_ip;
-	/** Data/Command pin gpio desc */
-	struct no_os_gpio_desc	       *dc_pin;
-	/** RESET pin gpio desc*/
-	struct no_os_gpio_desc     	   *reset_pin;
-	/* SPI initial param */
-	struct no_os_spi_init_param      *spi_ip;
+	struct capi_gpio_pin *reset_pin;
+
 	/* SPI descriptor*/
-	struct no_os_spi_desc	           *spi_desc;
-	/* I2C initial param*/
-	struct no_os_i2c_init_param      *i2c_ip;
+	struct capi_spi_device *spi_desc;
+
 	/* I2C descriptor*/
-	struct no_os_i2c_desc           *i2c_desc;
+	struct capi_i2c_device *i2c_desc;
+
 	/* Communication type */
-	enum comm_type                   comm_type;
+	enum comm_type comm_type;
 } ssd_1306_extra;
 
 extern const struct display_controller_ops ssd1306_ops;
@@ -96,5 +95,8 @@ int32_t ssd_1306_remove(struct display_dev *device);
 
 /** Print entire screen buffer */
 int32_t ssd_1306_print_buffer(struct display_dev *device, char *buffer);
+
+/** Clear the display */
+int32_t ssd_1306_clear_display(struct display_dev *device);
 
 #endif

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <errno.h>
-#include "capi_i2c_bitbang.h"
+#include "i2c_bitbang.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
 
@@ -30,9 +30,9 @@ static uint32_t capi_i2c_speed_to_hz(enum capi_i2c_speed capi_speed)
 }
 
 /* Helper function to set SDA line state */
-static int capi_i2c_bitbang_set_sda(struct capi_i2c_bitbang_handle *desc, uint8_t state)
+static int i2c_bitbang_set_sda(struct i2c_bitbang_handle *desc, uint8_t state)
 {
-	if (desc->pull_type == CAPI_I2C_BITBANG_PULL_EXTERNAL) {
+	if (desc->pull_type == I2C_BITBANG_PULL_EXTERNAL) {
 		/* Open-drain mode: high = input (pulled up), low = output low */
 		if (state == CAPI_GPIO_HIGH) {
 			return capi_gpio_pin_set_direction(&desc->sda_pin, CAPI_GPIO_INPUT);
@@ -49,9 +49,9 @@ static int capi_i2c_bitbang_set_sda(struct capi_i2c_bitbang_handle *desc, uint8_
 }
 
 /* Helper function to set SCL line state */
-static int capi_i2c_bitbang_set_scl(struct capi_i2c_bitbang_handle *desc, uint8_t state)
+static int i2c_bitbang_set_scl(struct i2c_bitbang_handle *desc, uint8_t state)
 {
-	if (desc->pull_type == CAPI_I2C_BITBANG_PULL_EXTERNAL) {
+	if (desc->pull_type == I2C_BITBANG_PULL_EXTERNAL) {
 		/* Open-drain mode: high = input (pulled up), low = output low */
 		if (state == CAPI_GPIO_HIGH) {
 			return capi_gpio_pin_set_direction(&desc->scl_pin, CAPI_GPIO_INPUT);
@@ -68,25 +68,25 @@ static int capi_i2c_bitbang_set_scl(struct capi_i2c_bitbang_handle *desc, uint8_
 }
 
 /* Helper function to read SDA line state */
-static int capi_i2c_bitbang_get_sda(struct capi_i2c_bitbang_handle *desc, uint8_t *value)
+static int i2c_bitbang_get_sda(struct i2c_bitbang_handle *desc, uint8_t *value)
 {
 	return capi_gpio_pin_get_value(&desc->sda_pin, value);
 }
 
 /* Helper function to read SCL line state */
-static int capi_i2c_bitbang_get_scl(struct capi_i2c_bitbang_handle *desc, uint8_t *value)
+static int i2c_bitbang_get_scl(struct i2c_bitbang_handle *desc, uint8_t *value)
 {
 	return capi_gpio_pin_get_value(&desc->scl_pin, value);
 }
 
 /* Wait for SCL to go high (clock stretching support) */
-static int capi_i2c_bitbang_wait_scl_high(struct capi_i2c_bitbang_handle *desc)
+static int i2c_bitbang_wait_scl_high(struct i2c_bitbang_handle *desc)
 {
 	uint8_t scl_state;
 	uint32_t timeout_count = desc->timeout_us;
 
 	while (timeout_count--) {
-		if (capi_i2c_bitbang_get_scl(desc, &scl_state) != 0)
+		if (i2c_bitbang_get_scl(desc, &scl_state) != 0)
 			return -EIO;
 
 		if (scl_state == CAPI_GPIO_HIGH)
@@ -99,35 +99,35 @@ static int capi_i2c_bitbang_wait_scl_high(struct capi_i2c_bitbang_handle *desc)
 }
 
 /* Generate I2C start condition */
-static int capi_i2c_bitbang_start(struct capi_i2c_bitbang_handle *desc)
+static int i2c_bitbang_start(struct i2c_bitbang_handle *desc)
 {
 	int ret;
 
 	/* Ensure both lines are high initially */
-	ret = capi_i2c_bitbang_set_sda(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_sda(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->half_period_us);
 
 	/* Wait for SCL to actually go high (clock stretching) */
-	ret = capi_i2c_bitbang_wait_scl_high(desc);
+	ret = i2c_bitbang_wait_scl_high(desc);
 	if (ret != 0)
 		return ret;
 
 	/* Start condition: SDA goes low while SCL is high */
-	ret = capi_i2c_bitbang_set_sda(desc, CAPI_GPIO_LOW);
+	ret = i2c_bitbang_set_sda(desc, CAPI_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->half_period_us);
 
 	/* Pull SCL low to complete start condition */
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_LOW);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
@@ -137,31 +137,31 @@ static int capi_i2c_bitbang_start(struct capi_i2c_bitbang_handle *desc)
 }
 
 /* Generate I2C stop condition */
-static int capi_i2c_bitbang_stop(struct capi_i2c_bitbang_handle *desc)
+static int i2c_bitbang_stop(struct i2c_bitbang_handle *desc)
 {
 	int ret;
 
 	/* Ensure SDA is low */
-	ret = capi_i2c_bitbang_set_sda(desc, CAPI_GPIO_LOW);
+	ret = i2c_bitbang_set_sda(desc, CAPI_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->quarter_period_us);
 
 	/* Release SCL (let it go high) */
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
 	/* Wait for SCL to actually go high */
-	ret = capi_i2c_bitbang_wait_scl_high(desc);
+	ret = i2c_bitbang_wait_scl_high(desc);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->half_period_us);
 
 	/* Stop condition: SDA goes high while SCL is high */
-	ret = capi_i2c_bitbang_set_sda(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_sda(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
@@ -171,31 +171,31 @@ static int capi_i2c_bitbang_stop(struct capi_i2c_bitbang_handle *desc)
 }
 
 /* Write a single bit to the I2C bus */
-static int capi_i2c_bitbang_write_bit(struct capi_i2c_bitbang_handle *desc, uint8_t bit)
+static int i2c_bitbang_write_bit(struct i2c_bitbang_handle *desc, uint8_t bit)
 {
 	int ret;
 
 	/* Set data line */
-	ret = capi_i2c_bitbang_set_sda(desc, bit ? CAPI_GPIO_HIGH : CAPI_GPIO_LOW);
+	ret = i2c_bitbang_set_sda(desc, bit ? CAPI_GPIO_HIGH : CAPI_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->quarter_period_us);
 
 	/* Clock high */
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
 	/* Wait for SCL to go high */
-	ret = capi_i2c_bitbang_wait_scl_high(desc);
+	ret = i2c_bitbang_wait_scl_high(desc);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->half_period_us);
 
 	/* Clock low */
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_LOW);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
@@ -205,38 +205,38 @@ static int capi_i2c_bitbang_write_bit(struct capi_i2c_bitbang_handle *desc, uint
 }
 
 /* Read a single bit from the I2C bus */
-static int capi_i2c_bitbang_read_bit(struct capi_i2c_bitbang_handle *desc, uint8_t *bit)
+static int i2c_bitbang_read_bit(struct i2c_bitbang_handle *desc, uint8_t *bit)
 {
 	int ret;
 
 	/* Release SDA for input */
-	ret = capi_i2c_bitbang_set_sda(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_sda(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->quarter_period_us);
 
 	/* Clock high */
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_HIGH);
 	if (ret != 0)
 		return ret;
 
 	/* Wait for SCL to go high */
-	ret = capi_i2c_bitbang_wait_scl_high(desc);
+	ret = i2c_bitbang_wait_scl_high(desc);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->quarter_period_us);
 
 	/* Read data */
-	ret = capi_i2c_bitbang_get_sda(desc, bit);
+	ret = i2c_bitbang_get_sda(desc, bit);
 	if (ret != 0)
 		return ret;
 
 	no_os_udelay(desc->quarter_period_us);
 
 	/* Clock low */
-	ret = capi_i2c_bitbang_set_scl(desc, CAPI_GPIO_LOW);
+	ret = i2c_bitbang_set_scl(desc, CAPI_GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
@@ -246,20 +246,20 @@ static int capi_i2c_bitbang_read_bit(struct capi_i2c_bitbang_handle *desc, uint8
 }
 
 /* Write a byte to the I2C bus and read ACK */
-static int capi_i2c_bitbang_write_byte(struct capi_i2c_bitbang_handle *desc, uint8_t byte)
+static int i2c_bitbang_write_byte(struct i2c_bitbang_handle *desc, uint8_t byte)
 {
 	int ret;
 	uint8_t i, ack;
 
 	/* Send 8 bits, MSB first */
 	for (i = 0; i < 8; i++) {
-		ret = capi_i2c_bitbang_write_bit(desc, (byte >> (7 - i)) & 0x01);
+		ret = i2c_bitbang_write_bit(desc, (byte >> (7 - i)) & 0x01);
 		if (ret != 0)
 			return ret;
 	}
 
 	/* Read ACK bit */
-	ret = capi_i2c_bitbang_read_bit(desc, &ack);
+	ret = i2c_bitbang_read_bit(desc, &ack);
 	if (ret != 0)
 		return ret;
 
@@ -268,7 +268,7 @@ static int capi_i2c_bitbang_write_byte(struct capi_i2c_bitbang_handle *desc, uin
 }
 
 /* Read a byte from the I2C bus and send ACK/NACK */
-static int capi_i2c_bitbang_read_byte(struct capi_i2c_bitbang_handle *desc, uint8_t *byte,
+static int i2c_bitbang_read_byte(struct i2c_bitbang_handle *desc, uint8_t *byte,
 				      bool send_nack)
 {
 	int ret;
@@ -278,7 +278,7 @@ static int capi_i2c_bitbang_read_byte(struct capi_i2c_bitbang_handle *desc, uint
 
 	/* Read 8 bits, MSB first */
 	for (i = 0; i < 8; i++) {
-		ret = capi_i2c_bitbang_read_bit(desc, &bit);
+		ret = i2c_bitbang_read_bit(desc, &bit);
 		if (ret != 0)
 			return ret;
 
@@ -286,7 +286,7 @@ static int capi_i2c_bitbang_read_byte(struct capi_i2c_bitbang_handle *desc, uint
 	}
 
 	/* Send ACK (0) or NACK (1) */
-	ret = capi_i2c_bitbang_write_bit(desc, send_nack ? 1 : 0);
+	ret = i2c_bitbang_write_bit(desc, send_nack ? 1 : 0);
 	if (ret != 0)
 		return ret;
 
@@ -294,21 +294,21 @@ static int capi_i2c_bitbang_read_byte(struct capi_i2c_bitbang_handle *desc, uint
 }
 
 /* Initialize the I2C bitbang controller */
-static int capi_i2c_bitbang_init(struct capi_i2c_controller_handle **handle,
+static int i2c_bitbang_init(struct capi_i2c_controller_handle **handle,
 				 const struct capi_i2c_config *config)
 {
-	struct capi_i2c_bitbang_handle *bitbang;
-	struct capi_i2c_bitbang_extra *extra;
+	struct i2c_bitbang_handle *bitbang;
+	struct i2c_bitbang_extra *extra;
 	int ret;
 	uint32_t speed_hz;
 
 	if (!handle || !config || !config->extra)
 		return -EINVAL;
 
-	extra = (struct capi_i2c_bitbang_extra *)config->extra;
+	extra = (struct i2c_bitbang_extra *)config->extra;
 
 	/* Allocate bitbang handle */
-	bitbang = (struct capi_i2c_bitbang_handle *)no_os_calloc(1, sizeof(*bitbang));
+	bitbang = (struct i2c_bitbang_handle *)no_os_calloc(1, sizeof(*bitbang));
 	if (!bitbang)
 		return -ENOMEM;
 
@@ -321,7 +321,7 @@ static int capi_i2c_bitbang_init(struct capi_i2c_controller_handle **handle,
 
 	/* Configure pull-up settings */
 	bitbang->pull_type = extra->pull_type;
-	bitbang->timeout_us = extra->timeout_us ? extra->timeout_us : CAPI_I2C_BITBANG_TIMEOUT_US;
+	bitbang->timeout_us = extra->timeout_us ? extra->timeout_us : I2C_BITBANG_TIMEOUT_US;
 
 	/* Calculate timing parameters from clock frequency */
 	speed_hz = capi_i2c_speed_to_hz(config->clk_freq_hz);
@@ -338,7 +338,7 @@ static int capi_i2c_bitbang_init(struct capi_i2c_controller_handle **handle,
 		bitbang->quarter_period_us = 1;
 
 	/* Configure GPIO initial state based on pull-up configuration */
-	if (bitbang->pull_type == CAPI_I2C_BITBANG_PULL_EXTERNAL) {
+	if (bitbang->pull_type == I2C_BITBANG_PULL_EXTERNAL) {
 		/* Open-drain: configure as input initially (pulled high) */
 		ret = capi_gpio_pin_set_direction(&bitbang->sda_pin, CAPI_GPIO_INPUT);
 		if (ret != 0)
@@ -376,7 +376,7 @@ error:
 }
 
 /* Deinitialize the I2C bitbang controller */
-static int capi_i2c_bitbang_deinit(struct capi_i2c_controller_handle *handle)
+static int i2c_bitbang_deinit(struct capi_i2c_controller_handle *handle)
 {
 	if (!handle)
 		return -EINVAL;
@@ -388,32 +388,32 @@ static int capi_i2c_bitbang_deinit(struct capi_i2c_controller_handle *handle)
 }
 
 /* Transmit data to I2C device */
-static int capi_i2c_bitbang_transmit(struct capi_i2c_device *device,
+static int i2c_bitbang_transmit(struct capi_i2c_device *device,
 				     struct capi_i2c_transfer *transfer)
 {
-	struct capi_i2c_bitbang_handle *bitbang;
+	struct i2c_bitbang_handle *bitbang;
 	int ret;
 	uint32_t i;
 
 	if (!device || !device->controller || !transfer)
 		return -EINVAL;
 
-	bitbang = (struct capi_i2c_bitbang_handle *)device->controller;
+	bitbang = (struct i2c_bitbang_handle *)device->controller;
 
 	/* Generate start condition */
-	ret = capi_i2c_bitbang_start(bitbang);
+	ret = i2c_bitbang_start(bitbang);
 	if (ret != 0)
 		return ret;
 
 	/* Send slave address with write bit (0) */
-	ret = capi_i2c_bitbang_write_byte(bitbang, (device->address << 1) | 0);
+	ret = i2c_bitbang_write_byte(bitbang, (device->address << 1) | 0);
 	if (ret != 0)
 		goto error_stop;
 
 	/* Send sub-address if present */
 	if (transfer->sub_address && transfer->sub_address_len > 0) {
 		for (i = 0; i < transfer->sub_address_len; i++) {
-			ret = capi_i2c_bitbang_write_byte(bitbang, transfer->sub_address[i]);
+			ret = i2c_bitbang_write_byte(bitbang, transfer->sub_address[i]);
 			if (ret != 0)
 				goto error_stop;
 		}
@@ -421,14 +421,14 @@ static int capi_i2c_bitbang_transmit(struct capi_i2c_device *device,
 
 	/* Send data bytes */
 	for (i = 0; i < transfer->len; i++) {
-		ret = capi_i2c_bitbang_write_byte(bitbang, transfer->buf[i]);
+		ret = i2c_bitbang_write_byte(bitbang, transfer->buf[i]);
 		if (ret != 0)
 			goto error_stop;
 	}
 
 	/* Generate stop condition if requested */
 	if (!transfer->no_stop) {
-		ret = capi_i2c_bitbang_stop(bitbang);
+		ret = i2c_bitbang_stop(bitbang);
 		if (ret != 0)
 			return ret;
 	}
@@ -437,71 +437,71 @@ static int capi_i2c_bitbang_transmit(struct capi_i2c_device *device,
 
 error_stop:
 	if (!transfer->no_stop)
-		capi_i2c_bitbang_stop(bitbang);
+		i2c_bitbang_stop(bitbang);
 	return ret;
 }
 
 /* Receive data from I2C device */
-static int capi_i2c_bitbang_receive(struct capi_i2c_device *device,
+static int i2c_bitbang_receive(struct capi_i2c_device *device,
 				    struct capi_i2c_transfer *transfer)
 {
-	struct capi_i2c_bitbang_handle *bitbang;
+	struct i2c_bitbang_handle *bitbang;
 	int ret;
 	uint32_t i;
 
 	if (!device || !device->controller || !transfer)
 		return -EINVAL;
 
-	bitbang = (struct capi_i2c_bitbang_handle *)device->controller;
+	bitbang = (struct i2c_bitbang_handle *)device->controller;
 
 	/* If sub-address is specified, write it first */
 	if (transfer->sub_address && transfer->sub_address_len > 0) {
 		/* Generate start condition */
-		ret = capi_i2c_bitbang_start(bitbang);
+		ret = i2c_bitbang_start(bitbang);
 		if (ret != 0)
 			return ret;
 
 		/* Send slave address with write bit (0) */
-		ret = capi_i2c_bitbang_write_byte(bitbang, (device->address << 1) | 0);
+		ret = i2c_bitbang_write_byte(bitbang, (device->address << 1) | 0);
 		if (ret != 0)
 			goto error_stop;
 
 		/* Send sub-address */
 		for (i = 0; i < transfer->sub_address_len; i++) {
-			ret = capi_i2c_bitbang_write_byte(bitbang, transfer->sub_address[i]);
+			ret = i2c_bitbang_write_byte(bitbang, transfer->sub_address[i]);
 			if (ret != 0)
 				goto error_stop;
 		}
 
 		/* Generate repeated start if requested */
 		if (transfer->repeated_start) {
-			ret = capi_i2c_bitbang_start(bitbang);
+			ret = i2c_bitbang_start(bitbang);
 			if (ret != 0)
 				goto error_stop;
 		}
 	} else {
 		/* Generate start condition */
-		ret = capi_i2c_bitbang_start(bitbang);
+		ret = i2c_bitbang_start(bitbang);
 		if (ret != 0)
 			return ret;
 	}
 
 	/* Send slave address with read bit (1) */
-	ret = capi_i2c_bitbang_write_byte(bitbang, (device->address << 1) | 1);
+	ret = i2c_bitbang_write_byte(bitbang, (device->address << 1) | 1);
 	if (ret != 0)
 		goto error_stop;
 
 	/* Read data bytes */
 	for (i = 0; i < transfer->len; i++) {
 		bool send_nack = (i == transfer->len - 1); /* NACK on last byte */
-		ret = capi_i2c_bitbang_read_byte(bitbang, &transfer->buf[i], send_nack);
+		ret = i2c_bitbang_read_byte(bitbang, &transfer->buf[i], send_nack);
 		if (ret != 0)
 			goto error_stop;
 	}
 
 	/* Generate stop condition if requested */
 	if (!transfer->no_stop) {
-		ret = capi_i2c_bitbang_stop(bitbang);
+		ret = i2c_bitbang_stop(bitbang);
 		if (ret != 0)
 			return ret;
 	}
@@ -510,12 +510,12 @@ static int capi_i2c_bitbang_receive(struct capi_i2c_device *device,
 
 error_stop:
 	if (!transfer->no_stop)
-		capi_i2c_bitbang_stop(bitbang);
+		i2c_bitbang_stop(bitbang);
 	return ret;
 }
 
 /* Register callback (not supported for bitbang) */
-static int capi_i2c_bitbang_register_callback(struct capi_i2c_controller_handle *handle,
+static int i2c_bitbang_register_callback(struct capi_i2c_controller_handle *handle,
 		capi_i2c_callback *const callback, void *const callback_arg)
 {
 	/* Bitbang implementation doesn't support async operations */
@@ -523,7 +523,7 @@ static int capi_i2c_bitbang_register_callback(struct capi_i2c_controller_handle 
 }
 
 /* Async transmit (not supported for bitbang) */
-static int capi_i2c_bitbang_transmit_async(struct capi_i2c_device *device,
+static int i2c_bitbang_transmit_async(struct capi_i2c_device *device,
 		struct capi_i2c_transfer *transfer)
 {
 	/* Bitbang implementation doesn't support async operations */
@@ -531,7 +531,7 @@ static int capi_i2c_bitbang_transmit_async(struct capi_i2c_device *device,
 }
 
 /* Async receive (not supported for bitbang) */
-static int capi_i2c_bitbang_receive_async(struct capi_i2c_device *device,
+static int i2c_bitbang_receive_async(struct capi_i2c_device *device,
 		struct capi_i2c_transfer *transfer)
 {
 	/* Bitbang implementation doesn't support async operations */
@@ -539,19 +539,19 @@ static int capi_i2c_bitbang_receive_async(struct capi_i2c_device *device,
 }
 
 /* ISR (not applicable for bitbang) */
-static void capi_i2c_bitbang_isr(struct capi_i2c_controller_handle *handle)
+static void i2c_bitbang_isr(struct capi_i2c_controller_handle *handle)
 {
 	/* Bitbang implementation doesn't use interrupts */
 }
 
 /* I2C bitbang operations structure */
-const struct capi_i2c_ops capi_i2c_bitbang_ops = {
-	.init = capi_i2c_bitbang_init,
-	.deinit = capi_i2c_bitbang_deinit,
-	.transmit = capi_i2c_bitbang_transmit,
-	.receive = capi_i2c_bitbang_receive,
-	.register_callback = capi_i2c_bitbang_register_callback,
-	.transmit_async = capi_i2c_bitbang_transmit_async,
-	.receive_async = capi_i2c_bitbang_receive_async,
-	.isr = capi_i2c_bitbang_isr
+const struct capi_i2c_ops i2c_bitbang_ops = {
+	.init = i2c_bitbang_init,
+	.deinit = i2c_bitbang_deinit,
+	.transmit = i2c_bitbang_transmit,
+	.receive = i2c_bitbang_receive,
+	.register_callback = i2c_bitbang_register_callback,
+	.transmit_async = i2c_bitbang_transmit_async,
+	.receive_async = i2c_bitbang_receive_async,
+	.isr = i2c_bitbang_isr
 };
