@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   adxl355.h
- *   @brief  Header file of ADXL355 Driver.
- *   @author RBolboac (ramona.bolboaca@analog.com)
+ *   @brief  Header file of ADXL355 CAPI Driver.
+ *   @author Claude Code (noreply@anthropic.com)
 ********************************************************************************
- * Copyright 2022(c) Analog Devices, Inc.
+ * Copyright 2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -30,14 +30,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __ADXL355_H__
-#define __ADXL355_H__
+#ifndef __adxl355_H__
+#define __adxl355_H__
 
 #include <stdint.h>
 #include <string.h>
 #include "no_os_util.h"
-#include "no_os_i2c.h"
-#include "no_os_spi.h"
+#include "capi/capi_spi.h"
 
 /* SPI commands */
 #define ADXL355_SPI_READ          0x01
@@ -198,29 +197,24 @@ enum adxl355_range {
 	ADXL359_RANGE_40G = 3,
 };
 
+
 enum adxl355_int_pol {
 	ADXL355_INT_ACTIVE_LOW = 0,
 	ADXL355_INT_ACTIVE_HIGH = 1
 };
-
-union adxl355_comm_init_param {
-	/** I2C Initialization structure. */
-	struct no_os_i2c_init_param i2c_init;
-	/** SPI Initialization structure. */
-	struct no_os_spi_init_param spi_init;
-} ;
 
 /**
  * @struct adxl355_init_param
  * @brief Structure holding the parameters for ADXL355 device initialization.
  */
 struct adxl355_init_param {
-	/** Device Communication initialization structure: either SPI or I2C */
-	union adxl355_comm_init_param comm_init;
-	/** Device Communication type: ADXL355_SPI_COMM, ADXL355_I2C_COMM */
-	enum adxl355_comm_type comm_type;
+	/** SPI controller handle */
+	struct capi_spi_controller_handle *spi_controller;
+	/** SPI device parameters */
+	struct capi_spi_config comm_param;
 	/** Device type: ADXL355 or 359 */
 	enum adxl355_type dev_type;
+	struct capi_spi_device *spi_dev;
 };
 
 struct _adxl355_int_mask {
@@ -270,13 +264,6 @@ struct adxl355_frac_repr {
 	int32_t fractional;
 } ;
 
-union adxl355_comm_desc {
-	/** I2C Descriptor */
-	struct no_os_i2c_desc *i2c_desc;
-	/** SPI Descriptor */
-	struct no_os_spi_desc *spi_desc;
-};
-
 /**
  * @struct adxl355_dev
  * @brief ADXL355 Device structure.
@@ -284,27 +271,39 @@ union adxl355_comm_desc {
 struct adxl355_dev {
 	/** Device type */
 	enum adxl355_type dev_type;
-	/** Device communication descriptor */
-	union adxl355_comm_desc com_desc;
-	/** Device Communication type: ADXL355_SPI_COMM, ADXL355_I2C_COMM */
-	enum adxl355_comm_type comm_type;
+	/** SPI controller handle */
+	struct capi_spi_controller_handle *spi_controller;
+	/** SPI device handle */
+	struct capi_spi_device *spi_device;
+	/** Device operation mode */
 	enum adxl355_op_mode op_mode;
+	/** Output data rate and low-pass filter setting */
 	enum adxl355_odr_lpf odr_lpf;
+	/** High-pass filter corner frequency */
 	enum adxl355_hpf_corner hpf_corner;
+	/** Measurement range */
 	enum adxl355_range range;
+	/** X-axis offset */
 	uint16_t x_offset;
+	/** Y-axis offset */
 	uint16_t y_offset;
+	/** Z-axis offset */
 	uint16_t z_offset;
+	/** FIFO sample count */
 	uint8_t fifo_samples;
+	/** Activity enable flags */
 	union adxl355_act_en_flags act_en;
+	/** Activity count threshold */
 	uint8_t act_cnt;
+	/** Activity threshold */
 	uint16_t act_thr;
+	/** Communication buffer for SPI transactions */
 	uint8_t comm_buff[289];
 };
 
-/*! Init. the comm. peripheral and checks if the ADXL355 part is present. */
+/*! Init. the SPI peripheral and checks if the ADXL355 part is present. */
 int adxl355_init(struct adxl355_dev **device,
-		 struct adxl355_init_param init_param);
+		      struct adxl355_init_param init_param);
 
 /*! Free the resources allocated by adxl355_init(). */
 int adxl355_remove(struct adxl355_dev *dev);
@@ -314,7 +313,7 @@ int adxl355_set_op_mode(struct adxl355_dev *dev, enum adxl355_op_mode op_mode);
 
 /*! Reads the device current operation mode. */
 int adxl355_get_op_mode(struct adxl355_dev *dev,
-			enum adxl355_op_mode *read_op_mode);
+			     enum adxl355_op_mode *read_op_mode);
 
 /*! Performs soft reset of the device. */
 int adxl355_soft_reset(struct adxl355_dev *dev);
@@ -327,15 +326,15 @@ int adxl355_set_range(struct adxl355_dev *dev, enum adxl355_range range_val);
 
 /*! Writes the low-pass filter settings. */
 int adxl355_set_odr_lpf(struct adxl355_dev *dev,
-			enum adxl355_odr_lpf odr_lpf_val);
+			     enum adxl355_odr_lpf odr_lpf_val);
 
 /*! Writes the high-pass filter settings. */
 int adxl355_set_hpf_corner(struct adxl355_dev *dev,
-			   enum adxl355_hpf_corner hpf_corner_val);
+				enum adxl355_hpf_corner hpf_corner_val);
 
 /*! Sets an offset value for each axis (Offset Calibration). */
 int adxl355_set_offset(struct adxl355_dev *dev, uint16_t x_offset,
-		       uint16_t y_offset, uint16_t z_offset);
+			    uint16_t y_offset, uint16_t z_offset);
 
 /*! Reads the raw output data of each axis. */
 int adxl355_get_raw_xyz(struct adxl355_dev *dev, uint32_t *raw_x,
@@ -343,7 +342,7 @@ int adxl355_get_raw_xyz(struct adxl355_dev *dev, uint32_t *raw_x,
 
 /*! Reads the raw output data of each axis and converts it to g. */
 int adxl355_get_xyz(struct adxl355_dev *dev, struct adxl355_frac_repr *x,
-		    struct adxl355_frac_repr *y, struct adxl355_frac_repr *z);
+			 struct adxl355_frac_repr *y, struct adxl355_frac_repr *z);
 
 /*! Reads the raw temperature data. */
 int adxl355_get_raw_temp(struct adxl355_dev *dev, uint16_t *raw_temp);
@@ -353,7 +352,7 @@ int adxl355_get_temp(struct adxl355_dev *dev, struct adxl355_frac_repr *temp);
 
 /*! Reads the status register value. */
 int adxl355_get_sts_reg(struct adxl355_dev *dev,
-			union adxl355_sts_reg_flags *status_flags);
+			     union adxl355_sts_reg_flags *status_flags);
 
 /*! Reads the number of FIFO entries register value. */
 int adxl355_get_nb_of_fifo_entries(struct adxl355_dev *dev, uint8_t *reg_value);
@@ -363,16 +362,16 @@ int adxl355_set_fifo_samples(struct adxl355_dev *dev, uint8_t reg_value);
 
 /*! Reads fifo data and returns the raw values. */
 int adxl355_get_raw_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
-			      uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z);
+				   uint32_t *raw_x, uint32_t *raw_y, uint32_t *raw_z);
 
 /*! Reads fifo data and returns the values converted in g. */
 int adxl355_get_fifo_data(struct adxl355_dev *dev, uint8_t *fifo_entries,
-			  struct adxl355_frac_repr *x, struct adxl355_frac_repr *y,
-			  struct adxl355_frac_repr *z);
+			       struct adxl355_frac_repr *x, struct adxl355_frac_repr *y,
+			       struct adxl355_frac_repr *z);
 
 /*! Configures the activity enable register. */
 int adxl355_conf_act_en(struct adxl355_dev *dev,
-			union adxl355_act_en_flags act_config);
+			     union adxl355_act_en_flags act_config);
 
 /*! Configures the activity threshold registers. */
 int adxl355_conf_act_thr(struct adxl355_dev *dev, uint16_t act_thr);
@@ -382,9 +381,9 @@ int adxl355_set_act_cnt_reg(struct adxl355_dev *dev, uint8_t act_cnt);
 
 /*! Configures the interrupt map for INT1 and INT2 pins. */
 int adxl355_config_int_pins(struct adxl355_dev *dev,
-			    union adxl355_int_mask int_conf);
+				 union adxl355_int_mask int_conf);
 
 /*! Configures the interrupt polarity. */
 int adxl355_set_int_pol(struct adxl355_dev *dev, enum adxl355_int_pol int_pol);
 
-#endif /* __ADXL355_H__ */
+#endif /* __adxl355_H__ */
