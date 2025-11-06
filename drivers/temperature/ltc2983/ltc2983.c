@@ -485,12 +485,12 @@ int ltc2983_thermocouple_assign_chan(struct ltc2983_desc *device,
 {
 	struct ltc2983_thermocouple *thermo = to_thermocouple(sensor);
 	uint32_t chan_val;
+	int ret;
 
 	chan_val = LTC2983_CHAN_ASSIGN(thermo->cold_junction_chan);
 	chan_val |= LTC2983_THERMOCOUPLE_CFG(thermo->sensor_config);
 
 	if (thermo->custom) {
-		int ret;
 
 		ret = __ltc2983_chan_custom_sensor_assign(device,
 				thermo->custom,
@@ -512,6 +512,7 @@ int ltc2983_rtd_assign_chan(struct ltc2983_desc *device,
 {
 	struct ltc2983_rtd *rtd = to_rtd(sensor);
 	uint32_t chan_val;
+	int ret;
 
 	chan_val = LTC2983_CHAN_ASSIGN(rtd->r_sense_chan);
 	chan_val |= LTC2983_RTD_CFG(rtd->sensor_config);
@@ -519,7 +520,6 @@ int ltc2983_rtd_assign_chan(struct ltc2983_desc *device,
 	chan_val |= LTC2983_RTD_CURVE(rtd->rtd_curve);
 
 	if (rtd->custom) {
-		int ret;
 
 		ret = __ltc2983_chan_custom_sensor_assign(device, rtd->custom,
 				&chan_val);
@@ -540,6 +540,7 @@ int ltc2983_thermistor_assign_chan(struct ltc2983_desc *device,
 {
 	struct ltc2983_thermistor *thermistor = to_thermistor(sensor);
 	uint32_t chan_val;
+	int ret;
 
 	chan_val = LTC2983_CHAN_ASSIGN(thermistor->r_sense_chan);
 	chan_val |= LTC2983_THERMISTOR_CFG(thermistor->sensor_config);
@@ -547,7 +548,6 @@ int ltc2983_thermistor_assign_chan(struct ltc2983_desc *device,
 		LTC2983_THERMISTOR_EXC_CURRENT(thermistor->excitation_current);
 
 	if (thermistor->custom) {
-		int ret;
 
 		ret = __ltc2983_chan_custom_sensor_assign(device,
 				thermistor->custom,
