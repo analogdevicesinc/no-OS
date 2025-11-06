@@ -32,6 +32,11 @@ config EXERCISE_4
 	help
 		Enable exercise 4.
 
+config EXERCISE_5
+	bool "Enable exercise 5"
+	help
+		Enable exercise 5.
+
 endchoice
 
 endmenu

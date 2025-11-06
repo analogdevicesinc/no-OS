@@ -7,6 +7,6 @@
 #include "maxim_spi.h"
 #include "maxim_i2c.h"
 #include "maxim_gpio.h"
-#include "bitbang_i2c.h"
+#include "i2c_bitbang.h"
 
 #endif

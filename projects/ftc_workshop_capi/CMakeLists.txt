@@ -9,6 +9,8 @@ elseif (${CONFIG_EXERCISE_3})
         target_sources(project_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/exercise_3/main.c)
 elseif (${CONFIG_EXERCISE_4})
         target_sources(project_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/exercise_4/main.c)
+elseif (${CONFIG_EXERCISE_5})
+        target_sources(project_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/exercise_5/main.c)
 endif()
 
 target_include_directories(project_lib PUBLIC

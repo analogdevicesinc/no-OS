@@ -15,9 +15,9 @@
 #include "capi/capi_i2c.h"
 #include "capi/capi_gpio.h"
 #include "capi/capi_uart.h"
-#include "max20303_capi.h"
-#include "capi_i2c_bitbang.h"
-#include "ssd_1306_capi.h"
+#include "max20303.h"
+#include "i2c_bitbang.h"
+#include "ssd_1306.h"
 #include "display.h"
 
 #include "platform.h"
@@ -27,7 +27,7 @@ static struct capi_i2c_controller_handle *i2c_controller;
 static struct capi_i2c_controller_handle *bitbang_i2c;
 static struct capi_gpio_port_handle *gpio_port0;
 
-static struct capi_i2c_device ssd_1306_capi_i2c_dev;
+static struct capi_i2c_device ssd_1306_i2c_dev;
 
 static struct capi_gpio_port_config gpio_port0_config = {
 	.identifier = 0,
@@ -36,8 +36,8 @@ static struct capi_gpio_port_config gpio_port0_config = {
 };
 
 /* SSD1306 OLED Display Setup using CAPI I2C bitbang */
-static ssd_1306_capi_extra oled_display_extra = {
-	.i2c_desc = &ssd_1306_capi_i2c_dev,
+static ssd_1306_extra oled_display_extra = {
+	.i2c_desc = &ssd_1306_i2c_dev,
 	.comm_type = SSD1306_I2C,
 };
 
@@ -58,7 +58,7 @@ static int init_display(void)
 {
 	struct capi_gpio_pin sda_pin;
 	struct capi_gpio_pin scl_pin;
-	struct capi_i2c_bitbang_extra bitbang_extra;
+	struct i2c_bitbang_extra bitbang_extra;
 	struct capi_i2c_config bitbang_config;
 	int ret;
 
@@ -79,7 +79,7 @@ static int init_display(void)
 	 * you can check the header file of the driver for an "_extra" struct (capi_i2c_bitbang.h -> capi_i2c_bitbang_extra)
 	 *
 	 * TODO: As part of this exercise, you don't have to write any new code. This function configures the
-	 * SSD1306 display using the ssd_1306_capi driver (which further uses our i2c bitbang driver). The structure
+	 * SSD1306 display using the ssd_1306 driver (which further uses our i2c bitbang driver). The structure
 	 * of the initialization parameters is laid out below. The parameter assignment code is commented. You'll
 	 * have to look over the sequence and understand what is being done.
 	 */
@@ -124,13 +124,12 @@ static int init_display(void)
 	 * capi_gpio_port_init(&gpio_port0, &gpio_port0_config);
 	 *
 	 * // At this point, you should make sure that sda_pin->port_handle = gpio_port0.
-	 * // In our example, the following fuctions will be called by the ssd_1306_capi driver,
+	 * // In our example, the following fuctions will be called by the ssd_1306 driver,
 	 * // however we have to pass valid pin handles (capi_gpio_pin).
 	 * capi_gpio_pin_set_direction(sda_pin, CAPI_GPIO_OUTPUT);
 	 * capi_gpio_pin_set_value(sda_pin, CAPI_GPIO_HIGH);
 	 */
 
-	/* // Uncomment this
 	sda_pin.port_handle = gpio_port0;
 	sda_pin.number = 30;
 	sda_pin.flags = CAPI_GPIO_ACTIVE_HIGH;
@@ -138,10 +137,8 @@ static int init_display(void)
 	scl_pin.port_handle = gpio_port0;
 	scl_pin.number = 31;
 	scl_pin.flags = CAPI_GPIO_ACTIVE_HIGH;
-	*/
 
 	/* Standard capi_i2c_config struct, using the capi_i2c_bitbang_ops and bitbang_extra*/
-	/* // Uncomment this
 	bitbang_config.ops = &capi_i2c_bitbang_ops;
 	bitbang_config.identifier = 0;
 	bitbang_config.clk_freq_hz = CAPI_I2C_SPEED_FAST;
@@ -150,7 +147,6 @@ static int init_display(void)
 	bitbang_config.device = NULL;
 	bitbang_config.dma_handle = NULL;
 	bitbang_config.extra = &bitbang_extra;
-	*/
 
 	ret = capi_gpio_port_init(&gpio_port0, &gpio_port0_config);
 	if (ret)
@@ -161,19 +157,15 @@ static int init_display(void)
 	 * the capi_gpio_port_init() call. We'll need to assign the new value.
 	 */
 
-	 /* // Uncomment this
 	sda_pin.port_handle = gpio_port0;
 	scl_pin.port_handle = gpio_port0;
-	*/
 
 	/* Configure I2C bitbang_extra struct */
 
-	/* // Uncomment this
 	bitbang_extra.sda_pin = sda_pin;
 	bitbang_extra.scl_pin = scl_pin;
 	bitbang_extra.pull_type = CAPI_I2C_BITBANG_PULL_EXTERNAL;
 	bitbang_extra.timeout_us = 100000;
-	*/
 
 	ret = capi_i2c_init(&bitbang_i2c, &bitbang_config);
 	if (ret) {
@@ -184,13 +176,13 @@ static int init_display(void)
 	/*
 	 * Initialize the capi_i2c_device struct specific to the for the SSD1306 display.
 	 * As the bitbang_i2c struct is dynamically allocated, we have to reassign the value
-	 * in the ssd_1306_capi_i2c_dev.controller field.
+	 * in the ssd_1306_i2c_dev.controller field.
 	 */
-	ssd_1306_capi_i2c_dev.address = 0x3C;
-	ssd_1306_capi_i2c_dev.speed = CAPI_I2C_SPEED_FAST;
-	ssd_1306_capi_i2c_dev.controller = bitbang_i2c;
+	ssd_1306_i2c_dev.address = 0x3C;
+	ssd_1306_i2c_dev.speed = CAPI_I2C_SPEED_FAST;
+	ssd_1306_i2c_dev.controller = bitbang_i2c;
 
-	oled_display_extra.i2c_desc = &ssd_1306_capi_i2c_dev;
+	oled_display_extra.i2c_desc = &ssd_1306_i2c_dev;
 	ret = display_init(&oled_display, &oled_display_ini_param);
 	if (ret) {
 		printf("Failed to initialize display: %d\n", ret);
@@ -206,7 +198,7 @@ static int init_display(void)
 int main()
 {
 	struct capi_uart_handle *uart = CAPI_UART_HANDLE;
-	struct max20303_capi_desc *max20303;
+	struct max20303_desc *max20303;
 	uint32_t battery_uv;
 	uint32_t battery_mv;
 	char voltage_str[16];
@@ -267,7 +259,7 @@ int main()
 		.speed = CAPI_I2C_SPEED_FAST,
 	};
 
-	struct max20303_capi_init_param max20303_param = {
+	struct max20303_init_param max20303_param = {
 		.i2c_controller = i2c_controller,
 		.i2c_device = &max20303_i2c_dev,
 		.fg_i2c_device = &max20303_fg_i2c_dev,
