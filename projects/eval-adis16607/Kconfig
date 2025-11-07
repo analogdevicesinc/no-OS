@@ -1,0 +1,16 @@
+menu "eval-adis16607 Configuration"
+
+choice EVAL_ADIS16607_EXAMPLE
+	prompt "Example variant"
+	default EVAL_ADIS16607_IIO_TRIGGER_EXAMPLE
+
+config EVAL_ADIS16607_IIO_TRIGGER_EXAMPLE
+	bool "IIO trigger example"
+	depends on IIO
+
+config EVAL_ADIS16607_BASIC_EXAMPLE
+	bool "Basic example"
+
+endchoice
+
+endmenu
