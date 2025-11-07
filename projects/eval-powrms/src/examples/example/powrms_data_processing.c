@@ -90,8 +90,8 @@ struct powrms_variables input_variables[VARIABLE_NUMBER] = {
 	},
 };
 
-// Storage for the 48 precision values as 32-bit integers
-// Order X1, Y1, X2, Y2, X3, Y3 ....
+// Storage for the 112 precision values as 32-bit integers
+// Order 10MHz: X1, Y1, X2, Y2, X3, Y3 , X4, Y4, X5, Y5, X6, Y6, X7, Y7, 100MHz:...
 int32_t precision_values[PRECISION_ARRAY_SIZE];
 
 // Storage for the 24 temperature correction coefficients as 32-bit integers
@@ -181,14 +181,19 @@ int _calc_interpolating_values(double *x_values, double *y_values,
 				    frequency_MHz_ranges[freq_index]);
 
 		// Calculate x1, x2, x3, y1, y2, y3 using floating-point interpolation
-		for (int i = 0; i < 3; i++) {
-			x_values[i] = (double)((float)precision_values[6 * freq_index + i * 2] +
-					       ((float)precision_values[6 * (freq_index + 1) + i * 2] -
-						(float)precision_values[6 * freq_index + i * 2]) * (*position)) /
+		for (int i = 0; i < PRECISION_POINTS_FREQ; i++) {
+			x_values[i] = (double)((float)precision_values[PRECISION_POINTS_FREQ_ALL *
+					       freq_index + i * 2] +
+					       ((float)precision_values[PRECISION_POINTS_FREQ_ALL * (freq_index + 1) + i * 2] -
+						(float)precision_values[PRECISION_POINTS_FREQ_ALL * freq_index + i * 2]) *
+					       (*position)) /
 				      PRECISION_SCALE_FACTOR;
-			y_values[i] = (double)((float)precision_values[6 * freq_index + i * 2 + 1] +
-					       ((float)precision_values[6 * (freq_index + 1) + i * 2 + 1] -
-						(float)precision_values[6 * freq_index + i * 2 + 1]) * (*position)) /
+			y_values[i] = (double)((float)precision_values[PRECISION_POINTS_FREQ_ALL *
+					       freq_index + i * 2 + 1] +
+					       ((float)precision_values[PRECISION_POINTS_FREQ_ALL * (freq_index + 1) + i * 2 +
+											 1] -
+						(float)precision_values[PRECISION_POINTS_FREQ_ALL * freq_index + i * 2 + 1]) *
+					       (*position)) /
 				      PRECISION_SCALE_FACTOR;
 		}
 		return 0;
@@ -205,11 +210,15 @@ int _calc_interpolating_values(double *x_values, double *y_values,
 					      frequency_MHz_ranges[prev_range_idx]);
 
 		// Calculate x1, x2, x3, y1, y2, y3 using linear extrapolation
-		for (int i = 0; i < 3; i++) {
-			int32_t prev_x = precision_values[6 * prev_range_idx + i * 2];
-			int32_t curr_x = precision_values[6 * curr_range_idx + i * 2];
-			int32_t prev_y = precision_values[6 * prev_range_idx + i * 2 + 1];
-			int32_t curr_y = precision_values[6 * curr_range_idx + i * 2 + 1];
+		for (int i = 0; i < PRECISION_POINTS_FREQ; i++) {
+			int32_t prev_x = precision_values[PRECISION_POINTS_FREQ_ALL * prev_range_idx + i
+										    * 2];
+			int32_t curr_x = precision_values[PRECISION_POINTS_FREQ_ALL * curr_range_idx + i
+										    * 2];
+			int32_t prev_y = precision_values[PRECISION_POINTS_FREQ_ALL * prev_range_idx + i
+										    * 2 + 1];
+			int32_t curr_y = precision_values[PRECISION_POINTS_FREQ_ALL * curr_range_idx + i
+										    * 2 + 1];
 
 			// Linear extrapolation: value = curr + (curr - prev) * extrap_factor
 			x_values[i] = (double)((float)curr_x + (float)(curr_x - prev_x) *
@@ -254,9 +263,9 @@ int calculate_power()
 	static float
 	temp_corr_coeffs[6]; // Both bottom and top limit coeffs, A1, A2, A3, B1, B2, B3
 	static double
-	y_values[3];  // Values used for POWER calculations, X axis points, input voltage
+	y_values[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, X axis points, input voltage
 	static double
-	x_values[3];  // Values used for POWER calculations, Y axis points, output power
+	x_values[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, Y axis points, output power
 	static uint8_t freq_index; // Cached frequency index
 	int ret;
 
@@ -315,23 +324,31 @@ int calculate_power()
 	VIN0_float = (float)VIN0 / (float)PRECISION_SCALE_FACTOR;
 	VIN1_float = (float)VIN1 / (float)PRECISION_SCALE_FACTOR;
 
+
 	adc_data_input.adc_vin0_voltage_corrected = VIN0_float;
 	adc_data_input.adc_vin1_voltage_corrected = VIN1_float;
 
-	// 3-point Lagrange interpolation
-	double y_0 = (VIN0_float - x_values[1]) * (VIN0_float - x_values[2]) / ((
-				x_values[0] - x_values[1]) * (x_values[0] - x_values[2])) * y_values[0]
-		     + (VIN0_float - x_values[0]) * (VIN0_float - x_values[2]) / ((
-					     x_values[1] - x_values[0]) * (x_values[1] - x_values[2])) * y_values[1]
-		     + (VIN0_float - x_values[0]) * (VIN0_float - x_values[1]) / ((
-					     x_values[2] - x_values[0]) * (x_values[2] - x_values[1])) * y_values[2];
-
-	double y_1 = (VIN1_float - x_values[1]) * (VIN1_float - x_values[2]) / ((
-				x_values[0] - x_values[1]) * (x_values[0] - x_values[2])) * y_values[0]
-		     + (VIN1_float - x_values[0]) * (VIN1_float - x_values[2]) / ((
-					     x_values[1] - x_values[0]) * (x_values[1] - x_values[2])) * y_values[1]
-		     + (VIN1_float - x_values[0]) * (VIN1_float - x_values[1]) / ((
-					     x_values[2] - x_values[0]) * (x_values[2] - x_values[1])) * y_values[2];
+	// 7 point Lagrange interpolation
+	double y_0 = 0.0;
+	for (int i = 0; i < PRECISION_POINTS_FREQ; i++) {
+		double term = y_values[i];
+		for (int j = 0; j < PRECISION_POINTS_FREQ; j++) {
+			if (j != i) {
+				term *= (VIN0_float - x_values[j]) / (x_values[i] - x_values[j]);
+			}
+		}
+		y_0 += term;
+	}
+	double y_1 = 0.0;
+	for (int i = 0; i < PRECISION_POINTS_FREQ; i++) {
+		double term = y_values[i];
+		for (int j = 0; j < PRECISION_POINTS_FREQ; j++) {
+			if (j != i) {
+				term *= (VIN1_float - x_values[j]) / (x_values[i] - x_values[j]);
+			}
+		}
+		y_1 += term;
+	}
 
 	// Convert results back to volts using consistent scale factor
 	// precision_values are stored with 10^7 scale factor (PRECISION_SCALE_FACTOR)

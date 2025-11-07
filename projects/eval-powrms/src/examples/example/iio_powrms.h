@@ -78,13 +78,13 @@
 #define FLOAT_PRECISION_DIGITS          7
 
 // Frequency range processing constants
-#define FREQ_RANGE_VALUES_PER_RANGE     6    // 6 precision values per frequency range
+#define FREQ_RANGE_VALUES_PER_RANGE     14    // 14 precision values per frequency range
 #define TEMP_COEFFS_PER_RANGE           3    // 3 temperature coefficients per frequency range
 #define MAX_FREQ_RANGE_INDEX            7    // 0-7 for 8 frequency ranges
 #define MIN_FREQ_RANGE_INDEX            0
 
 // Buffer sizes for parsing calibration data
-#define CALIB_VALUES_BUFFER_SIZE        200  // Buffer for 6 float values
+#define CALIB_VALUES_BUFFER_SIZE        256  // Buffer for 14 float values
 #define TEMP_VALUES_BUFFER_SIZE         150  // Buffer for 3 float values
 
 // String parsing constants

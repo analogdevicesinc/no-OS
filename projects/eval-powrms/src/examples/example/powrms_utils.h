@@ -45,13 +45,13 @@
     0x0003: Calibration data usage for temperature compensation (1 byte)
         - 0: Do not use temperature compensation
         - 1: Use temperature compensation
-    0x0004 - 0x00C3: Precision values array (48 int32_t values, 4 bytes each, total 192 bytes)
+    0x0004 - 0x00C3: Precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
         - Stored in little-endian format
     0x00C4 - 0x0113: Temperature compensation coefficients array (24 int32_t values, 4 bytes each, total 96 bytes)
         - Stored in little-endian format
     0x0114 - 0x0117: Voltage temperature compensation value (int32_t, 4 bytes)
         - Stored in little-endian format
-    0x0118 - 0x01D7: Default factory precision values array (48 int32_t values, 4 bytes each, total 192 bytes)
+    0x0118 - 0x01D7: Default factory precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
         - Stored in little-endian format
     0x01D8 - 0x0237: Default factory temperature compensation coefficients array (24 int32_t values, 4 bytes each, total 96 bytes)
         - Stored in little-endian format
@@ -68,7 +68,7 @@
 // User configurable parameters in EEPROM
 
 #define MEM_PRECISION_ARRAY_POZ         (MEM_TEMP_COMP_DATA_POZ + MEM_TEMP_COMP_DATA_LEN)
-#define MEM_PRECISION_ARRAY_SIZE        192
+#define MEM_PRECISION_ARRAY_SIZE        448
 
 #define MEM_TEMP_COMP_ARRAY_POZ         (MEM_PRECISION_ARRAY_POZ + MEM_PRECISION_ARRAY_SIZE)
 #define MEM_TEMP_COMP_ARRAY_SIZE        96
@@ -78,8 +78,8 @@
 
 // Default values in EEPROM
 
-#define MEM_DEF_PRECISION_ARRAY_POZ    (MEM_V_TEMP_COMP_VAL_POZ + MEM_V_TEMP_COMP_VAL_SIZE)
-#define MEM_DEF_PRECISION_ARRAY_SIZE    192
+#define MEM_DEF_PRECISION_ARRAY_POZ     (MEM_V_TEMP_COMP_VAL_POZ + MEM_V_TEMP_COMP_VAL_SIZE)
+#define MEM_DEF_PRECISION_ARRAY_SIZE    448
 
 #define MEM_DEF_TEMP_COMP_ARRAY_POZ     (MEM_DEF_PRECISION_ARRAY_POZ + MEM_DEF_PRECISION_ARRAY_SIZE)
 #define MEM_DEF_TEMP_COMP_ARRAY_SIZE     96
