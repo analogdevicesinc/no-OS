@@ -6,6 +6,7 @@ Quick test to connect to your FTC Workshop BLE device
 
 import asyncio
 import sys
+import os
 import time
 from datetime import datetime
 from bleak import BleakScanner, BleakClient
@@ -65,7 +66,7 @@ class FitDeviceMonitor:
 
         connection_panel = Panel(
             Align.center(connection_text),
-            title="🏃 Fit Device Monitor",
+            title="Step Counter Device",
             border_style="blue",
             height=3
         )
@@ -159,8 +160,10 @@ async def scan_for_fit_device():
         console.print("Make sure Bluetooth is enabled and devices are advertising")
         return None
 
-    # Find fit devices
-    fit_devices = [d for d in devices if d.name and "fit" in d.name.lower()]
+    adv_name = os.environ['BLE_ADV_NAME']
+
+    # Find the device
+    fit_devices = [d for d in devices if d.name and adv_name.lower() in d.name.lower()]
 
     if not fit_devices:
         console.print("[bold red] No 'Fit' devices found[/]")
