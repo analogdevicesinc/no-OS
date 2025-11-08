@@ -13,5 +13,6 @@
 #include "wsf_os.h"
 
 int cordio_init(void);
+void ble_set_adv_name(char *name);
 
 #endif // __CORDIO_INIT_

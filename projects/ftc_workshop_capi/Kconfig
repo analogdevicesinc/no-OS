@@ -1,5 +1,13 @@
 menu "FTC Workshop BLE Configuration"
 
+config BLE_ADV_NAME
+	string "BLE Advertising Device Name"
+	default "$(BLE_ADV_NAME)" if "$(BLE_ADV_NAME)" != ""
+	default "FTC_Workshop"
+	help
+	  Set the BLE advertising device name. Can be overridden by setting
+	  the BLE_ADV_NAME environment variable.
+
 config USE_USB_UART
 	bool
 	default y if UART_TYPE_USB
