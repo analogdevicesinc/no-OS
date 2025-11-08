@@ -12,8 +12,6 @@ Exercise 2 builds upon Exercise 1 by adding SPI communication to read data from 
 - Interface with the ADXL355 accelerometer driver
 - Read acceleration data on three axes (X, Y, Z)
 - Read and convert temperature sensor data
-- Format and display sensor data over UART
-- Understand fractional representation of floating-point values
 
 Hardware Setup
 --------------
@@ -94,9 +92,9 @@ Program Flow
 3. **Main Loop**:
 
    - As part of the exercise, the user is expected to call the function which reads a single acceleration measurement. Follow the hints in the source code.
-   - Read temperature data (in degrees Celsius)
+   - Read temperature data (in Celsius)
    - Format and print data to UART console
-   - Delay 500ms between readings
+   - Sleep for 500ms between readings
 
 Expected Output
 ~~~~~~~~~~~~~~~
@@ -114,11 +112,6 @@ When running, the serial console will display:
    X: 0.013 g, Y: -0.002 g, Z: 0.988 g | Temp: 24.134 C
 
 The Z-axis should read approximately 1 g when the sensor is lying flat (due to gravity).
-
-CAPI Object Mapping
--------------------
-
-This exercise demonstrates SPI communication through CAPI:
 
 SPI Controller Initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,24 +158,24 @@ ADXL355 Driver Integration
 .. code-block:: c
 
    // ADXL355 initialization parameters
-   struct adxl355_capi_init_param adxl355_param = {
+   struct adxl355_init_param adxl355_param = {
        .spi_controller = spi_controller,
        .comm_param = adxl355_spi_config,
        .dev_type = ID_ADXL355_CAPI,
        .spi_dev = &adxl355_spi_dev,
    };
 
-   struct adxl355_capi_dev *adxl355;
+   struct adxl355_dev *adxl355;
 
    // Initialize the driver
-   adxl355_capi_init(&adxl355, adxl355_param);
+   adxl355_init(&adxl355, adxl355_param);
 
    // Configure the sensor
-   adxl355_capi_soft_reset(adxl355);
-   adxl355_capi_set_odr_lpf(adxl355, ADXL355_CAPI_ODR_62_5HZ);
-   adxl355_capi_set_op_mode(adxl355, ADXL355_CAPI_MEAS_TEMP_ON_DRDY_OFF);
+   adxl355_soft_reset(adxl355);
+   adxl355_set_odr_lpf(adxl355, ADXL355_ODR_62_5HZ);
+   adxl355_set_op_mode(adxl355, ADXL355_MEAS_TEMP_ON_DRDY_OFF);
 
-The ADXL355 driver uses the CAPI SPI interface internally, abstracting all register-level communication.
+The ADXL355 driver uses the CAPI SPI interface internally, abstracting all register-level communication. The SPI controller has to be configured before this step.
 
 Data Representation
 ~~~~~~~~~~~~~~~~~~~
@@ -191,17 +184,17 @@ The ADXL355 driver returns data using a fractional representation structure:
 
 .. code-block:: c
 
-   struct adxl355_capi_frac_repr {
+   struct adxl355_frac_repr {
        int64_t integer;      // Integer part
        int32_t fractional;   // Fractional part (scaled)
    };
 
    // Example: Reading acceleration
-   struct adxl355_capi_frac_repr x_accel, y_accel, z_accel;
-   adxl355_capi_get_xyz(adxl355, &x_accel, &y_accel, &z_accel);
+   struct adxl355_frac_repr x_accel, y_accel, z_accel;
+   adxl355_get_xyz(adxl355, &x_accel, &y_accel, &z_accel);
 
    // Print with 3 decimal places
-   printf("X: %lld.%03d g\n",
+   printf("X: %lld.%03d m/s^2\n",
           (long long)x_accel.integer,
           abs(x_accel.fractional));
 
@@ -225,15 +218,13 @@ The project defconfig is defined in ``project_ex2.conf``:
    CONFIG_IRQ=y
    CONFIG_GPIO=y
 
-   CONFIG_ACCEL=y
-   CONFIG_ACCEL_ADXL355_CAPI=y
-
 This enables:
 
 - CAPI framework
 - UART and SPI peripheral drivers
 - GPIO and interrupt support
-- ADXL355 accelerometer driver with CAPI interface
+
+Note: The project won't compile out of the box. As part of the exercise, the user is expected to use menuconfig (or modify the defconfig and running a fresh build) to enable the ADXL355 driver.
 
 Build Commands
 ~~~~~~~~~~~~~~
@@ -267,7 +258,11 @@ Running the Example
 
    .. code-block:: bash
 
+      # Linux/macOS
       screen /dev/ttyACM0 115200
+
+      # Or with minicom
+      minicom -D /dev/ttyACM0 -b 115200
 
 4. **Observe output**: You should see acceleration and temperature readings updating twice per second
 

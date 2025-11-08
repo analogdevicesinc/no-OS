@@ -25,7 +25,7 @@ Required Components
 - FTHR to PMOD adapter (:adi:`FTHR-PMD-INTZ`)
 - SSD1306 128x64 OLED display PMOD module
 - USB cable for programming and serial communication
-- (Optional) Lithium battery for portable operation
+- Lithium battery
 
 Pin Connections
 ~~~~~~~~~~~~~~~
@@ -93,19 +93,20 @@ Program Flow
 1. **System Initialization**:
 
    - Initialize UART for debug output (115200 baud)
-   - Initialize GPIO port 0 for bit-banging
+   - Initialize GPIO port 0 for bit-banging the I2C signals
    - Initialize I2C bit-bang controller for OLED (P0.30, P0.31)
-   - Initialize hardware I2C controller 1 for MAX20303 (P0.14, P0.15)
+   - Initialize the I2C controller connected to the MAX20303
 
 2. **Display Initialization**:
 
-   - Configure SSD1306 OLED with I2C bit-bang interface
-   - Clear display and turn on
+   - Configure the SSD1306 OLED using its driver
+   - Clear the display
    - Display static labels: "Battery Voltage:" and "mV"
+   - Most of the code in this section is commented. The user should understand the parameter struct hierarchy and uncomment the code as they go.
 
 3. **MAX20303 Initialization**:
 
-   - Initialize MAX20303 with both main and fuel gauge I2C addresses
+   - Initialize MAX20303 using its driver
    - Disable hibernate mode to enable readings
    - Configure for battery voltage monitoring
 
@@ -161,7 +162,7 @@ I2C Hardware Controller
        .identifier = 1,              // I2C1 peripheral
        .initiator = 1,               // Master mode
        .clk_freq_hz = 400000,        // 400 kHz
-       .ops = &maxim_capi_i2c_ops    // Platform-specific operations
+       .ops = &maxim_i2c_ops    // Platform-specific operations
    };
 
    // Initialize I2C controller
@@ -230,8 +231,6 @@ GPIO Bit-Bang I2C
 
    // Initialize bit-bang I2C
    capi_i2c_init(&bitbang_i2c, &bitbang_config);
-
-Bit-banging implements the I2C protocol using GPIO toggling when hardware I2C peripherals are unavailable or already in use.
 
 Display Integration
 ~~~~~~~~~~~~~~~~~~~
@@ -331,14 +330,22 @@ Running the Example
 
 2. **Flash the firmware** using the build commands above
 
-3. **Open serial terminal** at 115200 baud to see debug output
+3. **Open serial terminal** at 115200 baud:
+
+   .. code-block:: bash
+
+      # Linux/macOS
+      screen /dev/ttyACM0 115200
+
+      # Or with minicom
+      minicom -D /dev/ttyACM0 -b 115200
 
 4. **Observe**: Battery voltage displayed on OLED and printed to console every second
 
 Testing the System
 ~~~~~~~~~~~~~~~~~~
 
-1. **Without battery**: MAX20303 may report 0V
+1. **Without battery**: MAX20303 will report 0V
 
 2. **With battery**:
 
@@ -351,12 +358,8 @@ Next Steps
 
 Once you understand Exercise 3, proceed to :doc:`ftc_workshop_capi_exercise_4` to learn about:
 
-- Combining all previous exercises
 - FreeRTOS task management
-- Bluetooth Low Energy with Cordio stack
 - Step counting algorithm
-- Multi-sensor data fusion
-- Advanced application architecture
 
 Additional Resources
 --------------------

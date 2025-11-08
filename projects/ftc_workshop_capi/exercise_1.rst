@@ -62,15 +62,9 @@ Program Flow
    - Redirect ``printf()`` to UART for console output
    - Initialize GPIO port 0 with 32 pins
 
-2. **GPIO Configuration**:
+2. **Main Loop**:
 
-   - The user is expencted to implement this step. Follow the hints in the application code.
-   - Configure P0.2 and P0.3 as inputs with internal pull-ups
-   - Buttons are active-low (pressed = 0, released = 1) due to external pull up resistors.
-
-3. **Main Loop**:
-
-   - Read button states using ``capi_gpio_pin_get_value()``
+   - Read the button states. The user is expencted to implement this step. Follow the hints in the application code.
    - Print button states to UART console
    - Delay 1 second between readings
 
@@ -85,11 +79,6 @@ When running, the serial console will display:
    Button state: 0 1     (Button 1 pressed)
    Button state: 1 0     (Button 2 pressed)
    Button state: 0 0     (Both buttons pressed)
-
-CAPI Object Mapping
--------------------
-
-This exercise demonstrates how hardware resources are mapped to CAPI objects:
 
 UART Initialization
 ~~~~~~~~~~~~~~~~~~~
@@ -106,7 +95,7 @@ UART Initialization
    struct capi_uart_config uart_config = {
        .identifier = 0,           // UART0
        .clk_freq_hz = 115200,     // Baud rate
-       .ops = &maxim_capi_uart_ops // Platform-specific operations
+       .ops = &maxim_uart_ops // Platform-specific operations
    };
 
    // Initialize UART controller
@@ -115,7 +104,7 @@ UART Initialization
    // Redirect stdio to UART for printf() support
    capi_uart_stdio(uart);
 
-The ``maxim_capi_uart_ops`` structure contains function pointers to the Maxim-specific UART driver implementation. This abstraction allows the same initialization code to work across different microcontroller families.
+The ``maxim_uart_ops`` structure contains function pointers to the Maxim-specific UART driver implementation. This abstraction allows the same initialization code to work across different microcontroller families.
 
 GPIO Initialization
 ~~~~~~~~~~~~~~~~~~~
@@ -131,7 +120,7 @@ GPIO Initialization
    struct capi_gpio_port_config gpio_port0_config = {
        .identifier = 0,           // Port 0
        .num_pins = 32,            // 32 GPIO pins
-       .ops = &maxim_capi_gpio_ops // Platform-specific operations
+       .ops = &maxim_gpio_ops // Platform-specific operations
    };
 
    // Initialize GPIO port
@@ -179,7 +168,7 @@ Build Commands
 
 .. code-block:: bash
 
-   # Configure CMake build
+   # Configure the CMake build
    cmake --preset max32655_fthr --fresh -B build_ex1 \
      -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf
 
@@ -196,7 +185,9 @@ Running the Example
 
 1. **Connect the board** via USB (provides both power and serial communication)
 
-2. **Open a serial terminal** at 115200 baud:
+2. **Flash the firmware** using the command from the previous section.
+
+3. **Open a serial terminal** at 115200 baud:
 
    .. code-block:: bash
 
@@ -206,9 +197,9 @@ Running the Example
       # Or with minicom
       minicom -D /dev/ttyACM0 -b 115200
 
-3. **Press the buttons** and observe the output change in real-time
+4. **Press the buttons** and observe the output change in real-time
 
-4. **Expected behavior**: Button state updates every second, showing "1" for released and "0" for pressed
+5. **Expected behavior**: Button state updates every second, showing "1" for released and "0" for pressed
 
 Next Steps
 ----------

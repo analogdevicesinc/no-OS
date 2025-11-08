@@ -31,6 +31,7 @@ The project consists of four progressive exercises:
    ftc_workshop_capi_exercise_2
    ftc_workshop_capi_exercise_3
    ftc_workshop_capi_exercise_4
+   ftc_workshop_capi_exercise_5
 
 Build System
 ------------
@@ -60,6 +61,8 @@ Each exercise has its own configuration file. To build a specific exercise:
    cmake --build build_ex1 --target ftc_workshop
 
    # The output binary is at: build_ex1/build/ftc_workshop.elf
+
+Note: The cmake commands should be run from the no-OS root directory.
 
 Flashing the Firmware
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -92,7 +95,7 @@ Connect a serial terminal at **115200 baud, 8N1** to view debug output:
 Quick Start
 -----------
 
-1. **Install Prerequisites**: Ensure Maxim SDK is installed and the ``MAXIM_LIBRARIES`` environment variable points to the SDK's Libraries directory.
+1. **Install Prerequisites**: Ensure Maxim SDK is installed and the ``MAXIM_LIBRARIES`` environment variable points to the SDK's Libraries ($MAXIM_LIBRARIES/Libraries) directory.
 
 2. **Clone the Repository**:
 
@@ -157,7 +160,7 @@ Example CAPI object hierarchy for SPI:
 .. code-block:: text
 
    SPI Controller (capi_spi_controller_handle)
-   ├── Operations (maxim_capi_spi_ops)
+   ├── Operations (maxim_spi_ops)
    │   ├── init()
    │   ├── transceive()
    │   └── remove()
@@ -178,7 +181,7 @@ Example CAPI object hierarchy for UART:
 .. code-block:: text
 
    UART Controller (capi_uart_handle)
-   ├── Operations (maxim_capi_uart_ops)
+   ├── Operations (maxim_uart_ops)
    │   ├── init()
    │   ├── read()
    │   ├── write()
