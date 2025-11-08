@@ -73,7 +73,7 @@ static int configure_spi_pins(struct capi_spi_device *device,
 	if (!priv->pinctrl_handle) {
 		/* Set up default pinctrl configuration */
 		struct capi_pinctrl_config pinctrl_config = {
-			.ops = &maxim_capi_pinctrl_ops,
+			.ops = &maxim_pinctrl_ops,
 			.identifier = 0, /* Global pinctrl instance */
 			.flags = NULL,
 			.extra = NULL
@@ -191,7 +191,7 @@ static int maxim_capi_spi_init(struct capi_spi_controller_handle **handle,
 	spi_pins.vddioh = 1;
 
 	/* Set up the handle */
-	spi_handle->ops = &maxim_capi_spi_ops;
+	spi_handle->ops = &maxim_spi_ops;
 
 	/* Initialize private data */
 	priv->instance = config->identifier;
@@ -660,7 +660,7 @@ static void maxim_capi_spi_isr(void *handle)
 /**
  * @brief MAX32655 SPI CAPI operations structure
  */
-const struct capi_spi_ops maxim_capi_spi_ops = {
+const struct capi_spi_ops maxim_spi_ops = {
 	.init = maxim_capi_spi_init,
 	.deinit = maxim_capi_spi_deinit,
 	.transceive = maxim_capi_spi_transceive,

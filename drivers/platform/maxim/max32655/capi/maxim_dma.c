@@ -73,7 +73,7 @@ static uint32_t capi_to_maxim_xfer_type(enum capi_dma_xfer_type xfer_type)
  * @param handle DMA controller handle
  * @return 0 on success, negative error code otherwise
  */
-static void maxim_capi_dma_isr(void *arg)
+static int maxim_capi_dma_isr(void *arg)
 {
 	struct maxim_capi_dma_handle *priv;
 	struct maxim_capi_dma_chan_handle *chan_priv;
@@ -82,7 +82,7 @@ static void maxim_capi_dma_isr(void *arg)
 	uint32_t i;
 
 	if (!handle || !handle->extra)
-		return;
+		return -EINVAL;
 
 	priv = (struct maxim_capi_dma_handle *)handle->extra;
 	intr_status = priv->dma_regs->intfl;
@@ -98,6 +98,8 @@ static void maxim_capi_dma_isr(void *arg)
 			}
 		}
 	}
+
+	return 0;
 }
 
 /**
@@ -184,7 +186,7 @@ static int maxim_capi_dma_init(struct capi_dma_handle **handle,
 	}
 
 	/* Set up the handle */
-	dma_handle->ops = &maxim_capi_dma_ops;
+	dma_handle->ops = &maxim_dma_ops;
 
 	/* Initialize private data */
 	priv->controller_id = config->id;
@@ -469,7 +471,7 @@ static bool maxim_capi_dma_chan_is_completed(const struct capi_dma_chan *chan)
 /**
  * @brief MAX32655 DMA CAPI operations structure
  */
-const struct capi_dma_ops maxim_capi_dma_ops = {
+const struct capi_dma_ops maxim_dma_ops = {
 	.init = maxim_capi_dma_init,
 	.deinit = maxim_capi_dma_deinit,
 	.init_chan = maxim_capi_dma_init_chan,

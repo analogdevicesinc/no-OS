@@ -97,7 +97,7 @@ struct maxim_capi_pinctrl_handle {
  * This structure contains function pointers for all pinctrl CAPI operations
  * specific to the MAX32655 platform.
  */
-extern const struct capi_pinctrl_ops maxim_capi_pinctrl_ops;
+extern const struct capi_pinctrl_ops maxim_pinctrl_ops;
 
 #ifdef __cplusplus
 }

@@ -39,7 +39,7 @@ static struct capi_i2c_device ssd_1306_i2c_dev;
 static struct capi_gpio_port_config gpio_port0_config = {
 	.identifier = 0,
 	.num_pins = 32,
-	.ops = &maxim_capi_gpio_ops,
+	.ops = &maxim_gpio_ops,
 };
 
 /* SSD1306 OLED Display Setup using CAPI I2C bitbang */
@@ -226,7 +226,7 @@ void bt_task(void *pvParameters)
 	struct capi_spi_config adxl355_spi_config = {
 		.identifier = 0,
 		.clk_freq_hz = 1000000,
-		.ops = &maxim_capi_spi_ops,
+		.ops = &maxim_spi_ops,
 	};
 
 	struct capi_spi_device adxl355_spi_dev = {

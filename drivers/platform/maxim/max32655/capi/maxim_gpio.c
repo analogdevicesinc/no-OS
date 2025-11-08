@@ -502,7 +502,7 @@ static int maxim_capi_gpio_pin_get_raw_value(struct capi_gpio_pin *pin, uint8_t 
 /**
  * @brief MAX32655 GPIO CAPI operations structure
  */
-const struct capi_gpio_ops maxim_capi_gpio_ops = {
+const struct capi_gpio_ops maxim_gpio_ops = {
 	.port_init = maxim_capi_gpio_port_init,
 	.port_deinit = maxim_capi_gpio_port_deinit,
 	.port_set_direction = maxim_capi_gpio_port_set_direction,

@@ -9,6 +9,7 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
+#include "no_os_init.h"
 #include "capi_gpio.h"
 #include "capi_uart.h"
 
@@ -27,7 +28,7 @@ int main()
 	struct capi_gpio_port_config gpio_port0_config = {
 		.identifier = 0,
 		.num_pins = 32,
-		.ops = &maxim_capi_gpio_ops,
+		.ops = &maxim_gpio_ops,
 	};
 
 	/* GPIO line handle for button 1 */
@@ -43,13 +44,13 @@ int main()
 	};
 
 	/* UART instance specific handle - statically allocated */
-	struct capi_uart_handler *uart = CAPI_UART_HANDLE;
+	struct capi_uart_handle *uart = CAPI_UART_HANDLE;
 
 	/* Configuration for the UART instance */
 	struct capi_uart_config uart_config = {
 		.identifier = 0,
 		.clk_freq_hz = 115200,
-		.ops = &maxim_capi_uart_ops,
+		.ops = &maxim_uart_ops,
 	};
 
 	/* Configure the UART hardware */

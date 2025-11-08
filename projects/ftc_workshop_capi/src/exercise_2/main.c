@@ -11,6 +11,7 @@
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_init.h"
 
 #include "capi/capi_spi.h"
 #include "capi/capi_uart.h"
@@ -33,7 +34,7 @@ int main()
 	struct capi_uart_config uart_config = {
 		.identifier = 0,
 		.clk_freq_hz = 115200,
-		.ops = &maxim_capi_uart_ops,
+		.ops = &maxim_uart_ops,
 	};
 
 	no_os_init();
@@ -51,7 +52,7 @@ int main()
 	struct capi_spi_config adxl355_spi_config = {
 		.identifier = 0,
 		.clk_freq_hz = 1000000,
-		.ops = &maxim_capi_spi_ops,
+		.ops = &maxim_spi_ops,
 	};
 
 	/* 
