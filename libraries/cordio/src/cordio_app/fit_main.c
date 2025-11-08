@@ -55,6 +55,8 @@
 #include "pal_btn.h"
 #include "tmr.h"
 
+#include "no_os_config.h"
+
 /**************************************************************************************************
   Macros
 **************************************************************************************************/
@@ -180,12 +182,17 @@ static const uint8_t fitAdvDataDisc[] = {
 };
 
 /*! scan data, discoverable mode */
-static const uint8_t fitScanDataDisc[] = {
+static uint8_t fitScanDataDisc[32] = {
 	/*! device name */
-	4, /*! length */
+	0, /*! length */
 	DM_ADV_TYPE_LOCAL_NAME, /*! AD type */
-	'F', 'i', 't'
 };
+
+void ble_set_adv_name(char *name)
+{
+	fitScanDataDisc[0] = strlen(name) + 1;
+	memcpy(&fitScanDataDisc[2], name, strlen(name));
+}
 
 /**************************************************************************************************
   Client Characteristic Configuration Descriptors
