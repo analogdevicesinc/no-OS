@@ -1,17 +1,16 @@
-Exercise 4: Complete Fitness Tracker with BLE
-==============================================
+Exercise 4: FreeRTOS-based Pedometer
+=====================================
 
 Overview
 --------
 
-Exercise 4 combines all previous exercises into a pedometer application with Bluetooth Low Energy connectivity. This example demonstrates real-time operating system usage, multi-sensor integration, step counting algorithms, and wireless data transmission.
+Exercise 4 builds a pedometer application using FreeRTOS for task management. This exercise combines the ADXL355 accelerometer with the SSD1306 OLED display to create a real-time step counter with visual feedback.
 
 **Learning Objectives:**
 
 - Integrate FreeRTOS for task management
-- Implement Bluetooth Low Energy using Cordio stack
-- Manage multiple peripherals concurrently
-- Create GATT services for data exposure
+- Implement step counting algorithms with peak detection
+- Manage multiple peripherals in a real-time OS environment
 
 Hardware Setup
 --------------
@@ -46,15 +45,9 @@ Complete Pin Connections
 +------------------+------------------+--------------------+------------------+
 | SPI CS           | P0.7             | ADXL355 CS         | P6               |
 +------------------+------------------+--------------------+------------------+
-| I2C1 SDA         | P0.15            | MAX20303 SDA       | —                |
-+------------------+------------------+--------------------+------------------+
-| I2C1 SCL         | P0.14            | MAX20303 SCL       | —                |
-+------------------+------------------+--------------------+------------------+
 | GPIO SDA         | P0.30            | SSD1306 SDA        | P7               |
 +------------------+------------------+--------------------+------------------+
 | GPIO SCL         | P0.31            | SSD1306 SCL        | P7               |
-+------------------+------------------+--------------------+------------------+
-| BLE Radio        | Internal         | Antenna            | —                |
 +------------------+------------------+--------------------+------------------+
 | Power            | 3.3V             | All peripherals    | VDD (P6, P7)     |
 +------------------+------------------+--------------------+------------------+
@@ -85,11 +78,6 @@ Hardware Connection Diagram
    │  3.3V ────────────┤ VDD                │                 │
    │  GND  ────────────┤ GND                │                 │
    │                   └────────────────────┘                 │
-   │                                                           │
-   │  P0.15 (I2C1_SDA) ◄─────► MAX20303 (on-board)            │
-   │  P0.14 (I2C1_SCL) ──────► MAX20303 (battery fuel gauge)  │
-   │                                                           │
-   │  BLE Radio ◄────────► Antenna (Internal/External)        │
    └───────────────────────────────────────────────────────────┘
 
 Functional Description
@@ -101,40 +89,30 @@ Program Flow
 1. **System Initialization**:
 
    - Initialize FreeRTOS kernel
+   - Create sensor processing task
+   - Note: the application is using a single FreeRTOS task
+
+2. **Task Initialization (bt_task)**:
+
    - Initialize SPI controller for ADXL355
-   - Initialize I2C controllers (hardware and bit-bang)
-   - Initialize Cordio BLE stack
-
-2. **Peripheral Initialization**:
-
+   - Initialize GPIO-based I2C for SSD1306 display
    - Configure ADXL355 accelerometer (62.5 Hz ODR)
-   - Configure MAX20303 battery management
-   - Initialize SSD1306 OLED display
-   - Display initial UI elements
+   - Initialize and configure SSD1306 OLED display
+   - Display initial "Steps: 0" text
 
-3. **BLE Stack Initialization**:
+3. **Main Task Loop**:
 
-   - Configure WSF (Wireless Software Foundation)
-   - Initialize Link Layer and Baseband
-   - Set up GATT services:
-
-     - Battery Service (report battery percentage)
-     - Running Speed and Cadence Service (report step count)
-
-4. **FreeRTOS Task (bt_task)**:
-
-   - Read accelerometer FIFO data
-   - Detect steps using peak detection algorithm
-   - Update step counter
-   - Read battery voltage and percentage
-   - Update OLED display with steps and battery
-   - Update the BLE GATT characteristics specific to battery and step count
+   - Read accelerometer FIFO data (X, Y, Z axes)
+   - Sum the acceleration for all the axes
+   - Apply step detection algorithm once we have 2 * STEP_WINDOW_SIZE samples (by default STEP_WINDOW_SIZE = 12)
+   - Update step counter when steps detected
+   - Periodically update OLED display (every 20 iterations)
    - Delay 50ms between iterations
 
 Step Counting Algorithm
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-The application implements a simple peak detection algorithm:
+The application implements a peak detection algorithm with low-pass filtering:
 
 1. **Data Acquisition**:
 
@@ -148,17 +126,16 @@ The application implements a simple peak detection algorithm:
 
 3. **Peak Detection**:
 
-   - Maintain sliding windows of max and min peaks
-   - Detect step when:
+   - Maintain sliding windows of max and min peaks (STEP_WINDOW_SIZE samples each). A step is defined as a peak followed by a trough, each occuring in an interval of STEP_WINDOW_SIZE samples
+   - Detect step when the following are true:
 
      - Maximum peak exceeds threshold + sensitivity/2
-     - Minimum peak below threshold - sensitivity/2
-     - Peak-to-peak difference > sensitivity threshold
+     - Trough below threshold - sensitivity/2
 
 4. **Step Increment**:
 
    - Increment global step counter
-   - Update display and BLE characteristics
+   - Update display every 20 loop iterations
 
 Expected Output
 ~~~~~~~~~~~~~~~
@@ -167,14 +144,8 @@ Expected Output
 
 .. code-block:: text
 
-   Starting BLE in Peripheral mode
-   Cordio initialization completed - GATT services should be available
-   GATT services available:
-   - Core GATT services (GAP/GATT)
-   - Battery Service - read battery level
-   - Running speed and cadence service - read step count
-   Battery voltage: 3987 mV
-   Battery percentage: 85
+   (No step count logging to console in this exercise)
+   Warning messages only appear if sensor read errors occur
 
 **OLED display:**
 
@@ -182,17 +153,9 @@ Expected Output
 
    ┌──────────────────────┐
    │ Steps: 42            │
-   │ Battery: 85%         │
-   │ [████████░░]         │
    └──────────────────────┘
 
-**BLE Advertisement:**
-
-- Device name: "FTC_Workshop"
-- Services: Battery, Running Speed and Cadence
-
-CAPI Object Mapping
--------------------
+Note: The step count is displayed modulo 1000 (i.e., resets to 0 after 999).
 
 FreeRTOS Integration
 ~~~~~~~~~~~~~~~~~~~~
@@ -203,15 +166,15 @@ FreeRTOS Integration
 
    int create_tasks(void)
    {
-       TaskHandle_t bt_task_handle = NULL;
+       TaskHandle_t thread1_handle = NULL;
 
-       // Create BLE/sensor task
-       xTaskCreate(bt_task,           // Task function
-                   "BT task",         // Task name
-                   2048,              // Stack size (words)
-                   NULL,              // Parameters
-                   tskIDLE_PRIORITY + 1, // Priority
-                   &bt_task_handle);
+       // Create sensor processing task
+       ret = xTaskCreate(bt_task,           // Task function
+                         "BT task",         // Task name
+                         2048,              // Stack size (words)
+                         NULL,              // Parameters
+                         tskIDLE_PRIORITY + 1, // Priority
+                         &thread1_handle);
 
        // Start FreeRTOS scheduler
        vTaskStartScheduler();
@@ -219,83 +182,60 @@ FreeRTOS Integration
        return 0;
    }
 
-FreeRTOS provides task scheduling, allowing the BLE stack and sensor processing to run concurrently with proper time management. FreeRTOS is partially integrated into the no-OS API (mutex, semaphore
-and delay API). Other features (such as threads, queues and events operation) need to be handled in the application layer using the FreeRTOS API directly.
+FreeRTOS provides task scheduling and delay functions. The main sensor processing runs in the ``bt_task``.
 
 Multi-Peripheral Coordination
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-All peripherals from previous exercises are initialized and used concurrently:
+All peripherals are initialized within the FreeRTOS task:
 
 .. code-block:: c
 
    void bt_task(void *pvParameters)
    {
-       // Initialize all peripherals
+       // Initialize SPI for accelerometer
        capi_spi_init(&spi_controller, &adxl355_spi_config);
-       capi_i2c_init(&i2c_controller, &i2c_config);
-       init_display();  // Bit-bang I2C for OLED
 
-       // Initialize drivers
-       adxl355_capi_init(&adxl355, adxl355_param);
-       max20303_init(&max20303, &max20303_param);
+       // Initialize display (uses GPIO I2C bitbang)
+       init_display();
 
-       // Initialize Cordio BLE stack
-       cordio_init();
+       // Initialize ADXL355 driver
+       adxl355_init(&adxl355, adxl355_param);
+       adxl355_soft_reset(adxl355);
+       adxl355_set_odr_lpf(adxl355, ADXL355_ODR_62_5HZ);
+       adxl355_set_op_mode(adxl355, ADXL355_MEAS_TEMP_ON_DRDY_OFF);
+
+       // Display initial text
+       display_print_string(oled_display, "Steps: ", 0, 0);
+       display_print_string(oled_display, "0", 0, 6);
 
        // Main processing loop
        while (1) {
-           // Read sensors
-           adxl355_capi_get_fifo_data(...);
-           max20303_read_vcell(...);
-           max20303_read_soc(...);
+           // Read FIFO data
+           adxl355_get_fifo_data(adxl355, &fifo_entries,
+                                 x_accel, y_accel, z_accel);
 
-           // Process data
-           step_count(...);
+           // Compute acceleration sum
+           for (int i = 0; i < fifo_entries; i++) {
+               accel_sum[i] = (x_accel[i] + y_accel[i] + z_accel[i]) / 10;
+           }
 
-           // Update displays
-           display_battery_level(...);
-           display_print_string(...);
+           // Detect steps
+           ret = step_count(accel_sum, fifo_entries);
+           if (ret)
+               total_step_count += ret;
 
-           // Update BLE
-           AppHwBattTest(battery_percentage);
+           // Update display every 20 iterations
+           if (i >= 20) {
+               sprintf(steps_display_buffer, "%d", total_step_count % 1000);
+               display_print_string(oled_display, steps_display_buffer, 0, 6);
+               i = 0;
+           }
 
+           i++;
            vTaskDelay(pdMS_TO_TICKS(50));
        }
    }
-
-Bluetooth Low Energy Stack
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Cordio stack initialization:**
-
-.. code-block:: c
-
-   void cordio_init(void)
-   {
-       // Initialize WSF
-       WsfInit();
-
-       // Initialize Link Layer
-       LlInit();
-
-       // Initialize Baseband
-       BbInit();
-
-       // Initialize application
-       AppInit();
-
-       // Start advertising
-       AppStart();
-   }
-
-The Cordio stack manages:
-
-- Link Layer (physical radio control)
-- Baseband (packet formatting)
-- HCI (Host Controller Interface)
-- L2CAP (Logical Link Control)
-- ATT/GATT (Attribute Protocol/Generic Attribute Profile)
 
 Build and Run
 -------------
@@ -313,30 +253,24 @@ The project defconfig is defined in ``project_ex4.conf``:
    CONFIG_UART=y
    CONFIG_SPI=y
    CONFIG_I2C=y
-   CONFIG_IRQ=y
    CONFIG_GPIO=y
 
    CONFIG_FREERTOS=y
    CONFIG_FREERTOS_CONF_PATH="projects/ftc_workshop_capi/src/platform/maxim"
 
-   CONFIG_CORDIO=y
-
    CONFIG_ACCEL=y
-   CONFIG_ACCEL_ADXL355_CAPI=y
-
-   CONFIG_CHARGER=y
-   CONFIG_CHARGER_MAX20303_CAPI=y
+   CONFIG_ACCEL_ADXL355=y
 
    CONFIG_DISPLAY=y
-   CONFIG_DISPLAY_SSD1306_CAPI=y
+   CONFIG_DISPLAY_SSD1306=y
    CONFIG_PLATFORM_I2C_BITBANG=y
 
 This enables:
 
 - All CAPI peripherals (UART, SPI, I2C, GPIO)
-- FreeRTOS
-- Cordio Bluetooth Low Energy stack
-- All sensor and display drivers
+- FreeRTOS with platform-specific configuration
+- ADXL355 accelerometer driver
+- SSD1306 display driver with I2C bitbang
 
 Build Commands
 ~~~~~~~~~~~~~~
@@ -348,12 +282,12 @@ Build Commands
      -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex4.conf
 
    # Build the project
-   cmake --build build_ex4 --target ftc_workshop
+   cmake --build build_ex4 --target ftc_workshop_capi
 
    # Flash to the board
    cmake --build build_ex4 --target flash
 
-Output binary location: ``build_ex4/build/ftc_workshop.elf``
+Output binary location: ``build_ex4/build/ftc_workshop_capi.elf``
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
@@ -361,131 +295,70 @@ Running the Example
 1. **Connect hardware**:
 
    - Attach FTHR-PMD-INTZ adapter to MAX32655 FTHR board
-   - Connect ADXL355 PMOD to the adapter's PMOD port
-   - Connect MAX20303 to I2C1 port on the adapter
-   - Connect SSD1306 OLED to GPIO pins (P0.30, P0.31)
-   - Ensure all devices share common ground via the adapter
-   - (Optional) Connect a battery to MAX20303 for real voltage readings
+   - Connect ADXL355 PMOD to P6 on the adapter
+   - Connect SSD1306 OLED to P7 on the adapter
+   - Connect USB cable for power and serial communication
 
 2. **Flash the firmware** using the build commands above
 
-3. **Open serial terminal** at 115200 baud to see debug output
+3. **Observe the display**:
+
+   - OLED should show "Steps: 0" initially
+   - Watch the step count update as you move the board
 
 4. **Test step counting**:
 
-   - Shake or tap the board with accelerometer attached
-   - Watch step count increment on OLED
-   - Observe console output
+   - Hold the board and simulate walking motion
+   - Shake or tap the board to generate step events
+   - Watch the step count increment on the OLED
 
-5. **Test BLE connectivity** using the provided Python script
-
-Testing with simple_ble_test.py
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The project includes a Python script specifically designed to test this application's BLE functionality. The script connects to the device and displays step count and battery percentage in real-time.
-
-**Prerequisites:**
-
-.. code-block:: bash
-
-   source build_ex4/.no_os_venv
-
-   # Install required Python packages
-   pip3 install bleak asyncio rich
-
-**Running the test script:**
-
-.. code-block:: bash
-
-   # Run the BLE test script
-   python3 projects/ftc_workshop_capi/scripts/ble_test.py
-
-The device will stop advertising after 180 s. You can press the S1 button on the FTHR-PMD-INTZ board in order to reset the MCU.
-
-The script will continuously monitor and display updates from the fitness tracker. Press Ctrl+C to stop.
-
-Testing the Complete System
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Testing the System
+~~~~~~~~~~~~~~~~~~
 
 1. **Display Test**:
 
-   - Verify step count and battery percentage display on OLED
-   - Check battery icon animation
-   - Ensure text is crisp and readable
+   - Verify "Steps: 0" displays on power-up
 
 2. **Step Counter Test**:
 
    - Hold board in hand and simulate walking motion
-   - Steps should increment on both OLED and BLE
-   - Try different motion patterns (walking, running, jumping)
-   - Run ``simple_ble_test.py`` to verify BLE updates match display
+   - Steps should increment on display
+   - Note: Count may not be perfectly accurate - algorithm is simplified
 
-3. **Battery Monitoring**:
+3. **Sensitivity Tuning**:
 
-   - With battery connected: See real voltage and percentage
-   - Without battery: May show 0V or invalid data
-   - Verify BLE Battery Service reports same percentage as display
-
-4. **BLE Connectivity**:
-
-   - Run ``simple_ble_test.py`` to connect
-   - Walk around while connected - verify step updates
-   - Disconnect and verify device continues functioning
-   - Reconnect - verify connection restoration
-
-Advanced Features
------------------
-
-Digital Signal Processing
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The low-pass filter smooths acceleration data:
-
-.. code-block:: c
-
-   static void apply_lpf(int32_t *buffer, uint32_t len)
-   {
-       for (int i = len - 1; i >= 3; i--) {
-           buffer[i] = buffer[i] + buffer[i-1] +
-                       buffer[i-2] + buffer[i-3];
-           buffer[i] /= 4;  // 4-sample moving average
-       }
-   }
-
-This reduces noise without requiring floating-point operations.
-
-Dynamic Threshold Adaptation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The step detection threshold adapts to walking intensity:
-
-.. code-block:: c
-
-   if (max_peak_val - min_peak_val > sensitivity) {
-       threshold = max_peak_val - min_peak_val;
-       return 1;  // Step detected
-   }
-
-This allows the algorithm to work for both slow walking and running.
+   - The sensitivity threshold is set to 150 (line 81 in main.c)
+   - Adjust this value if too sensitive or not sensitive enough
+   - Higher values = less sensitive (fewer false positives)
+   - Lower values = more sensitive (may detect more false steps)
 
 Conclusion
 ----------
 
-Exercise 4 demonstrates a complete embedded systems application with:
+Exercise 4 demonstrates a FreeRTOS-based pedometer application with:
 
+- Real-time task management using FreeRTOS
 - Multi-sensor integration via CAPI framework
-- Real-time processing with FreeRTOS
-- Wireless connectivity using Cordio BLE stack
-- Power management with MAX20303
-- User interface on OLED display
+- Peak detection algorithm for step counting
+- Visual feedback on OLED display
 - Convenient hardware interfacing with FTHR-PMD-INTZ adapter
+
+Next Steps
+----------
+
+In Exercise 5, you'll extend this application by adding:
+
+- Bluetooth Low Energy connectivity for wireless data transmission
+- Battery monitoring with MAX20303 power management IC
+- GATT services for exposing step count and battery data to mobile devices
+- Python test script for BLE connectivity validation
 
 Additional Resources
 --------------------
 
 - :dokuwiki:`FreeRTOS Integration </resources/no-os/freertos>`
-- :dokuwiki:`Cordio BLE Stack </resources/no-os/cordio>`
 - :adi:`FTHR-PMD-INTZ Adapter Documentation <fthr-pmd-intz>`
-- `Bluetooth Low Energy Specification <https://www.bluetooth.com/specifications/specs/core-specification/>`_
-- `FreeRTOS Documentation <https://www.freertos.org/Documentation/RTOS_book.html>`_
 - `Step Detection Algorithms Paper <https://doi.org/10.1109/JSEN.2014.2360391>`_
+- :dokuwiki:`ADXL355 Driver Documentation </resources/no-os/drivers/accel/adxl355>`
+- :dokuwiki:`SSD1306 Display Driver </resources/no-os/drivers/display/ssd1306>`
+- `FreeRTOS Documentation <https://www.freertos.org/Documentation/RTOS_book.html>`_
