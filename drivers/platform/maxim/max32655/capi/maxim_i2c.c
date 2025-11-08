@@ -124,7 +124,7 @@ static int maxim_capi_i2c_init(struct capi_i2c_controller_handle **handle,
 	}
 
 	/* Set up the handle */
-	i2c_handle->ops = &maxim_capi_i2c_ops;
+	i2c_handle->ops = &maxim_i2c_ops;
 
 	/* Initialize private data */
 	priv->instance = config->identifier;
@@ -426,7 +426,7 @@ static void maxim_capi_i2c_isr(struct capi_i2c_controller_handle *handle)
 /**
  * @brief MAX32655 I2C CAPI operations structure
  */
-const struct capi_i2c_ops maxim_capi_i2c_ops = {
+const struct capi_i2c_ops maxim_i2c_ops = {
 	.init = maxim_capi_i2c_init,
 	.deinit = maxim_capi_i2c_deinit,
 	.transmit = maxim_capi_i2c_transmit,

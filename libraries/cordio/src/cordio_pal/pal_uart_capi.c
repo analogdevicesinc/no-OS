@@ -69,7 +69,7 @@ static const struct capi_uart_config terminal_uart_config = {
 	.clk_freq_hz = 0,  /* Use default */
 	.line_config = &terminal_line_config,
 	.extra = NULL,
-	.ops = &maxim_capi_uart_ops  /* Will be populated by build system */
+	.ops = &maxim_uart_ops  /* Will be populated by build system */
 };
 
 void pal_get_terminal_uart(struct capi_uart_handle **terminal)

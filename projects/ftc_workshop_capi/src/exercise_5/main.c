@@ -22,8 +22,10 @@
 #include "max20303.h"
 #include "i2c_bitbang.h"
 #include "ssd_1306.h"
+#include "cordio_init.h"
 
 #include "platform.h"
+#include "no_os_config.h"
 
 #if defined(CONFIG_CORDIO)
 #include "cordio_init.h"
@@ -45,7 +47,7 @@ static struct capi_i2c_device ssd_1306_i2c_dev;
 static struct capi_gpio_port_config gpio_port0_config = {
 	.identifier = 0,
 	.num_pins = 32,
-	.ops = &maxim_capi_gpio_ops,
+	.ops = &maxim_gpio_ops,
 };
 
 /* SSD1306 OLED Display Setup using CAPI I2C bitbang */
@@ -299,7 +301,7 @@ void bt_task(void *pvParameters)
 	struct capi_spi_config adxl355_spi_config = {
 		.identifier = 0,
 		.clk_freq_hz = 1000000,
-		.ops = &maxim_capi_spi_ops,
+		.ops = &maxim_spi_ops,
 	};
 
 	struct capi_spi_device adxl355_spi_dev = {
@@ -327,11 +329,12 @@ void bt_task(void *pvParameters)
 
 	init_display();
 
-	/* 
+	/*
 	 * Configure the Cordio BLE stack. no-OS doesn't offer an API for controlling
 	 * BLE devices, thus we need to use the Cordio functions directly into the
 	 * application layer.
 	 */
+	ble_set_adv_name(CONFIG_BLE_ADV_NAME);
 	cordio_init();
 
 	/* 
@@ -362,7 +365,7 @@ void bt_task(void *pvParameters)
 		.identifier = 1,
 		.initiator = 1,
 		.clk_freq_hz = 400000,
-		.ops = &maxim_capi_i2c_ops,
+		.ops = &maxim_i2c_ops,
 	};
 
 	ret = capi_i2c_init(&i2c_controller, &i2c_config);

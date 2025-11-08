@@ -116,7 +116,7 @@ struct maxim_spi_pinctrl_config {
 /**
  * @brief MAX32655 SPI CAPI operations structure
  */
-extern const struct capi_spi_ops maxim_capi_spi_ops;
+extern const struct capi_spi_ops maxim_spi_ops;
 
 #ifdef __cplusplus
 }

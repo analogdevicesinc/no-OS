@@ -283,7 +283,7 @@ static int maxim_capi_pinctrl_set_pins(const struct capi_pinctrl_handle *handle,
 /**
  * @brief MAX32655 pinctrl CAPI operations structure
  */
-const struct capi_pinctrl_ops maxim_capi_pinctrl_ops = {
+const struct capi_pinctrl_ops maxim_pinctrl_ops = {
 	.pinctrl_init = maxim_capi_pinctrl_init,
 	.pinctrl_deinit = maxim_capi_pinctrl_deinit,
 	.pinctrl_set_pin = maxim_capi_pinctrl_set_pin,

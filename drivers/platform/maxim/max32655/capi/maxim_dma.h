@@ -102,7 +102,7 @@ static inline uint32_t maxim_dma_get_irq(uint32_t controller_id, uint32_t channe
 /**
  * @brief MAX32655 DMA CAPI operations structure
  */
-extern const struct capi_dma_ops maxim_capi_dma_ops;
+extern const struct capi_dma_ops maxim_dma_ops;
 
 #ifdef __cplusplus
 }

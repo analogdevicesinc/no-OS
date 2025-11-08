@@ -11,6 +11,7 @@
 #include "no_os_alloc.h"
 #include "no_os_delay.h"
 #include "no_os_util.h"
+#include "no_os_init.h"
 
 #include "capi/capi_i2c.h"
 #include "capi/capi_gpio.h"
@@ -32,7 +33,7 @@ static struct capi_i2c_device ssd_1306_i2c_dev;
 static struct capi_gpio_port_config gpio_port0_config = {
 	.identifier = 0,
 	.num_pins = 32,
-	.ops = &maxim_capi_gpio_ops,
+	.ops = &maxim_gpio_ops,
 };
 
 /* SSD1306 OLED Display Setup using CAPI I2C bitbang */
@@ -216,7 +217,7 @@ int main()
 	struct capi_uart_config uart_config = {
 		.identifier = 0,
 		.clk_freq_hz = 115200,
-		.ops = &maxim_capi_uart_ops,
+		.ops = &maxim_uart_ops,
 	};
 
 	no_os_init();
@@ -243,7 +244,7 @@ int main()
 		.identifier = 1,
 		.initiator = 1,
 		.clk_freq_hz = 400000,
-		.ops = &maxim_capi_i2c_ops,
+		.ops = &maxim_i2c_ops,
 	};
 
 	ret = capi_i2c_init(&i2c_controller, &i2c_config);

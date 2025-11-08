@@ -810,7 +810,7 @@ static int maxim_capi_uart_get_flow_control_state(struct capi_uart_handle *handl
 /**
  * @brief MAX32655 UART CAPI operations structure
  */
-const struct capi_uart_ops maxim_capi_uart_ops = {
+const struct capi_uart_ops maxim_uart_ops = {
 	.init = maxim_capi_uart_init,
 	.deinit = maxim_capi_uart_deinit,
 	.get_line_config = maxim_capi_uart_get_line_config,

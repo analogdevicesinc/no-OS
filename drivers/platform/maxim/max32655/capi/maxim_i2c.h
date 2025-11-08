@@ -57,7 +57,7 @@ struct maxim_capi_i2c_handle {
 /**
  * @brief MAX32655 I2C CAPI operations structure
  */
-extern const struct capi_i2c_ops maxim_capi_i2c_ops;
+extern const struct capi_i2c_ops maxim_i2c_ops;
 
 #ifdef __cplusplus
 }

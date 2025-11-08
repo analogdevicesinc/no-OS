@@ -45,7 +45,7 @@ struct maxim_capi_uart_handle {
  * This structure contains function pointers for all UART CAPI operations
  * specific to the MAX32655 platform.
  */
-extern const struct capi_uart_ops maxim_capi_uart_ops;
+extern const struct capi_uart_ops maxim_uart_ops;
 
 #ifdef __cplusplus
 }
