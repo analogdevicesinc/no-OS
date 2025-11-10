@@ -75,16 +75,16 @@
 // Voltage scaling constants
 #define VOLTAGE_TO_MILLIVOLT_SCALE      1000
 #define ADC_OFFSET_VALUE                0.0
-#define FLOAT_PRECISION_DIGITS          7
+#define FLOAT_PRECISION_DIGITS          3
 
 // Frequency range processing constants
-#define FREQ_RANGE_VALUES_PER_RANGE     14    // 14 precision values per frequency range
+#define FREQ_RANGE_VALUES_PER_RANGE     28    // 28 precision values per frequency range
 #define TEMP_COEFFS_PER_RANGE           3    // 3 temperature coefficients per frequency range
 #define MAX_FREQ_RANGE_INDEX            7    // 0-7 for 8 frequency ranges
 #define MIN_FREQ_RANGE_INDEX            0
 
 // Buffer sizes for parsing calibration data
-#define CALIB_VALUES_BUFFER_SIZE        256  // Buffer for 14 float values
+#define CALIB_VALUES_BUFFER_SIZE        256  // Buffer for 28 float values
 #define TEMP_VALUES_BUFFER_SIZE         150  // Buffer for 3 float values
 
 // String parsing constants
@@ -132,6 +132,19 @@ int powrms_set_precision_value_raw(int index, int32_t raw_value);
 int32_t powrms_get_precision_value_raw(int index);
 int powrms_set_precision_array_raw(const int32_t *raw_values, int count);
 int powrms_get_precision_array_raw(int32_t *raw_values, int max_count);
+
+// Reverse precision array functions (float interface - with conversion)
+int powrms_set_precision_value_reverse(int index, float value);
+float powrms_get_precision_value_reverse(int index);
+int powrms_set_precision_array_reverse(const float *values, int count);
+int powrms_get_precision_array_reverse(float *values, int max_count);
+
+// Reverse precision array functions (integer interface - no conversion, for MCU internal use)
+int powrms_set_precision_value_raw_reverse(int index, int32_t raw_value);
+int32_t powrms_get_precision_value_raw_reverse(int index);
+int powrms_set_precision_array_raw_reverse(const int32_t *raw_values,
+		int count);
+int powrms_get_precision_array_raw_reverse(int32_t *raw_values, int max_count);
 
 // Frequency ranges functions
 int powrms_set_frequency_range(int index, uint32_t frequency_MHz);

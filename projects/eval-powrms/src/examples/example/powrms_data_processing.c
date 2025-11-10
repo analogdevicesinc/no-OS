@@ -32,6 +32,7 @@
 *******************************************************************************/
 
 #include "powrms_data_processing.h"
+#include <math.h>
 
 int32_t use_eeprom_calibration_data = 0;
 
@@ -93,11 +94,23 @@ struct powrms_variables input_variables[VARIABLE_NUMBER] = {
 // Storage for the 112 precision values as 32-bit integers
 // Order 10MHz: X1, Y1, X2, Y2, X3, Y3 , X4, Y4, X5, Y5, X6, Y6, X7, Y7, 100MHz:...
 int32_t precision_values[PRECISION_ARRAY_SIZE];
+int32_t precision_values_reverse[PRECISION_ARRAY_SIZE];
 
 // Storage for the 24 temperature correction coefficients as 32-bit integers
 // Order A1, A2, A3 for each frequency range
-int32_t temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
-								   FREQUENCY_RANGE_NR];
+double temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
+								  FREQUENCY_RANGE_NR] = {
+	0.09907037, -0.006107942, -0.0176689,
+	0.5951664, -0.409783, 0.08516236,
+	-0.9938435, 0.6969325, -0.168762,
+	0.08790697, -0.09423475, 0.01784584,
+	1.005991, -0.5792234, 0.08180364,
+	-6.526894, 4.923146, -1.258186,
+	6.637077, -4.713627, 1.078375,
+	-3.673048, 2.75258, -0.7360349,
+};
+
+
 
 // Storage for the temperature compensation value as 32-bit integer
 int32_t temperature_compensation_value;
@@ -171,6 +184,7 @@ void sync_all_digits_from_values(void)
 }
 
 int _calc_interpolating_values(double *x_values, double *y_values,
+			       double *x_values_rev, double *y_values_rev,
 			       uint8_t freq_index, uint32_t local_frequency_MHz, float *position)
 {
 	if (freq_index < FREQUENCY_RANGE_NR - 1) {
@@ -195,6 +209,24 @@ int _calc_interpolating_values(double *x_values, double *y_values,
 						(float)precision_values[PRECISION_POINTS_FREQ_ALL * freq_index + i * 2 + 1]) *
 					       (*position)) /
 				      PRECISION_SCALE_FACTOR;
+			x_values_rev[i] = (double)((float)
+						   precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+											     freq_index + i * 2] +
+						   ((float)precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+											     (freq_index + 1) + i * 2] -
+						    (float)precision_values_reverse[PRECISION_POINTS_FREQ_ALL * freq_index + i * 2])
+						   *
+						   (*position)) /
+					  PRECISION_SCALE_FACTOR;
+			y_values_rev[i] = (double)((float)
+						   precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+											     freq_index + i * 2 + 1] +
+						   ((float)precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+											     (freq_index + 1) + i * 2 +
+											     1] -
+						    (float)precision_values[PRECISION_POINTS_FREQ_ALL * freq_index + i * 2 + 1]) *
+						   (*position)) /
+					  PRECISION_SCALE_FACTOR;
 		}
 		return 0;
 	} else if (freq_index == (FREQUENCY_RANGE_NR - 1)) {
@@ -220,11 +252,30 @@ int _calc_interpolating_values(double *x_values, double *y_values,
 			int32_t curr_y = precision_values[PRECISION_POINTS_FREQ_ALL * curr_range_idx + i
 										    * 2 + 1];
 
+			int32_t prev_x_rev = precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+								       prev_range_idx + i
+								       * 2];
+			int32_t curr_x_rev = precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+								       curr_range_idx + i
+								       * 2];
+			int32_t prev_y_rev = precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+								       prev_range_idx + i
+								       * 2 + 1];
+			int32_t curr_y_rev = precision_values_reverse[PRECISION_POINTS_FREQ_ALL *
+								       curr_range_idx + i
+								       * 2 + 1];
+
 			// Linear extrapolation: value = curr + (curr - prev) * extrap_factor
 			x_values[i] = (double)((float)curr_x + (float)(curr_x - prev_x) *
 					       extrap_factor) / PRECISION_SCALE_FACTOR;
 			y_values[i] = (double)((float)curr_y + (float)(curr_y - prev_y) *
 					       extrap_factor) / PRECISION_SCALE_FACTOR;
+			x_values_rev[i] = (double)((float)curr_x_rev + (float)(curr_x_rev - prev_x_rev)
+						   *
+						   extrap_factor) / PRECISION_SCALE_FACTOR;
+			y_values_rev[i] = (double)((float)curr_y_rev + (float)(curr_y_rev - prev_y_rev)
+						   *
+						   extrap_factor) / PRECISION_SCALE_FACTOR;
 		}
 		return 0;
 	} else
@@ -237,7 +288,7 @@ int _calc_temp_coefficients(float *temp_coeffs, uint8_t freq_index)
 		// Calculate temperature coefficients using floating-point arithmetic
 		for (int i = 0; i < TEMPERATURE_CORRECTION_COEFFS * 2; i++)
 			temp_coeffs[i] = (float)temperature_precision_values[freq_index *
-					 TEMPERATURE_CORRECTION_COEFFS + i] / (float)PRECISION_SCALE_FACTOR;
+					 TEMPERATURE_CORRECTION_COEFFS + i];
 		return 0;
 	} else {
 		return -EINVAL;
@@ -250,10 +301,173 @@ int32_t _cubic_function(float v_tmp, float a1, float a2, float a3)
 			 * PRECISION_SCALE_FACTOR);
 }
 
+double _Lagrange_interpolaiton(double *x_values, double *y_values,
+			       uint8_t points_number, double x_input)
+{
+	double y_output = 0.0;
+	for (int i = 0; i < points_number; i++) {
+		double term = y_values[i];
+		for (int j = 0; j < points_number; j++) {
+			if (j != i) {
+				term *= (x_input - x_values[j]) / (x_values[i] - x_values[j]);
+			}
+		}
+		y_output += term;
+	}
+	return y_output;
+}
+
+// Helper function to compute PCHIP derivatives (monotonicity-preserving)
+static void _pchip_compute_derivatives(double *x_values, double *y_values,
+				       uint8_t points_number, double *derivatives)
+{
+	if (points_number < 2) {
+		return;
+	}
+
+	// Handle special case of only 2 points (linear interpolation)
+	if (points_number == 2) {
+		double slope = (y_values[1] - y_values[0]) / (x_values[1] - x_values[0]);
+		derivatives[0] = slope;
+		derivatives[1] = slope;
+		return;
+	}
+
+	// Calculate segment lengths and slopes
+	double hk[points_number - 1];  // segment lengths
+	double mk[points_number - 1];  // segment slopes
+
+	for (int i = 0; i < points_number - 1; i++) {
+		hk[i] = x_values[i + 1] - x_values[i];
+		mk[i] = (y_values[i + 1] - y_values[i]) / hk[i];
+	}
+
+	// Initialize derivatives array
+	for (int i = 0; i < points_number; i++) {
+		derivatives[i] = 0.0;
+	}
+
+	// Calculate derivatives for internal points using PCHIP algorithm
+	for (int i = 1; i < points_number - 1; i++) {
+		double mk_prev = mk[i - 1];  // slope of previous segment
+		double mk_curr = mk[i];      // slope of current segment
+
+		// Check monotonicity condition:
+		// If signs differ or either slope is zero, set derivative to zero
+		if ((mk_prev > 0.0 && mk_curr < 0.0) ||
+		    (mk_prev < 0.0 && mk_curr > 0.0) ||
+		    mk_prev == 0.0 || mk_curr == 0.0) {
+			derivatives[i] = 0.0;
+		} else {
+			// Use weighted harmonic mean
+			double w1 = 2.0 * hk[i] + hk[i - 1];      // 2*h_k + h_{k-1}
+			double w2 = hk[i] + 2.0 * hk[i - 1];      // h_k + 2*h_{k-1}
+
+			// Weighted harmonic mean: 1/d_k = (w1/m_{k-1} + w2/m_k) / (w1 + w2)
+			double denominator = (w1 / mk_prev + w2 / mk_curr) / (w1 + w2);
+			derivatives[i] = 1.0 / denominator;
+		}
+	}
+
+	// Calculate endpoint derivatives using one-sided three-point estimate
+	// Left endpoint (i=0)
+	double h0 = hk[0];
+	double h1 = hk[1];
+	double m0 = mk[0];
+	double m1 = mk[1];
+
+	double d_left = ((2.0 * h0 + h1) * m0 - h0 * m1) / (h0 + h1);
+
+	// Preserve shape at left endpoint
+	if ((d_left > 0.0 && m0 < 0.0) || (d_left < 0.0 && m0 > 0.0)) {
+		derivatives[0] = 0.0;
+	} else if ((m0 > 0.0 && m1 < 0.0) || (m0 < 0.0 && m1 > 0.0)) {
+		if (fabs(d_left) > 3.0 * fabs(m0)) {
+			derivatives[0] = 3.0 * m0;
+		} else {
+			derivatives[0] = d_left;
+		}
+	} else {
+		derivatives[0] = d_left;
+	}
+
+	// Right endpoint (i=points_number-1)
+	double h_n2 = hk[points_number - 2];
+	double h_n3 = hk[points_number - 3];
+	double m_n2 = mk[points_number - 2];
+	double m_n3 = mk[points_number - 3];
+
+	double d_right = ((2.0 * h_n2 + h_n3) * m_n2 - h_n2 * m_n3) / (h_n2 + h_n3);
+
+	// Preserve shape at right endpoint
+	if ((d_right > 0.0 && m_n2 < 0.0) || (d_right < 0.0 && m_n2 > 0.0)) {
+		derivatives[points_number - 1] = 0.0;
+	} else if ((m_n2 > 0.0 && m_n3 < 0.0) || (m_n2 < 0.0 && m_n3 > 0.0)) {
+		if (fabs(d_right) > 3.0 * fabs(m_n2)) {
+			derivatives[points_number - 1] = 3.0 * m_n2;
+		} else {
+			derivatives[points_number - 1] = d_right;
+		}
+	} else {
+		derivatives[points_number - 1] = d_right;
+	}
+}
+
+static double _piecewise_cubic_Hermite_interpolation(double *x_values,
+		double *y_values,
+		uint8_t points_number, double x_input)
+{
+	// Compute PCHIP derivatives
+	double derivatives[points_number];
+	_pchip_compute_derivatives(x_values, y_values, points_number, derivatives);
+
+	// Find the interval where x_input lies
+	int interval = -1;
+	for (int i = 0; i < points_number - 1; i++) {
+		if (x_input >= x_values[i] && x_input <= x_values[i + 1]) {
+			interval = i;
+			break;
+		}
+	}
+
+	// If x_input is outside the range, return the closest endpoint value
+	if (interval == -1) {
+		if (x_input < x_values[0]) {
+			return y_values[0];
+		} else {
+			return y_values[points_number - 1];
+		}
+	}
+
+	// Get interval data
+	double x0 = x_values[interval];
+	double x1 = x_values[interval + 1];
+	double y0 = y_values[interval];
+	double y1 = y_values[interval + 1];
+	double d0 = derivatives[interval];
+	double d1 = derivatives[interval + 1];
+
+	// Normalize the input to [0,1] within the interval
+	double h = x1 - x0;
+	double t = (x_input - x0) / h;
+
+	// Calculate Hermite basis functions
+	double h00 = 2.0 * t * t * t - 3.0 * t * t + 1.0; // (1 + 2t)(1-t)²
+	double h10 = t * t * t - 2.0 * t * t + t;  // t(1-t)²
+	double h01 = -2.0 * t * t * t + 3.0 * t * t; // t²(3-2t)
+	double h11 = t * t * t - t * t;            // t²(t-1)
+
+	// Calculate the interpolated value using cubic Hermite interpolation
+	// Note: derivatives need to be scaled by interval width for proper Hermite interpolation
+	double y_output = h00 * y0 + h10 * (d0 * h) + h01 * y1 + h11 * (d1 * h);
+
+	return y_output;
+}
+
 int calculate_power()
 {
-	double v_temp_calib = (double)temperature_compensation_value /
-			      (double)PRECISION_SCALE_FACTOR;
+	double temp_compensation = (double)temperature_compensation_value /
+				   (double)PRECISION_SCALE_FACTOR;
 	double VIN_TEMP_float = adc_data_input.adc_vin2_voltage;
 	double VIN0_float = adc_data_input.adc_vin0_voltage;
 	double VIN1_float = adc_data_input.adc_vin1_voltage;
@@ -263,9 +477,14 @@ int calculate_power()
 	static float
 	temp_corr_coeffs[6]; // Both bottom and top limit coeffs, A1, A2, A3, B1, B2, B3
 	static double
+	x_values[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, Y axis points, output power
+	static double
 	y_values[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, X axis points, input voltage
 	static double
-	x_values[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, Y axis points, output power
+	x_values_rev[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, Y axis points, output power
+	static double
+	y_values_rev[PRECISION_POINTS_FREQ];  // Values used for POWER calculations, X axis points, input voltage
+
 	static uint8_t freq_index; // Cached frequency index
 	int ret;
 
@@ -287,7 +506,8 @@ int calculate_power()
 			freq_index++;
 
 		// Update interpolating reference points
-		ret = _calc_interpolating_values(x_values, y_values, freq_index,
+		ret = _calc_interpolating_values(x_values, y_values, x_values_rev, y_values_rev,
+						 freq_index,
 						 local_frequency_MHz, &position_between_freq_ranges);
 		if (ret) {
 			return -EINVAL;
@@ -302,17 +522,17 @@ int calculate_power()
 
 	// Correct V_IN values bottom limit
 	VIN0 = VIN0 - _cubic_function(VIN_TEMP_float, temp_corr_coeffs[0],
-				      temp_corr_coeffs[1], temp_corr_coeffs[2]) + _cubic_function(v_temp_calib,
+				      temp_corr_coeffs[1], temp_corr_coeffs[2]) + _cubic_function(temp_compensation,
 						      temp_corr_coeffs[0], temp_corr_coeffs[1], temp_corr_coeffs[2]);
 	VIN1 = VIN1 - _cubic_function(VIN_TEMP_float, temp_corr_coeffs[0],
-				      temp_corr_coeffs[1], temp_corr_coeffs[2]) + _cubic_function(v_temp_calib,
+				      temp_corr_coeffs[1], temp_corr_coeffs[2]) + _cubic_function(temp_compensation,
 						      temp_corr_coeffs[0], temp_corr_coeffs[1], temp_corr_coeffs[2]);
 
 	double VIN0_next = VIN0 - _cubic_function(VIN_TEMP_float, temp_corr_coeffs[3],
-			   temp_corr_coeffs[4], temp_corr_coeffs[5]) + _cubic_function(v_temp_calib,
+			   temp_corr_coeffs[4], temp_corr_coeffs[5]) + _cubic_function(temp_compensation,
 					   temp_corr_coeffs[3], temp_corr_coeffs[4], temp_corr_coeffs[5]);
 	double VIN1_next = VIN1 - _cubic_function(VIN_TEMP_float, temp_corr_coeffs[3],
-			   temp_corr_coeffs[4], temp_corr_coeffs[5]) + _cubic_function(v_temp_calib,
+			   temp_corr_coeffs[4], temp_corr_coeffs[5]) + _cubic_function(temp_compensation,
 					   temp_corr_coeffs[3], temp_corr_coeffs[4], temp_corr_coeffs[5]);
 
 	// Correct V_IN values top limit
@@ -328,32 +548,14 @@ int calculate_power()
 	adc_data_input.adc_vin0_voltage_corrected = VIN0_float;
 	adc_data_input.adc_vin1_voltage_corrected = VIN1_float;
 
-	// 7 point Lagrange interpolation
-	double y_0 = 0.0;
-	for (int i = 0; i < PRECISION_POINTS_FREQ; i++) {
-		double term = y_values[i];
-		for (int j = 0; j < PRECISION_POINTS_FREQ; j++) {
-			if (j != i) {
-				term *= (VIN0_float - x_values[j]) / (x_values[i] - x_values[j]);
-			}
-		}
-		y_0 += term;
-	}
-	double y_1 = 0.0;
-	for (int i = 0; i < PRECISION_POINTS_FREQ; i++) {
-		double term = y_values[i];
-		for (int j = 0; j < PRECISION_POINTS_FREQ; j++) {
-			if (j != i) {
-				term *= (VIN1_float - x_values[j]) / (x_values[i] - x_values[j]);
-			}
-		}
-		y_1 += term;
-	}
-
 	// Convert results back to volts using consistent scale factor
-	// precision_values are stored with 10^7 scale factor (PRECISION_SCALE_FACTOR)
-	adc_data_input.adc_p_fwd = y_0;
-	adc_data_input.adc_p_rev = y_1;
+	// precision_values are stored with 10^3 scale factor (PRECISION_SCALE_FACTOR)
+	adc_data_input.adc_p_fwd = _piecewise_cubic_Hermite_interpolation(x_values,
+				   y_values,
+				   PRECISION_POINTS_FREQ, VIN0_float);
+	adc_data_input.adc_p_rev = _piecewise_cubic_Hermite_interpolation(x_values_rev,
+				   y_values_rev,
+				   PRECISION_POINTS_FREQ, VIN1_float);
 
 	return 0;
 }

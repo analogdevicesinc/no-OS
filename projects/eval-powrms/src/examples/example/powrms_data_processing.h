@@ -45,15 +45,15 @@
 
 #define VARIABLE_NAMES  		{"Fq:", "In:", "Out:"}
 
-#define PRECISION_SCALE_FACTOR      10000000  // 10^7 for 7-digit precision (integer)
-#define PRECISION_RESOLUTION        (1.0 / PRECISION_SCALE_FACTOR)  // 10^-7 precision when converting to float
+#define PRECISION_SCALE_FACTOR      1000  // 10^3 for 3-digit precision (integer)
+#define PRECISION_RESOLUTION        (1.0 / PRECISION_SCALE_FACTOR)  // 10^-3 precision when converting to float
 
 
 // Precision array definitions
 #define FREQUENCY_RANGE_NR              8  // Number of frequency ranges for callibration
-#define PRECISION_ARRAY_SIZE            112
-#define PRECISION_POINTS_FREQ			7
-#define PRECISION_POINTS_FREQ_ALL		14
+#define PRECISION_ARRAY_SIZE            224
+#define PRECISION_POINTS_FREQ			14
+#define PRECISION_POINTS_FREQ_ALL		(2 * PRECISION_POINTS_FREQ)
 #define TEMPERATURE_CORRECTION_COEFFS   3
 
 
@@ -113,8 +113,10 @@ extern int32_t use_eeprom_calibration_data;
 
 // Storage for the 48 precision values as 32-bit integers
 extern int32_t precision_values[PRECISION_ARRAY_SIZE];
+// Storage for the 48 reverse precision values as 32-bit integers
+extern int32_t precision_values_reverse[PRECISION_ARRAY_SIZE];
 // External declaration of the temperature precision values array
-extern int32_t temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
+extern double temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
 					      FREQUENCY_RANGE_NR];
 // External declaration of the temperature compensation value
 extern int32_t temperature_compensation_value;

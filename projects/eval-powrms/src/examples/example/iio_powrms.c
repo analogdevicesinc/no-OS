@@ -94,20 +94,24 @@ static int read_calib_freq_range(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
 static int write_calib_freq_range(void *device, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel, intptr_t priv);
+static int read_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int write_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
 static int read_temp_freq_range(void *device, char *buf, uint32_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
 static int write_temp_freq_range(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv);
-static int read_dev_mode_overwrite_def_calib_values(void *device, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
-static int write_dev_mode_overwrite_def_calib_values(void *device, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv);
 static int read_temperature_compensation_value(void *device, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 static int write_temperature_compensation_value(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int read_dev_mode_overwrite_def_calib_values(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int write_dev_mode_overwrite_def_calib_values(void *device, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
 
@@ -154,100 +158,100 @@ struct iio_attribute powrms_voltage_channel_attributes[] = {
 struct iio_attribute powrms_precision_attributes[] = {
 	// New per-frequency range attributes for correction values
 	{
-		.name = "calib_10MHz_values",
+		.name = "calib_10MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX,  // frequency index 0
 	},
 	{
-		.name = "calib_100MHz_values",
+		.name = "calib_100MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 1,  // frequency index 1
 	},
 	{
-		.name = "calib_1000MHz_values",
+		.name = "calib_1000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 2,  // frequency index 2
 	},
 	{
-		.name = "calib_2000MHz_values",
+		.name = "calib_2000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 3,  // frequency index 3
 	},
 	{
-		.name = "calib_3000MHz_values",
+		.name = "calib_3000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 4,  // frequency index 4
 	},
 	{
-		.name = "calib_4000MHz_values",
+		.name = "calib_4000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 5,  // frequency index 5
 	},
 	{
-		.name = "calib_5000MHz_values",
+		.name = "calib_5000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MIN_FREQ_RANGE_INDEX + 6,  // frequency index 6
 	},
 	{
-		.name = "calib_6000MHz_values",
+		.name = "calib_6000MHz",
 		.show = read_calib_freq_range,
 		.store = write_calib_freq_range,
 		.priv = MAX_FREQ_RANGE_INDEX,  // frequency index 7
 	},
-	// New per-frequency range attributes for temperature calibration values
+	// New per-frequency range attributes for reverse correction values
 	{
-		.name = "calib_temp_10MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_10MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX,  // frequency index 0
 	},
 	{
-		.name = "calib_temp_100MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_100MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 1,  // frequency index 1
 	},
 	{
-		.name = "calib_temp_1000MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_1000MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 2,  // frequency index 2
 	},
 	{
-		.name = "calib_temp_2000MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_2000MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 3,  // frequency index 3
 	},
 	{
-		.name = "calib_temp_3000MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_3000MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 4,  // frequency index 4
 	},
 	{
-		.name = "calib_temp_4000MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_4000MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 5,  // frequency index 5
 	},
 	{
-		.name = "calib_temp_5000MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_5000MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MIN_FREQ_RANGE_INDEX + 6,  // frequency index 6
 	},
 	{
-		.name = "calib_temp_6000MHz_values",
-		.show = read_temp_freq_range,
-		.store = write_temp_freq_range,
+		.name = "calib_6000MHz_reverse",
+		.show = read_calib_freq_range_reverse,
+		.store = write_calib_freq_range_reverse,
 		.priv = MAX_FREQ_RANGE_INDEX,  // frequency index 7
 	},
 	{
@@ -257,7 +261,7 @@ struct iio_attribute powrms_precision_attributes[] = {
 		.priv = IIO_ATTR_SCALE,
 	},
 	{
-		.name = "dev_mode_overwrite_def_calib_values",
+		.name = "dev_mode_overwrite_def_calib",
 		.show = read_dev_mode_overwrite_def_calib_values,
 		.store = write_dev_mode_overwrite_def_calib_values,
 		.priv = IIO_ATTR_SCALE,
@@ -396,7 +400,7 @@ static int read_ch_attr(void *device, char *buf, uint32_t len,
 		// Scale factor for voltage channels (mV to V conversion)
 		// For ADC readings, typically scale = (vref / (2^resolution)) * gain
 		// Here we assume 1:1 scale (voltage values are already in volts)
-		return snprintf(buf, len, "%.7f", (1.0 / ((double)(BUFFER_VAL_PRECISSION))));
+		return snprintf(buf, len, "%.3f", (1.0 / ((double)(BUFFER_VAL_PRECISSION))));
 
 	case IIO_ATTR_OFFSET: // offset
 		// Offset for voltage channels (typically 0 for unipolar ADCs)
@@ -520,6 +524,177 @@ static int write_precision_raw(void *device, char *buf, uint32_t len,
 	return -EINVAL;
 }
 
+/**
+ * @brief Read voltage temperature compensation value from EEPROM
+ *
+ * This function reads the voltage temperature compensation value using single-byte reads to avoid
+ * I2C bus blocking issues that can occur with large transfers. The int32_t value is read byte by byte
+ * and reconstructed in little-endian format.
+ */
+int powrms_eeprom_read_v_temp_comp_val(int32_t *value)
+{
+	int ret;
+	uint16_t base_address =
+		MEM_V_TEMP_COMP_VAL_POZ; // Address for voltage temperature compensation value
+	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
+
+	if (!m24512_desc) {
+		return -ENODEV; // EEPROM not initialized
+	}
+
+	if (!value) {
+		return -EINVAL; // Invalid parameter
+	}
+
+	// Read 4 bytes for the int32_t value
+	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+		ret = no_os_eeprom_read(m24512_desc, base_address + byte_idx,
+					&byte_buffer[byte_idx], 1);
+		if (ret) {
+			return ret; // Read failed
+		}
+
+		// Small delay between byte reads to prevent I2C bus saturation
+		no_os_udelay(50); // 50 microseconds delay
+	}
+
+	// Reconstruct int32_t from bytes (little-endian format)
+	*value = (int32_t)((uint32_t)byte_buffer[0] |
+			   ((uint32_t)byte_buffer[1] << 8) |
+			   ((uint32_t)byte_buffer[2] << 16) |
+			   ((uint32_t)byte_buffer[3] << 24));
+
+	return 0; // Success
+}
+
+/**
+ * @brief Read default voltage temperature compensation value from EEPROM
+ *
+ * This function reads the default voltage temperature compensation value using single-byte reads to avoid
+ * I2C bus blocking issues that can occur with large transfers. The int32_t value is read byte by byte
+ * and reconstructed in little-endian format.
+ */
+int powrms_eeprom_read_def_v_temp_comp_val(int32_t *value)
+{
+	int ret;
+	uint16_t base_address =
+		MEM_DEF_V_TEMP_COMP_VAL_POZ; // Address for default voltage temperature compensation value
+	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
+
+	if (!m24512_desc) {
+		return -ENODEV; // EEPROM not initialized
+	}
+
+	if (!value) {
+		return -EINVAL; // Invalid parameter
+	}
+
+	// Read 4 bytes for the int32_t value
+	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+		ret = no_os_eeprom_read(m24512_desc, base_address + byte_idx,
+					&byte_buffer[byte_idx], 1);
+		if (ret) {
+			return ret; // Read failed
+		}
+
+		// Small delay between byte reads to prevent I2C bus saturation
+		no_os_udelay(50); // 50 microseconds delay
+	}
+
+	// Reconstruct int32_t from bytes (little-endian format)
+	*value = (int32_t)((uint32_t)byte_buffer[0] |
+			   ((uint32_t)byte_buffer[1] << 8) |
+			   ((uint32_t)byte_buffer[2] << 16) |
+			   ((uint32_t)byte_buffer[3] << 24));
+
+	return 0; // Success
+}
+
+/**
+ * @brief Write voltage temperature compensation value to EEPROM
+ *
+ * This function writes the voltage temperature compensation value using single-byte writes to avoid
+ * I2C bus blocking issues that can occur with large transfers. The int32_t value is broken down
+ * into bytes and written individually in little-endian format.
+ */
+int powrms_eeprom_write_v_temp_comp_val(int32_t value)
+{
+	int ret;
+	uint16_t base_address =
+		MEM_V_TEMP_COMP_VAL_POZ; // Address for voltage temperature compensation value
+	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	// Convert int32_t to bytes (little-endian format)
+	byte_buffer[0] = (uint8_t)(value & 0xFF);
+	byte_buffer[1] = (uint8_t)((value >> 8) & 0xFF);
+	byte_buffer[2] = (uint8_t)((value >> 16) & 0xFF);
+	byte_buffer[3] = (uint8_t)((value >> 24) & 0xFF);
+
+	// Write 4 bytes for the int32_t value
+	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+		ret = no_os_eeprom_write(m24512_desc, base_address + byte_idx,
+					 &byte_buffer[byte_idx], 1);
+		if (ret) {
+			return ret; // Write failed
+		}
+
+		// Small delay between byte writes to prevent I2C bus saturation
+		no_os_udelay(50); // 50 microseconds delay
+	}
+
+	// Optimized delay for M24512 - typical write cycle is 2-3ms
+	no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
+
+	return 0; // Success
+}
+
+/**
+ * @brief Write default voltage temperature compensation value to EEPROM
+ *
+ * This function writes the default voltage temperature compensation value using single-byte writes to avoid
+ * I2C bus blocking issues that can occur with large transfers. The int32_t value is broken down
+ * into bytes and written individually in little-endian format.
+ */
+int powrms_eeprom_write_def_v_temp_comp_val(int32_t value)
+{
+	int ret;
+	uint16_t base_address =
+		MEM_DEF_V_TEMP_COMP_VAL_POZ; // Address for default voltage temperature compensation value
+	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	// Convert int32_t to bytes (little-endian format)
+	byte_buffer[0] = (uint8_t)(value & 0xFF);
+	byte_buffer[1] = (uint8_t)((value >> 8) & 0xFF);
+	byte_buffer[2] = (uint8_t)((value >> 16) & 0xFF);
+	byte_buffer[3] = (uint8_t)((value >> 24) & 0xFF);
+
+	// Write 4 bytes for the int32_t value
+	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+		ret = no_os_eeprom_write(m24512_desc, base_address + byte_idx,
+					 &byte_buffer[byte_idx], 1);
+		if (ret) {
+			return ret; // Write failed
+		}
+
+		// Small delay between byte writes to prevent I2C bus saturation
+		no_os_udelay(50); // 50 microseconds delay
+	}
+
+	// Optimized delay for M24512 - typical write cycle is 2-3ms
+	no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
+
+	return 0; // Success
+}
+
+
 static int read_calib_freq_range(void *device, char *buf, uint32_t len,
 				 const struct iio_ch_info *channel, intptr_t priv)
 {
@@ -534,7 +709,7 @@ static int read_calib_freq_range(void *device, char *buf, uint32_t len,
 	     && remaining > MIN_REMAINING_BUFFER_SIZE; i++) {
 		float float_value = (float)precision_values[start_idx + i] *
 				    PRECISION_RESOLUTION;
-		int bytes = snprintf(buf + written, remaining, "%.7f", float_value);
+		int bytes = snprintf(buf + written, remaining, "%.3f", float_value);
 
 		if (bytes < 0 || bytes >= remaining)
 			break;
@@ -600,21 +775,21 @@ static int write_calib_freq_range(void *device, char *buf, uint32_t len,
 	return len;
 }
 
-static int read_temp_freq_range(void *device, char *buf, uint32_t len,
-				const struct iio_ch_info *channel, intptr_t priv)
+static int read_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int freq_index = (int)priv;  // frequency range index (0-7)
 	int written = 0;
 	int remaining = len;
 	int start_idx = freq_index *
-			TEMP_COEFFS_PER_RANGE;  // Starting index for this frequency range (3 temp coeffs per range)
+			FREQ_RANGE_VALUES_PER_RANGE;  // Starting index for this frequency range
 
-	// Write 3 temperature values for this frequency range as comma-separated list
-	for (int i = 0; i < TEMP_COEFFS_PER_RANGE
+	// Write 30 values for this frequency range as comma-separated list
+	for (int i = 0; i < FREQ_RANGE_VALUES_PER_RANGE
 	     && remaining > MIN_REMAINING_BUFFER_SIZE; i++) {
-		float float_value = (float)temperature_precision_values[start_idx + i] *
+		float float_value = (float)precision_values_reverse[start_idx + i] *
 				    PRECISION_RESOLUTION;
-		int bytes = snprintf(buf + written, remaining, "%.7f", float_value);
+		int bytes = snprintf(buf + written, remaining, "%.3f", float_value);
 
 		if (bytes < 0 || bytes >= remaining)
 			break;
@@ -623,7 +798,7 @@ static int read_temp_freq_range(void *device, char *buf, uint32_t len,
 		remaining -= bytes;
 
 		// Add comma separator except for last element
-		if (i < TEMP_COEFFS_PER_RANGE - 1 && remaining > MIN_COMMA_BUFFER_SIZE) {
+		if (i < FREQ_RANGE_VALUES_PER_RANGE - 1 && remaining > MIN_COMMA_BUFFER_SIZE) {
 			buf[written++] = ',';
 			remaining--;
 		}
@@ -632,18 +807,18 @@ static int read_temp_freq_range(void *device, char *buf, uint32_t len,
 	return written;
 }
 
-static int write_temp_freq_range(void *device, char *buf, uint32_t len,
-				 const struct iio_ch_info *channel, intptr_t priv)
+static int write_calib_freq_range_reverse(void *device, char *buf, uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
 {
 	int freq_index = (int)priv;  // frequency range index (0-7)
 	char *token;
 	char *saveptr;
-	char buf_copy[TEMP_VALUES_BUFFER_SIZE];  // Buffer for 3 values
+	char buf_copy[CALIB_VALUES_BUFFER_SIZE];  // Buffer for 14 values
 	int index = 0;
-	int start_idx = freq_index * TEMP_COEFFS_PER_RANGE;
+	int start_idx = freq_index * FREQ_RANGE_VALUES_PER_RANGE;
 	int ret;
 
-	if (len >= TEMP_VALUES_BUFFER_SIZE) {
+	if (len >= CALIB_VALUES_BUFFER_SIZE) {
 		return -EINVAL;
 	}
 
@@ -653,12 +828,12 @@ static int write_temp_freq_range(void *device, char *buf, uint32_t len,
 
 	// Parse comma-separated values
 	token = strtok_r(buf_copy, ",", &saveptr);
-	while (token != NULL && index < TEMP_COEFFS_PER_RANGE) {
+	while (token != NULL && index < FREQ_RANGE_VALUES_PER_RANGE) {
 		float float_value;
 		if (sscanf(token, "%f", &float_value) == 1) {
 			// Convert float to integer and store
-			temperature_precision_values[start_idx + index] = (int32_t)(
-						float_value * PRECISION_SCALE_FACTOR);
+			precision_values_reverse[start_idx + index] = (int32_t)(float_value *
+					PRECISION_SCALE_FACTOR);
 			index++;
 		} else {
 			return -EINVAL;
@@ -666,12 +841,12 @@ static int write_temp_freq_range(void *device, char *buf, uint32_t len,
 		token = strtok_r(NULL, ",", &saveptr);
 	}
 
-	if (index != TEMP_COEFFS_PER_RANGE) {
-		return -EINVAL;  // Expected exactly 3 values
+	if (index != FREQ_RANGE_VALUES_PER_RANGE) {
+		return -EINVAL;  // Expected exactly 14 values
 	}
 
 	// Save to EEPROM (write the entire array since EEPROM functions work with full array)
-	ret = powrms_eeprom_write_temp_corr_array(temperature_precision_values);
+	ret = powrms_eeprom_write_precision_array_reverse(precision_values_reverse);
 	if (ret != IIO_SUCCESS) {
 		// EEPROM write failed - values are still updated in RAM, so continue
 		// This allows the system to function even without EEPROM persistence
@@ -679,6 +854,96 @@ static int write_temp_freq_range(void *device, char *buf, uint32_t len,
 
 	return len;
 }
+
+
+// Temperature compensation value utility functions for external access
+int powrms_set_temperature_compensation_value(float value)
+{
+	// Convert float to integer for internal storage
+	temperature_compensation_value = (int32_t)(value * PRECISION_SCALE_FACTOR);
+	return 0;
+}
+
+float powrms_get_temperature_compensation_value(void)
+{
+	// Convert integer to float for external use
+	return (float)temperature_compensation_value * PRECISION_RESOLUTION;
+}
+
+int powrms_set_temperature_compensation_value_raw(int32_t raw_value)
+{
+	temperature_compensation_value = raw_value;
+	return 0;
+}
+
+int32_t powrms_get_temperature_compensation_value_raw(void)
+{
+	return temperature_compensation_value;
+}
+
+/**
+ * @brief Read temperature compensation value attribute
+ *
+ * This function reads the current temperature compensation value and returns it as a float.
+ * The value is converted from the internal int32_t representation using the precision scale factor.
+ *
+ * @param device - IIO device instance (unused)
+ * @param buf - Buffer to store the attribute value
+ * @param len - Buffer length
+ * @param channel - Channel information (unused)
+ * @param priv - Private data (unused)
+ * @return Number of bytes written to buffer
+ */
+static int read_temperature_compensation_value(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	// Convert from internal int32_t representation to float
+	float float_value = (float)temperature_compensation_value *
+			    PRECISION_RESOLUTION;
+	return snprintf(buf, len, "%.3f", float_value);
+}
+
+/**
+ * @brief Write temperature compensation value attribute
+ *
+ * This function parses a float value from the input buffer, converts it to the internal
+ * int32_t representation, and stores it in both RAM and EEPROM. It updates both the
+ * user-configurable position and can optionally update the default position depending
+ * on the current calibration mode.
+ *
+ * @param device - IIO device instance (unused)
+ * @param buf - Buffer containing the value to write
+ * @param len - Buffer length
+ * @param channel - Channel information (unused)
+ * @param priv - Private data (unused)
+ * @return Number of bytes processed on success, negative error code on failure
+ */
+static int write_temperature_compensation_value(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	float float_value;
+	int ret;
+
+	// Parse the input value
+	if (sscanf(buf, "%f", &float_value) == 1) {
+		// Convert float to integer for internal storage
+		temperature_compensation_value = (int32_t)(float_value *
+						 PRECISION_SCALE_FACTOR);
+
+		// Write to EEPROM at user configurable position
+		ret = powrms_eeprom_write_v_temp_comp_val(temperature_compensation_value);
+		if (ret != IIO_SUCCESS) {
+			// EEPROM write failed - values are still updated in RAM, so continue
+			// This allows the system to function even without EEPROM persistence
+		}
+
+		return len;
+	}
+	return -EINVAL;  // Invalid input format
+}
+
 
 int powrms_buffers_init(void)
 {
@@ -864,6 +1129,90 @@ int powrms_get_precision_array_raw(int32_t *raw_values, int max_count)
 	return count;
 }
 
+// Reverse precision array utility functions for external access
+int powrms_set_precision_value_reverse(int index, float value)
+{
+	if (index < 0 || index >= PRECISION_ARRAY_SIZE)
+		return -EINVAL;
+	// Convert float to integer for internal storage
+	precision_values_reverse[index] = (int32_t)(value * PRECISION_SCALE_FACTOR);
+	return 0;
+}
+
+float powrms_get_precision_value_reverse(int index)
+{
+	if (index < 0 || index >= PRECISION_ARRAY_SIZE)
+		return 0.0f;
+	// Convert integer to float for external use
+	return (float)precision_values_reverse[index] * PRECISION_RESOLUTION;
+}
+
+int powrms_set_precision_array_reverse(const float *values, int count)
+{
+	if (!values || count > PRECISION_ARRAY_SIZE)
+		return -EINVAL;
+
+	for (int i = 0; i < count; i++) {
+		// Convert float to integer for internal storage
+		precision_values_reverse[i] = (int32_t)(values[i] * PRECISION_SCALE_FACTOR);
+	}
+	return 0;
+}
+
+int powrms_get_precision_array_reverse(float *values, int max_count)
+{
+	if (!values)
+		return -EINVAL;
+
+	int count = (max_count < PRECISION_ARRAY_SIZE) ? max_count :
+		    PRECISION_ARRAY_SIZE;
+	for (int i = 0; i < count; i++) {
+		// Convert integer to float for external use
+		values[i] = (float)precision_values_reverse[i] * PRECISION_RESOLUTION;
+	}
+	return count;
+}
+
+// Direct integer access functions for MCU internal use (no conversion overhead) - reverse
+int powrms_set_precision_value_raw_reverse(int index, int32_t raw_value)
+{
+	if (index < 0 || index >= PRECISION_ARRAY_SIZE)
+		return -EINVAL;
+	precision_values_reverse[index] = raw_value;
+	return 0;
+}
+
+int32_t powrms_get_precision_value_raw_reverse(int index)
+{
+	if (index < 0 || index >= PRECISION_ARRAY_SIZE)
+		return 0;
+	return precision_values_reverse[index];
+}
+
+int powrms_set_precision_array_raw_reverse(const int32_t *raw_values, int count)
+{
+	if (!raw_values || count > PRECISION_ARRAY_SIZE)
+		return -EINVAL;
+
+	for (int i = 0; i < count; i++) {
+		precision_values_reverse[i] = raw_values[i];
+	}
+	return 0;
+}
+
+int powrms_get_precision_array_raw_reverse(int32_t *raw_values, int max_count)
+{
+	if (!raw_values)
+		return -EINVAL;
+
+	int count = (max_count < PRECISION_ARRAY_SIZE) ? max_count :
+		    PRECISION_ARRAY_SIZE;
+	for (int i = 0; i < count; i++) {
+		raw_values[i] = precision_values_reverse[i];
+	}
+	return count;
+}
+
 // Frequency ranges utility functions for external access
 int powrms_set_frequency_range(int index, uint32_t frequency_MHz)
 {
@@ -901,94 +1250,6 @@ int powrms_get_frequency_ranges(uint32_t *frequencies, int max_count)
 		frequencies[i] = frequency_MHz_ranges[i];
 	}
 	return count;
-}
-
-// Temperature compensation value utility functions for external access
-int powrms_set_temperature_compensation_value(float value)
-{
-	// Convert float to integer for internal storage
-	temperature_compensation_value = (int32_t)(value * PRECISION_SCALE_FACTOR);
-	return 0;
-}
-
-float powrms_get_temperature_compensation_value(void)
-{
-	// Convert integer to float for external use
-	return (float)temperature_compensation_value * PRECISION_RESOLUTION;
-}
-
-int powrms_set_temperature_compensation_value_raw(int32_t raw_value)
-{
-	temperature_compensation_value = raw_value;
-	return 0;
-}
-
-int32_t powrms_get_temperature_compensation_value_raw(void)
-{
-	return temperature_compensation_value;
-}
-
-/**
- * @brief Read temperature compensation value attribute
- *
- * This function reads the current temperature compensation value and returns it as a float.
- * The value is converted from the internal int32_t representation using the precision scale factor.
- *
- * @param device - IIO device instance (unused)
- * @param buf - Buffer to store the attribute value
- * @param len - Buffer length
- * @param channel - Channel information (unused)
- * @param priv - Private data (unused)
- * @return Number of bytes written to buffer
- */
-static int read_temperature_compensation_value(void *device, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	// Convert from internal int32_t representation to float
-	float float_value = (float)temperature_compensation_value *
-			    PRECISION_RESOLUTION;
-	return snprintf(buf, len, "%.7f", float_value);
-}
-
-/**
- * @brief Write temperature compensation value attribute
- *
- * This function parses a float value from the input buffer, converts it to the internal
- * int32_t representation, and stores it in both RAM and EEPROM. It updates both the
- * user-configurable position and can optionally update the default position depending
- * on the current calibration mode.
- *
- * @param device - IIO device instance (unused)
- * @param buf - Buffer containing the value to write
- * @param len - Buffer length
- * @param channel - Channel information (unused)
- * @param priv - Private data (unused)
- * @return Number of bytes processed on success, negative error code on failure
- */
-static int write_temperature_compensation_value(void *device, char *buf,
-		uint32_t len,
-		const struct iio_ch_info *channel, intptr_t priv)
-{
-	float float_value;
-	int ret;
-
-	// Parse the input value
-	if (sscanf(buf, "%f", &float_value) == 1) {
-		// Convert float to integer for internal storage
-		temperature_compensation_value = (int32_t)(float_value *
-						 PRECISION_SCALE_FACTOR);
-
-		// Write to EEPROM at user configurable position
-		ret = powrms_eeprom_write_v_temp_comp_val(temperature_compensation_value);
-		if (ret != IIO_SUCCESS) {
-			// EEPROM write failed - values are still updated in RAM, so continue
-			// This allows the system to function even without EEPROM persistence
-		}
-
-		return len;
-	}
-	return -EINVAL;  // Invalid input format
 }
 
 /**
@@ -1040,15 +1301,18 @@ static int write_dev_mode_overwrite_def_calib_values(void *device, char *buf,
 			if (ret != IIO_SUCCESS) {
 				return len;
 			}
-			ret = powrms_eeprom_write_def_temp_corr_array(temperature_precision_values);
+			powrms_watchdog_reset();
+			ret = powrms_eeprom_write_def_precision_array_reverse(precision_values_reverse);
 			if (ret != IIO_SUCCESS) {
 				return len;
 			}
-			// Save current temperature compensation value to default position in EEPROM
+			powrms_watchdog_reset();
 			ret = powrms_eeprom_write_def_v_temp_comp_val(temperature_compensation_value);
 			if (ret != IIO_SUCCESS) {
 				return len;
 			}
+			// All EEPROM writes successful
+			return len;
 		} else {
 			// For any other value (including 0), just acknowledge without action
 			return len;

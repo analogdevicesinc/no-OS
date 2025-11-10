@@ -57,6 +57,10 @@
         - Stored in little-endian format
     0x0238 - 0x023B: Default factory voltage temperature compensation value (int32_t, 4 bytes)
         - Stored in little-endian format
+    0x023C - 0x03FB: Reverse precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
+        - Stored in little-endian format
+    0x03FC - 0x05BB: Default factory reverse precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
+        - Stored in little-endian format
 */
 
 #define MEM_USE_DEF_CALIB_DATA_POZ      0x0002
@@ -68,7 +72,7 @@
 // User configurable parameters in EEPROM
 
 #define MEM_PRECISION_ARRAY_POZ         (MEM_TEMP_COMP_DATA_POZ + MEM_TEMP_COMP_DATA_LEN)
-#define MEM_PRECISION_ARRAY_SIZE        448
+#define MEM_PRECISION_ARRAY_SIZE        960
 
 #define MEM_TEMP_COMP_ARRAY_POZ         (MEM_PRECISION_ARRAY_POZ + MEM_PRECISION_ARRAY_SIZE)
 #define MEM_TEMP_COMP_ARRAY_SIZE        96
@@ -79,13 +83,23 @@
 // Default values in EEPROM
 
 #define MEM_DEF_PRECISION_ARRAY_POZ     (MEM_V_TEMP_COMP_VAL_POZ + MEM_V_TEMP_COMP_VAL_SIZE)
-#define MEM_DEF_PRECISION_ARRAY_SIZE    448
+#define MEM_DEF_PRECISION_ARRAY_SIZE    960
 
 #define MEM_DEF_TEMP_COMP_ARRAY_POZ     (MEM_DEF_PRECISION_ARRAY_POZ + MEM_DEF_PRECISION_ARRAY_SIZE)
 #define MEM_DEF_TEMP_COMP_ARRAY_SIZE     96
 
 #define MEM_DEF_V_TEMP_COMP_VAL_POZ     (MEM_DEF_TEMP_COMP_ARRAY_POZ + MEM_DEF_TEMP_COMP_ARRAY_SIZE)
 #define MEM_DEF_V_TEMP_COMP_VAL_SIZE     4
+
+// Reverse precision array values in EEPROM (user configurable)
+
+#define MEM_PRECISION_ARRAY_REVERSE_POZ         (MEM_DEF_V_TEMP_COMP_VAL_POZ + MEM_DEF_V_TEMP_COMP_VAL_SIZE)
+#define MEM_PRECISION_ARRAY_REVERSE_SIZE        960
+
+// Default reverse precision array values in EEPROM (factory settings)
+
+#define MEM_DEF_PRECISION_ARRAY_REVERSE_POZ     (MEM_PRECISION_ARRAY_REVERSE_POZ + MEM_PRECISION_ARRAY_REVERSE_SIZE)
+#define MEM_DEF_PRECISION_ARRAY_REVERSE_SIZE    960
 
 /**
  * @brief Read and decode user input from UART
@@ -215,28 +229,28 @@ int powrms_eeprom_write_precision_array(const int32_t *precision_array);
 int powrms_eeprom_read_precision_array(int32_t *precision_array);
 
 /**
- * @brief Write temperature correction array to EEPROM
+ * @brief Write reverse precision array to EEPROM
  *
- * This function writes the entire temperature_precision_values array (3*8 int32_t values)
- * to the EEPROM starting from the designated temperature correction memory position.
+ * This function writes the entire precision_values_reverse array (112 int32_t values)
+ * to the EEPROM starting from the designated reverse precision array memory position.
  * The EEPROM should already be initialized before calling this function.
  *
- * @param temp_corr_array Pointer to the array of 24 int32_t temperature correction values
+ * @param precision_array Pointer to the array of 112 int32_t reverse precision values
  * @return int 0 on success, negative error code on failure
  */
-int powrms_eeprom_write_temp_corr_array(const int32_t *temp_corr_array);
+int powrms_eeprom_write_precision_array_reverse(const int32_t *precision_array);
 
 /**
- * @brief Read temperature correction array from EEPROM
+ * @brief Read reverse precision array from EEPROM
  *
- * This function reads the entire temperature_precision_values array (3*8 int32_t values)
- * from the EEPROM starting from the designated temperature correction memory position.
+ * This function reads the entire precision_values_reverse array (112 int32_t values)
+ * from the EEPROM starting from the designated reverse precision array memory position.
  * The EEPROM should already be initialized before calling this function.
  *
- * @param temp_corr_array Pointer to the array where 24 int32_t temperature correction values will be stored
+ * @param precision_array Pointer to the array where 112 int32_t reverse precision values will be stored
  * @return int 0 on success, negative error code on failure
  */
-int powrms_eeprom_read_temp_corr_array(int32_t *temp_corr_array);
+int powrms_eeprom_read_precision_array_reverse(int32_t *precision_array);
 
 /**
  * @brief Write default precision array to EEPROM
@@ -263,28 +277,36 @@ int powrms_eeprom_write_def_precision_array(const int32_t *precision_array);
 int powrms_eeprom_read_def_precision_array(int32_t *precision_array);
 
 /**
- * @brief Write default temperature correction array to EEPROM
+ * @brief Write default reverse precision array to EEPROM
  *
- * This function writes the entire temperature_precision_values array (3*8 int32_t values)
- * to the EEPROM starting from the default temperature correction array memory position.
+ * This function writes the entire precision_values_reverse array (112 int32_t values)
+ * to the EEPROM starting from the default reverse precision array memory position.
  * The EEPROM should already be initialized before calling this function.
  *
- * @param temp_corr_array Pointer to the array of 24 int32_t temperature correction values
+ * @param precision_array Pointer to the array of 112 int32_t reverse precision values
  * @return int 0 on success, negative error code on failure
  */
-int powrms_eeprom_write_def_temp_corr_array(const int32_t *temp_corr_array);
+int powrms_eeprom_write_def_precision_array_reverse(const int32_t
+		*precision_array);
 
 /**
- * @brief Read default temperature correction array from EEPROM
+ * @brief Read default reverse precision array from EEPROM
  *
- * This function reads the entire temperature_precision_values array (3*8 int32_t values)
- * from the EEPROM starting from the default temperature correction array memory position.
+ * This function reads the entire precision_values_reverse array (112 int32_t values)
+ * from the EEPROM starting from the default reverse precision array memory position.
  * The EEPROM should already be initialized before calling this function.
  *
- * @param temp_corr_array Pointer to the array where 24 int32_t temperature correction values will be stored
+ * @param precision_array Pointer to the array where 112 int32_t reverse precision values will be stored
  * @return int 0 on success, negative error code on failure
  */
-int powrms_eeprom_read_def_temp_corr_array(int32_t *temp_corr_array);
+int powrms_eeprom_read_def_precision_array_reverse(int32_t *precision_array);
+
+/**
+ * @brief Get firmware version string in format "major.minor.patch"
+ *
+ * @param version_buf Buffer to store the version string (minimum 16 bytes)
+ */
+void powrms_get_firmware_version(char* version_buf);
 
 /**
  * @brief Write voltage temperature compensation value to EEPROM
@@ -315,7 +337,7 @@ int powrms_eeprom_read_v_temp_comp_val(int32_t *value);
  *
  * This function writes the default voltage temperature compensation value (int32_t)
  * to the EEPROM at the designated memory position for default data.
- * The EEPROM should already be initialized before calling this function.
+* The EEPROM should already be initialized before calling this function.
  *
  * @param value The default voltage temperature compensation value to write
  * @return int 0 on success, negative error code on failure
@@ -334,12 +356,6 @@ int powrms_eeprom_write_def_v_temp_comp_val(int32_t value);
  */
 int powrms_eeprom_read_def_v_temp_comp_val(int32_t *value);
 
-/**
- * @brief Get firmware version string in format "major.minor.patch"
- *
- * @param version_buf Buffer to store the version string (minimum 16 bytes)
- */
-void powrms_get_firmware_version(char* version_buf);
 
 int powrms_init_memory_upon_boot();
 

@@ -175,7 +175,7 @@ int powrms_eeprom_set_use_def_cal_data(int32_t value)
  *
  * @param use_temp_comp Pointer to store the temperature compensation flag value
  * @return int 0 on success, negative error code on failure
- */
+*/
 int powrms_eeprom_get_temp_comp_data(int32_t *use_temp_comp)
 {
 	uint8_t temp_comp_byte;
@@ -274,6 +274,7 @@ int powrms_eeprom_write_precision_array(const int32_t *precision_array)
 
 		// Optimized delay for M24512 precision array - typical write cycle is 2-3ms
 		no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
+		powrms_watchdog_reset();
 	}
 
 	return 0; // Success
@@ -326,114 +327,7 @@ int powrms_eeprom_read_precision_array(int32_t *precision_array)
 
 		// Longer delay between int32_t reads to allow I2C bus recovery
 		no_os_mdelay(2); // 2ms delay between each complete value
-	}
-
-	return 0; // Success
-}
-
-/**
- * @brief Write temperature correction array to EEPROM
- *
- * This function writes the temperature correction array using single-byte writes to avoid
- * I2C bus blocking issues that can occur with large transfers. Each int32_t
- * value is broken down into bytes and written individually in little-endian format.
- */
-int powrms_eeprom_write_temp_corr_array(const int32_t *temp_corr_array)
-{
-	int ret;
-	uint16_t base_address =
-		MEM_TEMP_COMP_ARRAY_POZ; // Starting address for temperature correction array
-	uint8_t byte_buffer[4];       // Buffer for 4 bytes of each int32_t
-	int array_size = TEMPERATURE_CORRECTION_COEFFS *
-			 FREQUENCY_RANGE_NR; // 3*8 = 24 values
-
-	if (!m24512_desc) {
-		return -ENODEV;
-	}
-
-	if (!temp_corr_array) {
-		return -EINVAL; // Invalid parameter
-	}
-
-	// Write each int32_t value byte by byte
-	// Array: 24 elements × 4 bytes each = 96 bytes total
-	for (int i = 0; i < array_size; i++) {
-		uint16_t current_address = base_address + (i * sizeof(int32_t));
-
-		// Convert int32_t to bytes (little-endian format)
-		byte_buffer[0] = (uint8_t)(temp_corr_array[i] & 0xFF);
-		byte_buffer[1] = (uint8_t)((temp_corr_array[i] >> 8) & 0xFF);
-		byte_buffer[2] = (uint8_t)((temp_corr_array[i] >> 16) & 0xFF);
-		byte_buffer[3] = (uint8_t)((temp_corr_array[i] >> 24) & 0xFF);
-
-		// Write 4 bytes for current int32_t value
-		for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
-			ret = no_os_eeprom_write(m24512_desc, current_address + byte_idx,
-						 &byte_buffer[byte_idx], 1);
-			if (ret) {
-				return ret; // Write failed
-			}
-
-			// Small delay between byte writes to prevent I2C bus saturation
-			no_os_udelay(50); // 50 microseconds delay
-		}
-
-		// Optimized delay for M24512 temperature array - typical write cycle is 2-3ms
-		no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
-	}
-
-	return 0; // Success
-}
-
-/**
- * @brief Read temperature correction array from EEPROM
- *
- * This function reads the temperature correction array using single-byte reads to avoid
- * I2C bus blocking issues that can occur with large transfers. Each int32_t
- * value is read byte by byte and reconstructed in little-endian format.
- */
-int  powrms_eeprom_read_temp_corr_array(int32_t *temp_corr_array)
-{
-	int ret;
-	uint16_t base_address =
-		MEM_TEMP_COMP_ARRAY_POZ; // Starting address for temperature correction array
-	uint8_t byte_buffer[4];       // Buffer for 4 bytes of each int32_t
-	int array_size = TEMPERATURE_CORRECTION_COEFFS *
-			 FREQUENCY_RANGE_NR; // 3*8 = 24 values
-
-	if (!m24512_desc) {
-		return -ENODEV; // EEPROM not initialized
-	}
-
-	if (!temp_corr_array) {
-		return -EINVAL; // Invalid parameter
-	}
-
-	// Read each int32_t value byte by byte
-	// Array: 24 elements × 4 bytes each = 96 bytes total
-	for (int i = 0; i < array_size; i++) {
-		uint16_t current_address = base_address + (i * sizeof(int32_t));
-
-		// Read 4 bytes for current int32_t value
-		for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
-			ret = no_os_eeprom_read(m24512_desc, current_address + byte_idx,
-						&byte_buffer[byte_idx], 1);
-			if (ret) {
-				return ret; // Read failed
-			}
-
-			// Small delay between byte reads to prevent I2C bus saturation
-			no_os_udelay(50); // 50 microseconds delay
-		}
-
-		// Reconstruct int32_t from bytes (little-endian format)
-		temp_corr_array[i] = (int32_t)((uint32_t)byte_buffer[0] |
-					       ((uint32_t)byte_buffer[1] << 8) |
-					       ((uint32_t)byte_buffer[2] << 16) |
-					       ((uint32_t)byte_buffer[3] << 24));
-
-		// Longer delay between int32_t reads to allow I2C bus recovery
-		no_os_mdelay(2); // 2ms delay between each complete value
+		powrms_watchdog_reset();
 	}
 
 	return 0; // Success
@@ -487,6 +381,7 @@ int powrms_eeprom_write_def_precision_array(const int32_t *precision_array)
 
 		// Optimized delay for M24512 precision array - typical write cycle is 2-3ms
 		no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
+		powrms_watchdog_reset();
 	}
 
 	return 0; // Success
@@ -539,45 +434,45 @@ int powrms_eeprom_read_def_precision_array(int32_t *precision_array)
 
 		// Longer delay between int32_t reads to allow I2C bus recovery
 		no_os_mdelay(2); // 2ms delay between each complete value
+		powrms_watchdog_reset();
 	}
 
 	return 0; // Success
 }
 
 /**
- * @brief Write default temperature correction array to EEPROM
+ * @brief Write reverse precision array to EEPROM
  *
- * This function writes the temperature correction array to the default temperature correction array memory position
+ * This function writes the precision array to the reverse precision array memory position
  * using single-byte writes to avoid I2C bus blocking issues that can occur with large transfers.
  * Each int32_t value is broken down into bytes and written individually in little-endian format.
  */
-int powrms_eeprom_write_def_temp_corr_array(const int32_t *temp_corr_array)
+int powrms_eeprom_write_precision_array_reverse(const int32_t *precision_array)
 {
 	int ret;
 	uint16_t base_address =
-		MEM_DEF_TEMP_COMP_ARRAY_POZ; // Starting address for default temperature correction array
+		MEM_PRECISION_ARRAY_REVERSE_POZ; // Starting address for reverse precision array
 	uint8_t byte_buffer[4];       // Buffer for 4 bytes of each int32_t
-	int array_size = TEMPERATURE_CORRECTION_COEFFS *
-			 FREQUENCY_RANGE_NR; // 3*8 = 24 values
 
 	if (!m24512_desc) {
 		return -ENODEV;
 	}
 
-	if (!temp_corr_array) {
+	if (!precision_array) {
 		return -EINVAL; // Invalid parameter
 	}
 
 	// Write each int32_t value byte by byte
-	// Array: 24 elements × 4 bytes each = 96 bytes total
-	for (int i = 0; i < array_size; i++) {
+	// Array: 112 elements × 4 bytes each = 448 bytes total
+	for (int i = 0; i < PRECISION_ARRAY_SIZE; i++) {
 		uint16_t current_address = base_address + (i * sizeof(int32_t));
+		uint32_t value = (uint32_t)precision_array[i];
 
-		// Convert int32_t to bytes (little-endian format)
-		byte_buffer[0] = (uint8_t)(temp_corr_array[i] & 0xFF);
-		byte_buffer[1] = (uint8_t)((temp_corr_array[i] >> 8) & 0xFF);
-		byte_buffer[2] = (uint8_t)((temp_corr_array[i] >> 16) & 0xFF);
-		byte_buffer[3] = (uint8_t)((temp_corr_array[i] >> 24) & 0xFF);
+		// Break down int32_t into bytes (little-endian format)
+		byte_buffer[0] = (uint8_t)(value & 0xFF);
+		byte_buffer[1] = (uint8_t)((value >> 8) & 0xFF);
+		byte_buffer[2] = (uint8_t)((value >> 16) & 0xFF);
+		byte_buffer[3] = (uint8_t)((value >> 24) & 0xFF);
 
 		// Write 4 bytes for current int32_t value
 		for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
@@ -591,40 +486,39 @@ int powrms_eeprom_write_def_temp_corr_array(const int32_t *temp_corr_array)
 			no_os_udelay(50); // 50 microseconds delay
 		}
 
-		// Optimized delay for M24512 temperature array - typical write cycle is 2-3ms
+		// Optimized delay for M24512 precision array - typical write cycle is 2-3ms
 		no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
+		powrms_watchdog_reset();
 	}
 
 	return 0; // Success
 }
 
 /**
- * @brief Read default temperature correction array from EEPROM
+ * @brief Read reverse precision array from EEPROM
  *
- * This function reads the temperature correction array from the default temperature correction array memory position
+ * This function reads the precision array from the reverse precision array memory position
  * using single-byte reads to avoid I2C bus blocking issues that can occur with large transfers.
  * Each int32_t value is read byte by byte and reconstructed in little-endian format.
  */
-int powrms_eeprom_read_def_temp_corr_array(int32_t *temp_corr_array)
+int powrms_eeprom_read_precision_array_reverse(int32_t *precision_array)
 {
 	int ret;
 	uint16_t base_address =
-		MEM_DEF_TEMP_COMP_ARRAY_POZ; // Starting address for default temperature correction array
+		MEM_PRECISION_ARRAY_REVERSE_POZ; // Starting address for reverse precision array
 	uint8_t byte_buffer[4];       // Buffer for 4 bytes of each int32_t
-	int array_size = TEMPERATURE_CORRECTION_COEFFS *
-			 FREQUENCY_RANGE_NR; // 3*8 = 24 values
 
 	if (!m24512_desc) {
-		return -ENODEV; // EEPROM not initialized
+		return -ENODEV;
 	}
 
-	if (!temp_corr_array) {
+	if (!precision_array) {
 		return -EINVAL; // Invalid parameter
 	}
 
 	// Read each int32_t value byte by byte
-	// Array: 24 elements × 4 bytes each = 96 bytes total
-	for (int i = 0; i < array_size; i++) {
+	// Array: 112 elements × 4 bytes each = 448 bytes total
+	for (int i = 0; i < PRECISION_ARRAY_SIZE; i++) {
 		uint16_t current_address = base_address + (i * sizeof(int32_t));
 
 		// Read 4 bytes for current int32_t value
@@ -640,184 +534,123 @@ int powrms_eeprom_read_def_temp_corr_array(int32_t *temp_corr_array)
 		}
 
 		// Reconstruct int32_t from bytes (little-endian format)
-		temp_corr_array[i] = (int32_t)((uint32_t)byte_buffer[0] |
+		precision_array[i] = (int32_t)((uint32_t)byte_buffer[0] |
 					       ((uint32_t)byte_buffer[1] << 8) |
 					       ((uint32_t)byte_buffer[2] << 16) |
 					       ((uint32_t)byte_buffer[3] << 24));
 
-		// Longer delay between int32_t reads to allow I2C bus recovery
+		// Optimized delay for M24512 precision array - typical read cycle is minimal
 		no_os_mdelay(2); // 2ms delay between each complete value
+		powrms_watchdog_reset();
 	}
 
 	return 0; // Success
 }
 
 /**
- * @brief Write voltage temperature compensation value to EEPROM
+ * @brief Write default reverse precision array to EEPROM
  *
- * This function writes the voltage temperature compensation value using single-byte writes to avoid
- * I2C bus blocking issues that can occur with large transfers. The int32_t value is broken down
- * into bytes and written individually in little-endian format.
+ * This function writes the precision array to the default reverse precision array memory position
+ * using single-byte writes to avoid I2C bus blocking issues that can occur with large transfers.
+ * Each int32_t value is broken down into bytes and written individually in little-endian format.
  */
-int powrms_eeprom_write_v_temp_comp_val(int32_t value)
+int powrms_eeprom_write_def_precision_array_reverse(const int32_t
+		*precision_array)
 {
 	int ret;
 	uint16_t base_address =
-		MEM_V_TEMP_COMP_VAL_POZ; // Address for voltage temperature compensation value
-	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
+		MEM_DEF_PRECISION_ARRAY_REVERSE_POZ; // Starting address for default reverse precision array
+	uint8_t byte_buffer[4];       // Buffer for 4 bytes of each int32_t
 
 	if (!m24512_desc) {
 		return -ENODEV;
 	}
 
-	// Convert int32_t to bytes (little-endian format)
-	byte_buffer[0] = (uint8_t)(value & 0xFF);
-	byte_buffer[1] = (uint8_t)((value >> 8) & 0xFF);
-	byte_buffer[2] = (uint8_t)((value >> 16) & 0xFF);
-	byte_buffer[3] = (uint8_t)((value >> 24) & 0xFF);
-
-	// Write 4 bytes for the int32_t value
-	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
-		ret = no_os_eeprom_write(m24512_desc, base_address + byte_idx,
-					 &byte_buffer[byte_idx], 1);
-		if (ret) {
-			return ret; // Write failed
-		}
-
-		// Small delay between byte writes to prevent I2C bus saturation
-		no_os_udelay(50); // 50 microseconds delay
-	}
-
-	// Optimized delay for M24512 - typical write cycle is 2-3ms
-	no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
-
-	return 0; // Success
-}
-
-/**
- * @brief Read voltage temperature compensation value from EEPROM
- *
- * This function reads the voltage temperature compensation value using single-byte reads to avoid
- * I2C bus blocking issues that can occur with large transfers. The int32_t value is read byte by byte
- * and reconstructed in little-endian format.
- */
-int powrms_eeprom_read_v_temp_comp_val(int32_t *value)
-{
-	int ret;
-	uint16_t base_address =
-		MEM_V_TEMP_COMP_VAL_POZ; // Address for voltage temperature compensation value
-	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
-
-	if (!m24512_desc) {
-		return -ENODEV; // EEPROM not initialized
-	}
-
-	if (!value) {
+	if (!precision_array) {
 		return -EINVAL; // Invalid parameter
 	}
 
-	// Read 4 bytes for the int32_t value
-	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
-		ret = no_os_eeprom_read(m24512_desc, base_address + byte_idx,
-					&byte_buffer[byte_idx], 1);
-		if (ret) {
-			return ret; // Read failed
+	// Write each int32_t value byte by byte
+	// Array: 112 elements × 4 bytes each = 448 bytes total
+	for (int i = 0; i < PRECISION_ARRAY_SIZE; i++) {
+		uint16_t current_address = base_address + (i * sizeof(int32_t));
+		uint32_t value = (uint32_t)precision_array[i];
+
+		// Break down int32_t into bytes (little-endian format)
+		byte_buffer[0] = (uint8_t)(value & 0xFF);
+		byte_buffer[1] = (uint8_t)((value >> 8) & 0xFF);
+		byte_buffer[2] = (uint8_t)((value >> 16) & 0xFF);
+		byte_buffer[3] = (uint8_t)((value >> 24) & 0xFF);
+
+		// Write 4 bytes for current int32_t value
+		for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+			ret = no_os_eeprom_write(m24512_desc, current_address + byte_idx,
+						 &byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret; // Write failed
+			}
+
+			// Small delay between byte writes to prevent I2C bus saturation
+			no_os_udelay(50); // 50 microseconds delay
 		}
 
-		// Small delay between byte reads to prevent I2C bus saturation
-		no_os_udelay(50); // 50 microseconds delay
+		// Optimized delay for M24512 precision array - typical write cycle is 2-3ms
+		no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
+		powrms_watchdog_reset();
 	}
-
-	// Reconstruct int32_t from bytes (little-endian format)
-	*value = (int32_t)((uint32_t)byte_buffer[0] |
-			   ((uint32_t)byte_buffer[1] << 8) |
-			   ((uint32_t)byte_buffer[2] << 16) |
-			   ((uint32_t)byte_buffer[3] << 24));
 
 	return 0; // Success
 }
 
 /**
- * @brief Write default voltage temperature compensation value to EEPROM
+ * @brief Read default reverse precision array from EEPROM
  *
- * This function writes the default voltage temperature compensation value using single-byte writes to avoid
- * I2C bus blocking issues that can occur with large transfers. The int32_t value is broken down
- * into bytes and written individually in little-endian format.
+ * This function reads the precision array from the default reverse precision array memory position
+ * using single-byte reads to avoid I2C bus blocking issues that can occur with large transfers.
+ * Each int32_t value is read byte by byte and reconstructed in little-endian format.
  */
-int powrms_eeprom_write_def_v_temp_comp_val(int32_t value)
+int powrms_eeprom_read_def_precision_array_reverse(int32_t *precision_array)
 {
 	int ret;
 	uint16_t base_address =
-		MEM_DEF_V_TEMP_COMP_VAL_POZ; // Address for default voltage temperature compensation value
-	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
+		MEM_DEF_PRECISION_ARRAY_REVERSE_POZ; // Starting address for default reverse precision array
+	uint8_t byte_buffer[4];       // Buffer for 4 bytes of each int32_t
 
 	if (!m24512_desc) {
 		return -ENODEV;
 	}
 
-	// Convert int32_t to bytes (little-endian format)
-	byte_buffer[0] = (uint8_t)(value & 0xFF);
-	byte_buffer[1] = (uint8_t)((value >> 8) & 0xFF);
-	byte_buffer[2] = (uint8_t)((value >> 16) & 0xFF);
-	byte_buffer[3] = (uint8_t)((value >> 24) & 0xFF);
-
-	// Write 4 bytes for the int32_t value
-	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
-		ret = no_os_eeprom_write(m24512_desc, base_address + byte_idx,
-					 &byte_buffer[byte_idx], 1);
-		if (ret) {
-			return ret; // Write failed
-		}
-
-		// Small delay between byte writes to prevent I2C bus saturation
-		no_os_udelay(50); // 50 microseconds delay
-	}
-
-	// Optimized delay for M24512 - typical write cycle is 2-3ms
-	no_os_mdelay(10); // 10ms delay to allow EEPROM internal write cycle
-
-	return 0; // Success
-}
-
-/**
- * @brief Read default voltage temperature compensation value from EEPROM
- *
- * This function reads the default voltage temperature compensation value using single-byte reads to avoid
- * I2C bus blocking issues that can occur with large transfers. The int32_t value is read byte by byte
- * and reconstructed in little-endian format.
- */
-int powrms_eeprom_read_def_v_temp_comp_val(int32_t *value)
-{
-	int ret;
-	uint16_t base_address =
-		MEM_DEF_V_TEMP_COMP_VAL_POZ; // Address for default voltage temperature compensation value
-	uint8_t byte_buffer[4];       // Buffer for 4 bytes of int32_t
-
-	if (!m24512_desc) {
-		return -ENODEV; // EEPROM not initialized
-	}
-
-	if (!value) {
+	if (!precision_array) {
 		return -EINVAL; // Invalid parameter
 	}
 
-	// Read 4 bytes for the int32_t value
-	for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
-		ret = no_os_eeprom_read(m24512_desc, base_address + byte_idx,
-					&byte_buffer[byte_idx], 1);
-		if (ret) {
-			return ret; // Read failed
+	// Read each int32_t value byte by byte
+	// Array: 112 elements × 4 bytes each = 448 bytes total
+	for (int i = 0; i < PRECISION_ARRAY_SIZE; i++) {
+		uint16_t current_address = base_address + (i * sizeof(int32_t));
+
+		// Read 4 bytes for current int32_t value
+		for (int byte_idx = 0; byte_idx < 4; byte_idx++) {
+			ret = no_os_eeprom_read(m24512_desc, current_address + byte_idx,
+						&byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret; // Read failed
+			}
+
+			// Small delay between byte reads to prevent I2C bus saturation
+			no_os_udelay(50); // 50 microseconds delay
 		}
 
-		// Small delay between byte reads to prevent I2C bus saturation
-		no_os_udelay(50); // 50 microseconds delay
-	}
+		// Reconstruct int32_t from bytes (little-endian format)
+		precision_array[i] = (int32_t)((uint32_t)byte_buffer[0] |
+					       ((uint32_t)byte_buffer[1] << 8) |
+					       ((uint32_t)byte_buffer[2] << 16) |
+					       ((uint32_t)byte_buffer[3] << 24));
 
-	// Reconstruct int32_t from bytes (little-endian format)
-	*value = (int32_t)((uint32_t)byte_buffer[0] |
-			   ((uint32_t)byte_buffer[1] << 8) |
-			   ((uint32_t)byte_buffer[2] << 16) |
-			   ((uint32_t)byte_buffer[3] << 24));
+		// Optimized delay for M24512 precision array - typical read cycle is minimal
+		no_os_mdelay(2); // 2ms delay between each complete value
+		powrms_watchdog_reset();
+	}
 
 	return 0; // Success
 }
@@ -988,7 +821,7 @@ int powrms_init_memory_upon_boot()
 			return ret;
 		}
 		no_os_udelay(50);
-		ret = powrms_eeprom_read_def_temp_corr_array(temperature_precision_values);
+		ret = powrms_eeprom_read_def_precision_array_reverse(precision_values_reverse);
 		if (ret) {
 			return ret;
 		}
@@ -1005,7 +838,7 @@ int powrms_init_memory_upon_boot()
 			return ret;
 		}
 		no_os_udelay(50);
-		ret = powrms_eeprom_read_temp_corr_array(temperature_precision_values);
+		ret = powrms_eeprom_read_precision_array_reverse(precision_values_reverse);
 		if (ret) {
 			return ret;
 		}

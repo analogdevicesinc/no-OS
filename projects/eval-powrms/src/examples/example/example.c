@@ -309,6 +309,7 @@ int example_main(void)
 	app_init_param.post_step_callback = &(screen_while);
 
 	display_entry = DISPLAY_ENTRY_SHOW;
+
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
 		return ret;
