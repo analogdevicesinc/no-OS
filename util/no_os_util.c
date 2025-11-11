@@ -90,6 +90,24 @@ uint32_t no_os_find_last_set_bit(uint32_t word)
 }
 
 /**
+ * Find last set bit in word.
+ */
+uint64_t no_os_find_last_set_bit_u64(uint64_t word)
+{
+	uint64_t bit = 0;
+	uint64_t last_set_bit = 64;
+
+	while (word) {
+		if (word & 0x1)
+			last_set_bit = bit;
+		word >>= 1;
+		bit ++;
+	}
+
+	return last_set_bit;
+}
+
+/**
  * Locate the closest element in an array.
  */
 uint32_t no_os_find_closest(int32_t val,
