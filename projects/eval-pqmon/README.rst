@@ -1,75 +1,113 @@
-AD-PQMON-SL kit no-OS Example Project
+AD-PQMON-SL Kit no-OS Example Project
 =====================================
 
-## Overview
+Overview
+--------
 
-The [AD-PQMON-SL](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-pqmon-sl.html) provides a complete software and hardware platform for prototyping and evaluating high performance class S polyphase energy quality monitors. The design incorporates the ADE9430 high performance, polyphase energy monitoring IC that has an advanced metrology feature set (total and fundamental active power, volt amperes reactive (VAR), volt amperes (VA), watthour, VAR hour, VA hour, total and fundamental IRMS and VRMS, power factor) and the MAX32650 ultralow power ARM cortex-M4 with FPU-based microcontroller with 3 MB flash and 1 MB SRAM. The ADE9430 enables accurate energy monitoring over a wide dynamic range through its superior analog performance and digital signal processing (DSP) core. The ADE9430 simplifies the implementation and certification of energy and power quality monitoring systems by providing tight integration of acquisition and calculation engines. This solution can be used on a 3-phase system or up to three single-phase systems.
+The :adi:`AD-PQMON-SL` provides a complete software and hardware platform for
+prototyping and evaluating high performance class S polyphase energy quality
+monitors. The design incorporates the ADE9430 high performance, polyphase
+energy monitoring IC that has an advanced metrology feature set (total and
+fundamental active power, volt amperes reactive (VAR), volt amperes (VA),
+watthour, VAR hour, VA hour, total and fundamental IRMS and VRMS, power
+factor) and the MAX32650 ultralow power ARM cortex-M4 with FPU-based
+microcontroller with 3 MB flash and 1 MB SRAM. The ADE9430 enables accurate
+energy monitoring over a wide dynamic range through its superior analog
+performance and digital signal processing (DSP) core. The ADE9430 simplifies
+the implementation and certification of energy and power quality monitoring
+systems by providing tight integration of acquisition and calculation engines.
+This solution can be used on a 3-phase system or up to three single-phase
+systems.
 
+Preliminary requirements
+-------------------------
 
-## Preliminary requirements
+The licensed software library that works in conjunction with the ADE9430 IC
+can be obtained from `here <https://form.analog.com/form_pages/softwaremodules/SRF.aspx>`__.
 
-The licensed software library that works in conjunction with the ADE9430 IC can be obtained from [here](https://form.analog.com/form_pages/softwaremodules/SRF.aspx).
+After obtaining the libraries, the following files need to be added to the
+project:
 
-After obtaining the libraries, the following files need to be added to the project:
+.. code-block:: console
 
-```console
-pqlib_dir
-|   libadi_pqlib_cm4_gcc.a
-└───include
-	|   ade9430.h
-	|   adi_pqlib_debug.h
-	|   adi_pqlib_error.h
-	|   adi_pqlib_memory.h
-	|   adi_pqlib_profile.h
-	|   adi_pqlib_version.h
-	|   adi_pqlib.h
-	└───config
-		└───adi_pqlib_cfg.h
-```
+        pqlib_dir
+        |   libadi_pqlib_cm4_gcc.a
+        └───include
+                |   ade9430.h
+                |   adi_pqlib_debug.h
+                |   adi_pqlib_error.h
+                |   adi_pqlib_memory.h
+                |   adi_pqlib_profile.h
+                |   adi_pqlib_version.h
+                |   adi_pqlib.h
+                └───config
+                        └───adi_pqlib_cfg.h
 
-It can be integrated into the project by defining the `PQLIB_PATH` to point to the `pqlib_dir` path. 
+It can be integrated into the project by defining the ``PQLIB_PATH`` to point
+to the ``pqlib_dir`` path.
 
+Choose interface
+----------------
 
-## Choose interface
+The firmware application can communicate with clients via several interfaces.
+In order to use the preferred connection type, set ``INTERFACE`` to the
+desired value:
 
-The firmware application can communicate with clients via several interfaces. In order to use the preferred connection type, set `INTERFACE` to the desired value:
+* ``INTERFACE=usb`` (Default value)
+* ``INTERFACE=serial`` (Used for 485 communication. Half-duplex communication
+  must be handled by user)
+* ``INTERFACE=ethernet_t1l`` (Used for communication over T1L)
+* ``INTERFACE=ethernet`` (Used for standard Ethernet communication via W5500
+  controller)
 
-* ```INTERFACE=usb``` (Default value)
-* ```INTERFACE=serial``` (Used for 485 communication. Half-duplex communication must be handled by user)
-* ```INTERFACE=ethernet_t1l``` (Used for communication over T1L)
-* ```INTERFACE=ethernet``` (Used for standard Ethernet communication via W5500 controller)
+.. note::
 
-NOTE: In case one builds firmware multiple times with different interfaces, make sure to delete the `build` directory before the new  compilation.
+   In case one builds firmware multiple times with different interfaces, make
+   sure to delete the ``build`` directory before the new compilation.
 
-NOTE 2: For T1L connection the deffault ip for the device is `192.168.97.40`. For network configuration on client side, use the following steps: [network configuration steps](https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602).
+.. note::
 
-NOTE 3: For standard Ethernet connection, the default IP for the device is `192.168.1.110`. Make sure your network environment is configured appropriately to communicate with this IP address.
+   For T1L connection the default ip for the device is ``192.168.97.40``. For
+   network configuration on client side, use the following steps: `network
+   configuration steps
+   <https://wiki.analog.com/resources/no-os/misc_guides/static_ip_setting?rev=1715173602>`__.
 
-## Build and run
+.. note::
 
-The project is based on a [MAX32650](https://www.analog.com/en/products/max32650.html) microcontroller. It can be built and run by running the following script:
+   For standard Ethernet connection, the default IP for the device is
+   ``192.168.1.110``. Make sure your network environment is configured
+   appropriately to communicate with this IP address.
 
-```bash
-# remove build directory
-make reset
-# select platform
-export PLATFORM=maxim
-# select controller type
-export TARGET=max32650
-# select interface
-export INTERFACE=usb
-# build and flash the code
-make PQLIB_PATH=<path_to_library> run
-```
+Build and run
+-------------
 
-The `iio_info` of the device should look like the following:
+The project is based on a :adi:`MAX32650` microcontroller. It can
+be built and run by running the following script:
 
-```console
-IIO context has 3 attributes:
+        # remove build directory
+        make reset
+        # select platform
+        export PLATFORM=maxim
+        # select controller type
+        export TARGET=max32650
+        # select interface
+        export INTERFACE=usb
+        # build and flash the code
+        make PQLIB_PATH=<path_to_library> run
+
+The ``iio_info`` of the device should look like the following:
+
+.. code-block:: console
+
+    IIO context has 3 attributes:
         uri: serial:/dev/ttyACM0,115200,8n1n
         serial,port: /dev/ttyACM0
         serial,description: MAX32650 CDC-ACM
-IIO context has 1 devices:
+
+IIO context has 1 device:
+
+.. code-block:: console
+
         iio:device0: pqm (buffer capable)
                 11 channels found:
                         current0: ia (input, index: 1, format: be:U16/16>>0)
@@ -229,4 +267,9 @@ IIO context has 1 devices:
                 No trigger on this device
 
 
-```
+Additional Resources
+---------------------
+
+The complete User Guide for the AD-PQMON-SL solution is available at
+`AD-PQMON-SL GitHub Page
+<https://analogdevicesinc.github.io/documentation/solutions/reference-designs/ad-pqmon-sl/index.html>`__.
