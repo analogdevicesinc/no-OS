@@ -184,7 +184,7 @@ enum ad5710r_id {
 
 /** AD5710R product ID */
 enum ad5710r_product_id {
-	PROD_ID_AD5710R = 0x00,
+	PROD_ID_AD5710R = 0x08,
 };
 
 /**
