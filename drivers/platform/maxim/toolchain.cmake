@@ -40,9 +40,16 @@ set(CMAKE_ASM_FLAGS "-mthumb -mcpu=cortex-m4 -mfloat-abi=softfp -mfpu=fpv4-sp-d1
 set(CMAKE_EXE_LINKER_FLAGS "-mthumb -mcpu=cortex-m4 -specs=nosys.specs -Wl,--gc-sections -mfpu=fpv4-sp-d16 ${MCU_LINKER_FLAGS} \
     -T${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC/${TARGET}.ld --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
-file(GLOB_RECURSE OPENOCD_PATH ${MAXIM_LIBRARIES}/../Tools/*/openocd)
+# Find OpenOCD - handles different names on Linux (openocd) and Windows (openocd.exe)
+cmake_path(SET OPENOCD_SEARCH_PATH NORMALIZE "${MAXIM_LIBRARIES}/../Tools/OpenOCD")
+find_program(OPENOCD_PATH
+    NAMES openocd
+    HINTS ${OPENOCD_SEARCH_PATH}
+    PATH_SUFFIXES bin
+    DOC "Path to OpenOCD executable"
+)
+
 if(OPENOCD_PATH)
-    list(GET OPENOCD_PATH 0 OPENOCD_PATH)
     cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "${MAXIM_LIBRARIES}/../Tools/OpenOCD/scripts")
 
     set(OPENOCD_INTERFACE "interface/cmsis-dap.cfg")
@@ -52,4 +59,8 @@ if(OPENOCD_PATH)
     if (NOT PROBE)
         set(PROBE "openocd")
     endif()
+
+    message(STATUS "Found OpenOCD: ${OPENOCD_PATH}")
+else()
+    message(STATUS "OpenOCD not found in ${OPENOCD_SEARCH_PATH}")
 endif()
