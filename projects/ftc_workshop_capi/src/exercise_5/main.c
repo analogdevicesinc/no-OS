@@ -22,7 +22,6 @@
 #include "max20303.h"
 #include "i2c_bitbang.h"
 #include "ssd_1306.h"
-#include "cordio_init.h"
 
 #include "platform.h"
 #include "no_os_config.h"

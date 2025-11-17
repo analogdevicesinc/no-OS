@@ -141,9 +141,9 @@ static int init_display(void)
 	scl_pin.flags = CAPI_GPIO_ACTIVE_HIGH;
 	*/
 
-	/* Standard capi_i2c_config struct, using the capi_i2c_bitbang_ops and bitbang_extra*/
+	/* Standard capi_i2c_config struct, using the i2c_bitbang_ops and bitbang_extra*/
 	/* // Uncomment this
-	bitbang_config.ops = &capi_i2c_bitbang_ops;
+	bitbang_config.ops = &i2c_bitbang_ops;
 	bitbang_config.identifier = 0;
 	bitbang_config.clk_freq_hz = CAPI_I2C_SPEED_FAST;
 	bitbang_config.initiator = true;
@@ -172,7 +172,7 @@ static int init_display(void)
 	/* // Uncomment this
 	bitbang_extra.sda_pin = sda_pin;
 	bitbang_extra.scl_pin = scl_pin;
-	bitbang_extra.pull_type = CAPI_I2C_BITBANG_PULL_EXTERNAL;
+	bitbang_extra.pull_type = I2C_BITBANG_PULL_EXTERNAL;
 	bitbang_extra.timeout_us = 100000;
 	*/
 

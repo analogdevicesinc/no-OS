@@ -83,7 +83,7 @@ class FitDeviceMonitor:
 
         device_panel = Panel(
             device_table,
-            title="📱 Device Information",
+            title="Device Information",
             border_style="magenta",
             height=8
         )
@@ -103,20 +103,20 @@ class FitDeviceMonitor:
                     battery_style = "yellow"
                 else:
                     battery_style = "bright_red"
-                battery_text = f"🔋 {self.battery_level}"
+                battery_text = f"{self.battery_level}"
             except:
                 battery_style = "white"
-                battery_text = f"🔋 {self.battery_level}"
+                battery_text = f"{self.battery_level}"
         else:
             battery_style = "dim"
-            battery_text = "🔋 Unknown"
+            battery_text = "Unknown"
 
         metrics_table.add_row("Battery Level:", Text(battery_text, style=battery_style))
-        metrics_table.add_row("Step Count:", f"👟 {self.step_count}")
+        metrics_table.add_row("Step Count:", f"{self.step_count}")
 
         metrics_panel = Panel(
             metrics_table,
-            title="📊 Real-time Metrics",
+            title="Real-time Metrics",
             border_style="green",
             height=6
         )
@@ -162,8 +162,11 @@ async def scan_for_fit_device():
 
     adv_name = os.environ['BLE_ADV_NAME']
 
+    print("adv name = {}", adv_name)
+    for d in devices:
+        print("Found ", d.name)
     # Find the device
-    fit_devices = [d for d in devices if d.name and adv_name.lower() in d.name.lower()]
+    fit_devices = [d for d in devices if d.name and adv_name.lower() == d.name.lower()]
 
     if not fit_devices:
         console.print("[bold red] No 'Fit' devices found[/]")

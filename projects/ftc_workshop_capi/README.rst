@@ -41,7 +41,24 @@ This project uses CMake with Kconfig for configuration management.
 Prerequisites
 ~~~~~~~~~~~~~
 
-- **Maxim SDK (MSDK)**: Install from the `Analog Devices website <https://www.analog.com/en/design-center/evaluation-hardware-and-software/software/software-download.html?swpart=SFW0010820A>`_ or download specific releases from the `MSDK GitHub releases page <https://github.com/analogdevicesinc/msdk/releases>`_
+- **Maxim SDK (MSDK)**: Install version **v2023_10**:
+
+  - **Linux**: `MaximMicrosSDK_linux.run <https://github.com/analogdevicesinc/msdk/releases/download/v2023_10/MaximMicrosSDK_linux.run>`_
+  - **Windows**: `MaximMicrosSDK_win.exe <https://github.com/analogdevicesinc/msdk/releases/download/v2023_10/MaximMicrosSDK_win.exe>`_
+
+  After installation, set the ``MAXIM_LIBRARIES`` environment variable to point to the Libraries directory inside the MaximSDK installation:
+
+  .. code-block:: bash
+
+     # Linux/macOS
+     export MAXIM_LIBRARIES=~/MaximSDK/Libraries
+
+     # Windows (Command Prompt)
+     set MAXIM_LIBRARIES=C:\MaximSDK\Libraries
+
+     # Windows (PowerShell)
+     $env:MAXIM_LIBRARIES="C:\MaximSDK\Libraries"
+
 - **CMake**: Version 3.20 or higher
 - **ARM GCC Toolchain**: Included with Maxim SDK
 - **Python 3**: For Kconfig processing
@@ -53,16 +70,21 @@ Each exercise has its own configuration file. To build a specific exercise:
 
 .. code-block:: bash
 
+   # Ensure MAXIM_LIBRARIES is set before running cmake
+   export MAXIM_LIBRARIES=~/MaximSDK/Libraries
+
    # Configure the build for exercise 1
-   cmake --preset max32655_fthr --fresh -B build_ex1 \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf --fresh
 
    # Build the project
-   cmake --build build_ex1 --target ftc_workshop
+   cmake --build ftc_workshop_build --target ftc_workshop
 
-   # The output binary is at: build_ex1/build/ftc_workshop.elf
+   # The output binary is at: ftc_workshop_build/build/ftc_workshop.elf
 
-Note: The cmake commands should be run from the no-OS root directory.
+Note 1: The cmake commands should be run from the no-OS root directory.
+Note 2: When changing between exercises, it is important to run the cmake config step with the --fresh flag.
+Note 3: The MAXIM_LIBRARIES environment variable must be set before running the cmake configuration step.
 
 Flashing the Firmware
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -72,12 +94,12 @@ The MAX32655 FTHR board includes an integrated CMSIS-DAP debugger:
 .. code-block:: bash
 
    # Using OpenOCD (automatically configured)
-   cmake --build build_ex1 --target flash
+   cmake --build ftc_workshop_build --target flash
 
    # Or manually with OpenOCD
    openocd -f interface/cmsis-dap.cfg \
            -f target/max32655.cfg \
-           -c "program build_ex1/build/ftc_workshop.elf verify reset exit"
+           -c "program ftc_workshop_build/build/ftc_workshop.elf verify reset exit"
 
 Serial Console
 ~~~~~~~~~~~~~~
@@ -86,11 +108,15 @@ Connect a serial terminal at **115200 baud, 8N1** to view debug output:
 
 .. code-block:: bash
 
-   # Linux/macOS
-   screen /dev/ttyACM0 115200
+   # Recommended: picocom with automatic CR after LF
+   picocom -b 115200 --imap lfcrlf /dev/ttyACM0
 
-   # Or use minicom
+   # Or use screen with automatic CR after LF
+   screen /dev/ttyACM0 115200,onlcr
+
+   # Or use minicom (configure CR after LF interactively)
    minicom -D /dev/ttyACM0 -b 115200
+   # Press Ctrl-A Z, then O → "Screen and keyboard" → enable "Add carriage return"
 
 Quick Start
 -----------
@@ -109,12 +135,13 @@ Quick Start
    .. code-block:: bash
 
       # Build exercise 1
-      cmake --preset max32655_fthr -B build_ex1 \
-        -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf
-      cmake --build build_ex1 --target ftc_workshop
+      cmake --preset max32655_fthr -B ftc_workshop_build \
+        -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf --fresh
+
+      cmake --build ftc_workshop_build --target ftc_workshop
 
       # Flash to board
-      cmake --build build_ex1 --target flash
+      cmake --build ftc_workshop_build --target flash
 
 4. **Open Serial Terminal** and press the buttons to see GPIO input in action.
 
@@ -214,7 +241,7 @@ The following pin connections are used across all exercises:
 Exercise-Specific Connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Exercise 2, 3, 4:**
+**Exercise 2, 4:**
 
 +------------------+------------------+-------------------------+
 | Signal           | MAX32655 Pin     | Connected To            |
@@ -228,7 +255,7 @@ Exercise-Specific Connections
 | SPI0_CS          | P0.7             | ADXL355 CS              |
 +------------------+------------------+-------------------------+
 
-**Exercise 3, 4:**
+**Exercise 3:**
 
 +------------------+------------------+-------------------------+
 | Signal           | MAX32655 Pin     | Connected To            |
@@ -242,7 +269,7 @@ Exercise-Specific Connections
 | GPIO_SCL         | P0.31            | SSD1306 SCL (bitbang)   |
 +------------------+------------------+-------------------------+
 
-**Exercise 4 Additional:**
+**Exercise 5 Additional:**
 
 +------------------+------------------+-------------------------+
 | Signal           | MAX32655 Pin     | Description             |

@@ -46,7 +46,7 @@ int main()
 	}
 
 	capi_uart_stdio(uart);
-	printf("ADXL355 Accelerometer Exercise 2\n");
+	printf("ADXL355 Accelerometer Exercise 2\r\n");
 
 	/* Initialize SPI controller */
 	struct capi_spi_config adxl355_spi_config = {
@@ -94,13 +94,12 @@ int main()
 	 * TODO: Initialize the adxl355 descriptor.
 	 * Hint: Check the adxl355.h file for the required function.
 	 */
-	ret = adxl355_init(&adxl355, adxl355_param);
 	if (ret) {
 		printf("Error initializing ADXL355: %d\n", ret);
 		return ret;
 	}
 
-	printf("ADXL355 initialized successfully\n");
+	printf("ADXL355 initialized successfully\r\n");
 
 	/* Perform soft reset */
 	ret = adxl355_soft_reset(adxl355);
@@ -131,7 +130,6 @@ int main()
 		 * TODO: Read acceleration data.
 		 * Hint: Look into the adxl355.h header for the adxl355_get_xyz() function
 		 */
-		ret = adxl355_get_xyz(adxl355, &x_accel, &y_accel, &z_accel);
 		if (ret) {
 			printf("Error reading acceleration data: %d\n", ret);
 		} else {

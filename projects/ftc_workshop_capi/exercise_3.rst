@@ -307,16 +307,16 @@ Build Commands
 .. code-block:: bash
 
    # Configure CMake build
-   cmake --preset max32655_fthr --fresh -B build_ex3 \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex3.conf
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex3.conf --fresh
 
    # Build the project
-   cmake --build build_ex3 --target ftc_workshop
+   cmake --build ftc_workshop_build --target ftc_workshop
 
    # Flash to the board
-   cmake --build build_ex3 --target flash
+   cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``build_ex3/build/ftc_workshop.elf``
+Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf``
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
@@ -334,11 +334,15 @@ Running the Example
 
    .. code-block:: bash
 
-      # Linux/macOS
-      screen /dev/ttyACM0 115200
+      # Recommended: picocom with automatic CR after LF
+      picocom -b 115200 --imap lfcrlf /dev/ttyACM0
 
-      # Or with minicom
+      # Or use screen with automatic CR after LF
+      screen /dev/ttyACM0 115200,onlcr
+
+      # Or use minicom (configure CR after LF interactively)
       minicom -D /dev/ttyACM0 -b 115200
+      # Press Ctrl-A Z, then O → "Screen and keyboard" → enable "Add carriage return"
 
 4. **Observe**: Battery voltage displayed on OLED and printed to console every second
 

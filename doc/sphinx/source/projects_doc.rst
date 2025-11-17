@@ -99,3 +99,11 @@ GYROSCOPES
    :glob:
 
    projects/gyroscope/*
+
+WORKSHOPS
+===========
+
+.. toctree::
+   :maxdepth: 1
+
+   projects/ftc_workshop_capi

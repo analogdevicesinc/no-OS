@@ -64,7 +64,7 @@ Program Flow
 
 2. **Main Loop**:
 
-   - Read the button states. The user is expencted to implement this step. Follow the hints in the application code.
+   - Read the button states. The user is expected to implement this step. Follow the hints in the application code.
    - Print button states to UART console
    - Delay 1 second between readings
 
@@ -169,16 +169,16 @@ Build Commands
 .. code-block:: bash
 
    # Configure the CMake build
-   cmake --preset max32655_fthr --fresh -B build_ex1 \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf --fresh
 
    # Build the project
-   cmake --build build_ex1 --target ftc_workshop
+   cmake --build ftc_workshop_build --target ftc_workshop
 
    # Flash to the board
-   cmake --build build_ex1 --target flash
+   cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``build_ex1/build/ftc_workshop.elf``
+Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf``
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
@@ -191,11 +191,15 @@ Running the Example
 
    .. code-block:: bash
 
-      # Linux/macOS
-      screen /dev/ttyACM0 115200
+      # Recommended: picocom with automatic CR after LF
+      picocom -b 115200 --imap lfcrlf /dev/ttyACM0
 
-      # Or with minicom
+      # Or use screen with automatic CR after LF
+      screen /dev/ttyACM0 115200,onlcr
+
+      # Or use minicom (configure CR after LF interactively)
       minicom -D /dev/ttyACM0 -b 115200
+      # Press Ctrl-A Z, then O → "Screen and keyboard" → enable "Add carriage return"
 
 4. **Press the buttons** and observe the output change in real-time
 

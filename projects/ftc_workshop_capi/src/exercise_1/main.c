@@ -103,7 +103,7 @@ int main()
 		 * Hint: Check the capi_gpio.h header for the function to read the state of the pin.
 		 */
 
-		/* 
+		 /* 
 		 * TODO: read the GPIO line for button 2 (gpio3 capi_gpio_pin) into the button2_val variable.
 		 * Hint: Check the capi_gpio.h header for the function to read the state of the pin.
 		 */

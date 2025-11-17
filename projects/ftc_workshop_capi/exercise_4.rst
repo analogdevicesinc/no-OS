@@ -278,16 +278,16 @@ Build Commands
 .. code-block:: bash
 
    # Configure CMake build
-   cmake --preset max32655_fthr --fresh -B build_ex4 \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex4.conf
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex4.conf --fresh
 
    # Build the project
-   cmake --build build_ex4 --target ftc_workshop_capi
+   cmake --build ftc_workshop_build --target ftc_workshop_capi
 
    # Flash to the board
-   cmake --build build_ex4 --target flash
+   cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``build_ex4/build/ftc_workshop_capi.elf``
+Output binary location: ``ftc_workshop_build/build/ftc_workshop_capi.elf``
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
