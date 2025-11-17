@@ -404,7 +404,7 @@ Running the Example
    - Connect ADXL355 PMOD to P6 on the adapter
    - Connect SSD1306 OLED to P7 on the adapter
    - Ensure all devices share common ground via the adapter
-   - (Optional) Connect a battery to MAX20303 for real voltage readings
+   - Connect a battery to MAX20303 for real voltage readings
 
 2. **Flash the firmware** using the build commands above
 
@@ -507,7 +507,7 @@ Testing the System
 3. **Battery Monitoring**:
 
    - With battery connected: See real voltage and percentage
-   - Without battery: May show 0V or invalid data
+   - Without battery: Currently, the MAX20303 driver will throw and error and the program will stop.
    - Verify BLE Battery Service reports same percentage as display
 
 4. **BLE Connectivity**:
