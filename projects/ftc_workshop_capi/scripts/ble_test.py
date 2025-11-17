@@ -160,23 +160,22 @@ async def scan_for_fit_device():
         console.print("Make sure Bluetooth is enabled and devices are advertising")
         return None
 
-    adv_name = os.environ['BLE_ADV_NAME']
+    adv_name = os.environ.get('BLE_ADV_NAME', 'FTC_Workshop')
 
-    print("adv name = {}", adv_name)
+    print("adv name = ", adv_name)
     for d in devices:
         print("Found ", d.name)
     # Find the device
     fit_devices = [d for d in devices if d.name and adv_name.lower() == d.name.lower()]
 
     if not fit_devices:
-        console.print("[bold red] No 'Fit' devices found[/]")
+        console.print(f"[bold red] No '{adv_name}' devices found[/]")
         console.print("\n[yellow]Make sure:[/]")
         console.print("- Your device is powered on")
         console.print("- BLE firmware is running")
-        console.print("- Device is advertising as 'Fit'")
         return None
 
-    console.print(f"[bold green] Found {len(fit_devices)} Fit device(s)[/]")
+    console.print(f"[bold green] Found {len(fit_devices)} {adv_name} device(s)[/]")
     return fit_devices[0]
 
 async def connect_and_monitor(monitor, live, fit_device):

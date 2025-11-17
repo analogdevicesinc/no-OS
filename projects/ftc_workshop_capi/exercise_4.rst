@@ -282,7 +282,7 @@ Build Commands
      -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex4.conf --fresh
 
    # Build the project
-   cmake --build ftc_workshop_build --target ftc_workshop_capi
+   cmake --build ftc_workshop_build --target ftc_workshop
 
    # Flash to the board
    cmake --build ftc_workshop_build --target flash
