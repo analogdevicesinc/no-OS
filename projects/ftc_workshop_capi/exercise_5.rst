@@ -338,16 +338,34 @@ Build Commands
 
 **Setting BLE Advertisement Name (Optional)**
 
-Before configuring the build, you can customize the BLE advertisement name by setting the ``BLE_ADV_NAME`` environment variable:
+Before configuring the build, you can customize the BLE advertisement name by setting the ``BLE_ADV_NAME`` environment variable. If not set, the default name "FTC_Workshop" will be used. This name will be visible when scanning for BLE devices.
+
+**Linux/macOS:**
 
 .. code-block:: bash
 
    # Set custom BLE advertisement name (optional)
    export BLE_ADV_NAME="FTC_Workshop"
 
-If not set, the default name "FTC_Workshop" will be used. This name will be visible when scanning for BLE devices.
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Set custom BLE advertisement name (optional)
+   $env:BLE_ADV_NAME="FTC_Workshop"
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   # Set custom BLE advertisement name (optional)
+   set BLE_ADV_NAME=FTC_Workshop
 
 **Build Steps**
+
+For complete build instructions including Windows-specific syntax, refer to the main :doc:`ftc_workshop_capi` documentation.
+
+**Linux/macOS:**
 
 .. code-block:: bash
 
@@ -361,7 +379,21 @@ If not set, the default name "FTC_Workshop" will be used. This name will be visi
    # Flash to the board
    cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``ftc_workshop_build/build/ftc_workshop_capi.elf``
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Configure CMake build (note: quotes required for paths with /)
+   cmake --preset max32655_fthr -B ftc_workshop_build `
+     -DPROJECT_DEFCONFIG="ftc_workshop_capi/project_ex5.conf" --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # Flash to the board
+   cmake --build ftc_workshop_build --target flash
+
+Output binary location: ``ftc_workshop_build/build/ftc_workshop_capi.elf`` (Linux/macOS) or ``ftc_workshop_build\build\ftc_workshop_capi.elf`` (Windows)
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
