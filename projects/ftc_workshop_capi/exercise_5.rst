@@ -336,6 +336,19 @@ This enables:
 Build Commands
 ~~~~~~~~~~~~~~
 
+**Setting BLE Advertisement Name (Optional)**
+
+Before configuring the build, you can customize the BLE advertisement name by setting the ``BLE_ADV_NAME`` environment variable:
+
+.. code-block:: bash
+
+   # Set custom BLE advertisement name (optional)
+   export BLE_ADV_NAME="FTC_Workshop"
+
+If not set, the default name "FTC_Workshop" will be used. This name will be visible when scanning for BLE devices.
+
+**Build Steps**
+
 .. code-block:: bash
 
    # Configure CMake build
@@ -343,7 +356,7 @@ Build Commands
      -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex5.conf --fresh
 
    # Build the project
-   cmake --build ftc_workshop_build --target ftc_workshop_capi
+   cmake --build ftc_workshop_build --target ftc_workshop
 
    # Flash to the board
    cmake --build ftc_workshop_build --target flash
