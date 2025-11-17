@@ -595,8 +595,7 @@ int ad5710r_set_operating_mode(struct ad5710r_desc *desc, uint8_t chn_num,
 		return -EINVAL;
 
 	ret = ad5710r_spi_write_mask(desc,
-				     chn_num < AD5710R_MAX_CHANNEL_OP_MODE_0  ? AD5710R_REG_ADDR_OPERATING_MODE_0 :
-				     AD5710R_REG_ADDR_OPERATING_MODE_1,
+				     AD5710R_REG_ADDR_OPERATING_MODE_CHN(chn_num),
 				     AD5710R_MASK_OPERATING_MODE(chn_num),
 				     chn_op_mode);
 	if (ret)
