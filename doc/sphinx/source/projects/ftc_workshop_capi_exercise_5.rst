@@ -339,16 +339,16 @@ Build Commands
 .. code-block:: bash
 
    # Configure CMake build
-   cmake --preset max32655_fthr -B ftc_workshop_build \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex5.conf --fresh
+   cmake --preset max32655_fthr --fresh -B build_ex5 \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex5.conf
 
    # Build the project
-   cmake --build ftc_workshop_build --target ftc_workshop_capi
+   cmake --build build_ex5 --target ftc_workshop_capi
 
    # Flash to the board
-   cmake --build ftc_workshop_build --target flash
+   cmake --build build_ex5 --target flash
 
-Output binary location: ``ftc_workshop_build/build/ftc_workshop_capi.elf``
+Output binary location: ``build_ex5/build/ftc_workshop_capi.elf``
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
@@ -411,21 +411,21 @@ The ``ble_test.py`` script connects to the device via BLE and displays step coun
 
 .. code-block:: text
 
-   ╭───────────── Fit Device Monitor ────────────────╮
+   ╭───────────── 🏃 Fit Device Monitor ─────────────╮
    │              ● CONNECTED                        │
    ╰─────────────────────────────────────────────────╯
 
-   ╭────────── Device Information ───────────────────╮
+   ╭────────── 📱 Device Information ────────────────╮
    │ Device Name:    FTC_Workshop                    │
    │ Address:        XX:XX:XX:XX:XX:XX               │
    │ Services:       5                               │
    │ Last Update:    14:32:45                        │
    ╰─────────────────────────────────────────────────╯
 
-   ╭────────── Real-time Metrics ─────────────────╮
-   │ Battery Level:  85%                          │
-   │ Step Count:     42                           │
-   ╰──────────────────────────────────────────────╯
+   ╭────────── 📊 Real-time Metrics ─────────────────╮
+   │ Battery Level:  🔋 85%                          │
+   │ Step Count:     👟 42                           │
+   ╰─────────────────────────────────────────────────╯
 
 **Important Notes:**
 

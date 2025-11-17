@@ -226,22 +226,100 @@ This enables:
 
 Note: The project won't compile out of the box. As part of the exercise, the user is expected to use menuconfig (or modify the defconfig and running a fresh build) to enable the ADXL355 driver.
 
+Enabling the ADXL355 Driver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before building the project, you need to enable the ADXL355 driver using menuconfig:
+
+**Step 1: Generate initial configuration**
+
+First, configure the build and generate the initial ``.config`` file:
+
+.. code-block:: bash
+
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex2.conf --fresh
+
+**Step 2: Launch menuconfig**
+
+Run menuconfig from the binary directory:
+
+.. code-block:: bash
+
+   cmake --build ftc_workshop_build --target menuconfig
+
+This will launch an interactive text-based configuration interface.
+
+**Step 3: Enable the ADXL355 driver**
+
+In the menuconfig interface:
+
+1. Navigate using arrow keys to **"Device Drivers"**
+2. Press **Enter** to expand the menu
+3. Navigate to **"Accelerometer Drivers"**
+4. Press **Space** or **Y** to enable it (it should show ``[*]``)
+5. Press **Enter** to expand the submenu
+6. Navigate to **"Enable the ADXL355 driver"**
+7. Press **Space** or **Y** to enable it (it should show ``[*]``)
+8. Press **q** to exit, and press **y** to save the configuration
+
+The menuconfig path is:
+
+.. code-block:: text
+
+   Device Drivers  --->
+       [*] Accelerometer Drivers  --->
+           [*] Enable the ADXL355 driver
+
+**Step 4: Verify configuration**
+
+You can verify that the driver is enabled by checking the ``.config`` file:
+
+.. code-block:: bash
+
+   grep ADXL355 ftc_workshop_build/build/.config
+
+You should see:
+
+.. code-block:: text
+
+   CONFIG_ACCEL_ADXL355=y
+
+Alternatively, you can manually add these lines to the ``project_ex2.conf`` file and regenerate the build:
+
+.. code-block:: kconfig
+
+   CONFIG_ACCEL=y
+   CONFIG_ACCEL_ADXL355=y
+
+Then run the CMake configuration command again with ``--fresh`` to regenerate the configuration.
+
+After the driver is enabled, you can continue compiling the project:
+
+.. code-block:: bash
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # Flash to the board
+   cmake --build ftc_workshop_build --target flash
+
 Build Commands
 ~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
    # Configure CMake build
-   cmake --preset max32655_fthr --fresh -B build_ex2 \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex2.conf
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex2.conf --fresh
 
    # Build the project
-   cmake --build build_ex2 --target ftc_workshop
+   cmake --build ftc_workshop_build --target ftc_workshop
 
    # Flash to the board
-   cmake --build build_ex2 --target flash
+   cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``build_ex2/build/ftc_workshop.elf``
+Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf``
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
@@ -258,11 +336,15 @@ Running the Example
 
    .. code-block:: bash
 
-      # Linux/macOS
-      screen /dev/ttyACM0 115200
+      # Recommended: picocom with automatic CR after LF
+      picocom -b 115200 --imap lfcrlf /dev/ttyACM0
 
-      # Or with minicom
+      # Or use screen with automatic CR after LF
+      screen /dev/ttyACM0 115200,onlcr
+
+      # Or use minicom (configure CR after LF interactively)
       minicom -D /dev/ttyACM0 -b 115200
+      # Press Ctrl-A Z, then O → "Screen and keyboard" → enable "Add carriage return"
 
 4. **Observe output**: You should see acceleration and temperature readings updating twice per second
 

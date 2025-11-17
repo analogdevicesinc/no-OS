@@ -452,9 +452,11 @@ void bt_task(void *pvParameters)
 			 * Hint: display_print_string() can be used.
 			 */
 
-			display_print_string(oled_display, steps_display_buffer, 0, 6);
-			display_print_string(oled_display, battery_display_buffer, 2, 8);
+			ret = display_print_string(oled_display, steps_display_buffer, 0, 6);
+			if (ret)
+				printf("Display write error: %d\n", ret);
 
+			ret = display_print_string(oled_display, battery_display_buffer, 2, 8);
 			if (ret)
 				printf("Display write error: %d\n", ret);
 		}
