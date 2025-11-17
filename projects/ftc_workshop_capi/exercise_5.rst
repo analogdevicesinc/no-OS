@@ -433,6 +433,8 @@ The ``ble_test.py`` script connects to the device via BLE and displays step coun
 
 **Prerequisites:**
 
+**Linux/macOS:**
+
 .. code-block:: bash
 
    # Create and activate virtual environment
@@ -442,15 +444,52 @@ The ``ble_test.py`` script connects to the device via BLE and displays step coun
    # Install required packages
    pip3 install bleak rich
 
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Create virtual environment
+   python -m venv .venv
+
+   # Activate virtual environment
+   .venv\Scripts\Activate.ps1
+
+   # Note: If you get an execution policy error, run:
+   # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+   # Install required packages
+   pip install bleak rich
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   # Create virtual environment
+   python -m venv .venv
+
+   # Activate virtual environment
+   .venv\Scripts\activate.bat
+
+   # Install required packages
+   pip install bleak rich
+
 **Running the script:**
 
 1. Flash the Exercise 5 firmware to the board
 2. Wait for the device to start advertising
-3. Run the script:
+3. Run the script (ensure your virtual environment is activated):
+
+**Linux/macOS:**
 
 .. code-block:: bash
 
    python3 projects/ftc_workshop_capi/scripts/ble_test.py
+
+**Windows (PowerShell and Command Prompt):**
+
+.. code-block:: batch
+
+   python projects\ftc_workshop_capi\scripts\ble_test.py
 
 **Expected output:**
 
