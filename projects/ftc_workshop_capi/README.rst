@@ -68,6 +68,8 @@ Building an Exercise
 
 Each exercise has its own configuration file. To build a specific exercise:
 
+**Linux/macOS:**
+
 .. code-block:: bash
 
    # Ensure MAXIM_LIBRARIES is set before running cmake
@@ -82,9 +84,44 @@ Each exercise has its own configuration file. To build a specific exercise:
 
    # The output binary is at: ftc_workshop_build/build/ftc_workshop.elf
 
-Note 1: The cmake commands should be run from the no-OS root directory.
-Note 2: When changing between exercises, it is important to run the cmake config step with the --fresh flag.
-Note 3: The MAXIM_LIBRARIES environment variable must be set before running the cmake configuration step.
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Ensure MAXIM_LIBRARIES is set before running cmake
+   $env:MAXIM_LIBRARIES="C:\MaximSDK\Libraries"
+
+   # Configure the build for exercise 1 (note: quotes are required for paths with slashes)
+   cmake --preset max32655_fthr -B ftc_workshop_build `
+     -DPROJECT_DEFCONFIG="ftc_workshop_capi/project_ex1.conf" --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # The output binary is at: ftc_workshop_build\build\ftc_workshop.elf
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   # Ensure MAXIM_LIBRARIES is set before running cmake
+   set MAXIM_LIBRARIES=C:\MaximSDK\Libraries
+
+   # Configure the build for exercise 1
+   cmake --preset max32655_fthr -B ftc_workshop_build ^
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex1.conf --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # The output binary is at: ftc_workshop_build\build\ftc_workshop.elf
+
+**Important Notes:**
+
+- Note 1: The cmake commands should be run from the no-OS root directory.
+- Note 2: When changing between exercises, it is important to run the cmake config step with the --fresh flag.
+- Note 3: The MAXIM_LIBRARIES environment variable must be set before running the cmake configuration step.
+- Note 4 (Windows PowerShell): Paths containing forward slashes (/) in -D parameters must be quoted to prevent PowerShell from misinterpreting them.
 
 Flashing the Firmware
 ~~~~~~~~~~~~~~~~~~~~~~

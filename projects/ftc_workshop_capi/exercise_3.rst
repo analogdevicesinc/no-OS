@@ -304,6 +304,10 @@ This enables:
 Build Commands
 ~~~~~~~~~~~~~~
 
+For complete build instructions including Windows-specific syntax, refer to the main :doc:`ftc_workshop_capi` documentation.
+
+**Linux/macOS:**
+
 .. code-block:: bash
 
    # Configure CMake build
@@ -316,7 +320,35 @@ Build Commands
    # Flash to the board
    cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf``
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Configure CMake build (note: quotes required for paths with /)
+   cmake --preset max32655_fthr -B ftc_workshop_build `
+     -DPROJECT_DEFCONFIG="ftc_workshop_capi/project_ex3.conf" --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # Flash to the board
+   cmake --build ftc_workshop_build --target flash
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   # Configure CMake build
+   cmake --preset max32655_fthr -B ftc_workshop_build ^
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex3.conf --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # Flash to the board
+   cmake --build ftc_workshop_build --target flash
+
+Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf`` (Linux/macOS) or ``ftc_workshop_build\build\ftc_workshop.elf`` (Windows)
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~

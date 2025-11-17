@@ -235,9 +235,25 @@ Before building the project, you need to enable the ADXL355 driver using menucon
 
 First, configure the build and generate the initial ``.config`` file:
 
+**Linux/macOS:**
+
 .. code-block:: bash
 
    cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex2.conf --fresh
+
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   cmake --preset max32655_fthr -B ftc_workshop_build `
+     -DPROJECT_DEFCONFIG="ftc_workshop_capi/project_ex2.conf" --fresh
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   cmake --preset max32655_fthr -B ftc_workshop_build ^
      -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex2.conf --fresh
 
 **Step 2: Launch menuconfig**
@@ -307,6 +323,10 @@ After the driver is enabled, you can continue compiling the project:
 Build Commands
 ~~~~~~~~~~~~~~
 
+For complete build instructions including Windows-specific syntax, refer to the main :doc:`ftc_workshop_capi` documentation.
+
+**Quick Reference (Linux/macOS):**
+
 .. code-block:: bash
 
    # Configure CMake build
@@ -319,7 +339,21 @@ Build Commands
    # Flash to the board
    cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf``
+**Quick Reference (Windows PowerShell):**
+
+.. code-block:: powershell
+
+   # Configure CMake build (note: quotes required for paths with /)
+   cmake --preset max32655_fthr -B ftc_workshop_build `
+     -DPROJECT_DEFCONFIG="ftc_workshop_capi/project_ex2.conf" --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # Flash to the board
+   cmake --build ftc_workshop_build --target flash
+
+Output binary location: ``ftc_workshop_build/build/ftc_workshop.elf`` (Linux/macOS) or ``ftc_workshop_build\build\ftc_workshop.elf`` (Windows)
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
