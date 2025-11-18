@@ -171,28 +171,28 @@ int adxl355_init(struct adxl355_dev **device,
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_DEVID_AD),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_DEVID_AD), &reg_value);
 	if (ret)
-		goto error_com;
+		goto error_dev;
 	if (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_AD)) {
 		ret = -EINVAL;
-		goto error_com;
+		goto error_dev;
 	}
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_DEVID_MST),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_DEVID_MST), &reg_value);
 	if (ret)
-		goto error_com;
+		goto error_dev;
 	if (reg_value != GET_ADXL355_RESET_VAL(ADXL355_DEVID_MST)) {
 		ret = -EINVAL;
-		goto error_com;
+		goto error_dev;
 	}
 
 	ret = adxl355_read_device_data(dev, ADXL355_ADDR(ADXL355_PARTID),
 				       GET_ADXL355_TRANSF_LEN(ADXL355_PARTID), &reg_value);
 	if (ret)
-		goto error_com;
+		goto error_dev;
 	if (reg_value != adxl355_part_id[dev->dev_type]) {
 		ret = -EINVAL;
-		goto error_com;
+		goto error_dev;
 	}
 
 	/* Get shadow register values */
@@ -212,13 +212,6 @@ int adxl355_init(struct adxl355_dev **device,
 	*device = dev;
 
 	return 0;
-error_com:
-	if (dev->comm_type == ADXL355_SPI_COMM)
-		no_os_spi_remove(dev->com_desc.spi_desc);
-	else
-		no_os_i2c_remove(dev->com_desc.i2c_desc);
-	no_os_free(dev);
-	return ret;
 error_dev:
 	no_os_free(dev);
 	return ret;
