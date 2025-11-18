@@ -336,19 +336,64 @@ This enables:
 Build Commands
 ~~~~~~~~~~~~~~
 
+**Setting BLE Advertisement Name (Optional)**
+
+Before configuring the build, you can customize the BLE advertisement name by setting the ``BLE_ADV_NAME`` environment variable. If not set, the default name "FTC_Workshop" will be used. This name will be visible when scanning for BLE devices.
+
+**Linux/macOS:**
+
+.. code-block:: bash
+
+   # Set custom BLE advertisement name (optional)
+   export BLE_ADV_NAME="FTC_Workshop"
+
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Set custom BLE advertisement name (optional)
+   $env:BLE_ADV_NAME="FTC_Workshop"
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   # Set custom BLE advertisement name (optional)
+   set BLE_ADV_NAME=FTC_Workshop
+
+**Build Steps**
+
+For complete build instructions including Windows-specific syntax, refer to the main :doc:`ftc_workshop_capi` documentation.
+
+**Linux/macOS:**
+
 .. code-block:: bash
 
    # Configure CMake build
-   cmake --preset max32655_fthr --fresh -B build_ex5 \
-     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex5.conf
+   cmake --preset max32655_fthr -B ftc_workshop_build \
+     -DPROJECT_DEFCONFIG=ftc_workshop_capi/project_ex5.conf --fresh
 
    # Build the project
-   cmake --build build_ex5 --target ftc_workshop_capi
+   cmake --build ftc_workshop_build --target ftc_workshop
 
    # Flash to the board
-   cmake --build build_ex5 --target flash
+   cmake --build ftc_workshop_build --target flash
 
-Output binary location: ``build_ex5/build/ftc_workshop_capi.elf``
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Configure CMake build (note: quotes required for paths with /)
+   cmake --preset max32655_fthr -B ftc_workshop_build `
+     -DPROJECT_DEFCONFIG="ftc_workshop_capi/project_ex5.conf" --fresh
+
+   # Build the project
+   cmake --build ftc_workshop_build --target ftc_workshop
+
+   # Flash to the board
+   cmake --build ftc_workshop_build --target flash
+
+Output binary location: ``ftc_workshop_build/build/ftc_workshop_capi.elf`` (Linux/macOS) or ``ftc_workshop_build\build\ftc_workshop_capi.elf`` (Windows)
 
 Running the Example
 ~~~~~~~~~~~~~~~~~~~
@@ -359,7 +404,7 @@ Running the Example
    - Connect ADXL355 PMOD to P6 on the adapter
    - Connect SSD1306 OLED to P7 on the adapter
    - Ensure all devices share common ground via the adapter
-   - (Optional) Connect a battery to MAX20303 for real voltage readings
+   - Connect a battery to MAX20303 for real voltage readings
 
 2. **Flash the firmware** using the build commands above
 
@@ -388,6 +433,8 @@ The ``ble_test.py`` script connects to the device via BLE and displays step coun
 
 **Prerequisites:**
 
+**Linux/macOS:**
+
 .. code-block:: bash
 
    # Create and activate virtual environment
@@ -397,35 +444,72 @@ The ``ble_test.py`` script connects to the device via BLE and displays step coun
    # Install required packages
    pip3 install bleak rich
 
+**Windows (PowerShell):**
+
+.. code-block:: powershell
+
+   # Create virtual environment
+   python -m venv .venv
+
+   # Activate virtual environment
+   .venv\Scripts\Activate.ps1
+
+   # Note: If you get an execution policy error, run:
+   # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+   # Install required packages
+   pip install bleak rich
+
+**Windows (Command Prompt):**
+
+.. code-block:: batch
+
+   # Create virtual environment
+   python -m venv .venv
+
+   # Activate virtual environment
+   .venv\Scripts\activate.bat
+
+   # Install required packages
+   pip install bleak rich
+
 **Running the script:**
 
 1. Flash the Exercise 5 firmware to the board
 2. Wait for the device to start advertising
-3. Run the script:
+3. Run the script (ensure your virtual environment is activated):
+
+**Linux/macOS:**
 
 .. code-block:: bash
 
    python3 projects/ftc_workshop_capi/scripts/ble_test.py
 
+**Windows (PowerShell and Command Prompt):**
+
+.. code-block:: batch
+
+   python projects\ftc_workshop_capi\scripts\ble_test.py
+
 **Expected output:**
 
 .. code-block:: text
 
-   ╭───────────── 🏃 Fit Device Monitor ─────────────╮
+   ╭───────────── Fit Device Monitor ────────────────╮
    │              ● CONNECTED                        │
    ╰─────────────────────────────────────────────────╯
 
-   ╭────────── 📱 Device Information ────────────────╮
+   ╭────────── Device Information ───────────────────╮
    │ Device Name:    FTC_Workshop                    │
    │ Address:        XX:XX:XX:XX:XX:XX               │
    │ Services:       5                               │
    │ Last Update:    14:32:45                        │
    ╰─────────────────────────────────────────────────╯
 
-   ╭────────── 📊 Real-time Metrics ─────────────────╮
-   │ Battery Level:  🔋 85%                          │
-   │ Step Count:     👟 42                           │
-   ╰─────────────────────────────────────────────────╯
+   ╭────────── Real-time Metrics ─────────────────╮
+   │ Battery Level:  85%                          │
+   │ Step Count:     42                           │
+   ╰──────────────────────────────────────────────╯
 
 **Important Notes:**
 
@@ -462,7 +546,7 @@ Testing the System
 3. **Battery Monitoring**:
 
    - With battery connected: See real voltage and percentage
-   - Without battery: May show 0V or invalid data
+   - Without battery: Currently, the MAX20303 driver will throw and error and the program will stop.
    - Verify BLE Battery Service reports same percentage as display
 
 4. **BLE Connectivity**:
