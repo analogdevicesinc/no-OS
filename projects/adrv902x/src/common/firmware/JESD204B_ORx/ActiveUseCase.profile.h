@@ -13,10 +13,10 @@ const char *json_profile_active_use_case = "{ \n\
           \"conv1\": 0, \n\
           \"conv2\": 3, \n\
           \"conv3\": 2, \n\
-          \"conv4\": 5, \n\
-          \"conv5\": 4, \n\
-          \"conv6\": 7, \n\
-          \"conv7\": 6, \n\
+          \"conv4\": 127, \n\
+          \"conv5\": 127, \n\
+          \"conv6\": 127, \n\
+          \"conv7\": 127, \n\
           \"conv8\": 127, \n\
           \"conv9\": 127, \n\
           \"conv10\": 127, \n\
@@ -38,9 +38,9 @@ const char *json_profile_active_use_case = "{ \n\
         \"bankId\": 0, \n\
         \"deviceId\": 0, \n\
         \"lane0Id\": 0, \n\
-        \"jesd204M\": 8, \n\
+        \"jesd204M\": 4, \n\
         \"jesd204K\": 32, \n\
-        \"jesd204F\": 8, \n\
+        \"jesd204F\": 4, \n\
         \"jesd204Np\": 16, \n\
         \"jesd204E\": 0, \n\
         \"scramble\": 1, \n\
@@ -188,7 +188,7 @@ const char *json_profile_active_use_case = "{ \n\
         \"deserializerLanesEnabled\": 15, \n\
         \"lmfcOffset\": 0, \n\
         \"syncbOutSelect\": 0, \n\
-        \"syncbOutLvdsMode\": 0, \n\
+        \"syncbOutLvdsMode\": 1, \n\
         \"syncbOutLvdsPnInvert\": 0, \n\
         \"syncbOutCmosSlewRate\": 0, \n\
         \"syncbOutCmosDriveLevel\": 0, \n\
@@ -402,37 +402,37 @@ const char *json_profile_active_use_case = "{ \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 122880, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 245760, \n\
+          \"rfBandwidth_kHz\": 60000, \n\
+          \"rxBbf3dBCorner_kHz\": 60000, \n\
+          \"rxAdcBandWidth_kHz\": 30000, \n\
           \"rxFir\": { \n\
-            \"gain_dB\": 6, \n\
+            \"gain_dB\": 0, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              1, \n\
-              -2, \n\
-              3, \n\
-              -4, \n\
-              6, \n\
-              -6, \n\
-              5, \n\
-              2, \n\
-              -22, \n\
-              88, \n\
-              -500, \n\
-              17244, \n\
-              -500, \n\
-              88, \n\
-              -22, \n\
-              2, \n\
-              5, \n\
-              -6, \n\
-              6, \n\
-              -4, \n\
-              3, \n\
-              -2, \n\
-              1, \n\
+              11, \n\
+              -78, \n\
+              245, \n\
+              -419, \n\
+              264, \n\
+              518, \n\
+              -1562, \n\
+              1556, \n\
+              886, \n\
+              -5552, \n\
+              8439, \n\
+              24149, \n\
+              8439, \n\
+              -5552, \n\
+              886, \n\
+              1556, \n\
+              -1562, \n\
+              518, \n\
+              264, \n\
+              -419, \n\
+              245, \n\
+              -78, \n\
+              11, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -484,7 +484,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -550,37 +550,37 @@ const char *json_profile_active_use_case = "{ \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 122880, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 245760, \n\
+          \"rfBandwidth_kHz\": 60000, \n\
+          \"rxBbf3dBCorner_kHz\": 60000, \n\
+          \"rxAdcBandWidth_kHz\": 30000, \n\
           \"rxFir\": { \n\
-            \"gain_dB\": 6, \n\
+            \"gain_dB\": 0, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              1, \n\
-              -2, \n\
-              3, \n\
-              -4, \n\
-              6, \n\
-              -6, \n\
-              5, \n\
-              2, \n\
-              -22, \n\
-              88, \n\
-              -500, \n\
-              17244, \n\
-              -500, \n\
-              88, \n\
-              -22, \n\
-              2, \n\
-              5, \n\
-              -6, \n\
-              6, \n\
-              -4, \n\
-              3, \n\
-              -2, \n\
-              1, \n\
+              11, \n\
+              -78, \n\
+              245, \n\
+              -419, \n\
+              264, \n\
+              518, \n\
+              -1562, \n\
+              1556, \n\
+              886, \n\
+              -5552, \n\
+              8439, \n\
+              24149, \n\
+              8439, \n\
+              -5552, \n\
+              886, \n\
+              1556, \n\
+              -1562, \n\
+              518, \n\
+              264, \n\
+              -419, \n\
+              245, \n\
+              -78, \n\
+              11, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -632,7 +632,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -698,37 +698,37 @@ const char *json_profile_active_use_case = "{ \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 122880, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 245760, \n\
+          \"rfBandwidth_kHz\": 60000, \n\
+          \"rxBbf3dBCorner_kHz\": 60000, \n\
+          \"rxAdcBandWidth_kHz\": 30000, \n\
           \"rxFir\": { \n\
-            \"gain_dB\": 6, \n\
+            \"gain_dB\": 0, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              1, \n\
-              -2, \n\
-              3, \n\
-              -4, \n\
-              6, \n\
-              -6, \n\
-              5, \n\
-              2, \n\
-              -22, \n\
-              88, \n\
-              -500, \n\
-              17244, \n\
-              -500, \n\
-              88, \n\
-              -22, \n\
-              2, \n\
-              5, \n\
-              -6, \n\
-              6, \n\
-              -4, \n\
-              3, \n\
-              -2, \n\
-              1, \n\
+              11, \n\
+              -78, \n\
+              245, \n\
+              -419, \n\
+              264, \n\
+              518, \n\
+              -1562, \n\
+              1556, \n\
+              886, \n\
+              -5552, \n\
+              8439, \n\
+              24149, \n\
+              8439, \n\
+              -5552, \n\
+              886, \n\
+              1556, \n\
+              -1562, \n\
+              518, \n\
+              264, \n\
+              -419, \n\
+              245, \n\
+              -78, \n\
+              11, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -780,7 +780,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -846,37 +846,37 @@ const char *json_profile_active_use_case = "{ \n\
           \"rhb3Decimation\": 1, \n\
           \"rxFir1Decimation\": 1, \n\
           \"rxFir2Decimation\": 1, \n\
-          \"rxOutputRate_kHz\": 122880, \n\
-          \"rfBandwidth_kHz\": 200000, \n\
-          \"rxBbf3dBCorner_kHz\": 200000, \n\
-          \"rxAdcBandWidth_kHz\": 100000, \n\
+          \"rxOutputRate_kHz\": 245760, \n\
+          \"rfBandwidth_kHz\": 60000, \n\
+          \"rxBbf3dBCorner_kHz\": 60000, \n\
+          \"rxAdcBandWidth_kHz\": 30000, \n\
           \"rxFir\": { \n\
-            \"gain_dB\": 6, \n\
+            \"gain_dB\": 0, \n\
             \"numFirCoefs\": 24, \n\
             \"coefs\": [ \n\
-              1, \n\
-              -2, \n\
-              3, \n\
-              -4, \n\
-              6, \n\
-              -6, \n\
-              5, \n\
-              2, \n\
-              -22, \n\
-              88, \n\
-              -500, \n\
-              17244, \n\
-              -500, \n\
-              88, \n\
-              -22, \n\
-              2, \n\
-              5, \n\
-              -6, \n\
-              6, \n\
-              -4, \n\
-              3, \n\
-              -2, \n\
-              1, \n\
+              11, \n\
+              -78, \n\
+              245, \n\
+              -419, \n\
+              264, \n\
+              518, \n\
+              -1562, \n\
+              1556, \n\
+              886, \n\
+              -5552, \n\
+              8439, \n\
+              24149, \n\
+              8439, \n\
+              -5552, \n\
+              886, \n\
+              1556, \n\
+              -1562, \n\
+              518, \n\
+              264, \n\
+              -419, \n\
+              245, \n\
+              -78, \n\
+              11, \n\
               0, \n\
               0, \n\
               0, \n\
@@ -928,7 +928,7 @@ const char *json_profile_active_use_case = "{ \n\
               0 \n\
             ] \n\
           }, \n\
-          \"rxDdcMode\": 3, \n\
+          \"rxDdcMode\": 0, \n\
           \"rxNcoShifterCfg\": { \n\
             \"bandAInputBandWidth_kHz\": 0, \n\
             \"bandAInputCenterFreq_kHz\": 0, \n\
@@ -1879,7 +1879,7 @@ const char *json_profile_active_use_case = "{ \n\
       { \n\
         \"profile\": { \n\
           \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 100000, \n\
+          \"primarySigBandwidth_kHz\": 120000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
@@ -1991,7 +1991,7 @@ const char *json_profile_active_use_case = "{ \n\
       { \n\
         \"profile\": { \n\
           \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 100000, \n\
+          \"primarySigBandwidth_kHz\": 120000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
@@ -2103,7 +2103,7 @@ const char *json_profile_active_use_case = "{ \n\
       { \n\
         \"profile\": { \n\
           \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 100000, \n\
+          \"primarySigBandwidth_kHz\": 120000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
@@ -2215,7 +2215,7 @@ const char *json_profile_active_use_case = "{ \n\
       { \n\
         \"profile\": { \n\
           \"txInputRate_kHz\": 245760, \n\
-          \"primarySigBandwidth_kHz\": 100000, \n\
+          \"primarySigBandwidth_kHz\": 120000, \n\
           \"rfBandwidth_kHz\": 450000, \n\
           \"txDac3dBCorner_kHz\": 450000, \n\
           \"txBbf3dBCorner_kHz\": 225000, \n\
@@ -2330,25 +2330,25 @@ const char *json_profile_active_use_case = "{ \n\
     \"RxChannel1\": [ \n\
       386, \n\
       273, \n\
-      505, \n\
-      512, \n\
-      10, \n\
-      294, \n\
-      153, \n\
-      96, \n\
-      40, \n\
-      148, \n\
+      500, \n\
+      320, \n\
+      7, \n\
+      591, \n\
+      308, \n\
+      120, \n\
+      25, \n\
+      210, \n\
       132, \n\
       1, \n\
       10, \n\
-      16, \n\
+      48, \n\
       0, \n\
       0, \n\
-      16, \n\
+      32, \n\
       0, \n\
       0, \n\
       0, \n\
-      0, \n\
+      13, \n\
       128, \n\
       7, \n\
       7, \n\
@@ -2358,14 +2358,14 @@ const char *json_profile_active_use_case = "{ \n\
       7, \n\
       7, \n\
       7, \n\
-      1, \n\
-      2, \n\
+      7, \n\
+      7, \n\
       0, \n\
       7, \n\
-      4, \n\
+      13, \n\
+      13, \n\
       0, \n\
-      0, \n\
-      4, \n\
+      13, \n\
       0, \n\
       12, \n\
       0, \n\
@@ -2388,25 +2388,25 @@ const char *json_profile_active_use_case = "{ \n\
     \"RxChannel2\": [ \n\
       386, \n\
       273, \n\
-      505, \n\
-      512, \n\
-      10, \n\
-      294, \n\
-      153, \n\
-      96, \n\
-      40, \n\
-      148, \n\
+      500, \n\
+      320, \n\
+      7, \n\
+      591, \n\
+      308, \n\
+      120, \n\
+      25, \n\
+      210, \n\
       132, \n\
       1, \n\
       10, \n\
-      16, \n\
+      48, \n\
       0, \n\
       0, \n\
-      16, \n\
+      32, \n\
       0, \n\
       0, \n\
       0, \n\
-      0, \n\
+      13, \n\
       128, \n\
       7, \n\
       7, \n\
@@ -2416,14 +2416,14 @@ const char *json_profile_active_use_case = "{ \n\
       7, \n\
       7, \n\
       7, \n\
-      1, \n\
-      2, \n\
+      7, \n\
+      7, \n\
       0, \n\
       7, \n\
-      4, \n\
+      13, \n\
+      13, \n\
       0, \n\
-      0, \n\
-      4, \n\
+      13, \n\
       0, \n\
       12, \n\
       0, \n\
@@ -2446,25 +2446,25 @@ const char *json_profile_active_use_case = "{ \n\
     \"RxChannel3\": [ \n\
       386, \n\
       273, \n\
-      505, \n\
-      512, \n\
-      10, \n\
-      294, \n\
-      153, \n\
-      96, \n\
-      40, \n\
-      148, \n\
+      500, \n\
+      320, \n\
+      7, \n\
+      591, \n\
+      308, \n\
+      120, \n\
+      25, \n\
+      210, \n\
       132, \n\
       1, \n\
       10, \n\
-      16, \n\
+      48, \n\
       0, \n\
       0, \n\
-      16, \n\
+      32, \n\
       0, \n\
       0, \n\
       0, \n\
-      0, \n\
+      13, \n\
       128, \n\
       7, \n\
       7, \n\
@@ -2474,14 +2474,14 @@ const char *json_profile_active_use_case = "{ \n\
       7, \n\
       7, \n\
       7, \n\
-      1, \n\
-      2, \n\
+      7, \n\
+      7, \n\
       0, \n\
       7, \n\
-      4, \n\
+      13, \n\
+      13, \n\
       0, \n\
-      0, \n\
-      4, \n\
+      13, \n\
       0, \n\
       12, \n\
       0, \n\
@@ -2504,25 +2504,25 @@ const char *json_profile_active_use_case = "{ \n\
     \"RxChannel4\": [ \n\
       386, \n\
       273, \n\
-      505, \n\
-      512, \n\
-      10, \n\
-      294, \n\
-      153, \n\
-      96, \n\
-      40, \n\
-      148, \n\
+      500, \n\
+      320, \n\
+      7, \n\
+      591, \n\
+      308, \n\
+      120, \n\
+      25, \n\
+      210, \n\
       132, \n\
       1, \n\
       10, \n\
-      16, \n\
+      48, \n\
       0, \n\
       0, \n\
-      16, \n\
+      32, \n\
       0, \n\
       0, \n\
       0, \n\
-      0, \n\
+      13, \n\
       128, \n\
       7, \n\
       7, \n\
@@ -2532,14 +2532,14 @@ const char *json_profile_active_use_case = "{ \n\
       7, \n\
       7, \n\
       7, \n\
-      1, \n\
-      2, \n\
+      7, \n\
+      7, \n\
       0, \n\
       7, \n\
-      4, \n\
+      13, \n\
+      13, \n\
       0, \n\
-      0, \n\
-      4, \n\
+      13, \n\
       0, \n\
       12, \n\
       0, \n\
