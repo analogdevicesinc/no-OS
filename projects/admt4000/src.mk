@@ -24,8 +24,10 @@ SRCS += $(DRIVERS)/api/no_os_dma.c		\
 	$(NO-OS)/util/no_os_alloc.c		\
 	$(NO-OS)/util/no_os_mutex.c
 
-INCS += $(DRIVERS)/magnetometer/admt4000/admt4000.h
-SRCS += $(DRIVERS)/magnetometer/admt4000/admt4000.c
+INCS += $(DRIVERS)/position/admt4000/admt4000.h
+SRCS += $(DRIVERS)/position/admt4000/admt4000.c
+
+CFLAGS += -DFW_VERSION=\"$(FW_VERSION)\"
 
 ifeq (y,$(strip $(TMC_ENABLED)))
 CFLAGS += -DTMC=1

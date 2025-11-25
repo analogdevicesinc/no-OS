@@ -63,27 +63,44 @@ extern UART_HandleTypeDef huart5;
 #define SPI_OPS			&stm32_spi_ops
 #define SPI_CS_PORT             0
 #define SPI_CS                  15
-#define GPIO_SPI_SEL_PORT	6
-#define GPIO_SPI_SEL_PIN	11
 #define SPI_EXTRA		&spi_extra_ip
-#define SPI_SEL_EXTRA		&spi_sel_b_extra_ip
-
 
 #define GPIO_OPS		&stm32_gpio_ops
 #define GPIO_EXTRA		&gpio_extra_ip
-#define GPIO_EXTRA		&gpio_extra_ip
+#define GPIO_IN_EXTRA		&gpio_in_extra_ip
 
-#define GPIO_SHDN_N_PORT        6
-#define GPIO_SHDN_N		7
-#define GPIO_GPIO0_BUSY_PORT    3
+#define GPIO_GPIO2_PORT		6
+#define GPIO_GPIO2		7
+
+#define GPIO_GPIO0_BUSY_PORT	3
 #define GPIO_GPIO0_BUSY		12
-#define GPIO_COIL_RS_PORT       6
-#define GPIO_COIL_RS		9
-#define GPIO_CNV_PORT           0
+
+#define GPIO_GPIO4_PORT		6
+#define GPIO_GPIO4		11
+
+#define GPIO_GPIO5_PORT		0
+#define GPIO_GPIO5		2
+
+#define GPIO_CNV_PORT		0
 #define GPIO_CNV		11
 
 #define GPIO_ACALC_PORT		0
 #define GPIO_ACALC		10
+
+#define GPIO_DIAG1_PORT		1
+#define GPIO_DAIG1		15
+
+#define GPIO_SHDN_N_PORT	0
+#define GPIO_SHDN_N		4
+
+#define GPIO_RSTB_PORT		0
+#define GPIO_RSTB		6
+
+#define GPIO_COIL_RS_PORT	6
+#define GPIO_COIL_RS		9
+
+#define GPIO_V_EN_PORT		2
+#define GPIO_V_EN		1
 
 #define GPIO_IRQ_ID		10
 #define GPIO_IRQ_OPS		&stm32_gpio_irq_ops
@@ -93,6 +110,14 @@ extern UART_HandleTypeDef huart5;
 #define ADMT4000_GPIO_CB_HANDLE		NULL /* Not used in stm32 platform */
 #define ADMT4000_GPIO_TRIG_IRQ_ID	0 /* Not used in stm32 platform */
 
+#define HW_MEZZANINE_NAME       "EVAL-ADMT4000ARD1Z"
+#define HW_CARRIER_NAME         "STM32"
+#define DEVICE_NAME             "EVAL-ADMT4000ARD1Z"
+#define DEVICE_VENDOR           "Analog Devices"
+#ifndef FW_VERSION
+#define FW_VERSION              "1.0.0"
+#endif
+
 #if (TMC)
 #define TMC_CS_PORT             6
 #define TMC_CS_PIN              10
@@ -101,9 +126,9 @@ extern UART_HandleTypeDef huart5;
 
 extern struct stm32_uart_init_param uart_extra_ip;
 extern struct stm32_spi_init_param spi_extra_ip;
-extern struct stm32_spi_init_param spi_sel_b_extra_ip;
 extern struct stm32_spi_init_param spi_tmc_extra_ip;
 extern struct stm32_gpio_init_param gpio_extra_ip;
+extern struct stm32_gpio_init_param gpio_in_extra_ip;
 extern struct stm32_gpio_irq_init_param trigger_gpio_irq_ip;
 
 #endif /* __PARAMETERS_H__ */

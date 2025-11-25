@@ -1,8 +1,9 @@
+FW_VERSION ?= 1.0.0.a.0
 TMC_ENABLED ?= y
 
 PLATFORM ?= stm32
 
-EXAMPLE ?= iio_example
+EXAMPLE ?= iio_trigger_example
 
 include ../../tools/scripts/generic_variables.mk
 

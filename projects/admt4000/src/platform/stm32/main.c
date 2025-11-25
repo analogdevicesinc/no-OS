@@ -46,10 +46,8 @@ int main()
 	struct no_os_uart_desc *uart_desc;
 	struct no_os_spi_desc *spi_desc;
 	int ret;
-	uint8_t sw_cfg[1] = {0xff};
 	
 	spi_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
-	spi_sel_b_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
 #ifdef TMC
 	spi_tmc_extra_ip.get_input_clock = HAL_RCC_GetPCLK1Freq;
 #endif
@@ -62,16 +60,6 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
-
-	/* Initialize SPI for switch configuration */
-	ret = no_os_spi_init(&spi_desc, &spi_sel_b_spi_ip);
-	if (ret)
-		return ret;
-
-	/* Configure ADG714 over SPI using SPI_SEL_B_N pin */
-	ret = no_os_spi_write_and_read(spi_desc, sw_cfg, 1);
-	if (ret)
-		return ret;
 
 	ret = example_main();
 

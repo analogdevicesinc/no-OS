@@ -36,6 +36,7 @@
 
 #include "parameters.h"
 #include "admt4000.h"
+#include "iio_admt_evb.h"
 
 #ifdef TMC
 #include "tmc5240_wrapper.h"
@@ -51,9 +52,11 @@
 
 extern struct no_os_uart_init_param admt4000_uart_ip;
 extern struct admt4000_init_param admt4000_ip;
-extern struct no_os_gpio_init_param spi_sel_b_ip;
-extern struct no_os_spi_init_param spi_sel_b_spi_ip;
 extern struct no_os_spi_init_param spi_tmc_spi_ip;
+extern struct no_os_gpio_init_param gpio_shdn_n_ip;
+extern struct no_os_gpio_init_param gpio_v_en_ip;
+extern struct no_os_gpio_init_param gpio_rstb_ip;
+extern struct no_os_gpio_init_param gpio_coil_rs_ip;
 #if (TMC)
 extern struct tmc5240_init_param tmc5240_ip;
 #endif

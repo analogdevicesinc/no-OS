@@ -1,4 +1,4 @@
 IIOD=y
-INCS += $(DRIVERS)/magnetometer/admt4000/iio_admt4000.h
-SRCS += $(DRIVERS)/magnetometer/admt4000/iio_admt4000.c \
-	$(DRIVERS)/magnetometer/admt4000/iio_admt4000_trig.c
+INCS += $(DRIVERS)/position/admt4000/iio_admt4000.h
+SRCS += $(DRIVERS)/position/admt4000/iio_admt4000.c \
+	$(DRIVERS)/position/admt4000/iio_admt4000_trig.c

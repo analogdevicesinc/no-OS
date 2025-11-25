@@ -34,9 +34,10 @@
 #include "parameters.h"
 #include "common_data.h"
 #include "iio_admt4000.h"
+#include "iio_admt_evb.h"
 #include "iio_trigger.h"
 #include "iio_app.h"
-
+#include "no_os_print_log.h"
 #ifdef TMC
 #include "iio_tmc5240.h"
 #endif
@@ -64,16 +65,27 @@ struct iio_hw_trig_init_param admt4000_gpio_trig_ip = {
 	.name = ADMT4000_GPIO_TRIG_NAME,
 };
 
+static struct iio_ctx_attr context_attributes[] = {
+	{.name = "hw_mezzanine", .value = HW_MEZZANINE_NAME },
+	{.name = "hw_carrier", .value = HW_CARRIER_NAME },
+	{.name = "hw_name", .value = DEVICE_NAME },
+	{.name = "hw_vendor", .value = DEVICE_VENDOR },
+	{.name = "fw_version", .value = FW_VERSION },
+};
+
 int example_main()
 {
 	int ret;
 	struct admt4000_iio_dev *admt4000_iio_desc;
 	struct admt4000_iio_dev_init_param admt4000_iio_ip;
+	struct admt_evb_iio_desc *admt_evb_desc;
+	struct admt_evb_iio_init_param admt_evb_ip;
 	struct iio_app_desc *app;
 	struct iio_app_init_param app_init_param = { 0 };
 	struct iio_hw_trig *admt4000_trig_desc;
 	struct no_os_irq_ctrl_desc *admt4000_irq_desc;
-
+	struct no_os_gpio_desc *gpio_v_en_desc;
+	struct no_os_gpio_desc *gpio_rstb_desc;
 	struct iio_data_buffer data_buff = {
 		.buff = (void *)iio_data_buffer,
 		.size = DATA_BUFFER_SIZE * 5 * sizeof(uint16_t)
@@ -85,10 +97,42 @@ int example_main()
 	struct tmc5240_iio_dev_init_param tmc_iio_ip;
 #endif
 
+	ret = no_os_gpio_get(&gpio_v_en_desc,
+				&gpio_v_en_ip);
+	if (ret)
+		return ret;
+	ret = no_os_gpio_direction_output(gpio_v_en_desc,
+						NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+	
+	ret = no_os_gpio_get(&gpio_rstb_desc,
+				&gpio_rstb_ip);
+	if (ret)
+		return ret;
+	no_os_mdelay(10);
+	ret = no_os_gpio_direction_output(gpio_rstb_desc,
+						NO_OS_GPIO_LOW);
+	if (ret)
+		return ret;
+	no_os_mdelay(10);
+	ret = no_os_gpio_set_value(gpio_rstb_desc, NO_OS_GPIO_HIGH);
+	if (ret)
+		return ret;
+	admt_evb_ip.gpio_shdn_n_ip = gpio_shdn_n_ip;
+	admt_evb_ip.gpio_v_en_ip = gpio_v_en_ip;
+	admt_evb_ip.gpio_rstb_ip = gpio_rstb_ip;
+	admt_evb_ip.gpio_coil_rs_ip = gpio_coil_rs_ip;
+	no_os_mdelay(10);
+
+	ret = admt_evb_iio_init(&admt_evb_desc, &admt_evb_ip);
+	if (ret)
+		return ret;
+
 	admt4000_iio_ip.admt4000_init_param = &admt4000_ip;
 
 	ret = admt4000_iio_init(&admt4000_iio_desc, &admt4000_iio_ip);
-
+	pr_info("Self-test passed. %d\n", ret);
 	if (ret)
 		return ret;
 
@@ -120,6 +164,11 @@ int example_main()
 	/** Declaring iio_devices structure */
 	struct iio_app_device iio_devices[] = {
 		{
+			.name = "admt_evb",
+			.dev = admt_evb_desc,
+			.dev_descriptor = admt_evb_desc->iio_dev,
+		},
+		{
 			.name = "admt4000",
 			.dev = admt4000_iio_desc,
 			.dev_descriptor = admt4000_iio_desc->iio_dev,
@@ -148,6 +197,8 @@ int example_main()
 	app_init_param.trigs = trigs;
 	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
 	app_init_param.irq_desc = admt4000_irq_desc;
+	app_init_param.ctx_attrs = context_attributes;
+	app_init_param.nb_ctx_attr = NO_OS_ARRAY_SIZE(context_attributes);
 
 	/** Initializing IIO app. */
 	ret = iio_app_init(&app, app_init_param);
