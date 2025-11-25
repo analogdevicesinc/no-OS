@@ -1,1 +1,1 @@
-.. include:: ../../../../drivers/magnetometer/admt4000/README.rst
+.. include:: ../../../../drivers/position/admt4000/README.rst
