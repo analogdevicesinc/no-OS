@@ -19,10 +19,10 @@
   :test:
     - test
   :source:
-    - ../../../../drivers/led/ltc3208/
+    - ../../../drivers/led/ltc3208/
   :include:
-    - ../../../../include
-    - ../../../../drivers/led/ltc3208
+    - ../../../include
+    - ../../../drivers/led/ltc3208
   :support:
   :libraries: []
 
@@ -30,7 +30,7 @@
   :test:
     - test/test_ltc3208.c
   :source:
-    - ../../../../drivers/led/ltc3208/ltc3208.c
+    - ../../../drivers/led/ltc3208/ltc3208.c
   :support:
 
 :defines:
@@ -63,7 +63,7 @@
   :test:
     :compile:
       :*:
-        - -I../../../../include
+        - -I../../../include
         - -include no_os_alloc.h
 
 # Add -gcov to the plugins list to make sure of the gcov plugin
@@ -75,7 +75,7 @@
   :gcovr:
     :html_medium_threshold: 75
     :html_high_threshold: 90
-    :report_include: "../../../../drivers/led/ltc3208/.*"
+    :report_include: "../../../drivers/led/ltc3208/.*"
 
 #:tools:
 # Ceedling defaults to using gcc for compiling, linking, etc.
