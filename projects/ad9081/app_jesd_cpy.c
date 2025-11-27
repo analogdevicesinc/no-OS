@@ -1,0 +1,172 @@
+/***************************************************************************//**
+ *   @file   app_jesd.c
+ *   @brief  Application JESD setup.
+ *   @author DBogdan (dragos.bogdan@analog.com)
+********************************************************************************
+ * Copyright 2020(c) Analog Devices, Inc.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include "axi_jesd204_rx.h"
+#include "axi_jesd204_tx.h"
+#include "axi_adxcvr.h"
+#include "no_os_error.h"
+#include "parameters.h"
+#include "jesd204_clk.h"
+#include "app_jesd.h"
+#include "app_config.h"
+
+/******************************************************************************/
+/************************ Variables Definitions *******************************/
+/******************************************************************************/
+struct axi_jesd204_rx *rx_jesd;
+struct axi_jesd204_tx *tx_jesd;
+
+struct adxcvr *rx_adxcvr;
+struct adxcvr *tx_adxcvr;
+
+struct jesd204_clk rx_jesd_clk;
+struct jesd204_clk tx_jesd_clk;
+struct no_os_clk_desc rx_lane_clk;
+struct no_os_clk_desc tx_lane_clk;
+
+/******************************************************************************/
+/************************** Functions Implementation **************************/
+/******************************************************************************/
+
+/**
+ * @brief Application JESD setup.
+ * @return 0 in case of success, -1 otherwise.
+ */
+int32_t app_jesd_init(struct no_os_clk clk[2],
+		      uint32_t reference_clk_khz,
+		      uint32_t rx_device_clk_khz,
+		      uint32_t tx_device_clk_khz,
+		      uint32_t rx_lane_clk_khz,
+		      uint32_t tx_lane_clk_khz)
+{
+	int32_t ret;
+
+	struct jesd204_tx_init tx_jesd_init = {
+		.name = "tx_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = AD9081_TX_JESD_F,
+		.frames_per_multiframe = AD9081_TX_JESD_K,
+		.converters_per_device = AD9081_TX_JESD_M *
+		MULTIDEVICE_INSTANCE_COUNT,
+		.converter_resolution = AD9081_TX_JESD_N,
+		.bits_per_sample = AD9081_TX_JESD_NP,
+		.high_density = AD9081_TX_JESD_HD,
+		.control_bits_per_sample = AD9081_TX_JESD_CS,
+		.subclass = AD9081_TX_JESD_SUBCLASS,
+		.device_clk_khz = tx_device_clk_khz,
+		.lane_clk_khz = tx_lane_clk_khz
+	};
+
+	struct jesd204_rx_init rx_jesd_init = {
+		.name = "rx_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = AD9081_RX_JESD_F,
+		.frames_per_multiframe = AD9081_RX_JESD_K,
+		.subclass = AD9081_RX_JESD_SUBCLASS,
+		.device_clk_khz = rx_device_clk_khz,
+		.lane_clk_khz = rx_lane_clk_khz
+	};
+
+#ifdef TX_XCVR_BASEADDR
+	struct adxcvr_init tx_adxcvr_init = {
+		.name = "tx_adxcvr",
+		.base = TX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL1,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 0,
+		.lane_rate_khz = tx_lane_clk_khz,
+		.ref_rate_khz = reference_clk_khz,
+		.export_no_os_clk = true
+	};
+#endif
+
+#ifdef RX_XCVR_BASEADDR
+	struct adxcvr_init rx_adxcvr_init = {
+		.name = "rx_adxcvr",
+		.base = RX_XCVR_BASEADDR,
+		.sys_clk_sel = ADXCVR_SYS_CLK_QPLL1,
+		.out_clk_sel = ADXCVR_REFCLK,
+		.lpm_enable = 1,
+		.lane_rate_khz = rx_lane_clk_khz,
+		.ref_rate_khz = reference_clk_khz,
+		.export_no_os_clk = true
+	};
+#endif
+
+#ifdef TX_XCVR_BASEADDR
+	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
+	if (ret)
+		return ret;
+	tx_jesd_clk.xcvr = tx_adxcvr;
+#endif
+#ifdef RX_XCVR_BASEADDR
+	ret = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
+	if (ret)
+		return ret;
+	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
+
+	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
+
+	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
+
+
+	tx_lane_clk.platform_ops = &jesd204_clk_ops;
+	tx_jesd_init.lane_clk = &tx_lane_clk;
+	tx_lane_clk.dev_desc = &tx_jesd_clk;
+
+	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	if (ret)
+		return ret;
+
+	tx_jesd_clk.jesd_tx = tx_jesd;
+	clk[1].clk_desc = tx_jesd->lane_clk;
+
+
+	rx_lane_clk.platform_ops = &jesd204_clk_ops;
+	rx_jesd_init.lane_clk = &rx_lane_clk;
+	rx_lane_clk.dev_desc = &rx_jesd_clk;
+
+	ret = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
+	if (ret)
+		return ret;
+
+	rx_jesd_clk.jesd_rx = rx_jesd;
+	clk[0].clk_desc = rx_jesd->lane_clk;
+
+	return 0;
+}

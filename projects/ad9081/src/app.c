@@ -187,9 +187,9 @@ int main(void)
 		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_nco_mixer_mode = {
-			AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF,
-			AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF,
-			AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF, AD9081_ADC_NCO_ZIF
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF,
+			AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF, AD9081_ADC_NCO_VIF
 		},
 		.rx_channel_digital_gain_6db_enable = {0, 0, 0, 0, 0, 0, 0, 0},
 		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
@@ -299,17 +299,25 @@ int main(void)
 		if (status != 0)
 			printf("ad9081_init() error: %" PRId32 "\n", status);
 
-		status = adi_ad9081_device_direct_loopback_set(&phy[i]->ad9081, BF_DIRECT_LOOPBACK_MODE(0), 0xE4);
+		status = adi_ad9081_device_direct_loopback_set(&phy[i]->ad9081,
+					BF_DIRECT_LOOPBACK_MODE(3), 0xAA);
 		if (status != 0)
-			printf("device_direct_loopback_set() error: %" PRId32 "\n", status);
-		
-		status = adi_ad9081_jesd_loopback_mode_set(&phy[i]->ad9081, 1);
-		if (status != 0)
-			printf("jesd_loopback_mode_set() error: %" PRId32 "\n", status);
+			printf("enable_direct_loopback error: %" PRId32 "\n", status);
 
-		// status = adi_ad9081_device_direct_loopback_set(&phy[i]->ad9081, BF_DIRECT_LOOPBACK_MODE(1), 0xE4);
-		// if (status != 0)
-		// 	printf("device_direct_loopback_set() error: %" PRId32 "\n", status);
+//		status = adi_ad9081_hal_bf_set(&phy[i]->ad9081, REG_ADC_DIVIDER_CTRL_ADDR,
+//				BF_ADCDIVN_DIVRATIO_SPI_INFO, BF_ADCDIVN_DIVRATIO_SPI(0));
+//		if (status != 0)
+//					printf("set divclk ration to 1:1 error: %" PRId32 "\n", status);
+
+//		status = adi_ad9081_hal_bf_set(&phy[i]->ad9081, REG_CLOCKING_CTRL_ADDR,
+//				BF_RXCLK_EN_INFO, BF_RXCLK_EN(1));
+//		if (status != 0)
+//					printf("set rx_clken error: %" PRId32 "\n", status);
+//
+//		status = adi_ad9081_hal_bf_set(&phy[i]->ad9081, REG_CLOCKING_CTRL_ADDR,
+//						BF_TXCLK_EN_INFO, BF_TXCLK_EN(1));
+				if (status != 0)
+							printf("clear tx_clken error: %" PRId32 "\n", status);
 
 		rx_adc_init.num_channels += phy[i]->jtx_link_rx[0].jesd_param.jesd_m +
 					    phy[i]->jtx_link_rx[1].jesd_param.jesd_m;
@@ -317,6 +325,43 @@ int main(void)
 		tx_dac_init.num_channels += phy[i]->jrx_link_tx[0].jesd_param.jesd_m *
 					    (phy[i]->jrx_link_tx[0].jesd_param.jesd_duallink > 0 ? 2 : 1);
 	}
+
+	/* Configure NCO bypass for indirect loopback BEFORE topology init */
+//	for (i = 0; i < MULTIDEVICE_INSTANCE_COUNT; i++) {
+//		/* Ensure direct loopback mode is disabled */
+//		status = adi_ad9081_device_direct_loopback_set(&phy[i]->ad9081,
+//			BF_DIRECT_LOOPBACK_MODE(1), 0x01);
+//		if (status != 0)
+//			printf("disable_direct_loopback error: %" PRId32 "\n", status);
+//
+//		/* Note: Indirect loopback is handled by FPGA transceiver, not by AD9081 JESD loopback mode */
+//		/* The JESD loopback mode (register 0x941) is for FIFO loopback testing only */
+////		status = adi_ad9081_jesd_loopback_mode_set(&phy[i]->ad9081, 1);
+////		if (status != 0)
+////					printf("enable_indirect_loopback error: %" PRId32 "\n", status);
+////	}
+//
+////		/* Configure NCO bypass for low latency */
+////		status = adi_ad9081_dac_duc_nco_ftw_set(&phy[i]->ad9081,
+////			AD9081_DAC_ALL, AD9081_DAC_CH_ALL,
+////			0, 0, 0);  /* ftw=0 for bypass */
+////		if (status != 0)
+////			printf("tx_nco_bypass error: %" PRId32 "\n", status);
+////
+////		status = adi_ad9081_adc_ddc_coarse_nco_ftw_set(&phy[i]->ad9081,
+////			AD9081_ADC_CDDC_ALL,
+////			0, 0, 0);  /* ftw=0 for bypass */
+////		if (status != 0)
+////			printf("rx_coarse_nco_bypass error: %" PRId32 "\n", status);
+////
+////		status = adi_ad9081_adc_ddc_fine_nco_ftw_set(&phy[i]->ad9081,
+////			AD9081_ADC_FDDC_ALL,
+////			0, 0, 0);  /* ftw=0 for bypass */
+////		if (status != 0)
+////			printf("rx_fine_nco_bypass error: %" PRId32 "\n", status);
+////
+////		printf("AD9081[%d]: Configured NCO bypass for indirect loopback (FPGA transceiver)\n", i);
+//	}
 
 	struct jesd204_topology *topology;
 	struct jesd204_topology_dev devs[] = {
@@ -371,6 +416,7 @@ int main(void)
 	jesd204_topology_init(&topology, devs,
 			      sizeof(devs) / sizeof(*devs));
 
+	/* Start JESD FSM with everything already configured */
 	jesd204_fsm_start(topology, JESD204_LINKS_ALL);
 
 	axi_jesd204_rx_watchdog(rx_jesd);

@@ -42,6 +42,7 @@
 #include "no_os_error.h"
 #include "parameters.h"
 #include "app_clock.h"
+#include <xparameters.h>
 
 struct hmc7044_dev* hmc7044_dev;
 
@@ -188,36 +189,36 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	struct hmc7044_chan_spec chan_spec[] = {
 		{
 			.num = 0,		// CORE_CLK_RX
-			.divider = 12,		// 250 MHz
+			.divider = 48,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 2,		// DEV_REFCLK
-			.divider = 12,		// 250 MHz
+			.divider = 4,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 3,		// DEV_SYSREF
-			.divider = 1536,	// 1.953125 MHz
+			.divider = 768,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
 			.is_sysref = true,
 		}, {
 			.num = 6,		// CORE_CLK_TX
-			.divider = 12,		// 250 MHz
+			.divider = 24,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 8,		// CORE_CLK_RX
-			.divider = 6,		// 500 MHz
+			.divider = 8,		// 500 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 10,		// CORE_CLK_RX_ALT
-			.divider = 12,		// 250 MHz
+			.divider = 48,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 12,		// FPGA_REFCLK
-			.divider = 6,		// 500 MHz
+			.divider = 16,		// 500 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 13,		// FPGA_SYSREF
-			.divider = 1536,	// 1.953125 MHz
+			.divider = 768,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
 			.is_sysref = true,
 		}
@@ -226,15 +227,16 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	struct hmc7044_chan_spec chan_spec[] = {
 		{
 			.num = 0,		// CORE_CLK_RX
-			.divider = 12,		// 250 MHz
+			.divider = 8,		// 250 MHz
 			.driver_mode = 2,	// LVDS
-		}, {
+		},
+		{
 			.num = 2,		// DEV_REFCLK
 			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 3,		// DEV_SYSREF
-			.divider = 1536,	// 1.953125 MHz
+			.divider = 1024,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
 			.is_sysref = true,
 		}, {
@@ -245,17 +247,19 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 			.num = 8,		// CORE_CLK_RX_ALT2
 			.divider = 12,		// 250 MHz
 			.driver_mode = 2,	// LVDS
-		}, {
+		},
+		{
 			.num = 10,		// CORE_CLK_RX_ALT
-			.divider = 12,		// 250 MHz
+			.divider = 8,		// 250 MHz
 			.driver_mode = 2,	// LVDS
-		}, {
+		},
+		{
 			.num = 12,		// FPGA_REFCLK2
-			.divider = 6,		// 500 MHz
+			.divider = 12,		// 500 MHz
 			.driver_mode = 2,	// LVDS
 		}, {
 			.num = 13,		// FPGA_SYSREF
-			.divider = 1536,	// 1.953125 MHz
+			.divider = 1024,	// 1.953125 MHz
 			.driver_mode = 2,	// LVDS
 			.is_sysref = true,
 		}
@@ -278,7 +282,7 @@ int32_t app_clock_init(struct no_os_clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.pll1_cp_current = 0,
 		.pll2_freq = 3000000000,
 		.pll1_loop_bw = 200,
-		.jesd204_max_sysref_frequency_hz = 2000000,
+		//.jesd204_max_sysref_frequency_hz = 2000000,
 		.sysref_timer_div = 1024,
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x15},
 		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
