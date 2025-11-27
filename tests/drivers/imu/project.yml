@@ -95,8 +95,9 @@
   :test: []
   :release: []
 
-:junit_tests_report:
-  :artifact_filename: report_junit.xml
+:report_tests_log_factory:
+  :reports:
+    - junit
 
 :plugins:
   :enabled:
