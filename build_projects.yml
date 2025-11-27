@@ -238,10 +238,11 @@ jobs:
       sudo apt install ruby-full
       sudo gem install ceedling
       pip install gcovr==4.1
-      cd tests/drivers/imu/
-      ceedling test:all
+      for dir in tests/drivers/*/; do
+        cd "$dir" && ceedling test:all && cd -
+      done
     displayName: 'Run unit tests'
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: 'tests/drivers/imu/build/artifacts/test/*.xml'
+      testResultsFiles: 'tests/drivers/**/build/artifacts/test/*.xml'
