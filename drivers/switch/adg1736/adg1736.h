@@ -50,11 +50,13 @@ enum adg1736_state {
 struct adg1736_dev {
 	struct no_os_gpio_desc *gpio_in1;
 	struct no_os_gpio_desc *gpio_in2;
+	struct no_os_gpio_desc *gpio_en;
 };
 
 struct adg1736_init_param {
 	struct no_os_gpio_init_param gpio_in1;
 	struct no_os_gpio_init_param gpio_in2;
+	struct no_os_gpio_init_param *gpio_en;
 };
 
 /** Set the state of a specific switch. */
@@ -73,5 +75,11 @@ int adg1736_init(struct adg1736_dev **device,
 
 /** Free resources allocated by adg1736_init(). */
 int adg1736_remove(struct adg1736_dev *dev);
+
+/** Enable the mux (requires EN pin). */
+int adg1736_enable(struct adg1736_dev *dev);
+
+/** Disable the mux (requires EN pin). */
+int adg1736_disable(struct adg1736_dev *dev);
 
 #endif // ADG1736_H_
