@@ -37,6 +37,9 @@ Driver Initialization
 In order to be able to use the device, you will have to provide the support
 for the communication protocol (GPIO for the control pins IN1 and IN2).
 
+You can optionally provide an EN pin to enable/disable the mux logic.
+If not provided, the EN pin is assumed to be tied high externally.
+
 The first API to be called is **adg1736_init**. Make sure that it returns 0,
 which means that the driver was initialized correctly.
 
@@ -49,8 +52,17 @@ Use **adg1736_set_switch_state()** to control which output each switch connects 
 
 Use **adg1736_get_switch_state()** to read the current switch position.
 
-ADG1736 Driver Initialization Example
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enable/Disable Control
+~~~~~~~~~~~~~~~~~~~~~~
+
+If EN pin is configured, use:
+- **adg1736_enable()**: Enable the mux logic (EN = HIGH)
+- **adg1736_disable()**: Disable the mux logic (EN = LOW)
+
+Driver Initialization Examples
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Without EN pin control:**
 
 .. code-block:: c
 
@@ -66,6 +78,7 @@ ADG1736 Driver Initialization Example
                         .platform_ops = &gpio_platform_ops,
                         .extra = NULL,
                 },
+                .gpio_en = NULL,  // EN pin not controlled (tied externally)
         };
 
         ret = adg1736_init(&adg1736_device, &adg1736_init_param);
@@ -77,7 +90,47 @@ ADG1736 Driver Initialization Example
         if (ret != 0)
                 return ret;
 
-        // Set switch 2 to connect to output B  
-        ret = adg1736_set_switch_state(adg1736_device, ADG1736_SW2, ADG1736_CONNECT_B);
+**With EN pin control:**
+
+.. code-block:: c
+
+        struct adg1736_dev *adg1736_device;
+        struct no_os_gpio_init_param en_gpio = {
+                .number = 3,
+                .platform_ops = &gpio_platform_ops,
+                .extra = NULL,
+        };
+        struct adg1736_init_param adg1736_init_param = {
+                .gpio_in1 = {
+                        .number = 1,
+                        .platform_ops = &gpio_platform_ops,
+                        .extra = NULL,
+                },
+                .gpio_in2 = {
+                        .number = 2,
+                        .platform_ops = &gpio_platform_ops,
+                        .extra = NULL,
+                },
+                .gpio_en = &en_gpio,  // EN pin controlled
+        };
+
+        ret = adg1736_init(&adg1736_device, &adg1736_init_param);
+        if (ret != 0)
+                return ret;
+
+        // Mux is enabled by default during init
+
+        // Set switch 1 to connect to output A
+        ret = adg1736_set_switch_state(adg1736_device, ADG1736_SW1, ADG1736_CONNECT_A);
+        if (ret != 0)
+                return ret;
+
+        // Disable the mux
+        ret = adg1736_disable(adg1736_device);
+        if (ret != 0)
+                return ret;
+
+        // Re-enable the mux
+        ret = adg1736_enable(adg1736_device);
         if (ret != 0)
                 return ret;
