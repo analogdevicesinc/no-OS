@@ -148,10 +148,22 @@ int adg1736_init(struct adg1736_dev **device,
 	if (ret)
 		goto error_gpio2;
 
+	ret = no_os_gpio_get_optional(&dev->gpio_en, init_param->gpio_en);
+	if (ret)
+		goto error_gpio2;
+
+	if (dev->gpio_en) {
+		ret = no_os_gpio_direction_output(dev->gpio_en, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto error_gpio_en;
+	}
+
 	*device = dev;
 
 	return 0;
 
+error_gpio_en:
+	no_os_gpio_remove(dev->gpio_en);
 error_gpio2:
 	no_os_gpio_remove(dev->gpio_in2);
 error_gpio1:
@@ -174,7 +186,41 @@ int adg1736_remove(struct adg1736_dev *dev)
 
 	no_os_gpio_remove(dev->gpio_in1);
 	no_os_gpio_remove(dev->gpio_in2);
+	if (dev->gpio_en)
+		no_os_gpio_remove(dev->gpio_en);
 	no_os_free(dev);
 
 	return 0;
+}
+
+/**
+ * @brief Enable the mux (requires EN pin).
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adg1736_enable(struct adg1736_dev *dev)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (!dev->gpio_en)
+		return -ENOTSUP;
+
+	return no_os_gpio_set_value(dev->gpio_en, NO_OS_GPIO_HIGH);
+}
+
+/**
+ * @brief Disable the mux (requires EN pin).
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adg1736_disable(struct adg1736_dev *dev)
+{
+	if (!dev)
+		return -EINVAL;
+
+	if (!dev->gpio_en)
+		return -ENOTSUP;
+
+	return no_os_gpio_set_value(dev->gpio_en, NO_OS_GPIO_LOW);
 }
