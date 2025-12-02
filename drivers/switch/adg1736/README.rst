@@ -1,23 +1,29 @@
-ADG1736 no-OS driver
-====================
+ADG736/ADG1736 no-OS driver
+===========================
 
 Supported Devices
 -----------------
 
+- `ADG736 <https://www.analog.com/en/products/adg736.html>`_
 - `ADG1736 <https://www.analog.com/en/products/adg1736.html>`_
 
 Overview
 --------
 
-The ADG1736 is a monolithic device comprising two independently selectable
-CMOS single pole, double throw (SPDT) switches. Each switch can connect
-its input to one of two outputs (A or B) based on the control signal.
+The ADG736 and ADG1736 are monolithic devices comprising two independently
+selectable CMOS single pole, double throw (SPDT) switches. Each switch can
+connect its input to one of two outputs (A or B) based on the control signal.
 
-The device operates from 1.8 V to 5.5 V single supply and features:
+The devices operate from 1.8 V to 5.5 V single supply and feature:
 - Low on resistance (2.5 Ω typical)
 - Fast switching times (tON: 16 ns, tOFF: 8 ns)
 - Break-before-make switching action
 - TTL-/CMOS-compatible control inputs
+
+**Key Difference:**
+
+- **ADG736**: Control via IN1 and IN2 pins only
+- **ADG1736**: Adds optional EN pin for enabling/disabling the mux logic
 
 Applications
 ------------
@@ -28,8 +34,8 @@ Applications
 - Communications systems
 - Mechanical reed relay replacement
 
-ADG1736 Device Configuration
-----------------------------
+Device Configuration
+--------------------
 
 Driver Initialization
 ~~~~~~~~~~~~~~~~~~~~~
@@ -37,8 +43,10 @@ Driver Initialization
 In order to be able to use the device, you will have to provide the support
 for the communication protocol (GPIO for the control pins IN1 and IN2).
 
-You can optionally provide an EN pin to enable/disable the mux logic.
-If not provided, the EN pin is assumed to be tied high externally.
+For **ADG1736**, you can optionally provide an EN pin to enable/disable the
+mux logic. If not provided, the EN pin is assumed to be tied high externally.
+
+For **ADG736**, the EN pin is not available and must not be specified.
 
 The first API to be called is **adg1736_init**. Make sure that it returns 0,
 which means that the driver was initialized correctly.
@@ -52,22 +60,52 @@ Use **adg1736_set_switch_state()** to control which output each switch connects 
 
 Use **adg1736_get_switch_state()** to read the current switch position.
 
-Enable/Disable Control
-~~~~~~~~~~~~~~~~~~~~~~
+Enable/Disable Control (ADG1736 only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If EN pin is configured, use:
+If using ADG1736 with EN pin configured, use:
 - **adg1736_enable()**: Enable the mux logic (EN = HIGH)
 - **adg1736_disable()**: Disable the mux logic (EN = LOW)
 
 Driver Initialization Examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Without EN pin control:**
+**ADG736 Example:**
+
+.. code-block:: c
+
+        struct adg1736_dev *adg736_device;
+        struct adg1736_init_param adg736_init_param = {
+                .type = ADG736,
+                .gpio_in1 = {
+                        .number = 1,
+                        .platform_ops = &gpio_platform_ops,
+                        .extra = NULL,
+                },
+                .gpio_in2 = {
+                        .number = 2,
+                        .platform_ops = &gpio_platform_ops,
+                        .extra = NULL,
+                },
+                .gpio_en = NULL,  // ADG736 does not have EN pin
+        };
+
+        ret = adg1736_init(&adg736_device, &adg736_init_param);
+        if (ret != 0)
+                return ret;
+
+        // Set switch 1 to connect to output A
+        ret = adg1736_set_switch_state(adg736_device, ADG1736_SW1, ADG1736_CONNECT_A);
+        if (ret != 0)
+                return ret;
+
+**ADG1736 Example (without EN pin control):**
 
 .. code-block:: c
 
         struct adg1736_dev *adg1736_device;
         struct adg1736_init_param adg1736_init_param = {
+                .type = ADG1736,
                 .gpio_in1 = {
                         .number = 1,
                         .platform_ops = &gpio_platform_ops,
@@ -85,12 +123,7 @@ Driver Initialization Examples
         if (ret != 0)
                 return ret;
 
-        // Set switch 1 to connect to output A
-        ret = adg1736_set_switch_state(adg1736_device, ADG1736_SW1, ADG1736_CONNECT_A);
-        if (ret != 0)
-                return ret;
-
-**With EN pin control:**
+**ADG1736 Example (with EN pin control):**
 
 .. code-block:: c
 
@@ -101,6 +134,7 @@ Driver Initialization Examples
                 .extra = NULL,
         };
         struct adg1736_init_param adg1736_init_param = {
+                .type = ADG1736,
                 .gpio_in1 = {
                         .number = 1,
                         .platform_ops = &gpio_platform_ops,
