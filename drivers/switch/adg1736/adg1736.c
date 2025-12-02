@@ -128,9 +128,14 @@ int adg1736_init(struct adg1736_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
+	if (init_param->type == ADG736 && init_param->gpio_en)
+		return -EINVAL;
+
 	dev = no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
+
+	dev->type = init_param->type;
 
 	ret = no_os_gpio_get(&dev->gpio_in1, &init_param->gpio_in1);
 	if (ret)
@@ -148,14 +153,16 @@ int adg1736_init(struct adg1736_dev **device,
 	if (ret)
 		goto error_gpio2;
 
-	ret = no_os_gpio_get_optional(&dev->gpio_en, init_param->gpio_en);
-	if (ret)
-		goto error_gpio2;
-
-	if (dev->gpio_en) {
-		ret = no_os_gpio_direction_output(dev->gpio_en, NO_OS_GPIO_HIGH);
+	if (dev->type == ADG1736) {
+		ret = no_os_gpio_get_optional(&dev->gpio_en, init_param->gpio_en);
 		if (ret)
-			goto error_gpio_en;
+			goto error_gpio2;
+
+		if (dev->gpio_en) {
+			ret = no_os_gpio_direction_output(dev->gpio_en, NO_OS_GPIO_HIGH);
+			if (ret)
+				goto error_gpio_en;
+		}
 	}
 
 	*device = dev;
@@ -186,7 +193,7 @@ int adg1736_remove(struct adg1736_dev *dev)
 
 	no_os_gpio_remove(dev->gpio_in1);
 	no_os_gpio_remove(dev->gpio_in2);
-	if (dev->gpio_en)
+	if (dev->type == ADG1736 && dev->gpio_en)
 		no_os_gpio_remove(dev->gpio_en);
 	no_os_free(dev);
 
@@ -194,7 +201,7 @@ int adg1736_remove(struct adg1736_dev *dev)
 }
 
 /**
- * @brief Enable the mux (requires EN pin).
+ * @brief Enable the mux (ADG1736 only, requires EN pin).
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -203,14 +210,17 @@ int adg1736_enable(struct adg1736_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	if (!dev->gpio_en)
+	if (dev->type != ADG1736)
 		return -ENOTSUP;
+
+	if (!dev->gpio_en)
+		return -EINVAL;
 
 	return no_os_gpio_set_value(dev->gpio_en, NO_OS_GPIO_HIGH);
 }
 
 /**
- * @brief Disable the mux (requires EN pin).
+ * @brief Disable the mux (ADG1736 only, requires EN pin).
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -219,8 +229,11 @@ int adg1736_disable(struct adg1736_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	if (!dev->gpio_en)
+	if (dev->type != ADG1736)
 		return -ENOTSUP;
+
+	if (!dev->gpio_en)
+		return -EINVAL;
 
 	return no_os_gpio_set_value(dev->gpio_en, NO_OS_GPIO_LOW);
 }
