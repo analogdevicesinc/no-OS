@@ -31,6 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
+#include "no_os_alloc.h"
 #ifdef BASIC_EXAMPLE
 #include "basic_example.h"
 #endif
@@ -98,7 +99,7 @@ int32_t enable_RS482_driver()
 {
 	// Enable driver and receiver of ADM2587, used only by serial connection
 	int status;
-	struct no_os_gpio_sec *enable_ADM2587;
+	struct no_os_gpio_desc *enable_ADM2587;
 	struct nhd_c12832a1z_dev *nhd_c12832a1z_device;
 
 	struct max_gpio_init_param gpio_extra_ip_ADM2587 = {
