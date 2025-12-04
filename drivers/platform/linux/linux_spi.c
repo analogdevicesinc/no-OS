@@ -103,11 +103,13 @@ int32_t linux_spi_init(struct no_os_spi_desc **desc,
 		goto free;
 	}
 
-	ret = ioctl(linux_desc->spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ,
-		    &param->max_speed_hz);
-	if (ret == -1) {
-		printf("%s: Can't set SPI max speed hz\n\r", __func__);
-		goto free;
+	if (param->max_speed_hz != 0) {
+		ret = ioctl(linux_desc->spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ,
+			&param->max_speed_hz);
+		if (ret == -1) {
+			printf("%s: Can't set SPI max speed hz\n\r", __func__);
+			goto free;
+		}
 	}
 
 	*desc = descriptor;
