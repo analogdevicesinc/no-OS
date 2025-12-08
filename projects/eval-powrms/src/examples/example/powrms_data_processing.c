@@ -97,6 +97,30 @@ struct powrms_variables input_variables[VARIABLE_NUMBER] = {
 int32_t precision_values[PRECISION_ARRAY_SIZE];
 int32_t precision_values_reverse[PRECISION_ARRAY_SIZE];
 
+// Polynomial calibration coefficients for 5000MHz (stored as double for 20 decimal precision)
+double poly_5000MHz_intercept = 0;
+double poly_5000MHz_c_x = 0;
+double poly_5000MHz_c_f = 0;
+double poly_5000MHz_c_x2 = 0;
+double poly_5000MHz_c_xf = 0;
+double poly_5000MHz_c_f2 = 0;
+double poly_5000MHz_c_x3 = 0;
+double poly_5000MHz_c_x2f = 0;
+double poly_5000MHz_c_xf2 = 0;
+double poly_5000MHz_c_f3 = 0;
+
+// Polynomial calibration coefficients for 5000MHz reverse (stored as double for 20 decimal precision)
+double poly_5000MHz_intercept_reverse = 0;
+double poly_5000MHz_c_x_reverse = 0;
+double poly_5000MHz_c_f_reverse = 0;
+double poly_5000MHz_c_x2_reverse = 0;
+double poly_5000MHz_c_xf_reverse = 0;
+double poly_5000MHz_c_f2_reverse = 0;
+double poly_5000MHz_c_x3_reverse = 0;
+double poly_5000MHz_c_x2f_reverse = 0;
+double poly_5000MHz_c_xf2_reverse = 0;
+double poly_5000MHz_c_f3_reverse = 0;
+
 // Storage for the 24 temperature correction coefficients as 32-bit integers
 // Order A1, A2, A3 for each frequency range
 double temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
@@ -465,6 +489,49 @@ static double _piecewise_cubic_Hermite_interpolation(double *x_values,
 	return y_output;
 }
 
+double _correct_newtone(double newtone_meas, int32_t freq_MHz)
+{
+	double f = (double)freq_MHz / 1000.0; // Convert MHz to GHz
+	return (201.7376
+		+ 0.9386 * newtone_meas
+		- 72.9199 * f
+		- 0.0003276 * (newtone_meas * newtone_meas)
+		+ 0.0104111 * newtone_meas * f
+		+ 6.52708 * (f * f));
+}
+
+double _correct_newtone_3rd_order(double newtone_meas, int32_t freq_MHz,
+				  bool reverse)
+{
+	double x = newtone_meas;
+	double f = (double)freq_MHz / 1000.0; // Convert MHz to GHz
+
+	if (reverse) {
+		return (poly_5000MHz_intercept_reverse
+			+ poly_5000MHz_c_x_reverse * x
+			+ poly_5000MHz_c_f_reverse * f
+			+ poly_5000MHz_c_x2_reverse * (x * x)
+			+ poly_5000MHz_c_xf_reverse * (x * f)
+			+ poly_5000MHz_c_f2_reverse * (f * f)
+			+ poly_5000MHz_c_x3_reverse * (x * x * x)
+			+ poly_5000MHz_c_x2f_reverse * (x * x * f)
+			+ poly_5000MHz_c_xf2_reverse * (x * f * f)
+			+ poly_5000MHz_c_f3_reverse * (f * f * f));
+	}
+
+	return (poly_5000MHz_intercept
+		+ poly_5000MHz_c_x * x
+		+ poly_5000MHz_c_f * f
+		+ poly_5000MHz_c_x2 * (x * x)
+		+ poly_5000MHz_c_xf * (x * f)
+		+ poly_5000MHz_c_f2 * (f * f)
+		+ poly_5000MHz_c_x3 * (x * x * x)
+		+ poly_5000MHz_c_x2f * (x * x * f)
+		+ poly_5000MHz_c_xf2 * (x * f * f)
+		+ poly_5000MHz_c_f3 * (f * f * f));
+}
+
+
 int calculate_power()
 {
 	double temp_compensation = (double)temperature_compensation_value /
@@ -557,6 +624,14 @@ int calculate_power()
 	adc_data_input.adc_p_rev = _piecewise_cubic_Hermite_interpolation(x_values_rev,
 				   y_values_rev,
 				   PRECISION_POINTS_FREQ, VIN1_float);
+
+// Extra requirement from 12.11.2025
+	if (local_frequency_MHz > 5000 && local_frequency_MHz < 6000) {
+		adc_data_input.adc_p_fwd = _correct_newtone_3rd_order(adc_data_input.adc_p_fwd,
+					   local_frequency_MHz, false);
+		adc_data_input.adc_p_rev = _correct_newtone_3rd_order(adc_data_input.adc_p_rev,
+					   local_frequency_MHz, true);
+	}
 
 	return 0;
 }

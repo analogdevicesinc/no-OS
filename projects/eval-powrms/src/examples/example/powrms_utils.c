@@ -36,6 +36,7 @@
 #include "no_os_eeprom.h"
 #include "no_os_delay.h"
 #include "iio_powrms.h"
+#include <math.h>
 
 
 uint8_t read_input()
@@ -655,6 +656,384 @@ int powrms_eeprom_read_def_precision_array_reverse(int32_t *precision_array)
 	return 0; // Success
 }
 
+/**
+ * @brief Write polynomial calibration coefficients for 5000MHz to EEPROM
+ *
+ * This function writes 10 polynomial coefficients (double array) to EEPROM.
+ * Uses single-byte writes to avoid I2C bus blocking.
+ */
+int powrms_eeprom_write_poly_5000MHz_coeffs(const double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_POLY_5000MHZ_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Write 10 coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value;
+
+		// Copy double to uint64_t to access individual bytes
+		memcpy(&temp_value, &coeffs[i], sizeof(double));
+
+		// Convert double to bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			byte_buffer[byte_idx] = (uint8_t)((temp_value >> (byte_idx * 8)) & 0xFF);
+		}
+
+		// Write 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_write(m24512_desc, current_address + byte_idx,
+						 &byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(10);
+		}
+
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Read polynomial calibration coefficients for 5000MHz from EEPROM
+ *
+ * This function reads 10 polynomial coefficients (double array) from EEPROM.
+ * Uses single-byte reads to avoid I2C bus blocking.
+ */
+int powrms_eeprom_read_poly_5000MHz_coeffs(double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_POLY_5000MHZ_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Read 10 coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value = 0;
+
+		// Read 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_read(m24512_desc, current_address + byte_idx,
+						&byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(10);
+		}
+
+		// Reconstruct uint64_t from bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			temp_value |= ((uint64_t)byte_buffer[byte_idx] << (byte_idx * 8));
+		}
+
+		// Copy uint64_t back to double
+		memcpy(&coeffs[i], &temp_value, sizeof(double));
+
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Write default polynomial calibration coefficients for 5000MHz to EEPROM
+ */
+int powrms_eeprom_write_def_poly_5000MHz_coeffs(const double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_DEF_POLY_5000MHZ_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Write 10 default coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value;
+
+		// Copy double to uint64_t to access individual bytes
+		memcpy(&temp_value, &coeffs[i], sizeof(double));
+
+		// Convert double to bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			byte_buffer[byte_idx] = (uint8_t)((temp_value >> (byte_idx * 8)) & 0xFF);
+		}
+
+		// Write 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_write(m24512_desc, current_address + byte_idx,
+						 &byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(10);
+		}
+
+		powrms_watchdog_reset();
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Read default polynomial calibration coefficients for 5000MHz from EEPROM
+ */
+int powrms_eeprom_read_def_poly_5000MHz_coeffs(double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_DEF_POLY_5000MHZ_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Read 10 default coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value = 0;
+
+		// Read 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_read(m24512_desc, current_address + byte_idx,
+						&byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(50);
+		}
+
+		// Reconstruct uint64_t from bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			temp_value |= ((uint64_t)byte_buffer[byte_idx] << (byte_idx * 8));
+		}
+
+		// Copy uint64_t back to double
+		memcpy(&coeffs[i], &temp_value, sizeof(double));
+
+		no_os_mdelay(2);
+		powrms_watchdog_reset();
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Write polynomial calibration coefficients for 5000MHz reverse to EEPROM
+ *
+ * This function writes 10 polynomial coefficients (double array) to EEPROM for reverse power.
+ * Uses single-byte writes to avoid I2C bus blocking.
+ */
+int powrms_eeprom_write_poly_5000MHz_reverse_coeffs(const double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_POLY_5000MHZ_REVERSE_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Write 10 coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value;
+
+		// Copy double to uint64_t to access individual bytes
+		memcpy(&temp_value, &coeffs[i], sizeof(double));
+
+		// Convert double to bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			byte_buffer[byte_idx] = (uint8_t)((temp_value >> (byte_idx * 8)) & 0xFF);
+		}
+
+		// Write 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_write(m24512_desc, current_address + byte_idx,
+						 &byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(10);
+		}
+
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Read polynomial calibration coefficients for 5000MHz reverse from EEPROM
+ *
+ * This function reads 10 polynomial coefficients (double array) from EEPROM for reverse power.
+ * Uses single-byte reads to avoid I2C bus blocking.
+ */
+int powrms_eeprom_read_poly_5000MHz_reverse_coeffs(double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_POLY_5000MHZ_REVERSE_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Read 10 coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value = 0;
+
+		// Read 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_read(m24512_desc, current_address + byte_idx,
+						&byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(10);
+		}
+
+		// Reconstruct uint64_t from bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			temp_value |= ((uint64_t)byte_buffer[byte_idx] << (byte_idx * 8));
+		}
+
+		// Copy uint64_t back to double
+		memcpy(&coeffs[i], &temp_value, sizeof(double));
+
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Write default polynomial calibration coefficients for 5000MHz reverse to EEPROM
+ */
+int powrms_eeprom_write_def_poly_5000MHz_reverse_coeffs(const double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_DEF_POLY_5000MHZ_REVERSE_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Write 10 default coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value;
+
+		// Copy double to uint64_t to access individual bytes
+		memcpy(&temp_value, &coeffs[i], sizeof(double));
+
+		// Convert double to bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			byte_buffer[byte_idx] = (uint8_t)((temp_value >> (byte_idx * 8)) & 0xFF);
+		}
+
+		// Write 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_write(m24512_desc, current_address + byte_idx,
+						 &byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(10);
+		}
+
+		powrms_watchdog_reset();
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Read default polynomial calibration coefficients for 5000MHz reverse from EEPROM
+ */
+int powrms_eeprom_read_def_poly_5000MHz_reverse_coeffs(double *coeffs)
+{
+	int ret;
+	uint16_t base_address = MEM_DEF_POLY_5000MHZ_REVERSE_COEFFS_POZ;
+	uint8_t byte_buffer[8];
+
+	if (!m24512_desc) {
+		return -ENODEV;
+	}
+
+	if (!coeffs) {
+		return -EINVAL;
+	}
+
+	// Read 10 default coefficients (80 bytes total, 8 bytes per double)
+	for (int i = 0; i < 10; i++) {
+		uint16_t current_address = base_address + (i * sizeof(double));
+		uint64_t temp_value = 0;
+
+		// Read 8 bytes for current coefficient
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			ret = no_os_eeprom_read(m24512_desc, current_address + byte_idx,
+						&byte_buffer[byte_idx], 1);
+			if (ret) {
+				return ret;
+			}
+			no_os_udelay(50);
+		}
+
+		// Reconstruct uint64_t from bytes (little-endian format)
+		for (int byte_idx = 0; byte_idx < 8; byte_idx++) {
+			temp_value |= ((uint64_t)byte_buffer[byte_idx] << (byte_idx * 8));
+		}
+
+		// Copy uint64_t back to double
+		memcpy(&coeffs[i], &temp_value, sizeof(double));
+
+		no_os_mdelay(2);
+		powrms_watchdog_reset();
+	}
+
+	return 0;
+}
+
 #ifdef MAXIM_PLATFORM
 #include "wdt.h"
 #include "nvic_table.h"
@@ -813,6 +1192,10 @@ int powrms_init_memory_upon_boot()
 
 	no_os_udelay(50);
 
+	// Temporary arrays for reading polynomial coefficients
+	double poly_coeffs[10];
+	double poly_coeffs_reverse[10];
+
 	if (use_def_calib_data) {
 		// Use default calibration data from MEM_DEF_PRECISION_ARRAY_POZ
 		no_os_udelay(50);
@@ -830,6 +1213,64 @@ int powrms_init_memory_upon_boot()
 		if (ret) {
 			return ret;
 		}
+		no_os_udelay(50);
+		// Read default polynomial calibration coefficients for 5000MHz
+		ret = powrms_eeprom_read_def_poly_5000MHz_coeffs(poly_coeffs);
+		if (ret) {
+			return ret;
+		}
+		// Validate EEPROM data - only copy if values are valid (not NaN or Inf)
+		// If EEPROM is uninitialized (0xFF bytes), it will read as NaN
+		int poly_coeffs_valid = 1;
+		for (int i = 0; i < 10; i++) {
+			if (isnan(poly_coeffs[i]) || isinf(poly_coeffs[i])) {
+				poly_coeffs_valid = 0;
+				break;
+			}
+		}
+		// Copy to individual coefficient variables only if EEPROM data is valid
+		if (poly_coeffs_valid) {
+			poly_5000MHz_intercept = poly_coeffs[0];
+			poly_5000MHz_c_x = poly_coeffs[1];
+			poly_5000MHz_c_f = poly_coeffs[2];
+			poly_5000MHz_c_x2 = poly_coeffs[3];
+			poly_5000MHz_c_xf = poly_coeffs[4];
+			poly_5000MHz_c_f2 = poly_coeffs[5];
+			poly_5000MHz_c_x3 = poly_coeffs[6];
+			poly_5000MHz_c_x2f = poly_coeffs[7];
+			poly_5000MHz_c_xf2 = poly_coeffs[8];
+			poly_5000MHz_c_f3 = poly_coeffs[9];
+		}
+		// If invalid, keep the compiled-in default values from powrms_data_processing.c
+
+		no_os_udelay(50);
+		// Read default polynomial calibration coefficients for 5000MHz reverse
+		ret = powrms_eeprom_read_def_poly_5000MHz_reverse_coeffs(poly_coeffs_reverse);
+		if (ret) {
+			return ret;
+		}
+		// Validate EEPROM data for reverse coefficients
+		int poly_coeffs_reverse_valid = 1;
+		for (int i = 0; i < 10; i++) {
+			if (isnan(poly_coeffs_reverse[i]) || isinf(poly_coeffs_reverse[i])) {
+				poly_coeffs_reverse_valid = 0;
+				break;
+			}
+		}
+		// Copy to individual reverse coefficient variables only if EEPROM data is valid
+		if (poly_coeffs_reverse_valid) {
+			poly_5000MHz_intercept_reverse = poly_coeffs_reverse[0];
+			poly_5000MHz_c_x_reverse = poly_coeffs_reverse[1];
+			poly_5000MHz_c_f_reverse = poly_coeffs_reverse[2];
+			poly_5000MHz_c_x2_reverse = poly_coeffs_reverse[3];
+			poly_5000MHz_c_xf_reverse = poly_coeffs_reverse[4];
+			poly_5000MHz_c_f2_reverse = poly_coeffs_reverse[5];
+			poly_5000MHz_c_x3_reverse = poly_coeffs_reverse[6];
+			poly_5000MHz_c_x2f_reverse = poly_coeffs_reverse[7];
+			poly_5000MHz_c_xf2_reverse = poly_coeffs_reverse[8];
+			poly_5000MHz_c_f3_reverse = poly_coeffs_reverse[9];
+		}
+		// If invalid, keep the compiled-in default values from powrms_data_processing.c
 	} else {
 		// Use custom calibration data from MEM_PRECISION_ARRAY_POZ
 		no_os_udelay(50);
@@ -847,6 +1288,64 @@ int powrms_init_memory_upon_boot()
 		if (ret) {
 			return ret;
 		}
+		no_os_udelay(50);
+		// Read user polynomial calibration coefficients for 5000MHz
+		ret = powrms_eeprom_read_poly_5000MHz_coeffs(poly_coeffs);
+		if (ret) {
+			return ret;
+		}
+		// Validate EEPROM data - only copy if values are valid (not NaN or Inf)
+		// If EEPROM is uninitialized (0xFF bytes), it will read as NaN
+		int user_poly_coeffs_valid = 1;
+		for (int i = 0; i < 10; i++) {
+			if (isnan(poly_coeffs[i]) || isinf(poly_coeffs[i])) {
+				user_poly_coeffs_valid = 0;
+				break;
+			}
+		}
+		// Copy to individual coefficient variables only if EEPROM data is valid
+		if (user_poly_coeffs_valid) {
+			poly_5000MHz_intercept = poly_coeffs[0];
+			poly_5000MHz_c_x = poly_coeffs[1];
+			poly_5000MHz_c_f = poly_coeffs[2];
+			poly_5000MHz_c_x2 = poly_coeffs[3];
+			poly_5000MHz_c_xf = poly_coeffs[4];
+			poly_5000MHz_c_f2 = poly_coeffs[5];
+			poly_5000MHz_c_x3 = poly_coeffs[6];
+			poly_5000MHz_c_x2f = poly_coeffs[7];
+			poly_5000MHz_c_xf2 = poly_coeffs[8];
+			poly_5000MHz_c_f3 = poly_coeffs[9];
+		}
+		// If invalid, keep the compiled-in default values from powrms_data_processing.c
+
+		no_os_udelay(50);
+		// Read user polynomial calibration coefficients for 5000MHz reverse
+		ret = powrms_eeprom_read_poly_5000MHz_reverse_coeffs(poly_coeffs_reverse);
+		if (ret) {
+			return ret;
+		}
+		// Validate EEPROM data for reverse coefficients
+		int user_poly_coeffs_reverse_valid = 1;
+		for (int i = 0; i < 10; i++) {
+			if (isnan(poly_coeffs_reverse[i]) || isinf(poly_coeffs_reverse[i])) {
+				user_poly_coeffs_reverse_valid = 0;
+				break;
+			}
+		}
+		// Copy to individual reverse coefficient variables only if EEPROM data is valid
+		if (user_poly_coeffs_reverse_valid) {
+			poly_5000MHz_intercept_reverse = poly_coeffs_reverse[0];
+			poly_5000MHz_c_x_reverse = poly_coeffs_reverse[1];
+			poly_5000MHz_c_f_reverse = poly_coeffs_reverse[2];
+			poly_5000MHz_c_x2_reverse = poly_coeffs_reverse[3];
+			poly_5000MHz_c_xf_reverse = poly_coeffs_reverse[4];
+			poly_5000MHz_c_f2_reverse = poly_coeffs_reverse[5];
+			poly_5000MHz_c_x3_reverse = poly_coeffs_reverse[6];
+			poly_5000MHz_c_x2f_reverse = poly_coeffs_reverse[7];
+			poly_5000MHz_c_xf2_reverse = poly_coeffs_reverse[8];
+			poly_5000MHz_c_f3_reverse = poly_coeffs_reverse[9];
+		}
+		// If invalid, keep the compiled-in default values from powrms_data_processing.c
 	}
 
 	return 0;

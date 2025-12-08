@@ -118,6 +118,16 @@ static int read_dev_mode_overwrite_def_calib_values(void *device, char *buf,
 static int write_dev_mode_overwrite_def_calib_values(void *device, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
+static int read_poly_5000MHz_coeff(void *device, char *buf, uint32_t len,
+				   const struct iio_ch_info *channel, intptr_t priv);
+static int write_poly_5000MHz_coeff(void *device, char *buf, uint32_t len,
+				    const struct iio_ch_info *channel, intptr_t priv);
+static int read_poly_5000MHz_coeff_reverse(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
+static int write_poly_5000MHz_coeff_reverse(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv);
 
 #define POWRMS_VOLTAGE_CHANNEL(_idx, _name)                                 \
 {                                                                           \
@@ -138,6 +148,20 @@ static int write_dev_mode_overwrite_def_calib_values(void *device, char *buf,
 .name = _name, .ch_type = IIO_VOLTAGE, .channel = _idx,                     \
 .scan_index = -1, .indexed = true, .scan_type = NULL,                      \
 .attributes = powrms_precision_attributes, .ch_out = false                 \
+}
+
+#define POWRMS_POLY_CALIB_CHANNEL(_idx, _name)                              \
+{                                                                           \
+.name = _name, .ch_type = IIO_VOLTAGE, .channel = _idx,                     \
+.scan_index = -1, .indexed = true, .scan_type = NULL,                      \
+.attributes = powrms_poly_calib_attributes, .ch_out = false                \
+}
+
+#define POWRMS_POLY_CALIB_REVERSE_CHANNEL(_idx, _name)                      \
+{                                                                           \
+.name = _name, .ch_type = IIO_VOLTAGE, .channel = _idx,                     \
+.scan_index = -1, .indexed = true, .scan_type = NULL,                      \
+.attributes = powrms_poly_calib_reverse_attributes, .ch_out = false        \
 }
 
 struct iio_attribute powrms_voltage_channel_attributes[] = {
@@ -273,6 +297,136 @@ struct iio_attribute powrms_precision_attributes[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
+struct iio_attribute powrms_poly_calib_attributes[] = {
+	// Polynomial calibration coefficients for 5000MHz
+	{
+		.name = "intercept",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 0,  // coefficient index
+	},
+	{
+		.name = "c_x",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 1,
+	},
+	{
+		.name = "c_f",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 2,
+	},
+	{
+		.name = "c_x2",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 3,
+	},
+	{
+		.name = "c_xf",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 4,
+	},
+	{
+		.name = "c_f2",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 5,
+	},
+	{
+		.name = "c_x3",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 6,
+	},
+	{
+		.name = "c_x2f",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 7,
+	},
+	{
+		.name = "c_xf2",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 8,
+	},
+	{
+		.name = "c_f3",
+		.show = read_poly_5000MHz_coeff,
+		.store = write_poly_5000MHz_coeff,
+		.priv = 9,
+	},
+	END_ATTRIBUTES_ARRAY,
+};
+
+struct iio_attribute powrms_poly_calib_reverse_attributes[] = {
+	// Polynomial calibration coefficients for 5000MHz reverse
+	{
+		.name = "intercept",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 0,  // coefficient index
+	},
+	{
+		.name = "c_x",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 1,
+	},
+	{
+		.name = "c_f",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 2,
+	},
+	{
+		.name = "c_x2",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 3,
+	},
+	{
+		.name = "c_xf",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 4,
+	},
+	{
+		.name = "c_f2",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 5,
+	},
+	{
+		.name = "c_x3",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 6,
+	},
+	{
+		.name = "c_x2f",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 7,
+	},
+	{
+		.name = "c_xf2",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 8,
+	},
+	{
+		.name = "c_f3",
+		.show = read_poly_5000MHz_coeff_reverse,
+		.store = write_poly_5000MHz_coeff_reverse,
+		.priv = 9,
+	},
+	END_ATTRIBUTES_ARRAY,
+};
+
 struct iio_attribute powrms_global_attributes[] = {
 	{
 		.name = "frequency_MHz",
@@ -324,6 +478,8 @@ static struct iio_channel iio_powrms_channels[] = {
 	POWRMS_POWER_CHANNEL(IIO_CH_P_FORWARD, "p_fwd"),
 	POWRMS_POWER_CHANNEL(IIO_CH_P_REVERSE, "p_rev"),
 	POWRMS_PRECISION_CHANNEL(IIO_CH_PRECISION_ARRAY, "precision_array"),
+	POWRMS_POLY_CALIB_CHANNEL(IIO_CH_POLY_CALIB_5000MHZ, "poly_calib_5000MHz"),
+	POWRMS_POLY_CALIB_REVERSE_CHANNEL(IIO_CH_POLY_CALIB_5000MHZ_REVERSE, "poly_calib_5000MHz_reverse"),
 }; // channel definitions for device
 
 struct iio_device powrms_iio_descriptor = {
@@ -976,6 +1132,273 @@ static int write_temperature_compensation_value(void *device, char *buf,
 	return -EINVAL;  // Invalid input format
 }
 
+/**
+ * @brief Read polynomial calibration coefficient for 5000MHz
+ *
+ * This function reads a specific polynomial coefficient based on the priv index.
+ * Coefficients: 0=intercept, 1=c_x, 2=c_f, 3=c_x2, 4=c_xf, 5=c_f2, 6=c_x3, 7=c_x2f, 8=c_xf2, 9=c_f3
+ *
+ * @param device - IIO device instance (unused)
+ * @param buf - Buffer to store the attribute value
+ * @param len - Buffer length
+ * @param channel - Channel information (unused)
+ * @param priv - Coefficient index (0-9)
+ * @return Number of bytes written to buffer
+ */
+static int read_poly_5000MHz_coeff(void *device, char *buf, uint32_t len,
+				   const struct iio_ch_info *channel, intptr_t priv)
+{
+	double *coeff_ptr;
+
+	// Select the appropriate coefficient based on priv index
+	switch (priv) {
+	case 0:
+		coeff_ptr = &poly_5000MHz_intercept;
+		break;
+	case 1:
+		coeff_ptr = &poly_5000MHz_c_x;
+		break;
+	case 2:
+		coeff_ptr = &poly_5000MHz_c_f;
+		break;
+	case 3:
+		coeff_ptr = &poly_5000MHz_c_x2;
+		break;
+	case 4:
+		coeff_ptr = &poly_5000MHz_c_xf;
+		break;
+	case 5:
+		coeff_ptr = &poly_5000MHz_c_f2;
+		break;
+	case 6:
+		coeff_ptr = &poly_5000MHz_c_x3;
+		break;
+	case 7:
+		coeff_ptr = &poly_5000MHz_c_x2f;
+		break;
+	case 8:
+		coeff_ptr = &poly_5000MHz_c_xf2;
+		break;
+	case 9:
+		coeff_ptr = &poly_5000MHz_c_f3;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	// Return value with 20 decimal precision using scientific notation
+	return snprintf(buf, len, "%.20e", *coeff_ptr);
+}
+
+/**
+ * @brief Write polynomial calibration coefficient for 5000MHz
+ *
+ * This function writes a specific polynomial coefficient based on the priv index.
+ * The value is stored in EEPROM for persistence.
+ *
+ * @param device - IIO device instance (unused)
+ * @param buf - Buffer containing the value to write
+ * @param len - Buffer length
+ * @param channel - Channel information (unused)
+ * @param priv - Coefficient index (0-9)
+ * @return Number of bytes processed on success, negative error code on failure
+ */
+static int write_poly_5000MHz_coeff(void *device, char *buf, uint32_t len,
+				    const struct iio_ch_info *channel, intptr_t priv)
+{
+	double double_value;
+	double *coeff_ptr;
+	int ret;
+
+	// Parse the input value (supports both standard and scientific notation)
+	if (sscanf(buf, "%lf", &double_value) != 1) {
+		return -EINVAL;  // Invalid input format
+	}
+
+	// Select the appropriate coefficient based on priv index
+	switch (priv) {
+	case 0:
+		coeff_ptr = &poly_5000MHz_intercept;
+		break;
+	case 1:
+		coeff_ptr = &poly_5000MHz_c_x;
+		break;
+	case 2:
+		coeff_ptr = &poly_5000MHz_c_f;
+		break;
+	case 3:
+		coeff_ptr = &poly_5000MHz_c_x2;
+		break;
+	case 4:
+		coeff_ptr = &poly_5000MHz_c_xf;
+		break;
+	case 5:
+		coeff_ptr = &poly_5000MHz_c_f2;
+		break;
+	case 6:
+		coeff_ptr = &poly_5000MHz_c_x3;
+		break;
+	case 7:
+		coeff_ptr = &poly_5000MHz_c_x2f;
+		break;
+	case 8:
+		coeff_ptr = &poly_5000MHz_c_xf2;
+		break;
+	case 9:
+		coeff_ptr = &poly_5000MHz_c_f3;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	// Store the double value directly (no conversion needed)
+	*coeff_ptr = double_value;
+
+	// Write to EEPROM
+	ret = powrms_eeprom_write_poly_5000MHz_coeffs(&poly_5000MHz_intercept);
+	if (ret != IIO_SUCCESS) {
+		// EEPROM write failed - values are still updated in RAM, so continue
+		// This allows the system to function even without EEPROM persistence
+	}
+
+	return len;
+}
+
+/**
+ * @brief Read polynomial calibration coefficient for 5000MHz reverse
+ *
+ * This function reads a specific polynomial coefficient for reverse power based on the priv index.
+ * Coefficients: 0=intercept, 1=c_x, 2=c_f, 3=c_x2, 4=c_xf, 5=c_f2, 6=c_x3, 7=c_x2f, 8=c_xf2, 9=c_f3
+ *
+ * @param device - IIO device instance (unused)
+ * @param buf - Buffer to store the attribute value
+ * @param len - Buffer length
+ * @param channel - Channel information (unused)
+ * @param priv - Coefficient index (0-9)
+ * @return Number of bytes written to buffer
+ */
+static int read_poly_5000MHz_coeff_reverse(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	double *coeff_ptr;
+
+	// Select the appropriate coefficient based on priv index
+	switch (priv) {
+	case 0:
+		coeff_ptr = &poly_5000MHz_intercept_reverse;
+		break;
+	case 1:
+		coeff_ptr = &poly_5000MHz_c_x_reverse;
+		break;
+	case 2:
+		coeff_ptr = &poly_5000MHz_c_f_reverse;
+		break;
+	case 3:
+		coeff_ptr = &poly_5000MHz_c_x2_reverse;
+		break;
+	case 4:
+		coeff_ptr = &poly_5000MHz_c_xf_reverse;
+		break;
+	case 5:
+		coeff_ptr = &poly_5000MHz_c_f2_reverse;
+		break;
+	case 6:
+		coeff_ptr = &poly_5000MHz_c_x3_reverse;
+		break;
+	case 7:
+		coeff_ptr = &poly_5000MHz_c_x2f_reverse;
+		break;
+	case 8:
+		coeff_ptr = &poly_5000MHz_c_xf2_reverse;
+		break;
+	case 9:
+		coeff_ptr = &poly_5000MHz_c_f3_reverse;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	// Return value with 20 decimal precision using scientific notation
+	return snprintf(buf, len, "%.20e", *coeff_ptr);
+}
+
+/**
+ * @brief Write polynomial calibration coefficient for 5000MHz reverse
+ *
+ * This function writes a specific polynomial coefficient for reverse power based on the priv index.
+ * The value is stored in EEPROM for persistence.
+ *
+ * @param device - IIO device instance (unused)
+ * @param buf - Buffer containing the value to write
+ * @param len - Buffer length
+ * @param channel - Channel information (unused)
+ * @param priv - Coefficient index (0-9)
+ * @return Number of bytes processed on success, negative error code on failure
+ */
+static int write_poly_5000MHz_coeff_reverse(void *device, char *buf,
+		uint32_t len,
+		const struct iio_ch_info *channel, intptr_t priv)
+{
+	double double_value;
+	double *coeff_ptr;
+	int ret;
+
+	// Parse the input value (supports both standard and scientific notation)
+	if (sscanf(buf, "%lf", &double_value) != 1) {
+		return -EINVAL;  // Invalid input format
+	}
+
+	// Select the appropriate coefficient based on priv index
+	switch (priv) {
+	case 0:
+		coeff_ptr = &poly_5000MHz_intercept_reverse;
+		break;
+	case 1:
+		coeff_ptr = &poly_5000MHz_c_x_reverse;
+		break;
+	case 2:
+		coeff_ptr = &poly_5000MHz_c_f_reverse;
+		break;
+	case 3:
+		coeff_ptr = &poly_5000MHz_c_x2_reverse;
+		break;
+	case 4:
+		coeff_ptr = &poly_5000MHz_c_xf_reverse;
+		break;
+	case 5:
+		coeff_ptr = &poly_5000MHz_c_f2_reverse;
+		break;
+	case 6:
+		coeff_ptr = &poly_5000MHz_c_x3_reverse;
+		break;
+	case 7:
+		coeff_ptr = &poly_5000MHz_c_x2f_reverse;
+		break;
+	case 8:
+		coeff_ptr = &poly_5000MHz_c_xf2_reverse;
+		break;
+	case 9:
+		coeff_ptr = &poly_5000MHz_c_f3_reverse;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	// Store the double value directly (no conversion needed)
+	*coeff_ptr = double_value;
+
+	// Write to EEPROM
+	ret = powrms_eeprom_write_poly_5000MHz_reverse_coeffs(
+		      &poly_5000MHz_intercept_reverse);
+	if (ret != IIO_SUCCESS) {
+		// EEPROM write failed - values are still updated in RAM, so continue
+		// This allows the system to function even without EEPROM persistence
+	}
+
+	return len;
+}
+
 
 int powrms_buffers_init(void)
 {
@@ -1343,6 +1766,46 @@ static int write_dev_mode_overwrite_def_calib_values(void *device, char *buf,
 			if (ret != IIO_SUCCESS) {
 				return len;
 			}
+			powrms_watchdog_reset();
+
+			// Save polynomial calibration coefficients for 5000MHz to factory defaults
+			double poly_coeffs[10] = {
+				poly_5000MHz_intercept,
+				poly_5000MHz_c_x,
+				poly_5000MHz_c_f,
+				poly_5000MHz_c_x2,
+				poly_5000MHz_c_xf,
+				poly_5000MHz_c_f2,
+				poly_5000MHz_c_x3,
+				poly_5000MHz_c_x2f,
+				poly_5000MHz_c_xf2,
+				poly_5000MHz_c_f3
+			};
+			ret = powrms_eeprom_write_def_poly_5000MHz_coeffs(poly_coeffs);
+			if (ret != IIO_SUCCESS) {
+				return len;
+			}
+			powrms_watchdog_reset();
+
+			// Save polynomial calibration coefficients for 5000MHz reverse to factory defaults
+			double poly_coeffs_reverse[10] = {
+				poly_5000MHz_intercept_reverse,
+				poly_5000MHz_c_x_reverse,
+				poly_5000MHz_c_f_reverse,
+				poly_5000MHz_c_x2_reverse,
+				poly_5000MHz_c_xf_reverse,
+				poly_5000MHz_c_f2_reverse,
+				poly_5000MHz_c_x3_reverse,
+				poly_5000MHz_c_x2f_reverse,
+				poly_5000MHz_c_xf2_reverse,
+				poly_5000MHz_c_f3_reverse
+			};
+			ret = powrms_eeprom_write_def_poly_5000MHz_reverse_coeffs(poly_coeffs_reverse);
+			if (ret != IIO_SUCCESS) {
+				return len;
+			}
+			powrms_watchdog_reset();
+
 			// All EEPROM writes successful
 			return len;
 		} else {

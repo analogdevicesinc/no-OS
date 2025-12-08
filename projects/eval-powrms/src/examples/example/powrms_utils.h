@@ -61,7 +61,17 @@
         - Stored in little-endian format
     0x03FC - 0x05BB: Default factory reverse precision values array (112 int32_t values, 4 bytes each, total 448 bytes)
         - Stored in little-endian format
+    0x05BC - 0x05E3: Polynomial calibration coefficients for 5000MHz (10 int32_t values, 4 bytes each, total 40 bytes)
+        - Stored in little-endian format
+        - Order: intercept, c_x, c_f, c_x2, c_xf, c_f2, c_x3, c_x2f, c_xf2, c_f3
+    0x05E4 - 0x060B: Default factory polynomial calibration coefficients for 5000MHz (10 int32_t values, 4 bytes each, total 40 bytes)
+        - Stored in little-endian format
 */
+
+// Note: Polynomial coefficients changed to double (8 bytes each) for 20 decimal precision
+// Updated memory layout:
+//    0x05BC - 0x060B: Polynomial calibration coefficients for 5000MHz (10 double values, 8 bytes each, total 80 bytes)
+//    0x060C - 0x065B: Default factory polynomial calibration coefficients for 5000MHz (10 double values, 8 bytes each, total 80 bytes)
 
 #define MEM_USE_DEF_CALIB_DATA_POZ      0x0002
 #define MEM_USE_DEF_CALIB_DATA_LEN      1
@@ -100,6 +110,26 @@
 
 #define MEM_DEF_PRECISION_ARRAY_REVERSE_POZ     (MEM_PRECISION_ARRAY_REVERSE_POZ + MEM_PRECISION_ARRAY_REVERSE_SIZE)
 #define MEM_DEF_PRECISION_ARRAY_REVERSE_SIZE    960
+
+// Polynomial calibration coefficients for 5000MHz (user configurable)
+
+#define MEM_POLY_5000MHZ_COEFFS_POZ             (MEM_DEF_PRECISION_ARRAY_REVERSE_POZ + MEM_DEF_PRECISION_ARRAY_REVERSE_SIZE)
+#define MEM_POLY_5000MHZ_COEFFS_SIZE            80  // 10 coefficients * 8 bytes each (double)
+
+// Default polynomial calibration coefficients for 5000MHz (factory settings)
+
+#define MEM_DEF_POLY_5000MHZ_COEFFS_POZ         (MEM_POLY_5000MHZ_COEFFS_POZ + MEM_POLY_5000MHZ_COEFFS_SIZE)
+#define MEM_DEF_POLY_5000MHZ_COEFFS_SIZE        80  // 10 coefficients * 8 bytes each (double)
+
+// Polynomial calibration coefficients for 5000MHz reverse (user configurable)
+
+#define MEM_POLY_5000MHZ_REVERSE_COEFFS_POZ     (MEM_DEF_POLY_5000MHZ_COEFFS_POZ + MEM_DEF_POLY_5000MHZ_COEFFS_SIZE)
+#define MEM_POLY_5000MHZ_REVERSE_COEFFS_SIZE    80  // 10 coefficients * 8 bytes each (double)
+
+// Default polynomial calibration coefficients for 5000MHz reverse (factory settings)
+
+#define MEM_DEF_POLY_5000MHZ_REVERSE_COEFFS_POZ (MEM_POLY_5000MHZ_REVERSE_COEFFS_POZ + MEM_POLY_5000MHZ_REVERSE_COEFFS_SIZE)
+#define MEM_DEF_POLY_5000MHZ_REVERSE_COEFFS_SIZE 80  // 10 coefficients * 8 bytes each (double)
 
 /**
  * @brief Read and decode user input from UART
@@ -355,6 +385,103 @@ int powrms_eeprom_write_def_v_temp_comp_val(int32_t value);
  * @return int 0 on success, negative error code on failure
  */
 int powrms_eeprom_read_def_v_temp_comp_val(int32_t *value);
+
+/**
+ * @brief Write polynomial calibration coefficients for 5000MHz to EEPROM
+ *
+ * This function writes the 10 polynomial calibration coefficients (double array)
+ * to the EEPROM at the designated memory position. The coefficients are:
+ * intercept, c_x, c_f, c_x2, c_xf, c_f2, c_x3, c_x2f, c_xf2, c_f3
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array of 10 double polynomial coefficients
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_write_poly_5000MHz_coeffs(const double *coeffs);
+
+/**
+ * @brief Read polynomial calibration coefficients for 5000MHz from EEPROM
+ *
+ * This function reads the 10 polynomial calibration coefficients (double array)
+ * from the EEPROM at the designated memory position.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array where 10 double polynomial coefficients will be stored
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_read_poly_5000MHz_coeffs(double *coeffs);
+
+/**
+ * @brief Write default polynomial calibration coefficients for 5000MHz to EEPROM
+ *
+ * This function writes the default 10 polynomial calibration coefficients (double array)
+ * to the EEPROM at the designated memory position for factory data.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array of 10 double default polynomial coefficients
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_write_def_poly_5000MHz_coeffs(const double *coeffs);
+
+/**
+ * @brief Read default polynomial calibration coefficients for 5000MHz from EEPROM
+ *
+ * This function reads the default 10 polynomial calibration coefficients (double array)
+ * from the EEPROM at the designated memory position for factory data.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array where 10 double default polynomial coefficients will be stored
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_read_def_poly_5000MHz_coeffs(double *coeffs);
+
+/**
+ * @brief Write polynomial calibration coefficients for 5000MHz reverse to EEPROM
+ *
+ * This function writes the 10 polynomial calibration coefficients (double array)
+ * for reverse power to the EEPROM at the designated memory position.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array of 10 double polynomial coefficients
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_write_poly_5000MHz_reverse_coeffs(const double *coeffs);
+
+/**
+ * @brief Read polynomial calibration coefficients for 5000MHz reverse from EEPROM
+ *
+ * This function reads the 10 polynomial calibration coefficients (double array)
+ * for reverse power from the EEPROM at the designated memory position.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array where 10 double polynomial coefficients will be stored
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_read_poly_5000MHz_reverse_coeffs(double *coeffs);
+
+/**
+ * @brief Write default polynomial calibration coefficients for 5000MHz reverse to EEPROM
+ *
+ * This function writes the default 10 polynomial calibration coefficients (double array)
+ * for reverse power to the EEPROM at the designated memory position for factory data.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array of 10 double default polynomial coefficients
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_write_def_poly_5000MHz_reverse_coeffs(const double *coeffs);
+
+/**
+ * @brief Read default polynomial calibration coefficients for 5000MHz reverse from EEPROM
+ *
+ * This function reads the default 10 polynomial calibration coefficients (double array)
+ * for reverse power from the EEPROM at the designated memory position for factory data.
+ * The EEPROM should already be initialized before calling this function.
+ *
+ * @param coeffs Pointer to array where 10 double default polynomial coefficients will be stored
+ * @return int 0 on success, negative error code on failure
+ */
+int powrms_eeprom_read_def_poly_5000MHz_reverse_coeffs(double *coeffs);
 
 
 int powrms_init_memory_upon_boot();

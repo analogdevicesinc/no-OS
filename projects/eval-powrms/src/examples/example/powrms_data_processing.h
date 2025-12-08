@@ -122,6 +122,32 @@ extern double temperature_precision_values[TEMPERATURE_CORRECTION_COEFFS *
 // External declaration of the temperature compensation value
 extern int32_t temperature_compensation_value;
 
+// Polynomial calibration coefficients for 5000MHz (stored as double for 20 decimal precision)
+// These are used for 3rd order polynomial correction: intercept + c_x*x + c_f*f + c_x2*x^2 + c_xf*x*f + c_f2*f^2 + c_x3*x^3 + c_x2f*x^2*f + c_xf2*x*f^2 + c_f3*f^3
+extern double poly_5000MHz_intercept;
+extern double poly_5000MHz_c_x;
+extern double poly_5000MHz_c_f;
+extern double poly_5000MHz_c_x2;
+extern double poly_5000MHz_c_xf;
+extern double poly_5000MHz_c_f2;
+extern double poly_5000MHz_c_x3;
+extern double poly_5000MHz_c_x2f;
+extern double poly_5000MHz_c_xf2;
+extern double poly_5000MHz_c_f3;
+
+// Polynomial calibration coefficients for 5000MHz reverse (stored as double for 20 decimal precision)
+// These are used for 3rd order polynomial correction for reverse power
+extern double poly_5000MHz_intercept_reverse;
+extern double poly_5000MHz_c_x_reverse;
+extern double poly_5000MHz_c_f_reverse;
+extern double poly_5000MHz_c_x2_reverse;
+extern double poly_5000MHz_c_xf_reverse;
+extern double poly_5000MHz_c_f2_reverse;
+extern double poly_5000MHz_c_x3_reverse;
+extern double poly_5000MHz_c_x2f_reverse;
+extern double poly_5000MHz_c_xf2_reverse;
+extern double poly_5000MHz_c_f3_reverse;
+
 /**
  * @brief Update the value of an input variable based on digit increment
  * @param input_var Pointer to the variable structure to update

@@ -57,6 +57,8 @@
 #define IIO_CH_P_FORWARD                5
 #define IIO_CH_P_REVERSE                6
 #define IIO_CH_PRECISION_ARRAY          7
+#define IIO_CH_POLY_CALIB_5000MHZ       8
+#define IIO_CH_POLY_CALIB_5000MHZ_REVERSE 9
 
 // IIO attribute private data indices
 #define IIO_ATTR_SCALE                  0
@@ -65,7 +67,7 @@
 #define IIO_ATTR_ARRAY_SIZE             3
 
 // Number of channels
-#define IIO_POWRMS_NUM_CHANNELS         8
+#define IIO_POWRMS_NUM_CHANNELS         10
 
 // Scan type configuration
 #define IIO_SCAN_REALBITS               32
