@@ -40,33 +40,50 @@ void _update_adc_data()
 {
 	uint16_t temp_vin0, temp_vin1, temp_vin2;
 
-	// Read VIN0 (Channel 0)
-	if (ad7091r5_read_one(adc_desc, ADC_VIN0_CHANNEL_NO, &temp_vin0) == 0) {
-		adc_data_input.adc_vin0_raw = temp_vin0;
-		// Convert raw ADC value to voltage (12-bit ADC, 4.096V reference)
-		adc_data_input.adc_vin0_voltage = ((float)adc_data_input.adc_vin0_raw *
-						   ADC_V_REF) / ADC_COUNTER_MAX;
+	for (uint8_t nr_of_cycle = 0; nr_of_cycle < adc_data_input.adc_averaging_nr;
+	     nr_of_cycle++) {
+		// Read VIN0 (Channel 0)
+		if (ad7091r5_read_one(adc_desc, ADC_VIN0_CHANNEL_NO, &temp_vin0) == 0) {
+			if (nr_of_cycle == 0)
+				adc_data_input.adc_vin0_raw = 0;
+
+			adc_data_input.adc_vin0_raw += temp_vin0;
+		}
+
+		no_os_mdelay(10);
+
+		// Read VIN1 (Channel 1)
+		if (ad7091r5_read_one(adc_desc, ADC_VIN1_CHANNEL_NO, &temp_vin1) == 0) {
+			if (nr_of_cycle == 0)
+				adc_data_input.adc_vin1_raw = 0;
+
+			adc_data_input.adc_vin1_raw += temp_vin1;
+		}
+
+		no_os_mdelay(10);
+
+		// Read VIN2 (Channel 2)
+		if (ad7091r5_read_one(adc_desc, ADC_VIN2_CHANNEL_NO, &temp_vin2) == 0) {
+			if (nr_of_cycle == 0)
+				adc_data_input.adc_vin2_raw = 0;
+			adc_data_input.adc_vin2_raw += temp_vin2;
+		}
+
+		no_os_mdelay(10);
 	}
+	// Average the readings
+	adc_data_input.adc_vin0_raw /= adc_data_input.adc_averaging_nr;
+	adc_data_input.adc_vin1_raw /= adc_data_input.adc_averaging_nr;
+	adc_data_input.adc_vin2_raw /= adc_data_input.adc_averaging_nr;
 
-	no_os_mdelay(50);
+	adc_data_input.adc_vin0_voltage = ((float)adc_data_input.adc_vin0_raw *
+					   ADC_V_REF) / ADC_COUNTER_MAX;
 
-	// Read VIN1 (Channel 1)
-	if (ad7091r5_read_one(adc_desc, ADC_VIN1_CHANNEL_NO, &temp_vin1) == 0) {
-		adc_data_input.adc_vin1_raw = temp_vin1;
-		// Convert raw ADC value to voltage (12-bit ADC, 4.096V reference)
-		adc_data_input.adc_vin1_voltage = ((float)adc_data_input.adc_vin1_raw *
-						   ADC_V_REF) / ADC_COUNTER_MAX;
-	}
+	adc_data_input.adc_vin1_voltage = ((float)adc_data_input.adc_vin1_raw *
+					   ADC_V_REF) / ADC_COUNTER_MAX;
 
-	no_os_mdelay(50);
-
-	// Read VIN2 (Channel 2)
-	if (ad7091r5_read_one(adc_desc, ADC_VIN2_CHANNEL_NO, &temp_vin2) == 0) {
-		adc_data_input.adc_vin2_raw = temp_vin2;
-		// Convert raw ADC value to voltage (12-bit ADC, 4.096V reference)
-		adc_data_input.adc_vin2_voltage = ((float)adc_data_input.adc_vin2_raw *
-						   ADC_V_REF) / ADC_COUNTER_MAX;
-	}
+	adc_data_input.adc_vin2_voltage = ((float)adc_data_input.adc_vin2_raw *
+					   ADC_V_REF) / ADC_COUNTER_MAX;
 
 	int ret = calculate_power();
 	if (ret) {

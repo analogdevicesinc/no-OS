@@ -91,6 +91,7 @@ extern uint32_t frequency_MHz_ranges[FREQUENCY_RANGE_NR];
 
 // Define the global ADC data structure
 struct adc_data {
+	uint8_t adc_averaging_nr;
 	uint16_t adc_p_fwd_raw;
 	uint16_t adc_p_rev_raw;
 	uint16_t adc_vin0_raw;    // Direct VIN0 reading

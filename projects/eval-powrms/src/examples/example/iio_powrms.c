@@ -80,6 +80,10 @@ static int get_use_default_temp_calibration(void *device, char *buf,
 static int set_use_default_temp_calibration(void *device, char *buf,
 		uint32_t len,
 		const struct iio_ch_info *channel, intptr_t priv);
+static int get_adc_averaging_nr(void *device, char *buf, uint32_t len,
+				const struct iio_ch_info *channel, intptr_t priv);
+static int set_adc_averaging_nr(void *device, char *buf, uint32_t len,
+				const struct iio_ch_info *channel, intptr_t priv);
 static int read_precision_raw(void *device, char *buf, uint32_t len,
 			      const struct iio_ch_info *channel, intptr_t priv);
 static int write_precision_raw(void *device, char *buf, uint32_t len,
@@ -294,6 +298,12 @@ struct iio_attribute powrms_global_attributes[] = {
 		.store = set_use_default_calibration,
 		.priv = IIO_ATTR_ARRAY_SIZE,
 	},
+	{
+		.name = "adc_averaging_nr",
+		.show = get_adc_averaging_nr,
+		.store = set_adc_averaging_nr,
+		.priv = IIO_ATTR_SCALE,
+	},
 	END_ATTRIBUTES_ARRAY,
 };
 
@@ -498,6 +508,28 @@ static int set_use_default_calibration(void *device, char *buf, uint32_t len,
 		} else {
 			// EEPROM write failed - still accept the command but don't update EEPROM
 			// This allows the system to continue functioning even without EEPROM
+			return len;
+		}
+	}
+	return -EINVAL;  // Invalid input format
+}
+
+static int get_adc_averaging_nr(void *device, char *buf, uint32_t len,
+				const struct iio_ch_info *channel, intptr_t priv)
+{
+	extern volatile struct adc_data adc_data_input;
+	return snprintf(buf, len, "%d", (int)adc_data_input.adc_averaging_nr);
+}
+
+static int set_adc_averaging_nr(void *device, char *buf, uint32_t len,
+				const struct iio_ch_info *channel, intptr_t priv)
+{
+	extern volatile struct adc_data adc_data_input;
+	int val;
+	if (sscanf(buf, "%d", &val) == 1) {
+		// Validate the value is reasonable (e.g., 1-255 for uint8_t)
+		if (val >= 1 && val <= 255) {
+			adc_data_input.adc_averaging_nr = (uint8_t)val;
 			return len;
 		}
 	}

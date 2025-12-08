@@ -50,6 +50,7 @@ uint32_t frequency_MHz_ranges[FREQUENCY_RANGE_NR] = {
 
 // Define the global ADC data variable
 volatile struct adc_data adc_data_input = {
+	.adc_averaging_nr = 1,
 	.adc_p_fwd_raw = 0.0,
 	.adc_p_rev_raw = 0.0,
 	.adc_vin0_voltage = 0.0,
