@@ -28,6 +28,8 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/adc/*
 
+   drivers/ad9680
+
 ADC / DAC
 ==========
 .. toctree::
