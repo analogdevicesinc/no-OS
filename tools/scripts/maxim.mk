@@ -106,6 +106,7 @@ endif
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 
+<<<<<<< HEAD
 
 ifeq ($(SBT),1)
 $(info **********************************************************************)
@@ -119,6 +120,14 @@ CFLAGS += -D__SLA_FWK__
 else
 LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
 
+=======
+ifeq ($(SBT),1)
+LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_sla.ld
+SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32690/Source/sla_header_MAX32690.c
+else
+LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
+endif
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
 ASM_SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).S
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/heap.c
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/system_$(TARGET_LCASE).c

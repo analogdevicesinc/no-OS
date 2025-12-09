@@ -12,8 +12,10 @@ LDFLAGS += -u_printf_float
 ifeq (y,$(strip $(HP_STATIC_IP)))
 NO_OS_IP=192.168.97.60
 NO_OS_NETMASK=255.255.255.0
-NO_OS_GATEWAY=0.0.0.0
+NO_OS_GATEWAY=192.168.97.1
 endif
+
+SBT=1
 
 HEAP_SIZE = 0x80000
 STACK_SIZE = 0xFFFF
@@ -30,10 +32,14 @@ export MAXIM_SBT_DIR # SBTs must have this environment variable defined to work
  
 endif # SBT
 <<<<<<< HEAD
+<<<<<<< HEAD
  
 =======
 
 >>>>>>> 8ab825dbe (Fix for secure boot)
+=======
+
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
 # *******************************************************************************
 # Default goal selection.  This section allows you to override the default goal
 # that will run if no targets are specified on the command-line.
@@ -60,12 +66,20 @@ endif
 ifeq "$(MAKECMDGOALS)" ""
 MAKECMDGOALS:=$(.DEFAULT_GOAL)
 endif
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
 # *******************************************************************************
 # Include SBT config.  We need to do this here because it needs to know
 # the current MAKECMDGOAL.
 ifeq ($(SBT),1)
 include ../../tools/scripts/SBT-config.mk
 endif
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
 include ../../tools/scripts/generic_variables.mk
  
 include ../../tools/scripts/examples.mk
@@ -81,13 +95,27 @@ ifeq "$(MAKECMDGOALS)" ""
 MAKECMDGOALS:=$(.DEFAULT_GOAL)
 endif
 
+<<<<<<< HEAD
+=======
+include ../../tools/scripts/generic.mk
+
+# Include the rules that integrate the SBTs.  SBTs are a special case that must be
+# include after the core gcc rules to extend them.
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
 ifeq ($(SBT), 1)
 include ../../tools/scripts/SBT-rules.mk
 endif
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
 # Get .DEFAULT_GOAL working.
 ifeq "$(MAKECMDGOALS)" ""
 MAKECMDGOALS:=$(.DEFAULT_GOAL)
 endif
+<<<<<<< HEAD
 
 include ../../tools/scripts/generic.mk
+=======
+>>>>>>> b7554c4f2 (Secure boot signing for a Hockey Puck No-OS build)
