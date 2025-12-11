@@ -70,4 +70,6 @@ struct stm32_uart_desc {
  */
 extern const struct no_os_uart_platform_ops stm32_uart_ops;
 
+extern struct capi_uart_ops stm32_capi_uart_ops;
+
 #endif
