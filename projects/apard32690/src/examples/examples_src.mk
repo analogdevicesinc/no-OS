@@ -25,7 +25,7 @@ SRCS += $(NO-OS)/util/no_os_crc8.c
 
 INCS += $(DRIVERS)/net/oa_tc6/oa_tc6.h
 SRCS += $(DRIVERS)/net/oa_tc6/oa_tc6.c
-
+SRCS += $(MAXIM_LIBRARIES)/PeriphDrivers/Source/SYS/mxc_lock.c
 SRC_DIRS += $(PROJECT)/src/examples/tcp_echo_server_example
 endif
 

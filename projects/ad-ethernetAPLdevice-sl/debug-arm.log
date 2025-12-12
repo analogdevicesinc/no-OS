@@ -1,0 +1,25 @@
+=cmd-param-changed,param="logging enabled",value="on"
+6^done
+(gdb) 
+=cmd-param-changed,param="remotetimeout",value="60"
+7^done
+(gdb) 
+@"SWD DPIDR 0x2ba01477\n"
+@"timed out while waiting for target halted\n"
+@"TARGET: max32xxx.cpu - Not halted\n"
+&"Protocol error with Rcmd: FC.\n"
+8^error,msg="Protocol error with Rcmd: FC."
+(gdb) 
+=thread-exited,id="1",group-id="i1"
+=thread-group-exited,id="i1"
+9^error,msg="Remote communication error.  Target disconnected: error while reading: Not a directory."
+(gdb) 
+&"\"monitor\" command not supported by this target.\n"
+10^error,msg="\"monitor\" command not supported by this target."
+(gdb) 
+11^done
+(gdb) 
+12^done
+(gdb) 
+13^error,msg="You can't do that when your target is `exec'"
+(gdb) 
