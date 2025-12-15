@@ -39,7 +39,7 @@
 #define INTEGER_PRECISION			2
 #define FLOATING_POINT_PRECISION	3
 
-#define OUTPUT_VARIABLE_NAMES  	{"V_in:", "V_out:", "P_fwd:", "P_rev:"}
+#define OUTPUT_VARIABLE_NAMES  	{"P_fwd:", "P_rev:"}
 
 #define ADC_P_FWD_CHANNEL_NO	0
 #define ADC_P_REV_CHANNEL_NO	1

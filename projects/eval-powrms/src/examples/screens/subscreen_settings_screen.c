@@ -50,7 +50,7 @@ void subscreen_settings_screen()
 
 		// Grid descriptors
 		lv_coord_t col_dsc[] = {
-			LV_GRID_FR(20),  // Name column
+			LV_GRID_FR(14),  // Name column
 			LV_GRID_FR(1),   // Digit 1
 			LV_GRID_FR(1),   // Digit 2
 			LV_GRID_FR(1),   // Digit 3

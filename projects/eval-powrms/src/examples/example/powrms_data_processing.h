@@ -43,7 +43,7 @@
 #define INTEGER_NUMERIC_LENGTH	4
 #define FLOATING_POINT_LENGTH	2
 
-#define VARIABLE_NAMES  		{"Fq:", "In:", "Out:"}
+#define VARIABLE_NAMES  		{"Fq:", "Ri:", "Ro:"}
 
 #define PRECISION_SCALE_FACTOR      1000  // 10^3 for 3-digit precision (integer)
 #define PRECISION_RESOLUTION        (1.0 / PRECISION_SCALE_FACTOR)  // 10^-3 precision when converting to float

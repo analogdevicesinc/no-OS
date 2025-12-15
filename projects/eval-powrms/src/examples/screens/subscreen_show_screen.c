@@ -110,10 +110,10 @@ void subscreen_show_screen()
 
 		// Define grid: 2 columns (label, value) and 4 rows (for 4 items)
 		static lv_coord_t col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-		static lv_coord_t row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
+		static lv_coord_t row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 		lv_obj_set_grid_dsc_array(scr, col_dsc, row_dsc);
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			// Name label (left column)
 			lv_obj_t *label_name = lv_label_create(scr);
 			lv_label_set_text(label_name, names[i]);
@@ -137,18 +137,18 @@ void subscreen_show_screen()
 
 	if (display_entry == DISPLAY_ENTRY_SHOW) {
 		// Display all 4 voltage readings in the order: VIN0, VIN1, P_FWD, P_REV
-		powrms_float_to_str(adc_data_input.adc_vin0_voltage_corrected, out_text,
-				    INTEGER_PRECISION, FLOATING_POINT_PRECISION, false);
-		lv_label_set_text(label_values[0], out_text);
-		powrms_float_to_str(adc_data_input.adc_vin1_voltage_corrected, out_text,
-				    INTEGER_PRECISION, FLOATING_POINT_PRECISION, false);
-		lv_label_set_text(label_values[1], out_text);
+		// powrms_float_to_str(adc_data_input.adc_vin0_voltage_corrected, out_text,
+		// 		    INTEGER_PRECISION, FLOATING_POINT_PRECISION, false);
+		// lv_label_set_text(label_values[0], out_text);
+		// powrms_float_to_str(adc_data_input.adc_vin1_voltage_corrected, out_text,
+		// 		    INTEGER_PRECISION, FLOATING_POINT_PRECISION, false);
+		// lv_label_set_text(label_values[1], out_text);
 		powrms_float_to_str(adc_data_input.adc_p_fwd, out_text, INTEGER_PRECISION,
 				    FLOATING_POINT_PRECISION, false);
-		lv_label_set_text(label_values[2], out_text);
+		lv_label_set_text(label_values[0], out_text);
 		powrms_float_to_str(adc_data_input.adc_p_rev, out_text, INTEGER_PRECISION,
 				    FLOATING_POINT_PRECISION, false);
-		lv_label_set_text(label_values[3], out_text);
+		lv_label_set_text(label_values[1], out_text);
 
 		lv_timer_handler();
 
