@@ -59,7 +59,7 @@ int8_t ad7780_init(struct ad7780_dev **device,
 
 	dev = (struct ad7780_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	init_status = no_os_gpio_get(&dev->gpio_pdrst, &init_param.gpio_pdrst);
 	init_status = no_os_gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
@@ -82,17 +82,17 @@ int8_t ad7780_init(struct ad7780_dev **device,
 	init_status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	if (init_status != 0) {
-		return -1;
+		return init_status;
 	}
 	AD7780_PDRST_HIGH;
 	init_status = ad7780_wait_rdy_go_low(dev);
 	if (init_status != 0) {
-		return -1;
+		return init_status;
 	}
 	ad7780_read_sample(dev,
 			   &ad7780status);
 	if ((ad7780status & (AD7780_STAT_ID1 | AD7780_STAT_ID0)) != AD7780_ID_NUMBER) {
-		return -1;
+		return -ENODEV;
 	}
 
 	*device = dev;
@@ -143,7 +143,7 @@ int8_t ad7780_wait_rdy_go_low(struct ad7780_dev *dev)
 		timeout--;
 	}
 	if (timeout == 0) {
-		return -1;
+		return -ETIMEDOUT;
 	} else {
 		return 0;
 	}

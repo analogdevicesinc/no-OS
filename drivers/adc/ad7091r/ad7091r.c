@@ -59,7 +59,7 @@ int8_t ad7091r_init(struct ad7091r_dev **device,
 
 	dev = (struct ad7091r_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Ensures that last state of SDO is high. */

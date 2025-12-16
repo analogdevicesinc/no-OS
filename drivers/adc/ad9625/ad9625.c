@@ -93,7 +93,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 
 	dev = (struct ad9625_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
@@ -119,7 +119,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 		printf("%s Error: Invalid CHIP ID (0x%x).\n",
 		       __func__,
 		       chip_id);
-		return -1;
+		return -ENODEV;
 	}
 
 	ad9625_spi_read(dev, AD9625_REG_PLL_STATUS, &pll_stat);
@@ -127,7 +127,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 		printf("%s Error: AD9625 PLL is NOT locked (0x%x).\n",
 		       __func__,
 		       chip_id);
-		return -1;
+		return -EIO;
 	}
 
 	*device = dev;

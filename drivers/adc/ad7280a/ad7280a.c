@@ -57,7 +57,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 
 	dev = (struct ad7280a_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* GPIO */
 	status = no_os_gpio_get(&dev->gpio_pd, &init_param.gpio_pd);
