@@ -783,7 +783,7 @@ int32_t AD717X_Init(ad717x_dev **device,
 
 	dev = (ad717x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	dev->regs = init_param.regs;
 	dev->num_regs = init_param.num_regs;

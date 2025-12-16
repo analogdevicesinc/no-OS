@@ -141,7 +141,7 @@ int32_t ad9434_setup(struct ad9434_dev **device,
 
 	dev = (struct ad9434_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
@@ -149,7 +149,7 @@ int32_t ad9434_setup(struct ad9434_dev **device,
 	ret |= ad9434_spi_read(dev, AD9434_REG_CHIP_ID, &chip_id);
 	if (chip_id != AD9434_CHIP_ID) {
 		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
-		return -1;
+		return -ENODEV;
 	}
 
 	ret |= ad9434_outputmode_set(dev, AD9434_DEF_OUTPUT_MODE);

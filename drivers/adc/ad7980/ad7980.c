@@ -55,7 +55,7 @@ int8_t ad7980_init(struct ad7980_dev **device,
 
 	dev = (struct ad7980_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	status = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
