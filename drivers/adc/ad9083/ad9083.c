@@ -124,7 +124,7 @@ static int32_t ad9083_spi_xfer(void *user_data, uint8_t *in_data,
 	int32_t i;
 
 	if (size_bytes > 6)
-		return -1;
+		return -EINVAL;
 
 	bytes_number = size_bytes;
 
@@ -133,7 +133,7 @@ static int32_t ad9083_spi_xfer(void *user_data, uint8_t *in_data,
 
 	ret = no_os_spi_write_and_read(phy->spi_desc, data, bytes_number);
 	if (ret != 0)
-		return -1;
+		return ret;
 
 	for (i = 0; i < bytes_number; i++)
 		out_data[i] = data[i];
@@ -362,7 +362,7 @@ int32_t ad9083_init(struct ad9083_phy **device,
 	if ((chip_id.prod_id & CHIPID_MASK) != CHIPID_AD9083) {
 		printf("%s: Unrecognized CHIP_ID 0x%X\n", __func__,
 		       chip_id.prod_id);
-		ret = -1;
+		ret = -ENODEV;
 		goto error_4;
 	}
 
@@ -421,7 +421,7 @@ int32_t ad9083_remove(struct ad9083_phy *dev)
 	int32_t ret;
 
 	if (!dev)
-		return -1;
+		return -EINVAL;
 
 	ret = no_os_spi_remove(dev->spi_desc);
 	if (ret != 0)

@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include "ad6676.h"
 #include "no_os_alloc.h"
+#include "no_os_error.h"
 
 /***************************************************************************//**
  * @brief SPI read from device.
@@ -277,7 +278,7 @@ static int32_t ad6676_set_decimation(struct ad6676_dev *dev,
 		init_param->m = 3072;
 		break;
 	default:
-		return -1;
+		return -EINVAL;
 	}
 
 	return ad6676_spi_write(dev, AD6676_DEC_MODE, init_param->decimation);
@@ -314,7 +315,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 		f_pfd = refin_Hz / 4;
 		div_val = R_DIV(2);
 	} else
-		return -1;
+		return -EINVAL;
 
 	/* Compute N val */
 
@@ -414,7 +415,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 
 	if (!tout) {
 		printf("AD6676 Synthesizer PLL unlocked (0x%X)\n", reg_val);
-		return -1;
+		return -EIO;
 	}
 
 	return 0;
@@ -552,7 +553,7 @@ static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 
 	printf("AD6676 CAL failed (0x%X)\n", cal);
 
-	return -1;
+	return -EIO;
 }
 
 /***************************************************************************//**
@@ -638,7 +639,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 
 	dev = (struct ad6676_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
@@ -648,7 +649,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 	ad6676_spi_read(dev, AD6676_CHIP_ID0, &reg_id);
 	if (reg_id != CHIP_ID0_AD6676) {
 		printf("Unrecognized CHIP_ID 0x%X\n", reg_id);
-		return -1;
+		return -ENODEV;
 	}
 
 	ret = ad6676_reset(dev, init_param.spi3wire);
@@ -698,7 +699,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 
 	if (reg_val != SYN_STAT_PLL_LCK) {
 		printf("AD6676 JESD PLL unlocked (0x%X)\n", reg_val);
-		return -1;
+		return -EIO;
 	}
 
 	ret |= ad6676_outputmode_set(dev, DP_CTRL_TWOS_COMPLEMENT);

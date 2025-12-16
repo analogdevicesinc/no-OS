@@ -226,7 +226,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 
 	dev = (struct ad9680_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
@@ -236,7 +236,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 			&chip_id);
 	if (chip_id != AD9680_CHIP_ID) {
 		printf("AD9680: Invalid CHIP ID (0x%x).\n", chip_id);
-		return -1;
+		return -ENODEV;
 	}
 
 	ad9680_spi_write(dev,
@@ -277,7 +277,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 			&pll_stat);
 	if ((pll_stat & 0x80) != 0x80) {
 		printf("AD9680: PLL is NOT locked!\n");
-		ret = -1;
+		ret = -EIO;
 	}
 
 	*device = dev;
@@ -352,7 +352,7 @@ int32_t ad9680_setup_jesd_fsm(struct ad9680_dev **device,
 			&pll_stat);
 	if ((pll_stat & 0x80) != 0x80) {
 		printf("AD9680: PLL is NOT locked!\n");
-		ret = -1;
+		ret = -EIO;
 	}
 
 	dev->sampling_frequency_hz = init_param->sampling_frequency_hz;

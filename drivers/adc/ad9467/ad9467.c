@@ -53,7 +53,7 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 
 	dev = (struct ad9467_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* SPI */
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
