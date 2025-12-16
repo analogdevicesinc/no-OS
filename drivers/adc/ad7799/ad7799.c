@@ -85,12 +85,12 @@ int32_t ad7799_read(struct ad7799_dev *device, uint8_t reg_addr,
 
 	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size + 1);
 	if (ret)
-		return -1;
+		return ret;
 
 	for (i = 1; i < buff_size + 1 ; i++)
 		*reg_data = (*reg_data << 8) | buff[i];
 
-	return ret;
+	return 0;
 }
 
 /**
@@ -116,9 +116,9 @@ int32_t ad7799_write(struct ad7799_dev *device, uint8_t reg_addr,
 
 	ret = no_os_spi_write_and_read(device->spi_desc, buff, buff_size + 1);
 	if (ret)
-		return -1;
+		return ret;
 
-	return ret;
+	return 0;
 }
 
 /**
@@ -151,18 +151,18 @@ int32_t ad7799_set_mode(struct ad7799_dev *device, uint8_t mode)
 
 	ret = ad7799_read(device, AD7799_REG_MODE, &reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	reg_data &= ~AD7799_MODE_SEL(AD7799_REG_MASK);
 	reg_data |= AD7799_MODE_SEL(mode);
 
 	ret = ad7799_write(device, AD7799_REG_MODE, reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	ret = ad7799_dev_ready(device);
 	if (ret)
-		return -1;
+		return ret;
 
 	return 0;
 }
@@ -180,7 +180,7 @@ int32_t ad7799_set_channel(struct ad7799_dev *device, uint8_t ch)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	reg_data &= ~AD7799_CONF_CHAN(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_CHAN(ch);
@@ -202,19 +202,19 @@ int32_t ad7799_get_channel(struct ad7799_dev *device, uint8_t ch,
 
 	ret = ad7799_set_channel(device, ch);
 	if (ret)
-		return -1;
+		return ret;
 
 	ret = ad7799_set_mode(device, AD7799_MODE_SINGLE);
 	if (ret)
-		return -1;
+		return ret;
 
 	ret = ad7799_dev_ready(device);
 	if (ret)
-		return -1;
+		return ret;
 
 	ret = ad7799_read(device, AD7799_REG_DATA, reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	return 0;
 }
@@ -271,7 +271,7 @@ int32_t ad7799_set_gain(struct ad7799_dev *device, uint8_t gain)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	reg_data &= ~AD7799_CONF_GAIN(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_GAIN(gain);
@@ -292,7 +292,7 @@ int32_t ad7799_get_gain(struct ad7799_dev *device, uint8_t *gain)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	reg_data &= AD7799_CONF_GAIN(AD7799_REG_MASK);
 	*gain = reg_data >> 8;
@@ -314,7 +314,7 @@ int32_t ad7799_set_refdet(struct ad7799_dev *device, uint8_t ref_en)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	reg_data &= ~AD7799_CONF_REFDET(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_REFDET(ref_en);
@@ -337,7 +337,7 @@ int32_t ad7799_set_polarity(struct ad7799_dev *device, uint8_t polarity)
 
 	ret = ad7799_read(device, AD7799_REG_CONF, &reg_data);
 	if (ret)
-		return -1;
+		return ret;
 
 	reg_data &= ~AD7799_CONF_POLARITY(AD7799_REG_MASK);
 	reg_data |= AD7799_CONF_POLARITY(polarity);
@@ -360,7 +360,7 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
 	while (timeout > 0) {
 		ret = ad7799_read(device, AD7799_REG_STAT, &data);
 		if (ret)
-			return -1;
+			return ret;
 
 		if (!(data & AD7799_STAT_RDY))
 			return 0;
@@ -368,7 +368,7 @@ int32_t ad7799_dev_ready(struct ad7799_dev *device)
 		timeout--;
 	}
 
-	return -1;
+	return -ETIMEDOUT;
 }
 
 /**
@@ -388,7 +388,7 @@ int32_t ad7799_init(struct ad7799_dev **device,
 
 	dev = (struct ad7799_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	dev->chip_type = init_param->chip_type;
 	dev->polarity = init_param->polarity;
@@ -405,55 +405,55 @@ int32_t ad7799_init(struct ad7799_dev **device,
 		break;
 	default:
 		no_os_free(dev);
-		return -1;
+		return -EINVAL;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret) {
 		no_os_free(dev);
-		return -1;
+		return ret;
 	}
 
 	ret = ad7799_reset(dev);
 	if (ret)
-		return -1;
+		return ret;
 
 	/* Check Chip ID */
 	ret = ad7799_read(dev, AD7799_REG_ID, &chip_id);
 	if (ret)
-		return -1;
+		return ret;
 
 	switch (dev->chip_type) {
 	case ID_AD7798:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7798) {
 			printf("Invalid AD7798 Chip ID");
-			return -1;
+			return -ENODEV;
 		}
 		break;
 	case ID_AD7799:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7799) {
 			printf("Invalid AD7799 Chip ID");
-			return -1;
+			return -ENODEV;
 		}
 		break;
 	default:
 		printf("Invalid AD7798 Chip ID");
-		return -1;
+		return -EINVAL;
 	}
 
 	/* Initially set gain to 1 */
 	ret = ad7799_set_gain(dev, dev->gain);
 	if (ret)
-		return -1;
+		return ret;
 
 	/* Enable unipolar coding */
 	ret = ad7799_set_polarity(dev, dev->polarity);
 	if (ret)
-		return -1;
+		return ret;
 
 	*device = dev;
 
-	return ret;
+	return 0;
 }
 
 /**
