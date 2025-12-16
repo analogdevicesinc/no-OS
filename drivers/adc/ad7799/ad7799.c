@@ -465,6 +465,9 @@ int32_t ad7799_remove(struct ad7799_dev *device)
 {
 	int32_t ret;
 
+	if (!device)
+		return -EINVAL;
+
 	ret = no_os_spi_remove(device->spi_desc);
 	no_os_free(device);
 
