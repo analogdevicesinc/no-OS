@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include "ad7980.h"           // AD7980 definitions.
 #include "no_os_alloc.h"
+#include "no_os_error.h"
 
 /***************************************************************************//**
  * @brief Initializes the communication peripheral.
@@ -80,6 +81,9 @@ int8_t ad7980_init(struct ad7980_dev **device,
 int32_t ad7980_remove(struct ad7980_dev *dev)
 {
 	int32_t ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = no_os_spi_remove(dev->spi_desc);
 

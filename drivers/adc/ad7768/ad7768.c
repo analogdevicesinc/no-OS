@@ -914,6 +914,9 @@ int ad7768_set_power_mode_and_sampling_freq(ad7768_dev *dev,
  */
 int ad7768_remove(ad7768_dev *dev)
 {
+	if (!dev)
+		return -EINVAL;
+
 	no_os_spi_remove(dev->spi_desc);
 
 	no_os_gpio_remove(dev->gpio_reset);

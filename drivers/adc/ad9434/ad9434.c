@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include "ad9434.h"
 #include "no_os_alloc.h"
+#include "no_os_error.h"
 
 #define DCO_DEBUG
 
@@ -166,6 +167,9 @@ int32_t ad9434_setup(struct ad9434_dev **device,
 int32_t ad9434_remove(struct ad9434_dev *dev)
 {
 	int32_t ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = no_os_spi_remove(dev->spi_desc);
 
