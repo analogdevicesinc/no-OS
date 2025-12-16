@@ -82,9 +82,12 @@ int32_t ad463x_spi_reg_read(struct ad463x_dev *dev,
 	buf[2] = AD463X_REG_READ_DUMMY;
 
 	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 3);
+	if (ret)
+		return ret;
+
 	*reg_data = buf[2];
 
-	return ret;
+	return 0;
 }
 
 /**
@@ -186,7 +189,7 @@ int32_t ad463x_spi_reg_write_masked(struct ad463x_dev *dev,
 int32_t ad463x_set_pwr_mode(struct ad463x_dev *dev, uint8_t mode)
 {
 	if ((mode != AD463X_NORMAL_MODE) && (mode != AD463X_LOW_POWER_MODE))
-		return -1;
+		return -EINVAL;
 
 	return ad463x_spi_reg_write(dev, AD463X_REG_DEVICE_CONFIG, mode);
 }
