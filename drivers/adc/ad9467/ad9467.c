@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include "ad9467.h"
 #include "no_os_alloc.h"
+#include "no_os_error.h"
 
 /***************************************************************************//**
  * @brief Configures the test mode and the output mode to a default state.
@@ -85,6 +86,9 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 int32_t ad9467_remove(struct ad9467_dev *dev)
 {
 	int32_t ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = no_os_spi_remove(dev->spi_desc);
 

@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include "ad7091r.h"
 #include "no_os_alloc.h"
+#include "no_os_error.h"
 
 /***************************************************************************//**
  * @brief Initializes the communication peripheral and the initial Values for
@@ -80,6 +81,9 @@ int8_t ad7091r_init(struct ad7091r_dev **device,
 int32_t ad7091r_remove(struct ad7091r_dev *dev)
 {
 	int32_t ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = no_os_spi_remove(dev->spi_desc);
 

@@ -382,6 +382,9 @@ int32_t ad9680_remove(struct ad9680_dev *dev)
 {
 	int32_t ret;
 
+	if (!dev)
+		return -EINVAL;
+
 	ret = no_os_spi_remove(dev->spi_desc);
 
 	no_os_free(dev);
