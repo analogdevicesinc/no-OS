@@ -50,8 +50,6 @@ int ade7880_read(struct ade7880_dev *dev, uint16_t reg_addr, uint32_t *reg_data)
 	int ret;
 	/* data buffer large enough for 32 bits reg */
 	uint8_t buff[7] = { 0 };
-	/* register addres */
-	uint32_t addr;
 
 	if (!dev)
 		return -ENODEV;
@@ -102,7 +100,6 @@ int ade7880_write(struct ade7880_dev *dev, uint16_t reg_addr, uint32_t reg_data)
 {
 	/* data buffer */
 	uint8_t buff[7] = { 0 };
-	int i;
 
 	if (!dev)
 		return -ENODEV;
@@ -260,8 +257,6 @@ int ade7880_read_data_ph(struct ade7880_dev *dev, enum ade7880_phase phase)
 	uint16_t irms_reg;
 	/* v rms phase register addr */
 	uint16_t vrms_reg;
-	/* intermediate values used for computation */
-	uint64_t val_int;
 
 	if (!dev)
 		return -ENODEV;
@@ -320,8 +315,6 @@ int ade7880_init(struct ade7880_dev **device,
 	struct ade7880_dev *dev;
 	/* chip id read value */
 	uint32_t chip_id;
-	/* part id read value */
-	uint32_t part_id;
 
 	dev = (struct ade7880_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
