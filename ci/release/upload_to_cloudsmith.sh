@@ -33,20 +33,21 @@
 # 2. Prepare Release - the release_projects.sh script is passed as input file from the no-OS
 #                      sources affilated to the Release.
 # 3. Create GitHub Release - generate new release using the same release tag and new sources and
-# 4. Upload Artifactory - the upload_to_artifactory.sh script is passed as input file from the no-OS
+# 4. Upload Cloudsmith - the upload_to_cloudsmith.sh script is passed as input file from the no-OS
 #                         sources affilated to the Release.
 
-# Upload artifacts to Artifactory in conjunction with upload_to_artifactory.py python script.
+# Upload artifacts to Cloudsmith in conjunction with upload_to_cloudsmith.py python script that is found
+# in wiki-scripts repository from analogdevicesinc organization.
 
 # Release Environment Variables
 WORKING_DIRECTORY="${1:-$(System.DefaultWorkingDirectory)}"
-ART_PATH="${2:-$(ARTIFACTORY_PATH)}"
-ART_TOKEN="${3:-$(ARTIFACTORY_TOKEN)}"
+CLOUDSMITH_REPO="${2:-$(CLOUDSMITH_REPO)}"
+CLOUDSMITH_API_KEY="${3:-$(CLOUDSMITH_API_KEY)}"
 # Get default working branch
 BRANCH="${4:-$(Build.SourceBranchName)}"
 BINARY_ALIAS="noos_projects_binaries"
 SRC_ALIAS="_no-os_sources"
-PYSCRIPT_PATH="ci/release/upload_to_artifactory.py"
+PYSCRIPT_PATH="wiki-scripts/utils/cloudsmith_utils/upload_to_cloudsmith.py"
 
 # Timestamp Variable
 timestamp=$(date +%Y_%m_%d-%H_%M)
@@ -61,8 +62,12 @@ cd ${WORKING_DIRECTORY}/${BINARY_ALIAS}
 
 # Upload artifacts to Artifactory for each platform
 for platform in "${platform_list[@]}"; do
-	python3 ${WORKING_DIRECTORY}/${SRC_ALIAS}/${PYSCRIPT_PATH} \
-	--base_path ${ART_PATH} --server_path no-OS/${BRANCH}/${timestamp}/${platform} \
-	--local_path noos_exports_${platform} --token ${ART_TOKEN} --props_level 1 \
-	--properties "git_sha=${short_hash}" --log_file upload_to_artifactory_log.txt --no_rel_path
+	python3 ${WORKING_DIRECTORY}/${PYSCRIPT_PATH} \
+	        --repo=${CLOUDSMITH_REPO} \
+					--version="no-OS/${BRANCH}/${timestamp}/${platform}/" \
+					--local_path="noos_exports_${platform}" \
+					--tags="git_sha-${GIT_SHA};timestamp_${timestamp}" \
+					--token="${CLOUDSMITH_API_KEY}" \
+					--log_file="upload_to_cloudsmith.log" \
+					--no_rel_path
 done
