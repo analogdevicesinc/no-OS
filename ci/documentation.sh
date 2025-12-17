@@ -36,6 +36,9 @@ COMMIT_RANGE="$1"
 check_new_components_readme() {
 	echo_green "Checking for new drivers/projects and their README.rst files..."
 
+	# Excluded driver categories that don't require README.rst
+	local excluded_categories=("api" "platform")
+
 	# Get all added files only
 	git diff --name-only --diff-filter=A $COMMIT_RANGE | while read -r file; do
 		# Check if this is a file in drivers/ or projects/ directory
@@ -46,6 +49,14 @@ check_new_components_readme() {
 			if [ "$top_dir" = "drivers" ]; then
 				# For drivers: drivers/category/driver_name/...
 				local category=$(echo "$file" | cut -d'/' -f2)
+
+				# Skip excluded driver categories
+				for excluded in "${excluded_categories[@]}"; do
+					if [ "$category" = "$excluded" ]; then
+						continue 2
+					fi
+				done
+
 				component_dir=$(echo "$file" | cut -d'/' -f3)
 				local component_path="drivers/$category/$component_dir"
 			elif [ "$top_dir" = "projects" ]; then
