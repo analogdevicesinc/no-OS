@@ -139,6 +139,14 @@ MUX
 
    drivers/mux/*
 
+POSITION
+========
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/position/*
+
 RF TRANSCEIVER
 ==============
 .. toctree::
