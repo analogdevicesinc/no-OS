@@ -746,24 +746,24 @@ int ade7913_adc_freq(struct ade7913_dev *dev,
 
 	switch (frequency) {
 	case ADE7913_ADC_FREQ_1KHZ:
-		ret = ade9153a_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
-					   no_os_field_prep(ADE7913_ADC_FREQ_MSK,
-							   ADE7913_ADC_FREQ_1KHZ));
+		ret = ade7913_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
+					  no_os_field_prep(ADE7913_ADC_FREQ_MSK,
+							  ADE7913_ADC_FREQ_1KHZ));
 		break;
 	case ADE7913_ADC_FREQ_2KHZ:
-		ret = ade9153a_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
-					   no_os_field_prep(ADE7913_ADC_FREQ_MSK,
-							   ADE7913_ADC_FREQ_2KHZ));
+		ret = ade7913_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
+					  no_os_field_prep(ADE7913_ADC_FREQ_MSK,
+							  ADE7913_ADC_FREQ_2KHZ));
 		break;
 	case ADE7913_ADC_FREQ_4KHZ:
-		ret = ade9153a_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
-					   no_os_field_prep(ADE7913_ADC_FREQ_MSK,
-							   ADE7913_ADC_FREQ_4KHZ));
+		ret = ade7913_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
+					  no_os_field_prep(ADE7913_ADC_FREQ_MSK,
+							  ADE7913_ADC_FREQ_4KHZ));
 		break;
 	default:
-		ret = ade9153a_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
-					   no_os_field_prep(ADE7913_ADC_FREQ_MSK,
-							   ADE7913_ADC_FREQ_8KHZ));
+		ret = ade7913_update_bits(dev, ADE7913_REG_CONFIG, ADE7913_ADC_FREQ_MSK,
+					  no_os_field_prep(ADE7913_ADC_FREQ_MSK,
+							  ADE7913_ADC_FREQ_8KHZ));
 		break;
 	}
 
@@ -900,7 +900,7 @@ int ade7913_cnt_snapshot_val(struct ade7913_dev *dev, uint16_t *val)
 	if (!val)
 		return -EINVAL;
 
-	ret = ade9153a_read(dev, ADE7913_REG_CNT_SNAPSHOT, &reg_val);
+	ret = ade7913_read(dev, ADE7913_REG_CNT_SNAPSHOT, &reg_val);
 	if (ret)
 		return ret;
 	*val = reg_val & (uint32_t)(ADE7913_CNT_VAL_MSK);
