@@ -1,0 +1,10 @@
+{
+  "maxim": {
+    "apard_communication_example": {
+      "flags": "RELEASE=y EXAMPLE=apard_communication_example"
+    },
+    "forward_packets_example": {
+      "flags": "RELEASE=y EXAMPLE=forward_packets_example"
+    }
+  }
+}
