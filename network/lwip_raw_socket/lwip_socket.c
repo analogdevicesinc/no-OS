@@ -62,6 +62,7 @@
 #include "lwip_socket.h"
 
 #include "no_os_delay.h"
+#include "no_os_alloc.h"
 #include "tcp_socket.h"
 
 #include "adin1110.h"
