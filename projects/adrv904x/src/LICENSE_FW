@@ -1,0 +1,231 @@
+Firmware Software License Agreement
+
+This Firmware Software License Agreement (the “Agreement”) is a legal
+agreement between Analog Devices, Inc., a Massachusetts corporation,
+with its principal office at One Technology Way, Norwood,
+Massachusetts, USA 02062 (“Analog Devices”) and you (personally or on
+behalf of your employer, as applicable) (“Licensee”) for the software
+and related documentation that accompanies this Agreement (the
+“Licensed Software”). YOU AGREE THAT YOU ARE BOUND BY THE TERMS AND
+CONDITIONS OF THIS AGREEMENT BY DOWNLOADING, INSTALLING, COPYING OR
+USING THE SOFTWARE. IF YOU DO NOT AGREE, DO NOT DOWNLOAD, INSTALL, COPY
+OR USE THE SOFTWARE.
+
+    1. License Grant: Subject to terms of this Agreement, Analog
+Devices grants to Licensee a non-exclusive license, without charge, to
+copy, use and distribute Licensed Software in object code form, and to
+incorporate Licensed Software in object code form into Licensee
+products.
+
+    2. Excluded Licenses: Any license, agreement or other document
+issued, entered into or granted by Licensee that purports to apply any
+Excluded License to any portion of Licensed Software shall be null and
+void with regard to Licensed Software. An “Excluded License” means any
+license, including licenses for “open source” code (as defined by the
+Free Software Foundation), that requires as a condition of use,
+modification, and/or distribution of software subject to the Excluded
+License, that such software or other software combined and/or
+distributed with such software be (i) disclosed or distributed in
+source code form; (ii) licensed for the purpose of making derivative
+works; or (iii) redistributable at no charge. The restrictions of this
+section apply regardless of whether the Licensed Software is intended
+or designed to run in an environment that includes software under an
+Excluded License.
+
+    3. Reserved Rights: All rights not expressly granted in this
+Agreement are reserved to Analog Devices and its licensors. Analog
+Devices and its licensors retain all right, title and interest in the
+Licensed Software and modifications thereof, including all related
+patent, copyright and other intellectual property rights, and Licensee
+shall not take any action inconsistent with such ownership. It is
+agreed that because of the proprietary nature of the Licensed Software,
+Analog Devices’ remedies at law for a breach by the Licensee of its
+obligations under this License will be inadequate and that Analog
+Devices will, in the event of such breach, be entitled to equitable
+relief, including injunctive relief, without the posting of any bond,
+in addition to all other remedies provided under this License or
+available at law.
+
+    4. Updates: If Analog Devices elects to make any update, upgrade or
+new version of the Licensed Software (“Updates”) available to Licensee,
+such Updates shall be deemed to be Licensed Software under this
+Agreement. Analog Devices shall have no obligation to provide support
+or Updates.
+
+    5. Publicity: Notwithstanding anything in this Agreement, Licensee
+may not use any trademark or trade name of Analog Devices or make any
+public announcement regarding the existence of this Agreement without
+Analog Devices’ prior written consent.
+
+    6. Feedback: Licensee may from time to time provide suggestions,
+ideas, comments or other feedback (“Feedback”) to Analog Devices with
+respect to the Licensed Software. Licensee agrees that all Feedback is
+and shall be given entirely voluntarily. To the extent Licensee
+provides such Feedback, however, Licensee hereby grants to Analog
+Devices a non-exclusive, irrevocable, perpetual, worldwide,
+royalty-free, transferable license, with the right to sublicense, under
+Licensee’s intellectual property, to use and disclose Feedback in any
+manner Analog Devices chooses and to display, perform, copy, make, have
+made, use, sell, and otherwise dispose of Analog Devices’ and its
+licensee’s products embodying such Feedback in any manner and via any
+media Analog Devices chooses, without reference to its source or other
+obligation to Analog Devices, even if the Feedback is designated as
+confidential.
+
+    7. Copyright Notice: In no event shall Licensee remove any
+copyright or other intellectual property notice or other legend
+contained on or in copies of Licensed Software or displayed by any
+Licensed Software.
+
+    8. Third Party Software: The Licensed Software may be accompanied
+by or include software made available by one or more third parties
+(“Third Party Software”). Each portion of Third Party Software is
+subject to its own separate software license terms and conditions
+(“Third Party Licenses”). The Third Party Licenses for Third Party
+Software delivered with the Licensed Software may be set forth or
+identified (by URL or otherwise) in (i) Appendix A to this license (if
+any), (ii) the applicable software header or footer text, (iii) a text
+file located in the directory of the applicable Third Party Software
+component and/or (iv) such other location customarily used for
+licensing terms. The use of each portion of Third Party Software is
+subject to the Third Party Licenses, and you agree that your use of any
+Third Party Software is bound by the applicable Third Party License.
+You agree to review and comply with all applicable Third Party Licenses
+prior to any use or distribution of any Third Party Software. Third
+Party Software is provided on an “as is” basis without any
+representation, warranty or liability of any kind. Analog Devices
+(including its licensors) shall have no liability or responsibility for
+the operation or performance of the Third Party Software and shall not
+be liable for any damages, costs, or expenses, direct or indirect,
+arising out of the performance or failure to perform of the Third Party
+Software. Analog Devices (including its licensors) shall be entitled to
+the benefit of any and all limitations of liability and disclaimers of
+warranties contained in the Third Party Licenses. For the avoidance of
+doubt, this license does not alter, limit or expand the terms and
+conditions of, or rights granted to you pursuant to, Third Party
+Licenses.
+
+    9. Licensee Requirements: Use or distribution of the Licensed
+Software may or may not infringe patent rights of one or more patent
+holders. This license does not alleviate Licensee’s obligation to
+obtain separate licenses from patent holders. Licensee shall defend,
+indemnify and hold Analog Devices, its licensors, and their respective
+officers, directors, employees and agents (each an “Indemnified Party”)
+harmless from and against any damages, fines, penalties, assessments,
+liabilities, costs and expenses (including reasonable attorneys’ fees
+and court costs) in the event that any claim is brought against an
+Indemnified Party (i) arising or alleged to arise from Licensee’s use
+or distribution of Licensed Software or Third Party Software, or (ii)
+on account of Licensee’s failure to obtain any required license or
+consent to use or distribute Licensed Software or Third Party Software.
+Licensee shall bear any and all expenses and pay any and all taxes that
+may be payable in relation to this Agreement.
+
+    10. DISCLAIMER AND LIMITATION OF WARRANTIES: LICENSED SOFTWARE AND
+THIRD PARTY SOFTWARE ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+AND ANALOG DEVICES, FOR ITSELF AND ITS LICENSORS, HEREBY DISCLAIMS ALL
+WARRANTIES, WHETHER EXPRESS OR IMPLIED, ORAL OR WRITTEN, WITH RESPECT
+TO THE LICENSED SOFTWARE AND THIRD PARTY SOFTWARE, INCLUDING, BUT NOT
+LIMITED TO, ANY EXPRESS AND IMPLIED WARRANTIES OF MERCHANTABILITY;
+FITNESS FOR PARTICULAR PURPOSE AND SYSTEM INTEGRATION; CONDITIONS OF
+QUALITY AND ACCURACY OF INFORMATIONAL CONTENT; NON-INFRINGEMENT; QUIET
+ENJOYMENT; AND TITLE. LICENSEE AGREES THAT ANY EFFORTS BY ANALOG
+DEVICES TO MODIFY OR UPDATE LICENSED SOFTWARE OR THIRD PARTY SOFTWARE
+SHALL NOT BE DEEMED A WAIVER OF THESE LIMITATIONS, AND THAT ANY ANALOG
+DEVICES WARRANTIES SHALL NOT BE DEEMED TO HAVE FAILED OF THEIR
+ESSENTIAL PURPOSE.
+
+    11. LIMITATION OF LIABILITY: TO THE MAXIMUM EXTENT PERMITTED BY
+LAW, ANALOG DEVICES (INCLUDING ITS LICENSORS) SHALL NOT BE LIABLE FOR
+ANY DAMAGES ARISING FROM OR RELATED TO THE LICENSED SOFTWARE, THIRD
+PARTY SOFTWARE, THEIR USE OR ANY RELATED INFORMATION AND/OR SERVICES,
+INCLUDING BUT NOT LIMITED TO ANY INDIRECT,a INCIDENTAL, SPECIAL,
+PUNITIVE, EXEMPLARY, CONSEQUENTIAL OR ANALOGOUS DAMAGES (INCLUDING
+WITHOUT LIMITATION ANY DAMAGES RESULTING FROM LOSS OF USE, DATA,
+REVENUE, PROFITS, OR SAVINGS, COMPUTER DAMAGE OR ANY OTHER CAUSE),
+UNDER ANY LEGAL THEORY (INCLUDING WITHOUT LIMITATION CONTRACT,
+WARRANTY, TORT, NEGLIGENCE, STRICT OR PRODUCT LIABILITY), EVEN IF IT
+HAS BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+    IN NO EVENT SHALL ANALOG DEVICES’ OR ITS LICENSORS’ CUMULATIVE
+LIABILITY FOR DAMAGES TO LICENSEE FOR ANY AND ALL CAUSES WHATSOEVER,
+REGARDLESS OF THE FORM OF ANY CLAIMS OR ACTIONS, EXCEED THE GREATER OF
+(1) ONE HUNDRED U.S. DOLLARS ($100.00 U.S.) OR (2) THE AMOUNT PAID TO
+ANALOG DEVICES HEREUNDER FOR THE LICENSED SOFTWARE.
+
+    Some jurisdictions do not permit the exclusion or limitation of
+liability for consequential or incidental damages, and, as such, some
+portion of the above limitation may not apply to Licensee. In such
+jurisdictions, Analog Devices' liability is limited to the greatest
+extent permitted by law.
+
+    12. HIGH RISK APPLICATIONS: THE LICENSED SOFTWARE IS NOT DESIGNED
+OR INTENDED FOR USE IN HAZARDOUS ENVIRONMENTS REQUIRING FAIL-SAFE
+PERFORMANCE, INCLUDING, WITHOUT LIMITATION, IN THE OPERATION OF NUCLEAR
+FACILITIES, AIRCRAFT NAVIGATION OR CONTROL SYSTEMS, AIR TRAFFIC
+CONTROL, LIFE SUPPORT MACHINES, WEAPONS SYSTEMS, OR ANY OTHER
+APPLICATION IN WHICH THE FAILURE OF THE LICENSED SOFTWARE COULD LEAD TO
+DEATH, PERSONAL INJURY OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGES
+(“HIGH RISK ACTIVITIES”). LICENSED SOFTWARE IS NOT DESIGNED,
+AUTHORIZED, OR WARRANTED TO BE SUITABLE FOR USE IN CONNECTION WITH HIGH
+RISK ACTIVITIES. USE OF LICENSED SOFTWARE IN CONNECTION WITH HIGH RISK
+ACTIVITIES IS UNDERSTOOD TO BE FULLY AT LICENSEE’S RISK.
+
+    13. Choice of Law: This Agreement and any dispute related to the
+Licensed Software shall be governed by the laws of the Commonwealth of
+Massachusetts, United States of America, without reference to its
+principles of conflicts of laws, and, as to matters affecting
+copyrights, trademarks and patents, in addition, by applicable United
+States federal law. The parties agree that the jurisdiction and venue
+of any action with respect to this Agreement shall be in a court of
+competent subject matter jurisdiction located in the Commonwealth of
+Massachusetts, and each of the parties hereby agrees to submit itself
+to the exclusive jurisdiction and venue of such courts for the purpose
+of any such action, except that Analog Devices may seek injunctive
+relief in any venue of its choosing. Licensee hereby submits to
+personal jurisdiction in such courts. The parties hereto specifically
+exclude the United Nations Convention on Contracts for the
+International Sale of Goods and the Uniform Computer Information
+Transactions Act from this Agreement and any transaction between them
+that may be implemented in connection with this Agreement. The original
+of this Agreement has been written in English. The parties hereto waive
+any statute, law, or regulation that might provide an alternative law
+or forum or to have this Agreement written in any language other than
+English.
+
+    14. Export: Licensee shall defend, indemnify and hold harmless
+Analog Devices from and against any damages, fines, penalties,
+assessments, liabilities, costs and expenses (including reasonable
+attorneys’ fees and court costs) arising out of any failure by Licensee
+to comply with any applicable export control laws or regulations.
+
+    15. Compliance with Laws of Other Jurisdictions: Licensee shall
+comply with all laws, legislation, rules, regulations, governmental
+requirements and industry standards with respect to Licensed Software,
+and the performance by Licensee of its obligations hereunder, existing
+in any applicable jurisdiction.
+
+    16. Assignment: Analog Devices may assign, transfer, or sublicense
+this Agreement or any rights or obligations hereunder at any time in
+its sole discretion.
+
+    17. Waiver; Modification; Severability: No waiver, consent,
+modification or change of terms of this Agreement shall bind either
+party unless in writing signed by both parties, and then such waiver,
+consent, modification or change shall be effective only in the specific
+instance and for the specific purpose given. If any provision of this
+Agreement is unenforceable, such provision shall be enforced to the
+extent possible under applicable law, and the remaining provisions will
+remain in effect.
+
+    18. Entire Agreement: This Agreement supersedes any and all other
+agreements, either oral or in writing, between the parties with respect
+to the matters stated herein. If, for any reason, any provision of this
+Agreement is held invalid, such invalidity shall not affect the
+remainder of this Agreement, and this Agreement shall continue in force
+and effect to the full extent allowed by law. For the avoidance of
+doubt, all Licensed Software under this Agreement is subject to the
+terms and conditions of this Agreement and not any agreement or terms
+for purchase of Analog Devices products, even if the Licensed Software
+is delivered with such products.
+
