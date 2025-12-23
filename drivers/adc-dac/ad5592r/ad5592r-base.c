@@ -2,8 +2,9 @@
  *   @file   ad5592r-base.c
  *   @brief  Implementation of AD5592R Base Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025, 2026 (c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -466,6 +467,57 @@ int32_t ad5592r_set_int_ref(struct ad5592r_dev *dev, bool enable)
 }
 
 /**
+ * Get the device voltage reference.
+ *
+ * @param[in] dev The device structure.
+ * @param[in] vref_mv The voltage reference in millivolts.
+ *
+ * @return 0 in case of success
+ * @return -ENODEV when dev is NULL
+ * @return -ERANGE when vref is outside of the valid values for ad559xr vref
+ */
+int32_t ad5592r_set_ext_ref(struct ad5592r_dev *dev, uint32_t vref_mv)
+{
+	int err;
+
+	if (!dev)
+		return -ENODEV;
+	if ((vref_mv < AD5592R_MIN_VREF_MV) || (vref_mv > AD5592R_MAX_VREF_MV))
+		return -ERANGE;
+
+	err = ad5592r_set_int_ref(dev, false);
+	if (err)
+		return err;
+
+	dev->external_vref = vref_mv;
+
+	return 0;
+}
+
+/**
+ * Get the device voltage reference.
+ *
+ * @param[in] dev The device structure.
+ * @param[out] vref_mv The voltage reference in millivolts.
+ *
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad5592r_get_ref(struct ad5592r_dev *dev, uint32_t *vref_mv)
+{
+	if (!dev)
+		return -ENODEV;
+	if (!vref_mv)
+		return -EINVAL;
+
+	if (dev->int_ref)
+		*vref_mv = INTERNAL_VREF_VOLTAGE * 1000;
+	else
+		*vref_mv = dev->external_vref;
+
+	return 0;
+}
+
+/**
  * Set ADC Buffer for the device
  *
  * @param dev - The device structure.
@@ -490,4 +542,29 @@ int32_t ad5592r_set_adc_buffer(struct ad5592r_dev *dev, bool enable)
 	dev->adc_buf = enable;
 
 	return 0;
+}
+
+/* Set repetition bit in ADC sequencer.
+ *
+ * @param dev - The device.
+ * @param repeat[in] - status of repeat bit to set.
+ * @return 0 if successful. Negative value if error is encountered.
+ */
+int32_t ad5592r_set_repetition(struct ad5592r_dev *dev, bool repeat)
+{
+	int err;
+	uint16_t val;
+
+	if (!dev)
+		return -EINVAL;
+
+	err = ad5592r_base_reg_read(dev, AD5592R_REG_ADC_SEQ, &val);
+	if (err)
+		return err;
+
+	val &= ~AD5592R_REG_ADC_SEQ_REP;
+	if (repeat)
+		val |= AD5592R_REG_ADC_SEQ_REP;
+
+	return ad5592r_base_reg_write(dev, AD5592R_REG_ADC_SEQ, val);
 }
