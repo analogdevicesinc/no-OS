@@ -2,8 +2,9 @@
  *   @file   ad5592r-base.h
  *   @brief  Header file of AD5592R Base Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025, 2026 (c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,6 +38,7 @@
 #include "no_os_delay.h"
 #include "no_os_spi.h"
 #include "no_os_i2c.h"
+#include "no_os_gpio.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 #include <stdbool.h>
@@ -92,8 +94,12 @@ enum ad5592r_registers {
 #define AD5592R_REG_LDAC_INPUT_REG_OUT		    0x02
 
 #define INTERNAL_VREF_VOLTAGE			    2.5
+#define AD5592R_MIN_VREF_MV 		1000
+#define AD5592R_MAX_VREF_MV 		5500
+#define AD5592R_TEMPERATURE_CHANNEL 	8
 
 #define NUM_OF_CHANNELS 8
+
 
 struct ad5592r_dev;
 
@@ -118,8 +124,10 @@ enum ad559xr_range {
 
 struct ad5592r_init_param {
 	bool int_ref;
+	uint32_t external_vref; /* valid only if int_ref = true */
 	struct no_os_spi_init_param *spi_init;
 	struct no_os_i2c_init_param *i2c_init;
+	struct no_os_gpio_init_param *ss_init;
 	uint8_t channel_modes[8];
 	uint8_t channel_offstate[8];
 	enum ad559xr_range adc_range;
@@ -132,9 +140,11 @@ struct ad5592r_dev {
 	const struct ad5592r_rw_ops *ops;
 	struct no_os_i2c_desc *i2c;
 	struct no_os_spi_desc *spi;
+	struct no_os_gpio_desc *ss;
 	uint16_t spi_msg;
 	uint8_t num_channels;
 	uint16_t cached_dac[8];
+	uint8_t cached_gpo[8];
 	uint16_t cached_gp_ctrl;
 	uint8_t channel_modes[8];
 	uint8_t channel_offstate[8];
@@ -145,6 +155,7 @@ struct ad5592r_dev {
 	enum ad559xr_range adc_range;
 	enum ad559xr_range dac_range;
 	bool int_ref;
+	uint32_t external_vref; /* valid only if int_ref = true */
 	uint8_t power_down[8];
 	bool adc_buf;
 };
@@ -168,8 +179,11 @@ int32_t ad5592r_set_dac_range(struct ad5592r_dev *dev,
 			      enum ad559xr_range dac_range);
 int32_t ad5592r_power_down(struct ad5592r_dev *dev, uint8_t chan, bool enable);
 int32_t ad5592r_set_int_ref(struct ad5592r_dev *dev, bool enable);
+int32_t ad5592r_set_ext_ref(struct ad5592r_dev *dev, uint32_t vref_mv);
+int32_t ad5592r_get_ref(struct ad5592r_dev *dev, uint32_t *vref_mv);
 int32_t ad5592r_set_adc_buffer(struct ad5592r_dev *dev, bool enable);
 int32_t ad5592r_base_reg_update(struct ad5592r_dev* dev, uint16_t reg_addr,
 				uint16_t data, uint16_t mask);
+int32_t ad5592r_set_repetition(struct ad5592r_dev *dev, bool repeat);
 
 #endif /* AD5592R_BASE_H_ */
