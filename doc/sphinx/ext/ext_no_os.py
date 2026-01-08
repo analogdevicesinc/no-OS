@@ -138,7 +138,7 @@ class directive_no_os_doxygen(Directive):
 
         if lf[0] not in env.no_os_doxygen:
             logger.warning(f"no-os-doxygen: Entry '{lf[0]}' from doc"
-                           " '{env.docname}' doesn't exist.")
+                           f" '{env.docname}' doesn't exist.")
             return []
 
         if env.no_os_doxygen[lf[0]]['list'] is None:
