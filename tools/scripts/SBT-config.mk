@@ -51,25 +51,31 @@ $(info **********************************************************************)
 CA_SIGN_BUILD := "$(CA_SIGN_BUILD)"
 BUILD_SESSION := "$(BUILD_SESSION)"
 TEST_KEY="$(MAXIM_SBT_DIR)/devices/$(TARGET_SEC)/keys/maximtestcrk.key"
-
 # Generate SCP packets inside of the build directory by default
 SCP_PACKETS?=$(BUILD_DIR)/scp_packets
 
 # Add header file
-#SRCS += $(CMSIS_ROOT)/Device/Maxim/$(TARGET_UC)/Source/sla_header_$(TARGET_UC).c
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/sla_header_$(TARGET_UCASE).c
 # Based on the Make goal the source code may need some specific compiler
 # definitions and files.  Additionally, the linkerfile may need to be changed.
 ifeq ($(MAKECMDGOALS),sla)
-PROJ_CFLAGS += -D__SLA_FWK__
-LINKERFILE ?= $(CMSIS_ROOT)/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_sla.ld
+$(info **********************************************************************)
+$(info MAKECMDGOALS:  $(MAKECMDGOALS))
+$(info **********************************************************************)
+CFLAGS += -D__SLA_FWK__
+LSCRIPT ?= $(CMSIS_ROOT)/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_sla.ld
+$(info **********************************************************************)
+$(info CFLAGS:  $(CFLAGS))
+$(info LSCRIPT:  $(LSCRIPT))
+$(info **********************************************************************)
+
 endif
 
 ifeq ($(MAKECMDGOALS),scpa)
 SCPA_MEM_BASE_ADDR ?= 0xC0000000
 SCPA_MEM_SIZE ?= 1024
 
-PROJ_CFLAGS += -D__SCPA_FWK__
-PROJ_CFLAGS += -DSCPA_MEM_BASE_ADDR=$(SCPA_MEM_BASE_ADDR) -DSCPA_MEM_SIZE=$(SCPA_MEM_SIZE)
+CFLAGS += -D__SCPA_FWK__
+CFLAGS += -DSCPA_MEM_BASE_ADDR=$(SCPA_MEM_BASE_ADDR) -DSCPA_MEM_SIZE=$(SCPA_MEM_SIZE)
 LINKERFILE ?= $(CMSIS_ROOT)/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_scpa.ld
 endif
