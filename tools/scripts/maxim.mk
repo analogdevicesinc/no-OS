@@ -15,7 +15,7 @@ OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
 PYTHON = python
-ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
@@ -129,6 +129,7 @@ $(info TARGET_LCASE is set to: $(TARGET_LCASE))
 $(info TARGET_UCASE is set to: $(TARGET_UCASE))
 LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_sla.ld
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32690/Source/sla_header_MAX32690.c
+CFLAGS += -D__SLA_FWK__
 else
 LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
 endif

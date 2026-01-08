@@ -22,7 +22,7 @@ sla: all
 	@echo " "
 	arm-none-eabi-objcopy $(BUILD_DIR)/$(PROJECT_NAME).elf -R .sig -O binary $(BUILD_DIR)/$(PROJECT_NAME).bin
 	@echo " "
-	$(CA_SIGN_BUILD) -c $(TARGET_SEC) header=yes key_file=$(TEST_KEY) ca=$(BUILD_DIR)/$(PROJECT_NAME).bin sca=$(BUILD_DIR)/$(PROJECT_NAME).sbin
+	$(CA_SIGN_BUILD) -c $(TARGET_SEC) key_file=$(TEST_KEY) ca=$(BUILD_DIR)/$(PROJECT_NAME).bin sca=$(BUILD_DIR)/$(PROJECT_NAME).sbin
 	@echo " "
 	arm-none-eabi-objcopy  $(BUILD_DIR)/$(PROJECT_NAME).elf --update-section .sig=$(BUILD_DIR)/$(PROJECT_NAME).sig
 	@echo " "
