@@ -1,4 +1,6 @@
-from os import path
+from os import path, environ
+from time import time
+from urllib.request import urlopen
 
 from lxml import html
 from docutils import nodes
@@ -9,6 +11,7 @@ from adi_doctools.directive.node import node_a
 
 logger = logging.getLogger(__name__)
 
+base_url_doc = "https://analogdevicesinc.github.io/no-OS/doxygen/"
 
 def manage_no_os_doxygen_links(env):
     """
@@ -22,19 +25,22 @@ def manage_no_os_doxygen_links(env):
         for p in pages:
             env.no_os_doxygen[p] = {'ctime': 0, 'list': None,
                                     'exclude': [], 'ctime_exclude': 0,
-                                    'warn': True}
+                                    'try_file': True, 'try_fetch': True}
 
     dxy = env.no_os_doxygen
 
-    root_path = path.abspath(path.join(env.srcdir, "..", "..", ".."))
+    if 'ADOC_CUSTOM_DOC' in environ:
+        root_path = path.abspath(path.join(env.srcdir, "..", "no-OS"))
+    else:
+        root_path = path.abspath(path.join(env.srcdir, "..", "..", ".."))
 
     def get_exclusions(file):
         if not path.isfile(file):
             logger.warning(f"no-os-doxygen: '{file}' does not exist!")
             return
 
-        ctime = path.getctime(file)
-        if ctime <= dxy['drivers']['ctime_exclude']:
+        ctime__ = path.getctime(file)
+        if ctime__ <= dxy['drivers']['ctime_exclude']:
             return
 
         with open(file, 'r') as f:
@@ -43,30 +49,67 @@ def manage_no_os_doxygen_links(env):
                 if line.startswith("EXCLUDE_DRV="):
                     exclude = line.split("=", 1)[1].strip().strip('"').split()
                     dxy['drivers']['exclude'] = exclude
-                    dxy['drivers']['ctime_exclude'] = ctime
+                    dxy['drivers']['ctime_exclude'] = ctime__
                     return
         return
 
     get_exclusions(path.join(root_path, "ci", "gen_dox.sh"))
 
-    doxypath = path.join(root_path, "doc", "doxygen", "build",
-                         "doxygen_doc", "html")
+    base_path = path.join(root_path, "doc", "doxygen", "build",
+                          "doxygen_doc", "html")
+
+    def read_file(p, file: tuple, ctime_):
+        if not dxy[p]['try_file']:
+            return None, None, False
+
+        file = path.join(base_path, SEP.join(file))
+        if not path.isfile(file):
+            logger.info(f"no-os-doxygen: '{file}' does not exist.")
+            dxy[p]['try_file'] = False
+            return None, None, False
+
+        ctime__ = path.getctime(file)
+        if ctime__ <= ctime_:
+            return None, None, True
+
+        with open(file, 'r') as f:
+            content = ''.join(f.readlines())
+            return content, ctime__, False
+
+    def fetch_file(p, file: tuple, ctime_):
+        if not dxy[p]['try_fetch']:
+            return None, None, False
+
+        url = base_url_doc + '/'.join(file)
+        ctime__ = int(time())
+        if ctime__ <= ctime_:
+            return None, None, True
+
+        try:
+            logger.info(f"loading doxygen entries from {url} ...")
+            with urlopen(url) as response:
+                content = response.read().decode('utf-8')
+                ctime__ = ctime__ + 600 # Slack future
+        except Exception as e:
+            logger.warning(f"no-os-doxygen: Failed to fetch '{url}', {e}")
+            dxy[p]['try_fetch'] = False
+            return None, None, False
+
+        return content, ctime__, False
 
     for p in pages:
-        file = path.join(doxypath, f"{p}_page.html")
-        if not path.isfile(file):
-            if dxy[p]['warn']:
-                logger.warning(f"no-os-doxygen: '{file}' does not exist!")
-                dxy[p]['warn'] = False
+        file = (f"{p}_page.html",)
+        content, ctime, cached = read_file(p, file, dxy[p]['ctime'])
+        if cached:
+            continue
+        if content is None:
+            content, ctime, cached = fetch_file(p, file, dxy[p]['ctime'])
+        if cached or content is None:
             continue
 
-        ctime = path.getctime(file)
-        if ctime <= dxy[p]['ctime']:
-            continue
+        root = html.fromstring(content)
 
         dxy[p]['list'] = {}
-
-        root = html.parse(file).getroot()
         link_elements = root.xpath("//body//div[@class='textblock']//ul")
 
         if p == "drivers":
@@ -136,6 +179,8 @@ class directive_no_os_doxygen(Directive):
                     break
             lf = [k, *lk]
 
+        if 'ADOC_CUSTOM_DOC' in environ:
+            lf.pop(0)
         if lf[0] not in env.no_os_doxygen:
             logger.warning(f"no-os-doxygen: Entry '{lf[0]}' from doc"
                            f" '{env.docname}' doesn't exist.")
@@ -165,7 +210,11 @@ class directive_no_os_doxygen(Directive):
         node = nodes.paragraph()
 
         content_root = (f'..{SEP}' * env.docname.count(SEP)) or f'.{SEP}'
-        url = node_a(href=path.join(content_root, 'doxygen', dir_),
+        if 'ADOC_CUSTOM_DOC' in environ:
+            path_ = base_url_doc + dir_
+        else:
+            path_ = path.join(content_root, 'doxygen', dir_)
+        url = node_a(href=path_,
                      classes=["reference", "external"])
         url += nodes.inline(text='/'.join(lf)+" (doxygen)")
         node += nodes.inline(text="See ")
