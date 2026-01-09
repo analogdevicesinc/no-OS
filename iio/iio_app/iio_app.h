@@ -41,10 +41,6 @@
 #include "no_os_error.h"
 #include "no_os_delay.h"
 
-#if defined(NO_OS_LWIP_NETWORKING)
-#include "lwip_socket.h"
-#endif
-
 #if defined(NO_OS_W5500_NETWORKING)
 #include "tcp_socket.h"
 #endif
@@ -95,10 +91,6 @@ struct iio_app_desc {
 	int (*post_step_callback)(void *arg);
 	/** Function parameteres */
 	void *arg;
-
-#ifdef NO_OS_LWIP_NETWORKING
-	struct lwip_network_desc *lwip_desc;
-#endif
 };
 
 /**
@@ -128,10 +120,6 @@ struct iio_app_init_param {
 	int (*post_step_callback)(void *arg);
 	/** Function parameteres */
 	void *arg;
-
-#ifdef NO_OS_LWIP_NETWORKING
-	struct lwip_network_param lwip_param;
-#endif
 };
 
 /** Register devices for an IIO application */
