@@ -41,6 +41,8 @@
 #include "tcp_socket.h"
 #endif
 
+struct no_os_net_desc;
+
 enum physical_link_type {
 	USE_UART,
 	USE_LOCAL_BACKEND,
@@ -102,6 +104,7 @@ struct iio_init_param {
 #endif
 	};
 	struct iio_local_backend *local_backend;
+	struct no_os_net_desc *net_desc;
 	struct iio_ctx_attr *ctx_attrs;
 	uint32_t nb_ctx_attr;
 	struct iio_device_init *devs;
