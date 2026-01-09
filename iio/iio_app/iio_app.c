@@ -327,6 +327,7 @@ int iio_app_init(struct iio_app_desc **app,
 
 		iio_init_param.phy_type = USE_NETWORK;
 		iio_init_param.tcp_socket_init_param = &socket_param;
+		iio_init_param.net_desc = application->net_desc;
 	}
 
 	iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
