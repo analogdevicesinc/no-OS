@@ -37,16 +37,12 @@
 #include "iio.h"
 #include "no_os_irq.h"
 #include "no_os_uart.h"
+#include "no_os_net.h"
 #include "no_os_error.h"
 #include "no_os_delay.h"
 
-#if defined(NO_OS_LWIP_NETWORKING)
-#include "lwip_socket.h"
-#endif
-
 #if defined(NO_OS_W5500_NETWORKING)
 #include "tcp_socket.h"
-#include "w5500_network.h"
 #endif
 
 #define IIO_APP_DEVICE(_name, _dev, _dev_descriptor, _read_buff, _write_buff, _default_trigger_id) {\
@@ -87,16 +83,14 @@ struct iio_app_desc {
 	struct no_os_uart_desc *uart_desc;
 	/** IRQ descriptor to be used */
 	void *irq_desc;
+	/** NETWORK descriptor to be used */
+	struct no_os_net_desc *net_desc;
 	/**  IIO descriptor to be returned */
 	struct iio_desc *iio_desc;
 	/** Function to be called each step */
 	int (*post_step_callback)(void *arg);
 	/** Function parameteres */
 	void *arg;
-
-#ifdef NO_OS_LWIP_NETWORKING
-	struct lwip_network_desc *lwip_desc;
-#endif
 };
 
 /**
@@ -120,18 +114,12 @@ struct iio_app_init_param {
 	struct no_os_uart_init_param uart_init_params;
 	/** IRQ descriptor to be used */
 	void *irq_desc;
+	/** NETWORK init params */
+	struct no_os_net_init_param net_init_params;
 	/** Function to be called each step */
 	int (*post_step_callback)(void *arg);
 	/** Function parameteres */
 	void *arg;
-
-#ifdef NO_OS_LWIP_NETWORKING
-	struct lwip_network_param lwip_param;
-#endif
-
-#ifdef NO_OS_W5500_NETWORKING
-	struct w5500_network_dev *net_dev;
-#endif
 };
 
 /** Register devices for an IIO application */
