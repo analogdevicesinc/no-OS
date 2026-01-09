@@ -75,6 +75,11 @@ struct w5500_network_init_param w5500_network_ip = {
 	.w5500_ip = &w5500_ip,
 };
 
+struct no_os_net_init_param w5500_net_init_params = {
+	.platform_ops = &w5500_net_ops,
+	.extra = &w5500_network_ip,
+};
+
 #endif
 
 #if defined(PQM_CONN_USB)
