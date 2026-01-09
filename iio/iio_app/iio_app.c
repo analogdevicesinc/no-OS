@@ -361,6 +361,21 @@ int iio_app_init(struct iio_app_desc **app,
 	iio_init_param.uart_desc = uart_desc;
 #endif
 
+	if (app_init_param.net_init_params.platform_ops) {
+		static struct tcp_socket_init_param socket_param;
+
+		status = no_os_net_init(&application->net_desc,
+					&app_init_param.net_init_params);
+		if (status)
+			goto error;
+
+		socket_param.net = application->net_desc->net_if;
+		socket_param.max_buff_size = 0;
+
+		iio_init_param.phy_type = USE_NETWORK;
+		iio_init_param.tcp_socket_init_param = &socket_param;
+	}
+
 	iio_init_devs = no_os_calloc(app_init_param.nb_devices, sizeof(*iio_init_devs));
 	if (!iio_init_devs) {
 		status = -ENOMEM;
@@ -467,6 +482,12 @@ int iio_app_remove(struct iio_app_desc *app)
 
 	if (app->uart_desc) {
 		ret = no_os_uart_remove(app->uart_desc);
+		if (ret)
+			return ret;
+	}
+
+	if (app->net_desc) {
+		ret = no_os_net_remove(app->net_desc);
 		if (ret)
 			return ret;
 	}
