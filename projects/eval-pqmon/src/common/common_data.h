@@ -54,6 +54,7 @@
 #include "no_os_spi.h"
 #include "no_os_timer.h"
 #include "no_os_uart.h"
+#include "no_os_net.h"
 #include "parameters.h"
 #include "pqlib_example.h"
 #include "afe_calibration.h"
@@ -80,6 +81,7 @@ extern const struct no_os_spi_init_param w5500_spi_init_params;
 
 extern struct w5500_init_param w5500_ip;
 extern struct w5500_network_init_param w5500_network_ip;
+extern struct no_os_net_init_param w5500_net_init_params;
 #endif
 
 #if defined(PQM_CONN_USB)
