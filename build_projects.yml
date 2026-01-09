@@ -238,7 +238,8 @@ jobs:
       sudo apt install ruby-full
       sudo gem install ceedling
       pip install gcovr==4.1
-      for dir in tests/drivers/*/; do
+      find tests -name "project.yml" -type f | while read project_file; do
+        dir=$(dirname "$project_file")
         cd "$dir" && ceedling test:all && cd -
       done
     displayName: 'Run unit tests'
