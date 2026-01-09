@@ -56,6 +56,8 @@ struct no_os_net_ops {
 	int (*init)(struct no_os_net_desc *, struct no_os_net_init_param *);
 	/** Remove backend resources (do not free descriptor) */
 	int (*remove)(struct no_os_net_desc *);
+	/** Optional: Process network stack (timers, packets). NULL if not needed. */
+	int (*step)(struct no_os_net_desc *, void *);
 };
 
 /**
@@ -97,5 +99,17 @@ int no_os_net_init(struct no_os_net_desc **desc,
  * @return 0 on success, negative error code otherwise
  */
 int no_os_net_remove(struct no_os_net_desc *desc);
+
+/**
+ * @brief Execute network processing step
+ *
+ * For polling-based stacks (LWIP), processes timers and pending packets.
+ * For hardware stacks (W5500), this is a no-op.
+ *
+ * @param desc - Network descriptor
+ * @param arg - Optional backend-specific argument
+ * @return 0 on success, negative error code otherwise
+ */
+int no_os_net_step(struct no_os_net_desc *desc, void *arg);
 
 #endif // _NO_OS_NET_H_

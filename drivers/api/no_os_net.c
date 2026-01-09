@@ -97,3 +97,25 @@ int no_os_net_remove(struct no_os_net_desc *desc)
 
 	return 0;
 }
+
+/**
+ * @brief Execute network processing step
+ *
+ * For polling-based network stacks (like LWIP), this function must be
+ * called periodically to process timers and pending packets. For
+ * hardware-based stacks (like W5500), this is a no-op.
+ *
+ * @param desc - Network descriptor
+ * @param arg - Optional backend-specific argument
+ * @return 0 on success, negative error code otherwise
+ */
+int no_os_net_step(struct no_os_net_desc *desc, void *arg)
+{
+	if (!desc)
+		return -EINVAL;
+
+	if (!desc->platform_ops || !desc->platform_ops->step)
+		return 0;
+
+	return desc->platform_ops->step(desc, arg);
+}
