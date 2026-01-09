@@ -101,6 +101,7 @@ extern const struct no_os_spi_init_param adin1110_spi_ip;
 
 extern struct adin1110_init_param adin1110_ip;
 extern struct lwip_network_param lwip_ip;
+extern struct no_os_net_init_param lwip_net_init_params;
 #endif
 
 extern struct pqm_init_para pqm_ip;

@@ -184,6 +184,11 @@ struct lwip_network_param lwip_ip = {
 	.platform_ops = &adin1110_lwip_ops,
 	.mac_param = &adin1110_ip,
 };
+
+struct no_os_net_init_param lwip_net_init_params = {
+	.platform_ops = &lwip_net_ops,
+	.extra = &lwip_ip,
+};
 #endif
 #endif
 
