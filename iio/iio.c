@@ -43,6 +43,7 @@
 #include "no_os_error.h"
 #include "no_os_alloc.h"
 #include "no_os_circular_buffer.h"
+#include "no_os_net.h"
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -55,7 +56,6 @@
 #ifdef NO_OS_LWIP_NETWORKING
 #include "no_os_delay.h"
 #include "tcp_socket.h"
-#include "lwip_socket.h"
 #endif
 
 #define IIOD_PORT		30431
@@ -212,6 +212,7 @@ struct iio_desc {
 	/* Instance of server socket */
 	struct tcp_socket_desc	*server;
 #endif
+	struct no_os_net_desc	*net_desc;
 };
 
 static inline int32_t _pop_conn(struct iio_desc *desc, uint32_t *conn_id)
@@ -1505,9 +1506,8 @@ int iio_step(struct iio_desc *desc)
 		ret = accept_network_clients(desc);
 		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
 			return ret;
-#if defined(NO_OS_LWIP_NETWORKING)
-		no_os_lwip_step(desc->server->net->net, desc->server->net->net);
-#endif
+		if (desc->net_desc)
+			no_os_net_step(desc->net_desc, NULL);
 	}
 #endif
 
@@ -1889,6 +1889,7 @@ int iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	ldesc->ctx_attrs = init_param->ctx_attrs;
 	ldesc->nb_ctx_attr = init_param->nb_ctx_attr;
+	ldesc->net_desc = init_param->net_desc;
 
 	ret = iio_init_trigs(ldesc, init_param->trigs, init_param->nb_trigs);
 	if (NO_OS_IS_ERR_VALUE(ret))
