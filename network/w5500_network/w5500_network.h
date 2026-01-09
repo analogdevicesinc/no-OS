@@ -38,6 +38,7 @@
 
 #include "network_interface.h"
 #include "w5500.h"
+#include "no_os_net.h"
 
 enum w5500_socket_role {
 	W5500_ROLE_UNUSED,
@@ -71,12 +72,32 @@ struct w5500_network_init_param {
 	struct w5500_init_param *w5500_ip;
 };
 
-/** Initialize the device */
-int w5500_network_init(struct w5500_network_dev **net_dev,
-		       struct w5500_network_init_param *init_param);
+/**
+ * @brief Initialize W5500 network backend
+ *
+ * Called by no_os_net_init() with an already-allocated descriptor.
+ * Allocates w5500_network_dev and sets desc->net_if and desc->extra.
+ *
+ * @param desc - Pre-allocated network descriptor to be filled
+ * @param param - Init params (extra points to w5500_network_init_param)
+ * @return 0 on success, negative error code otherwise
+ */
+int w5500_network_init(struct no_os_net_desc *desc,
+		       struct no_os_net_init_param *param);
 
-/** Free a device descriptor and release resources */
-int w5500_network_remove(struct w5500_network_dev *dev);
+/**
+ * @brief Remove W5500 network backend resources
+ *
+ * Called by no_os_net_remove(). Frees w5500_network_dev but NOT the
+ * descriptor itself (that's handled by the generic layer).
+ *
+ * @param desc - Network descriptor (do not free, only free extra)
+ * @return 0 on success, negative error code otherwise
+ */
+int w5500_network_remove(struct no_os_net_desc *desc);
+
+/** W5500 network ops for generic no_os_net interface */
+extern const struct no_os_net_ops w5500_net_ops;
 
 #endif /* NO_OS_W5500_NETWORKING */
 #endif /* W5500_NETWORK_H */
