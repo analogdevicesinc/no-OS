@@ -24,6 +24,7 @@ INCS += $(INCLUDE)/no_os_delay.h     				\
         $(INCLUDE)/no_os_lf256fifo.h 				\
         $(INCLUDE)/no_os_list.h      				\
         $(INCLUDE)/no_os_uart.h      				\
+        $(INCLUDE)/no_os_net.h      				\
         $(INCLUDE)/no_os_spi.h      				\
         $(INCLUDE)/no_os_i2c.h      				\
         $(INCLUDE)/no_os_dma.h      				\
@@ -75,6 +76,7 @@ ifeq ($(INTERFACE), ethernet)
 	SRCS += $(DRIVERS)/net/w5500/w5500.c
 	SRCS += $(NO-OS)/network/w5500_network/w5500_network.c
 	SRCS += $(NO-OS)/network/tcp_socket.c
+	SRCS += $(DRIVERS)/api/no_os_net.c
 endif
 
 ifeq ($(INTERFACE), ethernet_t1l)

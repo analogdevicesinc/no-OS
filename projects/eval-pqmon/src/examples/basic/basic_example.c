@@ -226,13 +226,7 @@ int basic_pqm_firmware()
 #endif
 
 #if defined(PQM_CONN_ETH)
-	struct w5500_network_dev *net_dev;
-
-	status = w5500_network_init(&net_dev, &w5500_network_ip);
-	if (status)
-		return status;
-
-	app_init_param.net_dev = net_dev;
+	app_init_param.net_init_params = w5500_net_init_params;
 #endif
 
 	app_init_param.post_step_callback = &(pqm_one_cycle);
