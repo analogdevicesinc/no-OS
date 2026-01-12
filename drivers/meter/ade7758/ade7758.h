@@ -499,12 +499,12 @@ int ade7758_rms_vals_phase_b(struct ade7758_dev *dev,
 int ade7758_rms_vals_phase_c(struct ade7758_dev *dev,
 			     struct ade7758_rms_values *data);
 
-/* Read period value */
-int ade7758_period_val(struct ade7758_dev *dev,
-		       struct ade7758_period_value *data);
+/* Read frequency/period value */
+int ade7758_frequency_period_val(struct ade7758_dev *dev,
+				 struct ade7758_freq_per_value *data);
 
 /* Read temperature value */
-int ade7758_temp_val(struct ade7758_dev *dev,
-		     struct ade7758_temp_value *data);
+int ade7758_temperature_val(struct ade7758_dev *dev,
+			    struct ade7758_temp_value *data);
 
 #endif /* __ADE7758_H__ */
