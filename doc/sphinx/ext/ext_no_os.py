@@ -13,19 +13,19 @@ logger = logging.getLogger(__name__)
 
 base_url_doc = "https://analogdevicesinc.github.io/no-OS/doxygen/"
 
-def manage_no_os_doxygen_links(env):
+def builder_inited_no_os_doxygen(app) -> None:
     """
     Manages the doxygen drivers/projects inventory.
     Only parses on source changes, persistent between Sphinx runs.
     """
+    env = app.env
     pages = ["drivers", "projects"]
 
     if not hasattr(env, 'no_os_doxygen'):
         env.no_os_doxygen = {}
         for p in pages:
             env.no_os_doxygen[p] = {'ctime': 0, 'list': None,
-                                    'exclude': [], 'ctime_exclude': 0,
-                                    'try_file': True, 'try_fetch': True}
+                                    'exclude': [], 'ctime_exclude': 0}
 
     dxy = env.no_os_doxygen
 
@@ -58,14 +58,11 @@ def manage_no_os_doxygen_links(env):
     base_path = path.join(root_path, "doc", "doxygen", "build",
                           "doxygen_doc", "html")
 
-    def read_file(p, file: tuple, ctime_):
-        if not dxy[p]['try_file']:
-            return None, None, False
-
+    def read_file(file: tuple, ctime_):
         file = path.join(base_path, SEP.join(file))
         if not path.isfile(file):
-            logger.info(f"no-os-doxygen: '{file}' does not exist.")
-            dxy[p]['try_file'] = False
+            if ctime_ == 0: # Never successfully fetched either
+                logger.info(f"no-os-doxygen: '{file}' does not exist.")
             return None, None, False
 
         ctime__ = path.getctime(file)
@@ -76,10 +73,7 @@ def manage_no_os_doxygen_links(env):
             content = ''.join(f.readlines())
             return content, ctime__, False
 
-    def fetch_file(p, file: tuple, ctime_):
-        if not dxy[p]['try_fetch']:
-            return None, None, False
-
+    def fetch_file(file: tuple, ctime_):
         url = base_url_doc + '/'.join(file)
         ctime__ = int(time())
         if ctime__ <= ctime_:
@@ -87,23 +81,24 @@ def manage_no_os_doxygen_links(env):
 
         try:
             logger.info(f"loading doxygen entries from {url} ...")
-            with urlopen(url) as response:
+            with urlopen(url, timeout=1) as response:
                 content = response.read().decode('utf-8')
-                ctime__ = ctime__ + 600 # Slack future
+                # Set cache expiration to 10 minutes
+                # (does not fetch on rebuild during within this window).
+                ctime__ = ctime__ + 600
         except Exception as e:
             logger.warning(f"no-os-doxygen: Failed to fetch '{url}', {e}")
-            dxy[p]['try_fetch'] = False
             return None, None, False
 
         return content, ctime__, False
 
     for p in pages:
         file = (f"{p}_page.html",)
-        content, ctime, cached = read_file(p, file, dxy[p]['ctime'])
+        content, ctime, cached = read_file(file, dxy[p]['ctime'])
         if cached:
             continue
         if content is None:
-            content, ctime, cached = fetch_file(p, file, dxy[p]['ctime'])
+            content, ctime, cached = fetch_file(file, dxy[p]['ctime'])
         if cached or content is None:
             continue
 
@@ -160,9 +155,10 @@ class directive_no_os_doxygen(Directive):
 
     def run(self):
         env = self.state.document.settings.env
-        self.current_doc = env.doc2path(env.docname)
+        if not hasattr(env, 'no_os_doxygen'):
+            return []
 
-        manage_no_os_doxygen_links(env)
+        self.current_doc = env.doc2path(env.docname)
 
         if len(self.arguments) == 1:
             lf = self.arguments[0].strip().split('/')
@@ -225,6 +221,7 @@ class directive_no_os_doxygen(Directive):
 
 
 def setup(app):
+    app.connect('builder-inited', builder_inited_no_os_doxygen)
     app.add_directive('no-os-doxygen', directive_no_os_doxygen)
 
     return {
