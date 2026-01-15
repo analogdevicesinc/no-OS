@@ -42,6 +42,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "ltc3208.h"
+#include "no_os_alloc.h"
 #include "no_os_i2c.h"
 #include "no_os_util.h"
 #include "no_os_delay.h"
