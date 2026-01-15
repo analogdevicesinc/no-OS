@@ -39,6 +39,7 @@
 #include "adi_pqlib_memory.h"
 #include "adi_pqlib_profile.h"
 #include "pqlib_convert.h"
+#include "afe_calibration.h"
 #include "status.h"
 #include <stddef.h>
 #include "no_os_circular_buffer.h"
@@ -56,7 +57,8 @@
 typedef enum {
 	PQLIB_STATE_WAITING_FOR_START_CMD,
 	PQLIB_STATE_WAITING_FOR_TRIGGER,
-	PQLIB_STATE_RUNNING
+	PQLIB_STATE_RUNNING,
+	PQLIB_STATE_CALIBRATING
 } PQLIB_STATE;
 
 /**
@@ -118,6 +120,14 @@ typedef struct {
 	ADI_PQLIB_FLICKER_MODEL flickerModel;
 	ADI_PQLIB_PHASE_MAP phaseMap;
 	VCONSEL_CONFIG vconsel;
+	/* Calibration input parameters */
+	CALIBRATION_TYPE calibrationType; /* Gain or Offset calibration */
+	float calNominalCurrent;        /* Arms for gain calibration */
+	float calNominalVoltage;        /* Vrms for gain calibration */
+	float calOffsetCurrent;         /* Arms for offset calibration */
+	float calOffsetVoltage;         /* Vrms for offset calibration */
+	float currentPgaGain;           /* PGA gain for current (default 1) */
+	float voltagePgaGain;           /* PGA gain for voltage (default 1) */
 
 } EXAMPLE_CONFIG; // pqlib example config
 
@@ -126,6 +136,7 @@ typedef struct {
 	bool readyToDisplay;
 	bool waitingForSync;
 	bool calibration;
+	bool calibrationRequested;
 	uint16_t syncCycles;
 	uint32_t processedCycles;
 	uint32_t zeroCrossingCount;

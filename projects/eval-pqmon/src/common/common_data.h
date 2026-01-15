@@ -56,6 +56,7 @@
 #include "no_os_uart.h"
 #include "parameters.h"
 #include "pqlib_example.h"
+#include "afe_calibration.h"
 
 #define FW_VERSION 2.2
 
@@ -68,7 +69,7 @@
 #define TOTAL_PQM_CHANNELS 11
 #define VOLTAGE_CH_NUMBER 3
 #define MAX_CH_ATTRS 23
-#define PQM_DEVICE_ATTR_NUMBER 40
+#define PQM_DEVICE_ATTR_NUMBER 59
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 #define MAX_EVENT_NUMBER 6
 
@@ -123,6 +124,17 @@ static const char *const pqm_flicker_model_available[] = {
 	[ADI_PQLIB_FLICKER_MODEL_120V_50HZ] = "120V_50HZ",
 	[ADI_PQLIB_FLICKER_MODEL_230V_60HZ] = "230V_60HZ",
 	[ADI_PQLIB_FLICKER_MODEL_120V_60HZ] = "120V_60HZ",
+};
+
+static const char *const pqm_calibration_type_available[] = {
+	[CALIBRATION_TYPE_GAIN] = "GAIN",
+	[CALIBRATION_TYPE_OFFSET] = "OFFSET",
+};
+
+static const char *const pqm_calibration_phase_available[] = {
+	[CALIBRATION_PHASE_A] = "A",
+	[CALIBRATION_PHASE_B] = "B",
+	[CALIBRATION_PHASE_C] = "C",
 };
 
 static const char *const pqm_nominal_frequency_available[] = {

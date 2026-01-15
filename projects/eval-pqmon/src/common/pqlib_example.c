@@ -33,6 +33,7 @@
 
 #include "pqlib_example.h"
 #include "iio_pqm.h"
+#include "afe_calibration.h"
 
 PQLIB_EXAMPLE pqlibExample;
 extern volatile uint8_t newSyncTimeAvailable = 0;
@@ -48,6 +49,11 @@ int pqm_measurement_init(void)
 	pqlibExample.processedCycles = 0;
 	pqlibExample.inputCycle.sequenceNumber = 0;
 	pqlibExample.input1012Cycles.sequenceNumber = 0;
+	pqlibExample.calibrationRequested = false;
+
+	/* Initialize calibration context */
+	calibration_init();
+
 	status = open_pqlib(&pqlibExample);
 
 	return status;
@@ -104,6 +110,21 @@ int pqm_start_measurement(bool waitingForSync)
 
 int pqm_one_cycle(void)
 {
+	/* Check for calibration request first */
+	if (pqlibExample.calibrationRequested || calibration_is_active()) {
+		if (pqlibExample.state != PQLIB_STATE_CALIBRATING) {
+			pqlibExample.state = PQLIB_STATE_CALIBRATING;
+		}
+		int cal_status = calibration_process_cycle();
+		if (!calibration_is_active()) {
+			/* Calibration complete, resume normal operation */
+			pqlibExample.calibrationRequested = false;
+			pqlibExample.state = PQLIB_STATE_WAITING_FOR_TRIGGER;
+			pqm_start_measurement(false);
+		}
+		return cal_status;
+	}
+
 	if (configChanged) {
 		printf("Recallibrating\n\r");
 		pqm_start_measurement(false);
@@ -515,6 +536,14 @@ void set_default_config(EXAMPLE_CONFIG *pConfig)
 	pConfig->enableIconsel = false;
 	pConfig->useExternalTimestamp = false;
 	pConfig->vconsel = VCONSEL_4W_WYE;
+
+	/* Calibration input defaults */
+	pConfig->calNominalCurrent = 10.0f;     /* 10 Arms for gain cal */
+	pConfig->calNominalVoltage = 230.0f;    /* 230 Vrms for gain cal */
+	pConfig->calOffsetCurrent = 0.1f;       /* 0.1 Arms for offset cal */
+	pConfig->calOffsetVoltage = 10.0f;      /* 10 Vrms for offset cal */
+	pConfig->currentPgaGain = 1.0f;         /* Default PGA gain */
+	pConfig->voltagePgaGain = 1.0f;         /* Default PGA gain */
 }
 
 int SyncLibTime(PQLIB_EXAMPLE *pExample, bool checkRtcTime)
