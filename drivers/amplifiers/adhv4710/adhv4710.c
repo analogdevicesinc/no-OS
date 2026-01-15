@@ -209,7 +209,7 @@ int adhv4710_get_status(struct adhv4710_dev *dev, uint8_t reg_addr, uint8_t msk,
 	if (!status)
 		return -EINVAL;
 
-	ret = ade7953_read(dev, reg_addr, &reg_val);
+	ret = adhv4710_read(dev, reg_addr, &reg_val);
 	if (ret)
 		return ret;
 
