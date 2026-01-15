@@ -37,6 +37,7 @@
 #include "pqlib_afe.h"
 #include "pqlib_convert.h"
 #include "pqlib_example.h"
+#include "afe_calibration.h"
 #include "status.h"
 #include <inttypes.h>
 
@@ -81,6 +82,29 @@
 #define SNEG_CURRENT_ANGLE              37
 #define SPOS_CURRENT_ANGLE              38
 #define SZRO_CURRENT_ANGLE              39
+
+// Calibration attributes
+#define CAL_TYPE                        40
+#define CAL_TYPE_AVAILABLE              41
+#define CAL_STATUS                      42
+#define CAL_PHASE                       43
+#define CAL_NOMINAL_CURRENT             44
+#define CAL_NOMINAL_VOLTAGE             45
+#define CAL_OFFSET_CURRENT              46
+#define CAL_OFFSET_VOLTAGE              47
+#define CAL_DONE                        48
+#define CAL_PHASE_AVAILABLE             49
+#define CAL_START                       50
+// Gain calibration errors
+#define CAL_GAIN_I_ERROR_BEFORE         51
+#define CAL_GAIN_V_ERROR_BEFORE         52
+#define CAL_GAIN_I_ERROR_AFTER          53
+#define CAL_GAIN_V_ERROR_AFTER          54
+// Offset calibration errors
+#define CAL_OFFSET_I_ERROR_BEFORE       55
+#define CAL_OFFSET_V_ERROR_BEFORE       56
+#define CAL_OFFSET_I_ERROR_AFTER        57
+#define CAL_OFFSET_V_ERROR_AFTER        58
 
 // Channel specific attributes
 #define CHAN_RMS                        0
