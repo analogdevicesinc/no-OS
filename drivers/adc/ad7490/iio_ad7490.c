@@ -30,6 +30,7 @@
 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************/
+#include <string.h>
 #include "iio_ad7490.h"
 #include "no_os_alloc.h"
 #include "no_os_error.h"

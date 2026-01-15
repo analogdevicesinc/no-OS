@@ -32,6 +32,9 @@
 *******************************************************************************/
 
 #include "max31889.h"
+#include "no_os_alloc.h"
+#include "no_os_delay.h"
+#include "no_os_util.h"
 
 int32_t max31889_write_reg(struct max31889_desc *desc, uint8_t reg_addr,
 			   uint8_t *data, uint8_t length)
