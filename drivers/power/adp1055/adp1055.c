@@ -34,6 +34,7 @@
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 
 /**
  * @brief Send command byte/word to ADP1055
