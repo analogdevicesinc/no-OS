@@ -95,6 +95,51 @@ be built and run by running the following script:
         # build and flash the code
         make PQLIB_PATH=<path_to_library> run
 
+AFE Calibration
+---------------
+
+The firmware supports gain and offset calibration for the ADE9430 AFE.
+
+**Calibration Procedure:**
+
+1. Set calibration input parameters (nominal voltage/current for gain, or offset
+   voltage/current for offset calibration)
+2. Select calibration type (GAIN or OFFSET) and phase (A, B, or C)
+3. Apply the reference signal and start calibration
+4. Wait for calibration to complete (status changes to "done")
+
+**Calibration IIO Attributes:**
+
+.. list-table::
+   :header-rows: 1
+
+   * - Attribute
+     - Description
+   * - cal_type
+     - Calibration type: GAIN or OFFSET
+   * - cal_phase
+     - Phase to calibrate: A, B, or C
+   * - cal_nominal_voltage
+     - Reference voltage for gain calibration (Vrms)
+   * - cal_nominal_current
+     - Reference current for gain calibration (Arms)
+   * - cal_offset_voltage
+     - Reference voltage for offset calibration (Vrms)
+   * - cal_offset_current
+     - Reference current for offset calibration (Arms)
+   * - cal_start
+     - Write 1 to start calibration
+   * - cal_status
+     - Calibration status: idle, in_progress, done, error
+   * - cal_gain_i_error_before/after
+     - Current error before/after gain calibration (%)
+   * - cal_gain_v_error_before/after
+     - Voltage error before/after gain calibration (%)
+   * - cal_offset_i_error_before/after
+     - Current error before/after offset calibration (%)
+   * - cal_offset_v_error_before/after
+     - Voltage error before/after offset calibration (%)
+
 The ``iio_info`` of the device should look like the following:
 
 .. code-block:: console
@@ -229,7 +274,7 @@ IIO context has 1 device:
                                 attr  1: startTime value: 0 0 0 0 0 0
                                 attr  2: endTime value: 0 0 0 0 0 0
                                 attr  3: durationInCycles value: 0 0 0 0 0 0
-                34 device-specific attributes found:
+                52 device-specific attributes found:
                                 attr  0: u2 value: 0.00
                                 attr  1: u0 value: 0.00
                                 attr  2: sneg_voltage value: 0.00
@@ -242,7 +287,7 @@ IIO context has 1 device:
                                 attr  9: szro_current value: 0.00
                                 attr 10: nominal_voltage value: 0.32
                                 attr 11: voltage_scale value: 1001.00
-                                attr 12: current_scale value: 294.00
+                                attr 12:  value: 294.00
                                 attr 13: i_consel_en value: 0.00
                                 attr 14: dip_threshold value: 90.00
                                 attr 15: dip_hysteresis value: 2.00
@@ -264,6 +309,24 @@ IIO context has 1 device:
                                 attr 31: nominal_frequency_available value: 50 60
                                 attr 32: process_data value: 1
                                 attr 33: fw_version value: 2.1
+                                attr 34: cal_type value: GAIN
+                                attr 35: cal_type_available value: GAIN OFFSET
+                                attr 36: cal_start value: 0
+                                attr 37: cal_status value: idle
+                                attr 38: cal_phase value: A
+                                attr 39: cal_phase_available value: A B C
+                                attr 40: cal_nominal_current value: 10.00
+                                attr 41: cal_nominal_voltage value: 230.00
+                                attr 42: cal_offset_current value: 1.00
+                                attr 43: cal_offset_voltage value: 10.00
+                                attr 44: cal_gain_i_error_before value: 0.000000
+                                attr 45: cal_gain_v_error_before value: 0.000000
+                                attr 46: cal_gain_i_error_after value: 0.000000
+                                attr 47: cal_gain_v_error_after value: 0.000000
+                                attr 48: cal_offset_i_error_before value: 0.000000
+                                attr 49: cal_offset_v_error_before value: 0.000000
+                                attr 50: cal_offset_i_error_after value: 0.000000
+                                attr 51: cal_offset_v_error_after value: 0.000000
                 No trigger on this device
 
 

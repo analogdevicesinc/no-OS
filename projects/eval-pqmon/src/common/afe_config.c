@@ -187,7 +187,6 @@ int afe_init(void)
 		}
 	}
 
-	// To remove
 	uint16_t pTest[10];
 	afe_read_16bit_buff(0x4A4, 1, pTest);
 	printf("ID register: %d\n\r", pTest[0]);
@@ -360,6 +359,47 @@ int afe_read_status_1(uint32_t *pSTATUS1)
 	if (status != 0) {
 		status = SYS_STATUS_AFE_STATUS1_FAILED;
 	}
+	return status;
+}
+
+int afe_read_status_1_clear_zx(uint32_t *pSTATUS1, uint8_t phase)
+{
+	int status = SYS_STATUS_SUCCESS;
+	uint32_t status1 = 0;
+	uint32_t zx_mask;
+
+	/* Select ZX mask based on phase */
+	switch (phase) {
+	case 0:
+		zx_mask = BITM_STATUS1_ZXVA;
+		break;
+	case 1:
+		zx_mask = BITM_STATUS1_ZXVB;
+		break;
+	case 2:
+		zx_mask = BITM_STATUS1_ZXVC;
+		break;
+	default:
+		zx_mask = BITM_STATUS1_ZXVA;
+		break;
+	}
+
+	status = afe_read_32bit_buff(REG_STATUS1, 1, pSTATUS1);
+	if (status != 0) {
+		return SYS_STATUS_AFE_STATUS1_FAILED;
+	}
+
+	status1 = *pSTATUS1;
+
+	/* Clear ZX bit for the specified phase by writing 1 to it */
+	if (status1 & zx_mask) {
+		uint32_t clear_mask = zx_mask;
+		status = afe_write_32bit_reg(REG_STATUS1, &clear_mask);
+		if (status != 0) {
+			return SYS_STATUS_AFE_STATUS1_FAILED;
+		}
+	}
+
 	return status;
 }
 

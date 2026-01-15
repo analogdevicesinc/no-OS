@@ -103,4 +103,4 @@ INCS += $(INCLUDE)/no_os_list.h \
 
 EXTRA_FILES +=	$(EXTRA_MATH_PQM) ${EXTRA_MATH_LIB}
 
-
+EXTRA_LIBS += m

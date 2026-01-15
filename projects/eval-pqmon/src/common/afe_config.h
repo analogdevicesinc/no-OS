@@ -195,6 +195,15 @@ int afe_read_angle(uint16_t *pAngle, uint16_t numAngles,
 int afe_read_status_1(uint32_t *pSTATUS1);
 
 /**
+ * @brief Read STATUS1 register and clear ZX bit for specified phase.
+ * @param[out] pSTATUS1  - pointer to read STATUS1.
+ * @param[in] phase      - phase to clear ZX bit for (0=A, 1=B, 2=C)
+ * @return status        - SYS_STATUS_SUCCESS on Success
+ *                       - SYS_STATUS_AFE_STATUS1_FAILED on Failure.
+ */
+int afe_read_status_1_clear_zx(uint32_t *pSTATUS1, uint8_t phase);
+
+/**
  * @brief Read STATUS0 register.
  * @param[out] pSTATUS0   - pointer to read STATUS0.
  * @return status 	     - SYS_STATUS_SUCCESS on Success,

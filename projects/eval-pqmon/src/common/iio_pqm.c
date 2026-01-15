@@ -288,6 +288,81 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 								.currentUnb.negSeqAngle));
 #endif
 
+		/* Calibration attributes */
+		case CAL_TYPE:
+			if (pqlibExample.exampleConfig.calibrationType < NO_OS_ARRAY_SIZE(
+				    pqm_calibration_type_available))
+				return snprintf(buf, len, "%s",
+						pqm_calibration_type_available[pqlibExample.exampleConfig.calibrationType]);
+			return snprintf(buf, len, "GAIN");
+		case CAL_TYPE_AVAILABLE:
+			strcpy(buf, "");
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_type_available); i++) {
+				strcat(buf, pqm_calibration_type_available[i]);
+				if (i != NO_OS_ARRAY_SIZE(pqm_calibration_type_available) - 1)
+					strcat(buf, " ");
+			}
+			return strlen(buf);
+		case CAL_STATUS:
+			return snprintf(buf, len, "%s", calibration_get_status_string());
+		case CAL_PHASE:
+			if (calibrationCtx.phase < NO_OS_ARRAY_SIZE(pqm_calibration_phase_available))
+				return snprintf(buf, len, "%s",
+						pqm_calibration_phase_available[calibrationCtx.phase]);
+			return snprintf(buf, len, "A");
+		case CAL_PHASE_AVAILABLE:
+			strcpy(buf, "");
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_phase_available); i++) {
+				strcat(buf, pqm_calibration_phase_available[i]);
+				if (i != NO_OS_ARRAY_SIZE(pqm_calibration_phase_available) - 1)
+					strcat(buf, " ");
+			}
+			return strlen(buf);
+		case CAL_NOMINAL_CURRENT:
+			return snprintf(buf, len, "%.2f",
+					pqlibExample.exampleConfig.calNominalCurrent);
+		case CAL_NOMINAL_VOLTAGE:
+			return snprintf(buf, len, "%.2f",
+					pqlibExample.exampleConfig.calNominalVoltage);
+		case CAL_OFFSET_CURRENT:
+			return snprintf(buf, len, "%.2f",
+					pqlibExample.exampleConfig.calOffsetCurrent);
+		case CAL_OFFSET_VOLTAGE:
+			return snprintf(buf, len, "%.2f",
+					pqlibExample.exampleConfig.calOffsetVoltage);
+		case CAL_DONE:
+			return snprintf(buf, len, "%s",
+					calibrationCtx.result.done ? "1" : "0");
+		case CAL_START:
+			return snprintf(buf, len, "%s",
+					calibration_is_active() ? "1" : "0");
+		/* Gain calibration errors */
+		case CAL_GAIN_I_ERROR_BEFORE:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.gain_i_error_before);
+		case CAL_GAIN_V_ERROR_BEFORE:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.gain_v_error_before);
+		case CAL_GAIN_I_ERROR_AFTER:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.gain_i_error_after);
+		case CAL_GAIN_V_ERROR_AFTER:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.gain_v_error_after);
+		/* Offset calibration errors */
+		case CAL_OFFSET_I_ERROR_BEFORE:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.offset_i_error_before);
+		case CAL_OFFSET_V_ERROR_BEFORE:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.offset_v_error_before);
+		case CAL_OFFSET_I_ERROR_AFTER:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.offset_i_error_after);
+		case CAL_OFFSET_V_ERROR_AFTER:
+			return snprintf(buf, len, "%.6f",
+					calibrationCtx.result.offset_v_error_after);
+
 		default:
 			return snprintf(buf, len, "%.2f", desc->pqm_global_attr[attr_id]);
 		}
@@ -404,6 +479,74 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 								* sizeof(uint16_t));
 				} while (!tmp_ret);
 			}
+			break;
+		/* Calibration attributes */
+		case CAL_TYPE:
+			/* Set calibration type without starting */
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_type_available); i++) {
+				if (strcmp(buf, pqm_calibration_type_available[i]) == 0) {
+					pqlibExample.exampleConfig.calibrationType = i;
+					configChanged = false;
+					return len;
+				}
+			}
+			return -EINVAL;
+		case CAL_START:
+			/* Start calibration with current settings */
+			if (value == 1) {
+				configChanged = false;
+				/* Update calibration input from config */
+				calibrationCtx.input.nominal_current =
+					pqlibExample.exampleConfig.calNominalCurrent;
+				calibrationCtx.input.nominal_voltage =
+					pqlibExample.exampleConfig.calNominalVoltage;
+				calibrationCtx.input.offset_current =
+					pqlibExample.exampleConfig.calOffsetCurrent;
+				calibrationCtx.input.offset_voltage =
+					pqlibExample.exampleConfig.calOffsetVoltage;
+				calibrationCtx.input.current_pga_gain =
+					pqlibExample.exampleConfig.currentPgaGain;
+				calibrationCtx.input.voltage_pga_gain =
+					pqlibExample.exampleConfig.voltagePgaGain;
+
+				calibration_start(
+					(CALIBRATION_TYPE)pqlibExample.exampleConfig.calibrationType,
+					(CALIBRATION_PHASE)calibrationCtx.phase);
+				pqlibExample.calibrationRequested = true;
+				return len;
+			}
+			return -EINVAL;
+		case CAL_PHASE:
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_phase_available); i++) {
+				if (strcmp(buf, pqm_calibration_phase_available[i]) == 0) {
+					calibrationCtx.phase = (CALIBRATION_PHASE)i;
+					configChanged = false;
+					return len;
+				}
+			}
+			/* Also accept numeric input for backwards compatibility */
+			if (value >= 0 && value <= 2) {
+				calibrationCtx.phase = (CALIBRATION_PHASE)(int)value;
+				configChanged = false;
+				return len;
+			}
+			return -EINVAL;
+		case CAL_NOMINAL_CURRENT:
+			pqlibExample.exampleConfig.calNominalCurrent = value;
+			configChanged = false;
+			break;
+		case CAL_NOMINAL_VOLTAGE:
+			pqlibExample.exampleConfig.calNominalVoltage = value;
+			configChanged = false;
+			break;
+		case CAL_OFFSET_CURRENT:
+			pqlibExample.exampleConfig.calOffsetCurrent = value;
+			configChanged = false;
+			break;
+		case CAL_OFFSET_VOLTAGE:
+			pqlibExample.exampleConfig.calOffsetVoltage = value;
+			configChanged = false;
+			break;
 		default:
 			desc->pqm_global_attr[attr_id] = value;
 		}
@@ -1091,6 +1234,111 @@ struct iio_attribute global_pqm_attributes[] = {
 		.name = "fw_version",
 		.show = read_pqm_attr,
 		.priv = FW_VERSION_NR,
+	},
+	/* Calibration attributes */
+	{
+		.name = "calibration_type",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_TYPE,
+	},
+	{
+		.name = "calibration_type_available",
+		.show = read_pqm_attr,
+		.priv = CAL_TYPE_AVAILABLE,
+	},
+	{
+		.name = "calibration_start",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_START,
+	},
+	{
+		.name = "cal_status",
+		.show = read_pqm_attr,
+		.priv = CAL_STATUS,
+	},
+	{
+		.name = "cal_phase",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_PHASE,
+	},
+	{
+		.name = "cal_phase_available",
+		.show = read_pqm_attr,
+		.priv = CAL_PHASE_AVAILABLE,
+	},
+	{
+		.name = "cal_nominal_current",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_NOMINAL_CURRENT,
+	},
+	{
+		.name = "cal_nominal_voltage",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_NOMINAL_VOLTAGE,
+	},
+	{
+		.name = "cal_offset_current",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_OFFSET_CURRENT,
+	},
+	{
+		.name = "cal_offset_voltage",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = CAL_OFFSET_VOLTAGE,
+	},
+	/* Gain calibration errors */
+	{
+		.name = "cal_gain_i_error_before",
+		.show = read_pqm_attr,
+		.priv = CAL_GAIN_I_ERROR_BEFORE,
+	},
+	{
+		.name = "cal_gain_v_error_before",
+		.show = read_pqm_attr,
+		.priv = CAL_GAIN_V_ERROR_BEFORE,
+	},
+	{
+		.name = "cal_gain_i_error_after",
+		.show = read_pqm_attr,
+		.priv = CAL_GAIN_I_ERROR_AFTER,
+	},
+	{
+		.name = "cal_gain_v_error_after",
+		.show = read_pqm_attr,
+		.priv = CAL_GAIN_V_ERROR_AFTER,
+	},
+	/* Offset calibration errors */
+	{
+		.name = "cal_offset_i_error_before",
+		.show = read_pqm_attr,
+		.priv = CAL_OFFSET_I_ERROR_BEFORE,
+	},
+	{
+		.name = "cal_offset_v_error_before",
+		.show = read_pqm_attr,
+		.priv = CAL_OFFSET_V_ERROR_BEFORE,
+	},
+	{
+		.name = "cal_offset_i_error_after",
+		.show = read_pqm_attr,
+		.priv = CAL_OFFSET_I_ERROR_AFTER,
+	},
+	{
+		.name = "cal_offset_v_error_after",
+		.show = read_pqm_attr,
+		.priv = CAL_OFFSET_V_ERROR_AFTER,
+	},
+	{
+		.name = "cal_done",
+		.show = read_pqm_attr,
+		.priv = CAL_DONE,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device
