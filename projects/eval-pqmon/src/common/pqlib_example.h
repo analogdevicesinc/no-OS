@@ -120,7 +120,6 @@ typedef struct {
 	ADI_PQLIB_FLICKER_MODEL flickerModel;
 	ADI_PQLIB_PHASE_MAP phaseMap;
 	VCONSEL_CONFIG vconsel;
-	/* Calibration input parameters */
 	CALIBRATION_TYPE calibrationType; /* Gain or Offset calibration */
 	float calNominalCurrent;        /* Arms for gain calibration */
 	float calNominalVoltage;        /* Vrms for gain calibration */
