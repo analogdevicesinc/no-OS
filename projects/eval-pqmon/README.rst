@@ -99,6 +99,8 @@ AFE Calibration
 ---------------
 
 The firmware supports gain and offset calibration for the ADE9430 AFE.
+Calibration coefficients can be stored in internal flash and are automatically
+loaded at startup.
 
 **Calibration Procedure:**
 
@@ -107,6 +109,7 @@ The firmware supports gain and offset calibration for the ADE9430 AFE.
 2. Select calibration type (GAIN or OFFSET) and phase (A, B, or C)
 3. Apply the reference signal and start calibration
 4. Wait for calibration to complete (status changes to "done")
+5. Save calibration to flash for persistence across power cycles
 
 **Calibration IIO Attributes:**
 
@@ -139,6 +142,14 @@ The firmware supports gain and offset calibration for the ADE9430 AFE.
      - Current error before/after offset calibration (%)
    * - cal_offset_v_error_before/after
      - Voltage error before/after offset calibration (%)
+   * - flash_cal_save
+     - Write 1 to save calibration to flash
+   * - flash_cal_load
+     - Write 1 to load calibration from flash
+   * - flash_cal_erase
+     - Write 1 to erase calibration from flash
+   * - flash_cal_valid
+     - Read 1 if valid calibration exists in flash
 
 The ``iio_info`` of the device should look like the following:
 
@@ -274,7 +285,7 @@ IIO context has 1 device:
                                 attr  1: startTime value: 0 0 0 0 0 0
                                 attr  2: endTime value: 0 0 0 0 0 0
                                 attr  3: durationInCycles value: 0 0 0 0 0 0
-                52 device-specific attributes found:
+                56 device-specific attributes found:
                                 attr  0: u2 value: 0.00
                                 attr  1: u0 value: 0.00
                                 attr  2: sneg_voltage value: 0.00
@@ -327,6 +338,10 @@ IIO context has 1 device:
                                 attr 49: cal_offset_v_error_before value: 0.000000
                                 attr 50: cal_offset_i_error_after value: 0.000000
                                 attr 51: cal_offset_v_error_after value: 0.000000
+                                attr 52: flash_cal_save value: 0
+                                attr 53: flash_cal_load value: 0
+                                attr 54: flash_cal_erase value: 0
+                                attr 55: flash_cal_valid value: 0
                 No trigger on this device
 
 

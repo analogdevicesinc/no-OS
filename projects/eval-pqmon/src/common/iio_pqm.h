@@ -92,19 +92,24 @@
 #define CAL_NOMINAL_VOLTAGE             45
 #define CAL_OFFSET_CURRENT              46
 #define CAL_OFFSET_VOLTAGE              47
-#define CAL_DONE                        48
-#define CAL_PHASE_AVAILABLE             49
-#define CAL_START                       50
+#define CAL_PHASE_AVAILABLE             48
+#define CAL_START                       49
 // Gain calibration errors
-#define CAL_GAIN_I_ERROR_BEFORE         51
-#define CAL_GAIN_V_ERROR_BEFORE         52
-#define CAL_GAIN_I_ERROR_AFTER          53
-#define CAL_GAIN_V_ERROR_AFTER          54
+#define CAL_GAIN_I_ERROR_BEFORE         50
+#define CAL_GAIN_V_ERROR_BEFORE         51
+#define CAL_GAIN_I_ERROR_AFTER          52
+#define CAL_GAIN_V_ERROR_AFTER          53
 // Offset calibration errors
-#define CAL_OFFSET_I_ERROR_BEFORE       55
-#define CAL_OFFSET_V_ERROR_BEFORE       56
-#define CAL_OFFSET_I_ERROR_AFTER        57
-#define CAL_OFFSET_V_ERROR_AFTER        58
+#define CAL_OFFSET_I_ERROR_BEFORE       54
+#define CAL_OFFSET_V_ERROR_BEFORE       55
+#define CAL_OFFSET_I_ERROR_AFTER        56
+#define CAL_OFFSET_V_ERROR_AFTER        57
+
+// Flash storage attributes
+#define FLASH_CAL_SAVE                  58
+#define FLASH_CAL_LOAD                  59
+#define FLASH_CAL_ERASE                 60
+#define FLASH_CAL_VALID                 61
 
 // Channel specific attributes
 #define CHAN_RMS                        0

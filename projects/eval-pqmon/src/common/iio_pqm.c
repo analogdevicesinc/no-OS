@@ -32,6 +32,7 @@
  *******************************************************************************/
 
 #include "iio_pqm.h"
+#include "flash_storage.h"
 
 #define PQM_VOLTAGE_CHANNEL(_idx, _scan_idx, _name)                            \
   {                                                                            \
@@ -287,8 +288,6 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 				       convert_fract_angle_type(pqlibExample.output->params1012Cycles
 								.currentUnb.negSeqAngle));
 #endif
-
-		/* Calibration attributes */
 		case CAL_TYPE:
 			if (pqlibExample.exampleConfig.calibrationType < NO_OS_ARRAY_SIZE(
 				    pqm_calibration_type_available))
@@ -330,13 +329,9 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case CAL_OFFSET_VOLTAGE:
 			return snprintf(buf, len, "%.2f",
 					pqlibExample.exampleConfig.calOffsetVoltage);
-		case CAL_DONE:
-			return snprintf(buf, len, "%s",
-					calibrationCtx.result.done ? "1" : "0");
 		case CAL_START:
 			return snprintf(buf, len, "%s",
 					calibration_is_active() ? "1" : "0");
-		/* Gain calibration errors */
 		case CAL_GAIN_I_ERROR_BEFORE:
 			return snprintf(buf, len, "%.6f",
 					calibrationCtx.result.gain_i_error_before);
@@ -349,7 +344,6 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case CAL_GAIN_V_ERROR_AFTER:
 			return snprintf(buf, len, "%.6f",
 					calibrationCtx.result.gain_v_error_after);
-		/* Offset calibration errors */
 		case CAL_OFFSET_I_ERROR_BEFORE:
 			return snprintf(buf, len, "%.6f",
 					calibrationCtx.result.offset_i_error_before);
@@ -362,6 +356,17 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case CAL_OFFSET_V_ERROR_AFTER:
 			return snprintf(buf, len, "%.6f",
 					calibrationCtx.result.offset_v_error_after);
+
+		/* Flash storage attributes */
+		case FLASH_CAL_SAVE:
+			return snprintf(buf, len, "0");
+		case FLASH_CAL_LOAD:
+			return snprintf(buf, len, "0");
+		case FLASH_CAL_ERASE:
+			return snprintf(buf, len, "0");
+		case FLASH_CAL_VALID:
+			return snprintf(buf, len, "%d",
+					flash_has_valid_calibration() ? 1 : 0);
 
 		default:
 			return snprintf(buf, len, "%.2f", desc->pqm_global_attr[attr_id]);
@@ -480,7 +485,6 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				} while (!tmp_ret);
 			}
 			break;
-		/* Calibration attributes */
 		case CAL_TYPE:
 			/* Set calibration type without starting */
 			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_type_available); i++) {
@@ -524,7 +528,6 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 					return len;
 				}
 			}
-			/* Also accept numeric input for backwards compatibility */
 			if (value >= 0 && value <= 2) {
 				calibrationCtx.phase = (CALIBRATION_PHASE)(int)value;
 				configChanged = false;
@@ -546,6 +549,50 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 		case CAL_OFFSET_VOLTAGE:
 			pqlibExample.exampleConfig.calOffsetVoltage = value;
 			configChanged = false;
+			break;
+		case FLASH_CAL_SAVE:
+			if (value == 1) {
+				/* Initialize flash if not already done */
+				if (!flash_storage_is_initialized()) {
+					if (flash_storage_init() != FLASH_STATUS_OK) {
+						return -EIO;
+					}
+				}
+				/* Save calibration for current channel */
+				if (flash_save_calibration_channel(calibrationCtx.phase) != FLASH_STATUS_OK) {
+					return -EIO;
+				}
+				/* Clear done flag so flash auto-load can work again */
+				calibration_clear_done();
+			}
+			break;
+		case FLASH_CAL_LOAD:
+			if (value == 1) {
+				/* Initialize flash if not already done */
+				if (!flash_storage_is_initialized()) {
+					if (flash_storage_init() != FLASH_STATUS_OK) {
+						return -EIO;
+					}
+				}
+				/* Load and apply calibration from flash */
+				if (flash_load_and_apply_calibration() != FLASH_STATUS_OK) {
+					return -EIO;
+				}
+			}
+			break;
+		case FLASH_CAL_ERASE:
+			if (value == 1) {
+				/* Initialize flash if not already done */
+				if (!flash_storage_is_initialized()) {
+					if (flash_storage_init() != FLASH_STATUS_OK) {
+						return -EIO;
+					}
+				}
+				/* Erase calibration data */
+				if (flash_erase_calibration() != FLASH_STATUS_OK) {
+					return -EIO;
+				}
+			}
 			break;
 		default:
 			desc->pqm_global_attr[attr_id] = value;
@@ -1235,20 +1282,19 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.priv = FW_VERSION_NR,
 	},
-	/* Calibration attributes */
 	{
-		.name = "calibration_type",
+		.name = "cal_type",
 		.show = read_pqm_attr,
 		.store = write_pqm_attr,
 		.priv = CAL_TYPE,
 	},
 	{
-		.name = "calibration_type_available",
+		.name = "cal_type_available",
 		.show = read_pqm_attr,
 		.priv = CAL_TYPE_AVAILABLE,
 	},
 	{
-		.name = "calibration_start",
+		.name = "cal_start",
 		.show = read_pqm_attr,
 		.store = write_pqm_attr,
 		.priv = CAL_START,
@@ -1293,7 +1339,6 @@ struct iio_attribute global_pqm_attributes[] = {
 		.store = write_pqm_attr,
 		.priv = CAL_OFFSET_VOLTAGE,
 	},
-	/* Gain calibration errors */
 	{
 		.name = "cal_gain_i_error_before",
 		.show = read_pqm_attr,
@@ -1314,7 +1359,6 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.priv = CAL_GAIN_V_ERROR_AFTER,
 	},
-	/* Offset calibration errors */
 	{
 		.name = "cal_offset_i_error_before",
 		.show = read_pqm_attr,
@@ -1336,9 +1380,27 @@ struct iio_attribute global_pqm_attributes[] = {
 		.priv = CAL_OFFSET_V_ERROR_AFTER,
 	},
 	{
-		.name = "cal_done",
+		.name = "flash_cal_save",
 		.show = read_pqm_attr,
-		.priv = CAL_DONE,
+		.store = write_pqm_attr,
+		.priv = FLASH_CAL_SAVE,
+	},
+	{
+		.name = "flash_cal_load",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = FLASH_CAL_LOAD,
+	},
+	{
+		.name = "flash_cal_erase",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = FLASH_CAL_ERASE,
+	},
+	{
+		.name = "flash_cal_valid",
+		.show = read_pqm_attr,
+		.priv = FLASH_CAL_VALID,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

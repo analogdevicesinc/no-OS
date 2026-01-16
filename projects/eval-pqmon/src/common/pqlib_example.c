@@ -34,6 +34,7 @@
 #include "pqlib_example.h"
 #include "iio_pqm.h"
 #include "afe_calibration.h"
+#include "flash_storage.h"
 
 PQLIB_EXAMPLE pqlibExample;
 extern volatile uint8_t newSyncTimeAvailable = 0;
@@ -53,6 +54,9 @@ int pqm_measurement_init(void)
 
 	/* Initialize calibration context */
 	calibration_init();
+
+	/* Initialize flash storage for calibration persistence */
+	flash_storage_init();
 
 	status = open_pqlib(&pqlibExample);
 
@@ -126,7 +130,6 @@ int pqm_one_cycle(void)
 	}
 
 	if (configChanged) {
-		printf("Recallibrating\n\r");
 		pqm_start_measurement(false);
 		configChanged = false;
 		pqlibExample.state = PQLIB_STATE_WAITING_FOR_TRIGGER;
@@ -214,6 +217,13 @@ int config_measurement(PQLIB_EXAMPLE *pExample)
 		}
 
 		status = process_pqlib_error(pExample, pqlibStatus);
+	}
+
+	/* Auto-load calibration from flash if available, but skip if calibration
+	 * was just performed (to avoid overwriting newly calibrated values) */
+	if (status == 0 && flash_storage_is_initialized() &&
+	    flash_has_valid_calibration() && !calibration_is_done()) {
+		flash_load_and_apply_calibration();
 	}
 
 	return status;
@@ -536,11 +546,9 @@ void set_default_config(EXAMPLE_CONFIG *pConfig)
 	pConfig->enableIconsel = false;
 	pConfig->useExternalTimestamp = false;
 	pConfig->vconsel = VCONSEL_4W_WYE;
-
-	/* Calibration input defaults */
 	pConfig->calNominalCurrent = 10.0f;     /* 10 Arms for gain cal */
 	pConfig->calNominalVoltage = 230.0f;    /* 230 Vrms for gain cal */
-	pConfig->calOffsetCurrent = 0.1f;       /* 0.1 Arms for offset cal */
+	pConfig->calOffsetCurrent = 1.0f;       /* 1.0 Arms for offset cal */
 	pConfig->calOffsetVoltage = 10.0f;      /* 10 Vrms for offset cal */
 	pConfig->currentPgaGain = 1.0f;         /* Default PGA gain */
 	pConfig->voltagePgaGain = 1.0f;         /* Default PGA gain */
