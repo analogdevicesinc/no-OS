@@ -54,7 +54,7 @@ Configuration
 
 A set of APIs are available for the configuration of the LM75 temperature
 sensor. The range of configuration includes functions to bring the LM75 into
-shutdown or low power mode, set the overtemperature and hyteresis values, 
+shutdown or low power mode, set the overtemperature and hysteresis values, 
 change the fault tolerance values as well as change to polarity of the 
 overtemperature signal.
 
@@ -74,14 +74,17 @@ of LM75 which can help to prevent tripping in noisy environments.
 Data Management
 ~~~~~~~~~~~~~~~
 
-Data management with the ADT75 involves functions such as
+Data management with the LM75 involves functions such as
 ``lm75_read_temperature``, ``lm75_read_mode``. ``lm75_read_os_polarity``, 
 and ``lm75_read_fault_queue``. The most useful of which is the 
 ``lm75_read_temperature`` function which will be used for temperature monitoring.
 
 Temperature reads are raw LM75 values which need further processing to extract
-the actual Celcius temperature reading. We use the function 
-``lm75_raw_to_celcius`` to convert the raw temperature value to Celcius.
+the actual milliCelsius temperature reading. We use the function 
+``lm75_raw_to_millicelsius`` to convert the raw temperature value to 
+milliCelsius. Conversely, if we have a milliCelsius and want to have a raw 
+temperature for writing to the over-temperature and hysteresis, we can use the
+``lm75_millicelsius_to_raw`` function.
 
 Driver Initialization Example
 -----------------------------
@@ -110,14 +113,14 @@ Driver Initialization Example
 
            int ret;
            uint16_t raw_temp;
-           float celcius;
+           int mc;
 
            ret = lm75_init(&lm75, &lm75_ip);
            if (ret != 0) {
                    printf("LM75 initialization failed: %d\n", ret);
                    goto init_error;
            }
-           printf("ADT75 initialization successful\n");
+           printf("LM75 initialization successful\n");
 
            /* Read raw temperature value */
            ret = lm75_read_temperature(lm75, lm75_die_temperature, &raw_temp);
@@ -126,9 +129,9 @@ Driver Initialization Example
                    goto init_error;
            }
 
-           /* and convert it to celcius to make it more meaningful */
-           lm75_raw_to_celcius(lm75, raw_temp, &celcius);
-           printf("Temperature: %f celcius\n", celcius);
+           /* and convert it to MilliCelsius to make it more meaningful */
+           mc = lm75_raw_to_millicelsius(raw_temp);
+           printf("Temperature: %d MilliCelsius\n", mc);
 
            /* Clean up and exit */
            lm75_remove(lm75);
@@ -151,35 +154,34 @@ data, configure sensors, and manage their lifecycle in a consistent
 manner. The LM75 driver integrates with this framework, allowing users
 to leverage the IIO application for temperature monitoring tasks. 
 
+The LM75 IIO design mimics the way Linux hwmon presents the LM75 driver to 
+userspace via IIO. That is, it exposes attributes like input, max and max_hyst.
+
 IIO Initialization Functions
 ----------------------------
 
-The initialization of the IIO example code for the ADT75 temperature
-sensor involves several key functions: ``adt75_iio_init`` prepares the
-ADT75 IIO descriptor using specified initialization parameters
-(``adt75_iio_init_param``), which includes UART and I2C setup. The
-``iio_app_init`` function configures the IIO environment by setting up
-devices like the ADT75 sensor. The main function, ``iio_example_main``,
-orchestrates this process, integrating the sensor into the IIO framework
-and configuring the application to acquire and process temperature data
-continuously with ``iio_app_run``. This initialization process ensures
+The initialization of the IIO example code for the LM75 temperature
+sensor involves several key functions: ``iio_lm75_init`` prepares the
+LM75 IIO descriptor using specified just a plain lm75 device descriptor
+which has been created and initialized prior. The ``iio_app_init`` function
+configures the IIO environment by setting up devices like the LM75 sensor.
+It also orchestrates the process of integrating the sensor into the IIO 
+framework and configuring the application to acquire and process temperature
+data continuously with ``iio_app_run``. This initialization process ensures
 proper operation and data handling from the sensor within the IIO
 infrastructure.
 
 IIO Device Configuration
 ------------------------
 
-Post-initialization, the key functions essential for running the IIO
-example for the ADT75 temperature sensor include ``adt75_iio_read_raw``,
-``adt75_iio_read_scale``, ``adt75_iio_read_offset``, and
-``adt75_iio_read_samples``. These functions are responsible for
-acquiring raw temperature data, handling scale and offset adjustments
-for accurate readings, and supporting batch processing of multiple
-temperature samples, respectively. Initialization and cleanup are
-performed by the ``adt75_iio_init`` and ``adt75_iio_remove`` functions
-to manage resource allocation and deallocation within the IIO framework,
-enabling continuous and precise temperature data acquisition for further
-application-level processing.
+Post-initialization, the LM75 IIO driver exposes a single temperature type 
+channel ``temp`` with 3 attributes, aligning closely with the Linux kernel way
+of exposing sensors of this type to the user via hwmon and IIO.
+
+The key attributes are ``input`` which is the raw die temperature, ``max``
+which is the threshold temperature which the chip uses to trigger an over 
+temperature event/alarm and lastly, the ``max_hyst`` which provides the 
+temperature value where the alarm condition is not valid.
 
 IIO Initialization Example
 --------------------------
@@ -188,37 +190,47 @@ IIO Initialization Example
 
    int iio_example_main()
    {
-       int ret;
-       struct adt75_iio_desc *adt75_iio_desc;
-       struct adt75_iio_init_param adt75_iio_ip;
-       struct iio_app_desc *app;
-       struct iio_data_buffer buff = {
-           .buff = (void *)iio_data_buffer,
-           .size = DATA_BUFFER_SIZE * sizeof(int16_t)
-       };
-       struct iio_app_init_param app_init_param = { 0 };
+           int ret;
+           struct lm75_init_param lm75_ip = {
+                   .fault_count = 0,
+                   .os_polarity = lm75_os_active_low,
+                   .i2c_ip = &lm75_i2c_ip,
+           };
+           struct lm75_dev *lm75;
+           struct iio_lm75 *iio_lm75;
+           struct iio_app_desc *app;
+           struct iio_app_init_param app_init_param = { 0 };
 
-       adt75_iio_ip.adt75_init_param = &adt75_ip;
-       ret = adt75_iio_init(&adt75_iio_desc, &adt75_iio_ip);
-       if (ret)
+           /* initialize the lm75 device separately */
+           ret = lm75_init(&lm75, &lm75_ip);
+           if (ret)
+                   return ret;
+
+           ret = iio_lm75_init(&iio_lm75, lm75);
+           if (ret)
+                   goto err_cleanup_lm75;
+
+           struct iio_app_device iio_devices[] = {
+                   {
+                           .name = "lm75",
+                           .dev = iio_lm75,
+                           .dev_descriptor = &iio_lm75->iio_dev,
+                   }
+           };
+
+           app_init_param.devices = iio_devices;
+           app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+           app_init_param.uart_init_params = lm75_uart_ip;
+
+           ret = iio_app_init(&app, app_init_param);
+           if (ret)
+                   goto err_cleanup_lm75_iio;
+
+           ret = iio_app_run(app);
+
+   err_cleanup_lm75_iio:
+           iio_lm75_remove(iio_lm75);
+   err_cleanup_lm75:
+           lm75_remove(lm75);
            return ret;
-
-       struct iio_app_device iio_devices[] = {
-           {
-               .name = "adt75",
-               .dev = adt75_iio_desc,
-               .dev_descriptor = adt75_iio_desc->iio_dev,
-               .read_buff = &buff,
-           }
-       };
-
-       app_init_param.devices = iio_devices;
-       app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
-       app_init_param.uart_init_params = adt75_uart_ip;
-
-       ret = iio_app_init(&app, app_init_param);
-       if (ret)
-           return ret;
-
-       return iio_app_run(app);
    }
