@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/temperature/lm75/README.rst
