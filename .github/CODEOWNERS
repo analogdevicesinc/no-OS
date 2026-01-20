@@ -8,49 +8,12 @@
 # CODEOWNERS file format: <pattern> + <mail address of one or more owners>
 
 ##### Global code owners (for whole files from repo) #####
-*
-	darius.berghe@analog.com
-	ciprian.regus@analog.com
-	dragos.bogdan@analog.com
-	antoniu.miclaus@analog.com
-	ramona.gradinariu@analog.com
-	george.mois@analog.com
-	raluca.bozdog@analog.com
-	ramona.nechita@analog.com
-	radu.sabau@analog.com
-	radu.etz@analog.com
-	robert.budai@analog.com
-	cristina.suteu@analog.com
-	stefan.popa@analog.com
+* darius.berghe@analog.com ciprian.regus@analog.com dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com george.mois@analog.com raluca.bozdog@analog.com ramona.nechita@analog.com radu.sabau@analog.com radu.etz@analog.com robert.budai@analog.com cristina.suteu@analog.com stefan.popa@analog.com
 
-/ci/
-	dragos.bogdan@analog.com
-	antoniu.miclaus@analog.com
-	ramona.gradinariu@analog.com
-	ciprian.regus@analog.com
-	darius.berghe@analog.com
-	stefan.raus@analog.com
-	andreea.andrisan@analog.com
+/ci/ dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com ciprian.regus@analog.com darius.berghe@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
 
-/tools/scripts/
-	dragos.bogdan@analog.com
-	antoniu.miclaus@analog.com
-	ramona.gradinariu@analog.com
-	stefan.raus@analog.com
-	andreea.andrisan@analog.com
-	ciprian.regus@analog.com
-	darius.berghe@analog.com
+/tools/scripts/ dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com ciprian.regus@analog.com darius.berghe@analog.com
 
-azure-pipelines.yml
-	dragos.bogdan@analog.com
-	antoniu.miclaus@analog.com
-	ramona.gradinariu@analog.com
-	stefan.raus@analog.com
-	andreea.andrisan@analog.com
+azure-pipelines.yml dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
 
-build_projects.yml
-	dragos.bogdan@analog.com
-	antoniu.miclaus@analog.com
-	ramona.gradinariu@analog.com
-	stefan.raus@analog.com
-	andreea.andrisan@analog.com
+build_projects.yml dragos.bogdan@analog.com antoniu.miclaus@analog.com ramona.gradinariu@analog.com stefan.raus@analog.com andreea.andrisan@analog.com
