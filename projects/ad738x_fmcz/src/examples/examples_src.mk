@@ -1,3 +1,8 @@
+ifeq (lattice,$(PLATFORM))
+BASIC_EXAMPLE := y
+IIO_EXAMPLE := n
+endif
+
 ifeq (y,$(strip $(BASIC_EXAMPLE)))
 CFLAGS += -DBASIC_EXAMPLE=1
 SRCS += $(PROJECT)/src/examples/basic_example/basic_example.c

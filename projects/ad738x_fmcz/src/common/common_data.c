@@ -37,12 +37,12 @@
 #include "no_os_spi.h"
 #include "no_os_uart.h"
 #include "no_os_pwm.h"
-uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
+_Alignas(64) uint8_t in_buff[MAX_SIZE_BASE_ADDR] = {0};
 
 struct no_os_uart_init_param ad738x_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id = UART_IRQ_ID,
-	.asynchronous_rx = true,
+	.asynchronous_rx = UART_ASYNC_RX,
 	.baud_rate = UART_BAUDRATE,
 	.size = NO_OS_UART_CS_8,
 	.parity = NO_OS_UART_PAR_NO,
@@ -75,7 +75,6 @@ struct ad738x_init_param ad738x_init_param = {
 #ifdef XILINX_PLATFORM
 	.clkgen_init = CLKGEN_INIT,
 	.axi_clkgen_rate = 100000000,
-	.offload_init_param = OFFLOAD_INIT,
 #endif
 	.dcache_invalidate_range =
 	(void (*)(uint32_t, uint32_t))DCACHE_INVALIDATE,
@@ -86,5 +85,6 @@ struct ad738x_init_param ad738x_init_param = {
 	.flags = AD738X_FLAG_STANDARD_SPI_DMA,
 #else
 	.flags = AD738X_FLAG_OFFLOAD,
+	.offload_init_param = OFFLOAD_INIT,
 #endif
 };

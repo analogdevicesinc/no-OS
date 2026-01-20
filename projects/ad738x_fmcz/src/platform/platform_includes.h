@@ -38,6 +38,8 @@
 #include "xilinx/parameters.h"
 #elif defined STM32_PLATFORM
 #include "stm32/parameters.h"
+#elif defined LATTICE_PLATFORM
+#include "lattice/parameters.h"
 #endif
 
 #ifdef IIO_SUPPORT
