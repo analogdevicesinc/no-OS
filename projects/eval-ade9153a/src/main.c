@@ -151,7 +151,7 @@ int main(void)
 	// Vlevel value assuming 1/2 full scale
 	ade9153a_ip.vlevel = ADE9153A_VLEVEL;
 	// V_div rsmall value
-	ade9153a_ip.vlevel = ADE9153A_RSMALL;
+	ade9153a_ip.rsmall = ADE9153A_RSMALL;
 	// Energy accumulate set to 4000
 	ade9153a_ip.no_samples = ADE9153A_NO_SAMPLES;
 	// AIGAIN for IAP-IAN swap
