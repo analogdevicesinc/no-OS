@@ -105,7 +105,7 @@ int32_t max31889_trig_and_read_temp(struct max31889_desc *desc,
 		if (ret)
 			return ret;
 		++step_counter;
-		no_os_udelay(
+		no_os_mdelay(
 			TEMP_MEAS_WAIT_UNTIL_ERROR_MS); // Delay to allow the conversion to complete
 	} while (!(reg_tmp & NO_OS_BIT(1)) && step_counter < MAX31889_MAX_CONV_STEPS);
 
