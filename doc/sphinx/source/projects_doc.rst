@@ -140,6 +140,14 @@ LED
 
    projects/led/*
 
+POSITION
+==============
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/position/*
+
 EXAMPLES
 ========
 .. toctree::
