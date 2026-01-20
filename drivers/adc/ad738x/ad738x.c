@@ -35,7 +35,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#ifdef XILINX_PLATFORM
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
 #include "ad738x.h"
@@ -313,11 +313,11 @@ out:
  * @return 0 in case of success, -1 otherwise.
  */
 
+#if !defined(USE_STANDARD_SPI)
 static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
-					uint32_t *buf,
-					uint16_t samples)
+				uint32_t *buf,
+				uint16_t samples)
 {
-#ifdef XILINX_PLATFORM
 	int32_t ret;
 	uint32_t commands_data[2] = {0, 0};
 	struct spi_engine_offload_message msg;
@@ -326,14 +326,13 @@ static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 		WRITE_READ(2),
 		CS_HIGH,
 	};
+	struct spi_engine_desc *spi_local = dev->spi_desc->extra;
 
-	ret = no_os_pwm_enable(dev->pwm_desc);
-	if (ret != 0)
-		return ret;
-
-	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != 0)
-		return ret;
+	if ((dev->flags & AD738X_FLAG_NO_PWM) == 0) {
+		ret = no_os_pwm_enable(dev->pwm_desc);
+		if (ret != 0)
+			return ret;
+	}
 
 	msg.commands_data = commands_data;
 	msg.commands = spi_eng_msg_cmds;
@@ -344,12 +343,18 @@ static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 	if (ret != 0)
 		return ret;
 
-	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
+	if (dev->dcache_invalidate_range && spi_local->offload_rx_dma->width_src)
+		dev->dcache_invalidate_range(msg.rx_addr,
+						samples * spi_local->offload_rx_dma->width_src);
+	if ((dev->flags & AD738X_FLAG_NO_PWM) == 0) {
+		ret = no_os_pwm_disable(dev->pwm_desc);
+		if (ret != 0)
+			return ret;
+	}
 
-#endif
 	return 0;
 }
+#endif
 
 /**
  * @brief Read from device.
@@ -366,8 +371,10 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 	int32_t ret;
 	int i;
 
+#if !defined(USE_STANDARD_SPI)
 	if (dev->flags & AD738X_FLAG_OFFLOAD)
 		return ad738x_read_data_offload(dev, buf, samples);
+#endif
 
 	if (dev->flags & AD738X_FLAG_STANDARD_SPI_DMA)
 		return ad738x_read_data_dma(dev, buf, samples);
@@ -400,11 +407,12 @@ int32_t ad738x_init(struct ad738x_dev **device,
 		return -1;
 
 	dev->flags = init_param->flags;
+	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+	dev->conv_mode = init_param->conv_mode;
+	dev->ref_sel = init_param->ref_sel;
+	dev->ref_voltage_mv = init_param->ref_voltage_mv;
 
 #ifdef XILINX_PLATFORM
-	dev->offload_init_param = init_param->offload_init_param;
-	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
-
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret)
 		goto err;
@@ -414,17 +422,21 @@ int32_t ad738x_init(struct ad738x_dev **device,
 		goto err;
 #endif
 
-	ret = no_os_pwm_init(&dev->pwm_desc, init_param->pwm_init);
+	if ((dev->flags & AD738X_FLAG_NO_PWM) == 0)
+		ret = no_os_pwm_init(&dev->pwm_desc, init_param->pwm_init);
 	if (ret)
 		goto err;
-
-	dev->conv_mode = init_param->conv_mode;
-	dev->ref_sel = init_param->ref_sel;
-	dev->ref_voltage_mv = init_param->ref_voltage_mv;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 	if (ret)
 		goto err;
+
+#if !defined(USE_STANDARD_SPI)
+	if (dev->flags & AD738X_FLAG_OFFLOAD)
+		ret = spi_engine_offload_init(dev->spi_desc, init_param->offload_init_param);
+	if (ret != 0)
+		goto err;
+#endif
 
 	ret = ad738x_reset(dev, HARD_RESET);
 	if (ret)
@@ -469,9 +481,11 @@ int32_t ad738x_remove(struct ad738x_dev *dev)
 		goto out;
 #endif
 
-	ret = no_os_pwm_remove(dev->pwm_desc);
-	if (ret)
-		goto out;
+	if (dev->pwm_desc) {
+		ret = no_os_pwm_remove(dev->pwm_desc);
+		if (ret)
+			goto out;
+	}
 
 	no_os_free(dev);
 out:

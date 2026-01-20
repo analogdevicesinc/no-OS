@@ -100,9 +100,12 @@
 
 #define AD738X_FLAG_STANDARD_SPI_DMA    NO_OS_BIT(0)
 #define AD738X_FLAG_OFFLOAD             NO_OS_BIT(1)
+#define AD738X_FLAG_NO_PWM              NO_OS_BIT(2)
+
 enum ad738x_conv_mode {
 	TWO_WIRE_MODE,
-	ONE_WIRE_MODE
+	ONE_WIRE_MODE,
+	FOUR_WIRE_MODE
 };
 
 enum ad738x_os_mode {
@@ -142,9 +145,8 @@ enum ad738x_ref_sel {
 struct ad738x_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
+
 #ifdef XILINX_PLATFORM
-	/** SPI module offload init */
-	struct spi_engine_offload_init_param *offload_init_param;
 	struct axi_clkgen *clkgen;
 #endif
 	struct no_os_pwm_desc *pwm_desc;
@@ -165,7 +167,8 @@ struct ad738x_init_param {
 #ifdef XILINX_PLATFORM
 	struct axi_clkgen_init *clkgen_init;
 	uint32_t axi_clkgen_rate;
-	/** SPI module offload init */
+#endif
+#if !defined(USE_STANDARD_SPI)
 	struct spi_engine_offload_init_param *offload_init_param;
 #endif
 	struct no_os_pwm_init_param *pwm_init;
