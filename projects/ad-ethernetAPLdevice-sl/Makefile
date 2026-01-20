@@ -29,7 +29,11 @@ export MAXIM_SBT_DIR # SBTs must have this environment variable defined to work
 # SBT-config.mk and SBT-rules.mk are included further down this Makefile.
  
 endif # SBT
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 8ab825dbe (Fix for secure boot)
 # *******************************************************************************
 # Default goal selection.  This section allows you to override the default goal
 # that will run if no targets are specified on the command-line.
@@ -56,14 +60,12 @@ endif
 ifeq "$(MAKECMDGOALS)" ""
 MAKECMDGOALS:=$(.DEFAULT_GOAL)
 endif
- 
 # *******************************************************************************
 # Include SBT config.  We need to do this here because it needs to know
 # the current MAKECMDGOAL.
 ifeq ($(SBT),1)
 include ../../tools/scripts/SBT-config.mk
 endif
- 
 include ../../tools/scripts/generic_variables.mk
  
 include ../../tools/scripts/examples.mk
@@ -74,6 +76,15 @@ ifeq ($(SBT), 1)
 include ../../tools/scripts/SBT-rules.mk
 endif
  
+# Get .DEFAULT_GOAL working.
+ifeq "$(MAKECMDGOALS)" ""
+MAKECMDGOALS:=$(.DEFAULT_GOAL)
+endif
+
+ifeq ($(SBT), 1)
+include ../../tools/scripts/SBT-rules.mk
+endif
+
 # Get .DEFAULT_GOAL working.
 ifeq "$(MAKECMDGOALS)" ""
 MAKECMDGOALS:=$(.DEFAULT_GOAL)
