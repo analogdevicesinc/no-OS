@@ -624,8 +624,11 @@ int AppBiaInit(struct ad5940_dev *dev, uint32_t *pBuffer, uint32_t BufferSize)
 	ret = ad5940_SEQMmrTrig(dev, AppBiaCfg.InitSeqInfo.SeqId);
 	if (ret < 0)
 		return ret;
-	while (ad5940_INTCTestFlag(dev, AFEINTC_1, AFEINTSRC_ENDSEQ) == false)
-		;
+	uint32_t timeout = 100000;
+	while (ad5940_INTCTestFlag(dev, AFEINTC_1, AFEINTSRC_ENDSEQ) == false) {
+		if (--timeout == 0)
+			return -ETIMEDOUT;
+	}
 
 	/* Measurment sequence  */
 	AppBiaCfg.MeasureSeqInfo.WriteSRAM = false;
