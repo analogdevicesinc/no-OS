@@ -56,6 +56,7 @@ extern TIM_HandleTypeDef htim8;
 #define STR(x) #x
 
 #define UART_IRQ_ID		UART5_IRQn
+#define UART_ASYNC_RX	true
 
 #define UART_DEVICE_ID		5
 #define UART_BAUDRATE		115200
