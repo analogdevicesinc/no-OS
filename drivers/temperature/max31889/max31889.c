@@ -140,12 +140,14 @@ int32_t max31889_init(struct max31889_desc **desc,
 		return -ENOMEM;
 
 	ret = no_os_i2c_init(&max31889_desc_tmp->i2c_desc, param->i2c_ip);
-	if (ret)
+	if (ret) {
 		no_os_free(max31889_desc_tmp);
-	return ret;
+		return ret;
+	}
 
 	*desc = max31889_desc_tmp;
-	return ret;
+
+	return 0;
 }
 
 int32_t max31889_remove(struct max31889_desc *desc)
