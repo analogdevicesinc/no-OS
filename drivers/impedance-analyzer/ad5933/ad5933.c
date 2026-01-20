@@ -68,6 +68,10 @@ int32_t ad5933_init(struct ad5933_dev **device,
 	dev->current_range = init_param.current_range;
 
 	status = no_os_i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+	if (status) {
+		no_os_free(dev);
+		return status;
+	}
 
 	*device = dev;
 
