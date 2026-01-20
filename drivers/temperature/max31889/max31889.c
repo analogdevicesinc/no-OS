@@ -65,12 +65,6 @@ int32_t max31889_read_reg(struct max31889_desc *desc, uint8_t reg_addr,
 	i2c_desc = desc->i2c_desc;
 
 	ret = no_os_i2c_write(i2c_desc, &reg_addr, 1, 0);
-	return -EINVAL;
-
-	i2c_desc = desc->i2c_desc;
-
-	ret = no_os_i2c_write(i2c_desc, &reg_addr, 1, 0);
-
 	if (ret)
 		return ret;
 
