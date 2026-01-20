@@ -109,6 +109,9 @@ int32_t max31889_trig_and_read_temp(struct max31889_desc *desc,
 			TEMP_MEAS_WAIT_UNTIL_ERROR_MS); // Delay to allow the conversion to complete
 	} while (!(reg_tmp & NO_OS_BIT(1)) && step_counter < MAX31889_MAX_CONV_STEPS);
 
+	if (!(reg_tmp & NO_OS_BIT(1)))
+		return -ETIMEDOUT;
+
 	ret = max31889_read_reg(desc, MAX31889_REG_FIFO_DATA, data, 2);
 	if (ret < 0)
 		return ret;
