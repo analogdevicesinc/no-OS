@@ -706,10 +706,16 @@ fImpCar_Type computeImpedance(uint32_t *const pData)
 
 	//(c^2+d^2)
 	denum = (c * c + d * d);
-	//RE((a+bi)(c-di)) = RE(a*c-b*d(-1)+(-a*d+b*c)i) = a*c+b*d
-	fCarZval.Real = (a * c + b * d) / denum;
-	////IM((a+bi)(c-di)) = IM(a*c-b*d(-1)+(-a*d+b*c)i) = (-a*d+b*c)
-	fCarZval.Image = (-a * d + b * c) / denum;
+	if (denum == 0) {
+		/* Current is zero, impedance is undefined - set to zero */
+		fCarZval.Real = 0;
+		fCarZval.Image = 0;
+	} else {
+		//RE((a+bi)(c-di)) = RE(a*c-b*d(-1)+(-a*d+b*c)i) = a*c+b*d
+		fCarZval.Real = (a * c + b * d) / denum;
+		////IM((a+bi)(c-di)) = IM(a*c-b*d(-1)+(-a*d+b*c)i) = (-a*d+b*c)
+		fCarZval.Image = (-a * d + b * c) / denum;
+	}
 
 	//Apply Rtia cal values;
 	a = fCarZval.Real * AppBiaCfg.RtiaCurrValue[0] - fCarZval.Image *
