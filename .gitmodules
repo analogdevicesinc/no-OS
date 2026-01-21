@@ -22,3 +22,6 @@
 [submodule "libraries/esh/esh"]
 	path = libraries/esh/esh
 	url = https://github.com/google/esh.git
+[submodule "libraries/tmc/TMC-API"]
+	path = libraries/tmc/TMC-API
+	url = https://github.com/analogdevicesinc/TMC-API.git
