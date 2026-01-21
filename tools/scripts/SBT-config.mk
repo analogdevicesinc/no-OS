@@ -1,5 +1,3 @@
-
-
 # This file is used by the Makefile system to build source code
 # for the Secure Boot Tools (SBT).  It's imported by the core
 # Makefile for each example project.
@@ -81,3 +79,4 @@ CFLAGS += -D__SCPA_FWK__
 CFLAGS += -DSCPA_MEM_BASE_ADDR=$(SCPA_MEM_BASE_ADDR) -DSCPA_MEM_SIZE=$(SCPA_MEM_SIZE)
 LINKERFILE ?= $(CMSIS_ROOT)/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_scpa.ld
 endif
+

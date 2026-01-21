@@ -15,7 +15,7 @@ OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
 PYTHON = python
-ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
@@ -106,7 +106,6 @@ endif
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
 
-
 ifeq ($(SBT),1)
 $(info **********************************************************************)
 $(info ********     max32690_sla.ld been called    **************************)
@@ -118,6 +117,7 @@ SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/sla_header_
 CFLAGS += -D__SLA_FWK__
 else
 LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
+endif
 
 ASM_SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).S
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/heap.c

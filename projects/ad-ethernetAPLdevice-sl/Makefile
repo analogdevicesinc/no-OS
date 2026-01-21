@@ -12,8 +12,10 @@ LDFLAGS += -u_printf_float
 ifeq (y,$(strip $(HP_STATIC_IP)))
 NO_OS_IP=192.168.97.60
 NO_OS_NETMASK=255.255.255.0
-NO_OS_GATEWAY=0.0.0.0
+NO_OS_GATEWAY=192.168.97.1
 endif
+
+#SBT=1
 
 HEAP_SIZE = 0x80000
 STACK_SIZE = 0xFFFF
@@ -70,6 +72,8 @@ include ../../tools/scripts/examples.mk
 
 include src.mk
 
+# Include the rules that integrate the SBTs.  SBTs are a special case that must be
+# include after the core gcc rules to extend them.
 ifeq ($(SBT), 1)
 include ../../tools/scripts/SBT-rules.mk
 endif
