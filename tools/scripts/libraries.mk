@@ -140,7 +140,24 @@ $(error)
 include $(NO-OS)/tools/scripts/esh.mk
 endif
 
-LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS)
+# TMC-API library
+ifneq ($(filter tmc_api_%,$(LIBRARIES)),)
+TMC_SRC_DIR = $(NO-OS)/libraries/tmc
+TMC_BUILD_DIR = $(BUILD_DIR)/tmc_libs
+TMC_LIBS = $(foreach lib,$(filter tmc_api_%,$(LIBRARIES)),$(TMC_BUILD_DIR)/lib$(shell echo $(lib) | sed 's/tmc_api_//' | tr '[:lower:]' '[:upper:]').a)
+EXTRA_LIBS			+= $(TMC_LIBS)
+EXTRA_LIBS_PATHS		+= $(TMC_BUILD_DIR)
+EXTRA_INC_PATHS			+= $(TMC_SRC_DIR)/TMC-API
+
+CLEAN_TMC = $(call remove_dir_action,$(TMC_BUILD_DIR))
+
+$(TMC_LIBS): $(TMC_BUILD_DIR)/lib%.a:
+	$(call print,Building TMC-API library $@)
+	$(call mk_dir,$(TMC_BUILD_DIR))
+	$(MAKE) -C $(TMC_SRC_DIR) CFLAGS='$(CFLAGS)' PLATFORM=$(PLATFORM) BUILD_DIR=$(BUILD_DIR) $*
+endif
+
+LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_LIBS) $(FATFS_LIB) $(MQTT_LIB) $(AZURE_LIBS) $(TMC_LIBS)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
 LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
 LIB_PATHS			+= $(addprefix -L,$(EXTRA_LIBS_PATHS))
@@ -169,3 +186,4 @@ clean_libs:
 	-$(CLEAN_IIO)
 	-$(CLEAN_AZURE)
 	-$(CLEAN_MBED_OS)
+	-$(CLEAN_TMC)
