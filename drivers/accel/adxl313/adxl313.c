@@ -349,8 +349,7 @@ int adxl313_remove(struct adxl313_dev *dev)
 	else
 		ret = no_os_i2c_remove(dev->com_desc.i2c_desc);
 
-	if (!ret)
-		no_os_free(dev);
+	no_os_free(dev);
 
 	return ret;
 }
