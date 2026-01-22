@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/base64.c:39:5:mbedtls_base64_encode	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/base64.c:106:5:mbedtls_base64_decode	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/base64.c:232:5:mbedtls_base64_self_test	160	static

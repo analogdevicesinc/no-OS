@@ -1,0 +1,1175 @@
+Trivially needed symbols: mbedtls_sha1_self_test/24 mbedtls_sha1/20 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_internal_sha1_process/17 mbedtls_sha1_starts/16 mbedtls_sha1_clone/15 mbedtls_sha1_free/14 mbedtls_sha1_init/13
+
+
+Initial Symbol table:
+
+putchar/32 (__builtin_putchar) @064340a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+puts/31 (__builtin_puts) @06434000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 
+  Calls: 
+memcmp/30 (memcmp) @06368d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+printf/29 (printf) @06368f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+memcpy/28 (memcpy) @06368e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: 
+__builtin_bswap32/27 (__builtin_bswap32) @06368dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+mbedtls_platform_zeroize/26 (mbedtls_platform_zeroize) @06368c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_sha1_free/14 
+  Calls: 
+memset/25 (memset) @06368bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_init/13 
+  Calls: 
+mbedtls_sha1_self_test/24 (mbedtls_sha1_self_test) @06368b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: sha1_test_buf/21 (addr) sha1_test_buflen/22 (read) sha1_test_sum/23 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 puts/31 putchar/32 puts/31 memcmp/30 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 memset/25 mbedtls_sha1_starts/16 printf/29 mbedtls_sha1_init/13 
+sha1_test_sum/23 (sha1_test_sum) @06362360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06362240
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buflen/22 (sha1_test_buflen) @06362240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @063621f8
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buf/21 (sha1_test_buf) @063621f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_sha1/20 (mbedtls_sha1) @06241dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06368b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_starts/16 mbedtls_sha1_init/13 
+mbedtls_sha1_finish/19 (mbedtls_sha1_finish) @06241c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06241dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_internal_sha1_process/17 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 memset/25 mbedtls_internal_sha1_process/17 memset/25 memset/25 
+mbedtls_sha1_update/18 (mbedtls_sha1_update) @06241b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06241c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memcpy/28 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 memcpy/28 
+mbedtls_internal_sha1_process/17 (mbedtls_internal_sha1_process) @062419d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06241b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: mbedtls_platform_zeroize/26 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 
+mbedtls_sha1_starts/16 (mbedtls_sha1_starts) @06241888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062419d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: 
+mbedtls_sha1_clone/15 (mbedtls_sha1_clone) @06241738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06241888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_sha1_free/14 (mbedtls_sha1_free) @062415e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06241738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_platform_zeroize/26 
+mbedtls_sha1_init/13 (mbedtls_sha1_init) @06241498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062415e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memset/25 
+_putchar_unlocked/12 (_putchar_unlocked) @06241150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/11 (_getchar_unlocked) @06241000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/10 (__sputc_r) @062030a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_error_add/9 (mbedtls_error_add) @06203888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061f2d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @061f2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @061f2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @061f2690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @061f2540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061f23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @06241dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061f22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @06241b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @061f2150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @061f2000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/12 _getchar_unlocked/11 __sputc_r/10 mbedtls_error_add/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+putchar/32 (__builtin_putchar) @064340a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+puts/31 (__builtin_puts) @06434000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 
+  Calls: 
+memcmp/30 (memcmp) @06368d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+printf/29 (printf) @06368f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+memcpy/28 (memcpy) @06368e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: 
+__builtin_bswap32/27 (__builtin_bswap32) @06368dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+mbedtls_platform_zeroize/26 (mbedtls_platform_zeroize) @06368c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_sha1_free/14 
+  Calls: 
+memset/25 (memset) @06368bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_init/13 
+  Calls: 
+mbedtls_sha1_self_test/24 (mbedtls_sha1_self_test) @06368b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha1_test_buf/21 (addr) sha1_test_buflen/22 (read) sha1_test_sum/23 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 puts/31 putchar/32 puts/31 memcmp/30 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 memset/25 mbedtls_sha1_starts/16 printf/29 mbedtls_sha1_init/13 
+sha1_test_sum/23 (sha1_test_sum) @06362360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buflen/22 (sha1_test_buflen) @06362240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buf/21 (sha1_test_buf) @063621f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_sha1/20 (mbedtls_sha1) @06241dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_starts/16 mbedtls_sha1_init/13 
+mbedtls_sha1_finish/19 (mbedtls_sha1_finish) @06241c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_internal_sha1_process/17 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 memset/25 mbedtls_internal_sha1_process/17 memset/25 memset/25 
+mbedtls_sha1_update/18 (mbedtls_sha1_update) @06241b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memcpy/28 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 memcpy/28 
+mbedtls_internal_sha1_process/17 (mbedtls_internal_sha1_process) @062419d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: mbedtls_platform_zeroize/26 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 
+mbedtls_sha1_starts/16 (mbedtls_sha1_starts) @06241888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: 
+mbedtls_sha1_clone/15 (mbedtls_sha1_clone) @06241738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_sha1_free/14 (mbedtls_sha1_free) @062415e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_platform_zeroize/26 
+mbedtls_sha1_init/13 (mbedtls_sha1_init) @06241498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memset/25 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061f23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061f22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+
+
+Initial Symbol table:
+
+putchar/32 (__builtin_putchar) @064340a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+puts/31 (__builtin_puts) @06434000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 
+  Calls: 
+memcmp/30 (memcmp) @06368d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+printf/29 (printf) @06368f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+memcpy/28 (memcpy) @06368e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: 
+__builtin_bswap32/27 (__builtin_bswap32) @06368dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+mbedtls_platform_zeroize/26 (mbedtls_platform_zeroize) @06368c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_sha1_free/14 
+  Calls: 
+memset/25 (memset) @06368bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_init/13 
+  Calls: 
+mbedtls_sha1_self_test/24 (mbedtls_sha1_self_test) @06368b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha1_test_buf/21 (addr) sha1_test_buflen/22 (read) sha1_test_sum/23 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 puts/31 putchar/32 puts/31 memcmp/30 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 memset/25 mbedtls_sha1_starts/16 printf/29 mbedtls_sha1_init/13 
+sha1_test_sum/23 (sha1_test_sum) @06362360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buflen/22 (sha1_test_buflen) @06362240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buf/21 (sha1_test_buf) @063621f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_sha1/20 (mbedtls_sha1) @06241dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_starts/16 mbedtls_sha1_init/13 
+mbedtls_sha1_finish/19 (mbedtls_sha1_finish) @06241c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_internal_sha1_process/17 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 memset/25 mbedtls_internal_sha1_process/17 memset/25 memset/25 
+mbedtls_sha1_update/18 (mbedtls_sha1_update) @06241b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memcpy/28 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 memcpy/28 
+mbedtls_internal_sha1_process/17 (mbedtls_internal_sha1_process) @062419d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: mbedtls_platform_zeroize/26 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 
+mbedtls_sha1_starts/16 (mbedtls_sha1_starts) @06241888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: 
+mbedtls_sha1_clone/15 (mbedtls_sha1_clone) @06241738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_sha1_free/14 (mbedtls_sha1_free) @062415e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_platform_zeroize/26 
+mbedtls_sha1_init/13 (mbedtls_sha1_init) @06241498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memset/25 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061f23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061f22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+putchar/32 (__builtin_putchar) @064340a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+puts/31 (__builtin_puts) @06434000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 
+  Calls: 
+memcmp/30 (memcmp) @06368d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+printf/29 (printf) @06368f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 
+  Calls: 
+memcpy/28 (memcpy) @06368e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: 
+__builtin_bswap32/27 (__builtin_bswap32) @06368dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+mbedtls_platform_zeroize/26 (mbedtls_platform_zeroize) @06368c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_sha1_free/14 
+  Calls: 
+memset/25 (memset) @06368bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_init/13 
+  Calls: 
+mbedtls_sha1_self_test/24 (mbedtls_sha1_self_test) @06368b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha1_test_buf/21 (addr) sha1_test_buflen/22 (read) sha1_test_sum/23 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 puts/31 putchar/32 puts/31 memcmp/30 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 memset/25 mbedtls_sha1_starts/16 printf/29 mbedtls_sha1_init/13 
+sha1_test_sum/23 (sha1_test_sum) @06362360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buflen/22 (sha1_test_buflen) @06362240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+sha1_test_buf/21 (sha1_test_buf) @063621f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_sha1/20 (mbedtls_sha1) @06241dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_starts/16 mbedtls_sha1_init/13 
+mbedtls_sha1_finish/19 (mbedtls_sha1_finish) @06241c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_internal_sha1_process/17 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/27 memset/25 mbedtls_internal_sha1_process/17 memset/25 memset/25 
+mbedtls_sha1_update/18 (mbedtls_sha1_update) @06241b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memcpy/28 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 memcpy/28 
+mbedtls_internal_sha1_process/17 (mbedtls_internal_sha1_process) @062419d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_update/18 mbedtls_sha1_update/18 
+  Calls: mbedtls_platform_zeroize/26 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/27 mbedtls_get_unaligned_uint32/2 
+mbedtls_sha1_starts/16 (mbedtls_sha1_starts) @06241888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: 
+mbedtls_sha1_clone/15 (mbedtls_sha1_clone) @06241738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_sha1_free/14 (mbedtls_sha1_free) @062415e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: mbedtls_platform_zeroize/26 
+mbedtls_sha1_init/13 (mbedtls_sha1_init) @06241498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_self_test/24 mbedtls_sha1/20 
+  Calls: memset/25 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061f23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 mbedtls_sha1_finish/19 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061f22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 mbedtls_internal_sha1_process/17 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+putchar/32 (__builtin_putchar) @064340a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 (80244270 (estimated locally),0.23 per call) 
+  Calls: 
+puts/31 (__builtin_puts) @06434000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 (36779389 (estimated locally),0.10 per call) mbedtls_sha1_self_test/24 (203953420 (estimated locally),0.58 per call) 
+  Calls: 
+memcmp/30 (memcmp) @06368d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 (630653749 (estimated locally),1.78 per call) 
+  Calls: 
+printf/29 (printf) @06368f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 (240732809 (estimated locally),0.68 per call) 
+  Calls: 
+memcpy/28 (memcpy) @06368e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_update/18 (19488414 (estimated locally),0.11 per call) mbedtls_sha1_update/18 (20078909 (estimated locally),0.11 per call) 
+  Calls: 
+__builtin_bswap32/27 (__builtin_bswap32) @06368dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_finish/19 (527533649 (estimated locally),0.49 per call) mbedtls_sha1_finish/19 (527533649 (estimated locally),0.49 per call) mbedtls_sha1_finish/19 (527533649 (estimated locally),0.49 per call) mbedtls_sha1_finish/19 (527533649 (estimated locally),0.49 per call) mbedtls_sha1_finish/19 (527533649 (estimated locally),0.49 per call) mbedtls_sha1_finish/19 (799293413 (estimated locally),0.74 per call) mbedtls_sha1_finish/19 (799293413 (estimated locally),0.74 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_zeroize/26 (mbedtls_platform_zeroize) @06368c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_internal_sha1_process/17 (1073741824 (estimated locally),1.00 per call) mbedtls_sha1_free/14 (741418729 (estimated locally),0.69 per call) 
+  Calls: 
+memset/25 (memset) @06368bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_sha1_self_test/24 (69202658 (estimated locally),0.20 per call) mbedtls_sha1_finish/19 (262422500 (estimated locally),0.24 per call) mbedtls_sha1_finish/19 (536870913 (estimated locally),0.50 per call) mbedtls_sha1_finish/19 (536870913 (estimated locally),0.50 per call) mbedtls_sha1_init/13 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_sha1_self_test/24 (mbedtls_sha1_self_test) @06368b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: sha1_test_buf/21 (addr) sha1_test_buflen/22 (read) sha1_test_sum/23 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:354617148 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 (354617150 (estimated locally),1.00 per call) puts/31 (36779389 (estimated locally),0.10 per call) putchar/32 (80244270 (estimated locally),0.23 per call) puts/31 (203953420 (estimated locally),0.58 per call) memcmp/30 (630653749 (estimated locally),1.78 per call) mbedtls_sha1_finish/19 (643524235 (estimated locally),1.81 per call) mbedtls_sha1_update/18 (645700838 (estimated locally),1.82 per call) mbedtls_sha1_update/18 (1063004409 (estimated locally),3.00 per call) memset/25 (69202658 (estimated locally),0.20 per call) mbedtls_sha1_starts/16 (729493365 (estimated locally),2.06 per call) printf/29 (240732809 (estimated locally),0.68 per call) mbedtls_sha1_init/13 (354617148 (estimated locally),1.00 per call) 
+sha1_test_sum/23 (sha1_test_sum) @06362360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+sha1_test_buflen/22 (sha1_test_buflen) @06362240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+sha1_test_buf/21 (sha1_test_buf) @063621f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_sha1_self_test/24 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_sha1/20 (mbedtls_sha1) @06241dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_sha1_free/14 (1073741824 (estimated locally),1.00 per call) mbedtls_sha1_finish/19 (256544234 (estimated locally),0.24 per call) mbedtls_sha1_update/18 (524844999 (estimated locally),0.49 per call) mbedtls_sha1_starts/16 (1073741823 (estimated locally),1.00 per call) mbedtls_sha1_init/13 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_sha1_finish/19 (mbedtls_sha1_finish) @06241c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_sha1_self_test/24 (643524235 (estimated locally),1.81 per call) mbedtls_sha1/20 (256544234 (estimated locally),0.24 per call) 
+  Calls: __builtin_bswap32/27 (527533649 (estimated locally),0.49 per call) __builtin_bswap32/27 (527533649 (estimated locally),0.49 per call) __builtin_bswap32/27 (527533649 (estimated locally),0.49 per call) __builtin_bswap32/27 (527533649 (estimated locally),0.49 per call) __builtin_bswap32/27 (527533649 (estimated locally),0.49 per call) mbedtls_internal_sha1_process/17 (799293413 (estimated locally),0.74 per call) __builtin_bswap32/27 (799293413 (estimated locally),0.74 per call) __builtin_bswap32/27 (799293413 (estimated locally),0.74 per call) memset/25 (262422500 (estimated locally),0.24 per call) mbedtls_internal_sha1_process/17 (536870913 (estimated locally),0.50 per call) memset/25 (536870913 (estimated locally),0.50 per call) memset/25 (536870913 (estimated locally),0.50 per call) 
+mbedtls_sha1_update/18 (mbedtls_sha1_update) @06241b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:184379333 (estimated locally) body
+  Called by: mbedtls_sha1_self_test/24 (645700838 (estimated locally),1.82 per call) mbedtls_sha1_self_test/24 (1063004409 (estimated locally),3.00 per call) mbedtls_sha1/20 (524844999 (estimated locally),0.49 per call) 
+  Calls: memcpy/28 (19488414 (estimated locally),0.11 per call) mbedtls_internal_sha1_process/17 (1014686025 (estimated locally),5.50 per call) mbedtls_internal_sha1_process/17 (20078909 (estimated locally),0.11 per call) memcpy/28 (20078909 (estimated locally),0.11 per call) 
+mbedtls_internal_sha1_process/17 (mbedtls_internal_sha1_process) @062419d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_sha1_finish/19 (799293413 (estimated locally),0.74 per call) mbedtls_sha1_finish/19 (536870913 (estimated locally),0.50 per call) mbedtls_sha1_update/18 (1014686025 (estimated locally),5.50 per call) mbedtls_sha1_update/18 (20078909 (estimated locally),0.11 per call) 
+  Calls: mbedtls_platform_zeroize/26 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) __builtin_bswap32/27 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_sha1_starts/16 (mbedtls_sha1_starts) @06241888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_sha1_self_test/24 (729493365 (estimated locally),2.06 per call) mbedtls_sha1/20 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_sha1_clone/15 (mbedtls_sha1_clone) @06241738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_sha1_free/14 (mbedtls_sha1_free) @062415e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_sha1_self_test/24 (354617150 (estimated locally),1.00 per call) mbedtls_sha1/20 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_platform_zeroize/26 (741418729 (estimated locally),0.69 per call) 
+mbedtls_sha1_init/13 (mbedtls_sha1_init) @06241498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_sha1_self_test/24 (354617148 (estimated locally),1.00 per call) mbedtls_sha1/20 (1073741823 (estimated locally),1.00 per call) 
+  Calls: memset/25 (1073741824 (estimated locally),1.00 per call) 
+Trivially needed variables: sha1_test_sum/23 sha1_test_buflen/22 sha1_test_buf/21
+Removing variables:
+
+Final Symbol table:
+
+putchar/32 (__builtin_putchar) @064340a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/31 (__builtin_puts) @06434000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/30 (memcmp) @06368d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/29 (printf) @06368f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/28 (memcpy) @06368e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap32/27 (__builtin_bswap32) @06368dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/26 (mbedtls_platform_zeroize) @06368c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/25 (memset) @06368bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_sha1_self_test/24 (mbedtls_sha1_self_test) @06368b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:354617148 (estimated locally)
+  Called by: 
+  Calls: 
+sha1_test_sum/23 (sha1_test_sum) @06362360
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.sha1_test_sum (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+sha1_test_buflen/22 (sha1_test_buflen) @06362240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.sha1_test_buflen (implicit_section)
+  Aux: @06362360
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+sha1_test_buf/21 (sha1_test_buf) @063621f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.sha1_test_buf (implicit_section)
+  Aux: @06362240
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_sha1/20 (mbedtls_sha1) @06241dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1 (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_sha1_finish/19 (mbedtls_sha1_finish) @06241c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_sha1_update/18 (mbedtls_sha1_update) @06241b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:184379333 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_internal_sha1_process/17 (mbedtls_internal_sha1_process) @062419d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_internal_sha1_process (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_sha1_starts/16 (mbedtls_sha1_starts) @06241888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_starts (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_sha1_clone/15 (mbedtls_sha1_clone) @06241738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_clone (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_sha1_free/14 (mbedtls_sha1_free) @062415e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_sha1_init/13 (mbedtls_sha1_init) @06241498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_sha1_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 

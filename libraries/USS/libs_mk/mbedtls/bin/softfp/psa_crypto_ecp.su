@@ -1,0 +1,10 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/include/psa/crypto_extra.h:594:32:mbedtls_ecc_group_to_psa	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:45:14:mbedtls_psa_ecp_load_representation	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:204:14:mbedtls_psa_ecp_export_key	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:162:14:mbedtls_psa_ecp_import_key	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:255:14:mbedtls_psa_ecp_export_public_key	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:284:14:mbedtls_psa_ecp_generate_key	200	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:336:14:mbedtls_psa_ecdsa_sign_hash	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:407:14:mbedtls_psa_ecp_load_public_part	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:422:14:mbedtls_psa_ecdsa_verify_hash	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_ecp.c:492:14:mbedtls_psa_key_agreement_ecdh	256	static

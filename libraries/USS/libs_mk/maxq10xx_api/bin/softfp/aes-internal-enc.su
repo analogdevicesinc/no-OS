@@ -1,0 +1,4 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-internal-enc.c:23:13:rijndaelEncrypt	36	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-internal-enc.c:98:8:aes_encrypt_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-internal-enc.c:128:6:mxq_aes_encrypt	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-internal-enc.c:135:6:aes_encrypt_deinit	8	static

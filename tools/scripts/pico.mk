@@ -265,7 +265,7 @@ COMPILE.s=$(AS) $(BOOT_ASFLAGS) $(DEPFLAGS) -c $< -o $@
 CFLAGS += -mcpu=cortex-m0plus
 CFLAGS += -mthumb
 CFLAGS += -O0
-CFLAGS += -g3
+CFLAGS += -g -O0
 CFLAGS += -ffunction-sections
 CFLAGS += -fdata-sections
 CFLAGS += -std=gnu11

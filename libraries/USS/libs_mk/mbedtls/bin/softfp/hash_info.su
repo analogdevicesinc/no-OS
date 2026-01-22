@@ -1,0 +1,5 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hash_info.c:60:15:mbedtls_hash_info_get_size	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hash_info.c:72:15:mbedtls_hash_info_get_block_size	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hash_info.c:84:17:mbedtls_hash_info_psa_from_md	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hash_info.c:96:19:mbedtls_hash_info_md_from_psa	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/hash_info.c:108:5:mbedtls_md_error_from_psa	0	static

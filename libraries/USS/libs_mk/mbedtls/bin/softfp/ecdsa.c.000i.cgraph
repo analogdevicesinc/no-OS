@@ -1,0 +1,3944 @@
+Trivially needed symbols: mbedtls_ecdsa_free/168 mbedtls_ecdsa_init/167 mbedtls_ecdsa_from_keypair/166 mbedtls_ecdsa_genkey/165 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature/163 mbedtls_ecdsa_write_signature/162 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify/159 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_ext/157 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign/155 mbedtls_ecdsa_can_do/154 mbedtls_ecdsa_sign_restartable/153
+
+
+Initial Symbol table:
+
+mbedtls_ecp_keypair_free/204 (mbedtls_ecp_keypair_free) @06519d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_free/168 
+  Calls: 
+mbedtls_ecp_keypair_init/203 (mbedtls_ecp_keypair_init) @06519c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_init/167 
+  Calls: 
+mbedtls_ecp_copy/202 (mbedtls_ecp_copy) @06519bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_mpi_copy/201 (mbedtls_mpi_copy) @06519b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_group_copy/200 (mbedtls_ecp_group_copy) @06519a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_gen_keypair/199 (mbedtls_ecp_gen_keypair) @065199d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_ecp_group_load/198 (mbedtls_ecp_group_load) @06519930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_asn1_get_mpi/197 (mbedtls_asn1_get_mpi) @06519888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+mbedtls_asn1_get_tag/196 (mbedtls_asn1_get_tag) @065197e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+memcpy/195 (memcpy) @06519738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_tag/194 (mbedtls_asn1_write_tag) @06519690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_len/193 (mbedtls_asn1_write_len) @065195e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_mpi/192 (mbedtls_asn1_write_mpi) @06519540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_ecp_is_zero/191 (mbedtls_ecp_is_zero) @06519498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_ecp_muladd_restartable/190 (mbedtls_ecp_muladd_restartable) @065193f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_hmac_drbg_free/189 (mbedtls_hmac_drbg_free) @06519348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_random/188 (mbedtls_hmac_drbg_random) @065192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: mbedtls_ecdsa_sign_det_restartable/156 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/187 (mbedtls_hmac_drbg_seed_buf) @065191f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_write_binary/186 (mbedtls_mpi_write_binary) @06519150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_init/185 (mbedtls_hmac_drbg_init) @065190a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_md_info_from_type/184 (mbedtls_md_info_from_type) @06519000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_sub_mpi/183 (mbedtls_mpi_sub_mpi) @064e7f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_shift_r/182 (mbedtls_mpi_shift_r) @064e7e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_read_binary/181 (mbedtls_mpi_read_binary) @064e7dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_free/180 (mbedtls_mpi_free) @064e7d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_free/179 (mbedtls_ecp_point_free) @064e7c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_inv_mod/178 (mbedtls_mpi_inv_mod) @064e7bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_add_mpi/177 (mbedtls_mpi_add_mpi) @064e7b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mul_mpi/176 (mbedtls_mpi_mul_mpi) @064e7a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mod_mpi/175 (mbedtls_mpi_mod_mpi) @064e79d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_mul_restartable/174 (mbedtls_ecp_mul_restartable) @064e7930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_gen_privkey/173 (mbedtls_ecp_gen_privkey) @064e7888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_init/172 (mbedtls_mpi_init) @064e77e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_init/171 (mbedtls_ecp_point_init) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_mpi/170 (mbedtls_mpi_cmp_mpi) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 derive_mpi/152 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_int/169 (mbedtls_mpi_cmp_int) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_free/168 (mbedtls_ecdsa_free) @064e7540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: mbedtls_ecp_keypair_free/204 
+mbedtls_ecdsa_init/167 (mbedtls_ecdsa_init) @064e73f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064e7540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_keypair_init/203 
+mbedtls_ecdsa_from_keypair/166 (mbedtls_ecdsa_from_keypair) @064e72a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064e73f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_free/168 mbedtls_ecp_copy/202 mbedtls_mpi_copy/201 mbedtls_ecp_group_copy/200 
+mbedtls_ecdsa_genkey/165 (mbedtls_ecdsa_genkey) @064e7150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064e72a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_gen_keypair/199 mbedtls_ecp_group_load/198 
+mbedtls_ecdsa_read_signature_restartable/164 (mbedtls_ecdsa_read_signature_restartable) @064e7000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064e7150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature/163 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecdsa_verify_restartable/158 mbedtls_asn1_get_mpi/197 mbedtls_asn1_get_mpi/197 mbedtls_error_add/151 mbedtls_asn1_get_tag/196 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+mbedtls_ecdsa_read_signature/163 (mbedtls_ecdsa_read_signature) @064c8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064e7000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_read_signature_restartable/164 
+mbedtls_ecdsa_write_signature/162 (mbedtls_ecdsa_write_signature) @064c8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8dc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_write_signature_restartable/161 
+mbedtls_ecdsa_write_signature_restartable/161 (mbedtls_ecdsa_write_signature_restartable) @064c8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature/162 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 ecdsa_signature_to_asn1/160 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+ecdsa_signature_to_asn1/160 (ecdsa_signature_to_asn1) @064c89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064c8c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 
+  Calls: memcpy/195 mbedtls_asn1_write_tag/194 mbedtls_asn1_write_len/193 mbedtls_asn1_write_mpi/192 mbedtls_asn1_write_mpi/192 
+mbedtls_ecdsa_verify/159 (mbedtls_ecdsa_verify) @064c8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_verify_restartable/158 
+mbedtls_ecdsa_verify_restartable/158 (mbedtls_ecdsa_verify_restartable) @064c8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_verify/159 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_is_zero/191 mbedtls_ecp_muladd_restartable/190 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 derive_mpi/152 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 
+mbedtls_ecdsa_sign_det_ext/157 (mbedtls_ecdsa_sign_det_ext) @064c85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_det_restartable/156 
+mbedtls_ecdsa_sign_det_restartable/156 (mbedtls_ecdsa_sign_det_restartable) @064c8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c85e8
+  References: mbedtls_hmac_drbg_random/188 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_sign_det_ext/157 
+  Calls: mbedtls_mpi_free/180 mbedtls_hmac_drbg_free/189 mbedtls_ecdsa_sign_restartable/153 mbedtls_hmac_drbg_seed_buf/187 mbedtls_mpi_write_binary/186 derive_mpi/152 mbedtls_mpi_write_binary/186 mbedtls_hmac_drbg_init/185 mbedtls_mpi_init/172 mbedtls_md_info_from_type/184 
+mbedtls_ecdsa_sign/155 (mbedtls_ecdsa_sign) @064c8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8498
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_restartable/153 
+mbedtls_ecdsa_can_do/154 (mbedtls_ecdsa_can_do) @064c81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c8348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_sign_restartable/153 (mbedtls_ecdsa_sign_restartable) @064c80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @064c81f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign/155 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_add_mpi/177 mbedtls_mpi_mul_mpi/176 mbedtls_ecp_gen_privkey/173 derive_mpi/152 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_mul_restartable/174 mbedtls_ecp_gen_privkey/173 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 
+derive_mpi/152 (derive_mpi) @06437e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064c81f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 
+  Calls: mbedtls_mpi_sub_mpi/183 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_shift_r/182 mbedtls_mpi_read_binary/181 
+mbedtls_error_add/151 (mbedtls_error_add) @06437150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @064e7150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+_putchar_unlocked/150 (_putchar_unlocked) @06437d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/149 (_getchar_unlocked) @06437bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/148 (__sputc_r) @064379d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortSetBASEPRI/147 (vPortSetBASEPRI) @0630a690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ulPortRaiseBASEPRI/146 (ulPortRaiseBASEPRI) @0630a540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+vPortRaiseBASEPRI/145 (vPortRaiseBASEPRI) @0630a348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+xPortIsInsideInterrupt/144 (xPortIsInsideInterrupt) @0630a1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ucPortCountLeadingZeros/143 (ucPortCountLeadingZeros) @06302f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_CheckChar/142 (ITM_CheckChar) @063c51f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_ReceiveChar/141 (ITM_ReceiveChar) @063c50a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ITM_SendChar/140 (ITM_SendChar) @063bce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SysTick_Config/139 (SysTick_Config) @063bcdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+SCB_GetFPUType/138 (SCB_GetFPUType) @063bcc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Load/137 (ARM_MPU_Load) @063bcb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_OrderedMemcpy/136 (ARM_MPU_OrderedMemcpy) @063bc9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegionEx/135 (ARM_MPU_SetRegionEx) @063bc888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_SetRegion/134 (ARM_MPU_SetRegion) @063bc738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_ClrRegion/133 (ARM_MPU_ClrRegion) @063bc5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Disable/132 (ARM_MPU_Disable) @063bc498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+ARM_MPU_Enable/131 (ARM_MPU_Enable) @063bc348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SystemReset/130 (__NVIC_SystemReset) @063afb28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetVector/129 (__NVIC_GetVector) @063af9d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetVector/128 (__NVIC_SetVector) @063af888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_DecodePriority/127 (NVIC_DecodePriority) @063af738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+NVIC_EncodePriority/126 (NVIC_EncodePriority) @063af5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriority/125 (__NVIC_GetPriority) @063af498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriority/124 (__NVIC_SetPriority) @063af348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetActive/123 (__NVIC_GetActive) @063af1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_ClearPendingIRQ/122 (__NVIC_ClearPendingIRQ) @063af0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPendingIRQ/121 (__NVIC_SetPendingIRQ) @063a8f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPendingIRQ/120 (__NVIC_GetPendingIRQ) @063a8dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_DisableIRQ/119 (__NVIC_DisableIRQ) @063a8c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetEnableIRQ/118 (__NVIC_GetEnableIRQ) @063a8b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_EnableIRQ/117 (__NVIC_EnableIRQ) @063a89d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_GetPriorityGrouping/116 (__NVIC_GetPriorityGrouping) @063a8888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__NVIC_SetPriorityGrouping/115 (__NVIC_SetPriorityGrouping) @063a8738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMMLA/114 (__SMMLA) @06358930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB/113 (__QSUB) @063587e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD/112 (__QADD) @06358690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SEL/111 (__SEL) @06358540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLDX/110 (__SMLSLDX) @063583f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSLD/109 (__SMLSLD) @063582a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSDX/108 (__SMLSDX) @06358150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLSD/107 (__SMLSD) @06358000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSDX/106 (__SMUSDX) @06352e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUSD/105 (__SMUSD) @06352d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALDX/104 (__SMLALDX) @06352bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLALD/103 (__SMLALD) @06352a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLADX/102 (__SMLADX) @06352930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMLAD/101 (__SMLAD) @063527e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUADX/100 (__SMUADX) @06352690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SMUAD/99 (__SMUAD) @06352540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16_RORn/98 (__SXTAB16_RORn) @063523f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTAB16/97 (__SXTAB16) @063522a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16_RORn/96 (__SXTB16_RORn) @06352150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SXTB16/95 (__SXTB16) @06352000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTAB16/94 (__UXTAB16) @06349e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UXTB16/93 (__UXTB16) @06349d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USADA8/92 (__USADA8) @06349a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAD8/91 (__USAD8) @06349930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSAX/90 (__UHSAX) @063497e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSAX/89 (__UQSAX) @06349690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USAX/88 (__USAX) @06349540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSAX/87 (__SHSAX) @063493f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSAX/86 (__QSAX) @063492a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSAX/85 (__SSAX) @06349150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHASX/84 (__UHASX) @06349000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQASX/83 (__UQASX) @06341e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UASX/82 (__UASX) @06341d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHASX/81 (__SHASX) @06341bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QASX/80 (__QASX) @06341a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SASX/79 (__SASX) @06341930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB16/78 (__UHSUB16) @063417e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB16/77 (__UQSUB16) @06341690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB16/76 (__USUB16) @06341540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB16/75 (__SHSUB16) @063413f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB16/74 (__QSUB16) @063412a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB16/73 (__SSUB16) @06341150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD16/72 (__UHADD16) @06341000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD16/71 (__UQADD16) @0633ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD16/70 (__UADD16) @0633cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD16/69 (__SHADD16) @0633cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD16/68 (__QADD16) @0633ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD16/67 (__SADD16) @0633c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHSUB8/66 (__UHSUB8) @0633c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQSUB8/65 (__UQSUB8) @0633c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__USUB8/64 (__USUB8) @0633c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHSUB8/63 (__SHSUB8) @0633c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QSUB8/62 (__QSUB8) @0633c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SSUB8/61 (__SSUB8) @0633c150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UHADD8/60 (__UHADD8) @0633c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UQADD8/59 (__UQADD8) @06335e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__UADD8/58 (__UADD8) @06335d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SHADD8/57 (__SHADD8) @06335bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__QADD8/56 (__QADD8) @06335a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__SADD8/55 (__SADD8) @06335930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FPSCR/54 (__set_FPSCR) @063357e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FPSCR/53 (__get_FPSCR) @06335690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_FAULTMASK/52 (__set_FAULTMASK) @06335540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_FAULTMASK/51 (__get_FAULTMASK) @063353f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI_MAX/50 (__set_BASEPRI_MAX) @063352a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_BASEPRI/49 (__set_BASEPRI) @06335150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_BASEPRI/48 (__get_BASEPRI) @06335000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_fault_irq/47 (__disable_fault_irq) @06332e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_fault_irq/46 (__enable_fault_irq) @06332d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PRIMASK/45 (__set_PRIMASK) @06332bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PRIMASK/44 (__get_PRIMASK) @06332a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_MSP/43 (__set_MSP) @06332930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_MSP/42 (__get_MSP) @063327e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_PSP/41 (__set_PSP) @06332690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_PSP/40 (__get_PSP) @06332540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_xPSR/39 (__get_xPSR) @063323f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_APSR/38 (__get_APSR) @063322a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_IPSR/37 (__get_IPSR) @06332150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__set_CONTROL/36 (__set_CONTROL) @06332000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__get_CONTROL/35 (__get_CONTROL) @0632ce70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__disable_irq/34 (__disable_irq) @0632cd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__enable_irq/33 (__enable_irq) @0632cbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRT/32 (__STRT) @0632ca80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRHT/31 (__STRHT) @0632c930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STRBT/30 (__STRBT) @0632c7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRT/29 (__LDRT) @0632c690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRHT/28 (__LDRHT) @0632c540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDRBT/27 (__LDRBT) @0632c3f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RRX/26 (__RRX) @0632c2a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLREX/25 (__CLREX) @0632c000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXW/24 (__STREXW) @06321e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXH/23 (__STREXH) @06321d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__STREXB/22 (__STREXB) @06321bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXW/21 (__LDREXW) @06321a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXH/20 (__LDREXH) @06321930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__LDREXB/19 (__LDREXB) @063217e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__CLZ/18 (__CLZ) @06321690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__RBIT/17 (__RBIT) @06321540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ROR/16 (__ROR) @06321348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REVSH/15 (__REVSH) @063211f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV16/14 (__REV16) @063210a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__REV/13 (__REV) @062ebe70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DMB/12 (__DMB) @062ebd20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__DSB/11 (__DSB) @062ebbd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__ISB/10 (__ISB) @062eba80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__cmsis_start/9 (__cmsis_start) @062eb930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06278d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06278bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06278a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06278690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06278540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062783f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062782a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06278150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06278000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/150 _getchar_unlocked/149 __sputc_r/148 vPortSetBASEPRI/147 ulPortRaiseBASEPRI/146 vPortRaiseBASEPRI/145 xPortIsInsideInterrupt/144 ucPortCountLeadingZeros/143 ITM_CheckChar/142 ITM_ReceiveChar/141 ITM_SendChar/140 SysTick_Config/139 SCB_GetFPUType/138 ARM_MPU_Load/137 ARM_MPU_OrderedMemcpy/136 ARM_MPU_SetRegionEx/135 ARM_MPU_SetRegion/134 ARM_MPU_ClrRegion/133 ARM_MPU_Disable/132 ARM_MPU_Enable/131 __NVIC_SystemReset/130 __NVIC_GetVector/129 __NVIC_SetVector/128 NVIC_DecodePriority/127 NVIC_EncodePriority/126 __NVIC_GetPriority/125 __NVIC_SetPriority/124 __NVIC_GetActive/123 __NVIC_ClearPendingIRQ/122 __NVIC_SetPendingIRQ/121 __NVIC_GetPendingIRQ/120 __NVIC_DisableIRQ/119 __NVIC_GetEnableIRQ/118 __NVIC_EnableIRQ/117 __NVIC_GetPriorityGrouping/116 __NVIC_SetPriorityGrouping/115 __SMMLA/114 __QSUB/113 __QADD/112 __SEL/111 __SMLSLDX/110 __SMLSLD/109 __SMLSDX/108 __SMLSD/107 __SMUSDX/106 __SMUSD/105 __SMLALDX/104 __SMLALD/103 __SMLADX/102 __SMLAD/101 __SMUADX/100 __SMUAD/99 __SXTAB16_RORn/98 __SXTAB16/97 __SXTB16_RORn/96 __SXTB16/95 __UXTAB16/94 __UXTB16/93 __USADA8/92 __USAD8/91 __UHSAX/90 __UQSAX/89 __USAX/88 __SHSAX/87 __QSAX/86 __SSAX/85 __UHASX/84 __UQASX/83 __UASX/82 __SHASX/81 __QASX/80 __SASX/79 __UHSUB16/78 __UQSUB16/77 __USUB16/76 __SHSUB16/75 __QSUB16/74 __SSUB16/73 __UHADD16/72 __UQADD16/71 __UADD16/70 __SHADD16/69 __QADD16/68 __SADD16/67 __UHSUB8/66 __UQSUB8/65 __USUB8/64 __SHSUB8/63 __QSUB8/62 __SSUB8/61 __UHADD8/60 __UQADD8/59 __UADD8/58 __SHADD8/57 __QADD8/56 __SADD8/55 __set_FPSCR/54 __get_FPSCR/53 __set_FAULTMASK/52 __get_FAULTMASK/51 __set_BASEPRI_MAX/50 __set_BASEPRI/49 __get_BASEPRI/48 __disable_fault_irq/47 __enable_fault_irq/46 __set_PRIMASK/45 __get_PRIMASK/44 __set_MSP/43 __get_MSP/42 __set_PSP/41 __get_PSP/40 __get_xPSR/39 __get_APSR/38 __get_IPSR/37 __set_CONTROL/36 __get_CONTROL/35 __disable_irq/34 __enable_irq/33 __STRT/32 __STRHT/31 __STRBT/30 __LDRT/29 __LDRHT/28 __LDRBT/27 __RRX/26 __CLREX/25 __STREXW/24 __STREXH/23 __STREXB/22 __LDREXW/21 __LDREXH/20 __LDREXB/19 __CLZ/18 __RBIT/17 __ROR/16 __REVSH/15 __REV16/14 __REV/13 __DMB/12 __DSB/11 __ISB/10 __cmsis_start/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+mbedtls_ecp_keypair_free/204 (mbedtls_ecp_keypair_free) @06519d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_free/168 
+  Calls: 
+mbedtls_ecp_keypair_init/203 (mbedtls_ecp_keypair_init) @06519c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_init/167 
+  Calls: 
+mbedtls_ecp_copy/202 (mbedtls_ecp_copy) @06519bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_mpi_copy/201 (mbedtls_mpi_copy) @06519b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_group_copy/200 (mbedtls_ecp_group_copy) @06519a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_gen_keypair/199 (mbedtls_ecp_gen_keypair) @065199d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_ecp_group_load/198 (mbedtls_ecp_group_load) @06519930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_asn1_get_mpi/197 (mbedtls_asn1_get_mpi) @06519888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+mbedtls_asn1_get_tag/196 (mbedtls_asn1_get_tag) @065197e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+memcpy/195 (memcpy) @06519738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_tag/194 (mbedtls_asn1_write_tag) @06519690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_len/193 (mbedtls_asn1_write_len) @065195e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_mpi/192 (mbedtls_asn1_write_mpi) @06519540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_ecp_is_zero/191 (mbedtls_ecp_is_zero) @06519498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_ecp_muladd_restartable/190 (mbedtls_ecp_muladd_restartable) @065193f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_hmac_drbg_free/189 (mbedtls_hmac_drbg_free) @06519348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_random/188 (mbedtls_hmac_drbg_random) @065192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: mbedtls_ecdsa_sign_det_restartable/156 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/187 (mbedtls_hmac_drbg_seed_buf) @065191f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_write_binary/186 (mbedtls_mpi_write_binary) @06519150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_init/185 (mbedtls_hmac_drbg_init) @065190a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_md_info_from_type/184 (mbedtls_md_info_from_type) @06519000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_sub_mpi/183 (mbedtls_mpi_sub_mpi) @064e7f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_shift_r/182 (mbedtls_mpi_shift_r) @064e7e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_read_binary/181 (mbedtls_mpi_read_binary) @064e7dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_free/180 (mbedtls_mpi_free) @064e7d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_free/179 (mbedtls_ecp_point_free) @064e7c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_inv_mod/178 (mbedtls_mpi_inv_mod) @064e7bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_add_mpi/177 (mbedtls_mpi_add_mpi) @064e7b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mul_mpi/176 (mbedtls_mpi_mul_mpi) @064e7a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mod_mpi/175 (mbedtls_mpi_mod_mpi) @064e79d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_mul_restartable/174 (mbedtls_ecp_mul_restartable) @064e7930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_gen_privkey/173 (mbedtls_ecp_gen_privkey) @064e7888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_init/172 (mbedtls_mpi_init) @064e77e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_init/171 (mbedtls_ecp_point_init) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_mpi/170 (mbedtls_mpi_cmp_mpi) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 derive_mpi/152 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_int/169 (mbedtls_mpi_cmp_int) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_free/168 (mbedtls_ecdsa_free) @064e7540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: mbedtls_ecp_keypair_free/204 
+mbedtls_ecdsa_init/167 (mbedtls_ecdsa_init) @064e73f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_keypair_init/203 
+mbedtls_ecdsa_from_keypair/166 (mbedtls_ecdsa_from_keypair) @064e72a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_free/168 mbedtls_ecp_copy/202 mbedtls_mpi_copy/201 mbedtls_ecp_group_copy/200 
+mbedtls_ecdsa_genkey/165 (mbedtls_ecdsa_genkey) @064e7150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_gen_keypair/199 mbedtls_ecp_group_load/198 
+mbedtls_ecdsa_read_signature_restartable/164 (mbedtls_ecdsa_read_signature_restartable) @064e7000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature/163 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecdsa_verify_restartable/158 mbedtls_asn1_get_mpi/197 mbedtls_asn1_get_mpi/197 mbedtls_error_add/151 mbedtls_asn1_get_tag/196 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+mbedtls_ecdsa_read_signature/163 (mbedtls_ecdsa_read_signature) @064c8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_read_signature_restartable/164 
+mbedtls_ecdsa_write_signature/162 (mbedtls_ecdsa_write_signature) @064c8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_write_signature_restartable/161 
+mbedtls_ecdsa_write_signature_restartable/161 (mbedtls_ecdsa_write_signature_restartable) @064c8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature/162 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 ecdsa_signature_to_asn1/160 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+ecdsa_signature_to_asn1/160 (ecdsa_signature_to_asn1) @064c89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 
+  Calls: memcpy/195 mbedtls_asn1_write_tag/194 mbedtls_asn1_write_len/193 mbedtls_asn1_write_mpi/192 mbedtls_asn1_write_mpi/192 
+mbedtls_ecdsa_verify/159 (mbedtls_ecdsa_verify) @064c8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_verify_restartable/158 
+mbedtls_ecdsa_verify_restartable/158 (mbedtls_ecdsa_verify_restartable) @064c8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_verify/159 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_is_zero/191 mbedtls_ecp_muladd_restartable/190 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 derive_mpi/152 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 
+mbedtls_ecdsa_sign_det_ext/157 (mbedtls_ecdsa_sign_det_ext) @064c85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_det_restartable/156 
+mbedtls_ecdsa_sign_det_restartable/156 (mbedtls_ecdsa_sign_det_restartable) @064c8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_hmac_drbg_random/188 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_sign_det_ext/157 
+  Calls: mbedtls_mpi_free/180 mbedtls_hmac_drbg_free/189 mbedtls_ecdsa_sign_restartable/153 mbedtls_hmac_drbg_seed_buf/187 mbedtls_mpi_write_binary/186 derive_mpi/152 mbedtls_mpi_write_binary/186 mbedtls_hmac_drbg_init/185 mbedtls_mpi_init/172 mbedtls_md_info_from_type/184 
+mbedtls_ecdsa_sign/155 (mbedtls_ecdsa_sign) @064c8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_restartable/153 
+mbedtls_ecdsa_can_do/154 (mbedtls_ecdsa_can_do) @064c81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_sign_restartable/153 (mbedtls_ecdsa_sign_restartable) @064c80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign/155 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_add_mpi/177 mbedtls_mpi_mul_mpi/176 mbedtls_ecp_gen_privkey/173 derive_mpi/152 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_mul_restartable/174 mbedtls_ecp_gen_privkey/173 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 
+derive_mpi/152 (derive_mpi) @06437e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 
+  Calls: mbedtls_mpi_sub_mpi/183 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_shift_r/182 mbedtls_mpi_read_binary/181 
+mbedtls_error_add/151 (mbedtls_error_add) @06437150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+
+
+Initial Symbol table:
+
+mbedtls_ecp_keypair_free/204 (mbedtls_ecp_keypair_free) @06519d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_free/168 
+  Calls: 
+mbedtls_ecp_keypair_init/203 (mbedtls_ecp_keypair_init) @06519c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_init/167 
+  Calls: 
+mbedtls_ecp_copy/202 (mbedtls_ecp_copy) @06519bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_mpi_copy/201 (mbedtls_mpi_copy) @06519b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_group_copy/200 (mbedtls_ecp_group_copy) @06519a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_gen_keypair/199 (mbedtls_ecp_gen_keypair) @065199d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_ecp_group_load/198 (mbedtls_ecp_group_load) @06519930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_asn1_get_mpi/197 (mbedtls_asn1_get_mpi) @06519888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+mbedtls_asn1_get_tag/196 (mbedtls_asn1_get_tag) @065197e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+memcpy/195 (memcpy) @06519738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_tag/194 (mbedtls_asn1_write_tag) @06519690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_len/193 (mbedtls_asn1_write_len) @065195e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_mpi/192 (mbedtls_asn1_write_mpi) @06519540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_ecp_is_zero/191 (mbedtls_ecp_is_zero) @06519498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_ecp_muladd_restartable/190 (mbedtls_ecp_muladd_restartable) @065193f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_hmac_drbg_free/189 (mbedtls_hmac_drbg_free) @06519348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_random/188 (mbedtls_hmac_drbg_random) @065192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: mbedtls_ecdsa_sign_det_restartable/156 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/187 (mbedtls_hmac_drbg_seed_buf) @065191f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_write_binary/186 (mbedtls_mpi_write_binary) @06519150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_init/185 (mbedtls_hmac_drbg_init) @065190a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_md_info_from_type/184 (mbedtls_md_info_from_type) @06519000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_sub_mpi/183 (mbedtls_mpi_sub_mpi) @064e7f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_shift_r/182 (mbedtls_mpi_shift_r) @064e7e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_read_binary/181 (mbedtls_mpi_read_binary) @064e7dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_free/180 (mbedtls_mpi_free) @064e7d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_free/179 (mbedtls_ecp_point_free) @064e7c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_inv_mod/178 (mbedtls_mpi_inv_mod) @064e7bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_add_mpi/177 (mbedtls_mpi_add_mpi) @064e7b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mul_mpi/176 (mbedtls_mpi_mul_mpi) @064e7a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mod_mpi/175 (mbedtls_mpi_mod_mpi) @064e79d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_mul_restartable/174 (mbedtls_ecp_mul_restartable) @064e7930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_gen_privkey/173 (mbedtls_ecp_gen_privkey) @064e7888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_init/172 (mbedtls_mpi_init) @064e77e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_init/171 (mbedtls_ecp_point_init) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_mpi/170 (mbedtls_mpi_cmp_mpi) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 derive_mpi/152 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_int/169 (mbedtls_mpi_cmp_int) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_free/168 (mbedtls_ecdsa_free) @064e7540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: mbedtls_ecp_keypair_free/204 
+mbedtls_ecdsa_init/167 (mbedtls_ecdsa_init) @064e73f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_keypair_init/203 
+mbedtls_ecdsa_from_keypair/166 (mbedtls_ecdsa_from_keypair) @064e72a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_free/168 mbedtls_ecp_copy/202 mbedtls_mpi_copy/201 mbedtls_ecp_group_copy/200 
+mbedtls_ecdsa_genkey/165 (mbedtls_ecdsa_genkey) @064e7150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_gen_keypair/199 mbedtls_ecp_group_load/198 
+mbedtls_ecdsa_read_signature_restartable/164 (mbedtls_ecdsa_read_signature_restartable) @064e7000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature/163 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecdsa_verify_restartable/158 mbedtls_asn1_get_mpi/197 mbedtls_asn1_get_mpi/197 mbedtls_error_add/151 mbedtls_asn1_get_tag/196 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+mbedtls_ecdsa_read_signature/163 (mbedtls_ecdsa_read_signature) @064c8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_read_signature_restartable/164 
+mbedtls_ecdsa_write_signature/162 (mbedtls_ecdsa_write_signature) @064c8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_write_signature_restartable/161 
+mbedtls_ecdsa_write_signature_restartable/161 (mbedtls_ecdsa_write_signature_restartable) @064c8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature/162 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 ecdsa_signature_to_asn1/160 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+ecdsa_signature_to_asn1/160 (ecdsa_signature_to_asn1) @064c89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 
+  Calls: memcpy/195 mbedtls_asn1_write_tag/194 mbedtls_asn1_write_len/193 mbedtls_asn1_write_mpi/192 mbedtls_asn1_write_mpi/192 
+mbedtls_ecdsa_verify/159 (mbedtls_ecdsa_verify) @064c8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_verify_restartable/158 
+mbedtls_ecdsa_verify_restartable/158 (mbedtls_ecdsa_verify_restartable) @064c8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_verify/159 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_is_zero/191 mbedtls_ecp_muladd_restartable/190 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 derive_mpi/152 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 
+mbedtls_ecdsa_sign_det_ext/157 (mbedtls_ecdsa_sign_det_ext) @064c85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_det_restartable/156 
+mbedtls_ecdsa_sign_det_restartable/156 (mbedtls_ecdsa_sign_det_restartable) @064c8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_hmac_drbg_random/188 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_sign_det_ext/157 
+  Calls: mbedtls_mpi_free/180 mbedtls_hmac_drbg_free/189 mbedtls_ecdsa_sign_restartable/153 mbedtls_hmac_drbg_seed_buf/187 mbedtls_mpi_write_binary/186 derive_mpi/152 mbedtls_mpi_write_binary/186 mbedtls_hmac_drbg_init/185 mbedtls_mpi_init/172 mbedtls_md_info_from_type/184 
+mbedtls_ecdsa_sign/155 (mbedtls_ecdsa_sign) @064c8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_restartable/153 
+mbedtls_ecdsa_can_do/154 (mbedtls_ecdsa_can_do) @064c81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_sign_restartable/153 (mbedtls_ecdsa_sign_restartable) @064c80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign/155 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_add_mpi/177 mbedtls_mpi_mul_mpi/176 mbedtls_ecp_gen_privkey/173 derive_mpi/152 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_mul_restartable/174 mbedtls_ecp_gen_privkey/173 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 
+derive_mpi/152 (derive_mpi) @06437e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 
+  Calls: mbedtls_mpi_sub_mpi/183 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_shift_r/182 mbedtls_mpi_read_binary/181 
+mbedtls_error_add/151 (mbedtls_error_add) @06437150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+mbedtls_ecp_keypair_free/204 (mbedtls_ecp_keypair_free) @06519d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_free/168 
+  Calls: 
+mbedtls_ecp_keypair_init/203 (mbedtls_ecp_keypair_init) @06519c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_init/167 
+  Calls: 
+mbedtls_ecp_copy/202 (mbedtls_ecp_copy) @06519bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_mpi_copy/201 (mbedtls_mpi_copy) @06519b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_group_copy/200 (mbedtls_ecp_group_copy) @06519a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: 
+mbedtls_ecp_gen_keypair/199 (mbedtls_ecp_gen_keypair) @065199d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_ecp_group_load/198 (mbedtls_ecp_group_load) @06519930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 
+  Calls: 
+mbedtls_asn1_get_mpi/197 (mbedtls_asn1_get_mpi) @06519888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+mbedtls_asn1_get_tag/196 (mbedtls_asn1_get_tag) @065197e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+memcpy/195 (memcpy) @06519738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_tag/194 (mbedtls_asn1_write_tag) @06519690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_len/193 (mbedtls_asn1_write_len) @065195e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_asn1_write_mpi/192 (mbedtls_asn1_write_mpi) @06519540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 ecdsa_signature_to_asn1/160 
+  Calls: 
+mbedtls_ecp_is_zero/191 (mbedtls_ecp_is_zero) @06519498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_ecp_muladd_restartable/190 (mbedtls_ecp_muladd_restartable) @065193f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 
+  Calls: 
+mbedtls_hmac_drbg_free/189 (mbedtls_hmac_drbg_free) @06519348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_random/188 (mbedtls_hmac_drbg_random) @065192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: mbedtls_ecdsa_sign_det_restartable/156 (addr) 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/187 (mbedtls_hmac_drbg_seed_buf) @065191f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_write_binary/186 (mbedtls_mpi_write_binary) @06519150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_hmac_drbg_init/185 (mbedtls_hmac_drbg_init) @065190a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_md_info_from_type/184 (mbedtls_md_info_from_type) @06519000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 
+  Calls: 
+mbedtls_mpi_sub_mpi/183 (mbedtls_mpi_sub_mpi) @064e7f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_shift_r/182 (mbedtls_mpi_shift_r) @064e7e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_read_binary/181 (mbedtls_mpi_read_binary) @064e7dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: derive_mpi/152 
+  Calls: 
+mbedtls_mpi_free/180 (mbedtls_mpi_free) @064e7d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_free/179 (mbedtls_ecp_point_free) @064e7c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_inv_mod/178 (mbedtls_mpi_inv_mod) @064e7bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_add_mpi/177 (mbedtls_mpi_add_mpi) @064e7b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mul_mpi/176 (mbedtls_mpi_mul_mpi) @064e7a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_mod_mpi/175 (mbedtls_mpi_mod_mpi) @064e79d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_mul_restartable/174 (mbedtls_ecp_mul_restartable) @064e7930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_gen_privkey/173 (mbedtls_ecp_gen_privkey) @064e7888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_init/172 (mbedtls_mpi_init) @064e77e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecp_point_init/171 (mbedtls_ecp_point_init) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_mpi/170 (mbedtls_mpi_cmp_mpi) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 derive_mpi/152 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_mpi_cmp_int/169 (mbedtls_mpi_cmp_int) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_free/168 (mbedtls_ecdsa_free) @064e7540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_from_keypair/166 
+  Calls: mbedtls_ecp_keypair_free/204 
+mbedtls_ecdsa_init/167 (mbedtls_ecdsa_init) @064e73f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_keypair_init/203 
+mbedtls_ecdsa_from_keypair/166 (mbedtls_ecdsa_from_keypair) @064e72a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_free/168 mbedtls_ecp_copy/202 mbedtls_mpi_copy/201 mbedtls_ecp_group_copy/200 
+mbedtls_ecdsa_genkey/165 (mbedtls_ecdsa_genkey) @064e7150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecp_gen_keypair/199 mbedtls_ecp_group_load/198 
+mbedtls_ecdsa_read_signature_restartable/164 (mbedtls_ecdsa_read_signature_restartable) @064e7000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature/163 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecdsa_verify_restartable/158 mbedtls_asn1_get_mpi/197 mbedtls_asn1_get_mpi/197 mbedtls_error_add/151 mbedtls_asn1_get_tag/196 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+mbedtls_ecdsa_read_signature/163 (mbedtls_ecdsa_read_signature) @064c8dc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_read_signature_restartable/164 
+mbedtls_ecdsa_write_signature/162 (mbedtls_ecdsa_write_signature) @064c8c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_write_signature_restartable/161 
+mbedtls_ecdsa_write_signature_restartable/161 (mbedtls_ecdsa_write_signature_restartable) @064c8b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature/162 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 ecdsa_signature_to_asn1/160 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_mpi_init/172 mbedtls_mpi_init/172 
+ecdsa_signature_to_asn1/160 (ecdsa_signature_to_asn1) @064c89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 
+  Calls: memcpy/195 mbedtls_asn1_write_tag/194 mbedtls_asn1_write_len/193 mbedtls_asn1_write_mpi/192 mbedtls_asn1_write_mpi/192 
+mbedtls_ecdsa_verify/159 (mbedtls_ecdsa_verify) @064c8888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_verify_restartable/158 
+mbedtls_ecdsa_verify_restartable/158 (mbedtls_ecdsa_verify_restartable) @064c8738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 mbedtls_ecdsa_verify/159 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_is_zero/191 mbedtls_ecp_muladd_restartable/190 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 derive_mpi/152 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 
+mbedtls_ecdsa_sign_det_ext/157 (mbedtls_ecdsa_sign_det_ext) @064c85e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_det_restartable/156 
+mbedtls_ecdsa_sign_det_restartable/156 (mbedtls_ecdsa_sign_det_restartable) @064c8498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_hmac_drbg_random/188 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 mbedtls_ecdsa_sign_det_ext/157 
+  Calls: mbedtls_mpi_free/180 mbedtls_hmac_drbg_free/189 mbedtls_ecdsa_sign_restartable/153 mbedtls_hmac_drbg_seed_buf/187 mbedtls_mpi_write_binary/186 derive_mpi/152 mbedtls_mpi_write_binary/186 mbedtls_hmac_drbg_init/185 mbedtls_mpi_init/172 mbedtls_md_info_from_type/184 
+mbedtls_ecdsa_sign/155 (mbedtls_ecdsa_sign) @064c8348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_restartable/153 
+mbedtls_ecdsa_can_do/154 (mbedtls_ecdsa_can_do) @064c81f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_restartable/153 
+  Calls: 
+mbedtls_ecdsa_sign_restartable/153 (mbedtls_ecdsa_sign_restartable) @064c80a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign/155 
+  Calls: mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_mpi_free/180 mbedtls_ecp_point_free/179 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_inv_mod/178 mbedtls_mpi_mod_mpi/175 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_mul_mpi/176 mbedtls_mpi_add_mpi/177 mbedtls_mpi_mul_mpi/176 mbedtls_ecp_gen_privkey/173 derive_mpi/152 mbedtls_mpi_cmp_int/169 mbedtls_mpi_mod_mpi/175 mbedtls_ecp_mul_restartable/174 mbedtls_ecp_gen_privkey/173 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_mpi_init/172 mbedtls_ecp_point_init/171 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_cmp_int/169 mbedtls_ecdsa_can_do/154 
+derive_mpi/152 (derive_mpi) @06437e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_verify_restartable/158 mbedtls_ecdsa_sign_det_restartable/156 mbedtls_ecdsa_sign_restartable/153 
+  Calls: mbedtls_mpi_sub_mpi/183 mbedtls_mpi_cmp_mpi/170 mbedtls_mpi_shift_r/182 mbedtls_mpi_read_binary/181 
+mbedtls_error_add/151 (mbedtls_error_add) @06437150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+mbedtls_ecp_keypair_free/204 (mbedtls_ecp_keypair_free) @06519d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_free/168 (741418729 (estimated locally),0.69 per call) 
+  Calls: 
+mbedtls_ecp_keypair_init/203 (mbedtls_ecp_keypair_init) @06519c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_init/167 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_ecp_copy/202 (mbedtls_ecp_copy) @06519bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 (177167400 (estimated locally),0.16 per call) 
+  Calls: 
+mbedtls_mpi_copy/201 (mbedtls_mpi_copy) @06519b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 (536870913 (estimated locally),0.50 per call) 
+  Calls: 
+mbedtls_ecp_group_copy/200 (mbedtls_ecp_group_copy) @06519a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_from_keypair/166 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_ecp_gen_keypair/199 (mbedtls_ecp_gen_keypair) @065199d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 (524845000 (estimated locally),0.49 per call) 
+  Calls: 
+mbedtls_ecp_group_load/198 (mbedtls_ecp_group_load) @06519930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_genkey/165 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_asn1_get_mpi/197 (mbedtls_asn1_get_mpi) @06519888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 (329978448 (estimated locally),0.31 per call) mbedtls_ecdsa_read_signature_restartable/164 (675078663 (estimated locally),0.63 per call) 
+  Calls: 
+mbedtls_asn1_get_tag/196 (mbedtls_asn1_get_tag) @065197e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+memcpy/195 (memcpy) @06519738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 (150349293 (estimated locally),0.14 per call) 
+  Calls: 
+mbedtls_asn1_write_tag/194 (mbedtls_asn1_write_tag) @06519690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 (208526167 (estimated locally),0.19 per call) 
+  Calls: 
+mbedtls_asn1_write_len/193 (mbedtls_asn1_write_len) @065195e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 (360086630 (estimated locally),0.34 per call) 
+  Calls: 
+mbedtls_asn1_write_mpi/192 (mbedtls_asn1_write_mpi) @06519540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: ecdsa_signature_to_asn1/160 (621803889 (estimated locally),0.58 per call) ecdsa_signature_to_asn1/160 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_ecp_is_zero/191 (mbedtls_ecp_is_zero) @06519498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (375142 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_ecp_muladd_restartable/190 (mbedtls_ecp_muladd_restartable) @065193f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (767476 (estimated locally),0.00 per call) 
+  Calls: 
+mbedtls_hmac_drbg_free/189 (mbedtls_hmac_drbg_free) @06519348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 (1063970776 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_hmac_drbg_random/188 (mbedtls_hmac_drbg_random) @065192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: mbedtls_ecdsa_sign_det_restartable/156 (addr) 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/187 (mbedtls_hmac_drbg_seed_buf) @065191f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 (124257692 (estimated locally),0.12 per call) 
+  Calls: 
+mbedtls_mpi_write_binary/186 (mbedtls_mpi_write_binary) @06519150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 (254209682 (estimated locally),0.24 per call) mbedtls_ecdsa_sign_det_restartable/156 (1063970775 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_hmac_drbg_init/185 (mbedtls_hmac_drbg_init) @065190a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 (1063970775 (estimated locally),0.99 per call) 
+  Calls: 
+mbedtls_md_info_from_type/184 (mbedtls_md_info_from_type) @06519000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mpi_sub_mpi/183 (mbedtls_mpi_sub_mpi) @064e7f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: derive_mpi/152 (243983606 (estimated locally),0.23 per call) 
+  Calls: 
+mbedtls_mpi_shift_r/182 (mbedtls_mpi_shift_r) @064e7e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: derive_mpi/152 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+mbedtls_mpi_read_binary/181 (mbedtls_mpi_read_binary) @064e7dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: derive_mpi/152 (1073741823 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_mpi_free/180 (mbedtls_mpi_free) @064e7d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_read_signature_restartable/164 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_write_signature_restartable/161 (1063970777 (estimated locally),0.99 per call) mbedtls_ecdsa_write_signature_restartable/161 (1063970777 (estimated locally),0.99 per call) mbedtls_ecdsa_verify_restartable/158 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_verify_restartable/158 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_verify_restartable/158 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_verify_restartable/158 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_sign_det_restartable/156 (1063970776 (estimated locally),0.99 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) 
+  Calls: 
+mbedtls_ecp_point_free/179 (mbedtls_ecp_point_free) @064e7c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) 
+  Calls: 
+mbedtls_mpi_inv_mod/178 (mbedtls_mpi_inv_mod) @064e7bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (27504818 (estimated locally),0.03 per call) mbedtls_ecdsa_sign_restartable/153 (17585263 (estimated locally),0.10 per call) 
+  Calls: 
+mbedtls_mpi_add_mpi/177 (mbedtls_mpi_add_mpi) @064e7b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 (19065341 (estimated locally),0.10 per call) 
+  Calls: 
+mbedtls_mpi_mul_mpi/176 (mbedtls_mpi_mul_mpi) @064e7a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (3212198 (estimated locally),0.00 per call) mbedtls_ecdsa_verify_restartable/158 (13444355 (estimated locally),0.01 per call) mbedtls_ecdsa_sign_restartable/153 (17233558 (estimated locally),0.09 per call) mbedtls_ecdsa_sign_restartable/153 (18310353 (estimated locally),0.10 per call) mbedtls_ecdsa_sign_restartable/153 (18684034 (estimated locally),0.10 per call) mbedtls_ecdsa_sign_restartable/153 (19454429 (estimated locally),0.11 per call) 
+  Calls: 
+mbedtls_mpi_mod_mpi/175 (mbedtls_mpi_mod_mpi) @064e79d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (183370 (estimated locally),0.00 per call) mbedtls_ecdsa_verify_restartable/158 (1570123 (estimated locally),0.00 per call) mbedtls_ecdsa_verify_restartable/158 (6571601 (estimated locally),0.01 per call) mbedtls_ecdsa_sign_restartable/153 (16888886 (estimated locally),0.09 per call) mbedtls_ecdsa_sign_restartable/153 (17944146 (estimated locally),0.10 per call) mbedtls_ecdsa_sign_restartable/153 (941466369 (estimated locally),5.11 per call) 
+  Calls: 
+mbedtls_ecp_mul_restartable/174 (mbedtls_ecp_mul_restartable) @064e7930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 (962644549 (estimated locally),5.22 per call) 
+  Calls: 
+mbedtls_ecp_gen_privkey/173 (mbedtls_ecp_gen_privkey) @064e7888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_sign_restartable/153 (19851458 (estimated locally),0.11 per call) mbedtls_ecdsa_sign_restartable/153 (984299130 (estimated locally),5.34 per call) 
+  Calls: 
+mbedtls_mpi_init/172 (mbedtls_mpi_init) @064e77e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 (1073741823 (estimated locally),1.00 per call) mbedtls_ecdsa_read_signature_restartable/164 (1073741823 (estimated locally),1.00 per call) mbedtls_ecdsa_write_signature_restartable/161 (1063970777 (estimated locally),0.99 per call) mbedtls_ecdsa_write_signature_restartable/161 (1063970777 (estimated locally),0.99 per call) mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_sign_det_restartable/156 (1063970775 (estimated locally),0.99 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) 
+  Calls: 
+mbedtls_ecp_point_init/171 (mbedtls_ecp_point_init) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_sign_restartable/153 (172766831 (estimated locally),0.94 per call) 
+  Calls: 
+mbedtls_mpi_cmp_mpi/170 (mbedtls_mpi_cmp_mpi) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (89631 (estimated locally),0.00 per call) mbedtls_ecdsa_verify_restartable/158 (140957129 (estimated locally),0.13 per call) mbedtls_ecdsa_verify_restartable/158 (609737564 (estimated locally),0.57 per call) mbedtls_ecdsa_sign_restartable/153 (178073418 (estimated locally),0.97 per call) derive_mpi/152 (588195767 (estimated locally),0.55 per call) 
+  Calls: 
+mbedtls_mpi_cmp_int/169 (mbedtls_mpi_cmp_int) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_ecdsa_verify_restartable/158 (243407235 (estimated locally),0.23 per call) mbedtls_ecdsa_verify_restartable/158 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_sign_restartable/153 (16551109 (estimated locally),0.09 per call) mbedtls_ecdsa_sign_restartable/153 (920754109 (estimated locally),5.00 per call) mbedtls_ecdsa_sign_restartable/153 (180711811 (estimated locally),0.98 per call) 
+  Calls: 
+mbedtls_ecdsa_free/168 (mbedtls_ecdsa_free) @064e7540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_ecdsa_from_keypair/166 (985158125 (estimated locally),0.92 per call) 
+  Calls: mbedtls_ecp_keypair_free/204 (741418729 (estimated locally),0.69 per call) 
+mbedtls_ecdsa_init/167 (mbedtls_ecdsa_init) @064e73f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecp_keypair_init/203 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_from_keypair/166 (mbedtls_ecdsa_from_keypair) @064e72a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecdsa_free/168 (985158125 (estimated locally),0.92 per call) mbedtls_ecp_copy/202 (177167400 (estimated locally),0.16 per call) mbedtls_mpi_copy/201 (536870913 (estimated locally),0.50 per call) mbedtls_ecp_group_copy/200 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_genkey/165 (mbedtls_ecdsa_genkey) @064e7150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecp_gen_keypair/199 (524845000 (estimated locally),0.49 per call) mbedtls_ecp_group_load/198 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_read_signature_restartable/164 (mbedtls_ecdsa_read_signature_restartable) @064e7000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_ecdsa_read_signature/163 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_mpi_free/180 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_free/180 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_verify_restartable/158 (161293464 (estimated locally),0.15 per call) mbedtls_asn1_get_mpi/197 (329978448 (estimated locally),0.31 per call) mbedtls_asn1_get_mpi/197 (675078663 (estimated locally),0.63 per call) mbedtls_asn1_get_tag/196 (1073741823 (estimated locally),1.00 per call) mbedtls_mpi_init/172 (1073741823 (estimated locally),1.00 per call) mbedtls_mpi_init/172 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_read_signature/163 (mbedtls_ecdsa_read_signature) @064c8dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecdsa_read_signature_restartable/164 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_write_signature/162 (mbedtls_ecdsa_write_signature) @064c8c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecdsa_write_signature_restartable/161 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_write_signature_restartable/161 (mbedtls_ecdsa_write_signature_restartable) @064c8b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_ecdsa_write_signature/162 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_mpi_free/180 (1063970777 (estimated locally),0.99 per call) mbedtls_mpi_free/180 (1063970777 (estimated locally),0.99 per call) ecdsa_signature_to_asn1/160 (520068912 (estimated locally),0.48 per call) mbedtls_ecdsa_sign_det_restartable/156 (1063970777 (estimated locally),0.99 per call) mbedtls_mpi_init/172 (1063970777 (estimated locally),0.99 per call) mbedtls_mpi_init/172 (1063970777 (estimated locally),0.99 per call) 
+ecdsa_signature_to_asn1/160 (ecdsa_signature_to_asn1) @064c89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 (520068912 (estimated locally),0.48 per call) 
+  Calls: memcpy/195 (150349293 (estimated locally),0.14 per call) mbedtls_asn1_write_tag/194 (208526167 (estimated locally),0.19 per call) mbedtls_asn1_write_len/193 (360086630 (estimated locally),0.34 per call) mbedtls_asn1_write_mpi/192 (621803889 (estimated locally),0.58 per call) mbedtls_asn1_write_mpi/192 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_verify/159 (mbedtls_ecdsa_verify) @064c8888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_verify_restartable/158 (mbedtls_ecdsa_verify_restartable) @064c8738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_ecdsa_read_signature_restartable/164 (161293464 (estimated locally),0.15 per call) mbedtls_ecdsa_verify/159 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_mpi_free/180 (1052905484 (estimated locally),0.98 per call) mbedtls_mpi_free/180 (1052905484 (estimated locally),0.98 per call) mbedtls_mpi_free/180 (1052905484 (estimated locally),0.98 per call) mbedtls_mpi_free/180 (1052905484 (estimated locally),0.98 per call) mbedtls_ecp_point_free/179 (1052905484 (estimated locally),0.98 per call) mbedtls_mpi_cmp_mpi/170 (89631 (estimated locally),0.00 per call) mbedtls_mpi_mod_mpi/175 (183370 (estimated locally),0.00 per call) mbedtls_ecp_is_zero/191 (375142 (estimated locally),0.00 per call) mbedtls_ecp_muladd_restartable/190 (767476 (estimated locally),0.00 per call) mbedtls_mpi_mod_mpi/175 (1570123 (estimated locally),0.00 per call) mbedtls_mpi_mul_mpi/176 (3212198 (estimated locally),0.00 per call) mbedtls_mpi_mod_mpi/175 (6571601 (estimated locally),0.01 per call) mbedtls_mpi_mul_mpi/176 (13444355 (estimated locally),0.01 per call) mbedtls_mpi_inv_mod/178 (27504818 (estimated locally),0.03 per call) derive_mpi/152 (56270086 (estimated locally),0.05 per call) mbedtls_mpi_cmp_mpi/170 (140957129 (estimated locally),0.13 per call) mbedtls_mpi_cmp_int/169 (243407235 (estimated locally),0.23 per call) mbedtls_mpi_cmp_mpi/170 (609737564 (estimated locally),0.57 per call) mbedtls_mpi_cmp_int/169 (1052905484 (estimated locally),0.98 per call) mbedtls_ecdsa_can_do/154 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/172 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/172 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/172 (1073741824 (estimated locally),1.00 per call) mbedtls_mpi_init/172 (1073741824 (estimated locally),1.00 per call) mbedtls_ecp_point_init/171 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_sign_det_ext/157 (mbedtls_ecdsa_sign_det_ext) @064c85e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_det_restartable/156 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_sign_det_restartable/156 (mbedtls_ecdsa_sign_det_restartable) @064c8498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_hmac_drbg_random/188 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_ecdsa_write_signature_restartable/161 (1063970777 (estimated locally),0.99 per call) mbedtls_ecdsa_sign_det_ext/157 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_mpi_free/180 (1063970776 (estimated locally),0.99 per call) mbedtls_hmac_drbg_free/189 (1063970776 (estimated locally),0.99 per call) mbedtls_ecdsa_sign_restartable/153 (124257692 (estimated locally),0.12 per call) mbedtls_hmac_drbg_seed_buf/187 (124257692 (estimated locally),0.12 per call) mbedtls_mpi_write_binary/186 (254209682 (estimated locally),0.24 per call) derive_mpi/152 (520068911 (estimated locally),0.48 per call) mbedtls_mpi_write_binary/186 (1063970775 (estimated locally),0.99 per call) mbedtls_hmac_drbg_init/185 (1063970775 (estimated locally),0.99 per call) mbedtls_mpi_init/172 (1063970775 (estimated locally),0.99 per call) mbedtls_md_info_from_type/184 (1073741823 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_sign/155 (mbedtls_ecdsa_sign) @064c8348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_ecdsa_sign_restartable/153 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_ecdsa_can_do/154 (mbedtls_ecdsa_can_do) @064c81f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_ecdsa_verify_restartable/158 (1073741824 (estimated locally),1.00 per call) mbedtls_ecdsa_sign_restartable/153 (184287984 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_ecdsa_sign_restartable/153 (mbedtls_ecdsa_sign_restartable) @064c80a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:184287984 (estimated locally) body
+  Called by: mbedtls_ecdsa_sign_det_restartable/156 (124257692 (estimated locally),0.12 per call) mbedtls_ecdsa_sign/155 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_mpi_free/180 (172766831 (estimated locally),0.94 per call) mbedtls_mpi_free/180 (172766831 (estimated locally),0.94 per call) mbedtls_mpi_free/180 (172766831 (estimated locally),0.94 per call) mbedtls_ecp_point_free/179 (172766831 (estimated locally),0.94 per call) mbedtls_mpi_cmp_int/169 (16551109 (estimated locally),0.09 per call) mbedtls_mpi_mod_mpi/175 (16888886 (estimated locally),0.09 per call) mbedtls_mpi_mul_mpi/176 (17233558 (estimated locally),0.09 per call) mbedtls_mpi_inv_mod/178 (17585263 (estimated locally),0.10 per call) mbedtls_mpi_mod_mpi/175 (17944146 (estimated locally),0.10 per call) mbedtls_mpi_mul_mpi/176 (18310353 (estimated locally),0.10 per call) mbedtls_mpi_mul_mpi/176 (18684034 (estimated locally),0.10 per call) mbedtls_mpi_add_mpi/177 (19065341 (estimated locally),0.10 per call) mbedtls_mpi_mul_mpi/176 (19454429 (estimated locally),0.11 per call) mbedtls_ecp_gen_privkey/173 (19851458 (estimated locally),0.11 per call) derive_mpi/152 (20256590 (estimated locally),0.11 per call) mbedtls_mpi_cmp_int/169 (920754109 (estimated locally),5.00 per call) mbedtls_mpi_mod_mpi/175 (941466369 (estimated locally),5.11 per call) mbedtls_ecp_mul_restartable/174 (962644549 (estimated locally),5.22 per call) mbedtls_ecp_gen_privkey/173 (984299130 (estimated locally),5.34 per call) mbedtls_mpi_init/172 (172766831 (estimated locally),0.94 per call) mbedtls_mpi_init/172 (172766831 (estimated locally),0.94 per call) mbedtls_mpi_init/172 (172766831 (estimated locally),0.94 per call) mbedtls_ecp_point_init/171 (172766831 (estimated locally),0.94 per call) mbedtls_mpi_cmp_mpi/170 (178073418 (estimated locally),0.97 per call) mbedtls_mpi_cmp_int/169 (180711811 (estimated locally),0.98 per call) mbedtls_ecdsa_can_do/154 (184287984 (estimated locally),1.00 per call) 
+derive_mpi/152 (derive_mpi) @06437e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) body local
+  Called by: mbedtls_ecdsa_verify_restartable/158 (56270086 (estimated locally),0.05 per call) mbedtls_ecdsa_sign_det_restartable/156 (520068911 (estimated locally),0.48 per call) mbedtls_ecdsa_sign_restartable/153 (20256590 (estimated locally),0.11 per call) 
+  Calls: mbedtls_mpi_sub_mpi/183 (243983606 (estimated locally),0.23 per call) mbedtls_mpi_cmp_mpi/170 (588195767 (estimated locally),0.55 per call) mbedtls_mpi_shift_r/182 (354334800 (estimated locally),0.33 per call) mbedtls_mpi_read_binary/181 (1073741823 (estimated locally),1.00 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+mbedtls_ecp_keypair_free/204 (mbedtls_ecp_keypair_free) @06519d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_keypair_init/203 (mbedtls_ecp_keypair_init) @06519c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_copy/202 (mbedtls_ecp_copy) @06519bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_copy/201 (mbedtls_mpi_copy) @06519b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_group_copy/200 (mbedtls_ecp_group_copy) @06519a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_gen_keypair/199 (mbedtls_ecp_gen_keypair) @065199d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_group_load/198 (mbedtls_ecp_group_load) @06519930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_mpi/197 (mbedtls_asn1_get_mpi) @06519888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_get_tag/196 (mbedtls_asn1_get_tag) @065197e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/195 (memcpy) @06519738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_tag/194 (mbedtls_asn1_write_tag) @06519690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_len/193 (mbedtls_asn1_write_len) @065195e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_asn1_write_mpi/192 (mbedtls_asn1_write_mpi) @06519540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_is_zero/191 (mbedtls_ecp_is_zero) @06519498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_muladd_restartable/190 (mbedtls_ecp_muladd_restartable) @065193f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_free/189 (mbedtls_hmac_drbg_free) @06519348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_random/188 (mbedtls_hmac_drbg_random) @065192a0
+  Type: function
+  Visibility: semantic_interposition external public
+  Address is taken.
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_seed_buf/187 (mbedtls_hmac_drbg_seed_buf) @065191f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_write_binary/186 (mbedtls_mpi_write_binary) @06519150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_hmac_drbg_init/185 (mbedtls_hmac_drbg_init) @065190a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_md_info_from_type/184 (mbedtls_md_info_from_type) @06519000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_sub_mpi/183 (mbedtls_mpi_sub_mpi) @064e7f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_shift_r/182 (mbedtls_mpi_shift_r) @064e7e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_read_binary/181 (mbedtls_mpi_read_binary) @064e7dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_free/180 (mbedtls_mpi_free) @064e7d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_point_free/179 (mbedtls_ecp_point_free) @064e7c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_inv_mod/178 (mbedtls_mpi_inv_mod) @064e7bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_add_mpi/177 (mbedtls_mpi_add_mpi) @064e7b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_mul_mpi/176 (mbedtls_mpi_mul_mpi) @064e7a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_mod_mpi/175 (mbedtls_mpi_mod_mpi) @064e79d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_mul_restartable/174 (mbedtls_ecp_mul_restartable) @064e7930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_gen_privkey/173 (mbedtls_ecp_gen_privkey) @064e7888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_init/172 (mbedtls_mpi_init) @064e77e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecp_point_init/171 (mbedtls_ecp_point_init) @064e7738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_cmp_mpi/170 (mbedtls_mpi_cmp_mpi) @064e7690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mpi_cmp_int/169 (mbedtls_mpi_cmp_int) @064e75e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_free/168 (mbedtls_ecdsa_free) @064e7540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_init/167 (mbedtls_ecdsa_init) @064e73f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_from_keypair/166 (mbedtls_ecdsa_from_keypair) @064e72a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_from_keypair (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_genkey/165 (mbedtls_ecdsa_genkey) @064e7150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_genkey (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_read_signature_restartable/164 (mbedtls_ecdsa_read_signature_restartable) @064e7000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_read_signature_restartable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_read_signature/163 (mbedtls_ecdsa_read_signature) @064c8dc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_read_signature (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_write_signature/162 (mbedtls_ecdsa_write_signature) @064c8c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_write_signature (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_write_signature_restartable/161 (mbedtls_ecdsa_write_signature_restartable) @064c8b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_write_signature_restartable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+ecdsa_signature_to_asn1/160 (ecdsa_signature_to_asn1) @064c89d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ecdsa_signature_to_asn1 (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_verify/159 (mbedtls_ecdsa_verify) @064c8888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_verify (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_verify_restartable/158 (mbedtls_ecdsa_verify_restartable) @064c8738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_verify_restartable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_sign_det_ext/157 (mbedtls_ecdsa_sign_det_ext) @064c85e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_sign_det_ext (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_sign_det_restartable/156 (mbedtls_ecdsa_sign_det_restartable) @064c8498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_sign_det_restartable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_sign/155 (mbedtls_ecdsa_sign) @064c8348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_sign (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_can_do/154 (mbedtls_ecdsa_can_do) @064c81f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_can_do (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_ecdsa_sign_restartable/153 (mbedtls_ecdsa_sign_restartable) @064c80a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_ecdsa_sign_restartable (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:184287984 (estimated locally)
+  Called by: 
+  Calls: 
+derive_mpi/152 (derive_mpi) @06437e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.derive_mpi (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741823 (estimated locally) local
+  Called by: 
+  Calls: 

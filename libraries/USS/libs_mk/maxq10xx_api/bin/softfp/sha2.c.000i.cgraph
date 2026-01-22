@@ -1,0 +1,473 @@
+Trivially needed symbols: sha256_final/6 sha256_update/5 sha256_init/4 sha256/3 sha256_transf/2 sha256_k/1 sha256_h0/0
+
+
+Initial Symbol table:
+
+memset/8 (memset) @061ef540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_final/6 
+  Calls: 
+memcpy/7 (memcpy) @061ef498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_final/6 (sha256_final) @061ef3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: sha256_transf/2 memset/8 
+sha256_update/5 (sha256_update) @061ef2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061ef3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: memcpy/7 sha256_transf/2 sha256_transf/2 memcpy/7 
+sha256_init/4 (sha256_init) @061ef150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061ef2a0
+  References: sha256_h0/0 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: 
+sha256/3 (sha256) @061ef000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061ef150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sha256_final/6 sha256_update/5 sha256_init/4 
+sha256_transf/2 (sha256_transf) @061b6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061ef000
+  References: sha256_k/1 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256_final/6 sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_k/1 (sha256_k) @05f0e558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061b6bd0
+  References: 
+  Referring: sha256_transf/2 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+sha256_h0/0 (sha256_h0) @05f0e4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @05f0e558
+  References: 
+  Referring: sha256_init/4 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memset/8 (memset) @061ef540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_final/6 
+  Calls: 
+memcpy/7 (memcpy) @061ef498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_final/6 (sha256_final) @061ef3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: sha256_transf/2 memset/8 
+sha256_update/5 (sha256_update) @061ef2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: memcpy/7 sha256_transf/2 sha256_transf/2 memcpy/7 
+sha256_init/4 (sha256_init) @061ef150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha256_h0/0 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: 
+sha256/3 (sha256) @061ef000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sha256_final/6 sha256_update/5 sha256_init/4 
+sha256_transf/2 (sha256_transf) @061b6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha256_k/1 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256_final/6 sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_k/1 (sha256_k) @05f0e558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: sha256_transf/2 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+sha256_h0/0 (sha256_h0) @05f0e4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: sha256_init/4 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+
+Initial Symbol table:
+
+memset/8 (memset) @061ef540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_final/6 
+  Calls: 
+memcpy/7 (memcpy) @061ef498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_final/6 (sha256_final) @061ef3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: sha256_transf/2 memset/8 
+sha256_update/5 (sha256_update) @061ef2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: memcpy/7 sha256_transf/2 sha256_transf/2 memcpy/7 
+sha256_init/4 (sha256_init) @061ef150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha256_h0/0 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: 
+sha256/3 (sha256) @061ef000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sha256_final/6 sha256_update/5 sha256_init/4 
+sha256_transf/2 (sha256_transf) @061b6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha256_k/1 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256_final/6 sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_k/1 (sha256_k) @05f0e558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: sha256_transf/2 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+sha256_h0/0 (sha256_h0) @05f0e4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: sha256_init/4 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memset/8 (memset) @061ef540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_final/6 
+  Calls: 
+memcpy/7 (memcpy) @061ef498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_final/6 (sha256_final) @061ef3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: sha256_transf/2 memset/8 
+sha256_update/5 (sha256_update) @061ef2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: memcpy/7 sha256_transf/2 sha256_transf/2 memcpy/7 
+sha256_init/4 (sha256_init) @061ef150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha256_h0/0 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256/3 
+  Calls: 
+sha256/3 (sha256) @061ef000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sha256_final/6 sha256_update/5 sha256_init/4 
+sha256_transf/2 (sha256_transf) @061b6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: sha256_k/1 (read) 
+  Referring: 
+  Function flags: body
+  Called by: sha256_final/6 sha256_update/5 sha256_update/5 
+  Calls: 
+sha256_k/1 (sha256_k) @05f0e558
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: sha256_transf/2 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+sha256_h0/0 (sha256_h0) @05f0e4c8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: sha256_init/4 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memset/8 (memset) @061ef540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: sha256_final/6 (119292720 (estimated locally),1.00 per call) 
+  Calls: 
+memcpy/7 (memcpy) @061ef498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: sha256_update/5 (524845000 (estimated locally),0.49 per call) sha256_update/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+sha256_final/6 (sha256_final) @061ef3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:119292720 (estimated locally) body
+  Called by: sha256/3 (1073741824 (estimated locally),1.00 per call) 
+  Calls: sha256_transf/2 (119292720 (estimated locally),1.00 per call) memset/8 (119292720 (estimated locally),1.00 per call) 
+sha256_update/5 (sha256_update) @061ef2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: sha256/3 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memcpy/7 (524845000 (estimated locally),0.49 per call) sha256_transf/2 (524845000 (estimated locally),0.49 per call) sha256_transf/2 (524845000 (estimated locally),0.49 per call) memcpy/7 (1073741824 (estimated locally),1.00 per call) 
+sha256_init/4 (sha256_init) @061ef150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: sha256_h0/0 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:119292720 (estimated locally) body
+  Called by: sha256/3 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+sha256/3 (sha256) @061ef000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sha256_final/6 (1073741824 (estimated locally),1.00 per call) sha256_update/5 (1073741824 (estimated locally),1.00 per call) sha256_init/4 (1073741824 (estimated locally),1.00 per call) 
+sha256_transf/2 (sha256_transf) @061b6bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: sha256_k/1 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:2043729 (estimated locally) body
+  Called by: sha256_final/6 (119292720 (estimated locally),1.00 per call) sha256_update/5 (524845000 (estimated locally),0.49 per call) sha256_update/5 (524845000 (estimated locally),0.49 per call) 
+  Calls: 
+sha256_k/1 (sha256_k) @05f0e558
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: sha256_transf/2 (read) 
+  Availability: overwritable
+  Varpool flags: initialized
+sha256_h0/0 (sha256_h0) @05f0e4c8
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: sha256_init/4 (read) 
+  Availability: overwritable
+  Varpool flags: initialized
+Trivially needed variables: sha256_k/1 sha256_h0/0
+Removing variables:
+
+Final Symbol table:
+
+memset/8 (memset) @061ef540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/7 (memcpy) @061ef498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sha256_final/6 (sha256_final) @061ef3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.sha256_final (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:119292720 (estimated locally)
+  Called by: 
+  Calls: 
+sha256_update/5 (sha256_update) @061ef2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.sha256_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+sha256_init/4 (sha256_init) @061ef150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.sha256_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:119292720 (estimated locally)
+  Called by: 
+  Calls: 
+sha256/3 (sha256) @061ef000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.sha256 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+sha256_transf/2 (sha256_transf) @061b6bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.sha256_transf (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:2043729 (estimated locally)
+  Called by: 
+  Calls: 
+sha256_k/1 (sha256_k) @05f0e558
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.sha256_k (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+sha256_h0/0 (sha256_h0) @05f0e4c8
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.sha256_h0 (implicit_section)
+  Aux: @05f0e558
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized

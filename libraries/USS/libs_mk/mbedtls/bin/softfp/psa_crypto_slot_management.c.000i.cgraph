@@ -1,0 +1,1645 @@
+Trivially needed symbols: mbedtls_psa_get_stats/89 psa_purge_key/88 psa_close_key/87 psa_open_key/86 psa_validate_key_persistence/85 psa_validate_key_location/84 psa_unlock_key_slot/83 psa_get_and_lock_key_slot/82 psa_get_empty_key_slot/81 psa_wipe_all_key_slots/80 psa_initialize_key_slots/79 psa_is_valid_key_id/77
+
+
+Initial Symbol table:
+
+memset/91 (memset) @0705b738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_get_stats/89 
+  Calls: 
+psa_wipe_key_slot/90 (psa_wipe_key_slot) @0705b690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_empty_key_slot/81 psa_wipe_all_key_slots/80 
+  Calls: 
+mbedtls_psa_get_stats/89 (mbedtls_psa_get_stats) @0705b5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_is_key_slot_occupied/64 psa_is_key_slot_locked/65 memset/91 
+psa_purge_key/88 (psa_purge_key) @0705b348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0705b5e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 
+psa_close_key/87 (psa_close_key) @0705b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0705b348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 psa_key_handle_is_null/49 
+psa_open_key/86 (psa_open_key) @0705b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0705b150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_persistence/85 (psa_validate_key_persistence) @0704d150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0705b000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_location/84 (psa_validate_key_location) @0704de70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704d150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_key_lifetime_is_external/72 
+psa_unlock_key_slot/83 (psa_unlock_key_slot) @0704dd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704de70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 
+  Calls: 
+psa_get_and_lock_key_slot/82 (psa_get_and_lock_key_slot) @0704dbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704dd20
+  References: global_data/76 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_get_and_lock_key_slot_in_memory/78 
+psa_get_empty_key_slot/81 (psa_get_empty_key_slot) @0704da80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704dbd0
+  References: global_data/76 (read) global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_lock_key_slot/71 psa_wipe_key_slot/90 psa_is_key_slot_locked/65 psa_is_key_slot_occupied/64 
+psa_wipe_all_key_slots/80 (psa_wipe_all_key_slots) @0704d888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704da80
+  References: global_data/76 (addr) global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_wipe_key_slot/90 
+psa_initialize_key_slots/79 (psa_initialize_key_slots) @0704d738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704d888
+  References: global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot_in_memory/78 (psa_get_and_lock_key_slot_in_memory) @0704d5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0704dd20
+  References: global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_and_lock_key_slot/82 
+  Calls: psa_lock_key_slot/71 mbedtls_svc_key_id_equal/10 psa_is_valid_key_id/77 mbedtls_svc_key_id_equal/10 psa_key_id_is_volatile/70 
+psa_is_valid_key_id/77 (psa_is_valid_key_id) @0704d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0704d738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+global_data/76 (global_data) @06ffdb88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0704d888
+  References: 
+  Referring: psa_initialize_key_slots/79 (write) psa_wipe_all_key_slots/80 (addr) psa_wipe_all_key_slots/80 (write) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (addr) psa_get_empty_key_slot/81 (addr) psa_get_and_lock_key_slot/82 (read) psa_get_and_lock_key_slot_in_memory/78 (addr) psa_get_and_lock_key_slot_in_memory/78 (addr) mbedtls_psa_get_stats/89 (addr) 
+  Availability: not-ready
+  Varpool flags:
+_putchar_unlocked/75 (_putchar_unlocked) @06e74d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/74 (_getchar_unlocked) @06e74bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/73 (__sputc_r) @06e749d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_lifetime_is_external/72 (psa_key_lifetime_is_external) @06e741f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0704d150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_validate_key_location/84 
+  Calls: 
+psa_lock_key_slot/71 (psa_lock_key_slot) @06e740a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0704dbd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_id_is_volatile/70 (psa_key_id_is_volatile) @06e64348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06eb77e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+psa_key_slot_clear_bits/69 (psa_key_slot_clear_bits) @06e64bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_set_bits_in_flags/68 (psa_key_slot_set_bits_in_flags) @06e64a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_set_flags/67 (psa_key_slot_set_flags) @06e64930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_slot_get_flags/66 (psa_key_slot_get_flags) @06e647e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_is_key_slot_locked/65 (psa_is_key_slot_locked) @06e64690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06e740a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_is_key_slot_occupied/64 (psa_is_key_slot_occupied) @06e64540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06e64690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+mbedtls_psa_safer_memcmp/63 (mbedtls_psa_safer_memcmp) @06e5ec78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_operation_init/62 (psa_pake_operation_init) @070023f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cipher_suite_init/61 (psa_pake_cipher_suite_init) @07002dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_hash/60 (psa_pake_cs_set_hash) @06ff2e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_hash/59 (psa_pake_cs_get_hash) @06ff2d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_bits/58 (psa_pake_cs_get_bits) @06ff2bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_family/57 (psa_pake_cs_get_family) @06ff2a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_primitive/56 (psa_pake_cs_set_primitive) @06ff2930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_primitive/55 (psa_pake_cs_get_primitive) @06ff27e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_set_algorithm/54 (psa_pake_cs_set_algorithm) @06ff2690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_pake_cs_get_algorithm/53 (psa_pake_cs_get_algorithm) @06ff2540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_ecc_group_to_psa/52 (mbedtls_ecc_group_to_psa) @06fb8738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_enrollment_algorithm/51 (psa_get_key_enrollment_algorithm) @06fb8d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_enrollment_algorithm/50 (psa_set_key_enrollment_algorithm) @06fb8bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_handle_is_null/49 (psa_key_handle_is_null) @06fb8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0705b348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_close_key/87 
+  Calls: mbedtls_svc_key_id_is_null/11 
+psa_verify_hash_interruptible_operation_init/48 (psa_verify_hash_interruptible_operation_init) @06fb8888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_sign_hash_interruptible_operation_init/47 (psa_sign_hash_interruptible_operation_init) @06fb8498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_bits/46 (psa_get_key_bits) @06fb80a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_bits/45 (psa_set_key_bits) @06fb3f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_type/44 (psa_get_key_type) @06fb3dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_type/43 (psa_set_key_type) @06fb3c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_algorithm/42 (psa_get_key_algorithm) @06fb3b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_algorithm/41 (psa_set_key_algorithm) @06fb39d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_usage_flags/40 (psa_get_key_usage_flags) @06fb3888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_usage_flags/39 (psa_set_key_usage_flags) @06fb3738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_extend_key_usage_flags/38 (psa_extend_key_usage_flags) @06fb35e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_lifetime/37 (psa_get_key_lifetime) @06fb3498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_lifetime/36 (psa_set_key_lifetime) @06fb3348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_get_key_id/35 (psa_get_key_id) @06fb31f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_set_key_id/34 (psa_set_key_id) @06fb30a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_attributes_init/33 (psa_key_attributes_init) @06facf18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_policy_init/32 (psa_key_policy_init) @06fac690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_key_derivation_operation_init/31 (psa_key_derivation_operation_init) @06fac150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_aead_operation_init/30 (psa_aead_operation_init) @06f53498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_mac_operation_init/29 (psa_mac_operation_init) @06f53738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_cipher_operation_init/28 (psa_cipher_operation_init) @06f33738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+psa_hash_operation_init/27 (psa_hash_operation_init) @06f332a0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/26 (mbedtls_cipher_get_operation) @06efe0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/25 (mbedtls_cipher_get_key_bitlen) @06ef3f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/24 (mbedtls_cipher_get_name) @06ef3dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/23 (mbedtls_cipher_get_type) @06ef3c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/22 (mbedtls_cipher_get_iv_size) @06ef3b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/21 (mbedtls_cipher_get_cipher_mode) @06ef39d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/20 (mbedtls_cipher_get_block_size) @06ef3888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/19 (mbedtls_cipher_info_has_variable_iv_size) @06ef3738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/18 (mbedtls_cipher_info_has_variable_key_bitlen) @06ef35e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/17 (mbedtls_cipher_info_get_block_size) @06ef3498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/16 (mbedtls_cipher_info_get_iv_size) @06ef3348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/15 (mbedtls_cipher_info_get_name) @06ef31f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/14 (mbedtls_cipher_info_get_key_bitlen) @06ef30a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/13 (mbedtls_cipher_info_get_mode) @06ee9a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/12 (mbedtls_cipher_info_get_type) @06eec888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_svc_key_id_is_null/11 (mbedtls_svc_key_id_is_null) @06eb7930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0705b348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_key_handle_is_null/49 
+  Calls: 
+mbedtls_svc_key_id_equal/10 (mbedtls_svc_key_id_equal) @06eb77e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0704dd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+mbedtls_svc_key_id_make/9 (mbedtls_svc_key_id_make) @06eb7690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06e36d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06e36bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06e36a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06e36690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06e36540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @06e363f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @06e362a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06e36150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06e36000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/75 _getchar_unlocked/74 __sputc_r/73 psa_key_slot_clear_bits/69 psa_key_slot_set_bits_in_flags/68 psa_key_slot_set_flags/67 psa_key_slot_get_flags/66 mbedtls_psa_safer_memcmp/63 psa_pake_operation_init/62 psa_pake_cipher_suite_init/61 psa_pake_cs_set_hash/60 psa_pake_cs_get_hash/59 psa_pake_cs_get_bits/58 psa_pake_cs_get_family/57 psa_pake_cs_set_primitive/56 psa_pake_cs_get_primitive/55 psa_pake_cs_set_algorithm/54 psa_pake_cs_get_algorithm/53 mbedtls_ecc_group_to_psa/52 psa_get_key_enrollment_algorithm/51 psa_set_key_enrollment_algorithm/50 psa_verify_hash_interruptible_operation_init/48 psa_sign_hash_interruptible_operation_init/47 psa_get_key_bits/46 psa_set_key_bits/45 psa_get_key_type/44 psa_set_key_type/43 psa_get_key_algorithm/42 psa_set_key_algorithm/41 psa_get_key_usage_flags/40 psa_set_key_usage_flags/39 psa_extend_key_usage_flags/38 psa_get_key_lifetime/37 psa_set_key_lifetime/36 psa_get_key_id/35 psa_set_key_id/34 psa_key_attributes_init/33 psa_key_policy_init/32 psa_key_derivation_operation_init/31 psa_aead_operation_init/30 psa_mac_operation_init/29 psa_cipher_operation_init/28 psa_hash_operation_init/27 mbedtls_cipher_get_operation/26 mbedtls_cipher_get_key_bitlen/25 mbedtls_cipher_get_name/24 mbedtls_cipher_get_type/23 mbedtls_cipher_get_iv_size/22 mbedtls_cipher_get_cipher_mode/21 mbedtls_cipher_get_block_size/20 mbedtls_cipher_info_has_variable_iv_size/19 mbedtls_cipher_info_has_variable_key_bitlen/18 mbedtls_cipher_info_get_block_size/17 mbedtls_cipher_info_get_iv_size/16 mbedtls_cipher_info_get_name/15 mbedtls_cipher_info_get_key_bitlen/14 mbedtls_cipher_info_get_mode/13 mbedtls_cipher_info_get_type/12 mbedtls_svc_key_id_make/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+memset/91 (memset) @0705b738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_get_stats/89 
+  Calls: 
+psa_wipe_key_slot/90 (psa_wipe_key_slot) @0705b690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_empty_key_slot/81 psa_wipe_all_key_slots/80 
+  Calls: 
+mbedtls_psa_get_stats/89 (mbedtls_psa_get_stats) @0705b5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_is_key_slot_occupied/64 psa_is_key_slot_locked/65 memset/91 
+psa_purge_key/88 (psa_purge_key) @0705b348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 
+psa_close_key/87 (psa_close_key) @0705b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 psa_key_handle_is_null/49 
+psa_open_key/86 (psa_open_key) @0705b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_persistence/85 (psa_validate_key_persistence) @0704d150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_location/84 (psa_validate_key_location) @0704de70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_key_lifetime_is_external/72 
+psa_unlock_key_slot/83 (psa_unlock_key_slot) @0704dd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 
+  Calls: 
+psa_get_and_lock_key_slot/82 (psa_get_and_lock_key_slot) @0704dbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_get_and_lock_key_slot_in_memory/78 
+psa_get_empty_key_slot/81 (psa_get_empty_key_slot) @0704da80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (read) global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_lock_key_slot/71 psa_wipe_key_slot/90 psa_is_key_slot_locked/65 psa_is_key_slot_occupied/64 
+psa_wipe_all_key_slots/80 (psa_wipe_all_key_slots) @0704d888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (addr) global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_wipe_key_slot/90 
+psa_initialize_key_slots/79 (psa_initialize_key_slots) @0704d738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot_in_memory/78 (psa_get_and_lock_key_slot_in_memory) @0704d5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_and_lock_key_slot/82 
+  Calls: psa_lock_key_slot/71 mbedtls_svc_key_id_equal/10 psa_is_valid_key_id/77 mbedtls_svc_key_id_equal/10 psa_key_id_is_volatile/70 
+psa_is_valid_key_id/77 (psa_is_valid_key_id) @0704d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+global_data/76 (global_data) @06ffdb88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: psa_initialize_key_slots/79 (write) psa_wipe_all_key_slots/80 (addr) psa_wipe_all_key_slots/80 (write) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (addr) psa_get_empty_key_slot/81 (addr) psa_get_and_lock_key_slot/82 (read) psa_get_and_lock_key_slot_in_memory/78 (addr) psa_get_and_lock_key_slot_in_memory/78 (addr) mbedtls_psa_get_stats/89 (addr) 
+  Availability: not-ready
+  Varpool flags:
+psa_key_lifetime_is_external/72 (psa_key_lifetime_is_external) @06e741f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_validate_key_location/84 
+  Calls: 
+psa_lock_key_slot/71 (psa_lock_key_slot) @06e740a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_id_is_volatile/70 (psa_key_id_is_volatile) @06e64348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+psa_is_key_slot_locked/65 (psa_is_key_slot_locked) @06e64690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_is_key_slot_occupied/64 (psa_is_key_slot_occupied) @06e64540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_handle_is_null/49 (psa_key_handle_is_null) @06fb8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_close_key/87 
+  Calls: mbedtls_svc_key_id_is_null/11 
+mbedtls_svc_key_id_is_null/11 (mbedtls_svc_key_id_is_null) @06eb7930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_key_handle_is_null/49 
+  Calls: 
+mbedtls_svc_key_id_equal/10 (mbedtls_svc_key_id_equal) @06eb77e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+
+
+Initial Symbol table:
+
+memset/91 (memset) @0705b738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_get_stats/89 
+  Calls: 
+psa_wipe_key_slot/90 (psa_wipe_key_slot) @0705b690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_empty_key_slot/81 psa_wipe_all_key_slots/80 
+  Calls: 
+mbedtls_psa_get_stats/89 (mbedtls_psa_get_stats) @0705b5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_is_key_slot_occupied/64 psa_is_key_slot_locked/65 memset/91 
+psa_purge_key/88 (psa_purge_key) @0705b348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 
+psa_close_key/87 (psa_close_key) @0705b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 psa_key_handle_is_null/49 
+psa_open_key/86 (psa_open_key) @0705b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_persistence/85 (psa_validate_key_persistence) @0704d150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_location/84 (psa_validate_key_location) @0704de70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_key_lifetime_is_external/72 
+psa_unlock_key_slot/83 (psa_unlock_key_slot) @0704dd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 
+  Calls: 
+psa_get_and_lock_key_slot/82 (psa_get_and_lock_key_slot) @0704dbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_get_and_lock_key_slot_in_memory/78 
+psa_get_empty_key_slot/81 (psa_get_empty_key_slot) @0704da80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (read) global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_lock_key_slot/71 psa_wipe_key_slot/90 psa_is_key_slot_locked/65 psa_is_key_slot_occupied/64 
+psa_wipe_all_key_slots/80 (psa_wipe_all_key_slots) @0704d888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (addr) global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_wipe_key_slot/90 
+psa_initialize_key_slots/79 (psa_initialize_key_slots) @0704d738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot_in_memory/78 (psa_get_and_lock_key_slot_in_memory) @0704d5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_and_lock_key_slot/82 
+  Calls: psa_lock_key_slot/71 mbedtls_svc_key_id_equal/10 psa_is_valid_key_id/77 mbedtls_svc_key_id_equal/10 psa_key_id_is_volatile/70 
+psa_is_valid_key_id/77 (psa_is_valid_key_id) @0704d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+global_data/76 (global_data) @06ffdb88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: psa_initialize_key_slots/79 (write) psa_wipe_all_key_slots/80 (addr) psa_wipe_all_key_slots/80 (write) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (addr) psa_get_empty_key_slot/81 (addr) psa_get_and_lock_key_slot/82 (read) psa_get_and_lock_key_slot_in_memory/78 (addr) psa_get_and_lock_key_slot_in_memory/78 (addr) mbedtls_psa_get_stats/89 (addr) 
+  Availability: not-ready
+  Varpool flags:
+psa_key_lifetime_is_external/72 (psa_key_lifetime_is_external) @06e741f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_validate_key_location/84 
+  Calls: 
+psa_lock_key_slot/71 (psa_lock_key_slot) @06e740a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_id_is_volatile/70 (psa_key_id_is_volatile) @06e64348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+psa_is_key_slot_locked/65 (psa_is_key_slot_locked) @06e64690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_is_key_slot_occupied/64 (psa_is_key_slot_occupied) @06e64540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_handle_is_null/49 (psa_key_handle_is_null) @06fb8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_close_key/87 
+  Calls: mbedtls_svc_key_id_is_null/11 
+mbedtls_svc_key_id_is_null/11 (mbedtls_svc_key_id_is_null) @06eb7930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_key_handle_is_null/49 
+  Calls: 
+mbedtls_svc_key_id_equal/10 (mbedtls_svc_key_id_equal) @06eb77e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memset/91 (memset) @0705b738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_psa_get_stats/89 
+  Calls: 
+psa_wipe_key_slot/90 (psa_wipe_key_slot) @0705b690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_empty_key_slot/81 psa_wipe_all_key_slots/80 
+  Calls: 
+mbedtls_psa_get_stats/89 (mbedtls_psa_get_stats) @0705b5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_is_key_slot_occupied/64 psa_is_key_slot_locked/65 memset/91 
+psa_purge_key/88 (psa_purge_key) @0705b348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 
+psa_close_key/87 (psa_close_key) @0705b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 psa_wipe_key_slot/90 psa_get_and_lock_key_slot_in_memory/78 psa_key_handle_is_null/49 
+psa_open_key/86 (psa_open_key) @0705b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_persistence/85 (psa_validate_key_persistence) @0704d150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_validate_key_location/84 (psa_validate_key_location) @0704de70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_key_lifetime_is_external/72 
+psa_unlock_key_slot/83 (psa_unlock_key_slot) @0704dd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 
+  Calls: 
+psa_get_and_lock_key_slot/82 (psa_get_and_lock_key_slot) @0704dbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_get_and_lock_key_slot_in_memory/78 
+psa_get_empty_key_slot/81 (psa_get_empty_key_slot) @0704da80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (read) global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_lock_key_slot/71 psa_wipe_key_slot/90 psa_is_key_slot_locked/65 psa_is_key_slot_occupied/64 
+psa_wipe_all_key_slots/80 (psa_wipe_all_key_slots) @0704d888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (addr) global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: psa_wipe_key_slot/90 
+psa_initialize_key_slots/79 (psa_initialize_key_slots) @0704d738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: global_data/76 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot_in_memory/78 (psa_get_and_lock_key_slot_in_memory) @0704d5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: global_data/76 (addr) global_data/76 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: psa_purge_key/88 psa_close_key/87 psa_get_and_lock_key_slot/82 
+  Calls: psa_lock_key_slot/71 mbedtls_svc_key_id_equal/10 psa_is_valid_key_id/77 mbedtls_svc_key_id_equal/10 psa_key_id_is_volatile/70 
+psa_is_valid_key_id/77 (psa_is_valid_key_id) @0704d498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+global_data/76 (global_data) @06ffdb88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: psa_initialize_key_slots/79 (write) psa_wipe_all_key_slots/80 (addr) psa_wipe_all_key_slots/80 (write) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (addr) psa_get_empty_key_slot/81 (addr) psa_get_and_lock_key_slot/82 (read) psa_get_and_lock_key_slot_in_memory/78 (addr) psa_get_and_lock_key_slot_in_memory/78 (addr) mbedtls_psa_get_stats/89 (addr) 
+  Availability: not-ready
+  Varpool flags:
+psa_key_lifetime_is_external/72 (psa_key_lifetime_is_external) @06e741f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_validate_key_location/84 
+  Calls: 
+psa_lock_key_slot/71 (psa_lock_key_slot) @06e740a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_id_is_volatile/70 (psa_key_id_is_volatile) @06e64348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+psa_is_key_slot_locked/65 (psa_is_key_slot_locked) @06e64690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_is_key_slot_occupied/64 (psa_is_key_slot_occupied) @06e64540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_psa_get_stats/89 psa_get_empty_key_slot/81 
+  Calls: 
+psa_key_handle_is_null/49 (psa_key_handle_is_null) @06fb8a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_close_key/87 
+  Calls: mbedtls_svc_key_id_is_null/11 
+mbedtls_svc_key_id_is_null/11 (mbedtls_svc_key_id_is_null) @06eb7930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_key_handle_is_null/49 
+  Calls: 
+mbedtls_svc_key_id_equal/10 (mbedtls_svc_key_id_equal) @06eb77e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: psa_get_and_lock_key_slot_in_memory/78 psa_get_and_lock_key_slot_in_memory/78 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memset/91 (memset) @0705b738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_psa_get_stats/89 (32534376 (estimated locally),1.00 per call) 
+  Calls: 
+psa_wipe_key_slot/90 (psa_wipe_key_slot) @0705b690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: psa_purge_key/88 (144134894 (estimated locally),0.13 per call) psa_close_key/87 (142023055 (estimated locally),0.13 per call) psa_get_empty_key_slot/81 (14404944 (estimated locally),0.11 per call) psa_wipe_all_key_slots/80 (1041207449 (estimated locally),32.00 per call) 
+  Calls: 
+mbedtls_psa_get_stats/89 (mbedtls_psa_get_stats) @0705b5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: global_data/76 (read) global_data/76 (read) global_data/76 (read) global_data/76 (read) global_data/76 (read) global_data/76 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:32534376 (estimated locally) body
+  Called by: 
+  Calls: memset/91 (32534376 (estimated locally),1.00 per call) 
+psa_purge_key/88 (psa_purge_key) @0705b348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 (564534706 (estimated locally),0.53 per call) psa_wipe_key_slot/90 (144134894 (estimated locally),0.13 per call) psa_get_and_lock_key_slot_in_memory/78 (1073741823 (estimated locally),1.00 per call) 
+psa_close_key/87 (psa_close_key) @0705b150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: psa_unlock_key_slot/83 (204374643 (estimated locally),0.19 per call) psa_wipe_key_slot/90 (142023055 (estimated locally),0.13 per call) psa_get_and_lock_key_slot_in_memory/78 (524845000 (estimated locally),0.49 per call) 
+psa_open_key/86 (psa_open_key) @0705b000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_validate_key_persistence/85 (psa_validate_key_persistence) @0704d150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_validate_key_location/84 (psa_validate_key_location) @0704de70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_unlock_key_slot/83 (psa_unlock_key_slot) @0704dd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: psa_purge_key/88 (564534706 (estimated locally),0.53 per call) psa_close_key/87 (204374643 (estimated locally),0.19 per call) 
+  Calls: 
+psa_get_and_lock_key_slot/82 (psa_get_and_lock_key_slot) @0704dbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: global_data/76 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: psa_get_and_lock_key_slot_in_memory/78 (1051300617 (estimated locally),0.98 per call) 
+psa_get_empty_key_slot/81 (psa_get_empty_key_slot) @0704da80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: global_data/76 (read) global_data/76 (addr) global_data/76 (read) global_data/76 (read) global_data/76 (read) global_data/76 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:136061795 (estimated locally) body
+  Called by: 
+  Calls: psa_wipe_key_slot/90 (14404944 (estimated locally),0.11 per call) 
+psa_wipe_all_key_slots/80 (psa_wipe_all_key_slots) @0704d888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: global_data/76 (addr) global_data/76 (write) global_data/76 (write) 
+  Referring: 
+  Availability: available
+  Function flags: count:32534376 (estimated locally) body
+  Called by: 
+  Calls: psa_wipe_key_slot/90 (1041207449 (estimated locally),32.00 per call) 
+psa_initialize_key_slots/79 (psa_initialize_key_slots) @0704d738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: global_data/76 (write) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot_in_memory/78 (psa_get_and_lock_key_slot_in_memory) @0704d5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: global_data/76 (addr) global_data/76 (read) global_data/76 (addr) global_data/76 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:181489054 (estimated locally) body local nonfreeing_fn
+  Called by: psa_purge_key/88 (1073741823 (estimated locally),1.00 per call) psa_close_key/87 (524845000 (estimated locally),0.49 per call) psa_get_and_lock_key_slot/82 (1051300617 (estimated locally),0.98 per call) 
+  Calls: psa_is_valid_key_id/77 (90744527 (estimated locally),0.50 per call) 
+psa_is_valid_key_id/77 (psa_is_valid_key_id) @0704d498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: psa_get_and_lock_key_slot_in_memory/78 (90744527 (estimated locally),0.50 per call) 
+  Calls: 
+global_data/76 (global_data) @06ffdb88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: psa_get_and_lock_key_slot/82 (read) psa_wipe_all_key_slots/80 (write) psa_get_and_lock_key_slot_in_memory/78 (read) psa_get_empty_key_slot/81 (addr) psa_get_and_lock_key_slot_in_memory/78 (addr) psa_initialize_key_slots/79 (write) psa_wipe_all_key_slots/80 (write) psa_wipe_all_key_slots/80 (addr) psa_get_and_lock_key_slot_in_memory/78 (addr) psa_get_and_lock_key_slot_in_memory/78 (read) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (addr) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (read) psa_get_empty_key_slot/81 (read) mbedtls_psa_get_stats/89 (read) mbedtls_psa_get_stats/89 (read) mbedtls_psa_get_stats/89 (read) mbedtls_psa_get_stats/89 (read) mbedtls_psa_get_stats/89 (read) mbedtls_psa_get_stats/89 (read) 
+  Availability: available
+  Varpool flags:
+Trivially needed variables: global_data/76
+Removing variables:
+
+Final Symbol table:
+
+memset/91 (memset) @0705b738
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+psa_wipe_key_slot/90 (psa_wipe_key_slot) @0705b690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_psa_get_stats/89 (mbedtls_psa_get_stats) @0705b5e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_psa_get_stats (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:32534376 (estimated locally)
+  Called by: 
+  Calls: 
+psa_purge_key/88 (psa_purge_key) @0705b348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_purge_key (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+psa_close_key/87 (psa_close_key) @0705b150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_close_key (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+psa_open_key/86 (psa_open_key) @0705b000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_open_key (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_validate_key_persistence/85 (psa_validate_key_persistence) @0704d150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_validate_key_persistence (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_validate_key_location/84 (psa_validate_key_location) @0704de70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_validate_key_location (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_unlock_key_slot/83 (psa_unlock_key_slot) @0704dd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_unlock_key_slot (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot/82 (psa_get_and_lock_key_slot) @0704dbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_get_and_lock_key_slot (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_get_empty_key_slot/81 (psa_get_empty_key_slot) @0704da80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_get_empty_key_slot (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:136061795 (estimated locally)
+  Called by: 
+  Calls: 
+psa_wipe_all_key_slots/80 (psa_wipe_all_key_slots) @0704d888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_wipe_all_key_slots (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:32534376 (estimated locally)
+  Called by: 
+  Calls: 
+psa_initialize_key_slots/79 (psa_initialize_key_slots) @0704d738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_initialize_key_slots (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_get_and_lock_key_slot_in_memory/78 (psa_get_and_lock_key_slot_in_memory) @0704d5e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.psa_get_and_lock_key_slot_in_memory (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:181489054 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+psa_is_valid_key_id/77 (psa_is_valid_key_id) @0704d498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.psa_is_valid_key_id (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+global_data/76 (global_data) @06ffdb88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.global_data (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:

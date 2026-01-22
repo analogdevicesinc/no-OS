@@ -1,0 +1,1395 @@
+Trivially needed symbols: mbedtls_test_hexcmp/20 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 mbedtls_test_hexify/17 mbedtls_test_unhexify/16 mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_equal/13 mbedtls_test_info_reset/12 mbedtls_test_case_uses_negative_0/11 mbedtls_test_set_step/10 mbedtls_test_skip/9 mbedtls_test_fail/8 mbedtls_test_ascii2uc/7 mbedtls_test_platform_teardown/6 mbedtls_test_platform_setup/5 mbedtls_test_info/4
+
+
+Initial Symbol table:
+
+exit/29 (exit) @062b45e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+fprintf/28 (fprintf) @062b4540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+_impure_ptr/27 (_impure_ptr) @062d1d80
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_test_zero_alloc/18 (read) mbedtls_test_unhexify_alloc/19 (read) mbedtls_test_unhexify_alloc/19 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_calloc/26 (mbedtls_calloc) @062b4498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+strlen/25 (strlen) @062b43f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify/16 
+  Calls: 
+snprintf/24 (snprintf) @062b4348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_le_u/14 mbedtls_test_equal/13 mbedtls_test_equal/13 
+  Calls: 
+memset/23 (memset) @062b42a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_zero_alloc/18 mbedtls_test_info_reset/12 mbedtls_test_info_reset/12 
+  Calls: 
+mbedtls_platform_teardown/22 (mbedtls_platform_teardown) @062b41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_teardown/6 
+  Calls: 
+mbedtls_platform_setup/21 (mbedtls_platform_setup) @062b4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_setup/5 
+  Calls: 
+mbedtls_test_hexcmp/20 (mbedtls_test_hexcmp) @062b40a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify_alloc/19 (mbedtls_test_unhexify_alloc) @062a6540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b40a8
+  References: _impure_ptr/27 (read) _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: exit/29 fprintf/28 mbedtls_test_unhexify/16 exit/29 fprintf/28 mbedtls_calloc/26 mbedtls_test_zero_alloc/18 strlen/25 
+mbedtls_test_zero_alloc/18 (mbedtls_test_zero_alloc) @062a6e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6540
+  References: _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: memset/23 exit/29 fprintf/28 mbedtls_calloc/26 
+mbedtls_test_hexify/17 (mbedtls_test_hexify) @062a6d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6e70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify/16 (mbedtls_test_unhexify) @062a6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: mbedtls_test_ascii2uc/7 mbedtls_test_ascii2uc/7 strlen/25 
+mbedtls_test_le_s/15 (mbedtls_test_le_s) @062a6a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6bd0
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_le_u/14 (mbedtls_test_le_u) @062a6930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6a80
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_equal/13 (mbedtls_test_equal) @062a67e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6930
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_info_reset/12 (mbedtls_test_info_reset) @062a6690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a67e0
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) mbedtls_test_case_uses_negative_0/11 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/23 memset/23 
+mbedtls_test_case_uses_negative_0/11 (mbedtls_test_case_uses_negative_0) @05efda20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6690
+  References: 
+  Referring: mbedtls_test_info_reset/12 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+mbedtls_test_set_step/10 (mbedtls_test_set_step) @062a6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @05efda20
+  References: mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_skip/9 (mbedtls_test_skip) @062a6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6498
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_fail/8 (mbedtls_test_fail) @062a61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a6348
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_equal/13 
+  Calls: 
+mbedtls_test_ascii2uc/7 (mbedtls_test_ascii2uc) @062a60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a61f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify/16 mbedtls_test_unhexify/16 
+  Calls: 
+mbedtls_test_platform_teardown/6 (mbedtls_test_platform_teardown) @06294d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062a60a8
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_teardown/22 
+mbedtls_test_platform_setup/5 (mbedtls_test_platform_setup) @06294b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06294d20
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_setup/21 
+mbedtls_test_info/4 (mbedtls_test_info) @05efd7e0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06294b28
+  References: 
+  Referring: mbedtls_test_fail/8 (read) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_set_step/10 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (addr) mbedtls_test_info_reset/12 (addr) mbedtls_test_equal/13 (read) mbedtls_test_equal/13 (addr) mbedtls_test_equal/13 (addr) mbedtls_test_le_u/14 (read) mbedtls_test_le_u/14 (addr) mbedtls_test_le_u/14 (addr) mbedtls_test_le_s/15 (read) mbedtls_test_le_s/15 (addr) mbedtls_test_le_s/15 (addr) 
+  Availability: not-ready
+  Varpool flags:
+platform_ctx/3 (platform_ctx) @05efd798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06294d20
+  References: 
+  Referring: mbedtls_test_platform_setup/5 (addr) mbedtls_test_platform_teardown/6 (addr) 
+  Availability: not-ready
+  Varpool flags:
+_putchar_unlocked/2 (_putchar_unlocked) @061d85e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061d8f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061d8d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+exit/29 (exit) @062b45e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+fprintf/28 (fprintf) @062b4540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+_impure_ptr/27 (_impure_ptr) @062d1d80
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_test_zero_alloc/18 (read) mbedtls_test_unhexify_alloc/19 (read) mbedtls_test_unhexify_alloc/19 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_calloc/26 (mbedtls_calloc) @062b4498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+strlen/25 (strlen) @062b43f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify/16 
+  Calls: 
+snprintf/24 (snprintf) @062b4348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_le_u/14 mbedtls_test_equal/13 mbedtls_test_equal/13 
+  Calls: 
+memset/23 (memset) @062b42a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_zero_alloc/18 mbedtls_test_info_reset/12 mbedtls_test_info_reset/12 
+  Calls: 
+mbedtls_platform_teardown/22 (mbedtls_platform_teardown) @062b41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_teardown/6 
+  Calls: 
+mbedtls_platform_setup/21 (mbedtls_platform_setup) @062b4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_setup/5 
+  Calls: 
+mbedtls_test_hexcmp/20 (mbedtls_test_hexcmp) @062b40a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify_alloc/19 (mbedtls_test_unhexify_alloc) @062a6540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: _impure_ptr/27 (read) _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: exit/29 fprintf/28 mbedtls_test_unhexify/16 exit/29 fprintf/28 mbedtls_calloc/26 mbedtls_test_zero_alloc/18 strlen/25 
+mbedtls_test_zero_alloc/18 (mbedtls_test_zero_alloc) @062a6e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: memset/23 exit/29 fprintf/28 mbedtls_calloc/26 
+mbedtls_test_hexify/17 (mbedtls_test_hexify) @062a6d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify/16 (mbedtls_test_unhexify) @062a6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: mbedtls_test_ascii2uc/7 mbedtls_test_ascii2uc/7 strlen/25 
+mbedtls_test_le_s/15 (mbedtls_test_le_s) @062a6a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_le_u/14 (mbedtls_test_le_u) @062a6930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_equal/13 (mbedtls_test_equal) @062a67e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_info_reset/12 (mbedtls_test_info_reset) @062a6690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) mbedtls_test_case_uses_negative_0/11 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/23 memset/23 
+mbedtls_test_case_uses_negative_0/11 (mbedtls_test_case_uses_negative_0) @05efda20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: mbedtls_test_info_reset/12 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+mbedtls_test_set_step/10 (mbedtls_test_set_step) @062a6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_skip/9 (mbedtls_test_skip) @062a6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_fail/8 (mbedtls_test_fail) @062a61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_equal/13 
+  Calls: 
+mbedtls_test_ascii2uc/7 (mbedtls_test_ascii2uc) @062a60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify/16 mbedtls_test_unhexify/16 
+  Calls: 
+mbedtls_test_platform_teardown/6 (mbedtls_test_platform_teardown) @06294d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_teardown/22 
+mbedtls_test_platform_setup/5 (mbedtls_test_platform_setup) @06294b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_setup/21 
+mbedtls_test_info/4 (mbedtls_test_info) @05efd7e0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: mbedtls_test_fail/8 (read) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_set_step/10 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (addr) mbedtls_test_info_reset/12 (addr) mbedtls_test_equal/13 (read) mbedtls_test_equal/13 (addr) mbedtls_test_equal/13 (addr) mbedtls_test_le_u/14 (read) mbedtls_test_le_u/14 (addr) mbedtls_test_le_u/14 (addr) mbedtls_test_le_s/15 (read) mbedtls_test_le_s/15 (addr) mbedtls_test_le_s/15 (addr) 
+  Availability: not-ready
+  Varpool flags:
+platform_ctx/3 (platform_ctx) @05efd798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_test_platform_setup/5 (addr) mbedtls_test_platform_teardown/6 (addr) 
+  Availability: not-ready
+  Varpool flags:
+
+
+Initial Symbol table:
+
+exit/29 (exit) @062b45e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+fprintf/28 (fprintf) @062b4540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+_impure_ptr/27 (_impure_ptr) @062d1d80
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_test_zero_alloc/18 (read) mbedtls_test_unhexify_alloc/19 (read) mbedtls_test_unhexify_alloc/19 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_calloc/26 (mbedtls_calloc) @062b4498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+strlen/25 (strlen) @062b43f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify/16 
+  Calls: 
+snprintf/24 (snprintf) @062b4348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_le_u/14 mbedtls_test_equal/13 mbedtls_test_equal/13 
+  Calls: 
+memset/23 (memset) @062b42a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_zero_alloc/18 mbedtls_test_info_reset/12 mbedtls_test_info_reset/12 
+  Calls: 
+mbedtls_platform_teardown/22 (mbedtls_platform_teardown) @062b41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_teardown/6 
+  Calls: 
+mbedtls_platform_setup/21 (mbedtls_platform_setup) @062b4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_setup/5 
+  Calls: 
+mbedtls_test_hexcmp/20 (mbedtls_test_hexcmp) @062b40a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify_alloc/19 (mbedtls_test_unhexify_alloc) @062a6540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: _impure_ptr/27 (read) _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: exit/29 fprintf/28 mbedtls_test_unhexify/16 exit/29 fprintf/28 mbedtls_calloc/26 mbedtls_test_zero_alloc/18 strlen/25 
+mbedtls_test_zero_alloc/18 (mbedtls_test_zero_alloc) @062a6e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: memset/23 exit/29 fprintf/28 mbedtls_calloc/26 
+mbedtls_test_hexify/17 (mbedtls_test_hexify) @062a6d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify/16 (mbedtls_test_unhexify) @062a6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: mbedtls_test_ascii2uc/7 mbedtls_test_ascii2uc/7 strlen/25 
+mbedtls_test_le_s/15 (mbedtls_test_le_s) @062a6a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_le_u/14 (mbedtls_test_le_u) @062a6930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_equal/13 (mbedtls_test_equal) @062a67e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_info_reset/12 (mbedtls_test_info_reset) @062a6690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) mbedtls_test_case_uses_negative_0/11 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/23 memset/23 
+mbedtls_test_case_uses_negative_0/11 (mbedtls_test_case_uses_negative_0) @05efda20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: mbedtls_test_info_reset/12 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+mbedtls_test_set_step/10 (mbedtls_test_set_step) @062a6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_skip/9 (mbedtls_test_skip) @062a6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_fail/8 (mbedtls_test_fail) @062a61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_equal/13 
+  Calls: 
+mbedtls_test_ascii2uc/7 (mbedtls_test_ascii2uc) @062a60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify/16 mbedtls_test_unhexify/16 
+  Calls: 
+mbedtls_test_platform_teardown/6 (mbedtls_test_platform_teardown) @06294d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_teardown/22 
+mbedtls_test_platform_setup/5 (mbedtls_test_platform_setup) @06294b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_setup/21 
+mbedtls_test_info/4 (mbedtls_test_info) @05efd7e0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: mbedtls_test_fail/8 (read) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_set_step/10 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (addr) mbedtls_test_info_reset/12 (addr) mbedtls_test_equal/13 (read) mbedtls_test_equal/13 (addr) mbedtls_test_equal/13 (addr) mbedtls_test_le_u/14 (read) mbedtls_test_le_u/14 (addr) mbedtls_test_le_u/14 (addr) mbedtls_test_le_s/15 (read) mbedtls_test_le_s/15 (addr) mbedtls_test_le_s/15 (addr) 
+  Availability: not-ready
+  Varpool flags:
+platform_ctx/3 (platform_ctx) @05efd798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_test_platform_setup/5 (addr) mbedtls_test_platform_teardown/6 (addr) 
+  Availability: not-ready
+  Varpool flags:
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+exit/29 (exit) @062b45e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+fprintf/28 (fprintf) @062b4540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+_impure_ptr/27 (_impure_ptr) @062d1d80
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_test_zero_alloc/18 (read) mbedtls_test_unhexify_alloc/19 (read) mbedtls_test_unhexify_alloc/19 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_calloc/26 (mbedtls_calloc) @062b4498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_zero_alloc/18 
+  Calls: 
+strlen/25 (strlen) @062b43f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 mbedtls_test_unhexify/16 
+  Calls: 
+snprintf/24 (snprintf) @062b4348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_le_u/14 mbedtls_test_equal/13 mbedtls_test_equal/13 
+  Calls: 
+memset/23 (memset) @062b42a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_zero_alloc/18 mbedtls_test_info_reset/12 mbedtls_test_info_reset/12 
+  Calls: 
+mbedtls_platform_teardown/22 (mbedtls_platform_teardown) @062b41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_teardown/6 
+  Calls: 
+mbedtls_platform_setup/21 (mbedtls_platform_setup) @062b4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_test_platform_setup/5 
+  Calls: 
+mbedtls_test_hexcmp/20 (mbedtls_test_hexcmp) @062b40a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify_alloc/19 (mbedtls_test_unhexify_alloc) @062a6540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: _impure_ptr/27 (read) _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: exit/29 fprintf/28 mbedtls_test_unhexify/16 exit/29 fprintf/28 mbedtls_calloc/26 mbedtls_test_zero_alloc/18 strlen/25 
+mbedtls_test_zero_alloc/18 (mbedtls_test_zero_alloc) @062a6e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: _impure_ptr/27 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: memset/23 exit/29 fprintf/28 mbedtls_calloc/26 
+mbedtls_test_hexify/17 (mbedtls_test_hexify) @062a6d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify/16 (mbedtls_test_unhexify) @062a6bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify_alloc/19 
+  Calls: mbedtls_test_ascii2uc/7 mbedtls_test_ascii2uc/7 strlen/25 
+mbedtls_test_le_s/15 (mbedtls_test_le_s) @062a6a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_le_u/14 (mbedtls_test_le_u) @062a6930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_equal/13 (mbedtls_test_equal) @062a67e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: snprintf/24 snprintf/24 mbedtls_test_fail/8 
+mbedtls_test_info_reset/12 (mbedtls_test_info_reset) @062a6690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) mbedtls_test_case_uses_negative_0/11 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memset/23 memset/23 
+mbedtls_test_case_uses_negative_0/11 (mbedtls_test_case_uses_negative_0) @05efda20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: mbedtls_test_info_reset/12 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+mbedtls_test_set_step/10 (mbedtls_test_set_step) @062a6498
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_skip/9 (mbedtls_test_skip) @062a6348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+mbedtls_test_fail/8 (mbedtls_test_fail) @062a61f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_le_s/15 mbedtls_test_le_u/14 mbedtls_test_equal/13 
+  Calls: 
+mbedtls_test_ascii2uc/7 (mbedtls_test_ascii2uc) @062a60a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_test_unhexify/16 mbedtls_test_unhexify/16 
+  Calls: 
+mbedtls_test_platform_teardown/6 (mbedtls_test_platform_teardown) @06294d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_teardown/22 
+mbedtls_test_platform_setup/5 (mbedtls_test_platform_setup) @06294b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_setup/21 
+mbedtls_test_info/4 (mbedtls_test_info) @05efd7e0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: mbedtls_test_fail/8 (read) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_set_step/10 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (addr) mbedtls_test_info_reset/12 (addr) mbedtls_test_equal/13 (read) mbedtls_test_equal/13 (addr) mbedtls_test_equal/13 (addr) mbedtls_test_le_u/14 (read) mbedtls_test_le_u/14 (addr) mbedtls_test_le_u/14 (addr) mbedtls_test_le_s/15 (read) mbedtls_test_le_s/15 (addr) mbedtls_test_le_s/15 (addr) 
+  Availability: not-ready
+  Varpool flags:
+platform_ctx/3 (platform_ctx) @05efd798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_test_platform_setup/5 (addr) mbedtls_test_platform_teardown/6 (addr) 
+  Availability: not-ready
+  Varpool flags:
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+exit/29 (exit) @062b45e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 (316154 (estimated locally),0.00 per call) mbedtls_test_unhexify_alloc/19 (316281 (estimated locally),0.00 per call) mbedtls_test_zero_alloc/18 (429496 (estimated locally),0.00 per call) 
+  Calls: 
+fprintf/28 (fprintf) @062b4540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 (316154 (estimated locally),0.00 per call) mbedtls_test_unhexify_alloc/19 (316281 (estimated locally),0.00 per call) mbedtls_test_zero_alloc/18 (429496 (estimated locally),0.00 per call) 
+  Calls: 
+_impure_ptr/27 (_impure_ptr) @062d1d80
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: mbedtls_test_zero_alloc/18 (read) mbedtls_test_unhexify_alloc/19 (read) mbedtls_test_unhexify_alloc/19 (read) 
+  Availability: not_available
+  Varpool flags:
+mbedtls_calloc/26 (mbedtls_calloc) @062b4498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 (790703481 (estimated locally),0.74 per call) mbedtls_test_zero_alloc/18 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+strlen/25 (strlen) @062b43f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_unhexify_alloc/19 (1073741824 (estimated locally),1.00 per call) mbedtls_test_unhexify/16 (116035461 (estimated locally),1.00 per call) 
+  Calls: 
+snprintf/24 (snprintf) @062b4348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_le_s/15 (460564370 (estimated locally),0.43 per call) mbedtls_test_le_s/15 (460564370 (estimated locally),0.43 per call) mbedtls_test_le_u/14 (460564370 (estimated locally),0.43 per call) mbedtls_test_le_u/14 (460564370 (estimated locally),0.43 per call) mbedtls_test_equal/13 (551490944 (estimated locally),0.51 per call) mbedtls_test_equal/13 (551490944 (estimated locally),0.51 per call) 
+  Calls: 
+memset/23 (memset) @062b42a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_zero_alloc/18 (1073312329 (estimated locally),1.00 per call) mbedtls_test_info_reset/12 (1073741824 (estimated locally),1.00 per call) mbedtls_test_info_reset/12 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_teardown/22 (mbedtls_platform_teardown) @062b41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_platform_teardown/6 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_platform_setup/21 (mbedtls_platform_setup) @062b4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_test_platform_setup/5 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_test_hexcmp/20 (mbedtls_test_hexcmp) @062b40a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:117207684 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify_alloc/19 (mbedtls_test_unhexify_alloc) @062a6540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: _impure_ptr/27 (read) _impure_ptr/27 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: exit/29 (316154 (estimated locally),0.00 per call) fprintf/28 (316154 (estimated locally),0.00 per call) mbedtls_test_unhexify/16 (790387200 (estimated locally),0.74 per call) exit/29 (316281 (estimated locally),0.00 per call) fprintf/28 (316281 (estimated locally),0.00 per call) mbedtls_calloc/26 (790703481 (estimated locally),0.74 per call) mbedtls_test_zero_alloc/18 (283038344 (estimated locally),0.26 per call) strlen/25 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_test_zero_alloc/18 (mbedtls_test_zero_alloc) @062a6e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: _impure_ptr/27 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_test_unhexify_alloc/19 (283038344 (estimated locally),0.26 per call) 
+  Calls: memset/23 (1073312329 (estimated locally),1.00 per call) exit/29 (429496 (estimated locally),0.00 per call) fprintf/28 (429496 (estimated locally),0.00 per call) mbedtls_calloc/26 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_test_hexify/17 (mbedtls_test_hexify) @062a6d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify/16 (mbedtls_test_unhexify) @062a6bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:116035461 (estimated locally) body
+  Called by: mbedtls_test_unhexify_alloc/19 (790387200 (estimated locally),0.74 per call) 
+  Calls: mbedtls_test_ascii2uc/7 (996582263 (estimated locally),8.59 per call) mbedtls_test_ascii2uc/7 (1034442873 (estimated locally),8.91 per call) strlen/25 (116035461 (estimated locally),1.00 per call) 
+mbedtls_test_le_s/15 (mbedtls_test_le_s) @062a6a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: snprintf/24 (460564370 (estimated locally),0.43 per call) snprintf/24 (460564370 (estimated locally),0.43 per call) mbedtls_test_fail/8 (460564370 (estimated locally),0.43 per call) 
+mbedtls_test_le_u/14 (mbedtls_test_le_u) @062a6930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: snprintf/24 (460564370 (estimated locally),0.43 per call) snprintf/24 (460564370 (estimated locally),0.43 per call) mbedtls_test_fail/8 (460564370 (estimated locally),0.43 per call) 
+mbedtls_test_equal/13 (mbedtls_test_equal) @062a67e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: snprintf/24 (551490944 (estimated locally),0.51 per call) snprintf/24 (551490944 (estimated locally),0.51 per call) mbedtls_test_fail/8 (551490944 (estimated locally),0.51 per call) 
+mbedtls_test_info_reset/12 (mbedtls_test_info_reset) @062a6690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (addr) mbedtls_test_info/4 (addr) mbedtls_test_case_uses_negative_0/11 (write) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memset/23 (1073741824 (estimated locally),1.00 per call) memset/23 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_test_case_uses_negative_0/11 (mbedtls_test_case_uses_negative_0) @05efda20
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: mbedtls_test_info_reset/12 (write) 
+  Availability: available
+  Varpool flags: initialized
+mbedtls_test_set_step/10 (mbedtls_test_set_step) @062a6498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (write) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_skip/9 (mbedtls_test_skip) @062a6348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_fail/8 (mbedtls_test_fail) @062a61f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: mbedtls_test_info/4 (read) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) mbedtls_test_info/4 (write) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_test_le_s/15 (460564370 (estimated locally),0.43 per call) mbedtls_test_le_u/14 (460564370 (estimated locally),0.43 per call) mbedtls_test_equal/13 (551490944 (estimated locally),0.51 per call) 
+  Calls: 
+mbedtls_test_ascii2uc/7 (mbedtls_test_ascii2uc) @062a60a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_test_unhexify/16 (996582263 (estimated locally),8.59 per call) mbedtls_test_unhexify/16 (1034442873 (estimated locally),8.91 per call) 
+  Calls: 
+mbedtls_test_platform_teardown/6 (mbedtls_test_platform_teardown) @06294d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_platform_teardown/22 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_test_platform_setup/5 (mbedtls_test_platform_setup) @06294b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: platform_ctx/3 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_platform_setup/21 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_test_info/4 (mbedtls_test_info) @05efd7e0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: mbedtls_test_info_reset/12 (addr) mbedtls_test_info_reset/12 (addr) mbedtls_test_equal/13 (read) mbedtls_test_equal/13 (addr) mbedtls_test_equal/13 (addr) mbedtls_test_skip/9 (write) mbedtls_test_le_u/14 (read) mbedtls_test_le_u/14 (addr) mbedtls_test_le_u/14 (addr) mbedtls_test_fail/8 (write) mbedtls_test_set_step/10 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_fail/8 (read) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_fail/8 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_skip/9 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_info_reset/12 (write) mbedtls_test_le_s/15 (read) mbedtls_test_le_s/15 (addr) mbedtls_test_le_s/15 (addr) 
+  Availability: available
+  Varpool flags:
+platform_ctx/3 (platform_ctx) @05efd798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_test_platform_setup/5 (addr) mbedtls_test_platform_teardown/6 (addr) 
+  Availability: available
+  Varpool flags:
+Trivially needed variables: mbedtls_test_case_uses_negative_0/11 mbedtls_test_info/4 platform_ctx/3
+Removing variables:
+
+Final Symbol table:
+
+exit/29 (exit) @062b45e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+fprintf/28 (fprintf) @062b4540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+_impure_ptr/27 (_impure_ptr) @062d1d80
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+mbedtls_calloc/26 (mbedtls_calloc) @062b4498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+strlen/25 (strlen) @062b43f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+snprintf/24 (snprintf) @062b4348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/23 (memset) @062b42a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_teardown/22 (mbedtls_platform_teardown) @062b41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_setup/21 (mbedtls_platform_setup) @062b4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_test_hexcmp/20 (mbedtls_test_hexcmp) @062b40a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_hexcmp (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:117207684 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify_alloc/19 (mbedtls_test_unhexify_alloc) @062a6540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_unhexify_alloc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_zero_alloc/18 (mbedtls_test_zero_alloc) @062a6e70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_zero_alloc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_hexify/17 (mbedtls_test_hexify) @062a6d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_hexify (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_unhexify/16 (mbedtls_test_unhexify) @062a6bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_unhexify (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:116035461 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_le_s/15 (mbedtls_test_le_s) @062a6a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_le_s (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_le_u/14 (mbedtls_test_le_u) @062a6930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_le_u (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_equal/13 (mbedtls_test_equal) @062a67e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_equal (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_info_reset/12 (mbedtls_test_info_reset) @062a6690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_info_reset (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_case_uses_negative_0/11 (mbedtls_test_case_uses_negative_0) @05efda20
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.mbedtls_test_case_uses_negative_0 (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized
+mbedtls_test_set_step/10 (mbedtls_test_set_step) @062a6498
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_set_step (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_skip/9 (mbedtls_test_skip) @062a6348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_skip (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_fail/8 (mbedtls_test_fail) @062a61f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_fail (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_ascii2uc/7 (mbedtls_test_ascii2uc) @062a60a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_ascii2uc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_test_platform_teardown/6 (mbedtls_test_platform_teardown) @06294d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_platform_teardown (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_platform_setup/5 (mbedtls_test_platform_setup) @06294b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_test_platform_setup (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_test_info/4 (mbedtls_test_info) @05efd7e0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.mbedtls_test_info (implicit_section)
+  Aux: @05efda20
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+platform_ctx/3 (platform_ctx) @05efd798
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.platform_ctx (implicit_section)
+  Aux: @05efd7e0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:

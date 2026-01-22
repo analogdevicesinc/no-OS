@@ -1,0 +1,1300 @@
+Trivially needed symbols: aes_gmac/45 aes_gcm_ad/44 aes_gcm_ae/43
+
+
+Initial Symbol table:
+
+memcmp/51 (memcmp) @062b2b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 
+  Calls: 
+memcpy/50 (memcpy) @062b2a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ghash/37 aes_gcm_prepare_j0/40 
+  Calls: 
+mxq_aes_encrypt/49 (mxq_aes_encrypt) @062b29d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gctr/38 aes_gctr/38 aes_gcm_init_hash_subkey/39 
+  Calls: 
+memset/48 (memset) @062b2930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gf_mult/35 ghash/37 ghash_start/36 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_init/47 (aes_encrypt_init) @062b2888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_deinit/46 (aes_encrypt_deinit) @062b27e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: 
+aes_gmac/45 (aes_gmac) @062b2738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: aes_gcm_ae/43 
+aes_gcm_ad/44 (aes_gcm_ad) @062b25e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b2738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/51 aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ae/43 (aes_gcm_ae) @062b23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b25e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gmac/45 
+  Calls: aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ghash/42 (aes_gcm_ghash) @062b22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a0bd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash/37 ghash_start/36 
+aes_gcm_gctr/41 (aes_gcm_gctr) @062b2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b22a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: aes_gctr/38 inc32/32 
+aes_gcm_prepare_j0/40 (aes_gcm_prepare_j0) @062b2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b2150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash_start/36 memset/48 memcpy/50 
+aes_gcm_init_hash_subkey/39 (aes_gcm_init_hash_subkey) @062a0d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b2000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 memset/48 aes_encrypt_init/47 
+aes_gctr/38 (aes_gctr) @062a0bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b25e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_gctr/41 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 inc32/32 xor_block/33 mxq_aes_encrypt/49 
+ghash/37 (ghash) @062a0a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b2150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_prepare_j0/40 aes_gcm_prepare_j0/40 
+  Calls: gf_mult/35 xor_block/33 memset/48 memcpy/50 gf_mult/35 xor_block/33 
+ghash_start/36 (ghash_start) @062a0690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a0a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_prepare_j0/40 
+  Calls: memset/48 
+gf_mult/35 (gf_mult) @062a0540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b2150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ghash/37 ghash/37 
+  Calls: shift_right_block/34 shift_right_block/34 xor_block/33 memset/48 
+shift_right_block/34 (shift_right_block) @062a0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b2150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: gf_mult/35 gf_mult/35 
+  Calls: 
+xor_block/33 (xor_block) @062a01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a0540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 gf_mult/35 ghash/37 ghash/37 
+  Calls: 
+inc32/32 (inc32) @062a00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b22a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 aes_gcm_gctr/41 
+  Calls: 
+rotr/31 (rotr) @0628cdc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_close_linux_tracing/30 (wpa_debug_close_linux_tracing) @0628c348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_linux_tracing/29 (wpa_debug_open_linux_tracing) @0628c1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_close_syslog/28 (wpa_debug_close_syslog) @0628c0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_syslog/27 (wpa_debug_open_syslog) @0627ebd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf_key/26 (wpa_hexdump_buf_key) @0627e738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf/25 (wpa_hexdump_buf) @0627e5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_str/24 (wpabuf_put_str) @06273f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_set/23 (wpabuf_set) @06273dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_buf/22 (wpabuf_put_buf) @06273c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_data/21 (wpabuf_put_data) @06273b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be32/20 (wpabuf_put_be32) @062739d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be24/19 (wpabuf_put_be24) @06273888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be16/18 (wpabuf_put_be16) @06273738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le32/17 (wpabuf_put_le32) @062735e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le16/16 (wpabuf_put_le16) @06273498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_u8/15 (wpabuf_put_u8) @06273348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead_u8/14 (wpabuf_mhead_u8) @062731f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead/13 (wpabuf_mhead) @062730a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head_u8/12 (wpabuf_head_u8) @06267a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head/11 (wpabuf_head) @06267888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_tailroom/10 (wpabuf_tailroom) @06267f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_len/9 (wpabuf_len) @06267dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_size/8 (wpabuf_size) @06267c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_broadcast_ether_addr/7 (is_broadcast_ether_addr) @062675e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_zero_ether_addr/6 (is_zero_ether_addr) @06267498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_realloc_array/5 (os_realloc_array) @0622ef18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_calloc/4 (os_calloc) @0622ec78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__locale_ctype_ptr_l/3 (__locale_ctype_ptr_l) @06206738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @061ca0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @0615d930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @0615d150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: rotr/31 wpa_debug_close_linux_tracing/30 wpa_debug_open_linux_tracing/29 wpa_debug_close_syslog/28 wpa_debug_open_syslog/27 wpa_hexdump_buf_key/26 wpa_hexdump_buf/25 wpabuf_put_str/24 wpabuf_set/23 wpabuf_put_buf/22 wpabuf_put_data/21 wpabuf_put_be32/20 wpabuf_put_be24/19 wpabuf_put_be16/18 wpabuf_put_le32/17 wpabuf_put_le16/16 wpabuf_put_u8/15 wpabuf_mhead_u8/14 wpabuf_mhead/13 wpabuf_head_u8/12 wpabuf_head/11 wpabuf_tailroom/10 wpabuf_len/9 wpabuf_size/8 is_broadcast_ether_addr/7 is_zero_ether_addr/6 os_realloc_array/5 os_calloc/4 __locale_ctype_ptr_l/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+memcmp/51 (memcmp) @062b2b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 
+  Calls: 
+memcpy/50 (memcpy) @062b2a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ghash/37 aes_gcm_prepare_j0/40 
+  Calls: 
+mxq_aes_encrypt/49 (mxq_aes_encrypt) @062b29d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gctr/38 aes_gctr/38 aes_gcm_init_hash_subkey/39 
+  Calls: 
+memset/48 (memset) @062b2930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gf_mult/35 ghash/37 ghash_start/36 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_init/47 (aes_encrypt_init) @062b2888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_deinit/46 (aes_encrypt_deinit) @062b27e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: 
+aes_gmac/45 (aes_gmac) @062b2738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: aes_gcm_ae/43 
+aes_gcm_ad/44 (aes_gcm_ad) @062b25e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/51 aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ae/43 (aes_gcm_ae) @062b23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gmac/45 
+  Calls: aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ghash/42 (aes_gcm_ghash) @062b22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash/37 ghash_start/36 
+aes_gcm_gctr/41 (aes_gcm_gctr) @062b2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: aes_gctr/38 inc32/32 
+aes_gcm_prepare_j0/40 (aes_gcm_prepare_j0) @062b2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash_start/36 memset/48 memcpy/50 
+aes_gcm_init_hash_subkey/39 (aes_gcm_init_hash_subkey) @062a0d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 memset/48 aes_encrypt_init/47 
+aes_gctr/38 (aes_gctr) @062a0bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_gctr/41 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 inc32/32 xor_block/33 mxq_aes_encrypt/49 
+ghash/37 (ghash) @062a0a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_prepare_j0/40 aes_gcm_prepare_j0/40 
+  Calls: gf_mult/35 xor_block/33 memset/48 memcpy/50 gf_mult/35 xor_block/33 
+ghash_start/36 (ghash_start) @062a0690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_prepare_j0/40 
+  Calls: memset/48 
+gf_mult/35 (gf_mult) @062a0540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ghash/37 ghash/37 
+  Calls: shift_right_block/34 shift_right_block/34 xor_block/33 memset/48 
+shift_right_block/34 (shift_right_block) @062a0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: gf_mult/35 gf_mult/35 
+  Calls: 
+xor_block/33 (xor_block) @062a01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 gf_mult/35 ghash/37 ghash/37 
+  Calls: 
+inc32/32 (inc32) @062a00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 aes_gcm_gctr/41 
+  Calls: 
+
+
+Initial Symbol table:
+
+memcmp/51 (memcmp) @062b2b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 
+  Calls: 
+memcpy/50 (memcpy) @062b2a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ghash/37 aes_gcm_prepare_j0/40 
+  Calls: 
+mxq_aes_encrypt/49 (mxq_aes_encrypt) @062b29d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gctr/38 aes_gctr/38 aes_gcm_init_hash_subkey/39 
+  Calls: 
+memset/48 (memset) @062b2930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gf_mult/35 ghash/37 ghash_start/36 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_init/47 (aes_encrypt_init) @062b2888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_deinit/46 (aes_encrypt_deinit) @062b27e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: 
+aes_gmac/45 (aes_gmac) @062b2738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: aes_gcm_ae/43 
+aes_gcm_ad/44 (aes_gcm_ad) @062b25e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/51 aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ae/43 (aes_gcm_ae) @062b23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gmac/45 
+  Calls: aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ghash/42 (aes_gcm_ghash) @062b22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash/37 ghash_start/36 
+aes_gcm_gctr/41 (aes_gcm_gctr) @062b2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: aes_gctr/38 inc32/32 
+aes_gcm_prepare_j0/40 (aes_gcm_prepare_j0) @062b2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash_start/36 memset/48 memcpy/50 
+aes_gcm_init_hash_subkey/39 (aes_gcm_init_hash_subkey) @062a0d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 memset/48 aes_encrypt_init/47 
+aes_gctr/38 (aes_gctr) @062a0bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_gctr/41 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 inc32/32 xor_block/33 mxq_aes_encrypt/49 
+ghash/37 (ghash) @062a0a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_prepare_j0/40 aes_gcm_prepare_j0/40 
+  Calls: gf_mult/35 xor_block/33 memset/48 memcpy/50 gf_mult/35 xor_block/33 
+ghash_start/36 (ghash_start) @062a0690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_prepare_j0/40 
+  Calls: memset/48 
+gf_mult/35 (gf_mult) @062a0540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ghash/37 ghash/37 
+  Calls: shift_right_block/34 shift_right_block/34 xor_block/33 memset/48 
+shift_right_block/34 (shift_right_block) @062a0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: gf_mult/35 gf_mult/35 
+  Calls: 
+xor_block/33 (xor_block) @062a01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 gf_mult/35 ghash/37 ghash/37 
+  Calls: 
+inc32/32 (inc32) @062a00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 aes_gcm_gctr/41 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memcmp/51 (memcmp) @062b2b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 
+  Calls: 
+memcpy/50 (memcpy) @062b2a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: ghash/37 aes_gcm_prepare_j0/40 
+  Calls: 
+mxq_aes_encrypt/49 (mxq_aes_encrypt) @062b29d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gctr/38 aes_gctr/38 aes_gcm_init_hash_subkey/39 
+  Calls: 
+memset/48 (memset) @062b2930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gf_mult/35 ghash/37 ghash_start/36 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_init/47 (aes_encrypt_init) @062b2888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_init_hash_subkey/39 
+  Calls: 
+aes_encrypt_deinit/46 (aes_encrypt_deinit) @062b27e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: 
+aes_gmac/45 (aes_gmac) @062b2738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: aes_gcm_ae/43 
+aes_gcm_ad/44 (aes_gcm_ad) @062b25e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcmp/51 aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ae/43 (aes_gcm_ae) @062b23f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gmac/45 
+  Calls: aes_encrypt_deinit/46 aes_gctr/38 aes_gcm_ghash/42 aes_gcm_gctr/41 aes_gcm_prepare_j0/40 aes_gcm_init_hash_subkey/39 
+aes_gcm_ghash/42 (aes_gcm_ghash) @062b22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash/37 ghash_start/36 
+aes_gcm_gctr/41 (aes_gcm_gctr) @062b2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: aes_gctr/38 inc32/32 
+aes_gcm_prepare_j0/40 (aes_gcm_prepare_j0) @062b2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: ghash/37 ghash/37 ghash_start/36 memset/48 memcpy/50 
+aes_gcm_init_hash_subkey/39 (aes_gcm_init_hash_subkey) @062a0d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 memset/48 aes_encrypt_init/47 
+aes_gctr/38 (aes_gctr) @062a0bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ad/44 aes_gcm_gctr/41 aes_gcm_ae/43 
+  Calls: mxq_aes_encrypt/49 inc32/32 xor_block/33 mxq_aes_encrypt/49 
+ghash/37 (ghash) @062a0a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_ghash/42 aes_gcm_prepare_j0/40 aes_gcm_prepare_j0/40 
+  Calls: gf_mult/35 xor_block/33 memset/48 memcpy/50 gf_mult/35 xor_block/33 
+ghash_start/36 (ghash_start) @062a0690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gcm_ghash/42 aes_gcm_prepare_j0/40 
+  Calls: memset/48 
+gf_mult/35 (gf_mult) @062a0540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: ghash/37 ghash/37 
+  Calls: shift_right_block/34 shift_right_block/34 xor_block/33 memset/48 
+shift_right_block/34 (shift_right_block) @062a0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: gf_mult/35 gf_mult/35 
+  Calls: 
+xor_block/33 (xor_block) @062a01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 gf_mult/35 ghash/37 ghash/37 
+  Calls: 
+inc32/32 (inc32) @062a00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: aes_gctr/38 aes_gcm_gctr/41 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memcmp/51 (memcmp) @062b2b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_gcm_ad/44 (1063970777 (estimated locally),0.99 per call) 
+  Calls: 
+memcpy/50 (memcpy) @062b2a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_gcm_prepare_j0/40 (365072224 (estimated locally),0.34 per call) ghash/37 (38976828 (estimated locally),0.33 per call) 
+  Calls: 
+mxq_aes_encrypt/49 (mxq_aes_encrypt) @062b29d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_gctr/38 (38976828 (estimated locally),0.22 per call) aes_gctr/38 (955630225 (estimated locally),5.34 per call) aes_gcm_init_hash_subkey/39 (907633961 (estimated locally),0.85 per call) 
+  Calls: 
+memset/48 (memset) @062b2930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_gcm_prepare_j0/40 (365072224 (estimated locally),0.34 per call) ghash/37 (38976828 (estimated locally),0.33 per call) aes_gcm_init_hash_subkey/39 (907633961 (estimated locally),0.85 per call) gf_mult/35 (7452626 (estimated locally),1.00 per call) ghash_start/36 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+aes_encrypt_init/47 (aes_encrypt_init) @062b2888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_gcm_init_hash_subkey/39 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+aes_encrypt_deinit/46 (aes_encrypt_deinit) @062b27e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: aes_gcm_ad/44 (1063970777 (estimated locally),0.99 per call) aes_gcm_ae/43 (1063970777 (estimated locally),0.99 per call) 
+  Calls: 
+aes_gmac/45 (aes_gmac) @062b2738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: aes_gcm_ae/43 (1073741824 (estimated locally),1.00 per call) 
+aes_gcm_ad/44 (aes_gcm_ad) @062b25e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memcmp/51 (1063970777 (estimated locally),0.99 per call) aes_encrypt_deinit/46 (1063970777 (estimated locally),0.99 per call) aes_gctr/38 (1063970777 (estimated locally),0.99 per call) aes_gcm_ghash/42 (1063970777 (estimated locally),0.99 per call) aes_gcm_gctr/41 (1063970777 (estimated locally),0.99 per call) aes_gcm_prepare_j0/40 (1063970777 (estimated locally),0.99 per call) aes_gcm_init_hash_subkey/39 (1073741824 (estimated locally),1.00 per call) 
+aes_gcm_ae/43 (aes_gcm_ae) @062b23f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: aes_gmac/45 (1073741824 (estimated locally),1.00 per call) 
+  Calls: aes_encrypt_deinit/46 (1063970777 (estimated locally),0.99 per call) aes_gctr/38 (1063970777 (estimated locally),0.99 per call) aes_gcm_ghash/42 (1063970777 (estimated locally),0.99 per call) aes_gcm_gctr/41 (1063970777 (estimated locally),0.99 per call) aes_gcm_prepare_j0/40 (1063970777 (estimated locally),0.99 per call) aes_gcm_init_hash_subkey/39 (1073741824 (estimated locally),1.00 per call) 
+aes_gcm_ghash/42 (aes_gcm_ghash) @062b22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: aes_gcm_ad/44 (1063970777 (estimated locally),0.99 per call) aes_gcm_ae/43 (1063970777 (estimated locally),0.99 per call) 
+  Calls: ghash/37 (1073741824 (estimated locally),1.00 per call) ghash/37 (1073741824 (estimated locally),1.00 per call) ghash/37 (1073741824 (estimated locally),1.00 per call) ghash_start/36 (1073741824 (estimated locally),1.00 per call) 
+aes_gcm_gctr/41 (aes_gcm_gctr) @062b2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: aes_gcm_ad/44 (1063970777 (estimated locally),0.99 per call) aes_gcm_ae/43 (1063970777 (estimated locally),0.99 per call) 
+  Calls: aes_gctr/38 (524845000 (estimated locally),0.49 per call) inc32/32 (524845000 (estimated locally),0.49 per call) 
+aes_gcm_prepare_j0/40 (aes_gcm_prepare_j0) @062b2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: aes_gcm_ad/44 (1063970777 (estimated locally),0.99 per call) aes_gcm_ae/43 (1063970777 (estimated locally),0.99 per call) 
+  Calls: ghash/37 (708669601 (estimated locally),0.66 per call) ghash/37 (708669601 (estimated locally),0.66 per call) ghash_start/36 (708669601 (estimated locally),0.66 per call) memset/48 (365072224 (estimated locally),0.34 per call) memcpy/50 (365072224 (estimated locally),0.34 per call) 
+aes_gcm_init_hash_subkey/39 (aes_gcm_init_hash_subkey) @062a0d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: aes_gcm_ad/44 (1073741824 (estimated locally),1.00 per call) aes_gcm_ae/43 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mxq_aes_encrypt/49 (907633961 (estimated locally),0.85 per call) memset/48 (907633961 (estimated locally),0.85 per call) aes_encrypt_init/47 (1073741824 (estimated locally),1.00 per call) 
+aes_gctr/38 (aes_gctr) @062a0bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:178956971 (estimated locally) body local
+  Called by: aes_gcm_ad/44 (1063970777 (estimated locally),0.99 per call) aes_gcm_ae/43 (1063970777 (estimated locally),0.99 per call) aes_gcm_gctr/41 (524845000 (estimated locally),0.49 per call) 
+  Calls: mxq_aes_encrypt/49 (38976828 (estimated locally),0.22 per call) inc32/32 (955630225 (estimated locally),5.34 per call) xor_block/33 (955630225 (estimated locally),5.34 per call) mxq_aes_encrypt/49 (955630225 (estimated locally),5.34 per call) 
+ghash/37 (ghash) @062a0a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:118111600 (estimated locally) body local
+  Called by: aes_gcm_prepare_j0/40 (708669601 (estimated locally),0.66 per call) aes_gcm_prepare_j0/40 (708669601 (estimated locally),0.66 per call) aes_gcm_ghash/42 (1073741824 (estimated locally),1.00 per call) aes_gcm_ghash/42 (1073741824 (estimated locally),1.00 per call) aes_gcm_ghash/42 (1073741824 (estimated locally),1.00 per call) 
+  Calls: gf_mult/35 (38976828 (estimated locally),0.33 per call) xor_block/33 (38976828 (estimated locally),0.33 per call) memset/48 (38976828 (estimated locally),0.33 per call) memcpy/50 (38976828 (estimated locally),0.33 per call) gf_mult/35 (955630225 (estimated locally),8.09 per call) xor_block/33 (955630225 (estimated locally),8.09 per call) 
+ghash_start/36 (ghash_start) @062a0690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: aes_gcm_prepare_j0/40 (708669601 (estimated locally),0.66 per call) aes_gcm_ghash/42 (1073741824 (estimated locally),1.00 per call) 
+  Calls: memset/48 (1073741824 (estimated locally),1.00 per call) 
+gf_mult/35 (gf_mult) @062a0540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:7452626 (estimated locally) body local
+  Called by: ghash/37 (38976828 (estimated locally),0.33 per call) ghash/37 (955630225 (estimated locally),8.09 per call) 
+  Calls: shift_right_block/34 (477224553 (estimated locally),64.03 per call) shift_right_block/34 (477224553 (estimated locally),64.03 per call) xor_block/33 (314968203 (estimated locally),42.26 per call) memset/48 (7452626 (estimated locally),1.00 per call) 
+shift_right_block/34 (shift_right_block) @062a0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: gf_mult/35 (477224553 (estimated locally),64.03 per call) gf_mult/35 (477224553 (estimated locally),64.03 per call) 
+  Calls: 
+xor_block/33 (xor_block) @062a01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: ghash/37 (38976828 (estimated locally),0.33 per call) ghash/37 (955630225 (estimated locally),8.09 per call) aes_gctr/38 (955630225 (estimated locally),5.34 per call) gf_mult/35 (314968203 (estimated locally),42.26 per call) 
+  Calls: 
+inc32/32 (inc32) @062a00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: aes_gcm_gctr/41 (524845000 (estimated locally),0.49 per call) aes_gctr/38 (955630225 (estimated locally),5.34 per call) 
+  Calls: 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+memcmp/51 (memcmp) @062b2b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/50 (memcpy) @062b2a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mxq_aes_encrypt/49 (mxq_aes_encrypt) @062b29d8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/48 (memset) @062b2930
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+aes_encrypt_init/47 (aes_encrypt_init) @062b2888
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+aes_encrypt_deinit/46 (aes_encrypt_deinit) @062b27e0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+aes_gmac/45 (aes_gmac) @062b2738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.aes_gmac (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+aes_gcm_ad/44 (aes_gcm_ad) @062b25e8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.aes_gcm_ad (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+aes_gcm_ae/43 (aes_gcm_ae) @062b23f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.aes_gcm_ae (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+aes_gcm_ghash/42 (aes_gcm_ghash) @062b22a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.aes_gcm_ghash (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+aes_gcm_gctr/41 (aes_gcm_gctr) @062b2150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.aes_gcm_gctr (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+aes_gcm_prepare_j0/40 (aes_gcm_prepare_j0) @062b2000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.aes_gcm_prepare_j0 (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+aes_gcm_init_hash_subkey/39 (aes_gcm_init_hash_subkey) @062a0d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.aes_gcm_init_hash_subkey (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+aes_gctr/38 (aes_gctr) @062a0bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.aes_gctr (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:178956971 (estimated locally) local
+  Called by: 
+  Calls: 
+ghash/37 (ghash) @062a0a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ghash (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:118111600 (estimated locally) local
+  Called by: 
+  Calls: 
+ghash_start/36 (ghash_start) @062a0690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.ghash_start (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+gf_mult/35 (gf_mult) @062a0540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.gf_mult (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:7452626 (estimated locally) local
+  Called by: 
+  Calls: 
+shift_right_block/34 (shift_right_block) @062a0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.shift_right_block (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+xor_block/33 (xor_block) @062a01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.xor_block (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+inc32/32 (inc32) @062a00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.inc32 (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 

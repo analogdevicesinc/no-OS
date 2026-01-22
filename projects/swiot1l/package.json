@@ -1,0 +1,43 @@
+{
+  "name": "@<scope>/swiot1l",
+  "version": "0.1.0",
+  "description": "A source xPack with <your-description-here>",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/<user-id>/swiot1l.git"
+  },
+  "homepage": "https://github.com/<user-id>/swiot1l/",
+  "bugs": {
+    "url": "https://github.com/<user-id>/swiot1l/issues/"
+  },
+  "keywords": [
+    "xpack"
+  ],
+  "author": {
+    "name": "NBroderi",
+    "email": "niall.broderick@analog.com",
+    "url": "<author-url>"
+  },
+  "license": "MIT",
+  "config": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "xpack": {
+    "minimumXpmRequired": "0.20.2",
+    "dependencies": {},
+    "devDependencies": {
+      "@xpack-dev-tools/openocd": {
+        "specifier": "0.12.0-4.1",
+        "local": "link",
+        "platforms": "all"
+      }
+    },
+    "properties": {},
+    "actions": {},
+    "buildConfigurations": {}
+  }
+}

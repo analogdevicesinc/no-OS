@@ -1,0 +1,527 @@
+\doxysection{USS\+\_\+\+API.\+h}
+\hypertarget{_u_s_s___a_p_i_8h_source}{}\label{_u_s_s___a_p_i_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/USS\_API.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/USS\_API.h}}
+\mbox{\hyperlink{_u_s_s___a_p_i_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ \_\_USS\_API\_H\_INCLUDED\_\_}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ \_\_USS\_API\_H\_INCLUDED\_\_}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_m_x_q___a_p_i_8h}{MXQ\_API.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00012\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a12c45a3ff63818c323b14ba9724c63ad}{USS\_KEYUSE\_SECURECHANNEL}}\ \ \ \ \ \ \ \ \ \ \ \ =0x00U,\ }
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ac6699b1fa751f894551b83fb40d78300}{USS\_KEYUSE\_DATASIGNATURE}}\ \ \ \ \ \ \ \ \ \ \ \ =0x01U,\ }
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60acf7707d78240fead4905179f66d69739}{USS\_KEYUSE\_ATTESTATION}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =0x11U,\ }
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a08d034922ab3a79cc1cf0ac7812db903}{USS\_KEYUSE\_INTERNALENCRYPTION}}\ \ \ \ \ \ \ =0xA2U,\ }
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a62e6baff9aa852e21b2dc5e96796ab63}{USS\_KEYUSE\_INTERNALMAC}}\ \ \ \ \ \ \ \ =0xA1U,\ }
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8e331e233abde588a7d475b335484c19}{USS\_KEYUSE\_ENCRYPTION}}\ \ \ \ \ \ =0x02U,\ }
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afa1165f614320642dbf6cb7e540a1db6}{USS\_KEYUSE\_TLSAUTH}}\ \ \ \ \ \ \ \ \ \ \ \ =0x04U,\ }
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a57b1e4dd3e51d96b1832c9421d3e02bb}{USS\_KEYUSE\_ADMINAUTH}}\ \ \ \ \ \ \ \ =0x08U,\ }
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a87b9ea4fe02957bdd6c3169aa4f823b1}{USS\_KEYUSE\_ENDCUSTOMERAUTH}}\ \ \ \ \ \ \ \ \ \ \ \ =0x18U,\ }
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3247234d0d0890de725c6a820e996025}{USS\_KEYUSE\_VERIFY\_KEY\_CERT}}\ \ \ \ \ \ \ \ \ \ \ \ =0x10U,\ }
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a3354873bb9765b5a5a5e1e9a32f73ee1}{USS\_KEYUSE\_VERIFY\_FW}}\ \ \ \ \ \ \ \ =0x20U,\ }
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a893ba9abf6a29496e2f9b51c9e4f4d04}{USS\_KEYUSE\_RFU}}\ \ \ \ \ \ \ \ \ \ \ \ =0x40U,\ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60accd44641ea6e2cd45539d72e47bed3e8}{USS\_KEYUSE\_KEY\_IMPORT}}\ \ \ \ \ \ =0x80U,\ }
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aec0d74142e15a9e4bc3e45b7a8c8256d}{USS\_KEYUSE\_GPIO\_CONTROL}}\ \ \ \ \ \ \ \ \ \ =0x8AU,\ }
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60afb4d336db573d90ec791bb38316d6764}{USS\_KEYUSE\_KEY\_EXCHAGE}}\ \ \ \ \ \ \ \ =0xD1U,\ }
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#ifdef\ MXQ\_FW\_UPDATE\_CAP}}
+\DoxyCodeLine{00029\ \ \ \ \ USS\_KEYUSE\_FIRMWARE\_UPDATE\ \ \ \ \ \ \ \ \ \ =0xA0U,\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a835ebbd794a4c22c368a226bcd5bdc29}{USS\_KEYUSE\_NONE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =0xFFU\ \ }
+\DoxyCodeLine{00033\ \}\ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a2ab50d3dfa602528154518cd74a7f2f2}{uss\_keyuse\_t}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00040\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{comment}{/*\ \ For\ USS\_KEYTYPE\_ECC:\ */}}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ae534c9a9a54d20ce5861d8277edffe49}{USS\_KEYPARAM\_EC\_P256R1}},\ }
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0b47c55ac403537662123190438f33c}{USS\_KEYPARAM\_EC\_P384R1}},\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a8a52431a2210923b73c3ba79e5b31e5a}{USS\_KEYPARAM\_EC\_P521R1}},\ }
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60af16b48e4352ee5dfe83f167482e6dba0}{USS\_KEYPARAM\_EC\_BP256R1}},\ }
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a43215b433cc0b9a18c4472a32fbe9e1f}{USS\_KEYPARAM\_EC\_BP384R1}},\ }
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aa857e7d13bedfaa6117bb00b5f7c0acf}{USS\_KEYPARAM\_EC\_BP512R1}},\ }
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0559b213e1143f6aeb3a12d95afecd8c}{USS\_KEYPARAM\_EDWARD\_TBD}},}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#ifdef\ ENABLE\_RSA}}
+\DoxyCodeLine{00050\ \ \ \ \ USS\_KEYPARAM\_RSA\_PUB3,}
+\DoxyCodeLine{00051\ \ \ \ \ USS\_KEYPARAM\_RSA\_CRT\_PUB3,}
+\DoxyCodeLine{00052\ \ \ \ \ USS\_KEYPARAM\_RSA\_PUB65537,}
+\DoxyCodeLine{00053\ \ \ \ \ USS\_KEYPARAM\_RSA\_CRT\_PUB65537,}
+\DoxyCodeLine{00054\ \ \ \ \ USS\_KEYPARAM\_DHE\ =\ 0xAA,}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a24f5926c423f1a5a49a53dea7c84ecb0}{USS\_UNKNOWN\_CURVE}}}
+\DoxyCodeLine{00057\ \}\ \mbox{\hyperlink{_u_s_s___a_p_i_8h_ac153fdfa88eacf6419f56a13363f456c}{uss\_keyparam\_id\_t}};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00065\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a29b6c4dc2eae0a7c76b9a27e72d7be70}{USS\_KEYTYPE\_AES}},\ \ \ \ \ }
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a1028ef3cf4d06b9f86b91fbc774f29bd}{USS\_KEYTYPE\_PSK}},\ \ \ \ \ }
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a98587741e1507567707ba651151b9709}{USS\_KEYTYPE\_HMAC}},\ \ \ \ }
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a6d1363ab8a49a8d2c8e847b778cfdfdc}{USS\_KEYTYPE\_ECC}},\ \ \ \ \ }
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a90ac6bec58cd8841edab8a3b408d10bb}{USS\_KEYTYPE\_IKM}},\ \ \ \ \ }
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a0f9296d1167d7ea0568711e837f93315}{USS\_KEYTYPE\_RSA}},\ \ \ \ \ }
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60abd37e822a8943fc1686580688a76fe5e}{USS\_KEYTYPE\_UNKNOWN}},\ }
+\DoxyCodeLine{00073\ \}\ \mbox{\hyperlink{_u_s_s___a_p_i_8h_ae8a904c950c73aa90b30cd91e5375cf0}{uss\_keytype\_id\_t}};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{struct___p_a_c_k_e_d}{\_PACKED}}}
+\DoxyCodeLine{00080\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aff64426f0c8c4c52bdc97c656c527f42}{USS\_OBJTYPE\_SECRETKEY}}\ \ \ \ \ =\ 0x01U,\ }
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a7fc9792b98ff8658e13a1f61f372df77}{USS\_OBJTYPE\_PUBKEY}}\ \ \ \ \ \ \ \ =\ 0x02U,\ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a048e5cc7763b963af596949414bea92b}{USS\_OBJTYPE\_KEYPAIR}}\ \ \ \ \ \ \ =\ 0x03U,\ }
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a832f85bcc9e50922bcb0ff36bfb6a75b}{USS\_OBJTYPE\_TRANSPARENT}}\ \ \ =\ 0x04U,\ }
+\DoxyCodeLine{00085\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60ad0d3e09000b823528df5978aba5209f3}{USS\_OBJTYPE\_COUNTER\_UP}}\ \ \ \ =\ 0x05U,\ }
+\DoxyCodeLine{00086\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a651d3974fef82389f48af2e1baaf02b3}{USS\_OBJTYPE\_X509}}\ \ \ \ \ \ \ \ \ \ =\ 0x06U,\ }
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60a4f52af04f28f76337395cb4e10759e28}{USS\_OBJTYPE\_COUNTER\_DOWN}}\ \ =\ 0x07U,\ }
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a8725e0903c76ca456eeec02a0f3a7f60aee06e56f48ad2602f43180e023d4e95d}{USS\_OBJTYPE\_UNKNOWN}}\ \ \ \ \ \ \ =\ 0x80U\ \ }
+\DoxyCodeLine{00089\ \}\ \mbox{\hyperlink{_u_s_s___a_p_i_8h_a73909432c404289a834e42f4fa191150}{uss\_objecttype\_t}};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ uss\_algo\_id\_t\ \ \ \ \ \ \ \ \ \ \ mxq\_algo\_id\_t}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#define\ uss\_object\_prop\_t\ \ \ \ \ \ \ mxq\_object\_prop\_t}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\#define\ USS\_Module\_Init(void)\ \(\backslash\)}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Module\_Init(void)}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#define\ USS\_Module\_Deinit(void)\ \(\backslash\)}}
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Module\_Deinit(void)}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ USS\_Module\_SetInterface(i)\ \(\backslash\)}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Module\_SetInterface(i)}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ USS\_ResetFactory(void)\ \(\backslash\)}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ResetFactory(void)}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#define\ USS\_Reset(void)\ \(\backslash\)}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Reset(void)}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#define\ USS\_DisplayObjectDetails(\ pOption,\ pObjDetails,\ pDetailsLen)\ \(\backslash\)}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_DisplayObjectDetails(\ pOption,\ pObjDetails,\ pDetailsLen)}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#define\ USS\_ListObject(\ option,\ \ objectid,\ \ pdest,\ \ pmaxlen\_readlen\ )\ \(\backslash\)}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ListObject(\ option,\ \ objectid,\ \ pdest,\ \ pmaxlen\_readlen\ )}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#define\ USS\_CreateObject(\ objectid,\ objectlen,\ objtype,\ objprops,\ accessrules)\ \(\backslash\)}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_CreateObject(\ objectid,\ objectlen,\ objtype,\ objprops,\ accessrules)}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#define\ USS\_DeleteObject(\ objectid)\(\backslash\)}}
+\DoxyCodeLine{00120\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_DeleteObject(\ objectid)}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#define\ USS\_WriteObject(\ objectid,\ \ dest\_offset,\ \ psrc,\ \ len)\(\backslash\)}}
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_WriteObject(\ objectid,\ \ dest\_offset,\ \ psrc,\ \ len)}}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#define\ USS\_WriteObjectV2(objectid,dest\_offset,psrc,len,keyid,algoid,pIv,pTag)\(\backslash\)}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_WriteObjectV2(objectid,dest\_offset,psrc,len,keyid,algoid,pIv,pTag)}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#define\ USS\_UpdateCounter(\ objectid,\ countval)\(\backslash\)}}
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_UpdateCounter(\ objectid,\ countval)}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\#define\ USS\_ReadObject(\ objectid\ ,\ \ src\_offset,\ \ pdest,\ \ pmaxlen\_readlen)\(\backslash\)}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ReadObject(\ objectid\ ,\ \ src\_offset,\ \ pdest,\ \ pmaxlen\_readlen)}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ USS\_ReadCounter(\ objectid,\ \ countval)\(\backslash\)}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ReadCounter(\ objectid,\ \ countval)}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#define\ USS\_Ping(\ l)\(\backslash\)}}
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Ping(\ l)}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#define\ USS\_Get\_Challenge(\ p\_buff\_out,\ \ len)\(\backslash\)}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Get\_Challenge(\ p\_buff\_out,\ \ len)}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#define\ USS\_Get\_Random\_Ext(\ p\_buff\_out,\ \ len,\ \ option)\(\backslash\)}}
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Get\_Random\_Ext(\ p\_buff\_out,\ \ len,\ \ option)}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#ifdef\ MAXQ106x}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#define\ USS\_Get\_Random(p,l)\ USS\_Get\_Challenge(p,l)}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00151\ \textcolor{preprocessor}{\#define\ USS\_Get\_Random(p,l)\ USS\_Get\_Random\_Ext(p,l,0)}}
+\DoxyCodeLine{00152\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#define\ USS\_Attestation(\ p\_buff\_out,\ \ len,\ \ option,\ \ key\_id,\ \ alg\_id,\ \ objid)\(\backslash\)}}
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Attestation(\ p\_buff\_out,\ \ len,\ \ option,\ \ key\_id,\ \ alg\_id,\ \ objid)}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#define\ USS\_GPIO\_Ctrl(\ pSecGpioId,\ \ pSecGpioMode,\ pPulseDuration,\ \ pOutputCond,\ pSignAlgo,\ pKeyId,\ pSignature,\ pSignLen)\(\backslash\)}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_GPIO\_Ctrl(\ pSecGpioId,\ \ pSecGpioMode,\ pPulseDuration,\ \ pOutputCond,\ pSignAlgo,\ pKeyId,\ pSignature,\ pSignLen)}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#define\ USS\_GPIO\_Read(pSecGpioId,\ pSignAlgo,\ pKeyId,\ output,\ \ olen,\ pChallenge)\(\backslash\)}}
+\DoxyCodeLine{00161\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_GPIO\_Read(pSecGpioId,\ pSignAlgo,\ pKeyId,\ output,\ \ olen,\ pChallenge)}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{preprocessor}{\#define\ USS\_EstablishKey\_DH(option\_flag,\ rsa\_ssa\_algo,\(\backslash\)}}
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\ \ \ \ moduluslen,\ modulus,\ generator,\ message,\(\backslash\)}}
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\ \ \ \ server\_rand\_len,\ server\_rand\_buf,\(\backslash\)}}
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\ \ \ \ keyusage,\(\backslash\)}}
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\ \ \ \ dst\_Aes1\_kid,\ dst1\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00168\ \textcolor{preprocessor}{\ \ \ \ dst\_Aes2\_kid,\ dst2\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00169\ \textcolor{preprocessor}{\ \ \ \ fixed\_info\_len,\ fixed\_info,\(\backslash\)}}
+\DoxyCodeLine{00170\ \textcolor{preprocessor}{\ \ \ \ sign\_verif\_key\_id,\ signing\_key\_pair\_id,\(\backslash\)}}
+\DoxyCodeLine{00171\ \textcolor{preprocessor}{\ \ \ \ signature\_len,\ signature,\(\backslash\)}}
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\ \ \ \ out\_buf,\ out\_buf\_len)\(\backslash\)}}
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_EstablishKey\_DH(option\_flag,\ rsa\_ssa\_algo,\(\backslash\)}}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\ \ \ \ moduluslen,\ modulus,\ generator,\ message,\(\backslash\)}}
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\ \ \ \ server\_rand\_len,\ server\_rand\_buf,\(\backslash\)}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\ \ \ \ keyusage,\(\backslash\)}}
+\DoxyCodeLine{00177\ \textcolor{preprocessor}{\ \ \ \ dst\_Aes1\_kid,\ dst1\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00178\ \textcolor{preprocessor}{\ \ \ \ dst\_Aes2\_kid,\ dst2\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\ \ \ \ fixed\_info\_len,\ fixed\_info,\(\backslash\)}}
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\ \ \ \ sign\_verif\_key\_id,\ signing\_key\_pair\_id,\(\backslash\)}}
+\DoxyCodeLine{00181\ \textcolor{preprocessor}{\ \ \ \ signature\_len,\ signature,\(\backslash\)}}
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\ \ \ \ out\_buf,\ out\_buf\_len)}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#define\ USS\_EstablishKey(option\_flag,\ ec\_type,\ key\_pair\_id,\ pub\_key\_id,\ pub\_key,\(\backslash\)}}
+\DoxyCodeLine{00185\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ server\_rand\_len,\ server\_rand\_buf,\(\backslash\)}}
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ dst\_Aes1\_kid,\ dst1\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ dst\_Aes2\_kid,\ dst2\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ fixed\_info\_len,\ fixed\_info,\(\backslash\)}}
+\DoxyCodeLine{00189\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ sign\_verif\_key\_id,\ signing\_key\_pair\_id,\ signature,\(\backslash\)}}
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ out\_buf,\ out\_buf\_len)\(\backslash\)}}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_EstablishKey(option\_flag,\ ec\_type,\ key\_pair\_id,\ pub\_key\_id,\ pub\_key,\(\backslash\)}}
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ server\_rand\_len,\ server\_rand\_buf,\(\backslash\)}}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ dst\_Aes1\_kid,\ dst1\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ dst\_Aes2\_kid,\ dst2\_key\_len,\(\backslash\)}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ fixed\_info\_len,\ fixed\_info,\(\backslash\)}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ sign\_verif\_key\_id,\ signing\_key\_pair\_id,\ signature,\(\backslash\)}}
+\DoxyCodeLine{00197\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ out\_buf,\ out\_buf\_len)}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{preprocessor}{\#define\ USS\_Perform\_Key\_Exchange(\ key\_Exchange\_Session\ )\(\backslash\)}}
+\DoxyCodeLine{00201\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Perform\_Key\_Exchange(\ key\_Exchange\_Session\ )}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{preprocessor}{\#define\ USS\_TLS13\_Generate\_Key(\ key,\ \ key\_id,\ \ key\_type,\ \ key\_param\_id,\ \ key\_size,\ \ p,\ \ g\_size,\ \ g)\(\backslash\)}}
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS13\_Generate\_Key(\ key,\ \ key\_id,\ \ key\_type,\ \ key\_param\_id,\ \ key\_size,\ \ p,\ \ g\_size,\ \ g)}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#define\ USS\_TLS13\_Create\_Secret(\ peer\_key,\ \ peer\_key\_size,\ \ key\_id,\ \ key\_type,\ \ key\_param\_id,\ \ CSID,\ \ shared\_secret\_id,\ \ secret,\ \ secret\_size)\(\backslash\)}}
+\DoxyCodeLine{00207\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS13\_Create\_Secret(\ peer\_key,\ \ peer\_key\_size,\ \ key\_id,\ \ key\_type,\ \ key\_param\_id,\ \ CSID,\ \ shared\_secret\_id,\ \ secret,\ \ secret\_size)}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \textcolor{preprocessor}{\#define\ USS\_TLS13\_Update\_IV(\ key\_id,\ \ \ iv,\ \ iv\_len)\(\backslash\)}}
+\DoxyCodeLine{00210\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS13\_Update\_IV(\ key\_id,\ \ \ iv,\ \ iv\_len)}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#define\ USS\_TLS13\_Extract\_Secret(\ digest\_id,\ ret\_kid,\ prk,\ prk\_len,\ salt\_kid,\ salt,\ \ salt\_len,\ ikm\_kid,\ ikm,\ ikm\_len)\(\backslash\)}}
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS13\_Extract\_Secret(\ digest\_id,\ ret\_kid,\ prk,\ prk\_len,\ salt\_kid,\ salt,\ \ salt\_len,\ ikm\_kid,\ ikm,\ ikm\_len)}}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00215\ \textcolor{preprocessor}{\#define\ USS\_TLS13\_Expand\_Secret(\ digest\_id,\ \ ret\_kid,\ \ ret\_keytype,\ \ ret\_isiv,\ \ okm,\ \ okm\_len,\ \ prk\_kid,\ \ \ prk,\ \ prk\_len,\ \ \ info,\ \ info\_len)\(\backslash\)}}
+\DoxyCodeLine{00216\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS13\_Expand\_Secret(\ digest\_id,\ \ ret\_kid,\ \ ret\_keytype,\ \ ret\_isiv,\ \ okm,\ \ okm\_len,\ \ prk\_kid,\ \ \ prk,\ \ prk\_len,\ \ \ info,\ \ info\_len)}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#define\ USS\_Encrypt\_PMS\_with\_RSA(\ data,\ \ encrypted\_pms,\ \ data\_len,\ \ cert\_id,\ \ CSID)\(\backslash\)}}
+\DoxyCodeLine{00219\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Encrypt\_PMS\_with\_RSA(\ data,\ \ encrypted\_pms,\ \ data\_len,\ \ cert\_id,\ \ CSID)}}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \textcolor{preprocessor}{\#define\ USS\_Ecdh\_Compute\_Shared(curve\_id,\ cserver\_public\_key,\ client\_public\_key,\ key\_len,\ CSID)\(\backslash\)}}
+\DoxyCodeLine{00222\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Ecdh\_Compute\_Shared(curve\_id,\ cserver\_public\_key,\ client\_public\_key,\ key\_len,\ CSID)}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#define\ USS\_SetECDHEKey(algoid,curveID,na,random,randomlen,ecdheparams,ecdheparamslen,signature,signaturelen)\(\backslash\)}}
+\DoxyCodeLine{00225\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_SetECDHEKey(algoid,curveID,na,random,randomlen,ecdheparams,ecdheparamslen,signature,signaturelen)}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \textcolor{preprocessor}{\#define\ USS\_tls\_prf\_sha\_256(key\_ID,\ label,\ llen,\ rand,\ rlen,\ destbuf,\ dlen)\(\backslash\)}}
+\DoxyCodeLine{00228\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_tls\_prf\_sha\_256(key\_ID,\ label,\ llen,\ rand,\ rlen,\ destbuf,\ dlen)}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \textcolor{preprocessor}{\#define\ USS\_tls\_records(direction,key\_ID,iv,\ iv\_len,\ input,\ ilen,\ output,\ olen,\ hdr\_msg,\ hdr\_msg\_len)\(\backslash\)}}
+\DoxyCodeLine{00231\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_tls\_records(direction,key\_ID,iv,\ iv\_len,\ input,\ ilen,\ output,\ olen,\ hdr\_msg,\ hdr\_msg\_len)}}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \textcolor{preprocessor}{\#define\ USS\_cipher\_auth\_ccm(key\_ID,\(\backslash\)}}
+\DoxyCodeLine{00234\ \textcolor{preprocessor}{\ \ \ \ direction,\(\backslash\)}}
+\DoxyCodeLine{00235\ \textcolor{preprocessor}{\ \ \ \ iv,\ iv\_len,\(\backslash\)}}
+\DoxyCodeLine{00236\ \textcolor{preprocessor}{\ \ \ \ ad,\ ad\_len,\(\backslash\)}}
+\DoxyCodeLine{00237\ \textcolor{preprocessor}{\ \ \ \ input,\ \ ilen,\(\backslash\)}}
+\DoxyCodeLine{00238\ \textcolor{preprocessor}{\ \ \ \ output,\ olen,\(\backslash\)}}
+\DoxyCodeLine{00239\ \textcolor{preprocessor}{\ \ \ \ tag,\ tag\_len)\(\backslash\)}}
+\DoxyCodeLine{00240\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_cipher\_auth\_ccm(key\_ID\(\backslash\)}}
+\DoxyCodeLine{00241\ \textcolor{preprocessor}{\ \ \ \ direction,\(\backslash\)}}
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\ \ \ \ iv,\ iv\_len,\(\backslash\)}}
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\ \ \ \ ad,\ ad\_len,\(\backslash\)}}
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\ \ \ \ input,\ \ ilen,\(\backslash\)}}
+\DoxyCodeLine{00245\ \textcolor{preprocessor}{\ \ \ \ output,\ olen,\(\backslash\)}}
+\DoxyCodeLine{00246\ \textcolor{preprocessor}{\ \ \ \ tag,\ tag\_len)}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \textcolor{preprocessor}{\#define\ USS\_tls\_cipher\_cbc(direction,\(\backslash\)}}
+\DoxyCodeLine{00249\ \textcolor{preprocessor}{\ \ \ \ key\_ID,\(\backslash\)}}
+\DoxyCodeLine{00250\ \textcolor{preprocessor}{\ \ \ \ iv,\ iv\_len,\(\backslash\)}}
+\DoxyCodeLine{00251\ \textcolor{preprocessor}{\ \ \ \ input,\ ilen,\(\backslash\)}}
+\DoxyCodeLine{00252\ \textcolor{preprocessor}{\ \ \ \ output,\ olen,\(\backslash\)}}
+\DoxyCodeLine{00253\ \textcolor{preprocessor}{\ \ \ \ hdr\_msg,\ hdr\_msg\_len,\(\backslash\)}}
+\DoxyCodeLine{00254\ \textcolor{preprocessor}{\ \ \ \ maclen)\(\backslash\)}}
+\DoxyCodeLine{00255\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_tls\_cipher\_cbc(direction,\(\backslash\)}}
+\DoxyCodeLine{00256\ \textcolor{preprocessor}{\ \ \ \ key\_ID,\(\backslash\)}}
+\DoxyCodeLine{00257\ \textcolor{preprocessor}{\ \ \ \ iv,\ iv\_len,\(\backslash\)}}
+\DoxyCodeLine{00258\ \textcolor{preprocessor}{\ \ \ \ input,\ ilen,\(\backslash\)}}
+\DoxyCodeLine{00259\ \textcolor{preprocessor}{\ \ \ \ output,\ olen,\(\backslash\)}}
+\DoxyCodeLine{00260\ \textcolor{preprocessor}{\ \ \ \ hdr\_msg,\ hdr\_msg\_len,\(\backslash\)}}
+\DoxyCodeLine{00261\ \textcolor{preprocessor}{\ \ \ \ maclen)}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \textcolor{preprocessor}{\#define\ USS\_tls\_cipher\_aead(key\_ID,\(\backslash\)}}
+\DoxyCodeLine{00264\ \textcolor{preprocessor}{\ \ \ \ direction,\(\backslash\)}}
+\DoxyCodeLine{00265\ \textcolor{preprocessor}{\ \ \ \ algo,\(\backslash\)}}
+\DoxyCodeLine{00266\ \textcolor{preprocessor}{\ \ \ \ iv,\ iv\_len,\(\backslash\)}}
+\DoxyCodeLine{00267\ \textcolor{preprocessor}{\ \ \ \ aad,\ aad\_len,\(\backslash\)}}
+\DoxyCodeLine{00268\ \textcolor{preprocessor}{\ \ \ \ input,\ ilen,\(\backslash\)}}
+\DoxyCodeLine{00269\ \textcolor{preprocessor}{\ \ \ \ output,\ olen,\(\backslash\)}}
+\DoxyCodeLine{00270\ \textcolor{preprocessor}{\ \ \ \ tag,\ tag\_len)\(\backslash\)}}
+\DoxyCodeLine{00271\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_tls\_cipher\_aead(key\_ID,\(\backslash\)}}
+\DoxyCodeLine{00272\ \textcolor{preprocessor}{\ \ \ \ direction,\(\backslash\)}}
+\DoxyCodeLine{00273\ \textcolor{preprocessor}{\ \ \ \ algo,\(\backslash\)}}
+\DoxyCodeLine{00274\ \textcolor{preprocessor}{\ \ \ \ iv,\ iv\_len,\(\backslash\)}}
+\DoxyCodeLine{00275\ \textcolor{preprocessor}{\ \ \ \ aad,\ aad\_len,\(\backslash\)}}
+\DoxyCodeLine{00276\ \textcolor{preprocessor}{\ \ \ \ input,\ ilen,\(\backslash\)}}
+\DoxyCodeLine{00277\ \textcolor{preprocessor}{\ \ \ \ output,\ olen,\(\backslash\)}}
+\DoxyCodeLine{00278\ \textcolor{preprocessor}{\ \ \ \ tag,\ tag\_len)}}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \textcolor{preprocessor}{\#define\ \ USS\_client\_key\_exchange(remote\_random,\(\backslash\)}}
+\DoxyCodeLine{00281\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ srvcert,\(\backslash\)}}
+\DoxyCodeLine{00282\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_ecdhe\_key,\(\backslash\)}}
+\DoxyCodeLine{00283\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_random,\(\backslash\)}}
+\DoxyCodeLine{00284\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_signkey,\(\backslash\)}}
+\DoxyCodeLine{00285\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_ecdsa\_sign,\(\backslash\)}}
+\DoxyCodeLine{00286\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ aeskey)\(\backslash\)}}
+\DoxyCodeLine{00287\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_client\_key\_exchange(remote\_random,\(\backslash\)}}
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ srvcert,\(\backslash\)}}
+\DoxyCodeLine{00289\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_ecdhe\_key,\(\backslash\)}}
+\DoxyCodeLine{00290\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_random,\(\backslash\)}}
+\DoxyCodeLine{00291\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_signkey,\(\backslash\)}}
+\DoxyCodeLine{00292\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ client\_ecdsa\_sign,\(\backslash\)}}
+\DoxyCodeLine{00293\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ aeskey)}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00295\ \textcolor{preprocessor}{\#define\ USS\_client\_decrypt(\ cleartext,\ \ \ ciphertext,\ \ ciphertext\_len,\ \ \ IV)\(\backslash\)}}
+\DoxyCodeLine{00296\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_client\_decrypt(\ cleartext,\ \ \ ciphertext,\ \ ciphertext\_len,\ \ \ IV)}}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \textcolor{preprocessor}{\#define\ USS\_client\_encrypt(\ ciphertext,\ \ \ cleartext,\ \ cleartext\_len,\ \ \ IV)\(\backslash\)}}
+\DoxyCodeLine{00300\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_client\_encrypt(\ ciphertext,\ \ \ cleartext,\ \ cleartext\_len,\ \ \ IV)}}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \textcolor{preprocessor}{\#define\ USS\_client\_key\_exchange\_psk(remote\_ecdhe\_pubkey,remote\_random,client\_ecdhe\_key,client\_random,\ curve\_id,PSK\_ID,aeskey)\(\backslash\)}}
+\DoxyCodeLine{00303\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_client\_key\_exchange\_psk(remote\_ecdhe\_pubkey,remote\_random,client\_ecdhe\_key,client\_random,\ curve\_id,PSK\_ID,aeskey)}}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \textcolor{preprocessor}{\#define\ USS\_Cipher\_Init(\_1encrypt\_0decrypt,cipher\_algo\_id,key\_object\_id,param,doSwitchAesSpi)\(\backslash\)}}
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Cipher\_Init(\_1encrypt\_0decrypt,cipher\_algo\_id,key\_object\_id,param,doSwitchAesSpi)}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \textcolor{preprocessor}{\#define\ USS\_Cipher\_Update(\ pdest,\ \ \ psrc,\ \ len)\(\backslash\)}}
+\DoxyCodeLine{00309\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Cipher\_Update(\ pdest,\ \ \ psrc,\ \ len)}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \textcolor{preprocessor}{\#define\ USS\_Cipher\_Finish(\ additional\_data,\ \ additional\_data\_len)\(\backslash\)}}
+\DoxyCodeLine{00312\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Cipher\_Finish(\ additional\_data,\ \ additional\_data\_len)}}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \textcolor{preprocessor}{\#define\ USS\_MAC\_Init(\_1compute\_0verify,mac\_algo\_id,key\_object\_id,IV,ivlen)\(\backslash\)}}
+\DoxyCodeLine{00315\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MAC\_Init(\_1compute\_0verify,mac\_algo\_id,key\_object\_id,IV,ivlen)}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \textcolor{preprocessor}{\#define\ USS\_MAC\_Update(\ psrc,\ \ inlen)\(\backslash\)}}
+\DoxyCodeLine{00318\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MAC\_Update(\ psrc,\ \ inlen)}}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \textcolor{preprocessor}{\#define\ USS\_MAC\_Finish(\ pdest,\ \ destlen)\(\backslash\)}}
+\DoxyCodeLine{00321\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MAC\_Finish(\ pdest,\ \ destlen)}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \textcolor{preprocessor}{\#define\ USS\_MAC\_Verify(\ pmac,\ \ maclen)\(\backslash\)}}
+\DoxyCodeLine{00324\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MAC\_Verify(\ pmac,\ \ maclen)}}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \textcolor{preprocessor}{\#define\ USS\_MD\_Init(\ md\_algo\_id)\(\backslash\)}}
+\DoxyCodeLine{00327\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MD\_Init(\ md\_algo\_id)}}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ \textcolor{preprocessor}{\#define\ USS\_MD\_Update(\ psrc,\ \ inlen)\(\backslash\)}}
+\DoxyCodeLine{00330\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MD\_Update(\ psrc,\ \ inlen)}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \textcolor{preprocessor}{\#define\ USS\_MD\_Finish(\ pdest,\ \ destlen)\(\backslash\)}}
+\DoxyCodeLine{00333\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_MD\_Finish(\ pdest,\ \ destlen)}}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \textcolor{preprocessor}{\#define\ USS\_Get\_MD\_OutputSize(\ md\_algo\_id)\(\backslash\)}}
+\DoxyCodeLine{00337\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Get\_MD\_OutputSize(\ md\_algo\_id)}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \textcolor{preprocessor}{\#define\ USS\_get\_curve\_bytelen(\ curve\_id)\(\backslash\)}}
+\DoxyCodeLine{00340\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_get\_curve\_bytelen(\ curve\_id)}}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \textcolor{preprocessor}{\#define\ USS\_get\_sign\_alg\_from\_curve(\ maxq\_id)\(\backslash\)}}
+\DoxyCodeLine{00343\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_get\_sign\_alg\_from\_curve(\ maxq\_id)}}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00346\ \textcolor{preprocessor}{\#define\ USS\_Sign(\ signalgo,\ \ privkey\_objectid,\ \ \ pdata,\ \ datalen,\ \ psignout,\ \ signlen)\(\backslash\)}}
+\DoxyCodeLine{00347\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Sign(\ signalgo,\ \ privkey\_objectid,\ \ \ pdata,\ \ datalen,\ \ psignout,\ \ signlen)}}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \textcolor{preprocessor}{\#define\ USS\_Verify(\ signalgo,\ \ pubkey\_objectid,\ \ \ pdata,\ \ datalen,\ \ \ signature,\ \ signlen)\(\backslash\)}}
+\DoxyCodeLine{00350\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Verify(\ signalgo,\ \ pubkey\_objectid,\ \ \ pdata,\ \ datalen,\ \ \ signature,\ \ signlen)}}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \textcolor{preprocessor}{\#define\ USS\_BuildKey(pdest,\ destlen,\(\backslash\)}}
+\DoxyCodeLine{00353\ \textcolor{preprocessor}{\ \ \ \ keytype,\(\backslash\)}}
+\DoxyCodeLine{00354\ \textcolor{preprocessor}{\ \ \ \ keyparam,\(\backslash\)}}
+\DoxyCodeLine{00355\ \textcolor{preprocessor}{\ \ \ \ keycomplen,\ total\_keylen,\(\backslash\)}}
+\DoxyCodeLine{00356\ \textcolor{preprocessor}{\ \ \ \ uu1,\ a1,\(\backslash\)}}
+\DoxyCodeLine{00357\ \textcolor{preprocessor}{\ \ \ \ uu2,\ a2,\(\backslash\)}}
+\DoxyCodeLine{00358\ \textcolor{preprocessor}{\ \ \ \ psrc\ )\(\backslash\)}}
+\DoxyCodeLine{00359\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_BuildKey(pdest,\ destlen,\(\backslash\)}}
+\DoxyCodeLine{00360\ \textcolor{preprocessor}{\ \ \ \ keytype,\(\backslash\)}}
+\DoxyCodeLine{00361\ \textcolor{preprocessor}{\ \ \ \ keyparam,\(\backslash\)}}
+\DoxyCodeLine{00362\ \textcolor{preprocessor}{\ \ \ \ keycomplen,\ total\_keylen,\(\backslash\)}}
+\DoxyCodeLine{00363\ \textcolor{preprocessor}{\ \ \ \ uu1,\ a1,\(\backslash\)}}
+\DoxyCodeLine{00364\ \textcolor{preprocessor}{\ \ \ \ uu2,\ a2,\(\backslash\)}}
+\DoxyCodeLine{00365\ \textcolor{preprocessor}{\ \ \ \ psrc\ )}}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \textcolor{preprocessor}{\#define\ USS\_BuildKey\_Ex(pdest,\ destlen,\(\backslash\)}}
+\DoxyCodeLine{00368\ \textcolor{preprocessor}{\ \ \ \ keytype,\(\backslash\)}}
+\DoxyCodeLine{00369\ \textcolor{preprocessor}{\ \ \ \ keyparam,\(\backslash\)}}
+\DoxyCodeLine{00370\ \textcolor{preprocessor}{\ \ \ \ keycomplen,\ total\_keylen,\(\backslash\)}}
+\DoxyCodeLine{00371\ \textcolor{preprocessor}{\ \ \ \ uu1,\ a1,\(\backslash\)}}
+\DoxyCodeLine{00372\ \textcolor{preprocessor}{\ \ \ \ uu2,\ a2,\(\backslash\)}}
+\DoxyCodeLine{00373\ \textcolor{preprocessor}{\ \ \ \ psrc,\ len\ )\(\backslash\)}}
+\DoxyCodeLine{00374\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_BuildKey\_Ex(pdest,\ destlen,\(\backslash\)}}
+\DoxyCodeLine{00375\ \textcolor{preprocessor}{\ \ \ \ keytype,\(\backslash\)}}
+\DoxyCodeLine{00376\ \textcolor{preprocessor}{\ \ \ \ keyparam,\(\backslash\)}}
+\DoxyCodeLine{00377\ \textcolor{preprocessor}{\ \ \ \ keycomplen,\ total\_keylen,\(\backslash\)}}
+\DoxyCodeLine{00378\ \textcolor{preprocessor}{\ \ \ \ uu1,\ a1,\(\backslash\)}}
+\DoxyCodeLine{00379\ \textcolor{preprocessor}{\ \ \ \ uu2,\ a2,\(\backslash\)}}
+\DoxyCodeLine{00380\ \textcolor{preprocessor}{\ \ \ \ psrc,\ len\ )}}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \textcolor{preprocessor}{\#define\ USS\_BuildEK\_Material(pdest,\ destlen,\ psrc,\ srclen,\ kek\_id,\ pIV,\ pTag)\(\backslash\)}}
+\DoxyCodeLine{00383\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_BuildEK\_Material(pdest,\ destlen,\ psrc,\ srclen,\ kek\_id,\ pIV,\ pTag)}}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00385\ \textcolor{preprocessor}{\#define\ USS\_Build\_EC\_Cert(pdest,\ destlen,\(\backslash\)}}
+\DoxyCodeLine{00386\ \textcolor{preprocessor}{\ \ \ \ keytype,\(\backslash\)}}
+\DoxyCodeLine{00387\ \textcolor{preprocessor}{\ \ \ \ keyparam,\(\backslash\)}}
+\DoxyCodeLine{00388\ \textcolor{preprocessor}{\ \ \ \ keycomplen,\ \ total\_keylen,\(\backslash\)}}
+\DoxyCodeLine{00389\ \textcolor{preprocessor}{\ \ \ \ pubkeyoffset,\(\backslash\)}}
+\DoxyCodeLine{00390\ \textcolor{preprocessor}{\ \ \ \ tbs\_start,\(\backslash\)}}
+\DoxyCodeLine{00391\ \textcolor{preprocessor}{\ \ \ \ tbs\_len,\(\backslash\)}}
+\DoxyCodeLine{00392\ \textcolor{preprocessor}{\ \ \ \ total\_certlen,\(\backslash\)}}
+\DoxyCodeLine{00393\ \textcolor{preprocessor}{\ \ \ \ verifalgo,\(\backslash\)}}
+\DoxyCodeLine{00394\ \textcolor{preprocessor}{\ \ \ \ verifkeyobjid,\(\backslash\)}}
+\DoxyCodeLine{00395\ \textcolor{preprocessor}{\ \ \ \ uu1,\ a1,\(\backslash\)}}
+\DoxyCodeLine{00396\ \textcolor{preprocessor}{\ \ \ \ uu2,\ a2,\(\backslash\)}}
+\DoxyCodeLine{00397\ \textcolor{preprocessor}{\ \ \ \ pcertbody\ )\(\backslash\)}}
+\DoxyCodeLine{00398\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Build\_EC\_Cert(pdest,\ destlen,\(\backslash\)}}
+\DoxyCodeLine{00399\ \textcolor{preprocessor}{\ \ \ \ keytype,\(\backslash\)}}
+\DoxyCodeLine{00400\ \textcolor{preprocessor}{\ \ \ \ keyparam,\(\backslash\)}}
+\DoxyCodeLine{00401\ \textcolor{preprocessor}{\ \ \ \ keycomplen,\ \ total\_keylen,\(\backslash\)}}
+\DoxyCodeLine{00402\ \textcolor{preprocessor}{\ \ \ \ pubkeyoffset,\(\backslash\)}}
+\DoxyCodeLine{00403\ \textcolor{preprocessor}{\ \ \ \ tbs\_start,\(\backslash\)}}
+\DoxyCodeLine{00404\ \textcolor{preprocessor}{\ \ \ \ tbs\_len,\(\backslash\)}}
+\DoxyCodeLine{00405\ \textcolor{preprocessor}{\ \ \ \ total\_certlen,\(\backslash\)}}
+\DoxyCodeLine{00406\ \textcolor{preprocessor}{\ \ \ \ verifalgo,\(\backslash\)}}
+\DoxyCodeLine{00407\ \textcolor{preprocessor}{\ \ \ \ verifkeyobjid,\(\backslash\)}}
+\DoxyCodeLine{00408\ \textcolor{preprocessor}{\ \ \ \ uu1,\ a1,\(\backslash\)}}
+\DoxyCodeLine{00409\ \textcolor{preprocessor}{\ \ \ \ uu2,\ a2,\(\backslash\)}}
+\DoxyCodeLine{00410\ \textcolor{preprocessor}{\ \ \ \ pcertbody\ )}}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00412\ \textcolor{preprocessor}{\#define\ USS\_ImportKeyCert(destobj\_id,\(\backslash\)}}
+\DoxyCodeLine{00413\ \textcolor{preprocessor}{\ \ \ \ verifalgo,\(\backslash\)}}
+\DoxyCodeLine{00414\ \textcolor{preprocessor}{\ \ \ \ verifkey\_id,\(\backslash\)}}
+\DoxyCodeLine{00415\ \textcolor{preprocessor}{\ \ \ \ pdata,\ datalen,\(\backslash\)}}
+\DoxyCodeLine{00416\ \textcolor{preprocessor}{\ \ \ \ sign,\ signlen,\(\backslash\)}}
+\DoxyCodeLine{00417\ \textcolor{preprocessor}{\ \ \ \ cmd)\(\backslash\)}}
+\DoxyCodeLine{00418\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ImportKeyCert(destobj\_id,\(\backslash\)}}
+\DoxyCodeLine{00419\ \textcolor{preprocessor}{\ \ \ \ verifalgo,\(\backslash\)}}
+\DoxyCodeLine{00420\ \textcolor{preprocessor}{\ \ \ \ verifkey\_id,\(\backslash\)}}
+\DoxyCodeLine{00421\ \textcolor{preprocessor}{\ \ \ \ pdata,\ datalen,\(\backslash\)}}
+\DoxyCodeLine{00422\ \textcolor{preprocessor}{\ \ \ \ sign,\ signlen,\(\backslash\)}}
+\DoxyCodeLine{00423\ \textcolor{preprocessor}{\ \ \ \ cmd)}}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00425\ \textcolor{preprocessor}{\#define\ USS\_ImportKey(destid,valg,vkid,data,datalen,sign,signlen)\(\backslash\)}}
+\DoxyCodeLine{00426\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ImportKey(destid,valg,vkid,data,datalen,sign,signlen)}}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \textcolor{preprocessor}{\#define\ USS\_ImportKeyEnc(destid,valg,vkid,data,datalen,sign,signlen)\(\backslash\)}}
+\DoxyCodeLine{00429\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ImportKeyEnc(destid,valg,vkid,data,datalen,sign,signlen)}}
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \textcolor{preprocessor}{\#define\ USS\_ImportRootCert(destid,valg,vkid,data,datalen,sign,signlen)\(\backslash\)}}
+\DoxyCodeLine{00432\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ImportRootCert(destid,valg,vkid,data,datalen,sign,signlen)}}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \textcolor{preprocessor}{\#define\ USS\_ImportChildCert(\ destobj\_id,\ pdata,\ datalen)\(\backslash\)}}
+\DoxyCodeLine{00435\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_ImportChildCert(\ destobj\_id,\ pdata,\ datalen)}}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \textcolor{preprocessor}{\#define\ USS\_AdminAuth(verifkey\_id,algo,sign,signlen)\(\backslash\)}}
+\DoxyCodeLine{00438\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_AdminAuth(verifkey\_id,algo,sign,signlen)}}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \textcolor{preprocessor}{\#define\ USS\_AdminAuthReset(void)\(\backslash\)}}
+\DoxyCodeLine{00441\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_AdminAuthReset(void)}}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \textcolor{preprocessor}{\#define\ USS\_VerifyBoot(verifkey\_id,algo,sign,signlen)\(\backslash\)}}
+\DoxyCodeLine{00444\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_VerifyBoot(verifkey\_id,algo,sign,signlen)}}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \textcolor{preprocessor}{\#define\ USS\_VerifyBootReset(void)\(\backslash\)}}
+\DoxyCodeLine{00447\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_VerifyBootReset(void)}}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \textcolor{preprocessor}{\#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{00450\ \textcolor{preprocessor}{\#define\ USS\_OpenSecureChannel(\ channel\_key\_id,\ local\_key)\(\backslash\)}}
+\DoxyCodeLine{00451\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_OpenSecureChannel(\ channel\_key\_id,\ local\_key)}}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \textcolor{preprocessor}{\#define\ USS\_OpenSecureChannel2(\ channel\_key\_id,\ local\_key)\(\backslash\)}}
+\DoxyCodeLine{00454\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_OpenSecureChannel2(\ channel\_key\_id,\ local\_key)}}
+\DoxyCodeLine{00455\ \textcolor{preprocessor}{\#elif\ defined(MAXQ1065)}}
+\DoxyCodeLine{00456\ \textcolor{preprocessor}{\#define\ USS\_OpenSecureChannel(\ pMode,\ pSCKeyId,\ pPrivateKey,\ pHostPubId,\ pDevicePubKey,\ local\_key)\(\backslash\)}}
+\DoxyCodeLine{00457\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_OpenSecureChannel(\ pMode,\ pSCKeyId,\ pPrivateKey,\ pHostPubId,\ pDevicePubKey,\ local\_key)}}
+\DoxyCodeLine{00458\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00459\ \textcolor{preprocessor}{\#define\ USS\_OpenSecureChannel(\ pMode,\ pSCKeyId,\ pPrivateKey,\ local\_key)\(\backslash\)}}
+\DoxyCodeLine{00460\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_OpenSecureChannel(\ pMode,\ pSCKeyId,\ pPrivateKey,\ local\_key)}}
+\DoxyCodeLine{00461\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00462\ \textcolor{preprocessor}{\#define\ USS\_CloseSecureChannel(void)\(\backslash\)}}
+\DoxyCodeLine{00463\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_CloseSecureChannel(void)}}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00465\ \textcolor{preprocessor}{\#define\ USS\_SetConfig(\ s)\(\backslash\)}}
+\DoxyCodeLine{00466\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_SetConfig(\ s)}}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00468\ \textcolor{preprocessor}{\#define\ USS\_SetState(\ newstate)\(\backslash\)}}
+\DoxyCodeLine{00469\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_SetState(\ newstate)}}
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ \textcolor{preprocessor}{\#define\ USS\_GetStatus(\ status)\(\backslash\)}}
+\DoxyCodeLine{00472\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_GetStatus(\ status)}}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00474\ \textcolor{preprocessor}{\#if\ defined(MAXQ106x)\ ||\ defined(MAXQ108x)}}
+\DoxyCodeLine{00475\ \textcolor{preprocessor}{\#define\ USS\_Sleep(void)\(\backslash\)}}
+\DoxyCodeLine{00476\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Sleep(void)}}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \textcolor{preprocessor}{\#define\ USS\_Wakeup(void)\(\backslash\)}}
+\DoxyCodeLine{00479\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Wakeup(void)}}
+\DoxyCodeLine{00480\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \textcolor{preprocessor}{\#if\ defined(MAXQ106x)}}
+\DoxyCodeLine{00483\ \textcolor{preprocessor}{\#define\ USS\_GCU\_Enable(void)\(\backslash\)}}
+\DoxyCodeLine{00484\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_GCU\_Enable(void)}}
+\DoxyCodeLine{00485\ }
+\DoxyCodeLine{00486\ \textcolor{preprocessor}{\#define\ USS\_GCU\_Direct(void)\(\backslash\)}}
+\DoxyCodeLine{00487\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_GCU\_Direct(void)}}
+\DoxyCodeLine{00488\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \textcolor{preprocessor}{\#if\ defined(MAXQ1065)\ \ \ \ }}
+\DoxyCodeLine{00491\ \textcolor{preprocessor}{\#define\ USS\_1065\_Sleep(\ p\_buff\_out)\(\backslash\)}}
+\DoxyCodeLine{00492\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_1065\_Sleep(\ p\_buff\_out)}}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \textcolor{preprocessor}{\#define\ USS\_1065\_Restore(\ p\_restore\_data,\ data\_len)\(\backslash\)}}
+\DoxyCodeLine{00495\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_1065\_Restore(\ p\_restore\_data,\ data\_len)}}
+\DoxyCodeLine{00496\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \textcolor{preprocessor}{\#define\ USS\_TLS\_Enable(void)\(\backslash\)}}
+\DoxyCodeLine{00499\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS\_Enable(void)}}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00501\ \textcolor{preprocessor}{\#define\ USS\_TLS\_Direct(void)\(\backslash\)}}
+\DoxyCodeLine{00502\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS\_Direct(void)}}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \textcolor{preprocessor}{\#define\ USS\_TLS\_Restore(void)\(\backslash\)}}
+\DoxyCodeLine{00505\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS\_Restore(void)}}
+\DoxyCodeLine{00506\ }
+\DoxyCodeLine{00507\ \textcolor{preprocessor}{\#define\ USS\_TLS\_Save(void)\(\backslash\)}}
+\DoxyCodeLine{00508\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_TLS\_Save(void)}}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \textcolor{preprocessor}{\#define\ USS\_DisplayStatus(\ s)\(\backslash\)}}
+\DoxyCodeLine{00511\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_DisplayStatus(\ s)}}
+\DoxyCodeLine{00512\ }
+\DoxyCodeLine{00513\ \textcolor{preprocessor}{\#define\ USS\_DisplayConfig(\ c)\(\backslash\)}}
+\DoxyCodeLine{00514\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_DisplayConfig(\ c)}}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \textcolor{preprocessor}{\#define\ USS\_DisplaySysConfig(\ c)\(\backslash\)}}
+\DoxyCodeLine{00517\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_DisplaySysConfig(\ c)}}
+\DoxyCodeLine{00518\ }
+\DoxyCodeLine{00519\ \textcolor{preprocessor}{\#ifdef\ MXQ\_FW\_UPDATE\_CAP}}
+\DoxyCodeLine{00520\ \textcolor{preprocessor}{\#if\ defined(MAXQ108x)}}
+\DoxyCodeLine{00521\ \textcolor{preprocessor}{\#define\ USS\_FW\_Update(\ fw\_img,\ fw\_len,\ key\_ID,\ signature,\ algo,\ keyparam)\(\backslash\)}}
+\DoxyCodeLine{00522\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MAXQ\_FW\_Update(\ fw\_img,\ fw\_len,\ key\_ID,\ signature,\ algo,\ keyparam)}}
+\DoxyCodeLine{00523\ \textcolor{preprocessor}{\#elif\ defined(MAXQ1065)}}
+\DoxyCodeLine{00524\ \textcolor{preprocessor}{\#define\ USS\_FW\_Update(\ fw\_img,\ fw\_len)\(\backslash\)}}
+\DoxyCodeLine{00525\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MAXQ\_FW\_Update(\ fw\_img,\ fw\_len)}}
+\DoxyCodeLine{00526\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00527\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00528\ }
+\DoxyCodeLine{00529\ }
+\DoxyCodeLine{00530\ \textcolor{preprocessor}{\#define\ USS\_Tamper(cmd)\(\backslash\)}}
+\DoxyCodeLine{00531\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Tamper(cmd)}}
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \textcolor{preprocessor}{\#if\ defined(USS\_ST)}}
+\DoxyCodeLine{00534\ \textcolor{preprocessor}{\#define\ USS\_Bypass(\ in\_out\_buf\_p,\ int\_out\_buf\_len)\(\backslash\)}}
+\DoxyCodeLine{00535\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_Bypass(\ in\_out\_buf\_p,\ int\_out\_buf\_len)}}
+\DoxyCodeLine{00536\ \textcolor{preprocessor}{\#endif\ }}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \textcolor{preprocessor}{\#define\ USS\_get\_str\_code(error\_code)\(\backslash\)}}
+\DoxyCodeLine{00539\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ MXQ\_get\_str\_code(error\_code)}}
+\DoxyCodeLine{00540\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,2115 @@
+Trivially needed symbols: mbedtls_aes_self_test/45 mbedtls_aes_crypt_ctr/35 mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_ecb/33 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_aes_setkey_dec/30 mbedtls_aes_setkey_enc/29 mbedtls_aes_free/27 mbedtls_aes_init/26
+
+
+Initial Symbol table:
+
+putchar/52 (__builtin_putchar) @062e4690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcmp/51 (memcmp) @062e41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+printf/50 (printf) @062e4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+puts/49 (__builtin_puts) @062e4f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcpy/48 (memcpy) @062e4e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_crypt_cbc/34 
+  Calls: 
+mbedtls_platform_zeroize/47 (mbedtls_platform_zeroize) @062e4dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_aes_free/27 
+  Calls: 
+memset/46 (memset) @062e4d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_init/26 
+  Calls: 
+mbedtls_aes_self_test/45 (mbedtls_aes_self_test) @062e4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: aes_test_ecb_dec/36 (addr) aes_test_ecb_enc/37 (addr) aes_test_cbc_dec/38 (addr) aes_test_cbc_enc/39 (addr) aes_test_ctr_nonce_counter/41 (addr) aes_test_ctr_key/40 (addr) aes_test_ctr_len/44 (read) aes_test_ctr_ct/43 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_ct/43 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_aes_free/27 puts/49 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ctr/35 memcpy/48 memcpy/48 mbedtls_aes_setkey_enc/29 memcpy/48 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_cbc/34 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 memset/46 memset/46 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ecb/33 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 printf/50 puts/49 mbedtls_aes_init/26 memset/46 
+aes_test_ctr_len/44 (aes_test_ctr_len) @062aae10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aaa68
+  References: 
+  Referring: mbedtls_aes_self_test/45 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_ct/43 (aes_test_ctr_ct) @062aadc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aae10
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_pt/42 (aes_test_ctr_pt) @062aaca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aadc8
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_nonce_counter/41 (aes_test_ctr_nonce_counter) @062aab88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aa948
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_key/40 (aes_test_ctr_key) @062aaa68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aab88
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_enc/39 (aes_test_cbc_enc) @062aa948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aa828
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_dec/38 (aes_test_cbc_dec) @062aa828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aa708
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_enc/37 (aes_test_ecb_enc) @062aa708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062aa5e8
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_dec/36 (aes_test_ecb_dec) @062aa5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_crypt_ctr/35 (mbedtls_aes_crypt_ctr) @062b4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062e4c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_cbc/34 (mbedtls_aes_crypt_cbc) @062b4b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b4c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: memcpy/48 mbedtls_aes_crypt_ecb/33 mbedtls_xor/8 mbedtls_xor/8 mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_ecb/33 (mbedtls_aes_crypt_ecb) @062b49d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b4b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_crypt_ctr/35 mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 
+mbedtls_internal_aes_decrypt/32 (mbedtls_internal_aes_decrypt) @062b4888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b49d8
+  References: RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_internal_aes_encrypt/31 (mbedtls_internal_aes_encrypt) @0627cc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b4888
+  References: FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_aes_setkey_dec/30 (mbedtls_aes_setkey_dec) @0627c0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0627cc78
+  References: FSb/13 (read) RT0/19 (read) FSb/13 (read) RT1/20 (read) FSb/13 (read) RT2/21 (read) FSb/13 (read) RT3/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_free/27 mbedtls_aes_setkey_enc/29 mbedtls_aes_rk_offset/28 mbedtls_aes_init/26 
+mbedtls_aes_setkey_enc/29 (mbedtls_aes_setkey_enc) @06271d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0627c0a8
+  References: aes_init_done/24 (read) aes_init_done/24 (write) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_get_unaligned_uint32/2 mbedtls_aes_rk_offset/28 aes_gen_tables/25 
+mbedtls_aes_rk_offset/28 (mbedtls_aes_rk_offset) @06271150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062052a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_dec/30 mbedtls_aes_setkey_enc/29 
+  Calls: 
+mbedtls_aes_free/27 (mbedtls_aes_free) @06271000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06271d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_platform_zeroize/47 
+mbedtls_aes_init/26 (mbedtls_aes_init) @0625fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06271000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: memset/46 
+aes_gen_tables/25 (aes_gen_tables) @0625fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06271150
+  References: RCON/23 (write) FSb/13 (write) RSb/18 (write) FSb/13 (write) RSb/18 (write) FSb/13 (read) FT0/14 (write) FT0/14 (read) FT1/15 (write) FT1/15 (read) FT2/16 (write) FT2/16 (read) FT3/17 (write) RSb/18 (read) RT0/19 (write) RT0/19 (read) RT1/20 (write) RT1/20 (read) RT2/21 (write) RT2/21 (read) RT3/22 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_enc/29 
+  Calls: 
+aes_init_done/24 (aes_init_done) @0529dc18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0625fd20
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+RCON/23 (RCON) @0529dbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529dc18
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) 
+  Availability: not-ready
+  Varpool flags:
+RT3/22 (RT3) @0529db88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529db40
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT2/21 (RT2) @0529db40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529daf8
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT1/20 (RT1) @0529daf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529dab0
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT0/19 (RT0) @0529dab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529da20
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RSb/18 (RSb) @0529da68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06271150
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT3/17 (FT3) @0529da20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529d9d8
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT2/16 (FT2) @0529d9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529d990
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT1/15 (FT1) @0529d990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529d948
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT0/14 (FT0) @0529d948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529da68
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FSb/13 (FSb) @0529d900
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0529dbd0
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_error_add/12 (mbedtls_error_add) @0625f000
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/11 (_putchar_unlocked) @06216f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/10 (_getchar_unlocked) @06216dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/9 (__sputc_r) @06216bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @06205d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062b4c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @06205bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @06205a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @06205690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @06205540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062053f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062b4888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062052a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @0627c0a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_aes_setkey_enc/29 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @06205150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @06205000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: mbedtls_error_add/12 _putchar_unlocked/11 _getchar_unlocked/10 __sputc_r/9 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+putchar/52 (__builtin_putchar) @062e4690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcmp/51 (memcmp) @062e41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+printf/50 (printf) @062e4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+puts/49 (__builtin_puts) @062e4f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcpy/48 (memcpy) @062e4e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_crypt_cbc/34 
+  Calls: 
+mbedtls_platform_zeroize/47 (mbedtls_platform_zeroize) @062e4dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_aes_free/27 
+  Calls: 
+memset/46 (memset) @062e4d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_init/26 
+  Calls: 
+mbedtls_aes_self_test/45 (mbedtls_aes_self_test) @062e4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_test_ecb_dec/36 (addr) aes_test_ecb_enc/37 (addr) aes_test_cbc_dec/38 (addr) aes_test_cbc_enc/39 (addr) aes_test_ctr_nonce_counter/41 (addr) aes_test_ctr_key/40 (addr) aes_test_ctr_len/44 (read) aes_test_ctr_ct/43 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_ct/43 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_aes_free/27 puts/49 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ctr/35 memcpy/48 memcpy/48 mbedtls_aes_setkey_enc/29 memcpy/48 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_cbc/34 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 memset/46 memset/46 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ecb/33 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 printf/50 puts/49 mbedtls_aes_init/26 memset/46 
+aes_test_ctr_len/44 (aes_test_ctr_len) @062aae10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_ct/43 (aes_test_ctr_ct) @062aadc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_pt/42 (aes_test_ctr_pt) @062aaca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_nonce_counter/41 (aes_test_ctr_nonce_counter) @062aab88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_key/40 (aes_test_ctr_key) @062aaa68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_enc/39 (aes_test_cbc_enc) @062aa948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_dec/38 (aes_test_cbc_dec) @062aa828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_enc/37 (aes_test_ecb_enc) @062aa708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_dec/36 (aes_test_ecb_dec) @062aa5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_crypt_ctr/35 (mbedtls_aes_crypt_ctr) @062b4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_cbc/34 (mbedtls_aes_crypt_cbc) @062b4b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: memcpy/48 mbedtls_aes_crypt_ecb/33 mbedtls_xor/8 mbedtls_xor/8 mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_ecb/33 (mbedtls_aes_crypt_ecb) @062b49d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_crypt_ctr/35 mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 
+mbedtls_internal_aes_decrypt/32 (mbedtls_internal_aes_decrypt) @062b4888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_internal_aes_encrypt/31 (mbedtls_internal_aes_encrypt) @0627cc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_aes_setkey_dec/30 (mbedtls_aes_setkey_dec) @0627c0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: FSb/13 (read) RT0/19 (read) FSb/13 (read) RT1/20 (read) FSb/13 (read) RT2/21 (read) FSb/13 (read) RT3/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_free/27 mbedtls_aes_setkey_enc/29 mbedtls_aes_rk_offset/28 mbedtls_aes_init/26 
+mbedtls_aes_setkey_enc/29 (mbedtls_aes_setkey_enc) @06271d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_init_done/24 (read) aes_init_done/24 (write) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_get_unaligned_uint32/2 mbedtls_aes_rk_offset/28 aes_gen_tables/25 
+mbedtls_aes_rk_offset/28 (mbedtls_aes_rk_offset) @06271150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_dec/30 mbedtls_aes_setkey_enc/29 
+  Calls: 
+mbedtls_aes_free/27 (mbedtls_aes_free) @06271000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_platform_zeroize/47 
+mbedtls_aes_init/26 (mbedtls_aes_init) @0625fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: memset/46 
+aes_gen_tables/25 (aes_gen_tables) @0625fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: RCON/23 (write) FSb/13 (write) RSb/18 (write) FSb/13 (write) RSb/18 (write) FSb/13 (read) FT0/14 (write) FT0/14 (read) FT1/15 (write) FT1/15 (read) FT2/16 (write) FT2/16 (read) FT3/17 (write) RSb/18 (read) RT0/19 (write) RT0/19 (read) RT1/20 (write) RT1/20 (read) RT2/21 (write) RT2/21 (read) RT3/22 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_enc/29 
+  Calls: 
+aes_init_done/24 (aes_init_done) @0529dc18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+RCON/23 (RCON) @0529dbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) 
+  Availability: not-ready
+  Varpool flags:
+RT3/22 (RT3) @0529db88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT2/21 (RT2) @0529db40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT1/20 (RT1) @0529daf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT0/19 (RT0) @0529dab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RSb/18 (RSb) @0529da68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT3/17 (FT3) @0529da20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT2/16 (FT2) @0529d9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT1/15 (FT1) @0529d990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT0/14 (FT0) @0529d948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FSb/13 (FSb) @0529d900
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_xor/8 (mbedtls_xor) @06205d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062053f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062052a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_aes_setkey_enc/29 
+  Calls: 
+
+
+Initial Symbol table:
+
+putchar/52 (__builtin_putchar) @062e4690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcmp/51 (memcmp) @062e41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+printf/50 (printf) @062e4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+puts/49 (__builtin_puts) @062e4f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcpy/48 (memcpy) @062e4e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_crypt_cbc/34 
+  Calls: 
+mbedtls_platform_zeroize/47 (mbedtls_platform_zeroize) @062e4dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_aes_free/27 
+  Calls: 
+memset/46 (memset) @062e4d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_init/26 
+  Calls: 
+mbedtls_aes_self_test/45 (mbedtls_aes_self_test) @062e4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_test_ecb_dec/36 (addr) aes_test_ecb_enc/37 (addr) aes_test_cbc_dec/38 (addr) aes_test_cbc_enc/39 (addr) aes_test_ctr_nonce_counter/41 (addr) aes_test_ctr_key/40 (addr) aes_test_ctr_len/44 (read) aes_test_ctr_ct/43 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_ct/43 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_aes_free/27 puts/49 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ctr/35 memcpy/48 memcpy/48 mbedtls_aes_setkey_enc/29 memcpy/48 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_cbc/34 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 memset/46 memset/46 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ecb/33 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 printf/50 puts/49 mbedtls_aes_init/26 memset/46 
+aes_test_ctr_len/44 (aes_test_ctr_len) @062aae10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_ct/43 (aes_test_ctr_ct) @062aadc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_pt/42 (aes_test_ctr_pt) @062aaca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_nonce_counter/41 (aes_test_ctr_nonce_counter) @062aab88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_key/40 (aes_test_ctr_key) @062aaa68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_enc/39 (aes_test_cbc_enc) @062aa948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_dec/38 (aes_test_cbc_dec) @062aa828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_enc/37 (aes_test_ecb_enc) @062aa708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_dec/36 (aes_test_ecb_dec) @062aa5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_crypt_ctr/35 (mbedtls_aes_crypt_ctr) @062b4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_cbc/34 (mbedtls_aes_crypt_cbc) @062b4b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: memcpy/48 mbedtls_aes_crypt_ecb/33 mbedtls_xor/8 mbedtls_xor/8 mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_ecb/33 (mbedtls_aes_crypt_ecb) @062b49d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_crypt_ctr/35 mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 
+mbedtls_internal_aes_decrypt/32 (mbedtls_internal_aes_decrypt) @062b4888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_internal_aes_encrypt/31 (mbedtls_internal_aes_encrypt) @0627cc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_aes_setkey_dec/30 (mbedtls_aes_setkey_dec) @0627c0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: FSb/13 (read) RT0/19 (read) FSb/13 (read) RT1/20 (read) FSb/13 (read) RT2/21 (read) FSb/13 (read) RT3/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_free/27 mbedtls_aes_setkey_enc/29 mbedtls_aes_rk_offset/28 mbedtls_aes_init/26 
+mbedtls_aes_setkey_enc/29 (mbedtls_aes_setkey_enc) @06271d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_init_done/24 (read) aes_init_done/24 (write) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_get_unaligned_uint32/2 mbedtls_aes_rk_offset/28 aes_gen_tables/25 
+mbedtls_aes_rk_offset/28 (mbedtls_aes_rk_offset) @06271150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_dec/30 mbedtls_aes_setkey_enc/29 
+  Calls: 
+mbedtls_aes_free/27 (mbedtls_aes_free) @06271000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_platform_zeroize/47 
+mbedtls_aes_init/26 (mbedtls_aes_init) @0625fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: memset/46 
+aes_gen_tables/25 (aes_gen_tables) @0625fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: RCON/23 (write) FSb/13 (write) RSb/18 (write) FSb/13 (write) RSb/18 (write) FSb/13 (read) FT0/14 (write) FT0/14 (read) FT1/15 (write) FT1/15 (read) FT2/16 (write) FT2/16 (read) FT3/17 (write) RSb/18 (read) RT0/19 (write) RT0/19 (read) RT1/20 (write) RT1/20 (read) RT2/21 (write) RT2/21 (read) RT3/22 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_enc/29 
+  Calls: 
+aes_init_done/24 (aes_init_done) @0529dc18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+RCON/23 (RCON) @0529dbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) 
+  Availability: not-ready
+  Varpool flags:
+RT3/22 (RT3) @0529db88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT2/21 (RT2) @0529db40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT1/20 (RT1) @0529daf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT0/19 (RT0) @0529dab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RSb/18 (RSb) @0529da68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT3/17 (FT3) @0529da20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT2/16 (FT2) @0529d9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT1/15 (FT1) @0529d990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT0/14 (FT0) @0529d948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FSb/13 (FSb) @0529d900
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_xor/8 (mbedtls_xor) @06205d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062053f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062052a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_aes_setkey_enc/29 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+putchar/52 (__builtin_putchar) @062e4690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcmp/51 (memcmp) @062e41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+printf/50 (printf) @062e4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+puts/49 (__builtin_puts) @062e4f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: 
+memcpy/48 (memcpy) @062e4e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_crypt_cbc/34 
+  Calls: 
+mbedtls_platform_zeroize/47 (mbedtls_platform_zeroize) @062e4dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_aes_free/27 
+  Calls: 
+memset/46 (memset) @062e4d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_init/26 
+  Calls: 
+mbedtls_aes_self_test/45 (mbedtls_aes_self_test) @062e4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_test_ecb_dec/36 (addr) aes_test_ecb_enc/37 (addr) aes_test_cbc_dec/38 (addr) aes_test_cbc_enc/39 (addr) aes_test_ctr_nonce_counter/41 (addr) aes_test_ctr_key/40 (addr) aes_test_ctr_len/44 (read) aes_test_ctr_ct/43 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_ct/43 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_aes_free/27 puts/49 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ctr/35 memcpy/48 memcpy/48 mbedtls_aes_setkey_enc/29 memcpy/48 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_cbc/34 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 memset/46 memset/46 printf/50 putchar/52 puts/49 memcmp/51 mbedtls_aes_crypt_ecb/33 puts/49 mbedtls_aes_setkey_enc/29 mbedtls_aes_setkey_dec/30 memset/46 printf/50 puts/49 mbedtls_aes_init/26 memset/46 
+aes_test_ctr_len/44 (aes_test_ctr_len) @062aae10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_ct/43 (aes_test_ctr_ct) @062aadc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_pt/42 (aes_test_ctr_pt) @062aaca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_nonce_counter/41 (aes_test_ctr_nonce_counter) @062aab88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ctr_key/40 (aes_test_ctr_key) @062aaa68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_enc/39 (aes_test_cbc_enc) @062aa948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_cbc_dec/38 (aes_test_cbc_dec) @062aa828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_enc/37 (aes_test_ecb_enc) @062aa708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+aes_test_ecb_dec/36 (aes_test_ecb_dec) @062aa5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_aes_crypt_ctr/35 (mbedtls_aes_crypt_ctr) @062b4c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_cbc/34 (mbedtls_aes_crypt_cbc) @062b4b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 
+  Calls: memcpy/48 mbedtls_aes_crypt_ecb/33 mbedtls_xor/8 mbedtls_xor/8 mbedtls_aes_crypt_ecb/33 
+mbedtls_aes_crypt_ecb/33 (mbedtls_aes_crypt_ecb) @062b49d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_crypt_ctr/35 mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 
+mbedtls_internal_aes_decrypt/32 (mbedtls_internal_aes_decrypt) @062b4888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_internal_aes_encrypt/31 (mbedtls_internal_aes_encrypt) @0627cc78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_ecb/33 
+  Calls: mbedtls_platform_zeroize/47 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_aes_setkey_dec/30 (mbedtls_aes_setkey_dec) @0627c0a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: FSb/13 (read) RT0/19 (read) FSb/13 (read) RT1/20 (read) FSb/13 (read) RT2/21 (read) FSb/13 (read) RT3/22 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 
+  Calls: mbedtls_aes_free/27 mbedtls_aes_setkey_enc/29 mbedtls_aes_rk_offset/28 mbedtls_aes_init/26 
+mbedtls_aes_setkey_enc/29 (mbedtls_aes_setkey_enc) @06271d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: aes_init_done/24 (read) aes_init_done/24 (write) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_get_unaligned_uint32/2 mbedtls_aes_rk_offset/28 aes_gen_tables/25 
+mbedtls_aes_rk_offset/28 (mbedtls_aes_rk_offset) @06271150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_dec/30 mbedtls_aes_setkey_enc/29 
+  Calls: 
+mbedtls_aes_free/27 (mbedtls_aes_free) @06271000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: mbedtls_platform_zeroize/47 
+mbedtls_aes_init/26 (mbedtls_aes_init) @0625fe70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_self_test/45 mbedtls_aes_setkey_dec/30 
+  Calls: memset/46 
+aes_gen_tables/25 (aes_gen_tables) @0625fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: RCON/23 (write) FSb/13 (write) RSb/18 (write) FSb/13 (write) RSb/18 (write) FSb/13 (read) FT0/14 (write) FT0/14 (read) FT1/15 (write) FT1/15 (read) FT2/16 (write) FT2/16 (read) FT3/17 (write) RSb/18 (read) RT0/19 (write) RT0/19 (read) RT1/20 (write) RT1/20 (read) RT2/21 (write) RT2/21 (read) RT3/22 (write) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_setkey_enc/29 
+  Calls: 
+aes_init_done/24 (aes_init_done) @0529dc18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (write) 
+  Availability: not-ready
+  Varpool flags: initialized
+RCON/23 (RCON) @0529dbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) 
+  Availability: not-ready
+  Varpool flags:
+RT3/22 (RT3) @0529db88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT2/21 (RT2) @0529db40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT1/20 (RT1) @0529daf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RT0/19 (RT0) @0529dab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+RSb/18 (RSb) @0529da68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT3/17 (FT3) @0529da20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT2/16 (FT2) @0529d9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT1/15 (FT1) @0529d990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FT0/14 (FT0) @0529d948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+FSb/13 (FSb) @0529d900
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: not-ready
+  Varpool flags:
+mbedtls_xor/8 (mbedtls_xor) @06205d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_aes_crypt_cbc/34 mbedtls_aes_crypt_cbc/34 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @062053f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @062052a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_decrypt/32 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_internal_aes_encrypt/31 mbedtls_aes_setkey_enc/29 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+putchar/52 (__builtin_putchar) @062e4690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 (577528 (estimated locally),0.01 per call) mbedtls_aes_self_test/45 (855517 (estimated locally),0.01 per call) mbedtls_aes_self_test/45 (4590060 (estimated locally),0.06 per call) 
+  Calls: 
+memcmp/51 (memcmp) @062e41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 (9927442 (estimated locally),0.13 per call) mbedtls_aes_self_test/45 (2001290 (estimated locally),0.03 per call) mbedtls_aes_self_test/45 (10737416 (estimated locally),0.14 per call) 
+  Calls: 
+printf/50 (printf) @062e4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 (5248415 (estimated locally),0.07 per call) mbedtls_aes_self_test/45 (7774707 (estimated locally),0.10 per call) mbedtls_aes_self_test/45 (41713221 (estimated locally),0.56 per call) 
+  Calls: 
+puts/49 (__builtin_puts) @062e4f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 (12127486 (estimated locally),0.16 per call) mbedtls_aes_self_test/45 (3185964 (estimated locally),0.04 per call) mbedtls_aes_self_test/45 (642264 (estimated locally),0.01 per call) mbedtls_aes_self_test/45 (2286362 (estimated locally),0.03 per call) mbedtls_aes_self_test/45 (3445905 (estimated locally),0.05 per call) mbedtls_aes_self_test/45 (12266895 (estimated locally),0.16 per call) mbedtls_aes_self_test/45 (24626805 (estimated locally),0.33 per call) 
+  Calls: 
+memcpy/48 (memcpy) @062e4e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 (5104083 (estimated locally),0.07 per call) mbedtls_aes_self_test/45 (5104083 (estimated locally),0.07 per call) mbedtls_aes_self_test/45 (10496829 (estimated locally),0.14 per call) mbedtls_aes_crypt_cbc/34 (958878294 (estimated locally),4.07 per call) 
+  Calls: 
+mbedtls_platform_zeroize/47 (mbedtls_platform_zeroize) @062e4dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_internal_aes_decrypt/32 (118111600 (estimated locally),1.00 per call) mbedtls_internal_aes_encrypt/31 (118111600 (estimated locally),1.00 per call) mbedtls_aes_free/27 (741418729 (estimated locally),0.69 per call) 
+  Calls: 
+memset/46 (memset) @062e4d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_aes_self_test/45 (15549414 (estimated locally),0.21 per call) mbedtls_aes_self_test/45 (15549414 (estimated locally),0.21 per call) mbedtls_aes_self_test/45 (15549414 (estimated locally),0.21 per call) mbedtls_aes_self_test/45 (83426441 (estimated locally),1.12 per call) mbedtls_aes_self_test/45 (74626682 (estimated locally),1.00 per call) mbedtls_aes_init/26 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_aes_self_test/45 (mbedtls_aes_self_test) @062e4c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: aes_test_ecb_dec/36 (addr) aes_test_ecb_enc/37 (addr) aes_test_cbc_dec/38 (addr) aes_test_cbc_enc/39 (addr) aes_test_ctr_nonce_counter/41 (read) aes_test_ctr_key/40 (addr) aes_test_ctr_len/44 (read) aes_test_ctr_ct/43 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_pt/42 (addr) aes_test_ctr_ct/43 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:74626682 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_aes_free/27 (74626682 (estimated locally),1.00 per call) puts/49 (12127486 (estimated locally),0.16 per call) putchar/52 (577528 (estimated locally),0.01 per call) puts/49 (3185964 (estimated locally),0.04 per call) memcmp/51 (9927442 (estimated locally),0.13 per call) mbedtls_aes_crypt_ctr/35 (10208167 (estimated locally),0.14 per call) memcpy/48 (5104083 (estimated locally),0.07 per call) memcpy/48 (5104083 (estimated locally),0.07 per call) mbedtls_aes_setkey_enc/29 (10496829 (estimated locally),0.14 per call) memcpy/48 (10496829 (estimated locally),0.14 per call) printf/50 (5248415 (estimated locally),0.07 per call) putchar/52 (855517 (estimated locally),0.01 per call) puts/49 (642264 (estimated locally),0.01 per call) memcmp/51 (2001290 (estimated locally),0.03 per call) mbedtls_aes_crypt_cbc/34 (198127780 (estimated locally),2.65 per call) puts/49 (2286362 (estimated locally),0.03 per call) mbedtls_aes_setkey_enc/29 (7774707 (estimated locally),0.10 per call) mbedtls_aes_setkey_dec/30 (7774707 (estimated locally),0.10 per call) memset/46 (15549414 (estimated locally),0.21 per call) memset/46 (15549414 (estimated locally),0.21 per call) memset/46 (15549414 (estimated locally),0.21 per call) printf/50 (7774707 (estimated locally),0.10 per call) putchar/52 (4590060 (estimated locally),0.06 per call) puts/49 (3445905 (estimated locally),0.05 per call) memcmp/51 (10737416 (estimated locally),0.14 per call) mbedtls_aes_crypt_ecb/33 (1063004410 (estimated locally),14.24 per call) puts/49 (12266895 (estimated locally),0.16 per call) mbedtls_aes_setkey_enc/29 (41713221 (estimated locally),0.56 per call) mbedtls_aes_setkey_dec/30 (41713221 (estimated locally),0.56 per call) memset/46 (83426441 (estimated locally),1.12 per call) printf/50 (41713221 (estimated locally),0.56 per call) puts/49 (24626805 (estimated locally),0.33 per call) mbedtls_aes_init/26 (74626682 (estimated locally),1.00 per call) memset/46 (74626682 (estimated locally),1.00 per call) 
+aes_test_ctr_len/44 (aes_test_ctr_len) @062aae10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_ct/43 (aes_test_ctr_ct) @062aadc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_pt/42 (aes_test_ctr_pt) @062aaca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_nonce_counter/41 (aes_test_ctr_nonce_counter) @062aab88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_key/40 (aes_test_ctr_key) @062aaa68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_cbc_enc/39 (aes_test_cbc_enc) @062aa948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_cbc_dec/38 (aes_test_cbc_dec) @062aa828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ecb_enc/37 (aes_test_ecb_enc) @062aa708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ecb_dec/36 (aes_test_ecb_dec) @062aa5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_self_test/45 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_aes_crypt_ctr/35 (mbedtls_aes_crypt_ctr) @062b4c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:54928846 (estimated locally) body
+  Called by: mbedtls_aes_self_test/45 (10208167 (estimated locally),0.14 per call) 
+  Calls: mbedtls_aes_crypt_ecb/33 (125628925 (estimated locally),2.29 per call) 
+mbedtls_aes_crypt_cbc/34 (mbedtls_aes_crypt_cbc) @062b4b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:235652552 (estimated locally) body
+  Called by: mbedtls_aes_self_test/45 (198127780 (estimated locally),2.65 per call) 
+  Calls: memcpy/48 (958878294 (estimated locally),4.07 per call) mbedtls_aes_crypt_ecb/33 (1014686025 (estimated locally),4.31 per call) mbedtls_xor/8 (1014686025 (estimated locally),4.31 per call) mbedtls_xor/8 (958878294 (estimated locally),4.07 per call) mbedtls_aes_crypt_ecb/33 (1014686025 (estimated locally),4.31 per call) 
+mbedtls_aes_crypt_ecb/33 (mbedtls_aes_crypt_ecb) @062b49d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_aes_self_test/45 (1063004410 (estimated locally),14.24 per call) mbedtls_aes_crypt_ctr/35 (125628925 (estimated locally),2.29 per call) mbedtls_aes_crypt_cbc/34 (1014686025 (estimated locally),4.31 per call) mbedtls_aes_crypt_cbc/34 (1014686025 (estimated locally),4.31 per call) 
+  Calls: mbedtls_internal_aes_decrypt/32 (698110424 (estimated locally),0.65 per call) mbedtls_internal_aes_encrypt/31 (359632648 (estimated locally),0.33 per call) 
+mbedtls_internal_aes_decrypt/32 (mbedtls_internal_aes_decrypt) @062b4888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RT0/19 (read) RT1/20 (read) RT2/21 (read) RT3/22 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) RSb/18 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body
+  Called by: mbedtls_aes_crypt_ecb/33 (698110424 (estimated locally),0.65 per call) 
+  Calls: mbedtls_platform_zeroize/47 (118111600 (estimated locally),1.00 per call) 
+mbedtls_internal_aes_encrypt/31 (mbedtls_internal_aes_encrypt) @0627cc78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FT0/14 (read) FT1/15 (read) FT2/16 (read) FT3/17 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body
+  Called by: mbedtls_aes_crypt_ecb/33 (359632648 (estimated locally),0.33 per call) 
+  Calls: mbedtls_platform_zeroize/47 (118111600 (estimated locally),1.00 per call) 
+mbedtls_aes_setkey_dec/30 (mbedtls_aes_setkey_dec) @0627c0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: FSb/13 (read) RT0/19 (read) FSb/13 (read) RT1/20 (read) FSb/13 (read) RT2/21 (read) FSb/13 (read) RT3/22 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:40215050 (estimated locally) body
+  Called by: mbedtls_aes_self_test/45 (7774707 (estimated locally),0.10 per call) mbedtls_aes_self_test/45 (41713221 (estimated locally),0.56 per call) 
+  Calls: mbedtls_aes_free/27 (40215050 (estimated locally),1.00 per call) mbedtls_aes_setkey_enc/29 (40215050 (estimated locally),1.00 per call) mbedtls_aes_rk_offset/28 (40215050 (estimated locally),1.00 per call) mbedtls_aes_init/26 (40215050 (estimated locally),1.00 per call) 
+mbedtls_aes_setkey_enc/29 (mbedtls_aes_setkey_enc) @06271d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: aes_init_done/24 (read) aes_init_done/24 (write) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) RCON/23 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) FSb/13 (read) 
+  Referring: 
+  Availability: available
+  Function flags: count:157482133 (estimated locally) body nonfreeing_fn
+  Called by: mbedtls_aes_self_test/45 (10496829 (estimated locally),0.14 per call) mbedtls_aes_self_test/45 (7774707 (estimated locally),0.10 per call) mbedtls_aes_self_test/45 (41713221 (estimated locally),0.56 per call) mbedtls_aes_setkey_dec/30 (40215050 (estimated locally),1.00 per call) 
+  Calls: mbedtls_aes_rk_offset/28 (118111600 (estimated locally),0.75 per call) aes_gen_tables/25 (38976828 (estimated locally),0.25 per call) 
+mbedtls_aes_rk_offset/28 (mbedtls_aes_rk_offset) @06271150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: mbedtls_aes_setkey_dec/30 (40215050 (estimated locally),1.00 per call) mbedtls_aes_setkey_enc/29 (118111600 (estimated locally),0.75 per call) 
+  Calls: 
+mbedtls_aes_free/27 (mbedtls_aes_free) @06271000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_aes_self_test/45 (74626682 (estimated locally),1.00 per call) mbedtls_aes_setkey_dec/30 (40215050 (estimated locally),1.00 per call) 
+  Calls: mbedtls_platform_zeroize/47 (741418729 (estimated locally),0.69 per call) 
+mbedtls_aes_init/26 (mbedtls_aes_init) @0625fe70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_aes_self_test/45 (74626682 (estimated locally),1.00 per call) mbedtls_aes_setkey_dec/30 (40215050 (estimated locally),1.00 per call) 
+  Calls: memset/46 (1073741824 (estimated locally),1.00 per call) 
+aes_gen_tables/25 (aes_gen_tables) @0625fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: RCON/23 (write) FSb/13 (write) RSb/18 (write) FSb/13 (write) RSb/18 (write) FSb/13 (read) FT0/14 (write) FT1/15 (write) FT2/16 (write) FT3/17 (write) RSb/18 (read) RT0/19 (write) RT1/20 (write) RT2/21 (write) RT3/22 (write) 
+  Referring: 
+  Availability: local
+  Function flags: count:10737414 (estimated locally) body local nonfreeing_fn
+  Called by: mbedtls_aes_setkey_enc/29 (38976828 (estimated locally),0.25 per call) 
+  Calls: 
+aes_init_done/24 (aes_init_done) @0529dc18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (write) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function
+RCON/23 (RCON) @0529dbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) 
+  Availability: available
+  Varpool flags:
+RT3/22 (RT3) @0529db88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_aes_setkey_dec/30 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: available
+  Varpool flags:
+RT2/21 (RT2) @0529db40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_setkey_dec/30 (read) aes_gen_tables/25 (write) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: available
+  Varpool flags:
+RT1/20 (RT1) @0529daf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_setkey_dec/30 (read) aes_gen_tables/25 (write) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: available
+  Varpool flags:
+RT0/19 (RT0) @0529dab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_setkey_dec/30 (read) aes_gen_tables/25 (write) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: available
+  Varpool flags:
+RSb/18 (RSb) @0529da68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) mbedtls_internal_aes_decrypt/32 (read) 
+  Availability: available
+  Varpool flags:
+FT3/17 (FT3) @0529da20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: available
+  Varpool flags:
+FT2/16 (FT2) @0529d9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: available
+  Varpool flags:
+FT1/15 (FT1) @0529d990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: available
+  Varpool flags:
+FT0/14 (FT0) @0529d948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: aes_gen_tables/25 (write) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: available
+  Varpool flags:
+FSb/13 (FSb) @0529d900
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_dec/30 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_enc/29 (read) mbedtls_aes_setkey_dec/30 (read) aes_gen_tables/25 (write) aes_gen_tables/25 (write) aes_gen_tables/25 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) mbedtls_internal_aes_encrypt/31 (read) 
+  Availability: available
+  Varpool flags:
+mbedtls_xor/8 (mbedtls_xor) @06205d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: mbedtls_aes_crypt_cbc/34 (1014686025 (estimated locally),4.31 per call) mbedtls_aes_crypt_cbc/34 (958878294 (estimated locally),4.07 per call) 
+  Calls: 
+Trivially needed variables: aes_test_ctr_len/44 aes_test_ctr_ct/43 aes_test_ctr_pt/42 aes_test_ctr_nonce_counter/41 aes_test_ctr_key/40 aes_test_cbc_enc/39 aes_test_cbc_dec/38 aes_test_ecb_enc/37 aes_test_ecb_dec/36 aes_init_done/24 RCON/23 RT3/22 RT2/21 RT1/20 RT0/19 RSb/18 FT3/17 FT2/16 FT1/15 FT0/14 FSb/13
+Removing variables:
+
+Final Symbol table:
+
+putchar/52 (__builtin_putchar) @062e4690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/51 (memcmp) @062e41f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/50 (printf) @062e4150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/49 (__builtin_puts) @062e4f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/48 (memcpy) @062e4e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/47 (mbedtls_platform_zeroize) @062e4dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/46 (memset) @062e4d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_aes_self_test/45 (mbedtls_aes_self_test) @062e4c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:74626682 (estimated locally)
+  Called by: 
+  Calls: 
+aes_test_ctr_len/44 (aes_test_ctr_len) @062aae10
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ctr_len (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_ct/43 (aes_test_ctr_ct) @062aadc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ctr_ct (implicit_section)
+  Aux: @062aae10
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_pt/42 (aes_test_ctr_pt) @062aaca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ctr_pt (implicit_section)
+  Aux: @062aadc8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_nonce_counter/41 (aes_test_ctr_nonce_counter) @062aab88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ctr_nonce_counter (implicit_section)
+  Aux: @062aaca8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ctr_key/40 (aes_test_ctr_key) @062aaa68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ctr_key (implicit_section)
+  Aux: @062aab88
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_cbc_enc/39 (aes_test_cbc_enc) @062aa948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_cbc_enc (implicit_section)
+  Aux: @062aaa68
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_cbc_dec/38 (aes_test_cbc_dec) @062aa828
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_cbc_dec (implicit_section)
+  Aux: @062aa948
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ecb_enc/37 (aes_test_ecb_enc) @062aa708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ecb_enc (implicit_section)
+  Aux: @062aa828
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+aes_test_ecb_dec/36 (aes_test_ecb_dec) @062aa5e8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.aes_test_ecb_dec (implicit_section)
+  Aux: @062aa708
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_aes_crypt_ctr/35 (mbedtls_aes_crypt_ctr) @062b4c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_crypt_ctr (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:54928846 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_aes_crypt_cbc/34 (mbedtls_aes_crypt_cbc) @062b4b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_crypt_cbc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:235652552 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_aes_crypt_ecb/33 (mbedtls_aes_crypt_ecb) @062b49d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_crypt_ecb (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_internal_aes_decrypt/32 (mbedtls_internal_aes_decrypt) @062b4888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_internal_aes_decrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_internal_aes_encrypt/31 (mbedtls_internal_aes_encrypt) @0627cc78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_internal_aes_encrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_aes_setkey_dec/30 (mbedtls_aes_setkey_dec) @0627c0a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_setkey_dec (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:40215050 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_aes_setkey_enc/29 (mbedtls_aes_setkey_enc) @06271d20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_setkey_enc (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:157482133 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_aes_rk_offset/28 (mbedtls_aes_rk_offset) @06271150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.mbedtls_aes_rk_offset (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_aes_free/27 (mbedtls_aes_free) @06271000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_aes_init/26 (mbedtls_aes_init) @0625fe70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_aes_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+aes_gen_tables/25 (aes_gen_tables) @0625fd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.aes_gen_tables (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:10737414 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+aes_init_done/24 (aes_init_done) @0529dc18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.aes_init_done (implicit_section)
+  Aux: @062aa5e8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function
+RCON/23 (RCON) @0529dbd0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.RCON (implicit_section)
+  Aux: @0529dc18
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+RT3/22 (RT3) @0529db88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.RT3 (implicit_section)
+  Aux: @0529dbd0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+RT2/21 (RT2) @0529db40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.RT2 (implicit_section)
+  Aux: @0529db88
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+RT1/20 (RT1) @0529daf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.RT1 (implicit_section)
+  Aux: @0529db40
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+RT0/19 (RT0) @0529dab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.RT0 (implicit_section)
+  Aux: @0529daf8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+RSb/18 (RSb) @0529da68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.RSb (implicit_section)
+  Aux: @0529dab0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+FT3/17 (FT3) @0529da20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.FT3 (implicit_section)
+  Aux: @0529da68
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+FT2/16 (FT2) @0529d9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.FT2 (implicit_section)
+  Aux: @0529da20
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+FT1/15 (FT1) @0529d990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.FT1 (implicit_section)
+  Aux: @0529d9d8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+FT0/14 (FT0) @0529d948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.FT0 (implicit_section)
+  Aux: @0529d990
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+FSb/13 (FSb) @0529d900
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.bss.FSb (implicit_section)
+  Aux: @0529d948
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags:
+mbedtls_xor/8 (mbedtls_xor) @06205d20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 

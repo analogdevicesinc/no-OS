@@ -1,0 +1,13 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:66:12:cmac_multiply_by_u	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:155:13:cmac_pad	4	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:113:12:cmac_generate_subkeys	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:737:12:cmac_test_subkeys	152	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:173:5:mbedtls_cipher_cmac_starts	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:215:5:mbedtls_cipher_cmac_update	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:281:5:mbedtls_cipher_cmac_finish	88	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:339:5:mbedtls_cipher_cmac_reset	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:359:5:mbedtls_cipher_cmac	96	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:831:12:cmac_test_wth_cipher	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:399:5:mbedtls_aes_cmac_prf_128	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:898:12:test_aes128_cmac_prf	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/cmac.c:923:5:mbedtls_cmac_self_test	40	static

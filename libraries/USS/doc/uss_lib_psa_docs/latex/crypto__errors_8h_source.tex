@@ -1,0 +1,121 @@
+\doxysection{crypto\+\_\+errors.\+h}
+\hypertarget{crypto__errors_8h_source}{}\label{crypto__errors_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_errors.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_errors.h}}
+\mbox{\hyperlink{crypto__errors_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ CRYTPO\_ERROR\_H}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ CRYTPO\_ERROR\_H}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stddef.h>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/*A\ status\ code\ to\ indicate\ general\ success*/}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ PSA\_SUCCESS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)0)}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/*This\ error\ indicates\ that\ the\ function\ has\ detected\ an\ abnormal\ call,\ which\ typically\ indicates\ a}}
+\DoxyCodeLine{00024\ \textcolor{comment}{programming\ error\ in\ the\ caller,\ or\ an\ abuse\ of\ the\ API*/}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_PROGRAMMER\_ERROR\ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/129)}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ caller\ is\ not\ permitted\ to\ connect\ to\ a\ Service*/}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_CONNECTION\_REFUSED\ \ \ \ \ \ \ \ ((psa\_status\_t)-\/130)}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ caller\ cannot\ connect\ to\ a\ service*/}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_CONNECTION\_BUSY\ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/131)}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ an\ error\ that\ does\ not\ correspond\ to\ any\ defined\ failure\ cause*/}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_GENERIC\_ERROR\ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/132)}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ requested\ action\ is\ denied\ by\ a\ policy*/}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_NOT\_PERMITTED\ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/133)}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ requested\ operation\ or\ a\ parameter\ is\ not\ supported*/}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_NOT\_SUPPORTED\ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/134)}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ parameters\ passed\ to\ the\ function\ are\ invalid*/}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INVALID\_ARGUMENT\ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/135)}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ a\ handle\ parameter\ is\ not\ valid.A\ function\ can\ return\ this\ }}
+\DoxyCodeLine{00046\ \textcolor{comment}{error\ any\ time\ it\ expects\ a\ parameter\ to\ be\ a\ handle\ to\ an\ existing\ resource,\ but}}
+\DoxyCodeLine{00047\ \textcolor{comment}{the\ handle\ is\ invalid.*/}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INVALID\_HANDLE\ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/136)}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ requested\ action\ cannot\ be\ performed\ in\ the\ current\ state.}}
+\DoxyCodeLine{00051\ \textcolor{comment}{It\ is\ recommended\ that\ a\ function\ returns\ this\ error\ when\ an\ operation\ is\ requested\ out\ of\ sequence*/}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_BAD\_STATE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/137)}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ an\ output\ buffer\ parameter\ is\ too\ small*/}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_BUFFER\_TOO\_SMALL\ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/138)}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ an\ identifier\ or\ index\ is\ already\ in\ use*/}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_ALREADY\_EXISTS\ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/139)}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ an\ identified\ resource\ does\ not\ exist*/}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_DOES\_NOT\_EXIST\ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/140)}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ there\ is\ not\ enough\ runtime\ memory*/}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INSUFFICIENT\_MEMORY\ \ \ \ \ \ \ ((psa\_status\_t)-\/141)}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ there\ is\ not\ enough\ persistent\ storage*/}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INSUFFICIENT\_STORAGE\ \ \ \ \ \ ((psa\_status\_t)-\/142)}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ a\ data\ source\ has\ insufficient\ capacity\ left*/}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INSUFFICIENT\_DATA\ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/143)}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ an\ error\ within\ the\ service*/}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_SERVICE\_FAILURE\ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/144)}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ a\ communication\ failure\ between\ the\ function\ and\ another\ service\ or}}
+\DoxyCodeLine{00076\ \textcolor{comment}{component*/}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_COMMUNICATION\_FAILURE\ \ \ \ \ ((psa\_status\_t)-\/145)}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ a\ storage\ failure\ that\ may\ have\ led\ to\ data\ loss*/}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_STORAGE\_FAILURE\ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/146)}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ a\ hardware\ failure\ was\ detected*/}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_HARDWARE\_FAILURE\ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/147)}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ there\ is\ not\ enough\ entropy\ to\ generate\ random\ data\ needed\ for\ the}}
+\DoxyCodeLine{00086\ \textcolor{comment}{requested\ action*/}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INSUFFICIENT\_ENTROPY\ \ \ \ \ \ ((psa\_status\_t)-\/148)}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ a\ signature,\ MAC\ or\ hash\ is\ incorrect*/}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INVALID\_SIGNATURE\ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/149)}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ decrypted\ padding\ is\ incorrect*/}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_INVALID\_PADDING\ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/150)}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ internal\ data\ has\ been\ tampered\ with.}}
+\DoxyCodeLine{00096\ \textcolor{comment}{A\ function\ can\ return\ this\ error\ if\ it\ detects\ an\ invalid\ state\ that\ cannot\ happen\ during\ normal\ operation}}
+\DoxyCodeLine{00097\ \textcolor{comment}{and\ that\ indicates\ that\ the\ implementation’s\ security\ guarantees\ no\ longer\ hold.*/}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_CORRUPTION\_DETECTED\ \ \ \ \ \ \ ((psa\_status\_t)-\/151)}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ stored\ data\ has\ been\ corrupted*/}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_DATA\_CORRUPT\ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/152)}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ data\ read\ from\ storage\ is\ not\ valid\ for\ the\ implementation*/}}
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ PSA\_ERROR\_DATA\_INVALID\ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/153)}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \textcolor{comment}{/*A\ status\ code\ that\ indicates\ that\ the\ requested\ operation\ is\ interruptible,\ and\ still\ has\ work\ to\ do*/}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#define\ PSA\_OPERATION\_INCOMPLETE\ \ \ \ \ \ \ \ \ \ \ \ ((psa\_status\_t)-\/248)}}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00111\ \}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//CRYTPO\_ERROR\_H}}
+
+\end{DoxyCode}

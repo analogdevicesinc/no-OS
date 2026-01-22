@@ -1,0 +1,14 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:28:5:hkdf_abstract_extract	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:55:5:hkdf_abstract_init	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:75:5:hkdf_abstract_core	856	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:155:5:hkdf_abstract_finish	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:167:5:hkdf_abstract_expand	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:181:5:hkdf_abstract	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:202:5:hkdf_sha256	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:207:5:hkdf_sha256_extract	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:212:5:hkdf_sha256_expand	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:217:5:hkdf_sha256_init	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:222:5:hkdf_sha256_core	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:227:5:hkdf_sha256_finish	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:233:5:test_hkdf_helper_sha256	256	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/hmac/hkdf.c:363:5:test_hkdf_vectors	40	static

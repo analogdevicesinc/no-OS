@@ -1,0 +1,8 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/alignment.h:56:17:mbedtls_get_unaligned_uint16	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/alignment.h:70:13:mbedtls_put_unaligned_uint16	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/alignment.h:82:17:mbedtls_get_unaligned_uint32	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/alignment.h:96:13:mbedtls_put_unaligned_uint32	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/alignment.h:108:17:mbedtls_get_unaligned_uint64	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/alignment.h:122:13:mbedtls_put_unaligned_uint64	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/common.h:124:13:mbedtls_xor	12	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/platform_util.c:105:6:mbedtls_platform_zeroize	8	static

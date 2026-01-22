@@ -1,0 +1,645 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/\+MXQ\+\_\+\+Host.h File Reference}
+\hypertarget{_m_x_q___host_8h}{}\label{_m_x_q___host_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Host.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Host.h}}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_acc8246854863e284651e7284817abf9c}{HOST\+\_\+init\+\_\+spi}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a885978c10a30e0182302d8406ffd20d1}{HOST\+\_\+init\+\_\+i2c}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_aa57cdfe61bb008b72eebceced2b6f8f3}{HOST\+\_\+init\+\_\+pipe}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a7a9125fb9f9a9bcdc68342ecf7749b1d}{HOST\+\_\+init\+\_\+serial}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a701cc957e52b7694ec39727918b900d3}{HOST\+\_\+init\+\_\+mailbox}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ab24531226751b882fbbfd0f57c276628}{HOST\+\_\+send\+\_\+bytes\+\_\+spi}} (const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}src, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a3bbc7e8f735396d5adb7a7513ab27d25}{HOST\+\_\+exchange\+\_\+bytes\+\_\+spi}} (const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}src, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len, \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ac1317f38cead4da7a3f85c781ffd97f9}{HOST\+\_\+receive\+\_\+bytes\+\_\+spi}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ae2f594a12ace15b193db6a075ba51f7a}{HOST\+\_\+receive\+\_\+bytes\+\_\+spi\+\_\+first}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a7abb7771fd29e8ffceae40bdc6c61cff}{HOST\+\_\+send\+\_\+bytes\+\_\+i2c}} (const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}src, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a18778055a3e09db22418e2a138888104}{HOST\+\_\+receive\+\_\+bytes\+\_\+i2c}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_af98b10b0e7a94e1b2eaefaa026b545d7}{HOST\+\_\+receive\+\_\+bytes\+\_\+i2c\+\_\+first}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a4d488518dd683d4a0c93d2a858efe95c}{HOST\+\_\+send\+\_\+bytes\+\_\+serial}} (const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}src, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ade51c9684399c2c6588e100eab5f11a5}{HOST\+\_\+receive\+\_\+bytes\+\_\+serial\+\_\+first}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a4c07d8a2a2ee19caf2665cfc1ff4a7e0}{HOST\+\_\+receive\+\_\+bytes\+\_\+serial}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a61c6ca06e9777d6e4f5cf9cee016dd6c}{HOST\+\_\+send\+\_\+bytes\+\_\+pipe}} (const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}src, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ad42d13c51d8005a0425f75fb874edfa1}{HOST\+\_\+receive\+\_\+bytes\+\_\+pipe\+\_\+first}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ab32f06ceb66e30ca50ee324cdfb970b6}{HOST\+\_\+send\+\_\+bytes\+\_\+mailbox}} (const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}src, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a4a7dc554c7abd1318e4fefad3bf757f4}{HOST\+\_\+receive\+\_\+bytes\+\_\+mailbox\+\_\+first}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a68ed39875dc93aa4afd28b2072975f1d}{HOST\+\_\+receive\+\_\+bytes\+\_\+mailbox}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a48a66a47093f17e517a87f7a0426b617}{HOST\+\_\+receive\+\_\+bytes\+\_\+pipe}} (\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}dest, \mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}} len)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_aebf5a05ac8940daed76ed775ceafe23b}{HOST\+\_\+sleep\+\_\+maxq10xx}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ae6d3419911dac78a8ed8d020b7e25c47}{HOST\+\_\+wakeup\+\_\+maxq106x}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_ab4705c76cd2659562ae76aabfa543727}{HOST\+\_\+reset\+\_\+maxq106x}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a997ad2efd1dfef3684b34cde1aafef40}{HOST\+\_\+toggle\+\_\+wdi}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a0454c2b2a49f967950503c5ebdf47e46}{HOST\+\_\+activate\+\_\+tls}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a99d6bb8899b9b29ef1cc4075d1c5cbce}{HOST\+\_\+follow\+\_\+tls}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a72069881c16d8eba46df6558758bead7}{HOST\+\_\+activate\+\_\+gcu}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a04a09a68940359dc804921c0db871d87}{HOST\+\_\+follow\+\_\+gcu}} (void)
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{_m_x_q___host_8h_ab35e8bbb7920f2e74db3e7cf653b83b1}{HOST\+\_\+get\+\_\+interface}} (void)
+\item 
+void \mbox{\hyperlink{_m_x_q___host_8h_a36ea525f00780d7e4ffff7fd63fc1207}{HOST\+\_\+set\+\_\+interface}} (void \texorpdfstring{$\ast$}{*}i)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___host_8h_a3b503535086286eea29f25e962e7df65}{HOST\+\_\+deinit\+\_\+interface}} (void)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyDate}{Date}
+Apr, May 2015 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Authors}
+Stéphane Di Vito, Maxim Integrated Products Inc. 
+
+Benjamin Vinot, Maxim Integrated Products Inc. 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_m_x_q___host_8h_a72069881c16d8eba46df6558758bead7}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_activate\_gcu@{HOST\_activate\_gcu}}
+\index{HOST\_activate\_gcu@{HOST\_activate\_gcu}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_activate\_gcu()}{HOST\_activate\_gcu()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a72069881c16d8eba46df6558758bead7} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+activate\+\_\+gcu (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Activate AES SPI Mode by setting the MODE pin to 1. This also performs a reset of the MAXQ106x through the RESET pin.
+
+Sequence is\+:
+\begin{DoxyEnumerate}
+\item Set MODE pin to 1
+\item Assert the RESET pin (0)
+\item Hold RESET pin for 100uS
+\item De-\/assert the RESET pin (1)
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Host side context (authentication state, secure channel, ...) must also be reset.
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a0454c2b2a49f967950503c5ebdf47e46}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_activate\_tls@{HOST\_activate\_tls}}
+\index{HOST\_activate\_tls@{HOST\_activate\_tls}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_activate\_tls()}{HOST\_activate\_tls()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a0454c2b2a49f967950503c5ebdf47e46} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+activate\+\_\+tls (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Activate Crypto toolbox Mode by setting the MODE pin to 0. This also performs a reset of the MAXQ106x through the RESET pin.
+
+Sequence is\+:
+\begin{DoxyEnumerate}
+\item Set MODE pin to 0
+\item Assert the RESET pin (0)
+\item Hold RESET pin for 100uS
+\item De-\/assert the RESET pin (1)
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Host side context (authentication state, secure channel, ...) must also be reset.
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a3b503535086286eea29f25e962e7df65}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_deinit\_interface@{HOST\_deinit\_interface}}
+\index{HOST\_deinit\_interface@{HOST\_deinit\_interface}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_deinit\_interface()}{HOST\_deinit\_interface()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a3b503535086286eea29f25e962e7df65} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+deinit\+\_\+interface (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{_m_x_q___host_8h_a3bbc7e8f735396d5adb7a7513ab27d25}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_exchange\_bytes\_spi@{HOST\_exchange\_bytes\_spi}}
+\index{HOST\_exchange\_bytes\_spi@{HOST\_exchange\_bytes\_spi}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_exchange\_bytes\_spi()}{HOST\_exchange\_bytes\_spi()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a3bbc7e8f735396d5adb7a7513ab27d25} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+exchange\+\_\+bytes\+\_\+spi (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{src}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{}\end{DoxyParamCaption})}
+
+Exchange bytes with the MAXQ106x over the host SPI interface (when available).
+
+This is used for the AES-\/\+SPI mode only.
+
+Refer to the user guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & source buffer containing bytes to transmit \\
+\hline
+{\em len} & number of bytes to transmit \\
+\hline
+{\em dest} & destination buffer for the received bytes\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & OK \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a04a09a68940359dc804921c0db871d87}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_follow\_gcu@{HOST\_follow\_gcu}}
+\index{HOST\_follow\_gcu@{HOST\_follow\_gcu}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_follow\_gcu()}{HOST\_follow\_gcu()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a04a09a68940359dc804921c0db871d87} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+follow\+\_\+gcu (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{_m_x_q___host_8h_a99d6bb8899b9b29ef1cc4075d1c5cbce}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_follow\_tls@{HOST\_follow\_tls}}
+\index{HOST\_follow\_tls@{HOST\_follow\_tls}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_follow\_tls()}{HOST\_follow\_tls()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a99d6bb8899b9b29ef1cc4075d1c5cbce} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+follow\+\_\+tls (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{_m_x_q___host_8h_ab35e8bbb7920f2e74db3e7cf653b83b1}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_get\_interface@{HOST\_get\_interface}}
+\index{HOST\_get\_interface@{HOST\_get\_interface}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_get\_interface()}{HOST\_get\_interface()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ab35e8bbb7920f2e74db3e7cf653b83b1} 
+void \texorpdfstring{$\ast$}{*} HOST\+\_\+get\+\_\+interface (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{_m_x_q___host_8h_a885978c10a30e0182302d8406ffd20d1}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_init\_i2c@{HOST\_init\_i2c}}
+\index{HOST\_init\_i2c@{HOST\_init\_i2c}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_init\_i2c()}{HOST\_init\_i2c()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a885978c10a30e0182302d8406ffd20d1} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+init\+\_\+i2c (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Initializes the host platform I2C interface for communication with the MAXQ106x. In case GPIO must be driven by the HOST, this function shall also intialize them.
+
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & OK \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a701cc957e52b7694ec39727918b900d3}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_init\_mailbox@{HOST\_init\_mailbox}}
+\index{HOST\_init\_mailbox@{HOST\_init\_mailbox}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_init\_mailbox()}{HOST\_init\_mailbox()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a701cc957e52b7694ec39727918b900d3} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+init\+\_\+mailbox (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Mailbox implementation \Hypertarget{_m_x_q___host_8h_aa57cdfe61bb008b72eebceced2b6f8f3}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_init\_pipe@{HOST\_init\_pipe}}
+\index{HOST\_init\_pipe@{HOST\_init\_pipe}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_init\_pipe()}{HOST\_init\_pipe()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_aa57cdfe61bb008b72eebceced2b6f8f3} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+init\+\_\+pipe (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Reserved for special use \Hypertarget{_m_x_q___host_8h_a7a9125fb9f9a9bcdc68342ecf7749b1d}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_init\_serial@{HOST\_init\_serial}}
+\index{HOST\_init\_serial@{HOST\_init\_serial}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_init\_serial()}{HOST\_init\_serial()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a7a9125fb9f9a9bcdc68342ecf7749b1d} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+init\+\_\+serial (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Reserved for special use \Hypertarget{_m_x_q___host_8h_acc8246854863e284651e7284817abf9c}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_init\_spi@{HOST\_init\_spi}}
+\index{HOST\_init\_spi@{HOST\_init\_spi}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_init\_spi()}{HOST\_init\_spi()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_acc8246854863e284651e7284817abf9c} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+init\+\_\+spi (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Initializes the host platform SPI interface for communication with the MAXQ106x. In case GPIO must be driven by the HOST, this function shall also intialize them\+:
+\begin{DoxyItemize}
+\item RESET pin as output, set to high (if connected)
+\item WAKEUP pin as output, set to high (if connected)
+\item WDI pin as output, set to high (if connected)
+\item CMS pin as output, set to high (I2C) or low (SPI). This pin does not need to be dynamically driven. It is usually hard wired to a state corresponding to the protocol in use.
+\item MODE pin as output, set to high (if connected)
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Status of execution
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & OK \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a18778055a3e09db22418e2a138888104}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_i2c@{HOST\_receive\_bytes\_i2c}}
+\index{HOST\_receive\_bytes\_i2c@{HOST\_receive\_bytes\_i2c}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_i2c()}{HOST\_receive\_bytes\_i2c()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a18778055a3e09db22418e2a138888104} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+i2c (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Receives bytes from the MAXQ106x over I2C, using I2C read.
+
+A timeout can be implemented (see MAXQ106x User guide for command timings)
+
+Refer to the MAXQ106x User Guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dest} & destination buffer for the received bytes \\
+\hline
+{\em len} & maximum number of bytes to receive\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of bytes received or error 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em if} & \texorpdfstring{$>$}{>}0, number of bytes received \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_af98b10b0e7a94e1b2eaefaa026b545d7}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_i2c\_first@{HOST\_receive\_bytes\_i2c\_first}}
+\index{HOST\_receive\_bytes\_i2c\_first@{HOST\_receive\_bytes\_i2c\_first}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_i2c\_first()}{HOST\_receive\_bytes\_i2c\_first()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_af98b10b0e7a94e1b2eaefaa026b545d7} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+i2c\+\_\+first (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Waits for the MAXQ106x response over I2C by polling, then receives more bytes.
+
+Process\+:
+\begin{DoxyEnumerate}
+\item Send a polling byte (any value) using I2C write
+\item Read 1 byte using I2C read
+\item If byte is not 0x55, wait for a while, then go to 1.
+\item if 0x55 is received\+: continue receiving more bytes (up to {\ttfamily len}) using I2C read
+\end{DoxyEnumerate}
+
+A timeout can be implemented (see MAXQ106x User guide for command timings)
+
+Refer to the MAXQ106x User Guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dest} & destination buffer for the received bytes \\
+\hline
+{\em len} & maximum number of bytes to receive\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of bytes received or error 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em if} & \texorpdfstring{$>$}{>}0, number of bytes received \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a68ed39875dc93aa4afd28b2072975f1d}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_mailbox@{HOST\_receive\_bytes\_mailbox}}
+\index{HOST\_receive\_bytes\_mailbox@{HOST\_receive\_bytes\_mailbox}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_mailbox()}{HOST\_receive\_bytes\_mailbox()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a68ed39875dc93aa4afd28b2072975f1d} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+mailbox (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Mailbox implementation \Hypertarget{_m_x_q___host_8h_a4a7dc554c7abd1318e4fefad3bf757f4}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_mailbox\_first@{HOST\_receive\_bytes\_mailbox\_first}}
+\index{HOST\_receive\_bytes\_mailbox\_first@{HOST\_receive\_bytes\_mailbox\_first}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_mailbox\_first()}{HOST\_receive\_bytes\_mailbox\_first()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a4a7dc554c7abd1318e4fefad3bf757f4} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+mailbox\+\_\+first (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Mailbox implementation \Hypertarget{_m_x_q___host_8h_a48a66a47093f17e517a87f7a0426b617}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_pipe@{HOST\_receive\_bytes\_pipe}}
+\index{HOST\_receive\_bytes\_pipe@{HOST\_receive\_bytes\_pipe}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_pipe()}{HOST\_receive\_bytes\_pipe()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a48a66a47093f17e517a87f7a0426b617} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+pipe (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{}\end{DoxyParamCaption})}
+
+Reserved for special use. \Hypertarget{_m_x_q___host_8h_ad42d13c51d8005a0425f75fb874edfa1}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_pipe\_first@{HOST\_receive\_bytes\_pipe\_first}}
+\index{HOST\_receive\_bytes\_pipe\_first@{HOST\_receive\_bytes\_pipe\_first}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_pipe\_first()}{HOST\_receive\_bytes\_pipe\_first()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ad42d13c51d8005a0425f75fb874edfa1} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+pipe\+\_\+first (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{}\end{DoxyParamCaption})}
+
+Reserved for special use. \Hypertarget{_m_x_q___host_8h_a4c07d8a2a2ee19caf2665cfc1ff4a7e0}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_serial@{HOST\_receive\_bytes\_serial}}
+\index{HOST\_receive\_bytes\_serial@{HOST\_receive\_bytes\_serial}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_serial()}{HOST\_receive\_bytes\_serial()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a4c07d8a2a2ee19caf2665cfc1ff4a7e0} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+serial (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Reserved for special use. \Hypertarget{_m_x_q___host_8h_ade51c9684399c2c6588e100eab5f11a5}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_serial\_first@{HOST\_receive\_bytes\_serial\_first}}
+\index{HOST\_receive\_bytes\_serial\_first@{HOST\_receive\_bytes\_serial\_first}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_serial\_first()}{HOST\_receive\_bytes\_serial\_first()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ade51c9684399c2c6588e100eab5f11a5} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+serial\+\_\+first (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Reserved for special use. \Hypertarget{_m_x_q___host_8h_ac1317f38cead4da7a3f85c781ffd97f9}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_spi@{HOST\_receive\_bytes\_spi}}
+\index{HOST\_receive\_bytes\_spi@{HOST\_receive\_bytes\_spi}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_spi()}{HOST\_receive\_bytes\_spi()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ac1317f38cead4da7a3f85c781ffd97f9} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+spi (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{}\end{DoxyParamCaption})}
+
+Receives bytes from the MAXQ106x over the host SPI interface.
+
+The host shall send arbitrary bytes over MOSI in order to get back bytes over MISO.
+
+A timeout can be implemented (see MAXQ106x User guide for command timings)
+
+Refer to the MAXQ106x User Guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dest} & destination buffer for the received bytes \\
+\hline
+{\em len} & maximum number of bytes to receive\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of bytes received or error 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em if} & \texorpdfstring{$>$}{>}0, number of bytes received \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_ae2f594a12ace15b193db6a075ba51f7a}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_receive\_bytes\_spi\_first@{HOST\_receive\_bytes\_spi\_first}}
+\index{HOST\_receive\_bytes\_spi\_first@{HOST\_receive\_bytes\_spi\_first}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_receive\_bytes\_spi\_first()}{HOST\_receive\_bytes\_spi\_first()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ae2f594a12ace15b193db6a075ba51f7a} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+receive\+\_\+bytes\+\_\+spi\+\_\+first (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{}\end{DoxyParamCaption})}
+
+Waits for the MAXQ106x response over SPI by polling, then receives more bytes.
+
+The host shall send arbitrary bytes over MOSI in order to get back bytes over MISO.
+
+When the MAXQ106x replies with 0x55, then read more bytes.
+
+Receives bytes from the MAXQ106x over the host I2C interface (when available).
+
+Process\+:
+\begin{DoxyEnumerate}
+\item Exchange 1 byte over SPI\+: transmit a polling byte (any value) to the MAXQ106x SPI slave and simultanesouly receive 1 byte
+\item If the received byte is not 0x55, wait for a while, then go to 1.
+\item If 0x55 is received\+: continue receiving more bytes (up to {\ttfamily len}) by sending dummy bytes
+\end{DoxyEnumerate}
+
+A timeout can be implemented (see MAXQ106x User guide for command timings).
+
+Refer to the MAXQ106x User Guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dest} & destination buffer for the received bytes \\
+\hline
+{\em len} & maximum number of bytes to receive\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+number of bytes received or error 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em if} & \texorpdfstring{$>$}{>}0, number of bytes received \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_ab4705c76cd2659562ae76aabfa543727}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_reset\_maxq106x@{HOST\_reset\_maxq106x}}
+\index{HOST\_reset\_maxq106x@{HOST\_reset\_maxq106x}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_reset\_maxq106x()}{HOST\_reset\_maxq106x()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ab4705c76cd2659562ae76aabfa543727} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+reset\+\_\+maxq106x (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Triggers the RESET pin of the MAXQ106x.
+
+Sequence is\+:
+\begin{DoxyEnumerate}
+\item Assert the RESET pin (0)
+\item Hold RESET pin for 100uS
+\item De-\/assert the RESET pin (1)
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Host side context (authentication state, secure channel, ...) must also be reset.
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function may be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a7abb7771fd29e8ffceae40bdc6c61cff}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_send\_bytes\_i2c@{HOST\_send\_bytes\_i2c}}
+\index{HOST\_send\_bytes\_i2c@{HOST\_send\_bytes\_i2c}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_send\_bytes\_i2c()}{HOST\_send\_bytes\_i2c()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a7abb7771fd29e8ffceae40bdc6c61cff} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+send\+\_\+bytes\+\_\+i2c (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{src}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Sends bytes to the MAXQ106x over the host I2C interface using I2C write.
+
+Refer to the MAXQ106x User Guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & source buffer containing bytes to transmit \\
+\hline
+{\em len} & number of bytes to transmit\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & OK \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_ab32f06ceb66e30ca50ee324cdfb970b6}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_send\_bytes\_mailbox@{HOST\_send\_bytes\_mailbox}}
+\index{HOST\_send\_bytes\_mailbox@{HOST\_send\_bytes\_mailbox}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_send\_bytes\_mailbox()}{HOST\_send\_bytes\_mailbox()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ab32f06ceb66e30ca50ee324cdfb970b6} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+send\+\_\+bytes\+\_\+mailbox (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{src}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Mailbox implementation \Hypertarget{_m_x_q___host_8h_a61c6ca06e9777d6e4f5cf9cee016dd6c}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_send\_bytes\_pipe@{HOST\_send\_bytes\_pipe}}
+\index{HOST\_send\_bytes\_pipe@{HOST\_send\_bytes\_pipe}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_send\_bytes\_pipe()}{HOST\_send\_bytes\_pipe()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a61c6ca06e9777d6e4f5cf9cee016dd6c} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+send\+\_\+bytes\+\_\+pipe (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{src}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{}\end{DoxyParamCaption})}
+
+Reserved for special use. \Hypertarget{_m_x_q___host_8h_a4d488518dd683d4a0c93d2a858efe95c}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_send\_bytes\_serial@{HOST\_send\_bytes\_serial}}
+\index{HOST\_send\_bytes\_serial@{HOST\_send\_bytes\_serial}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_send\_bytes\_serial()}{HOST\_send\_bytes\_serial()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a4d488518dd683d4a0c93d2a858efe95c} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+send\+\_\+bytes\+\_\+serial (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{src}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_a2e6812fd1b617820c6b662f33484d2e2}{mxq\+\_\+u2}}}]{len}{}\end{DoxyParamCaption})}
+
+Reserved for special use. \Hypertarget{_m_x_q___host_8h_ab24531226751b882fbbfd0f57c276628}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_send\_bytes\_spi@{HOST\_send\_bytes\_spi}}
+\index{HOST\_send\_bytes\_spi@{HOST\_send\_bytes\_spi}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_send\_bytes\_spi()}{HOST\_send\_bytes\_spi()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ab24531226751b882fbbfd0f57c276628} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+send\+\_\+bytes\+\_\+spi (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{_m_x_q___types_8h_a853db19984bf1a420fded79b735e3017}{mxq\+\_\+u1}} \texorpdfstring{$\ast$}{*}}]{src}{, }\item[{\mbox{\hyperlink{_m_x_q___types_8h_ac92930f3e63d3a00ad7e71179eec21ae}{mxq\+\_\+length}}}]{len}{}\end{DoxyParamCaption})}
+
+Sends bytes to the MAXQ106x over the host SPI interface (when available).
+
+Refer to the user guide for a description of the communication protocol.
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & source buffer containing bytes to transmit \\
+\hline
+{\em len} & number of bytes to transmit\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & OK \\
+\hline
+{\em if} & \texorpdfstring{$<$}{<}=0, error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function must be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a36ea525f00780d7e4ffff7fd63fc1207}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_set\_interface@{HOST\_set\_interface}}
+\index{HOST\_set\_interface@{HOST\_set\_interface}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_set\_interface()}{HOST\_set\_interface()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a36ea525f00780d7e4ffff7fd63fc1207} 
+void HOST\+\_\+set\+\_\+interface (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{i}{}\end{DoxyParamCaption})}
+
+\Hypertarget{_m_x_q___host_8h_aebf5a05ac8940daed76ed775ceafe23b}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_sleep\_maxq10xx@{HOST\_sleep\_maxq10xx}}
+\index{HOST\_sleep\_maxq10xx@{HOST\_sleep\_maxq10xx}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_sleep\_maxq10xx()}{HOST\_sleep\_maxq10xx()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_aebf5a05ac8940daed76ed775ceafe23b} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+sleep\+\_\+maxq10xx (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Deasserts the PW\+\_\+\+DOWN pin of the MAXQ1065 to enter sleep mode.
+
+Sequence is\+:
+\begin{DoxyEnumerate}
+\item Deassert the WAKEUP pin (0)
+\end{DoxyEnumerate}
+
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function may be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_a997ad2efd1dfef3684b34cde1aafef40}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_toggle\_wdi@{HOST\_toggle\_wdi}}
+\index{HOST\_toggle\_wdi@{HOST\_toggle\_wdi}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_toggle\_wdi()}{HOST\_toggle\_wdi()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_a997ad2efd1dfef3684b34cde1aafef40} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+toggle\+\_\+wdi (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Toggles the WDI pin to reset the MAXQ106x watchdog counter.
+
+The MAXQ106x watchdog is disabled by default. It can be enabled using MWX\+\_\+\+Set\+Config().
+
+Sequence is\+:
+\begin{DoxyEnumerate}
+\item Assert the WDI pin (0)
+\item De-\/assert the WDI pin (1)
+\end{DoxyEnumerate}
+
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function may be implemented by the API user. 
+\end{DoxyNote}
+\Hypertarget{_m_x_q___host_8h_ae6d3419911dac78a8ed8d020b7e25c47}\index{MXQ\_Host.h@{MXQ\_Host.h}!HOST\_wakeup\_maxq106x@{HOST\_wakeup\_maxq106x}}
+\index{HOST\_wakeup\_maxq106x@{HOST\_wakeup\_maxq106x}!MXQ\_Host.h@{MXQ\_Host.h}}
+\doxysubsubsection{\texorpdfstring{HOST\_wakeup\_maxq106x()}{HOST\_wakeup\_maxq106x()}}
+{\footnotesize\ttfamily \label{_m_x_q___host_8h_ae6d3419911dac78a8ed8d020b7e25c47} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} HOST\+\_\+wakeup\+\_\+maxq106x (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Asserts the WAKEUP pin of the MAXQ106x to resume from sleep mode.
+
+Sequence is\+:
+\begin{DoxyEnumerate}
+\item Assert the WAKEUP pin (0)
+\item Hold WAKEUP pin for 100uS
+\item De-\/assert the WAKEUP pin (1)
+\end{DoxyEnumerate}
+
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+This function may be implemented by the API user. 
+\end{DoxyNote}

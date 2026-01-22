@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/fake_external_rng_for_test.c:31:6:mbedtls_test_enable_insecure_external_rng	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/fake_external_rng_for_test.c:36:6:mbedtls_test_disable_insecure_external_rng	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/tests/src/fake_external_rng_for_test.c:41:14:mbedtls_psa_external_get_random	16	static

@@ -1,0 +1,2221 @@
+Trivially needed symbols: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 oaes_decrypt/37 oaes_mac/36 oaes_encrypt/35 oaes_set_option/32 oaes_key_import_data/31 oaes_key_import/30 oaes_key_export_data/29 oaes_key_export/28 oaes_key_gen_256/27 oaes_key_gen_192/26 oaes_key_gen_128/25 oaes_key_destroy/22 oaes_sprintf/21
+
+
+Initial Symbol table:
+
+memcmp/46 (memcmp) @06303f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_key_import/30 
+  Calls: 
+memcpy/45 (memcpy) @06303e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 oaes_decrypt/37 oaes_mac/36 oaes_mac/36 oaes_encrypt/35 oaes_encrypt/35 oaes_set_option/32 oaes_key_export_data/29 oaes_key_export/28 oaes_word_rot_left/15 oaes_key_expand/23 
+  Calls: 
+rand/44 (rand) @06303dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_set_option/32 oaes_key_gen/24 
+  Calls: 
+memset/43 (memset) @06303d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc_mac/39 HOST_aes_cbc/38 HOST_aes_cbc/38 oaes_set_option/32 oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: 
+strlen/42 (strlen) @06303c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+strcat/41 (strcat) @06303bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+sprintf/40 (sprintf) @06303b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+HOST_aes_cbc_mac/39 (HOST_aes_cbc_mac) @06303a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_mac/36 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+HOST_aes_cbc/38 (HOST_aes_cbc) @06303930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303a80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_decrypt/37 oaes_encrypt/35 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+oaes_decrypt/37 (oaes_decrypt) @063037e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_decrypt_block/34 memcpy/45 
+oaes_mac/36 (oaes_mac) @06303690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063037e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 
+  Calls: memcpy/45 oaes_encrypt_block/33 memcpy/45 
+oaes_encrypt/35 (oaes_encrypt) @06303540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_encrypt_block/33 memcpy/45 memcpy/45 
+oaes_decrypt_block/34 (oaes_decrypt_block) @063033f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06303930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt/37 
+  Calls: oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 
+oaes_encrypt_block/33 (oaes_encrypt_block) @063032a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06303690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_mac/36 oaes_encrypt/35 
+  Calls: oaes_shift_rows/16 oaes_sub_byte/13 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_shift_rows/16 oaes_sub_byte/13 
+oaes_set_option/32 (oaes_set_option) @06303150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303540
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: rand/44 memcpy/45 memset/43 
+oaes_key_import_data/31 (oaes_key_import_data) @06303000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: oaes_key_expand/23 memset/43 
+oaes_key_import/30 (oaes_key_import) @062ece70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303000
+  References: oaes_header/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_expand/23 memset/43 memcmp/46 
+oaes_key_export_data/29 (oaes_key_export_data) @062ecd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062ece70
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_export/28 (oaes_key_export) @062ecbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062ecd20
+  References: oaes_header/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_gen_256/27 (oaes_key_gen_256) @062eca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062ecbd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_192/26 (oaes_key_gen_192) @062ec930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062eca80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_128/25 (oaes_key_gen_128) @062ec7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062ec930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen/24 (oaes_key_gen) @062ec690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062ec930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_gen_256/27 oaes_key_gen_192/26 oaes_key_gen_128/25 
+  Calls: oaes_key_expand/23 rand/44 memset/43 
+oaes_key_expand/23 (oaes_key_expand) @062ec540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062ec930
+  References: oaes_gf_8/4 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: oaes_sub_byte/13 oaes_sub_byte/13 oaes_word_rot_left/15 memcpy/45 
+oaes_key_destroy/22 (oaes_key_destroy) @062ec3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062ec7e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+oaes_sprintf/21 (oaes_sprintf) @062ec2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062ec3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: strlen/42 strcat/41 sprintf/40 
+oaes_inv_mix_cols/20 (oaes_inv_mix_cols) @062ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c1d20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_mix_cols/19 (oaes_mix_cols) @062ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c1bd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_gf_mul/18 (oaes_gf_mul) @062c1e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c1bd0
+  References: oaes_gf_mul_2/7 (read) oaes_gf_mul_3/8 (read) oaes_gf_mul_9/9 (read) oaes_gf_mul_b/10 (read) oaes_gf_mul_d/11 (read) oaes_gf_mul_e/12 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 
+  Calls: 
+oaes_inv_shift_rows/17 (oaes_inv_shift_rows) @062c1d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c1930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_shift_rows/16 (oaes_shift_rows) @062c1bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06303690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: 
+oaes_word_rot_left/15 (oaes_word_rot_left) @062c1a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c17e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_expand/23 
+  Calls: memcpy/45 
+oaes_inv_sub_byte/14 (oaes_inv_sub_byte) @062c1930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06303930
+  References: oaes_inv_sub_byte_value/6 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_sub_byte/13 (oaes_sub_byte) @062c17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062ec930
+  References: oaes_sub_byte_value/5 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_key_expand/23 oaes_key_expand/23 
+  Calls: 
+oaes_gf_mul_e/12 (oaes_gf_mul_e) @061ebb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @061ebab0
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_d/11 (oaes_gf_mul_d) @061ebab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @061ebaf8
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_b/10 (oaes_gf_mul_b) @061ebaf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @061ebc60
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_9/9 (oaes_gf_mul_9) @061ebc60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @061eba20
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_3/8 (oaes_gf_mul_3) @061eba20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @061ebdc8
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_2/7 (oaes_gf_mul_2) @061ebdc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c1bd0
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_inv_sub_byte_value/6 (oaes_inv_sub_byte_value) @061eb990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @06303930
+  References: 
+  Referring: oaes_inv_sub_byte/14 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_sub_byte_value/5 (oaes_sub_byte_value) @061ebf78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062ec930
+  References: 
+  Referring: oaes_sub_byte/13 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_8/4 (oaes_gf_8) @061eba68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062c1a80
+  References: 
+  Referring: oaes_key_expand/23 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_header/3 (oaes_header) @061eb9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062ecd20
+  References: 
+  Referring: oaes_key_export/28 (read) oaes_key_import/30 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+_putchar_unlocked/2 (_putchar_unlocked) @061699d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06169888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06169690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+memcmp/46 (memcmp) @06303f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_key_import/30 
+  Calls: 
+memcpy/45 (memcpy) @06303e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 oaes_decrypt/37 oaes_mac/36 oaes_mac/36 oaes_encrypt/35 oaes_encrypt/35 oaes_set_option/32 oaes_key_export_data/29 oaes_key_export/28 oaes_word_rot_left/15 oaes_key_expand/23 
+  Calls: 
+rand/44 (rand) @06303dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_set_option/32 oaes_key_gen/24 
+  Calls: 
+memset/43 (memset) @06303d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc_mac/39 HOST_aes_cbc/38 HOST_aes_cbc/38 oaes_set_option/32 oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: 
+strlen/42 (strlen) @06303c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+strcat/41 (strcat) @06303bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+sprintf/40 (sprintf) @06303b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+HOST_aes_cbc_mac/39 (HOST_aes_cbc_mac) @06303a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_mac/36 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+HOST_aes_cbc/38 (HOST_aes_cbc) @06303930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_decrypt/37 oaes_encrypt/35 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+oaes_decrypt/37 (oaes_decrypt) @063037e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_decrypt_block/34 memcpy/45 
+oaes_mac/36 (oaes_mac) @06303690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 
+  Calls: memcpy/45 oaes_encrypt_block/33 memcpy/45 
+oaes_encrypt/35 (oaes_encrypt) @06303540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_encrypt_block/33 memcpy/45 memcpy/45 
+oaes_decrypt_block/34 (oaes_decrypt_block) @063033f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt/37 
+  Calls: oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 
+oaes_encrypt_block/33 (oaes_encrypt_block) @063032a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_mac/36 oaes_encrypt/35 
+  Calls: oaes_shift_rows/16 oaes_sub_byte/13 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_shift_rows/16 oaes_sub_byte/13 
+oaes_set_option/32 (oaes_set_option) @06303150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: rand/44 memcpy/45 memset/43 
+oaes_key_import_data/31 (oaes_key_import_data) @06303000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: oaes_key_expand/23 memset/43 
+oaes_key_import/30 (oaes_key_import) @062ece70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: oaes_header/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_expand/23 memset/43 memcmp/46 
+oaes_key_export_data/29 (oaes_key_export_data) @062ecd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_export/28 (oaes_key_export) @062ecbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: oaes_header/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_gen_256/27 (oaes_key_gen_256) @062eca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_192/26 (oaes_key_gen_192) @062ec930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_128/25 (oaes_key_gen_128) @062ec7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen/24 (oaes_key_gen) @062ec690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_gen_256/27 oaes_key_gen_192/26 oaes_key_gen_128/25 
+  Calls: oaes_key_expand/23 rand/44 memset/43 
+oaes_key_expand/23 (oaes_key_expand) @062ec540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_gf_8/4 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: oaes_sub_byte/13 oaes_sub_byte/13 oaes_word_rot_left/15 memcpy/45 
+oaes_key_destroy/22 (oaes_key_destroy) @062ec3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+oaes_sprintf/21 (oaes_sprintf) @062ec2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: strlen/42 strcat/41 sprintf/40 
+oaes_inv_mix_cols/20 (oaes_inv_mix_cols) @062ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_mix_cols/19 (oaes_mix_cols) @062ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_gf_mul/18 (oaes_gf_mul) @062c1e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_gf_mul_2/7 (read) oaes_gf_mul_3/8 (read) oaes_gf_mul_9/9 (read) oaes_gf_mul_b/10 (read) oaes_gf_mul_d/11 (read) oaes_gf_mul_e/12 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 
+  Calls: 
+oaes_inv_shift_rows/17 (oaes_inv_shift_rows) @062c1d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_shift_rows/16 (oaes_shift_rows) @062c1bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: 
+oaes_word_rot_left/15 (oaes_word_rot_left) @062c1a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_expand/23 
+  Calls: memcpy/45 
+oaes_inv_sub_byte/14 (oaes_inv_sub_byte) @062c1930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_inv_sub_byte_value/6 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_sub_byte/13 (oaes_sub_byte) @062c17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_sub_byte_value/5 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_key_expand/23 oaes_key_expand/23 
+  Calls: 
+oaes_gf_mul_e/12 (oaes_gf_mul_e) @061ebb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_d/11 (oaes_gf_mul_d) @061ebab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_b/10 (oaes_gf_mul_b) @061ebaf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_9/9 (oaes_gf_mul_9) @061ebc60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_3/8 (oaes_gf_mul_3) @061eba20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_2/7 (oaes_gf_mul_2) @061ebdc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_inv_sub_byte_value/6 (oaes_inv_sub_byte_value) @061eb990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_inv_sub_byte/14 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_sub_byte_value/5 (oaes_sub_byte_value) @061ebf78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_sub_byte/13 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_8/4 (oaes_gf_8) @061eba68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_key_expand/23 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_header/3 (oaes_header) @061eb9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_key_export/28 (read) oaes_key_import/30 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+
+Initial Symbol table:
+
+memcmp/46 (memcmp) @06303f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_key_import/30 
+  Calls: 
+memcpy/45 (memcpy) @06303e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 oaes_decrypt/37 oaes_mac/36 oaes_mac/36 oaes_encrypt/35 oaes_encrypt/35 oaes_set_option/32 oaes_key_export_data/29 oaes_key_export/28 oaes_word_rot_left/15 oaes_key_expand/23 
+  Calls: 
+rand/44 (rand) @06303dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_set_option/32 oaes_key_gen/24 
+  Calls: 
+memset/43 (memset) @06303d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc_mac/39 HOST_aes_cbc/38 HOST_aes_cbc/38 oaes_set_option/32 oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: 
+strlen/42 (strlen) @06303c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+strcat/41 (strcat) @06303bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+sprintf/40 (sprintf) @06303b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+HOST_aes_cbc_mac/39 (HOST_aes_cbc_mac) @06303a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_mac/36 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+HOST_aes_cbc/38 (HOST_aes_cbc) @06303930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_decrypt/37 oaes_encrypt/35 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+oaes_decrypt/37 (oaes_decrypt) @063037e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_decrypt_block/34 memcpy/45 
+oaes_mac/36 (oaes_mac) @06303690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 
+  Calls: memcpy/45 oaes_encrypt_block/33 memcpy/45 
+oaes_encrypt/35 (oaes_encrypt) @06303540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_encrypt_block/33 memcpy/45 memcpy/45 
+oaes_decrypt_block/34 (oaes_decrypt_block) @063033f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt/37 
+  Calls: oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 
+oaes_encrypt_block/33 (oaes_encrypt_block) @063032a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_mac/36 oaes_encrypt/35 
+  Calls: oaes_shift_rows/16 oaes_sub_byte/13 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_shift_rows/16 oaes_sub_byte/13 
+oaes_set_option/32 (oaes_set_option) @06303150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: rand/44 memcpy/45 memset/43 
+oaes_key_import_data/31 (oaes_key_import_data) @06303000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: oaes_key_expand/23 memset/43 
+oaes_key_import/30 (oaes_key_import) @062ece70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: oaes_header/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_expand/23 memset/43 memcmp/46 
+oaes_key_export_data/29 (oaes_key_export_data) @062ecd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_export/28 (oaes_key_export) @062ecbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: oaes_header/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_gen_256/27 (oaes_key_gen_256) @062eca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_192/26 (oaes_key_gen_192) @062ec930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_128/25 (oaes_key_gen_128) @062ec7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen/24 (oaes_key_gen) @062ec690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_gen_256/27 oaes_key_gen_192/26 oaes_key_gen_128/25 
+  Calls: oaes_key_expand/23 rand/44 memset/43 
+oaes_key_expand/23 (oaes_key_expand) @062ec540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_gf_8/4 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: oaes_sub_byte/13 oaes_sub_byte/13 oaes_word_rot_left/15 memcpy/45 
+oaes_key_destroy/22 (oaes_key_destroy) @062ec3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+oaes_sprintf/21 (oaes_sprintf) @062ec2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: strlen/42 strcat/41 sprintf/40 
+oaes_inv_mix_cols/20 (oaes_inv_mix_cols) @062ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_mix_cols/19 (oaes_mix_cols) @062ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_gf_mul/18 (oaes_gf_mul) @062c1e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_gf_mul_2/7 (read) oaes_gf_mul_3/8 (read) oaes_gf_mul_9/9 (read) oaes_gf_mul_b/10 (read) oaes_gf_mul_d/11 (read) oaes_gf_mul_e/12 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 
+  Calls: 
+oaes_inv_shift_rows/17 (oaes_inv_shift_rows) @062c1d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_shift_rows/16 (oaes_shift_rows) @062c1bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: 
+oaes_word_rot_left/15 (oaes_word_rot_left) @062c1a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_expand/23 
+  Calls: memcpy/45 
+oaes_inv_sub_byte/14 (oaes_inv_sub_byte) @062c1930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_inv_sub_byte_value/6 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_sub_byte/13 (oaes_sub_byte) @062c17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_sub_byte_value/5 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_key_expand/23 oaes_key_expand/23 
+  Calls: 
+oaes_gf_mul_e/12 (oaes_gf_mul_e) @061ebb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_d/11 (oaes_gf_mul_d) @061ebab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_b/10 (oaes_gf_mul_b) @061ebaf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_9/9 (oaes_gf_mul_9) @061ebc60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_3/8 (oaes_gf_mul_3) @061eba20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_2/7 (oaes_gf_mul_2) @061ebdc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_inv_sub_byte_value/6 (oaes_inv_sub_byte_value) @061eb990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_inv_sub_byte/14 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_sub_byte_value/5 (oaes_sub_byte_value) @061ebf78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_sub_byte/13 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_8/4 (oaes_gf_8) @061eba68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_key_expand/23 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_header/3 (oaes_header) @061eb9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_key_export/28 (read) oaes_key_import/30 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memcmp/46 (memcmp) @06303f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_key_import/30 
+  Calls: 
+memcpy/45 (memcpy) @06303e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 oaes_decrypt/37 oaes_mac/36 oaes_mac/36 oaes_encrypt/35 oaes_encrypt/35 oaes_set_option/32 oaes_key_export_data/29 oaes_key_export/28 oaes_word_rot_left/15 oaes_key_expand/23 
+  Calls: 
+rand/44 (rand) @06303dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_set_option/32 oaes_key_gen/24 
+  Calls: 
+memset/43 (memset) @06303d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc_mac/39 HOST_aes_cbc/38 HOST_aes_cbc/38 oaes_set_option/32 oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: 
+strlen/42 (strlen) @06303c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+strcat/41 (strcat) @06303bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+sprintf/40 (sprintf) @06303b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: oaes_sprintf/21 
+  Calls: 
+HOST_aes_cbc_mac/39 (HOST_aes_cbc_mac) @06303a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_mac/36 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+HOST_aes_cbc/38 (HOST_aes_cbc) @06303930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_decrypt/37 oaes_encrypt/35 oaes_key_import_data/31 memset/43 memcpy/45 oaes_set_option/32 memset/43 
+oaes_decrypt/37 (oaes_decrypt) @063037e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_decrypt_block/34 memcpy/45 
+oaes_mac/36 (oaes_mac) @06303690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 
+  Calls: memcpy/45 oaes_encrypt_block/33 memcpy/45 
+oaes_encrypt/35 (oaes_encrypt) @06303540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc/38 
+  Calls: oaes_encrypt_block/33 memcpy/45 memcpy/45 
+oaes_decrypt_block/34 (oaes_decrypt_block) @063033f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt/37 
+  Calls: oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_sub_byte/14 oaes_inv_shift_rows/17 
+oaes_encrypt_block/33 (oaes_encrypt_block) @063032a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_mac/36 oaes_encrypt/35 
+  Calls: oaes_shift_rows/16 oaes_sub_byte/13 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_shift_rows/16 oaes_sub_byte/13 
+oaes_set_option/32 (oaes_set_option) @06303150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: rand/44 memcpy/45 memset/43 
+oaes_key_import_data/31 (oaes_key_import_data) @06303000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: HOST_aes_cbc_mac/39 HOST_aes_cbc/38 
+  Calls: oaes_key_expand/23 memset/43 
+oaes_key_import/30 (oaes_key_import) @062ece70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: oaes_header/3 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_expand/23 memset/43 memcmp/46 
+oaes_key_export_data/29 (oaes_key_export_data) @062ecd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_export/28 (oaes_key_export) @062ecbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: oaes_header/3 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/45 
+oaes_key_gen_256/27 (oaes_key_gen_256) @062eca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_192/26 (oaes_key_gen_192) @062ec930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen_128/25 (oaes_key_gen_128) @062ec7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: oaes_key_gen/24 
+oaes_key_gen/24 (oaes_key_gen) @062ec690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_gen_256/27 oaes_key_gen_192/26 oaes_key_gen_128/25 
+  Calls: oaes_key_expand/23 rand/44 memset/43 
+oaes_key_expand/23 (oaes_key_expand) @062ec540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_gf_8/4 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_import_data/31 oaes_key_import/30 oaes_key_gen/24 
+  Calls: oaes_sub_byte/13 oaes_sub_byte/13 oaes_word_rot_left/15 memcpy/45 
+oaes_key_destroy/22 (oaes_key_destroy) @062ec3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+oaes_sprintf/21 (oaes_sprintf) @062ec2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: strlen/42 strcat/41 sprintf/40 
+oaes_inv_mix_cols/20 (oaes_inv_mix_cols) @062ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_mix_cols/19 (oaes_mix_cols) @062ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 oaes_gf_mul/18 
+oaes_gf_mul/18 (oaes_gf_mul) @062c1e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_gf_mul_2/7 (read) oaes_gf_mul_3/8 (read) oaes_gf_mul_9/9 (read) oaes_gf_mul_b/10 (read) oaes_gf_mul_d/11 (read) oaes_gf_mul_e/12 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_inv_mix_cols/20 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 oaes_mix_cols/19 
+  Calls: 
+oaes_inv_shift_rows/17 (oaes_inv_shift_rows) @062c1d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_shift_rows/16 (oaes_shift_rows) @062c1bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 
+  Calls: 
+oaes_word_rot_left/15 (oaes_word_rot_left) @062c1a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: oaes_key_expand/23 
+  Calls: memcpy/45 
+oaes_inv_sub_byte/14 (oaes_inv_sub_byte) @062c1930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_inv_sub_byte_value/6 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_decrypt_block/34 oaes_decrypt_block/34 
+  Calls: 
+oaes_sub_byte/13 (oaes_sub_byte) @062c17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: oaes_sub_byte_value/5 (read) 
+  Referring: 
+  Function flags: body
+  Called by: oaes_encrypt_block/33 oaes_encrypt_block/33 oaes_key_expand/23 oaes_key_expand/23 
+  Calls: 
+oaes_gf_mul_e/12 (oaes_gf_mul_e) @061ebb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_d/11 (oaes_gf_mul_d) @061ebab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_b/10 (oaes_gf_mul_b) @061ebaf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_9/9 (oaes_gf_mul_9) @061ebc60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_3/8 (oaes_gf_mul_3) @061eba20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_mul_2/7 (oaes_gf_mul_2) @061ebdc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_inv_sub_byte_value/6 (oaes_inv_sub_byte_value) @061eb990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_inv_sub_byte/14 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_sub_byte_value/5 (oaes_sub_byte_value) @061ebf78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_sub_byte/13 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_gf_8/4 (oaes_gf_8) @061eba68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_key_expand/23 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+oaes_header/3 (oaes_header) @061eb9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: oaes_key_export/28 (read) oaes_key_import/30 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memcmp/46 (memcmp) @06303f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: oaes_key_import/30 (557438223 (estimated locally),0.52 per call) 
+  Calls: 
+memcpy/45 (memcpy) @06303e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 (1040367094 (estimated locally),0.97 per call) HOST_aes_cbc/38 (1040367094 (estimated locally),0.97 per call) oaes_decrypt/37 (28901214 (estimated locally),0.13 per call) oaes_mac/36 (7803328 (estimated locally),0.37 per call) oaes_mac/36 (63136016 (estimated locally),2.96 per call) oaes_encrypt/35 (118111600 (estimated locally),2.67 per call) oaes_encrypt/35 (14598063 (estimated locally),0.33 per call) oaes_set_option/32 (72552821 (estimated locally),0.16 per call) oaes_key_export_data/29 (401595120 (estimated locally),0.37 per call) oaes_key_export/28 (401595120 (estimated locally),0.37 per call) oaes_key_expand/23 (26541933 (estimated locally),0.64 per call) oaes_word_rot_left/15 (865006417 (estimated locally),0.81 per call) 
+  Calls: 
+rand/44 (rand) @06303dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: oaes_set_option/32 (1010605808 (estimated locally),2.22 per call) oaes_key_gen/24 (955630225 (estimated locally),5.21 per call) 
+  Calls: 
+memset/43 (memset) @06303d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: HOST_aes_cbc_mac/39 (1040367094 (estimated locally),0.97 per call) HOST_aes_cbc_mac/39 (1073741824 (estimated locally),1.00 per call) HOST_aes_cbc/38 (1040367094 (estimated locally),0.97 per call) HOST_aes_cbc/38 (1073741824 (estimated locally),1.00 per call) oaes_set_option/32 (135688837 (estimated locally),0.30 per call) oaes_key_import_data/31 (409674218 (estimated locally),0.38 per call) oaes_key_import/30 (32385919 (estimated locally),0.03 per call) oaes_key_gen/24 (147879861 (estimated locally),0.81 per call) 
+  Calls: 
+strlen/42 (strlen) @06303c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: oaes_sprintf/21 (305801672 (estimated locally),1.33 per call) 
+  Calls: 
+strcat/41 (strcat) @06303bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: oaes_sprintf/21 (955630225 (estimated locally),4.14 per call) 
+  Calls: 
+sprintf/40 (sprintf) @06303b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: oaes_sprintf/21 (955630225 (estimated locally),4.14 per call) 
+  Calls: 
+HOST_aes_cbc_mac/39 (HOST_aes_cbc_mac) @06303a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: oaes_mac/36 (1018623418 (estimated locally),0.95 per call) oaes_key_import_data/31 (1040367094 (estimated locally),0.97 per call) memset/43 (1040367094 (estimated locally),0.97 per call) memcpy/45 (1040367094 (estimated locally),0.97 per call) oaes_set_option/32 (1073741824 (estimated locally),1.00 per call) memset/43 (1073741824 (estimated locally),1.00 per call) 
+HOST_aes_cbc/38 (HOST_aes_cbc) @06303930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: oaes_decrypt/37 (679501201 (estimated locally),0.63 per call) oaes_encrypt/35 (350046078 (estimated locally),0.33 per call) oaes_key_import_data/31 (1040367094 (estimated locally),0.97 per call) memset/43 (1040367094 (estimated locally),0.97 per call) memcpy/45 (1040367094 (estimated locally),0.97 per call) oaes_set_option/32 (1073741824 (estimated locally),1.00 per call) memset/43 (1073741824 (estimated locally),1.00 per call) 
+oaes_decrypt/37 (oaes_decrypt) @063037e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:230506674 (estimated locally) body
+  Called by: HOST_aes_cbc/38 (679501201 (estimated locally),0.63 per call) 
+  Calls: oaes_decrypt_block/34 (77166240 (estimated locally),0.33 per call) memcpy/45 (28901214 (estimated locally),0.13 per call) 
+oaes_mac/36 (oaes_mac) @06303690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:21346826 (estimated locally) body
+  Called by: HOST_aes_cbc_mac/39 (1018623418 (estimated locally),0.95 per call) 
+  Calls: memcpy/45 (7803328 (estimated locally),0.37 per call) oaes_encrypt_block/33 (20834885 (estimated locally),0.98 per call) memcpy/45 (63136016 (estimated locally),2.96 per call) 
+oaes_encrypt/35 (oaes_encrypt) @06303540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:44301761 (estimated locally) body
+  Called by: HOST_aes_cbc/38 (350046078 (estimated locally),0.33 per call) 
+  Calls: oaes_encrypt_block/33 (38976828 (estimated locally),0.88 per call) memcpy/45 (118111600 (estimated locally),2.67 per call) memcpy/45 (14598063 (estimated locally),0.33 per call) 
+oaes_decrypt_block/34 (oaes_decrypt_block) @063033f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:31463468 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_decrypt/37 (77166240 (estimated locally),0.33 per call) 
+  Calls: oaes_inv_sub_byte/14 (118111600 (estimated locally),3.75 per call) oaes_inv_shift_rows/17 (14598063 (estimated locally),0.46 per call) oaes_inv_mix_cols/20 (118111600 (estimated locally),3.75 per call) oaes_inv_mix_cols/20 (118111600 (estimated locally),3.75 per call) oaes_inv_mix_cols/20 (118111600 (estimated locally),3.75 per call) oaes_inv_mix_cols/20 (118111600 (estimated locally),3.75 per call) oaes_inv_sub_byte/14 (955630224 (estimated locally),30.37 per call) oaes_inv_shift_rows/17 (118111600 (estimated locally),3.75 per call) 
+oaes_encrypt_block/33 (oaes_encrypt_block) @063032a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:31463468 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_mac/36 (20834885 (estimated locally),0.98 per call) oaes_encrypt/35 (38976828 (estimated locally),0.88 per call) 
+  Calls: oaes_shift_rows/16 (14598063 (estimated locally),0.46 per call) oaes_sub_byte/13 (118111600 (estimated locally),3.75 per call) oaes_mix_cols/19 (118111600 (estimated locally),3.75 per call) oaes_mix_cols/19 (118111600 (estimated locally),3.75 per call) oaes_mix_cols/19 (118111600 (estimated locally),3.75 per call) oaes_mix_cols/19 (118111600 (estimated locally),3.75 per call) oaes_shift_rows/16 (118111600 (estimated locally),3.75 per call) oaes_sub_byte/13 (955630224 (estimated locally),30.37 per call) 
+oaes_set_option/32 (oaes_set_option) @06303150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:455484510 (estimated locally) body
+  Called by: HOST_aes_cbc_mac/39 (1073741824 (estimated locally),1.00 per call) HOST_aes_cbc/38 (1073741824 (estimated locally),1.00 per call) 
+  Calls: rand/44 (1010605808 (estimated locally),2.22 per call) memcpy/45 (72552821 (estimated locally),0.16 per call) memset/43 (135688837 (estimated locally),0.30 per call) 
+oaes_key_import_data/31 (oaes_key_import_data) @06303000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: HOST_aes_cbc_mac/39 (1040367094 (estimated locally),0.97 per call) HOST_aes_cbc/38 (1040367094 (estimated locally),0.97 per call) 
+  Calls: oaes_key_expand/23 (294950985 (estimated locally),0.27 per call) memset/43 (409674218 (estimated locally),0.38 per call) 
+oaes_key_import/30 (oaes_key_import) @062ece70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: oaes_header/3 (addr) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741821 (estimated locally) body
+  Called by: 
+  Calls: oaes_key_expand/23 (23316720 (estimated locally),0.02 per call) memset/43 (32385919 (estimated locally),0.03 per call) memcmp/46 (557438223 (estimated locally),0.52 per call) 
+oaes_key_export_data/29 (oaes_key_export_data) @062ecd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: memcpy/45 (401595120 (estimated locally),0.37 per call) 
+oaes_key_export/28 (oaes_key_export) @062ecbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: oaes_header/3 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: memcpy/45 (401595120 (estimated locally),0.37 per call) 
+oaes_key_gen_256/27 (oaes_key_gen_256) @062eca80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: oaes_key_gen/24 (1073741824 (estimated locally),1.00 per call) 
+oaes_key_gen_192/26 (oaes_key_gen_192) @062ec930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: oaes_key_gen/24 (1073741824 (estimated locally),1.00 per call) 
+oaes_key_gen_128/25 (oaes_key_gen_128) @062ec7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: oaes_key_gen/24 (1073741824 (estimated locally),1.00 per call) 
+oaes_key_gen/24 (oaes_key_gen) @062ec690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:183564871 (estimated locally) body local
+  Called by: oaes_key_gen_256/27 (1073741824 (estimated locally),1.00 per call) oaes_key_gen_192/26 (1073741824 (estimated locally),1.00 per call) oaes_key_gen_128/25 (1073741824 (estimated locally),1.00 per call) 
+  Calls: oaes_key_expand/23 (118111600 (estimated locally),0.64 per call) rand/44 (955630225 (estimated locally),5.21 per call) memset/43 (147879861 (estimated locally),0.81 per call) 
+oaes_key_expand/23 (oaes_key_expand) @062ec540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: oaes_gf_8/4 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:41250533 (estimated locally) body local
+  Called by: oaes_key_import_data/31 (294950985 (estimated locally),0.27 per call) oaes_key_import/30 (23316720 (estimated locally),0.02 per call) oaes_key_gen/24 (118111600 (estimated locally),0.64 per call) 
+  Calls: oaes_sub_byte/13 (58129804 (estimated locally),1.41 per call) oaes_sub_byte/13 (132370892 (estimated locally),3.21 per call) oaes_word_rot_left/15 (33092724 (estimated locally),0.80 per call) memcpy/45 (26541933 (estimated locally),0.64 per call) 
+oaes_key_destroy/22 (oaes_key_destroy) @062ec3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+oaes_sprintf/21 (oaes_sprintf) @062ec2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:230632918 (estimated locally) body
+  Called by: 
+  Calls: strlen/42 (305801672 (estimated locally),1.33 per call) strcat/41 (955630225 (estimated locally),4.14 per call) sprintf/40 (955630225 (estimated locally),4.14 per call) 
+oaes_inv_mix_cols/20 (oaes_inv_mix_cols) @062ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_decrypt_block/34 (118111600 (estimated locally),3.75 per call) oaes_decrypt_block/34 (118111600 (estimated locally),3.75 per call) oaes_decrypt_block/34 (118111600 (estimated locally),3.75 per call) oaes_decrypt_block/34 (118111600 (estimated locally),3.75 per call) 
+  Calls: oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) 
+oaes_mix_cols/19 (oaes_mix_cols) @062ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_encrypt_block/33 (118111600 (estimated locally),3.75 per call) oaes_encrypt_block/33 (118111600 (estimated locally),3.75 per call) oaes_encrypt_block/33 (118111600 (estimated locally),3.75 per call) oaes_encrypt_block/33 (118111600 (estimated locally),3.75 per call) 
+  Calls: oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) oaes_gf_mul/18 (959603073 (estimated locally),0.89 per call) 
+oaes_gf_mul/18 (oaes_gf_mul) @062c1e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: oaes_gf_mul_2/7 (read) oaes_gf_mul_3/8 (read) oaes_gf_mul_9/9 (read) oaes_gf_mul_b/10 (read) oaes_gf_mul_d/11 (read) oaes_gf_mul_e/12 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_inv_mix_cols/20 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) oaes_mix_cols/19 (959603073 (estimated locally),0.89 per call) 
+  Calls: 
+oaes_inv_shift_rows/17 (oaes_inv_shift_rows) @062c1d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_decrypt_block/34 (14598063 (estimated locally),0.46 per call) oaes_decrypt_block/34 (118111600 (estimated locally),3.75 per call) 
+  Calls: 
+oaes_shift_rows/16 (oaes_shift_rows) @062c1bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_encrypt_block/33 (14598063 (estimated locally),0.46 per call) oaes_encrypt_block/33 (118111600 (estimated locally),3.75 per call) 
+  Calls: 
+oaes_word_rot_left/15 (oaes_word_rot_left) @062c1a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: oaes_key_expand/23 (33092724 (estimated locally),0.80 per call) 
+  Calls: memcpy/45 (865006417 (estimated locally),0.81 per call) 
+oaes_inv_sub_byte/14 (oaes_inv_sub_byte) @062c1930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: oaes_inv_sub_byte_value/6 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_decrypt_block/34 (118111600 (estimated locally),3.75 per call) oaes_decrypt_block/34 (955630224 (estimated locally),30.37 per call) 
+  Calls: 
+oaes_sub_byte/13 (oaes_sub_byte) @062c17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: oaes_sub_byte_value/5 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local nonfreeing_fn
+  Called by: oaes_key_expand/23 (58129804 (estimated locally),1.41 per call) oaes_key_expand/23 (132370892 (estimated locally),3.21 per call) oaes_encrypt_block/33 (118111600 (estimated locally),3.75 per call) oaes_encrypt_block/33 (955630224 (estimated locally),30.37 per call) 
+  Calls: 
+oaes_gf_mul_e/12 (oaes_gf_mul_e) @061ebb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_d/11 (oaes_gf_mul_d) @061ebab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_b/10 (oaes_gf_mul_b) @061ebaf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_9/9 (oaes_gf_mul_9) @061ebc60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_3/8 (oaes_gf_mul_3) @061eba20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_2/7 (oaes_gf_mul_2) @061ebdc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_gf_mul/18 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_inv_sub_byte_value/6 (oaes_inv_sub_byte_value) @061eb990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_inv_sub_byte/14 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_sub_byte_value/5 (oaes_sub_byte_value) @061ebf78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_sub_byte/13 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_8/4 (oaes_gf_8) @061eba68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_key_expand/23 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_header/3 (oaes_header) @061eb9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: oaes_key_export/28 (read) oaes_key_import/30 (addr) 
+  Availability: available
+  Varpool flags: initialized
+Trivially needed variables: oaes_gf_mul_e/12 oaes_gf_mul_d/11 oaes_gf_mul_b/10 oaes_gf_mul_9/9 oaes_gf_mul_3/8 oaes_gf_mul_2/7 oaes_inv_sub_byte_value/6 oaes_sub_byte_value/5 oaes_gf_8/4 oaes_header/3
+Removing variables:
+
+Final Symbol table:
+
+memcmp/46 (memcmp) @06303f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/45 (memcpy) @06303e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+rand/44 (rand) @06303dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/43 (memset) @06303d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+strlen/42 (strlen) @06303c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+strcat/41 (strcat) @06303bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sprintf/40 (sprintf) @06303b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+HOST_aes_cbc_mac/39 (HOST_aes_cbc_mac) @06303a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_aes_cbc_mac (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_aes_cbc/38 (HOST_aes_cbc) @06303930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_aes_cbc (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_decrypt/37 (oaes_decrypt) @063037e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_decrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:230506674 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_mac/36 (oaes_mac) @06303690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_mac (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:21346826 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_encrypt/35 (oaes_encrypt) @06303540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_encrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:44301761 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_decrypt_block/34 (oaes_decrypt_block) @063033f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_decrypt_block (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:31463468 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_encrypt_block/33 (oaes_encrypt_block) @063032a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_encrypt_block (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:31463468 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_set_option/32 (oaes_set_option) @06303150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_set_option (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:455484510 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_import_data/31 (oaes_key_import_data) @06303000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_import_data (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_import/30 (oaes_key_import) @062ece70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_import (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741821 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_export_data/29 (oaes_key_export_data) @062ecd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_export_data (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_export/28 (oaes_key_export) @062ecbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_export (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_gen_256/27 (oaes_key_gen_256) @062eca80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_gen_256 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_gen_192/26 (oaes_key_gen_192) @062ec930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_gen_192 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_gen_128/25 (oaes_key_gen_128) @062ec7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_gen_128 (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_key_gen/24 (oaes_key_gen) @062ec690
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_key_gen (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:183564871 (estimated locally) local
+  Called by: 
+  Calls: 
+oaes_key_expand/23 (oaes_key_expand) @062ec540
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_key_expand (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:41250533 (estimated locally) local
+  Called by: 
+  Calls: 
+oaes_key_destroy/22 (oaes_key_destroy) @062ec3f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_key_destroy (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_sprintf/21 (oaes_sprintf) @062ec2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.oaes_sprintf (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:230632918 (estimated locally)
+  Called by: 
+  Calls: 
+oaes_inv_mix_cols/20 (oaes_inv_mix_cols) @062ec150
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_inv_mix_cols (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_mix_cols/19 (oaes_mix_cols) @062ec000
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_mix_cols (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_gf_mul/18 (oaes_gf_mul) @062c1e70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_gf_mul (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_inv_shift_rows/17 (oaes_inv_shift_rows) @062c1d20
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_inv_shift_rows (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_shift_rows/16 (oaes_shift_rows) @062c1bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_shift_rows (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_word_rot_left/15 (oaes_word_rot_left) @062c1a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_word_rot_left (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+oaes_inv_sub_byte/14 (oaes_inv_sub_byte) @062c1930
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_inv_sub_byte (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_sub_byte/13 (oaes_sub_byte) @062c17e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.oaes_sub_byte (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+oaes_gf_mul_e/12 (oaes_gf_mul_e) @061ebb40
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_mul_e (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_d/11 (oaes_gf_mul_d) @061ebab0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_mul_d (implicit_section)
+  Aux: @061ebb40
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_b/10 (oaes_gf_mul_b) @061ebaf8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_mul_b (implicit_section)
+  Aux: @061ebab0
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_9/9 (oaes_gf_mul_9) @061ebc60
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_mul_9 (implicit_section)
+  Aux: @061ebaf8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_3/8 (oaes_gf_mul_3) @061eba20
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_mul_3 (implicit_section)
+  Aux: @061ebc60
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_mul_2/7 (oaes_gf_mul_2) @061ebdc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_mul_2 (implicit_section)
+  Aux: @061eba20
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_inv_sub_byte_value/6 (oaes_inv_sub_byte_value) @061eb990
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_inv_sub_byte_value (implicit_section)
+  Aux: @061ebdc8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_sub_byte_value/5 (oaes_sub_byte_value) @061ebf78
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_sub_byte_value (implicit_section)
+  Aux: @061eb990
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_gf_8/4 (oaes_gf_8) @061eba68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.oaes_gf_8 (implicit_section)
+  Aux: @061ebf78
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+oaes_header/3 (oaes_header) @061eb9d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.data.oaes_header (implicit_section)
+  Aux: @061eba68
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized

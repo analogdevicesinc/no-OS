@@ -1,0 +1,377 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\+\_\+mac.h File Reference}
+\hypertarget{crypto__mac_8h}{}\label{crypto__mac_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_mac.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_mac.h}}
+{\ttfamily \#include "{}crypto\+\_\+config\+\_\+def.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+common.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+typedefs.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+hash.\+h"{}}\newline
+{\ttfamily \#include "{}crypto\+\_\+cipher.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a3aa75436926b10a490b2117345836401}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+HMAC\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) (\mbox{\hyperlink{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+MAC}} \texorpdfstring{$\vert$}{|} 0x00800000))
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a6c3cdfe1b73cdcb93bb0769f7ca168e2}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+CIPHER\+\_\+\+MAC\+\_\+\+BASE}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) (\mbox{\hyperlink{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+MAC}} \texorpdfstring{$\vert$}{|} 0x00c00000))
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a53ccb985145370a13e46782f67d45777}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MAC\+\_\+\+SUBCATEGORY\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00c00000)
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a70f397425684b3efcde1e0e34c28261f}{PSA\+\_\+\+ALG\+\_\+\+HMAC}}(hash\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em Macro to define an HMAC algorithm based on a hash algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a20bdc755de7b90f6621ccb1e6bb5d9e1}{PSA\+\_\+\+ALG\+\_\+\+CBC\+\_\+\+MAC}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x03c00100)
+\begin{DoxyCompactList}\small\item\em Macro to define the CBC-\/\+MAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a146328a1e0023a02464e232d6ecefdc2}{PSA\+\_\+\+ALG\+\_\+\+CMAC}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x03c00200)
+\begin{DoxyCompactList}\small\item\em Macro to define the CMAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MAC\+\_\+\+TRUNCATION\+\_\+\+MASK}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x003f0000)
+\begin{DoxyCompactList}\small\item\em Macro to define the truncated MAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_adc5dc635ff006cb7f029bafd2d253017}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MAC\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LENGTH\+\_\+\+FLAG}}~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00008000)
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_acefbfee70ff20ac398686f09ed55eac5}{USS\+\_\+\+PSA\+\_\+\+MAC\+\_\+\+TRUNCATION\+\_\+\+OFFSET}}~16u
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_aba2b3168ff49ec31374ecc8c81ac0665}{PSA\+\_\+\+ALG\+\_\+\+TRUNCATED\+\_\+\+MAC}}(mac\+\_\+alg,  mac\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Macro to define a truncated MAC algorithm with a specific length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a38ccc56b173d00f2058aa6112d378a46}{PSA\+\_\+\+ALG\+\_\+\+FULL\+\_\+\+LENGTH\+\_\+\+MAC}}(mac\+\_\+alg)
+\begin{DoxyCompactList}\small\item\em Macro to define a full-\/length MAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_ae9b6eed00b39ff89a0325c83554295d3}{PSA\+\_\+\+ALG\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LENGTH\+\_\+\+MAC}}(mac\+\_\+alg,  min\+\_\+mac\+\_\+length)
+\begin{DoxyCompactList}\small\item\em Macro to define a MAC algorithm with at least a minimum length. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_aca7aee4c9dde316b3b1a150a26eab776}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+MAC}}(alg)
+\begin{DoxyCompactList}\small\item\em Check if the given algorithm is a MAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a4a050c3c3cbc6eb96418f18847601c8a}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HMAC}}(alg)
+\begin{DoxyCompactList}\small\item\em Check if the given algorithm is an HMAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_ae49d1eb601125d65a5c5b252aa45479e}{PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+MAC}}(alg)
+\begin{DoxyCompactList}\small\item\em Check if the given algorithm is a block cipher MAC algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a6f707468883de071a87feafd5ff77336}{USS\+\_\+\+PSA\+\_\+\+MAC\+\_\+\+TRUNCATED\+\_\+\+LENGTH}}(mac\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a20ff9c127a8389af0c47ec1a6d0d4a01}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+HMAC\+\_\+\+GET\+\_\+\+HASH}}(hmac\+\_\+alg)
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a4c1151a9816184287aa5f76e82e16080}{PSA\+\_\+\+MAC\+\_\+\+LENGTH}}(key\+\_\+type,  key\+\_\+bits,  alg)
+\begin{DoxyCompactList}\small\item\em Macro to calculate the length of the MAC based on the key type, key bits, and algorithm. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a441b6efc161a4573d06465bd22d9dc2d}{PSA\+\_\+\+MAC\+\_\+\+OPERATION\+\_\+\+INIT}}~\{0\}
+\begin{DoxyCompactList}\small\item\em This macro returns a suitable initializer for a MAC operation object of type psa\+\_\+mac\+\_\+operation\+\_\+t. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a4681cc4f6226883a2160122c562ca682}{PSA\+\_\+\+MAC\+\_\+\+MAX\+\_\+\+SIZE}}~PSA\+\_\+\+HASH\+\_\+\+MAX\+\_\+\+SIZE
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_a3cb3be7f54447b004c7ab6de39d0ca5d}{USS\+\_\+\+MAC\+\_\+\+VERIFY\+\_\+\+FLAG}}~0x01u
+\item 
+\#define \mbox{\hyperlink{crypto__mac_8h_aff5f32f6c1057f17b0087ae5f63b777b}{USS\+\_\+\+MAC\+\_\+\+COMPUTE\+\_\+\+FLAG}}~0x02u
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{crypto__mac_8h_ae9b6eed00b39ff89a0325c83554295d3}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC@{PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC}}
+\index{PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC@{PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC}{PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_ae9b6eed00b39ff89a0325c83554295d3} 
+\#define PSA\+\_\+\+ALG\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LENGTH\+\_\+\+MAC(\begin{DoxyParamCaption}\item[{}]{mac\+\_\+alg}{, }\item[{}]{min\+\_\+mac\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})(\mbox{\hyperlink{crypto__mac_8h_aba2b3168ff49ec31374ecc8c81ac0665}{PSA\_ALG\_TRUNCATED\_MAC}}(mac\_alg,\ min\_mac\_length)|\ \mbox{\hyperlink{crypto__mac_8h_adc5dc635ff006cb7f029bafd2d253017}{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}})}
+
+\end{DoxyCode}
+
+
+Macro to define a MAC algorithm with at least a minimum length. 
+
+This macro returns a MAC algorithm that is truncated to a minimum length
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac\+\_\+alg} & The MAC algorithm to be truncated \\
+\hline
+{\em min\+\_\+mac\+\_\+length} & The minimum length of the truncated MAC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The MAC algorithm with at least the minimum length 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_a20bdc755de7b90f6621ccb1e6bb5d9e1}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_CBC\_MAC@{PSA\_ALG\_CBC\_MAC}}
+\index{PSA\_ALG\_CBC\_MAC@{PSA\_ALG\_CBC\_MAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_CBC\_MAC}{PSA\_ALG\_CBC\_MAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a20bdc755de7b90f6621ccb1e6bb5d9e1} 
+\#define PSA\+\_\+\+ALG\+\_\+\+CBC\+\_\+\+MAC~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x03c00100)}
+
+
+
+Macro to define the CBC-\/\+MAC algorithm. 
+
+\Hypertarget{crypto__mac_8h_a146328a1e0023a02464e232d6ecefdc2}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_CMAC@{PSA\_ALG\_CMAC}}
+\index{PSA\_ALG\_CMAC@{PSA\_ALG\_CMAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_CMAC}{PSA\_ALG\_CMAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a146328a1e0023a02464e232d6ecefdc2} 
+\#define PSA\+\_\+\+ALG\+\_\+\+CMAC~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}})0x03c00200)}
+
+
+
+Macro to define the CMAC algorithm. 
+
+\Hypertarget{crypto__mac_8h_a38ccc56b173d00f2058aa6112d378a46}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_FULL\_LENGTH\_MAC@{PSA\_ALG\_FULL\_LENGTH\_MAC}}
+\index{PSA\_ALG\_FULL\_LENGTH\_MAC@{PSA\_ALG\_FULL\_LENGTH\_MAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_FULL\_LENGTH\_MAC}{PSA\_ALG\_FULL\_LENGTH\_MAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a38ccc56b173d00f2058aa6112d378a46} 
+\#define PSA\+\_\+\+ALG\+\_\+\+FULL\+\_\+\+LENGTH\+\_\+\+MAC(\begin{DoxyParamCaption}\item[{}]{mac\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})((mac\_alg)\ \&\ \string~(\mbox{\hyperlink{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}}\ |\ \mbox{\hyperlink{crypto__mac_8h_adc5dc635ff006cb7f029bafd2d253017}{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}}))}
+
+\end{DoxyCode}
+
+
+Macro to define a full-\/length MAC algorithm. 
+
+This macro returns a MAC algorithm without any truncation or minimum length requirements
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac\+\_\+alg} & The MAC algorithm to be used \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The full-\/length MAC algorithm 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_a70f397425684b3efcde1e0e34c28261f}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_HMAC@{PSA\_ALG\_HMAC}}
+\index{PSA\_ALG\_HMAC@{PSA\_ALG\_HMAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_HMAC}{PSA\_ALG\_HMAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a70f397425684b3efcde1e0e34c28261f} 
+\#define PSA\+\_\+\+ALG\+\_\+\+HMAC(\begin{DoxyParamCaption}\item[{}]{hash\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})(\mbox{\hyperlink{crypto__mac_8h_a3aa75436926b10a490b2117345836401}{USS\_PSA\_ALG\_HMAC\_BASE}}\ |\ (hash\_alg\ \&\ \mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}})))}
+
+\end{DoxyCode}
+
+
+Macro to define an HMAC algorithm based on a hash algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash\+\_\+alg} & The hash algorithm to be used in the HMAC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The HMAC algorithm 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_ae49d1eb601125d65a5c5b252aa45479e}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC@{PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC}}
+\index{PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC@{PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC}{PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_ae49d1eb601125d65a5c5b252aa45479e} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+BLOCK\+\_\+\+CIPHER\+\_\+\+MAC(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (((alg)\ \&\ (\mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}}\ |\ \mbox{\hyperlink{crypto__mac_8h_a53ccb985145370a13e46782f67d45777}{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK}}))\ ==\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__mac_8h_a6c3cdfe1b73cdcb93bb0769f7ca168e2}{USS\_PSA\_ALG\_CIPHER\_MAC\_BASE}})}
+
+\end{DoxyCode}
+
+
+Check if the given algorithm is a block cipher MAC algorithm. 
+
+This macro checks if the given algorithm is based on the block cipher MAC subcategory.
+
+
+\begin{DoxyParams}{Parameters}
+{\em alg} & The algorithm to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the algorithm is a block cipher MAC algorithm, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_a4a050c3c3cbc6eb96418f18847601c8a}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_IS\_HMAC@{PSA\_ALG\_IS\_HMAC}}
+\index{PSA\_ALG\_IS\_HMAC@{PSA\_ALG\_IS\_HMAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_HMAC}{PSA\_ALG\_IS\_HMAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a4a050c3c3cbc6eb96418f18847601c8a} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+HMAC(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (((alg)\ \&\ (\mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}}\ |\ \mbox{\hyperlink{crypto__mac_8h_a53ccb985145370a13e46782f67d45777}{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK}}))\ ==\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__mac_8h_a3aa75436926b10a490b2117345836401}{USS\_PSA\_ALG\_HMAC\_BASE}})}
+
+\end{DoxyCode}
+
+
+Check if the given algorithm is an HMAC algorithm. 
+
+This macro checks if the given algorithm is based on the HMAC subcategory.
+
+
+\begin{DoxyParams}{Parameters}
+{\em alg} & The algorithm to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the algorithm is an HMAC algorithm, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_aca7aee4c9dde316b3b1a150a26eab776}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_IS\_MAC@{PSA\_ALG\_IS\_MAC}}
+\index{PSA\_ALG\_IS\_MAC@{PSA\_ALG\_IS\_MAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_IS\_MAC}{PSA\_ALG\_IS\_MAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_aca7aee4c9dde316b3b1a150a26eab776} 
+\#define PSA\+\_\+\+ALG\+\_\+\+IS\+\_\+\+MAC(\begin{DoxyParamCaption}\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((alg)\ \&\ \mbox{\hyperlink{crypto__common_8h_afd3a553967bc96b23b87e4e24a367dfd}{USS\_PSA\_ALG\_MASK}})\ ==\ \mbox{\hyperlink{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}{USS\_PSA\_ALG\_TYPE\_MAC}})}
+
+\end{DoxyCode}
+
+
+Check if the given algorithm is a MAC algorithm. 
+
+This macro checks if the given algorithm belongs to the MAC category.
+
+
+\begin{DoxyParams}{Parameters}
+{\em alg} & The algorithm to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the algorithm is a MAC algorithm, false otherwise 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_aba2b3168ff49ec31374ecc8c81ac0665}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_ALG\_TRUNCATED\_MAC@{PSA\_ALG\_TRUNCATED\_MAC}}
+\index{PSA\_ALG\_TRUNCATED\_MAC@{PSA\_ALG\_TRUNCATED\_MAC}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_ALG\_TRUNCATED\_MAC}{PSA\_ALG\_TRUNCATED\_MAC}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_aba2b3168ff49ec31374ecc8c81ac0665} 
+\#define PSA\+\_\+\+ALG\+\_\+\+TRUNCATED\+\_\+\+MAC(\begin{DoxyParamCaption}\item[{}]{mac\+\_\+alg}{, }\item[{}]{mac\+\_\+length}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ (\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}})((mac\_alg\ \&\ \string~(\mbox{\hyperlink{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}}\ |\ \mbox{\hyperlink{crypto__mac_8h_adc5dc635ff006cb7f029bafd2d253017}{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}}))\ |\ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ ((mac\_length\ <<\ \mbox{\hyperlink{crypto__mac_8h_acefbfee70ff20ac398686f09ed55eac5}{USS\_PSA\_MAC\_TRUNCATION\_OFFSET}})\ \&\ \mbox{\hyperlink{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}}))}
+
+\end{DoxyCode}
+
+
+Macro to define a truncated MAC algorithm with a specific length. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac\+\_\+alg} & The MAC algorithm to be truncated \\
+\hline
+{\em mac\+\_\+length} & The desired length of the truncated MAC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The truncated MAC algorithm 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_a4c1151a9816184287aa5f76e82e16080}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_MAC\_LENGTH@{PSA\_MAC\_LENGTH}}
+\index{PSA\_MAC\_LENGTH@{PSA\_MAC\_LENGTH}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_MAC\_LENGTH}{PSA\_MAC\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a4c1151a9816184287aa5f76e82e16080} 
+\#define PSA\+\_\+\+MAC\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{key\+\_\+type}{, }\item[{}]{key\+\_\+bits}{, }\item[{}]{alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((alg)\ \&\ \mbox{\hyperlink{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}}\ ?\ \mbox{\hyperlink{crypto__mac_8h_a6f707468883de071a87feafd5ff77336}{USS\_PSA\_MAC\_TRUNCATED\_LENGTH}}(alg)\ :\ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__mac_8h_a4a050c3c3cbc6eb96418f18847601c8a}{PSA\_ALG\_IS\_HMAC}}(alg)\ ?\ \mbox{\hyperlink{crypto__hash_8h_ae0c23128dc05e9680d2c4c1b292bcc77}{PSA\_HASH\_LENGTH}}(\mbox{\hyperlink{crypto__mac_8h_a20ff9c127a8389af0c47ec1a6d0d4a01}{USS\_PSA\_ALG\_HMAC\_GET\_HASH}}(alg))\ :\ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{crypto__mac_8h_ae49d1eb601125d65a5c5b252aa45479e}{PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC}}(alg)\ ?\ \mbox{\hyperlink{crypto__cipher_8h_aeed2ae6f2ea1e2f994562ada459d1f03}{PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH}}(key\_type)\ :\ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((void)\ (key\_type),\ (void)\ (key\_bits),\ 0u))}
+
+\end{DoxyCode}
+
+
+Macro to calculate the length of the MAC based on the key type, key bits, and algorithm. 
+
+This macro calculates the length of the MAC based on the provided key type, key bits, and algorithm. If the algorithm specifies a truncated MAC, the length of the truncated MAC is returned. If the algorithm is an HMAC algorithm, the length of the corresponding hash algorithm is returned. If the algorithm is a block cipher MAC algorithm, the block length of the key type is returned. If none of the above conditions are met, 0 is returned.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+\_\+type} & The type of the key \\
+\hline
+{\em key\+\_\+bits} & The number of bits in the key \\
+\hline
+{\em alg} & The algorithm to calculate the MAC length for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The length of the MAC 
+\end{DoxyReturn}
+\Hypertarget{crypto__mac_8h_a4681cc4f6226883a2160122c562ca682}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_MAC\_MAX\_SIZE@{PSA\_MAC\_MAX\_SIZE}}
+\index{PSA\_MAC\_MAX\_SIZE@{PSA\_MAC\_MAX\_SIZE}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_MAC\_MAX\_SIZE}{PSA\_MAC\_MAX\_SIZE}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a4681cc4f6226883a2160122c562ca682} 
+\#define PSA\+\_\+\+MAC\+\_\+\+MAX\+\_\+\+SIZE~PSA\+\_\+\+HASH\+\_\+\+MAX\+\_\+\+SIZE}
+
+\Hypertarget{crypto__mac_8h_a441b6efc161a4573d06465bd22d9dc2d}\index{crypto\_mac.h@{crypto\_mac.h}!PSA\_MAC\_OPERATION\_INIT@{PSA\_MAC\_OPERATION\_INIT}}
+\index{PSA\_MAC\_OPERATION\_INIT@{PSA\_MAC\_OPERATION\_INIT}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{PSA\_MAC\_OPERATION\_INIT}{PSA\_MAC\_OPERATION\_INIT}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a441b6efc161a4573d06465bd22d9dc2d} 
+\#define PSA\+\_\+\+MAC\+\_\+\+OPERATION\+\_\+\+INIT~\{0\}}
+
+
+
+This macro returns a suitable initializer for a MAC operation object of type psa\+\_\+mac\+\_\+operation\+\_\+t. 
+
+\Hypertarget{crypto__mac_8h_aff5f32f6c1057f17b0087ae5f63b777b}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_MAC\_COMPUTE\_FLAG@{USS\_MAC\_COMPUTE\_FLAG}}
+\index{USS\_MAC\_COMPUTE\_FLAG@{USS\_MAC\_COMPUTE\_FLAG}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MAC\_COMPUTE\_FLAG}{USS\_MAC\_COMPUTE\_FLAG}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_aff5f32f6c1057f17b0087ae5f63b777b} 
+\#define USS\+\_\+\+MAC\+\_\+\+COMPUTE\+\_\+\+FLAG~0x02u}
+
+\Hypertarget{crypto__mac_8h_a3cb3be7f54447b004c7ab6de39d0ca5d}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_MAC\_VERIFY\_FLAG@{USS\_MAC\_VERIFY\_FLAG}}
+\index{USS\_MAC\_VERIFY\_FLAG@{USS\_MAC\_VERIFY\_FLAG}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_MAC\_VERIFY\_FLAG}{USS\_MAC\_VERIFY\_FLAG}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a3cb3be7f54447b004c7ab6de39d0ca5d} 
+\#define USS\+\_\+\+MAC\+\_\+\+VERIFY\+\_\+\+FLAG~0x01u}
+
+\Hypertarget{crypto__mac_8h_a6c3cdfe1b73cdcb93bb0769f7ca168e2}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_ALG\_CIPHER\_MAC\_BASE@{USS\_PSA\_ALG\_CIPHER\_MAC\_BASE}}
+\index{USS\_PSA\_ALG\_CIPHER\_MAC\_BASE@{USS\_PSA\_ALG\_CIPHER\_MAC\_BASE}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_CIPHER\_MAC\_BASE}{USS\_PSA\_ALG\_CIPHER\_MAC\_BASE}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a6c3cdfe1b73cdcb93bb0769f7ca168e2} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+CIPHER\+\_\+\+MAC\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) (\mbox{\hyperlink{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+MAC}} \texorpdfstring{$\vert$}{|} 0x00c00000))}
+
+\Hypertarget{crypto__mac_8h_a3aa75436926b10a490b2117345836401}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_ALG\_HMAC\_BASE@{USS\_PSA\_ALG\_HMAC\_BASE}}
+\index{USS\_PSA\_ALG\_HMAC\_BASE@{USS\_PSA\_ALG\_HMAC\_BASE}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_HMAC\_BASE}{USS\_PSA\_ALG\_HMAC\_BASE}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a3aa75436926b10a490b2117345836401} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+HMAC\+\_\+\+BASE~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) (\mbox{\hyperlink{crypto__common_8h_a14b9ea3e84d3a715aea31488b08b75b7}{USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+TYPE\+\_\+\+MAC}} \texorpdfstring{$\vert$}{|} 0x00800000))}
+
+\Hypertarget{crypto__mac_8h_a20ff9c127a8389af0c47ec1a6d0d4a01}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_ALG\_HMAC\_GET\_HASH@{USS\_PSA\_ALG\_HMAC\_GET\_HASH}}
+\index{USS\_PSA\_ALG\_HMAC\_GET\_HASH@{USS\_PSA\_ALG\_HMAC\_GET\_HASH}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_HMAC\_GET\_HASH}{USS\_PSA\_ALG\_HMAC\_GET\_HASH}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a20ff9c127a8389af0c47ec1a6d0d4a01} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+HMAC\+\_\+\+GET\+\_\+\+HASH(\begin{DoxyParamCaption}\item[{}]{hmac\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\mbox{\hyperlink{crypto__common_8h_ae9c74a64521c7b00fd93d9b5263b8155}{USS\_PSA\_ALG\_TYPE\_HASH}}\ |\ ((hmac\_alg)\ \&\ \mbox{\hyperlink{crypto__common_8h_a8b06c60bcdf0a40ed7cff57bc56c70c9}{USS\_PSA\_ALG\_HASH\_MASK}}))}
+
+\end{DoxyCode}
+\Hypertarget{crypto__mac_8h_adc5dc635ff006cb7f029bafd2d253017}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG@{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}}
+\index{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG@{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}{USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_adc5dc635ff006cb7f029bafd2d253017} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MAC\+\_\+\+AT\+\_\+\+LEAST\+\_\+\+THIS\+\_\+\+LENGTH\+\_\+\+FLAG~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00008000)}
+
+\Hypertarget{crypto__mac_8h_a53ccb985145370a13e46782f67d45777}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK@{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK}}
+\index{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK@{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK}{USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a53ccb985145370a13e46782f67d45777} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MAC\+\_\+\+SUBCATEGORY\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x00c00000)}
+
+\Hypertarget{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK@{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}}
+\index{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK@{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7} 
+\#define USS\+\_\+\+PSA\+\_\+\+ALG\+\_\+\+MAC\+\_\+\+TRUNCATION\+\_\+\+MASK~((\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\+\_\+algorithm\+\_\+t}}) 0x003f0000)}
+
+
+
+Macro to define the truncated MAC algorithm. 
+
+\Hypertarget{crypto__mac_8h_a6f707468883de071a87feafd5ff77336}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_MAC\_TRUNCATED\_LENGTH@{USS\_PSA\_MAC\_TRUNCATED\_LENGTH}}
+\index{USS\_PSA\_MAC\_TRUNCATED\_LENGTH@{USS\_PSA\_MAC\_TRUNCATED\_LENGTH}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_MAC\_TRUNCATED\_LENGTH}{USS\_PSA\_MAC\_TRUNCATED\_LENGTH}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_a6f707468883de071a87feafd5ff77336} 
+\#define USS\+\_\+\+PSA\+\_\+\+MAC\+\_\+\+TRUNCATED\+\_\+\+LENGTH(\begin{DoxyParamCaption}\item[{}]{mac\+\_\+alg}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((mac\_alg)\ \&\ \mbox{\hyperlink{crypto__mac_8h_a03f85e4cde6618aafe3b09829e2935d7}{USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK}})\ >>\ \mbox{\hyperlink{crypto__mac_8h_acefbfee70ff20ac398686f09ed55eac5}{USS\_PSA\_MAC\_TRUNCATION\_OFFSET}})}
+
+\end{DoxyCode}
+\Hypertarget{crypto__mac_8h_acefbfee70ff20ac398686f09ed55eac5}\index{crypto\_mac.h@{crypto\_mac.h}!USS\_PSA\_MAC\_TRUNCATION\_OFFSET@{USS\_PSA\_MAC\_TRUNCATION\_OFFSET}}
+\index{USS\_PSA\_MAC\_TRUNCATION\_OFFSET@{USS\_PSA\_MAC\_TRUNCATION\_OFFSET}!crypto\_mac.h@{crypto\_mac.h}}
+\doxysubsubsection{\texorpdfstring{USS\_PSA\_MAC\_TRUNCATION\_OFFSET}{USS\_PSA\_MAC\_TRUNCATION\_OFFSET}}
+{\footnotesize\ttfamily \label{crypto__mac_8h_acefbfee70ff20ac398686f09ed55eac5} 
+\#define USS\+\_\+\+PSA\+\_\+\+MAC\+\_\+\+TRUNCATION\+\_\+\+OFFSET~16u}
+

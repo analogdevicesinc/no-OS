@@ -1,0 +1,209 @@
+/*******************************************************************************
+* Copyright (C) Maxim Integrated Products, Inc., All rights Reserved.
+*
+* This software is protected by copyright laws of the United States and
+* of foreign countries. This material may also be protected by patent laws
+* and technology transfer regulations of the United States and of foreign
+* countries. This software is furnished under a license agreement and/or a
+* nondisclosure agreement and may only be used or reproduced in accordance
+* with the terms of those agreements. Dissemination of this information to
+* any party or parties not specified in the license agreement and/or
+* nondisclosure agreement is expressly prohibited.
+*
+* The above copyright notice and this permission notice shall be included
+* in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+* OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES
+* OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+* OTHER DEALINGS IN THE SOFTWARE.
+*
+* Except as contained in this notice, the name of Maxim Integrated
+* Products, Inc. shall not be used except as stated in the Maxim Integrated
+* Products, Inc. Branding Policy.
+*
+* The mere transfer of this software does not imply any licenses
+* of trade secrets, proprietary technology, copyrights, patents,
+* trademarks, maskwork rights, or any other form of intellectual
+* property whatsoever. Maxim Integrated Products, Inc. retains all
+* ownership rights.
+*******************************************************************************/
+
+/* System */
+#define MBEDTLS_HAVE_ASM
+#define MBEDTLS_HAVE_TIME
+#define MBEDTLS_TIMING_C
+#define MBEDTLS_ERROR_C
+#define MBEDTLS_PLATFORM_C
+
+/* Debug */
+#define MBEDTLS_SSL_DEBUG_ALL
+#define MBEDTLS_DEBUG_C
+
+/* Hash */
+#define MBEDTLS_SHA1_C
+#define MBEDTLS_SHA224_C
+#define MBEDTLS_SHA256_C
+#define MBEDTLS_SHA384_C
+#define MBEDTLS_SHA512_C
+
+/* TLS/DTLS */
+#define MBEDTLS_ASN1_PARSE_C
+#define MBEDTLS_ASN1_WRITE_C
+#define MBEDTLS_PK_C
+#define MBEDTLS_PK_PARSE_C
+#define MBEDTLS_X509_USE_C
+#define MBEDTLS_X509_CRT_PARSE_C
+
+#define MBEDTLS_MD_C
+#define MBEDTLS_NET_C
+#define MBEDTLS_OID_C
+#define MBEDTLS_BASE64_C
+
+#define MBEDTLS_SSL_TLS_C
+#define MBEDTLS_SSL_PROTO_TLS1_2
+#define MBEDTLS_SSL_COOKIE_C
+#define MBEDTLS_SSL_PROTO_DTLS
+#define MBEDTLS_SSL_DTLS_HELLO_VERIFY
+
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_PSK_ENABLED
+
+#define MBEDTLS_CIPHER_MODE_CBC
+#define MBEDTLS_CIPHER_PADDING_PKCS7
+
+#define MBEDTLS_ECP_C
+#define MBEDTLS_ECDH_C
+#define MBEDTLS_ECDSA_C
+#define MBEDTLS_BIGNUM_C
+
+/* NIST EC Curves */
+#define MBEDTLS_ECP_DP_SECP256R1_ENABLED
+#define MBEDTLS_ECP_DP_SECP384R1_ENABLED
+#define MBEDTLS_ECP_DP_SECP521R1_ENABLED
+
+#if defined(MAXQ108x)
+    #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
+    #define MBEDTLS_KEY_EXCHANGE_RSA_PSK_ENABLED
+    #define MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED
+    #define MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED
+
+    #define MBEDTLS_RSA_C
+    #define MBEDTLS_PKCS1_V21
+    #define MBEDTLS_PKCS1_V15
+    #define MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    #define MBEDTLS_DHM_C
+
+    #define MBEDTLS_SSL_PROTO_TLS1_3
+    #define MBEDTLS_SSL_TLS1_3_COMPATIBILITY_MODE
+    #define MBEDTLS_SSL_KEEP_PEER_CERTIFICATE
+
+    #define MBEDTLS_PSA_CRYPTO_C
+    #define MBEDTLS_HKDF_C
+    #define MBEDTLS_SSL_TLS1_3_KEY_EXCHANGE_MODE_PSK_ENABLED
+    #define MBEDTLS_SSL_TLS1_3_KEY_EXCHANGE_MODE_EPHEMERAL_ENABLED
+
+    //#define MBEDTLS_SSL_SESSION_TICKETS
+    //#define MBEDTLS_SSL_TLS1_3_TICKET_AGE_TOLERANCE 6000
+    //#define MBEDTLS_SSL_TLS1_3_TICKET_NONCE_LENGTH 32
+    //#define MBEDTLS_SSL_TLS1_3_DEFAULT_NEW_SESSION_TICKETS 1
+
+    #include "mbedtls/config_psa.h"
+#endif
+
+/* Google IoT */
+#define MBEDTLS_SSL_SERVER_NAME_INDICATION
+
+/* Cipher Suites */
+#if defined(MAXQ108x)
+#define MBEDTLS_SSL_CIPHERSUITES                     \
+    MBEDTLS_TLS_PSK_WITH_AES_128_GCM_SHA256         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_GCM_SHA384         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA256         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CBC_SHA384         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CCM                ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CCM                ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8              ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CCM_8              ,\
+    MBEDTLS_TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA256   ,\
+    MBEDTLS_TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA384   ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384 ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM        ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM        ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8      ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8      ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256  ,\
+    MBEDTLS_TLS_RSA_PSK_WITH_AES_128_GCM_SHA256     ,\
+    MBEDTLS_TLS_RSA_PSK_WITH_AES_256_GCM_SHA384     ,\
+    MBEDTLS_TLS_DHE_PSK_WITH_AES_128_GCM_SHA256     ,\
+    MBEDTLS_TLS_DHE_PSK_WITH_AES_256_GCM_SHA384     ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_128_GCM_SHA256     ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_256_GCM_SHA384     ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_128_CCM            ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_256_CCM            ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_128_CCM_8          ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_256_CCM_8          ,\
+    MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256   ,\
+    MBEDTLS_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384   ,\
+    MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256   ,\
+    MBEDTLS_TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384   ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_128_CBC_SHA256     ,\
+    MBEDTLS_TLS_DHE_RSA_WITH_AES_256_CBC_SHA256     ,\
+    MBEDTLS_TLS1_3_AES_128_GCM_SHA256               ,\
+    MBEDTLS_TLS1_3_AES_256_GCM_SHA384               ,\
+    MBEDTLS_TLS1_3_AES_128_CCM_SHA256               ,\
+    MBEDTLS_TLS1_3_AES_128_CCM_8_SHA256
+#elif defined(MAXQ1065)
+#define MBEDTLS_SSL_CIPHERSUITES                     \
+    MBEDTLS_TLS_PSK_WITH_AES_128_GCM_SHA256         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CCM                ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CCM                ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8              ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CCM_8              ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256  ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM        ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM        ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8      ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8
+#else
+#define MBEDTLS_SSL_CIPHERSUITES                     \
+    MBEDTLS_TLS_PSK_WITH_AES_128_GCM_SHA256         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_GCM_SHA384         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA            ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA256         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CBC_SHA            ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CBC_SHA384         ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CCM                ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CCM                ,\
+    MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8              ,\
+    MBEDTLS_TLS_PSK_WITH_AES_256_CCM_8              ,\
+    MBEDTLS_TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA      ,\
+    MBEDTLS_TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA      ,\
+    MBEDTLS_TLS_ECDHE_PSK_WITH_AES_128_CBC_SHA256   ,\
+    MBEDTLS_TLS_ECDHE_PSK_WITH_AES_256_CBC_SHA384   ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA    ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA    ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384 ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA     ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256  ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA     ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384  ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256  ,\
+    MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384  ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM        ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM        ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM_8      ,\
+    MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8
+#endif

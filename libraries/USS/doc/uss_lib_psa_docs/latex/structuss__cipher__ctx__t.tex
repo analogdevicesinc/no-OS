@@ -1,0 +1,73 @@
+\doxysection{uss\+\_\+cipher\+\_\+ctx\+\_\+t Struct Reference}
+\hypertarget{structuss__cipher__ctx__t}{}\label{structuss__cipher__ctx__t}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+
+
+{\ttfamily \#include $<$crypto\+\_\+typedefs.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a220f68d5a3f60700d94b3bfd01287cc6}{nonce}} \mbox{[}16\mbox{]}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a00e5d5b8c141c06c3f398b75cb31ca7b}{is\+Active}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a4a19c18c28a0f2816fcc070bb6645bcd}{encrypt\+\_\+decrypt}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a4d4cb4ed4e708c8b9f589748941cc8fe}{is\+IVSet}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a312bf273a7fcef9af81d97c361f6cd5d}{is\+Body\+Begin}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a541765f8d3e9a66c661b22f742b11ffd}{is\+Cipher\+Init\+Done}}\+: 1
+\item 
+uint32\+\_\+t \mbox{\hyperlink{structuss__cipher__ctx__t_a00cb05b1f410895af2b0c7602a49f1a5}{processed\+\_\+input\+\_\+len}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structuss__cipher__ctx__t_a4a19c18c28a0f2816fcc070bb6645bcd}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!encrypt\_decrypt@{encrypt\_decrypt}}
+\index{encrypt\_decrypt@{encrypt\_decrypt}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{encrypt\_decrypt}{encrypt\_decrypt}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a4a19c18c28a0f2816fcc070bb6645bcd} 
+uint32\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::encrypt\+\_\+decrypt}
+
+\Hypertarget{structuss__cipher__ctx__t_a00e5d5b8c141c06c3f398b75cb31ca7b}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!isActive@{isActive}}
+\index{isActive@{isActive}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isActive}{isActive}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a00e5d5b8c141c06c3f398b75cb31ca7b} 
+uint32\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::is\+Active}
+
+\Hypertarget{structuss__cipher__ctx__t_a312bf273a7fcef9af81d97c361f6cd5d}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!isBodyBegin@{isBodyBegin}}
+\index{isBodyBegin@{isBodyBegin}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isBodyBegin}{isBodyBegin}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a312bf273a7fcef9af81d97c361f6cd5d} 
+uint32\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::is\+Body\+Begin}
+
+\Hypertarget{structuss__cipher__ctx__t_a541765f8d3e9a66c661b22f742b11ffd}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!isCipherInitDone@{isCipherInitDone}}
+\index{isCipherInitDone@{isCipherInitDone}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isCipherInitDone}{isCipherInitDone}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a541765f8d3e9a66c661b22f742b11ffd} 
+uint32\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::is\+Cipher\+Init\+Done}
+
+\Hypertarget{structuss__cipher__ctx__t_a4d4cb4ed4e708c8b9f589748941cc8fe}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!isIVSet@{isIVSet}}
+\index{isIVSet@{isIVSet}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{isIVSet}{isIVSet}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a4d4cb4ed4e708c8b9f589748941cc8fe} 
+uint32\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::is\+IVSet}
+
+\Hypertarget{structuss__cipher__ctx__t_a220f68d5a3f60700d94b3bfd01287cc6}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!nonce@{nonce}}
+\index{nonce@{nonce}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{nonce}{nonce}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a220f68d5a3f60700d94b3bfd01287cc6} 
+uint8\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::nonce\mbox{[}16\mbox{]}}
+
+\Hypertarget{structuss__cipher__ctx__t_a00cb05b1f410895af2b0c7602a49f1a5}\index{uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}!processed\_input\_len@{processed\_input\_len}}
+\index{processed\_input\_len@{processed\_input\_len}!uss\_cipher\_ctx\_t@{uss\_cipher\_ctx\_t}}
+\doxysubsubsection{\texorpdfstring{processed\_input\_len}{processed\_input\_len}}
+{\footnotesize\ttfamily \label{structuss__cipher__ctx__t_a00cb05b1f410895af2b0c7602a49f1a5} 
+uint32\+\_\+t uss\+\_\+cipher\+\_\+ctx\+\_\+t\+::processed\+\_\+input\+\_\+len}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/\mbox{\hyperlink{crypto__typedefs_8h}{crypto\+\_\+typedefs.\+h}}\end{DoxyCompactItemize}

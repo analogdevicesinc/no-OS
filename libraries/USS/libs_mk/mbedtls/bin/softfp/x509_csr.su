@@ -1,0 +1,8 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:54:12:x509_csr_get_version	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:75:12:x509_csr_parse_extensions	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:170:12:x509_csr_parse_attributes	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:476:5:mbedtls_x509_csr_info	64	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:557:6:mbedtls_x509_csr_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:565:6:mbedtls_x509_csr_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:234:5:mbedtls_x509_csr_parse_der	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/x509_csr.c:401:5:mbedtls_x509_csr_parse	56	static

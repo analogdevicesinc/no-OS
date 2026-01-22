@@ -1,0 +1,9 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:44:16:crc8_le	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:80:16:crc8_be	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:116:9:CrcBlock8	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:282:25:MAC_WriteFrame	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:134:6:spiCallback	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:173:18:MAC_Write	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:365:18:MAC_Read	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:510:18:MAC_SendFrame	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/src/adi_spi_generic.c:579:18:MAC_RecvFrame	32	static

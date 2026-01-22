@@ -162,13 +162,13 @@ int main(void)
 	if (!pin && HW_VERSION >= 1)
 apply_factory_defaults: {
 		printf("EEPROM: loading factory defaults...\n");
-		ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(15), eebuf, nvmpsz + 1);
+		ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(15), eebuf, nvmpsz+1);
 		if (ret)
 			return ret;
 
 		crc = no_os_crc8(crc8, eebuf, nvmpsz, 0xa5);
 		if (crc == eebuf[nvmpsz]) {
-			ret = no_os_eeprom_write(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz + 1);
+			ret = no_os_eeprom_write(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz+1);
 			if (ret)
 				return ret;
 			printf("EEPROM: loaded factory defaults.\n");
@@ -186,7 +186,7 @@ apply_factory_defaults: {
 	}
 
 	printf("EEPROM: loading non-volatile parameters...\n");
-	ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz + 1);
+	ret = no_os_eeprom_read(eeprom, NVMP_AREA_ADDRESS(0), eebuf, nvmpsz+1);
 	if (ret)
 		return ret;
 
@@ -200,7 +200,7 @@ apply_factory_defaults: {
 post_eeprom:
 	nvmp = (union nvmp255 *)eebuf;
 
-	switch (id) {
+	switch(id) {
 	case ID_ADMV96X1:
 		speed = 100;
 		break;

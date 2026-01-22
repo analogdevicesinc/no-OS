@@ -1,0 +1,737 @@
+Trivially needed symbols: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_commit/22 mbedtls_mps_reader_get/21 mbedtls_mps_reader_feed/20 mbedtls_mps_reader_free/19 mbedtls_mps_reader_init/18
+
+
+Initial Symbol table:
+
+memmove/26 (memmove) @0625b3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 
+  Calls: 
+memcpy/25 (memcpy) @0625b348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_feed/20 
+  Calls: 
+zero/24 (zero) @062620d8
+  Type: variable definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_mps_reader_reclaim/23 (mbedtls_mps_reader_reclaim) @0625b2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 memmove/26 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_commit/22 (mbedtls_mps_reader_commit) @0625b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0625b2a0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_is_consuming/14 
+mbedtls_mps_reader_get/21 (mbedtls_mps_reader_get) @0625b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0625b150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_serving_from_accumulator/16 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_feed/20 (mbedtls_mps_reader_feed) @0623ef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0625b000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 mps_reader_is_accumulating/12 mps_reader_is_producing/13 
+mbedtls_mps_reader_free/19 (mbedtls_mps_reader_free) @0623edc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0623ef18
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mbedtls_mps_reader_init/18 (mbedtls_mps_reader_init) @0623ec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0623edc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mps_reader_zero/17 (mps_reader_zero) @0623eb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0623edc8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_free/19 mbedtls_mps_reader_init/18 
+  Calls: 
+mps_reader_serving_from_accumulator/16 (mps_reader_serving_from_accumulator) @0623e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0625b150
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_get/21 
+  Calls: mps_reader_get_fragment_offset/15 
+mps_reader_get_fragment_offset/15 (mps_reader_get_fragment_offset) @0623e7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0623e930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mps_reader_serving_from_accumulator/16 mbedtls_mps_reader_get/21 
+  Calls: 
+mps_reader_is_consuming/14 (mps_reader_is_consuming) @0623e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0623e7e0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_commit/22 mbedtls_mps_reader_get/21 
+  Calls: mps_reader_is_producing/13 
+mps_reader_is_producing/13 (mps_reader_is_producing) @0623e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0623e3f0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mps_reader_is_consuming/14 mbedtls_mps_reader_feed/20 
+  Calls: 
+mps_reader_is_accumulating/12 (mps_reader_is_accumulating) @0623e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @0625b000
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_feed/20 
+  Calls: 
+_putchar_unlocked/11 (_putchar_unlocked) @06204888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/10 (_getchar_unlocked) @06204738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/9 (__sputc_r) @06204540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @061f3d20
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @061f3bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @061f3a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @061f3690
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @061f3540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @061f33f0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @061f32a0
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @061f3150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @061f3000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: zero/24 _putchar_unlocked/11 _getchar_unlocked/10 __sputc_r/9 mbedtls_xor/8 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_put_unaligned_uint64/5 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+memmove/26 (memmove) @0625b3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 
+  Calls: 
+memcpy/25 (memcpy) @0625b348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_feed/20 
+  Calls: 
+mbedtls_mps_reader_reclaim/23 (mbedtls_mps_reader_reclaim) @0625b2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 memmove/26 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_commit/22 (mbedtls_mps_reader_commit) @0625b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_is_consuming/14 
+mbedtls_mps_reader_get/21 (mbedtls_mps_reader_get) @0625b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_serving_from_accumulator/16 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_feed/20 (mbedtls_mps_reader_feed) @0623ef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 mps_reader_is_accumulating/12 mps_reader_is_producing/13 
+mbedtls_mps_reader_free/19 (mbedtls_mps_reader_free) @0623edc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mbedtls_mps_reader_init/18 (mbedtls_mps_reader_init) @0623ec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mps_reader_zero/17 (mps_reader_zero) @0623eb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_free/19 mbedtls_mps_reader_init/18 
+  Calls: 
+mps_reader_serving_from_accumulator/16 (mps_reader_serving_from_accumulator) @0623e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_get/21 
+  Calls: mps_reader_get_fragment_offset/15 
+mps_reader_get_fragment_offset/15 (mps_reader_get_fragment_offset) @0623e7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mps_reader_serving_from_accumulator/16 mbedtls_mps_reader_get/21 
+  Calls: 
+mps_reader_is_consuming/14 (mps_reader_is_consuming) @0623e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_commit/22 mbedtls_mps_reader_get/21 
+  Calls: mps_reader_is_producing/13 
+mps_reader_is_producing/13 (mps_reader_is_producing) @0623e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mps_reader_is_consuming/14 mbedtls_mps_reader_feed/20 
+  Calls: 
+mps_reader_is_accumulating/12 (mps_reader_is_accumulating) @0623e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_feed/20 
+  Calls: 
+
+
+Initial Symbol table:
+
+memmove/26 (memmove) @0625b3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 
+  Calls: 
+memcpy/25 (memcpy) @0625b348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_feed/20 
+  Calls: 
+mbedtls_mps_reader_reclaim/23 (mbedtls_mps_reader_reclaim) @0625b2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 memmove/26 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_commit/22 (mbedtls_mps_reader_commit) @0625b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_is_consuming/14 
+mbedtls_mps_reader_get/21 (mbedtls_mps_reader_get) @0625b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_serving_from_accumulator/16 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_feed/20 (mbedtls_mps_reader_feed) @0623ef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 mps_reader_is_accumulating/12 mps_reader_is_producing/13 
+mbedtls_mps_reader_free/19 (mbedtls_mps_reader_free) @0623edc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mbedtls_mps_reader_init/18 (mbedtls_mps_reader_init) @0623ec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mps_reader_zero/17 (mps_reader_zero) @0623eb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_free/19 mbedtls_mps_reader_init/18 
+  Calls: 
+mps_reader_serving_from_accumulator/16 (mps_reader_serving_from_accumulator) @0623e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_get/21 
+  Calls: mps_reader_get_fragment_offset/15 
+mps_reader_get_fragment_offset/15 (mps_reader_get_fragment_offset) @0623e7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mps_reader_serving_from_accumulator/16 mbedtls_mps_reader_get/21 
+  Calls: 
+mps_reader_is_consuming/14 (mps_reader_is_consuming) @0623e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_commit/22 mbedtls_mps_reader_get/21 
+  Calls: mps_reader_is_producing/13 
+mps_reader_is_producing/13 (mps_reader_is_producing) @0623e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mps_reader_is_consuming/14 mbedtls_mps_reader_feed/20 
+  Calls: 
+mps_reader_is_accumulating/12 (mps_reader_is_accumulating) @0623e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_feed/20 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memmove/26 (memmove) @0625b3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 
+  Calls: 
+memcpy/25 (memcpy) @0625b348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_feed/20 
+  Calls: 
+mbedtls_mps_reader_reclaim/23 (mbedtls_mps_reader_reclaim) @0625b2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 memmove/26 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_commit/22 (mbedtls_mps_reader_commit) @0625b150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_is_consuming/14 
+mbedtls_mps_reader_get/21 (mbedtls_mps_reader_get) @0625b000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_serving_from_accumulator/16 mps_reader_get_fragment_offset/15 mps_reader_is_consuming/14 
+mbedtls_mps_reader_feed/20 (mbedtls_mps_reader_feed) @0623ef18
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: memcpy/25 mps_reader_is_accumulating/12 mps_reader_is_producing/13 
+mbedtls_mps_reader_free/19 (mbedtls_mps_reader_free) @0623edc8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mbedtls_mps_reader_init/18 (mbedtls_mps_reader_init) @0623ec78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mps_reader_zero/17 
+mps_reader_zero/17 (mps_reader_zero) @0623eb28
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_free/19 mbedtls_mps_reader_init/18 
+  Calls: 
+mps_reader_serving_from_accumulator/16 (mps_reader_serving_from_accumulator) @0623e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_get/21 
+  Calls: mps_reader_get_fragment_offset/15 
+mps_reader_get_fragment_offset/15 (mps_reader_get_fragment_offset) @0623e7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mps_reader_serving_from_accumulator/16 mbedtls_mps_reader_get/21 
+  Calls: 
+mps_reader_is_consuming/14 (mps_reader_is_consuming) @0623e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_reclaim/23 mbedtls_mps_reader_commit/22 mbedtls_mps_reader_get/21 
+  Calls: mps_reader_is_producing/13 
+mps_reader_is_producing/13 (mps_reader_is_producing) @0623e540
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mps_reader_is_consuming/14 mbedtls_mps_reader_feed/20 
+  Calls: 
+mps_reader_is_accumulating/12 (mps_reader_is_accumulating) @0623e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_mps_reader_feed/20 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memmove/26 (memmove) @0625b3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 (515512426 (estimated locally),0.48 per call) 
+  Calls: 
+memcpy/25 (memcpy) @0625b348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_mps_reader_reclaim/23 (515512426 (estimated locally),0.48 per call) mbedtls_mps_reader_feed/20 (427309330 (estimated locally),0.40 per call) 
+  Calls: 
+mbedtls_mps_reader_reclaim/23 (mbedtls_mps_reader_reclaim) @0625b2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memcpy/25 (515512426 (estimated locally),0.48 per call) memmove/26 (515512426 (estimated locally),0.48 per call) 
+mbedtls_mps_reader_commit/22 (mbedtls_mps_reader_commit) @0625b150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_get/21 (mbedtls_mps_reader_get) @0625b000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_feed/20 (mbedtls_mps_reader_feed) @0623ef18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: memcpy/25 (427309330 (estimated locally),0.40 per call) 
+mbedtls_mps_reader_free/19 (mbedtls_mps_reader_free) @0623edc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_init/18 (mbedtls_mps_reader_init) @0623ec78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body nonfreeing_fn
+  Called by: 
+  Calls: 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+memmove/26 (memmove) @0625b3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/25 (memcpy) @0625b348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_reclaim/23 (mbedtls_mps_reader_reclaim) @0625b2a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_mps_reader_reclaim (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_commit/22 (mbedtls_mps_reader_commit) @0625b150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_mps_reader_commit (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_get/21 (mbedtls_mps_reader_get) @0625b000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_mps_reader_get (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_feed/20 (mbedtls_mps_reader_feed) @0623ef18
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_mps_reader_feed (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_free/19 (mbedtls_mps_reader_free) @0623edc8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_mps_reader_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_mps_reader_init/18 (mbedtls_mps_reader_init) @0623ec78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_mps_reader_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) nonfreeing_fn
+  Called by: 
+  Calls: 

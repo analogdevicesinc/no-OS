@@ -1,0 +1,9 @@
+{
+    "macros": ["MBEDTLS_SHA1_C=1"],
+    "target_overrides": {
+        "*": {
+            "mbed-trace.enable": 1,
+            "tls-socket.debug-level": 0
+        }
+    }
+}

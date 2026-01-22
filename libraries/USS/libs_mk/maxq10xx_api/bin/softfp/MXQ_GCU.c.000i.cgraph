@@ -1,0 +1,1256 @@
+Trivially needed symbols: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_Shutdown/7 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 GCU_SendCommand/3
+
+
+Initial Symbol table:
+
+memcpy/26 (memcpy) @06284150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 
+  Calls: 
+receivebytes/25 (receivebytes) @062840a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_RequestTag/12 GCU_RequestBlock/11 
+  Calls: 
+sendbytes/24 (sendbytes) @06284000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_SendBlock/10 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+cmd_print_gcu/23 (cmd_print_gcu) @06255f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_Shutdown/7 GCU_Shutdown/7 GCU_Reset/6 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+puts/22 (__builtin_puts) @06255e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_Shutdown/7 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+g_debugoutputlevel/21 (g_debugoutputlevel) @0625f2d0
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_LoadKey/4 (read) GCU_LoadIV/5 (read) GCU_Reset/6 (read) GCU_Shutdown/7 (read) GCU_Abort/8 (read) GCU_LinkTest/9 (read) GCU_SendBlock/10 (read) GCU_RequestBlock/11 (read) GCU_RequestTag/12 (read) GCU_ECBEncDec/13 (read) GCU_GCMEncDec/14 (read) GCU_GMAC/15 (read) GCU_GCMAuthEncDec/16 (read) 
+  Availability: not-ready
+  Varpool flags:
+putchar/20 (__builtin_putchar) @06255dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+exchangebytes/19 (exchangebytes) @06255d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_Shutdown/7 GCU_Reset/6 GCU_SendCommand/3 
+  Calls: 
+printf/18 (printf) @06255c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+g_dump_comm/17 (g_dump_comm) @061ebee8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_SendCommand/3 (read) GCU_SendCommand/3 (read) 
+  Availability: not-ready
+  Varpool flags:
+GCU_GCMAuthEncDec/16 (GCU_GCMAuthEncDec) @06255bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GMAC/15 (GCU_GMAC) @06255a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255bd0
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GCMEncDec/14 (GCU_GCMEncDec) @06255930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255a80
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_ECBEncDec/13 (GCU_ECBEncDec) @062557e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255930
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 puts/22 
+GCU_RequestTag/12 (GCU_RequestTag) @06255690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062557e0
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_RequestBlock/11 (GCU_RequestBlock) @06255540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255690
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_SendBlock/10 (GCU_SendBlock) @062553f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255540
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LinkTest/9 (GCU_LinkTest) @062552a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062553f0
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Abort/8 (GCU_Abort) @06255150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062552a0
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Shutdown/7 (GCU_Shutdown) @06255000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255150
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_Reset/6 (GCU_Reset) @061eebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06255000
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_LoadIV/5 (GCU_LoadIV) @061eea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061eebd0
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LoadKey/4 (GCU_LoadKey) @061ee930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061eea80
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_SendCommand/3 (GCU_SendCommand) @061eee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @061ee930
+  References: g_dump_comm/17 (read) g_dump_comm/17 (read) 
+  Referring: 
+  Function flags: body
+  Called by: GCU_GCMAuthEncDec/16 GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: putchar/20 exchangebytes/19 printf/18 
+_putchar_unlocked/2 (_putchar_unlocked) @061799d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @06179888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @06179690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+memcpy/26 (memcpy) @06284150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 
+  Calls: 
+receivebytes/25 (receivebytes) @062840a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_RequestTag/12 GCU_RequestBlock/11 
+  Calls: 
+sendbytes/24 (sendbytes) @06284000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_SendBlock/10 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+cmd_print_gcu/23 (cmd_print_gcu) @06255f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_Shutdown/7 GCU_Shutdown/7 GCU_Reset/6 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+puts/22 (__builtin_puts) @06255e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_Shutdown/7 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+g_debugoutputlevel/21 (g_debugoutputlevel) @0625f2d0
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_LoadKey/4 (read) GCU_LoadIV/5 (read) GCU_Reset/6 (read) GCU_Shutdown/7 (read) GCU_Abort/8 (read) GCU_LinkTest/9 (read) GCU_SendBlock/10 (read) GCU_RequestBlock/11 (read) GCU_RequestTag/12 (read) GCU_ECBEncDec/13 (read) GCU_GCMEncDec/14 (read) GCU_GMAC/15 (read) GCU_GCMAuthEncDec/16 (read) 
+  Availability: not-ready
+  Varpool flags:
+putchar/20 (__builtin_putchar) @06255dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+exchangebytes/19 (exchangebytes) @06255d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_Shutdown/7 GCU_Reset/6 GCU_SendCommand/3 
+  Calls: 
+printf/18 (printf) @06255c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+g_dump_comm/17 (g_dump_comm) @061ebee8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_SendCommand/3 (read) GCU_SendCommand/3 (read) 
+  Availability: not-ready
+  Varpool flags:
+GCU_GCMAuthEncDec/16 (GCU_GCMAuthEncDec) @06255bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GMAC/15 (GCU_GMAC) @06255a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GCMEncDec/14 (GCU_GCMEncDec) @06255930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_ECBEncDec/13 (GCU_ECBEncDec) @062557e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 puts/22 
+GCU_RequestTag/12 (GCU_RequestTag) @06255690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_RequestBlock/11 (GCU_RequestBlock) @06255540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_SendBlock/10 (GCU_SendBlock) @062553f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LinkTest/9 (GCU_LinkTest) @062552a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Abort/8 (GCU_Abort) @06255150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Shutdown/7 (GCU_Shutdown) @06255000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_Reset/6 (GCU_Reset) @061eebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_LoadIV/5 (GCU_LoadIV) @061eea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LoadKey/4 (GCU_LoadKey) @061ee930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_SendCommand/3 (GCU_SendCommand) @061eee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/17 (read) g_dump_comm/17 (read) 
+  Referring: 
+  Function flags: body
+  Called by: GCU_GCMAuthEncDec/16 GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: putchar/20 exchangebytes/19 printf/18 
+
+
+Initial Symbol table:
+
+memcpy/26 (memcpy) @06284150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 
+  Calls: 
+receivebytes/25 (receivebytes) @062840a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_RequestTag/12 GCU_RequestBlock/11 
+  Calls: 
+sendbytes/24 (sendbytes) @06284000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_SendBlock/10 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+cmd_print_gcu/23 (cmd_print_gcu) @06255f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_Shutdown/7 GCU_Shutdown/7 GCU_Reset/6 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+puts/22 (__builtin_puts) @06255e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_Shutdown/7 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+g_debugoutputlevel/21 (g_debugoutputlevel) @0625f2d0
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_LoadKey/4 (read) GCU_LoadIV/5 (read) GCU_Reset/6 (read) GCU_Shutdown/7 (read) GCU_Abort/8 (read) GCU_LinkTest/9 (read) GCU_SendBlock/10 (read) GCU_RequestBlock/11 (read) GCU_RequestTag/12 (read) GCU_ECBEncDec/13 (read) GCU_GCMEncDec/14 (read) GCU_GMAC/15 (read) GCU_GCMAuthEncDec/16 (read) 
+  Availability: not-ready
+  Varpool flags:
+putchar/20 (__builtin_putchar) @06255dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+exchangebytes/19 (exchangebytes) @06255d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_Shutdown/7 GCU_Reset/6 GCU_SendCommand/3 
+  Calls: 
+printf/18 (printf) @06255c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+g_dump_comm/17 (g_dump_comm) @061ebee8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_SendCommand/3 (read) GCU_SendCommand/3 (read) 
+  Availability: not-ready
+  Varpool flags:
+GCU_GCMAuthEncDec/16 (GCU_GCMAuthEncDec) @06255bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GMAC/15 (GCU_GMAC) @06255a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GCMEncDec/14 (GCU_GCMEncDec) @06255930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_ECBEncDec/13 (GCU_ECBEncDec) @062557e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 puts/22 
+GCU_RequestTag/12 (GCU_RequestTag) @06255690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_RequestBlock/11 (GCU_RequestBlock) @06255540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_SendBlock/10 (GCU_SendBlock) @062553f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LinkTest/9 (GCU_LinkTest) @062552a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Abort/8 (GCU_Abort) @06255150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Shutdown/7 (GCU_Shutdown) @06255000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_Reset/6 (GCU_Reset) @061eebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_LoadIV/5 (GCU_LoadIV) @061eea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LoadKey/4 (GCU_LoadKey) @061ee930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_SendCommand/3 (GCU_SendCommand) @061eee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/17 (read) g_dump_comm/17 (read) 
+  Referring: 
+  Function flags: body
+  Called by: GCU_GCMAuthEncDec/16 GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: putchar/20 exchangebytes/19 printf/18 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+memcpy/26 (memcpy) @06284150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 
+  Calls: 
+receivebytes/25 (receivebytes) @062840a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_RequestTag/12 GCU_RequestBlock/11 
+  Calls: 
+sendbytes/24 (sendbytes) @06284000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_SendBlock/10 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+cmd_print_gcu/23 (cmd_print_gcu) @06255f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_Shutdown/7 GCU_Shutdown/7 GCU_Reset/6 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+puts/22 (__builtin_puts) @06255e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_Shutdown/7 GCU_Reset/6 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: 
+g_debugoutputlevel/21 (g_debugoutputlevel) @0625f2d0
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_LoadKey/4 (read) GCU_LoadIV/5 (read) GCU_Reset/6 (read) GCU_Shutdown/7 (read) GCU_Abort/8 (read) GCU_LinkTest/9 (read) GCU_SendBlock/10 (read) GCU_RequestBlock/11 (read) GCU_RequestTag/12 (read) GCU_ECBEncDec/13 (read) GCU_GCMEncDec/14 (read) GCU_GMAC/15 (read) GCU_GCMAuthEncDec/16 (read) 
+  Availability: not-ready
+  Varpool flags:
+putchar/20 (__builtin_putchar) @06255dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+exchangebytes/19 (exchangebytes) @06255d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_Shutdown/7 GCU_Reset/6 GCU_SendCommand/3 
+  Calls: 
+printf/18 (printf) @06255c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: GCU_SendCommand/3 
+  Calls: 
+g_dump_comm/17 (g_dump_comm) @061ebee8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_SendCommand/3 (read) GCU_SendCommand/3 (read) 
+  Availability: not-ready
+  Varpool flags:
+GCU_GCMAuthEncDec/16 (GCU_GCMAuthEncDec) @06255bd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GMAC/15 (GCU_GMAC) @06255a80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_GCMEncDec/14 (GCU_GCMEncDec) @06255930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 memcpy/26 puts/22 
+GCU_ECBEncDec/13 (GCU_ECBEncDec) @062557e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 GCU_SendCommand/3 puts/22 
+GCU_RequestTag/12 (GCU_RequestTag) @06255690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_RequestBlock/11 (GCU_RequestBlock) @06255540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 receivebytes/25 GCU_SendCommand/3 puts/22 
+GCU_SendBlock/10 (GCU_SendBlock) @062553f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LinkTest/9 (GCU_LinkTest) @062552a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Abort/8 (GCU_Abort) @06255150
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: GCU_SendCommand/3 puts/22 
+GCU_Shutdown/7 (GCU_Shutdown) @06255000
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_Reset/6 (GCU_Reset) @061eebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: cmd_print_gcu/23 exchangebytes/19 cmd_print_gcu/23 puts/22 
+GCU_LoadIV/5 (GCU_LoadIV) @061eea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_LoadKey/4 (GCU_LoadKey) @061ee930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: sendbytes/24 cmd_print_gcu/23 GCU_SendCommand/3 puts/22 
+GCU_SendCommand/3 (GCU_SendCommand) @061eee70
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: g_dump_comm/17 (read) g_dump_comm/17 (read) 
+  Referring: 
+  Function flags: body
+  Called by: GCU_GCMAuthEncDec/16 GCU_GCMAuthEncDec/16 GCU_GMAC/15 GCU_GCMEncDec/14 GCU_ECBEncDec/13 GCU_ECBEncDec/13 GCU_RequestTag/12 GCU_RequestBlock/11 GCU_SendBlock/10 GCU_LinkTest/9 GCU_Abort/8 GCU_LoadIV/5 GCU_LoadKey/4 
+  Calls: putchar/20 exchangebytes/19 printf/18 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+memcpy/26 (memcpy) @06284150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 (1073741824 (estimated locally),1.00 per call) GCU_GMAC/15 (1073741824 (estimated locally),1.00 per call) GCU_GCMEncDec/14 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+receivebytes/25 (receivebytes) @062840a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_RequestTag/12 (524845000 (estimated locally),0.49 per call) GCU_RequestBlock/11 (524845000 (estimated locally),0.49 per call) 
+  Calls: 
+sendbytes/24 (sendbytes) @06284000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 (524845000 (estimated locally),0.49 per call) GCU_GMAC/15 (524845000 (estimated locally),0.49 per call) GCU_GCMEncDec/14 (524845000 (estimated locally),0.49 per call) GCU_ECBEncDec/13 (524845000 (estimated locally),0.49 per call) GCU_SendBlock/10 (524845000 (estimated locally),0.49 per call) GCU_LoadIV/5 (351110354 (estimated locally),0.33 per call) GCU_LoadKey/4 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+cmd_print_gcu/23 (cmd_print_gcu) @06255f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 (524845000 (estimated locally),0.49 per call) GCU_GMAC/15 (524845000 (estimated locally),0.49 per call) GCU_GCMEncDec/14 (524845000 (estimated locally),0.49 per call) GCU_ECBEncDec/13 (524845000 (estimated locally),0.49 per call) GCU_RequestTag/12 (524845000 (estimated locally),0.49 per call) GCU_RequestBlock/11 (524845000 (estimated locally),0.49 per call) GCU_SendBlock/10 (524845000 (estimated locally),0.49 per call) GCU_Shutdown/7 (1073741824 (estimated locally),1.00 per call) GCU_Shutdown/7 (1073741824 (estimated locally),1.00 per call) GCU_Reset/6 (1073741824 (estimated locally),1.00 per call) GCU_Reset/6 (1073741824 (estimated locally),1.00 per call) GCU_LoadIV/5 (351110354 (estimated locally),0.33 per call) GCU_LoadKey/4 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+puts/22 (__builtin_puts) @06255e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_GCMAuthEncDec/16 (354334800 (estimated locally),0.33 per call) GCU_GMAC/15 (354334800 (estimated locally),0.33 per call) GCU_GCMEncDec/14 (354334800 (estimated locally),0.33 per call) GCU_ECBEncDec/13 (354334800 (estimated locally),0.33 per call) GCU_RequestTag/12 (354334800 (estimated locally),0.33 per call) GCU_RequestBlock/11 (354334800 (estimated locally),0.33 per call) GCU_SendBlock/10 (354334800 (estimated locally),0.33 per call) GCU_LinkTest/9 (354334800 (estimated locally),0.33 per call) GCU_Abort/8 (354334800 (estimated locally),0.33 per call) GCU_Shutdown/7 (354334800 (estimated locally),0.33 per call) GCU_Reset/6 (354334800 (estimated locally),0.33 per call) GCU_LoadIV/5 (354334800 (estimated locally),0.33 per call) GCU_LoadKey/4 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+g_debugoutputlevel/21 (g_debugoutputlevel) @0625f2d0
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_GCMEncDec/14 (read) GCU_GMAC/15 (read) GCU_LoadKey/4 (read) GCU_LoadIV/5 (read) GCU_Reset/6 (read) GCU_Shutdown/7 (read) GCU_Abort/8 (read) GCU_LinkTest/9 (read) GCU_SendBlock/10 (read) GCU_RequestBlock/11 (read) GCU_RequestTag/12 (read) GCU_ECBEncDec/13 (read) GCU_GCMAuthEncDec/16 (read) 
+  Availability: not_available
+  Varpool flags:
+putchar/20 (__builtin_putchar) @06255dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_SendCommand/3 (22836877 (estimated locally),0.33 per call) 
+  Calls: 
+exchangebytes/19 (exchangebytes) @06255d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_Shutdown/7 (1073741824 (estimated locally),1.00 per call) GCU_Reset/6 (1073741824 (estimated locally),1.00 per call) GCU_SendCommand/3 (1004539167 (estimated locally),14.52 per call) 
+  Calls: 
+printf/18 (printf) @06255c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: GCU_SendCommand/3 (22836877 (estimated locally),0.33 per call) 
+  Calls: 
+g_dump_comm/17 (g_dump_comm) @061ebee8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: GCU_SendCommand/3 (read) GCU_SendCommand/3 (read) 
+  Availability: not_available
+  Varpool flags:
+GCU_GCMAuthEncDec/16 (GCU_GCMAuthEncDec) @06255bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (524845000 (estimated locally),0.49 per call) cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (536870913 (estimated locally),0.50 per call) GCU_SendCommand/3 (536870913 (estimated locally),0.50 per call) memcpy/26 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_GMAC/15 (GCU_GMAC) @06255a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (524845000 (estimated locally),0.49 per call) cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) memcpy/26 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_GCMEncDec/14 (GCU_GCMEncDec) @06255930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (524845000 (estimated locally),0.49 per call) cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) memcpy/26 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_ECBEncDec/13 (GCU_ECBEncDec) @062557e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (524845000 (estimated locally),0.49 per call) cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (536870913 (estimated locally),0.50 per call) GCU_SendCommand/3 (536870913 (estimated locally),0.50 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_RequestTag/12 (GCU_RequestTag) @06255690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) receivebytes/25 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_RequestBlock/11 (GCU_RequestBlock) @06255540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) receivebytes/25 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_SendBlock/10 (GCU_SendBlock) @062553f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (524845000 (estimated locally),0.49 per call) cmd_print_gcu/23 (524845000 (estimated locally),0.49 per call) GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_LinkTest/9 (GCU_LinkTest) @062552a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_Abort/8 (GCU_Abort) @06255150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_Shutdown/7 (GCU_Shutdown) @06255000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: cmd_print_gcu/23 (1073741824 (estimated locally),1.00 per call) exchangebytes/19 (1073741824 (estimated locally),1.00 per call) cmd_print_gcu/23 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_Reset/6 (GCU_Reset) @061eebd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: cmd_print_gcu/23 (1073741824 (estimated locally),1.00 per call) exchangebytes/19 (1073741824 (estimated locally),1.00 per call) cmd_print_gcu/23 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_LoadIV/5 (GCU_LoadIV) @061eea80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (351110354 (estimated locally),0.33 per call) cmd_print_gcu/23 (351110354 (estimated locally),0.33 per call) GCU_SendCommand/3 (1063970775 (estimated locally),0.99 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_LoadKey/4 (GCU_LoadKey) @061ee930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_debugoutputlevel/21 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: sendbytes/24 (354334800 (estimated locally),0.33 per call) cmd_print_gcu/23 (354334800 (estimated locally),0.33 per call) GCU_SendCommand/3 (1073741824 (estimated locally),1.00 per call) puts/22 (354334800 (estimated locally),0.33 per call) 
+GCU_SendCommand/3 (GCU_SendCommand) @061eee70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: g_dump_comm/17 (read) g_dump_comm/17 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:69202658 (estimated locally) body
+  Called by: GCU_GCMAuthEncDec/16 (536870913 (estimated locally),0.50 per call) GCU_GCMAuthEncDec/16 (536870913 (estimated locally),0.50 per call) GCU_GMAC/15 (1073741824 (estimated locally),1.00 per call) GCU_GCMEncDec/14 (1073741824 (estimated locally),1.00 per call) GCU_ECBEncDec/13 (536870913 (estimated locally),0.50 per call) GCU_ECBEncDec/13 (536870913 (estimated locally),0.50 per call) GCU_RequestTag/12 (1073741824 (estimated locally),1.00 per call) GCU_RequestBlock/11 (1073741824 (estimated locally),1.00 per call) GCU_SendBlock/10 (1073741824 (estimated locally),1.00 per call) GCU_LinkTest/9 (1073741824 (estimated locally),1.00 per call) GCU_Abort/8 (1073741824 (estimated locally),1.00 per call) GCU_LoadIV/5 (1063970775 (estimated locally),0.99 per call) GCU_LoadKey/4 (1073741824 (estimated locally),1.00 per call) 
+  Calls: putchar/20 (22836877 (estimated locally),0.33 per call) exchangebytes/19 (1004539167 (estimated locally),14.52 per call) printf/18 (22836877 (estimated locally),0.33 per call) 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+memcpy/26 (memcpy) @06284150
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+receivebytes/25 (receivebytes) @062840a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+sendbytes/24 (sendbytes) @06284000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+cmd_print_gcu/23 (cmd_print_gcu) @06255f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/22 (__builtin_puts) @06255e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+g_debugoutputlevel/21 (g_debugoutputlevel) @0625f2d0
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+putchar/20 (__builtin_putchar) @06255dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+exchangebytes/19 (exchangebytes) @06255d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/18 (printf) @06255c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+g_dump_comm/17 (g_dump_comm) @061ebee8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags:
+GCU_GCMAuthEncDec/16 (GCU_GCMAuthEncDec) @06255bd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_GCMAuthEncDec (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_GMAC/15 (GCU_GMAC) @06255a80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_GMAC (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_GCMEncDec/14 (GCU_GCMEncDec) @06255930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_GCMEncDec (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_ECBEncDec/13 (GCU_ECBEncDec) @062557e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_ECBEncDec (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_RequestTag/12 (GCU_RequestTag) @06255690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_RequestTag (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_RequestBlock/11 (GCU_RequestBlock) @06255540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_RequestBlock (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_SendBlock/10 (GCU_SendBlock) @062553f0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_SendBlock (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_LinkTest/9 (GCU_LinkTest) @062552a0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_LinkTest (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_Abort/8 (GCU_Abort) @06255150
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_Abort (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_Shutdown/7 (GCU_Shutdown) @06255000
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_Shutdown (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_Reset/6 (GCU_Reset) @061eebd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_Reset (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_LoadIV/5 (GCU_LoadIV) @061eea80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_LoadIV (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_LoadKey/4 (GCU_LoadKey) @061ee930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_LoadKey (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+GCU_SendCommand/3 (GCU_SendCommand) @061eee70
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.GCU_SendCommand (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:69202658 (estimated locally)
+  Called by: 
+  Calls: 

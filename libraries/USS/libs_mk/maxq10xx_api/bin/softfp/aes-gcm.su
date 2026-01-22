@@ -1,0 +1,14 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:16:13:inc32	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:25:13:xor_block	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:36:13:shift_right_block	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:96:13:ghash_start	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:65:13:gf_mult	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:175:15:aes_gcm_init_hash_subkey	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:143:13:aes_gctr	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:222:13:aes_gcm_gctr	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:103:13:ghash	56	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:236:13:aes_gcm_ghash	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:199:13:aes_gcm_prepare_j0	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:262:5:aes_gcm_ae	336	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:300:5:aes_gcm_ad	352	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/api/internal/crypto/aes_gcm/aes-gcm.c:340:5:aes_gmac	40	static

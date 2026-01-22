@@ -1,0 +1,2404 @@
+Trivially needed symbols: mbedtls_gcm_self_test/55 mbedtls_gcm_free/41 mbedtls_gcm_auth_decrypt/40 mbedtls_gcm_crypt_and_tag/39 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 mbedtls_gcm_init/28
+
+
+Initial Symbol table:
+
+putchar/69 (__builtin_putchar) @0632e3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 
+  Calls: 
+memcmp/68 (memcmp) @0632e348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+printf/67 (printf) @0632e2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+puts/66 (__builtin_puts) @0632e1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @0632e0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_auth_decrypt/40 gcm_mask/36 mbedtls_gcm_update/37 
+  Calls: 
+__builtin_bswap64/64 (__builtin_bswap64) @0632e000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+memcpy/63 (memcpy) @062e1f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 
+  Calls: 
+__builtin_bswap32/62 (__builtin_bswap32) @062e1e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_update/61 (mbedtls_cipher_update) @062e1dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gcm_mask/36 mbedtls_gcm_starts/33 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_setkey/60 (mbedtls_cipher_setkey) @062e1d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_setup/59 (mbedtls_cipher_setup) @062e1c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_free/58 (mbedtls_cipher_free) @062e1bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_info_from_values/57 (mbedtls_cipher_info_from_values) @062e1b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+memset/56 (memset) @062e1a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 gcm_gen_table/29 mbedtls_gcm_init/28 
+  Calls: 
+mbedtls_gcm_self_test/55 (mbedtls_gcm_self_test) @062e19d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) ct_test_data/53 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) ct_test_data/53 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_gcm_free/41 puts/66 putchar/69 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 puts/66 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 
+tag_test_data/54 (tag_test_data) @062a7708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7120
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+ct_test_data/53 (ct_test_data) @062a7120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7f30
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_test_data/52 (pt_test_data) @062a7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7e58
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_index_test_data/51 (pt_index_test_data) @062a7e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7c18
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_len_test_data/50 (pt_len_test_data) @062a7dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7948
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+additional_test_data/49 (additional_test_data) @062a7d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7ca8
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_index_test_data/48 (add_index_test_data) @062a7ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a79d8
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_len_test_data/47 (add_len_test_data) @062a7c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7d38
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_test_data/46 (iv_test_data) @062a7b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7a68
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_index_test_data/45 (iv_index_test_data) @062a7a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7dc8
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_len_test_data/44 (iv_len_test_data) @062a79d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7b88
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_test_data/43 (key_test_data) @062a7948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062a7870
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_index_test_data/42 (key_index_test_data) @062a7870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @01c61e00
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_free/41 (mbedtls_gcm_free) @062b0c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062e19d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_free/58 
+mbedtls_gcm_auth_decrypt/40 (mbedtls_gcm_auth_decrypt) @062b0b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b0c78
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_gcm_crypt_and_tag/39 
+mbedtls_gcm_crypt_and_tag/39 (mbedtls_gcm_crypt_and_tag) @062b09d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b0b28
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_auth_decrypt/40 
+  Calls: mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 
+mbedtls_gcm_finish/38 (mbedtls_gcm_finish) @062b0888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b09d8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 memset/56 memcpy/63 gcm_mult/32 gcm_mult/32 
+mbedtls_gcm_update/37 (mbedtls_gcm_update) @062b0738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b0888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_platform_zeroize/65 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_mult/32 
+gcm_mask/36 (gcm_mask) @062b05e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b0888
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 mbedtls_platform_zeroize/65 mbedtls_cipher_update/61 
+gcm_incr/35 (gcm_incr) @062b0498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b05e8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: 
+mbedtls_gcm_update_ad/34 (mbedtls_gcm_update_ad) @062b0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b0738
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 
+mbedtls_gcm_starts/33 (mbedtls_gcm_starts) @062b01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b0348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_cipher_update/61 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint64/5 __builtin_bswap64/64 memset/56 memcpy/63 memset/56 memset/56 
+gcm_mult/32 (gcm_mult) @062b00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b0348
+  References: last4/31 (read) last4/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 
+last4/31 (last4) @062a7168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b0348
+  References: 
+  Referring: gcm_mult/32 (read) gcm_mult/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_setkey/30 (mbedtls_gcm_setkey) @0629ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062b01f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: gcm_gen_table/29 mbedtls_cipher_setkey/60 mbedtls_cipher_setup/59 mbedtls_cipher_free/58 mbedtls_cipher_info_from_values/57 
+gcm_gen_table/29 (gcm_gen_table) @0629ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062b01f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 mbedtls_cipher_update/61 memset/56 
+mbedtls_gcm_init/28 (mbedtls_gcm_init) @0629e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0629ebd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: memset/56 
+mbedtls_error_add/27 (mbedtls_error_add) @0629e7e0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/26 (_putchar_unlocked) @0629e498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/25 (_getchar_unlocked) @0629e348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/24 (__sputc_r) @0629e150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_operation/23 (mbedtls_cipher_get_operation) @0626f738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_key_bitlen/22 (mbedtls_cipher_get_key_bitlen) @0626f5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_name/21 (mbedtls_cipher_get_name) @0626f498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_type/20 (mbedtls_cipher_get_type) @0626f348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_iv_size/19 (mbedtls_cipher_get_iv_size) @0626f1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_cipher_mode/18 (mbedtls_cipher_get_cipher_mode) @0626f0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_get_block_size/17 (mbedtls_cipher_get_block_size) @06269690
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_iv_size/16 (mbedtls_cipher_info_has_variable_iv_size) @06269540
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_has_variable_key_bitlen/15 (mbedtls_cipher_info_has_variable_key_bitlen) @062693f0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_block_size/14 (mbedtls_cipher_info_get_block_size) @062690a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_iv_size/13 (mbedtls_cipher_info_get_iv_size) @06269e70
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_name/12 (mbedtls_cipher_info_get_name) @06269d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_key_bitlen/11 (mbedtls_cipher_info_get_key_bitlen) @06269bd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_mode/10 (mbedtls_cipher_info_get_mode) @06269a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_get_type/9 (mbedtls_cipher_info_get_type) @06269930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @0622ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062b00a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mask/36 gcm_mask/36 gcm_mask/36 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_buffer_offset_const/7 (mbedtls_buffer_offset_const) @0622ebd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_buffer_offset/6 (mbedtls_buffer_offset) @0622ea80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @0622e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @0622ed20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+mbedtls_get_unaligned_uint64/4 (mbedtls_get_unaligned_uint64) @0622e540
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @0622e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062b00a8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @0622e2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  Aux: @062b01f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+mbedtls_put_unaligned_uint16/1 (mbedtls_put_unaligned_uint16) @0622e150
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_get_unaligned_uint16/0 (mbedtls_get_unaligned_uint16) @0622e000
+  Type: function definition
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: mbedtls_error_add/27 _putchar_unlocked/26 _getchar_unlocked/25 __sputc_r/24 mbedtls_cipher_get_operation/23 mbedtls_cipher_get_key_bitlen/22 mbedtls_cipher_get_name/21 mbedtls_cipher_get_type/20 mbedtls_cipher_get_iv_size/19 mbedtls_cipher_get_cipher_mode/18 mbedtls_cipher_get_block_size/17 mbedtls_cipher_info_has_variable_iv_size/16 mbedtls_cipher_info_has_variable_key_bitlen/15 mbedtls_cipher_info_get_block_size/14 mbedtls_cipher_info_get_iv_size/13 mbedtls_cipher_info_get_name/12 mbedtls_cipher_info_get_key_bitlen/11 mbedtls_cipher_info_get_mode/10 mbedtls_cipher_info_get_type/9 mbedtls_buffer_offset_const/7 mbedtls_buffer_offset/6 mbedtls_get_unaligned_uint64/4 mbedtls_put_unaligned_uint16/1 mbedtls_get_unaligned_uint16/0
+
+Reclaimed Symbol table:
+
+putchar/69 (__builtin_putchar) @0632e3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 
+  Calls: 
+memcmp/68 (memcmp) @0632e348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+printf/67 (printf) @0632e2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+puts/66 (__builtin_puts) @0632e1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @0632e0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_auth_decrypt/40 gcm_mask/36 mbedtls_gcm_update/37 
+  Calls: 
+__builtin_bswap64/64 (__builtin_bswap64) @0632e000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+memcpy/63 (memcpy) @062e1f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 
+  Calls: 
+__builtin_bswap32/62 (__builtin_bswap32) @062e1e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_update/61 (mbedtls_cipher_update) @062e1dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gcm_mask/36 mbedtls_gcm_starts/33 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_setkey/60 (mbedtls_cipher_setkey) @062e1d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_setup/59 (mbedtls_cipher_setup) @062e1c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_free/58 (mbedtls_cipher_free) @062e1bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_info_from_values/57 (mbedtls_cipher_info_from_values) @062e1b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+memset/56 (memset) @062e1a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 gcm_gen_table/29 mbedtls_gcm_init/28 
+  Calls: 
+mbedtls_gcm_self_test/55 (mbedtls_gcm_self_test) @062e19d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) ct_test_data/53 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) ct_test_data/53 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_gcm_free/41 puts/66 putchar/69 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 puts/66 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 
+tag_test_data/54 (tag_test_data) @062a7708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+ct_test_data/53 (ct_test_data) @062a7120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_test_data/52 (pt_test_data) @062a7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_index_test_data/51 (pt_index_test_data) @062a7e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_len_test_data/50 (pt_len_test_data) @062a7dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+additional_test_data/49 (additional_test_data) @062a7d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_index_test_data/48 (add_index_test_data) @062a7ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_len_test_data/47 (add_len_test_data) @062a7c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_test_data/46 (iv_test_data) @062a7b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_index_test_data/45 (iv_index_test_data) @062a7a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_len_test_data/44 (iv_len_test_data) @062a79d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_test_data/43 (key_test_data) @062a7948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_index_test_data/42 (key_index_test_data) @062a7870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_free/41 (mbedtls_gcm_free) @062b0c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_free/58 
+mbedtls_gcm_auth_decrypt/40 (mbedtls_gcm_auth_decrypt) @062b0b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_gcm_crypt_and_tag/39 
+mbedtls_gcm_crypt_and_tag/39 (mbedtls_gcm_crypt_and_tag) @062b09d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_auth_decrypt/40 
+  Calls: mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 
+mbedtls_gcm_finish/38 (mbedtls_gcm_finish) @062b0888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 memset/56 memcpy/63 gcm_mult/32 gcm_mult/32 
+mbedtls_gcm_update/37 (mbedtls_gcm_update) @062b0738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_platform_zeroize/65 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_mult/32 
+gcm_mask/36 (gcm_mask) @062b05e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 mbedtls_platform_zeroize/65 mbedtls_cipher_update/61 
+gcm_incr/35 (gcm_incr) @062b0498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: 
+mbedtls_gcm_update_ad/34 (mbedtls_gcm_update_ad) @062b0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 
+mbedtls_gcm_starts/33 (mbedtls_gcm_starts) @062b01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_cipher_update/61 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint64/5 __builtin_bswap64/64 memset/56 memcpy/63 memset/56 memset/56 
+gcm_mult/32 (gcm_mult) @062b00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: last4/31 (read) last4/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 
+last4/31 (last4) @062a7168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: gcm_mult/32 (read) gcm_mult/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_setkey/30 (mbedtls_gcm_setkey) @0629ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: gcm_gen_table/29 mbedtls_cipher_setkey/60 mbedtls_cipher_setup/59 mbedtls_cipher_free/58 mbedtls_cipher_info_from_values/57 
+gcm_gen_table/29 (gcm_gen_table) @0629ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 mbedtls_cipher_update/61 memset/56 
+mbedtls_gcm_init/28 (mbedtls_gcm_init) @0629e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: memset/56 
+mbedtls_xor/8 (mbedtls_xor) @0622ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mask/36 gcm_mask/36 gcm_mask/36 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @0622e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @0622e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @0622e2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+
+
+Initial Symbol table:
+
+putchar/69 (__builtin_putchar) @0632e3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 
+  Calls: 
+memcmp/68 (memcmp) @0632e348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+printf/67 (printf) @0632e2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+puts/66 (__builtin_puts) @0632e1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @0632e0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_auth_decrypt/40 gcm_mask/36 mbedtls_gcm_update/37 
+  Calls: 
+__builtin_bswap64/64 (__builtin_bswap64) @0632e000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+memcpy/63 (memcpy) @062e1f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 
+  Calls: 
+__builtin_bswap32/62 (__builtin_bswap32) @062e1e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_update/61 (mbedtls_cipher_update) @062e1dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gcm_mask/36 mbedtls_gcm_starts/33 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_setkey/60 (mbedtls_cipher_setkey) @062e1d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_setup/59 (mbedtls_cipher_setup) @062e1c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_free/58 (mbedtls_cipher_free) @062e1bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_info_from_values/57 (mbedtls_cipher_info_from_values) @062e1b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+memset/56 (memset) @062e1a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 gcm_gen_table/29 mbedtls_gcm_init/28 
+  Calls: 
+mbedtls_gcm_self_test/55 (mbedtls_gcm_self_test) @062e19d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) ct_test_data/53 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) ct_test_data/53 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_gcm_free/41 puts/66 putchar/69 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 puts/66 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 
+tag_test_data/54 (tag_test_data) @062a7708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+ct_test_data/53 (ct_test_data) @062a7120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_test_data/52 (pt_test_data) @062a7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_index_test_data/51 (pt_index_test_data) @062a7e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_len_test_data/50 (pt_len_test_data) @062a7dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+additional_test_data/49 (additional_test_data) @062a7d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_index_test_data/48 (add_index_test_data) @062a7ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_len_test_data/47 (add_len_test_data) @062a7c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_test_data/46 (iv_test_data) @062a7b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_index_test_data/45 (iv_index_test_data) @062a7a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_len_test_data/44 (iv_len_test_data) @062a79d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_test_data/43 (key_test_data) @062a7948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_index_test_data/42 (key_index_test_data) @062a7870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_free/41 (mbedtls_gcm_free) @062b0c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_free/58 
+mbedtls_gcm_auth_decrypt/40 (mbedtls_gcm_auth_decrypt) @062b0b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_gcm_crypt_and_tag/39 
+mbedtls_gcm_crypt_and_tag/39 (mbedtls_gcm_crypt_and_tag) @062b09d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_auth_decrypt/40 
+  Calls: mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 
+mbedtls_gcm_finish/38 (mbedtls_gcm_finish) @062b0888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 memset/56 memcpy/63 gcm_mult/32 gcm_mult/32 
+mbedtls_gcm_update/37 (mbedtls_gcm_update) @062b0738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_platform_zeroize/65 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_mult/32 
+gcm_mask/36 (gcm_mask) @062b05e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 mbedtls_platform_zeroize/65 mbedtls_cipher_update/61 
+gcm_incr/35 (gcm_incr) @062b0498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: 
+mbedtls_gcm_update_ad/34 (mbedtls_gcm_update_ad) @062b0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 
+mbedtls_gcm_starts/33 (mbedtls_gcm_starts) @062b01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_cipher_update/61 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint64/5 __builtin_bswap64/64 memset/56 memcpy/63 memset/56 memset/56 
+gcm_mult/32 (gcm_mult) @062b00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: last4/31 (read) last4/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 
+last4/31 (last4) @062a7168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: gcm_mult/32 (read) gcm_mult/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_setkey/30 (mbedtls_gcm_setkey) @0629ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: gcm_gen_table/29 mbedtls_cipher_setkey/60 mbedtls_cipher_setup/59 mbedtls_cipher_free/58 mbedtls_cipher_info_from_values/57 
+gcm_gen_table/29 (gcm_gen_table) @0629ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 mbedtls_cipher_update/61 memset/56 
+mbedtls_gcm_init/28 (mbedtls_gcm_init) @0629e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: memset/56 
+mbedtls_xor/8 (mbedtls_xor) @0622ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mask/36 gcm_mask/36 gcm_mask/36 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @0622e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @0622e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @0622e2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+putchar/69 (__builtin_putchar) @0632e3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 
+  Calls: 
+memcmp/68 (memcmp) @0632e348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+printf/67 (printf) @0632e2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+puts/66 (__builtin_puts) @0632e1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @0632e0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_auth_decrypt/40 gcm_mask/36 mbedtls_gcm_update/37 
+  Calls: 
+__builtin_bswap64/64 (__builtin_bswap64) @0632e000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+memcpy/63 (memcpy) @062e1f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 
+  Calls: 
+__builtin_bswap32/62 (__builtin_bswap32) @062e1e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_update/61 (mbedtls_cipher_update) @062e1dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: gcm_mask/36 mbedtls_gcm_starts/33 gcm_gen_table/29 
+  Calls: 
+mbedtls_cipher_setkey/60 (mbedtls_cipher_setkey) @062e1d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_setup/59 (mbedtls_cipher_setup) @062e1c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_free/58 (mbedtls_cipher_free) @062e1bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_free/41 mbedtls_gcm_setkey/30 
+  Calls: 
+mbedtls_cipher_info_from_values/57 (mbedtls_cipher_info_from_values) @062e1b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: 
+memset/56 (memset) @062e1a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 gcm_gen_table/29 mbedtls_gcm_init/28 
+  Calls: 
+mbedtls_gcm_self_test/55 (mbedtls_gcm_self_test) @062e19d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) ct_test_data/53 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) key_index_test_data/42 (read) key_test_data/43 (addr) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_len_test_data/50 (read) pt_len_test_data/50 (read) ct_test_data/53 (addr) ct_test_data/53 (addr) ct_test_data/53 (addr) pt_len_test_data/50 (read) pt_len_test_data/50 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) pt_len_test_data/50 (read) tag_test_data/54 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_gcm_free/41 puts/66 putchar/69 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 mbedtls_gcm_free/41 memcmp/68 memcmp/68 mbedtls_gcm_crypt_and_tag/39 puts/66 mbedtls_gcm_setkey/30 printf/67 mbedtls_gcm_init/28 puts/66 
+tag_test_data/54 (tag_test_data) @062a7708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+ct_test_data/53 (ct_test_data) @062a7120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_test_data/52 (pt_test_data) @062a7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_index_test_data/51 (pt_index_test_data) @062a7e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+pt_len_test_data/50 (pt_len_test_data) @062a7dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+additional_test_data/49 (additional_test_data) @062a7d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_index_test_data/48 (add_index_test_data) @062a7ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+add_len_test_data/47 (add_len_test_data) @062a7c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_test_data/46 (iv_test_data) @062a7b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_index_test_data/45 (iv_index_test_data) @062a7a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+iv_len_test_data/44 (iv_len_test_data) @062a79d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_test_data/43 (key_test_data) @062a7948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) mbedtls_gcm_self_test/55 (addr) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+key_index_test_data/42 (key_index_test_data) @062a7870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) mbedtls_gcm_self_test/55 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_free/41 (mbedtls_gcm_free) @062b0c78
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_cipher_free/58 
+mbedtls_gcm_auth_decrypt/40 (mbedtls_gcm_auth_decrypt) @062b0b28
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 mbedtls_gcm_crypt_and_tag/39 
+mbedtls_gcm_crypt_and_tag/39 (mbedtls_gcm_crypt_and_tag) @062b09d8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_auth_decrypt/40 
+  Calls: mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 
+mbedtls_gcm_finish/38 (mbedtls_gcm_finish) @062b0888
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 memset/56 memcpy/63 gcm_mult/32 gcm_mult/32 
+mbedtls_gcm_update/37 (mbedtls_gcm_update) @062b0738
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_platform_zeroize/65 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_incr/35 gcm_mult/32 gcm_mask/36 gcm_mult/32 
+gcm_mask/36 (gcm_mask) @062b05e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: mbedtls_xor/8 mbedtls_xor/8 mbedtls_xor/8 mbedtls_platform_zeroize/65 mbedtls_cipher_update/61 
+gcm_incr/35 (gcm_incr) @062b0498
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_update/37 mbedtls_gcm_update/37 
+  Calls: 
+mbedtls_gcm_update_ad/34 (mbedtls_gcm_update_ad) @062b0348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 
+mbedtls_gcm_starts/33 (mbedtls_gcm_starts) @062b01f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_crypt_and_tag/39 
+  Calls: mbedtls_cipher_update/61 gcm_mult/32 mbedtls_xor/8 gcm_mult/32 mbedtls_xor/8 mbedtls_put_unaligned_uint64/5 __builtin_bswap64/64 memset/56 memcpy/63 memset/56 memset/56 
+gcm_mult/32 (gcm_mult) @062b00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: last4/31 (read) last4/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update/37 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 mbedtls_put_unaligned_uint32/3 __builtin_bswap32/62 
+last4/31 (last4) @062a7168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: gcm_mult/32 (read) gcm_mult/32 (read) 
+  Availability: not-ready
+  Varpool flags: initialized read-only const-value-known
+mbedtls_gcm_setkey/30 (mbedtls_gcm_setkey) @0629ebd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: gcm_gen_table/29 mbedtls_cipher_setkey/60 mbedtls_cipher_setup/59 mbedtls_cipher_free/58 mbedtls_cipher_info_from_values/57 
+gcm_gen_table/29 (gcm_gen_table) @0629ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_setkey/30 
+  Calls: __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 __builtin_bswap32/62 mbedtls_get_unaligned_uint32/2 mbedtls_cipher_update/61 memset/56 
+mbedtls_gcm_init/28 (mbedtls_gcm_init) @0629e930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 mbedtls_gcm_self_test/55 
+  Calls: memset/56 
+mbedtls_xor/8 (mbedtls_xor) @0622ed20
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mask/36 gcm_mask/36 gcm_mask/36 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_update_ad/34 mbedtls_gcm_starts/33 mbedtls_gcm_starts/33 
+  Calls: mbedtls_put_unaligned_uint32/3 mbedtls_get_unaligned_uint32/2 mbedtls_get_unaligned_uint32/2 
+mbedtls_put_unaligned_uint64/5 (mbedtls_put_unaligned_uint64) @0622e690
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_starts/33 
+  Calls: 
+mbedtls_put_unaligned_uint32/3 (mbedtls_put_unaligned_uint32) @0622e3f0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 mbedtls_gcm_finish/38 gcm_mult/32 gcm_mult/32 gcm_mult/32 gcm_mult/32 mbedtls_xor/8 
+  Calls: 
+mbedtls_get_unaligned_uint32/2 (mbedtls_get_unaligned_uint32) @0622e2a0
+  Type: function definition analyzed
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: mbedtls_xor/8 mbedtls_xor/8 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 gcm_gen_table/29 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+putchar/69 (__builtin_putchar) @0632e3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 (58625440 (estimated locally),0.11 per call) 
+  Calls: 
+memcmp/68 (memcmp) @0632e348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 (551819673 (estimated locally),1.00 per call) mbedtls_gcm_self_test/55 (563081301 (estimated locally),1.02 per call) mbedtls_gcm_self_test/55 (661719432 (estimated locally),1.20 per call) mbedtls_gcm_self_test/55 (675223912 (estimated locally),1.23 per call) mbedtls_gcm_self_test/55 (793506699 (estimated locally),1.44 per call) mbedtls_gcm_self_test/55 (809700716 (estimated locally),1.47 per call) mbedtls_gcm_self_test/55 (860292823 (estimated locally),1.56 per call) mbedtls_gcm_self_test/55 (877849823 (estimated locally),1.59 per call) 
+  Calls: 
+printf/67 (printf) @0632e2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 (214000062 (estimated locally),0.39 per call) mbedtls_gcm_self_test/55 (256620064 (estimated locally),0.47 per call) mbedtls_gcm_self_test/55 (278218697 (estimated locally),0.51 per call) mbedtls_gcm_self_test/55 (303700358 (estimated locally),0.55 per call) 
+  Calls: 
+puts/66 (__builtin_puts) @0632e1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_self_test/55 (80705902 (estimated locally),0.15 per call) mbedtls_gcm_self_test/55 (178458481 (estimated locally),0.32 per call) mbedtls_gcm_self_test/55 (214000062 (estimated locally),0.39 per call) mbedtls_gcm_self_test/55 (256620064 (estimated locally),0.47 per call) mbedtls_gcm_self_test/55 (278218697 (estimated locally),0.51 per call) mbedtls_gcm_self_test/55 (6258069 (estimated locally),0.01 per call) mbedtls_gcm_self_test/55 (181802154 (estimated locally),0.33 per call) 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @0632e0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_free/41 (741418729 (estimated locally),0.69 per call) mbedtls_gcm_auth_decrypt/40 (614180 (estimated locally),0.00 per call) mbedtls_gcm_update/37 (49016314 (estimated locally),0.23 per call) gcm_mask/36 (217325344 (estimated locally),0.20 per call) 
+  Calls: 
+__builtin_bswap64/64 (__builtin_bswap64) @0632e000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_starts/33 (118111600 (estimated locally),0.65 per call) 
+  Calls: 
+memcpy/63 (memcpy) @062e1f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 (1062574911 (estimated locally),0.99 per call) mbedtls_gcm_starts/33 (60845371 (estimated locally),0.33 per call) 
+  Calls: 
+__builtin_bswap32/62 (__builtin_bswap32) @062e1e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) gcm_mult/32 (63136016 (estimated locally),1.00 per call) gcm_mult/32 (63136016 (estimated locally),1.00 per call) gcm_mult/32 (63136016 (estimated locally),1.00 per call) gcm_mult/32 (63136016 (estimated locally),1.00 per call) gcm_gen_table/29 (44739243 (estimated locally),0.66 per call) gcm_gen_table/29 (44739243 (estimated locally),0.66 per call) gcm_gen_table/29 (44739243 (estimated locally),0.66 per call) gcm_gen_table/29 (44739243 (estimated locally),0.66 per call) 
+  Calls: 
+mbedtls_cipher_update/61 (mbedtls_cipher_update) @062e1dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_starts/33 (178956971 (estimated locally),0.98 per call) gcm_mask/36 (1073741824 (estimated locally),1.00 per call) gcm_gen_table/29 (67786732 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_cipher_setkey/60 (mbedtls_cipher_setkey) @062e1d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 (496406427 (estimated locally),0.46 per call) 
+  Calls: 
+mbedtls_cipher_setup/59 (mbedtls_cipher_setup) @062e1c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 (1015561438 (estimated locally),0.95 per call) 
+  Calls: 
+mbedtls_cipher_free/58 (mbedtls_cipher_free) @062e1bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_free/41 (741418729 (estimated locally),0.69 per call) mbedtls_gcm_setkey/30 (1015561438 (estimated locally),0.95 per call) 
+  Calls: 
+mbedtls_cipher_info_from_values/57 (mbedtls_cipher_info_from_values) @062e1b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_setkey/30 (1062437125 (estimated locally),0.99 per call) 
+  Calls: 
+memset/56 (memset) @062e1a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_starts/33 (118111600 (estimated locally),0.65 per call) mbedtls_gcm_starts/33 (178956971 (estimated locally),0.98 per call) mbedtls_gcm_starts/33 (178956971 (estimated locally),0.98 per call) mbedtls_gcm_init/28 (1073741824 (estimated locally),1.00 per call) gcm_gen_table/29 (67786732 (estimated locally),1.00 per call) 
+  Calls: 
+mbedtls_gcm_self_test/55 (mbedtls_gcm_self_test) @062e19d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: key_index_test_data/42 (read) key_test_data/43 (addr) pt_len_test_data/50 (read) iv_index_test_data/45 (read) iv_test_data/46 (addr) iv_len_test_data/44 (read) add_index_test_data/48 (read) additional_test_data/49 (addr) add_len_test_data/47 (read) pt_index_test_data/51 (read) pt_test_data/52 (addr) ct_test_data/53 (addr) tag_test_data/54 (addr) 
+  Referring: 
+  Availability: available
+  Function flags: count:550915623 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_gcm_free/41 (244563342 (estimated locally),0.44 per call) puts/66 (80705902 (estimated locally),0.15 per call) putchar/69 (58625440 (estimated locally),0.11 per call) puts/66 (178458481 (estimated locally),0.32 per call) mbedtls_gcm_free/41 (540783278 (estimated locally),0.98 per call) memcmp/68 (551819673 (estimated locally),1.00 per call) memcmp/68 (563081301 (estimated locally),1.02 per call) mbedtls_gcm_finish/38 (574572759 (estimated locally),1.04 per call) mbedtls_gcm_update/37 (305174464 (estimated locally),0.55 per call) mbedtls_gcm_update/37 (293089553 (estimated locally),0.53 per call) mbedtls_gcm_update/37 (305174464 (estimated locally),0.55 per call) mbedtls_gcm_update_ad/34 (622805030 (estimated locally),1.13 per call) mbedtls_gcm_starts/33 (635515339 (estimated locally),1.15 per call) mbedtls_gcm_setkey/30 (648485042 (estimated locally),1.18 per call) printf/67 (214000062 (estimated locally),0.39 per call) mbedtls_gcm_init/28 (648485042 (estimated locally),1.18 per call) puts/66 (214000062 (estimated locally),0.39 per call) mbedtls_gcm_free/41 (648485042 (estimated locally),1.18 per call) memcmp/68 (661719432 (estimated locally),1.20 per call) memcmp/68 (675223912 (estimated locally),1.23 per call) mbedtls_gcm_finish/38 (689003995 (estimated locally),1.25 per call) mbedtls_gcm_update/37 (365952652 (estimated locally),0.66 per call) mbedtls_gcm_update/37 (351460924 (estimated locally),0.64 per call) mbedtls_gcm_update/37 (365952652 (estimated locally),0.66 per call) mbedtls_gcm_update_ad/34 (746842149 (estimated locally),1.36 per call) mbedtls_gcm_starts/33 (762083829 (estimated locally),1.38 per call) mbedtls_gcm_setkey/30 (777636563 (estimated locally),1.41 per call) printf/67 (256620064 (estimated locally),0.47 per call) mbedtls_gcm_init/28 (777636563 (estimated locally),1.41 per call) puts/66 (256620064 (estimated locally),0.47 per call) mbedtls_gcm_free/41 (777636563 (estimated locally),1.41 per call) memcmp/68 (793506699 (estimated locally),1.44 per call) memcmp/68 (809700716 (estimated locally),1.47 per call) mbedtls_gcm_crypt_and_tag/39 (826225223 (estimated locally),1.50 per call) mbedtls_gcm_setkey/30 (843086965 (estimated locally),1.53 per call) printf/67 (278218697 (estimated locally),0.51 per call) mbedtls_gcm_init/28 (843086965 (estimated locally),1.53 per call) puts/66 (278218697 (estimated locally),0.51 per call) mbedtls_gcm_free/41 (843086965 (estimated locally),1.53 per call) memcmp/68 (860292823 (estimated locally),1.56 per call) memcmp/68 (877849823 (estimated locally),1.59 per call) mbedtls_gcm_crypt_and_tag/39 (895765129 (estimated locally),1.63 per call) puts/66 (6258069 (estimated locally),0.01 per call) mbedtls_gcm_setkey/30 (920304121 (estimated locally),1.67 per call) printf/67 (303700358 (estimated locally),0.55 per call) mbedtls_gcm_init/28 (920304121 (estimated locally),1.67 per call) puts/66 (181802154 (estimated locally),0.33 per call) 
+tag_test_data/54 (tag_test_data) @062a7708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+ct_test_data/53 (ct_test_data) @062a7120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+pt_test_data/52 (pt_test_data) @062a7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+pt_index_test_data/51 (pt_index_test_data) @062a7e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+pt_len_test_data/50 (pt_len_test_data) @062a7dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+additional_test_data/49 (additional_test_data) @062a7d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+add_index_test_data/48 (add_index_test_data) @062a7ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+add_len_test_data/47 (add_len_test_data) @062a7c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+iv_test_data/46 (iv_test_data) @062a7b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+iv_index_test_data/45 (iv_index_test_data) @062a7a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+iv_len_test_data/44 (iv_len_test_data) @062a79d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+key_test_data/43 (key_test_data) @062a7948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (addr) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+key_index_test_data/42 (key_index_test_data) @062a7870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: mbedtls_gcm_self_test/55 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_gcm_free/41 (mbedtls_gcm_free) @062b0c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (244563342 (estimated locally),0.44 per call) mbedtls_gcm_self_test/55 (540783278 (estimated locally),0.98 per call) mbedtls_gcm_self_test/55 (648485042 (estimated locally),1.18 per call) mbedtls_gcm_self_test/55 (777636563 (estimated locally),1.41 per call) mbedtls_gcm_self_test/55 (843086965 (estimated locally),1.53 per call) 
+  Calls: mbedtls_platform_zeroize/65 (741418729 (estimated locally),0.69 per call) mbedtls_cipher_free/58 (741418729 (estimated locally),0.69 per call) 
+mbedtls_gcm_auth_decrypt/40 (mbedtls_gcm_auth_decrypt) @062b0b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:178956971 (estimated locally) body
+  Called by: 
+  Calls: mbedtls_platform_zeroize/65 (614180 (estimated locally),0.00 per call) mbedtls_gcm_crypt_and_tag/39 (178956971 (estimated locally),1.00 per call) 
+mbedtls_gcm_crypt_and_tag/39 (mbedtls_gcm_crypt_and_tag) @062b09d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (826225223 (estimated locally),1.50 per call) mbedtls_gcm_self_test/55 (895765129 (estimated locally),1.63 per call) mbedtls_gcm_auth_decrypt/40 (178956971 (estimated locally),1.00 per call) 
+  Calls: mbedtls_gcm_finish/38 (125398821 (estimated locally),0.12 per call) mbedtls_gcm_update/37 (256544234 (estimated locally),0.24 per call) mbedtls_gcm_update_ad/34 (524845000 (estimated locally),0.49 per call) mbedtls_gcm_starts/33 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_gcm_finish/38 (mbedtls_gcm_finish) @062b0888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (574572759 (estimated locally),1.04 per call) mbedtls_gcm_self_test/55 (689003995 (estimated locally),1.25 per call) mbedtls_gcm_crypt_and_tag/39 (125398821 (estimated locally),0.12 per call) 
+  Calls: mbedtls_xor/8 (706612316 (estimated locally),0.66 per call) gcm_mult/32 (706612316 (estimated locally),0.66 per call) mbedtls_xor/8 (706612316 (estimated locally),0.66 per call) __builtin_bswap32/62 (706612316 (estimated locally),0.66 per call) __builtin_bswap32/62 (706612316 (estimated locally),0.66 per call) __builtin_bswap32/62 (706612316 (estimated locally),0.66 per call) __builtin_bswap32/62 (706612316 (estimated locally),0.66 per call) memset/56 (706612316 (estimated locally),0.66 per call) memcpy/63 (1062574911 (estimated locally),0.99 per call) gcm_mult/32 (350649719 (estimated locally),0.33 per call) gcm_mult/32 (177167400 (estimated locally),0.16 per call) 
+mbedtls_gcm_update/37 (mbedtls_gcm_update) @062b0738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:217493005 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (305174464 (estimated locally),0.55 per call) mbedtls_gcm_self_test/55 (293089553 (estimated locally),0.53 per call) mbedtls_gcm_self_test/55 (305174464 (estimated locally),0.55 per call) mbedtls_gcm_self_test/55 (365952652 (estimated locally),0.66 per call) mbedtls_gcm_self_test/55 (351460924 (estimated locally),0.64 per call) mbedtls_gcm_self_test/55 (365952652 (estimated locally),0.66 per call) mbedtls_gcm_crypt_and_tag/39 (256544234 (estimated locally),0.24 per call) 
+  Calls: mbedtls_platform_zeroize/65 (49016314 (estimated locally),0.23 per call) gcm_mask/36 (29527900 (estimated locally),0.14 per call) gcm_incr/35 (29527900 (estimated locally),0.14 per call) gcm_mult/32 (958878294 (estimated locally),4.41 per call) gcm_mask/36 (1014686025 (estimated locally),4.67 per call) gcm_incr/35 (1014686025 (estimated locally),4.67 per call) gcm_mult/32 (9243331 (estimated locally),0.04 per call) gcm_mask/36 (69194898 (estimated locally),0.32 per call) gcm_mult/32 (22834316 (estimated locally),0.10 per call) 
+gcm_mask/36 (gcm_mask) @062b05e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) body local
+  Called by: mbedtls_gcm_update/37 (29527900 (estimated locally),0.14 per call) mbedtls_gcm_update/37 (1014686025 (estimated locally),4.67 per call) mbedtls_gcm_update/37 (69194898 (estimated locally),0.32 per call) 
+  Calls: mbedtls_xor/8 (173338695 (estimated locally),0.16 per call) mbedtls_xor/8 (856416481 (estimated locally),0.80 per call) mbedtls_xor/8 (282617437 (estimated locally),0.26 per call) mbedtls_platform_zeroize/65 (217325344 (estimated locally),0.20 per call) mbedtls_cipher_update/61 (1073741824 (estimated locally),1.00 per call) 
+gcm_incr/35 (gcm_incr) @062b0498
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:261993008 (estimated locally) body local nonfreeing_fn
+  Called by: mbedtls_gcm_update/37 (29527900 (estimated locally),0.14 per call) mbedtls_gcm_update/37 (1014686025 (estimated locally),4.67 per call) 
+  Calls: 
+mbedtls_gcm_update_ad/34 (mbedtls_gcm_update_ad) @062b0348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (622805030 (estimated locally),1.13 per call) mbedtls_gcm_self_test/55 (746842149 (estimated locally),1.36 per call) mbedtls_gcm_crypt_and_tag/39 (524845000 (estimated locally),0.49 per call) 
+  Calls: mbedtls_xor/8 (38976828 (estimated locally),0.33 per call) gcm_mult/32 (955630225 (estimated locally),8.09 per call) mbedtls_xor/8 (955630225 (estimated locally),8.09 per call) gcm_mult/32 (11952894 (estimated locally),0.10 per call) mbedtls_xor/8 (59055800 (estimated locally),0.50 per call) 
+mbedtls_gcm_starts/33 (mbedtls_gcm_starts) @062b01f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:182777011 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (635515339 (estimated locally),1.15 per call) mbedtls_gcm_self_test/55 (762083829 (estimated locally),1.38 per call) mbedtls_gcm_crypt_and_tag/39 (1073741824 (estimated locally),1.00 per call) 
+  Calls: mbedtls_cipher_update/61 (178956971 (estimated locally),0.98 per call) gcm_mult/32 (118111600 (estimated locally),0.65 per call) mbedtls_xor/8 (118111600 (estimated locally),0.65 per call) gcm_mult/32 (955630225 (estimated locally),5.23 per call) mbedtls_xor/8 (955630225 (estimated locally),5.23 per call) __builtin_bswap64/64 (118111600 (estimated locally),0.65 per call) memset/56 (118111600 (estimated locally),0.65 per call) memcpy/63 (60845371 (estimated locally),0.33 per call) memset/56 (178956971 (estimated locally),0.98 per call) memset/56 (178956971 (estimated locally),0.98 per call) 
+gcm_mult/32 (gcm_mult) @062b00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: last4/31 (read) last4/31 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:63136014 (estimated locally) body local
+  Called by: mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_finish/38 (350649719 (estimated locally),0.33 per call) mbedtls_gcm_finish/38 (177167400 (estimated locally),0.16 per call) mbedtls_gcm_update/37 (958878294 (estimated locally),4.41 per call) mbedtls_gcm_update/37 (9243331 (estimated locally),0.04 per call) mbedtls_gcm_update/37 (22834316 (estimated locally),0.10 per call) mbedtls_gcm_update_ad/34 (955630225 (estimated locally),8.09 per call) mbedtls_gcm_update_ad/34 (11952894 (estimated locally),0.10 per call) mbedtls_gcm_starts/33 (118111600 (estimated locally),0.65 per call) mbedtls_gcm_starts/33 (955630225 (estimated locally),5.23 per call) 
+  Calls: __builtin_bswap32/62 (63136016 (estimated locally),1.00 per call) __builtin_bswap32/62 (63136016 (estimated locally),1.00 per call) __builtin_bswap32/62 (63136016 (estimated locally),1.00 per call) __builtin_bswap32/62 (63136016 (estimated locally),1.00 per call) 
+last4/31 (last4) @062a7168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: gcm_mult/32 (read) gcm_mult/32 (read) 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_gcm_setkey/30 (mbedtls_gcm_setkey) @0629ebd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (648485042 (estimated locally),1.18 per call) mbedtls_gcm_self_test/55 (777636563 (estimated locally),1.41 per call) mbedtls_gcm_self_test/55 (843086965 (estimated locally),1.53 per call) mbedtls_gcm_self_test/55 (920304121 (estimated locally),1.67 per call) 
+  Calls: gcm_gen_table/29 (242643460 (estimated locally),0.23 per call) mbedtls_cipher_setkey/60 (496406427 (estimated locally),0.46 per call) mbedtls_cipher_setup/59 (1015561438 (estimated locally),0.95 per call) mbedtls_cipher_free/58 (1015561438 (estimated locally),0.95 per call) mbedtls_cipher_info_from_values/57 (1062437125 (estimated locally),0.99 per call) 
+gcm_gen_table/29 (gcm_gen_table) @0629ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:67786732 (estimated locally) body local
+  Called by: mbedtls_gcm_setkey/30 (242643460 (estimated locally),0.23 per call) 
+  Calls: __builtin_bswap32/62 (44739243 (estimated locally),0.66 per call) __builtin_bswap32/62 (44739243 (estimated locally),0.66 per call) __builtin_bswap32/62 (44739243 (estimated locally),0.66 per call) __builtin_bswap32/62 (44739243 (estimated locally),0.66 per call) mbedtls_cipher_update/61 (67786732 (estimated locally),1.00 per call) memset/56 (67786732 (estimated locally),1.00 per call) 
+mbedtls_gcm_init/28 (mbedtls_gcm_init) @0629e930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: mbedtls_gcm_self_test/55 (648485042 (estimated locally),1.18 per call) mbedtls_gcm_self_test/55 (777636563 (estimated locally),1.41 per call) mbedtls_gcm_self_test/55 (843086965 (estimated locally),1.53 per call) mbedtls_gcm_self_test/55 (920304121 (estimated locally),1.67 per call) 
+  Calls: memset/56 (1073741824 (estimated locally),1.00 per call) 
+mbedtls_xor/8 (mbedtls_xor) @0622ed20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_finish/38 (706612316 (estimated locally),0.66 per call) mbedtls_gcm_update_ad/34 (38976828 (estimated locally),0.33 per call) mbedtls_gcm_update_ad/34 (955630225 (estimated locally),8.09 per call) mbedtls_gcm_update_ad/34 (59055800 (estimated locally),0.50 per call) mbedtls_gcm_starts/33 (118111600 (estimated locally),0.65 per call) mbedtls_gcm_starts/33 (955630225 (estimated locally),5.23 per call) gcm_mask/36 (173338695 (estimated locally),0.16 per call) gcm_mask/36 (856416481 (estimated locally),0.80 per call) gcm_mask/36 (282617437 (estimated locally),0.26 per call) 
+  Calls: 
+Trivially needed variables: tag_test_data/54 ct_test_data/53 pt_test_data/52 pt_index_test_data/51 pt_len_test_data/50 additional_test_data/49 add_index_test_data/48 add_len_test_data/47 iv_test_data/46 iv_index_test_data/45 iv_len_test_data/44 key_test_data/43 key_index_test_data/42 last4/31
+Removing variables:
+
+Final Symbol table:
+
+putchar/69 (__builtin_putchar) @0632e3f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcmp/68 (memcmp) @0632e348
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+printf/67 (printf) @0632e2a0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+puts/66 (__builtin_puts) @0632e1f8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_platform_zeroize/65 (mbedtls_platform_zeroize) @0632e0a8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap64/64 (__builtin_bswap64) @0632e000
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memcpy/63 (memcpy) @062e1f18
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_bswap32/62 (__builtin_bswap32) @062e1e70
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_update/61 (mbedtls_cipher_update) @062e1dc8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setkey/60 (mbedtls_cipher_setkey) @062e1d20
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_setup/59 (mbedtls_cipher_setup) @062e1c78
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_free/58 (mbedtls_cipher_free) @062e1bd0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_cipher_info_from_values/57 (mbedtls_cipher_info_from_values) @062e1b28
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+memset/56 (memset) @062e1a80
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+mbedtls_gcm_self_test/55 (mbedtls_gcm_self_test) @062e19d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_self_test (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:550915623 (estimated locally)
+  Called by: 
+  Calls: 
+tag_test_data/54 (tag_test_data) @062a7708
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.tag_test_data (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+ct_test_data/53 (ct_test_data) @062a7120
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.ct_test_data (implicit_section)
+  Aux: @062a7708
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+pt_test_data/52 (pt_test_data) @062a7f30
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.pt_test_data (implicit_section)
+  Aux: @062a7120
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+pt_index_test_data/51 (pt_index_test_data) @062a7e58
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.pt_index_test_data (implicit_section)
+  Aux: @062a7f30
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+pt_len_test_data/50 (pt_len_test_data) @062a7dc8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.pt_len_test_data (implicit_section)
+  Aux: @062a7e58
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+additional_test_data/49 (additional_test_data) @062a7d38
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.additional_test_data (implicit_section)
+  Aux: @062a7dc8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+add_index_test_data/48 (add_index_test_data) @062a7ca8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.add_index_test_data (implicit_section)
+  Aux: @062a7d38
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+add_len_test_data/47 (add_len_test_data) @062a7c18
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.add_len_test_data (implicit_section)
+  Aux: @062a7ca8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+iv_test_data/46 (iv_test_data) @062a7b88
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.iv_test_data (implicit_section)
+  Aux: @062a7c18
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+iv_index_test_data/45 (iv_index_test_data) @062a7a68
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.iv_index_test_data (implicit_section)
+  Aux: @062a7b88
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+iv_len_test_data/44 (iv_len_test_data) @062a79d8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.iv_len_test_data (implicit_section)
+  Aux: @062a7a68
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+key_test_data/43 (key_test_data) @062a7948
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.key_test_data (implicit_section)
+  Aux: @062a79d8
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+key_index_test_data/42 (key_index_test_data) @062a7870
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.key_index_test_data (implicit_section)
+  Aux: @062a7948
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_gcm_free/41 (mbedtls_gcm_free) @062b0c78
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_free (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_gcm_auth_decrypt/40 (mbedtls_gcm_auth_decrypt) @062b0b28
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_auth_decrypt (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:178956971 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_gcm_crypt_and_tag/39 (mbedtls_gcm_crypt_and_tag) @062b09d8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_crypt_and_tag (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_gcm_finish/38 (mbedtls_gcm_finish) @062b0888
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_finish (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_gcm_update/37 (mbedtls_gcm_update) @062b0738
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_update (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:217493005 (estimated locally)
+  Called by: 
+  Calls: 
+gcm_mask/36 (gcm_mask) @062b05e8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.gcm_mask (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:1073741824 (estimated locally) local
+  Called by: 
+  Calls: 
+gcm_incr/35 (gcm_incr) @062b0498
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.gcm_incr (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:261993008 (estimated locally) local nonfreeing_fn
+  Called by: 
+  Calls: 
+mbedtls_gcm_update_ad/34 (mbedtls_gcm_update_ad) @062b0348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_update_ad (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_gcm_starts/33 (mbedtls_gcm_starts) @062b01f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_starts (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:182777011 (estimated locally)
+  Called by: 
+  Calls: 
+gcm_mult/32 (gcm_mult) @062b00a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.gcm_mult (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:63136014 (estimated locally) local
+  Called by: 
+  Calls: 
+last4/31 (last4) @062a7168
+  Type: variable definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.rodata.last4 (implicit_section)
+  Aux: @062a7870
+  References: 
+  Referring: 
+  Availability: available
+  Varpool flags: initialized used-by-single-function read-only const-value-known
+mbedtls_gcm_setkey/30 (mbedtls_gcm_setkey) @0629ebd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_setkey (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741823 (estimated locally)
+  Called by: 
+  Calls: 
+gcm_gen_table/29 (gcm_gen_table) @0629ea80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text.gcm_gen_table (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:67786732 (estimated locally) local
+  Called by: 
+  Calls: 
+mbedtls_gcm_init/28 (mbedtls_gcm_init) @0629e930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.mbedtls_gcm_init (implicit_section)
+  References: 
+  Referring: 
+  Availability: available
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+mbedtls_xor/8 (mbedtls_xor) @0622ed20
+  Type: function
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags: count:118111600 (estimated locally)
+  Called by: 
+  Calls: 

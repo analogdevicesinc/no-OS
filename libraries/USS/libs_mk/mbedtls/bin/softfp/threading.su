@@ -1,0 +1,4 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/threading.c:129:12:threading_mutex_fail	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/threading.c:134:13:threading_mutex_dummy	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/threading.c:148:6:mbedtls_threading_set_alt	4	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/threading.c:169:6:mbedtls_threading_free_alt	0	static

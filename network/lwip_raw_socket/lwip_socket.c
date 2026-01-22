@@ -873,7 +873,25 @@ static int32_t lwip_socket_connect(void *net, uint32_t sock_id,
 
 	pcb = socket->pcb;
 
-	return tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
+	ret =  tcp_connect(pcb, &ipaddr, addr->port, lwip_connect_callback);
+		#ifdef NO_OS_LWIP_NETWORKING
+		/*
+		 * Currently, the LWIP networking layer doesn't implement packet RX
+		 * using interrupts, so we have to poll.
+		 * 
+		 * Adding this as a workaround, based off this commit: https://github.com/analogdevicesinc/no-OS/commit/8ca2a15b8b7cc7a53985bf5a773bdd99f4bc63bc#diff-f9781ad4653f9192f0521846b4116a5b34ae3c2abd2c4256ee0a813e3f947aa4R158
+		 * 
+		 * Previously this polling was only applied to the mqtt layer
+		 */
+		int i = 500;
+		while(i>0){
+		no_os_lwip_step(desc, NULL);
+		no_os_mdelay(1);
+		i--;
+		}
+	#endif /*NO_OS_LWIP_NETWORKING*/
+	return ret;
+
 }
 
 /**

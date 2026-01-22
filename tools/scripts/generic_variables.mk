@@ -35,7 +35,7 @@ CFLAGS += -DNO_OS_VERSION=$(GIT_VERSION) \
 		-DNO_OS_PROJECT=$(notdir $(PROJECT))
 
 #Variables for compiling flags in generic.mk
-CFLAGS_MFLOAT_TYPE 	?= hard
+CFLAGS_MFLOAT_TYPE 	= soft
 
 ifeq '$(NO_OS_USB_UART)' 'y'
 CFLAGS += -DNO_OS_USB_UART

@@ -1,0 +1,193 @@
+\doxysection{C\+:/\+JS/ci\+\_\+ist/workspace/spb\+\_\+ist/\+USS/\+USS\+\_\+\+CFS\+\_\+\+Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/examples.h File Reference}
+\hypertarget{examples_8h}{}\label{examples_8h}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/examples.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/examples.h}}
+{\ttfamily \#include "{}MXQ\+\_\+\+API.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{examples_8h_a8b8b91205df891e2c7837bd03795306f}{TEST\+\_\+\+FAILED}}~-\/1
+\item 
+\#define \mbox{\hyperlink{examples_8h_abbb6f6ce3335f1be149c668d3d387dca}{ASSERTSUCCESS}}(fn)
+\item 
+\#define \mbox{\hyperlink{examples_8h_a1044101210e75e9ad4d2770b0c7b5638}{ASSERTERROR}}(fn,  status)
+\item 
+\#define \mbox{\hyperlink{examples_8h_aa431291f6e5231c09389a1e274910267}{ASSERTTRUE}}(x)
+\item 
+\#define \mbox{\hyperlink{examples_8h_aff42f689d36068dcf28d788ae0d56c4d}{EXITPROG}}(err)
+\item 
+\#define \mbox{\hyperlink{examples_8h_a6c843b922e1ba029c0c70b4a6b2f400b}{KEYCOMPLEN}}~32
+\item 
+\#define \mbox{\hyperlink{examples_8h_a667f5d038b336193a1c6dca02dd5b3c8}{PUBKEYADMINID}}~0x1001
+\item 
+\#define \mbox{\hyperlink{examples_8h_ab3732f552c5a9d6ba263970ace1b9044}{PUBKEYIMPORTOBJID}}~0x1000
+\item 
+\#define \mbox{\hyperlink{examples_8h_a6c843b922e1ba029c0c70b4a6b2f400b}{KEYCOMPLEN}}~32
+\item 
+\#define \mbox{\hyperlink{examples_8h_a667f5d038b336193a1c6dca02dd5b3c8}{PUBKEYADMINID}}~0x1001
+\item 
+\#define \mbox{\hyperlink{examples_8h_ab3732f552c5a9d6ba263970ace1b9044}{PUBKEYIMPORTOBJID}}~0x1000
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{examples_8h_a515dd21f58a593a365c19740b37d4ebb}{Administrator\+\_\+\+Authentication}} (void)
+\item 
+int \mbox{\hyperlink{examples_8h_a1f4ea431e8f2ba7d4231cbf53de17023}{ECDSA\+\_\+sign\+\_\+secp256r1\+\_\+sha256}} (mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}dest, mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}key, mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}data, mxq\+\_\+length data\+\_\+length)
+\item 
+void \mbox{\hyperlink{examples_8h_a3b4e00b63472d775fa72215579e75d12}{print\+\_\+buffer}} (const unsigned char \texorpdfstring{$\ast$}{*}buffer, unsigned int len)
+\item 
+void \mbox{\hyperlink{examples_8h_a03f5ae65d95867d12f12c50771bf0f2d}{mxq\+\_\+perror}} (mxq\+\_\+u2 error\+\_\+code, char \texorpdfstring{$\ast$}{*}file, int line)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+mxq\+\_\+u1 \mbox{\hyperlink{examples_8h_a9845bb697a44624fc8dcf85a600c542d}{Key\+Pair\+Admin}} \mbox{[}96\mbox{]}
+\item 
+mxq\+\_\+u1 \mbox{\hyperlink{examples_8h_a085bb0466e73f8c0cc831d7eeb6872bb}{Key\+Pair\+Import}} \mbox{[}96\mbox{]}
+\item 
+mxq\+\_\+u1 \mbox{\hyperlink{examples_8h_a19bce917271f371dc3524d4fd4762369}{Key\+Secure\+Channel}} \mbox{[}32\mbox{]}
+\item 
+mxq\+\_\+u1 \mbox{\hyperlink{examples_8h_aecabad3ff0c05e1e053f790faebb9ca6}{Key\+Pair\+Secure\+Boot}} \mbox{[}96\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{examples_8h_a1044101210e75e9ad4d2770b0c7b5638}\index{examples.h@{examples.h}!ASSERTERROR@{ASSERTERROR}}
+\index{ASSERTERROR@{ASSERTERROR}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{ASSERTERROR}{ASSERTERROR}}
+{\footnotesize\ttfamily \label{examples_8h_a1044101210e75e9ad4d2770b0c7b5638} 
+\#define ASSERTERROR(\begin{DoxyParamCaption}\item[{}]{fn}{, }\item[{}]{status}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\ mxq\_u2\ err;\ \textcolor{keywordflow}{if}((err=fn)!=status)\ \{printf\ (\textcolor{stringliteral}{"{}Error\ condition\ \%04x\ not\ verified\ (got\ \%04x)\ @line\ \%d\ in\ \%s\(\backslash\)n"{}},\ status,err,\ \_\_LINE\_\_\ ,\ \_\_FILE\_\_);\textcolor{keywordflow}{return}\ \mbox{\hyperlink{examples_8h_a8b8b91205df891e2c7837bd03795306f}{TEST\_FAILED}};\}\}}
+
+\end{DoxyCode}
+\Hypertarget{examples_8h_abbb6f6ce3335f1be149c668d3d387dca}\index{examples.h@{examples.h}!ASSERTSUCCESS@{ASSERTSUCCESS}}
+\index{ASSERTSUCCESS@{ASSERTSUCCESS}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{ASSERTSUCCESS}{ASSERTSUCCESS}}
+{\footnotesize\ttfamily \label{examples_8h_abbb6f6ce3335f1be149c668d3d387dca} 
+\#define ASSERTSUCCESS(\begin{DoxyParamCaption}\item[{}]{fn}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\ \textcolor{keywordtype}{int}\ err;\ \textcolor{keywordflow}{if}((err=fn)!=0)\ \{printf\ (\textcolor{stringliteral}{"{}Error\ \%04x\ @line\ \%d\ in\ \%s\(\backslash\)n"{}},err,\ \_\_LINE\_\_\ ,\ \_\_FILE\_\_\ );\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{examples_8h_a8b8b91205df891e2c7837bd03795306f}{TEST\_FAILED}};\}\}}
+
+\end{DoxyCode}
+\Hypertarget{examples_8h_aa431291f6e5231c09389a1e274910267}\index{examples.h@{examples.h}!ASSERTTRUE@{ASSERTTRUE}}
+\index{ASSERTTRUE@{ASSERTTRUE}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{ASSERTTRUE}{ASSERTTRUE}}
+{\footnotesize\ttfamily \label{examples_8h_aa431291f6e5231c09389a1e274910267} 
+\#define ASSERTTRUE(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\ \textcolor{keywordtype}{int}\ a=(x);\ \textcolor{keywordflow}{if}((a==0))\ \{printf\ (\textcolor{stringliteral}{"{}Error\ condition\ not\ verified\ \%d\ @line\ \%d\ in\ \%s\(\backslash\)n"{}},a,\ \_\_LINE\_\_\ ,\ \_\_FILE\_\_);\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{examples_8h_a8b8b91205df891e2c7837bd03795306f}{TEST\_FAILED}};\}\}}
+
+\end{DoxyCode}
+\Hypertarget{examples_8h_aff42f689d36068dcf28d788ae0d56c4d}\index{examples.h@{examples.h}!EXITPROG@{EXITPROG}}
+\index{EXITPROG@{EXITPROG}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{EXITPROG}{EXITPROG}}
+{\footnotesize\ttfamily \label{examples_8h_aff42f689d36068dcf28d788ae0d56c4d} 
+\#define EXITPROG(\begin{DoxyParamCaption}\item[{}]{err}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\ \textcolor{keywordflow}{if}(err)\ \mbox{\hyperlink{examples_8h_a03f5ae65d95867d12f12c50771bf0f2d}{mxq\_perror}}(err,\ \_\_FILE\_\_,\ \_\_LINE\_\_);\ exit(err);\}}
+
+\end{DoxyCode}
+\Hypertarget{examples_8h_a6c843b922e1ba029c0c70b4a6b2f400b}\index{examples.h@{examples.h}!KEYCOMPLEN@{KEYCOMPLEN}}
+\index{KEYCOMPLEN@{KEYCOMPLEN}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{KEYCOMPLEN}{KEYCOMPLEN}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{examples_8h_a6c843b922e1ba029c0c70b4a6b2f400b} 
+\#define KEYCOMPLEN~32}
+
+\Hypertarget{examples_8h_a6c843b922e1ba029c0c70b4a6b2f400b}\index{examples.h@{examples.h}!KEYCOMPLEN@{KEYCOMPLEN}}
+\index{KEYCOMPLEN@{KEYCOMPLEN}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{KEYCOMPLEN}{KEYCOMPLEN}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{examples_8h_a6c843b922e1ba029c0c70b4a6b2f400b} 
+\#define KEYCOMPLEN~32}
+
+\Hypertarget{examples_8h_a667f5d038b336193a1c6dca02dd5b3c8}\index{examples.h@{examples.h}!PUBKEYADMINID@{PUBKEYADMINID}}
+\index{PUBKEYADMINID@{PUBKEYADMINID}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{PUBKEYADMINID}{PUBKEYADMINID}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{examples_8h_a667f5d038b336193a1c6dca02dd5b3c8} 
+\#define PUBKEYADMINID~0x1001}
+
+\Hypertarget{examples_8h_a667f5d038b336193a1c6dca02dd5b3c8}\index{examples.h@{examples.h}!PUBKEYADMINID@{PUBKEYADMINID}}
+\index{PUBKEYADMINID@{PUBKEYADMINID}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{PUBKEYADMINID}{PUBKEYADMINID}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{examples_8h_a667f5d038b336193a1c6dca02dd5b3c8} 
+\#define PUBKEYADMINID~0x1001}
+
+\Hypertarget{examples_8h_ab3732f552c5a9d6ba263970ace1b9044}\index{examples.h@{examples.h}!PUBKEYIMPORTOBJID@{PUBKEYIMPORTOBJID}}
+\index{PUBKEYIMPORTOBJID@{PUBKEYIMPORTOBJID}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{PUBKEYIMPORTOBJID}{PUBKEYIMPORTOBJID}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{examples_8h_ab3732f552c5a9d6ba263970ace1b9044} 
+\#define PUBKEYIMPORTOBJID~0x1000}
+
+\Hypertarget{examples_8h_ab3732f552c5a9d6ba263970ace1b9044}\index{examples.h@{examples.h}!PUBKEYIMPORTOBJID@{PUBKEYIMPORTOBJID}}
+\index{PUBKEYIMPORTOBJID@{PUBKEYIMPORTOBJID}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{PUBKEYIMPORTOBJID}{PUBKEYIMPORTOBJID}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{examples_8h_ab3732f552c5a9d6ba263970ace1b9044} 
+\#define PUBKEYIMPORTOBJID~0x1000}
+
+\Hypertarget{examples_8h_a8b8b91205df891e2c7837bd03795306f}\index{examples.h@{examples.h}!TEST\_FAILED@{TEST\_FAILED}}
+\index{TEST\_FAILED@{TEST\_FAILED}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{TEST\_FAILED}{TEST\_FAILED}}
+{\footnotesize\ttfamily \label{examples_8h_a8b8b91205df891e2c7837bd03795306f} 
+\#define TEST\+\_\+\+FAILED~-\/1}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{examples_8h_a515dd21f58a593a365c19740b37d4ebb}\index{examples.h@{examples.h}!Administrator\_Authentication@{Administrator\_Authentication}}
+\index{Administrator\_Authentication@{Administrator\_Authentication}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{Administrator\_Authentication()}{Administrator\_Authentication()}}
+{\footnotesize\ttfamily \label{examples_8h_a515dd21f58a593a365c19740b37d4ebb} 
+int Administrator\+\_\+\+Authentication (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{examples_8h_a1f4ea431e8f2ba7d4231cbf53de17023}\index{examples.h@{examples.h}!ECDSA\_sign\_secp256r1\_sha256@{ECDSA\_sign\_secp256r1\_sha256}}
+\index{ECDSA\_sign\_secp256r1\_sha256@{ECDSA\_sign\_secp256r1\_sha256}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{ECDSA\_sign\_secp256r1\_sha256()}{ECDSA\_sign\_secp256r1\_sha256()}}
+{\footnotesize\ttfamily \label{examples_8h_a1f4ea431e8f2ba7d4231cbf53de17023} 
+int ECDSA\+\_\+sign\+\_\+secp256r1\+\_\+sha256 (\begin{DoxyParamCaption}\item[{mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}}]{dest}{, }\item[{mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}}]{key}{, }\item[{mxq\+\_\+u1 \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{mxq\+\_\+length}]{data\+\_\+length}{}\end{DoxyParamCaption})}
+
+\Hypertarget{examples_8h_a03f5ae65d95867d12f12c50771bf0f2d}\index{examples.h@{examples.h}!mxq\_perror@{mxq\_perror}}
+\index{mxq\_perror@{mxq\_perror}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{mxq\_perror()}{mxq\_perror()}}
+{\footnotesize\ttfamily \label{examples_8h_a03f5ae65d95867d12f12c50771bf0f2d} 
+void mxq\+\_\+perror (\begin{DoxyParamCaption}\item[{mxq\+\_\+u2}]{error\+\_\+code}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{int}]{line}{}\end{DoxyParamCaption})}
+
+\Hypertarget{examples_8h_a3b4e00b63472d775fa72215579e75d12}\index{examples.h@{examples.h}!print\_buffer@{print\_buffer}}
+\index{print\_buffer@{print\_buffer}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{print\_buffer()}{print\_buffer()}}
+{\footnotesize\ttfamily \label{examples_8h_a3b4e00b63472d775fa72215579e75d12} 
+void print\+\_\+buffer (\begin{DoxyParamCaption}\item[{const unsigned char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{unsigned int}]{len}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{examples_8h_a9845bb697a44624fc8dcf85a600c542d}\index{examples.h@{examples.h}!KeyPairAdmin@{KeyPairAdmin}}
+\index{KeyPairAdmin@{KeyPairAdmin}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{KeyPairAdmin}{KeyPairAdmin}}
+{\footnotesize\ttfamily \label{examples_8h_a9845bb697a44624fc8dcf85a600c542d} 
+mxq\+\_\+u1 Key\+Pair\+Admin\mbox{[}96\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{examples_8h_a085bb0466e73f8c0cc831d7eeb6872bb}\index{examples.h@{examples.h}!KeyPairImport@{KeyPairImport}}
+\index{KeyPairImport@{KeyPairImport}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{KeyPairImport}{KeyPairImport}}
+{\footnotesize\ttfamily \label{examples_8h_a085bb0466e73f8c0cc831d7eeb6872bb} 
+mxq\+\_\+u1 Key\+Pair\+Import\mbox{[}96\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{examples_8h_aecabad3ff0c05e1e053f790faebb9ca6}\index{examples.h@{examples.h}!KeyPairSecureBoot@{KeyPairSecureBoot}}
+\index{KeyPairSecureBoot@{KeyPairSecureBoot}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{KeyPairSecureBoot}{KeyPairSecureBoot}}
+{\footnotesize\ttfamily \label{examples_8h_aecabad3ff0c05e1e053f790faebb9ca6} 
+mxq\+\_\+u1 Key\+Pair\+Secure\+Boot\mbox{[}96\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{examples_8h_a19bce917271f371dc3524d4fd4762369}\index{examples.h@{examples.h}!KeySecureChannel@{KeySecureChannel}}
+\index{KeySecureChannel@{KeySecureChannel}!examples.h@{examples.h}}
+\doxysubsubsection{\texorpdfstring{KeySecureChannel}{KeySecureChannel}}
+{\footnotesize\ttfamily \label{examples_8h_a19bce917271f371dc3524d4fd4762369} 
+mxq\+\_\+u1 Key\+Secure\+Channel\mbox{[}32\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+

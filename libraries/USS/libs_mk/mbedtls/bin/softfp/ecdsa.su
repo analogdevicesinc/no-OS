@@ -1,0 +1,17 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:215:12:derive_mpi	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:621:12:ecdsa_signature_to_asn1	168	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:376:5:mbedtls_ecdsa_can_do	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:242:5:mbedtls_ecdsa_sign_restartable	144	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:392:5:mbedtls_ecdsa_sign	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:409:5:mbedtls_ecdsa_sign_det_restartable	280	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:482:5:mbedtls_ecdsa_sign_det_ext	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:500:5:mbedtls_ecdsa_verify_restartable	136	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:608:5:mbedtls_ecdsa_verify	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:651:5:mbedtls_ecdsa_write_signature_restartable	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:700:5:mbedtls_ecdsa_write_signature	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:726:5:mbedtls_ecdsa_read_signature_restartable	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:715:5:mbedtls_ecdsa_read_signature	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:788:5:mbedtls_ecdsa_genkey	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:820:6:mbedtls_ecdsa_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:828:6:mbedtls_ecdsa_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ecdsa.c:805:5:mbedtls_ecdsa_from_keypair	16	static

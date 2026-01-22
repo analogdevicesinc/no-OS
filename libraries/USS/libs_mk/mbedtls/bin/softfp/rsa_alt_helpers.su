@@ -1,0 +1,5 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/rsa_alt_helpers.c:62:5:mbedtls_rsa_deduce_primes	120	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/rsa_alt_helpers.c:194:5:mbedtls_rsa_deduce_private_exponent	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/rsa_alt_helpers.c:237:5:mbedtls_rsa_deduce_crt	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/rsa_alt_helpers.c:271:5:mbedtls_rsa_validate_params	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/rsa_alt_helpers.c:384:5:mbedtls_rsa_validate_crt	48	static

@@ -1,0 +1,6 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_spi.c:85:6:SPI_Callback	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_spi.c:91:11:HOST_init_spi	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_spi.c:148:11:HOST_exchange_bytes_spi	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_spi.c:176:11:HOST_send_bytes_spi	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_spi.c:200:11:HOST_receive_bytes_spi	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/maxq10xx-api/src/target/target_max32xxx/host_max32xxx_spi.c:223:11:HOST_receive_bytes_spi_first	24	static

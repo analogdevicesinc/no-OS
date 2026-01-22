@@ -1,0 +1,1186 @@
+\doxysection{Administration}
+\hypertarget{group___administration}{}\label{group___administration}\index{Administration@{Administration}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group___administration_ga8eb0c0faee5ee2bd033c0d66a3de9785}{RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+ERROR}}~0x0002
+\item 
+\#define \mbox{\hyperlink{group___administration_ga30033d2e6760922bcaa2e19244054a74}{RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+EXTERNAL\+\_\+\+TAMPER}}~0x0004
+\item 
+\#define \mbox{\hyperlink{group___administration_gacdb08872f82544d80ffde093d747091e}{RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+POR}}~0x0008
+\item 
+\#define \mbox{\hyperlink{group___administration_ga7afd628e4834413ba2d143bf2109730f}{RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+WD\+\_\+\+TIMEOUT}}~0x0010
+\item 
+\#define \mbox{\hyperlink{group___administration_ga9aaf31f9e63266bd9ec016a76efe3915}{RST\+\_\+\+EV\+\_\+\+MAXQ106x\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+ERROR}}~0x0200
+\item 
+\#define \mbox{\hyperlink{group___administration_ga44e6bc901d5f2ff826c8ece0dfc00111}{RST\+\_\+\+EV\+\_\+\+MAXQ106x\+\_\+\+EXTERNAL\+\_\+\+TAMPER}}~0x0400
+\item 
+\#define \mbox{\hyperlink{group___administration_ga65f28e5ffe7bdcafa8002e9e18853d36}{RST\+\_\+\+EV\+\_\+\+MAXQ106x\+\_\+\+WD\+\_\+\+TIMEOUT}}~0x1000
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}{mxq\+\_\+state\+\_\+t}}
+\item 
+typedef struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_ga01aeab3d3980bad129ce4b2350507889}{mxq\+\_\+config\+\_\+t}}
+\item 
+typedef struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_gac7110632d93bde6ce1a81e0078c6f9e5}{mxq\+\_\+sysconfig\+\_\+t}}
+\item 
+typedef struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_ga4fcc3e535da1b5652e898e13f9392131}{mxq\+\_\+status\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60}{\+\_\+\+PACKED}} \{ \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2c3f280f491548bb4a7a9ad3263f6a9f}{LC\+\_\+\+DELIVERY}} = 3
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae187a9e1fbcab98d32c24ecf6426edc1}{LC\+\_\+\+INITIALIZED}} = 4
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8edf726b1270a06d80c3ae9bd4f447e1}{LC\+\_\+\+OPERATIONAL}} = 5
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0e7b2195b91124d2bb915f1184c81a2c}{LC\+\_\+\+TERMINATED}} = 6
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae0e3e531cfae26ebb78b0852e39949e0}{ALGO\+\_\+\+NONE}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a25df7092a863d64d85c3218448bc92c0}{ALGO\+\_\+\+MD\+\_\+\+FIRST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a53697fe9de4fa6c5eddafc277db81926}{ALGO\+\_\+\+MD\+\_\+\+SHA256}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab5325289df76ed61f1d9e0e5ece0e467}{ALGO\+\_\+\+MD\+\_\+\+SHA384}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8ebf204de93a6b2e7aa53b8b598aefaf}{ALGO\+\_\+\+MD\+\_\+\+SHA512}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a31928540766a5691cc2ac6013d0a806c}{ALGO\+\_\+\+MD\+\_\+\+LAST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2e1996c5f1fac19d7d985ac04a9b65c6}{ALGO\+\_\+\+SIGN\+\_\+\+FIRST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a548babb5a1916debd387424720ba4c18}{ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+any}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad040ae36ff3f3279a1aadcbca82bd5a0}{ALGO\+\_\+\+ECDSA\+\_\+\+PLAIN}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a001a422be43f39cb920ea7419c000c9a}{ALGO\+\_\+\+ECDSA\+\_\+\+INNER\+\_\+\+MD}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0b9d94302f765d1b9363f8de02b3bf03}{ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+256}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa7bd3e3370953c7a741ce04e5df672de}{ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+384}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ada343db9d3f5314dbac8121adda71f74}{ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+512}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aaa89fb8347c9e5e0fa1b717d9eb1c5b2}{ALGO\+\_\+\+SIGN\+\_\+\+LAST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab29903f5f725c251ed761af5340a7dc4}{ALGO\+\_\+\+MAC\+\_\+\+FIRST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a685df8721ae7db5bd8a3c6477b5f677b}{ALGO\+\_\+\+MAC\+\_\+\+NULL}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae88a78f911db968153cf68b1505c8350}{ALGO\+\_\+\+HMAC\+\_\+\+SHA\+\_\+any}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa853c82a8df66c712da0d7b7767c1dd3}{ALGO\+\_\+\+HMAC\+\_\+\+SHA256}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abed04333242d09960c25b7b3a4fc9436}{ALGO\+\_\+\+HMAC\+\_\+\+SHA384}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a81f8859a42c64ee85292f32a0153dcfb}{ALGO\+\_\+\+HMAC\+\_\+\+SHA512}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae65a5968651d3836e50721edcd4c0918}{ALGO\+\_\+\+MAC\+\_\+\+AES\+\_\+\+CMAC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc6c163d63038281e1b1148fccd310c6}{ALGO\+\_\+\+MAC\+\_\+\+AES\+\_\+\+GMAC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aabbccee790775799d25cd267fa04a62e}{ALGO\+\_\+\+MAC\+\_\+\+AES\+\_\+\+CBC\+\_\+\+MAC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6aaf3ad697dec1f938484ee3714209ad}{ALGO\+\_\+\+MAC\+\_\+\+LAST}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a577ba58551daad5a72d348bc3e101bf4}{ALGO\+\_\+\+CIPHER\+\_\+\+FIRST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a306284605d440d06b71b524024e34164}{ALGO\+\_\+\+CIPHER\+\_\+\+NULL}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a937188f581530072b11c3ef2d2f2d7dc}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+any}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afd88e1fc3edbf8445a30df47462f37ce}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+ECB}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7bd438d5eea67309eefcf65238af0c61}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+CBC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af38bd6c676b7dfe36a6b22da51a345a5}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+CCM}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7ccc685557625790188a4470566ba431}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+GCM}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aff077002d9bc3679156f463a437e7183}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+GCU}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8ad82b2a48827136c4c282bf8c403319}{ALGO\+\_\+\+CIPHER\+\_\+\+ECIES\+\_\+\+AES\+\_\+\+HMAC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac77af1573af532a9d85fcb4cfa036be8}{ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+CTR}} = 0x22
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a51097c15df2757d9988d864f99ff4ece}{ALGO\+\_\+\+CIPHER\+\_\+\+LAST}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a42d0bf18b3988bde92e678498b13ba3f}{ALGO\+\_\+\+MD\+\_\+\+SHA1}} =0x81
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a49d9245b8a588a8589a4c24b029be986}{ALGO\+\_\+\+RSASIGN\+\_\+\+FIRST}} = 0XA0
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abc6210602166aa7ca35e4960079b1cd7}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+PLAIN}} = 0x\+A1
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9fc456527efd4967b70e25ffa0544de3}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+SHA256}} = 0x\+A2
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4902ffc8cb58823eeb5de671b51aba24}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+SHA384}} = 0x\+A3
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af017dde8f52cc0b5ee8e16b0384713f1}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+SHA512}} = 0x\+A4
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6482454063b74c454a64704b281a7096}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+INNERMD}} = 0x\+A5
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa7ffbeea81bc60385f4e79c0eff38b39}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+PLAIN}} = 0x\+A6
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab4f07bde5ee62fbd63459936a8d57318}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+SHA256}} = 0x\+A7
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad974e2f4d3d97484bd12bf9df3e7238c}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+SHA384}} = 0x\+A8
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa3776f00774041229ca60b85f43efd51}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+SHA512}} = 0x\+A9
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a95d1536b26f954394008331c097fcb30}{ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+INNERMD}} = 0x\+AA
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afff75dfba52a5ecfb14f831f516e1eca}{ALGO\+\_\+\+RSASIGN\+\_\+\+ANY}} = 0XAB
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af1200acbcc1a1906683f9ceaacff3260}{ALGO\+\_\+\+RSASIGN\+\_\+\+LAST}} = 0XAC
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5be0273ebb28adf4880f7d58eb64c785}{ALGO\+\_\+\+INVALID}} =0x\+FF
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afdb6d80ba180c52391792f2d27d539eb}{MXQ\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL}} =0x00U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa427d536d6239f3fd3880bc93b2de10d}{MXQ\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE}} =0x01U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9ba5f0e6b2591311cf81b14a0046230c}{MXQ\+\_\+\+KEYUSE\+\_\+\+ATTESTATION}} =0x11U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4096277587575c1b6113f0280ffe2548}{MXQ\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION}} =0x\+A2U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa6b61c08025edb63125f1d324fcc09c5}{MXQ\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC}} =0x\+A1U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a85296ac325e5d180fdf1d71fcd38610a}{MXQ\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION}} =0x02U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af8a6521c70ce89bd12cd33bbe98750ee}{MXQ\+\_\+\+KEYUSE\+\_\+\+TLSAUTH}} =0x04U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a307727a87e2ac5b19eb573104db672bf}{MXQ\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH}} =0x08U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a63b00a180bf13651825f132f9800ad0d}{MXQ\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH}} =0x18U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad69f535c2865bceca30a1863aa748c67}{MXQ\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT}} =0x10U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aed6bb3d15313da494e4f0570958ac939}{MXQ\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW}} =0x20U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7c51c10e15b571a68e424bc77cfdfa89}{MXQ\+\_\+\+KEYUSE\+\_\+\+RFU}} =0x40U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a11acb19fcefb364d35c9ed5b7ec0ff3c}{MXQ\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT}} =0x80U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a61bf66983fb5f75ea44b049c04b91e2e}{MXQ\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL}} =0x8\+AU
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1f97ff56fe4d2b51b3bdd6ab47a00012}{MXQ\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE}} =0x\+D1U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ada0f5b42c7f5387de945c83b460b986a}{MXQ\+\_\+\+KEYUSE\+\_\+\+NONE}} =0x\+FFU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad25fa5d533341bebd0e5218ef968fcbb}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5575f5368cbdc2df20811f44a5ad2837}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a60fa624f6387e53150822bcf4ccde801}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a418fdb744bae9506a3424c4772d4e575}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60acf33dea726dca1dc5486b4dcd6df78e9}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a45e01b87021f01760a0e84d6774dcf66}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0940ca44ba5abe3c81bbede44ba7906e}{MXQ\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac1e1d539d340ebb34c7d75c030d98bb4}{MXQ\+\_\+\+UNKNOWN\+\_\+\+CURVE}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a93d7c4538c10896ffce554929a3d681d}{MXQ\+\_\+\+KEYTYPE\+\_\+\+AES}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae7c60c4d0441f87c2e70ce8e113fd0fc}{MXQ\+\_\+\+KEYTYPE\+\_\+\+PSK}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a46b6cae82ddaa655f36db34d97fa0572}{MXQ\+\_\+\+KEYTYPE\+\_\+\+HMAC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4b1731ad78143bd6d34f75d7051af057}{MXQ\+\_\+\+KEYTYPE\+\_\+\+ECC}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa6db8f208910a40168d6133e9f43789b}{MXQ\+\_\+\+KEYTYPE\+\_\+\+IKM}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9494ca508f20c30b7e27c9660e960d65}{MXQ\+\_\+\+KEYTYPE\+\_\+\+RSA}}
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1aec682ad2d97ddc8bddbabceeab3e5a}{MXQ\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN}}
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2ea56e36113a9c4c5bb4052cbffce384}{S\+\_\+\+ERASE\+\_\+\+SELECTED}} = 0x01
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a56e62b8d198b5e695f9ae8289366b07f}{S\+\_\+\+ERASE\+\_\+\+ALL}} = 0x02
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a760c06755743198ad8ece23b777e7823}{SHARE\+\_\+\+SECRET}} = 1
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a01c5170e3321214ba8a511cdaaeab944}{GENERATE\+\_\+M}} = 2
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a05b545cd67ecc775dea54fcb4c992af4}{IS\+\_\+\+AUTH\+\_\+\+ENABLED}} = 8
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a3686ae382b7b7c868b911fefb93bc909}{CMDNUM\+\_\+\+CREATE\+\_\+\+OBJECT}} = 0x10U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2a2936dfd4ba6ae83d1cb87bd23a3349}{CMDNUM\+\_\+\+DELETE\+\_\+\+OBJECT}} = 0x11U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af23d472d01b5a446475cf1da5dee4867}{CMDNUM\+\_\+\+READ\+\_\+\+OBJECT}} = 0x12U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a65f74cf2ae4e8443c40757b95cc48cfa}{CMDNUM\+\_\+\+WRITE\+\_\+\+OBJECT}} = 0x13U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2ce4a3a20a7187a1fd1f96fd43c66673}{CMDNUM\+\_\+\+UPDATE\+\_\+\+COUNTER}} = 0x14U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a483ac26ee85b9b8dbe3c605a7916d3a9}{CMDNUM\+\_\+\+LIST\+\_\+\+OBJECTS}} = 0x15U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4c8f0274b22baa635ab152f39694b8e8}{CMDNUM\+\_\+\+TAMPER}} = 0x17U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af31a3d18d7dd099883b5d1723c9804b1}{CMDNUM\+\_\+\+IMPORT\+\_\+\+KEY\+\_\+\+ENC}} = 0x20U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab3536e54a1beef1cc0760471f44e80ef}{CMDNUM\+\_\+\+TLS13\+\_\+\+KEY\+\_\+\+EXCHANGE}} = 0x\+B0U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2cd3752465cfbd860534dc07cb71b185}{CMDNUM\+\_\+\+ENCRYPT\+\_\+\+DECRYPT}} = 0x\+C0U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4e4266306ef9cef63e4f4b0dac9b80d4}{CMDNUM\+\_\+\+MANAGE\+\_\+\+SECURE\+\_\+\+CHANNEL}} = 0x\+C1U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6e170c72d97a1fb7c5028075d6fa55b6}{CMDNUM\+\_\+\+ADMIN\+\_\+\+AUTHENTICATE}} = 0x\+C2U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af9099f7ffcbefb8a0203d8e4798205fc}{CMDNUM\+\_\+\+KEY\+\_\+\+EXCHANGE}} = 0x\+C3U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7fd3f89d5d4556f211468807a0554c32}{CMDNUM\+\_\+\+TLS\+\_\+\+RECORD}} = 0x\+C4U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae8d4c534f579a579e84f0de7348f0912}{CMDNUM\+\_\+\+ESTABLISH\+\_\+\+KEY\+\_\+\+DH}} = 0x\+C6U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1b114855f50354b7800edb403f19590a}{CMDNUM\+\_\+\+GET\+\_\+\+CHALLENGE}} = 0x\+C7U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a92e6a3dd68b84f9de891a2aff8b83eb8}{CMDNUM\+\_\+\+COMPUTE\+\_\+\+VERIFY\+\_\+\+DIGITAL\+\_\+\+SIGNATURE}} = 0x\+C8U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0c92ffe0722ce3f39cbb5d08e7b6b3b9}{CMDNUM\+\_\+\+GET\+\_\+\+RANDOM}} = 0x\+C9U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a23decfd9aaca579084115b6f57f40a11}{CMDNUM\+\_\+\+IMPORT\+\_\+\+KEY}} = 0x\+CAU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab6ad69cbe8a15ba68af2b158f5471221}{CMDNUM\+\_\+\+IMPORT\+\_\+\+ROOTCERT}} = 0x\+CBU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a92bbb04f8379f6fd86ddcc7b8ebbf559}{CMDNUM\+\_\+\+VERIFY\+\_\+\+BOOT}} = 0x\+CCU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5297d11276ffba61f9c988622229ead6}{CMDNUM\+\_\+\+ATTESTATION}} = 0x\+CDU
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4f16a094c01307682456d872170b3ab0}{CMDNUM\+\_\+\+ESTABLISH\+\_\+\+KEY}} = 0x\+CEU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad6d16e05b16e5f55ded3425f82f148f4}{CMDNUM\+\_\+\+IMPORT\+\_\+\+CHILDCERT}} = 0x\+CFU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4dc9757997803d46e04d091c936ca943}{CMDNUM\+\_\+\+COMPUTE\+\_\+\+MESSAGE\+\_\+\+DIGEST}} = 0x\+D0U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af8a7abf1ae76e0e6b3576a5790add4dd}{CMDNUM\+\_\+\+COMPUTE\+\_\+\+MAC}} = 0x\+D1U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a03aa6ed828c46eb7c260da3e8f298f49}{CMDNUM\+\_\+\+SLEEP}} = 0x\+F1U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a868408eb09f94a8477efe61c95af4cdd}{CMDNUM\+\_\+\+GETSTATUS}} = 0x\+F2U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af97c0c81d3b9c30b0a9415e00c59f666}{CMDNUM\+\_\+\+SET\+\_\+\+LIFE\+\_\+\+CYCLE\+\_\+\+STATE}} = 0x\+F3U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8dd2186b1d1bce29659aea26fa9749ba}{CMDNUM\+\_\+\+SETCONFIG}} = 0x\+F4U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa06b85431f13bc1428258d5c5ae3f9fd}{CMDNUM\+\_\+\+RESET\+\_\+\+FACTORY}} = 0x\+F5U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8147a99dd667abee59046d58ad60f422}{CMDNUM\+\_\+\+RESTORE}} = 0x\+F6U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aee67216fbc1b8318acdb1e76f339550c}{CMDNUM\+\_\+\+DUMP}} = 0x\+F6U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac05f14ab22b40279408f7e09cdf37b5c}{CMDNUM\+\_\+\+PING}} = 0x\+F7U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abda42cbb95f2e417969a285ef4c15659}{CMDNUM\+\_\+\+GPIO\+\_\+\+CONTROL}} = 0x\+FBU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aee30b2b9bad4e6b1df6bc32328e3b47d}{CMDNUM\+\_\+\+GPIO\+\_\+\+READ}} = 0x\+FCU
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a111371425ae7dfcadbdca07dad8aaa94}{COND\+\_\+\+NA}} =0x00U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aade4e49d5a78d205dcc4dffa1cc0d8a5}{COND\+\_\+\+ENDUSER}} =0x01U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a27a0619db66b70a5a8dc7be8b9d0bd3d}{COND\+\_\+\+ADMIN}} =0x02U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc1fb34929b3748ca316437188836122}{COND\+\_\+\+SECUREBOOT}} =0x04U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4868e285eb000e6afe697c480c05908c}{COND\+\_\+\+HOST}} =0x08U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0d68bd3315d163a7a9673bb01dcc6032}{COND\+\_\+\+NONE}} =COND\+\_\+\+ENDUSER+\+COND\+\_\+\+HOST+\+COND\+\_\+\+ADMIN+\+COND\+\_\+\+SECUREBOOT
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad5e940ad9b11ceecf775ca8a4c13cafa}{MXQ\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY}} = 0x01U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7dd78f1345b87e498752669230adc6c8}{MXQ\+\_\+\+OBJTYPE\+\_\+\+PUBKEY}} = 0x02U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab537da9cc9d6197c8043235526d64699}{MXQ\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR}} = 0x03U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac934d92de2d7d5d8a9b1eaba78de3cbb}{MXQ\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT}} = 0x04U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a59ce378bc7afc88836ee7791e37e85ec}{MXQ\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP}} = 0x05U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a771cefd227d187ac3cc844510eb4f15e}{MXQ\+\_\+\+OBJTYPE\+\_\+\+X509}} = 0x06U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8362ad8531d301bfae0e4fdc5b5fe55a}{MXQ\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN}} = 0x07U
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a76473f19c3eeeeba3d12d13164f1940f}{MXQ\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN}} = 0x80U
+, \newline
+\mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a3d04dd740ff2d0826890f47f232621a5}{OBJPROP\+\_\+\+TEMPORARY}} = 0x01
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60adf5eba7e6b1833b779209142f2985a3f}{OBJPROP\+\_\+\+PERSISTENT}} = 0x02
+, \mbox{\hyperlink{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a89c75fe29f6e2fc75e0602139a58f61e}{OBJPROP\+\_\+\+WIPE\+\_\+\+ON\+\_\+\+TAMPER}} = 0x04
+ \}
+\item 
+enum \mbox{\hyperlink{group___administration_gad521792437d1978c72fcfc81155b7478}{te\+SCProcess\+State}} \{ \newline
+\mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a10c3fbe859408f27dd8b4438db050188}{e\+SCInit}} = 1
+, \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a797e4240e832e3cd41b8b99cbe40f994}{e\+SCAes\+Cbc\+Init}} = 2
+, \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478ac5edd83199e2f51eb59f8960ccd4504d}{e\+SCFinish}} = 3
+, \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478addf77541ab9180cc539d21fe6163fc14}{e\+SCAes\+Gcm\+Init}} = 4
+, \newline
+\mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478acc9aec29507c8d1585b0281ec85eb4ed}{e\+SCPre\+Shared\+Key\+Mode}} = 5
+, \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a2cca86daaff8977cd24ac9ee804ca34b}{e\+SCEcdhe}} = 0x10
+, \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478abc6d5081372a62b58a713839fe8b748f}{e\+SCAuth\+Ecdhe}} = 0x13
+, \mbox{\hyperlink{group___administration_ggad521792437d1978c72fcfc81155b7478a01f164d047e813d13d8b769a07c9f170}{e\+SCEcdhe\+Mode1065}} = 0x15
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\+\_\+\+Module\+\_\+\+Init}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_ga0ead3d761114495e89a6fe863e87e835}{MXQ\+\_\+\+Module\+\_\+\+Deinit}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_ga6ae1b5bd52046253eb5f67afdb11939e}{MXQ\+\_\+\+Reset\+Factory}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_ga1b2dd60e215c446702935401c5ee66c8}{MXQ\+\_\+\+Reset}} (void)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_gabc8600c9e34d7e5e1e8fbe7b6df3747f}{MXQ\+\_\+\+Set\+Config}} (\mbox{\hyperlink{group___administration_ga01aeab3d3980bad129ce4b2350507889}{mxq\+\_\+config\+\_\+t}} \texorpdfstring{$\ast$}{*}s)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_ga382f514ebc4771e09d4f7a42cefb71a2}{MXQ\+\_\+\+Set\+State}} (\mbox{\hyperlink{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}{mxq\+\_\+state\+\_\+t}} newstate)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e}{MXQ\+\_\+\+Get\+Status}} (\mbox{\hyperlink{group___administration_ga4fcc3e535da1b5652e898e13f9392131}{mxq\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}status)
+\item 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} \mbox{\hyperlink{group___administration_gabc2576c517e1ee1c3bd6baf25f7ae355}{MXQ\+\_\+\+TLS\+\_\+\+Enable}} (void)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{group___administration_ga30033d2e6760922bcaa2e19244054a74}\index{Administration@{Administration}!RST\_EV\_HOST\_EXTERNAL\_TAMPER@{RST\_EV\_HOST\_EXTERNAL\_TAMPER}}
+\index{RST\_EV\_HOST\_EXTERNAL\_TAMPER@{RST\_EV\_HOST\_EXTERNAL\_TAMPER}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_HOST\_EXTERNAL\_TAMPER}{RST\_EV\_HOST\_EXTERNAL\_TAMPER}}
+{\footnotesize\ttfamily \label{group___administration_ga30033d2e6760922bcaa2e19244054a74} 
+\#define RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+EXTERNAL\+\_\+\+TAMPER~0x0004}
+
+RESET OUT pin pulse when the external TAMPER pin is triggered (MAXQ10xx must not be in sleep mode or powered off, and must be in crypto toolbox mode). \Hypertarget{group___administration_gacdb08872f82544d80ffde093d747091e}\index{Administration@{Administration}!RST\_EV\_HOST\_POR@{RST\_EV\_HOST\_POR}}
+\index{RST\_EV\_HOST\_POR@{RST\_EV\_HOST\_POR}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_HOST\_POR}{RST\_EV\_HOST\_POR}}
+{\footnotesize\ttfamily \label{group___administration_gacdb08872f82544d80ffde093d747091e} 
+\#define RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+POR~0x0008}
+
+RESET OUT pin pulse when the MAXQ10xx reboots \Hypertarget{group___administration_ga8eb0c0faee5ee2bd033c0d66a3de9785}\index{Administration@{Administration}!RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR@{RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR}}
+\index{RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR@{RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR}{RST\_EV\_HOST\_SECURE\_CHANNEL\_ERROR}}
+{\footnotesize\ttfamily \label{group___administration_ga8eb0c0faee5ee2bd033c0d66a3de9785} 
+\#define RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+ERROR~0x0002}
+
+RESET OUT pin pulse when the current secure channel fails (signature or decryption error) \Hypertarget{group___administration_ga7afd628e4834413ba2d143bf2109730f}\index{Administration@{Administration}!RST\_EV\_HOST\_WD\_TIMEOUT@{RST\_EV\_HOST\_WD\_TIMEOUT}}
+\index{RST\_EV\_HOST\_WD\_TIMEOUT@{RST\_EV\_HOST\_WD\_TIMEOUT}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_HOST\_WD\_TIMEOUT}{RST\_EV\_HOST\_WD\_TIMEOUT}}
+{\footnotesize\ttfamily \label{group___administration_ga7afd628e4834413ba2d143bf2109730f} 
+\#define RST\+\_\+\+EV\+\_\+\+HOST\+\_\+\+WD\+\_\+\+TIMEOUT~0x0010}
+
+RESET OUT pin pulse when the MAXQ10xx watchdog counter expires \Hypertarget{group___administration_ga44e6bc901d5f2ff826c8ece0dfc00111}\index{Administration@{Administration}!RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER@{RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER}}
+\index{RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER@{RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER}{RST\_EV\_MAXQ106x\_EXTERNAL\_TAMPER}}
+{\footnotesize\ttfamily \label{group___administration_ga44e6bc901d5f2ff826c8ece0dfc00111} 
+\#define RST\+\_\+\+EV\+\_\+\+MAXQ106x\+\_\+\+EXTERNAL\+\_\+\+TAMPER~0x0400}
+
+Performs an internal reset when the external TAMPER pin is triggered \Hypertarget{group___administration_ga9aaf31f9e63266bd9ec016a76efe3915}\index{Administration@{Administration}!RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR@{RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR}}
+\index{RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR@{RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR}{RST\_EV\_MAXQ106x\_SECURE\_CHANNEL\_ERROR}}
+{\footnotesize\ttfamily \label{group___administration_ga9aaf31f9e63266bd9ec016a76efe3915} 
+\#define RST\+\_\+\+EV\+\_\+\+MAXQ106x\+\_\+\+SECURE\+\_\+\+CHANNEL\+\_\+\+ERROR~0x0200}
+
+Performs an internal reset when the current secure channel fails (signature or decryption error) \Hypertarget{group___administration_ga65f28e5ffe7bdcafa8002e9e18853d36}\index{Administration@{Administration}!RST\_EV\_MAXQ106x\_WD\_TIMEOUT@{RST\_EV\_MAXQ106x\_WD\_TIMEOUT}}
+\index{RST\_EV\_MAXQ106x\_WD\_TIMEOUT@{RST\_EV\_MAXQ106x\_WD\_TIMEOUT}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{RST\_EV\_MAXQ106x\_WD\_TIMEOUT}{RST\_EV\_MAXQ106x\_WD\_TIMEOUT}}
+{\footnotesize\ttfamily \label{group___administration_ga65f28e5ffe7bdcafa8002e9e18853d36} 
+\#define RST\+\_\+\+EV\+\_\+\+MAXQ106x\+\_\+\+WD\+\_\+\+TIMEOUT~0x1000}
+
+Performs an internal reset when the MAXQ10xx watchdog counter expires 
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{group___administration_ga01aeab3d3980bad129ce4b2350507889}\index{Administration@{Administration}!mxq\_config\_t@{mxq\_config\_t}}
+\index{mxq\_config\_t@{mxq\_config\_t}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{mxq\_config\_t}{mxq\_config\_t}}
+{\footnotesize\ttfamily \label{group___administration_ga01aeab3d3980bad129ce4b2350507889} 
+typedef struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_ga01aeab3d3980bad129ce4b2350507889}{mxq\+\_\+config\+\_\+t}}}
+
+MAXQ10xx configuration information.
+
+Configuration can be modified using \doxylink{group___administration_gabc8600c9e34d7e5e1e8fbe7b6df3747f}{MXQ\+\_\+\+Set\+Config()} (administrator authentication needed), and read using \doxylink{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e}{MXQ\+\_\+\+Get\+Status()}. \Hypertarget{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}\index{Administration@{Administration}!mxq\_state\_t@{mxq\_state\_t}}
+\index{mxq\_state\_t@{mxq\_state\_t}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{mxq\_state\_t}{mxq\_state\_t}}
+{\footnotesize\ttfamily \label{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065} 
+typedef enum \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}{mxq\+\_\+state\+\_\+t}}}
+
+Input enumeration for the MXQ\+\_\+\+Set\+State API \Hypertarget{group___administration_ga4fcc3e535da1b5652e898e13f9392131}\index{Administration@{Administration}!mxq\_status\_t@{mxq\_status\_t}}
+\index{mxq\_status\_t@{mxq\_status\_t}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{mxq\_status\_t}{mxq\_status\_t}}
+{\footnotesize\ttfamily \label{group___administration_ga4fcc3e535da1b5652e898e13f9392131} 
+typedef struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_ga4fcc3e535da1b5652e898e13f9392131}{mxq\+\_\+status\+\_\+t}}}
+
+Output structure for the MXQ\+\_\+\+Get\+Status function. \Hypertarget{group___administration_gac7110632d93bde6ce1a81e0078c6f9e5}\index{Administration@{Administration}!mxq\_sysconfig\_t@{mxq\_sysconfig\_t}}
+\index{mxq\_sysconfig\_t@{mxq\_sysconfig\_t}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{mxq\_sysconfig\_t}{mxq\_sysconfig\_t}}
+{\footnotesize\ttfamily \label{group___administration_gac7110632d93bde6ce1a81e0078c6f9e5} 
+typedef struct \mbox{\hyperlink{struct___p_a_c_k_e_d}{\+\_\+\+PACKED}} \mbox{\hyperlink{group___administration_gac7110632d93bde6ce1a81e0078c6f9e5}{mxq\+\_\+sysconfig\+\_\+t}}}
+
+MAXQ10xx configuration information. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60}\index{Administration@{Administration}!\_PACKED@{\_PACKED}}
+\index{\_PACKED@{\_PACKED}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{\_PACKED}{\_PACKED}}
+{\footnotesize\ttfamily \label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+enum \+\_\+\+PACKED}
+
+Input enumeration for the MXQ\+\_\+\+Set\+State API \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LC\_DELIVERY@{LC\_DELIVERY}!Administration@{Administration}}\index{Administration@{Administration}!LC\_DELIVERY@{LC\_DELIVERY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2c3f280f491548bb4a7a9ad3263f6a9f}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+LC\+\_\+\+DELIVERY&Delivery state, with default key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LC\_INITIALIZED@{LC\_INITIALIZED}!Administration@{Administration}}\index{Administration@{Administration}!LC\_INITIALIZED@{LC\_INITIALIZED}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae187a9e1fbcab98d32c24ecf6426edc1}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+LC\+\_\+\+INITIALIZED&Customer intermediate mode \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LC\_OPERATIONAL@{LC\_OPERATIONAL}!Administration@{Administration}}\index{Administration@{Administration}!LC\_OPERATIONAL@{LC\_OPERATIONAL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8edf726b1270a06d80c3ae9bd4f447e1}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+LC\+\_\+\+OPERATIONAL&In the field \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LC\_TERMINATED@{LC\_TERMINATED}!Administration@{Administration}}\index{Administration@{Administration}!LC\_TERMINATED@{LC\_TERMINATED}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0e7b2195b91124d2bb915f1184c81a2c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+LC\+\_\+\+TERMINATED&Terminated \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_NONE@{ALGO\_NONE}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_NONE@{ALGO\_NONE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae0e3e531cfae26ebb78b0852e39949e0}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+NONE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MD\_FIRST@{ALGO\_MD\_FIRST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MD\_FIRST@{ALGO\_MD\_FIRST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a25df7092a863d64d85c3218448bc92c0}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MD\+\_\+\+FIRST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MD\_SHA256@{ALGO\_MD\_SHA256}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MD\_SHA256@{ALGO\_MD\_SHA256}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a53697fe9de4fa6c5eddafc277db81926}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MD\+\_\+\+SHA256&SHA-\/256 (FIPS 180-\/4\+: \href{http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}{\texttt{ http\+://nvlpubs.\+nist.\+gov/nistpubs/\+FIPS/\+NIST.\+FIPS.\+180-\/4.\+pdf}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MD\_SHA384@{ALGO\_MD\_SHA384}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MD\_SHA384@{ALGO\_MD\_SHA384}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab5325289df76ed61f1d9e0e5ece0e467}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MD\+\_\+\+SHA384&SHA-\/384 (FIPS 180-\/4\+: \href{http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}{\texttt{ http\+://nvlpubs.\+nist.\+gov/nistpubs/\+FIPS/\+NIST.\+FIPS.\+180-\/4.\+pdf}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MD\_SHA512@{ALGO\_MD\_SHA512}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MD\_SHA512@{ALGO\_MD\_SHA512}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8ebf204de93a6b2e7aa53b8b598aefaf}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MD\+\_\+\+SHA512&SHA-\/512 (FIPS 180-\/4\+: \href{http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf}{\texttt{ http\+://nvlpubs.\+nist.\+gov/nistpubs/\+FIPS/\+NIST.\+FIPS.\+180-\/4.\+pdf}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MD\_LAST@{ALGO\_MD\_LAST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MD\_LAST@{ALGO\_MD\_LAST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a31928540766a5691cc2ac6013d0a806c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MD\+\_\+\+LAST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_SIGN\_FIRST@{ALGO\_SIGN\_FIRST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_SIGN\_FIRST@{ALGO\_SIGN\_FIRST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2e1996c5f1fac19d7d985ac04a9b65c6}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+SIGN\+\_\+\+FIRST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_ECDSA\_SHA\_any@{ALGO\_ECDSA\_SHA\_any}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_ECDSA\_SHA\_any@{ALGO\_ECDSA\_SHA\_any}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a548babb5a1916debd387424720ba4c18}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+any&For key algo field only\+: ECDSA with any SHA. Cannot be used in MXQ\+\_\+\+Sign, MXQ\+\_\+\+Adminauthenticate, MXQ\+\_\+\+Verifyboot, ...) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_ECDSA\_PLAIN@{ALGO\_ECDSA\_PLAIN}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_ECDSA\_PLAIN@{ALGO\_ECDSA\_PLAIN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad040ae36ff3f3279a1aadcbca82bd5a0}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+ECDSA\+\_\+\+PLAIN&ECDSA with already hashed value as input (FIPS 186-\/4 \href{https://csrc.nist.gov/publications/detail/fips/186/4/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/186/4/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_ECDSA\_INNER\_MD@{ALGO\_ECDSA\_INNER\_MD}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_ECDSA\_INNER\_MD@{ALGO\_ECDSA\_INNER\_MD}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a001a422be43f39cb920ea7419c000c9a}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+ECDSA\+\_\+\+INNER\+\_\+\+MD&ECDSA with already hashed value using COMPUTE MD command \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_ECDSA\_SHA\_256@{ALGO\_ECDSA\_SHA\_256}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_ECDSA\_SHA\_256@{ALGO\_ECDSA\_SHA\_256}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0b9d94302f765d1b9363f8de02b3bf03}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+256&ECDSA with SHA-\/256 (FIPS 186-\/4 \href{https://csrc.nist.gov/publications/detail/fips/186/4/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/186/4/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_ECDSA\_SHA\_384@{ALGO\_ECDSA\_SHA\_384}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_ECDSA\_SHA\_384@{ALGO\_ECDSA\_SHA\_384}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa7bd3e3370953c7a741ce04e5df672de}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+384&ECDSA with SHA-\/384 (FIPS 186-\/4 \href{https://csrc.nist.gov/publications/detail/fips/186/4/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/186/4/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_ECDSA\_SHA\_512@{ALGO\_ECDSA\_SHA\_512}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_ECDSA\_SHA\_512@{ALGO\_ECDSA\_SHA\_512}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ada343db9d3f5314dbac8121adda71f74}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+ECDSA\+\_\+\+SHA\+\_\+512&ECDSA with SHA-\/512 (FIPS 186-\/4 \href{https://csrc.nist.gov/publications/detail/fips/186/4/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/186/4/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_SIGN\_LAST@{ALGO\_SIGN\_LAST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_SIGN\_LAST@{ALGO\_SIGN\_LAST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aaa89fb8347c9e5e0fa1b717d9eb1c5b2}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+SIGN\+\_\+\+LAST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MAC\_FIRST@{ALGO\_MAC\_FIRST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MAC\_FIRST@{ALGO\_MAC\_FIRST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab29903f5f725c251ed761af5340a7dc4}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MAC\+\_\+\+FIRST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MAC\_NULL@{ALGO\_MAC\_NULL}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MAC\_NULL@{ALGO\_MAC\_NULL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a685df8721ae7db5bd8a3c6477b5f677b}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MAC\+\_\+\+NULL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_HMAC\_SHA\_any@{ALGO\_HMAC\_SHA\_any}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_HMAC\_SHA\_any@{ALGO\_HMAC\_SHA\_any}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae88a78f911db968153cf68b1505c8350}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+HMAC\+\_\+\+SHA\+\_\+any&For key algo field only\+: HMAC with any SHA (cannot be used in MXQ\+\_\+\+MAC\+\_\+\+Init) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_HMAC\_SHA256@{ALGO\_HMAC\_SHA256}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_HMAC\_SHA256@{ALGO\_HMAC\_SHA256}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa853c82a8df66c712da0d7b7767c1dd3}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+HMAC\+\_\+\+SHA256&HMAC-\/\+SHA-\/256 (FIPS 198-\/1 \href{https://csrc.nist.gov/publications/detail/fips/198/1/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/198/1/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_HMAC\_SHA384@{ALGO\_HMAC\_SHA384}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_HMAC\_SHA384@{ALGO\_HMAC\_SHA384}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abed04333242d09960c25b7b3a4fc9436}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+HMAC\+\_\+\+SHA384&HMAC-\/\+SHA-\/384 (FIPS 198-\/1 \href{https://csrc.nist.gov/publications/detail/fips/198/1/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/198/1/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_HMAC\_SHA512@{ALGO\_HMAC\_SHA512}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_HMAC\_SHA512@{ALGO\_HMAC\_SHA512}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a81f8859a42c64ee85292f32a0153dcfb}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+HMAC\+\_\+\+SHA512&HMAC-\/\+SHA-\/512 (FIPS 198-\/1 \href{https://csrc.nist.gov/publications/detail/fips/198/1/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/fips/198/1/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MAC\_AES\_CMAC@{ALGO\_MAC\_AES\_CMAC}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MAC\_AES\_CMAC@{ALGO\_MAC\_AES\_CMAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae65a5968651d3836e50721edcd4c0918}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MAC\+\_\+\+AES\+\_\+\+CMAC&AES-\/\+CMAC (NIST SP800-\/38B \href{https://csrc.nist.gov/publications/detail/sp/800-38b/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/sp/800-\/38b/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MAC\_AES\_GMAC@{ALGO\_MAC\_AES\_GMAC}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MAC\_AES\_GMAC@{ALGO\_MAC\_AES\_GMAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc6c163d63038281e1b1148fccd310c6}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MAC\+\_\+\+AES\+\_\+\+GMAC&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MAC\_AES\_CBC\_MAC@{ALGO\_MAC\_AES\_CBC\_MAC}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MAC\_AES\_CBC\_MAC@{ALGO\_MAC\_AES\_CBC\_MAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aabbccee790775799d25cd267fa04a62e}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MAC\+\_\+\+AES\+\_\+\+CBC\+\_\+\+MAC&AES-\/\+CBC-\/\+MAC (ISO/\+IEC 9797-\/1 MAC Algorithm 1) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MAC\_LAST@{ALGO\_MAC\_LAST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MAC\_LAST@{ALGO\_MAC\_LAST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6aaf3ad697dec1f938484ee3714209ad}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MAC\+\_\+\+LAST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_FIRST@{ALGO\_CIPHER\_FIRST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_FIRST@{ALGO\_CIPHER\_FIRST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a577ba58551daad5a72d348bc3e101bf4}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+FIRST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_NULL@{ALGO\_CIPHER\_NULL}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_NULL@{ALGO\_CIPHER\_NULL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a306284605d440d06b71b524024e34164}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+NULL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_any@{ALGO\_CIPHER\_AES\_any}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_any@{ALGO\_CIPHER\_AES\_any}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a937188f581530072b11c3ef2d2f2d7dc}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+any&AES with any mode \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_ECB@{ALGO\_CIPHER\_AES\_ECB}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_ECB@{ALGO\_CIPHER\_AES\_ECB}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afd88e1fc3edbf8445a30df47462f37ce}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+ECB&AES-\/\+ECB (NIST SP800-\/38A \href{https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38a.pdf}{\texttt{ https\+://nvlpubs.\+nist.\+gov/nistpubs/legacy/sp/nistspecialpublication800-\/38a.\+pdf}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_CBC@{ALGO\_CIPHER\_AES\_CBC}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_CBC@{ALGO\_CIPHER\_AES\_CBC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7bd438d5eea67309eefcf65238af0c61}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+CBC&AES-\/\+CBC (NIST SP800-\/38A \href{https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38a.pdf}{\texttt{ https\+://nvlpubs.\+nist.\+gov/nistpubs/legacy/sp/nistspecialpublication800-\/38a.\+pdf}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_CCM@{ALGO\_CIPHER\_AES\_CCM}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_CCM@{ALGO\_CIPHER\_AES\_CCM}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af38bd6c676b7dfe36a6b22da51a345a5}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+CCM&AES-\/\+CCM (NIST SP800-\/38C \href{https://csrc.nist.gov/publications/detail/sp/800-38c/final}{\texttt{ https\+://csrc.\+nist.\+gov/publications/detail/sp/800-\/38c/final}}) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_GCM@{ALGO\_CIPHER\_AES\_GCM}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_GCM@{ALGO\_CIPHER\_AES\_GCM}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7ccc685557625790188a4470566ba431}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+GCM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_GCU@{ALGO\_CIPHER\_AES\_GCU}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_GCU@{ALGO\_CIPHER\_AES\_GCU}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aff077002d9bc3679156f463a437e7183}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+GCU&A key with this algorithm value is transferred from the secure storage to the AES-\/\+SPI key register when used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_ECIES\_AES\_HMAC@{ALGO\_CIPHER\_ECIES\_AES\_HMAC}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_ECIES\_AES\_HMAC@{ALGO\_CIPHER\_ECIES\_AES\_HMAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8ad82b2a48827136c4c282bf8c403319}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+ECIES\+\_\+\+AES\+\_\+\+HMAC&ECIES using AES-\/\+CBC with HMAC \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_AES\_CTR@{ALGO\_CIPHER\_AES\_CTR}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_AES\_CTR@{ALGO\_CIPHER\_AES\_CTR}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac77af1573af532a9d85fcb4cfa036be8}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+AES\+\_\+\+CTR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_CIPHER\_LAST@{ALGO\_CIPHER\_LAST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_CIPHER\_LAST@{ALGO\_CIPHER\_LAST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a51097c15df2757d9988d864f99ff4ece}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+CIPHER\+\_\+\+LAST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_MD\_SHA1@{ALGO\_MD\_SHA1}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_MD\_SHA1@{ALGO\_MD\_SHA1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a42d0bf18b3988bde92e678498b13ba3f}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+MD\+\_\+\+SHA1&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASIGN\_FIRST@{ALGO\_RSASIGN\_FIRST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASIGN\_FIRST@{ALGO\_RSASIGN\_FIRST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a49d9245b8a588a8589a4c24b029be986}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASIGN\+\_\+\+FIRST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V2\_1\_PLAIN@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_PLAIN}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V2\_1\_PLAIN@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_PLAIN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abc6210602166aa7ca35e4960079b1cd7}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+PLAIN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA256@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA256}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA256@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA256}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9fc456527efd4967b70e25ffa0544de3}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+SHA256&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA384@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA384}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA384@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA384}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4902ffc8cb58823eeb5de671b51aba24}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+SHA384&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA512@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA512}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA512@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_SHA512}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af017dde8f52cc0b5ee8e16b0384713f1}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+SHA512&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V2\_1\_INNERMD@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_INNERMD}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V2\_1\_INNERMD@{ALGO\_RSASSAPSSPKCS1\_V2\_1\_INNERMD}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6482454063b74c454a64704b281a7096}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V2\+\_\+1\+\_\+\+INNERMD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V1\_5\_PLAIN@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_PLAIN}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V1\_5\_PLAIN@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_PLAIN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa7ffbeea81bc60385f4e79c0eff38b39}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+PLAIN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA256@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA256}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA256@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA256}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab4f07bde5ee62fbd63459936a8d57318}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+SHA256&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA384@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA384}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA384@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA384}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad974e2f4d3d97484bd12bf9df3e7238c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+SHA384&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA512@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA512}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA512@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_SHA512}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa3776f00774041229ca60b85f43efd51}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+SHA512&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASSAPSSPKCS1\_V1\_5\_INNERMD@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_INNERMD}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASSAPSSPKCS1\_V1\_5\_INNERMD@{ALGO\_RSASSAPSSPKCS1\_V1\_5\_INNERMD}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a95d1536b26f954394008331c097fcb30}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASSAPSSPKCS1\+\_\+\+V1\+\_\+5\+\_\+\+INNERMD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASIGN\_ANY@{ALGO\_RSASIGN\_ANY}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASIGN\_ANY@{ALGO\_RSASIGN\_ANY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afff75dfba52a5ecfb14f831f516e1eca}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASIGN\+\_\+\+ANY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_RSASIGN\_LAST@{ALGO\_RSASIGN\_LAST}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_RSASIGN\_LAST@{ALGO\_RSASIGN\_LAST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af1200acbcc1a1906683f9ceaacff3260}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+RSASIGN\+\_\+\+LAST&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ALGO\_INVALID@{ALGO\_INVALID}!Administration@{Administration}}\index{Administration@{Administration}!ALGO\_INVALID@{ALGO\_INVALID}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5be0273ebb28adf4880f7d58eb64c785}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+ALGO\+\_\+\+INVALID&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_SECURECHANNEL@{MXQ\_KEYUSE\_SECURECHANNEL}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_SECURECHANNEL@{MXQ\_KEYUSE\_SECURECHANNEL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afdb6d80ba180c52391792f2d27d539eb}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+SECURECHANNEL&Key can be used for secure channel \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_DATASIGNATURE@{MXQ\_KEYUSE\_DATASIGNATURE}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_DATASIGNATURE@{MXQ\_KEYUSE\_DATASIGNATURE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa427d536d6239f3fd3880bc93b2de10d}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+DATASIGNATURE&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_ATTESTATION@{MXQ\_KEYUSE\_ATTESTATION}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_ATTESTATION@{MXQ\_KEYUSE\_ATTESTATION}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9ba5f0e6b2591311cf81b14a0046230c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+ATTESTATION&Key/\+Cert can be used for generic data signature/verification \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_INTERNALENCRYPTION@{MXQ\_KEYUSE\_INTERNALENCRYPTION}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_INTERNALENCRYPTION@{MXQ\_KEYUSE\_INTERNALENCRYPTION}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4096277587575c1b6113f0280ffe2548}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+INTERNALENCRYPTION&Key can be used for object or key data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_INTERNALMAC@{MXQ\_KEYUSE\_INTERNALMAC}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_INTERNALMAC@{MXQ\_KEYUSE\_INTERNALMAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa6b61c08025edb63125f1d324fcc09c5}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+INTERNALMAC&Key can be used for MAC key derivation only \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_ENCRYPTION@{MXQ\_KEYUSE\_ENCRYPTION}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_ENCRYPTION@{MXQ\_KEYUSE\_ENCRYPTION}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a85296ac325e5d180fdf1d71fcd38610a}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+ENCRYPTION&Key can be used for generic data encryption/decryption \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_TLSAUTH@{MXQ\_KEYUSE\_TLSAUTH}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_TLSAUTH@{MXQ\_KEYUSE\_TLSAUTH}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af8a6521c70ce89bd12cd33bbe98750ee}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+TLSAUTH&Key can be used in TLS authentication \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_ADMINAUTH@{MXQ\_KEYUSE\_ADMINAUTH}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_ADMINAUTH@{MXQ\_KEYUSE\_ADMINAUTH}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a307727a87e2ac5b19eb573104db672bf}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+ADMINAUTH&Key can be used to authenticate the manufacturer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_ENDCUSTOMERAUTH@{MXQ\_KEYUSE\_ENDCUSTOMERAUTH}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_ENDCUSTOMERAUTH@{MXQ\_KEYUSE\_ENDCUSTOMERAUTH}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a63b00a180bf13651825f132f9800ad0d}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+ENDCUSTOMERAUTH&Key can be used to authenticate the end customer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_VERIFY\_KEY\_CERT@{MXQ\_KEYUSE\_VERIFY\_KEY\_CERT}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_VERIFY\_KEY\_CERT@{MXQ\_KEYUSE\_VERIFY\_KEY\_CERT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad69f535c2865bceca30a1863aa748c67}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+KEY\+\_\+\+CERT&Key/\+Cert can be used to verify certificates \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_VERIFY\_FW@{MXQ\_KEYUSE\_VERIFY\_FW}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_VERIFY\_FW@{MXQ\_KEYUSE\_VERIFY\_FW}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aed6bb3d15313da494e4f0570958ac939}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+VERIFY\+\_\+\+FW&Key can be used to verify firmware \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_RFU@{MXQ\_KEYUSE\_RFU}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_RFU@{MXQ\_KEYUSE\_RFU}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7c51c10e15b571a68e424bc77cfdfa89}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+RFU&RFU \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_KEY\_IMPORT@{MXQ\_KEYUSE\_KEY\_IMPORT}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_KEY\_IMPORT@{MXQ\_KEYUSE\_KEY\_IMPORT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a11acb19fcefb364d35c9ed5b7ec0ff3c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+IMPORT&Key can be used to verify import/generate key requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_GPIO\_CONTROL@{MXQ\_KEYUSE\_GPIO\_CONTROL}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_GPIO\_CONTROL@{MXQ\_KEYUSE\_GPIO\_CONTROL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a61bf66983fb5f75ea44b049c04b91e2e}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+GPIO\+\_\+\+CONTROL&Key can be used to Secure GPIO Control \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_KEY\_EXCHAGE@{MXQ\_KEYUSE\_KEY\_EXCHAGE}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_KEY\_EXCHAGE@{MXQ\_KEYUSE\_KEY\_EXCHAGE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1f97ff56fe4d2b51b3bdd6ab47a00012}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+KEY\+\_\+\+EXCHAGE&Key can be used for key exchange requests \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYUSE\_NONE@{MXQ\_KEYUSE\_NONE}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYUSE\_NONE@{MXQ\_KEYUSE\_NONE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ada0f5b42c7f5387de945c83b460b986a}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYUSE\+\_\+\+NONE&Key can\textquotesingle{}t be used \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EC\_P256R1@{MXQ\_KEYPARAM\_EC\_P256R1}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EC\_P256R1@{MXQ\_KEYPARAM\_EC\_P256R1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad25fa5d533341bebd0e5218ef968fcbb}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P256\+R1&NIST sec\+P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EC\_P384R1@{MXQ\_KEYPARAM\_EC\_P384R1}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EC\_P384R1@{MXQ\_KEYPARAM\_EC\_P384R1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5575f5368cbdc2df20811f44a5ad2837}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P384\+R1&NIST sec\+P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EC\_P521R1@{MXQ\_KEYPARAM\_EC\_P521R1}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EC\_P521R1@{MXQ\_KEYPARAM\_EC\_P521R1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a60fa624f6387e53150822bcf4ccde801}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+P521\+R1&NIST sec\+P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EC\_BP256R1@{MXQ\_KEYPARAM\_EC\_BP256R1}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EC\_BP256R1@{MXQ\_KEYPARAM\_EC\_BP256R1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a418fdb744bae9506a3424c4772d4e575}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP256\+R1&Brainpool P256r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EC\_BP384R1@{MXQ\_KEYPARAM\_EC\_BP384R1}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EC\_BP384R1@{MXQ\_KEYPARAM\_EC\_BP384R1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60acf33dea726dca1dc5486b4dcd6df78e9}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP384\+R1&Brainpool P384r1 ~\newline
+ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EC\_BP512R1@{MXQ\_KEYPARAM\_EC\_BP512R1}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EC\_BP512R1@{MXQ\_KEYPARAM\_EC\_BP512R1}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a45e01b87021f01760a0e84d6774dcf66}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EC\+\_\+\+BP512\+R1&Brainpool P521r1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYPARAM\_EDWARD\_TBD@{MXQ\_KEYPARAM\_EDWARD\_TBD}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYPARAM\_EDWARD\_TBD@{MXQ\_KEYPARAM\_EDWARD\_TBD}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0940ca44ba5abe3c81bbede44ba7906e}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYPARAM\+\_\+\+EDWARD\+\_\+\+TBD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_UNKNOWN\_CURVE@{MXQ\_UNKNOWN\_CURVE}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_UNKNOWN\_CURVE@{MXQ\_UNKNOWN\_CURVE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac1e1d539d340ebb34c7d75c030d98bb4}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+UNKNOWN\+\_\+\+CURVE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_AES@{MXQ\_KEYTYPE\_AES}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_AES@{MXQ\_KEYTYPE\_AES}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a93d7c4538c10896ffce554929a3d681d}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+AES&AES Key. Supports AES 128 and 256, not 192 (less secure) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_PSK@{MXQ\_KEYTYPE\_PSK}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_PSK@{MXQ\_KEYTYPE\_PSK}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae7c60c4d0441f87c2e70ce8e113fd0fc}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+PSK&TLS Pre Shared Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_HMAC@{MXQ\_KEYTYPE\_HMAC}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_HMAC@{MXQ\_KEYTYPE\_HMAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a46b6cae82ddaa655f36db34d97fa0572}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+HMAC&HMAC key. Key length must be suitable, adjusted to the used SHA algo \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_ECC@{MXQ\_KEYTYPE\_ECC}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_ECC@{MXQ\_KEYTYPE\_ECC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4b1731ad78143bd6d34f75d7051af057}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+ECC&ECC key. Key length must fit the curve! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_IKM@{MXQ\_KEYTYPE\_IKM}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_IKM@{MXQ\_KEYTYPE\_IKM}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa6db8f208910a40168d6133e9f43789b}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+IKM&Input Key Material for HKDF! \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_RSA@{MXQ\_KEYTYPE\_RSA}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_RSA@{MXQ\_KEYTYPE\_RSA}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a9494ca508f20c30b7e27c9660e960d65}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+RSA&RSA key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_KEYTYPE\_UNKNOWN@{MXQ\_KEYTYPE\_UNKNOWN}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_KEYTYPE\_UNKNOWN@{MXQ\_KEYTYPE\_UNKNOWN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1aec682ad2d97ddc8bddbabceeab3e5a}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+KEYTYPE\+\_\+\+UNKNOWN&Unknown key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{S\_ERASE\_SELECTED@{S\_ERASE\_SELECTED}!Administration@{Administration}}\index{Administration@{Administration}!S\_ERASE\_SELECTED@{S\_ERASE\_SELECTED}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2ea56e36113a9c4c5bb4052cbffce384}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+S\+\_\+\+ERASE\+\_\+\+SELECTED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{S\_ERASE\_ALL@{S\_ERASE\_ALL}!Administration@{Administration}}\index{Administration@{Administration}!S\_ERASE\_ALL@{S\_ERASE\_ALL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a56e62b8d198b5e695f9ae8289366b07f}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+S\+\_\+\+ERASE\+\_\+\+ALL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SHARE\_SECRET@{SHARE\_SECRET}!Administration@{Administration}}\index{Administration@{Administration}!SHARE\_SECRET@{SHARE\_SECRET}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a760c06755743198ad8ece23b777e7823}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+SHARE\+\_\+\+SECRET&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GENERATE\_M@{GENERATE\_M}!Administration@{Administration}}\index{Administration@{Administration}!GENERATE\_M@{GENERATE\_M}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a01c5170e3321214ba8a511cdaaeab944}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+GENERATE\+\_\+M&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{IS\_AUTH\_ENABLED@{IS\_AUTH\_ENABLED}!Administration@{Administration}}\index{Administration@{Administration}!IS\_AUTH\_ENABLED@{IS\_AUTH\_ENABLED}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a05b545cd67ecc775dea54fcb4c992af4}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+IS\+\_\+\+AUTH\+\_\+\+ENABLED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_CREATE\_OBJECT@{CMDNUM\_CREATE\_OBJECT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_CREATE\_OBJECT@{CMDNUM\_CREATE\_OBJECT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a3686ae382b7b7c868b911fefb93bc909}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+CREATE\+\_\+\+OBJECT&CREATE OBJECT \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_DELETE\_OBJECT@{CMDNUM\_DELETE\_OBJECT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_DELETE\_OBJECT@{CMDNUM\_DELETE\_OBJECT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2a2936dfd4ba6ae83d1cb87bd23a3349}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+DELETE\+\_\+\+OBJECT&DELETE OBJECT \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_READ\_OBJECT@{CMDNUM\_READ\_OBJECT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_READ\_OBJECT@{CMDNUM\_READ\_OBJECT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af23d472d01b5a446475cf1da5dee4867}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+READ\+\_\+\+OBJECT&READ OBJECT \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_WRITE\_OBJECT@{CMDNUM\_WRITE\_OBJECT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_WRITE\_OBJECT@{CMDNUM\_WRITE\_OBJECT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a65f74cf2ae4e8443c40757b95cc48cfa}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+WRITE\+\_\+\+OBJECT&WRITE OBJECT \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_UPDATE\_COUNTER@{CMDNUM\_UPDATE\_COUNTER}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_UPDATE\_COUNTER@{CMDNUM\_UPDATE\_COUNTER}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2ce4a3a20a7187a1fd1f96fd43c66673}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+UPDATE\+\_\+\+COUNTER&UPDATE COUNTER \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_LIST\_OBJECTS@{CMDNUM\_LIST\_OBJECTS}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_LIST\_OBJECTS@{CMDNUM\_LIST\_OBJECTS}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a483ac26ee85b9b8dbe3c605a7916d3a9}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+LIST\+\_\+\+OBJECTS&LIST OBJECT \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_TAMPER@{CMDNUM\_TAMPER}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_TAMPER@{CMDNUM\_TAMPER}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4c8f0274b22baa635ab152f39694b8e8}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+TAMPER&TAMPER \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_IMPORT\_KEY\_ENC@{CMDNUM\_IMPORT\_KEY\_ENC}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_IMPORT\_KEY\_ENC@{CMDNUM\_IMPORT\_KEY\_ENC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af31a3d18d7dd099883b5d1723c9804b1}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+IMPORT\+\_\+\+KEY\+\_\+\+ENC&IMPORT KEY encrypted with a KEK. Not a command per se, uses command 0x\+CA \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_TLS13\_KEY\_EXCHANGE@{CMDNUM\_TLS13\_KEY\_EXCHANGE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_TLS13\_KEY\_EXCHANGE@{CMDNUM\_TLS13\_KEY\_EXCHANGE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab3536e54a1beef1cc0760471f44e80ef}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+TLS13\+\_\+\+KEY\+\_\+\+EXCHANGE&TLS1.\+3 Key Exchange \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_ENCRYPT\_DECRYPT@{CMDNUM\_ENCRYPT\_DECRYPT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_ENCRYPT\_DECRYPT@{CMDNUM\_ENCRYPT\_DECRYPT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a2cd3752465cfbd860534dc07cb71b185}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+ENCRYPT\+\_\+\+DECRYPT&ENCRYPT/\+DECRYPT DATA \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_MANAGE\_SECURE\_CHANNEL@{CMDNUM\_MANAGE\_SECURE\_CHANNEL}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_MANAGE\_SECURE\_CHANNEL@{CMDNUM\_MANAGE\_SECURE\_CHANNEL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4e4266306ef9cef63e4f4b0dac9b80d4}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+MANAGE\+\_\+\+SECURE\+\_\+\+CHANNEL&MANAGE SECURE CHANNEL \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_ADMIN\_AUTHENTICATE@{CMDNUM\_ADMIN\_AUTHENTICATE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_ADMIN\_AUTHENTICATE@{CMDNUM\_ADMIN\_AUTHENTICATE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a6e170c72d97a1fb7c5028075d6fa55b6}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+ADMIN\+\_\+\+AUTHENTICATE&ADMIN AUTHENTICATE \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_KEY\_EXCHANGE@{CMDNUM\_KEY\_EXCHANGE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_KEY\_EXCHANGE@{CMDNUM\_KEY\_EXCHANGE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af9099f7ffcbefb8a0203d8e4798205fc}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+KEY\+\_\+\+EXCHANGE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_TLS\_RECORD@{CMDNUM\_TLS\_RECORD}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_TLS\_RECORD@{CMDNUM\_TLS\_RECORD}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7fd3f89d5d4556f211468807a0554c32}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+TLS\+\_\+\+RECORD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_ESTABLISH\_KEY\_DH@{CMDNUM\_ESTABLISH\_KEY\_DH}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_ESTABLISH\_KEY\_DH@{CMDNUM\_ESTABLISH\_KEY\_DH}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ae8d4c534f579a579e84f0de7348f0912}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+ESTABLISH\+\_\+\+KEY\+\_\+\+DH&ESTABLISH KEY DH \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_GET\_CHALLENGE@{CMDNUM\_GET\_CHALLENGE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_GET\_CHALLENGE@{CMDNUM\_GET\_CHALLENGE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a1b114855f50354b7800edb403f19590a}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+GET\+\_\+\+CHALLENGE&GET CHALLENGE \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_COMPUTE\_VERIFY\_DIGITAL\_SIGNATURE@{CMDNUM\_COMPUTE\_VERIFY\_DIGITAL\_SIGNATURE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_COMPUTE\_VERIFY\_DIGITAL\_SIGNATURE@{CMDNUM\_COMPUTE\_VERIFY\_DIGITAL\_SIGNATURE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a92e6a3dd68b84f9de891a2aff8b83eb8}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+COMPUTE\+\_\+\+VERIFY\+\_\+\+DIGITAL\+\_\+\+SIGNATURE&COMPUTE/\+VERIFY DIGITAL SIGNATURE \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_GET\_RANDOM@{CMDNUM\_GET\_RANDOM}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_GET\_RANDOM@{CMDNUM\_GET\_RANDOM}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0c92ffe0722ce3f39cbb5d08e7b6b3b9}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+GET\+\_\+\+RANDOM&GET RANDOM \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_IMPORT\_KEY@{CMDNUM\_IMPORT\_KEY}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_IMPORT\_KEY@{CMDNUM\_IMPORT\_KEY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a23decfd9aaca579084115b6f57f40a11}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+IMPORT\+\_\+\+KEY&IMPORT KEY \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_IMPORT\_ROOTCERT@{CMDNUM\_IMPORT\_ROOTCERT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_IMPORT\_ROOTCERT@{CMDNUM\_IMPORT\_ROOTCERT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab6ad69cbe8a15ba68af2b158f5471221}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+IMPORT\+\_\+\+ROOTCERT&IMPORT ROOT CERTIFICATE \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_VERIFY\_BOOT@{CMDNUM\_VERIFY\_BOOT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_VERIFY\_BOOT@{CMDNUM\_VERIFY\_BOOT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a92bbb04f8379f6fd86ddcc7b8ebbf559}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+VERIFY\+\_\+\+BOOT&VERIFY BOOT \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_ATTESTATION@{CMDNUM\_ATTESTATION}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_ATTESTATION@{CMDNUM\_ATTESTATION}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a5297d11276ffba61f9c988622229ead6}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+ATTESTATION&ATTESTATION \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_ESTABLISH\_KEY@{CMDNUM\_ESTABLISH\_KEY}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_ESTABLISH\_KEY@{CMDNUM\_ESTABLISH\_KEY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4f16a094c01307682456d872170b3ab0}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+ESTABLISH\+\_\+\+KEY&ESTABLISH KEY \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_IMPORT\_CHILDCERT@{CMDNUM\_IMPORT\_CHILDCERT}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_IMPORT\_CHILDCERT@{CMDNUM\_IMPORT\_CHILDCERT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad6d16e05b16e5f55ded3425f82f148f4}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+IMPORT\+\_\+\+CHILDCERT&IMPORT CHILD CERTIFICATE \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_COMPUTE\_MESSAGE\_DIGEST@{CMDNUM\_COMPUTE\_MESSAGE\_DIGEST}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_COMPUTE\_MESSAGE\_DIGEST@{CMDNUM\_COMPUTE\_MESSAGE\_DIGEST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4dc9757997803d46e04d091c936ca943}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+COMPUTE\+\_\+\+MESSAGE\+\_\+\+DIGEST&COMPUTE MESSAGE DIGEST \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_COMPUTE\_MAC@{CMDNUM\_COMPUTE\_MAC}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_COMPUTE\_MAC@{CMDNUM\_COMPUTE\_MAC}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af8a7abf1ae76e0e6b3576a5790add4dd}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+COMPUTE\+\_\+\+MAC&COMPUTE/\+VERIFY MAC \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_SLEEP@{CMDNUM\_SLEEP}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_SLEEP@{CMDNUM\_SLEEP}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a03aa6ed828c46eb7c260da3e8f298f49}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+SLEEP&SLEEP \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_GETSTATUS@{CMDNUM\_GETSTATUS}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_GETSTATUS@{CMDNUM\_GETSTATUS}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a868408eb09f94a8477efe61c95af4cdd}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+GETSTATUS&GET STATUS \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_SET\_LIFE\_CYCLE\_STATE@{CMDNUM\_SET\_LIFE\_CYCLE\_STATE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_SET\_LIFE\_CYCLE\_STATE@{CMDNUM\_SET\_LIFE\_CYCLE\_STATE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60af97c0c81d3b9c30b0a9415e00c59f666}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+SET\+\_\+\+LIFE\+\_\+\+CYCLE\+\_\+\+STATE&SET LIFE CYCLE STATE \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_SETCONFIG@{CMDNUM\_SETCONFIG}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_SETCONFIG@{CMDNUM\_SETCONFIG}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8dd2186b1d1bce29659aea26fa9749ba}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+SETCONFIG&SET CONFIG \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_RESET\_FACTORY@{CMDNUM\_RESET\_FACTORY}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_RESET\_FACTORY@{CMDNUM\_RESET\_FACTORY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aa06b85431f13bc1428258d5c5ae3f9fd}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+RESET\+\_\+\+FACTORY&FACTORY RESET \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_RESTORE@{CMDNUM\_RESTORE}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_RESTORE@{CMDNUM\_RESTORE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8147a99dd667abee59046d58ad60f422}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+RESTORE&RESTORE MAXQ1065 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_DUMP@{CMDNUM\_DUMP}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_DUMP@{CMDNUM\_DUMP}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aee67216fbc1b8318acdb1e76f339550c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+DUMP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_PING@{CMDNUM\_PING}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_PING@{CMDNUM\_PING}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac05f14ab22b40279408f7e09cdf37b5c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+PING&PING \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_GPIO\_CONTROL@{CMDNUM\_GPIO\_CONTROL}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_GPIO\_CONTROL@{CMDNUM\_GPIO\_CONTROL}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60abda42cbb95f2e417969a285ef4c15659}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+GPIO\+\_\+\+CONTROL&GPIO CONTROL \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMDNUM\_GPIO\_READ@{CMDNUM\_GPIO\_READ}!Administration@{Administration}}\index{Administration@{Administration}!CMDNUM\_GPIO\_READ@{CMDNUM\_GPIO\_READ}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aee30b2b9bad4e6b1df6bc32328e3b47d}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+CMDNUM\+\_\+\+GPIO\+\_\+\+READ&GPIO READ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COND\_NA@{COND\_NA}!Administration@{Administration}}\index{Administration@{Administration}!COND\_NA@{COND\_NA}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a111371425ae7dfcadbdca07dad8aaa94}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+COND\+\_\+\+NA&Never \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COND\_ENDUSER@{COND\_ENDUSER}!Administration@{Administration}}\index{Administration@{Administration}!COND\_ENDUSER@{COND\_ENDUSER}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60aade4e49d5a78d205dcc4dffa1cc0d8a5}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+COND\+\_\+\+ENDUSER&Access if secure boot (independent of others) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COND\_ADMIN@{COND\_ADMIN}!Administration@{Administration}}\index{Administration@{Administration}!COND\_ADMIN@{COND\_ADMIN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a27a0619db66b70a5a8dc7be8b9d0bd3d}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+COND\+\_\+\+ADMIN&Access if authenticate as administrator (independent of others) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COND\_SECUREBOOT@{COND\_SECUREBOOT}!Administration@{Administration}}\index{Administration@{Administration}!COND\_SECUREBOOT@{COND\_SECUREBOOT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60afc1fb34929b3748ca316437188836122}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+COND\+\_\+\+SECUREBOOT&Access if secure boot (independent of others) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COND\_HOST@{COND\_HOST}!Administration@{Administration}}\index{Administration@{Administration}!COND\_HOST@{COND\_HOST}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a4868e285eb000e6afe697c480c05908c}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+COND\+\_\+\+HOST&Access if host (independent of others) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COND\_NONE@{COND\_NONE}!Administration@{Administration}}\index{Administration@{Administration}!COND\_NONE@{COND\_NONE}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a0d68bd3315d163a7a9673bb01dcc6032}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+COND\+\_\+\+NONE&Access always \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_SECRETKEY@{MXQ\_OBJTYPE\_SECRETKEY}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_SECRETKEY@{MXQ\_OBJTYPE\_SECRETKEY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ad5e940ad9b11ceecf775ca8a4c13cafa}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+SECRETKEY&Secret Key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_PUBKEY@{MXQ\_OBJTYPE\_PUBKEY}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_PUBKEY@{MXQ\_OBJTYPE\_PUBKEY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a7dd78f1345b87e498752669230adc6c8}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+PUBKEY&Public key \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_KEYPAIR@{MXQ\_OBJTYPE\_KEYPAIR}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_KEYPAIR@{MXQ\_OBJTYPE\_KEYPAIR}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ab537da9cc9d6197c8043235526d64699}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+KEYPAIR&Key Pair \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_TRANSPARENT@{MXQ\_OBJTYPE\_TRANSPARENT}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_TRANSPARENT@{MXQ\_OBJTYPE\_TRANSPARENT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60ac934d92de2d7d5d8a9b1eaba78de3cbb}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+TRANSPARENT&Transparent object \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_COUNTER\_UP@{MXQ\_OBJTYPE\_COUNTER\_UP}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_COUNTER\_UP@{MXQ\_OBJTYPE\_COUNTER\_UP}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a59ce378bc7afc88836ee7791e37e85ec}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+UP&Monotonic counter incrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_X509@{MXQ\_OBJTYPE\_X509}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_X509@{MXQ\_OBJTYPE\_X509}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a771cefd227d187ac3cc844510eb4f15e}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+X509&X.\+509 certificate \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_COUNTER\_DOWN@{MXQ\_OBJTYPE\_COUNTER\_DOWN}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_COUNTER\_DOWN@{MXQ\_OBJTYPE\_COUNTER\_DOWN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a8362ad8531d301bfae0e4fdc5b5fe55a}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+COUNTER\+\_\+\+DOWN&Monotonic counter decrementing \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MXQ\_OBJTYPE\_UNKNOWN@{MXQ\_OBJTYPE\_UNKNOWN}!Administration@{Administration}}\index{Administration@{Administration}!MXQ\_OBJTYPE\_UNKNOWN@{MXQ\_OBJTYPE\_UNKNOWN}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a76473f19c3eeeeba3d12d13164f1940f}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+MXQ\+\_\+\+OBJTYPE\+\_\+\+UNKNOWN&Unknown object type \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OBJPROP\_TEMPORARY@{OBJPROP\_TEMPORARY}!Administration@{Administration}}\index{Administration@{Administration}!OBJPROP\_TEMPORARY@{OBJPROP\_TEMPORARY}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a3d04dd740ff2d0826890f47f232621a5}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+OBJPROP\+\_\+\+TEMPORARY&Data is volatile, but object remains. Use as little as possible (uses RAM) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OBJPROP\_PERSISTENT@{OBJPROP\_PERSISTENT}!Administration@{Administration}}\index{Administration@{Administration}!OBJPROP\_PERSISTENT@{OBJPROP\_PERSISTENT}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60adf5eba7e6b1833b779209142f2985a3f}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+OBJPROP\+\_\+\+PERSISTENT&Fully persistent object. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OBJPROP\_WIPE\_ON\_TAMPER@{OBJPROP\_WIPE\_ON\_TAMPER}!Administration@{Administration}}\index{Administration@{Administration}!OBJPROP\_WIPE\_ON\_TAMPER@{OBJPROP\_WIPE\_ON\_TAMPER}}}\Hypertarget{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60a89c75fe29f6e2fc75e0602139a58f61e}\label{group___administration_ga8725e0903c76ca456eeec02a0f3a7f60} 
+OBJPROP\+\_\+\+WIPE\+\_\+\+ON\+\_\+\+TAMPER&Object data destroyed on GPIO tamper event (applies to both persistent and temporary) \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{group___administration_gad521792437d1978c72fcfc81155b7478}\index{Administration@{Administration}!teSCProcessState@{teSCProcessState}}
+\index{teSCProcessState@{teSCProcessState}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{teSCProcessState}{teSCProcessState}}
+{\footnotesize\ttfamily \label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+enum \mbox{\hyperlink{group___administration_gad521792437d1978c72fcfc81155b7478}{te\+SCProcess\+State}}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCInit@{eSCInit}!Administration@{Administration}}\index{Administration@{Administration}!eSCInit@{eSCInit}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478a10c3fbe859408f27dd8b4438db050188}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCInit&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCAesCbcInit@{eSCAesCbcInit}!Administration@{Administration}}\index{Administration@{Administration}!eSCAesCbcInit@{eSCAesCbcInit}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478a797e4240e832e3cd41b8b99cbe40f994}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCAes\+Cbc\+Init&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCFinish@{eSCFinish}!Administration@{Administration}}\index{Administration@{Administration}!eSCFinish@{eSCFinish}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478ac5edd83199e2f51eb59f8960ccd4504d}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCFinish&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCAesGcmInit@{eSCAesGcmInit}!Administration@{Administration}}\index{Administration@{Administration}!eSCAesGcmInit@{eSCAesGcmInit}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478addf77541ab9180cc539d21fe6163fc14}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCAes\+Gcm\+Init&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCPreSharedKeyMode@{eSCPreSharedKeyMode}!Administration@{Administration}}\index{Administration@{Administration}!eSCPreSharedKeyMode@{eSCPreSharedKeyMode}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478acc9aec29507c8d1585b0281ec85eb4ed}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCPre\+Shared\+Key\+Mode&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCEcdhe@{eSCEcdhe}!Administration@{Administration}}\index{Administration@{Administration}!eSCEcdhe@{eSCEcdhe}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478a2cca86daaff8977cd24ac9ee804ca34b}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCEcdhe&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCAuthEcdhe@{eSCAuthEcdhe}!Administration@{Administration}}\index{Administration@{Administration}!eSCAuthEcdhe@{eSCAuthEcdhe}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478abc6d5081372a62b58a713839fe8b748f}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCAuth\+Ecdhe&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{eSCEcdheMode1065@{eSCEcdheMode1065}!Administration@{Administration}}\index{Administration@{Administration}!eSCEcdheMode1065@{eSCEcdheMode1065}}}\Hypertarget{group___administration_ggad521792437d1978c72fcfc81155b7478a01f164d047e813d13d8b769a07c9f170}\label{group___administration_gad521792437d1978c72fcfc81155b7478} 
+e\+SCEcdhe\+Mode1065&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e}\index{Administration@{Administration}!MXQ\_GetStatus@{MXQ\_GetStatus}}
+\index{MXQ\_GetStatus@{MXQ\_GetStatus}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_GetStatus()}{MXQ\_GetStatus()}}
+{\footnotesize\ttfamily \label{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Get\+Status (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___administration_ga4fcc3e535da1b5652e898e13f9392131}{mxq\+\_\+status\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{status}{}\end{DoxyParamCaption})}
+
+Gets information about the MAXQ10xx.
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & Pointer to the structure that receives the status information.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0x0000} & OK \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN} & Unspecified error \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED} & Security Condition not Satisfied\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+\doxylink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\+\_\+\+Module\+\_\+\+Init()} must have been called before. 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+None 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_ga0ead3d761114495e89a6fe863e87e835}\index{Administration@{Administration}!MXQ\_Module\_Deinit@{MXQ\_Module\_Deinit}}
+\index{MXQ\_Module\_Deinit@{MXQ\_Module\_Deinit}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_Module\_Deinit()}{MXQ\_Module\_Deinit()}}
+{\footnotesize\ttfamily \label{group___administration_ga0ead3d761114495e89a6fe863e87e835} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Module\+\_\+\+Deinit (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Deinitializes the host to close communication with the security module.
+
+\begin{DoxyReturn}{Returns}
+Execution status. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+None 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+MAXQ10xx communication interface is closed. 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_gadb2d3ce218c13b3572db87018efa1482}\index{Administration@{Administration}!MXQ\_Module\_Init@{MXQ\_Module\_Init}}
+\index{MXQ\_Module\_Init@{MXQ\_Module\_Init}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_Module\_Init()}{MXQ\_Module\_Init()}}
+{\footnotesize\ttfamily \label{group___administration_gadb2d3ce218c13b3572db87018efa1482} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Module\+\_\+\+Init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Initializes the host to enable communication with the security module.
+
+The underlying platform dependent functions will enable the actual communication interface and required GPIOs.
+
+\begin{DoxyReturn}{Returns}
+Execution status. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+None 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+MAXQ10xx is ready to receive commands. 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_ga1b2dd60e215c446702935401c5ee66c8}\index{Administration@{Administration}!MXQ\_Reset@{MXQ\_Reset}}
+\index{MXQ\_Reset@{MXQ\_Reset}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_Reset()}{MXQ\_Reset()}}
+{\footnotesize\ttfamily \label{group___administration_ga1b2dd60e215c446702935401c5ee66c8} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Reset (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Resets the MAXQ10xx through the RESET pin
+
+\begin{DoxyReturn}{Returns}
+Execution status. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+\doxylink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\+\_\+\+Module\+\_\+\+Init()} must have been called before. 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+All security conditions are disabled. 
+
+All pending operations (message digest, cipher, mac) are aborted 
+
+All internal context is reset (TLS session keys, Secure channel session keys, Internally stored randoms or digests) 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_ga6ae1b5bd52046253eb5f67afdb11939e}\index{Administration@{Administration}!MXQ\_ResetFactory@{MXQ\_ResetFactory}}
+\index{MXQ\_ResetFactory@{MXQ\_ResetFactory}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_ResetFactory()}{MXQ\_ResetFactory()}}
+{\footnotesize\ttfamily \label{group___administration_ga6ae1b5bd52046253eb5f67afdb11939e} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Reset\+Factory (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Performs a Factory Reset \begin{DoxyNote}{Note}
+Only available on debug parts
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+Execution status. 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em MXQ\+\_\+\+OK} & Success.\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+\doxylink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\+\_\+\+Module\+\_\+\+Init()} must have been called before. 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+All security conditions are disabled. 
+
+All pending operations (message digest, cipher, mac) are aborted 
+
+All internal context is reset (TLS session keys, Secure channel session keys, Internally stored randoms or digests) 
+
+All objects are deleted. Object 0x1000 (Key importation key) is reset to its default value. Object 0x1001 (Adminsitrator key is reset to its defautl value. 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_gabc8600c9e34d7e5e1e8fbe7b6df3747f}\index{Administration@{Administration}!MXQ\_SetConfig@{MXQ\_SetConfig}}
+\index{MXQ\_SetConfig@{MXQ\_SetConfig}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_SetConfig()}{MXQ\_SetConfig()}}
+{\footnotesize\ttfamily \label{group___administration_gabc8600c9e34d7e5e1e8fbe7b6df3747f} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Set\+Config (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___administration_ga01aeab3d3980bad129ce4b2350507889}{mxq\+\_\+config\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})}
+
+Changes configuration parameters of the MAXQ10xx. Current configuration can be read out using \doxylink{group___administration_ga2e465c16b2609af5ecb8d9de1837f41e}{MXQ\+\_\+\+Get\+Status()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Pointer to the structure holding the new configuration.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0x0000} & OK \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN} & Unspecified error \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED} & Security Condition not Satisfied\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+\doxylink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\+\_\+\+Module\+\_\+\+Init()} must have been called before. 
+
+Administrator authentication is required 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+None 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_ga382f514ebc4771e09d4f7a42cefb71a2}\index{Administration@{Administration}!MXQ\_SetState@{MXQ\_SetState}}
+\index{MXQ\_SetState@{MXQ\_SetState}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_SetState()}{MXQ\_SetState()}}
+{\footnotesize\ttfamily \label{group___administration_ga382f514ebc4771e09d4f7a42cefb71a2} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+Set\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{group___administration_gaf3d9faa6afc5151ee1f0523e35d4a065}{mxq\+\_\+state\+\_\+t}}}]{newstate}{}\end{DoxyParamCaption})}
+
+Changes the life cycle state value of the MAXQ10xx.
+
+\begin{DoxyWarning}{Warning}
+This is a one way process. It is not possible to revert to a previous state.
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em newstate} & New life cycle state.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0x0000} & OK \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN} & Unspecified error \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ACCESS\+\_\+\+DENIED} & Security Condition not Satisfied\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyPrecond}{Precondition}
+\doxylink{group___administration_gadb2d3ce218c13b3572db87018efa1482}{MXQ\+\_\+\+Module\+\_\+\+Init()} must have been called before. 
+
+Administrator authentication is required 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+None 
+\end{DoxyPostcond}
+\Hypertarget{group___administration_gabc2576c517e1ee1c3bd6baf25f7ae355}\index{Administration@{Administration}!MXQ\_TLS\_Enable@{MXQ\_TLS\_Enable}}
+\index{MXQ\_TLS\_Enable@{MXQ\_TLS\_Enable}!Administration@{Administration}}
+\doxysubsubsection{\texorpdfstring{MXQ\_TLS\_Enable()}{MXQ\_TLS\_Enable()}}
+{\footnotesize\ttfamily \label{group___administration_gabc2576c517e1ee1c3bd6baf25f7ae355} 
+\mbox{\hyperlink{_m_x_q___error_8h_a948c2e81dafee10837687db81c2ae156}{mxq\+\_\+err\+\_\+t}} \mbox{\hyperlink{_m_x_q___a_p_i_8h_a3830f9f511a29b9a5a25b35bc8cbd357}{\+\_\+\+\_\+\+API\+\_\+\+\_\+}} MXQ\+\_\+\+TLS\+\_\+\+Enable (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+Activates the Crypto toolbox mode.
+
+This function may be implemented by the underlying platform.
+
+\begin{DoxyReturn}{Returns}
+Status of execution 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0x0000} & OK \\
+\hline
+{\em MXQ\+\_\+\+RSP\+\_\+\+ERROR\+\_\+\+UNKNOWN} & Unspecified error\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyWarning}{Warning}
+This performs a reset of the MAXQ10xx.
+\end{DoxyWarning}
+\begin{DoxyPostcond}{Postcondition}
+All security conditions are disabled. 
+
+All pending operations (message digest, cipher, mac) are aborted 
+
+All internal context is reset (TLS session keys, Secure channel session keys, Internally stored randoms or digests) 
+\end{DoxyPostcond}

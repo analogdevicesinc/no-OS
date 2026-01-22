@@ -1,0 +1,4 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pem.c:60:6:mbedtls_pem_init	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pem.c:353:5:mbedtls_pem_read_buffer	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pem.c:567:6:mbedtls_pem_free	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/pem.c:580:5:mbedtls_pem_write_buffer	56	static

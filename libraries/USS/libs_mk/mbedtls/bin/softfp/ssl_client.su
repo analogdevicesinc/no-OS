@@ -1,0 +1,11 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_misc.h:2163:19:mbedtls_ssl_tls12_named_group_is_ecdhe	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_misc.h:2184:19:mbedtls_ssl_tls13_named_group_is_ecdhe	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:685:12:ssl_generate_random	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:722:12:ssl_prepare_client_hello	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:312:12:ssl_write_client_hello_cipher_suites	64	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_misc.h:2018:20:mbedtls_ssl_tls13_set_hs_sent_ext_mask	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:40:12:ssl_write_hostname_ext	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:128:12:ssl_write_alpn_ext	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:229:12:ssl_write_supported_groups_ext	64	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:430:12:ssl_write_client_hello_body	80	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_client.c:900:5:mbedtls_ssl_write_client_hello	40	static

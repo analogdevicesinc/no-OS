@@ -1,0 +1,192 @@
+\doxysection{MXQ\+\_\+\+Config.\+h}
+\hypertarget{_m_x_q___config_8h_source}{}\label{_m_x_q___config_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Config.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/MXQ\_Config.h}}
+\mbox{\hyperlink{_m_x_q___config_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*******************************************************************************}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright\ (C)\ 2018-\/2019\ Maxim\ Integrated\ Products,\ Inc.\ (now\ owned\ by\ Analog\ Devices,\ Inc.),}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*\ 2024\ Analog\ Devices,\ Inc.\ This\ software\ is\ proprietary\ and}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.\ ,\ All\ rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ This\ software\ is\ protected\ by\ copyright\ laws\ of\ the\ United\ States\ and}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*\ of\ foreign\ countries.\ This\ material\ may\ also\ be\ protected\ by\ patent\ laws}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ and\ technology\ transfer\ regulations\ of\ the\ United\ States\ and\ of\ foreign}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*\ countries.\ This\ software\ is\ furnished\ under\ a\ license\ agreement\ and/or\ a}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ nondisclosure\ agreement\ and\ may\ only\ be\ used\ or\ reproduced\ in\ accordance}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*\ with\ the\ terms\ of\ those\ agreements.\ Dissemination\ of\ this\ information\ to}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ any\ party\ or\ parties\ not\ specified\ in\ the\ license\ agreement\ and/or}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ nondisclosure\ agreement\ is\ expressly\ prohibited.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ The\ above\ copyright\ notice\ and\ this\ permission\ notice\ shall\ be\ included}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*\ in\ all\ copies\ or\ substantial\ portions\ of\ the\ Software.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,\ EXPRESS}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*\ OR\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ MERCHANTABILITY,\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\ AND\ NONINFRINGEMENT.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*\ IN\ NO\ EVENT\ SHALL\ MAXIM\ INTEGRATED\ BE\ LIABLE\ FOR\ ANY\ CLAIM,\ DAMAGES}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*\ OR\ OTHER\ LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF\ CONTRACT,\ TORT\ OR\ OTHERWISE,}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*\ ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*\ OTHER\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{*}}
+\DoxyCodeLine{00026\ \textcolor{comment}{*\ Except\ as\ contained\ in\ this\ notice,\ the\ name\ of\ Maxim\ Integrated}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*\ Products,\ Inc.\ shall\ not\ be\ used\ except\ as\ stated\ in\ the\ Maxim\ Integrated}}
+\DoxyCodeLine{00028\ \textcolor{comment}{*\ Products,\ Inc.\ Branding\ Policy.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{*}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*\ The\ mere\ transfer\ of\ this\ software\ does\ not\ imply\ any\ licenses}}
+\DoxyCodeLine{00031\ \textcolor{comment}{*\ of\ trade\ secrets,\ proprietary\ technology,\ copyrights,\ patents,}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*\ trademarks,\ maskwork\ rights,\ or\ any\ other\ form\ of\ intellectual}}
+\DoxyCodeLine{00033\ \textcolor{comment}{*\ property\ whatsoever.\ Maxim\ Integrated\ Products,\ Inc.\ retains\ all}}
+\DoxyCodeLine{00034\ \textcolor{comment}{*\ ownership\ rights.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{******************************************************************************/}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#ifndef\ \_MXQ\_CONFIG\_H\_}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ \_MXQ\_CONFIG\_H\_}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{/*\ C\ library\ dependencies\ */}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{comment}{/*\ Notes:\ the\ SDK\ build\ system\ already\ provides\ definitions\ for:}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ -\/\ USE\_PROTOCOL\_SPI\ or\ USE\_PROTOCOL\_I2C}}
+\DoxyCodeLine{00055\ \textcolor{comment}{\ -\/\ MXQ\_DUMP\_COMM}}
+\DoxyCodeLine{00056\ \textcolor{comment}{\ -\/\ MXQ\_DUMP\_DEBUG}}
+\DoxyCodeLine{00057\ \textcolor{comment}{\ \ \ When\ using\ an\ alternative\ build\ environment,\ those\ symbols\ can\ be\ defined\ here.}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#if\ (!defined\ (USE\_PROTOCOL\_SPI))\ \&\&\ (!defined(USE\_PROTOCOL\_I2C))\ \&\&\ (!defined(USE\_PROTOCOL\_PIPE))\ \&\&\ (!defined(USE\_PROTOCOL\_MAILBOX))}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ USE\_PROTOCOL\_SPI}}
+\DoxyCodeLine{00062\ \textcolor{comment}{//\#define\ USE\_PROTOCOL\_I2C}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{comment}{/*\ MXQ\ wrappers\ to\ standard\ libc\ functions\ */}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ MXQ\_MEMCPY(dest,\ src,\ len)\ \ \ \ \ \ \ \ \ \ \ \ \ \ memcpy(dest,\ src,\ len)}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ MXQ\_MEMSET(dest,\ value,\ len)\ \ \ \ \ \ \ \ \ \ \ \ memset(dest,\ value,\ len)}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ MXQ\_MEMCMP(ptr1,\ ptr2,\ len)\ \ \ \ \ \ \ \ \ \ \ \ \ memcmp(ptr1,\ ptr2,\ len)}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \textcolor{comment}{/*\ Define\ the\ output\ of\ command\ exchange\ via\ MXQ\_PRINTF:\ }}
+\DoxyCodeLine{00072\ \textcolor{comment}{}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ -\/\ MXQ\_DUMP\_COMM:\ }}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ -\/\ \ (-\/1)\ permanently\ disabled\ (not\ compiled)}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ -\/\ \ 0,\ 1\ or\ 2:\ No,\ B\&W\ or\ Color\ output,\ dynamically\ selectable}}
+\DoxyCodeLine{00076\ \textcolor{comment}{\ -\/\ MXQ\_DEMU\ DEBUG:}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ \ \ -\/\ \ (-\/1):\ permanently\ disabled\ (not\ compiled)}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ -\/\ \ 0,\ 1:\ None\ or\ Verbose,\ dynamically\ selectable}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00080\ \textcolor{comment}{//\#define\ MXQ\_NO\_PRINTF\ //\ Override:\ Force\ no\ printf\ output.\ Automatically\ selected\ if\ all\ DUMP\ options\ are\ -\/1}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#if\ defined(MXQ\_NO\_PRINTF)}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{comment}{//\ Force\ no\ printf\ output}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#undef\ MXQ\_DUMP\_COMM}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#undef\ MXQ\_DUMP\_DEBUG}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#undef\ MXQ\_DUMP\_ERROR}}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#define\ MXQ\_DUMP\_COMM\ \ (-\/1)}}
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#define\ MXQ\_DUMP\_DEBUG\ (-\/1)}}
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ MXQ\_DUMP\_ERROR\ (-\/1)}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \textcolor{comment}{//\ Select\ default\ outputs}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#ifndef\ MXQ\_DUMP\_COMM}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\#define\ MXQ\_DUMP\_COMM\ \ 0}}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\#ifndef\ MXQ\_DUMP\_DEBUG}}
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ MXQ\_DUMP\_DEBUG\ 0}}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#ifndef\ MXQ\_DUMP\_ERROR}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#define\ MXQ\_DUMP\_ERROR\ 0}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#if\ (MXQ\_DUMP\_COMM==-\/1)\&\&(MXQ\_DUMP\_ERROR==-\/1)\&\&(MXQ\_DUMP\_DEBUG==-\/1)}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#ifndef\ MXQ\_NO\_PRINTF}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#define\ MXQ\_NO\_PRINTF}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#ifdef\ MXQ\_ON\_ARDUINO}}
+\DoxyCodeLine{00118\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{comment}{//\ Arduino(r)\ platform\ needs\ a\ custom\ printf}}
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#ifndef\ MXQ\_NO\_PRINTF}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#include\ <stdarg.h>}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00125\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{keywordtype}{void}\ ard\_printf(\textcolor{keywordtype}{char}\ *\ format,...);}
+\DoxyCodeLine{00129\ \textcolor{keywordtype}{void}\ ard\_vprintf(\textcolor{keywordtype}{char}\ *\ format,\ va\_list\ arg);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00132\ \}}
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ MXQ\_PRINT\_ERR(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ard\_printf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#define\ MXQ\_PRINTF(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ard\_printf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#define\ MXQ\_VPRINTF(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ard\_vprintf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{comment}{//\ Arduino\ pin\ and\ peripheral\ mapping}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#define\ MYSERIAL\ Serial1}}
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#define\ MYSPI\ \ \ \ SPI1}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\#define\ MYSS\_PIN\ 10}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{comment}{//\ Note:\ not\ supporting\ I2C\ yet\ on\ Arduino}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#elif\ defined\ MXQ\_ON\_MBED}}
+\DoxyCodeLine{00150\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{preprocessor}{\#define\ MYRST\_PIN\ \ \ \ P0\_4}}
+\DoxyCodeLine{00153\ \textcolor{preprocessor}{\#define\ MYMODE\_PIN\ \ \ P0\_2}}
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#define\ MYWAKEUP\_PIN\ P0\_3}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\#define\ MYSS\_PIN\ \ \ \ \ P1\_3}}
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#define\ MYMISO\_PIN\ \ \ P1\_2}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\#define\ MYMOSI\_PIN\ \ \ P1\_1}}
+\DoxyCodeLine{00159\ \textcolor{preprocessor}{\#define\ MYSCLK\_PIN\ \ \ P1\_0}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \textcolor{comment}{//\ Note:\ not\ supporting\ I2C\ yet\ on\ MBED}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \textcolor{preprocessor}{\#ifndef\ MXQ\_NO\_PRINTF}}
+\DoxyCodeLine{00165\ \textcolor{preprocessor}{\#define\ MXQ\_PRINT\_ERR(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00166\ \textcolor{preprocessor}{\#define\ MXQ\_PRINTF(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00167\ \textcolor{preprocessor}{\#define\ MXQ\_VPRINTF(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vprintf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00168\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00171\ \textcolor{preprocessor}{\#else\ }}
+\DoxyCodeLine{00172\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/*/}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\#ifndef\ MXQ\_NO\_PRINTF}}
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\#define\ MXQ\_PRINT\_ERR(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\#define\ MXQ\_PRINTF(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00177\ \textcolor{preprocessor}{\#define\ MXQ\_VPRINTF(...)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vprintf(\_\_VA\_ARGS\_\_)}}
+\DoxyCodeLine{00178\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MXQ\_ON\_...}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#ifndef\ MXQ\_PRINTF}}
+\DoxyCodeLine{00183\ \textcolor{preprocessor}{\#define\ MXQ\_PRINTF(...)}}
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#ifndef\ MXQ\_PRINT\_ERR}}
+\DoxyCodeLine{00187\ \textcolor{preprocessor}{\#define\ MXQ\_PRINT\_ERR(...)}}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#ifndef\ MXQ\_VPRINTF}}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#define\ MXQ\_VPRINTF(...)}}
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_MXQ\_CONFIG\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

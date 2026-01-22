@@ -1,0 +1,198 @@
+\doxysection{crypto\+\_\+common.\+h}
+\hypertarget{crypto__common_8h_source}{}\label{crypto__common_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_common.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_common.h}}
+\mbox{\hyperlink{crypto__common_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_CRYPTO\_COMMON\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_CRYPTO\_COMMON\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__typedefs_8h}{crypto\_typedefs.h}}"{}}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_NONE\ \ \ \ \ \ \ \ ((psa\_algorithm\_t)0)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_FFDH\ ((psa\_algorithm\_t)0x09010000)}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_ECDH\ ((psa\_algorithm\_t)0x09020000)}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128\ ((psa\_algorithm\_t)0x08800200)}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_STREAM\_CIPHER\ ((psa\_algorithm\_t)0x04800100)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_CTR\ ((psa\_algorithm\_t)0x04c01000)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_CFB\ ((psa\_algorithm\_t)0x04c01100)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_OFB\ ((psa\_algorithm\_t)0x04c01200)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_XTS\ ((psa\_algorithm\_t)0x0440ff00)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_ECB\_NO\_PADDING\ ((psa\_algorithm\_t)0x04404400)}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_CBC\_NO\_PADDING\ ((psa\_algorithm\_t)0x04404000)}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_CBC\_PKCS7\ ((psa\_algorithm\_t)0x04404100)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_PBKDF2\_AES\_CMAC\_PRF\_128\ ((psa\_algorithm\_t)0x08800200)}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_RSA\_PKCS1V15\_CRYPT\ ((psa\_algorithm\_t)0x07000200)}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_HKDF(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)\ (0x08000100\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_HKDF\_EXPAND(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)\ (0x08000500\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_HKDF\_EXTRACT(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)\ (0x08000400\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_ASYMMETRIC\_ENCRYPTION(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x07000000)}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_CIPHER(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x04000000)}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_ECDH(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7fff0000)\ ==\ 0x09020000)}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_FFDH(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7fff0000)\ ==\ 0x09010000)}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_HKDF(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000100)}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_HKDF\_EXPAND(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000500)}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_HKDF\_EXTRACT(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000400)}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_KEY\_AGREEMENT(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x09000000)}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_KEY\_DERIVATION(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f000000)\ ==\ 0x08000000)}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_KEY\_DERIVATION\_STRETCHING(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f800000)\ ==\ 0x08800000)}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_PBKDF2\_HMAC(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08800100)}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_RAW\_KEY\_AGREEMENT(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f00ffff)\ ==\ 0x09000000)}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_RSA\_OAEP(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x07000300)}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_STREAM\_CIPHER(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ 0x7f800000)\ ==\ 0x04800000)}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_TLS12\_PRF(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000200)}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_TLS12\_PSK\_TO\_MS(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\ \ \ \ (((alg)\ \&\ \string~0x000000ff)\ ==\ 0x08000300)}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_WILDCARD(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00095\ \textcolor{preprocessor}{\ \ \ \ ((PSA\_ALG\_GET\_HASH(alg)\ ==\ PSA\_ALG\_ANY\_HASH)\ ||\ \(\backslash\)}}
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\ \ \ \ \ (((alg)\ \&\ 0x7f008000)\ ==\ 0x03008000)\ ||\ \(\backslash\)}}
+\DoxyCodeLine{00097\ \textcolor{preprocessor}{\ \ \ \ \ (((alg)\ \&\ 0x7f008000)\ ==\ 0x05008000))}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_KEY\_AGREEMENT(ka\_alg,\ kdf\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00100\ \textcolor{preprocessor}{\ \ \ \ ((ka\_alg)\ |\ (kdf\_alg))}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_KEY\_AGREEMENT\_GET\_BASE(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)((alg)\ \&\ 0xffff0000))}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_KEY\_AGREEMENT\_GET\_KDF(alg)\ \(\backslash\)}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)((alg)\ \&\ 0xfe00ffff))}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_PBKDF2\_HMAC(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)(0x08800100\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_RSA\_OAEP(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)(0x07000300\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_TLS12\_PRF(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)\ (0x08000200\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_TLS12\_PSK\_TO\_MS(hash\_alg)\ \(\backslash\)}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\ \ \ \ ((psa\_algorithm\_t)\ (0x08000300\ |\ ((hash\_alg)\ \&\ 0x000000ff)))}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{comment}{/***\ Implementation\ specific\ macros\ ***/}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_MASK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x7f000000)}}
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_HASH\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x02000000)}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_MAC\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x03000000)}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_CIPHER\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x04000000)}}
+\DoxyCodeLine{00127\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_AEAD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x05000000)}}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_SIGN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x06000000)}}
+\DoxyCodeLine{00129\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_ASYMMETRIC\_ENCRYPTION\ \ ((psa\_algorithm\_t)\ 0x07000000)}}
+\DoxyCodeLine{00130\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_KEY\_DERIVATION\ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x08000000)}}
+\DoxyCodeLine{00131\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_TYPE\_KEY\_AGREEMENT\ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x09000000)}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_HASH\_MASK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x000000ff)}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ USS\_PSA\_KEY\_TYPE\_MASK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_key\_type\_t)\ 0x7000)}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#define\ USS\_PSA\_KEY\_TYPE\_RAW\_MASK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_key\_type\_t)\ 0x1000)}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#define\ USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK\ \ \ \ \ \ \ \ \ ((psa\_key\_type\_t)\ 0x2000)}}
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#define\ USS\_PSA\_KEY\_TYPE\_PUBLIC\_KEY\_MASK\ \ \ \ \ \ \ \ ((psa\_key\_type\_t)\ 0x4000)}}
+\DoxyCodeLine{00139\ \textcolor{preprocessor}{\#define\ USS\_PSA\_KEY\_TYPE\_KEY\_PAIR\_MASK\ \ \ \ \ \ \ \ \ \ ((psa\_key\_type\_t)\ 0x7000)}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#define\ USS\_PSA\_BITS\_TO\_BYTES(bits)\ \ \ \ \ \ \ \ \ \ \ \ \ ((bits\ +\ 7u)\ /\ 8u)}}
+\DoxyCodeLine{00142\ \textcolor{preprocessor}{\#define\ USS\_PSA\_BYTES\_TO\_BITS(bytes)\ \ \ \ \ \ \ \ \ \ \ \ (bytes\ *\ 8u)}}
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ROUND\_UP\_TO\_MULTIPLE(block\_size,\ length)\ \(\backslash\)}}
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\ \ \ \ (((length\ +\ (block\_size\ -\/\ 1))\ /\ block\_size)\ *\ block\_size)}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \textcolor{preprocessor}{\#define\ USS\_ENCRYPT\ \ \ \ \ 1u}}
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#define\ USS\_DECRYPT\ \ \ \ \ 0u}}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#define\ USS\_TRUE\ \ \ \ \ \ \ \ 1u}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#define\ USS\_FALSE\ \ \ \ \ \ \ 0u}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00163\ mxq\_keytype\_id\_t\ \mbox{\hyperlink{crypto__common_8h_a1145d7449ac43bb1629f00322a98ee33}{uss\_psa\_to\_maxq\_key\_type}}(\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ psa\_key\_type);}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00175\ mxq\_object\_prop\_t\ \mbox{\hyperlink{crypto__common_8h_a245523fc5592d7df72f0595370c4c2c6}{uss\_psa\_to\_maxq\_key\_lifetime}}(\mbox{\hyperlink{crypto__typedefs_8h_a6821ff6dd39dc2bc370ded760ad8b0cf}{psa\_key\_lifetime\_t}}\ psa\_key\_lifetime);}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00187\ mxq\_keyuse\_t\ \mbox{\hyperlink{crypto__common_8h_a951d0c2701107a1c46d886700acc0bac}{uss\_psa\_to\_maxq\_keyuse}}(\mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ psa\_key\_use);}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00199\ mxq\_objecttype\_t\ \mbox{\hyperlink{crypto__common_8h_a087ea319183ebba3b83e7259920da430}{uss\_psa\_to\_maxq\_object\_type}}(\mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ psa\_key\_type);}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00211\ \mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ \mbox{\hyperlink{crypto__common_8h_a8299472b91aec45b6053d5f21d586a7f}{uss\_maxq\_to\_psa\_algo\_id}}(mxq\_algo\_id\_t\ mxq\_algo\_type);}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00223\ \mbox{\hyperlink{crypto__typedefs_8h_a7bb9de71337e0e98de843aa7f9b55f25}{psa\_key\_usage\_t}}\ \mbox{\hyperlink{crypto__common_8h_a09fe68476ec7e563da884bf10eb3d46a}{uss\_maxq\_to\_psa\_keyuse}}(mxq\_keyuse\_t\ mxq\_key\_use);}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00237\ \mbox{\hyperlink{crypto__typedefs_8h_a63fce6880ca5933b5d6baa257febf1f6}{psa\_key\_type\_t}}\ \mbox{\hyperlink{crypto__common_8h_aa27d249927c1a1948ef09bf642f06e29}{uss\_maxq\_to\_psa\_key\_type}}(mxq\_keytype\_id\_t\ mxq\_key\_type,\ mxq\_keyparam\_id\_t\ params,\ mxq\_objecttype\_t\ mxq\_object\_type);}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00247\ \mbox{\hyperlink{crypto__typedefs_8h_a05676e70ba5c6a7565aff3c36677c1f9}{psa\_status\_t}}\ \mbox{\hyperlink{crypto__common_8h_a26b6230dea08ad1af4360cd6d24b871b}{uss\_to\_psa\_error\_code}}(mxq\_err\_t\ maxqCode);}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00256\ mxq\_algo\_id\_t\ \mbox{\hyperlink{crypto__common_8h_a6395efbc108363540729474eae81ab93}{uss\_psa\_to\_maxq\_algo\_id}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ psa\_algo\_type);}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00273\ mxq\_algo\_id\_t\ \mbox{\hyperlink{crypto__common_8h_a41ff05919383dfddb564699d33f21953}{uss\_sign\_algo\_from\_psa}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ psa\_algo,\ \textcolor{keywordtype}{bool}\ isMsg);}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00283\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{crypto__common_8h_ae797a4ade4285f2ca15a1994a222fddb}{check\_key\_policy}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ psa\_algo,\ \mbox{\hyperlink{structpsa__key__attributes__t}{psa\_key\_attributes\_t}}\ *attr);}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00293\ mxq\_u2\ \mbox{\hyperlink{crypto__common_8h_abab502be9b7137f4d71ea695b6e8ab5f}{get\_u2}}(mxq\_u1*\ psrc,\ mxq\_length*\ offset);}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00303\ mxq\_u1\ \mbox{\hyperlink{crypto__common_8h_a38c7d6dc320b37fe8cbb054d4dcbcfae}{get\_u1}}(mxq\_u1*\ psrc,\ mxq\_length*\ offset);}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00312\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{crypto__common_8h_a8d5641bdd36c663e66203d25034e7011}{ifCryptoInitDone}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00323\ uint8\_t\ \mbox{\hyperlink{crypto__common_8h_ae99ac9494acfc4b11415c67c4a07854f}{ct\_memcmp}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *s1,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *s2,\ \textcolor{keywordtype}{size\_t}\ n);}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00333\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{crypto__common_8h_a0160269195d668774bfc08a4b08d8327}{check\_aead\_tag\_len}}(\mbox{\hyperlink{crypto__typedefs_8h_ac2e4d47f1300d73c2f829a6d99252d69}{psa\_algorithm\_t}}\ psa\_algo);}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00341\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ buffer\_cleanup(uint8\_t\ *\ buffer,\ \textcolor{keywordtype}{size\_t}\ buffer\_size)\{}
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{keywordflow}{if}(buffer\ !=\ NULL)\{}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ memset(buffer,\ 0x0,\ buffer\_size);}
+\DoxyCodeLine{00344\ \ \ \ \ \}}
+\DoxyCodeLine{00345\ \}}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00349\ \}}
+\DoxyCodeLine{00350\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\_CRYPTO\_COMMON\_H\_}}
+
+\end{DoxyCode}

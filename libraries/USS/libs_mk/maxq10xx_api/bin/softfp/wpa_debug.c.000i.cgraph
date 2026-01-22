@@ -1,0 +1,1265 @@
+Trivially needed symbols: wpa_debug_close_file/44 wpa_debug_open_file/43 wpa_debug_reopen_file/42 wpa_hexdump_ascii_key/41 wpa_hexdump_ascii/40 wpa_hexdump_key/38 wpa_hexdump/37 wpa_printf/35 wpa_debug_print_timestamp/34 wpa_debug_timestamp/33 wpa_debug_show_keys/32 wpa_debug_level/31
+
+
+Initial Symbol table:
+
+_ctype_/50 (_ctype_) @0631ddc8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: _wpa_hexdump_ascii/39 (addr) 
+  Availability: not-ready
+  Varpool flags: read-only
+printf/49 (printf) @06303690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 
+  Calls: 
+__builtin_va_end/48 (__builtin_va_end) @063035e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+putchar/47 (__builtin_putchar) @06303540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+vprintf/46 (vprintf) @06303498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+__builtin_va_start/45 (__builtin_va_start) @063033f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+wpa_debug_close_file/44 (wpa_debug_close_file) @06303348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_open_file/43 (wpa_debug_open_file) @063031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @06303348
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_reopen_file/42 (wpa_debug_reopen_file) @063030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063031f8
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii_key/41 (wpa_hexdump_ascii_key) @062fc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @063030a8
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+wpa_hexdump_ascii/40 (wpa_hexdump_ascii) @062fc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fc690
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+_wpa_hexdump_ascii/39 (_wpa_hexdump_ascii) @062fce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062fc690
+  References: wpa_debug_level/31 (read) _ctype_/50 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_ascii_key/41 wpa_hexdump_ascii/40 
+  Calls: putchar/47 putchar/47 putchar/47 putchar/47 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_hexdump_key/38 (wpa_hexdump_key) @062fcd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fc540
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+wpa_hexdump/37 (wpa_hexdump) @062fcbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fcd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+_wpa_hexdump/36 (_wpa_hexdump) @062fca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  Aux: @062fcd20
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_key/38 wpa_hexdump/37 
+  Calls: putchar/47 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_printf/35 (wpa_printf) @062fc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fcbd0
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: __builtin_va_end/48 putchar/47 vprintf/46 wpa_debug_print_timestamp/34 __builtin_va_start/45 
+wpa_debug_print_timestamp/34 (wpa_debug_print_timestamp) @062fc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fc930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+wpa_debug_timestamp/33 (wpa_debug_timestamp) @062fb240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fc7e0
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_show_keys/32 (wpa_debug_show_keys) @062fb1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fb240
+  References: 
+  Referring: wpa_hexdump_key/38 (read) wpa_hexdump_ascii_key/41 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_level/31 (wpa_debug_level) @062fb1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @062fb1f8
+  References: 
+  Referring: wpa_printf/35 (read) _wpa_hexdump/36 (read) _wpa_hexdump_ascii/39 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_close_linux_tracing/30 (wpa_debug_close_linux_tracing) @062fc348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_linux_tracing/29 (wpa_debug_open_linux_tracing) @062fc1f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_close_syslog/28 (wpa_debug_close_syslog) @062fc0a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_open_syslog/27 (wpa_debug_open_syslog) @062eebd0
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf_key/26 (wpa_hexdump_buf_key) @062ee738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_hexdump_buf/25 (wpa_hexdump_buf) @062ee5e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_str/24 (wpabuf_put_str) @062e3f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_set/23 (wpabuf_set) @062e3dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_buf/22 (wpabuf_put_buf) @062e3c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_data/21 (wpabuf_put_data) @062e3b28
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be32/20 (wpabuf_put_be32) @062e39d8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be24/19 (wpabuf_put_be24) @062e3888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_be16/18 (wpabuf_put_be16) @062e3738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le32/17 (wpabuf_put_le32) @062e35e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_le16/16 (wpabuf_put_le16) @062e3498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_put_u8/15 (wpabuf_put_u8) @062e3348
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead_u8/14 (wpabuf_mhead_u8) @062e31f8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_mhead/13 (wpabuf_mhead) @062e30a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head_u8/12 (wpabuf_head_u8) @062d6a80
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_head/11 (wpabuf_head) @062d6888
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_tailroom/10 (wpabuf_tailroom) @062d6f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_len/9 (wpabuf_len) @062d6dc8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+wpabuf_size/8 (wpabuf_size) @062d6c78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_broadcast_ether_addr/7 (is_broadcast_ether_addr) @062d65e8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+is_zero_ether_addr/6 (is_zero_ether_addr) @062d6498
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_realloc_array/5 (os_realloc_array) @0629df18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+os_calloc/4 (os_calloc) @0629dc78
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__locale_ctype_ptr_l/3 (__locale_ctype_ptr_l) @06275738
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @062390a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061cc930
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061cc150
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: wpa_debug_close_linux_tracing/30 wpa_debug_open_linux_tracing/29 wpa_debug_close_syslog/28 wpa_debug_open_syslog/27 wpa_hexdump_buf_key/26 wpa_hexdump_buf/25 wpabuf_put_str/24 wpabuf_set/23 wpabuf_put_buf/22 wpabuf_put_data/21 wpabuf_put_be32/20 wpabuf_put_be24/19 wpabuf_put_be16/18 wpabuf_put_le32/17 wpabuf_put_le16/16 wpabuf_put_u8/15 wpabuf_mhead_u8/14 wpabuf_mhead/13 wpabuf_head_u8/12 wpabuf_head/11 wpabuf_tailroom/10 wpabuf_len/9 wpabuf_size/8 is_broadcast_ether_addr/7 is_zero_ether_addr/6 os_realloc_array/5 os_calloc/4 __locale_ctype_ptr_l/3 _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+_ctype_/50 (_ctype_) @0631ddc8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: _wpa_hexdump_ascii/39 (addr) 
+  Availability: not-ready
+  Varpool flags: read-only
+printf/49 (printf) @06303690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 
+  Calls: 
+__builtin_va_end/48 (__builtin_va_end) @063035e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+putchar/47 (__builtin_putchar) @06303540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+vprintf/46 (vprintf) @06303498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+__builtin_va_start/45 (__builtin_va_start) @063033f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+wpa_debug_close_file/44 (wpa_debug_close_file) @06303348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_open_file/43 (wpa_debug_open_file) @063031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_reopen_file/42 (wpa_debug_reopen_file) @063030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii_key/41 (wpa_hexdump_ascii_key) @062fc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+wpa_hexdump_ascii/40 (wpa_hexdump_ascii) @062fc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+_wpa_hexdump_ascii/39 (_wpa_hexdump_ascii) @062fce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: wpa_debug_level/31 (read) _ctype_/50 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_ascii_key/41 wpa_hexdump_ascii/40 
+  Calls: putchar/47 putchar/47 putchar/47 putchar/47 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_hexdump_key/38 (wpa_hexdump_key) @062fcd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+wpa_hexdump/37 (wpa_hexdump) @062fcbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+_wpa_hexdump/36 (_wpa_hexdump) @062fca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_key/38 wpa_hexdump/37 
+  Calls: putchar/47 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_printf/35 (wpa_printf) @062fc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: __builtin_va_end/48 putchar/47 vprintf/46 wpa_debug_print_timestamp/34 __builtin_va_start/45 
+wpa_debug_print_timestamp/34 (wpa_debug_print_timestamp) @062fc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+wpa_debug_timestamp/33 (wpa_debug_timestamp) @062fb240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_show_keys/32 (wpa_debug_show_keys) @062fb1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: wpa_hexdump_key/38 (read) wpa_hexdump_ascii_key/41 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_level/31 (wpa_debug_level) @062fb1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: wpa_printf/35 (read) _wpa_hexdump/36 (read) _wpa_hexdump_ascii/39 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+
+Initial Symbol table:
+
+_ctype_/50 (_ctype_) @0631ddc8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: _wpa_hexdump_ascii/39 (addr) 
+  Availability: not-ready
+  Varpool flags: read-only
+printf/49 (printf) @06303690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 
+  Calls: 
+__builtin_va_end/48 (__builtin_va_end) @063035e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+putchar/47 (__builtin_putchar) @06303540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+vprintf/46 (vprintf) @06303498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+__builtin_va_start/45 (__builtin_va_start) @063033f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+wpa_debug_close_file/44 (wpa_debug_close_file) @06303348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_open_file/43 (wpa_debug_open_file) @063031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_reopen_file/42 (wpa_debug_reopen_file) @063030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii_key/41 (wpa_hexdump_ascii_key) @062fc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+wpa_hexdump_ascii/40 (wpa_hexdump_ascii) @062fc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+_wpa_hexdump_ascii/39 (_wpa_hexdump_ascii) @062fce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: wpa_debug_level/31 (read) _ctype_/50 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_ascii_key/41 wpa_hexdump_ascii/40 
+  Calls: putchar/47 putchar/47 putchar/47 putchar/47 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_hexdump_key/38 (wpa_hexdump_key) @062fcd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+wpa_hexdump/37 (wpa_hexdump) @062fcbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+_wpa_hexdump/36 (_wpa_hexdump) @062fca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_key/38 wpa_hexdump/37 
+  Calls: putchar/47 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_printf/35 (wpa_printf) @062fc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: __builtin_va_end/48 putchar/47 vprintf/46 wpa_debug_print_timestamp/34 __builtin_va_start/45 
+wpa_debug_print_timestamp/34 (wpa_debug_print_timestamp) @062fc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+wpa_debug_timestamp/33 (wpa_debug_timestamp) @062fb240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_show_keys/32 (wpa_debug_show_keys) @062fb1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: wpa_hexdump_key/38 (read) wpa_hexdump_ascii_key/41 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_level/31 (wpa_debug_level) @062fb1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: wpa_printf/35 (read) _wpa_hexdump/36 (read) _wpa_hexdump_ascii/39 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+_ctype_/50 (_ctype_) @0631ddc8
+  Type: variable
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: _wpa_hexdump_ascii/39 (addr) 
+  Availability: not-ready
+  Varpool flags: read-only
+printf/49 (printf) @06303690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 _wpa_hexdump/36 
+  Calls: 
+__builtin_va_end/48 (__builtin_va_end) @063035e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+putchar/47 (__builtin_putchar) @06303540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+vprintf/46 (vprintf) @06303498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+__builtin_va_start/45 (__builtin_va_start) @063033f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Function flags:
+  Called by: wpa_printf/35 
+  Calls: 
+wpa_debug_close_file/44 (wpa_debug_close_file) @06303348
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_open_file/43 (wpa_debug_open_file) @063031f8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_debug_reopen_file/42 (wpa_debug_reopen_file) @063030a8
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii_key/41 (wpa_hexdump_ascii_key) @062fc690
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+wpa_hexdump_ascii/40 (wpa_hexdump_ascii) @062fc540
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 
+_wpa_hexdump_ascii/39 (_wpa_hexdump_ascii) @062fce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: wpa_debug_level/31 (read) _ctype_/50 (addr) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_ascii_key/41 wpa_hexdump_ascii/40 
+  Calls: putchar/47 putchar/47 putchar/47 putchar/47 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_hexdump_key/38 (wpa_hexdump_key) @062fcd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+wpa_hexdump/37 (wpa_hexdump) @062fcbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: _wpa_hexdump/36 
+_wpa_hexdump/36 (_wpa_hexdump) @062fca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: wpa_hexdump_key/38 wpa_hexdump/37 
+  Calls: putchar/47 printf/49 printf/49 printf/49 printf/49 wpa_debug_print_timestamp/34 
+wpa_printf/35 (wpa_printf) @062fc930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: __builtin_va_end/48 putchar/47 vprintf/46 wpa_debug_print_timestamp/34 __builtin_va_start/45 
+wpa_debug_print_timestamp/34 (wpa_debug_print_timestamp) @062fc7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: _wpa_hexdump_ascii/39 _wpa_hexdump/36 wpa_printf/35 
+  Calls: 
+wpa_debug_timestamp/33 (wpa_debug_timestamp) @062fb240
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_show_keys/32 (wpa_debug_show_keys) @062fb1f8
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: wpa_hexdump_key/38 (read) wpa_hexdump_ascii_key/41 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+wpa_debug_level/31 (wpa_debug_level) @062fb1b0
+  Type: variable definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: wpa_printf/35 (read) _wpa_hexdump/36 (read) _wpa_hexdump_ascii/39 (read) 
+  Availability: not-ready
+  Varpool flags: initialized
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+_ctype_/50 (_ctype_) @0631ddc8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: _wpa_hexdump_ascii/39 (addr) 
+  Availability: not_available
+  Varpool flags: read-only
+printf/49 (printf) @06303690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: _wpa_hexdump_ascii/39 (118111600 (estimated locally),2.58 per call) _wpa_hexdump_ascii/39 (955630225 (estimated locally),20.90 per call) _wpa_hexdump_ascii/39 (955630225 (estimated locally),20.90 per call) _wpa_hexdump_ascii/39 (118111600 (estimated locally),2.58 per call) _wpa_hexdump_ascii/39 (14598063 (estimated locally),0.32 per call) _wpa_hexdump_ascii/39 (3224014 (estimated locally),0.07 per call) _wpa_hexdump_ascii/39 (4522553 (estimated locally),0.10 per call) _wpa_hexdump/36 (58174370 (estimated locally),0.13 per call) _wpa_hexdump/36 (955630225 (estimated locally),2.19 per call) _wpa_hexdump/36 (37212843 (estimated locally),0.09 per call) _wpa_hexdump/36 (213498813 (estimated locally),0.49 per call) 
+  Calls: 
+__builtin_va_end/48 (__builtin_va_end) @063035e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: wpa_printf/35 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+putchar/47 (__builtin_putchar) @06303540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: wpa_printf/35 (354334800 (estimated locally),0.33 per call) _wpa_hexdump_ascii/39 (118111600 (estimated locally),2.58 per call) _wpa_hexdump_ascii/39 (955630225 (estimated locally),20.90 per call) _wpa_hexdump_ascii/39 (477815112 (estimated locally),10.45 per call) _wpa_hexdump_ascii/39 (477815112 (estimated locally),10.45 per call) _wpa_hexdump/36 (213498813 (estimated locally),0.49 per call) 
+  Calls: 
+vprintf/46 (vprintf) @06303498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: wpa_printf/35 (354334800 (estimated locally),0.33 per call) 
+  Calls: 
+__builtin_va_start/45 (__builtin_va_start) @063033f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: wpa_printf/35 (1073741824 (estimated locally),1.00 per call) 
+  Calls: 
+wpa_debug_close_file/44 (wpa_debug_close_file) @06303348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+wpa_debug_open_file/43 (wpa_debug_open_file) @063031f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+wpa_debug_reopen_file/42 (wpa_debug_reopen_file) @063030a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii_key/41 (wpa_hexdump_ascii_key) @062fc690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 (1073741824 (estimated locally),1.00 per call) 
+wpa_hexdump_ascii/40 (wpa_hexdump_ascii) @062fc540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: _wpa_hexdump_ascii/39 (1073741824 (estimated locally),1.00 per call) 
+_wpa_hexdump_ascii/39 (_wpa_hexdump_ascii) @062fce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: wpa_debug_level/31 (read) _ctype_/50 (addr) 
+  Referring: 
+  Availability: local
+  Function flags: count:45713236 (estimated locally) body local
+  Called by: wpa_hexdump_ascii_key/41 (1073741824 (estimated locally),1.00 per call) wpa_hexdump_ascii/40 (1073741824 (estimated locally),1.00 per call) 
+  Calls: putchar/47 (118111600 (estimated locally),2.58 per call) putchar/47 (955630225 (estimated locally),20.90 per call) putchar/47 (477815112 (estimated locally),10.45 per call) putchar/47 (477815112 (estimated locally),10.45 per call) printf/49 (118111600 (estimated locally),2.58 per call) printf/49 (955630225 (estimated locally),20.90 per call) printf/49 (955630225 (estimated locally),20.90 per call) printf/49 (118111600 (estimated locally),2.58 per call) printf/49 (14598063 (estimated locally),0.32 per call) printf/49 (3224014 (estimated locally),0.07 per call) printf/49 (4522553 (estimated locally),0.10 per call) wpa_debug_print_timestamp/34 (22344629 (estimated locally),0.49 per call) 
+wpa_hexdump_key/38 (wpa_hexdump_key) @062fcd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: wpa_debug_show_keys/32 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: _wpa_hexdump/36 (1073741824 (estimated locally),1.00 per call) 
+wpa_hexdump/37 (wpa_hexdump) @062fcbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: _wpa_hexdump/36 (1073741824 (estimated locally),1.00 per call) 
+_wpa_hexdump/36 (_wpa_hexdump) @062fca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Availability: local
+  Function flags: count:436781535 (estimated locally) body local
+  Called by: wpa_hexdump_key/38 (1073741824 (estimated locally),1.00 per call) wpa_hexdump/37 (1073741824 (estimated locally),1.00 per call) 
+  Calls: putchar/47 (213498813 (estimated locally),0.49 per call) printf/49 (58174370 (estimated locally),0.13 per call) printf/49 (955630225 (estimated locally),2.19 per call) printf/49 (37212843 (estimated locally),0.09 per call) printf/49 (213498813 (estimated locally),0.49 per call) wpa_debug_print_timestamp/34 (213498813 (estimated locally),0.49 per call) 
+wpa_printf/35 (wpa_printf) @062fc930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: wpa_debug_level/31 (read) 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: __builtin_va_end/48 (1073741824 (estimated locally),1.00 per call) putchar/47 (354334800 (estimated locally),0.33 per call) vprintf/46 (354334800 (estimated locally),0.33 per call) wpa_debug_print_timestamp/34 (354334800 (estimated locally),0.33 per call) __builtin_va_start/45 (1073741824 (estimated locally),1.00 per call) 
+wpa_debug_print_timestamp/34 (wpa_debug_print_timestamp) @062fc7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: wpa_printf/35 (354334800 (estimated locally),0.33 per call) _wpa_hexdump_ascii/39 (22344629 (estimated locally),0.49 per call) _wpa_hexdump/36 (213498813 (estimated locally),0.49 per call) 
+  Calls: 
+wpa_debug_timestamp/33 (wpa_debug_timestamp) @062fb240
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+wpa_debug_show_keys/32 (wpa_debug_show_keys) @062fb1f8
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: wpa_hexdump_key/38 (read) wpa_hexdump_ascii_key/41 (read) 
+  Availability: overwritable
+  Varpool flags: initialized
+wpa_debug_level/31 (wpa_debug_level) @062fb1b0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: _wpa_hexdump/36 (read) _wpa_hexdump_ascii/39 (read) wpa_printf/35 (read) 
+  Availability: overwritable
+  Varpool flags: initialized
+Trivially needed variables: wpa_debug_timestamp/33 wpa_debug_show_keys/32 wpa_debug_level/31
+Removing variables:
+
+Final Symbol table:
+
+_ctype_/50 (_ctype_) @0631ddc8
+  Type: variable
+  Body removed by symtab_remove_unreachable_nodes
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Varpool flags: read-only
+printf/49 (printf) @06303690
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_va_end/48 (__builtin_va_end) @063035e8
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+putchar/47 (__builtin_putchar) @06303540
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+vprintf/46 (vprintf) @06303498
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+__builtin_va_start/45 (__builtin_va_start) @063033f0
+  Type: function
+  Visibility: semantic_interposition external public
+  References: 
+  Referring: 
+  Availability: not_available
+  Function flags:
+  Called by: 
+  Calls: 
+wpa_debug_close_file/44 (wpa_debug_close_file) @06303348
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_debug_close_file (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_debug_open_file/43 (wpa_debug_open_file) @063031f8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_debug_open_file (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_debug_reopen_file/42 (wpa_debug_reopen_file) @063030a8
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_debug_reopen_file (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii_key/41 (wpa_hexdump_ascii_key) @062fc690
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_hexdump_ascii_key (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_hexdump_ascii/40 (wpa_hexdump_ascii) @062fc540
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_hexdump_ascii (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+_wpa_hexdump_ascii/39 (_wpa_hexdump_ascii) @062fce70
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text._wpa_hexdump_ascii (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:45713236 (estimated locally) local
+  Called by: 
+  Calls: 
+wpa_hexdump_key/38 (wpa_hexdump_key) @062fcd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_hexdump_key (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_hexdump/37 (wpa_hexdump) @062fcbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_hexdump (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+_wpa_hexdump/36 (_wpa_hexdump) @062fca80
+  Type: function definition analyzed
+  Visibility: semantic_interposition prevailing_def_ironly asm_written section:.text._wpa_hexdump (implicit_section)
+  References: 
+  Referring: 
+  Availability: local
+  Function flags: count:436781535 (estimated locally) local
+  Called by: 
+  Calls: 
+wpa_printf/35 (wpa_printf) @062fc930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_printf (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_debug_print_timestamp/34 (wpa_debug_print_timestamp) @062fc7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.wpa_debug_print_timestamp (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+wpa_debug_timestamp/33 (wpa_debug_timestamp) @062fb240
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.wpa_debug_timestamp (implicit_section)
+  Aux: @00000001
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+wpa_debug_show_keys/32 (wpa_debug_show_keys) @062fb1f8
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.bss.wpa_debug_show_keys (implicit_section)
+  Aux: @062fb240
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized
+wpa_debug_level/31 (wpa_debug_level) @062fb1b0
+  Type: variable definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.data.wpa_debug_level (implicit_section)
+  Aux: @062fb1f8
+  References: 
+  Referring: 
+  Availability: overwritable
+  Varpool flags: initialized

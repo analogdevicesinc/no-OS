@@ -1,0 +1,13 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:48:5:psa_is_valid_key_id	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:97:21:psa_get_and_lock_key_slot_in_memory	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:143:14:psa_initialize_key_slots	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:152:6:psa_wipe_all_key_slots	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:164:14:psa_get_empty_key_slot	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:341:14:psa_get_and_lock_key_slot	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:401:14:psa_unlock_key_slot	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:424:14:psa_validate_key_location	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:455:14:psa_validate_key_persistence	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:474:14:psa_open_key	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:502:14:psa_close_key	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:526:14:psa_purge_key	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_slot_management.c:544:6:mbedtls_psa_get_stats	8	static

@@ -1,0 +1,79 @@
+\doxysection{crypto\+\_\+mac.\+h}
+\hypertarget{crypto__mac_8h_source}{}\label{crypto__mac_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_mac.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_mac.h}}
+\mbox{\hyperlink{crypto__mac_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ \_CRYPTO\_MAC\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ \_CRYPTO\_MAC\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00012\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__config__def_8h}{crypto\_config\_def.h}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__common_8h}{crypto\_common.h}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__typedefs_8h}{crypto\_typedefs.h}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__hash_8h}{crypto\_hash.h}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__cipher_8h}{crypto\_cipher.h}}"{}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_HMAC\_BASE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ (USS\_PSA\_ALG\_TYPE\_MAC\ |\ 0x00800000))}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_CIPHER\_MAC\_BASE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ (USS\_PSA\_ALG\_TYPE\_MAC\ |\ 0x00c00000))}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x00c00000)}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_HMAC(hash\_alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)(USS\_PSA\_ALG\_HMAC\_BASE\ |\ (hash\_alg\ \&\ USS\_PSA\_ALG\_HASH\_MASK)))}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_CBC\_MAC\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)0x03c00100)}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_CMAC\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)0x03c00200)}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x003f0000)}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((psa\_algorithm\_t)\ 0x00008000)}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ USS\_PSA\_MAC\_TRUNCATION\_OFFSET\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 16u}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_TRUNCATED\_MAC(mac\_alg,\ mac\_length)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\ \ \ \ (psa\_algorithm\_t)((mac\_alg\ \&\ \string~(USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK\ |\ USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG))\ |\ \ \ \(\backslash\)}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\ \ \ \ \ ((mac\_length\ <<\ USS\_PSA\_MAC\_TRUNCATION\_OFFSET)\ \&\ USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK))}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_FULL\_LENGTH\_MAC(mac\_alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\ \ \ \ (psa\_algorithm\_t)((mac\_alg)\ \&\ \string~(USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK\ |\ USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG))}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_AT\_LEAST\_THIS\_LENGTH\_MAC(mac\_alg,\ min\_mac\_length)\ \ \ \(\backslash\)}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\ \ \ \ (psa\_algorithm\_t)(PSA\_ALG\_TRUNCATED\_MAC(mac\_alg,\ min\_mac\_length)|\ USS\_PSA\_ALG\_MAC\_AT\_LEAST\_THIS\_LENGTH\_FLAG)}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_MAC(alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (((alg)\ \&\ USS\_PSA\_ALG\_MASK)\ ==\ USS\_PSA\_ALG\_TYPE\_MAC)}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_HMAC(alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (((alg)\ \&\ (USS\_PSA\_ALG\_MASK\ |\ USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK))\ ==\ \(\backslash\)}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USS\_PSA\_ALG\_HMAC\_BASE)}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC(alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (((alg)\ \&\ (USS\_PSA\_ALG\_MASK\ |\ USS\_PSA\_ALG\_MAC\_SUBCATEGORY\_MASK))\ ==\ \(\backslash\)}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USS\_PSA\_ALG\_CIPHER\_MAC\_BASE)}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#define\ USS\_PSA\_MAC\_TRUNCATED\_LENGTH(mac\_alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (((mac\_alg)\ \&\ USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK)\ >>\ USS\_PSA\_MAC\_TRUNCATION\_OFFSET)}}
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#define\ USS\_PSA\_ALG\_HMAC\_GET\_HASH(hmac\_alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (USS\_PSA\_ALG\_TYPE\_HASH\ |\ ((hmac\_alg)\ \&\ USS\_PSA\_ALG\_HASH\_MASK))}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#define\ PSA\_MAC\_LENGTH(key\_type,\ key\_bits,\ alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((alg)\ \&\ USS\_PSA\_ALG\_MAC\_TRUNCATION\_MASK\ ?\ USS\_PSA\_MAC\_TRUNCATED\_LENGTH(alg)\ :\ \ \(\backslash\)}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_ALG\_IS\_HMAC(alg)\ ?\ PSA\_HASH\_LENGTH(USS\_PSA\_ALG\_HMAC\_GET\_HASH(alg))\ :\ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_ALG\_IS\_BLOCK\_CIPHER\_MAC(alg)\ ?\ PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH(key\_type)\ :\ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((void)\ (key\_type),\ (void)\ (key\_bits),\ 0u))}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#define\ PSA\_MAC\_OPERATION\_INIT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{0\}}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{preprocessor}{\#define\ PSA\_MAC\_MAX\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ PSA\_HASH\_MAX\_SIZE}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#define\ USS\_MAC\_VERIFY\_FLAG\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x01u}}
+\DoxyCodeLine{00148\ \textcolor{preprocessor}{\#define\ USS\_MAC\_COMPUTE\_FLAG\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0x02u}}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00151\ \}}
+\DoxyCodeLine{00152\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\_CRYPTO\_MAC\_H\_}}
+
+\end{DoxyCode}

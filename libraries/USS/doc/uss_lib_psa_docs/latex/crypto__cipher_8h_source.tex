@@ -1,0 +1,61 @@
+\doxysection{crypto\+\_\+cipher.\+h}
+\hypertarget{crypto__cipher_8h_source}{}\label{crypto__cipher_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_cipher.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/crypto\_cipher.h}}
+\mbox{\hyperlink{crypto__cipher_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Copyright\ (C)\ 2024\ Analog\ Devices,\ Inc.}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ All\ Rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ This\ software\ is\ proprietary\ and\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.}}
+\DoxyCodeLine{00006\ \textcolor{comment}{**}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#ifndef\ \_CRYPTO\_CIPHER\_H\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ \_CRYPTO\_CIPHER\_H\_}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__common_8h}{crypto\_common.h}}"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{crypto__config__def_8h}{crypto\_config\_def.h}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}MXQ\_API.h"{}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_ENCRYPT\_OUTPUT\_SIZE(key\_type,\ alg,\ input\_length)\ \ \ \ \ ((key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_CTR)\ \ \ \ \ \ \ \ \ \ \ \ \ ?\ (input\_length\ +\ 12)\ :\ \(\backslash\)}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_CBC\_NO\_PADDING)\ \ \ ?\ (input\_length\ +\ 16)\ :\ \(\backslash\)}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_ECB\_NO\_PADDING)\ \ \ ?\ input\_length\ :\ \(\backslash\)}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0)}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_ENCRYPT\_OUTPUT\_MAX\_SIZE(input\_length)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (input\_length\ +\ 16)}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_DECRYPT\_OUTPUT\_SIZE(key\_type,\ alg,\ input\_length)\ \ \ \ \ ((key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_CTR)\ \ \ \ \ \ \ \ \ \ \ \ \ ?\ (input\_length\ -\/\ 12)\ :\ \(\backslash\)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_CBC\_NO\_PADDING)\ \ \ ?\ (input\_length\ -\/\ 16)\ :\ \(\backslash\)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_ECB\_NO\_PADDING)\ \ \ ?\ input\_length\ :\ \(\backslash\)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0)}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_DECRYPT\_OUTPUT\_MAX\_SIZE(input\_length)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (input\_length)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_IV\_MAX\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (16)}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_IV\_LENGTH(key\_type,\ alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_CTR)\ ?\ 12\ :\ \(\backslash\)}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_CBC\_NO\_PADDING)\ ?\ 16\ :\ \(\backslash\)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (key\_type\ ==\ PSA\_KEY\_TYPE\_AES)\ \&\&\ (alg\ ==\ PSA\_ALG\_ECB\_NO\_PADDING)\ ?\ 0\ :\ \(\backslash\)}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0)}}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_UPDATE\_OUTPUT\_SIZE(key\_type,\ alg,\ input\_length)\ \ \ \ \ \ (input\_length)}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_UPDATE\_OUTPUT\_MAX\_SIZE(input\_length)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (input\_length)}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH(type)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ((type\ \&\ USS\_PSA\_KEY\_TYPE\_MASK)\ ==\ USS\_PSA\_KEY\_TYPE\_SYMMETRIC\_MASK\ ?\ \(\backslash\)}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1u\ <<\ (((type)\ >>\ 8)\ \&\ 7))\ :\ 0u)}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_FINISH\_OUTPUT\_SIZE(key\_type,\ alg)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (PSA\_ALG\_IS\_CIPHER(alg)\ ?\ PSA\_BLOCK\_CIPHER\_BLOCK\_LENGTH(key\_type)\ :\ 0)}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_FINISH\_OUTPUT\_MAX\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (0)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ USS\_PSA\_BLOCK\_CIPHER\_BLOCK\_MAX\_SIZE}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ PSA\_CIPHER\_OPERATION\_INIT\ (psa\_cipher\_operation\_t)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \{0\}}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ PSA\_ALG\_IS\_STREAM\_CIPHER(alg)\ (((alg)\ \&\ 0x7f800000)\ ==\ 0x04800000)}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00052\ \}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_cplusplus\ \ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\_CRYPTO\_CIPHER\_H\_}}
+
+\end{DoxyCode}

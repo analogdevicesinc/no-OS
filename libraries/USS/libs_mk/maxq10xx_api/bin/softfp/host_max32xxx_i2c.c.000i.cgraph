@@ -1,0 +1,309 @@
+Trivially needed symbols: HOST_exchange_bytes_i2c/7 HOST_receive_bytes_i2c/6 HOST_receive_bytes_i2c_first/5 HOST_send_bytes_i2c/4 HOST_init_i2c/3
+
+
+Initial Symbol table:
+
+HOST_exchange_bytes_i2c/7 (HOST_exchange_bytes_i2c) @0613bd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @01c61e00
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c/6 (HOST_receive_bytes_i2c) @0613bbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0613bd20
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c_first/5 (HOST_receive_bytes_i2c_first) @0613ba80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0613bbd0
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_send_bytes_i2c/4 (HOST_send_bytes_i2c) @0613b930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0613ba80
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_init_i2c/3 (HOST_init_i2c) @0613b7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  Aux: @0613b930
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+_putchar_unlocked/2 (_putchar_unlocked) @062350a8
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+_getchar_unlocked/1 (_getchar_unlocked) @061c9f18
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+__sputc_r/0 (__sputc_r) @061c9d20
+  Type: function definition
+  Visibility: semantic_interposition
+  References: 
+  Referring: 
+  Function flags:
+  Called by: 
+  Calls: 
+
+Removing unused symbols: _putchar_unlocked/2 _getchar_unlocked/1 __sputc_r/0
+
+Reclaimed Symbol table:
+
+HOST_exchange_bytes_i2c/7 (HOST_exchange_bytes_i2c) @0613bd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c/6 (HOST_receive_bytes_i2c) @0613bbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c_first/5 (HOST_receive_bytes_i2c_first) @0613ba80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_send_bytes_i2c/4 (HOST_send_bytes_i2c) @0613b930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_init_i2c/3 (HOST_init_i2c) @0613b7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+
+
+Initial Symbol table:
+
+HOST_exchange_bytes_i2c/7 (HOST_exchange_bytes_i2c) @0613bd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c/6 (HOST_receive_bytes_i2c) @0613bbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c_first/5 (HOST_receive_bytes_i2c_first) @0613ba80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_send_bytes_i2c/4 (HOST_send_bytes_i2c) @0613b930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_init_i2c/3 (HOST_init_i2c) @0613b7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+
+Removing unused symbols:
+
+Reclaimed Symbol table:
+
+HOST_exchange_bytes_i2c/7 (HOST_exchange_bytes_i2c) @0613bd20
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c/6 (HOST_receive_bytes_i2c) @0613bbd0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c_first/5 (HOST_receive_bytes_i2c_first) @0613ba80
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_send_bytes_i2c/4 (HOST_send_bytes_i2c) @0613b930
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+HOST_init_i2c/3 (HOST_init_i2c) @0613b7e0
+  Type: function definition analyzed
+  Visibility: semantic_interposition public
+  References: 
+  Referring: 
+  Function flags: body
+  Called by: 
+  Calls: 
+
+Reclaiming functions:
+Reclaiming variables:
+Clearing address taken flags:
+Optimized Symbol table:
+
+HOST_exchange_bytes_i2c/7 (HOST_exchange_bytes_i2c) @0613bd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c/6 (HOST_receive_bytes_i2c) @0613bbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c_first/5 (HOST_receive_bytes_i2c_first) @0613ba80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_send_bytes_i2c/4 (HOST_send_bytes_i2c) @0613b930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+HOST_init_i2c/3 (HOST_init_i2c) @0613b7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition public
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally) body
+  Called by: 
+  Calls: 
+Trivially needed variables:
+Removing variables:
+
+Final Symbol table:
+
+HOST_exchange_bytes_i2c/7 (HOST_exchange_bytes_i2c) @0613bd20
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_exchange_bytes_i2c (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c/6 (HOST_receive_bytes_i2c) @0613bbd0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_receive_bytes_i2c (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_receive_bytes_i2c_first/5 (HOST_receive_bytes_i2c_first) @0613ba80
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_receive_bytes_i2c_first (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_send_bytes_i2c/4 (HOST_send_bytes_i2c) @0613b930
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_send_bytes_i2c (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 
+HOST_init_i2c/3 (HOST_init_i2c) @0613b7e0
+  Type: function definition analyzed
+  Visibility: externally_visible semantic_interposition asm_written public section:.text.HOST_init_i2c (implicit_section)
+  References: 
+  Referring: 
+  Availability: overwritable
+  Function flags: count:1073741824 (estimated locally)
+  Called by: 
+  Calls: 

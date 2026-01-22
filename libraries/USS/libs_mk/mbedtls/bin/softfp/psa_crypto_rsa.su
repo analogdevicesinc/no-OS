@@ -1,0 +1,12 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:420:12:rsa_pss_expected_salt_len	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:54:21:psa_check_rsa_key_byte_aligned	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:526:12:psa_rsa_oaep_set_padding_mode	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:316:21:psa_rsa_decode_md_type	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:71:14:mbedtls_psa_rsa_load_representation	72	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:169:14:mbedtls_psa_rsa_export_key	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:132:14:mbedtls_psa_rsa_import_key	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:213:14:mbedtls_psa_rsa_export_public_key	32	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:343:14:mbedtls_psa_rsa_sign_hash	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:442:14:mbedtls_psa_rsa_verify_hash	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:536:14:mbedtls_psa_asymmetric_encrypt	40	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/psa_crypto_rsa.c:630:14:mbedtls_psa_asymmetric_decrypt	48	static

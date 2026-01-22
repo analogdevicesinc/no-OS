@@ -1,0 +1,3 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/fcs/fcs.c:60:10:HAL_FcsInit	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/fcs/fcs.c:66:10:HAL_FcsUnInit	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/adin1110/common/hal/fcs/fcs.c:72:10:HAL_FcsCalculate	0	static

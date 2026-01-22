@@ -54,6 +54,7 @@ const struct no_os_spi_init_param adin1110_spi_ip = {
 	.extra = SPI_EXTRA,
 };
 
+
 const struct no_os_i2c_init_param adt75_comm_param = {
 	.device_id = 1,
 	.max_speed_hz = 400000,

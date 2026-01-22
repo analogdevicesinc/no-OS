@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "platform_includes.h"
+#include "../platform_includes.h"
 #include "common_data.h"
 #include "no_os_error.h"
 
@@ -51,6 +51,7 @@
 *******************************************************************************/
 int main()
 {
+	
 	struct no_os_uart_desc *uart_desc;
 	int ret;
 
@@ -59,7 +60,14 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+	printf("\n");
 
+	printf("\e[H\e[2J\e[93mStarting MQTT Example Program:\e[0m\r\n\r\n");
+	ret = swiot1l_mqtt();
+	printf("\r\n\r\n\e[93mExit with code\e[0m -> %d\r\n", ret);
+
+
+	return ret;
 #ifdef SWIOT1L_MQTT_EXAMPLE
 	return swiot1l_mqtt();
 #elif SWIOT1L_DEFAULT_FW

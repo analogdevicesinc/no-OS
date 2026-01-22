@@ -1,0 +1,84 @@
+\doxysection{examples.\+h}
+\hypertarget{examples_8h_source}{}\label{examples_8h_source}\index{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/examples.h@{C:/JS/ci\_ist/workspace/spb\_ist/USS/USS\_CFS\_Release/maxq10xx-\/sdk/maxq10xx-\/api/include/psa/examples.h}}
+\mbox{\hyperlink{examples_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*******************************************************************************}}
+\DoxyCodeLine{00002\ \textcolor{comment}{*\ Copyright\ (C)\ 2018\ Maxim\ Integrated\ Products,\ Inc.\ (now\ owned\ by\ Analog\ Devices,\ Inc.),}}
+\DoxyCodeLine{00003\ \textcolor{comment}{*\ 2024\ Analog\ Devices,\ Inc.\ This\ software\ is\ proprietary\ and}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ confidential\ to\ Analog\ Devices,\ Inc.\ and\ its\ licensors.\ ,\ All\ rights\ Reserved.}}
+\DoxyCodeLine{00005\ \textcolor{comment}{*}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*\ This\ software\ is\ protected\ by\ copyright\ laws\ of\ the\ United\ States\ and}}
+\DoxyCodeLine{00007\ \textcolor{comment}{*\ of\ foreign\ countries.\ This\ material\ may\ also\ be\ protected\ by\ patent\ laws}}
+\DoxyCodeLine{00008\ \textcolor{comment}{*\ and\ technology\ transfer\ regulations\ of\ the\ United\ States\ and\ of\ foreign}}
+\DoxyCodeLine{00009\ \textcolor{comment}{*\ countries.\ This\ software\ is\ furnished\ under\ a\ license\ agreement\ and/or\ a}}
+\DoxyCodeLine{00010\ \textcolor{comment}{*\ nondisclosure\ agreement\ and\ may\ only\ be\ used\ or\ reproduced\ in\ accordance}}
+\DoxyCodeLine{00011\ \textcolor{comment}{*\ with\ the\ terms\ of\ those\ agreements.\ Dissemination\ of\ this\ information\ to}}
+\DoxyCodeLine{00012\ \textcolor{comment}{*\ any\ party\ or\ parties\ not\ specified\ in\ the\ license\ agreement\ and/or}}
+\DoxyCodeLine{00013\ \textcolor{comment}{*\ nondisclosure\ agreement\ is\ expressly\ prohibited.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{*}}
+\DoxyCodeLine{00015\ \textcolor{comment}{*\ The\ above\ copyright\ notice\ and\ this\ permission\ notice\ shall\ be\ included}}
+\DoxyCodeLine{00016\ \textcolor{comment}{*\ in\ all\ copies\ or\ substantial\ portions\ of\ the\ Software.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{*}}
+\DoxyCodeLine{00018\ \textcolor{comment}{*\ THE\ SOFTWARE\ IS\ PROVIDED\ "{}AS\ IS"{},\ WITHOUT\ WARRANTY\ OF\ ANY\ KIND,\ EXPRESS}}
+\DoxyCodeLine{00019\ \textcolor{comment}{*\ OR\ IMPLIED,\ INCLUDING\ BUT\ NOT\ LIMITED\ TO\ THE\ WARRANTIES\ OF}}
+\DoxyCodeLine{00020\ \textcolor{comment}{*\ MERCHANTABILITY,\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\ AND\ NONINFRINGEMENT.}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*\ IN\ NO\ EVENT\ SHALL\ MAXIM\ INTEGRATED\ BE\ LIABLE\ FOR\ ANY\ CLAIM,\ DAMAGES}}
+\DoxyCodeLine{00022\ \textcolor{comment}{*\ OR\ OTHER\ LIABILITY,\ WHETHER\ IN\ AN\ ACTION\ OF\ CONTRACT,\ TORT\ OR\ OTHERWISE,}}
+\DoxyCodeLine{00023\ \textcolor{comment}{*\ ARISING\ FROM,\ OUT\ OF\ OR\ IN\ CONNECTION\ WITH\ THE\ SOFTWARE\ OR\ THE\ USE\ OR}}
+\DoxyCodeLine{00024\ \textcolor{comment}{*\ OTHER\ DEALINGS\ IN\ THE\ SOFTWARE.}}
+\DoxyCodeLine{00025\ \textcolor{comment}{*}}
+\DoxyCodeLine{00026\ \textcolor{comment}{*\ Except\ as\ contained\ in\ this\ notice,\ the\ name\ of\ Maxim\ Integrated}}
+\DoxyCodeLine{00027\ \textcolor{comment}{*\ Products,\ Inc.\ shall\ not\ be\ used\ except\ as\ stated\ in\ the\ Maxim\ Integrated}}
+\DoxyCodeLine{00028\ \textcolor{comment}{*\ Products,\ Inc.\ Branding\ Policy.}}
+\DoxyCodeLine{00029\ \textcolor{comment}{*}}
+\DoxyCodeLine{00030\ \textcolor{comment}{*\ The\ mere\ transfer\ of\ this\ software\ does\ not\ imply\ any\ licenses}}
+\DoxyCodeLine{00031\ \textcolor{comment}{*\ of\ trade\ secrets,\ proprietary\ technology,\ copyrights,\ patents,}}
+\DoxyCodeLine{00032\ \textcolor{comment}{*\ trademarks,\ maskwork\ rights,\ or\ any\ other\ form\ of\ intellectual}}
+\DoxyCodeLine{00033\ \textcolor{comment}{*\ property\ whatsoever.\ Maxim\ Integrated\ Products,\ Inc.\ retains\ all}}
+\DoxyCodeLine{00034\ \textcolor{comment}{*\ ownership\ rights.}}
+\DoxyCodeLine{00035\ \textcolor{comment}{*******************************************************************************}}
+\DoxyCodeLine{00036\ \textcolor{comment}{*}}
+\DoxyCodeLine{00037\ \textcolor{comment}{*\ \ \ @file\ \ \ \ \ \ \ examples.h}}
+\DoxyCodeLine{00038\ \textcolor{comment}{*\ \ \ @author\ \ \ \ \ Benjamin\ VINOT\ -\/\ <benjamin.vinot@maximintegrated.com>}}
+\DoxyCodeLine{00039\ \textcolor{comment}{*\ \ \ @date\ \ \ \ \ \ \ Apr\ 9,\ 2018}}
+\DoxyCodeLine{00040\ \textcolor{comment}{*}}
+\DoxyCodeLine{00041\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#ifndef\ \_\_EXAMPLES\_H\_}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ \_\_EXAMPLES\_H\_}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ "{}MXQ\_API.h"{}}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ TEST\_FAILED\ -\/1}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ ASSERTSUCCESS(fn)\ \{\ int\ err;\ if((err=fn)!=0)\ \{printf\ ("{}Error\ \%04x\ @line\ \%d\ in\ \%s\(\backslash\)n"{},err,\ \_\_LINE\_\_\ ,\ \_\_FILE\_\_\ );\ return\ TEST\_FAILED;\}\}}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ ASSERTERROR(fn,status)\ \{\ mxq\_u2\ err;\ if((err=fn)!=status)\ \{printf\ ("{}Error\ condition\ \%04x\ not\ verified\ (got\ \%04x)\ @line\ \%d\ in\ \%s\(\backslash\)n"{},\ status,err,\ \_\_LINE\_\_\ ,\ \_\_FILE\_\_);return\ TEST\_FAILED;\}\}}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ ASSERTTRUE(x\ )\ \{\ int\ a=(x);\ if((a==0))\ \{printf\ ("{}Error\ condition\ not\ verified\ \%d\ @line\ \%d\ in\ \%s\(\backslash\)n"{},a,\ \_\_LINE\_\_\ ,\ \_\_FILE\_\_);\ return\ TEST\_FAILED;\}\}}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ EXITPROG(err)\ \{\ if(err)\ mxq\_perror(err,\ \_\_FILE\_\_,\ \_\_LINE\_\_);\ exit(err);\}}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{comment}{//\ The\ below\ keys\ are\ pre-\/loaded\ (public\ part\ only)\ in\ the\ MAXQ1061}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#define\ KEYCOMPLEN\ 32\ \ }\textcolor{comment}{//\ ECC=secp256r1\ key\ size\ in\ bytes}}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ PUBKEYADMINID\ 0x1001}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ PUBKEYIMPORTOBJID\ 0x1000}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ KEYCOMPLEN\ 32\ \ }\textcolor{comment}{//\ ECC=secp256r1\ key\ size\ in\ bytes}}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ PUBKEYADMINID\ \ \ \ \ 0x1001}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ PUBKEYIMPORTOBJID\ 0x1000}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{keyword}{extern}\ mxq\_u1\ \mbox{\hyperlink{examples_8h_a9845bb697a44624fc8dcf85a600c542d}{KeyPairAdmin}}[96];}
+\DoxyCodeLine{00069\ \textcolor{keyword}{extern}\ mxq\_u1\ \mbox{\hyperlink{examples_8h_a085bb0466e73f8c0cc831d7eeb6872bb}{KeyPairImport}}[96];}
+\DoxyCodeLine{00070\ \textcolor{keyword}{extern}\ mxq\_u1\ \mbox{\hyperlink{examples_8h_a19bce917271f371dc3524d4fd4762369}{KeySecureChannel}}[32];}
+\DoxyCodeLine{00071\ \textcolor{keyword}{extern}\ mxq\_u1\ \mbox{\hyperlink{examples_8h_aecabad3ff0c05e1e053f790faebb9ca6}{KeyPairSecureBoot}}[96];}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{examples_8h_a515dd21f58a593a365c19740b37d4ebb}{Administrator\_Authentication}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00074\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{examples_8h_a1f4ea431e8f2ba7d4231cbf53de17023}{ECDSA\_sign\_secp256r1\_sha256}}(mxq\_u1*\ dest,\ mxq\_u1*\ key,\ mxq\_u1*\ data,\ mxq\_length\ data\_length);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{examples_8h_a3b4e00b63472d775fa72215579e75d12}{print\_buffer}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *\ buffer,\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ len);}
+\DoxyCodeLine{00077\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{examples_8h_a03f5ae65d95867d12f12c50771bf0f2d}{mxq\_perror}}(mxq\_u2\ error\_code,\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line);}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_\_EXAMPLES\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

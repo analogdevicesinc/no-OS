@@ -1,0 +1,9 @@
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:120:12:ssl_ticket_update_keys	0	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:70:12:ssl_ticket_gen_key	48	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:399:32:ssl_ticket_select_key	16	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:42:6:mbedtls_ssl_ticket_init	8	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:155:5:mbedtls_ssl_ticket_rotate	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:213:5:mbedtls_ssl_ticket_setup	24	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:298:5:mbedtls_ssl_ticket_write	88	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:417:5:mbedtls_ssl_ticket_parse	88	static
+C:/analog/cfs/1.0.1/SDK/MAX/Libraries/USS/maxq10xx-sdk/mbedtls/library/ssl_ticket.c:529:6:mbedtls_ssl_ticket_free	8	static
