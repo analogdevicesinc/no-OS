@@ -342,11 +342,7 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	if (descriptor->device_id == 3)
-        ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_IBRO_CLK);
-    else
-		ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
-		
+	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;

@@ -5,4 +5,3 @@ SRCS += $(DRIVERS)/adc/ad7124/ad7124.c
 INCS += $(DRIVERS)/adc/ad7124/ad7124.h
 SRCS += $(DRIVERS)/adc/ad7124/ad7124_regs.c
 INCS += $(DRIVERS)/adc/ad7124/ad7124_regs.h
-SRCS += $(MAXIM_LIBRARIES)/PeriphDrivers/Source/SYS/mxc_lock.c
