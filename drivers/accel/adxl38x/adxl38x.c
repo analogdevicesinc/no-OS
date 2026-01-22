@@ -393,6 +393,9 @@ int adxl38x_get_deviceID(struct adxl38x_dev *dev,
 	uint8_t misc0_reg;
 
 	ret = adxl38x_read_device_data(dev, ADXL38X_MISC0, 1, &misc0_reg);
+	if (ret)
+		return ret;
+
 	if (misc0_reg & NO_OS_BIT(7))
 		dev->dev_type = ID_ADXL382;
 	else
