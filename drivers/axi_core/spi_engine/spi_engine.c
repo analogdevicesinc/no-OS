@@ -692,8 +692,10 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 	int32_t 		ret;
 	struct spi_engine_msg	msg;
 	struct spi_engine_desc	*desc_extra;
+	uint8_t		prev_offload_config;
 
 	desc_extra = desc->extra;
+	prev_offload_config = desc_extra->offload_config;
 
 	/* If we want to access SPI interface and SPI engine offload module was
 	 * activated, we need to disable it
@@ -737,6 +739,8 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 	spi_engine_queue_no_os_free(&msg.cmds);
 	no_os_free(msg.tx_buf);
 	no_os_free(msg.rx_buf);
+
+	desc_extra->offload_config = prev_offload_config;
 
 	return ret;
 }
