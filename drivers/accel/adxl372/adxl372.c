@@ -692,8 +692,10 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	int32_t ret;
 
 	dev = (struct adxl372_dev *)no_os_malloc(sizeof(*dev));
-	if (!dev)
+	if (!dev) {
+		ret = -ENOMEM;
 		goto error;
+	}
 
 	dev->comm_type = init_param.comm_type;
 	if (dev->comm_type == SPI) {
@@ -726,29 +728,29 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	/* GPIO */
 	ret = no_os_gpio_get(&dev->gpio_int1,
 			     &init_param.gpio_int1);
-	if (ret < 0)
+	if (ret)
 		goto error;
 
 	ret |= no_os_gpio_get(&dev->gpio_int2,
 			      &init_param.gpio_int2);
-	if (ret < 0)
+	if (ret)
 		goto error;
 
 	ret |= no_os_gpio_direction_input(dev->gpio_int1);
-	if (ret < 0)
+	if (ret)
 		goto error;
 
 	ret |= no_os_gpio_direction_input(dev->gpio_int2);
-	if (ret < 0)
+	if (ret)
 		goto error;
 
 	/* Query device presence */
 	ret = adxl372_read_reg(dev, ADXL372_DEVID, &dev_id);
-	if (ret < 0)
+	if (ret)
 		goto error;
 
 	ret = adxl372_read_reg(dev, ADXL372_PARTID, &part_id);
-	if (ret < 0)
+	if (ret)
 		goto error;
 
 	if (dev_id != ADXL372_DEVID_VAL || part_id != ADXL372_PARTID_VAL) {
@@ -758,46 +760,77 @@ int32_t adxl372_init(struct adxl372_dev **device,
 
 	/* Device settings */
 	ret = adxl372_set_op_mode(dev, ADXL372_STANDBY);
-	ret |= adxl372_reset(dev);
-	ret |= adxl372_set_bandwidth(dev, init_param.bw);
-	ret |= adxl372_set_odr(dev, init_param.odr);
-	ret |= adxl372_set_wakeup_rate(dev, init_param.wur);
-	ret |= adxl372_set_act_proc_mode(dev, init_param.act_proc_mode);
-	ret |= adxl372_set_instant_on_th(dev, init_param.th_mode);
-	ret |= adxl372_set_activity_threshold(dev,
+	if (ret)
+		goto error;
+	ret = adxl372_reset(dev);
+	if (ret)
+		goto error;
+	ret = adxl372_set_bandwidth(dev, init_param.bw);
+	if (ret)
+		goto error;
+	ret = adxl372_set_odr(dev, init_param.odr);
+	if (ret)
+		goto error;
+	ret = adxl372_set_wakeup_rate(dev, init_param.wur);
+	if (ret)
+		goto error;
+	ret = adxl372_set_act_proc_mode(dev, init_param.act_proc_mode);
+	if (ret)
+		goto error;
+	ret = adxl372_set_instant_on_th(dev, init_param.th_mode);
+	if (ret)
+		goto error;
+	ret = adxl372_set_activity_threshold(dev,
 					      ADXL372_ACTIVITY,
 					      init_param.activity_th.thresh,
 					      init_param.activity_th.referenced,
 					      init_param.activity_th.enable);
-	ret |= adxl372_set_activity_threshold(dev,
+	if (ret)
+		goto error;
+	ret = adxl372_set_activity_threshold(dev,
 					      ADXL372_ACTIVITY2,
 					      init_param.activity2_th.thresh,
 					      init_param.activity2_th.referenced,
 					      init_param.activity2_th.enable);
-	ret |= adxl372_set_activity_threshold(dev,
+	if (ret)
+		goto error;
+	ret = adxl372_set_activity_threshold(dev,
 					      ADXL372_INACTIVITY,
 					      init_param.inactivity_th.thresh,
 					      init_param.inactivity_th.referenced,
 					      init_param.inactivity_th.enable);
-	ret |= adxl372_set_activity_time(dev, init_param.activity_time);
-	ret |= adxl372_set_inactivity_time(dev, init_param.inactivity_time);
-	ret |= adxl372_set_filter_settle(dev, init_param.filter_settle);
-	ret |= adxl372_configure_fifo(dev,
+	if (ret)
+		goto error;
+	ret = adxl372_set_activity_time(dev, init_param.activity_time);
+	if (ret)
+		goto error;
+	ret = adxl372_set_inactivity_time(dev, init_param.inactivity_time);
+	if (ret)
+		goto error;
+	ret = adxl372_set_filter_settle(dev, init_param.filter_settle);
+	if (ret)
+		goto error;
+	ret = adxl372_configure_fifo(dev,
 				      init_param.fifo_config.fifo_mode,
 				      init_param.fifo_config.fifo_format,
 				      init_param.fifo_config.fifo_samples);
+	if (ret)
+		goto error;
 
-	ret |= adxl372_interrupt_config(dev, init_param.int1_config,
+	ret = adxl372_interrupt_config(dev, init_param.int1_config,
 					init_param.int2_config);
+	if (ret)
+		goto error;
 
-	ret |= adxl372_set_op_mode(dev, init_param.op_mode);
+	ret = adxl372_set_op_mode(dev, init_param.op_mode);
+	if (ret)
+		goto error;
 
-	if (!ret) {
-		*device = dev;
-		printf("adxl372 successfully initialized\n");
-		no_os_mdelay(1000);
-		return ret;
-	}
+	*device = dev;
+	printf("adxl372 successfully initialized\n");
+	no_os_mdelay(1000);
+	return ret;
+
 error:
 	printf("adxl372 initialization error (%d)\n", ret);
 	no_os_free(dev);
