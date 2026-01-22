@@ -279,6 +279,9 @@ void adxl362_get_xyz(struct adxl362_dev *dev,
 {
 	uint8_t xyz_values[6] = {0, 0, 0, 0, 0, 0};
 
+	if (!dev || !x || !y || !z)
+		return;
+
 	adxl362_get_register_value(dev,
 				   xyz_values,
 				   ADXL362_REG_XDATA_L,
@@ -302,6 +305,13 @@ void adxl362_get_g_xyz(struct adxl362_dev *dev,
 		       float* z)
 {
 	uint8_t xyz_values[6] = {0, 0, 0, 0, 0, 0};
+
+	if (dev->selected_range < 2) {
+		*x = 0;
+		*y = 0;
+		*z = 0;
+		return;
+	}
 
 	adxl362_get_register_value(dev,
 				   xyz_values,
