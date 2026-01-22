@@ -256,6 +256,9 @@ void adxl345_get_g_xyz(struct adxl345_dev *dev,
 	int16_t y_data = 0;  // Y-axis's output data.
 	int16_t z_data = 0;  // Z-axis's output data.
 
+	if (!dev || !x || !y || !z)
+		return;
+
 	adxl345_get_xyz(dev, &x_data, &y_data, &z_data);
 	*x = (float)(dev->full_resolution_set ? (x_data * ADXL345_SCALE_FACTOR) :
 		     (x_data * ADXL345_SCALE_FACTOR * (dev->selected_range >> 1)));
