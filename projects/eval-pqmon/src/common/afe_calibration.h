@@ -57,6 +57,7 @@ typedef enum {
 	CALIBRATION_STATE_INIT,
 	CALIBRATION_STATE_COLLECTING,
 	CALIBRATION_STATE_CALCULATING,
+	CALIBRATION_STATE_CALCULATE_ERROR_BEFORE,
 	CALIBRATION_STATE_WRITING,
 	CALIBRATION_STATE_VERIFY_COLLECTING,
 	CALIBRATION_STATE_VERIFY_CALCULATING,
@@ -134,15 +135,27 @@ typedef struct {
 	uint16_t cycle_count;
 	uint16_t target_cycles;
 	int64_t irms_sum;
+	int64_t irms_sum_no_gain;
+	int64_t irms_sum_no_off;
 	int64_t vrms_sum;
+	int64_t vrms_sum_no_gain;
+	int64_t vrms_sum_no_off;
 	int64_t ifrms_sum;
+	int64_t ifrms_sum_no_off;
 	int64_t vfrms_sum;
+	int64_t vfrms_sum_no_off;
 	uint32_t irms_expected;
 	uint32_t vrms_expected;
 	uint32_t irms_measured;
+	uint32_t irms_measured_no_gain;
+	uint32_t irms_measured_no_off;
 	uint32_t vrms_measured;
+	uint32_t vrms_measured_no_gain;
+	uint32_t vrms_measured_no_off;
 	uint32_t ifrms_measured;
+	uint32_t ifrms_measured_no_off;
 	uint32_t vfrms_measured;
+	uint32_t vfrms_measured_no_off;
 	CALIBRATION_INPUT input;
 	CALIBRATION_RESULT result;
 } CALIBRATION_CONTEXT;
@@ -216,7 +229,7 @@ uint32_t calculate_expected_vrms(const CALIBRATION_INPUT *input,
  * @param measured - Measured RMS value
  * @return Gain coefficient (signed 32-bit)
  */
-int32_t calculate_gain(uint32_t expected, uint32_t measured);
+int32_t calculate_gain(int32_t expected, int32_t measured);
 
 /**
  * @brief Calculate RMS without gain coefficient
@@ -224,7 +237,7 @@ int32_t calculate_gain(uint32_t expected, uint32_t measured);
  * @param gain - Gain register value
  * @return rms value without gain (signed 32-bit)
  */
-int32_t calculate_rms_without_gain(uint32_t measured, uint32_t gain);
+int32_t calculate_rms_without_gain(int32_t measured, int32_t gain);
 
 /**
  * @brief Calculate RMS offset coefficient
@@ -232,7 +245,7 @@ int32_t calculate_rms_without_gain(uint32_t measured, uint32_t gain);
  * @param measured - Measured RMS value
  * @return Offset coefficient (signed 32-bit)
  */
-int32_t calculate_rmsos(uint32_t expected, uint32_t measured);
+int32_t calculate_rmsos(int32_t expected, int32_t measured);
 
 /**
  * @brief Calculate RMS value without offset coefficient
@@ -240,7 +253,7 @@ int32_t calculate_rmsos(uint32_t expected, uint32_t measured);
  * @param xrmsos - RMSOS register value
  * @return rms value without offset (signed 32-bit)
  */
-int32_t calculate_rms_without_rmsos(uint32_t measured, uint32_t xrmsos);
+int32_t calculate_rms_without_rmsos(int32_t measured, int32_t xrmsos);
 
 
 /**
@@ -249,6 +262,6 @@ int32_t calculate_rms_without_rmsos(uint32_t measured, uint32_t xrmsos);
  * @param expected - Expected value
  * @return Error as percentage (e.g., 0.01 = 1%)
  */
-float calculate_error(uint32_t measured, uint32_t expected);
+float calculate_error(int32_t measured, int32_t expected);
 
 #endif /* __AFE_CALIBRATION_H__ */
