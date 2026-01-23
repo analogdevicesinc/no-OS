@@ -109,7 +109,8 @@
 #define FLASH_CAL_SAVE                  58
 #define FLASH_CAL_LOAD                  59
 #define FLASH_CAL_ERASE                 60
-#define FLASH_CAL_VALID                 61
+#define FLASH_STAT                      61
+#define FLASH_CAL_DATA                  62
 
 // Channel specific attributes
 #define CHAN_RMS                        0
