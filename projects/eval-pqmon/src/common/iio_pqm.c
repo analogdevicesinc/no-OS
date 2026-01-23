@@ -364,9 +364,87 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 			return snprintf(buf, len, "0");
 		case FLASH_CAL_ERASE:
 			return snprintf(buf, len, "0");
-		case FLASH_CAL_VALID:
-			return snprintf(buf, len, "%d",
-					flash_has_valid_calibration() ? 1 : 0);
+		case FLASH_STAT: {
+			FLASH_CALIBRATION_DATA tmp_data;
+			int flash_ret = flash_read_calibration(&tmp_data);
+			switch (flash_ret) {
+			case FLASH_STATUS_OK:
+				return snprintf(buf, len, "ok");
+			case FLASH_STATUS_NO_DATA:
+				return snprintf(buf, len, "no_data");
+			case FLASH_STATUS_INVALID_CRC:
+				return snprintf(buf, len, "crc_error");
+			case FLASH_STATUS_INVALID_VERSION:
+				return snprintf(buf, len, "version_error");
+			case FLASH_STATUS_INVALID_MAGIC:
+				return snprintf(buf, len, "invalid_magic");
+			default:
+				return snprintf(buf, len, "error");
+			}
+		}
+
+		case FLASH_CAL_DATA: {
+			FLASH_CALIBRATION_DATA flash_data;
+			int ret;
+			int offset = 0;
+
+			/* Initialize flash if needed */
+			if (!flash_storage_is_initialized()) {
+				ret = flash_storage_init();
+				if (ret != FLASH_STATUS_OK)
+					return snprintf(buf, len, "flash_init_error");
+			}
+
+			/* Read calibration data from flash */
+			ret = flash_read_calibration(&flash_data);
+			if (ret != FLASH_STATUS_OK)
+				return snprintf(buf, len, "no_data");
+
+			/* Format summary for all channels */
+			offset += snprintf(buf + offset, len - offset,
+					   "CH_A:gain=%d,off=%d,i_gain=0x%x,i_gain_err=%.5f%%,v_gain=0x%x,"
+					   "v_gain_err=%.5f%%,i_rmsos=0x%x,i_off_err=%.5f%%,v_rmsos=0x%x,v_off_err=%.5f%%;",
+					   flash_data.channel[0].gain_calibrated ? 1 : 0,
+					   flash_data.channel[0].offset_calibrated ? 1 : 0,
+					   flash_data.channel[0].i_gain,
+					   flash_data.channel[0].gain_i_error * 100,
+					   flash_data.channel[0].v_gain,
+					   flash_data.channel[0].gain_v_error * 100,
+					   flash_data.channel[0].i_rmsos,
+					   flash_data.channel[0].offset_i_error * 100,
+					   flash_data.channel[0].v_rmsos,
+					   flash_data.channel[0].offset_v_error * 100);
+
+			offset += snprintf(buf + offset, len - offset,
+					   "CH_B:gain=%d,off=%d,i_gain=0x%x,i_gain_err=%.5f%%,v_gain=0x%x,"
+					   "v_gain_err=%.5f%%,i_rmsos=0x%x,i_off_err=%.5f%%,v_rmsos=0x%x,v_off_err=%.5f%%;",
+					   flash_data.channel[1].gain_calibrated ? 1 : 0,
+					   flash_data.channel[1].offset_calibrated ? 1 : 0,
+					   flash_data.channel[1].i_gain,
+					   flash_data.channel[1].gain_i_error * 100,
+					   flash_data.channel[1].v_gain,
+					   flash_data.channel[1].gain_v_error * 100,
+					   flash_data.channel[1].i_rmsos,
+					   flash_data.channel[1].offset_i_error * 100,
+					   flash_data.channel[1].v_rmsos,
+					   flash_data.channel[1].offset_v_error * 100);
+
+			offset += snprintf(buf + offset, len - offset,
+					   "CH_C:gain=%d,off=%d,i_gain=0x%x,i_gain_err=%.5f%%,v_gain=0x%x,"
+					   "v_gain_err=%.5f%%,i_rmsos=0x%x,i_off_err=%.5f%%,v_rmsos=0x%x,v_off_err=%.5f%%;",
+					   flash_data.channel[2].gain_calibrated ? 1 : 0,
+					   flash_data.channel[2].offset_calibrated ? 1 : 0,
+					   flash_data.channel[2].i_gain,
+					   flash_data.channel[2].gain_i_error * 100,
+					   flash_data.channel[2].v_gain,
+					   flash_data.channel[2].gain_v_error * 100,
+					   flash_data.channel[2].i_rmsos,
+					   flash_data.channel[2].offset_i_error * 100,
+					   flash_data.channel[2].v_rmsos,
+					   flash_data.channel[2].offset_v_error * 100);
+
+			return offset;
+		}
 
 		default:
 			return snprintf(buf, len, "%.2f", desc->pqm_global_attr[attr_id]);
@@ -1398,9 +1476,14 @@ struct iio_attribute global_pqm_attributes[] = {
 		.priv = FLASH_CAL_ERASE,
 	},
 	{
-		.name = "flash_cal_valid",
+		.name = "flash_status",
 		.show = read_pqm_attr,
-		.priv = FLASH_CAL_VALID,
+		.priv = FLASH_STAT,
+	},
+	{
+		.name = "flash_cal_data",
+		.show = read_pqm_attr,
+		.priv = FLASH_CAL_DATA,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

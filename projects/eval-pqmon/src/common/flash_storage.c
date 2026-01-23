@@ -261,9 +261,13 @@ int flash_load_and_apply_calibration(void)
 {
 	FLASH_CALIBRATION_DATA cal_data;
 	FLASH_STATUS status;
-	int ret;
 	uint8_t ch;
 	uint16_t run_reg = 0;
+	uint32_t igain_copy, vgain_copy;
+	uint16_t igain_reg, vgain_reg;
+	uint32_t irmsos_copy, vrmsos_copy, ifrmsos_copy, vfrmsos_copy;
+	uint16_t irmsos_reg, vrmsos_reg, ifrmsos_reg, vfrmsos_reg;
+	int ret;
 
 	/* Read calibration data from flash */
 	status = flash_read_calibration(&cal_data);
@@ -283,47 +287,61 @@ int flash_load_and_apply_calibration(void)
 		/* Apply gain coefficients if calibrated */
 		if (c->gain_calibrated) {
 			/* Use local copies */
-			uint32_t igain_copy = (uint32_t)c->i_gain;
-			uint32_t vgain_copy = (uint32_t)c->v_gain;
+			igain_copy = (uint32_t)c->i_gain;
+			vgain_copy = (uint32_t)c->v_gain;
 
-			uint16_t igain_reg = (ch == 0) ? REG_AIGAIN :
-					     (ch == 1) ? REG_BIGAIN : REG_CIGAIN;
-			afe_write_32bit_reg(igain_reg, &igain_copy);
+			igain_reg = (ch == 0) ? REG_AIGAIN :
+				    (ch == 1) ? REG_BIGAIN : REG_CIGAIN;
+			ret = afe_write_32bit_reg(igain_reg, &igain_copy);
+			if (ret != 0)
+				return FLASH_STATUS_WRITE_FAILED;
 
-			uint16_t vgain_reg = (ch == 0) ? REG_AVGAIN :
-					     (ch == 1) ? REG_BVGAIN : REG_CVGAIN;
-			afe_write_32bit_reg(vgain_reg, &vgain_copy);
+			vgain_reg = (ch == 0) ? REG_AVGAIN :
+				    (ch == 1) ? REG_BVGAIN : REG_CVGAIN;
+			ret = afe_write_32bit_reg(vgain_reg, &vgain_copy);
+			if (ret != 0)
+				return FLASH_STATUS_WRITE_FAILED;
 		}
 
 		/* Apply offset coefficients if calibrated */
 		if (c->offset_calibrated) {
 			/* Use local copies */
-			uint32_t irmsos_copy = (uint32_t)c->i_rmsos;
-			uint32_t vrmsos_copy = (uint32_t)c->v_rmsos;
-			uint32_t ifrmsos_copy = (uint32_t)c->if_rmsos;
-			uint32_t vfrmsos_copy = (uint32_t)c->vf_rmsos;
+			irmsos_copy = (uint32_t)c->i_rmsos;
+			vrmsos_copy = (uint32_t)c->v_rmsos;
+			ifrmsos_copy = (uint32_t)c->if_rmsos;
+			vfrmsos_copy = (uint32_t)c->vf_rmsos;
 
-			uint16_t irmsos_reg = (ch == 0) ? REG_AIRMSOS :
-					      (ch == 1) ? REG_BIRMSOS : REG_CIRMSOS;
-			afe_write_32bit_reg(irmsos_reg, &irmsos_copy);
+			irmsos_reg = (ch == 0) ? REG_AIRMSOS :
+				     (ch == 1) ? REG_BIRMSOS : REG_CIRMSOS;
+			ret = afe_write_32bit_reg(irmsos_reg, &irmsos_copy);
+			if (ret != 0)
+				return FLASH_STATUS_WRITE_FAILED;
 
-			uint16_t vrmsos_reg = (ch == 0) ? REG_AVRMSOS :
-					      (ch == 1) ? REG_BVRMSOS : REG_CVRMSOS;
-			afe_write_32bit_reg(vrmsos_reg, &vrmsos_copy);
+			vrmsos_reg = (ch == 0) ? REG_AVRMSOS :
+				     (ch == 1) ? REG_BVRMSOS : REG_CVRMSOS;
+			ret = afe_write_32bit_reg(vrmsos_reg, &vrmsos_copy);
+			if (ret != 0)
+				return FLASH_STATUS_WRITE_FAILED;
 
-			uint16_t ifrmsos_reg = (ch == 0) ? REG_AIFRMSOS :
-					       (ch == 1) ? REG_BIFRMSOS : REG_CIFRMSOS;
-			afe_write_32bit_reg(ifrmsos_reg, &ifrmsos_copy);
+			ifrmsos_reg = (ch == 0) ? REG_AIFRMSOS :
+				      (ch == 1) ? REG_BIFRMSOS : REG_CIFRMSOS;
+			ret = afe_write_32bit_reg(ifrmsos_reg, &ifrmsos_copy);
+			if (ret != 0)
+				return FLASH_STATUS_WRITE_FAILED;
 
-			uint16_t vfrmsos_reg = (ch == 0) ? REG_AVFRMSOS :
-					       (ch == 1) ? REG_BVFRMSOS : REG_CVFRMSOS;
-			afe_write_32bit_reg(vfrmsos_reg, &vfrmsos_copy);
+			vfrmsos_reg = (ch == 0) ? REG_AVFRMSOS :
+				      (ch == 1) ? REG_BVFRMSOS : REG_CVFRMSOS;
+			ret = afe_write_32bit_reg(vfrmsos_reg, &vfrmsos_copy);
+			if (ret != 0)
+				return FLASH_STATUS_WRITE_FAILED;
 		}
 	}
 
 	/* Restart AFE measurements */
 	run_reg = 1;
-	afe_write_16bit_reg(REG_RUN, &run_reg);
+	ret = afe_write_16bit_reg(REG_RUN, &run_reg);
+	if (ret != 0)
+		return FLASH_STATUS_WRITE_FAILED;
 
 	return FLASH_STATUS_OK;
 }
@@ -377,6 +395,8 @@ int flash_save_all_calibration(void)
 {
 	FLASH_CALIBRATION_DATA cal_data;
 	uint8_t ch;
+	uint16_t vgain_reg, igain_reg, irmsos_reg, vrmsos_reg;
+	uint16_t ifrmsos_reg, vfrmsos_reg;
 	int ret;
 
 	/* Initialize structure */
@@ -387,34 +407,54 @@ int flash_save_all_calibration(void)
 		FLASH_CHANNEL_CALIBRATION *c = &cal_data.channel[ch];
 
 		/* Read gain registers */
-		uint16_t igain_reg = (ch == 0) ? REG_AIGAIN :
-				     (ch == 1) ? REG_BIGAIN : REG_CIGAIN;
+		igain_reg = (ch == 0) ? REG_AIGAIN :
+			    (ch == 1) ? REG_BIGAIN : REG_CIGAIN;
 		ret = afe_read_32bit_buff(igain_reg, 1, (uint32_t *)&c->i_gain);
-		if (ret == 0 && c->i_gain != 0)
+		if (ret != 0)
+			return FLASH_STATUS_READ_FAILED;
+
+		vgain_reg = (ch == 0) ? REG_AVGAIN :
+			    (ch == 1) ? REG_BVGAIN : REG_CVGAIN;
+		ret = afe_read_32bit_buff(vgain_reg, 1, (uint32_t *)&c->v_gain);
+		if (ret != 0)
+			return FLASH_STATUS_READ_FAILED;
+
+		if (c->i_gain != 0 && c->v_gain != 0)
 			c->gain_calibrated = true;
 
-		uint16_t vgain_reg = (ch == 0) ? REG_AVGAIN :
-				     (ch == 1) ? REG_BVGAIN : REG_CVGAIN;
-		ret = afe_read_32bit_buff(vgain_reg, 1, (uint32_t *)&c->v_gain);
-
 		/* Read offset registers */
-		uint16_t irmsos_reg = (ch == 0) ? REG_AIRMSOS :
-				      (ch == 1) ? REG_BIRMSOS : REG_CIRMSOS;
+		irmsos_reg = (ch == 0) ? REG_AIRMSOS :
+			     (ch == 1) ? REG_BIRMSOS : REG_CIRMSOS;
 		ret = afe_read_32bit_buff(irmsos_reg, 1, (uint32_t *)&c->i_rmsos);
-		if (ret == 0 && c->i_rmsos != 0)
+		if (ret != 0)
+			return FLASH_STATUS_READ_FAILED;
+
+		vrmsos_reg = (ch == 0) ? REG_AVRMSOS :
+			     (ch == 1) ? REG_BVRMSOS : REG_CVRMSOS;
+		ret = afe_read_32bit_buff(vrmsos_reg, 1, (uint32_t *)&c->v_rmsos);
+		if (ret != 0)
+			return FLASH_STATUS_READ_FAILED;
+
+		if (c->i_rmsos != 0 && c->v_rmsos != 0)
 			c->offset_calibrated = true;
 
-		uint16_t vrmsos_reg = (ch == 0) ? REG_AVRMSOS :
-				      (ch == 1) ? REG_BVRMSOS : REG_CVRMSOS;
-		ret = afe_read_32bit_buff(vrmsos_reg, 1, (uint32_t *)&c->v_rmsos);
-
-		uint16_t ifrmsos_reg = (ch == 0) ? REG_AIFRMSOS :
-				       (ch == 1) ? REG_BIFRMSOS : REG_CIFRMSOS;
+		ifrmsos_reg = (ch == 0) ? REG_AIFRMSOS :
+			      (ch == 1) ? REG_BIFRMSOS : REG_CIFRMSOS;
 		ret = afe_read_32bit_buff(ifrmsos_reg, 1, (uint32_t *)&c->if_rmsos);
+		if (ret != 0)
+			return FLASH_STATUS_READ_FAILED;
 
-		uint16_t vfrmsos_reg = (ch == 0) ? REG_AVFRMSOS :
-				       (ch == 1) ? REG_BVFRMSOS : REG_CVFRMSOS;
+		vfrmsos_reg = (ch == 0) ? REG_AVFRMSOS :
+			      (ch == 1) ? REG_BVFRMSOS : REG_CVFRMSOS;
 		ret = afe_read_32bit_buff(vfrmsos_reg, 1, (uint32_t *)&c->vf_rmsos);
+		if (ret != 0)
+			return FLASH_STATUS_READ_FAILED;
+
+		/* Save calibration errors from current context */
+		c->gain_i_error = calibrationCtx.result.gain_i_error_after;
+		c->gain_v_error = calibrationCtx.result.gain_v_error_after;
+		c->offset_i_error = calibrationCtx.result.offset_i_error_after;
+		c->offset_v_error = calibrationCtx.result.offset_v_error_after;
 	}
 
 	/* Save calibration input parameters from current context */
