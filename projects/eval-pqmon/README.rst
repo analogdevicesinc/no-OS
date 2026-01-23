@@ -148,8 +148,10 @@ loaded at startup.
      - Write 1 to load calibration from flash
    * - flash_cal_erase
      - Write 1 to erase calibration from flash
-   * - flash_cal_valid
-     - Read 1 if valid calibration exists in flash
+   * - flash_status
+     - Flash data status: ok, no_data, crc_error, version_error, invalid_magic, error
+   * - flash_cal_data
+     - Read calibration data summary for all channels (gain, offset, validity)
 
 The ``iio_info`` of the device should look like the following:
 
@@ -285,7 +287,7 @@ IIO context has 1 device:
                                 attr  1: startTime value: 0 0 0 0 0 0
                                 attr  2: endTime value: 0 0 0 0 0 0
                                 attr  3: durationInCycles value: 0 0 0 0 0 0
-                56 device-specific attributes found:
+                57 device-specific attributes found:
                                 attr  0: u2 value: 0.00
                                 attr  1: u0 value: 0.00
                                 attr  2: sneg_voltage value: 0.00
@@ -341,7 +343,8 @@ IIO context has 1 device:
                                 attr 52: flash_cal_save value: 0
                                 attr 53: flash_cal_load value: 0
                                 attr 54: flash_cal_erase value: 0
-                                attr 55: flash_cal_valid value: 0
+                                attr 55: flash_status value: no_data
+                                attr 56: flash_cal_data value: CH_A:gain=0,off=0,i_gain=0x0,...;CH_B:...;CH_C:...
                 No trigger on this device
 
 
