@@ -38,6 +38,7 @@
 #include "pqlib_example.h"
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 /* Global calibration context */
 CALIBRATION_CONTEXT calibrationCtx;
@@ -130,6 +131,9 @@ void calibration_init(void)
 uint32_t calculate_expected_irms(const CALIBRATION_INPUT *input,
 				 float rms_value)
 {
+	if (input->current_scale == 0.0f)
+		return 0;
+
 	float percentage = (rms_value * SQRT_2 * input->current_pga_gain) /
 			   input->current_scale;
 	return (uint32_t)(percentage * (float)ADI_PQLIB_MAX_RMS_VALUE_CAL);
@@ -138,39 +142,48 @@ uint32_t calculate_expected_irms(const CALIBRATION_INPUT *input,
 uint32_t calculate_expected_vrms(const CALIBRATION_INPUT *input,
 				 float rms_value)
 {
+	if (input->voltage_scale == 0.0f)
+		return 0;
+
 	float percentage = (rms_value * SQRT_2 * input->voltage_pga_gain) /
 			   input->voltage_scale;
 	return (uint32_t)(percentage * (float)ADI_PQLIB_MAX_RMS_VALUE_CAL);
 }
 
-int32_t calculate_gain(uint32_t expected, uint32_t measured)
+int32_t calculate_gain(int32_t expected, int32_t measured)
 {
+	int64_t diff, gain;
+
 	if (measured == 0)
 		return 0;
 
-	int64_t diff = (int64_t)expected - (int64_t)measured;
-	int64_t gain = (diff * GAIN_SCALE_FACTOR) / (int64_t)measured;
+	diff = (int64_t)expected - (int64_t)measured;
+	gain = (diff * GAIN_SCALE_FACTOR) / (int64_t)measured;
 
 	return (int32_t)gain;
 }
 
-int32_t calculate_rms_without_gain(uint32_t measured, uint32_t gain)
+int32_t calculate_rms_without_gain(int32_t measured, int32_t gain)
 {
+	int64_t rms, num, numi;
+
 	if (measured == 0)
 		return 0;
 
-	int64_t num = (int64_t)measured * GAIN_SCALE_FACTOR;
-	int64_t numi = (gain + GAIN_SCALE_FACTOR);
-	int64_t rms = num / numi;
+	num = (int64_t)measured * GAIN_SCALE_FACTOR;
+	numi = (int64_t)gain + GAIN_SCALE_FACTOR;
+	rms = num / numi;
 
 	return (int32_t)rms;
 }
 
-int32_t calculate_rmsos(uint32_t expected, uint32_t measured)
+int32_t calculate_rmsos(int32_t expected, int32_t measured)
 {
-	int64_t expected_sq = (int64_t)expected * (int64_t)expected;
-	int64_t measured_sq = (int64_t)measured * (int64_t)measured;
-	int64_t offset = (expected_sq - measured_sq) / OFFSET_SCALE_FACTOR;
+	int64_t offset, expected_sq, measured_sq;
+
+	expected_sq = (int64_t)expected * (int64_t)expected;
+	measured_sq = (int64_t)measured * (int64_t)measured;
+	offset = (expected_sq - measured_sq) / OFFSET_SCALE_FACTOR;
 
 	/* Clamp to 24-bit signed register range */
 	if (offset > OFFSET_REG_MAX)
@@ -181,11 +194,15 @@ int32_t calculate_rmsos(uint32_t expected, uint32_t measured)
 	return (int32_t)offset;
 }
 
-int32_t calculate_rms_without_rmsos(uint32_t measured, uint32_t xrmsos)
+int32_t calculate_rms_without_rmsos(int32_t measured, int32_t xrmsos)
 {
-	int64_t measured_sq = (int64_t)measured * (int64_t)measured;
-	int64_t xrmsos_int = (int64_t)xrmsos * OFFSET_SCALE_FACTOR;
-	int64_t rms = sqrtl(measured_sq - xrmsos_int);
+	int64_t rms, measured_sq, xrmsos_int;
+
+	measured_sq = (int64_t)measured * (int64_t)measured;
+	xrmsos_int = (int64_t)xrmsos * OFFSET_SCALE_FACTOR;
+	if (xrmsos_int >= measured_sq)
+		return 0;
+	rms = sqrtl(measured_sq - xrmsos_int);
 
 	/* Clamp to 24-bit signed register range */
 	if (rms > OFFSET_REG_MAX)
@@ -196,7 +213,7 @@ int32_t calculate_rms_without_rmsos(uint32_t measured, uint32_t xrmsos)
 	return (int32_t)rms;
 }
 
-float calculate_error(uint32_t measured, uint32_t expected)
+float calculate_error(int32_t measured, int32_t expected)
 {
 	if (expected == 0)
 		return 0.0f;
@@ -265,20 +282,26 @@ static int calibration_read_rms_values(void)
 
 	if (type == CALIBRATION_TYPE_GAIN) {
 		/* For gain calibration, remove gain */
-		calibrationCtx.irms_sum += calculate_rms_without_gain(irms,
-					   calibrationCtx.input.i_gain_init);
-		calibrationCtx.vrms_sum += calculate_rms_without_gain(vrms,
-					   calibrationCtx.input.v_gain_init);
+		calibrationCtx.irms_sum_no_gain += calculate_rms_without_gain(irms,
+						   calibrationCtx.input.i_gain_init);
+		calibrationCtx.irms_sum += irms;
+		calibrationCtx.vrms_sum_no_gain += calculate_rms_without_gain(vrms,
+						   calibrationCtx.input.v_gain_init);
+		calibrationCtx.vrms_sum += vrms;
 	} else {
 		/* For offset calibration, remove RMS offset */
-		calibrationCtx.irms_sum += calculate_rms_without_rmsos(irms,
-					   calibrationCtx.input.i_rmsos_init);
-		calibrationCtx.vrms_sum += calculate_rms_without_rmsos(vrms,
-					   calibrationCtx.input.v_rmsos_init);
-		calibrationCtx.ifrms_sum = calculate_rms_without_rmsos(ifrms,
-					   calibrationCtx.input.if_rmsos_init);
-		calibrationCtx.vfrms_sum = calculate_rms_without_rmsos(vfrms,
-					   calibrationCtx.input.vf_rmsos_init);
+		calibrationCtx.irms_sum_no_off += calculate_rms_without_rmsos(irms,
+						  calibrationCtx.input.i_rmsos_init);
+		calibrationCtx.irms_sum += irms;
+		calibrationCtx.vrms_sum_no_off += calculate_rms_without_rmsos(vrms,
+						  calibrationCtx.input.v_rmsos_init);
+		calibrationCtx.vrms_sum += vrms;
+		calibrationCtx.ifrms_sum_no_off += calculate_rms_without_rmsos(ifrms,
+						   calibrationCtx.input.if_rmsos_init);
+		calibrationCtx.ifrms_sum += ifrms;
+		calibrationCtx.vfrms_sum_no_off += calculate_rms_without_rmsos(vfrms,
+						   calibrationCtx.input.vf_rmsos_init);
+		calibrationCtx.vfrms_sum += vfrms;
 	}
 	calibrationCtx.cycle_count++;
 
@@ -311,18 +334,37 @@ static void calibration_calculate_means(void)
 
 	calibrationCtx.irms_measured = (uint32_t)(calibrationCtx.irms_sum /
 				       calibrationCtx.cycle_count);
+	calibrationCtx.irms_measured_no_gain = (uint32_t)(
+			calibrationCtx.irms_sum_no_gain /
+			calibrationCtx.cycle_count);
+	calibrationCtx.irms_measured_no_off = (uint32_t)(
+			calibrationCtx.irms_sum_no_off /
+			calibrationCtx.cycle_count);
 	calibrationCtx.vrms_measured = (uint32_t)(calibrationCtx.vrms_sum /
 				       calibrationCtx.cycle_count);
+	calibrationCtx.vrms_measured_no_gain = (uint32_t)(
+			calibrationCtx.vrms_sum_no_gain /
+			calibrationCtx.cycle_count);
+	calibrationCtx.vrms_measured_no_off = (uint32_t)(
+			calibrationCtx.vrms_sum_no_off /
+			calibrationCtx.cycle_count);
 	calibrationCtx.ifrms_measured = (uint32_t)(calibrationCtx.ifrms_sum /
 					calibrationCtx.cycle_count);
+	calibrationCtx.ifrms_measured_no_off = (uint32_t)(
+			calibrationCtx.ifrms_sum_no_off /
+			calibrationCtx.cycle_count);
 	calibrationCtx.vfrms_measured = (uint32_t)(calibrationCtx.vfrms_sum /
 					calibrationCtx.cycle_count);
+	calibrationCtx.vfrms_measured_no_off = (uint32_t)(
+			calibrationCtx.vfrms_sum_no_off /
+			calibrationCtx.cycle_count);
 }
 
 static int calibration_write_gain_registers(void)
 {
 	int status;
 	uint8_t phase = calibrationCtx.phase;
+	uint32_t igain_copy, vgain_copy;
 
 	/* Calculate expected values for gain calibration */
 	calibrationCtx.irms_expected = calculate_expected_irms(
@@ -332,24 +374,16 @@ static int calibration_write_gain_registers(void)
 					       &calibrationCtx.input,
 					       calibrationCtx.input.nominal_voltage);
 
-	/* Calculate error before calibration */
-	calibrationCtx.result.gain_i_error_before = calculate_error(
-				calibrationCtx.irms_measured,
-				calibrationCtx.irms_expected);
-	calibrationCtx.result.gain_v_error_before = calculate_error(
-				calibrationCtx.vrms_measured,
-				calibrationCtx.vrms_expected);
-
 	/* Calculate gain coefficients */
 	calibrationCtx.result.i_gain = calculate_gain(
 					       calibrationCtx.irms_expected,
-					       calibrationCtx.irms_measured);
+					       calibrationCtx.irms_measured_no_gain);
 	calibrationCtx.result.v_gain = calculate_gain(
 					       calibrationCtx.vrms_expected,
-					       calibrationCtx.vrms_measured);
+					       calibrationCtx.vrms_measured_no_gain);
 
-	uint32_t igain_copy = (uint32_t)calibrationCtx.result.i_gain;
-	uint32_t vgain_copy = (uint32_t)calibrationCtx.result.v_gain;
+	igain_copy = (uint32_t)calibrationCtx.result.i_gain;
+	vgain_copy = (uint32_t)calibrationCtx.result.v_gain;
 
 	status = afe_write_32bit_reg(igain_regs[phase], &igain_copy);
 	if (status != 0)
@@ -366,43 +400,29 @@ static int calibration_write_offset_registers(void)
 {
 	int status;
 	uint8_t phase = calibrationCtx.phase;
-
-	/* Calculate expected values for offset calibration */
-	calibrationCtx.irms_expected = calculate_expected_irms(
-					       &calibrationCtx.input,
-					       calibrationCtx.input.offset_current);
-	calibrationCtx.vrms_expected = calculate_expected_vrms(
-					       &calibrationCtx.input,
-					       calibrationCtx.input.offset_voltage);
-
-	/* Calculate error before calibration */
-	calibrationCtx.result.offset_i_error_before = calculate_error(
-				calibrationCtx.irms_measured,
-				calibrationCtx.irms_expected);
-	calibrationCtx.result.offset_v_error_before = calculate_error(
-				calibrationCtx.vrms_measured,
-				calibrationCtx.vrms_expected);
+	uint32_t irmsos_copy, vrmsos_copy;
+	uint32_t ifrmsos_copy, vfrmsos_copy;
 
 	/* Calculate RMS offset coefficients */
 	calibrationCtx.result.i_rmsos = calculate_rmsos(
 						calibrationCtx.irms_expected,
-						calibrationCtx.irms_measured);
+						calibrationCtx.irms_measured_no_off);
 	calibrationCtx.result.v_rmsos = calculate_rmsos(
 						calibrationCtx.vrms_expected,
-						calibrationCtx.vrms_measured);
+						calibrationCtx.vrms_measured_no_off);
 
 	/* Calculate fundamental RMS offset coefficients */
 	calibrationCtx.result.if_rmsos = calculate_rmsos(
 			calibrationCtx.irms_expected,
-			calibrationCtx.ifrms_measured);
+			calibrationCtx.ifrms_measured_no_off);
 	calibrationCtx.result.vf_rmsos = calculate_rmsos(
 			calibrationCtx.vrms_expected,
-			calibrationCtx.vfrms_measured);
+			calibrationCtx.vfrms_measured_no_off);
 
-	uint32_t irmsos_copy = (uint32_t)calibrationCtx.result.i_rmsos;
-	uint32_t vrmsos_copy = (uint32_t)calibrationCtx.result.v_rmsos;
-	uint32_t ifrmsos_copy = (uint32_t)calibrationCtx.result.if_rmsos;
-	uint32_t vfrmsos_copy = (uint32_t)calibrationCtx.result.vf_rmsos;
+	irmsos_copy = (uint32_t)calibrationCtx.result.i_rmsos;
+	vrmsos_copy = (uint32_t)calibrationCtx.result.v_rmsos;
+	ifrmsos_copy = (uint32_t)calibrationCtx.result.if_rmsos;
+	vfrmsos_copy = (uint32_t)calibrationCtx.result.vf_rmsos;
 
 	status = afe_write_32bit_reg(irmsos_regs[phase], &irmsos_copy);
 	if (status != 0)
@@ -448,6 +468,9 @@ int calibration_process_cycle(void)
 	int status = 0;
 	bool zx_detected = false;
 	uint8_t phase = calibrationCtx.phase;
+	uint32_t igain_init_copy, vgain_init_copy;
+	uint32_t irmsos_init_copy, vrmsos_init_copy;
+	uint32_t ifrmsos_init_copy, vfrmsos_init_copy;
 
 	switch (calibrationCtx.state) {
 	case CALIBRATION_STATE_IDLE:
@@ -457,9 +480,15 @@ int calibration_process_cycle(void)
 	case CALIBRATION_STATE_INIT:
 		calibrationCtx.cycle_count = 0;
 		calibrationCtx.irms_sum = 0;
+		calibrationCtx.irms_sum_no_gain = 0;
+		calibrationCtx.irms_sum_no_off = 0;
 		calibrationCtx.vrms_sum = 0;
+		calibrationCtx.vrms_sum_no_gain = 0;
+		calibrationCtx.vrms_sum_no_off = 0;
 		calibrationCtx.ifrms_sum = 0;
+		calibrationCtx.ifrms_sum_no_off = 0;
 		calibrationCtx.vfrms_sum = 0;
+		calibrationCtx.vfrms_sum_no_off = 0;
 		calibrationCtx.state = CALIBRATION_STATE_COLLECTING;
 		if (calibrationCtx.type == CALIBRATION_TYPE_GAIN) {
 			status = afe_read_32bit_buff(igain_regs[phase],
@@ -524,6 +553,40 @@ int calibration_process_cycle(void)
 
 	case CALIBRATION_STATE_CALCULATING:
 		calibration_calculate_means();
+		calibrationCtx.state = CALIBRATION_STATE_CALCULATE_ERROR_BEFORE;
+		break;
+
+	case CALIBRATION_STATE_CALCULATE_ERROR_BEFORE:
+		/* Calculate expected values based on calibration type */
+		if (calibrationCtx.type == CALIBRATION_TYPE_GAIN) {
+			calibrationCtx.irms_expected = calculate_expected_irms(
+							       &calibrationCtx.input,
+							       calibrationCtx.input.nominal_current);
+			calibrationCtx.vrms_expected = calculate_expected_vrms(
+							       &calibrationCtx.input,
+							       calibrationCtx.input.nominal_voltage);
+			/* Calculate error before calibration */
+			calibrationCtx.result.gain_i_error_before = calculate_error(
+						calibrationCtx.irms_measured,
+						calibrationCtx.irms_expected);
+			calibrationCtx.result.gain_v_error_before = calculate_error(
+						calibrationCtx.vrms_measured,
+						calibrationCtx.vrms_expected);
+		} else {
+			calibrationCtx.irms_expected = calculate_expected_irms(
+							       &calibrationCtx.input,
+							       calibrationCtx.input.offset_current);
+			calibrationCtx.vrms_expected = calculate_expected_vrms(
+							       &calibrationCtx.input,
+							       calibrationCtx.input.offset_voltage);
+			/* Calculate error before calibration */
+			calibrationCtx.result.offset_i_error_before = calculate_error(
+						calibrationCtx.irms_measured,
+						calibrationCtx.irms_expected);
+			calibrationCtx.result.offset_v_error_before = calculate_error(
+						calibrationCtx.vrms_measured,
+						calibrationCtx.vrms_expected);
+		}
 		calibrationCtx.state = CALIBRATION_STATE_WRITING;
 		break;
 
@@ -542,9 +605,15 @@ int calibration_process_cycle(void)
 		/* Reset for verification */
 		calibrationCtx.cycle_count = 0;
 		calibrationCtx.irms_sum = 0;
+		calibrationCtx.irms_sum_no_gain = 0;
+		calibrationCtx.irms_sum_no_off = 0;
 		calibrationCtx.vrms_sum = 0;
+		calibrationCtx.vrms_sum_no_gain = 0;
+		calibrationCtx.vrms_sum_no_off = 0;
 		calibrationCtx.ifrms_sum = 0;
+		calibrationCtx.ifrms_sum_no_off = 0;
 		calibrationCtx.vfrms_sum = 0;
+		calibrationCtx.vfrms_sum_no_off = 0;
 		calibrationCtx.state = CALIBRATION_STATE_VERIFY_COLLECTING;
 		break;
 
@@ -570,6 +639,73 @@ int calibration_process_cycle(void)
 	case CALIBRATION_STATE_VERIFY_CALCULATING:
 		calibration_calculate_means();
 		calibration_calculate_error_after();
+		/* Compare the initial errors with the current ones
+		 * Keep initial values if initial errors smaller */
+		if (calibrationCtx.type == CALIBRATION_TYPE_GAIN) {
+			if (fabsf(calibrationCtx.result.gain_i_error_after) >= fabsf(
+				    calibrationCtx.result.gain_i_error_before)) {
+				igain_init_copy = calibrationCtx.input.i_gain_init;
+				status = afe_write_32bit_reg(igain_regs[phase], &igain_init_copy);
+				if (status != 0) {
+					calibrationCtx.state = CALIBRATION_STATE_ERROR;
+					break;
+				}
+				calibrationCtx.result.i_gain = calibrationCtx.input.i_gain_init;
+				calibrationCtx.result.gain_i_error_after =
+					calibrationCtx.result.gain_i_error_before;
+			}
+			if (fabsf(calibrationCtx.result.gain_v_error_after) >= fabsf(
+				    calibrationCtx.result.gain_v_error_before)) {
+				vgain_init_copy = calibrationCtx.input.v_gain_init;
+				status = afe_write_32bit_reg(vgain_regs[phase], &vgain_init_copy);
+				if (status != 0) {
+					calibrationCtx.state = CALIBRATION_STATE_ERROR;
+					break;
+				}
+				calibrationCtx.result.v_gain = calibrationCtx.input.v_gain_init;
+				calibrationCtx.result.gain_v_error_after =
+					calibrationCtx.result.gain_v_error_before;
+			}
+		} else {
+			if (fabsf(calibrationCtx.result.offset_i_error_after) >= fabsf(
+				    calibrationCtx.result.offset_i_error_before)) {
+				irmsos_init_copy = calibrationCtx.input.i_rmsos_init;
+				status = afe_write_32bit_reg(irmsos_regs[phase], &irmsos_init_copy);
+				if (status != 0) {
+					calibrationCtx.state = CALIBRATION_STATE_ERROR;
+					break;
+				}
+				ifrmsos_init_copy = calibrationCtx.input.if_rmsos_init;
+				status = afe_write_32bit_reg(ifrmsos_regs[phase], &ifrmsos_init_copy);
+				if (status != 0) {
+					calibrationCtx.state = CALIBRATION_STATE_ERROR;
+					break;
+				}
+				calibrationCtx.result.i_rmsos = calibrationCtx.input.i_rmsos_init;
+				calibrationCtx.result.if_rmsos = calibrationCtx.input.if_rmsos_init;
+				calibrationCtx.result.offset_i_error_after =
+					calibrationCtx.result.offset_i_error_before;
+			}
+			if (fabsf(calibrationCtx.result.offset_v_error_after) >= fabsf(
+				    calibrationCtx.result.offset_v_error_before)) {
+				vrmsos_init_copy = calibrationCtx.input.v_rmsos_init;
+				status = afe_write_32bit_reg(vrmsos_regs[phase], &vrmsos_init_copy);
+				if (status != 0) {
+					calibrationCtx.state = CALIBRATION_STATE_ERROR;
+					break;
+				}
+				vfrmsos_init_copy = calibrationCtx.input.vf_rmsos_init;
+				status = afe_write_32bit_reg(vfrmsos_regs[phase], &vfrmsos_init_copy);
+				if (status != 0) {
+					calibrationCtx.state = CALIBRATION_STATE_ERROR;
+					break;
+				}
+				calibrationCtx.result.v_rmsos = calibrationCtx.input.v_rmsos_init;
+				calibrationCtx.result.vf_rmsos = calibrationCtx.input.vf_rmsos_init;
+				calibrationCtx.result.offset_v_error_after =
+					calibrationCtx.result.offset_v_error_before;
+			}
+		}
 		calibrationCtx.result.done = true;
 		calibrationCtx.state = CALIBRATION_STATE_DONE;
 		break;
