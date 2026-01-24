@@ -1,0 +1,7 @@
+{
+  "maxim": {
+    "iio":  {
+      "flags" : "TARGET=max32665"
+    }
+  }
+}
