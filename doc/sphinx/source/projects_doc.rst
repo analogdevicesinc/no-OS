@@ -20,6 +20,14 @@ ADC / DAC
    
    projects/adc-dac/*
 
+ANALOG FRONT-ENDS
+=================
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/afe/*
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
