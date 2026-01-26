@@ -4,8 +4,7 @@ ifndef MAXIM_LIBRARIES
 $(error MAXIM_LIBRARIES not defined.$(ENDL))
 endif
 
-# export INCLUDE_OTHER_PATTERN	= $(PROJECT_BUILD)/root/MaximSDK/Libraries
-export INCLUDE_OTHER_PATTERN	= $(PROJECT_BUILD)/root/analog/cfs/2.0.0
+export INCLUDE_OTHER_PATTERN	= $(PROJECT_BUILD)/root/MaximSDK/Libraries
 export INCLUDE_OTHER_CORRECTED	= $(MAXIM_LIBRARIES)
 CC=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
