@@ -31,14 +31,18 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
+#include <stdio.h>
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "tcp_socket.h"
 #include "no_os_util.h"
 #include "no_os_alloc.h"
 
+#include "lwip_socket.h"
+#include "no_os_delay.h"
+
 #ifndef DISABLE_SECURE_SOCKET
+#include "mbedtls/debug.h"
 #include "noos_mbedtls_config.h"
 #include "no_os_trng.h"
 #endif /* DISABLE_SECURE_SOCKET */
@@ -87,7 +91,22 @@ static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 			size_t len)
 {
 	int32_t ret;
-
+	#ifdef NO_OS_LWIP_NETWORKING
+		/*
+		 * Currently, the LWIP networking layer doesn't implement packet RX
+		 * using interrupts, so we have to poll.
+		 * 
+		 * Adding this as a workaround, based off this commit: https://github.com/analogdevicesinc/no-OS/commit/8ca2a15b8b7cc7a53985bf5a773bdd99f4bc63bc#diff-f9781ad4653f9192f0521846b4116a5b34ae3c2abd2c4256ee0a813e3f947aa4R158
+		 * 
+		 * Previously this polling was only applied to the mqtt layer
+		 */
+		int i = 500;
+		while(i>0){
+		no_os_lwip_step(sock->net->net, NULL);
+		no_os_mdelay(1);
+		i--;
+		}
+	#endif /*NO_OS_LWIP_NETWORKING*/
 	ret = sock->net->socket_recv(sock->net->net, sock->id, buff, len);
 	if (ret == -EAGAIN)
 		return MBEDTLS_ERR_SSL_WANT_READ;

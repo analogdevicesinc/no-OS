@@ -1,39 +1,49 @@
 /***************************************************************************//**
  *   @file   noos_mbedtls_config.h
  *   @brief  Config to build mbedtls library
- *   @author Mihail Chindris (mihail.chindris@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  *   @copyright
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
+ *
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
  *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
  * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
 #ifndef NOOS_MBEDTLS_CONFIG_H
 #define NOOS_MBEDTLS_CONFIG_H
+
+/******************************************************************************/
+/***************************** User configuration *****************************/
+/******************************************************************************/
 
 /*
  * For an easy configuration of mbedtls library only this macros from user
@@ -57,11 +67,11 @@
  * chipersuites should work for other servers too.
  */
 
-//#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-//#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_CBC_SHA
+#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_CBC_SHA
 #define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-//#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_CBC_SHA256
-//#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_CBC_SHA
+#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+#define ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_CBC_SHA
 
 /* Eliptic curves to be used by the chiper */
 #define ENABLE_ECP_DP_SECP256R1_ENABLED
@@ -80,7 +90,7 @@
  * 2000 is a eoungh to do the tls handshake and is no to much
  * platforms with memory constrains like ADuCM3029
  */
-#define MAX_CONTENT_LEN 2500
+//#define MAX_CONTENT_LEN 2500
 
 /*
  * ENABLE_MEMORY_OPTIMIZATIONS should be defined in the case memory
@@ -88,6 +98,10 @@
  * server an client verification.
  */
 #define ENABLE_MEMORY_OPTIMIZATIONS
+
+/******************************************************************************/
+/********************* Minimal tls client requirements ************************/
+/******************************************************************************/
 
 /* Minimal requirements */
 /* Hardware entropy is used (trng.h) */
@@ -106,7 +120,12 @@
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,\
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,\
 	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,\
-	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+	MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, \
+	MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+
+/******************************************************************************/
+/*************** Configuration depending on user input ************************/
+/******************************************************************************/
 
 #ifdef MAX_CONTENT_LEN
 #define MBEDTLS_SSL_MAX_CONTENT_LEN	MAX_CONTENT_LEN
@@ -125,6 +144,8 @@
 
 /* Enable KEY_EXCHANGE_ECDHE_RSA_ENABLED if used one of these chipersuites is defined */
 #define MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
+#define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+
 
 #endif /* Chipers that use ENABLE_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #endif /* ENABLE_TLS1_2 */
@@ -143,6 +164,10 @@
 
 #endif /* ENABLE_PEM_CERT */
 
+/******************************************************************************/
+/**************** Solve dependencies needed by modules ************************/
+/******************************************************************************/
+
 /* Dependencies for MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #ifdef MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
 
@@ -157,6 +182,21 @@
 #define MBEDTLS_ASN1_PARSE_C
 #define MBEDTLS_X509_USE_C
 #define MBEDTLS_X509_CRT_PARSE_C
+#define MBEDTLS_SHA256_C
+#define MBEDTLS_ASN1_WRITE_C
+#define MBEDTLS_ECDSA_C
+
+#define MBEDTLS_SSL_PROTO_DTLS
+// Trying to force tls v 1.2
+#undef MBEDTLS_SSL_PROTO_TLS1_3
+#undef MBEDTLS_SSL_PROTO_TLS1_1
+#undef MBEDTLS_SSL_PROTO_TLS1_0
+#define MBEDTLS_SSL_PROTO_TLS1_2
+
+
+// #define MBEDTLS_SSL_MAX_CONTENT_LEN 4096  // Or a larger value if needed
+// #define MBEDTLS_MPI_MAX_SIZE 512  // Adjust based on your memory requirements
+
 
 #ifdef ENABLE_ECP_DP_SECP256R1_ENABLED
 #define MBEDTLS_ECP_DP_SECP256R1_ENABLED
@@ -192,6 +232,7 @@
 #   define MBEDTLS_SHA1_C
 #  endif
 # endif
+#   define MBEDTLS_SHA256_C
 
 # if (defined(ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_128_GCM_SHA256) || \
 	defined(ENABLE_CHIPERSUITE_ECDHE_RSA_WITH_AES_256_GCM_SHA384))
@@ -212,7 +253,6 @@
 #define MBEDTLS_SHA256_C
 #endif
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
-
 /* Check if the configuration is ok */
 #include "mbedtls/check_config.h"
 
