@@ -66,6 +66,8 @@
 
 #include "adin1110.h"
 
+#include "no_os_alloc.h"
+
 static bool mdns_result;
 static bool mdns_is_conflict;
 static uint32_t mdns_conflict_id;
