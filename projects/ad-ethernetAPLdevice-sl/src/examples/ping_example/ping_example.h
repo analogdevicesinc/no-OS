@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   main.c
- *   @brief  Main file for the apard32690 project.
+ *   @file   tcp_echo_server_example.h
+ *   @brief  Header for the TCP echo server example
  *   @author Ciprian Regus (ciprian.regus@analog.com)
 ********************************************************************************
  * Copyright 2023(c) Analog Devices, Inc.
@@ -30,43 +30,9 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "common_data.h"
-#include "no_os_init.h"
+#ifndef __PING_EXAMPLE_H__
+#define __PING_EXAMPLE_H__
 
-#if defined(HP_TCP_ECHO_SERVER)
-#include "tcp_echo_server_example.h"
-#elif defined(HP_BASIC_EXAMPLE)
-#include "hello_world.h"
-#elif defined(HP_AD7124_APP)
-#include "ad7124_app.h"
-#elif defined(HP_MAX6613_APP)
-#include "max6613_app.h"
-#elif defined(HP_IIO_EXAMPLE)
-#include "iio_example.h"
-#elif defined(HP_PING_EXAMPLE)
-#include "ping_example.h"
-#endif
+int ping_example_main();
 
-/***************************************************************************//**
- * @brief Main function execution.
- *
- * @return ret - Result of the enabled examples execution.
-*******************************************************************************/
-int main()
-{
-#if defined(HP_BASIC_EXAMPLE)
-	return hello_world_main();
-#elif defined(HP_AD7124_APP)
-	return ad7124_app_main();
-#elif defined(HP_MAX6613_APP)
-	return max6613_app_main();
-#elif defined(HP_TCP_ECHO_SERVER)
-	return tcp_echo_server_example_main();
-#elif defined(HP_IIO_EXAMPLE)
-	return iio_example_main();
-#elif defined(HP_PING_EXAMPLE)
-	return ping_example_main();
-#endif
-
-	return 0;
-}
+#endif /* __PING_EXAMPLE_H__ */
