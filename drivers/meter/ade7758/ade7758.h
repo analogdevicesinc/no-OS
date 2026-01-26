@@ -175,7 +175,7 @@
 #define ADE7758_CONSEL_MSK					NO_OS_GENMASK(1, 0)
 
 /* ADE7758_REG_LCYCMODE Bit Definition */
-#define ADE7758_FREQSEL_MSK					NO_OS_BIT(7)
+#define ADE7758_FREQ_PERIOD_SEL_MSK				NO_OS_BIT(7)
 #define ADE7758_RSTREAD_MSK					NO_OS_BIT(6)
 #define ADE7758_ZXSEL_MSK					NO_OS_GENMASK(5, 3)
 #define ADE7758_LVA_MSK						NO_OS_BIT(2)
@@ -499,12 +499,12 @@ int ade7758_rms_vals_phase_b(struct ade7758_dev *dev,
 int ade7758_rms_vals_phase_c(struct ade7758_dev *dev,
 			     struct ade7758_rms_values *data);
 
-/* Read period value */
-int ade7758_period_val(struct ade7758_dev *dev,
-		       struct ade7758_period_value *data);
+/* Read frequency/period value */
+int ade7758_frequency_period_val(struct ade7758_dev *dev,
+				 struct ade7758_freq_per_value *data);
 
 /* Read temperature value */
-int ade7758_temp_val(struct ade7758_dev *dev,
-		     struct ade7758_temp_value *data);
+int ade7758_temperature_val(struct ade7758_dev *dev,
+			    struct ade7758_temp_value *data);
 
 #endif /* __ADE7758_H__ */

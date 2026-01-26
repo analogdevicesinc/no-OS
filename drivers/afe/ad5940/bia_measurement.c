@@ -34,6 +34,9 @@
 #include <errno.h>
 #include "bia_measurement.h"
 
+/* External function provided by platform/project */
+extern uint32_t ClrMCUIntFlag(void);
+
 /* Initial AD5940 settings */
 AppBiaCfg_Type AppBiaCfg = {
 	.SeqStartAddr = 0,

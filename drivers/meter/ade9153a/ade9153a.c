@@ -3669,8 +3669,6 @@ int ade9153a_temp_result(struct ade9153a_dev *dev, uint16_t *val)
  */
 int ade9153a_compmode(struct ade9153a_dev *dev)
 {
-	int ret;
-
 	if (!dev)
 		return -ENODEV;
 
@@ -3684,8 +3682,6 @@ int ade9153a_compmode(struct ade9153a_dev *dev)
  */
 int ade9153a_run(struct ade9153a_dev *dev)
 {
-	int ret;
-
 	if (!dev)
 		return -ENODEV;
 
@@ -3699,8 +3695,6 @@ int ade9153a_run(struct ade9153a_dev *dev)
  */
 int ade9153a_stop(struct ade9153a_dev *dev)
 {
-	int ret;
-
 	if (!dev)
 		return -ENODEV;
 

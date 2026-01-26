@@ -1,5 +1,5 @@
 SHELL         = /bin/bash
-SPHINXOPTS   ?=
+SPHINXOPTS   ?= -j auto
 SPHINXBUILD  ?= sphinx-build
 SOURCEDIR     = .
 BUILDDIR      = ../build

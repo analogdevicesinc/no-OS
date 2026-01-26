@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 #include "adt7420.h"
 
 const struct adt7420_chip_info chip_info[] = {

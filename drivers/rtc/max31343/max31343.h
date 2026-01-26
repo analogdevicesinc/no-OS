@@ -132,7 +132,7 @@ struct max31343_time_stamp {
 	uint8_t				hr;     /* Hours                [0-23] */
 	uint8_t				day;    /* Day of month         [1-31] */
 	uint8_t				mon;    /* Month                [0-11] */
-	uint8_t				year;   /* Year                 [2000-2199] */
+	uint16_t			year;   /* Year                 [2000-2199] */
 };
 
 /**

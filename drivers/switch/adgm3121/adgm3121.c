@@ -61,7 +61,7 @@ int adgm3121_write_register(struct adgm3121_dev *dev, uint8_t reg_addr,
 
 	/* Build 16-bit SPI command: [RW][ADDR][DATA] */
 	cmd = ADGM3121_SPI_WRITE |
-	      NO_OS_FIELD_PREP(ADGM3121_SPI_ADDR_MSK, reg_addr) |
+	      no_os_field_prep(ADGM3121_SPI_ADDR_MSK, reg_addr) |
 	      data;
 
 	buf[0] = cmd >> 8;
@@ -92,7 +92,7 @@ int adgm3121_read_register(struct adgm3121_dev *dev, uint8_t reg_addr,
 
 	/* Build 16-bit SPI command: [RW][ADDR][DUMMY] */
 	cmd = ADGM3121_SPI_READ |
-	      NO_OS_FIELD_PREP(ADGM3121_SPI_ADDR_MSK, reg_addr);
+	      no_os_field_prep(ADGM3121_SPI_ADDR_MSK, reg_addr);
 
 	buf[0] = cmd >> 8;
 	buf[1] = cmd & 0xFF;
@@ -421,7 +421,7 @@ int adgm3121_check_internal_error(struct adgm3121_dev *dev,
 	if (ret)
 		return ret;
 
-	*error_status = NO_OS_FIELD_GET(ADGM3121_INTERNAL_ERROR, switch_data);
+	*error_status = no_os_field_get(ADGM3121_INTERNAL_ERROR, switch_data);
 
 	return 0;
 }

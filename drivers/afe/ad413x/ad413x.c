@@ -938,7 +938,7 @@ int32_t ad413x_init(struct ad413x_dev **device,
 	/* Reset POR flag */
 	ret = ad413x_reg_read(dev, AD413X_REG_STATUS, &reg_data);
 	if (ret)
-		return -1;
+		goto err_spi;
 
 	/* Change SPI to 4 wire*/
 	ret = ad413x_reg_write_msk(dev,
