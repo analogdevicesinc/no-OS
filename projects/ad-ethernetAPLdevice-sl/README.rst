@@ -38,6 +38,38 @@ The project may be tested by using netcat on the host:
 
     netcat 192.168.97.60 10000
 
+6. **mqtt_baremetal**: Creates an MQTT client that connects to a public MQTT broker and publishes messages to a topic 
+
+    Two configuration options are available for this example:
+    - unsecure mqtt 
+    - secure mqtt (TLS)
+
+    Unsecure mqtt uses port 1883 and does not require certificates. 
+    
+    Secure mqtt uses port 8883 and requires the following certificates: CA certificate, public certificate and private key.
+
+    To toggle between the 2 options in the code must select the "CONNECTION_TYPE" in the Makefile or in the build command.
+
+7. **mqtt_freertos**: Creates an MQTT client that connects to a public MQTT broker and publishes messages to a topic
+
+    Two configuration options are available for this example:
+    - unsecure mqtt 
+    - secure mqtt (TLS)
+
+    Unsecure mqtt uses port 1883 and does not require certificates. 
+    
+    Secure mqtt uses port 8883 and requires the following certificates: CA certificate, public certificate and private key.
+
+    To toggle between the 2 options in the code must select the "CONNECTION_TYPE" in the Makefile or in the build command.
+
+8. **ping_example**: Creates a simple ping application that allows a RPi on the same network to ping the embedded platform
+
+    The embedded platform can be pinged by a PC or a RPi when they are both on the same network.
+
+.. code-block:: bash
+
+    ping 192.168.97.60
+
 Building the project
 --------------------
 
@@ -46,7 +78,7 @@ Building the project
 
 .. code-block:: bash
 
-    make EXAMPLE=<example> HP_STATIC_IP=<y/n> BOARD_REV=<HP_IS/HP_NON_IS> <RELEASE=y/n>
+    make EXAMPLE=<example> HP_STATIC_IP=<y/n> BOARD_REV=<HP_IS/HP_NON_IS> BOARD_REV=<PLAIN_CONNECTION/SECURE_CONNECTION> <RELEASE=y/n>
 
 Make Flags
 ^^^^^^^^^^
@@ -60,12 +92,18 @@ Make Flags
     * `iio_example`
     * `max6613_app`
     * `tcp_echo_server`
+    * `mqtt_baremetal`
+    * `mqtt_freertos`
+    * `ping_example`
 * **HP_STATIC_IP**: Selects between a static IP and DHCP for samples involving a network connection.
     * `y`: Configures the IP specified using the NO_OS_IP make variable. By default, it is 192.168.97.60
     * `n`: (Default) Let the DHCP server running on the host PC assign an IP to the device.
 * **BOARD_REV**: Selects the board revision.
     * `HP_IS`: (Default) Configure the peripheral interfaces for the intrinsic safety version of the ad-ethernetAPLdevice-sl
     * `HP_NON_IS`: Configure the peripheral interfaces for the non intrinsic safety version of the ad-ethernetAPLdevice-sl
+* **CONNECTION_TYPE**: Selects the connection type (REQUIRED ONLY FOR MQTT EXAMPLES).
+    * `PLAIN_CONNECTION`: (Default) Configure unsecure mqtt connection
+    * `SECURE_CONNECTION`: Configure secure mqtt connection (TLS)
 
 A successful build should end with the following terminal output:
 
@@ -94,9 +132,9 @@ Before the MCU can be programmed a few steps are necessary (only for the Drag-an
 
     * Copy the firmware binary file to the `MAINTANANCE` drive. It should unmount and a `DAPLINK` drive should appear instead.
 
-#. Connect the MAX32625PICO board to the PC and the Hockey Puck board. If everything went well, you should see a mass storage device named `DAPLINK` in your filesystem.
+#. Connect the MAX32625PICO board to the PC and the ad-ethernetAPLdevice-sl board. If everything went well, you should see a mass storage device named `DAPLINK` in your filesystem.
 
-#. Power on the Hockey Puck board.
+#. Power on the ad-ethernetAPLdevice-sl board.
 
 The microcontroller may be programmed in 2 ways:
 1. Drag-and-drop the binary (.hex) file in the `DAPLINK` directory. The drive should be unmounted and mounted again, once the programming is done.

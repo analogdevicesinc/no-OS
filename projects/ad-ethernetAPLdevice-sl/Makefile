@@ -1,6 +1,7 @@
-EXAMPLE ?= ad7124_app
-BOARD_REV ?= HP_IS
-HP_STATIC_IP ?= n
+EXAMPLE ?= mqtt_baremetal
+BOARD_REV ?= HP_NON_IS
+HP_STATIC_IP ?= y
+CONNECTION_TYPE ?= PLAIN_CONNECTION #If running an MQTT example, must select a connection type i.e. PLAIN_CONNECTION or SECURE_CONNECTION
 
 CFLAGS += -D$(BOARD_REV)=1
 PLATFORM=maxim
