@@ -36,7 +36,7 @@ endif
 #                            Compiler / Linker flags                            #
 ################################################################################
 
-LATTICE_ARCH_FLAGS   ?= -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore
+LATTICE_ARCH_FLAGS   ?= -march=rv32ima -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore
 LATTICE_DEBUG        ?= y
 LATTICE_OPT_FLAGS    ?= -Os
 ifeq (y,$(strip $(LATTICE_DEBUG)))
