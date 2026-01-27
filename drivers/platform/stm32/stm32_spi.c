@@ -44,6 +44,11 @@
 #include "no_os_pwm.h"
 #endif
 
+/**
+ * @brief spi_table contains the pointers towards the SPI buses
+*/
+static SPI_HandleTypeDef hspi_table[SPI_MAX_BUS_NUMBER + 1];
+
 static int stm32_spi_config(struct no_os_spi_desc *desc)
 {
 	int ret;
@@ -120,29 +125,29 @@ static int stm32_spi_config(struct no_os_spi_desc *desc)
 		ret = -EINVAL;
 		goto error;
 	};
-	sdesc->hspi.Instance = base;
-	sdesc->hspi.Init.Mode = SPI_MODE_MASTER;
-	sdesc->hspi.Init.Direction = SPI_DIRECTION_2LINES;
-	sdesc->hspi.Init.DataSize = SPI_DATASIZE_8BIT;
-	sdesc->hspi.Init.CLKPolarity = desc->mode & NO_OS_SPI_CPOL ?
-				       SPI_POLARITY_HIGH :
-				       SPI_POLARITY_LOW;
-	sdesc->hspi.Init.CLKPhase = desc->mode & NO_OS_SPI_CPHA ? SPI_PHASE_2EDGE :
-				    SPI_PHASE_1EDGE;
-	sdesc->hspi.Init.NSS = SPI_NSS_SOFT;
-	sdesc->hspi.Init.BaudRatePrescaler = prescaler;
-	sdesc->hspi.Init.FirstBit = desc->bit_order ? SPI_FIRSTBIT_LSB :
-				    SPI_FIRSTBIT_MSB;
-	sdesc->hspi.Init.TIMode = SPI_TIMODE_DISABLE;
-	sdesc->hspi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-	sdesc->hspi.Init.CRCPolynomial = 10;
-	ret = HAL_SPI_Init(&sdesc->hspi);
+	sdesc->hspi->Instance = base;
+	sdesc->hspi->Init.Mode = SPI_MODE_MASTER;
+	sdesc->hspi->Init.Direction = SPI_DIRECTION_2LINES;
+	sdesc->hspi->Init.DataSize = SPI_DATASIZE_8BIT;
+	sdesc->hspi->Init.CLKPolarity = desc->mode & NO_OS_SPI_CPOL ?
+					SPI_POLARITY_HIGH :
+					SPI_POLARITY_LOW;
+	sdesc->hspi->Init.CLKPhase = desc->mode & NO_OS_SPI_CPHA ? SPI_PHASE_2EDGE :
+				     SPI_PHASE_1EDGE;
+	sdesc->hspi->Init.NSS = SPI_NSS_SOFT;
+	sdesc->hspi->Init.BaudRatePrescaler = prescaler;
+	sdesc->hspi->Init.FirstBit = desc->bit_order ? SPI_FIRSTBIT_LSB :
+				     SPI_FIRSTBIT_MSB;
+	sdesc->hspi->Init.TIMode = SPI_TIMODE_DISABLE;
+	sdesc->hspi->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+	sdesc->hspi->Init.CRCPolynomial = 10;
+	ret = HAL_SPI_Init(sdesc->hspi);
 	if (ret != HAL_OK) {
 		ret = -EIO;
 		goto error;
 	}
 #ifdef SPI_SR_TXE
-	__HAL_SPI_ENABLE(&sdesc->hspi);
+	__HAL_SPI_ENABLE(sdesc->hspi);
 #endif
 	return 0;
 error:
@@ -186,6 +191,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 	spi_desc->mode = param->mode;
 	spi_desc->bit_order = param->bit_order;
 	spi_desc->chip_select = param->chip_select;
+	sdesc->hspi = &hspi_table[param->device_id];
 	if (sinit->get_input_clock)
 		sdesc->input_clock = sinit->get_input_clock();
 
@@ -283,9 +289,9 @@ int32_t stm32_spi_remove(struct no_os_spi_desc *desc)
 	no_os_dma_remove(sdesc->dma_desc);
 
 #ifdef SPI_SR_TXE
-	__HAL_SPI_DISABLE(&sdesc->hspi);
+	__HAL_SPI_DISABLE(sdesc->hspi);
 #endif
-	HAL_SPI_DeInit(&sdesc->hspi);
+	HAL_SPI_DeInit(sdesc->hspi);
 	no_os_gpio_remove(sdesc->chip_select);
 	no_os_free(desc->extra);
 	no_os_free(desc);
@@ -351,15 +357,16 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 #ifdef SPI_SR_TXE
 	uint32_t tx_cnt = 0;
 	uint32_t rx_cnt = 0;
-	SPI_TypeDef * SPIx = sdesc->hspi.Instance;
+	SPI_TypeDef * SPIx = sdesc->hspi->Instance;
 #endif
 
 	// Compute a slave ID based on SPI instance and chip select.
 	// If it did not change since last call to stm32_spi_write_and_read,
 	// no need to reconfigure SPI. Otherwise, reconfigure it.
-	slave_id = ((uint64_t)(uintptr_t)sdesc->hspi.Instance << 32) |
+	slave_id = ((uint64_t)(uintptr_t)sdesc->hspi->Instance << 32) |
 		   sdesc->chip_select->number;
-	if (slave_id != last_slave_id) {
+	if ((slave_id != last_slave_id) ||
+	    (sdesc->hspi->State == HAL_SPI_STATE_RESET)) {
 		last_slave_id = slave_id;
 		ret = stm32_spi_config(desc);
 		if (ret)
@@ -384,14 +391,14 @@ int32_t stm32_spi_transfer(struct no_os_spi_desc *desc,
 		   for all STM32 families. */
 
 		if (msgs[i].tx_buff && msgs[i].rx_buff)
-			ret = HAL_SPI_TransmitReceive(&sdesc->hspi, msgs[i].tx_buff, msgs[i].rx_buff,
+			ret = HAL_SPI_TransmitReceive(sdesc->hspi, msgs[i].tx_buff, msgs[i].rx_buff,
 						      msgs[i].bytes_number, HAL_MAX_DELAY);
 
 		else if (msgs[i].tx_buff)
-			ret = HAL_SPI_Transmit(&sdesc->hspi, msgs[i].tx_buff, msgs[i].bytes_number,
+			ret = HAL_SPI_Transmit(sdesc->hspi, msgs[i].tx_buff, msgs[i].bytes_number,
 					       HAL_MAX_DELAY);
 		else
-			ret = HAL_SPI_Receive(&sdesc->hspi, msgs[i].rx_buff, msgs[i].bytes_number,
+			ret = HAL_SPI_Receive(sdesc->hspi, msgs[i].rx_buff, msgs[i].bytes_number,
 					      HAL_MAX_DELAY);
 
 		if (ret != HAL_OK) {
@@ -488,7 +495,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 	struct stm32_spi_desc* sdesc = desc->extra;
 	struct no_os_dma_xfer_desc* rx_ch_xfer;
 	struct no_os_dma_xfer_desc* tx_ch_xfer;
-	SPI_TypeDef* SPIx = sdesc->hspi.Instance;
+	SPI_TypeDef* SPIx = sdesc->hspi->Instance;
 	int ret;
 	uint8_t i;
 
@@ -554,16 +561,16 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 
 	if (sdesc->txdma_ch)
 #if defined (STM32H5)
-		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_TXDMAEN);
+		SET_BIT(sdesc->hspi->Instance->CFG1, SPI_CFG1_TXDMAEN);
 #else
-		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_TXDMAEN);
+		SET_BIT(sdesc->hspi->Instance->CR2, SPI_CR2_TXDMAEN);
 #endif
 
 	if (sdesc->rxdma_ch)
 #if defined (STM32H5)
-		SET_BIT(sdesc->hspi.Instance->CFG1, SPI_CFG1_RXDMAEN);
+		SET_BIT(sdesc->hspi->Instance->CFG1, SPI_CFG1_RXDMAEN);
 #else
-		SET_BIT(sdesc->hspi.Instance->CR2, SPI_CR2_RXDMAEN);
+		SET_BIT(sdesc->hspi->Instance->CR2, SPI_CR2_RXDMAEN);
 #endif
 
 #ifdef HAL_TIM_MODULE_ENABLED
@@ -692,7 +699,7 @@ int32_t stm32_spi_transfer_abort(struct no_os_spi_desc* desc)
 		return -EINVAL;
 
 	sdesc = desc->extra;
-	SPI_TypeDef *SPIx = sdesc->hspi.Instance;
+	SPI_TypeDef *SPIx = sdesc->hspi->Instance;
 
 	if (sdesc->rxdma_ch) {
 		ret = no_os_dma_xfer_abort(sdesc->dma_desc, sdesc->rxdma_ch);
