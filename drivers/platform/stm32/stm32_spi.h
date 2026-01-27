@@ -93,8 +93,8 @@ struct stm32_spi_desc {
 	bool stm32_spi_dma_done;
 	void (*stm32_spi_dma_user_cb)(void *ctx);
 	void *stm32_spi_dma_user_ctx;
-	struct stm32_dma_channel* rx_ch_xfer;
-	struct stm32_dma_channel* tx_ch_xfer;
+	struct no_os_dma_xfer_desc *rx_ch_xfer;
+	struct no_os_dma_xfer_desc *tx_ch_xfer;
 #ifdef HAL_TIM_MODULE_ENABLED
 	/** CS PWM descriptor */
 	struct no_os_pwm_desc* pwm_desc;
