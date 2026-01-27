@@ -516,6 +516,9 @@ int ad74416h_get_adc_single(struct ad74416h_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
+	if (rate >= NO_OS_ARRAY_SIZE(conv_rate_ad74416h))
+		return -EINVAL;
+
 	delay = AD74116H_CONV_TIME_US / conv_rate_ad74416h[rate];
 
 	no_os_udelay(delay * nb_active_channels);
