@@ -164,7 +164,7 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 		       const struct no_os_spi_init_param *param)
 {
 	int32_t ret;
-	struct no_os_spi_desc	*spi_desc;
+	struct no_os_spi_desc *spi_desc;
 
 	if (!desc || !param)
 		return -EINVAL;
@@ -206,13 +206,13 @@ int32_t stm32_spi_init(struct no_os_spi_desc **desc,
 
 		if (sinit->rxdma_ch) {
 			sdesc->rxdma_ch = &sdesc->dma_desc->channels[0];
-			sdesc->rxdma_ch->id = sinit->rxdma_ch->hdma;
+			sdesc->rxdma_ch->id = (uint32_t)sinit->rxdma_ch->hdma;
 			sdesc->rxdma_ch->extra = sinit->rxdma_ch;
 			sdesc->rxdma_ch->irq_num = sinit->irq_num;
 		}
 		if (sinit->txdma_ch) {
 			sdesc->txdma_ch = &sdesc->dma_desc->channels[1];
-			sdesc->txdma_ch->id = sinit->txdma_ch->hdma;
+			sdesc->txdma_ch->id = (uint32_t)sinit->txdma_ch->hdma;
 			sdesc->txdma_ch->extra = sinit->txdma_ch;
 		}
 	}
@@ -516,7 +516,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 #ifndef SPI_SR_TXE
 		tx_ch_xfer[i].dst = &(SPIx->TXDR);
 #else
-		tx_ch_xfer[i].dst = &(SPIx->DR);
+		tx_ch_xfer[i].dst = (uint8_t *) & (SPIx->DR);
 #endif
 		tx_ch_xfer[i].xfer_type = MEM_TO_DEV;
 		tx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
@@ -526,7 +526,7 @@ int32_t stm32_config_dma_and_start(struct no_os_spi_desc* desc,
 #ifndef SPI_SR_RXNE
 		rx_ch_xfer[i].src = &(SPIx->RXDR);
 #else
-		rx_ch_xfer[i].src = &(SPIx->DR);
+		rx_ch_xfer[i].src = (uint8_t *) & (SPIx->DR);
 #endif
 		rx_ch_xfer[i].periph = NO_OS_DMA_IRQ;
 		rx_ch_xfer[i].xfer_type = DEV_TO_MEM;
