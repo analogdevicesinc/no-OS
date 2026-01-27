@@ -1165,6 +1165,8 @@ static int ad74413r_iio_read_diag_function(void *dev, char *buf, uint32_t len,
 		return ret;
 
 	mode = no_os_field_get(AD74413R_DIAG_ASSIGN_MASK(ch_idx), reg_val);
+	if (mode >= NO_OS_ARRAY_SIZE(ad74413r_diag_available))
+		return -EINVAL;
 	strcpy(buf, ad74413r_diag_available[mode]);
 
 	return strlen(buf);
