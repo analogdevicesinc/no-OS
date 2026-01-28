@@ -71,6 +71,16 @@ struct adin1110_init_param adin1110_ip = {
 	.append_crc = false,
 };
 
+struct lwip_network_param lwip_ip = {
+	.platform_ops = &adin1110_lwip_ops,
+	.mac_param = &adin1110_ip,
+};
+
+struct no_os_net_init_param lwip_net_init_params = {
+	.platform_ops = &lwip_net_ops,
+	.extra = &lwip_ip,
+};
+
 /***************************************************************************//**
  * @brief IIO example main execution.
  *
@@ -105,14 +115,11 @@ int example_main()
 	};
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
+	memcpy(lwip_ip.hwaddr, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
 	app_init_param.devices = iio_devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
 	app_init_param.uart_init_params = adxl355_uart_ip;
-	app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
-	app_init_param.lwip_param.mac_param = &adin1110_ip;
-	app_init_param.lwip_param.extra = NULL;
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
-	       NETIF_MAX_HWADDR_LEN);
+	app_init_param.net_init_params = lwip_net_init_params;
 
 	ret = iio_app_init(&app, app_init_param);
 	if (ret)
