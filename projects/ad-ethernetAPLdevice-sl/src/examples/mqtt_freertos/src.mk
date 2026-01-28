@@ -5,7 +5,6 @@ LIBRARIES += lwip
 CFLAGS += -DNO_OS_STATIC_IP
 CFLAGS += -DNO_OS_LWIP_NETWORKING
 CFLAGS += -DCONFIG_OA_TC6_PROTECTION=1
-CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
 CFLAGS += -DNO_OS_LWIP_INIT_ONETIME=1
 CFLAGS += -g -O0
 
@@ -55,12 +54,6 @@ SRCS += $(DRIVERS)/net/oa_tc6/oa_tc6.c
 INCS += $(NO-OS)/network/tcp_socket.h
 INCS += $(NO-OS)/network/network_interface.h
 SRCS += $(NO-OS)/network/tcp_socket.c
-
-INCS += $(NO-OS)/iio/iio_trigger.h
-INCS += $(NO-OS)/iio/iio.h
-INCS += $(NO-OS)/iio/iio_types.h
-SRC_DIRS += $(NO-OS)/iio/iio_app
-SRCS += $(NO-OS)/iio/iio_trigger.c
 
 LIBRARIES += mbedtls
 INCS += $(NO-OS)/libraries/mbedtls/include/mbedtls/ssl.h

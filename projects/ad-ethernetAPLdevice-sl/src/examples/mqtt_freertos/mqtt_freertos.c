@@ -95,6 +95,7 @@ struct adin1110_init_param adin1110_ip = {
 	.mac_address = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80},
 	.append_crc = false,
 	.oa_tc6_spi = true,
+	.oa_tc6_prote = true,
 };
 
 struct lwip_network_param lwip_ip = {
@@ -126,7 +127,7 @@ int mqtt_freertos_main()
 	struct lwip_network_desc *lwip_desc;
 	struct tcp_socket_desc *tcp_socket;
 
-	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x80, 0x05, 0x25, 0x62};
+	uint8_t adin1110_mac_address[6] = {0x00, 0xe0, 0x22, 0x03, 0x25, 0x60};
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
