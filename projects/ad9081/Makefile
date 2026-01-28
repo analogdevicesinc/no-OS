@@ -6,6 +6,7 @@ QUAD_MXFE = n
 #PROFILE = vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc
 #PROFILE = zcu102_ad9081_m8_l4
 PROFILE = vcu118_ad9081_m8_l4
+#PROFILE = zc706_ad9081_m8_l4
 
 include ../../tools/scripts/generic_variables.mk
 
