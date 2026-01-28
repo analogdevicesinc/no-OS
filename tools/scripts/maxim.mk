@@ -16,7 +16,13 @@ OC=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
 
 PYTHON = python
-ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe")))
+# Try the default MSDK location first
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../Tools/GNUTools -wholename "*bin/$(CC)" -o -name "$(CC).exe" 2>/dev/null)))
+
+# If not found in default location, try alternative path (Maxim Libraries distributed by CodeFusion Studio)
+ifeq ($(ARM_COMPILER_PATH),)
+ARM_COMPILER_PATH = $(realpath $(dir $(shell find $(MAXIM_LIBRARIES)/../../../Tools/gcc/arm-none-eabi -wholename "*bin/$(CC)" -o -name "$(CC).exe" 2>/dev/null)))
+endif
 
 # Use the user provided compiler if the SDK doesn't contain it.
 ifeq ($(ARM_COMPILER_PATH),)
@@ -57,8 +63,15 @@ TARGET_REV=0x4131
 
 TARGETCFG=$(TARGET_LCASE).cfg
 
-OPENOCD_SCRIPTS=$(MAXIM_LIBRARIES)/../Tools/OpenOCD/scripts
+# Try the default SDK OpenOCD location first
 OPENOCD_BIN=$(MAXIM_LIBRARIES)/../Tools/OpenOCD
+OPENOCD_SCRIPTS=$(MAXIM_LIBRARIES)/../Tools/OpenOCD/scripts
+
+# If not found in default location, try alternative path
+ifeq ($(wildcard $(OPENOCD_BIN)),)
+OPENOCD_BIN=$(MAXIM_LIBRARIES)/../../../Tools/openocd/bin
+OPENOCD_SCRIPTS=$(MAXIM_LIBRARIES)/../../../Tools/openocd/share/openocd/scripts
+endif
 GDB_PATH=$(ARM_COMPILER_PATH)
 OPENOCD_SVD=$(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Include
 TARGETSVD=$(TARGET)
