@@ -73,7 +73,8 @@ const struct no_os_gpio_init_param adin1110_rst_gpio_ip = {
 	.number = ADIN1110_RESET_PIN,
 	.pull = NO_OS_PULL_NONE,
 	.platform_ops = &max_gpio_ops,
-	.extra = &(struct max_gpio_init_param){
+	.extra = &(struct max_gpio_init_param)
+	{
 		.vssel = 0
 	},
 };
@@ -95,6 +96,7 @@ struct adin1110_init_param adin1110_ip = {
 	.mac_address = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80},
 	.append_crc = false,
 	.oa_tc6_spi = true,
+	.oa_tc6_prote = true,
 };
 
 struct lwip_network_param lwip_ip = {
@@ -143,7 +145,7 @@ int mqtt_baremetal_main()
 	struct lwip_network_desc *lwip_desc;
 	struct tcp_socket_desc *tcp_socket;
 
-	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x60, 0x03, 0x25, 0x80};
+	uint8_t adin1110_mac_address[6] = {0x00, 0xe0, 0x22, 0x03, 0x25, 0x60};
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
@@ -215,7 +217,7 @@ int mqtt_baremetal_main()
 	struct mqtt_init_param	mqtt_init_param = {
 		.sock = tcp_socket,
 		.timer_init_param = &timer_param,
-		.command_timeout_ms = 20000,
+		.command_timeout_ms = 50000,
 		.send_buff = send_buff,
 		.read_buff = read_buff,
 		.send_buff_size = 256,
