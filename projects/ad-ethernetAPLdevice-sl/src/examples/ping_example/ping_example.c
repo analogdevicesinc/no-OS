@@ -99,7 +99,7 @@ int ping_example_main(){
 	struct no_os_uart_desc *uart_desc;
 	struct lwip_network_desc *lwip_desc;
 
-	uint8_t adin1110_mac_address[6] = {0x00, 0x18, 0x60, 0x03, 0x25, 0x80};
+	uint8_t adin1110_mac_address[6] = {0x00, 0xe0, 0x22, 0x03, 0x25, 0x60};
 
 	ret = no_os_uart_init(&uart_desc, &uart_ip);
 	if (ret)
