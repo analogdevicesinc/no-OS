@@ -58,6 +58,11 @@ include $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGE
 endif
 include $(MAXIM_LIBRARIES)/PeriphDrivers/$(TARGET_LCASE)_files.mk
 
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_assert.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_delay.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/nvic_table.c
+PERIPH_DRIVER_C_FILES += $(SOURCE_DIR)/SYS/mxc_lock.c
+
 HEX=$(basename $(BINARY)).hex
 TARGET_REV=0x4131
 
