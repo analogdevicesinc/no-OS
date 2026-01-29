@@ -2,8 +2,9 @@
  *   @file   ad4080.h
  *   @brief  Header file of AD4080 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2023(c) Analog Devices, Inc.
+ * Copyright 2023-2025(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -116,6 +117,25 @@
 /** AD4080_REG_GENERAL_CONFIG Bit Definition */
 #define AD4080_FIFO_MODE_MSK			NO_OS_GENMASK(1, 0)
 
+/** AD4080_REG_FILTER_CONFIG Bit Definition */
+#define AD4080_FILTER_SEL_MSK 			NO_OS_GENMASK(1, 0)
+#define AD4080_SINC_DECIMATION_MSK		NO_OS_GENMASK(6, 3)
+
+#define AD4080_FILTER_SINC1 		1
+#define AD4080_FILTER_SINC5 		2
+#define AD4080_FILTER_SINC5_PLUS 	3
+
+#define AD4080_SINC_DEC_2 		0
+#define AD4080_SINC_DEC_4 		1
+#define AD4080_SINC_DEC_8 		2
+#define AD4080_SINC_DEC_16 		3
+#define AD4080_SINC_DEC_32 		4
+#define AD4080_SINC_DEC_64 		5
+#define AD4080_SINC_DEC_128 		6
+#define AD4080_SINC_DEC_256 		7
+#define AD4080_SINC_DEC_512 		8
+#define AD4080_SINC_DEC_1024 		9
+
 /** Miscellaneous Definitions */
 #define AD4080_SW_RESET				NO_OS_BIT(7) | NO_OS_BIT(0)
 #define AD4080_SPI_READ          		NO_OS_BIT(7)
@@ -123,6 +143,15 @@
 #define BYTE_ADDR_L				NO_OS_GENMASK(7, 0)
 #define AD4080_CHIP_ID				NO_OS_GENMASK(2, 0)
 #define AD4080_FIFO_SIZE		  NO_OS_BIT(14)
+#define AD4080_FIFO_DEPTH 	16384 	/* AD4080 is 16K deep maximum */
+#define AD4080_MAX_FIFO_WATERMARK 	(AD4080_FIFO_DEPTH)
+#define AD4080_LAST_REG_ADDR 	AD4080_REG_FILTER_CONFIG
+#define AD4080_ADC_GRANULARITY 	20 	/* 20 Bits precision */
+#define ADC_REF_VOLTAGE 	3300 	/* mV granularity */
+#define AD4080_ADC_MAX_RESOLUTION_VAL 	((1 << AD4080_ADC_GRANULARITY) - 1)
+#define AD4080_DEFAULT_SCALE 	(((((double)ADC_REF_VOLTAGE)/1000) / AD4080_ADC_MAX_RESOLUTION_VAL) * 1E3L) /* 1E3 converts volts to millivolts: 1 x 10^3 = 1000. */
+#define OFFSET_CORRECTION_NEGATIVE_LIMIT 	0x800
+
 
 /** AD4080 Sequential Addressing Behavior */
 enum ad4080_addr_asc {
@@ -242,13 +271,25 @@ enum ad4080_fifo_mode {
 	AD4080_EVENT_TRIGGER,
 };
 
+struct ad4080_spi_desc {
+	struct no_os_spi_desc *spi;
+	struct no_os_gpio_desc *ss;
+};
+
+struct ad4080_gp_desc {
+	enum ad4080_gpio_op_enable op_enable;
+	enum ad4080_gpio_op_func_sel func_sel;
+	struct no_os_gpio_desc *gp;
+};
+
 /**
  * @struct ad4080_dev
  * @brief ad4080 Device structure.
  */
 struct ad4080_dev {
 	/* SPI */
-	struct no_os_spi_desc	*spi_desc;
+	struct ad4080_spi_desc 	cfg;
+	struct ad4080_spi_desc 	data;
 	/* SPI 3-Wire Connection */
 	bool spi3wire;
 	/** Address Ascension */
@@ -285,6 +326,19 @@ struct ad4080_dev {
 	enum ad4080_gpio_op_enable gpio_op_enable[NUM_AD4080_GPIO];
 	/** AD4080 GPIO Output Function Selection */
 	enum ad4080_gpio_op_func_sel gpio_op_func_sel[NUM_AD4080_GPIO];
+	/** AD4080 private data */
+	char __attribute__((aligned(16))) privdata[0];
+};
+
+struct ad4080_spi_init_param {
+	struct no_os_spi_init_param *spi;
+	struct no_os_gpio_init_param *ss;
+};
+
+struct ad4080_gp_init_param {
+	enum ad4080_gpio_op_enable op_enable;
+	enum ad4080_gpio_op_func_sel func_sel;
+	struct no_os_gpio_init_param *gp;
 };
 
 /**
@@ -293,7 +347,8 @@ struct ad4080_dev {
  */
 struct ad4080_init_param {
 	/* SPI */
-	struct no_os_spi_init_param	*spi_init;
+	struct ad4080_spi_init_param cfg;
+	struct ad4080_spi_init_param data;
 	/* SPI 3-Wire Connection */
 	bool spi3wire;
 	/** Address Ascension */
@@ -326,11 +381,21 @@ struct ad4080_init_param {
 	enum ad4080_intf_ldo_pd intf_ldo_pd;
 	/** AD4080 Conversion Data FIFO Mode */
 	enum ad4080_fifo_mode fifo_mode;
-	/** AD4080 GPIO Output Enable state */
-	enum ad4080_gpio_op_enable gpio_op_enable[NUM_AD4080_GPIO];
-	/** AD4080 GPIO Output Function Selection */
-	enum ad4080_gpio_op_func_sel gpio_op_func_sel[NUM_AD4080_GPIO];
+	/** AD4080 privdata size */
+	size_t privdata_len;
 };
+
+/** Retrieve the private data associated with the AD4080 device. */
+static inline void *ad4080_privdata(struct ad4080_dev *dev)
+{
+	if (!dev)
+		return NULL;
+	return dev->privdata;
+}
+
+/** Reads data into a register */
+int ad4080_read_data(struct ad4080_dev *dev, uint8_t *buf, size_t len);
+
 /** Writes data into a register.  */
 int ad4080_write(struct ad4080_dev *dev, uint16_t reg_addr, uint8_t reg_val);
 
