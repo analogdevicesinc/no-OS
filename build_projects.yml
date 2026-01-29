@@ -37,6 +37,8 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
+    displayName: 'Show Xilinx version'
   - script: |
       export BRANCH=$(branch)
       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
@@ -72,6 +74,10 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - script: |
+      echo "Using STM32CubeIDE version: $(STM32CUBEIDE_VERSION)"
+      echo "Using STM32CubeMX version: $(STM32CUBEMX_VERSION)"
+    displayName: 'Show SDK versions'
   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
@@ -105,6 +111,8 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - script: 'echo "Using Maxim SDK version: $(MAXIM_SDK_VERSION)"'
+    displayName: 'Show Maxim SDK version'
   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
@@ -138,6 +146,8 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - script: 'echo "Using Mbed version: $(MBED_VERSION)"'
+    displayName: 'Show Mbed version'
   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
@@ -171,6 +181,8 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - script: 'echo "Using Pico SDK version: $(PICO_SDK_VERSION)"'
+    displayName: 'Show Pico SDK version'
   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
@@ -204,6 +216,11 @@ jobs:
     submodules: true
     clean: true
     persistCredentials: true
+  - script: |
+      echo "Using ADuCM3029 DFP version: $(ADUCM3029_DFP_VERSION)"
+      echo "Using CCES IDE version: $(CCES_VERSION)"
+      echo "Using ARM CMSIS version: $(ARM_CMSIS_VERSION)"
+    displayName: 'Show SDK versions'
   - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
                -export_dir $(RELEASE_DIR)
                -log_dir $(LOG_DIR)
