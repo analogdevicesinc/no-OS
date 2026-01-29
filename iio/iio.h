@@ -41,6 +41,9 @@
 #include "tcp_socket.h"
 #endif
 
+/* Forward declaration */
+struct no_os_net_desc;
+
 enum physical_link_type {
 	USE_UART,
 	USE_LOCAL_BACKEND,
@@ -102,6 +105,8 @@ struct iio_init_param {
 #endif
 	};
 	struct iio_local_backend *local_backend;
+	/** Network descriptor for step processing (optional, used by LWIP) */
+	struct no_os_net_desc *net_desc;
 	struct iio_ctx_attr *ctx_attrs;
 	uint32_t nb_ctx_attr;
 	struct iio_device_init *devs;
