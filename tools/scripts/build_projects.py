@@ -382,7 +382,7 @@ def main():
 					if hardware in blacklist:
 						continue
 					env = dict(os.environ)
-					shell_source(environment_path_files + platform + "_environment.sh")
+					shell_source("/no-OS_agent/.max_env.sh")
 
 					new_build = BuildConfig(project_dir,
 								platform,
