@@ -2,8 +2,9 @@
  *   @file   ad5593r.c
  *   @brief  Implementation of AD5593R driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025, 2026 (c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +20,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. â€œAS ISâ€ AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -267,12 +268,12 @@ int32_t ad5593r_init(struct ad5592r_dev **device,
 
 	dev = (struct ad5592r_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* Initialize the SPI communication. */
 	ret = no_os_i2c_init(&dev->i2c, init_param->i2c_init);
 	if (ret < 0)
-		return ret;
+		goto err_free_device;
 
 	dev->ops = &ad5593r_rw_ops;
 	dev->ldac_mode = 0;
@@ -280,7 +281,7 @@ int32_t ad5593r_init(struct ad5592r_dev **device,
 
 	ret = ad5592r_software_reset(dev);
 	if (ret < 0)
-		return ret;
+		goto err_remove_i2c;
 
 	for (i = 0; i < NUM_OF_CHANNELS; i++) {
 		dev->channel_modes[i] = init_param->channel_modes[i];
@@ -289,31 +290,67 @@ int32_t ad5593r_init(struct ad5592r_dev **device,
 
 	ret = ad5592r_set_adc_range(dev, init_param->adc_range);
 	if (ret < 0)
-		return ret;
+		goto err_remove_i2c;
 
 	ret = ad5592r_set_dac_range(dev, init_param->dac_range);
 	if (ret < 0)
-		return ret;
+		goto err_remove_i2c;
 
 	ret = ad5592r_set_adc_buffer(dev, init_param->adc_buf);
 	if (ret < 0)
-		return ret;
+		goto err_remove_i2c;
 
 	ret = ad5592r_set_channel_modes(dev);
 	if (ret < 0)
-		return ret;
+		goto err_remove_i2c;
 
 	ret = ad5592r_set_int_ref(dev, init_param->int_ref);
 	if (ret < 0)
-		return ret;
+		goto err_remove_i2c;
 
 	for (i = 0; i < NUM_OF_CHANNELS ; i++) {
 		ret = ad5592r_power_down(dev, i, init_param->power_down[i]);
 		if (ret < 0)
-			return ret;
+			goto err_remove_i2c;
 	}
 
 	*device = dev;
 
+	return 0;
+
+err_remove_i2c:
+	no_os_i2c_remove(dev->i2c);
+err_free_device:
+	no_os_free(dev);
 	return ret;
+}
+
+/**
+ * Teardown an AD5593r device.
+ *
+ * @param device - The device structure.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad5593r_remove(struct ad5592r_dev *dev)
+{
+	int err;
+
+	if (!dev)
+		return -EINVAL;
+
+	/* before anything else, reset the chip to bring
+	 * it to a known state */
+	err = ad5592r_software_reset(dev);
+	if (err)
+		return err;
+
+	/* disable the I2C master */
+	err = no_os_i2c_remove(dev->i2c);
+	if (err)
+		return err;
+
+	/* finally we can remove our descriptor object */
+	no_os_free(dev);
+
+	return 0;
 }

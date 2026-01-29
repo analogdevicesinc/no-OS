@@ -2,8 +2,9 @@
  *   @file   ad5592r.c
  *   @brief  Implementation of AD5592R driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025, 2026 (c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +20,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. â€œAS ISâ€ AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -44,6 +45,43 @@ const struct ad5592r_rw_ops ad5592r_rw_ops = {
 };
 
 /**
+ * Perform proper SPI sequence to an AD5592r target device.
+ *
+ * @param dev The ad5592r device structure.
+ * @param data buffer where to put received/read data.
+ * @param bytes_number length of data to read.
+ *
+ * @return 0 in case of success, negative error code otherwise
+ */
+static int ad5592r_write_and_read_spi(struct ad5592r_dev *dev,
+				      uint8_t *data,
+				      uint16_t bytes_number)
+{
+	int err;
+
+	if (!dev)
+		return -ENODEV;
+
+	if (!data)
+		return -EINVAL;
+
+	if (dev->ss) {
+		err = no_os_gpio_set_value(dev->ss, NO_OS_GPIO_LOW);
+		if (err)
+			return err;
+	}
+
+	err = no_os_spi_write_and_read(dev->spi, data, bytes_number);
+	if (err)
+		return err;
+
+	if (dev->ss)
+		err = no_os_gpio_set_value(dev->ss, NO_OS_GPIO_HIGH);
+
+	return err;
+}
+
+/**
  * Write NOP and read value.
  *
  * @param dev - The device structure.
@@ -55,9 +93,9 @@ int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf)
 	int32_t ret;
 	uint16_t spi_msg_nop = 0; /* NOP */
 
-	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&spi_msg_nop,
-				       sizeof(spi_msg_nop));
-	if (ret < 0)
+	ret = ad5592r_write_and_read_spi(dev, (uint8_t *)&spi_msg_nop,
+					 sizeof(spi_msg_nop));
+	if (ret)
 		return ret;
 
 	*buf = swab16(spi_msg_nop);
@@ -83,8 +121,8 @@ int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 
 	dev->spi_msg = swab16(NO_OS_BIT(15) | (uint16_t)(chan << 12) | value);
 
-	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				       sizeof(dev->spi_msg));
+	ret = ad5592r_write_and_read_spi(dev, (uint8_t *)&dev->spi_msg,
+					 sizeof(dev->spi_msg));
 	if (ret)
 		return ret;
 
@@ -105,6 +143,7 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 			 uint16_t *value)
 {
 	int32_t ret;
+	uint32_t track_time;
 
 	if (!dev)
 		return -1;
@@ -112,10 +151,22 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) |
 			      NO_OS_BIT(chan));
 
-	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				       sizeof(dev->spi_msg));
+	ret = ad5592r_write_and_read_spi(dev, (uint8_t *)&dev->spi_msg,
+					 sizeof(dev->spi_msg));
 	if (ret < 0)
 		return ret;
+
+	/*
+	 * ad5592r datasheet pg 8:
+	 * Temperature conversion takes 5us when ADC buffer enabled
+	 * and 20us when buffer disabled.
+	 */
+	if (chan == 8) {
+		track_time = 20;
+		if (dev->adc_buf)
+			track_time = 5;
+		no_os_udelay(track_time);
+	}
 
 	/*
 	 * Invalid data:
@@ -179,8 +230,8 @@ int32_t ad5592r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
 
 	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) | chans);
 
-	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				       sizeof(dev->spi_msg));
+	ret = ad5592r_write_and_read_spi(dev, (uint8_t *)&dev->spi_msg,
+					 sizeof(dev->spi_msg));
 	if (ret < 0)
 		return ret;
 
@@ -217,8 +268,8 @@ int32_t ad5592r_reg_write(struct ad5592r_dev *dev, uint8_t reg, uint16_t value)
 
 	dev->spi_msg = swab16((reg << 11) | value);
 
-	return no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-					sizeof(dev->spi_msg));
+	return ad5592r_write_and_read_spi(dev, (uint8_t *)&dev->spi_msg,
+					  sizeof(dev->spi_msg));
 }
 
 /**
@@ -239,8 +290,8 @@ int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg, uint16_t *value)
 	dev->spi_msg = swab16((AD5592R_REG_LDAC << 11) |
 			      AD5592R_LDAC_READBACK_EN | (reg << 2) | dev->ldac_mode);
 
-	ret = no_os_spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
-				       sizeof(dev->spi_msg));
+	ret = ad5592r_write_and_read_spi(dev, (uint8_t *)&dev->spi_msg,
+					 sizeof(dev->spi_msg));
 	if (ret < 0)
 		return ret;
 
@@ -297,12 +348,23 @@ int32_t ad5592r_init(struct ad5592r_dev **device,
 
 	dev = (struct ad5592r_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	/* Initialize the SPI communication. */
 	ret = no_os_spi_init(&dev->spi, init_param->spi_init);
 	if (ret)
-		return ret;
+		goto err_free_device;
+
+	/* initialize the software slave select (if any) */
+	if (init_param->ss_init) {
+		ret = no_os_gpio_get(&dev->ss, init_param->ss_init);
+		if (ret)
+			goto err_remove_spi;
+
+		ret = no_os_gpio_direction_output(dev->ss, NO_OS_GPIO_HIGH);
+		if (ret)
+			goto err_remove_spi_ss;
+	}
 
 	dev->ops = &ad5592r_rw_ops;
 	dev->ldac_mode = 0;
@@ -310,7 +372,7 @@ int32_t ad5592r_init(struct ad5592r_dev **device,
 
 	ret = ad5592r_software_reset(dev);
 	if (ret < 0)
-		return ret;
+		goto err_remove_spi_ss;
 
 	for (i = 0; i < NUM_OF_CHANNELS; i++) {
 		dev->channel_modes[i] = init_param->channel_modes[i];
@@ -319,31 +381,77 @@ int32_t ad5592r_init(struct ad5592r_dev **device,
 
 	ret = ad5592r_set_adc_range(dev, init_param->adc_range);
 	if (ret < 0)
-		return ret;
+		goto err_remove_spi_ss;
 
 	ret = ad5592r_set_dac_range(dev, init_param->dac_range);
 	if (ret < 0)
-		return ret;
+		goto err_remove_spi_ss;
 
 	ret = ad5592r_set_adc_buffer(dev, init_param->adc_buf);
 	if (ret < 0)
-		return ret;
+		goto err_remove_spi_ss;
 
 	ret = ad5592r_set_channel_modes(dev);
 	if (ret < 0)
-		return ret;
+		goto err_remove_spi_ss;
 
 	ret = ad5592r_set_int_ref(dev, init_param->int_ref);
 	if (ret < 0)
-		return ret;
+		goto err_remove_spi_ss;
 
 	for (i = 0; i < NUM_OF_CHANNELS; i++) {
 		ret = ad5592r_power_down(dev, i, init_param->power_down[i]);
 		if (ret < 0)
-			return ret;
+			goto err_remove_spi_ss;
 	}
 
 	*device = dev;
 
+	return 0;
+
+err_remove_spi_ss:
+	if (dev->ss)
+		no_os_gpio_remove(dev->ss);
+err_remove_spi:
+	no_os_spi_remove(dev->spi);
+err_free_device:
+	no_os_free(dev);
 	return ret;
+}
+
+/**
+ * Teardown an AD5592r device.
+ *
+ * @param device - The device structure.
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad5592r_remove(struct ad5592r_dev *dev)
+{
+	int err;
+
+	if (!dev)
+		return -EINVAL;
+
+	/* before anything else, reset the chip to bring
+	 * it to a known state */
+	err = ad5592r_software_reset(dev);
+	if (err)
+		return err;
+
+	/* remove software slave select - if it exists */
+	if (dev->ss) {
+		err = no_os_gpio_remove(dev->ss);
+		if (err)
+			return err;
+	}
+
+	/* disable the SPI master */
+	err = no_os_spi_remove(dev->spi);
+	if (err)
+		return err;
+
+	/* finally we can remove our descriptor object */
+	no_os_free(dev);
+
+	return 0;
 }

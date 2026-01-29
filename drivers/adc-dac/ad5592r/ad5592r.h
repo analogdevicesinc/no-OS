@@ -2,8 +2,9 @@
  *   @file   ad5592r.h
  *   @brief  Header file of AD5592R driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
+ *   @author Niel Acuna (niel.acuna@analog.com)
 ********************************************************************************
- * Copyright 2018, 2020, 2025(c) Analog Devices, Inc.
+ * Copyright 2018, 2020, 2025, 2026 (c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -19,7 +20,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. ìAS ISî AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. ‚ÄúAS IS‚Äù AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -56,6 +57,7 @@ int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg,
 int32_t ad5592r_gpio_read(struct ad5592r_dev *dev, uint8_t *value);
 int32_t ad5592r_init(struct ad5592r_dev **dev,
 		     struct ad5592r_init_param *init_param);
+int32_t ad5592r_remove(struct ad5592r_dev *dev);
 int32_t ad5592r_enable_busy(struct ad5592r_dev *dev, bool enable);
 int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf);
 
