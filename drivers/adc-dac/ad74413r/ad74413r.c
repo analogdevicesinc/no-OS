@@ -720,10 +720,15 @@ int ad74413r_get_adc_single(struct ad74413r_desc *desc, uint32_t ch,
 	if (ret)
 		return ret;
 
-	if (desc->chip_id == AD74413R)
+	if (desc->chip_id == AD74413R) {
+		if (rejection >= NO_OS_ARRAY_SIZE(conv_times_ad74413r))
+			return -EINVAL;
 		delay = conv_times_ad74413r[rejection];
-	else
+	} else {
+		if (rejection >= NO_OS_ARRAY_SIZE(conv_times_ad74412r))
+			return -EINVAL;
 		delay = conv_times_ad74412r[rejection];
+	}
 
 	/** Wait for all channels to complete the conversion. */
 	if (delay < 1000)
@@ -802,6 +807,8 @@ int ad74413r_adc_get_value(struct ad74413r_desc *desc, uint32_t ch,
 						 (uint32_t *)&val->decimal);
 		break;
 	case AD74413R_RESISTANCE:
+		if (adc_code >= AD74413R_ADC_MAX_VALUE)
+			return -EINVAL;
 		val->integer = no_os_div_u64_rem(adc_code * AD74413R_RTD_PULL_UP,
 						 AD74413R_ADC_MAX_VALUE - adc_code,
 						 (uint32_t *)&val->decimal);
