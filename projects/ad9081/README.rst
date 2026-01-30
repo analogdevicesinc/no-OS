@@ -146,6 +146,7 @@ A successful build should end with the following terminal output:
 Available profiles:
   * vcu118_ad9081_m8_l4 - default profile
   * vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc - Quad-MxFE profile
+   
     .. code-block:: bash
   
       JESD_MODE=8B10B \ #JESD204B, subclass 1
@@ -168,6 +169,7 @@ Available profiles:
       TX_JESD_NP=16 \
       TX_NUM_LINKS=4 \
   * vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc - Quad-MxFE profile
+   
     .. code-block:: bash
   
       JESD_MODE=64B66B \ #JESD204C, subclass 1
@@ -189,6 +191,56 @@ Available profiles:
       TX_JESD_S=1 \
       TX_JESD_NP=16 \
       TX_NUM_LINKS=4 \
+  * zcu102_ad9081_m8_l4 - ZCU102 + AD9081
+   
+    .. code-block:: bash
+  
+      JESD_MODE=8B10B \ #JESD204B, subclass 1
+      TX_MODE=9 \
+      RX_MODE=10 \
+      RX_LANE_RATE_KHZ=10000000 \ 
+      TX_LANE_RATE_KHZ=10000000 \
+      RX_JESD_M=8 \
+      RX_JESD_L=4 \
+      RX_JESD_F=4 \
+      RX_JESD_K=32 \
+      RX_JESD_S=1 \
+      RX_JESD_NP=16 \
+      RX_NUM_LINKS=1 \
+      TX_JESD_M=8 \
+      TX_JESD_L=4 \
+      TX_JESD_F=4 \
+      TX_JESD_K=32 \
+      TX_JESD_S=1 \
+      TX_JESD_NP=16 \
+      TX_NUM_LINKS=1 \
+  * zc706_ad9081_m8_l4 - ZC706 + AD9081
+   
+    .. code-block:: bash
+  
+      #This is a profile which uses QPLL for both adxcvr instances.
+      #For this to work both instances need to configure the same lane rate.
+      ADXCVR_REF_CLK_KHZ=250000
+      #JESD profile
+      JESD_MODE=8B10B \ #JESD204B, subclass 1
+      TX_MODE=9 \
+      RX_MODE=10 \
+      RX_LANE_RATE_KHZ=10000000 \ 
+      TX_LANE_RATE_KHZ=10000000 \
+      RX_JESD_M=8 \
+      RX_JESD_L=4 \
+      RX_JESD_F=4 \
+      RX_JESD_K=32 \
+      RX_JESD_S=1 \
+      RX_JESD_NP=16 \
+      RX_NUM_LINKS=1 \
+      TX_JESD_M=8 \
+      TX_JESD_L=4 \
+      TX_JESD_F=4 \
+      TX_JESD_K=32 \
+      TX_JESD_S=1 \
+      TX_JESD_NP=16 \
+      TX_NUM_LINKS=1 \
 
 These profiles correspond some of the possible HDL configurations. For creating
 a profile for your specific project needs, please visit
@@ -226,7 +278,9 @@ command while buidling the project
   # Uncomment to select the profile:
   #PROFILE = vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc
   #PROFILE = vcu118_quad_ad9081_204b_txmode_9_rxmode_10_revc
+  #PROFILE = zcu102_ad9081_m8_l4
   PROFILE = vcu118_ad9081_m8_l4
+  #PROFILE = zc706_ad9081_m8_l4
 
 or
 .. code-block:: bash
