@@ -112,6 +112,9 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		.ref_rate_khz = reference_clk_khz,
 		.export_no_os_clk = true
 	};
+#ifdef PLATFORM_ZYNQ
+	tx_adxcvr_init.out_clk_sel = ADXCVR_REFCLK;
+#endif
 #endif
 
 #ifdef RX_XCVR_BASEADDR
@@ -125,6 +128,10 @@ int32_t app_jesd_init(struct no_os_clk clk[2],
 		.ref_rate_khz = reference_clk_khz,
 		.export_no_os_clk = true
 	};
+#ifdef PLATFORM_ZYNQ
+	rx_adxcvr_init.sys_clk_sel = ADXCVR_SYS_CLK_QPLL0;
+	rx_adxcvr_init.out_clk_sel = ADXCVR_REFCLK;
+#endif
 #endif
 
 #ifdef TX_XCVR_BASEADDR
