@@ -5,14 +5,13 @@
  *
  * \details Command definition for ADI_ADRV904X_CPU_CMD_ID_RUN_SERDES_EYE_SWEEP
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADI_ADRV904X_CPU_CMD_RUN_SERDES_EYE_SWEEP_H__
@@ -89,6 +88,25 @@ typedef struct adi_adrv904x_CpuCmd_RunVertEyeSweepResp
     int8_t    eyeHeightsAtSpo[512];         /*!< store the upper and lower eye height at 16 SPOs*/
 } adi_adrv904x_CpuCmd_RunVertEyeSweepResp_t;)
 
+
+/**
+ * \brief JESD_GET_RX_LANE_SINT_CODES command structure
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adi_adrv904x_CpuCmd_GetRxLaneSintCodes
+{
+    uint8_t    lane;                            /*!< Serdes lane id */
+} adi_adrv904x_CpuCmd_adi_adrv904x_CpuCmd_GetRxLaneSintCodes_t;)
+
+/**
+ * \brief JESD_GET_RX_LANE_SINT_CODES command response structure
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adi_adrv904x_CpuCmd_GetRxLaneSintCodesResp
+{
+    uint8_t    sintCodes[8];            /*!< store the SINT Codes */
+} adi_adrv904x_CpuCmd_GetRxLaneSintCodesResp_t;)
+
 /**
  * \brief API stable equivalent of SerdesPhyLib_fgPubCalStatus_t
  */
@@ -116,7 +134,7 @@ typedef struct adi_adrv904x_SerdesInitCalStatus
 /**
  * \brief API stable equivalent of SerdesPhyLib_bgPubCalStatus_t
  */
-ADI_ADRV904X_PACKED(
+ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_SerdesTrackingCalStatus
 {
     int16_t  temperature;
@@ -128,9 +146,15 @@ typedef struct adi_adrv904x_SerdesTrackingCalStatus
     int8_t   outerUp;
     int8_t   outerDown;
     int8_t   b[8U];
+#ifndef ADI_LIBRARY_RM_FLOATS
     float    ps[2U];
     float    yVector[16U];
-} adi_adrv904x_SerdesTrackingCalStatus_t;)
+#else
+    uint32_t ps_float[2U];
+    uint32_t yVector_float[16U];
+#endif
+} adi_adrv904x_SerdesTrackingCalStatus_t;
+ADI_ADRV904X_PACK_FINISH
 
 #endif /* __ADI_ADRV904X_CPU_CMD_RUN_SERDES_EYE_SWEEP_H__ */
 

@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -12,7 +11,7 @@
  *
  * \details Contains CPU memory tables and a few configuration constants.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_CPU_MEMORY_H__
@@ -115,7 +114,7 @@
 #define ADRV904X_CPU_0_PM_RADIO_SEQ_SEQUENCE_SIZE     (0x010004F0U)
 #define ADRV904X_CPU_0_PM_RADIO_SEQ_BUILD_TIME_CRC    (0x010004F4U)
 
-#define ADRV904X_PM_CORE_SCRATCH_EXT_PTR              (0x01000504U)     /*!< Extended core scratch registers pointer */
+#define ADRV904X_PM_CORE_SCRATCH_EXT_PTR              (0x01000508U)     /*!< Extended core scratch registers pointer: MUST be 8 byte aligned! */
 
 /**
  * The following memory definitions are in the ADRV904X CPU 1 program memory range (before application):

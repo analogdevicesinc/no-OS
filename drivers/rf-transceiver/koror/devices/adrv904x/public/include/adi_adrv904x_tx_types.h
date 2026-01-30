@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_tx_types.h
 * \brief Contains ADRV904X API Tx datapath data types
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADI_ADRV904X_TX_TYPES_H_
@@ -17,6 +16,7 @@
 #include "adi_library_types.h"
 #include "adi_adrv904x_tx_nco.h"
 #include "adi_adrv904x_gpio_types.h"
+
 
 #define ADRV904X_TX_ATTEN_TABLE_MAX_IDX 959      /*!< Maximum valid tx attenuation table index */
 #define ADRV904X_TX_ATTEN_VALUE_MILLI_DB_MAX 41950    /*!< Maximum Value of TX Attenuation in 1/1000s of a dB */
@@ -47,6 +47,16 @@
 #define ADI_ADRV904X_TX_CHAN_ID_MAX (ADI_ADRV904X_MAX_TXCHANNELS - 1U)
 #define ADI_ADRV904X_TX_CHAN_MASK_MAX ((1U << (ADI_ADRV904X_TX_CHAN_ID_MAX + 1U)) - 1U)
 #define ADI_ADRV904X_TX_PLAYBACK_DATA_MAX_NUM_SAMPLES  (8192U) /*!< Maxinum number of TX playback samples */
+
+#define ADI_ADRV904X_NUM_PFIR_COEF 24
+
+#define TX_CDUC_GAIN_BASE_ADDR 0x608B0D60U /*!< register to be written in one SPI transaction */
+#define TX_CDUC_GAIN_SIZE      (0x4U * ADI_ADRV904X_MAX_TX_CARRIERS)
+
+#define ADI_ADRV904X_MAX_TXCARRIERS 8U
+#define ADI_ADRV904X_TX_CARRIER_ID_MAX ( - 1U)
+#define ADI_ADRV904X_TX_CARRIER_MASK_MAX ((1U << (ADI_ADRV904X_TX_CARRIER_ID_MAX + 1U)) - 1U)
+
 
 /**
  *  \brief Enum of possible Tx channel enables
@@ -122,6 +132,17 @@ typedef struct adi_adrv904x_PowerMonitorCfg
     uint8_t avgPowerIrqEnable;                      /*!< 1 = enables average power error interrupt, 0 = no IRQ */
     uint8_t avgPeakRatioEnable;                     /*!< 1 = enables average to peak power ratio calculation block, both avgPower and peakPower calculations must be enabled before enabling ratio calculation, 0 = disabled */
 }adi_adrv904x_PowerMonitorCfg_t;
+
+/**
+ *  \brief Data structure to hold ADRV904X Tx Peak & Average Power Protection block state
+ */
+typedef struct adi_adrv904x_PowerMonitorState
+{
+    uint16_t peakThreshold;   /*!< Power monitor peak power threshold. Peak Threshold[dBFS] = 10 * Log10(peakThreshold/65535) */
+    uint16_t avgThreshold;    /*!< Power monitor average power threshold. Average Threshold[dBFS] = 10 * Log10(avgThreshold/65535) */
+    uint8_t peakPowerEnable;  /*!< This enables peak power measurement block. 1 = Peak power error is flagged when peak count is above peak count threshold, 0 = disabled */
+    uint8_t avgPowerEnable;   /*!< This enables average power measurement block. 1 = PA error is flagged when average power measurement is above average power threshold, 0 = disabled */
+}adi_adrv904x_PowerMonitorState_t;
 
 /**
  * \brief Indicates the tx channels to which an instance of adi_adrv904x_PowerProtectionCfg_t applies
@@ -318,6 +339,17 @@ typedef struct adi_adrv904x_DtxGpioCfg
 {
     adi_adrv904x_GpioPinSel_e dtxGpioTxSel[ADI_ADRV904X_MAX_TXCHANNELS];  /*!< GPIO selection for each Tx channel. User can select ADI_ADRV904X_GPIO_INVALID if they don't need to route DTX signal to a GPIO. */
 } adi_adrv904x_DtxGpioCfg_t;
+
+
+/**
+ * \brief PFIR coefficientsplayback data. It contains 1023 samples maximum
+ */
+typedef struct adi_adrv904x_TxPfirCoeff
+{
+    int16_t  pfirCoefI[ADI_ADRV904X_NUM_PFIR_COEF]; /*!< An array of PFIR i coefficients - 16bit */
+    int16_t  pfirCoefQ[ADI_ADRV904X_NUM_PFIR_COEF]; /*!< An array of PFIR q coefficients - 16bit */
+}adi_adrv904x_TxPfirCoeff_t;
+
 
 
 

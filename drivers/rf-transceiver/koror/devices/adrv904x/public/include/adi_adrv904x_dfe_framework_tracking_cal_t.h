@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  *
  * \brief   Contains ADRV904X Tracking Cal Types Download File data structures.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef ADRV904X_DFE_FRAMEWORK_TRACKING_CAL_T_H__
@@ -117,6 +116,7 @@ typedef struct adi_adrv904x_DfeAppFrameworkTrackingCalCapBufAccessSet
     uint8_t  stopAfterCapDone;                                                          /*!< Skip the following captures and updates after captures are complete for that iteration */
     uint32_t errCodes[ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKING_CAL_MAX_NUM_ERROR_CODES_TO_PAUSE_CAL]; /*!< Array of error codes to pause the cal with capture data */
     uint8_t  releaseCapBuf;                                                             /*!< Release capture buffers and continue routine capture and updates, this will also clear capIsDone state */
+    uint8_t  iterType;                                                                  /*!< select the iteration type for capture, DPD calibration only */
 } adi_adrv904x_DfeAppFrameworkTrackingCalCapBufAccessSet_t;
 ADI_ADRV904X_PACK_FINISH
 
@@ -130,8 +130,10 @@ typedef struct adi_adrv904x_DfeAppFrameworkTrackingCalCapBufAccessGet
     uint8_t  capIsDone;                                                              /*!< FW will set this bit to indicate cal thread is paused and capture data is ready */
     uint8_t  num;                                                                    /*!< Number of valid captures in pMem array */
     uint64_t pMem[ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKING_CAL_MAX_NUM_DPD_CAPTURE_BUFS_TO_STORE]; /*!< Array of capture buffers */
+    uint8_t  iterType;                                                               /*!< select the iteration type for capture, DPD calibration only. Values are from adi_adrv904x_DfeAppCalDpdIterationType_e */
 } adi_adrv904x_DfeAppFrameworkTrackingCalCapBufAccessGet_t;
 ADI_ADRV904X_PACK_FINISH
 
 #endif /* ADRV904X_DFE_FRAMEWORK_TRACKING_CAL_T_H__ */
+
 

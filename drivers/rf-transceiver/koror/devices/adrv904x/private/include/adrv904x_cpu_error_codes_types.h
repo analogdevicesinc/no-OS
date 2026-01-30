@@ -1,8 +1,7 @@
  /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
  /**
@@ -12,7 +11,7 @@
  *
  * \details Contains CPU Error code definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_CPU_ERROR_CODES_TYPES_H__
@@ -1709,6 +1708,30 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                         @mainrecovtext: Perform QEC reset, or re-run Initialization Calibration, before re-enabling QEC tracking Calibration
                                                                                                                     */
+   ADRV904X_CPU_TXQEC_CAL_DAC_LB_TUNING_ERROR        = (ADRV904X_CPU_TXQEC_CAL_CODE_ERROR_START +  14u),            /*!<@errcode: 0x320E
+                                                                                                                        @desc: Tx QEC:Error tuning LB filter bandwidth prior to DAC image tuning
+                                                                                                                        @maincause: LB observation error
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                        @mainrecovtext: Re-run Initialization Calibration, before re-enabling QEC tracking Calibration
+                                                                                                                    */
+    ADRV904X_CPU_TXQEC_LBDC_AUTOCORR_ERROR_1          = (ADRV904X_CPU_TXQEC_CAL_CODE_ERROR_START + 15u),                /*!<@errcode: 0x320F
+                                                                                                                        @desc: LB DC tune: Error waiting for auto-corr capture
+                                                                                                                        @maincause: Error in capturing the required data
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                        @mainrecovtext: Re-run Calibration
+                                                                                                                    */
+    ADRV904X_CPU_TXQEC_LBDC_AUTOCORR_ERROR_2         = (ADRV904X_CPU_TXQEC_CAL_CODE_ERROR_START + 16u),               /*!<@errcode: 0x3210
+                                                                                                                        @desc: LB DC tune: Error in getting auto-corr results
+                                                                                                                        @maincause: Error in capturing the required data
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                        @mainrecovtext: Re-run Calibration
+                                                                                                                    */
+    ADRV904X_CPU_TXQEC_LBDC_TIMEOUT_ERROR          = (ADRV904X_CPU_TXQEC_CAL_CODE_ERROR_START + 17u),               /*!<@errcode: 0x3211
+                                                                                                                        @desc: LB DC tune: Timeout waiting for the auto-corr capture to be done
+                                                                                                                        @maincause: The data capture HW cannot collect the required data within a specific time interval
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                        @mainrecovtext: The cal will re-run automatically
+                                                                                                                    */
     /*!< ---- Object ID = ADRV904X_CPU_OBJID_CFG_DEVICE_PROFILE Section Base Error Code = 0x8000 ----                   @errcode: 0x8000
                                                                                                                         @desc: Device Profile Configuration
                                                                                                                         @maincause:
@@ -3058,6 +3081,13 @@ typedef enum adrv904x_CpuErrorCode
                                                                                                                         @maincause: The EFUSE read did not occur.
                                                                                                                         @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
                                                                                                                         @mainrecovtext: Reset Device and try again. If the problem persists contact ADI
+                                                                                                                    */
+
+    ADRV904X_CPU_SYSTEM_SBET_PRODUCT_ID_ERROR         = (ADRV904X_CPU_SYSTEM_ERROR_CODE_START + 122u),              /*!<@errcode: 0xFF7A
+                                                                                                                        @desc: System: Profile product ID doesn't support SBET
+                                                                                                                        @maincause: The Device Profile is not valid for this Product
+                                                                                                                        @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                        @mainrecovtext: Reprogram the Device with a Valid Profile Image. If the problem persists contact ADI
                                                                                                                     */
 
 #ifndef ADI_ADRV904X_FW

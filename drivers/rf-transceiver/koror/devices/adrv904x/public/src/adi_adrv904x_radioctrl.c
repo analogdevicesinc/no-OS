@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,10 +8,8 @@
 * \brief Contains CPU features related function implementation defined in
 * adi_adrv904x_radioctrl.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
-
-#include <math.h>
 
 #include "adi_adrv904x_radioctrl.h"
 #include "adi_adrv904x_cals.h"
@@ -759,67 +756,67 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StreamImageWrite(adi_adrv904x_Devi
 
         /* Update device handle alarm input config */
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[0U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 0, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 0, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[1U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 2, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 2, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[2U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 4, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 4, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[3U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 6, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 6, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[4U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 8, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 8, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[5U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 10, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 10, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[6U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 12, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 12, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[7U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 14, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 14, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[8U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 16, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 16, 2U);
         device->devStateInfo.alarmGpioConfig.alarmInputGpioPinMode[9U] =
-                            (adi_adrv904x_AlarmInputGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 18, 2U);
+                            (adi_adrv904x_AlarmInputGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_ALARM_INPUT_PIN_MODE_START_BYTE + 18, 2U);
 
         /* Update device handle alarm output config */
         device->devStateInfo.alarmGpioConfig.paEnOutGpioPinMode =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_PA_EN_PIN_MODE_START_BYTE, 4U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_PA_EN_PIN_MODE_START_BYTE, 4U);
         device->devStateInfo.alarmGpioConfig.lnaEnOutGpioPinMode =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_LNA_EN_PIN_MODE_START_BYTE, 4U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_LNA_EN_PIN_MODE_START_BYTE, 4U);
         device->devStateInfo.alarmGpioConfig.ocFuseEnOutGpioPinMode =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_OC_FUSE_EN_PIN_MODE_START_BYTE, 4U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_OC_FUSE_EN_PIN_MODE_START_BYTE, 4U);
 
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[0U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 0, 2U);  /* Check this >?>?>?*/
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 0, 2U); /* Check this >?>?>?*/
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[1U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 2, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 2, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[2U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 4, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 4, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[3U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 6, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 6, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[4U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 8, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 8, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[5U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 10, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 10, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[6U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 12, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 12, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp0OutGpioPinMode[7U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 14, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP0_OUT_PIN_MODE_START_BYTE + 14, 2U);
 
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[0U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 0, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 0, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[1U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 2, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 2, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[2U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 4, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 4, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[3U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 6, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 6, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[4U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 8, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 8, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[5U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 10, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 10, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[6U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 12, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 12, 2U);
         device->devStateInfo.alarmGpioConfig.auxGrp1OutGpioPinMode[7U] =
-                            (adi_adrv904x_OutGpioPinModes_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 14, 2U);
+                            (adi_adrv904x_OutGpioPinModes_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_EA_AUX_GRP1_OUT_PIN_MODE_START_BYTE + 14, 2U);
 
         /* Update device handle DTX input config */
         device->devStateInfo.dtxInputMapping.dtxInput[0U] = adrv904x_StreamGleanGpioNumberGet(gpioAssignments, ADRV904X_STREAM_GPIO_DTX_INPUT_0);
@@ -848,7 +845,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StreamImageWrite(adi_adrv904x_Devi
 
         /* Update device handle SBET Latch Power index input config */
         device->devStateInfo.sbetLatchModelIndex = adrv904x_StreamGleanGpioNumberGet(gpioAssignments, ADRV904X_STREAM_GPIO_SBET_LATCH_DPD_MODEL_INDEX);
-        
+
         /* Update GPIO Predrive to either Digital or Analog */
         device->devStateInfo.digGpioPredrive = adrv904x_StreamGleanGpioNumberGet(gpioAssignments, ADRV904X_STREAM_GPIO_PREDRIVE_EN);
         device->devStateInfo.anaGpioPredrive = adrv904x_StreamGleanAnaGpioNumberGet(anaGpioAssignments, ADRV904X_STREAM_ANALOG_GPIO_PREDRIVE_EN);
@@ -940,13 +937,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StreamImageWrite(adi_adrv904x_Devi
 
         device->devStateInfo.txToOrxMappingConfig.txObservability = (uint16_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXORXOBSERVABILITY_START_BYTE, 2U);
 
-        device->devStateInfo.txToOrxMappingConfig.mode = (adi_adrv904x_TxToOrxMappingMode_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXORXMAPPINGMODE_START_BYTE, 1U);
+	    device->devStateInfo.txToOrxMappingConfig.mode = (adi_adrv904x_TxToOrxMappingMode_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXORXMAPPINGMODE_START_BYTE, 1U);
 
         for (idx = 0U; idx < ADI_ADRV904X_TX_TO_ORX_MAPPING_PIN_TABLE_SIZE; idx++)
         {
-            device->devStateInfo.txToOrxMappingConfig.pinTableOrx0[idx] = (adi_adrv904x_TxToOrxMappingPinTable_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXTOORXMAPPINGPINTABLEORX0_00_START_BYTE + (idx * 4U), 4U);
+	        device->devStateInfo.txToOrxMappingConfig.pinTableOrx0[idx] = (adi_adrv904x_TxToOrxMappingPinTable_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXTOORXMAPPINGPINTABLEORX0_00_START_BYTE + (idx * 4U), 4U);
 
-            device->devStateInfo.txToOrxMappingConfig.pinTableOrx1[idx] = (adi_adrv904x_TxToOrxMappingPinTable_e)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXTOORXMAPPINGPINTABLEORX1_00_START_BYTE + (idx * 4U), 4U);
+	        device->devStateInfo.txToOrxMappingConfig.pinTableOrx1[idx] = (adi_adrv904x_TxToOrxMappingPinTable_e)(int32_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXTOORXMAPPINGPINTABLEORX1_00_START_BYTE + (idx * 4U), 4U);
         }
         device->devStateInfo.txToOrxMappingConfig.autoSwitchOrxAttenEnable = (uint8_t)adrv904x_CpuIntFromBytesGet(binary + STREAM_IMAGE_TXTOORXMAPPINAUTOSWITCHORXATTENENABLE_START_BYTE, 1U);
 
@@ -2369,7 +2366,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TemperatureGet(adi_adrv904x_Device
     }
 
     /* Copy/translate the temperature data to the caller's buffer */
-    deviceTemperature->avgMask = ADRV904X_CTOHS(devTempCmdResp0.tempData.avgMask | devTempCmdResp1.tempData.avgMask);
+    deviceTemperature->avgMask = ADRV904X_CTOHS((uint16_t)(devTempCmdResp0.tempData.avgMask | devTempCmdResp1.tempData.avgMask));
     deviceTemperature->tempDegreesCelsiusAvg = 0;
     for( curTempSensor = 0U; curTempSensor < ADI_ADRV904X_DEVTEMP_MAX_SENSORS; curTempSensor++)
     {
@@ -2913,7 +2910,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoFreqCalculate(adi_adrv904x_D
     uint8_t  validRangeSynthesisBw = 0U;
 
     const uint32_t ORX_ADC_RATE_GUARD_REGION_KHZ = 100000U; /* Distance between the RF synthesis BW edges and multiples of FS/2 */
-    const float    HB_FILTER_PASSBAND_EDGE       = 0.44f;
+    const int32_t HB_FILTER_PASSBAND_EDGE_BY_100 = 44;
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
@@ -2982,9 +2979,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoFreqCalculate(adi_adrv904x_D
         goto cleanup;
     }
 
-    passbandEdgeShift = (int32_t)((HB_FILTER_PASSBAND_EDGE *
+    passbandEdgeShift = (int32_t)((HB_FILTER_PASSBAND_EDGE_BY_100 *
                                   device->initExtract.orx.orxChannelCfg[orxChannelIdx].orxOutputRate_kHz) -
-                                  ((float)(txSynthesisBwUpper_kHz - centreTxSynthesisBw_kHz)));
+                                  ((txSynthesisBwUpper_kHz - centreTxSynthesisBw_kHz) * 100)) / 100;
     /* If passbandEdgeShift is less than 0, the synthesis BW is greater than the 88% bandwidth supported by the ORx*/
     if (passbandEdgeShift < 0)
     {
@@ -4555,6 +4552,30 @@ cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalErrorClear(adi_adrv904x_Device_t* const device,
+                                                                        const uint32_t channelMask,
+                                                                        const uint8_t errClearMask)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    int implemented = 0;
+    (void)channelMask;
+    (void)errClearMask;
+
+    /* Check device pointer is not null */
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_ADRV904X_API_ENTRY(&device->common);
+
+        if (implemented == 0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_FEATURE;
+        ADI_API_NOT_IMPLEMENTED_REPORT_GOTO(&device->common, cleanup);
+    }
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StreamProcErrorGet(   adi_adrv904x_Device_t* const            device,
                                                                     adi_adrv904x_StreamErrArray_t* const    streamErr)
 {
@@ -5617,51 +5638,53 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioSequencerPreMcsCfg(adi_adrv90
         goto cleanup;
     }
 
-    /* Set all Tx/Rx/ORx and antenna enables to be under RS control */
-    recoveryAction = adrv904x_Core_TxRsModeSel_BfSet(device,
-                                                     NULL,
-                                                     ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
-                                                     0xFFu);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Tx control to RS mode");
-        goto cleanup;
-    }
-    recoveryAction = adrv904x_Core_RxRsModeSel_BfSet(device,
-                                                     NULL,
-                                                     ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
-                                                     0xFFu);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Rx control to RS mode");
-        goto cleanup;
-    }
-    recoveryAction = adrv904x_Core_OrxRsModeSel_BfSet(device,
-                                                      NULL,
-                                                      ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
-                                                      0x3u);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting ORx control to RS mode");
-        goto cleanup;
-    }
-    recoveryAction = adrv904x_Core_TxAntRsModeSel_BfSet(device,
+        /* Set all Tx/Rx/ORx and antenna enables to be under RS control */
+        recoveryAction = adrv904x_Core_TxRsModeSel_BfSet(device,
                                                         NULL,
                                                         ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
                                                         0xFFu);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Tx Antenna control to RS mode");
-        goto cleanup;
-    }
-    recoveryAction = adrv904x_Core_RxAntRsModeSel_BfSet(device,
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Tx control to RS mode");
+            goto cleanup;
+        }
+        recoveryAction = adrv904x_Core_RxRsModeSel_BfSet(device,
                                                         NULL,
                                                         ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
                                                         0xFFu);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Rx Antenna control to RS mode");
-        goto cleanup;
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Rx control to RS mode");
+            goto cleanup;
+        }
+        recoveryAction = adrv904x_Core_OrxRsModeSel_BfSet(device,
+                                                        NULL,
+                                                        ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                        0x3u);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting ORx control to RS mode");
+            goto cleanup;
+        }
+        recoveryAction = adrv904x_Core_TxAntRsModeSel_BfSet(device,
+                                                            NULL,
+                                                            ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                            0xFFu);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Tx Antenna control to RS mode");
+            goto cleanup;
+        }
+        recoveryAction = adrv904x_Core_RxAntRsModeSel_BfSet(device,
+                                                            NULL,
+                                                            ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                            0xFFu);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Rx Antenna control to RS mode");
+            goto cleanup;
+        }
     }
 
     /* Send the pattern lookup table to the DFE */
@@ -8723,8 +8746,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierCfgGet(adi_a
         if (carrierGainReg != 0U)
         {
             /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
-            //carrierGain = (int32_t)(1000U * 20U * (double)log10((double)carrierGainReg / DIG_GAIN_MULT));
-        	carrierGain = (int32_t)(20 * log10((100000UL * (double)carrierGainReg) / DIG_GAIN_MULT) - 100);
+            carrierGain = adi_library_linearToMillidBVolt(carrierGainReg, DIG_GAIN_MULT);
         }
 
         antCalCarrierCfg->rxCarrierGainForAntCal[i] = carrierGain;
@@ -8748,7 +8770,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierCfgGet(adi_a
         if (carrierGainReg != 0)
         {
             /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
-            carrierGain = (int32_t)(1000U * 20U * (double)log10((double)carrierGainReg / DIG_GAIN_MULT));
+            carrierGain = adi_library_linearToMillidBVolt(carrierGainReg, DIG_GAIN_MULT);
         }
 
         antCalCarrierCfg->txCarrierGainForAntCal[i] = carrierGain;

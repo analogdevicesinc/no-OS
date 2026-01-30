@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
  * \brief Contains ADRV904X Tx related private function prototypes for
  *        adrv904x_dfe_dpd.c which helps adi_adrv904x_dfe_dpd.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */ 
 
 #ifndef _ADRV904X_DFE_DPD_H_
@@ -31,29 +30,11 @@
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_Device_t* const                      device,
-                                                                 const uint32_t                                    dpdTxChannelMask,
-                                                                 const adi_adrv904x_DfeAppCalDpdModelType_e        dpdModelType,
-                                                                 const adi_adrv904x_DfeAppCalDpdModelDesc_t* const modelDesc);
+adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_Device_t* const                         device,
+                                                                 const uint32_t                                       dpdTxChannelMask,
+                                                                 const adi_adrv904x_DfeAppCalDpdModelType_e           dpdModelType,
+                                                                 const adi_adrv904x_DfeAppCalDpdModelDescInt_t* const modelDesc);
 
-/**
-* \brief Performs range check on DPD CTC Model configuration.
-*
-* \dep_begin
-* \dep{device->common.devHalInfo}
-* \dep_end
-*
-* \param[in,out] device Context variable - Pointer to the ADRV904X device's data structure.
-* \param[in] dpdTxChannelMask - Tx channel selected
-* \param[in] dpdModelType - selected DPD model type
-* \param[in] modelDesc - pointer to CTC model parameter structure configured to be range checked
-*
-* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
-*/
-adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigCtcSetRangeCheck(adi_adrv904x_Device_t* const                      device,
-                                                                 const uint32_t                                    dpdTxChannelMask,
-                                                                 const adi_adrv904x_DfeAppCalDpdModelType_e        dpdModelType,
-                                                                 const adi_adrv904x_DfeAppCalCtcModelDesc_t* const modelDesc);
 
 /**
 * \brief Performs range check on DPD actuator gain monitor configuration.
@@ -89,8 +70,9 @@ adi_adrv904x_ErrAction_e adrv904x_DpdCaptureConfigSetRangeCheck(adi_adrv904x_Dev
                                                                 const uint32_t                                     dpdTxChannelMask,
                                                                 const adi_adrv904x_DfeAppCalDpdCaptureCfg_t* const dpdCaptureCfg);
 
+#ifndef ADI_LIBRARY_RM_FLOATS
 /**
-* \brief Performs range check on DPD capture configuration.
+* \brief Performs range check on DPD capture configuration, using floating point numbers.
 *
 * \dep_begin
 * \dep{device->common.devHalInfo}
@@ -102,9 +84,27 @@ adi_adrv904x_ErrAction_e adrv904x_DpdCaptureConfigSetRangeCheck(adi_adrv904x_Dev
 *
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_Device_t* const                       device,
-                                                                 const uint32_t                                     dpdTxChannelMask,
-                                                                 const adi_adrv904x_DfeAppCalDpdTrackCfg_t* const   dpdTrackCfg);
+adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheckFloat(adi_adrv904x_Device_t* const                     device,
+                                                                      const uint32_t                                   dpdTxChannelMask,
+                                                                      const adi_adrv904x_DfeAppCalDpdTrackCfg_t* const dpdTrackCfg);
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+/**
+* \brief Performs range check on DPD capture configuration, using integer types
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device's data structure.
+* \param[in] dpdTxChannelMask - Tx channel selected
+* \param[in] dpdTrackCfg - pointer to DPD tracking structure configured to be range checked
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheckInt(adi_adrv904x_Device_t* const                        device,
+                                                                    const uint32_t                                      dpdTxChannelMask,
+                                                                    const adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg);
 
 /**
 * \brief Performs range check on DPD TDD Lut Switch configuration.

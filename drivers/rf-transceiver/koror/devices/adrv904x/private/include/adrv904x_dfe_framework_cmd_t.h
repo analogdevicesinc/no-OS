@@ -1,7 +1,6 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -9,14 +8,12 @@
  * \brief Contains DFE Application type definitions for the ADI Command
  *        Handler Service.
  *
- * DFE APP Version: 2.10.0.4
+ * DFE APP Version: 2.15.0.4
  */
 
 #ifndef _FRAMEWORK_CMD_T_H
 #define _FRAMEWORK_CMD_T_H
 
-#include "stdint.h"
-#include "stdbool.h"
 #include "adi_adrv904x_dfe_svc_err_codes_t.h"
 #include "adi_adrv904x_dfe_app_err_codes_t.h"
 #include "adi_adrv904x_platform_pack.h"
@@ -25,7 +22,6 @@
 
 
 #define ADRV904X_DFE_APP_FRAMEWORK_CMD_CALFRMWRK_OBJ_TYPE_MASK           0x03
-#define ADRV904X_DFE_APP_FRAMEWORK_CMD_CALFRMWRK_OBJ_TYPE_CAL            0x01
 #define ADRV904X_DFE_APP_FRAMEWORK_CMD_CALFRMWRK_OBJ_TYPE_FRMWRK         0x02
 
 #define ADRV904X_DFE_APP_FRAMEWORK_CMD_EVENTCODE                         (0x00u)

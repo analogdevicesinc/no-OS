@@ -1,7 +1,6 @@
 /**
- * Copyright 2015 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -9,7 +8,7 @@
  * \brief Contains ADRV904X data interface related private function prototypes for
  *        adrv904x_datainterface.c which helps adi_adrv904x_datainterface.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADRV904X_DATAINTERFACE_H_
@@ -319,5 +318,90 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_GetJtxLanePoweredDown(adi_adrv904x_Dev
                                                                 adrv904x_BfSerdesTxdigPhyRegmapCore1p2ChanAddr_e const laneSerdesPhyBitfieldAddr,
                                                                 uint8_t* const phyLanePd);
             
+
+
+/**
+* \brief Retrieve Deframer configuration
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable -Pointer to the device settings structure
+* \param[in] deframerSel selected of framer defined in adi_adrv904x_DeframerSel_e
+* \param[in] chanSel selected Tx channel defined in adi_adrv904x_TxChannels_e
+* \param[out] deframerCfg Pointer to the JESD Deframer configuration read back
+* \param[in] bypass mode select
+* \param[in] scale parameters enable
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adrv904x_DeframerCfgGet(adi_adrv904x_Device_t* const        device,
+                                                     const adi_adrv904x_DeframerSel_e    deframerSel,
+                                                     const adi_adrv904x_TxChannels_e     chanSel,
+                                                     adi_adrv904x_DeframerCfg_t* const   deframerCfg,
+                                                     const bool bBypass,
+                                                     const bool bParamScaling);
+
+/**
+ * \brief Gets the DAC sample crossbar for the specified ADRV904X deframer
+ *
+ * \dep_begin
+ * \dep{device->common.devHalInfo}
+ * \dep_end
+ *
+ * \param[in,out] device Context variable -Pointer to the device settings structure
+ * \param[in] deframerSel selected of framer defined in adi_adrv904x_DeframerSel_e
+ * \param[out] dacXbar Pointer to the JESD structure adi_adrv904x_DacSampleXbarCfg_t
+ *
+ * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+ */
+ADI_API adi_adrv904x_ErrAction_e adrv904x_DacSampleXbarGet(adi_adrv904x_Device_t* const           device,
+                                                           const adi_adrv904x_DeframerSel_e       deframerSel,
+                                                           adi_adrv904x_DacSampleXbarCfg_t* const dacXbar);
+
+
+/**
+ * \brief Get the CDUC Sample Crossbar for the selected deframer and TX channel.
+ *  For the entries in the structure adi_adrv904x_CducSampleXbarCfg_t, the valid value is from 0..31.
+ *  Value 0x80 (128) indicates the entry unused and disabled.
+ *
+ * \pre This function is called after the device has been initialized
+ *
+ * \dep_begin
+ * \dep{device->common.devHalInfo}
+ * \dep_end
+ *
+ * \param[in,out] device    - Context variable, pointer to the device settings structure
+ * \param[in]     deframerSel - selected of deframer defined in adi_adrv904x_DeframerSel_e
+ * \param[in]     txChanSel  - selected RX channel defined in adi_adrv904x_TxChannels_e
+ * \param[out]    cducSampleXbarCfg - pointer to a structure to contain the return of CDUC Sample XBar values
+ *
+ * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+ */
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducSampleXBarGet(adi_adrv904x_Device_t* const             device,
+    const adi_adrv904x_DeframerSel_e         deframerSel,
+    const adi_adrv904x_TxChannels_e          txChanSel,
+    adi_adrv904x_CducSampleXbarCfg_t * const cducSampleXbarCfg);
+
+
+/**
+ * \brief Get the CDUC Mode value for the selected deframer.
+ *
+ * \pre This function is called after the device has been initialized
+ *
+ * \dep_begin
+ * \dep{device->common.devHalInfo}
+ * \dep_end
+ *
+ * \param[in,out] device      - Context variable, pointer to the device settings structure
+ * \param[in]     deframerSel - selected of deframer defined in adi_adrv904x_DeframerSel_e
+ * \param[out]    cducMode    - pointer to hold cduc mode value.
+ *
+ * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+ */
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducModeGet(adi_adrv904x_Device_t* const       device,
+    const adi_adrv904x_DeframerSel_e   deframerSel,
+    adi_adrv904x_CducMode_e * const    cducMode);
 
 #endif  /* _ADRV904X_DATAINTERFACE_H_ */

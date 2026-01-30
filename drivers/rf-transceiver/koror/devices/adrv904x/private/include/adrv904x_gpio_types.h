@@ -1,7 +1,6 @@
 /**
- * Copyright 2015 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -9,7 +8,7 @@
  * \brief Contains ADRV904X GPIO related private data prototypes for
  *        adrv904x_gpio.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADRV904X_GPIO_TYPES_H_
@@ -71,7 +70,7 @@ typedef enum adrv904x_GpioRoute
     ADRV904X_GPIO_ROUTE_ANA_DEST_ORX            = 16U,  /*!< NOT SUPPORTED: Analog Destination Route to ORX using Ana IE Override */		
     ADRV904X_GPIO_ROUTE_DIG_DEST_RADIO_SEQ      = 17U,  /*!< Digital Destination Route to Radio Sequencer */
     ADRV904X_GPIO_ROUTE_DIG_DEST_RX_CDDC_RSSI   = 18U,  /*!< Digital Destination Route to RX CDDC_RSSI */
-    ADRV904X_GPIO_ROUTE_DIG_DEST_TX_DTX         = 19U,  /*!< Digital Destination Route to Tx using Stg3 selected source 0 and Tx channel gpio_select, specifically for Koror DTX pin functionality*/
+    ADRV904X_GPIO_ROUTE_DIG_DEST_TX_DTX         = 19U,  /*!< Digital Destination Route to Tx using Stg3 selected source 0 and Tx channel gpio_select, specifically for ADRV904X DTX pin functionality*/
 } adrv904x_GpioRoute_e;
 
 

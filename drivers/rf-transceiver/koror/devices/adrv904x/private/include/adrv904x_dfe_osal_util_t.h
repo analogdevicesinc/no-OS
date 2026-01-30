@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -11,13 +10,12 @@
  * \brief Contains shared types used for OSAL data logging.
  * \details Contains enums and typedefs which are shared between the BBIC and DFE and used for logging OSAL information.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_DFE_OSAL_UTIL_T_H__
 #define __ADRV904X_DFE_OSAL_UTIL_T_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 
 /*

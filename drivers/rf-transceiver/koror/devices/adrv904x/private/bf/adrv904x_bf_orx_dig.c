@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #include "../../private/bf/adrv904x_bf_orx_dig.h"
@@ -19,6 +19,59 @@
 #include "adrv904x_bf_error_types.h"
 
 #define ADI_FILE ADI_ADRV904X_FILE_PRIVATE_BF_ORX_DIG
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_OrxDig_AdcPdN_BfSet(adi_adrv904x_Device_t* const device,
+                                                              adi_adrv904x_SpiCache_t* const spiCache,
+                                                              const adrv904x_BfOrxDigChanAddr_e baseAddr,
+                                                              const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_OrxDig_AdcPdN_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_SLICE_ORX_0__ORX_DIG) &&
+            (baseAddr != ADRV904X_BF_SLICE_ORX_1__ORX_DIG))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_OrxDig_AdcPdN_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0xA0U),
+                                                  ((uint32_t) bfValue << 1),
+                                                  0x2U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_OrxDig_CptBusy_BfGet(adi_adrv904x_Device_t* const device,
                                                                adi_adrv904x_SpiCache_t* const spiCache,

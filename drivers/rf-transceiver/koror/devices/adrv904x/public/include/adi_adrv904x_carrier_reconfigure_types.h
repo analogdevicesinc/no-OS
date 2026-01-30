@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  *
  * \brief   Contains ADRV904X Carrier Reconfigure data structures.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_CARRIER_RECONFIGURE_TYPES_H__
@@ -66,8 +65,8 @@ typedef struct adi_adrv904x_CarrierJesdInternalCfg
     uint32_t frequencyKhz;                                              /*!< JESD interface frequency */
     uint16_t divide;                                                    /*!< JESD interface divide value */
     uint16_t numSlots;                                                  /*!< JESD carrier slot table number of carrier slots. Support up to 64 */
-    uint16_t initSlot;                                                  /*!< JESD interface initial slot to use in carrier slot table. With Koror HW, initslot is always 0 */
-    uint16_t maxSlot;                                                   /*!< JESD interface max slot to use in carrier slot table: maxSlot = initSlot + numSlots. With Koror HW, initslot is always 0, so maxSlot = numSlots */
+    uint16_t initSlot;                                                  /*!< JESD interface initial slot to use in carrier slot table. With ADRV904X, initslot is always 0 */
+    uint16_t maxSlot;                                                   /*!< JESD interface max slot to use in carrier slot table: maxSlot = initSlot + numSlots. With ADRV904X, initslot is always 0, so maxSlot = numSlots */
     uint16_t ifaceMaxSlot;                                              /*!< JESD interface max slot. Supprts only 8 or 16. */
     uint16_t slotTable[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];          /*!< JESD carrier slot table. Size 64 */
     uint16_t ifaceSlotTable[ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS];   /*!< JESD interface slot table. Size 16 */
@@ -146,6 +145,7 @@ typedef struct adi_adrv904x_CarrierReconfigInput
     adi_adrv904x_CarrierJesdCfg_t               jesdCfg;                                    /*!< Copy of input to Solve() function */
     uint32_t                                    numProfiles;                                /*!< Copy of input to Solve() function. Number of profiles that are used. Only first N=numCarrierProfiles are populated */
     adi_adrv904x_CarrierRadioCfg_t              profileCfgs[ADI_ADRV904X_MAX_NUM_PROFILES]; /*!< Copy of input to Solve() function, but enough memory for all 4 profiles */
+    adi_adrv904x_ChannelFilterCfg_t             fwCmdsFilterCfg[ADI_ADRV904X_MAX_NUM_PROFILES]; /*!< Channel Filter Config data for CDUC/CDDC. Inputs to FW Cmd steps */
 } adi_adrv904x_CarrierReconfigInput_t;
 
 

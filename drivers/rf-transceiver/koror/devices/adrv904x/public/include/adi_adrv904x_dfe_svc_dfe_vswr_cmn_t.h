@@ -1,20 +1,18 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file
  * \brief DFE capture service module definitions and types
  *
- * DFE SDK API Version: 2.10.0.4
+ * DFE SDK API Version: 2.15.0.4
  */
 
 #ifndef ADI_ADRV904X_DFE_SVC_DFE_VSWR_CMN_T_H_
 #define ADI_ADRV904X_DFE_SVC_DFE_VSWR_CMN_T_H_
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 
 #define ADI_ADRV904X_VSWR_PLAYBACK_DATA_MAX_NUM_SAMPLES    1023U /*!< VSWR playback data maximum number of samples */

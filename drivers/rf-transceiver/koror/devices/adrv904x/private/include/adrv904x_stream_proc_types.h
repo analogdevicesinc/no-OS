@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  *
  * \brief   Contains ADRV904X stream process macros and enums.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_STREAM_PROC_TYPES_H__
@@ -55,9 +54,12 @@ typedef enum
     ADRV904X_STREAM_TX_ADC_DAC_DISABLE_RAMP             = ADRV904X_STREAM_ID__TX__TXLB_ADC_RAMP_DISABLE,            /*!< Custom stream: Disable TxLB ADC DAC ramp */
     ADRV904X_STREAM_TX_WRITE_DTX_MODE_CONFIG            = ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG,            /*!< Custom stream: Write DTX Mode Config */
     ADRV904X_STREAM_TX_WRITE_DTX_MODE_CONFIG_CLRSTATUS  = ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG_CLRSTATUS,  /*!< Custom stream: Write DTX Mode Config And Set Clear-Status bits */
-    ADRV904X_STREAM_TX_PA_PROT_RECOVERY                 = ADRV904X_STREAM_ID__TX__PA_PROT_RECOVERY,                 /*!< Custom stream: PA Protection Recovery */
+    ADRV904X_STREAM_TX_DTX_POWER_UP                     = ADRV904X_STREAM_ID__TX__DTX_POWER_UP,                     /*!< Custom stream: Exit from DTX mode */
     ADRV904X_STREAM_TX_SET_INIT_CAL_RUNNING_BIT         = ADRV904X_STREAM_ID__TX__TX_SET_INIT_CAL_RUNNING_BIT,      /*!< Custom stream: Set Init Cal Running Bit */
     ADRV904X_STREAM_TX_CLR_INIT_CAL_RUNNING_BIT         = ADRV904X_STREAM_ID__TX__TX_CLR_INIT_CAL_RUNNING_BIT,      /*!< Custom stream: Clear Init Cal Running Bit */
+    ADRV904X_STREAM_TX_PA_PROT_CLEAR_ACTIVE_FLAG        = ADRV904X_STREAM_ID__TX__PA_PROT_CLEAR_ACTIVE_FLAG,        /*!< Custom stream: PAP Active Bit clear */
+    ADRV904X_STREAM_TX_PA_PROT_CHECK_IF_ACTIVE          = ADRV904X_STREAM_ID__TX__PA_PROT_CHECK_IF_ACTIVE,          /*!< Custom stream: PAP Active Bit check */
+    ADRV904X_STREAM_TX_PA_PROT_ACTIVATE                 = ADRV904X_STREAM_ID__TX__PA_PROT_ACTIVATE,                 /*!< Custom stream: PAP Activate Handling*/
 
     ADRV904X_STREAM_TX_SET_IMMEDIATE_CAPTURE_ENABLE_BIT = ADRV904X_STREAM_ID__TX__SET_IMMEDIATE_CAPTURE_ENABLE_BIT, /*!< Custom stream: Set immediate capture enable bit */
     ADRV904X_STREAM_TX_SET_CAPTURE_PENDING_BIT          = ADRV904X_STREAM_ID__TX__SET_CAPTURE_PENDING_BIT,          /*!< Custom stream: Set capture pending bit */
@@ -65,13 +67,9 @@ typedef enum
     ADRV904X_STREAM_TX_WRITE_DTX_MANUAL_ACTIVATE        = ADRV904X_STREAM_ID__TX__DTX_MANUAL_ACTIVATE,              /*!< Custom stream: Manual DTX activate */
     ADRV904X_STREAM_TX_WRITE_DTX_MANUAL_DEACTIVATE      = ADRV904X_STREAM_ID__TX__DTX_MANUAL_DEACTIVATE,            /*!< Custom stream: Manual DTX activate */
     ADRV904X_STREAM_TX_SET_CFR_CFG_SET_CHANGE_REQ       = ADRV904X_STREAM_ID__TX__CFR_CFG_SET_CHANGE_REQ,           /*!< Custom stream: Set CFR config set change request bit */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_PREPARE_0       = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_0,       /*!< Custom stream: Prepare to switch to DPD Model 0 */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_PREPARE_1       = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_1,       /*!< Custom stream: Prepare to switch to DPD Model 1 */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_PREPARE_2       = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_2,       /*!< Custom stream: Prepare to switch to DPD Model 2 */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_PREPARE_3       = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_3,       /*!< Custom stream: Prepare to switch to DPD Model 3 */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_PREPARE_4       = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_4,       /*!< Custom stream: Prepare to switch to DPD Model 4 */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_TX_FALL_SET     = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_TX_FALL_SET,     /*!< Custom stream: Switch DPD model in Tx Fall stream */
-    ADRV904X_STREAM_TX_DPD_MODEL_SWITCH_TX_FALL_CLEAR   = ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_TX_FALL_CLEAR,   /*!< Custom stream: Don't switch DPD model in Tx Fall stream */
+    ADRV904X_STREAM_TX_DTX_DEACTIVATE                   = ADRV904X_STREAM_ID__TX__DTX_DEACTIVATE,                   /*!< Custom stream: Notify core SP that DTX is deactivated */
+	ADRV904X_STREAM_TX_SET_CT_DPD_CLEAR_OUTPUT          = ADRV904X_STREAM_ID__TX__SET_CT_DPD_CLEAR_OUTPUT,          /*!< Custom stream: Set Clear CT DPD output */
+	ADRV904X_STREAM_TX_CLEAR_CT_DPD_CLEAR_OUTPUT        = ADRV904X_STREAM_ID__TX__CLEAR_CT_DPD_CLEAR_OUTPUT,        /*!< Custom stream: Set Clear CT DPD output and clear status */
 } adrv904x_StreamTxCustomStreams_e;
 
 typedef enum
@@ -90,7 +88,6 @@ typedef enum
 
 
     ADRV904X_STREAM_MAIN_TRIGGER_TX_STREAM_USED_BY_DFE      = ADRV904X_STREAM_ID__CORE__TRIGGER_TX_STREAM_USED_BY_DFE,                         /*!< Core stream used to trigger TX streams by DFE (see ADRV904X_TRIGGER_SLICE_STREAM_[NUM|MASK]) */
-    ADRV904X_STREAM_MAIN_TRIGGER_RX_STREAM_USED_BY_DFE      = ADRV904X_STREAM_ID__CORE__TRIGGER_RX_STREAM_USED_BY_DFE,                         /*!< Core stream used to trigger RX streams by DFE (see ADRV904X_TRIGGER_SLICE_STREAM_[NUM|MASK]) */
     ADRV904X_STREAM_MAIN_CFG_TX_ORX0_MAPPING_IN_RS_MODE     = ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_CFG_GPIO_PIN_STATE_FOR_ORX0,         /*!< Custom stream: Configure Tx to ORx0 mapping in RS mode */
     ADRV904X_STREAM_MAIN_CFG_TX_ORX1_MAPPING_IN_RS_MODE     = ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_CFG_GPIO_PIN_STATE_FOR_ORX1,         /*!< Custom stream: Configure Tx to ORx1 mapping in RS mode */
     ADRV904X_STREAM_MAIN_ACT_TX_ORX0_MAPPING_IN_RS_MODE     = ADRV904X_STREAM_ID__CORE__RADIO_SEQ_RISE_EVENT_00,                               /*!< Custom stream: Activate Tx to ORx0 mapping in RS mode */
@@ -109,6 +106,10 @@ typedef enum
     ADRV904X_STREAM_ANT_CAL_UPDATE_SLICE_SCRATCHPAD_REG     = ADRV904X_STREAM_ID__CORE__UPDATE_SLICE_SCRATCHPAD_REG,                           /*!< Custom stream: Update Rx/Tx slice scratchpad registers */
     ADRV904X_STREAM_DFE_SBET_CLEAR_CAP_REQUEST_FOR_BUF0     = ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF0,                       /*!< Custom stream: Clear SBET Capture Request for Buffer0 */
     ADRV904X_STREAM_DFE_SBET_CLEAR_CAP_REQUEST_FOR_BUF1     = ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF1,                       /*!< Custom stream: Clear SBET Capture Request for Buffer1 */
+    ADRV904X_STREAM_SET_CAPTURE_BUFFER_0_SW_CTRL            = ADRV904X_STREAM_ID__CORE__SET_CAPTURE_BUFFER_0_SW_CTRL,                          /*!< Custom stream: Clear SBET Capture Request for Buffer0 */
+    ADRV904X_STREAM_SET_CAPTURE_BUFFER_1_SW_CTRL            = ADRV904X_STREAM_ID__CORE__SET_CAPTURE_BUFFER_1_SW_CTRL,                          /*!< Custom stream: Clear SBET Capture Request for Buffer1 */
+    ADRV904X_STREAM_CAPTURE_BUF0_SW_TRIGGER_TOGGLE          = ADRV904X_STREAM_ID__CORE__CAPTURE_BUF0_SW_TRIGGER_TOGGLE,                        /*!< Custom stream: Clear SBET Capture Request for Buffer0 */
+    ADRV904X_STREAM_CAPTURE_BUF1_SW_TRIGGER_TOGGLE          = ADRV904X_STREAM_ID__CORE__CAPTURE_BUF1_SW_TRIGGER_TOGGLE,                        /*!< Custom stream: Clear SBET Capture Request for Buffer1 */
 } adrv904x_StreamMainCustomStreams_e;
 
 #endif /* __ADRV904X_STREAM_PROC_TYPES_H__ */

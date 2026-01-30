@@ -1,5 +1,10 @@
-#ifndef _PALAU_STRUCT_ENDIAN_H_
-#define _PALAU_STRUCT_ENDIAN_H_
+/**
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
+*/
+
+#ifndef _ADRV904X_STRUCT_ENDIAN_H_
+#define _ADRV904X_STRUCT_ENDIAN_H_
 
 #include "adrv904x_platform_byte_order.h"
 #include "adrv904x_cpu_cmd_run_serdes_eye_sweep.h"

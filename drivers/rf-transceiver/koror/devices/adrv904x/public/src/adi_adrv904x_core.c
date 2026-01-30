@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains ADRV904X features related function implementation defined in
 * adi_adrv904x_core.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_core.h"
@@ -288,7 +287,7 @@ cleanup :
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Initialize(adi_adrv904x_Device_t* const        device,
                                                          const adi_adrv904x_Init_t* const    init)
 {
-        adi_adrv904x_Info_t devStateInfoClear;
+        ADI_PLATFORM_LARGE_VAR_ALLOC(adi_adrv904x_Info_t, devStateInfoClearPtr);
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     uint8_t idx = 0U;
     uint8_t TX_SPIMODE_ENABLE_ALLCH = 0xFFU;
@@ -300,20 +299,19 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Initialize(adi_adrv904x_Device_t* 
     ADI_ADRV904X_API_ENTRY(&device->common);
 
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, init, cleanup);
-
-    ADI_LIBRARY_MEMSET(&devStateInfoClear, 0, sizeof(adi_adrv904x_Info_t));
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, devStateInfoClearPtr, cleanup);
     
     /* There is no HW Reset occurring right here, so we cannot throw away current Shared Resource States */
     /* Restore Shared Resource Manager from current device structure.*/
-    ADI_LIBRARY_MEMCPY( &devStateInfoClear.sharedResourcePool, &device->devStateInfo.sharedResourcePool, sizeof(device->devStateInfo.sharedResourcePool) );
+	ADI_LIBRARY_MEMCPY(&devStateInfoClearPtr->sharedResourcePool, &device->devStateInfo.sharedResourcePool, sizeof(device->devStateInfo.sharedResourcePool));
 
     /* Restore silicon revision from current device structure */
-    devStateInfoClear.deviceSiRev = device->devStateInfo.deviceSiRev;
-    devStateInfoClear.swTest = device->devStateInfo.swTest;
-    devStateInfoClear.dfeSwTest = device->devStateInfo.dfeSwTest;
-    (void)ADI_LIBRARY_MEMCPY(&devStateInfoClear.vswrWaveformLoaded, &device->devStateInfo.vswrWaveformLoaded, sizeof(device->devStateInfo.vswrWaveformLoaded));
-    devStateInfoClear.devState = device->devStateInfo.devState;
-    device->devStateInfo = devStateInfoClear;
+    devStateInfoClearPtr->deviceSiRev = device->devStateInfo.deviceSiRev;
+    devStateInfoClearPtr->swTest = device->devStateInfo.swTest;
+    devStateInfoClearPtr->dfeSwTest = device->devStateInfo.dfeSwTest;
+    (void)ADI_LIBRARY_MEMCPY(&devStateInfoClearPtr->vswrWaveformLoaded, &device->devStateInfo.vswrWaveformLoaded, sizeof(device->devStateInfo.vswrWaveformLoaded));
+    devStateInfoClearPtr->devState = device->devStateInfo.devState;
+    device->devStateInfo = *devStateInfoClearPtr;
 
 
     /* Set the Memory Repair Start */

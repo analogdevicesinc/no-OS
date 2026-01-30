@@ -1,13 +1,12 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adrv904x_dfe_cfr.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "../../private/include/adrv904x_dfe_cfr.h"

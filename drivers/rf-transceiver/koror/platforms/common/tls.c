@@ -1,3 +1,9 @@
+/**
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
+*/
+
+
 #include "tls.h"
 
 typedef struct

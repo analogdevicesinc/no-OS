@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains Rx features related function implementation defined in
 * adi_adrv904x_rx.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_rx.h"
@@ -73,7 +72,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxGainTableWrite(adi_adrv904x_Devi
     uint32_t baseAddress[1] = { 0U };
     uint16_t numGainIndicesToWrite = arraySize;
     /*Maximum Array Size = Max Gain Table Size x Bytes Per Gain Table Entry*/
-    uint8_t cpuDmaData[((ADI_ADRV904X_MAX_GAIN_TABLE_INDEX - ADI_ADRV904X_MIN_GAIN_TABLE_INDEX) + 1U) * ADI_ADRV904X_NUM_BYTES_PER_RX_GAIN_INDEX] = { 0U };
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cpuDmaData, ((ADI_ADRV904X_MAX_GAIN_TABLE_INDEX - ADI_ADRV904X_MIN_GAIN_TABLE_INDEX) + 1U) * ADI_ADRV904X_NUM_BYTES_PER_RX_GAIN_INDEX);
     adrv904x_BfRxDdcChanAddr_e ddcBaseAddr = ADRV904X_BF_SLICE_RX_0__RX_DDC_0_;
     uint32_t chanId = 0U;
     adi_adrv904x_SpiCache_t spiCache = { { 0U }, 0U, 0U, 0U };
@@ -94,6 +93,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxGainTableWrite(adi_adrv904x_Devi
 
     ADI_ADRV904X_API_ENTRY(&device->common);
 
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cpuDmaData, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, gainTableRow, cleanup);
 
 #if ADI_ADRV904X_RX_RANGE_CHECK > 0
@@ -191,14 +191,12 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxGainTableRead(adi_adrv904x_Devic
     uint32_t maxReadGainIndices = arraySize;
     uint16_t numGainIndicesReadVal = 0U;
     /*Maximum Array Size = Max Gain Table Size x Bytes Per Gain Table Entry*/
-    uint8_t cpuAhbData[((ADI_ADRV904X_MAX_GAIN_TABLE_INDEX - ADI_ADRV904X_MIN_GAIN_TABLE_INDEX) + 1U) * ADI_ADRV904X_NUM_BYTES_PER_RX_GAIN_INDEX];
-
-    ADI_LIBRARY_MEMSET(&cpuAhbData, 0, sizeof(cpuAhbData));
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cpuAhbData, ((ADI_ADRV904X_MAX_GAIN_TABLE_INDEX - ADI_ADRV904X_MIN_GAIN_TABLE_INDEX) + 1U) * ADI_ADRV904X_NUM_BYTES_PER_RX_GAIN_INDEX);
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
     ADI_ADRV904X_API_ENTRY(&device->common);
-
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cpuAhbData, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, gainTableRow, cleanup);
 
 #if ADI_ADRV904X_RX_RANGE_CHECK > 0
@@ -818,6 +816,7 @@ cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
+
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcDataFormatSet(adi_adrv904x_Device_t* const          device,
                                                             const adi_adrv904x_CddcDataFormatRt_t cddcDataFormat[],
                                                             const uint32_t                        arraySize)
@@ -906,6 +905,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcDataFormatGet(adi_adrv904x_Dev
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+
     /* Null pointer checks */
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cddcDataFormat, cleanup);
 
@@ -973,6 +973,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcDataFormatGet(adi_adrv904x_Dev
     
     /* Populate the rxChannelMask field of the output structure with the specified channel. */
     cddcDataFormat->rxChannelMask = rxChannel;
+
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
@@ -1345,6 +1346,195 @@ cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoAltSet(adi_adrv904x_Device_t* const                 device,
+                                                           const adi_adrv904x_ORxAltNcoConfig_t * const orxAltNcoConfig)
+{
+        static const uint8_t           ALL_ORX_MASK = (1U << ADI_ADRV904X_MAX_ORX) - 1U;
+    adi_adrv904x_ErrAction_e       recoveryAction  = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    adi_adrv904x_ORxAltNcoConfig_t orxAltNcoInfo;
+    adrv904x_ORxNcoConfigResp_t    cmdRsp;
+    adrv904x_CpuCmdStatus_e        cmdStatus       = ADRV904X_CPU_CMD_STATUS_GENERIC;
+    adi_adrv904x_CpuErrorCode_t    cpuErrorCode    = 0U;
+    uint32_t                       cpuTypeIdx      = 0U;
+    uint8_t                        channelMaskRet  = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, orxAltNcoConfig, cleanup);
+
+    /* Check that ORx channel mask is valid */
+    if ((orxAltNcoConfig->orxChanSelect == 0) || ((orxAltNcoConfig->orxChanSelect | ALL_ORX_MASK) != ALL_ORX_MASK))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               orxAltNcoConfig->orxChanSelect,
+                               "Invalid ORx Channel mask.");
+        goto cleanup;
+    }
+
+    /* Check preset adc nco freq value is valid 24bit int */
+    if ((orxAltNcoConfig->freqAdcKhz > 8388607) ||
+        (orxAltNcoConfig->freqAdcKhz < -8388608))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               orxAltNcoConfig->freqAdcKhz,
+                               "freqAdcKhz outside maximum range. Must be in range -8388608 to 8388607");
+        goto cleanup;
+    }
+
+    /* Check preset datapath nco freq value is valid 24bit int */
+    if ((orxAltNcoConfig->freqDatapathKhz > 8388607) ||
+        (orxAltNcoConfig->freqDatapathKhz < -8388608))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT( &device->common,
+                                recoveryAction,
+                                orxAltNcoConfig->freqDatapathKhz,
+                                "freqDatapathKhz outside maximum range. Must be in range -8388608 to 8388607");
+        goto cleanup;
+    }
+
+    ADI_LIBRARY_MEMSET(&orxAltNcoInfo, 0, sizeof(orxAltNcoInfo));
+    ADI_LIBRARY_MEMSET(&cmdRsp, 0, sizeof(cmdRsp));
+
+    /* Prepare the command payload */
+    orxAltNcoInfo.orxChanSelect   = orxAltNcoConfig->orxChanSelect;
+    orxAltNcoInfo.freqAdcKhz      = ADRV904X_HTOCL(orxAltNcoConfig->freqAdcKhz);
+    orxAltNcoInfo.freqDatapathKhz = ADRV904X_HTOCL(orxAltNcoConfig->freqDatapathKhz);
+
+    /* For each CPU, send the command, wait for a response, and process any errors.
+     * Only the CPU that owns this channel will set chanSelect in its response.
+     */
+    for (cpuTypeIdx = 0U; cpuTypeIdx < (uint32_t) ADI_ADRV904X_CPU_TYPE_MAX_RADIO; ++cpuTypeIdx)
+    {
+        /* Send command and receive response */
+        recoveryAction = adrv904x_CpuCmdSend(   device,
+                                                (adi_adrv904x_CpuType_e)cpuTypeIdx,
+                                                ADRV904X_LINK_ID_0,
+                                                ADRV904X_CPU_CMD_ID_SET_ORX_ALT_NCO,
+                                                (void*)&orxAltNcoInfo,
+                                                sizeof(orxAltNcoInfo),
+                                                (void*)&cmdRsp,
+                                                sizeof(cmdRsp),
+                                                &cmdStatus);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO(cmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
+        }
+
+        channelMaskRet |= cmdRsp.chanSelect;
+        if (channelMaskRet == orxAltNcoInfo.orxChanSelect)
+        {
+            goto cleanup;
+        }
+    }
+    /* if didn't go to cleanup, then some error occurred.*/
+    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, channelMaskRet, "Firmware did not execute cmd on all channels requested");
+
+cleanup :
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoAltGet(adi_adrv904x_Device_t* const          device,
+                                                           adi_adrv904x_ORxAltNcoConfig_t* const orxAltNcoConfig)
+{
+        const uint8_t NCO_NUM_BYTES = 3U;
+    
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint8_t scratchRegIdStart_adc = 0U;
+    uint8_t scratchRegIdStart_dp = 0U;
+    uint8_t tmpByte = 0U;
+    uint32_t tmpAdc = 0U;
+    uint32_t tmpDp = 0U;
+    uint8_t idx = 0U;
+    uint8_t orxChanSelect = 0;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, orxAltNcoConfig, cleanup);
+
+    orxChanSelect = orxAltNcoConfig->orxChanSelect;
+    ADI_LIBRARY_MEMSET(orxAltNcoConfig, 0, sizeof(adi_adrv904x_ORxAltNcoConfig_t));
+
+    /* Check that requested Tx channel is valid and determine scratchpadRegIdStart for selected channel.
+     * The alternative values for ORx0 are in mapping value 0x08 to 0x0B, and for ORxC are in mapping value 0x0C to 0x0F.
+     */
+    switch (orxChanSelect)
+    {
+        case 0x01:
+            scratchRegIdStart_adc = ADRV904X_CPU_MAPVAL_8_NCO_ADC_FREQ_MSB;
+            scratchRegIdStart_dp = ADRV904X_CPU_MAPVAL_8_NCO_DP_FREQ_MSB;
+            break;
+
+        case 0x02:
+            scratchRegIdStart_adc = ADRV904X_CPU_MAPVAL_C_NCO_ADC_FREQ_MSB;
+            scratchRegIdStart_dp = ADRV904X_CPU_MAPVAL_C_NCO_DP_FREQ_MSB;
+            break;
+
+        default:
+            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_PARAM_ERROR_REPORT( &device->common,
+                                    recoveryAction,
+                                    orxAltNcoConfig->orxChanSelect,
+                                    "Invalid ORx Channel mask.");
+            goto cleanup;
+            break;
+    }
+
+    orxAltNcoConfig->orxChanSelect = orxChanSelect;
+
+    /* Readback Scratchpad values */
+    for (idx = 0U; idx < NCO_NUM_BYTES; ++idx)
+    {
+        recoveryAction = adrv904x_Core_ScratchReg_BfGet(device,
+                                                        NULL,
+                                                        (adrv904x_BfCoreChanAddr_e)ADRV904X_BF_CORE_ADDR,
+                                                        (scratchRegIdStart_adc - idx),
+                                                        &tmpByte);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to read Tx to Orx Preset value for Orx ADC NCO");
+            goto cleanup;
+        }
+        tmpAdc <<= 8U;
+        tmpAdc |= ((uint32_t)tmpByte);
+
+        recoveryAction = adrv904x_Core_ScratchReg_BfGet(device,
+                                                        NULL,
+                                                        (adrv904x_BfCoreChanAddr_e)ADRV904X_BF_CORE_ADDR,
+                                                        (scratchRegIdStart_dp - idx),
+                                                        &tmpByte);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to read Tx to Orx Preset value for Orx Datapath NCO");
+            goto cleanup;
+        }
+        tmpDp <<= 8U;
+        tmpDp |= ((uint32_t)tmpByte);
+    }
+
+    /* Readback values are 24bits. Returned results are int32_t, so sign extend data as needed */
+    if ((tmpAdc & 0x00800000U) != 0U)
+    {
+        tmpAdc |= 0xFF000000U;
+    }
+    
+    if ((tmpDp & 0x00800000U) != 0U)
+    {
+        tmpDp |= 0xFF000000U;
+    }
+
+    /* Store results */
+    orxAltNcoConfig->freqAdcKhz = (int32_t)tmpAdc;
+    orxAltNcoConfig->freqDatapathKhz = (int32_t)tmpDp;
+
+    cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoGet(adi_adrv904x_Device_t* const                    device,
                                                         adi_adrv904x_ORxNcoConfigReadbackResp_t* const  orxRbConfig)
 {
@@ -1400,9 +1590,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoGet(adi_adrv904x_Device_t* c
         {
             /* Extract the command-specific response from the response payload */
             orxRbConfig->enabled = (uint8_t) orxNcoCfgGetCmdRsp.enabled;
-            orxRbConfig->ncoSelect = (uint8_t) orxNcoCfgGetCmdRsp.ncoSelect;
             orxRbConfig->phase = (uint32_t) ADRV904X_CTOHL(orxNcoCfgGetCmdRsp.phase);
             orxRbConfig->frequencyKhz = (int32_t) ADRV904X_CTOHL(orxNcoCfgGetCmdRsp.frequencyKhz);
+            orxRbConfig->status = (uint32_t) ADRV904X_CTOHL(orxNcoCfgGetCmdRsp.status); 
             goto cleanup;
         }
     }
@@ -1587,8 +1777,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCddcNcoGet(adi_adrv904x_Device_t
         if (channelMaskRet == rxNcoCfgRbCmd.chanSelect)
         {
             /* Extract the command-specific response from the response payload */
-            rxRbConfig->chanSelect    = (uint8_t) ADRV904X_CTOHL(rxNcoCfgGetCmdRsp.chanSelect);
-            rxRbConfig->carrierSelect = (uint8_t) ADRV904X_CTOHL(rxNcoCfgGetCmdRsp.carrierSelect);
+            rxRbConfig->chanSelect    = (uint8_t) rxNcoCfgGetCmdRsp.chanSelect;
+            rxRbConfig->carrierSelect = (uint8_t) rxNcoCfgGetCmdRsp.carrierSelect;
             rxRbConfig->enabled       = (uint8_t) rxNcoCfgGetCmdRsp.enabled;
             rxRbConfig->phase         = (uint32_t) ADRV904X_CTOHL(rxNcoCfgGetCmdRsp.phase); 
 
@@ -3962,7 +4152,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierRssiPowerRead(adi_adrv904
     }
 
     /* The bfValue is in 0.36 bit format. Convert it to mdb */
-    *gain_mdB = 10 * log10(bfValue / pow(2,36)) * 1000;
+    *gain_mdB = adi_library_q36ToDB(bfValue, 1000);
     
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -4019,7 +4209,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierGainAdjustSet(adi_adrv904
     }
 
     /* Convert from mdB to 7.16. (reg value = 10**(value in mdB/1000/20)) * 2^16) */
-    bfValue = (uint32_t)((double)pow(10, (double)gain_mdB / 1000U / 20U) * DIG_GAIN_MULT);
+    bfValue = adi_library_millidBVoltToLinear(gain_mdB, DIG_GAIN_MULT);
 
     /* Write out the enable */
     for (rxIdx = 0U; rxIdx < ADI_ADRV904X_MAX_RX_ONLY; rxIdx++)
@@ -4237,8 +4427,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxCarrierGainAdjustGet(adi_adrv904
     if (bfValue != 0U)
     {
         /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
-        //*gain_mdB = (int32_t)(1000U * 20U * log10((double)bfValue / DIG_GAIN_MULT));
-        *gain_mdB = (int32_t)(20 * log10((100000UL * (double)bfValue) / DIG_GAIN_MULT) - 100);
+        *gain_mdB = adi_library_linearToMillidBVolt(bfValue, DIG_GAIN_MULT);
     }
 
 cleanup:
@@ -4253,31 +4442,25 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv
                                                                         const uint32_t                                              numCarrierProfiles,
                                                                         const uint8_t                                               useCustomFilters)
 {
-        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adi_adrv904x_ChannelFilterCfg_t localFilterCfg[ADI_ADRV904X_MAX_NUM_PROFILES];
-    char coeffLoadBuf[sizeof(adi_adrv904x_ChannelFilterLoadMaxSize_t)];
-    adi_adrv904x_ChannelFilterLoad_t* const channelFilterLoad = (adi_adrv904x_ChannelFilterLoad_t*)&coeffLoadBuf;
-    adi_adrv904x_CarrierReconfigSoln_t soln;
-    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
-    adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
+        /* For Rx Calculate stage, FW command sequence needs to target CDDCs and NOT apply the changes to HW */
+    const uint8_t rxFlag = ADI_TRUE;
+    const uint8_t apply = ADI_FALSE;
+    
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(adi_adrv904x_ChannelFilterCfg_t, localFilterCfg, ADI_ADRV904X_MAX_NUM_PROFILES);
+    ADI_PLATFORM_LARGE_VAR_ALLOC(adi_adrv904x_CarrierReconfigSoln_t, solnPtr);
     adi_adrv904x_ChannelFilterOutputCfg_t chFilterOutput;
-    adi_adrv904x_ChannelFilterLoadResp_t chFilterLoadCmdRsp;
     uint32_t rxIdx = 0U;
     uint32_t rxSel = 0U;
     uint32_t bandIdx = 0U;
     uint32_t carrierIdx = 0U;
-    uint32_t coeffLoadIdx = 0U;
     uint32_t profileIdx = 0U;
-    uint32_t coeffAddressOffset = 0U;
     uint32_t coeffIdx = 0U;
     int32_t coeffTableIdx = 0U;
     const int16_t *coeffTable = NULL;
     int16_t coeffTableSize = 0;
     uint32_t numberOfFilterTaps = 0U;
     uint8_t asymmetricFilterTaps = 0U;
-    
-    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
-    adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
     adi_adrv904x_RxTxLoFreqReadback_t rxTxLoReadback;
     adi_adrv904x_RxNcoConfigReadbackResp_t rxRbConfig;
     uint32_t currentBandCenter_kHz = 0U;
@@ -4287,14 +4470,12 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, localFilterCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, solnPtr, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxCarrierConfigs, cleanup);
 
-    ADI_LIBRARY_MEMSET(&chFilterLoadCmdRsp, 0, sizeof(chFilterLoadCmdRsp));
-    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
-    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
     ADI_LIBRARY_MEMSET(&chFilterOutput, 0, sizeof(chFilterOutput));
-    ADI_LIBRARY_MEMSET(&soln, 0, sizeof(soln));
     ADI_LIBRARY_MEMSET(&rxTxLoReadback, 0, sizeof(rxTxLoReadback));
     ADI_LIBRARY_MEMSET(&rxRbConfig, 0, sizeof(rxRbConfig));
     ADI_LIBRARY_MEMSET(&lclInitialCfg, 0, sizeof(lclInitialCfg));
@@ -4369,7 +4550,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv
     }
     
     /* Initialize lcl solution structure */
-    recoveryAction = adrv904x_ReconfigSolutionInit(device, jesdCfg, rxCarrierConfigs, numCarrierProfiles, &soln);
+    recoveryAction = adrv904x_ReconfigSolutionInit(device, jesdCfg, rxCarrierConfigs, localFilterCfg, numCarrierProfiles, solnPtr);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Could not initialize struct");
@@ -4391,7 +4572,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv
     for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
     {   
         /* Set convenience pointer to output profile */
-        pProfileCfgOut = &soln.outputs.profileCfgs[profileIdx];
+        pProfileCfgOut = &solnPtr->outputs.profileCfgs[profileIdx];
         
         /* Set convenience pointer to lcl var profile of lclInitialCfg */
         pInitialCfg = &lclInitialCfg[profileIdx];
@@ -4494,103 +4675,17 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv
             goto cleanup;
         }
         
-        /* Reset the buffer each profile. channelFilterLoad maps to this buffer */
-        ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
-        
-        /* Perform endianness correction and load channel filter coefficients */
-        channelFilterLoad->coeffIdx = 0U;
-        for (coeffIdx = 0U; coeffIdx < ADI_ADRV904X_NUM_CF_COEFFICIENTS; coeffIdx++)
-        {
-            coeffAddressOffset = coeffLoadIdx * sizeof(int16_t);
-            ADI_LIBRARY_MEMCPY((void*)((uint8_t*)channelFilterLoad + sizeof(adi_adrv904x_ChannelFilterLoad_t) + coeffAddressOffset), (void*)(&localFilterCfg[profileIdx].coeffs[coeffIdx]), sizeof(int16_t));
-            coeffLoadIdx++;
-        
-            /* Once we fill up enough coefficients or we're on the last coefficient send to fw and clear out the buffer */
-            if ((coeffLoadIdx == ADI_ADRV904X_CHAN_FILTER_COEFF_LOAD_LEN) || (coeffIdx == (ADI_ADRV904X_NUM_CF_COEFFICIENTS - 1U)))
-            {
-                /* Using coeffLoadIdx after incremented to give us the number of coefficients actually loaded */
-                channelFilterLoad->coeffNum = (uint16_t)ADRV904X_HTOCL(coeffLoadIdx);
-    
-                /* Send command and receive response */
-                recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                        ADI_ADRV904X_CPU_TYPE_0,
-                                                        ADRV904X_LINK_ID_0,
-                                                        ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_COEFFS,
-                                                        (void*)channelFilterLoad,
-                                                        sizeof(coeffLoadBuf),
-                                                        (void*)&chFilterLoadCmdRsp,
-                                                        sizeof(chFilterLoadCmdRsp),
-                                                        &cmdStatus);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
-                }
-            
-                ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
-            
-                channelFilterLoad->coeffIdx = coeffIdx + 1;
-                coeffLoadIdx = 0U;
-            }
-        }
-        
-        /* Perform endianness correction and load channel filter configs */
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx] = (uint32_t)ADRV904X_HTOCL(localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx]);
-            localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx] = localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx];
-        }
-    
-        recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                ADI_ADRV904X_CPU_TYPE_0,
-                                                ADRV904X_LINK_ID_0,
-                                                ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_CFG,
-                                                (void*)&(localFilterCfg[profileIdx].carrierFilterCfg),
-                                                sizeof(localFilterCfg[profileIdx].carrierFilterCfg),
-                                                (void*)&chFilterLoadCmdRsp,
-                                                sizeof(chFilterLoadCmdRsp),
-                                                &cmdStatus);
+        /* Carrier Channel Filter Config FW CMD Sequence: Get HW settings but DO NOT APPLY to HW */
+        recoveryAction = adrv904x_CarrierChanFilterCfgCmdSequence(  device,
+                                                                    rxFlag,
+                                                                    apply,
+                                                                    &rxCarrierConfigs[profileIdx],
+                                                                    &localFilterCfg[profileIdx],
+                                                                    &chFilterOutput);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
-            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
-        }
-        
-        /* Create local cmd data with Endianness correction */
-        chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].channelMask);
-    
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = rxCarrierConfigs[profileIdx].carriers[carrierIdx].enable;
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].sampleRate_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].ibw_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(rxCarrierConfigs[profileIdx].carriers[carrierIdx].centerFrequency_kHz);
-        }
-        chFilterCmd.apply = 0u;
-        
-        /* Reset for each profile */
-        ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
-        
-        /* Send command and receive response */
-        recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                ADI_ADRV904X_CPU_TYPE_0,
-                                                ADRV904X_LINK_ID_0,
-                                                ADRV904X_CPU_CMD_ID_RX_CARRIER_RECONFIGURE,
-                                                (void*)&chFilterCmd,
-                                                sizeof(chFilterCmd),
-                                                (void*)&chFilterCmdRsp,
-                                                sizeof(chFilterCmdRsp),
-                                                &cmdStatus);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
-        }
-        
-        /* Pull out necessary results from response with Endianness correction */
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            chFilterOutput.numberOfFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.numberOfFilterTaps[carrierIdx]);
-            chFilterOutput.dataPipeStop[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.dataPipeStop[carrierIdx]);
-            chFilterOutput.bypassFilter[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.bypassFilter[carrierIdx]);
-            chFilterOutput.oddFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.oddFilterTaps[carrierIdx]);
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Channel Filter Config Cmd Sequence error");
+            goto cleanup;
         }
         
         /* Calculate CDDC delays */
@@ -4609,7 +4704,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierCalculate(adi_adrv
     
 
     /* Store Rx solution structure to device handle. To be used in next call to Apply() stage */
-    ADI_LIBRARY_MEMCPY(&device->devStateInfo.rxCarrierReconfigSoln, &soln, sizeof(adi_adrv904x_CarrierReconfigSoln_t));
+    ADI_LIBRARY_MEMCPY(&device->devStateInfo.rxCarrierReconfigSoln, solnPtr, sizeof(adi_adrv904x_CarrierReconfigSoln_t));
 
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -4617,26 +4712,25 @@ cleanup:
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierWrite(adi_adrv904x_Device_t* const device)
 {
-        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
-    adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
-    adi_adrv904x_ChannelFilterOutputCfg_t chFilterOutput;
+        /* For Rx Write stage, FW command sequence needs to target CDDCs and apply the changes to HW */
+    const uint8_t rxFlag = ADI_TRUE;
+    const uint8_t apply = ADI_TRUE;
+    
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     uint32_t rxIdx = 0U;
     uint32_t rxSel = 0U;
-    uint32_t carrierIdx = 0U;
     uint32_t profileIdx = 0U;
-    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
-    adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
     adi_adrv904x_CarrierReconfigSoln_t* soln = NULL;
+    adi_adrv904x_ChannelFilterOutputCfg_t tmpChanFilterOutputCfg;
+    
     adi_adrv904x_CarrierRadioCfg_t* pProfileCfgIn = NULL;
+    adi_adrv904x_ChannelFilterCfg_t* pFwCmdsFilterCfg = NULL;
     adi_adrv904x_CarrierReconfigProfileCfgOut_t* pProfileCfgOut = NULL;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
-
-    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
-    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
-    ADI_LIBRARY_MEMSET(&chFilterOutput, 0, sizeof(chFilterOutput));
+    
+    ADI_LIBRARY_MEMSET(&tmpChanFilterOutputCfg, 0, sizeof(tmpChanFilterOutputCfg));
 
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
     
@@ -4646,38 +4740,21 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxDynamicCarrierWrite(adi_adrv904x
     for (profileIdx = 0U; profileIdx < soln->inputs.numProfiles; profileIdx++)
     {
         pProfileCfgIn = &soln->inputs.profileCfgs[profileIdx];
+        pFwCmdsFilterCfg = &soln->inputs.fwCmdsFilterCfg[profileIdx];
         pProfileCfgOut = &soln->outputs.profileCfgs[profileIdx];
         
-        /* Create local cmd data with Endianness correction */
-        chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->channelMask);
-    
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = pProfileCfgIn->carriers[carrierIdx].enable;
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].sampleRate_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].ibw_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].centerFrequency_kHz);
-        }
-        chFilterCmd.apply = 1u;
-        
-        /* Reset for each profile */
-        ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
-        
-        /* Send command and receive response */
-        recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                ADI_ADRV904X_CPU_TYPE_0,
-                                                ADRV904X_LINK_ID_0,
-                                                ADRV904X_CPU_CMD_ID_RX_CARRIER_RECONFIGURE,
-                                                (void*)&chFilterCmd,
-                                                sizeof(chFilterCmd),
-                                                (void*)&chFilterCmdRsp,
-                                                sizeof(chFilterCmdRsp),
-                                                &cmdStatus);
+        /* Run FW Command sequence for Channel filter Coeff again. */
+        recoveryAction = adrv904x_CarrierChanFilterCfgCmdSequence(  device,
+                                                                    rxFlag,
+                                                                    apply,
+                                                                    pProfileCfgIn,
+                                                                    pFwCmdsFilterCfg,
+                                                                    &tmpChanFilterOutputCfg);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
-            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Channel Filter Config Cmd Sequence error");
+            goto cleanup;
         }
-        
         
         /* Program Carrier Rx JESD Config */
         recoveryAction = adrv904x_CarrierRxJesdConfigSet(   device,
@@ -5092,7 +5169,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiConfigSet(adi_adrv904x_Devic
     cmdStruct.pwrMtrRssiCfg.opMode                     = (uint8_t)pPwrMtrRssiCfg->opMode;
     cmdStruct.pwrMtrRssiCfg.measMode                   = (uint8_t)pPwrMtrRssiCfg->measMode;
     cmdStruct.pwrMtrRssiCfg.startDelay                 = (uint16_t)ADRV904X_HTOCS(pPwrMtrRssiCfg->startDelay);
-    cmdStruct.pwrMtrRssiCfg.contDelay                  = (uint16_t)ADRV904X_HTOCS(pPwrMtrRssiCfg->contDelay);
+    cmdStruct.pwrMtrRssiCfg.contDelay                  = (uint16_t)ADRV904X_HTOCS((uint16_t)pPwrMtrRssiCfg->contDelay);
     cmdStruct.pwrMtrRssiCfg.waitDelay                  = (uint32_t)ADRV904X_HTOCL(pPwrMtrRssiCfg->waitDelay);
     cmdStruct.pwrMtrRssiCfg.fddPinMode                 = (uint8_t)pPwrMtrRssiCfg->fddPinMode;
     cmdStruct.pwrMtrRssiCfg.duration0                  = (uint8_t)pPwrMtrRssiCfg->duration0;
@@ -5279,12 +5356,38 @@ cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-
+#ifndef ADI_LIBRARY_RM_FLOATS
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiReadBack(adi_adrv904x_Device_t* const device,
                                                              const uint16_t               meterSel,
                                                              const uint32_t               channelSel,
                                                              float* const                 pPwrMeasDb,
                                                              float* const                 pPwrMeasLinear)
+{
+        uint8_t powerMeasdB = 0;
+    uint64_t powerMeasLinear = 0;
+
+    /* Check device pointer is not null */
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+
+    adi_adrv904x_ErrAction_e recoveryAction = adi_adrv904x_RxRssiReadBack_v2(device, meterSel, channelSel, &powerMeasdB, &powerMeasLinear);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        goto cleanup;
+    }
+    *pPwrMeasDb     = (float)powerMeasdB/ 4.0f;
+    *pPwrMeasLinear = (float)(10 * log10(powerMeasLinear / pow(2,36)));
+
+cleanup :
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+#endif
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiReadBack_v2(adi_adrv904x_Device_t* const device,
+                                                                const uint16_t               meterSel,
+                                                                const uint32_t               channelSel,
+                                                                uint8_t* const               pPwrMeasDb,
+                                                                uint64_t* const              pPwrMeasLinear)
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
     adrv904x_DfeSvcCmdDfeMtrRssiReadback_t cmdStruct;
@@ -5357,8 +5460,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiReadBack(adi_adrv904x_Device
         goto cleanup;
     }
 
-    *pPwrMeasDb     = (float)respStruct.pwrMeasDb / 4.0f;
-    *pPwrMeasLinear = 10 * log10(respStruct.pwrMeasLinear / pow(2,36));
+    *pPwrMeasDb     = respStruct.pwrMeasDb;
+    *pPwrMeasLinear = respStruct.pwrMeasLinear;
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }

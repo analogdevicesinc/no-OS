@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  * 
  * \brief   Contains ADRV904X Calibration data types
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_CAL_TYPES_H__
@@ -55,7 +54,7 @@ typedef enum adi_adrv904x_InitCalibrations
     ADI_ADRV904X_IC_TXLOL                = 2048,             /*!< TxLOL initial calibration       */
     ADI_ADRV904X_IC_SERDES               = 4096,            /*!< SerDes initial calibration      */
     ADI_ADRV904X_IC_TXRX_PHASE           = 131072,        /*!< TxRxPhase initial calibration   */
-	
+
 } adi_adrv904x_InitCalibrations_e;
 
 /**
@@ -160,7 +159,8 @@ typedef enum adi_adrv904x_TrackingCalibrationId
     ADI_ADRV904X_TC_RX_ADC     = 4,    /*!< Rx ADC Tracking calibration      */
     ADI_ADRV904X_TC_TX_LB_ADC  = 5,  /*!< TxLB ADC Tracking calibration    */
     ADI_ADRV904X_TC_ORX_ADC    = 6,   /*!< ORx ADC Tracking calibration     */
-    ADI_ADRV904X_TC_NUM_CALS   = 6 + 1ul, /*!< Number of tracking calibrations  */
+    ADI_ADRV904X_TC_RXSPUR     = 7,    /*!< RxSpur Tracking calibration      */
+    ADI_ADRV904X_TC_NUM_CALS   = 7 + 1ul, /*!< Number of tracking calibrations  */
 } adi_adrv904x_TrackingCalibrationId_e;
 
 typedef uint32_t adi_adrv904x_TrackingCalibrationId_t;
@@ -177,6 +177,7 @@ typedef enum adi_adrv904x_TrackingCalibrationMask
     ADI_ADRV904X_TC_RX_ADC_MASK     = 16,    /*!< Rx ADC Tracking calibration      */
     ADI_ADRV904X_TC_TX_LB_ADC_MASK  = 32,  /*!< TxLB ADC Tracking calibration    */
     ADI_ADRV904X_TC_ORX_ADC_MASK    = 64,   /*!< ORx ADC Tracking calibration     */
+    ADI_ADRV904X_TC_RXSPUR_MASK     = 128,    /*!< RxSpur Tracking calibration      */
 } adi_adrv904x_TrackingCalibrationMask_e;
 
 typedef uint32_t adi_adrv904x_TrackingCalibrationMask_t;
@@ -187,7 +188,8 @@ typedef uint32_t adi_adrv904x_TrackingCalibrationMask_t;
                                                                           | ADI_ADRV904X_TC_TX_SERDES_MASK \
                                                                           | ADI_ADRV904X_TC_RX_ADC_MASK \
                                                                           | ADI_ADRV904X_TC_TX_LB_ADC_MASK \
-                                                                          | ADI_ADRV904X_TC_ORX_ADC_MASK))
+                                                                          | ADI_ADRV904X_TC_ORX_ADC_MASK \
+                                                                          | ADI_ADRV904X_TC_RXSPUR_MASK))
 
 /**
  * \brief Data structure to hold tracking calibration enable masks
@@ -229,7 +231,7 @@ ADI_ADRV904X_PACKED(
 typedef struct adi_adrv904x_TrackingCalState
 {
     adi_adrv904x_TrackingCalibrationMask_t calError[ADI_ADRV904X_NUM_TRACKING_CAL_CHANNELS];
-    adi_adrv904x_TrackingCalStateFlag_t    calState[ADI_ADRV904X_NUM_TRACKING_CAL_CHANNELS][7];
+    adi_adrv904x_TrackingCalStateFlag_t    calState[ADI_ADRV904X_NUM_TRACKING_CAL_CHANNELS][8];
 } adi_adrv904x_TrackingCalState_t;)
 
 /**

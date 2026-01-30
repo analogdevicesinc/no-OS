@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2022 - 2022 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2022 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
  
 /**
@@ -10,13 +9,12 @@
  * 
  * \brief   Contains ADRV904X CPU ECC Scrub enable command data structures.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_CPU_ECC_SCRUB_CMD_H__
 #define __ADI_ADRV904X_CPU_ECC_SCRUB_CMD_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 #include "adi_adrv904x_cpu_error_codes_types.h"
 

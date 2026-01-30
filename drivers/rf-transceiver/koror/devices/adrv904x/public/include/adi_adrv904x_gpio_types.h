@@ -1,20 +1,19 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
  * \file adi_adrv904x_gpio_types.h
  * \brief Contains functions to allow control of the General Purpose IO functions on the ADRV904X device
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_GPIO_TYPES_H_
 #define _ADI_ADRV904X_GPIO_TYPES_H_
 
-#include <stdint.h>
+#include "adi_library_types.h"
 
 #define ADI_ADRV904X_GPIO_COUNT 24U
 #define ADI_ADRV904X_GPIO_ANALOG_COUNT 16U

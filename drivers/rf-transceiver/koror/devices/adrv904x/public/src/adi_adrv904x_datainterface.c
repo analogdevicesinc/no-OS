@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_datainterface.c
 * \brief Contains function implementation defined in adi_adrv904x_datainterface.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_datainterface.h"
@@ -910,7 +909,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DacSampleXbarSet(adi_adrv904x_Devi
 
 
         /* Only supported in bypass mode */
-    recoveryAction =  adi_adrv904x_CducModeGet(device, deframerSel, &cducMode);
+    recoveryAction =  adrv904x_CducModeGet(device, deframerSel, &cducMode);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting CDUC Mode for the selected deframer");
@@ -1083,115 +1082,22 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DacSampleXbarGet(adi_adrv904x_Devi
                                                                adi_adrv904x_DacSampleXbarCfg_t* const dacXbar)
 {
         adi_adrv904x_ErrAction_e     recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adrv904x_BfJrxLinkChanAddr_e deframerBaseAddr         = ADRV904X_BF_DIGITAL_CORE_JESD_JRX_LINK_0_;
-    uint8_t                      bfValue = 0U;
-    uint8_t                      dacIdx = 0U;
-
-
-    adrv904x_BfJesdCommonChanAddr_e commonBaseAddr = ADRV904X_BF_DIGITAL_CORE_JESD_JESD_COMMON;
-    adi_adrv904x_CducMode_e cducMode = ADI_ADRV904X_CDUC_MODE;
-    uint8_t                      dacValue = 0U;
-
+    
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dacXbar, cleanup);
 
+    recoveryAction = adrv904x_DacSampleXbarGet(device,
+                                               deframerSel,
+                                               dacXbar);
 
-        /* Only supported in bypass mode */
-    recoveryAction =  adi_adrv904x_CducModeGet(device, deframerSel, &cducMode);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    if(recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting CDUC Mode for the selected deframer");
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting sample crossbar value for the selected deframer");
         goto cleanup;
     }
-
-    if (cducMode != ADI_ADRV904X_CDUC_BYPASS_MODE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid CDUC Mode. It must be in CDUC Bypass mode.");
-        goto cleanup;
-    }
-
-    /* Get the base address of the selected deframer */
-    recoveryAction = adrv904x_DeframerBitfieldAddressGet(device, deframerSel, &deframerBaseAddr);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get base address for the selected deframer");
-        goto cleanup;
-    }
-
-    for (dacIdx = 0U; dacIdx < ADI_ADRV904X_NUM_DAC_SAMPLE_XBAR; dacIdx++)
-    {
-        if (deframerSel == ADI_ADRV904X_DEFRAMER_0)
-        {
-            /* Get this status of converters */
-            recoveryAction = adrv904x_JesdCommon_JrxCoreConvDisableLink0_BfGet(device,
-                                                                               NULL,
-                                                                               commonBaseAddr,
-                                                                               dacIdx,
-                                                                               &bfValue);
-            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-            {
-                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting converter status for the selected deframer");
-                goto cleanup;
-            }
-
-            if (bfValue == 1U) /* Converter is in disable */
-            {
-                dacXbar->txDacChan[dacIdx] = ADI_ADRV904X_DEFRAMER_OUT_INVALID;
-            }
-            else /* Converter is in enable */
-            {
-                /* Getting Sample Xbar value */
-                recoveryAction = adrv904x_JesdCommon_TxSampleSelLink0_BfGet(device,
-                                                                            NULL,
-                                                                            commonBaseAddr,
-                                                                            dacIdx,
-                                                                            &dacValue);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting sample crossbar value for the selected framer");
-                    goto cleanup;
-                }
-                dacXbar->txDacChan[dacIdx] = (adi_adrv904x_DacSampleXbarSel_e) dacValue;
-            }
-        }
-        else if (deframerSel == ADI_ADRV904X_DEFRAMER_1)
-        {
-            /* Get this status of converters */
-            recoveryAction = adrv904x_JesdCommon_JrxCoreConvDisableLink1_BfGet(device,
-                                                                               NULL,
-                                                                               commonBaseAddr,
-                                                                               dacIdx,
-                                                                               &bfValue);
-            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-            {
-                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting converter status for the selected deframer");
-                goto cleanup;
-            }
-
-            if (bfValue == 1U) /* Converter is in disable */
-            {
-                dacXbar->txDacChan[dacIdx] = ADI_ADRV904X_DEFRAMER_OUT_INVALID;
-            }
-            else /* Converter is in enable */
-            {
-                /* Getting Sample Xbar value */
-                recoveryAction = adrv904x_JesdCommon_TxSampleSelLink1_BfGet(device,
-                                                                            NULL,
-                                                                            commonBaseAddr,
-                                                                            dacIdx,
-                                                                            &dacValue);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting sample crossbar value for the selected deframer");
-                    goto cleanup;
-                }
-                dacXbar->txDacChan[dacIdx] = (adi_adrv904x_DacSampleXbarSel_e) dacValue;
-            }
-        }
-    }
-
+        
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
@@ -1203,7 +1109,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerCfgGet(adi_adrv904x_Device_t
 {
         adi_adrv904x_ErrAction_e     recoveryAction    = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     adrv904x_BfJtxLinkChanAddr_e framerBaseAddr    = ADRV904X_BF_DIGITAL_CORE_JESD_JTX_LINK_0_;
-    uint8_t                      dataByte          = 0U;
     uint8_t                      converter         = 0U;
     uint8_t                      enabledFramers    = 0U;
     uint8_t                      framerIdx         = 0U;
@@ -1397,39 +1302,21 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerCfgGet(adi_adrv904x_Device_t
     }
 
     /* Get the Sync In LVDS Mode Enable */
-    recoveryAction = adrv904x_Core_SyncInCmosSchmittTrigEnable_BfGet(device,
-                                                                     NULL,
-                                                                     (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                     &dataByte);
+	recoveryAction = adrv904x_Core_SyncInLvdsSelectCmosUnselect_BfGet(device,
+                                                                      NULL,
+                                                                      (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
+                                                                      &framerCfg->syncbInLvdsMode);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get the Sync In LVDS Mode Enable");
         goto cleanup;
     }
-    if (framerCfg->syncbInSelect == 0U)
-    {
-        framerCfg->syncbInLvdsMode = dataByte & 0x01;
-    }
-    else if (framerCfg->syncbInSelect == 1U)
-    {
-        framerCfg->syncbInLvdsMode = (dataByte >> 1U) & 0x01;
-    }
-    else if (framerCfg->syncbInSelect == 2U)
-    {
-        framerCfg->syncbInLvdsMode = (dataByte >> 2U) & 0x01;
-    }
-    else
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error syncbInSelect is invalid");
-        goto cleanup;
-    }
-
+	
     /* Get the Sync In LVDS Pn Invert */
     recoveryAction = adrv904x_Core_SyncInLvdsPnInvert_BfGet(device,
                                                             NULL,
                                                             (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                            &framerCfg->syncbInLvdsMode);
+                                                            &framerCfg->syncbInLvdsPnInvert);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get the Sync In LVDS Pn Invert");
@@ -1526,6 +1413,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerCfgGet(adi_adrv904x_Device_t
         case ADI_ADRV904X_FRAMER_2:
             framerIdx = 2;
             break;
+
+        default:
+			recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+			ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid framer selection");
+			goto cleanup;
     }
     framerCfg->iqRate_kHz = device->initExtract.jesdSetting.framerSetting[framerIdx].iqRate_kHz;
     framerCfg->laneRate_kHz = device->initExtract.jesdSetting.framerSetting[framerIdx].laneRate_kHz;
@@ -1539,11 +1431,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeframerCfgGet(adi_adrv904x_Device
                                                              adi_adrv904x_DeframerCfg_t* const   deframerCfg)
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adrv904x_BfJrxLinkChanAddr_e deframerBaseAddr                            = ADRV904X_BF_DIGITAL_CORE_JESD_JRX_LINK_0_;
-    uint8_t                      enabledDeframers                            = 0U;
-    uint8_t                      laneIdx                                     = 0U;
-    uint8_t                      deframerIdx                                 = 0U;
-    uint8_t                      tmpByte                                     = 0U;
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
@@ -1551,334 +1438,20 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeframerCfgGet(adi_adrv904x_Device
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, deframerCfg, cleanup);
     ADI_LIBRARY_MEMSET(deframerCfg, 0, sizeof(adi_adrv904x_DeframerCfg_t));
 
-    /* Get all deframers link state */
-    recoveryAction = adrv904x_JesdCommon_JrxLinkEn_BfGet(device,
-                                                         NULL,
-                                                         ADRV904X_BF_DIGITAL_CORE_JESD_JESD_COMMON,
-                                                         &enabledDeframers);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Get deframer link state failed");
-        goto cleanup;
-    }
-
-    /* Get the base address of the selected framer */
-    recoveryAction = adrv904x_DeframerBitfieldAddressGet(device, deframerSel, &deframerBaseAddr);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get base address for the selected framer");
-        goto cleanup;
-    }
-
-    /* Get the deframer link type */
-    recoveryAction = adrv904x_JrxLink_JrxLinkType_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &deframerCfg->enableJesd204C);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get link type for the selected deframer");
-        goto cleanup;
-    }
-
-    /* Bank ID for Jrx is not available, assign it to zero */
-    deframerCfg->bankId = 0;
-
-    /* Get the deframer device ID */
-    recoveryAction = adrv904x_JrxLink_JrxCoreDidCfg_BfGet(device,
-                                                          NULL,
-                                                          deframerBaseAddr,
-                                                          &deframerCfg->deviceId);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get device ID for the selected deframer");
-        goto cleanup;
-    }
-
-    /* Get the deframer lane ID */
-    for (laneIdx = 0U; laneIdx < ADI_ADRV904X_MAX_DESERIALIZER_LANES; laneIdx++)
-    {
-        recoveryAction = adrv904x_JrxLink_JrxCoreLidCfg_BfGet(device,
-                                                              NULL,
-                                                              deframerBaseAddr,
-                                                              laneIdx,
-                                                              &deframerCfg->laneId[laneIdx]);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lane ID for the selected deframer");
-            goto cleanup;
-        }
-    }
-
-    /* get M - Number of converters per device */
-    recoveryAction = adrv904x_JrxLink_JrxCoreMCfg_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &deframerCfg->jesd204M);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of converters per device");
-        goto cleanup;
-    }
-    ++deframerCfg->jesd204M;
-
-    /* get K - Number of frames in extended multiblocks */
-    recoveryAction = adrv904x_JrxLink_JrxCoreKCfg_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &tmpByte);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of frames in extended multiblocks");
-        goto cleanup;
-    }
-
-    deframerCfg->jesd204K = tmpByte + 1;
-
-    /* get Np - Total number of bits per sample */
-    recoveryAction = adrv904x_JrxLink_JrxCoreNpCfg_BfGet(device,
-                                                         NULL,
-                                                         deframerBaseAddr,
-                                                         &deframerCfg->jesd204Np);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get total number of bits per sample");
-        goto cleanup;
-    }
-    ++deframerCfg->jesd204Np;
-
-    /* get F - Number of octets per frame per lane*/
-    recoveryAction = adrv904x_JrxLink_JrxCoreFCfg_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &deframerCfg->jesd204F);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of octets per frame per lane");
-        goto cleanup;
-    }
-    ++deframerCfg->jesd204F;
-
-    /* get E - Number of multiblocks in extended multiblocks */
-    /* This parameter is only valid for Jesd204C */
-    deframerCfg->jesd204E = 0;
-    if (deframerCfg->enableJesd204C == 1)
-    {
-        recoveryAction = adrv904x_JrxLink_JrxCoreECfg_BfGet(device,
-                                                            NULL,
-                                                            deframerBaseAddr,
-                                                            &deframerCfg->jesd204E);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of multiblocks in extended multiblocks");
-            goto cleanup;
-        }
-    }
-
-    /* get descrambling enabled */
-    recoveryAction = adrv904x_JrxLink_JrxCoreDscrCfg_BfGet(device,
-                                                           NULL,
-                                                           deframerBaseAddr,
-                                                           &deframerCfg->decrambling);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get descrambling enabled");
-        goto cleanup;
-    }
-
-    /* Get the lane crossbar selection and physical lane crossbar */
-    recoveryAction = adrv904x_DeframerLaneEnableGet(device, deframerSel, deframerCfg);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lane crossbar selection and physical lane");
-        goto cleanup;
-    }
-
-    /* get global LMFC phase adjustment */
-    recoveryAction = adrv904x_JrxLink_JrxCorePhaseAdjust_BfGet(device,
-                                                               NULL,
-                                                               deframerBaseAddr,
-                                                               &deframerCfg->lmfcOffset);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get global LMFC phase adjustment");
-        goto cleanup;
-    }
-
-    /* get sync Out Cmos Drive strength for both SyncOut0  and SyncOut1 */
-    recoveryAction = adrv904x_Core_SyncOut0CmosTxDriveStrength_BfGet(device,
-                                                                     NULL,
-                                                                     (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                     &deframerCfg->syncbOut0CmosDriveStrength);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get syncbOut0CmosDriveStrength");
-        goto cleanup;
-    }
-
-    recoveryAction =adrv904x_Core_SyncOut1CmosTxDriveStrength_BfGet(device,
-                                                                    NULL,
-                                                                    (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                    &deframerCfg->syncbOut1CmosDriveStrength);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get syncbOut1CmosDriveStrength");
-        goto cleanup;
-    }
-
-    /* get sync out select */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSyncNSel_BfGet(device,
-                                                            NULL,
-                                                            deframerBaseAddr,
-                                                            &deframerCfg->syncbOutSelect);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sync out select");
-        goto cleanup;
-    }
-
-    /* Should be 0, 1, 2, or 3 */
-    if (deframerCfg->syncbOutSelect > 3U)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid syncbOutSelect value.");
-        goto cleanup;
-    }
-
-    /* Re-encode syncbOutSelect to 0: pin-0, 1: pin-1, 2: both pins, 3: no pin selected */
-    if (deframerCfg->syncbOutSelect == 0U)
-    {
-        deframerCfg->syncbOutSelect = 3U;
-    }
-    else
-    {
-        deframerCfg->syncbOutSelect -= 1U;
-    }
-
-    /* If any pin selected */
-    if (deframerCfg->syncbOutSelect != 3U)
-    {
-        /* get syncbOut Lvds mode */
-        recoveryAction = adrv904x_Core_SyncOutLvdsAndCmosEnable_BfGet(device,
-                                                                      NULL,
-                                                                      (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                      &deframerCfg->syncbOutLvdsMode);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get syncbOut Lvds mode");
-            goto cleanup;
-        }
-
-        /* get lvds pin invert */
-        recoveryAction = adrv904x_Core_SyncOutLvdsPnInvert_BfGet(device,
-                                                                 NULL,
-                                                                 (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                 &deframerCfg->syncbOutLvdsPnInvert);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lvds pin invert");
-            goto cleanup;
-        }
-
-        /* Case link-0 or both link-0 and link-1 selected */
-        if ((deframerCfg->syncbOutSelect == 0U) || (deframerCfg->syncbOutSelect == 2U))
-        {
-            deframerCfg->syncbOutLvdsMode = deframerCfg->syncbOutLvdsMode & 0x01U;
-            deframerCfg->syncbOutLvdsPnInvert = deframerCfg->syncbOutLvdsPnInvert & 0x01U;
-        }
-        else if (deframerCfg->syncbOutSelect == 1U) /* Case only link-1 selected */
-        {
-            deframerCfg->syncbOutLvdsMode = (deframerCfg->syncbOutLvdsMode >> 1U) & 0x01U;
-            deframerCfg->syncbOutLvdsPnInvert = (deframerCfg->syncbOutLvdsPnInvert >> 1U) & 0x01U;
-        }
-        else
-        {
-            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid 'syncbOutSelect', should be 0-2");
-            goto cleanup;
-        }
-    }
-
-    /* get Deframer output to DAC mapping */
-    recoveryAction = adi_adrv904x_DacSampleXbarGet(device,
-                                                   deframerSel,
-                                                   &deframerCfg->dacCrossbar);
+    recoveryAction = adrv904x_DeframerCfgGet(device,
+                                             deframerSel,
+                                             ADI_ADRV904X_TXOFF, /* not used */
+                                             deframerCfg,
+                                             true,
+                                             false /* No param scaling */
+                                             );
 
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get dacCrossbar");
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Get deframer config failed");
         goto cleanup;
     }
-
-    /* get sysref on relink enable */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefForRelink_BfGet(device,
-                                                                   NULL,
-                                                                   deframerBaseAddr,
-                                                                   &deframerCfg->newSysrefOnRelink);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysref on relink enable");
-        goto cleanup;
-    }
-
-    /* get sysrefForStartup */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefForStartup_BfGet(device,
-                                                                    NULL,
-                                                                    deframerBaseAddr,
-                                                                    &deframerCfg->sysrefForStartup);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefForStartup");
-        goto cleanup;
-    }
-
-    /* get sysrefNhot Enable*/
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefNShotEnable_BfGet(device,
-                                                                     NULL,
-                                                                     deframerBaseAddr,
-                                                                     &deframerCfg->sysrefNShotEnable);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefNhot enable");
-        goto cleanup;
-    }
-
-    /* get sysrefNshotCount */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefNShotCount_BfGet(device,
-                                                                    NULL,
-                                                                    deframerBaseAddr,
-                                                                    &deframerCfg->sysrefNShotCount);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefNshotCount");
-        goto cleanup;
-    }
-
-    /* get sysrefIgnoreWhenLinked*/
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefIgnoreWhenLinked_BfGet(device,
-                                                                          NULL,
-                                                                          deframerBaseAddr,
-                                                                          &deframerCfg->sysrefIgnoreWhenLinked);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefIgnoreWhenLinked");
-        goto cleanup;
-    }
-
-    /* Get the Deframer IQ Rate and Lane Rate */
-    switch ((int32_t) deframerSel)
-    {
-        case ADI_ADRV904X_DEFRAMER_0:
-            deframerIdx = 0;
-            break;
-
-        case ADI_ADRV904X_DEFRAMER_1:
-            deframerIdx = 1;
-            break;
-    }
-    deframerCfg->iqRate_kHz = device->initExtract.jesdSetting.deframerSetting[deframerIdx].iqRate_kHz;
-    deframerCfg->laneRate_kHz = device->initExtract.jesdSetting.deframerSetting[deframerIdx].laneRate_kHz;
-
+    
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
@@ -1891,7 +1464,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerCfgGet_v2(adi_adrv904x_Devic
 {
         adi_adrv904x_ErrAction_e     recoveryAction    = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     adrv904x_BfJtxLinkChanAddr_e framerBaseAddr    = ADRV904X_BF_DIGITAL_CORE_JESD_JTX_LINK_0_;
-    uint8_t                      dataByte          = 0U;
     uint8_t                      enabledFramers    = 0U;
     uint8_t                      framerIdx         = 0U;
     uint8_t                      tmpByte           = 0U;
@@ -2086,39 +1658,21 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerCfgGet_v2(adi_adrv904x_Devic
     }
 
     /* Get the Sync In LVDS Mode Enable */
-    recoveryAction = adrv904x_Core_SyncInCmosSchmittTrigEnable_BfGet(device,
-                                                                     NULL,
-                                                                     (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                     &dataByte);
+	recoveryAction = adrv904x_Core_SyncInLvdsSelectCmosUnselect_BfGet(device,
+                                                                      NULL,
+                                                                      (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
+                                                                      &framerCfg->syncbInLvdsMode);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get the Sync In LVDS Mode Enable");
         goto cleanup;
     }
-    if (framerCfg->syncbInSelect == 0U)
-    {
-        framerCfg->syncbInLvdsMode = dataByte & 0x01;
-    }
-    else if (framerCfg->syncbInSelect == 1U)
-    {
-        framerCfg->syncbInLvdsMode = (dataByte >> 1U) & 0x01;
-    }
-    else if (framerCfg->syncbInSelect == 2U)
-    {
-        framerCfg->syncbInLvdsMode = (dataByte >> 2U) & 0x01;
-    }
-    else
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error syncbInSelect is invalid");
-        goto cleanup;
-    }
-
+	
     /* Get the Sync In LVDS Pn Invert */
     recoveryAction = adrv904x_Core_SyncInLvdsPnInvert_BfGet(device,
                                                             NULL,
                                                             (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                            &framerCfg->syncbInLvdsMode);
+                                                            &framerCfg->syncbInLvdsPnInvert);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get the Sync In LVDS Pn Invert");
@@ -2217,6 +1771,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerCfgGet_v2(adi_adrv904x_Devic
         case ADI_ADRV904X_FRAMER_2:
             framerIdx = 2;
             break;
+
+        default:
+			recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+			ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid framer selection");
+			goto cleanup;
     }
     framerCfg->iqRate_kHz = device->initExtract.jesdSetting.framerSetting[framerIdx].iqRate_kHz;
     framerCfg->laneRate_kHz = device->initExtract.jesdSetting.framerSetting[framerIdx].laneRate_kHz;
@@ -2232,350 +1791,66 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeframerCfgGet_v2(adi_adrv904x_Dev
                                                                 adi_adrv904x_DeframerCfg_t* const   deframerCfg)
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adrv904x_BfJrxLinkChanAddr_e deframerBaseAddr                            = ADRV904X_BF_DIGITAL_CORE_JESD_JRX_LINK_0_;
-    uint8_t                      enabledDeframers                            = 0U;
-    uint8_t                      laneIdx                                     = 0U;
-    uint8_t                      deframerIdx                                 = 0U;
-    uint8_t                      tmpByte                                     = 0U;
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, deframerCfg, cleanup);
     ADI_LIBRARY_MEMSET(deframerCfg, 0, sizeof(adi_adrv904x_DeframerCfg_t));
-
-    /* Get all deframers link state */
-    recoveryAction = adrv904x_JesdCommon_JrxLinkEn_BfGet(device,
-                                                         NULL,
-                                                         ADRV904X_BF_DIGITAL_CORE_JESD_JESD_COMMON,
-                                                         &enabledDeframers);
+    
+    recoveryAction = adrv904x_DeframerCfgGet(device,
+                                             deframerSel,
+                                             chanSel,
+                                             deframerCfg,
+                                             false, /* CDUC */
+                                             false /* no param scaling */
+                                             );
+    
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Get deframer link state failed");
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Get deframer config (CDUC mode) failed");
         goto cleanup;
     }
-
-    /* Get the base address of the selected framer */
-    recoveryAction = adrv904x_DeframerBitfieldAddressGet(device, deframerSel, &deframerBaseAddr);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get base address for the selected framer");
-        goto cleanup;
-    }
-
-    /* Get the deframer link type */
-    recoveryAction = adrv904x_JrxLink_JrxLinkType_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &deframerCfg->enableJesd204C);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get link type for the selected deframer");
-        goto cleanup;
-    }
-
-    /* Bank ID for Jrx is not available, assign it to zero */
-    deframerCfg->bankId = 0;
-
-    /* Get the deframer device ID */
-    recoveryAction = adrv904x_JrxLink_JrxCoreDidCfg_BfGet(device,
-                                                          NULL,
-                                                          deframerBaseAddr,
-                                                          &deframerCfg->deviceId);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get device ID for the selected deframer");
-        goto cleanup;
-    }
-
-    /* Get the deframer lane ID */
-    for (laneIdx = 0U; laneIdx < ADI_ADRV904X_MAX_DESERIALIZER_LANES; laneIdx++)
-    {
-        recoveryAction = adrv904x_JrxLink_JrxCoreLidCfg_BfGet(device,
-                                                              NULL,
-                                                              deframerBaseAddr,
-                                                              laneIdx,
-                                                              &deframerCfg->laneId[laneIdx]);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lane ID for the selected deframer");
-            goto cleanup;
-        }
-    }
-
-    /* get M - Number of converters per device */
-    recoveryAction = adrv904x_JrxLink_JrxCoreMCfg_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &deframerCfg->jesd204M);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of converters per device");
-        goto cleanup;
-    }
-    ++deframerCfg->jesd204M;
-
-    /* get K - Number of frames in extended multiblocks */
-    recoveryAction = adrv904x_JrxLink_JrxCoreKCfg_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &tmpByte);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of frames in extended multiblocks");
-        goto cleanup;
-    }
-
-    deframerCfg->jesd204K = tmpByte + 1;
-
-    /* get Np - Total number of bits per sample */
-    recoveryAction = adrv904x_JrxLink_JrxCoreNpCfg_BfGet(device,
-                                                         NULL,
-                                                         deframerBaseAddr,
-                                                         &deframerCfg->jesd204Np);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get total number of bits per sample");
-        goto cleanup;
-    }
-    ++deframerCfg->jesd204Np;
-
-    /* get F - Number of octets per frame per lane*/
-    recoveryAction = adrv904x_JrxLink_JrxCoreFCfg_BfGet(device,
-                                                        NULL,
-                                                        deframerBaseAddr,
-                                                        &deframerCfg->jesd204F);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of octets per frame per lane");
-        goto cleanup;
-    }
-    ++deframerCfg->jesd204F;
-
-    /* get E - Number of multiblocks in extended multiblocks */
-    /* This parameter is only valid for Jesd204C */
-    deframerCfg->jesd204E = 0;
-    if (deframerCfg->enableJesd204C == 1)
-    {
-        recoveryAction = adrv904x_JrxLink_JrxCoreECfg_BfGet(device,
-                                                            NULL,
-                                                            deframerBaseAddr,
-                                                            &deframerCfg->jesd204E);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get number of multiblocks in extended multiblocks");
-            goto cleanup;
-        }
-    }
-
-    /* get descrambling enabled */
-    recoveryAction = adrv904x_JrxLink_JrxCoreDscrCfg_BfGet(device,
-                                                           NULL,
-                                                           deframerBaseAddr,
-                                                           &deframerCfg->decrambling);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get descrambling enabled");
-        goto cleanup;
-    }
-
-    /* Get the lane crossbar selection and physical lane crossbar */
-    recoveryAction = adrv904x_DeframerLaneEnableGet(device, deframerSel, deframerCfg);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lane crossbar selection and physical lane");
-        goto cleanup;
-    }
-
-    /* get global LMFC phase adjustment */
-    recoveryAction = adrv904x_JrxLink_JrxCorePhaseAdjust_BfGet(device,
-                                                               NULL,
-                                                               deframerBaseAddr,
-                                                               &deframerCfg->lmfcOffset);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get global LMFC phase adjustment");
-        goto cleanup;
-    }
-
-    /* get sync Out Cmos Drive strength for both SyncOut0  and SyncOut1 */
-    recoveryAction = adrv904x_Core_SyncOut0CmosTxDriveStrength_BfGet(device,
-                                                                     NULL,
-                                                                     (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                     &deframerCfg->syncbOut0CmosDriveStrength);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get syncbOut0CmosDriveStrength");
-        goto cleanup;
-    }
-
-    recoveryAction =adrv904x_Core_SyncOut1CmosTxDriveStrength_BfGet(device,
-                                                                    NULL,
-                                                                    (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                    &deframerCfg->syncbOut1CmosDriveStrength);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get syncbOut1CmosDriveStrength");
-        goto cleanup;
-    }
-
-    /* get sync out select */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSyncNSel_BfGet(device,
-                                                            NULL,
-                                                            deframerBaseAddr,
-                                                            &deframerCfg->syncbOutSelect);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sync out select");
-        goto cleanup;
-    }
-
-    /* Should be 0, 1, 2, or 3 */
-    if (deframerCfg->syncbOutSelect > 3U)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid syncbOutSelect value.");
-        goto cleanup;
-    }
-
-    /* Re-encode syncbOutSelect to 0: pin-0, 1: pin-1, 2: both pins, 3: no pin selected */
-    if (deframerCfg->syncbOutSelect == 0U)
-    {
-        deframerCfg->syncbOutSelect = 3U;
-    }
-    else
-    {
-        deframerCfg->syncbOutSelect -= 1U;
-    }
-
-    /* If any pin selected */
-    if (deframerCfg->syncbOutSelect != 3U)
-    {
-        /* get syncbOut Lvds mode */
-        recoveryAction = adrv904x_Core_SyncOutLvdsAndCmosEnable_BfGet(device,
-                                                                      NULL,
-                                                                      (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                      &deframerCfg->syncbOutLvdsMode);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get syncbOut Lvds mode");
-            goto cleanup;
-        }
-
-        /* get lvds pin invert */
-        recoveryAction = adrv904x_Core_SyncOutLvdsPnInvert_BfGet(device,
-                                                                 NULL,
-                                                                 (adrv904x_BfCoreChanAddr_e) ADRV904X_BF_CORE_ADDR,
-                                                                 &deframerCfg->syncbOutLvdsPnInvert);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get lvds pin invert");
-            goto cleanup;
-        }
-
-        /* Case link-0 or both link-0 and link-1 selected */
-        if ((deframerCfg->syncbOutSelect == 0U) || (deframerCfg->syncbOutSelect == 2U))
-        {
-            deframerCfg->syncbOutLvdsMode = deframerCfg->syncbOutLvdsMode & 0x01U;
-            deframerCfg->syncbOutLvdsPnInvert = deframerCfg->syncbOutLvdsPnInvert & 0x01U;
-        }
-        else if (deframerCfg->syncbOutSelect == 1U) /* Case only link-1 selected */
-        {
-            deframerCfg->syncbOutLvdsMode = (deframerCfg->syncbOutLvdsMode >> 1U) & 0x01U;
-            deframerCfg->syncbOutLvdsPnInvert = (deframerCfg->syncbOutLvdsPnInvert >> 1U) & 0x01U;
-        }
-        else
-        {
-            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid 'syncbOutSelect', should be 0-2");
-            goto cleanup;
-        }
-    }
-
-    /* get Deframer output to DAC mapping */
-    recoveryAction = adi_adrv904x_CducSampleXBarGet(device,
-                                                   deframerSel,
-                                                   chanSel,
-                                                   &deframerCfg->cducCrossbar);
-
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get dacCrossbar");
-        goto cleanup;
-    }
-
-    /* get sysref on relink enable */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefForRelink_BfGet(device,
-                                                                   NULL,
-                                                                   deframerBaseAddr,
-                                                                   &deframerCfg->newSysrefOnRelink);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysref on relink enable");
-        goto cleanup;
-    }
-
-    /* get sysrefForStartup */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefForStartup_BfGet(device,
-                                                                    NULL,
-                                                                    deframerBaseAddr,
-                                                                    &deframerCfg->sysrefForStartup);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefForStartup");
-        goto cleanup;
-    }
-
-    /* get sysrefNhot Enable*/
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefNShotEnable_BfGet(device,
-                                                                     NULL,
-                                                                     deframerBaseAddr,
-                                                                     &deframerCfg->sysrefNShotEnable);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefNhot enable");
-        goto cleanup;
-    }
-
-    /* get sysrefNshotCount */
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefNShotCount_BfGet(device,
-                                                                    NULL,
-                                                                    deframerBaseAddr,
-                                                                    &deframerCfg->sysrefNShotCount);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefNshotCount");
-        goto cleanup;
-    }
-
-    /* get sysrefIgnoreWhenLinked*/
-    recoveryAction = adrv904x_JrxLink_JrxCoreSysrefIgnoreWhenLinked_BfGet(device,
-                                                                          NULL,
-                                                                          deframerBaseAddr,
-                                                                          &deframerCfg->sysrefIgnoreWhenLinked);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while attempting to get sysrefIgnoreWhenLinked");
-        goto cleanup;
-    }
-
-    /* Get the Deframer IQ Rate and Lane Rate */
-    switch ((int32_t) deframerSel)
-    {
-        case ADI_ADRV904X_DEFRAMER_0:
-            deframerIdx = 0;
-            break;
-
-        case ADI_ADRV904X_DEFRAMER_1:
-            deframerIdx = 1;
-            break;
-    }
-    deframerCfg->iqRate_kHz = device->initExtract.jesdSetting.deframerSetting[deframerIdx].iqRate_kHz;
-    deframerCfg->laneRate_kHz = device->initExtract.jesdSetting.deframerSetting[deframerIdx].laneRate_kHz;
-
+    
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeframerCfgGetScaled(adi_adrv904x_Device_t* const        device,
+                                                                   const adi_adrv904x_DeframerSel_e    deframerSel,
+                                                                   const adi_adrv904x_TxChannels_e     chanSel,
+                                                                   adi_adrv904x_DeframerCfg_t* const   deframerCfg,
+                                                                   const uint8_t                       bBypass)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    /* Check device pointer is not null */
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, deframerCfg, cleanup);
+    ADI_LIBRARY_MEMSET(deframerCfg, 0, sizeof(adi_adrv904x_DeframerCfg_t));
+    
+
+    recoveryAction = adrv904x_DeframerCfgGet(device,
+        deframerSel,
+        chanSel,
+        deframerCfg,
+        (bBypass == ADI_TRUE),
+        true /* param scaling */
+        );
+    
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Get scaled deframer config failed");
+        goto cleanup;
+    }
+    
+cleanup :
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+
+
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_FramerLinkStateSet(adi_adrv904x_Device_t*  device,
                                                                  const uint8_t  framerSelMask,
@@ -3501,7 +2776,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerializerReset(adi_adrv904x_Devic
             }
         } /* End for loop to set clock offset on powered lanes */
 
-        adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
         adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
 
         adrv904x_CpuCmd_SerReset_t serReset;
@@ -8051,7 +7325,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RunEyeSweep_v2(adi_adrv904x_Device
     runEyeSweepCmdRsp = (adi_adrv904x_CpuCmd_RunEyeSweepResp_t*)((uint8_t*)ctrlDataGet + ADRV904X_SERDES_CTRL_FSM_CMD_RSP_HDR_SIZE_BYTES);
 
     /* Poll Serdes Calibration Status for completion of the Eye Sweep */
-    for (timeElapsedUs = 0U; timeElapsedUs < ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_US; timeElapsedUs += ADI_ADRV904X_RUNEYESWEEP_INTERVAL_US)
+    for (timeElapsedUs = 0U; timeElapsedUs < ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_ONE_HOUR_IN_US; timeElapsedUs += ADI_ADRV904X_RUNEYESWEEP_INTERVAL_US)
     {
         /* Get Serdes Calibration Status */
         recoveryAction = adi_adrv904x_CalSpecificStatusGet( device,
@@ -8081,7 +7355,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RunEyeSweep_v2(adi_adrv904x_Device
     }
 
     /* Check for timeout */
-    if (timeElapsedUs >= ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_US)
+    if (timeElapsedUs >= ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_ONE_HOUR_IN_US)
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_RESET_FEATURE;
         ADI_ERROR_REPORT(&device->common,
@@ -8636,7 +7910,7 @@ cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-
+#ifndef __KERNEL__
 /* Open 'filePath' for logging serdes cal status.
  * 
  * Create the file if required. Ensure the header information is written to start of the file.
@@ -8689,6 +7963,7 @@ static FILE* adrv904x_openSerdesCalStatusLogFile(const adi_adrv904x_GenericStrBu
     /* Success */
     return filePtr;    
 }
+#endif  /* __KERNEL__ */
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesInitCalStatusGet(adi_adrv904x_Device_t* const              device,
                                                                      const adi_adrv904x_GenericStrBuf_t* const filePath,
@@ -8730,7 +8005,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesInitCalStatusGet(adi_adrv904
 
     /* Prepare the command payload */
     cpuCmd.lane = laneNumber;
-    CTOH_STRUCT(adrv904x_CpuCmd_SerdesCalStatusGet, cpuCmd);
+    CTOH_STRUCT(cpuCmd, adrv904x_CpuCmd_SerdesCalStatusGet);
 
     /* Send command and receive response */
     recoveryAction = adrv904x_CpuCmdSend(device,
@@ -8769,10 +8044,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesInitCalStatusGet(adi_adrv904
         /* No log file has been supplied; We're done. */
         goto cleanup;
     }
-    
+#ifndef __KERNEL__
     /* Log file supplied; Write data to it. */
     filePtr = adrv904x_openSerdesCalStatusLogFile(filePath);
-
+#endif
     if (filePtr == NULL)
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
@@ -8865,7 +8140,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesTrackingCalStatusGet(adi_adr
 
     /* Prepare the command payload */
     cpuCmd.lane = laneNumber;
-    CTOH_STRUCT(adrv904x_CpuCmd_SerdesCalStatusGet, cpuCmd);
+    CTOH_STRUCT(cpuCmd, adrv904x_CpuCmd_SerdesCalStatusGet);
 
     /* Send command and receive response */
     recoveryAction = adrv904x_CpuCmdSend(device,
@@ -8904,10 +8179,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesTrackingCalStatusGet(adi_adr
         /* No log file has been supplied; We're done. */
         goto cleanup;
     }
-    
+#ifndef __KERNEL__
     /* Log file supplied; Write data to it. */
     filePtr = adrv904x_openSerdesCalStatusLogFile(filePath);
-    
+#endif
     if (filePtr == NULL)
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
@@ -8945,7 +8220,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesTrackingCalStatusGet(adi_adr
         ADI_LIBRARY_FPRINTF(filePtr, "%d ", calStatus->b[i]);
     }
     ADI_LIBRARY_FPRINTF(filePtr, "],[");
-
+#ifndef ADI_LIBRARY_RM_FLOATS
     for (i = 0U; i < NELEMS(calStatus->ps); i++)
     {
         ADI_LIBRARY_FPRINTF(filePtr, "%f ", calStatus->ps[i]);
@@ -8957,6 +8232,19 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SerdesTrackingCalStatusGet(adi_adr
         ADI_LIBRARY_FPRINTF(filePtr, "%f ", calStatus->yVector[i]);
     }    
     ADI_LIBRARY_FPRINTF(filePtr, "]\n");
+#else
+    for (i = 0U; i < NELEMS(calStatus->ps_float); i++)
+    {
+        ADI_LIBRARY_FPRINTF(filePtr, "0x%x ", calStatus->ps_float[i]);
+    }
+    ADI_LIBRARY_FPRINTF(filePtr, "],[");
+
+    for (i = 0U; i < NELEMS(calStatus->yVector_float); i++)
+    {
+        ADI_LIBRARY_FPRINTF(filePtr, "0x%x ", calStatus->yVector_float[i]);
+    }    
+    ADI_LIBRARY_FPRINTF(filePtr, "]\n");
+#endif
     ADI_LIBRARY_FFLUSH(filePtr);
 
     if (ADI_LIBRARY_FERROR(filePtr) != 0)
@@ -9150,40 +8438,21 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CducModeGet(adi_adrv904x_Device_t*
                                                           adi_adrv904x_CducMode_e * const    cducMode)
 {
         adi_adrv904x_ErrAction_e     recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adrv904x_BfJesdCommonChanAddr_e commonBaseAddr = ADRV904X_BF_DIGITAL_CORE_JESD_JESD_COMMON;
-    uint8_t regValue = 0U;
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cducMode, cleanup);
 
-    /* Check deframer selection */
-    if ((deframerSel & ~ADI_ADRV904X_ALL_DEFRAMER) != 0)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid deframer selection");
-        goto cleanup;
-    }
-
     /* Get framer CDUC mode for all deframers */
-    recoveryAction = adrv904x_JesdCommon_CducBypassMode_BfGet(device,
-                                                              NULL,
-                                                              commonBaseAddr,
-                                                              &regValue);
+    recoveryAction = adrv904x_CducModeGet(device,
+                                          deframerSel,
+                                          cducMode);
+        
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting CDUC mode for the selected deframer");
         goto cleanup;
-    }
-
-    if ((regValue & deframerSel) != 0)
-    {
-        *cducMode = ADI_ADRV904X_CDUC_BYPASS_MODE;
-    }
-    else
-    {
-        *cducMode = ADI_ADRV904X_CDUC_MODE;
     }
 
 cleanup :
@@ -9265,6 +8534,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcSampleXBarSet(adi_adrv904x_Dev
             case ADI_ADRV904X_RX7:
                 CddcSampleXBarBfSet = adrv904x_JesdCommon_Rx7ChSampleSelLink0_BfSet;
                 break;
+            default:
+				recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+				ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid RX channel selection for framer 0");
+				goto cleanup;
         }
     }
     else if (framerSel == ADI_ADRV904X_FRAMER_1)
@@ -9299,6 +8572,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcSampleXBarSet(adi_adrv904x_Dev
             case ADI_ADRV904X_RX7:
                 CddcSampleXBarBfSet = adrv904x_JesdCommon_Rx7ChSampleSelLink1_BfSet;
                 break;
+            default:
+				recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid RX channel selection for framer 1");
+                goto cleanup;
         }
     }
     else
@@ -9449,6 +8726,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcSampleXBarGet(adi_adrv904x_Dev
             case ADI_ADRV904X_RX7:
                 CddcSampleXBarBfGet = adrv904x_JesdCommon_Rx7ChSampleSelLink0_BfGet;
                 break;
+            default:
+				recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+				ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid RX channel selection for framer 0");
+				goto cleanup;
         }
     }
     else if (framerSel == ADI_ADRV904X_FRAMER_1)
@@ -9482,6 +8763,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CddcSampleXBarGet(adi_adrv904x_Dev
             case ADI_ADRV904X_RX7:
                 CddcSampleXBarBfGet = adrv904x_JesdCommon_Rx7ChSampleSelLink1_BfGet;
                 break;
+            default:
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid RX channel selection for framer 1");
+                goto cleanup;
         }
     }
     else
@@ -9609,6 +8894,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CducSampleXBarSet(adi_adrv904x_Dev
             case ADI_ADRV904X_TX7:
                 CducSampleXBarBfSet = adrv904x_JesdCommon_Tx7ChSampleSelLink0_BfSet;
                 break;
+            default:
+				recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+				ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid TX channel selection for deframer 0");
+				goto cleanup;
         }
     }
     else if (deframerSel == ADI_ADRV904X_DEFRAMER_1)
@@ -9643,6 +8932,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CducSampleXBarSet(adi_adrv904x_Dev
             case ADI_ADRV904X_TX7:
                 CducSampleXBarBfSet = adrv904x_JesdCommon_Tx7ChSampleSelLink1_BfSet;
                 break;
+            default:
+				recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+				ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid TX channel selection for deframer 1");
+				goto cleanup;
         }
     }
     else
@@ -9731,148 +9024,16 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CducSampleXBarGet(adi_adrv904x_Dev
                                                                 adi_adrv904x_CducSampleXbarCfg_t * const cducSampleXbarCfg)
 {
         adi_adrv904x_ErrAction_e     recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adrv904x_BfJesdCommonChanAddr_e commonBaseAddr = ADRV904X_BF_DIGITAL_CORE_JESD_JESD_COMMON;
-    uint32_t cducXbarLimit = 0U;
-    uint32_t index = 0U;
-    uint8_t  regValue = 0U;
-    adi_adrv904x_ErrAction_e(*CducSampleXBarBfGet)(adi_adrv904x_Device_t*,
-                                                   adi_adrv904x_SpiCache_t* const,
-                                                   const adrv904x_BfJesdCommonChanAddr_e,
-                                                   uint8_t,
-                                                   uint8_t* const) = NULL;
-    adi_adrv904x_ErrAction_e(*CducSampleXBarConverterBfGet)(adi_adrv904x_Device_t* const,
-                                                            adi_adrv904x_SpiCache_t* const,
-                                                            const adrv904x_BfJesdCommonChanAddr_e,
-                                                            uint8_t,
-                                                            uint8_t* const) = NULL;
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cducSampleXbarCfg, cleanup);
-
-    /* Verify only one valid TX channel is selected */
-    if ((txChanSel == 0)                         ||        /* No TXchannel selected */
-        ((txChanSel & ~ADI_ADRV904X_TXALL) != 0) ||        /* non TX bits is set */
-        ((txChanSel & (txChanSel - 1)) != 0))              /* more than 1 bit is set */
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid TX channel selection");
-        goto cleanup;
-    }
-
-    /* Check deframer selection and assign values */
-    if (deframerSel == ADI_ADRV904X_DEFRAMER_0)
-    {
-        cducXbarLimit = ADI_ADRV904X_MAX_DFRM_CARRIER_XBAR_IDX;
-        CducSampleXBarConverterBfGet = adrv904x_JesdCommon_JrxCoreConvDisableLink0_BfGet;
-
-        switch ((uint32_t) txChanSel)
-        {
-            case ADI_ADRV904X_TX0:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx0ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX1:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx1ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX2:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx2ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX3:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx3ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX4:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx4ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX5:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx5ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX6:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx6ChSampleSelLink0_BfGet;
-                break;
-            case ADI_ADRV904X_TX7:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx7ChSampleSelLink0_BfGet;
-                break;
-        }
-    }
-    else if (deframerSel == ADI_ADRV904X_DEFRAMER_1)
-    {
-        cducXbarLimit = ADI_ADRV904X_MAX_DFRM_CARRIER_XBAR_IDX / 2U; /* deframer 1 has half of deframer 0 */
-        CducSampleXBarConverterBfGet = adrv904x_JesdCommon_JrxCoreConvDisableLink1_BfGet;
-
-        switch ((int32_t) txChanSel)
-        {
-            case ADI_ADRV904X_TX0:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx0ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX1:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx1ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX2:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx2ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX3:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx3ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX4:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx4ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX5:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx5ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX6:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx6ChSampleSelLink1_BfGet;
-                break;
-            case ADI_ADRV904X_TX7:
-                CducSampleXBarBfGet = adrv904x_JesdCommon_Tx7ChSampleSelLink1_BfGet;
-                break;
-        }
-    }
-    else
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Invalid deframer selection");
-        goto cleanup;
-    }
-
-    /* Getting CDUC Sample XBar for all entries */
-    for (index = 0U; index < cducXbarLimit; index++)
-    {
-        /* Get the CDUC Sample XBar Converter status first */
-        recoveryAction = CducSampleXBarConverterBfGet(device,
-                                                      NULL,
-                                                      commonBaseAddr,
-                                                      index,
-                                                      &regValue);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting CDUC Sample XBar Converter index.");
-            goto cleanup;
-        }
-
-        if (regValue == ADI_ADRV904X_XBAR_CONTROL_INDEX_DISABLED)
-        {
-            /* The CDUC Sample XBar Converter status is disabled so assign disable value to the index. */
-            cducSampleXbarCfg->cducSampleXbar[index] = ADI_ADRV904X_XBAR_ENTRY_DISABLED;
-        }
-        else
-        {
-            /* The CDUC Sample XBar Converter status is enabled so read value from register */
-            recoveryAction = CducSampleXBarBfGet(device,
-                                                 NULL,
-                                                 commonBaseAddr,
-                                                 index,
-                                                 &regValue);
-
-            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-            {
-                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while getting CDUC Sample XBar selected deframer and Tx channel.");
-                goto cleanup;
-            }
-
-            cducSampleXbarCfg->cducSampleXbar[index] = regValue;
-        }
-    }
+    
+    recoveryAction = adrv904x_CducSampleXBarGet(device,
+                               deframerSel,
+                               txChanSel,
+                               cducSampleXbarCfg);
 
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);

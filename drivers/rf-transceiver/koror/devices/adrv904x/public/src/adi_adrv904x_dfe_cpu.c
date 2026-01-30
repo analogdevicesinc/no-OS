@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains CPU features related function implementation defined in
 * adi_adrv904x_dfe_cpu.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 
@@ -1154,7 +1153,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeAppConfigSet(adi_adrv904x_Devic
     ADI_LIBRARY_MEMSET(&setConfigResp, 0, sizeof(adrv904x_DfeAppFrameworkCmdAppSetConfigResp_t));
 
     setConfig         = (adrv904x_DfeAppFrameworkCmdAppSetConfig_t*)&cmdBuf;
-    setConfig->objId  = ADRV904X_HTOCL(configID);
+    setConfig->objId  = ADRV904X_HTOCL((uint32_t)configID);
     setConfig->offset = ADRV904X_HTOCL(offset);
     setConfig->length = ADRV904X_HTOCL(size);
     ADI_LIBRARY_MEMCPY(&cmdBuf[sizeof(adrv904x_DfeAppFrameworkCmdAppSetConfig_t)], buffer, size);
@@ -1356,10 +1355,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeAppControlCmdExec(adi_adrv904x_
 {
 
         adi_adrv904x_ErrAction_e                            recoveryAction                                  = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    uint8_t                                             txBuf[SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE];
-    uint8_t                                             rxBuf[SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, txBuf, SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE);
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, rxBuf, SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE);
     adrv904x_DfeAppFrameworkCmdAppSetCtrl_t*            setInfo                                         = NULL;
-    adrv904x_DfeAppFrameworkCmdAppSetCtrlResp_t* const  cmdRsp                                          = (adrv904x_DfeAppFrameworkCmdAppSetCtrlResp_t*)&rxBuf;
+    adrv904x_DfeAppFrameworkCmdAppSetCtrlResp_t* const  cmdRsp                                          = (adrv904x_DfeAppFrameworkCmdAppSetCtrlResp_t*)rxBuf;
     adrv904x_DfeSvcCmdStatus_t                          cmdStatus                                       = ADRV904X_DFE_SVC_CMD_STATUS_GENERIC;
     adi_adrv904x_DfeAppErrCode_e                        cpuErrorCode                                    = ADI_ADRV904X_DFE_APP_ERR_CODE_NO_ERROR;
     uint32_t                                            fwChannel                                       = 0U;
@@ -1367,6 +1366,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeAppControlCmdExec(adi_adrv904x_
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txBuf, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, rxBuf, cleanup);
 
     if (lengthSet > 0U)
     {
@@ -1405,9 +1406,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeAppControlCmdExec(adi_adrv904x_
 
     fwChannel = adrv904x_DfeChannelToChannelId(channel);
 
-    ADI_LIBRARY_MEMSET(&txBuf[0U], 0, sizeof(txBuf));
-    ADI_LIBRARY_MEMSET(&rxBuf[0U], 0, sizeof(rxBuf));
-
     /* Prepare the command payload */
     setInfo     = (adrv904x_DfeAppFrameworkCmdAppSetCtrl_t*)((uint8_t*)txBuf);
     setInfo->objId = ADRV904X_HTOCL(objId);
@@ -1430,7 +1428,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeAppControlCmdExec(adi_adrv904x_
     recoveryAction = adrv904x_DfeAppCmdSend(device,
                                             ADRV904X_LINK_ID_0,
                                             ADRV904X_DFE_APP_FRAMEWORK_CMD_TRACKINGCAL_CTRL, 
-                                            (void*)&txBuf,
+                                            (void*)txBuf,
                                             (sizeof(adrv904x_DfeAppFrameworkCmdAppSetCtrl_t) + lengthSet),
                                             (void*)cmdRsp,
                                             (sizeof(adrv904x_DfeAppFrameworkCmdAppSetCtrlResp_t) + lengthGet),
@@ -1629,8 +1627,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCaptureSequencerConfigSet(adi_a
         &cmdStatus);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_RETURN(capSeqCfgCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction);
-        goto cleanup;
+        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_GOTO(capSeqCfgCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
     }
 
 cleanup:
@@ -1668,8 +1665,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCaptureSequencerConfigGet(adi_a
         &cmdStatus);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_RETURN(capSeqCfgCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction);
-        goto cleanup;
+        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_GOTO(capSeqCfgCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
     }
     
     capSeqCfg->skipCapturePeriodIfNoRequest = capSeqCfgCmdRsp->capSeqCfgGet.skipCapturePeriodIfNoRequest;
@@ -1740,6 +1736,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCalSpecificStatusGet(adi_adrv90
         goto cleanup;
     }
 
+    if ((length + sizeof(adrv904x_DfeAppFrameworkCmdAppGetCalStatusResp_t)) > sizeof(rxBuf))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length is too large.");
+        goto cleanup;
+    }
+
     /* Build the CPU command */
     calStatusCmd = (adrv904x_DfeAppFrameworkCmdAppGetCalStatus_t*)((uint8_t*)txBuf);
     calStatusCmd->type = ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKINGCAL_STATUS_SPECIFIC;
@@ -1759,8 +1762,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCalSpecificStatusGet(adi_adrv90
                                             &cmdStatus);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_RETURN(sendCalStatusCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction);
-        goto cleanup;
+        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_GOTO(sendCalStatusCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
     }
     ADI_LIBRARY_MEMCPY(calStatusGet,(uint8_t *)(rxBuf + sizeof(adrv904x_DfeAppFrameworkCmdAppGetCalStatusResp_t)), length);
 
@@ -1801,6 +1803,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCalExtendedStatusGet(adi_adrv90
         goto cleanup;
     }
 
+    if ((length + sizeof(adrv904x_DfeAppFrameworkCmdAppGetCalStatusResp_t)) > sizeof(rxBuf))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length is too large.");
+        goto cleanup;
+    }
+
     /* Build the CPU command */    
     calStatusCmd = (adrv904x_DfeAppFrameworkCmdAppGetCalStatus_t*)((uint8_t*)txBuf);
     calStatusCmd->type = ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKINGCAL_STATUS_EXTENDED;
@@ -1821,8 +1830,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeCalExtendedStatusGet(adi_adrv90
 
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_RETURN(sendCalStatusCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction);
-        goto cleanup;
+        ADI_ADRV904X_DFE_APP_CMD_RESP_CHECK_GOTO(sendCalStatusCmdRsp->cmdStatus, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
     }
     ADI_LIBRARY_MEMCPY(calStatusGet, (uint8_t *)(rxBuf + sizeof(adrv904x_DfeAppFrameworkCmdAppGetCalStatusResp_t)), length);
 
@@ -2045,6 +2053,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeSysPvtStatusGet(adi_adrv904x_De
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length is zero.");
+        goto cleanup;
+    }
+
+    if ((length + sizeof(adrv904x_CpuCmdResp_t) + sizeof(adrv904x_DfeAppFrameworkCmdGetSysStatusResp_t)) > sizeof(rxBuf))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length is too large.");
         goto cleanup;
     }
 

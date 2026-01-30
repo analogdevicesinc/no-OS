@@ -1,7 +1,6 @@
 /**
 * Copyright 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains ADRV904X VSWR function prototypes for
 *    adrv904x_dfe_vswr.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADRV904X_DFE_VSWR_H_

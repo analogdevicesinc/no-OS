@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -10,7 +9,7 @@
 * \brief Contains ADRV904X DPD function prototypes for
 *    adi_adrv904x_dfe_dpd.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 
@@ -18,11 +17,13 @@
 #define _ADI_ADRV904X_DFE_DPD_H_
 
 #include "adi_adrv904x_dfe_cal_dpd_types.h"
+#include "adi_adrv904x_dfe_cal_dpd_int_types.h"
 #include "adi_adrv904x_dfe_framework_tracking_cal_t.h"
 #include "adi_adrv904x_error.h"
 #include "adi_common_error_types.h"
 #include "adi_adrv904x_tx_types.h"
 
+#ifndef ADI_LIBRARY_RM_FLOATS
 /** 
 * \brief Configures the base DPD model for the requested Tx channel(s)
 *
@@ -30,6 +31,12 @@
 * The basis model configuration includes the feature set consisting of i(memory term),j(cross term),
 * k(power term) and the complex coefficient values. A maximum of ADI_ADRV904X_DPD_MAX_NUM_FEATURES 
 * features can be configured for the DPD adaptation engine.
+*
+* If the dpdModelType parameter is set to ADI_ADRV904X_DFE_APP_CAL_DPD_MODEL_TYPE_DPD_0, then all 4 
+* GMP models are configured. Therefore if multiple models are used and they have different 
+* configurations MODEL_TYPE_DPD_0 must be configured first.
+*
+* Note that the value for dpdModelType must have the same value as modelDesc->dpdPartial.modelIndex
 *
 * \dep_begin
 * \dep{device->halDevInfo}
@@ -72,15 +79,21 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdGet(adi_adrv904x_
                                                                    const adi_adrv904x_TxChannels_e              dpdTxChannelSel,
                                                                    const adi_adrv904x_DfeAppCalDpdModelType_e   dpdModelType,
                                                                    adi_adrv904x_DfeAppCalDpdModelDesc_t* const  modelDesc);
+#endif /* ADI_LIBRARY_RM_FLOATS */
 
-/** 
-* \brief Configures the base CTC model for the requested Tx channel(s)
+/**
+* \brief Configures the base DPD model for the requested Tx channel(s), without using floating point
 *
-* WARNING : This API is not supported currently
-* This function configures a basis model for the CTC adaptation engine in the ADRV904x device. 
-* The basis model configuration includes the feature set consisting of r, c, d, k, m, j and the
-* complex coefficient values. A maximum of ADI_ADRV904X_DPD_MAX_NUM_FEATURES features can be 
-* configured for the CTC adaptation engine.
+* This function configures a basis model for the DPD adaptation engine in the ADRV904x device.
+* The basis model configuration includes the feature set consisting of i(memory term),j(cross term),
+* k(power term) and the complex coefficient values. A maximum of ADI_ADRV904X_DPD_MAX_NUM_FEATURES
+* features can be configured for the DPD adaptation engine.
+*
+* If the dpdModelType parameter is set to ADI_ADRV904X_DFE_APP_CAL_DPD_MODEL_TYPE_DPD_0, then all 4
+* GMP models are configured. Therefore if multiple models are used and they have different
+* configurations MODEL_TYPE_DPD_0 must be configured first.
+*
+* Note that the value for dpdModelType must have the same value as modelDesc->dpdPartial.modelIndex
 *
 * \dep_begin
 * \dep{device->halDevInfo}
@@ -89,16 +102,40 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdGet(adi_adrv904x_
 * \pre This function may be called any time after device initialization but before enabling the DPD tracking calibration.
 *
 * \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
-* \param[in] dpdTxChannelMask - One or multiple Tx channel for which CTC model configuration is required
-* \param[in] dpdModelType - Model type 
+* \param[in] dpdTxChannelMask - One or multiple Tx channel for which DPD model configuration is required
+* \param[in] dpdModelType - Model type
 * \param[in] modelDesc - Pointer to the model config structure
 *
 * \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigCtcSet(adi_adrv904x_Device_t* const                         device,
-                                                                   const uint32_t                                       dpdTxChannelMask,
-                                                                   const adi_adrv904x_DfeAppCalDpdModelType_e           dpdModelType,
-                                                                   const adi_adrv904x_DfeAppCalCtcModelDesc_t* const    modelDesc);
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet_int(adi_adrv904x_Device_t* const                         device,
+                                                                       const uint32_t                                       dpdTxChannelMask,
+                                                                       const adi_adrv904x_DfeAppCalDpdModelType_e           dpdModelType,
+                                                                       const adi_adrv904x_DfeAppCalDpdModelDescInt_t* const modelDesc);
+
+/**
+* \brief Retrieves the DPD model feature set for the requested Tx channel from the device, without using floating point
+*
+* This function retrieves the DPD model config updated with the feature co-efficient values
+* computed from the last DPD adaptation cycle.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] dpdTxChannelSel - Tx channel selection to read DPD model configuration. Only one Tx channel should be selected
+* \param[in] dpdModelType - Model type
+* \param[out] modelDesc - Pointer to the model config structure which will be updated with the updated DPD model configuration.
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdGet_int(adi_adrv904x_Device_t* const                   device,
+                                                                       const adi_adrv904x_TxChannels_e                dpdTxChannelSel,
+                                                                       const adi_adrv904x_DfeAppCalDpdModelType_e     dpdModelType,
+                                                                       adi_adrv904x_DfeAppCalDpdModelDescInt_t* const modelDesc);
 
 /** 
 * \brief DPD reset for a requested Tx channel.
@@ -119,12 +156,29 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdReset(adi_adrv904x_Device_t* co
                                                        const uint32_t                          txChannelMask,
                                                        const adi_adrv904x_DfeAppDpdResetMode_e dpdResetMode);
 
-/**
-* \brief Retrieves the CTC model feature set for the requested Tx channel from the device
+/** 
+* \brief ctc2 enable/disable for a requested Tx channel.
 *
-* WARNING : This API is not supported currently
-* This function retrieves the CTC model config updated with the feature co-efficient values
-* computed from the last CTC adaptation cycle.
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization. Enable can only be called after a valid ctc2 model is configured. If it is called to disable ctc2, 
+* \a ctc2 reset will be called to revert the environment to the previous state
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] dpdTxChannelMask - Tx channel mask for selected TX channels for DPD Reset.
+* \param[in] enableCtc2 - if enable or disable ctc2. 
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2EnableSet(adi_adrv904x_Device_t* const                       device,
+	                                                        const uint32_t                                     dpdTxChannelMask,
+	                                                        const uint8_t enableCtc2);
+	
+	
+/** 
+* \brief ctc2 enable/disable for a requested Tx channel.
 *
 * \dep_begin
 * \dep{device->halDevInfo}
@@ -133,16 +187,14 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdReset(adi_adrv904x_Device_t* co
 * \pre This function may be called any time after device initialization.
 *
 * \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
-* \param[in] dpdTxChannelSel - Tx channel selection to read CTC model configuration. Only one Tx channel should be selected
-* \param[in] dpdModelType - Model type 
-* \param[out] modelDesc - Pointer to the model config structure which will be updated with the updated CTC model configuration. 
+* \param[in] dpdTxChannelSel - Tx channel mask for selected TX channels for DPD Reset.
+* \param[out] ctc2Enable - the state of ctc2: if enabled or disabled
 *
 * \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigCtcGet(adi_adrv904x_Device_t* const                 device,
-                                                                   const adi_adrv904x_TxChannels_e              dpdTxChannelSel,
-                                                                   const adi_adrv904x_DfeAppCalDpdModelType_e   dpdModelType,
-                                                                   adi_adrv904x_DfeAppCalCtcModelDesc_t* const   modelDesc);
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2EnableGet(adi_adrv904x_Device_t* const                 device,
+	                                                        const adi_adrv904x_TxChannels_e              dpdTxChannelSel,
+	                                                        uint32_t* const ctc2Enable);
 
 /**
 * \brief Sets the DPD gain monitor configuration
@@ -229,7 +281,44 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdCaptureConfigSet(adi_adrv904x_D
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdCaptureConfigGet(adi_adrv904x_Device_t* const                  device,
                                                                   const adi_adrv904x_TxChannels_e               dpdTxChannelSel,
                                                                   adi_adrv904x_DfeAppCalDpdCaptureCfg_t* const  dpdCaptureCfg);
+/**
+* \brief Set the DPD wide band buffer segmentation
+*
+* This function Set the DPD wide band buffer segmentation
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] wbBufNum - wide band buffer segmentation count
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_WBBufSegConfigSet( adi_adrv904x_Device_t* const    device,
+	                                                             const adi_adrv904x_DfeAppCalDpdWbRegBufSeg_e wbBufNum);
 
+#ifndef ADI_LIBRARY_RM_FLOATS
+/**
+* \brief get the DPD wide band buffer segmentation
+*
+* This function get the DPD wide band buffer segmentation
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[out] wbBufNum - Pointer to the wide band buffer segmentation count read back value
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_WBBufSegConfigGet( adi_adrv904x_Device_t* const    device,
+	                                                             adi_adrv904x_DfeAppCalDpdWbRegBufSeg_e* wbBufNum);
 /**
 * \brief Sets the DPD tracking calibration configuration
 *
@@ -272,6 +361,50 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet(adi_adrv904x_
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet(adi_adrv904x_Device_t* const                 device,
                                                                    const adi_adrv904x_TxChannels_e              dpdTxChannelSel,
                                                                    adi_adrv904x_DfeAppCalDpdTrackCfg_t* const   dpdTrackCfg);
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+/**
+* \brief Sets the DPD tracking calibration configuration, without using floating point
+*
+* This function sets the DPD tracking calibration configuration in the FW.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function should be called after DPD Reset and before DPD tracking is enabled.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] dpdTxChannelMask - One or multiple Tx channel selection to apply DPD tracking calibration configuration
+* \param[in] dpdTrackCfg - Pointer to the DPD tracking calibration config structure which contains the configuration to be set in FW
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet_int(adi_adrv904x_Device_t* const                        device,
+                                                                       const uint32_t                                      dpdTxChannelMask,
+                                                                       const adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg);
+
+
+/**
+* \brief Read the DPD tracking calibration configuration, without using floating point
+*
+* This function reads the DPD tracking calibration configuration in the FW.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] dpdTxChannelSel - Tx channel selection to read DPD tracking calibration configuration. Only one Tx channel should be selected
+* \param[out] dpdTrackCfg - Pointer to the DPD tracking calibration config structure
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet_int(adi_adrv904x_Device_t* const                  device,
+                                                                       const adi_adrv904x_TxChannels_e               dpdTxChannelSel,
+                                                                       adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg);
 
 /**
 * \brief Sets the DPD Power Meter Configuration
@@ -426,6 +559,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCaptureDataFromBufMemGet(adi
                                                                              const adi_adrv904x_Channels_e              orxChannelSel,
                                                                              adi_adrv904x_DfeAppDpdCaptureData_t* const dpdCaptureData);
 
+#ifndef ADI_LIBRARY_RM_FLOATS
 /**
 * \brief Returns the status of the Dpd Cal Specific status
 *
@@ -448,6 +582,30 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCaptureDataFromBufMemGet(adi
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet(adi_adrv904x_Device_t* const               device,
                                                                          const adi_adrv904x_Channels_e              channel,
                                                                          adi_adrv904x_DfeAppCalDpdStatus_t* const   calDpdSpecStatus);
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+/**
+* \brief Returns the status of the Dpd Cal Specific status, without using floating point
+*
+* The function can be called to read back the status of the 
+* Dpd Cal Specific status in the adi_adrv904x_DfeAppCalDpdStatus_t
+*
+* \pre This function may be called any time after the device has been initialized, and
+* initialization calibrations have taken place
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in] device Context variable -Context variable -A pointer to the device settings structure
+* \param[in] channel Channel selection to read back cal status. Must be a single channel.
+* \param[out] calDpdSpecStatus Status of the Cal Specific, as a structure of type adi_adrv904x_DfeAppCalDpdStatus_t is returned to this pointer address
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE Function completed successfully, no action required
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet_int(adi_adrv904x_Device_t* const                device,
+                                                                             const adi_adrv904x_Channels_e               channel,
+                                                                             adi_adrv904x_DfeAppCalDpdStatusInt_t* const calDpdSpecStatus);
 
 /**
 * \brief Sets the DPD Stability Configuration
@@ -653,5 +811,141 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdPathdelaySeed(adi_adrv904x_Devi
 */
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdPathdelayResetSeed(adi_adrv904x_Device_t* const device,
                                                                     const uint32_t               dpdTxChannelMask);
+
+#ifndef ADI_LIBRARY_RM_FLOATS
+/** 
+* \brief Configures the base CTC2 model for the requested Tx channel(s)
+*
+* This function configures a model for the CTC2 HW in ADRV904x device.
+. A maximum of ADI_ADRV904X_DFE_APP_CAL_CTC2_DPD_MAX_NUM_FEATURES 
+* features can be configured for the CTC2 mode.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization but before enabling the DPD tracking calibration.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] txChannelMask - One or multiple Tx channel for which CTC2 model configuration is required
+* \param[in] modelDesc - Pointer to the model config structure
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigSet(adi_adrv904x_Device_t* const                      device,
+                                                                 const uint32_t                                    txChannelMask,
+                                                                 const adi_adrv904x_DfeAppCalCtc2ModelDesc_t* const modelDesc);
+
+/** 
+* \brief Configures the base CTC2 model Version 2 for the requested Tx channel(s)
+*
+* This function configures a model for the CTC2 HW in ADRV904x device.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization but before enabling the DPD tracking calibration.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] txChannelMask - One or multiple Tx channel for which CTC2 model configuration is required
+* \param[in] modelDesc - Pointer to the model config structure
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigSet_v2(adi_adrv904x_Device_t* const                          device,
+                                                                    const uint32_t                                        txChannelMask,
+                                                                    const adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t* const modelDesc);
+
+/** 
+* \brief Reads the selected CTC2 model from ADRV904x device
+*
+* This function retrieves the CTC2 model config updated with the feature co-efficient values
+* computed from the last CTC2 adaptation cycle.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization but before enabling the DPD tracking calibration.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] txChannelSel - Tx channel selection
+* \param[in] ctc2ModelType - Model type selection
+* \param[out] modelDesc - Pointer to the model config structure to be populated
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigGet(adi_adrv904x_Device_t* const                      device,
+                                                                 const adi_adrv904x_TxChannels_e                   txChannelSel,
+                                                                 adi_adrv904x_DfeAppCalCtc2ModelType_e             ctc2ModelType,
+                                                                 adi_adrv904x_DfeAppCalCtc2ModelDesc_t* const      modelDesc);
+
+/** 
+* \brief Reads the selected CTC2 model Version 2 from ADRV904x device
+*
+* This function retrieves the CTC2 model config updated with the feature co-efficient values
+* computed from the last CTC2 adaptation cycle.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization but before enabling the DPD tracking calibration.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] txChannelSel - Tx channel selection
+* \param[in] ctc2ModelType - Model type selection
+* \param[out] modelDesc - Pointer to the model config structure to be populated
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigGet_v2(adi_adrv904x_Device_t* const                     device,
+                                                                    const adi_adrv904x_TxChannels_e                  txChannelSel,
+                                                                    adi_adrv904x_DfeAppCalCtc2ModelType_e            ctc2ModelType,
+                                                                    adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t* const  modelDesc);
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+/**
+* \brief Sets DPD related gain config (for LUT dynamic range expansion).
+*
+* Due to precision limitations, values read back may be slightly different to what is set.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization but before enabling the DPD tracking calibration.
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] txChannelMask - One or multiple Tx channels
+* \param[in] gainCfg - Pointer to the config structure
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdGainSet(adi_adrv904x_Device_t* const                    device,
+                                                         const uint32_t                                  txChannelMask,
+                                                         const adi_adrv904x_DfeAppCalDpdGainCfg_t* const gainCfg);
+
+/**
+* \brief Retrieve DPD related gain config
+*
+* Due to precision limitations, values read back may be slightly different to what is set.
+*
+* \dep_begin
+* \dep{device->halDevInfo}
+* \dep_end
+*
+* \pre This function may be called any time after device initialization
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure
+* \param[in] txChannelSel - Tx channel selection
+* \param[out] gainCfg - Pointer to the config structure to be populated
+*
+* \retval ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdGainGet(adi_adrv904x_Device_t* const              device,
+                                                         const adi_adrv904x_TxChannels_e           txChannelSel,
+                                                         adi_adrv904x_DfeAppCalDpdGainCfg_t* const gainCfg);
 
 #endif /* _ADI_ADRV904X_DFE_DPD_H_ */

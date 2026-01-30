@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains AGC features related function implementation defined in
 * adi_adrv904x_agc.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_agc.h"
@@ -2115,6 +2114,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_AgcDualBandGpioCfgSet(adi_adrv904x
                 option1 = ADI_ADRV904X_GPIO_SIGNAL_RX5_DUALBAND_CONTROL_BAND1_1;
                 option2 = ADI_ADRV904X_GPIO_SIGNAL_RX7_DUALBAND_CONTROL_BAND1_1;
                 break;
+            default:
+	            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+				ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, i, "Invalid GPIO selected. Please check the GPIO table given at function documentation");
+				goto cleanup;
             }
 
             if ((agcDualBandGpioConfig->analogGpioMapping[i] != option1) &&

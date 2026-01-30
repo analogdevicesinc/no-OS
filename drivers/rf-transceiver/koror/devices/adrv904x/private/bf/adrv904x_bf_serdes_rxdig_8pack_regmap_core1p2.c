@@ -8,9 +8,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #include "../../private/bf/adrv904x_bf_serdes_rxdig_8pack_regmap_core1p2.h"

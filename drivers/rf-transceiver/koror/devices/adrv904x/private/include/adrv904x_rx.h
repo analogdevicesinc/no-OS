@@ -1,7 +1,6 @@
 /**
- * Copyright 2015 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -9,7 +8,7 @@
  * \brief Contains ADRV904X Rx related private function prototypes for
  *        adrv904x_rx.c which helps adi_adrv904x_rx.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */ 
 
 #ifndef _ADRV904X_RX_H_
@@ -549,6 +548,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatSetRangeCheck(adi_adrv904x
                                                                     const adi_adrv904x_RxDataFormatRt_t rxDataFormat[],
                                                                     const uint32_t                      arraySize);
 
+
 /**
 * \brief Helper function for adrv904x_CddcDataFormatSet. Validates data in configuration table.
 *
@@ -752,6 +752,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatFloatingPointSet(adi_adrv9
                                                                        const uint32_t                                           rxChannelMask,
                                                                        const adi_adrv904x_FloatingPointConfigSettings_t * const floatingPointConfig);
 
+
 /**
 * \brief Sets the CDDC Data format to floating point format.
 *
@@ -798,6 +799,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatIntegerSet(adi_adrv904x_De
                                                                  const adi_adrv904x_RxDataFormatModes_e             formatSelect,
                                                                  const adi_adrv904x_IntegerConfigSettings_t * const integerConfigSettings,
                                                                  const adi_adrv904x_SlicerConfigSettings_t * const  slicerConfigSettings);
+
 
 /**
 * \brief Sets the CDDC Data format to integer and configures slicer settings.
@@ -856,6 +858,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDataFormatSlicerSet(adi_adrv904x_D
 ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatEmbOvldMonitorSet(adi_adrv904x_Device_t * const                                 device,
                                                                         const uint32_t                                                rxChannelMask,
                                                                         const adi_adrv904x_EmbOverloadMonitorConfigSettings_t * const embOvldConfigSettings);
+
 
 /**
 * \brief Sets the CDDC Data format to embedded overload indicator format and configures the embedded overload monitor settings.
@@ -1116,6 +1119,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatSelectGet(adi_adrv904x_Dev
                                                                 const adi_adrv904x_RxChannels_e          rxChannel,
                                                                 adi_adrv904x_RxDataFormatModes_e * const rxDataFormat);
 
+
 /**
 * \brief Returns the Cddc Data formatter mode currently configured
 *
@@ -1151,6 +1155,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDataFormatSelectGet(adi_adrv904x_D
 ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatFloatingPointGet(adi_adrv904x_Device_t * const                      device,
                                                                        const adi_adrv904x_RxChannels_e                    rxChannel,
                                                                        adi_adrv904x_FloatingPointConfigSettings_t * const floatingPointConfig);
+
 
 /**
 * \brief Retrieves the Cddc floating point formatter settings configured in the device
@@ -1188,6 +1193,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatIntegerGet(adi_adrv904x_De
                                                                  const adi_adrv904x_RxChannels_e              rxChannel,
                                                                  adi_adrv904x_IntegerConfigSettings_t * const integerConfigSettings,
                                                                  adi_adrv904x_SlicerConfigSettings_t * const  slicerConfigSettings);
+
 
 /**
 * \brief Returns the Cddc Data formatter integer and slicer settings.
@@ -1227,6 +1233,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDataFormatIntegerGet(adi_adrv904x_
 ADI_API adi_adrv904x_ErrAction_e adrv904x_RxDataFormatEmbOvldMonitorGet(adi_adrv904x_Device_t * const                           device,
                                                                         const adi_adrv904x_RxChannels_e                         rxChannel,
                                                                         adi_adrv904x_EmbOverloadMonitorConfigSettings_t * const embOvldConfigSettings);
+
 
 /**
 * \brief Retrieves the Cddc embedded overload indicator format settings configured in the device

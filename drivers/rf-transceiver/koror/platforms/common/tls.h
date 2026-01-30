@@ -1,3 +1,8 @@
+/**
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
+*/
+
 #ifndef TLS_H
 #define TLS_H
 

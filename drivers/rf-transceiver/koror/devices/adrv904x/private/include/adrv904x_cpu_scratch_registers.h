@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -12,7 +11,7 @@
  *
  * \details Contains CPU scratch register definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_CPU_SCRATCH_REGISTERS_H__
@@ -291,17 +290,34 @@
 /* Software Breakpoint GPIO scratchpad register assignments */
 #define ADRV904X_CPU_SWBKPT_WAKEUP_GPIO_PIN_REG_ID    196
 
+/* Set by powerup stream if SBET is enabled in stream settings */
+#define ADRV904X_SCRATCH_ID_SBET_MODE                 197
+
 /* Scratch register to enable/disable the Tx Anttena Cal - channelMask */
 #define ADRV904X_GPIO_ANTCAL_TX_MASK                  198
 
 /* Scratch register to enable/disable the Rx Anttena Cal - channelMask */
 #define ADRV904X_GPIO_ANTCAL_RX_MASK                  199
 
+/* Unused */
+#define ADRV904X_SCRATCH_ID_UNUSED_01                 200
+#define ADRV904X_SCRATCH_ID_UNUSED_02                 201
+#define ADRV904X_SCRATCH_ID_UNUSED_03                 202
+#define ADRV904X_SCRATCH_ID_UNUSED_04                 203
+
 /* Scratch register containing slice stream processor stream number to trigger */
 #define ADRV904X_TRIGGER_SLICE_STREAM_NUM             204
 
 /* Scratch register containing channel mask of which slice stream processors to trigger stream in */
 #define ADRV904X_TRIGGER_SLICE_STREAM_MASK            205
+
+/* Unused */
+#define ADRV904X_SCRATCH_ID_UNUSED_05                 206
+#define ADRV904X_SCRATCH_ID_UNUSED_06                 207
+#define ADRV904X_SCRATCH_ID_UNUSED_07                 208
+#define ADRV904X_SCRATCH_ID_UNUSED_08                 209
+#define ADRV904X_SCRATCH_ID_UNUSED_09                 210
+#define ADRV904X_SCRATCH_ID_UNUSED_10                 211
 
 /* Scratch register that holds TRx channels for gpio 0 */
 #define ADRV904X_TRIGGER_SLICE_GPIO_0_TRX_CHANNELS    212
@@ -318,8 +334,9 @@
 /* Scratch register that holds if channels affect are from Rx or Tx */
 #define ADRV904X_TRIGGER_SLICE_TR_OR_RX_CHANNELS      216
 
-/* Scratch register that holds the last state of TX0. TX0 high = 0x04, TX0 low = 0x00 */
-#define ADRV904X_TX0_STATE                            217
+
+/* Scratch register that holds a mask with current Tx state of each channel */
+#define ADRV904X_SBET_TX_STATE                        217
 
 /* Scratch register that holds the Current Value of 'Symbol Ignore Count' for BUF0 */
 #define ADRV904X_SBET_CUR_SYMBOL_IGNORE_COUNT_BUF0    218
@@ -333,32 +350,31 @@
 /* Scratch register that holds the Requested Value of 'Symbol Ignore Count' for BUF1 */
 #define ADRV904X_SBET_REQ_SYMBOL_IGNORE_COUNT_BUF1    221
 
-/* Note: The registers 225-233 are currently used as SBET debug counters. They can be re-purposed if needed.
+/* Note: The registers 222-226 are currently used as SBET debug counters. They can be re-purposed if needed.
  *       All the code in core SP starting with tag $ENABLE_SBET_DBG$ needs to be removed
  */
-/* Scratch register that holds counter registering how many times SBET_CHECK_DPD_MODEL_IDX_MATCHES_TARGET was called */
-#define ADRV904X_DBG_SBET_CHECK_DPD_MODEL_IDX_MATCHES_TARGET_INVOKE_CNT    225
+/* Scratch register that holds counter registering how many times SBET_UPDATE_DPD_INDEX was called */
+#define ADRV904X_DBG_SBET_UPDATE_DPD_INDEX_CNT                             222
 
-/* Scratch register that holds counter registering how many times SBET_CAP_CHECK_AND_UPDATE_IGNORE_COUNT was called */
-#define ADRV904X_DBG_SBET_CAP_CHECK_AND_UPDATE_IGNORE_COUNT_INVOKE_CNT     226
+/* Scratch register that holds counter registering how many times SBET_CAP_CHECK_CAPTURE_REQ_AND_TX_ON_FLAG was called */
+#define ADRV904X_DBG_SBET_CAP_CHECK_CAPTURE_REQ_AND_TX_ON_FLAG_CNT         223
+
+/* Scratch register that holds counter registering how many times SBET_CHECK_DPD_MODEL_IDX_MATCHES_TARGET was called */
+#define ADRV904X_DBG_SBET_CHECK_DPD_MODEL_IDX_MATCHES_TARGET_INVOKE_CNT    224
 
 /* Scratch register that holds counter registering how many times SBET_CAPTURE_BUF0_SW_TRIGGER_TOGGLE was called */
-#define ADRV904X_DBG_SBET_CAPTURE_BUF0_SW_TRIGGER_TOGGLE_INVOKE_CNT        227
+#define ADRV904X_DBG_SBET_CAPTURE_BUF0_SW_TRIGGER_TOGGLE_INVOKE_CNT        225
 
 /* Scratch register that holds counter registering how many times SBET_CAPTURE_BUF1_SW_TRIGGER_TOGGLE was called */
-#define ADRV904X_DBG_SBET_CAPTURE_BUF1_SW_TRIGGER_TOGGLE_INVOKE_CNT        228
+#define ADRV904X_DBG_SBET_CAPTURE_BUF1_SW_TRIGGER_TOGGLE_INVOKE_CNT        226
 
-/* Scratch register that holds counter registering how many times SBET_CLEAR_CAP_REQUEST_FOR_BUF0 was called */
-#define ADRV904X_DBG_SBET_CLEAR_CAP_REQUEST_FOR_BUF0_INVOKE_CNT            230
+/* A bitmask of the channel (Tx0 to Tx3) that a capture is actively requested on, only low 4 bits are used */
+#define ADRV904X_SBET_CAPTURE_CHANNEL_MASK0                                227
 
-/* Scratch register that holds counter registering how many times SBET_CLEAR_CAP_REQUEST_FOR_BUF1 was called */
-#define ADRV904X_DBG_SBET_CLEAR_CAP_REQUEST_FOR_BUF1_INVOKE_CNT            231
+/* A bitmask of the channel (Tx4 to Tx7) that a capture is actively requested on, only high 4 bits are used */
+#define ADRV904X_SBET_CAPTURE_CHANNEL_MASK1                                228
 
-/* Scratch register that holds counter registering how many times CAPTURE_BUF0_SW_TRIGGER_TOGGLE was called */
-#define ADRV904X_DBG_CAPTURE_BUF0_SW_TRIGGER_TOGGLE_INVOKE_CNT             232
-
-/* Scratch register that holds counter registering how many times CAPTURE_BUF1_SW_TRIGGER_TOGGLE was called */
-#define ADRV904X_DBG_CAPTURE_BUF1_SW_TRIGGER_TOGGLE_INVOKE_CNT             233
+/* Unused scratch registers from 229 to 255 */
 
 
 /* Scratch register 256 contains DFE CPU0 boot status */
@@ -370,7 +386,7 @@
 #define ADRV904X_DFE_SDK_DATA_ADDR_2_SCRATCH_REG_ID    259               /* address[23:16] */
 #define ADRV904X_DFE_SDK_DATA_ADDR_3_SCRATCH_REG_ID    260               /* address[31:24] */
 
-/* Scratch register containing DFE DMA request error flag. This register is used by Koror core
+/* Scratch register containing DFE DMA request error flag. This register is used by the core
  * stream to indicate an error when a new DMA transaction is requested but the previous one
  * is not completed
  */
@@ -713,7 +729,7 @@
 
 /*
  * Scratch registers used to store channel masks for DTX input pins.
- * Koror only, pin used as PA_EN mux update stream trigger.
+ * ADRV904X only, pin used as PA_EN mux update stream trigger.
  */
 #define ADRV904X_DTX_INPUT_CHANNEL_MASK_0                            481
 #define ADRV904X_DTX_INPUT_CHANNEL_MASK_1                            482
@@ -731,8 +747,8 @@
 #define ADRV904X_UPDATE_PA_EN_AFTER_DTX_ACTIVATED_TIMER              492
 
 /* Scratch registers containing Tx channel selection for CLGC_POWER_METERS_RESTART_ORX0/1 streams (RCI mode only)*/
-#define ADRV904X_CLGC_POWER_METER_ORX0_TX_CHANNEL_SEL                493
-#define ADRV904X_CLGC_POWER_METER_ORX1_TX_CHANNEL_SEL                494
+#define ADRV904X_CLGC_POWER_METER_ORX0_TX_CHANNEL_SEL                493 /* bit3 - Use AltNCO; bits 2-0 txCh*/
+#define ADRV904X_CLGC_POWER_METER_ORX1_TX_CHANNEL_SEL                494 /* bit3 - Use AltNCO; bits 2-0 txCh*/
 
 /* Scratch registers to store pattern addresses for RS1 to switch to during antenna cal */
 #define ADRV904X_ANTENNA_CAL_RS1_PATTERN0_ADDR_LSB                   495 /* LSB of default pattern */
@@ -760,81 +776,100 @@
 /* Scratch register containing channel mask of which slice stream processors to trigger stream in. Used by DFE */
 #define ADRV904X_TRIGGER_SLICE_STREAM_MASK_USED_BY_DFE               506
 
+/* Value (bits[0:1]) and mask (bits[2:3]) to write to CAP_TRIGGER_SW_CTRL using core stream processor (set by DFE processor) */
+#define ADRV904X_CAP_TRIGGER_SW_CTRL0                                507
+#define ADRV904X_CAP_TRIGGER_SW_CTRL1                                508
+
 /* EXTENDED CORE SCRATCH REGISTERS STORED IN M4 HEAP MEMORY - There are 128 words (512 bytes) reserved. */
 /* This section of memory is word accessible and it's read-only for core stream. This is to avoid
  * race conditions between M4 ECC scrubbing and core stream write access. BBIC can read/write these scratch registers.
  * When BBIC will write these extended scratch registers, M4 ECC scrubbing needs to be disabled with mailbox command to Radio FW. */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_0_GAIN    0             /* Extended core scratch registers Word 0 - Bit0-22:Tx Carrier0 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_1_GAIN    1             /* Extended core scratch registers Word 1 - Bit0-22:Tx Carrier1 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_2_GAIN    2             /* Extended core scratch registers Word 2 - Bit0-22:Tx Carrier2 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_3_GAIN    3             /* Extended core scratch registers Word 3 - Bit0-22:Tx Carrier3 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_4_GAIN    4             /* Extended core scratch registers Word 4 - Bit0-22:Tx Carrier4 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_5_GAIN    5             /* Extended core scratch registers Word 5 - Bit0-22:Tx Carrier5 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_6_GAIN    6             /* Extended core scratch registers Word 6 - Bit0-22:Tx Carrier6 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_TX_CARRIER_7_GAIN    7             /* Extended core scratch registers Word 7 - Bit0-22:Tx Carrier7 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_0_GAIN    8             /* Extended core scratch registers Word 8 - Bit0-22:Rx Carrier0 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_1_GAIN    9             /* Extended core scratch registers Word 9 - Bit0-22:Rx Carrier1 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_2_GAIN    10            /* Extended core scratch registers Word 10- Bit0-22:Rx Carrier2 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_3_GAIN    11            /* Extended core scratch registers Word 11- Bit0-22:Rx Carrier3 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_4_GAIN    12            /* Extended core scratch registers Word 12- Bit0-22:Rx Carrier4 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_5_GAIN    13            /* Extended core scratch registers Word 13- Bit0-22:Rx Carrier5 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_6_GAIN    14            /* Extended core scratch registers Word 14- Bit0-22:Rx Carrier6 gain. Bit23-31:Reserved */
-#define ADRV904X_ANTENNA_CAL_RX_CARRIER_7_GAIN    15            /* Extended core scratch registers Word 15- Bit0-22:Rx Carrier7 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_0_GAIN        0         /* Extended core scratch registers Word 0 - Bit0-22:Tx Carrier0 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_1_GAIN        1         /* Extended core scratch registers Word 1 - Bit0-22:Tx Carrier1 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_2_GAIN        2         /* Extended core scratch registers Word 2 - Bit0-22:Tx Carrier2 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_3_GAIN        3         /* Extended core scratch registers Word 3 - Bit0-22:Tx Carrier3 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_4_GAIN        4         /* Extended core scratch registers Word 4 - Bit0-22:Tx Carrier4 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_5_GAIN        5         /* Extended core scratch registers Word 5 - Bit0-22:Tx Carrier5 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_6_GAIN        6         /* Extended core scratch registers Word 6 - Bit0-22:Tx Carrier6 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_TX_CARRIER_7_GAIN        7         /* Extended core scratch registers Word 7 - Bit0-22:Tx Carrier7 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_0_GAIN        8         /* Extended core scratch registers Word 8 - Bit0-22:Rx Carrier0 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_1_GAIN        9         /* Extended core scratch registers Word 9 - Bit0-22:Rx Carrier1 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_2_GAIN        10        /* Extended core scratch registers Word 10- Bit0-22:Rx Carrier2 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_3_GAIN        11        /* Extended core scratch registers Word 11- Bit0-22:Rx Carrier3 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_4_GAIN        12        /* Extended core scratch registers Word 12- Bit0-22:Rx Carrier4 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_5_GAIN        13        /* Extended core scratch registers Word 13- Bit0-22:Rx Carrier5 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_6_GAIN        14        /* Extended core scratch registers Word 14- Bit0-22:Rx Carrier6 gain. Bit23-31:Reserved */
+#define ADRV904X_ANTENNA_CAL_RX_CARRIER_7_GAIN        15        /* Extended core scratch registers Word 15- Bit0-22:Rx Carrier7 gain. Bit23-31:Reserved */
 
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_0        16            /* Extended core scratch registers Word 16- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_1        17            /* Extended core scratch registers Word 17- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_2        18            /* Extended core scratch registers Word 18- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_3        19            /* Extended core scratch registers Word 19- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_4        20            /* Extended core scratch registers Word 20- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_5        21            /* Extended core scratch registers Word 21- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_6        22            /* Extended core scratch registers Word 22- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_7        23            /* Extended core scratch registers Word 23- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_8        24            /* Extended core scratch registers Word 24- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_9        25            /* Extended core scratch registers Word 25- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_0            16        /* Extended core scratch registers Word 16- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_1            17        /* Extended core scratch registers Word 17- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_2            18        /* Extended core scratch registers Word 18- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_3            19        /* Extended core scratch registers Word 19- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_4            20        /* Extended core scratch registers Word 20- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_5            21        /* Extended core scratch registers Word 21- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_6            22        /* Extended core scratch registers Word 22- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_7            23        /* Extended core scratch registers Word 23- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_8            24        /* Extended core scratch registers Word 24- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_LNA_EN_TBL_ALARM_9            25        /* Extended core scratch registers Word 25- Bit0-7:Impacted LNA_EN by given alarm. Bit8-31:Rsrvd */
 
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_0         26            /* Extended core scratch registers Word 26- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_1         27            /* Extended core scratch registers Word 27- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_2         28            /* Extended core scratch registers Word 28- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_3         29            /* Extended core scratch registers Word 29- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_4         30            /* Extended core scratch registers Word 30- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_5         31            /* Extended core scratch registers Word 31- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_6         32            /* Extended core scratch registers Word 32- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_7         33            /* Extended core scratch registers Word 33- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_8         34            /* Extended core scratch registers Word 34- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_9         35            /* Extended core scratch registers Word 35- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_0             26        /* Extended core scratch registers Word 26- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_1             27        /* Extended core scratch registers Word 27- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_2             28        /* Extended core scratch registers Word 28- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_3             29        /* Extended core scratch registers Word 29- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_4             30        /* Extended core scratch registers Word 30- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_5             31        /* Extended core scratch registers Word 31- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_6             32        /* Extended core scratch registers Word 32- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_7             33        /* Extended core scratch registers Word 33- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_8             34        /* Extended core scratch registers Word 34- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_PA_EN_TBL_ALARM_9             35        /* Extended core scratch registers Word 35- Bit0-7:Impacted PA_EN by given alarm. Bit8-31:Rsrvd */
 
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_0      36            /* Extended core scratch registers Word 36- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_1      37            /* Extended core scratch registers Word 37- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_2      38            /* Extended core scratch registers Word 38- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_3      39            /* Extended core scratch registers Word 39- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_4      40            /* Extended core scratch registers Word 40- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_5      41            /* Extended core scratch registers Word 41- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_6      42            /* Extended core scratch registers Word 42- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_7      43            /* Extended core scratch registers Word 43- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_8      44            /* Extended core scratch registers Word 44- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_9      45            /* Extended core scratch registers Word 45- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_0          36        /* Extended core scratch registers Word 36- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_1          37        /* Extended core scratch registers Word 37- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_2          38        /* Extended core scratch registers Word 38- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_3          39        /* Extended core scratch registers Word 39- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_4          40        /* Extended core scratch registers Word 40- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_5          41        /* Extended core scratch registers Word 41- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_6          42        /* Extended core scratch registers Word 42- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_7          43        /* Extended core scratch registers Word 43- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_8          44        /* Extended core scratch registers Word 44- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP1_TBL_ALARM_9          45        /* Extended core scratch registers Word 45- Bit0-7:Impacted AUX_GRP1 by given alarm. Bit8-31:Rsrvd */
 
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_0      46            /* Extended core scratch registers Word 46- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_1      47            /* Extended core scratch registers Word 47- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_2      48            /* Extended core scratch registers Word 48- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_3      49            /* Extended core scratch registers Word 49- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_4      50            /* Extended core scratch registers Word 50- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_5      51            /* Extended core scratch registers Word 51- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_6      52            /* Extended core scratch registers Word 52- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_7      53            /* Extended core scratch registers Word 53- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_8      54            /* Extended core scratch registers Word 54- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_9      55            /* Extended core scratch registers Word 55- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_0          46        /* Extended core scratch registers Word 46- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_1          47        /* Extended core scratch registers Word 47- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_2          48        /* Extended core scratch registers Word 48- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_3          49        /* Extended core scratch registers Word 49- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_4          50        /* Extended core scratch registers Word 50- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_5          51        /* Extended core scratch registers Word 51- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_6          52        /* Extended core scratch registers Word 52- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_7          53        /* Extended core scratch registers Word 53- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_8          54        /* Extended core scratch registers Word 54- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_AUX_GRP0_TBL_ALARM_9          55        /* Extended core scratch registers Word 55- Bit0-7:Impacted AUX_GRP0 by given alarm. Bit8-31:Rsrvd */
 
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_0    56            /* Extended core scratch registers Word 56- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_1    57            /* Extended core scratch registers Word 57- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_2    58            /* Extended core scratch registers Word 58- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_3    59            /* Extended core scratch registers Word 59- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_4    60            /* Extended core scratch registers Word 60- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_5    61            /* Extended core scratch registers Word 61- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_6    62            /* Extended core scratch registers Word 62- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_7    63            /* Extended core scratch registers Word 63- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_8    64            /* Extended core scratch registers Word 64- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
-#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_9    65            /* Extended core scratch registers Word 65- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_0        56        /* Extended core scratch registers Word 56- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_1        57        /* Extended core scratch registers Word 57- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_2        58        /* Extended core scratch registers Word 58- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_3        59        /* Extended core scratch registers Word 59- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_4        60        /* Extended core scratch registers Word 60- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_5        61        /* Extended core scratch registers Word 61- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_6        62        /* Extended core scratch registers Word 62- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_7        63        /* Extended core scratch registers Word 63- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_8        64        /* Extended core scratch registers Word 64- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+#define ADRV904X_EA_IMP_OC_FUSE_EN_TBL_ALARM_9        65        /* Extended core scratch registers Word 65- Bit0-7:Impacted OC_FUSE_EN by given alarm. Bit8-31:Rsrvd */
+
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_0           66        /* Extended core scratch registers Word 66- Bit0-15: Average PA Protection threshold (tx0). Bit16-31:Peak PA Protection Threshold (tx0) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_1           67        /* Extended core scratch registers Word 67- Bit0-15: Average PA Protection threshold (tx1). Bit16-31:Peak PA Protection Threshold (tx1) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_2           68        /* Extended core scratch registers Word 68- Bit0-15: Average PA Protection threshold (tx2). Bit16-31:Peak PA Protection Threshold (tx2) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_3           69        /* Extended core scratch registers Word 69- Bit0-15: Average PA Protection threshold (tx3). Bit16-31:Peak PA Protection Threshold (tx3) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_4           70        /* Extended core scratch registers Word 70- Bit0-15: Average PA Protection threshold (tx4). Bit16-31:Peak PA Protection Threshold (tx4) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_5           71        /* Extended core scratch registers Word 71- Bit0-15: Average PA Protection threshold (tx5). Bit16-31:Peak PA Protection Threshold (tx5) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_6           72        /* Extended core scratch registers Word 72- Bit0-15: Average PA Protection threshold (tx6). Bit16-31:Peak PA Protection Threshold (tx6) */
+#define ADRV904X_PA_PROTECTION_THRESHOLDS_7           73        /* Extended core scratch registers Word 73- Bit0-15: Average PA Protection threshold (tx7). Bit16-31:Peak PA Protection Threshold (tx7) */
+
+/* To extract peak and average target thresholds from extended scratch reg */
+#define ADRV904X_PA_PROTECTION_THRESHOLD_PEAK_BITM    0x0000ffffu
+#define ADRV904X_PA_PROTECTION_THRESHOLD_PEAK_BITP    0u
+#define ADRV904X_PA_PROTECTION_THRESHOLD_AVG_BITM     0xffff0000u
+#define ADRV904X_PA_PROTECTION_THRESHOLD_AVG_BITP     16u
 
 #endif /* __ADRV904X_CPU_SCRATCH_REGISTERS_H__ */
 

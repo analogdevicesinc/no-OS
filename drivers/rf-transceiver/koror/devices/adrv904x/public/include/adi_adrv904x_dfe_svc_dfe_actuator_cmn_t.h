@@ -1,20 +1,18 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file adi_adrv904x_dfe_svc_dfe_actuator_cmn_t.h
  * \brief DFE actuator service module definitions and types
  *
- * DFE SDK API Version: 2.10.0.4
+ * DFE SDK API Version: 2.15.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_DFE_ACTUATOR_CMN_T_H_
 #define ADRV904X_DFE_SVC_DFE_ACTUATOR_CMN_T_H_
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 
 /**

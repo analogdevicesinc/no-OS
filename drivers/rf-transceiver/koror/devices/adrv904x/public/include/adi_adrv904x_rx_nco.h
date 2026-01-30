@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
  
 /**
@@ -10,13 +9,12 @@
  * 
  * \brief   Contains ADRV904X Rx NCO data structures.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_RX_NCO_H__
 #define __ADI_ADRV904X_RX_NCO_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 #include "adi_adrv904x_cpu_error_codes_types.h"
 
@@ -98,7 +96,38 @@ typedef struct adi_adrv904x_ORxNcoConfigReadbackResp
 } adi_adrv904x_ORxNcoConfigReadbackResp_t;)
 
 /**
- * \brief NCO CDDC Rx set command structure (Koror only)
+ * \brief Rx Spur Configuration Set structure 
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adi_adrv904x_RxSpurFreqSet
+{
+    uint32_t                  rxChannelMask; /*!< Rx Channels for which gain index needs to be updated. Bits 0-7 correspond to Rx0-Rx7 respectively */
+    int32_t                   baseBandFreqKHz;      /*!< Baseband freq at which Rx SPUR freq needs to be cancelled */
+    uint8_t                   enable;               /*!< 0: Disable, 1: Enable */
+} adi_adrv904x_RxSpurFreqSet_t;)
+
+/**
+ * \brief Rx Spur Configuration Get Structure 
+ */
+typedef struct adi_adrv904x_RxSpurFreqGet
+{
+    uint32_t                 rxChannelMask; /*!< Rx Channels for which gain index needs to be updated. Bits 0-7 correspond to Rx0-Rx7 respectively */
+} adi_adrv904x_RxSpurFreqGet_t;
+
+/**
+ * \brief Rx Spur Configuration response structure 
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adi_adrv904x_RxSpurFreqConfigResp
+{
+    adi_adrv904x_CpuErrorCode_t status;                         /*!< Rx Spur Frequency Config response status */
+    uint32_t                    rxChannelMask;                  /*!< Rx Channel for which result is returned */
+    int32_t                     baseBandFreqKHz;                /*!< Baseband freq at which Rx SPUR freq needs to be cancelled */
+    uint8_t                     enabled;                        /*!< 0: Disabled, 1: Enabled */
+} adi_adrv904x_RxSpurFreqConfigResp_t;)
+
+/**
+ * \brief NCO CDDC Rx set command structure
  */
 ADI_ADRV904X_PACKED(
 typedef struct adi_adrv904x_RxCddcNcoConfig
@@ -111,7 +140,7 @@ typedef struct adi_adrv904x_RxCddcNcoConfig
 } adi_adrv904x_RxCddcNcoConfig_t;)
 
 /**
- * \brief NCO CDDC Rx set command response structure (Koror only)
+ * \brief NCO CDDC Rx set command response structure
  */
 ADI_ADRV904X_PACKED(
 typedef struct adi_adrv904x_RxCddcNcoConfigReadbackResp
@@ -123,6 +152,17 @@ typedef struct adi_adrv904x_RxCddcNcoConfigReadbackResp
     uint32_t                      phase;              /*!< Phase in degrees (0 - 359) */
     int32_t                       frequencyKhz;       /*!< Frequency in KHz */
 } adi_adrv904x_RxCddcNcoConfigReadbackResp_t;)
+
+/**
+ * \brief Alternative NCO ORx config
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adi_adrv904x_ORxAltNcoConfig
+{
+    uint8_t                     orxChanSelect;       /*!< Select ORx channel (bit mapped) */
+    int32_t                     freqAdcKhz;          /*!< Desired ADC frequency in KHz */
+    int32_t                     freqDatapathKhz;     /*!< Desired Datapath frequency in KHz */
+} adi_adrv904x_ORxAltNcoConfig_t;)
 
 #endif /* __ADI_ADRV904X_RX_NCO_H__ */
 

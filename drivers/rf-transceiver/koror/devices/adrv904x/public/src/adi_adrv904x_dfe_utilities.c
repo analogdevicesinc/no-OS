@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -10,7 +9,7 @@
 *        Analog Devices maintains and provides updates to this code layer.
 *        The end user should not modify this file or any code in this directory.
 *        
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_dfe_utilities.h"
@@ -282,7 +281,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeLogTraceBufferGet(adi_adrv904x_
     uint8_t waitCount = 0;
     
     uint32_t getDfeLogtraceData[ADI_ADRV904X_MAX_LOGTRACE_SIZE / sizeof(uint32_t)] = { 0 };
-    uint8_t sortLogTraceData[ADI_ADRV904X_MAX_LOGTRACE_SIZE] = { 0 };
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, sortLogTraceData, ADI_ADRV904X_MAX_LOGTRACE_SIZE);
     
     adrv904x_DfeSvcCmdLogTraceBuffer_t logTraceCmd;
     adrv904x_DfeSvcCmdLogTraceBufferResp_t logTraceBufferResp;
@@ -297,6 +296,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeLogTraceBufferGet(adi_adrv904x_
     
     ADI_ADRV904X_API_ENTRY(&device->common);
     
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, sortLogTraceData, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, logTrace, cleanup);
     
     ADI_LIBRARY_MEMSET(logTrace, 0, sizeof(adi_adrv904x_DfeLogTraceBuffer_t));

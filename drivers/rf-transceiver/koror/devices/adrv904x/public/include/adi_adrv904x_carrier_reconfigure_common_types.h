@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  *
  * \brief   Contains ADRV904X Carrier Reconfigure Common data structures.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_CARRIER_RECONFIGURE_TYPES_COMMON_H__
@@ -183,13 +182,26 @@ typedef struct adi_adrv904x_CarrierRadioCfg
 ADI_ADRV904X_PACK_FINISH
 
 /**
- * \brief Data structure for hold Carrier data for dynamic reconfiguration 
+ * \brief Data structure to hold extended Carrier data for dynamic reconfiguration
+ */
+    ADI_ADRV904X_PACK_START
+typedef struct adi_adrv904x_CarrierRadioCfgExtended
+{
+    uint32_t slotShufflingEnable;                                                       /*!< Enable slot shuffling for Dynamic Carrier Reconfig */
+    uint32_t slotShufflingLoopsMax;                                                     /*!< Sets number of attempts loops in slot shuffling for Dynamic Carrier Reconfig */
+    uint32_t reserved1;                                                                 /*!< Reserved parameter 1 */
+    uint32_t reserved2;                                                                 /*!< Reserved parameter 2 */
+} adi_adrv904x_CarrierRadioCfgExtended_t;
+ADI_ADRV904X_PACK_FINISH
+
+/**
+ * \brief Data structure for hold Carrier data for dynamic reconfiguration
  */
     ADI_ADRV904X_PACK_START
 typedef struct adi_adrv904x_CarrierRadioCfgCmd
 {
-    adi_adrv904x_CarrierRadioCfg_t  carrierRadioCfg;                    /*!< carrierRadioCfg passed into the BBIC API */
-    uint8_t                         apply;                              /*!< Set to 1 to apply config to HW; 0 to skip and leave HW unchanged */
+    adi_adrv904x_CarrierRadioCfg_t carrierRadioCfg;                     /*!< carrierRadioCfg passed into the BBIC API */
+    uint8_t                        apply;                               /*!< Set to 1 to apply config to HW; 0 to skip and leave HW unchanged */
 } adi_adrv904x_CarrierRadioCfgCmd_t;
 ADI_ADRV904X_PACK_FINISH
 

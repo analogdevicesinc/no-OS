@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  *
  * \brief   Contains ADRV904X stream id definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_STREAM_ID_H__
@@ -18,10 +17,10 @@
 
 #define ADRV904X_STREAM_ID__CORE__RADIO_SEQ_RISE_EVENT_00                                    (128U)
 #define ADRV904X_STREAM_ID__CORE__RADIO_SEQ_RISE_EVENT_01                                    (129U)
-#define ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF0                            (136U)   /* Use what was RADIO_SEQ_RISE_EVENT_08.This stream need to be always defined because it's used by SDK */
-#define ADRV904X_STREAM_ID__CORE__UNUSED0                                                    (138U)   /* When SBET Enabled: Use what was RADIO_SEQ_RISE_EVENT_10. Currently unused */
-#define ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF1                            (168U)   /* Use what was RADIO_SEQ_FALL_EVENT_08.This stream need to be always defined because it's used by SDK */
-#define ADRV904X_STREAM_ID__CORE__UNUSED2                                                    (170U)   /* When SBET Enabled: Use what was RADIO_SEQ_FALL_EVENT_10. Currently unused */
+#define ADRV904X_STREAM_ID__CORE__CAPTURE_BUF0_SW_TRIGGER_TOGGLE                             (140U)   /* Use what was RADIO_SEQ_RISE_EVENT_12 */
+#define ADRV904X_STREAM_ID__CORE__CAPTURE_BUF1_SW_TRIGGER_TOGGLE                             (141U)   /* Use what was RADIO_SEQ_RISE_EVENT_13 */
+#define ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF1                            (168U)   /* Use what was RADIO_SEQ_FALL_EVENT_08. This stream need to be always defined because it's used by SDK */
+#define ADRV904X_STREAM_ID__CORE__SBET_CLEAR_CAP_REQUEST_FOR_BUF0                            (169U)   /* Use what was RADIO_SEQ_FALL_EVENT_09. This stream need to be always defined because it's used by SDK  */
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_SECONDARY_PATH_NORMAL_OPERATION    (172U)   /* Use what was RADIO_SEQ_FALL_EVENT_12 */
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_SECONDARY_PATH_UL_CAL              (173U)   /* Use what was RADIO_SEQ_FALL_EVENT_13 */
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_SECONDARY_PATH_DL_CAL              (174U)   /* Use what was RADIO_SEQ_FALL_EVENT_14 */
@@ -39,11 +38,10 @@
 #define ADRV904X_STREAM_ID__CORE__DFE_ACT_LUT_COPY_TX_IN_PROGRESS_CLEAR                      (145U)
 #define ADRV904X_STREAM_ID__CORE__EA_UPDATE_ALARM_OUTPUTS_STRM                               (153U)
 #define ADRV904X_STREAM_ID__CORE__TRIGGER_TX_STREAM_USED_BY_DFE                              (156U)
-#define ADRV904X_STREAM_ID__CORE__TRIGGER_RX_STREAM_USED_BY_DFE                              (157U)
-#define ADRV904X_STREAM_ID__CORE__SBET_UPDATE_POWER_INDEX_FROM_CIRCULAR_BUF                  (159U) /* When SBET Enabled */
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_CFG_GPIO_ALL_OFF_PIN_STATE_FOR_ORX0      (180U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_CFG_GPIO_ALL_OFF_PIN_STATE_FOR_ORX1      (181U)
-#define ADRV904X_STREAM_ID__CORE__SBET_UPDATE_DPD_INDEX                                      (188U)  /* When SBET Enabled */
+#define ADRV904X_STREAM_ID__CORE__SET_CAPTURE_BUFFER_0_SW_CTRL                               (189U)
+#define ADRV904X_STREAM_ID__CORE__SET_CAPTURE_BUFFER_1_SW_CTRL                               (190U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_ORX_ATT_TABLE_UPDATE                     (202U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_ORX_NCO_FREQ_TABLE_UPDATE                (203U)
 #define ADRV904X_STREAM_ID__CORE__TX_TO_ORX_MAPPING_ONLY_LOL_NCO_FREQ_TABLE_UPDATE           (204U)
@@ -56,32 +54,32 @@
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_MAIN_PATH_NORMAL_OPERATION         (243U)
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_MAIN_PATH_UL_CAL                   (244U)
 #define ADRV904X_STREAM_ID__CORE__ANT_CAL_SET_OUTPUT_GPIO_MAIN_PATH_DL_CAL                   (245U)
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_0                                   (8U)   /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_4 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_1                                   (9U)   /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_5 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_2                                   (10U)  /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_6 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_3                                   (11U)  /* When SBET Disabled: Use what was TX__RADIO_SEQ_RISE_7 */
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_PREPARE_4                                   (12U)  /* When SBET Disabled: Use what was TX__RADIO_SEQ_FALL_0 */
+#define ADRV904X_STREAM_ID__TX__PA_PROT_ACTIVATE                                             (4U)   /* Use what was TX__RADIO_SEQ_RISE_0 */
 #define ADRV904X_STREAM_ID__TX__TX_SET_INIT_CAL_RUNNING_BIT                                  (17U)  /* Use what was TX__RADIO_SEQ_FALL_5 */
 #define ADRV904X_STREAM_ID__TX__TX_CLR_INIT_CAL_RUNNING_BIT                                  (18U)  /* Use what was TX__RADIO_SEQ_FALL_6 */
+#define ADRV904X_STREAM_ID__TX__PA_PROT_CHECK_IF_ACTIVE                                      (20U)
+#define ADRV904X_STREAM_ID__TX__PA_PROT_CLEAR_ACTIVE_FLAG                                    (21U)
+#define ADRV904X_STREAM_ID__TX__DTX_POWER_UP                                                 (32U)
 #define ADRV904X_STREAM_ID__TX__DTX_MANUAL_ACTIVATE                                          (36U)
 #define ADRV904X_STREAM_ID__TX__DTX_MANUAL_DEACTIVATE                                        (37U)
+#define ADRV904X_STREAM_ID__TX__DTX_DEACTIVATE                                               (39U)
 #define ADRV904X_STREAM_ID__TX__TX_LOOPBACK1_ENABLE_REQUEST                                  (41U)
 #define ADRV904X_STREAM_ID__TX__TX_LOOPBACK1_DISABLE_REQUEST                                 (42U)
 #define ADRV904X_STREAM_ID__TX__TX_LOOPBACK2_ENABLE_REQUEST                                  (43U)
 #define ADRV904X_STREAM_ID__TX__TX_LOOPBACK2_DISABLE_REQUEST                                 (44U)
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_TX_FALL_SET                                 (52U)
+#define ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG_CLRSTATUS                              (52U)
 #define ADRV904X_STREAM_ID__TX__TXLB_ADC_RAMP_ENABLE                                         (53U)
 #define ADRV904X_STREAM_ID__TX__TXLB_ADC_RAMP_DISABLE                                        (54U)
-#define ADRV904X_STREAM_ID__TX__DPD_MODEL_SWITCH_TX_FALL_CLEAR                               (57U)
+#define ADRV904X_STREAM_ID__TX__CFR_CFG_SET_CHANGE_REQ                                       (57U)
 #define ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG                                        (63U)
 #define ADRV904X_STREAM_ID__TX__SET_CAPTURE_TRIGGER_BIT                                      (64U)
 #define ADRV904X_STREAM_ID__TX__CLEAR_CAPTURE_TRIGGER_BIT                                    (65U)
 #define ADRV904X_STREAM_ID__TX__SET_IMMEDIATE_CAPTURE_ENABLE_BIT                             (66U)
 #define ADRV904X_STREAM_ID__TX__SET_CAPTURE_PENDING_BIT                                      (67U)
 #define ADRV904X_STREAM_ID__TX__CLEAR_CAPTURE_PENDING_BIT                                    (68U)
-#define ADRV904X_STREAM_ID__TX__PA_PROT_RECOVERY                                             (85U)
-#define ADRV904X_STREAM_ID__TX__WRITE_DTX_MODE_CONFIG_CLRSTATUS                              (87U)
-#define ADRV904X_STREAM_ID__TX__CFR_CFG_SET_CHANGE_REQ                                       (88U)
+#define ADRV904X_STREAM_ID__TX__SET_CT_DPD_CLEAR_OUTPUT                                      (79U)
+#define ADRV904X_STREAM_ID__TX__CLEAR_CT_DPD_CLEAR_OUTPUT                                    (80U)
+#define ADRV904X_STREAM_ID__TX__DISABLE_CT_DPD_CLEAR_OUTPUT                                  (81U)
 #define ADRV904X_STREAM_ID__RX__RX_CUSTOM_RISE                     (21U)
 #define ADRV904X_STREAM_ID__RX__RX_CUSTOM_FALL                     (22U)
 #define ADRV904X_STREAM_ID__RX__RX_SET_DDC0_RSSI_REQ_FLAG          (36U)

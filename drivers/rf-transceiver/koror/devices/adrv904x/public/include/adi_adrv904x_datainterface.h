@@ -1,14 +1,13 @@
  /**
- * Copyright 2015 - 2023 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file adi_adrv904x_datainterface.h
  * \brief Contains ADRV904X API public function prototypes related to the data interface
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_DATAINTERFACE_H_
@@ -216,6 +215,33 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeframerCfgGet_v2(adi_adrv904x_Dev
                                                                 const adi_adrv904x_DeframerSel_e    deframerSel,
                                                                 const adi_adrv904x_TxChannels_e     chanSel,
                                                                 adi_adrv904x_DeframerCfg_t* const   deframerCfg);
+
+
+/**
+* \brief Gets the JESD204B / C Deframer's scaled configuration 
+*
+* This function reads the JESD204B / C deframer settings.
+*
+* \pre This function may be called any time after device initialization
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in, out] device Context variable - Pointer to the device settings structure
+* \param[in] deframerSel selected of framer defined in adi_adrv904x_DeframerSel_e
+* \param[in] chanSel selected Tx channel defined in adi_adrv904x_TxChannels_e
+* \param[out] deframerCfg Pointer to the JESD Deframer configuration read back
+* \param[in] bypass CDUC if ADI_TRUE
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DeframerCfgGetScaled(adi_adrv904x_Device_t* const        device,
+                                                                   const adi_adrv904x_DeframerSel_e    deframerSel,
+                                                                   const adi_adrv904x_TxChannels_e     chanSel,
+                                                                   adi_adrv904x_DeframerCfg_t* const   deframerCfg,
+                                                                   const uint8_t bypass);
+
 /**
  * \brief Gets the link states for all the framers.
  *

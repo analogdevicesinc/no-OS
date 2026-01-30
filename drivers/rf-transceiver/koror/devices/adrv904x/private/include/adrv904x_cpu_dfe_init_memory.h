@@ -1,14 +1,13 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file
  * \brief This file contains DFE memory definitions
  *
- * DFE SDK API Version: 2.10.0.4
+ * DFE SDK API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_CPU_DFE_PROFILE_INIT_MEMORY_H__

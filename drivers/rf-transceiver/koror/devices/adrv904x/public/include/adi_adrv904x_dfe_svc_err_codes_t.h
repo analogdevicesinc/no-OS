@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -12,7 +11,7 @@
  *
  * \details Contains DFE error code definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_ERROR_CODES_T_H__
@@ -798,6 +797,46 @@ typedef enum adi_adrv904x_DfeSvcErrCode
                                                                                                                     * @maincause: Fbox scaler value cannot be smaller than minimum scaler value detected based on max num of columns
                                                                                                                     * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
                                                                                                                     * @mainrecovtext: Increase fbox scaler value
+                                                                                                                    * @severity:
+                                                                                                                    */
+
+    ADI_ADRV904X_DFE_SVC_ERR_CODE_DFE_ACT_MODEL_SELECT_PAUSED        = (ADI_ADRV904X_DFE_SVC_ERR_SVC_DFE_ERROR_CODE_START + 0x19u),          /*!< @errcode: 0x0419
+                                                                                                                    * @desc: DFE Actuator service error: model selecting is paused during capturing
+                                                                                                                    * @maincause: A new model could not be immediately selected during a capture
+                                                                                                                    * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
+                                                                                                                    * @mainrecovtext: If model selecting is not synchronised with capturing, this condition is not an error.
+                                                                                                                    * @severity:
+                                                                                                                    */
+
+    ADI_ADRV904X_DFE_SVC_ERR_CODE_DFE_UNEXPECTED_DONE_EVENT_CNT      = (ADI_ADRV904X_DFE_SVC_ERR_SVC_DFE_ERROR_CODE_START + 0x1Au),          /*!< @errcode: 0x041A
+                                                                                                                    * @desc: DFE Event Service Error: Too many capture buffer DMA done event were received
+                                                                                                                    * @maincause: Too many capture buffer DMA done event were received
+                                                                                                                    * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
+                                                                                                                    * @mainrecovtext: Contact ADI with memdump if the Problem Persists
+                                                                                                                    * @severity:
+                                                                                                                    */
+
+    ADI_ADRV904X_DFE_SVC_ERR_CODE_DFE_UNEXPECTED_CAP_NOT_IN_PROGRESS = (ADI_ADRV904X_DFE_SVC_ERR_SVC_DFE_ERROR_CODE_START + 0x1Bu),          /*!< @errcode: 0x041B
+                                                                                                                    * @desc: DFE Event Service Error: An unexpected capture buffer DMA done event was received
+                                                                                                                    * @maincause: An unexpected capture buffer DMA done event was received
+                                                                                                                    * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
+                                                                                                                    * @mainrecovtext: Contact ADI with memdump if the Problem Persists
+                                                                                                                    * @severity:
+                                                                                                                    */
+
+    ADI_ADRV904X_DFE_SVC_ERR_CODE_DFE_CAP_DMA_ERROR                  = (ADI_ADRV904X_DFE_SVC_ERR_SVC_DFE_ERROR_CODE_START + 0x1Cu),          /*!< @errcode: 0x041C
+                                                                                                                    * @desc: DFE Event Service Error: DMA error occurred during capture buffer DMA
+                                                                                                                    * @maincause: DMA error occurred during capture buffer DMA
+                                                                                                                    * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_DEVICE
+                                                                                                                    * @mainrecovtext: Contact ADI with memdump if the Problem Persists
+                                                                                                                    * @severity:
+                                                                                                                    */
+
+    ADI_ADRV904X_DFE_SVC_ERR_CODE_DFE_CTC2_KLUT_ENTRY_EXCEED_RANGE   = (ADI_ADRV904X_DFE_SVC_ERR_SVC_DFE_ERROR_CODE_START + 0x1Du),          /*!< @errcode: 0x041D
+                                                                                                                    * @desc: DFE Actuator service error: CTC model Klut entry exceed range
+                                                                                                                    * @maincause: inappropriate scale and offset value for klut
+                                                                                                                    * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                    * @mainrecovtext: Program ctc2 model config with appropriate scale and offset value for klut
                                                                                                                     * @severity:
                                                                                                                     */
 

@@ -1,14 +1,13 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file adrv904x_dfe_svc_radio_ctrl_sequencer_t.h
  * \brief Contains data types for DFE SDK Radio Sequencer Service
  *
- * DFE SDK API Version: 2.10.0.4
+ * DFE SDK API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_DFE_SVC_RADIO_CTRL_SEQUENCER_T_H__

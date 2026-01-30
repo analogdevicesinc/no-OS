@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _ADRV904X_BF_TX_FUNCS_H_
@@ -76,11 +76,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionAveragePower_BfGet
                                                                                  adi_adrv904x_SpiCache_t* const spiCache,
                                                                                  const adrv904x_BfTxFuncsChanAddr_e baseAddr,
                                                                                  uint16_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionAverageThreshold_BfSet(adi_adrv904x_Device_t* const device,
-                                                                                     adi_adrv904x_SpiCache_t* const spiCache,
-                                                                                     const adrv904x_BfTxFuncsChanAddr_e baseAddr,
-                                                                                     const uint16_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionAverageThreshold_BfGet(adi_adrv904x_Device_t* const device,
                                                                                      adi_adrv904x_SpiCache_t* const spiCache,
@@ -246,11 +241,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionPeakPower_BfGet(ad
                                                                               adi_adrv904x_SpiCache_t* const spiCache,
                                                                               const adrv904x_BfTxFuncsChanAddr_e baseAddr,
                                                                               uint16_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionPeakThreshold_BfSet(adi_adrv904x_Device_t* const device,
-                                                                                  adi_adrv904x_SpiCache_t* const spiCache,
-                                                                                  const adrv904x_BfTxFuncsChanAddr_e baseAddr,
-                                                                                  const uint16_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionPeakThreshold_BfGet(adi_adrv904x_Device_t* const device,
                                                                                   adi_adrv904x_SpiCache_t* const spiCache,

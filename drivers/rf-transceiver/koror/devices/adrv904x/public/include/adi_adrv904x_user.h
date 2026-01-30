@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
  * \file adi_adrv904x_user.h
  * \brief Contains ADRV904X API macro definitions for user to override
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_USER_H_
@@ -122,6 +121,10 @@
 
 #ifndef ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_US
 #define ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_US        180000000
+#endif
+
+#ifndef ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_ONE_HOUR_IN_US
+#define ADI_ADRV904X_RUNEYESWEEP_TIMEOUT_ONE_HOUR_IN_US        (60UL * 60UL * 1000000UL)
 #endif
 
 #ifndef ADI_ADRV904X_RUNEYESWEEP_INTERVAL_US

@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _ADRV904X_BF_ORX_DIG_H_
@@ -26,6 +26,11 @@
     #define ADI_API
   #endif
 #endif
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_OrxDig_AdcPdN_BfSet(adi_adrv904x_Device_t* const device,
+                                                              adi_adrv904x_SpiCache_t* const spiCache,
+                                                              const adrv904x_BfOrxDigChanAddr_e baseAddr,
+                                                              const uint8_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_OrxDig_CptBusy_BfGet(adi_adrv904x_Device_t* const device,
                                                                adi_adrv904x_SpiCache_t* const spiCache,

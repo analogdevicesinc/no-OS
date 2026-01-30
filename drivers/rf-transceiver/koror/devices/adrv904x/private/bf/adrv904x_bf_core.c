@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #include "../../private/bf/adrv904x_bf_core.h"
@@ -21140,53 +21140,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_StreamProcGpioPinMask_BfGet(adi_a
     return recoveryAction;
 }
 
-ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInCmosSchmittTrigEnable_BfGet(adi_adrv904x_Device_t* const device,
-                                                                                 adi_adrv904x_SpiCache_t* const spiCache,
-                                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
-                                                                                 uint8_t* const bfValue)
-{
-    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    uint32_t bfValueTmp = 0U;
-
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-
-    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
-
-#if ADRV904X_BITFIELD_NULL_CHECK > 0
-    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
-#endif /* ADRV904X_BITFIELD_NULL_CHECK */
-
-    *bfValue = (uint8_t) 0;
-
-#if ADRV904X_BITFIELD_ADDR_CHECK > 0
-    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
-    {
-        ADI_ERROR_REPORT(&device->common, 
-                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
-                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
-                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
-                         baseAddr, 
-                         "Invalid adrv904x_Core_SyncInCmosSchmittTrigEnable_BfGet Address");
-        return recoveryAction;
-    }
-#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
-
-    recoveryAction = adi_adrv904x_Register32Read(device,
-                                                 spiCache,
-                                                 (uint32_t) (baseAddr + 0x183U),
-                                                 &bfValueTmp,
-                                                 0x7U);
-    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
-        return recoveryAction;
-    }
-
-    *bfValue = (uint8_t) bfValueTmp;
-
-    return recoveryAction;
-}
-
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInLvdsPnInvert_BfGet(adi_adrv904x_Device_t* const device,
                                                                         adi_adrv904x_SpiCache_t* const spiCache,
                                                                         const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -21230,6 +21183,53 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInLvdsPnInvert_BfGet(adi_adrv
     }
 
     *bfValue = (uint8_t) (bfValueTmp >> 3);
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInLvdsSelectCmosUnselect_BfGet(adi_adrv904x_Device_t* const device,
+                                                                                  adi_adrv904x_SpiCache_t* const spiCache,
+                                                                                  const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                                  uint8_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint8_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_SyncInLvdsSelectCmosUnselect_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x183U),
+                                                 &bfValueTmp,
+                                                 0x40U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint8_t) (bfValueTmp >> 6);
 
     return recoveryAction;
 }
@@ -21418,6 +21418,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncOutLvdsPnInvert_BfGet(adi_adr
     }
 
     *bfValue = (uint8_t) (bfValueTmp >> 2);
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx0AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1D5U),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1D6U),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx0AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx0AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  (uint32_t) bfValue,
+                                                  0x1U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
 
     return recoveryAction;
 }
@@ -21763,6 +21875,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenUpdateS1_BfSet(adi_adrv90
                                                   ((uint32_t) baseAddr + 0x1D4U),
                                                   (uint32_t) bfValue,
                                                   0x1U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx1AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1D7U),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1D8U),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx1AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx1AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 1),
+                                                  0x2U);
     if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
@@ -22122,6 +22346,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenUpdateS1_BfSet(adi_adrv90
     return recoveryAction;
 }
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx2AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1D9U),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1DAU),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx2AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx2AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 2),
+                                                  0x4U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -22463,6 +22799,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenUpdateS1_BfSet(adi_adrv90
                                                   ((uint32_t) baseAddr + 0x1D4U),
                                                   ((uint32_t) bfValue << 2),
                                                   0x4U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx3AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1DBU),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1DCU),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx3AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx3AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 3),
+                                                  0x8U);
     if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
@@ -22822,6 +23270,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenUpdateS1_BfSet(adi_adrv90
     return recoveryAction;
 }
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx4AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1DDU),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1DEU),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx4AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx4AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 4),
+                                                  0x10U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -23163,6 +23723,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenUpdateS1_BfSet(adi_adrv90
                                                   ((uint32_t) baseAddr + 0x1D4U),
                                                   ((uint32_t) bfValue << 4),
                                                   0x10U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx5AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1DFU),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1E0U),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx5AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx5AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 5),
+                                                  0x20U);
     if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
@@ -23522,6 +24194,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenUpdateS1_BfSet(adi_adrv90
     return recoveryAction;
 }
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx6AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1E1U),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1E2U),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx6AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx6AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 6),
+                                                  0x40U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -23863,6 +24647,118 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenUpdateS1_BfSet(adi_adrv90
                                                   ((uint32_t) baseAddr + 0x1D4U),
                                                   ((uint32_t) bfValue << 6),
                                                   0x40U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx7AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint16_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx7AttenuationReadback_BfGet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1E3U),
+                                                 &bfValueTmp,
+                                                 0xFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp)));
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t) (baseAddr + 0x1E4U),
+                                                 &bfValueTmp,
+                                                 0x3U);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
+
+    return recoveryAction;
+}
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx7AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 1U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_Core_Tx7AttenReadbackUpdate_BfSet");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_Core_Tx7AttenReadbackUpdate_BfSet Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x1E5U),
+                                                  ((uint32_t) bfValue << 7),
+                                                  0x80U);
     if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");

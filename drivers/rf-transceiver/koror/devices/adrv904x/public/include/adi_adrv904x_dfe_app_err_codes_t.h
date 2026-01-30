@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -12,7 +11,7 @@
  *
  * \details Contains DFE App error code definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 #ifndef __ADI_ADRV904X_DFE_APP_ERROR_CODES_T_H__
 #define __ADI_ADRV904X_DFE_APP_ERROR_CODES_T_H__
@@ -646,6 +645,22 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @maincause: Return loss values have passed thresholds configured for VSWR major alarm
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
                                                                                                                   * @mainrecovtext: Check external path conditions and/or VSWR alarm configuration.
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_TOO_FEW_VALID_CAPTURES                  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 77u),  /*!< @errcode: 0xE04D
+                                                                                                                  * @desc: APP Error: Too few captures after capture screening
+                                                                                                                  * @maincause: Too many captures were screened out to invalid power of PAR. IT may occur of signal power is changing rapidly
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
+                                                                                                                  * @mainrecovtext: It is mainly a warning, and can be ignored if infrequent
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_MAG_GAIN_SATURATION                     = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 78u),  /*!< @errcode: 0xE04E
+                                                                                                                  * @desc: APP Error: Feature calculation saturation
+                                                                                                                  * @maincause: Use of mag gain caused saturation during feature calculation
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
+                                                                                                                  * @mainrecovtext: Reduce input signal power, or reduce mag gain setting
                                                                                                                   * @severity:
                                                                                                                   */
 
@@ -1501,64 +1516,60 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @severity:
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_CT_FLUT_BUFFER_ACQ_FAIL                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 364u), /*!< @errcode: 0xE16C
-                                                                                                                  * @desc: APP Error: CT FLUT buffer acquire failed
-                                                                                                                  * @maincause: CT FLUT Buffer not Available
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_BUFFER_ACQ_FAIL                   = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 364u), /*!< @errcode: 0xE16C
+                                                                                                                  * @desc: APP Error: CTC2 FLUT buffer acquire failed
+                                                                                                                  * @maincause: CTC2 FLUT Buffer not Available
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_FEATURE
                                                                                                                   * @mainrecovtext: Check that if buffers are available
                                                                                                                   * @severity:
                                                                                                                   */
-
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_FLUT_COPY_FAILED                     = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 365u), /*!< @errcode: 0xE16D
-                                                                                                                  * @desc: APP Error: CTC FLUT Copy
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_COPY_FAILED                       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 365u), /*!< @errcode: 0xE16D
+                                                                                                                  * @desc: APP Error: CTC2 FLUT Copy
                                                                                                                   * @maincause: LUT copy timedout or DMA error reported
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                   * @mainrecovtext: Contact ADI with memdump
                                                                                                                   * @severity:
                                                                                                                   */
-
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_MODEL_CONFIG_FAILED                  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 366u), /*!< @errcode: 0xE16E
-                                                                                                                  * @desc: APP Error: CTC Model config failed
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_FAILED                    = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 366u), /*!< @errcode: 0xE16E
+                                                                                                                  * @desc: APP Error: CTC2 Model config failed
                                                                                                                   * @maincause: Invalid configuration or out of range parameter
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
-                                                                                                                  * @mainrecovtext: Check CTC model configuration
+                                                                                                                  * @mainrecovtext: Check CTC2 model configuration
                                                                                                                   * @severity:
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_ACT_DELAY_GET_FAILED                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 367u), /*!< @errcode: 0xE16F
-                                                                                                                  * @desc: APP Error: CTC Act delay get failed
-                                                                                                                  * @maincause: CTC driver mutex lock might have failed
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_ACT_DELAY_GET_FAILED                   = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 367u), /*!< @errcode: 0xE16F
+                                                                                                                  * @desc: APP Error: CTC2 Act delay get failed
+                                                                                                                  * @maincause: CTC2 driver mutex lock might have failed
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                   * @mainrecovtext: Contact ADI with memdump
                                                                                                                   * @severity:
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_ACT_FBOX_SCALE_GET_FAILED            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 368u), /*!< @errcode: 0xE170
-                                                                                                                  * @desc: APP Error: CTC Act Fbox scaler get failed
-                                                                                                                  * @maincause: CTC driver mutex lock might have failed
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FBOX_SCALE_GET_FAILED                  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 368u), /*!< @errcode: 0xE170
+                                                                                                                  * @desc: APP Error: CTC2 Act Fbox scaler get failed
+                                                                                                                  * @maincause: CTC2 driver mutex lock might have failed
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump
+                                                                                                                  * @severity:
+                                                                                                                  */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_ACT_ENABLE_FAILED                      = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 369u), /*!< @errcode: 0xE171
+                                                                                                                  * @desc: APP Error: CTC2 Actuator enable failed
+                                                                                                                  * @maincause: CTC2 driver mutex lock might have failed
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                   * @mainrecovtext: Contact ADI with memdump
                                                                                                                   * @severity:
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_ACTUATOR_ENABLE_FAILED               = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 369u), /*!< @errcode: 0xE171
-                                                                                                                  * @desc: APP Error: CTC Actuator enable failed
-                                                                                                                  * @maincause: CTC driver mutex lock might have failed
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_ACT_RESET_FAILED                       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 370u), /*!< @errcode: 0xE172
+                                                                                                                  * @desc: APP Error: CTC2 Actuator reset failed
+                                                                                                                  * @maincause: CTC2 driver mutex lock might have failed
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
                                                                                                                   * @mainrecovtext: Contact ADI with memdump
                                                                                                                   * @severity:
                                                                                                                   */
-
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_ACTUATOR_RESET_FAILED                = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 370u), /*!< @errcode: 0xE172
-                                                                                                                  * @desc: APP Error: CTC Actuator reset failed
-                                                                                                                  * @maincause: CTC driver mutex lock might have failed
-                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
-                                                                                                                  * @mainrecovtext: Contact ADI with memdump
-                                                                                                                  * @severity:
-                                                                                                                  */
-
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CT_DPD_ACT_FBOX_SCALE_SET_FAILED            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 371u), /*!< @errcode: 0xE173
-                                                                                                                  * @desc: APP Error: CTC Act Fbox scaler set failed
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FBOX_SCALE_SET_FAILED                  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 371u), /*!< @errcode: 0xE173
+                                                                                                                  * @desc: APP Error: CTC2 Act Fbox scaler set failed
                                                                                                                   * @maincause: Fbox scaler is smaller than model config requires
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
                                                                                                                   * @mainrecovtext: Increase fbox scaler value
@@ -1572,6 +1583,7 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @mainrecovtext: Enable TX channel or shorten the TX on time
                                                                                                                   * @severity:
                                                                                                                   */
+
 
     ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_FEATCOMPUTE_BAD_CALTYPE                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 373u), /*!< @errcode: 0xE175
                                                                                                                   * @desc: APP Error: calType to request feature compute
@@ -1613,7 +1625,7 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @severity:
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_OUT_OF_RANGE_BLOCK_ID_DECOMP            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 378u), /*!< @errcode: 0xE180
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DFE_OUT_OF_RANGE_BLOCK_ID_DECOMP            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 378u), /*!< @errcode: 0xE17A
                                                                                                                   * @desc: APP Error: Out of range block id during decomposition
                                                                                                                   * @maincause: Unexpected Error
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
@@ -1621,7 +1633,8 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @severity:CRITICAL
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_NO_AVAILABLE_ITERATION_TYPE             = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 379U), /*!< @errcode: 0xE181
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_NO_AVAILABLE_ITERATION_TYPE             = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 379U), /*!< @errcode: 0xE17B
                                                                                                                   * @desc: APP Error: DPD couldn't find an available iteration type(GMP or CTC2) to run
                                                                                                                   * @maincause: No GMP and/or CTC2 models configured
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
@@ -1629,7 +1642,7 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @severity:
                                                                                                                   */
 
-    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_INDIRECT_LEARNING_SET_FOR_PARTIAL       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 380U), /*!< @errcode: 0xE182
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_INDIRECT_LEARNING_SET_FOR_PARTIAL       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 380U), /*!< @errcode: 0xE17C
                                                                                                                   * @desc: APP Error: indirect learning is set for partial update
                                                                                                                   * @maincause: customer configured indirect learning
                                                                                                                   * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
@@ -1637,12 +1650,246 @@ typedef enum adi_adrv904x_DfeAppErrCode
                                                                                                                   * @severity:
                                                                                                                   */
 
+
+
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INVALID_COL_FOR_FEAT    = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 381u),   /*!< @errcode: 0xE17D
+                                                                                                                  * @desc: APP Error: CTC2 model invalid column selections
+                                                                                                                  * @maincause: One of the features has invalid column selection. Max:8
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_DUPLICATE_FEATURES      = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 382u),   /*!< @errcode: 0xE17E
+                                                                                                                  * @desc: APP Error: CTC2 model has duplicate features
+                                                                                                                  * @maincause: Two features have the same row, column and j term
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_ROW_WITH_NO_FEATURE     = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 383u),   /*!< @errcode: 0xE17F
+                                                                                                                  * @desc: APP Error: CTC2 model has a row with no columns enabled
+                                                                                                                  * @maincause: There is a row with no features enabled for
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INV_NUM_OF_BLOCKS       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 384u),   /*!< @errcode: 0xE180
+                                                                                                                  * @desc: APP Error: CTC2 model has IIR blocks exceeding max value
+                                                                                                                  * @maincause: Model enables more IIR blocks than allowed. Max: 32
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INV_NUM_OF_FEAT_FOR_UPD = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 385u),   /*!< @errcode: 0xE181
+                                                                                                                  * @desc: APP Error: CTC2 model has more features than allowed
+                                                                                                                  * @maincause: Model has more features than maximum 255(per update)
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_FEAT_ID_NOT_FOUND       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 386u),   /*!< @errcode: 0xE182
+                                                                                                                  * @desc: APP Error: Feature id cannot be found for a given set of row/col/j
+                                                                                                                  * @maincause: Feature id cannot be found for a given set of row/col/j
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump and CTC model configuration
+                                                                                                                  * @severity: CRITICAL
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_DEC_ROW_NOT_CONSECUTIVE = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 387u),   /*!< @errcode: 0xE183
+                                                                                                                  * @desc: APP Error: Rows and/or decs are not consecutive
+                                                                                                                  * @maincause: There are disabled rows or decs in between enabled ones in model configu
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INVALID_MODEL_INDEX     = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 388u),   /*!< @errcode: 0xE184
+                                                                                                                  * @desc: APP Error: CTC2 model config selects invalid model index
+                                                                                                                  * @maincause: Invalid model index selection. Only model0 is available for CTC2
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INVALID_DEC_SEL         = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 389u),   /*!< @errcode: 0xE185
+                                                                                                                  * @desc: APP Error: CTC2 model invalid Decimator selection for a row
+                                                                                                                  * @maincause: One of the rows selecting an invalid decimator
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INVALID_DEC_CFG         = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 390u),   /*!< @errcode: 0xE186
+                                                                                                                  * @desc: APP Error: CTC2 model invalid deciumator config
+                                                                                                                  * @maincause: One of the decimator doesn't have any rows connected to
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INVALID_ROW_SEL         = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 391u),   /*!< @errcode: 0xE187
+                                                                                                                  * @desc: APP Error: CTC2 model invalid row selection for a feature
+                                                                                                                  * @maincause: One of the features selecting an invalid row
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_ENTRY_SAT_ERROR                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 392u),   /*!< @errcode: 0xE188
+                                                                                                                  * @desc: APP Error: CTC2 FLUT Saturation
+                                                                                                                  * @maincause: One or more FLUT entries exceeding int16 max value
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update Fbox scaler parameter, or CTC2 model config
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_BUFFER_REL_FAIL                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 393u),   /*!< @errcode: 0xE189
+                                                                                                                  * @desc: APP Error: CTC2 FLUT buffer release failed
+                                                                                                                  * @maincause: CTC2 FLUT Buffer not valid
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump
+                                                                                                                  * @severity: CRITICAL
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_COPY_SDK_ERROR                  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 394u),   /*!< @errcode: 0xE18A
+                                                                                                                  * @desc: APP Error: FLUT Copy error reported from SDK.
+                                                                                                                  * @maincause: Unexpected error
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump
+                                                                                                                  * @severity: CRITICAL
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_COPY_EVENTGET_FAILED            = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 395u),   /*!< @errcode: 0xE18B
+                                                                                                                  * @desc: APP Error: FLUT Copy error while waiting for completion.
+                                                                                                                  * @maincause: Unexpected error encountered while waiting for any LUT done or error event
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                  * @mainrecovtext: Contact ADI with memdump
+                                                                                                                  * @severity: CRITICAL
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INV_NUM_OF_FEAT_FOR_DEC = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 396u),   /*!< @errcode: 0xE18C
+                                                                                                                  * @desc: APP Error: CTC2 model invalid number of features for a decimator
+                                                                                                                  * @maincause: One of the decimator has more features than allowed
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_GAIN_CALC_ERROR                      = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 397u),   /*!< @errcode: 0xE18D
+                                                                                                                  * @desc: APP Error: CTC2 adaptation cannot calculate Tx/Orx gain
+                                                                                                                  * @maincause: Capture data might have all 0s
+                                                                                                                  * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                  * @mainrecovtext: Use a different dec ratio or CFR delay
+                                                                                                                  * @severity:
+                                                                                                                  */
+
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_MODEL_CONFIG_INVALID_KFLUT_FOR_FEAT  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 398u), /*!< @errcode: 0xE18E
+                                                                                                                * @desc: APP Error: CTC2 model invalid kFlut power term
+                                                                                                                * @maincause: One of the features has invalid kFlut power term. Range:[1-14]
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                * @severity:
+                                                                                                                */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_TX_PFIR_FRAC_ADJ_FAILED                   = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 399u), /*!< @errcode: 0xE18F
+                                                                                                                * @desc: APP Error: Mailbox command to Radio CPU has failed
+                                                                                                                * @maincause: Radio CPU is not responsive or invalid frac delay setting is used
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                * @mainrecovtext: Contact ADI with memdump
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_CAPTURE_REQUEST_FAILURE              = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 400u), /*!< @errcode: 0xE190
+                                                                                                                * @desc: APP Error: CTC2 Capture Request failure
+                                                                                                                * @maincause: number of non-zero samples in all of the captures is less than 64
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                * @mainrecovtext: make sure your setup is configured correctly
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_IIR_RESULT_OUT_OF_RANGE              = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 401u), /*!< @errcode: 0xE191
+                                                                                                                * @desc: APP Error: CTC2 IIR result out of range
+                                                                                                                * @maincause: model configuration
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                * @mainrecovtext: make sure you config the right parameter
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_FLUT_SWAP_AFTER_UPDATE_FAILED        = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 402u), /*!< @errcode: 0xE192
+                                                                                                                * @desc: APP Error: CTC2 flut swap after lut update failed
+                                                                                                                * @maincause: unexpected error
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                * @mainrecovtext: Contact ADI with memdump
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_TXPFIR_RESET_FAILED                  = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 403u), /*!< @errcode: 0xE193
+                                                                                                                * @desc: APP Error: CTC2 tx pfir reset failed
+                                                                                                                * @maincause: unexpected error
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                * @mainrecovtext: Contact ADI with memdump
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_RESET_FAILED                         = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 404u), /*!< @errcode: 0xE194
+                                                                                                                * @desc: APP Error: CTC2 reset failed
+                                                                                                                * @maincause: unexpected error
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                * @mainrecovtext: Contact ADI with memdump
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_NO_VALID_MODEL                       = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 405u), /*!< @errcode: 0xE195
+                                                                                                                * @desc: APP Error: CTC2 no valid model available
+                                                                                                                * @maincause: customer try to enable ctc2 without configuring correct model
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_RESET_FEATURE
+                                                                                                                * @mainrecovtext: Do model config before enabling ctc2
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_INVALID_MODEL_SEL                    = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 406u), /*!< @errcode: 0xE196
+                                                                                                                * @desc: APP Error: Invalid Model Structure field
+                                                                                                                * @maincause: model configuration
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                * @mainrecovtext: Update CTC2 model configuration
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_ENV_PWR_RATIO_VIOL                   = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 407u), /*!< @errcode: 0xE197
+                                                                                                                * @desc: APP Error: Max to min envelope power ratio violates the threshold
+                                                                                                                * @maincause: signal stability
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_NONE
+                                                                                                                * @mainrecovtext: Robustness check on signal
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CTC2_ENV_PWR_ALL_ZERO                     = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 408u), /*!< @errcode: 0xE198
+                                                                                                                * @desc: APP Error: envelope power all 0
+                                                                                                                * @maincause: signal stability
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_NONE
+                                                                                                                * @mainrecovtext: Robustness check on signal
+                                                                                                                * @severity:
+                                                                                                                */
+
+    ADI_ADRV904X_DFE_APP_ERR_CODE_DPD_WB_REG_BUF_SELECT_ERR                 = (ADI_ADRV904X_DFE_APP_ERR_COMMON_ERROR_CODE_START + 409u), /*!< @errcode: 0xE199
+                                                                                                                * @desc: APP Error: wide band regularization buffer select does not match the wide band buffer allocation mode
+                                                                                                                * @maincause: config error
+                                                                                                                * @mainrecovenum: ADI_ADRV904X_ERR_ACT_CHECK_PARAM
+                                                                                                                * @mainrecovtext: check config details
+                                                                                                                * @severity:
+                                                                                                                */
+
 #ifndef ADI_ADRV904X_DFE_SVC_CMN_FW
     /* Pseudo error code */
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR                 = (int32_t) 0x80000000                       /* Remove UL for API to avoid ISO C error. set to large number to force enum to be uint32_t */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR               = (int32_t) 0x80000000                         /* Remove UL for API to avoid ISO C error. set to large number to force enum to be uint32_t */
 #else
     /* Pseudo error code */
-    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR                 = 0x80000000UL                               /* Add UL for FW to force it to be unsigned int. set to large number to force enum to be uint32_t */
+    ADI_ADRV904X_DFE_APP_ERR_CODE_CPU_CAL_EXIT_OCCURRED_ERROR               = 0x80000000UL                                 /* Add UL for FW to force it to be unsigned int. set to large number to force enum to be uint32_t */
 #endif
 } adi_adrv904x_DfeAppErrCode_e;
 

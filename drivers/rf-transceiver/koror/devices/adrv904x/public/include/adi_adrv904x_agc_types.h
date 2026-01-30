@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file adi_adrv904x_agc_types.h
  * \brief Contains ADRV904X API AGC data types
  *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_AGC_TYPES_H_

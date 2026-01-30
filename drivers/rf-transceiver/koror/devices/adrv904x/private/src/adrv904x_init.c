@@ -1,13 +1,12 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adrv904x_init.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "../../private/include/adrv904x_init.h"
@@ -84,9 +83,6 @@ adi_adrv904x_ErrAction_e adrv904x_ClocksSync(   adi_adrv904x_Device_t* const    
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
 
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, init);
-
-    // TODO: This sequence differs slightly than described in the Palau_MCS document
-    //       however, this is the sequence used by DV team
 
     /* Set Digital device clock divider */
     digDeviceClockDiv = 0U;

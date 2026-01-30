@@ -1,7 +1,6 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -11,13 +10,12 @@
  *
  * \details Contains DFE CPU boot status error code definitions
  *
- * DFE SDK API Version: 2.10.0.4
+ * DFE SDK API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_DFE_SVC_ERR_DFE_BOOT_STATUS_T_H__
 #define __ADRV904X_DFE_SVC_ERR_DFE_BOOT_STATUS_T_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 #include "adi_adrv904x_dfe_svc_err_codes_t.h"
 

@@ -5,14 +5,13 @@
  *
  * \details Command definition for ADRV904X_CPU_CMD_ID_RUN_SERDES_EYE_SWEEP
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADRV904X_CPU_CMD_RUN_SERDES_EYE_SWEEP_H__
@@ -156,8 +155,27 @@ ADI_ADRV904X_PACKED(
 typedef struct adrv904x_CpuCmd_PerCompEyeSweepResp
 {
     adrv904x_CpuErrorCode_e status;    /*!< CPU error status code */
-    int8_t    perEyeHeightsAtSpo[512];   
+    int8_t    perEyeHeightsAtSpo[512];
 } adrv904x_CpuCmd_PerCompEyeSweepResp_t;)
+
+/**
+ * \brief JESD_GET_RX_LANE_SINT_CODES command structure
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adrv904x_CpuCmd_GetSintCodes
+{
+    uint8_t        lane;                            /*!< Serdes lane id */
+}   adrv904x_CpuCmd_GetSintCodes_t;)
+
+/**
+ * \brief JESD_GET_RX_LANE_SINT_CODES command response structure
+ */
+ADI_ADRV904X_PACKED(
+typedef struct adrv904x_CpuCmd_GetSintCodesResp
+{
+    adrv904x_CpuErrorCode_e cpuErrorCode;    /*!< CPU error status code */
+    adi_adrv904x_CpuCmd_GetRxLaneSintCodesResp_t details;
+} adrv904x_CpuCmd_GetSintCodesResp_t;)
 
 /**
  * \brief GET_SERDES_FG_METRICS, GET_SERDES_BG_METRICS command structure.

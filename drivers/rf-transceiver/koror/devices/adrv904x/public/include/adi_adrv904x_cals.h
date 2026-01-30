@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains ADRV904X processor function prototypes for
 *    adi_adrv904x_cals.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADI_ADRV904X_CALS_H_
@@ -507,6 +506,16 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DigDcOffsetEnableGet(adi_adrv904x_
                                                                    uint8_t* const isEnabled);
 
 /**
+* ignore cflag 'Wshadow' for these functions if compiled by GCC
+* adi_adrv904x_TxLolReset - shadows structure adi_adrv904x_TxLolReset_t
+* adi_adrv904x_RxQecReset - shadows structure adi_adrv904x_RxQecReset_t
+* adi_adrv904x_TxQecReset - shadows structure adi_adrv904x_TxQecReset_t
+*/
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif /* __GNUC__ */
+/**
  * \brief Reset Tx LOL
  *
  * \dep_begin
@@ -535,6 +544,9 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxLolReset(adi_adrv904x_Device_t* 
 */
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxQecReset(adi_adrv904x_Device_t* const           device,
                                                          const adi_adrv904x_TxQecReset_t* const txQecReset);
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif /* __GNUC__ */
 
 /**
  * \brief Set Dig Dc offset configuration for selected channel/s. User can select 1dB corner for

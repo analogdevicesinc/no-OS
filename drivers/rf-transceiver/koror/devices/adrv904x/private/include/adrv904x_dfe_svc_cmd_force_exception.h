@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,7 +9,7 @@
  *
  * \brief type definitions for ADI_ADRV904X_DFE_SVC_CMD_ID_FORCE_EXCEPTION
  *
- * DFE SDK Version: 2.10.0.4
+ * DFE SDK Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_CMD_FORCE_EXCEPTION_H__

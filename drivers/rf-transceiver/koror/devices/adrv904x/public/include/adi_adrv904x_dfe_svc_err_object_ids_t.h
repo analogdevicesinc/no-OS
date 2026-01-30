@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -12,13 +11,16 @@
  *
  * \details Contains DFE Object ID definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_DFE_SVC_ERR_OBJID_T_H__
 #define __ADI_ADRV904X_DFE_SVC_ERR_OBJID_T_H__
 
-#include <stdint.h>
+
+#include "adi_library_types.h"
+
+
 
 /**
  * \brief DFE firmware object IDs
@@ -73,7 +75,7 @@ typedef enum
     /* Calibration objects ( 0xB0 - 0xBF ) */
     ADI_ADRV904X_DFE_SVC_ERR_OBJID_CAL_START           = 0xB0u,          /*!< Cal start index */
 
-    ADI_ADRV904X_DFE_SVC_ERR_OBJID_CAL_END             = 0xBFu,          /*!< Cal end index */
+    ADI_ADRV904X_DFE_SVC_ERR_OBJID_CAL_END             = 0xB3u,          /*!< Cal end index */
     /* SDK Application objects, always keep in end */
     ADI_ADRV904X_DFE_SVC_ERR_OBJID_APP_START           = 0xE0u,          /*!< Start of APP OBJID */
     ADI_ADRV904X_DFE_SVC_ERR_OBJID_APP_ERROR           = 0xE0u,          /*!< APP error */

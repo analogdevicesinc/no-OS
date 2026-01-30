@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _ADRV904X_BF_CDUC_HB_DPATH_H_
@@ -32,86 +32,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_BandDest_BfSet(adi_adrv904
                                                                      const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
                                                                      uint8_t channelId, 
                                                                      const adrv904x_Bf_CducHbDpath_BandDest_e bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain0_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain0_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain1_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain1_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain2_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain2_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain3_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain3_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain4_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain4_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain5_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain5_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain6_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain6_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain7_BfSet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         const uint32_t bfValue);
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGain7_BfGet(adi_adrv904x_Device_t* const device,
-                                                                         adi_adrv904x_SpiCache_t* const spiCache,
-                                                                         const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
-                                                                         uint32_t* const bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierGainEnable_BfSet(adi_adrv904x_Device_t* const device,
                                                                               adi_adrv904x_SpiCache_t* const spiCache,

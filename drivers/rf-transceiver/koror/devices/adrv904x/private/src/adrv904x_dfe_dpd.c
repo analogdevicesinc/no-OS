@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,17 +8,18 @@
 *
 * \brief Contains ADRV904X DFE DPD related private function implementations
 * 
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #include "adi_adrv904x_dfe_cal_dpd_types.h"
+#include "adi_adrv904x_dfe_cal_dpd_int_types.h"
 #include "../../private/include/adrv904x_dfe_dpd.h"
 #define ADI_FILE    ADI_ADRV904X_FILE_PRIVATE_DFE_DPD
 
 
-adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_Device_t* const                      device,
-                                                                 const uint32_t                                    dpdTxChannelMask,
-                                                                 const adi_adrv904x_DfeAppCalDpdModelType_e        dpdModelType,
-                                                                 const adi_adrv904x_DfeAppCalDpdModelDesc_t* const modelDesc)
+adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_Device_t* const                         device,
+                                                                 const uint32_t                                       dpdTxChannelMask,
+                                                                 const adi_adrv904x_DfeAppCalDpdModelType_e           dpdModelType,
+                                                                 const adi_adrv904x_DfeAppCalDpdModelDescInt_t* const modelDesc)
 {
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
 
@@ -47,7 +47,17 @@ adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_De
                                "Invalid DPD Model is selected. Valid values must be less than 3(ADI_ADRV904X_DFE_APP_CAL_DPD_MODEL_TYPE_DPD_3)");
         return recoveryAction;
     }
-    
+
+    if (dpdModelType != modelDesc->dpdPartial.modelIndex)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdModelType,
+                               "Invalid DPD Model is selected. dpdModelType must match modelIndex");
+        return recoveryAction;
+    }
+
     if ((modelDesc->features == 0u) || (modelDesc->features > ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
@@ -103,62 +113,6 @@ adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigDpdSetRangeCheck(adi_adrv904x_De
                                    "Invalid feature[i].poly is selected, feature[i].poly should be 0/1/7/8/9 ");
             return recoveryAction;
         }
-    }
-
-    recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
-    
-    return recoveryAction;
-}
-
-adi_adrv904x_ErrAction_e adrv904x_DpdModelConfigCtcSetRangeCheck(adi_adrv904x_Device_t* const                      device,
-                                                                 const uint32_t                                    dpdTxChannelMask,
-                                                                 const adi_adrv904x_DfeAppCalDpdModelType_e        dpdModelType,
-                                                                 const adi_adrv904x_DfeAppCalCtcModelDesc_t* const modelDesc)
-{
-    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
-    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, modelDesc);
-
-    if (((dpdTxChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (dpdTxChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common,
-                               recoveryAction,
-                               dpdTxChannelMask,
-                               "Invalid Tx channel is selected. Valid values are any combinations of Tx0/1/2/3/4/5/6/7");
-        return recoveryAction;
-    }
-
-    if ((dpdModelType > ADI_ADRV904X_DFE_APP_CAL_DPD_MODEL_TYPE_CTC_4) || (dpdModelType < ADI_ADRV904X_DFE_APP_CAL_DPD_MODEL_TYPE_CTC_0))
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common,
-                               recoveryAction,
-                               dpdModelType,
-                               "Invalid CTC Model is selected. Valid values must be 3/4/5/6/7");
-        return recoveryAction;
-    }
-    
-    if (modelDesc->features == 0u)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common, 
-                               recoveryAction,
-                               modelDesc->features,
-                               "modelDesc->features should be 1 ~ 255.");
-        return recoveryAction;
-    }
-
-    if (modelDesc->ctcPartial.partial > ADI_ADRV904X_DFE_APP_CAL_DPD_TYPE_CTC_1)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common, 
-                               recoveryAction,
-                               modelDesc->ctcPartial.partial,
-                               "Invalid modelDesc->ctcPartial.partial is selected, modelDesc->dpdPartial should be DPD, CTC1 or CTC2 ");
-        return recoveryAction;
     }
 
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
@@ -272,9 +226,9 @@ adi_adrv904x_ErrAction_e adrv904x_DpdCaptureConfigSetRangeCheck(adi_adrv904x_Dev
     return recoveryAction;
 }
 
-adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_Device_t* const                       device,
-                                                                 const uint32_t                                     dpdTxChannelMask,
-                                                                 const adi_adrv904x_DfeAppCalDpdTrackCfg_t* const   dpdTrackCfg)
+static adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheckCommon(adi_adrv904x_Device_t* const                        device,
+                                                                              const uint32_t                                      dpdTxChannelMask,
+                                                                              const adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg)
 {
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
 
@@ -514,6 +468,94 @@ adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_De
         return recoveryAction;
     }
 
+    if ((dpdTrackCfg->bwDetCfg.bwDetEn != 0u) &&
+        (dpdTrackCfg->bwDetCfg.bwDetEn != 1u))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->bwDetCfg.bwDetEn,
+                               "Invalid bwDetEn is selected. Valid value is 0/1 ");
+        return recoveryAction;
+    }
+
+    if (dpdTrackCfg->bwDetCfg.corrLagMax > 4095u)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->bwDetCfg.corrLagMax,
+                               "Invalid corrLagMax is selected. Valid value is within 0:4095 ");
+        return recoveryAction;
+    }
+
+    if (dpdTrackCfg->decayP < 0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->decayP,
+                               "Invalid decayP. Valid value is positive number");
+        return recoveryAction;
+    }
+
+    if (dpdTrackCfg->muPwrBasedCfg.pwrRangeHighDB > 0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->muPwrBasedCfg.pwrRangeHighDB,
+                               "Invalid pwrRangeHighDB is selected. Valid value is negative number");
+        return recoveryAction;
+    }
+
+    if (dpdTrackCfg->muPwrBasedCfg.pwrRangeLowDB > 0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->muPwrBasedCfg.pwrRangeLowDB,
+                               "Invalid pwrRangeLowDB is selected. Valid value is negative number");
+        return recoveryAction;
+    }
+
+    for(uint8_t i=0; i<ADI_ADRV904X_DFE_APP_CAL_DPD_NUM_PWR_BASED_MU; i++)
+    {
+        if (dpdTrackCfg->muPwrBasedCfg.muPwrBased[i] > 100u)
+        {
+            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_PARAM_ERROR_REPORT(&device->common,
+                                   recoveryAction,
+                                   dpdTrackCfg->muPwrBasedCfg.muPwrBased[i],
+                                   "Invalid muPwrBased[] is selected. Valid value is <= 100");
+            return recoveryAction;
+        }
+    }
+
+    recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
+
+    return recoveryAction;
+}
+
+#ifndef ADI_LIBRARY_RM_FLOATS
+adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheckFloat(adi_adrv904x_Device_t* const                     device,
+                                                                      const uint32_t                                   dpdTxChannelMask,
+                                                                      const adi_adrv904x_DfeAppCalDpdTrackCfg_t* const dpdTrackCfg)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, dpdTrackCfg);
+
+    recoveryAction = adrv904x_DpdTrackingConfigSetRangeCheckCommon(device,
+            dpdTxChannelMask,
+            (const adi_adrv904x_DfeAppCalDpdTrackCfgInt_t*)dpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        return recoveryAction;
+    }
+
     if ((dpdTrackCfg->wbRegAlpha < 0.0f) ||
         (dpdTrackCfg->wbRegAlpha > 1.0f))
     {
@@ -533,27 +575,6 @@ adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_De
                                recoveryAction,
                                dpdTrackCfg->wbRegBeta,
                                "Invalid wbRegBeta is selected. Valid value is within 0.0 and 1.0 ");
-        return recoveryAction;
-    }
-
-    if ((dpdTrackCfg->bwDetCfg.bwDetEn != 0u) &&
-        (dpdTrackCfg->bwDetCfg.bwDetEn != 1u))
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common,
-                               recoveryAction,
-                               dpdTrackCfg->bwDetCfg.bwDetEn,
-                               "Invalid bwDetEn is selected. Valid value is 0/1 ");
-        return recoveryAction;
-    }
-
-    if (dpdTrackCfg->bwDetCfg.corrLagMax > 4095u)
-    {
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-        ADI_PARAM_ERROR_REPORT(&device->common,
-                               recoveryAction,
-                               dpdTrackCfg->bwDetCfg.corrLagMax,
-                               "Invalid corrLagMax is selected. Valid value is within 0:4095 ");
         return recoveryAction;
     }
 
@@ -587,6 +608,83 @@ adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheck(adi_adrv904x_De
                                recoveryAction,
                                dpdTrackCfg->bwDetCfg.alphaTrack,
                                "Invalid alphaTrack is selected. Valid value is within 0.0 and 1.0 ");
+        return recoveryAction;
+    }
+
+    recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
+
+    return recoveryAction;
+}
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSetRangeCheckInt(adi_adrv904x_Device_t* const                        device,
+                                                                    const uint32_t                                      dpdTxChannelMask,
+                                                                    const adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, dpdTrackCfg);
+
+    recoveryAction = adrv904x_DpdTrackingConfigSetRangeCheckCommon(device, dpdTxChannelMask, dpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        return recoveryAction;
+    }
+
+    if ((dpdTrackCfg->wbRegAlpha_e6 < 0) ||
+        (dpdTrackCfg->wbRegAlpha_e6 > 1000000))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->wbRegAlpha_e6,
+                               "Invalid wbRegAlpha_e6 is selected. Valid value is within 0 and 1e6 ");
+        return recoveryAction;
+    }
+
+    if ((dpdTrackCfg->wbRegBeta_e6 < 0) ||
+        (dpdTrackCfg->wbRegBeta_e6 > 1000000))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->wbRegBeta_e6,
+                               "Invalid wbRegBeta_e6 is selected. Valid value is within 0 and 1e6");
+        return recoveryAction;
+    }
+
+    if ((dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6 < 0) ||
+        (dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6 > 1000000))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6,
+                               "Invalid loBwBeta2Thres_e6 is selected. Valid value is within 0 and 1e6 ");
+        return recoveryAction;
+    }
+
+    if ((dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6 < 0) ||
+        (dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6 > 1000000))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6,
+                               "Invalid hiBwBeta2Thres_e6 is selected. Valid value is within 0 and 1e6 ");
+        return recoveryAction;
+    }
+
+    if ((dpdTrackCfg->bwDetCfg.alphaTrack_e6 < 0) ||
+        (dpdTrackCfg->bwDetCfg.alphaTrack_e6 > 1000000))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               dpdTrackCfg->bwDetCfg.alphaTrack_e6,
+                               "Invalid alphaTrack_e6 is selected. Valid value is within 0 and 1e6 ");
         return recoveryAction;
     }
 

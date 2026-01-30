@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2022 - 2022 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2022 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -12,13 +11,12 @@
  *
  * \details Contains DFE error code definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_DFE_SVC_CMD_DFE_RADIO_T_H__
 #define __ADRV904X_DFE_SVC_CMD_DFE_RADIO_T_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 #include "adi_adrv904x_dfe_svc_err_codes_t.h"
 #include "adrv904x_dfe_svc_cmd_t.h"

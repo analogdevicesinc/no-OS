@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
  * \brief Contains ADRV904X Tx related private function prototypes for
  *        adrv904x_tx.c which helps adi_adrv904x_tx.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */ 
 
 #ifndef _ADRV904X_TX_H_
@@ -17,6 +16,8 @@
 
 #include "../../private/bf/adrv904x_bf_tx_dig_types.h"
 #include "../../private/bf/adrv904x_bf_tx_funcs_types.h"
+#include "../../private/bf/adrv904x_bf_tx_datapath.h"
+#include "../../private/bf/adrv904x_bf_tx_datapath_types.h"
 
 #include "../../private/bf/adrv904x_bf_tx_band_duc_types.h"
 #include "../../private/bf/adrv904x_bf_tx_dfe_dig_regs_types.h"
@@ -79,6 +80,25 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxBitfieldAddressGet(adi_adrv904x_Devi
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncsBitfieldAddressGet(adi_adrv904x_Device_t* const        device,
                                                                     const adi_adrv904x_TxChannels_e     txChannel,
                                                                     adrv904x_BfTxFuncsChanAddr_e* const txFuncsChannelBitfieldAddr);
+
+/**
+* \brief Look up the Tx Datapath bitfield address given a Tx Channel
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in] device Pointer to the ADRV904X data structure
+* \param[in] txChannel Channel selection to read back gain index for (Valid Tx0-Tx7 only)
+* \param[out] txDatapathChannelBitfieldAddr Tx datapath channel bitfield address which will be updated by this function
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adrv904x_TxDatapathBitfieldAddressGet(adi_adrv904x_Device_t* const device,
+                                                                       const adi_adrv904x_TxChannels_e txChannel,
+                                                                       adrv904x_BfTxDatapathChanAddr_e* const txDatapathChannelBitfieldAddr);
+
+
 /**
 * \brief Look up the Tx function bitfield address given a Tx Channel
 *
@@ -162,6 +182,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxLoSourceGet(adi_adrv904x_Device_t* c
 */
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxDecPowerCfgRangeCheck(adi_adrv904x_Device_t* const device,
                                                                   const adi_adrv904x_TxDecimatedPowerCfg_t* const decPowerCfg);
+
+/**
+* \brief Returns 0-indexed carrier id for a given adi_adrv904x_TxCarrier_e.
+*
+* \param[in] txCarrier The value to convert.
+*
+* \retval uint8_t The carrier id. Returns a value greater ADI_ADRV904X_CARRIER_ID_MAX if the value supplied cannot be
+*     converted (i.e. is not valid value for the enum or refers to TX_CARRIER_NONE or TX_CARRIER_ALL).
+*/
+ADI_API uint8_t adrv904x_TxCarrierToId(const adi_adrv904x_TxCarrier_e txCarrier);
 
 /**
 * \brief Performs mask validation
@@ -274,4 +304,40 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DpdActMmrBitfieldAddressGet(adi_adrv90
 ADI_API adi_adrv904x_ErrAction_e adrv904x_TxDfeDigBitfieldAddressGet(adi_adrv904x_Device_t* const device,
                                                                   const adi_adrv904x_TxChannels_e txChannel,
                                                                   adrv904x_BfTxDfeDigRegsChanAddr_e* const txDfeDigChannelBitfieldAddr);
+
+/**
+ * \brief Fixed-point gain in 7.16 format to support -90dB to 36dB on carrier 0
+ * 
+ * \param device   Pointer to the ADRV904X device data structure.
+ * \param baseAddr Base Address of instance to be configured.
+ *          Parameter is of type adrv904x_BfCducHbDpathChanAddr_e.
+ * \param carrierIdx  Carrier whose gain is to be got
+ * \param bfValue  Gain to be returned. Parameter is of type *uint32_t.
+ * 
+ * \return adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if successful, no action required
+ * 
+ */
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierNGain_Get(adi_adrv904x_Device_t* const device,
+                                                                       adi_adrv904x_SpiCache_t* const spiCache,
+                                                                       const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
+                                                                       const uint32_t carrierIdx,
+                                                                       uint32_t* const bfValue);
+
+/**
+ * \brief Fixed-point gain in 7.16 format to support -90dB to 36dB on carrier 1
+ * 
+ * \param device   Pointer to the ADRV904X device data structure.
+ * \param baseAddr Base Address of instance to be configured.
+ *          Parameter is of type adrv904x_BfCducHbDpathChanAddr_e.
+ * \param carrierIdx  Carrier whose gain is to be set
+ * \param bfValue  Data to be configured. Parameter is of type uint32_t.
+ * 
+ * \return adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if successful, no action required
+ * 
+ */
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierNGain_Set(adi_adrv904x_Device_t* const device,
+                                                                       adi_adrv904x_SpiCache_t* const spiCache,
+                                                                       const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
+                                                                       const uint32_t carrierIdx,
+                                                                       const uint32_t bfValue);
 #endif /* _ADRV904X_TX_H_ */

@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains ADRV904X features related function implementation defined in
 * adi_adrv904x_tx.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_tx.h"
@@ -22,6 +21,8 @@
 #include "../../private/include/adrv904x_stream_proc_types.h"
 #include "../../private/bf/adrv904x_bf_tx_funcs.h"
 #include "../../private/bf/adrv904x_bf_tx_dig.h"
+
+
 
 #include "adi_adrv904x_dfe_cpu.h"
 #include "../../private/bf/adrv904x_bf_tx_band_duc.h"
@@ -107,7 +108,6 @@ static const txAttenUpdateFnPtr_t txAttenChanS0S1UpdateFnPtrs[ADI_ADRV904X_MAX_T
     { adrv904x_Core_Tx6AttenUpdateS0_BfSet, adrv904x_Core_Tx6AttenUpdateS1_BfSet },
     { adrv904x_Core_Tx7AttenUpdateS0_BfSet, adrv904x_Core_Tx7AttenUpdateS1_BfSet },
 };
-
 ADI_API adi_adrv904x_ErrAction_e  adi_adrv904x_TxAttenTableRead(adi_adrv904x_Device_t* const device,
                                                                 const adi_adrv904x_TxChannels_e txChannel,
                                                                 const uint32_t txAttenIndexOffset,
@@ -211,6 +211,163 @@ cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
+
+typedef adi_adrv904x_ErrAction_e(*txAttenReadbackUpdateFnPtr_t)(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_SpiCache_t* const spiCache,
+    const adrv904x_BfCoreChanAddr_e baseAddr,
+    const uint8_t bfValue);
+
+typedef adi_adrv904x_ErrAction_e(*txAttenuationReadbackFnPtr_t)(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_SpiCache_t* const spiCache,
+    const adrv904x_BfCoreChanAddr_e baseAddr,
+    uint16_t* const bfValue);
+
+static const txAttenReadbackUpdateFnPtr_t txAttenReadbackUpdateFnPtrs[ADI_ADRV904X_MAX_TXCHANNELS] =
+{
+    adrv904x_Core_Tx0AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx1AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx2AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx3AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx4AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx5AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx6AttenReadbackUpdate_BfSet,
+    adrv904x_Core_Tx7AttenReadbackUpdate_BfSet,
+};
+
+static const txAttenuationReadbackFnPtr_t txAttenuationReadbackFnPtrs[ADI_ADRV904X_MAX_TXCHANNELS] =
+{
+    adrv904x_Core_Tx0AttenuationReadback_BfGet,
+    adrv904x_Core_Tx1AttenuationReadback_BfGet,
+    adrv904x_Core_Tx2AttenuationReadback_BfGet,
+    adrv904x_Core_Tx3AttenuationReadback_BfGet,
+    adrv904x_Core_Tx4AttenuationReadback_BfGet,
+    adrv904x_Core_Tx5AttenuationReadback_BfGet,
+    adrv904x_Core_Tx6AttenuationReadback_BfGet,
+    adrv904x_Core_Tx7AttenuationReadback_BfGet,
+};
+
+/**
+ * \brief This function sets the PA Protection Peak Power Threshold.
+ *        This function uses two byte writes instead of a 32bit read-modify-write to avoid a race-
+ *        condition with antenna cal that modifies another bit in the same 32bit register.
+ * 
+ * \param device   Pointer to the ADRV904X device data structure.
+ * \param baseAddr Base Address of instance to be configured.
+ *          Parameter is of type adrv904x_BfTxFuncsChanAddr_e.
+ * \param threshold  Data to be configured. Parameter is of type uint16_t.
+ * 
+ * \return adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if successful, no action required
+ * 
+ */
+static adi_adrv904x_ErrAction_e adrv904x_PaProtectionPeakThresholdSet(adi_adrv904x_Device_t* const device,
+                                                                       adi_adrv904x_SpiCache_t* const spiCache,
+                                                                       const adrv904x_BfTxFuncsChanAddr_e baseAddr,
+                                                                       const uint16_t threshold)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint8_t writeData[sizeof(uint16_t)] = {0};
+    static const uint32_t PA_PROTECTION_PEAK_THRESHOLD_ADDR_OFFSET = 0x36U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    writeData[0] = threshold & 0xFFU;
+    writeData[1] = threshold >> 8U;
+
+    recoveryAction = adi_adrv904x_RegistersByteWrite(device,
+                                                     spiCache,
+                                                     ((uint32_t) baseAddr + PA_PROTECTION_PEAK_THRESHOLD_ADDR_OFFSET),
+                                                     writeData,
+                                                     (uint32_t)(sizeof(writeData)));
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "RegistersByteWrite issue when setting PA Protection peak threshold");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
+/**
+ * \brief This function sets the PA Protection Average Power Threshold.
+ *        This function uses two byte writes instead of a 32bit read-modify-write to avoid a race-
+ *        condition with antenna cal that modifies another bit in the same 32bit register.
+ * 
+ * \param device   Pointer to the ADRV904X device data structure.
+ * \param baseAddr Base Address of instance to be configured.
+ *          Parameter is of type adrv904x_BfTxFuncsChanAddr_e.
+ * \param threshold  Data to be configured. Parameter is of type uint16_t.
+ * 
+ * \return adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if successful, no action required
+ * 
+ */
+static adi_adrv904x_ErrAction_e adrv904x_PaProtectionAverageThresholdSet(adi_adrv904x_Device_t* const device,
+                                                                         adi_adrv904x_SpiCache_t* const spiCache,
+                                                                         const adrv904x_BfTxFuncsChanAddr_e baseAddr,
+                                                                         const uint16_t threshold)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint8_t writeData[sizeof(uint16_t)] = {0};
+    static const uint32_t PA_PROTECTION_AVERAGE_THRESHOLD_ADDR_OFFSET = 0x32U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    writeData[0] = threshold & 0xFFU;
+    writeData[1] = threshold >> 8U;
+
+    recoveryAction = adi_adrv904x_RegistersByteWrite(device,
+                                                     spiCache,
+                                                     ((uint32_t) baseAddr + PA_PROTECTION_AVERAGE_THRESHOLD_ADDR_OFFSET),
+                                                     writeData,
+                                                     (uint32_t)(sizeof(writeData)));
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "RegistersByteWrite issue when setting PA Protection average threshold");
+        return recoveryAction;
+    }
+
+    return recoveryAction;
+}
+
+/**
+ * \brief Use the Tx atten table to find out the digital atten associated with a Tx atten index.
+ *
+ * \param device     Pointer to the ADRV904X device data structure
+ * \param txChannel  TX Channel
+ * \param attenIndex TX atten index
+ * \param digAtten   Output digital attenuation
+ *
+ * \return adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if successful, no action required
+ */
+static adi_adrv904x_ErrAction_e adrv904x_TxDigAttenGet(adi_adrv904x_Device_t* const device,
+                                                       const adi_adrv904x_TxChannels_e txChannel,
+                                                       const uint16_t attenIndex,
+                                                       uint32_t *digAtten)
+{
+    static const uint8_t TX_ENTRY_SIZE = 4U;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t tableOffset = 0;
+
+    tableOffset = adrv904x_txAttenAddrLookup(txChannel);
+    if (tableOffset == 0U)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChannel, "Invalid TxChannel");
+        return recoveryAction;
+    }
+    tableOffset += (attenIndex * TX_ENTRY_SIZE);
+
+    recoveryAction = adi_adrv904x_Register32Read(device, NULL, tableOffset, digAtten, 0xFFFFFFFF);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reading Tx atten table entry");
+        return recoveryAction;
+    }
+
+    *digAtten = ADRV904X_BF_DECODE(*digAtten, ADRV904X_TX_ATTEN_TABLE_MULT_MASK, ADRV904X_TX_ATTEN_TABLE_MULT_SHIFT);
+
+    return recoveryAction;
+}
+
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenSet(adi_adrv904x_Device_t* const device,
                                                          const adi_adrv904x_TxAtten_t txAttenuation[],
                                                          const uint32_t               numTxAttenConfigs)
@@ -262,6 +419,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenSet(adi_adrv904x_Device_t* 
         dataFF[2] : 0x00U Placeholder - will be replaced with latch mask value calculated in function
     */
     uint8_t dataFF[] = { 0x01U, 0xD3U, 0x00U };
+
+    uint16_t peakThreshold = 0U;
+    uint16_t avgThreshold = 0U;
+    uint32_t digAtten = 0U;
+    static const uint32_t MIN_DIG_ATTEN = 4095U; /* 0dB digital attenuation */
+    uint8_t papEnabled = 0U;
+    adrv904x_BfTxFuncsChanAddr_e txBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_FUNCS;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
@@ -335,6 +499,50 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenSet(adi_adrv904x_Device_t* 
             data1[5U] = (uint8_t)(attenRegVal >> 8U);
             data1[7U] = addrLsb;
             data1[8U] = attenLsb;
+
+            /* Part 1 of workaround for issue where PAP block measures power after dig atten:
+             * Adjust thresholds for 0 digital atten to prevent any possible false triggering during the
+             * attenuation change ramp. The PAP thresholds are written to scratch registers for the DFE
+             * processor to be able to read, however to keep this function quick, the enable state is
+             * stored in the device structure, and the thresholds are there too for convenience.
+             */
+            if ((device->devStateInfo.txPowerMonitorState[chanId].peakPowerEnable != 0) ||
+                (device->devStateInfo.txPowerMonitorState[chanId].avgPowerEnable != 0))
+            {
+                recoveryAction = adrv904x_TxFuncsBitfieldAddressGet(device, (adi_adrv904x_TxChannels_e)(1U << chanId), &txBaseAddr);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, (1U << chanId), "Invalid Tx Channel used to determine SPI address");
+                    goto cleanup;
+                }
+                if (device->devStateInfo.txPowerMonitorState[chanId].peakPowerEnable != 0)
+                {
+                    recoveryAction = adrv904x_PaProtectionPeakThresholdSet(device,
+                                                                           NULL,
+                                                                           txBaseAddr,
+                                                                           device->devStateInfo.txPowerMonitorState[chanId].peakThreshold);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Peak Threshold");
+                        goto cleanup;
+                    }
+                    papEnabled = 1U;
+                }
+                if (device->devStateInfo.txPowerMonitorState[chanId].avgPowerEnable != 0)
+                {
+                    recoveryAction = adrv904x_PaProtectionAverageThresholdSet(device,
+                                                                              NULL,
+                                                                              txBaseAddr,
+                                                                              device->devStateInfo.txPowerMonitorState[chanId].avgThreshold);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Average Threshold");
+                        goto cleanup;
+                    }
+                    papEnabled = 1U;
+                }
+            }
+
             halError = adi_hal_SpiWrite(device->common.devHalInfo, data1, DATA_TRANSACTION_1_SIZE);
             recoveryAction = (adi_adrv904x_ErrAction_e) adi_common_hal_ErrCodeConvert(halError);
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
@@ -378,6 +586,86 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenSet(adi_adrv904x_Device_t* 
                                    data2,
                                    "Error writing Attenuation Latch Value");
             goto cleanup;
+        }
+    }
+
+
+    /* Part 2 of workaround for issue where PAP block measures power after dig atten:
+     * Adjust thresholds based on the digital part of the new atten, and the configured target
+     * threshold. To keep this function quick, we have set a flag if any PAP is enabled on any
+     * channel.
+     */
+    if (papEnabled != 0U)
+    {
+        /* Wait 1us for atten ramp to finish */
+        recoveryAction = (adi_adrv904x_ErrAction_e) adi_common_hal_Wait_us(&device->common, 1U);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Wait#1 failed");
+            goto cleanup;
+        }
+
+        /* Loop through the number of configurations passed */
+        for (i = 0U; i < numTxAttenConfigs; ++i)
+        {
+            /* for each Tx channel in chanMask */
+            for (chanId = 0U; chanId <= ADI_ADRV904X_TX_CHAN_ID_MAX; ++chanId)
+            {
+                if ((txAttenuation[i].txChannelMask & (1U << chanId)) == 0U)
+                {
+                    /* Skip channel. It's not in chanMask. */
+                    continue;
+                }
+
+                if ((device->devStateInfo.txPowerMonitorState[chanId].peakPowerEnable != 0) ||
+                    (device->devStateInfo.txPowerMonitorState[chanId].avgPowerEnable != 0))
+                {
+                    recoveryAction = adrv904x_TxFuncsBitfieldAddressGet(device, (adi_adrv904x_TxChannels_e)(1U << chanId), &txBaseAddr);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, (1U << chanId), "Invalid Tx Channel used to determine SPI address");
+                        goto cleanup;
+                    }
+
+                    /* Read dig atten from table */
+                    attenIndex = (txAttenuation[i].txAttenuation_mdB / ADRV904X_TX_ATTEN_STEP_SIZE_DIV_0P05);
+                    recoveryAction = adrv904x_TxDigAttenGet(device, (adi_adrv904x_TxChannels_e)(1U << chanId), attenIndex, &digAtten);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while finding digAtten");
+                        goto cleanup;
+                    }
+
+                    if (device->devStateInfo.txPowerMonitorState[chanId].peakPowerEnable != 0)
+                    {
+                        peakThreshold = device->devStateInfo.txPowerMonitorState[chanId].peakThreshold;
+                        /* Adjust threshold based on digital attenuation. The threshold in dBFS is 10 * log10(threshold/65535),
+                        * and the dig atten in dBFS is 20 * log10(digAtten/4095). The new threshold is found by adding the
+                        * target threshold and the dig atten in dBFS, and then converting back to a linear power value:
+                        *     Tnew = 65535 * pow(10, (10 * log10(Ttarget/65535) + 20 * log10(digAtten/4095)) / 10)
+                        * This simplifies to: Tnew = Ttarget * pow(digAtten/4095, 2)
+                        */
+                        peakThreshold = (uint16_t)(((uint64_t)peakThreshold * (uint64_t)(digAtten * digAtten)) / (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN));
+                        recoveryAction = adrv904x_PaProtectionPeakThresholdSet(device, NULL, txBaseAddr, peakThreshold);
+                        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                        {
+                            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Peak Threshold");
+                            goto cleanup;
+                        }
+                    }
+                    if (device->devStateInfo.txPowerMonitorState[chanId].avgPowerEnable != 0)
+                    {
+                        avgThreshold = device->devStateInfo.txPowerMonitorState[chanId].avgThreshold;
+                        avgThreshold = (uint16_t)(((uint64_t)avgThreshold * (uint64_t)(digAtten * digAtten)) / (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN));
+                        recoveryAction = adrv904x_PaProtectionAverageThresholdSet(device, NULL, txBaseAddr, avgThreshold);
+                        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                        {
+                            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Avg Threshold");
+                            goto cleanup;
+                        }
+                    }
+                }
+            }
         }
     }
 cleanup:
@@ -1115,6 +1403,80 @@ cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPfirFracDelaySet_v2(adi_adrv904x_Device_t* const device,
+                                                                    const uint32_t txChannelMask,
+                                                                    const uint8_t fracDelay)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    adrv904x_DfeSvctxPfirFracDelaySet_t cmdStruct;
+    adrv904x_DfeSvctxPfirFracDelaySetResp_t respStruct;
+    adrv904x_DfeSvcCmdStatus_t cmdStatus = ADRV904X_DFE_SVC_CMD_STATUS_GENERIC;
+    uint32_t chanIdx = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+
+    ADI_LIBRARY_MEMSET(&cmdStruct, 0, sizeof(cmdStruct));
+    ADI_LIBRARY_MEMSET(&respStruct, 0, sizeof(respStruct));
+
+    /* Check that requested Tx Channel mask is valid */
+    if (((txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (txChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               txChannelMask,
+                               "Invalid Tx channel mask");
+        goto cleanup;
+    }
+
+    if (fracDelay < 64)
+    {
+        /* Do nothing, fracDelay is valid. */
+    }
+    else
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, fracDelay, "Invalid fracDelay provided.");
+        goto cleanup;
+    }
+
+    /* Prepare the command payload */
+    cmdStruct.fracDelay = fracDelay;
+
+    for (chanIdx = 0U; chanIdx < ADI_ADRV904X_MAX_TXCHANNELS; ++chanIdx)
+    {
+        if (ADRV904X_BF_EQUAL(txChannelMask, 1U << chanIdx))
+        {
+            cmdStruct.txChannel = chanIdx;
+
+            /* Send command and receive response to DFE */
+            recoveryAction = adrv904x_DfeSvcCmdSend(device,
+                                                    ADRV904X_LINK_ID_0,
+                                                    ADRV904X_DFE_SVC_CMD_ID_RADIO_TX_PFIR_FRAC_DELAY_SET, 
+                                                    (uint8_t *)&cmdStruct,
+                                                    sizeof(cmdStruct),
+                                                    (uint8_t *)&respStruct,
+                                                    sizeof(respStruct),
+                                                    &cmdStatus);
+
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "DfeSvcCmdSend - ctc2 frac delay set");
+                goto cleanup;
+            }
+            if (respStruct.status != ADI_ADRV904X_DFE_SVC_ERR_CODE_NO_ERROR)
+            {
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_FEATURE; 
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, respStruct.status, "Ctc2 frac delay set status");
+                goto cleanup;
+            }
+        }
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxAttenS0S1Set(adi_adrv904x_Device_t* const   device,
                                                              const uint32_t                 chanMask,
                                                              const uint32_t                 levelMilliDB,
@@ -1812,6 +2174,24 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorCfgSet(adi_adrv904x_
     adrv904x_BfTxFuncsChanAddr_e txBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_FUNCS;
     static const uint16_t MAX_PEAK_PRE_THRESHOLD = 511U;
     uint16_t peakPreThreShold = 0U;
+    uint16_t peakThreshold = 0U;
+    uint16_t avgThreshold = 0U;
+
+    uint32_t digAtten = 0U;
+    uint32_t papScratchRegAddr = 0U;
+    uint32_t papScratchRegVal = 0U;
+    uint8_t origEccState = 0U;
+    uint16_t attenIndex = 0U;
+    uint32_t extendedCoreScratchRegBaseAddress = 0U;
+    static const uint32_t MIN_DIG_ATTEN = 4095U; /* 0dB digital attenuation */
+    static const uint32_t txScratchPad5Addr[] = { (uint32_t)ADRV904X_ADDR_TX0_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX1_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX2_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX3_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX4_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX5_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX6_STREAM_SCRATCH5,
+                                                  (uint32_t)ADRV904X_ADDR_TX7_STREAM_SCRATCH5 };
     
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
@@ -1862,8 +2242,94 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorCfgSet(adi_adrv904x_
                     goto cleanup;
                 }
 
+                peakThreshold = txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.peakThreshold;
+                avgThreshold = txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.avgThreshold;
+
+                /* Store PAP config used when changing Tx attenuation */
+                device->devStateInfo.txPowerMonitorState[chanIdx].peakThreshold = peakThreshold;
+                device->devStateInfo.txPowerMonitorState[chanIdx].avgThreshold = avgThreshold;
+                device->devStateInfo.txPowerMonitorState[chanIdx].peakPowerEnable = txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.peakPowerEnable;
+                device->devStateInfo.txPowerMonitorState[chanIdx].avgPowerEnable = txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.avgPowerEnable;
+
+                /* Store enable bits in Tx scratch reg to be able to restore config after antenna cal, in bits 30,31 of TX scratch reg 5 */
+                papScratchRegVal = 0;
+                papScratchRegVal |= (device->devStateInfo.txPowerMonitorState[chanIdx].peakPowerEnable) ? (1U << 30U) : 0;
+                papScratchRegVal |= (device->devStateInfo.txPowerMonitorState[chanIdx].avgPowerEnable) ? (1U << 31U) : 0;
+                recoveryAction = adi_adrv904x_Register32Write(device, NULL, txScratchPad5Addr[chanIdx], papScratchRegVal, (1U << 30U) | (1U << 31U));
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txScratchPad5Addr[chanIdx], "Error storing PAP enable state in TX scratchpad 5");
+                    goto cleanup;
+                }
+
+                /* Read the base address for extended core scratch registers located in M4 heap */
+                recoveryAction = adi_adrv904x_Register32Read(device, NULL, ADRV904X_PM_CORE_SCRATCH_EXT_PTR, &extendedCoreScratchRegBaseAddress, 0xFFFFFFFF);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reading extended core stream scratch base addr");
+                    goto cleanup;
+                }
+
+                /* Read the current ECC scrubbing state in M4 before disabling ECC */
+                recoveryAction = adi_adrv904x_EccEnableGet(device, &origEccState);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while reading ECC state of M4");
+                    return recoveryAction;
+                }
+
+                /* Disable ECC before we write to M4 memory */
+                recoveryAction = adi_adrv904x_EccEnableSet(device, 0U);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while disabling ECC scrubbing on M4");
+                    return recoveryAction;
+                }
+
+                /* Store the threshold targets for the DFE processor */
+                papScratchRegAddr = extendedCoreScratchRegBaseAddress + (sizeof(uint32_t) * (ADRV904X_PA_PROTECTION_THRESHOLDS_0 + chanIdx));
+                papScratchRegVal = ((uint32_t)avgThreshold << ADRV904X_PA_PROTECTION_THRESHOLD_AVG_BITP) |
+                                   ((uint32_t)peakThreshold << ADRV904X_PA_PROTECTION_THRESHOLD_PEAK_BITP);
+                recoveryAction = adi_adrv904x_Register32Write(device, NULL, papScratchRegAddr, papScratchRegVal, 0xFFFFFFFF);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT( &device->common, recoveryAction, "Error while storing PA protection thresholds");
+                    goto cleanup;
+                }
+
+                /* Restore ECC scrubbing */
+                recoveryAction = adi_adrv904x_EccEnableSet(device, origEccState);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while restoring ECC scrubbing on M4");
+                    return recoveryAction;
+                }
+
+                /* Read back current configured digital attenuation */
+                recoveryAction = txAttenChanS0S1GetFnPtrs[chanIdx][0](device, NULL, ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS, &attenIndex);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to read Tx atten index");
+                    return recoveryAction;
+                }
+                recoveryAction = adrv904x_TxDigAttenGet(device, (adi_adrv904x_TxChannels_e)chanSel, attenIndex, &digAtten);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while finding digAtten");
+                    goto cleanup;
+                }
+
+                /* Adjust threshold based on digital attenuation. The threshold in dBFS is 10 * log10(threshold/65535),
+                 * and the dig atten in dBFS is 20 * log10(digAtten/4095). The new threshold is found by adding the
+                 * target threshold and the dig atten in dBFS, and then converting back to a linear power value:
+                 *     Tnew = 65535 * pow(10, (10 * log10(Ttarget/65535) + 20 * log10(digAtten/4095)) / 10)
+                 * This simplifies to: Tnew = Ttarget * pow(digAtten/4095, 2)
+                 */
+                peakThreshold = (uint16_t)(((uint64_t)peakThreshold * (uint64_t)(digAtten * digAtten)) / (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN));
+                avgThreshold = (uint16_t)(((uint64_t)avgThreshold * (uint64_t)(digAtten * digAtten)) / (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN));
+
                 /* Peak Pre Threshold must be set to (peakThreshold/2) / 2^(16-9) to adjust bus width */
-                peakPreThreShold = txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.peakThreshold >> 8;
+                peakPreThreShold = peakThreshold >> 8;
                 if (peakPreThreShold > MAX_PEAK_PRE_THRESHOLD)
                 {
                     /* Saturate pre threshold */
@@ -1890,16 +2356,14 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorCfgSet(adi_adrv904x_
                     goto cleanup;
                 }
 
-                recoveryAction = adrv904x_TxFuncs_PaProtectionPeakThreshold_BfSet(device,
-                                                                                  NULL,
-                                                                                  txBaseAddr,
-                                                                                  txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.peakThreshold);
+
+                recoveryAction = adrv904x_PaProtectionPeakThresholdSet(device, NULL, txBaseAddr, peakThreshold);
                 if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                 {
                     ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Peak Threshold");
                     goto cleanup;
                 }
-                
+
                 recoveryAction = adrv904x_TxFuncs_PaProtectionPeakDur_BfSet(device,
                                                                             NULL,
                                                                             txBaseAddr,
@@ -1949,17 +2413,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorCfgSet(adi_adrv904x_
                     ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Peak Power IRQ enable");
                     goto cleanup;
                 }
-                
-                recoveryAction = adrv904x_TxFuncs_PaProtectionAverageThreshold_BfSet(device,
-                                                                                     NULL,
-                                                                                     txBaseAddr,
-                                                                                     txPowerMonitorCfg[cfgIdx].txPowerMonitorCfg.avgThreshold);
+
+
+                recoveryAction = adrv904x_PaProtectionAverageThresholdSet(device, NULL, txBaseAddr, avgThreshold);
                 if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                 {
                     ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to write Tx PA Protect Average Threshold");
                     goto cleanup;
                 }
-                
+
                 recoveryAction = adrv904x_TxFuncs_PaProtectionAverageDur_BfSet(device,
                                                                                NULL,
                                                                                txBaseAddr,
@@ -2023,6 +2485,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorCfgGet(adi_adrv904x_
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     adrv904x_BfTxFuncsChanAddr_e txBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_FUNCS;
     uint8_t tempByte = 0U;
+
+    uint32_t chanIdx = 0U;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
@@ -2160,6 +2624,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorCfgGet(adi_adrv904x_
         goto cleanup;
     }
 
+    chanIdx = adrv904x_TxChannelsToId((adi_adrv904x_TxChannels_e)txPowerMonitorCfg->txChannelMask);
+
+    /* Return the configured target thresholds instead of HW register values */
+    txPowerMonitorCfg->txPowerMonitorCfg.peakThreshold = device->devStateInfo.txPowerMonitorState[chanIdx].peakThreshold;
+    txPowerMonitorCfg->txPowerMonitorCfg.avgThreshold = device->devStateInfo.txPowerMonitorState[chanIdx].avgThreshold;
 
 cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -3056,6 +3525,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorStatusGet(adi_adrv90
     adrv904x_BfTxFuncsChanAddr_e txBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_FUNCS;
     uint8_t tempByte = 0U;
 
+    uint16_t attenIndex = 0U;
+    uint32_t chanIdx = 0U;
+    uint32_t digAtten = 0U;
+    static const uint32_t MIN_DIG_ATTEN = 4095U; /* 0dB digital attenuation */
+
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
     ADI_ADRV904X_API_ENTRY(&device->common);
@@ -3156,6 +3630,58 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPowerMonitorStatusGet(adi_adrv90
         powerMonitorStatus->avgPower = 0U;
         powerMonitorStatus->avgErrorPower = 0U;
     }
+
+
+    chanIdx = adrv904x_TxChannelsToId(txChannel);
+    /* Adjust power based on digital attenuation. The power in dBFS is 10 * log10(power/65535),
+     * and the dig atten in dBFS is 20 * log10(digAtten/4095). The new power is found by subtracting the
+     * dig atten from power in dBFS, and then converting back to a linear power value:
+     *     powerNew = 65535 * pow(10, (10 * log10(power/65535) - 20 * log10(digAtten/4095)) / 10)
+     * This simplifies to: powerNew = power * pow(4095/digAtten, 2)
+     */
+
+    /* Read back current configured digital attenuation, and use that to adjust error power values. The actual digital
+     * attenuation is not used here, because the error power will have been saved when PAP event occured. If ramp-down
+     * is enabled, then the current digital attenuation will have changed. peakErrorPower, avgPower, and avgErrorPower
+     * are not updated while waiting for a PAP event to be cleared.
+     */
+    recoveryAction = txAttenChanS0S1GetFnPtrs[chanIdx][0](device, NULL, ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS, &attenIndex);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to read Tx atten index");
+        return recoveryAction;
+    }
+    recoveryAction = adrv904x_TxDigAttenGet(device, txChannel, attenIndex, &digAtten);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while finding digAtten");
+        goto cleanup;
+    }
+
+    powerMonitorStatus->peakErrorPower = (uint16_t)(((uint64_t)powerMonitorStatus->peakErrorPower * (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN)) / (uint64_t)(digAtten * digAtten));
+    powerMonitorStatus->avgErrorPower = (uint16_t)(((uint64_t)powerMonitorStatus->avgErrorPower * (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN)) / (uint64_t)(digAtten * digAtten));
+    powerMonitorStatus->avgPower = (uint16_t)(((uint64_t)powerMonitorStatus->avgPower * (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN)) / (uint64_t)(digAtten * digAtten));
+
+    /* Read back current active digital attenuation, and use that to adjust peak power value, which is constantly updating */
+    recoveryAction = txAttenReadbackUpdateFnPtrs[chanIdx](device, NULL, ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS, 1U);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to set Tx atten readback update");
+        return recoveryAction;
+    }
+    recoveryAction = txAttenuationReadbackFnPtrs[chanIdx](device, NULL, ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS, &attenIndex);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failure to read current Tx atten index");
+        return recoveryAction;
+    }
+    recoveryAction = adrv904x_TxDigAttenGet(device, txChannel, attenIndex, &digAtten);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while finding digAtten");
+        goto cleanup;
+    }
+    powerMonitorStatus->peakPower = (uint16_t)(((uint64_t)powerMonitorStatus->peakPower * (uint64_t)(MIN_DIG_ATTEN * MIN_DIG_ATTEN)) / (uint64_t)(digAtten * digAtten));
 
     recoveryAction = adrv904x_TxFuncs_PaProtectionAprEn_BfGet(device,
                                                               NULL,
@@ -3774,7 +4300,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DtxCfgSet(adi_adrv904x_Device_t* c
                                               (uint32_t)ADRV904X_ADDR_TX4_STREAM_SCRATCH6,
                                               (uint32_t)ADRV904X_ADDR_TX5_STREAM_SCRATCH6,
                                               (uint32_t)ADRV904X_ADDR_TX6_STREAM_SCRATCH6,
-                                              (uint32_t)ADRV904X_ADDR_TX7_STREAM_SCRATCH6 
+                                              (uint32_t)ADRV904X_ADDR_TX7_STREAM_SCRATCH6
                                             };
     static const uint32_t TX_SCRATCH_MASK      = 0xFFFF0103U;
     static const uint32_t DTX_MODE_MASK        = 0x00000003U;
@@ -3787,6 +4313,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DtxCfgSet(adi_adrv904x_Device_t* c
     uint32_t chanIdx = 0U;
     uint32_t chanSel = 0U;
     uint32_t txScratch6Value = 0U;
+    adi_adrv904x_DtxMode_e prvDtxMode[] = { ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE,
+                                            ADI_ADRV904X_DTXMODE_DISABLE
+                                          };
 
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
@@ -3843,6 +4378,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DtxCfgSet(adi_adrv904x_Device_t* c
                     goto cleanup;
                 }
 
+                prvDtxMode[chanIdx] = (adi_adrv904x_DtxMode_e)((txScratch6Value & DTX_MODE_MASK) >> DTX_MODE_SHIFT);
+
                 txScratch6Value &= (~DTX_MODE_MASK);
                 txScratch6Value |= ((uint32_t)(dtxCfg[cfgIdx].dtxMode) << DTX_MODE_SHIFT);
                 txScratch6Value &= (~DTX_ZERO_COUNT_MASK);
@@ -3864,8 +4401,40 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DtxCfgSet(adi_adrv904x_Device_t* c
             ADI_PARAM_ERROR_REPORT(&device->common,
                                    recoveryAction,
                                    dtxCfg[cfgIdx].txChannelMask,
-                                   "Error while triggering TX stream");
+                                   "Error while triggering TX DTX CFG stream");
             goto cleanup;
+        }
+
+        /* Check if DTX is requested to be disabled but this request was issued when DTX was activated */
+        for (chanIdx = 0U; chanIdx < ADI_ADRV904X_MAX_TXCHANNELS; ++chanIdx)
+        {
+            chanSel = 1U << chanIdx;
+            if (ADRV904X_BF_EQUAL(dtxCfg[cfgIdx].txChannelMask, chanSel))
+            {
+                  if ((dtxCfg[cfgIdx].dtxMode == ADI_ADRV904X_DTXMODE_DISABLE) &&
+                      (prvDtxMode[chanIdx] == ADI_ADRV904X_DTXMODE_AUTO))
+                {
+
+                    recoveryAction = adrv904x_TxStreamTrigger(device, (uint8_t)chanSel, (uint8_t)ADRV904X_STREAM_TX_DTX_DEACTIVATE);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_PARAM_ERROR_REPORT(&device->common,
+                                               recoveryAction,
+                                               chanSel,
+                                               "Error while triggering TX DTX DEACTIVATE stream");
+                        goto cleanup;
+                    }
+                    recoveryAction = adrv904x_TxStreamTrigger(device, (uint8_t)chanSel, (uint8_t)ADRV904X_STREAM_TX_DTX_POWER_UP);
+                    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                    {
+                        ADI_PARAM_ERROR_REPORT(&device->common,
+                                               recoveryAction,
+                                               chanSel,
+                                               "Error while triggering TX DTX POWER UP stream");
+                        goto cleanup;
+                    }
+                }
+            }
         }
     }
 
@@ -6134,7 +6703,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierGainAdjustSet(adi_adrv904
     }
 
     /* Convert from mdB to 7.16. (reg value = 10**(value in mdB/1000/20)) * 2^16) */
-    bfValue = (uint32_t)((double)pow(10, (double)gain_mdB / 1000U / 20U) * DIG_GAIN_MULT);
+    bfValue = adi_library_millidBVoltToLinear(gain_mdB, DIG_GAIN_MULT);
 
     /* Write out the enable */
     for (txIdx = 0U; txIdx < ADI_ADRV904X_MAX_TXCHANNELS; txIdx++)
@@ -6155,65 +6724,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierGainAdjustSet(adi_adrv904
                 carrierSel = 1U << carrierIdx;
                 if ((txCarrierMask->carrierMask & carrierSel) > 0U)
                 {
-                    switch (carrierSel)
-                    {
-                        case ADI_ADRV904X_TX_CARRIER_0:            
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain0_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_1:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain1_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_2:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain2_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_3:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain3_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_4:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain4_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_5:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain5_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_6:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain6_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        case ADI_ADRV904X_TX_CARRIER_7:
-                            recoveryAction = adrv904x_CducHbDpath_CarrierGain7_BfSet(device,
-                                                                                     NULL,
-                                                                                     cducHbDpathChanBaseAddr,
-                                                                                     bfValue);
-                            break;
-                        default:
-                            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-                            ADI_PARAM_ERROR_REPORT(&device->common,
-                                                   recoveryAction,
-                                                   txCarrierMask->carrierMask,
-                                                   "Invalid Tx carrier selection");
-                            goto cleanup;
-                            break;
-                    }
+                    recoveryAction = adrv904x_CducHbDpath_CarrierNGain_Set(device,
+                                                                           NULL,
+                                                                           cducHbDpathChanBaseAddr,
+                                                                           carrierIdx,
+                                                                           bfValue);
 
                     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                     {
@@ -6260,18 +6775,21 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierGainAdjustGet(adi_adrv904
 
     *gain_mdB = 0;
 
-    if ((txCarrierSel->txChannelMask != ADI_ADRV904X_TX0) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX1) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX2) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX3) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX4) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX5) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX6) &&
-        (txCarrierSel->txChannelMask != ADI_ADRV904X_TX7))
+    /* Validate Tx channel mask */
+    recoveryAction = adrv904x_ValidateMask((uint8_t)txCarrierSel->txChannelMask, 1u); /* Only one allowed */
+
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        /* Invalid Tx channel selection */
-        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txCarrierSel->txChannelMask, "Invalid Tx channel selection");
+        goto cleanup;
+    }
+
+    /* Validate Tx carrier mask */
+    recoveryAction = adrv904x_ValidateMask((uint8_t)txCarrierSel->carrierMask, 1u); /* Only one allowed */
+
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txCarrierSel->carrierMask, "Invalid Tx carrier selection");
         goto cleanup;
     }
 
@@ -6284,65 +6802,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierGainAdjustGet(adi_adrv904
         goto cleanup;
     }
 
-    switch (txCarrierSel->carrierMask)
-    {
-        case ADI_ADRV904X_TX_CARRIER_0:            
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain0_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_1:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain1_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_2:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain2_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_3:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain3_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_4:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain4_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_5:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain5_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_6:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain6_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        case ADI_ADRV904X_TX_CARRIER_7:
-            recoveryAction = adrv904x_CducHbDpath_CarrierGain7_BfGet(device,
-                                                                     NULL,
-                                                                     cducHbDpathChanBaseAddr,
-                                                                     &bfValue);
-            break;
-        default:
-            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-            ADI_PARAM_ERROR_REPORT(&device->common,
-                                   recoveryAction,
-                                   txCarrierSel->carrierMask,
-                                   "Invalid Tx carrier selection");
-            goto cleanup;
-            break;
-    }
+    recoveryAction = adrv904x_CducHbDpath_CarrierNGain_Get(device,
+                                                            NULL,
+                                                            cducHbDpathChanBaseAddr,
+                                                            adrv904x_TxCarrierToId((adi_adrv904x_TxCarrier_e)txCarrierSel->carrierMask),
+                                                            &bfValue);
 
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
@@ -6353,8 +6817,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierGainAdjustGet(adi_adrv904
     if (bfValue != 0U)
     {
         /* Convert from 7.16 to mdB.  value in mdB = (1000*20*log10(reg value/2^16)) */
-        //*gain_mdB = (int32_t)(1000U * 20U * log10((double)bfValue / DIG_GAIN_MULT));
-        *gain_mdB = (int32_t)(20 * log10((100000UL * (double)bfValue) / DIG_GAIN_MULT) - 100);
+        *gain_mdB = adi_library_linearToMillidBVolt(bfValue, DIG_GAIN_MULT);
     }
 
 cleanup:
@@ -6421,7 +6884,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierBandAttenSet(adi_adrv904x
                 {
                     /* Convert from the requested atten level (milli-dB) to equivalent */
                     /* Convert from mdB to 0.8. (reg value = 10**(value in mdB/1000/20)) * 2^8) */
-                    attenRegVal = (uint32_t)((double)pow(10, (0.0 - (double)atten_mdB) / 1000U / 20U) * DIG_GAIN_MULT);
+                    attenRegVal = adi_library_millidBVoltToLinear(0 - atten_mdB, DIG_GAIN_MULT);
                    
                     if (attenRegVal > 255U)
                     {
@@ -6545,8 +7008,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCarrierBandAttenGet(adi_adrv904x
     /* Convert from 0.8 to mdB.  value in mdB = (1000*20*log10(reg value/2^8)) */
     if (bfValue > 0)
     {        
-        //*atten_mdB = 0 - (1000U * 20U * (double)log10((double)bfValue / DIG_GAIN_MULT));
-        *atten_mdB = 0 - (20 * log10((100000UL * (double)bfValue) / DIG_GAIN_MULT) - 100);
+        *atten_mdB = 0 - adi_library_linearToMillidBVolt(bfValue, DIG_GAIN_MULT);
     }
     else
     {
@@ -7110,7 +7572,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackDataWrite(adi_adrv904x_D
     uint32_t dataToWrite       = 0U;
     uint8_t captureEnableRead  = 0U;
     adrv904x_BfTxDigChanAddr_e txDigBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_DIG;
-    uint32_t dataToWriteArr[ADI_ADRV904X_TX_PLAYBACK_DATA_MAX_NUM_SAMPLES];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint32_t, dataToWriteArr, ADI_ADRV904X_TX_PLAYBACK_DATA_MAX_NUM_SAMPLES);
     uint32_t txPlaybackDuc0BaseAddressArr[ADI_ADRV904X_MAX_TXCHANNELS] = {
         ADI_ADVRV904X_TX0_PLAYBACK_RAM_BASEADDR,
         ADI_ADVRV904X_TX1_PLAYBACK_RAM_BASEADDR,
@@ -7134,8 +7596,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackDataWrite(adi_adrv904x_D
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dataToWriteArr, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, playbackData, cleanup);
-    ADI_LIBRARY_MEMSET(&dataToWriteArr[0U], 0, sizeof(dataToWriteArr));
 
     /*Check that if requested Tx Channel valid*/
     if (((txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) ||
@@ -7323,7 +7785,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackDataRead(adi_adrv904x_De
     uint32_t baseAddrToRead    = 0U;
     uint8_t captureEnableRead  = 0U;
     adrv904x_BfTxDigChanAddr_e txDigBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_DIG;
-    uint32_t dataToReadArr[ADI_ADRV904X_TX_PLAYBACK_DATA_MAX_NUM_SAMPLES];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint32_t, dataToReadArr, ADI_ADRV904X_TX_PLAYBACK_DATA_MAX_NUM_SAMPLES);
 
     uint32_t txPlaybackBaseAddressArr[ADI_ADRV904X_MAX_TXCHANNELS] = {
         ADI_ADVRV904X_TX0_PLAYBACK_RAM_BASEADDR,
@@ -7338,8 +7800,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackDataRead(adi_adrv904x_De
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dataToReadArr, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, playbackData, cleanup);
-    ADI_LIBRARY_MEMSET(&dataToReadArr[0U], 0, sizeof(dataToReadArr));
 
     if (bandSelect > 1) 
     {
@@ -7928,38 +8390,75 @@ cleanup :
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_adrv904x_Device_t* const                                device,
-                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
-                                                                            adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
-                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
-                                                                            adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
-                                                                            const uint32_t                                              numCarrierProfiles,
-                                                                            const uint8_t                                               useCustomFilters)
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+    const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+    adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
+    const uint32_t                                              numCarrierProfiles,
+    const uint8_t                                               useCustomFilters)
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adi_adrv904x_ChannelFilterCfg_t localFilterCfg[ADI_ADRV904X_MAX_NUM_PROFILES];
-    char coeffLoadBuf[sizeof(adi_adrv904x_ChannelFilterLoadMaxSize_t)];
-    adi_adrv904x_ChannelFilterLoad_t* const channelFilterLoad = (adi_adrv904x_ChannelFilterLoad_t*)&coeffLoadBuf;
-    adi_adrv904x_CarrierReconfigSoln_t soln;
-    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
-    adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
+    adi_adrv904x_CarrierRadioCfgExtended_t          txCarrierConfigsExtended[ADI_ADRV904X_MAX_NUM_PROFILES];
+    uint32_t profileIdx;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigs, cleanup);
+
+    if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numCarrierProfiles, "Up to four profiles allowed.");
+        goto cleanup;
+    }
+
+    /* Prepare txCarrierConfigsExtended with default settings */
+    for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
+    {
+        /* Default to enabled slot shuffling */
+        txCarrierConfigsExtended[profileIdx].slotShufflingEnable = 1;
+        txCarrierConfigsExtended[profileIdx].slotShufflingLoopsMax = ADI_SLOT_SHUFFLE_RAND_ITERATIONS;
+    }
+
+    /* Solve */
+    recoveryAction = adi_adrv904x_TxDynamicCarrierCalculateExtended(device, jesdCfg, txCarrierConfigs, txCarrierChannelFilterApplicationSel, txCarrierChannelFilter, txCarrierConfigsExtended, numCarrierProfiles, useCustomFilters);
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculateExtended(adi_adrv904x_Device_t* const                                device,
+                                                                                adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+                                                                                adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+                                                                                const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+                                                                                adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
+                                                                                adi_adrv904x_CarrierRadioCfgExtended_t                      txCarrierConfigsExtended[],
+                                                                                const uint32_t                                              numCarrierProfiles,
+                                                                                const uint8_t                                               useCustomFilters)
+{
+    /* For Tx Calculate stage, FW command sequence needs to target CDUCs and NOT apply the changes to HW */
+    const uint8_t rxFlag = ADI_FALSE;
+    const uint8_t apply = ADI_FALSE;
+    
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(adi_adrv904x_ChannelFilterCfg_t, localFilterCfg, ADI_ADRV904X_MAX_NUM_PROFILES);
+    ADI_PLATFORM_LARGE_VAR_ALLOC(adi_adrv904x_CarrierReconfigSoln_t, solnPtr);
     adi_adrv904x_ChannelFilterOutputCfg_t chFilterOutput;
-    adi_adrv904x_ChannelFilterLoadResp_t chFilterLoadCmdRsp;
     uint32_t txIdx = 0U;
     uint32_t bandIdx = 0U;
     uint32_t txSel = 0U;
     uint32_t carrierIdx = 0U;
-    uint32_t coeffLoadIdx = 0U;
     uint32_t profileIdx = 0U;
-    uint32_t coeffAddressOffset = 0U;
     uint32_t coeffIdx = 0U;
     int32_t coeffTableIdx = 0U;
     const int16_t *coeffTable = NULL;
     int16_t coeffTableSize = 0;
     uint32_t numberOfFilterTaps = 0U;
     uint8_t asymmetricFilterTaps = 0U;
-    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
-    adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
     adi_adrv904x_RxTxLoFreqReadback_t rxTxLoReadback;
     adi_adrv904x_TxNcoMixConfigReadbackResp_t txRbConfig;
     uint32_t currentBandCenter_kHz = 0U;
@@ -7969,14 +8468,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, localFilterCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, solnPtr, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigsExtended, cleanup);    
 
-    ADI_LIBRARY_MEMSET(&chFilterLoadCmdRsp, 0, sizeof(chFilterLoadCmdRsp));
-    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
-    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
     ADI_LIBRARY_MEMSET(&chFilterOutput, 0, sizeof(chFilterOutput));
-    ADI_LIBRARY_MEMSET(&soln, 0, sizeof(soln));
     ADI_LIBRARY_MEMSET(&rxTxLoReadback, 0, sizeof(rxTxLoReadback));
     ADI_LIBRARY_MEMSET(&txRbConfig, 0, sizeof(txRbConfig));
     ADI_LIBRARY_MEMSET(&lclInitialCfg, 0, sizeof(lclInitialCfg));
@@ -8051,7 +8549,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_
     }
     
     /* Initialize lcl solution structure */
-    recoveryAction = adrv904x_ReconfigSolutionInit(device, jesdCfg, txCarrierConfigs, numCarrierProfiles, &soln);
+    recoveryAction = adrv904x_ReconfigSolutionInit(device, jesdCfg, txCarrierConfigs, localFilterCfg, numCarrierProfiles, solnPtr);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Could not initialize struct");
@@ -8073,7 +8571,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_
     for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
     {
         /* Set convenience pointer to output profile */
-        pProfileCfgOut = &soln.outputs.profileCfgs[profileIdx];
+        pProfileCfgOut = &solnPtr->outputs.profileCfgs[profileIdx];
         
         /* Set convenience pointer to lcl var profile of lclInitialCfg */
         pInitialCfg = &lclInitialCfg[profileIdx];
@@ -8179,104 +8677,20 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_
             goto cleanup;
         }
         
-        /* Reset the buffer each profile. channelFilterLoad maps to this buffer */
-        ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
-    
-        /* Perform endianness correction and load channel filter coefficients */
-        channelFilterLoad->coeffIdx = 0U;
-        for (coeffIdx = 0U; coeffIdx < ADI_ADRV904X_NUM_CF_COEFFICIENTS; coeffIdx++)
-        {
-            coeffAddressOffset = coeffLoadIdx * sizeof(int16_t);
-            ADI_LIBRARY_MEMCPY((void*)((uint8_t*)channelFilterLoad + sizeof(adi_adrv904x_ChannelFilterLoad_t) + coeffAddressOffset), (void*)(&localFilterCfg[profileIdx].coeffs[coeffIdx]), sizeof(int16_t));
-            coeffLoadIdx++;
-        
-            /* Once we fill up enough coefficients or we're on the last coefficient send to fw and clear out the buffer */
-            if ((coeffLoadIdx == ADI_ADRV904X_CHAN_FILTER_COEFF_LOAD_LEN) || (coeffIdx == (ADI_ADRV904X_NUM_CF_COEFFICIENTS - 1U)))
-            {
-                /* Using coeffLoadIdx after incremented to give us the number of coefficients actually loaded */
-                channelFilterLoad->coeffNum = (uint16_t)ADRV904X_HTOCL(coeffLoadIdx);
-    
-                /* Send command and receive response */
-                recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                        ADI_ADRV904X_CPU_TYPE_0,
-                                                        ADRV904X_LINK_ID_0,
-                                                        ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_COEFFS,
-                                                        (void*)channelFilterLoad,
-                                                        sizeof(coeffLoadBuf),
-                                                        (void*)&chFilterLoadCmdRsp,
-                                                        sizeof(chFilterLoadCmdRsp),
-                                                        &cmdStatus);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
-                }
-            
-                ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
-            
-                channelFilterLoad->coeffIdx = coeffIdx + 1;
-                coeffLoadIdx = 0U;
-            }
-        }
-        
-        /* Perform endianness correction and load channel filter configs */
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx] = (uint32_t)ADRV904X_HTOCL(localFilterCfg[profileIdx].carrierFilterCfg.numberOfFilterTaps[carrierIdx]);
-            localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx] = localFilterCfg[profileIdx].carrierFilterCfg.asymmetricFilterTaps[carrierIdx];
-        }
-    
-        recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                ADI_ADRV904X_CPU_TYPE_0,
-                                                ADRV904X_LINK_ID_0,
-                                                ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_CFG,
-                                                (void*)&(localFilterCfg[profileIdx].carrierFilterCfg),
-                                                sizeof(localFilterCfg[profileIdx].carrierFilterCfg),
-                                                (void*)&chFilterLoadCmdRsp,
-                                                sizeof(chFilterLoadCmdRsp),
-                                                &cmdStatus);
+        /* Carrier Channel Filter Config FW CMD Sequence: Get HW settings but DO NOT APPLY to HW */
+        recoveryAction = adrv904x_CarrierChanFilterCfgCmdSequence(  device,
+                                                                    rxFlag,
+                                                                    apply,
+                                                                    &txCarrierConfigs[profileIdx],
+                                                                    &localFilterCfg[profileIdx],
+                                                                    &chFilterOutput);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
-            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Channel Filter Config Cmd Sequence error");
+            goto cleanup;
         }
-        
-        /* Create local cmd data with Endianness correction */
-        chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(txCarrierConfigs[profileIdx].channelMask);
     
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = txCarrierConfigs[profileIdx].carriers[carrierIdx].enable;
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(txCarrierConfigs[profileIdx].carriers[carrierIdx].sampleRate_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(txCarrierConfigs[profileIdx].carriers[carrierIdx].ibw_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(txCarrierConfigs[profileIdx].carriers[carrierIdx].centerFrequency_kHz);
-        }
-        chFilterCmd.apply = 0u;
-        
-        /* Reset for each profile */
-        ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
-        
-        /* Send command and receive response */
-        recoveryAction = adrv904x_CpuCmdSend(   device,
-                                                ADI_ADRV904X_CPU_TYPE_0,
-                                                ADRV904X_LINK_ID_0,
-                                                ADRV904X_CPU_CMD_ID_TX_CARRIER_RECONFIGURE,
-                                                (void*)&chFilterCmd,
-                                                sizeof(chFilterCmd),
-                                                (void*)&chFilterCmdRsp,
-                                                sizeof(chFilterCmdRsp),
-                                                &cmdStatus);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-        {
-            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
-        }
-        
-        /* Pull out necessary results from response with Endianness correction */
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            chFilterOutput.numberOfFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.numberOfFilterTaps[carrierIdx]);
-            chFilterOutput.dataPipeStop[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.dataPipeStop[carrierIdx]);
-            chFilterOutput.bypassFilter[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.bypassFilter[carrierIdx]);
-            chFilterOutput.oddFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.oddFilterTaps[carrierIdx]);
-        }
+        /* Calculate CDUC delays */
         recoveryAction = adrv904x_CducDelayConfigurationCalculate(  device,
                                                                     &txCarrierConfigs[profileIdx],
                                                                     &chFilterOutput,
@@ -8299,33 +8713,38 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_
         /* Slot Shuffling Algorithm */
         ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Slot Shuffle START ------------------------------------------------------------ %d", 0);
 #endif
-        recoveryAction = adrv904x_CarrierDelaySlotShuffleSet(   device,
-                                                                &txCarrierConfigs[profileIdx],
-                                                                &chFilterOutput,
-                                                                pProfileCfgOut,
-                                                                ADI_FALSE);
-        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        if (txCarrierConfigsExtended[profileIdx].slotShufflingEnable == 1u)
         {
-            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Tx Carrier Slot Shuffling Strategies Failed");
-            goto cleanup;
-        }
+            recoveryAction = adrv904x_CarrierDelaySlotShuffleSet(device,
+                &txCarrierConfigs[profileIdx],
+                &chFilterOutput,
+                pProfileCfgOut,
+                ADI_FALSE,
+                txCarrierConfigsExtended[profileIdx].slotShufflingLoopsMax);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Tx Carrier Slot Shuffling Strategies Failed");
+                goto cleanup;
+            }
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
-        for (uint32_t slot = 0; slot < ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; slot++)
-        {
-            ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Post-Shuffle Iface-SlotTable[%d] = %d", slot, pProfileCfgOut->internalJesdCfg.ifaceSlotTable[slot]);
-        }
-        for (uint32_t slot = 0; slot < ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; slot++)
-        {
-            ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Post Shuffle SlotTable[%d] = %d", slot, pProfileCfgOut->internalJesdCfg.slotTable[slot]);
-        }
-        
-        
-        ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Slot Shuffle STOP ------------------------------------------------------------ %d", 0);
+            for (uint32_t slot = 0; slot < ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; slot++)
+            {
+                ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Post-Shuffle Iface-SlotTable[%d] = %d", slot, pProfileCfgOut->internalJesdCfg.ifaceSlotTable[slot]);
+            }
+            for (uint32_t slot = 0; slot < ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; slot++)
+            {
+                ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Post Shuffle SlotTable[%d] = %d", slot, pProfileCfgOut->internalJesdCfg.slotTable[slot]);
+            }
+
+
+            ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Slot Shuffle STOP ------------------------------------------------------------ %d", 0);
 #endif  
+        }
+
     } /* End of profile forloop */
     
     /* Store Tx solution structure to device handle. To be used in next call to Apply() stage */
-    ADI_LIBRARY_MEMCPY(&device->devStateInfo.txCarrierReconfigSoln, &soln, sizeof(adi_adrv904x_CarrierReconfigSoln_t));
+    ADI_LIBRARY_MEMCPY(&device->devStateInfo.txCarrierReconfigSoln, solnPtr, sizeof(adi_adrv904x_CarrierReconfigSoln_t));
 
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -8333,26 +8752,25 @@ cleanup:
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierWrite(adi_adrv904x_Device_t* const device)
 {
-        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
-    adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
-    adi_adrv904x_ChannelFilterOutputCfg_t chFilterOutput;
+        /* For Tx Write stage, FW command sequence needs to target CDUCs and apply the changes to HW */
+    const uint8_t rxFlag = ADI_FALSE;
+    const uint8_t apply = ADI_TRUE;
+    
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     uint32_t txIdx = 0U;
     uint32_t txSel = 0U;
-    uint32_t carrierIdx = 0U;
     uint32_t profileIdx = 0U;
-    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
-    adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
     adi_adrv904x_CarrierReconfigSoln_t* soln = NULL;
+    adi_adrv904x_ChannelFilterOutputCfg_t tmpChanFilterOutputCfg;
+    
     adi_adrv904x_CarrierRadioCfg_t* pProfileCfgIn = NULL;
+    adi_adrv904x_ChannelFilterCfg_t* pFwCmdsFilterCfg = NULL;
     adi_adrv904x_CarrierReconfigProfileCfgOut_t* pProfileCfgOut = NULL;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
-
-    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
-    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
-    ADI_LIBRARY_MEMSET(&chFilterOutput, 0, sizeof(chFilterOutput));
+    
+    ADI_LIBRARY_MEMSET(&tmpChanFilterOutputCfg, 0, sizeof(tmpChanFilterOutputCfg));
 
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
     
@@ -8362,36 +8780,20 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierWrite(adi_adrv904x
     for (profileIdx = 0U; profileIdx < soln->inputs.numProfiles; profileIdx++)
     {
         pProfileCfgIn = &soln->inputs.profileCfgs[profileIdx];
+        pFwCmdsFilterCfg = &soln->inputs.fwCmdsFilterCfg[profileIdx];
         pProfileCfgOut = &soln->outputs.profileCfgs[profileIdx];
         
-        /* Create local cmd data with Endianness correction */
-        chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->channelMask);
-    
-        for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
-        {
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = pProfileCfgIn->carriers[carrierIdx].enable;
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].sampleRate_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].ibw_kHz);
-            chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(pProfileCfgIn->carriers[carrierIdx].centerFrequency_kHz);
-        }
-        chFilterCmd.apply = 1u;
-        
-        /* Reset for each profile */
-        ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
-        
-        /* Send command and receive response */
-        recoveryAction = adrv904x_CpuCmdSend(   device,
-            ADI_ADRV904X_CPU_TYPE_0,
-            ADRV904X_LINK_ID_0,
-            ADRV904X_CPU_CMD_ID_TX_CARRIER_RECONFIGURE,
-            (void*)&chFilterCmd,
-            sizeof(chFilterCmd),
-            (void*)&chFilterCmdRsp,
-            sizeof(chFilterCmdRsp),
-            &cmdStatus);
+        /* Run FW Command sequence for Channel filter Coeff again. */
+        recoveryAction = adrv904x_CarrierChanFilterCfgCmdSequence(  device,
+                                                                    rxFlag,
+                                                                    apply,
+                                                                    pProfileCfgIn,
+                                                                    pFwCmdsFilterCfg,
+                                                                    &tmpChanFilterOutputCfg);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
-            ADI_ADRV904X_CPU_CMD_RESP_CHECK_GOTO((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction, cleanup);
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Channel Filter Config Cmd Sequence error");
+            goto cleanup;
         }
         
         /* Program Carrier Tx JESD Config */
@@ -8466,18 +8868,65 @@ cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelect(  adi_adrv904x_Device_t* const                                device,
-                                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
-                                                                                            adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
-                                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
-                                                                                            const uint32_t                                              numCarrierProfiles )
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelect(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+    const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+    const uint32_t                                              numCarrierProfiles)
 {
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    adi_adrv904x_CarrierRadioCfgExtended_t          txCarrierConfigsExtended[ADI_ADRV904X_MAX_NUM_PROFILES];
+    uint32_t profileIdx;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierChannelFilterApplicationSel, cleanup);
+
+    if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numCarrierProfiles, "Up to four profiles allowed.");
+        goto cleanup;
+    }
+
+    /* Set txCarrierConfigsExtended to default values */
+    for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
+    {
+        /* Default to enabled slot shuffling */
+        txCarrierConfigsExtended[profileIdx].slotShufflingEnable = 1;
+        txCarrierConfigsExtended[profileIdx].slotShufflingLoopsMax = ADI_SLOT_SHUFFLE_RAND_ITERATIONS;
+    }
+
+    recoveryAction = adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelectExtended(device, jesdCfg, txCarrierConfigs, txCarrierChannelFilterApplicationSel, txCarrierConfigsExtended, numCarrierProfiles);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while calculating TxDynamicCarrier");
+        goto cleanup;
+    }
+
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelectExtended(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+    const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+    adi_adrv904x_CarrierRadioCfgExtended_t                      txCarrierConfigsExtended[],
+    const uint32_t                                              numCarrierProfiles)
+{
+    
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigsExtended, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierChannelFilterApplicationSel, cleanup);
  
     if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
@@ -8488,7 +8937,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFil
     }
     
     /* Solve */
-    recoveryAction = adi_adrv904x_TxDynamicCarrierCalculate(device, jesdCfg, txCarrierConfigs, txCarrierChannelFilterApplicationSel, NULL, numCarrierProfiles, ADI_FALSE);
+    recoveryAction = adi_adrv904x_TxDynamicCarrierCalculateExtended(device, jesdCfg, txCarrierConfigs, txCarrierChannelFilterApplicationSel, NULL, txCarrierConfigsExtended, numCarrierProfiles, ADI_FALSE);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while calculating TxDynamicCarrier");
@@ -8507,11 +8956,55 @@ cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigure(  adi_adrv904x_Device_t* const            device,
-                                                                            adi_adrv904x_CarrierJesdCfg_t* const    jesdCfg,
-                                                                            adi_adrv904x_CarrierRadioCfg_t          txCarrierConfigs[],
-                                                                            adi_adrv904x_ChannelFilterCfg_t         txCarrierChannelFilter[],
-                                                                            const uint32_t                          numCarrierProfiles)
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigure(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_CarrierJesdCfg_t* const    jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t          txCarrierConfigs[],
+    adi_adrv904x_ChannelFilterCfg_t         txCarrierChannelFilter[],
+    const uint32_t                          numCarrierProfiles)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t profileIdx;
+    adi_adrv904x_CarrierRadioCfgExtended_t          txCarrierConfigsExtended[ADI_ADRV904X_MAX_NUM_PROFILES];
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierChannelFilter, cleanup);
+
+    if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numCarrierProfiles, "Up to four profiles allowed.");
+        goto cleanup;
+    }
+
+    /* Set txCarrierConfigsExtended to default values */
+    for (profileIdx = 0U; profileIdx < numCarrierProfiles; profileIdx++)
+    {
+        /* Default to enabled slot shuffling */
+        txCarrierConfigsExtended[profileIdx].slotShufflingEnable = 1;
+        txCarrierConfigsExtended[profileIdx].slotShufflingLoopsMax = ADI_SLOT_SHUFFLE_RAND_ITERATIONS;
+    }
+
+    recoveryAction = adi_adrv904x_TxDynamicCarrierReconfigureExtended(device, jesdCfg, txCarrierConfigs, txCarrierChannelFilter, txCarrierConfigsExtended, numCarrierProfiles);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while Reconfiguring Dynamic Carriers (Extended)");
+        goto cleanup;
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureExtended(adi_adrv904x_Device_t* const device,
+    adi_adrv904x_CarrierJesdCfg_t* const    jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t          txCarrierConfigs[],
+    adi_adrv904x_ChannelFilterCfg_t         txCarrierChannelFilter[],
+    adi_adrv904x_CarrierRadioCfgExtended_t  txCarrierConfigsExtended[],
+    const uint32_t                          numCarrierProfiles)
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     
@@ -8519,6 +9012,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigure(  adi_
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, jesdCfg, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigs, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierConfigsExtended, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, txCarrierChannelFilter, cleanup);
     
     if (numCarrierProfiles > ADI_ADRV904X_MAX_NUM_PROFILES)
@@ -8529,7 +9023,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigure(  adi_
     }
     
     /* Solve */
-    recoveryAction = adi_adrv904x_TxDynamicCarrierCalculate(device, jesdCfg, txCarrierConfigs, NULL, txCarrierChannelFilter, numCarrierProfiles, ADI_TRUE);
+    recoveryAction = adi_adrv904x_TxDynamicCarrierCalculateExtended(device, jesdCfg, txCarrierConfigs, NULL, txCarrierChannelFilter, txCarrierConfigsExtended, numCarrierProfiles, ADI_TRUE);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while calculating TxDynamicCarrier");

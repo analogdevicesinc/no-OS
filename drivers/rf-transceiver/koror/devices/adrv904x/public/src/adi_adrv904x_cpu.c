@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains CPU features related function implementation defined in
 * adi_adrv904x_cpu.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #include "adi_adrv904x_cpu.h"
 
@@ -1286,6 +1285,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CpuSysPvtStatusGet(adi_adrv904x_De
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length is zero.");
+        goto cleanup;
+    }
+
+    if ((length + sizeof(adrv904x_CpuCmdResp_t) + sizeof(adrv904x_CpuCmd_GetSysStatusResp_t)) > sizeof(rxBuf))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length exceeds maximum buffer size.");
         goto cleanup;
     }
 

@@ -3,14 +3,13 @@
  *
  * \brief   Contains ADRV904X Device Profile type definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADRV904X_CPU_DEVICE_PROFILE_TYPES_H__
@@ -148,6 +147,15 @@ typedef enum adrv904x_SerDesLaneNum
 #define ADRV904X_ORX_CHAN_LEN_CPU       (ADRV904X_ORX_CHAN_LEN / 2u)
 #define ADRV904X_SERDES_LANE_LEN_CPU    (ADRV904X_SERDES_LANE_LEN / 2u)
 
+/* Map human-readable symbols to the the register values use in the hardware and
+ * required in adrv904x_DeviceProfile_t struct.
+ * Note not all values are supported by all ClkGen instances. */
+#define ADRV904X_CLKGEN_DIV1_OFF    0u
+#define ADRV904X_CLKGEN_DIV1_DIVBY2 1u
+#define ADRV904X_CLKGEN_DIV1_DIVBY3 2u
+#define ADRV904X_CLKGEN_DIV1_DIVBY4 3u
+#define ADRV904X_CLKGEN_DIV1_DIVBY5 4u
+
 /* Enumeration for EXT LO Select Device Profile def'n */
 typedef enum
 {
@@ -176,9 +184,9 @@ typedef enum
 typedef enum adrv904x_DfeMappingControl
 {
     ADRV904X_DFE_MAPPING_CTRL_DEFAULT,      /*!< In RCI mode, BBIC controls both Tx/Rx/Orx enable and TxToOrx mapping pins externally. In RS mode, radio sequencer controls Tx/ORx enable signals
-                                                 DFE CPU controls Tx to Orx mapping pins(through RS with GPIO outputs from Koror)	*/
-    ADRV904X_DFE_MAPPING_CTRL_DFE           /*!< In RCI mode, BBIC controls Tx/Rx/Orx enable pins externally. DFE CPU controls Tx to Orx mapping pins(with GPIO outputs from Koror)
-                                                 In RS mode,  RS controls Tx/Rx/Orx enable pins. DFE CPU controls Tx to Orx mapping pins(with GPIO outputs from Koror) */
+                                                 DFE CPU controls Tx to Orx mapping pins(through RS with GPIO outputs from ADRV904X) */
+    ADRV904X_DFE_MAPPING_CTRL_DFE           /*!< In RCI mode, BBIC controls Tx/Rx/Orx enable pins externally. DFE CPU controls Tx to Orx mapping pins(with GPIO outputs from ADRV904X)
+                                                 In RS mode,  RS controls Tx/Rx/Orx enable pins. DFE CPU controls Tx to Orx mapping pins(with GPIO outputs from ADRV904X) */
 } adrv904x_DfeMappingControl_e;
 
 /* Enumeration for DUC channel number */
@@ -235,11 +243,11 @@ ADI_ADRV904X_PACK_FINISH
     ADI_ADRV904X_PACK_START
 typedef struct adrv904x_ClkGenConfig
 {
-    uint8_t div1enb;                /*!< div 2 enable setting  */
+    uint8_t div1enb;                /*!< div 1 (sample clk) enable setting  */
     uint8_t div3enb;                /*!< div 3 enable setting */
-    uint8_t intDiv;                 /*!< int div bincode setting  */
-    uint8_t clkDiv;                 /*!< clkDiv thermo bincode setting  */
-    uint8_t reserved[4];            /*!< Reserve  */
+    uint8_t intDiv;                 /*!< interface clk divider register setting */
+    uint8_t clkDiv;                 /*!< sample clk divider register setting  */
+    uint8_t reserved[4];            /*!< Reserved  */
 } adrv904x_ClkGenConfig_t;
 ADI_ADRV904X_PACK_FINISH
 

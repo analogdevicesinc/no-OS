@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,13 +8,14 @@
  * \brief Contains ADRV904X receive related function prototypes for
  *        adi_adrv904x_rx.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_RX_H_
 #define _ADI_ADRV904X_RX_H_
 
 #include "adi_adrv904x_rx_types.h"
+#include "adi_adrv904x_rx_nco.h"
 #include "adi_adrv904x_error.h"
 
 #include "adi_adrv904x_carrier_reconfigure_types.h"
@@ -552,6 +552,41 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoSet_v2(adi_adrv904x_Device_t
                                                            const adi_adrv904x_ORxNcoConfig_t * const   orxNcoConfig);
 
 /**
+* \brief Stores alternative ORx NCO frequencies that can be used later for specific DFE captures.
+*
+* \pre This function can be called after the CPU has been initialized.
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data
+* \param[in] orxAltNcoConfig Pointer to the ALT ORX NCO config settings
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoAltSet(adi_adrv904x_Device_t* const                 device,
+                                                           const adi_adrv904x_ORxAltNcoConfig_t * const orxAltNcoConfig);
+
+/**
+* \brief Reads back alternative ORx NCO frequencies
+*
+* \pre This function can be called after the CPU has been initialized, firmware loaded and the ORX NCO configured.
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data
+* \param[in,out] orxAltNcoConfig Pointer to ORX Alternative NCO config structure. orxChanSelect is a bitmask field (with
+*                                only a single bit set) that selects which ORx channel to read the values for.
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_OrxNcoAltGet(adi_adrv904x_Device_t* const          device,
+                                                           adi_adrv904x_ORxAltNcoConfig_t* const orxAltNcoConfig);
+
+/**
 * \brief Gets ORX NCO parameters in adi_adrv904x_OrxNcoConfigReadback_t structure.
 *
 * \pre This function can be called after the CPU has been initialized, firmware loaded and the ORX NCO configured.
@@ -799,8 +834,6 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxTestDataGet(adi_adrv904x_Device_
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxLoPowerDownSet(adi_adrv904x_Device_t* const    device, 
                                                                const adi_adrv904x_RxChannels_e rxChannelMask,
                                                                const uint8_t                   enable);
-
-
 /**
  * \brief Configure Rx Carrier RSSI (Recieved Signal Strength Indicator).
  *
@@ -1253,6 +1286,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiEnable(adi_adrv904x_Device_t
                                                            const uint16_t               meterMask,
                                                            const uint32_t               channelMask,
                                                            const uint8_t                enable);
+
+#ifndef ADI_LIBRARY_RM_FLOATS
 /**
  * \brief       Readback RSSI (DDC/CDDC) power measurement
  * This function reads back the RSSI (DDC/CDDC) power measurement
@@ -1274,5 +1309,28 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiReadBack(adi_adrv904x_Device
                                                              const uint32_t               channelSel,
                                                              float* const                 pPwrMeasDb,
                                                              float* const                 pPwrMeasLinear);
+#endif
+
+/**
+ * \brief       Readback RSSI (DDC/CDDC) power measurement
+ * This function reads back the RSSI (DDC/CDDC) power measurement, without using floating point numbers
+ *
+ * \dep_begin
+ * \dep{device->common.devHalInfo}
+ * \dep_end
+ *
+ * \param [in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+ * \param [in]  meterSel   - Meter mask (only one allowed)
+ * \param [in]  channelSel - Rx channel number mask (only one channel allowed for readback)
+ * \param [out] pPwrMeasDb - Pointer to power meter read back in dB (implicit negative Q6.2 fixed point format) when applicable
+ * \param [out] pPwrMeasLinear - Pointer to power meter read back linear value (Q0.36 fixed point)
+ *
+ * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+ */
+ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RxRssiReadBack_v2(adi_adrv904x_Device_t* const device,
+                                                                 const uint16_t               meterSel,
+                                                                 const uint32_t               channelSel,
+                                                                 uint8_t* const               pPwrMeasDb,
+                                                                 uint64_t* const              pPwrMeasLinear);
 
 #endif /* _ADI_ADRV904X_RX_H_ */

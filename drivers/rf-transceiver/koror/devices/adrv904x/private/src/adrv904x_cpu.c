@@ -1,13 +1,12 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adrv904x_cpu.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "../../private/include/adrv904x_cpu.h"
@@ -310,7 +309,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CpuMailboxBufferRead(adi_adrv904x_Devic
     uint32_t cpuAddr = ADRV904X_CPU_0_DM_MAILBOX_LINK_0_START_ADDR;
     
 
-    uint8_t readData[SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE] = { 0U };
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, readData, SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE);
     
     uint32_t i = 0U;
 
@@ -833,6 +832,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CpuCmdWrite(adi_adrv904x_Device_t* con
     if ((cpuType == ADI_ADRV904X_CPU_TYPE_0) ||
            (cpuType == ADI_ADRV904X_CPU_TYPE_1))
     {
+        /* Write to CPU's Mailbox CMD bitfield (armX_spiX_command) to notify it of incoming command. */
         ADRV904X_SPIWRITEBYTE_RETURN("CPU_COMMAND", cpuAddr->cmdAddr, linkId, recoveryAction);
     }
     else if (cpuType == ADI_ADRV904X_CPU_TYPE_DFE)
@@ -988,7 +988,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CpuCmdSend(adi_adrv904x_Device_t* cons
     adrv904x_CpuCmdResp_t *rxRsp = NULL;
     adrv904x_CpuCmdId_t rspCmdId;
     adrv904x_CpuCmdStatus_e cmdStatus;
-    uint8_t cmdBuf[sizeof(adrv904x_MaxCpuCmdBufSz_t)];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cmdBuf, sizeof(adrv904x_MaxCpuCmdBufSz_t));
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
 
@@ -1052,7 +1052,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CpuCmdSend(adi_adrv904x_Device_t* cons
     }
 
     /* Verify command payload size is acceptable */
-    if (cmdPayloadSz > (sizeof(cmdBuf) - sizeof(adrv904x_CpuCmd_t)))
+    if (cmdPayloadSz > (sizeof(adrv904x_MaxCpuCmdBufSz_t) - sizeof(adrv904x_CpuCmd_t)))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cmdPayloadSz, "cmdPayloadSz is too large for command buffer.");
@@ -1060,7 +1060,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CpuCmdSend(adi_adrv904x_Device_t* cons
     }
 
     /* Verify response payload size is acceptable */
-    if (respPayloadSz > (sizeof(cmdBuf) - sizeof(adrv904x_CpuCmdResp_t)))
+    if (respPayloadSz > (sizeof(adrv904x_MaxCpuCmdBufSz_t) - sizeof(adrv904x_CpuCmdResp_t)))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, respPayloadSz, "respPayloadSz is too large for command buffer.");

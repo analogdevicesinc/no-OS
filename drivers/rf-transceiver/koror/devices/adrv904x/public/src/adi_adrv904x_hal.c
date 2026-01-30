@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -10,7 +9,7 @@
 *        Analog Devices maintains and provides updates to this code layer.
 *        The end user should not modify this file or any code in this directory.
 *        
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_hal.h"
@@ -1146,36 +1145,37 @@ static const adi_adrv904x_RegisterMap_t adrv904x_ThirtyTwoBitRegisterMapArray[] 
     { (uint32_t)ADRV904X_TELEMETRY_ADDR_BASE,       (uint32_t)(ADRV904X_TELEMETRY_ADDR_BASE + ADRV904X_TELEMETRY_REG_LEN),              1U,                                         0U },
     { (uint32_t)ADRV904X_SEMAPHORE_ADDR_BASE,       (uint32_t)(ADRV904X_SEMAPHORE_ADDR_BASE + ADRV904X_SEMAPHORE_ADDR_STRIDE),          32U,                                        (uint32_t)ADRV904X_SEMAPHORE_ADDR_STRIDE }
         ,
-    { (uint32_t)ADRV904X_CORE_0_INTR_AGG_ADDR_BASE,      (uint32_t)(ADRV904X_CORE_0_INTR_AGG_ADDR_BASE + ADRV904X_CORE_0_INTR_AGG_REG_LEN),  1U,                                          0U },
-    { (uint32_t)ADRV904X_CORE_1_INTR_AGG_ADDR_BASE,      (uint32_t)(ADRV904X_CORE_1_INTR_AGG_ADDR_BASE + ADRV904X_CORE_1_INTR_AGG_REG_LEN),  1U,                                          0U },
-    { (uint32_t)ADRV904X_TX_DPD_ACT_LUT_ADDR_BASE,       (uint32_t)(ADRV904X_TX_DPD_ACT_LUT_ADDR_BASE + ADRV904X_TX_DPD_ACT_LUT_REG_LEN),    (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,       (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_TX_ANA_LB_ADC_32_ADDR_BASE,     (uint32_t)(ADRV904X_TX_ANA_LB_ADC_32_ADDR_BASE + ADRV904X_TX_ANA_LB_ADC_32_REG_LEN),(uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,       (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_TX_SEMAPHORE_ADDR_BASE,         (uint32_t)(ADRV904X_TX_SEMAPHORE_ADDR_BASE + ADRV904X_TX_SEMAPHORE_REG_LEN),        (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,       (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_TX_CFR_PULSE_RAM_ADDR_BASE,     (uint32_t)(ADRV904X_TX_CFR_PULSE_RAM_ADDR_BASE + ADRV904X_TX_CFR_PULSE_RAM_REG_LEN),(uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,       (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_RX_SEMAPHORE_ADDR_BASE,         (uint32_t)(ADRV904X_RX_SEMAPHORE_ADDR_BASE + ADRV904X_RX_SEMAPHORE_REG_LEN),        (uint32_t)ADI_ADRV904X_MAX_RX_ONLY,          (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_ORX_SEMAPHORE_ADDR_BASE,        (uint32_t)(ADRV904X_ORX_SEMAPHORE_ADDR_BASE + ADRV904X_ORX_SEMAPHORE_REG_LEN),      (uint32_t)ADI_ADRV904X_MAX_ORX,              (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_RS_GLOBAL_CFG_1_ADDR_BASE,      (uint32_t)(ADRV904X_RS_GLOBAL_CFG_1_ADDR_BASE + ADRV904X_RS_GLOBAL_CFG_1_REG_LEN),  1U,                                          0U },
-    { (uint32_t)ADRV904X_RS_CONFIG_0_ADDR_BASE,          (uint32_t)(ADRV904X_RS_CONFIG_0_ADDR_BASE + ADRV904X_RS_CONFIG_0_REG_LEN),          1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_INTR_AGG_ADDR_BASE,         (uint32_t)(ADRV904X_A55_INTR_AGG_ADDR_BASE + ADRV904X_A55_INTR_AGG_REG_LEN),        1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_INTR_TSMTR_ADDR_BASE,       (uint32_t)(ADRV904X_A55_INTR_TSMTR_ADDR_BASE + ADRV904X_A55_INTR_TSMTR_REG_LEN),    1U,                                          0U },             
-    { (uint32_t)ADRV904X_A55_UART0_ADDR_BASE,            (uint32_t)(ADRV904X_A55_UART0_ADDR_BASE + ADRV904X_A55_UART0_REG_LEN),              1U,                                          0U },             
-    { (uint32_t)ADRV904X_A55_UART1_ADDR_BASE,            (uint32_t)(ADRV904X_A55_UART1_ADDR_BASE + ADRV904X_A55_UART1_REG_LEN),              1U,                                          0U },   
-    { (uint32_t)ADRV904X_A55_TRU_ADDR_BASE,              (uint32_t)(ADRV904X_A55_TRU_ADDR_BASE + ADRV904X_A55_TRU_REG_LEN),                  1U,                                          0U },  
-    { (uint32_t)ADRV904X_A55_GIC_ADDR_BASE,              (uint32_t)(ADRV904X_A55_GIC_ADDR_BASE + ADRV904X_A55_GIC_REG_LEN),                  1U,                                          0U },            
-    { (uint32_t)ADRV904X_A55_MDMA_ADDR_BASE,             (uint32_t)(ADRV904X_A55_MDMA_ADDR_BASE + ADRV904X_A55_MDMA_REG_LEN),                1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_L4CFG_ADDR_BASE,            (uint32_t)(ADRV904X_A55_L4CFG_ADDR_BASE + ADRV904X_A55_L4CFG_REG_LEN),              1U,                                          0U },             
-    { (uint32_t)ADRV904X_A55_CAPBUFDDE_ADDR_BASE,        (uint32_t)(ADRV904X_A55_CAPBUFDDE_ADDR_BASE + ADRV904X_A55_CAPBUFDDE_REG_LEN),      1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_TSGEN_CTRL_ADDR_BASE,       (uint32_t)(ADRV904X_A55_TSGEN_CTRL_ADDR_BASE + ADRV904X_A55_TSGEN_CTRL_REG_LEN),    1U,                                          0U },    
-    { (uint32_t)ADRV904X_A55_MMR_FABRIC_ADDR_BASE,       (uint32_t)(ADRV904X_A55_MMR_FABRIC_ADDR_BASE + ADRV904X_A55_MMR_FABRIC_REG_LEN),    1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_SYSTEM_CTI_ADDR_BASE,       (uint32_t)(ADRV904X_A55_SYSTEM_CTI_ADDR_BASE + ADRV904X_A55_SYSTEM_CTI_REG_LEN),    1U,                                          0U },             
-    { (uint32_t)ADRV904X_A55_ATB_FUNNEL_ADDR_BASE,       (uint32_t)(ADRV904X_A55_ATB_FUNNEL_ADDR_BASE + ADRV904X_A55_ATB_FUNNEL_REG_LEN),    1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_TRACE_FIFO_ADDR_BASE,       (uint32_t)(ADRV904X_A55_TRACE_FIFO_ADDR_BASE + ADRV904X_A55_TRACE_FIFO_REG_LEN),    1U,                                          0U },    
-    { (uint32_t)ADRV904X_A55_TPIU_ADDR_BASE,             (uint32_t)(ADRV904X_A55_TPIU_ADDR_BASE + ADRV904X_A55_TPIU_REG_LEN),                1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_PE_DBGVIEW_ADDR_BASE,       (uint32_t)(ADRV904X_A55_PE_DBGVIEW_ADDR_BASE + ADRV904X_A55_PE_DBGVIEW_REG_LEN),    1U,                                          0U },
-    { (uint32_t)ADRV904X_A55_PE_SYSVIEW_ADDR_BASE,       (uint32_t)(ADRV904X_A55_PE_SYSVIEW_ADDR_BASE + ADRV904X_A55_PE_SYSVIEW_REG_LEN),    1U,                                          0U },    
-    { (uint32_t)ADRV904X_A55_FABRIC_ADDR_BASE,           (uint32_t)(ADRV904X_A55_FABRIC_ADDR_BASE + ADRV904X_A55_FABRIC_REG_LEN),            1U,                                          0U },
-    { (uint32_t)ADRV904X_TX_VSWR_PLAYBACK_RAM_ADDR_BASE, (uint32_t)(ADRV904X_TX_VSWR_PLAYBACK_RAM_ADDR_BASE + ADRV904X_TX_VSWR_PLAYBACK_RAM_REG_LEN), (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS, (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
-    { (uint32_t)ADRV904X_TX_CAPTURE_RAM_ADDR_BASE,       (uint32_t)(ADRV904X_TX_CAPTURE_RAM_ADDR_BASE + ADRV904X_TX_CAPTURE_RAM_REG_LEN), (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS, (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_CORE_0_INTR_AGG_ADDR_BASE,      (uint32_t)(ADRV904X_CORE_0_INTR_AGG_ADDR_BASE + ADRV904X_CORE_0_INTR_AGG_REG_LEN),            1U,                                    0U },
+    { (uint32_t)ADRV904X_CORE_1_INTR_AGG_ADDR_BASE,      (uint32_t)(ADRV904X_CORE_1_INTR_AGG_ADDR_BASE + ADRV904X_CORE_1_INTR_AGG_REG_LEN),            1U,                                    0U },
+    { (uint32_t)ADRV904X_TX_DPD_ACT_LUT_ADDR_BASE,       (uint32_t)(ADRV904X_TX_DPD_ACT_LUT_ADDR_BASE + ADRV904X_TX_DPD_ACT_LUT_REG_LEN),              (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS, (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_TX_ANA_LB_ADC_32_ADDR_BASE,     (uint32_t)(ADRV904X_TX_ANA_LB_ADC_32_ADDR_BASE + ADRV904X_TX_ANA_LB_ADC_32_REG_LEN),          (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS, (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_TX_SEMAPHORE_ADDR_BASE,         (uint32_t)(ADRV904X_TX_SEMAPHORE_ADDR_BASE + ADRV904X_TX_SEMAPHORE_REG_LEN),                  (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS, (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_TX_CFR_PULSE_RAM_ADDR_BASE,     (uint32_t)(ADRV904X_TX_CFR_PULSE_RAM_ADDR_BASE + ADRV904X_TX_CFR_PULSE_RAM_REG_LEN),          (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS, (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_RX_SEMAPHORE_ADDR_BASE,         (uint32_t)(ADRV904X_RX_SEMAPHORE_ADDR_BASE + ADRV904X_RX_SEMAPHORE_REG_LEN),                  (uint32_t)ADI_ADRV904X_MAX_RX_ONLY,    (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_ORX_SEMAPHORE_ADDR_BASE,        (uint32_t)(ADRV904X_ORX_SEMAPHORE_ADDR_BASE + ADRV904X_ORX_SEMAPHORE_REG_LEN),                (uint32_t)ADI_ADRV904X_MAX_ORX,        (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_RS_GLOBAL_CFG_1_ADDR_BASE,      (uint32_t)(ADRV904X_RS_GLOBAL_CFG_1_ADDR_BASE + ADRV904X_RS_GLOBAL_CFG_1_REG_LEN),            1U,                                    0U },
+    { (uint32_t)ADRV904X_RS_CONFIG_0_ADDR_BASE,          (uint32_t)(ADRV904X_RS_CONFIG_0_ADDR_BASE + ADRV904X_RS_CONFIG_0_REG_LEN),                    1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_INTR_AGG_ADDR_BASE,         (uint32_t)(ADRV904X_A55_INTR_AGG_ADDR_BASE + ADRV904X_A55_INTR_AGG_REG_LEN),                  1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_INTR_TSMTR_ADDR_BASE,       (uint32_t)(ADRV904X_A55_INTR_TSMTR_ADDR_BASE + ADRV904X_A55_INTR_TSMTR_REG_LEN),              1U,                                    0U },             
+    { (uint32_t)ADRV904X_A55_UART0_ADDR_BASE,            (uint32_t)(ADRV904X_A55_UART0_ADDR_BASE + ADRV904X_A55_UART0_REG_LEN),                        1U,                                    0U },             
+    { (uint32_t)ADRV904X_A55_UART1_ADDR_BASE,            (uint32_t)(ADRV904X_A55_UART1_ADDR_BASE + ADRV904X_A55_UART1_REG_LEN),                        1U,                                    0U },   
+    { (uint32_t)ADRV904X_A55_TRU_ADDR_BASE,              (uint32_t)(ADRV904X_A55_TRU_ADDR_BASE + ADRV904X_A55_TRU_REG_LEN),                            1U,                                    0U },  
+    { (uint32_t)ADRV904X_A55_GIC_ADDR_BASE,              (uint32_t)(ADRV904X_A55_GIC_ADDR_BASE + ADRV904X_A55_GIC_REG_LEN),                            1U,                                    0U },            
+    { (uint32_t)ADRV904X_A55_MDMA_ADDR_BASE,             (uint32_t)(ADRV904X_A55_MDMA_ADDR_BASE + ADRV904X_A55_MDMA_REG_LEN),                          1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_L4CFG_ADDR_BASE,            (uint32_t)(ADRV904X_A55_L4CFG_ADDR_BASE + ADRV904X_A55_L4CFG_REG_LEN),                        1U,                                    0U },             
+    { (uint32_t)ADRV904X_A55_CAPBUFDDE_ADDR_BASE,        (uint32_t)(ADRV904X_A55_CAPBUFDDE_ADDR_BASE + ADRV904X_A55_CAPBUFDDE_REG_LEN),                1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_TSGEN_CTRL_ADDR_BASE,       (uint32_t)(ADRV904X_A55_TSGEN_CTRL_ADDR_BASE + ADRV904X_A55_TSGEN_CTRL_REG_LEN),              1U,                                    0U },    
+    { (uint32_t)ADRV904X_A55_MMR_FABRIC_ADDR_BASE,       (uint32_t)(ADRV904X_A55_MMR_FABRIC_ADDR_BASE + ADRV904X_A55_MMR_FABRIC_REG_LEN),              1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_SYSTEM_CTI_ADDR_BASE,       (uint32_t)(ADRV904X_A55_SYSTEM_CTI_ADDR_BASE + ADRV904X_A55_SYSTEM_CTI_REG_LEN),              1U,                                    0U },             
+    { (uint32_t)ADRV904X_A55_ATB_FUNNEL_ADDR_BASE,       (uint32_t)(ADRV904X_A55_ATB_FUNNEL_ADDR_BASE + ADRV904X_A55_ATB_FUNNEL_REG_LEN),              1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_TRACE_FIFO_ADDR_BASE,       (uint32_t)(ADRV904X_A55_TRACE_FIFO_ADDR_BASE + ADRV904X_A55_TRACE_FIFO_REG_LEN),              1U,                                    0U },    
+    { (uint32_t)ADRV904X_A55_TPIU_ADDR_BASE,             (uint32_t)(ADRV904X_A55_TPIU_ADDR_BASE + ADRV904X_A55_TPIU_REG_LEN),                          1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_PE_DBGVIEW_ADDR_BASE,       (uint32_t)(ADRV904X_A55_PE_DBGVIEW_ADDR_BASE + ADRV904X_A55_PE_DBGVIEW_REG_LEN),              1U,                                    0U },
+    { (uint32_t)ADRV904X_A55_PE_SYSVIEW_ADDR_BASE,       (uint32_t)(ADRV904X_A55_PE_SYSVIEW_ADDR_BASE + ADRV904X_A55_PE_SYSVIEW_REG_LEN),              1U,                                    0U },    
+    { (uint32_t)ADRV904X_A55_FABRIC_ADDR_BASE,           (uint32_t)(ADRV904X_A55_FABRIC_ADDR_BASE + ADRV904X_A55_FABRIC_REG_LEN),                      1U,                                    0U },
+    { (uint32_t)ADRV904X_TX_VSWR_PLAYBACK_RAM_ADDR_BASE, (uint32_t)(ADRV904X_TX_VSWR_PLAYBACK_RAM_ADDR_BASE + ADRV904X_TX_VSWR_PLAYBACK_RAM_REG_LEN), (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,  (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)ADRV904X_TX_CAPTURE_RAM_ADDR_BASE,       (uint32_t)(ADRV904X_TX_CAPTURE_RAM_ADDR_BASE + ADRV904X_TX_CAPTURE_RAM_REG_LEN),             (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,  (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
+    { (uint32_t)TX_CDUC_GAIN_BASE_ADDR,                  (uint32_t)(TX_CDUC_GAIN_BASE_ADDR + TX_CDUC_GAIN_SIZE),                                      (uint32_t)ADI_ADRV904X_MAX_TXCHANNELS,  (uint32_t)ADRV904X_AHB_ADDR_STRIDE },
 };
 
 /*

@@ -1,7 +1,6 @@
 /**
- * Copyright 2015 - 2022 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -10,14 +9,13 @@
  * \brief Contains DFE Application type definitions for CLGC, visible to BBIC API
  *        and customers.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 
 #ifndef ADRV904X_DFE_CAL_CLGC_TYPES_H_
 #define ADRV904X_DFE_CAL_CLGC_TYPES_H_
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 #include "adi_adrv904x_dfe_svc_dfe_capture_cmn_t.h"
 #include "adi_adrv904x_cals_structs.h"
@@ -50,6 +48,7 @@ typedef enum adi_adrv904x_DfeAppCalClgcCtrlCmd
     ADI_ADRV904X_DFE_APP_CAL_CLGC_CTRL_CAPTURE_BUF_ACCESS = 4, /*!< Capture buffer access command for debugging purposes */
 } adi_adrv904x_DfeAppCalClgcCtrlCmd_e;
 
+#ifndef ADI_LIBRARY_RM_FLOATS
 /**
  * \brief Data structure to hold CLGC capture configuration parameters
  */
@@ -110,7 +109,7 @@ typedef struct adi_adrv904x_DfeAppCalClgcStatus
     uint32_t                     periodEndedErrorCount; /*!< count for ADI_ADRV904X_DFE_APP_ERR_CODE_CAPTURE_PERIOD_ENDED_BEFORE_CAPTURES*/
 } adi_adrv904x_DfeAppCalClgcStatus_t;
 ADI_ADRV904X_PACK_FINISH
-
+#endif /* ADI_LIBRARY_RM_FLOATS */
 
 #endif /* ADRV904X_DFE_CAL_CLGC_TYPES_H_ */
 

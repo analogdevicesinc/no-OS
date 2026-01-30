@@ -3,20 +3,18 @@
  *
  * \brief   Contains ADRV904X Device Profile JESD type definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADRV904X_CPU_DEVICE_PROFILE_JESD_TYPES_H__
 #define __ADRV904X_CPU_DEVICE_PROFILE_JESD_TYPES_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 
 
@@ -383,7 +381,8 @@ typedef struct adrv904x_JesdDeframerConfig
                                                                  /*!<                  1 - 2/3 resampling fir used */
                                                                  /*!<                  2 - 3/4 resampling fir used */
 
-    uint8_t reserved1[2];                                        /*!< Reserved */
+    uint8_t interleavingEnabled;                                 /*!< Interleaving enabled for a deframer */
+    uint8_t reserved1[1];                                        /*!< Reserved */
 } adrv904x_JesdDeframerConfig_t;
 ADI_ADRV904X_PACK_FINISH
 

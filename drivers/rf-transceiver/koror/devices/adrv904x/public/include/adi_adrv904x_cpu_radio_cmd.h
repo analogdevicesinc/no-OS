@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2022 - 2022 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2022 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
  
 /**
@@ -10,13 +9,12 @@
  * 
  * \brief   Contains ADRV904X CPU Radio command data structures.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADI_ADRV904X_CPU_RADIO_CMD_H__
 #define __ADI_ADRV904X_CPU_RADIO_CMD_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
 #include "adi_adrv904x_cpu_error_codes_types.h"
 
@@ -24,7 +22,7 @@
 #define CPU_RADIO_CMD_RESP_BUFFER_SIZE (22u)
 
 /**
- * \brief CPU Radio command response structure (Koror only)
+ * \brief CPU Radio command response structure
  */
 ADI_ADRV904X_PACKED(
 typedef struct adi_adrv904x_CpuRadioCmd
@@ -34,7 +32,7 @@ typedef struct adi_adrv904x_CpuRadioCmd
 } adi_adrv904x_CpuRadioCmd_t;)
 
 /**
- * \brief CPU Radio command response structure (Koror only)
+ * \brief CPU Radio command response structure
  */
 ADI_ADRV904X_PACKED(
 typedef struct adi_adrv904x_CpuRadioCmdResp

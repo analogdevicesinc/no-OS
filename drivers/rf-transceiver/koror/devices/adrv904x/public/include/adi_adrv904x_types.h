@@ -1,14 +1,13 @@
 /**
- * Copyright 2015 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /*!
 * \file adi_adrv904x_types.h
 * \brief Contains ADRV904X API configuration and run-time type definitions
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADI_ADRV904X_TYPES_H_
@@ -455,6 +454,7 @@ typedef struct adi_adrv904x_Info
     adi_adrv904x_CarrierReconfigLatencyCfgTop_t rxCarrierLatencyApplied;                         /*!< Internal use only: Rx carrier reconfig latency settings for currently applied config */
     uint16_t                                    carrierLfsrValue;                                /*!< Internal use only: LFSR value used in Carrier Reconfig random table generation */
     uint8_t vswrWaveformLoaded[ADI_ADRV904X_MAX_TXCHANNELS];                                     /*!< Internal use only: Shows if VSWR waveform is loaded by user */
+    adi_adrv904x_PowerMonitorState_t    txPowerMonitorState[ADI_ADRV904X_MAX_TXCHANNELS];        /*!< Internal use only: PA protection monitor state */
 } adi_adrv904x_Info_t;
 
 /**
@@ -474,10 +474,11 @@ typedef struct adi_adrv904x_BandCfgExtract
  */
 typedef struct adi_adrv904x_TxChannelCfgExtract
 {
-    uint32_t                        rfBandwidth_kHz;                            /*!< Tx RF passband bandwidth for the profile */
+    uint32_t                        rfBandwidth_kHz;                            /*!< Tx RF passband bandwidth for the profile */    
     uint32_t                        totalDecimation;                            /*!< Total DDC decimation  */
     uint32_t                        digChanMask;                                /*!< Tx digital channel mask indicates which DUCs to initialize */
     uint32_t                        txLbAdcSampleRate_kHz;                      /*!< TX LB ADC Sample rate */
+    uint32_t                        txLbAdcClkDiv;                              /*!< The logical (not bitfield) value of the LB ClkGen's interface divider. i.e. 5 => Div5 etc. */
     adi_adrv904x_BandCfgExtract_t   bandSettings[ADI_ADRV904X_DUC_NUM_BAND];    /*!< Tx DUC settings */
     uint32_t                        pfirRate_kHz;                               /*!< Tx PFIR rate */
     adi_adrv904x_CarrierRuntime_t   carrierRuntimeSettings;                     /*!< Tx carrier runtime settings */
@@ -563,7 +564,8 @@ typedef struct adi_adrv904x_DeframerSettingsExtract
     uint8_t   jesdNp;                 /*!< Np value */
     uint8_t   deserialLaneEnabled;    /*!< lane enabled */
     uint32_t  iqRate_kHz;             /*!< Framer I/Q rate */
-    uint32_t  laneRate_kHz;           /*!< Framer Lane rate */
+    uint32_t  laneRate_kHz; /*!< Framer Lane rate */
+    uint32_t  interleavingEnabled; /*!< Interleaver enabled */
 } adi_adrv904x_DeframerSettingsExtract_t;
 
 /**

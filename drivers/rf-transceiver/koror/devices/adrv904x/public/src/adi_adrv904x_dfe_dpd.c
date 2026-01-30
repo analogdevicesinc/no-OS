@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_dfe_dpd.c
 * \brief Contains DPD features related function implementations
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #include "adi_common_hal.h"
 #include "adi_library_types.h"
@@ -18,6 +17,7 @@
 #include "adi_adrv904x_hal.h"
 #include "adi_adrv904x_dfe_cpu.h"
 #include "adi_adrv904x_dfe_cal_dpd_types.h"
+#include "adi_adrv904x_dfe_cal_dpd_int_types.h"
 #include "adi_adrv904x_dfe_framework_tracking_cal_t.h"
 #include "../../private/include/adrv904x_platform_byte_order.h"
 #include "../../private/include/adrv904x_dfe_cpu.h"
@@ -28,13 +28,14 @@
 
 #define DPD_CTRL_SET_CMD_FLAG (0x10)
 
+#ifndef ADI_LIBRARY_RM_FLOATS
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet(adi_adrv904x_Device_t* const                      device,
                                                                    const uint32_t                                    dpdTxChannelMask,
                                                                    const adi_adrv904x_DfeAppCalDpdModelType_e        dpdModelType,
                                                                    const adi_adrv904x_DfeAppCalDpdModelDesc_t* const modelDesc)
 {
         const uint16_t DPD_CTRL_MODEL_CONFIG_SET = 0 | DPD_CTRL_SET_CMD_FLAG;
-    uint8_t cpuCtrlData[sizeof(adi_adrv904x_DfeAppCalDpdModelType_t) + sizeof(adi_adrv904x_DfeAppCalDpdModelDesc_t)];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cpuCtrlData, sizeof(adi_adrv904x_DfeAppCalDpdModelType_t) + sizeof(adi_adrv904x_DfeAppCalDpdModelDesc_t));
     adi_adrv904x_DfeAppCalDpdModelDesc_t *pTmpModelDesc =
                  (adi_adrv904x_DfeAppCalDpdModelDesc_t *)(cpuCtrlData + sizeof(adi_adrv904x_DfeAppCalDpdModelType_t));
 
@@ -44,9 +45,10 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet(adi_adrv904x_
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cpuCtrlData, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
 
-    recoveryAction = adrv904x_DpdModelConfigDpdSetRangeCheck(device, dpdTxChannelMask, dpdModelType, modelDesc);
+    recoveryAction = adrv904x_DpdModelConfigDpdSetRangeCheck(device, dpdTxChannelMask, dpdModelType, (const adi_adrv904x_DfeAppCalDpdModelDescInt_t* const)modelDesc);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "DpdModelConfigDpdSet range check failed ");
@@ -61,8 +63,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet(adi_adrv904x_
 
     for (i = 0U; i < pTmpModelDesc->features; ++i)
     {
-        pTmpModelDesc->feature[i].a.real = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.real);
-        pTmpModelDesc->feature[i].a.imag = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.imag);
+        pTmpModelDesc->feature[i].a.real = ADRV904X_HTOCD(pTmpModelDesc->feature[i].a.real);
+        pTmpModelDesc->feature[i].a.imag = ADRV904X_HTOCD(pTmpModelDesc->feature[i].a.imag);
     }
     pTmpModelDesc->features = ADRV904X_HTOCS(pTmpModelDesc->features);
 
@@ -76,7 +78,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet(adi_adrv904x_
                                                                DPD_CTRL_MODEL_CONFIG_SET,
                                                                (adi_adrv904x_Channels_e)txChan,
                                                                cpuCtrlData,
-                                                               sizeof(cpuCtrlData),
+                                                               sizeof(adi_adrv904x_DfeAppCalDpdModelType_t) + sizeof(adi_adrv904x_DfeAppCalDpdModelDesc_t),
                                                                &lengthResp,
                                                                NULL,
                                                                0);
@@ -137,18 +139,146 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdGet(adi_adrv904x_
     if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
     {
         modelDesc->features = ADRV904X_CTOHS(modelDesc->features);
-        modelDesc->dpdPartial.partial = ADRV904X_CTOHL(modelDesc->dpdPartial.partial);
-        modelDesc->mode = ADRV904X_CTOHL(modelDesc->mode);
-        modelDesc->actDepth = ADRV904X_CTOHL(modelDesc->actDepth);
 
         for (i = 0U; i < modelDesc->features; ++i)
         {
-            modelDesc->feature[i].a.real = ADRV904X_HTOCLL(modelDesc->feature[i].a.real);
-            modelDesc->feature[i].a.imag = ADRV904X_HTOCLL(modelDesc->feature[i].a.imag);
+            modelDesc->feature[i].a.real = ADRV904X_HTOCD(modelDesc->feature[i].a.real);
+            modelDesc->feature[i].a.imag = ADRV904X_HTOCD(modelDesc->feature[i].a.imag);
         }
         
         /* mem set the unused features*/
         int memsetSize = sizeof(adi_adrv904x_DfeAppCalDpdAdpFeatureRow_t) * (ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES - modelDesc->features);
+        ADI_LIBRARY_MEMSET(&(modelDesc->feature[modelDesc->features]), 0, memsetSize);
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdSet_int(adi_adrv904x_Device_t* const                         device,
+                                                                       const uint32_t                                       dpdTxChannelMask,
+                                                                       const adi_adrv904x_DfeAppCalDpdModelType_e           dpdModelType,
+                                                                       const adi_adrv904x_DfeAppCalDpdModelDescInt_t* const modelDesc)
+{
+    const uint16_t DPD_CTRL_MODEL_CONFIG_SET = 0 | DPD_CTRL_SET_CMD_FLAG;
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cpuCtrlData, sizeof(adi_adrv904x_DfeAppCalDpdModelType_t) + sizeof(adi_adrv904x_DfeAppCalDpdModelDescInt_t));
+    adi_adrv904x_DfeAppCalDpdModelDescInt_t *pTmpModelDesc =
+                 (adi_adrv904x_DfeAppCalDpdModelDescInt_t *)(cpuCtrlData + sizeof(adi_adrv904x_DfeAppCalDpdModelType_t));
+
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0;
+    uint32_t i = 0;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cpuCtrlData, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+
+    recoveryAction = adrv904x_DpdModelConfigDpdSetRangeCheck(device, dpdTxChannelMask, dpdModelType, modelDesc);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "DpdModelConfigDpdSet range check failed ");
+        goto cleanup;
+    }
+
+    ADI_LIBRARY_MEMCPY((void*)cpuCtrlData, (const void *)&dpdModelType, sizeof(adi_adrv904x_DfeAppCalDpdModelType_t));
+    ADI_LIBRARY_MEMCPY((void*)(cpuCtrlData + sizeof(adi_adrv904x_DfeAppCalDpdModelType_t)), (const void * const)modelDesc, sizeof(adi_adrv904x_DfeAppCalDpdModelDescInt_t));
+
+    /* Note that all the integer fields of *pTmpModelDesc and it's sub-strucutures are uint8_t so require no endianess
+     * corrections. */
+
+    for (i = 0U; i < pTmpModelDesc->features; ++i)
+    {
+        adi_library_scaledIntToFp64(pTmpModelDesc->feature[i].a.real_e6, 1000000, (uint64_t *)&pTmpModelDesc->feature[i].a.real_e6);
+        pTmpModelDesc->feature[i].a.real_e6 = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.real_e6);
+        adi_library_scaledIntToFp64(pTmpModelDesc->feature[i].a.imag_e6, 1000000, (uint64_t *)&pTmpModelDesc->feature[i].a.imag_e6);
+        pTmpModelDesc->feature[i].a.imag_e6 = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.imag_e6);
+    }
+    pTmpModelDesc->features = ADRV904X_HTOCS(pTmpModelDesc->features);
+
+    for (i = 0U; i < ADI_ADRV904X_MAX_TXCHANNELS; ++i)
+    {
+        uint32_t txChan = (1 << i);
+        if (dpdTxChannelMask & txChan)
+        {
+            recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                               ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                               DPD_CTRL_MODEL_CONFIG_SET,
+                                                               (adi_adrv904x_Channels_e)txChan,
+                                                               cpuCtrlData,
+                                                               sizeof(adi_adrv904x_DfeAppCalDpdModelType_t) + sizeof(adi_adrv904x_DfeAppCalDpdModelDescInt_t),
+                                                               &lengthResp,
+                                                               NULL,
+                                                               0);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChan, "Failed to send request");
+                goto cleanup;
+            }
+        }
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigDpdGet_int(adi_adrv904x_Device_t* const                   device,
+                                                                       const adi_adrv904x_TxChannels_e                dpdTxChannelSel,
+                                                                       const adi_adrv904x_DfeAppCalDpdModelType_e     dpdModelType,
+                                                                       adi_adrv904x_DfeAppCalDpdModelDescInt_t* const modelDesc)
+{
+    const uint16_t DPD_CTRL_MODEL_CONFIG_GET = 0;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0;
+    uint32_t i = 0;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+
+    /*Check that if requested Tx Channel valid*/
+    /* Channel must contain a single channel number (0-7) */
+    recoveryAction = adrv904x_DfeVerifyChannel((adi_adrv904x_Channels_e)dpdTxChannelSel);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdTxChannelSel, "channel parameter is invalid.");
+        goto cleanup;
+    }
+
+    recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                       ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                       DPD_CTRL_MODEL_CONFIG_GET,
+                                                       (adi_adrv904x_Channels_e)dpdTxChannelSel,
+                                                       (const uint8_t*)&dpdModelType,
+                                                       sizeof(adi_adrv904x_DfeAppCalDpdModelType_t),
+                                                       &lengthResp,
+                                                       (uint8_t *)modelDesc,
+                                                       sizeof(adi_adrv904x_DfeAppCalDpdModelDescInt_t));
+
+    if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        if (modelDesc->features == 0U)
+        {
+            ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, modelDesc->features, "The number of features is greater than maximum allowed");
+            goto cleanup;
+        }
+    }
+
+    if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        modelDesc->features = ADRV904X_CTOHS(modelDesc->features);
+
+        for (i = 0U; i < modelDesc->features; ++i)
+        {
+            adi_library_fp64ToScaledInt(modelDesc->feature[i].a.real_e6, 1000000, &modelDesc->feature[i].a.real_e6);
+            modelDesc->feature[i].a.real_e6 = ADRV904X_HTOCLL(modelDesc->feature[i].a.real_e6);
+            adi_library_fp64ToScaledInt(modelDesc->feature[i].a.imag_e6, 1000000, &modelDesc->feature[i].a.imag_e6);
+            modelDesc->feature[i].a.imag_e6 = ADRV904X_HTOCLL(modelDesc->feature[i].a.imag_e6);
+        }
+        
+        /* mem set the unused features*/
+        int memsetSize = sizeof(adi_adrv904x_DfeAppCalDpdAdpFeatureRowInt_t) * (ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_FEATURES - modelDesc->features);
         ADI_LIBRARY_MEMSET(&(modelDesc->feature[modelDesc->features]), 0, memsetSize);
     }
 
@@ -221,136 +351,93 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdReset(adi_adrv904x_Device_t* co
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigCtcSet(adi_adrv904x_Device_t* const                      device,
-                                                                   const uint32_t                                    dpdTxChannelMask,
-                                                                   const adi_adrv904x_DfeAppCalDpdModelType_e        dpdModelType,
-                                                                   const adi_adrv904x_DfeAppCalCtcModelDesc_t* const modelDesc)
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2EnableSet(adi_adrv904x_Device_t* const                       device,
+	const uint32_t                                     dpdTxChannelMask,
+	const uint8_t enableCtc2)
 {
-        const uint16_t DPD_CTRL_MODEL_CONFIG_SET = 0 | DPD_CTRL_SET_CMD_FLAG;
-    uint8_t cpuCtrlData[sizeof(adi_adrv904x_DfeAppCalDpdModelType_t) + sizeof(adi_adrv904x_DfeAppCalCtcModelDesc_t)];
-    adi_adrv904x_DfeAppCalCtcModelDesc_t *pTmpModelDesc =
-                 (adi_adrv904x_DfeAppCalCtcModelDesc_t *)(cpuCtrlData + sizeof(adi_adrv904x_DfeAppCalDpdModelType_t));
+		 	const uint16_t 	DPD_CTRL_CTC2_ENABLE_SET = 12 | DPD_CTRL_SET_CMD_FLAG;
+	uint8_t tmpEnableCtc2;
+	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+	uint32_t lengthResp = 0;
+	uint32_t i = 0;
 
-    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    uint32_t lengthResp = 0;
-    uint32_t i = 0;
+	ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+	ADI_ADRV904X_API_ENTRY(&device->common);
+	if (((dpdTxChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (dpdTxChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
+	{
+		recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+		ADI_PARAM_ERROR_REPORT(&device->common,
+			recoveryAction,
+			dpdTxChannelMask,
+			"Invalid Tx channel is selected. Valid values are any combinations of Tx0/1/2/3/4/5/6/7");
+		return recoveryAction;
+	}
+	tmpEnableCtc2 = enableCtc2;
+	
+	for (i = 0; i < ADI_ADRV904X_MAX_TXCHANNELS; i++)
+	{
+		uint32_t txChan = (1 << i);
+		if (dpdTxChannelMask & txChan)
+		{
+			recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+				ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+				DPD_CTRL_CTC2_ENABLE_SET,
+				(adi_adrv904x_Channels_e)txChan,
+				(const uint8_t*)&tmpEnableCtc2,
+				sizeof(tmpEnableCtc2),
+				&lengthResp,
+				NULL,
+				0);
+			if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+			{
+				ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChan, "Failed to send request");
+				goto cleanup;
+			}
+		}
+	}
 
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
-
-    recoveryAction = adrv904x_DpdModelConfigCtcSetRangeCheck(device, dpdTxChannelMask, dpdModelType, modelDesc);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "DpdModelConfigCtcSet range check failed.");
-        goto cleanup;
-    }
-
-    ADI_LIBRARY_MEMCPY((void*)cpuCtrlData, (const void *)&dpdModelType, sizeof(adi_adrv904x_DfeAppCalDpdModelType_t));
-    ADI_LIBRARY_MEMCPY((void*)(cpuCtrlData + sizeof(adi_adrv904x_DfeAppCalDpdModelType_t)), (const void *const)modelDesc, sizeof(adi_adrv904x_DfeAppCalCtcModelDesc_t));
-
-    /* Note that all the integer fields of *pTmpModelDesc and it's sub-strucutures are uint8_t so require no endianess
-     * corrections. */
-
-    pTmpModelDesc->kLutAddrScale = ADRV904X_HTOCL(pTmpModelDesc->kLutAddrScale);
-    pTmpModelDesc->fLutAddrScale = ADRV904X_HTOCL(pTmpModelDesc->fLutAddrScale);
-
-    for (i = 0U; i < pTmpModelDesc->features; ++i)
-    {
-        pTmpModelDesc->feature[i].c = ADRV904X_HTOCS(pTmpModelDesc->feature[i].c);
-        pTmpModelDesc->feature[i].d = ADRV904X_HTOCS(pTmpModelDesc->feature[i].d);
-
-        pTmpModelDesc->feature[i].a.real = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.real);
-        pTmpModelDesc->feature[i].a.imag = ADRV904X_HTOCLL(pTmpModelDesc->feature[i].a.imag);
-    }
-
-    for (i = 0; i < ADI_ADRV904X_MAX_TXCHANNELS; i++)
-    {
-        uint32_t txChan = (1 << i);
-        if (dpdTxChannelMask & txChan)
-        {
-            recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
-                                                               ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
-                                                               DPD_CTRL_MODEL_CONFIG_SET,
-                                                               (adi_adrv904x_Channels_e)txChan,
-                                                               cpuCtrlData,
-                                                               sizeof(cpuCtrlData),
-                                                               &lengthResp,
-                                                               NULL,
-                                                               0);
-            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-            {
-                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChan, "Failed to send request");
-                goto cleanup;
-            }
-        }
-    }
-
-cleanup:
-    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+	cleanup:
+	ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdModelConfigCtcGet(adi_adrv904x_Device_t* const             device,
-                                                                const adi_adrv904x_TxChannels_e             dpdTxChannelSel,
-                                                                const adi_adrv904x_DfeAppCalDpdModelType_e  dpdModelType,
-                                                                adi_adrv904x_DfeAppCalCtcModelDesc_t* const modelDesc)
+#ifndef ADI_LIBRARY_RM_FLOATS
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2EnableGet(adi_adrv904x_Device_t* const                 device,
+	const adi_adrv904x_TxChannels_e              dpdTxChannelSel,
+	uint32_t* const ctc2Enable)
 {
-        const uint16_t DPD_CTRL_MODEL_CONFIG_GET = 0;
-    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    uint32_t lengthResp = 0;
-    uint32_t i = 0;
+		 	const uint16_t DPD_CTRL_CAPTURE_CDPD_CTRL_CTC2_ENABLE_GET = 12;
+	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+	uint32_t lengthResp = 0;
 
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+	ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+	ADI_ADRV904X_API_ENTRY(&device->common);
+	ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, ctc2Enable, cleanup);
 
-    /*Check that if requested Tx Channel valid*/
-    /* Channel must contain a single channel number (0-7) */
-    recoveryAction = adrv904x_DfeVerifyChannel((adi_adrv904x_Channels_e)dpdTxChannelSel);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdTxChannelSel, "channel parameter is invalid.");
-        goto cleanup;
-    }
+	/*Check that if requested Tx Channel valid*/
+	/* Channel must contain a single channel number (0-7) */
+	recoveryAction = adrv904x_DfeVerifyChannel((adi_adrv904x_Channels_e)dpdTxChannelSel);
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdTxChannelSel, "channel parameter is invalid.");
+		goto cleanup;
+	}
 
-    recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
-                                                       ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
-                                                       DPD_CTRL_MODEL_CONFIG_GET,
-                                                       (adi_adrv904x_Channels_e)dpdTxChannelSel,
-                                                       (const uint8_t*)&dpdModelType,
-                                                       sizeof(adi_adrv904x_DfeAppCalDpdModelType_t),
-                                                       &lengthResp,
-                                                       (uint8_t *)modelDesc,
-                                                       sizeof(*modelDesc));
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to send request");
-        goto cleanup;
-    }
+	recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+		ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+		DPD_CTRL_CAPTURE_CDPD_CTRL_CTC2_ENABLE_GET,
+		(adi_adrv904x_Channels_e)dpdTxChannelSel,
+		NULL,
+		0,
+		&lengthResp,
+		(uint8_t*)ctc2Enable,
+		sizeof(*ctc2Enable));
 
-    if (modelDesc->features == 0U)
-    {
-        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, modelDesc->features, "The number of features is greater than maximum allowed");
-        goto cleanup;
-    }
+	
 
-    modelDesc->ctcPartial.partial = ADRV904X_CTOHL(modelDesc->ctcPartial.partial);
-
-    modelDesc->kLutAddrScale = ADRV904X_CTOHL(modelDesc->kLutAddrScale);
-    modelDesc->fLutAddrScale = ADRV904X_CTOHL(modelDesc->fLutAddrScale);
-
-    for (i = 0U; i < modelDesc->features; ++i)
-    {
-        modelDesc->feature[i].c = ADRV904X_CTOHS(modelDesc->feature[i].c);
-        modelDesc->feature[i].d = ADRV904X_CTOHS(modelDesc->feature[i].d);
-
-        modelDesc->feature[i].a.real = ADRV904X_CTOHLL(modelDesc->feature[i].a.real);
-        modelDesc->feature[i].a.imag = ADRV904X_CTOHLL(modelDesc->feature[i].a.imag);
-    }
-
-cleanup:
-    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+	cleanup:
+	ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
+#endif /* ADI_LIBRARY_RM_FLOATS */
 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdActuatorGainMonitorConfigSet(adi_adrv904x_Device_t* const                          device,
                                                                               const uint32_t                                        dpdTxChannelMask,
@@ -440,8 +527,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdActuatorGainMonitorConfigGet(ad
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         dpdPowerMeterCfg->dpdInOutQualLim = ADRV904X_CTOHL(dpdPowerMeterCfg->dpdInOutQualLim);
-        dpdPowerMeterCfg->dpdInOutMinGainLim = ADRV904X_HTOCL(dpdPowerMeterCfg->dpdInOutMinGainLim);
-        dpdPowerMeterCfg->dpdInOutMaxGainLim = ADRV904X_HTOCL(dpdPowerMeterCfg->dpdInOutMaxGainLim);
+        dpdPowerMeterCfg->dpdInOutMinGainLim = ADRV904X_CTOHL(dpdPowerMeterCfg->dpdInOutMinGainLim);
+        dpdPowerMeterCfg->dpdInOutMaxGainLim = ADRV904X_CTOHL(dpdPowerMeterCfg->dpdInOutMaxGainLim);
         dpdPowerMeterCfg->dpdInOutPwrMeasContDlyCntr = ADRV904X_CTOHS(dpdPowerMeterCfg->dpdInOutPwrMeasContDlyCntr);
     }
 
@@ -473,6 +560,11 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdCaptureConfigSet(adi_adrv904x_D
     ADI_LIBRARY_MEMCPY((void *)&tmpDpdCaptureCfg, dpdCaptureCfg, sizeof(adi_adrv904x_DfeAppCalDpdCaptureCfg_t));
 
     tmpDpdCaptureCfg.capPeakDetCfg.windowLength = ADRV904X_HTOCL(tmpDpdCaptureCfg.capPeakDetCfg.windowLength);
+	
+	for (i = 0; i < DPD_NUM_CAPTURE_BUFFER_MAX; i++)
+	{
+		tmpDpdCaptureCfg.ctc2FrameDelay[i] = ADRV904X_HTOCL(tmpDpdCaptureCfg.ctc2FrameDelay[i]);
+	}
 
     for (i = 0; i < ADI_ADRV904X_MAX_TXCHANNELS; i++)
     {
@@ -534,47 +626,109 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdCaptureConfigGet(adi_adrv904x_D
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         dpdCaptureCfg->capPeakDetCfg.windowLength = ADRV904X_CTOHL(dpdCaptureCfg->capPeakDetCfg.windowLength);
+	    for (uint8_t i = 0; i < DPD_NUM_CAPTURE_BUFFER_MAX; i++)
+	    {
+		    dpdCaptureCfg->ctc2FrameDelay[i] = ADRV904X_CTOHL(dpdCaptureCfg->ctc2FrameDelay[i]);
+	    }
+
     }
 
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet(adi_adrv904x_Device_t* const                     device,
-                                                                   const uint32_t                                   dpdTxChannelMask,
-                                                                   const adi_adrv904x_DfeAppCalDpdTrackCfg_t* const dpdTrackCfg)
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_WBBufSegConfigSet( adi_adrv904x_Device_t* const                 device,
+	                                                             const adi_adrv904x_DfeAppCalDpdWbRegBufSeg_e wbBufNum)
 {
-        const uint16_t DPD_CTRL_TRACK_CONFIG_SET = 1 | DPD_CTRL_SET_CMD_FLAG;
-    adi_adrv904x_DfeAppCalDpdTrackCfg_t tmpDpdTrackCfg;
+		adi_adrv904x_ErrAction_e            recoveryAction                                      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+	const uint16_t                  offset = 0;
+	uint8_t                         configDataSet[4] = { wbBufNum, 0x00, 0x00, 0x00 };
+	/* Check device pointer is not null */
+	ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+	ADI_ADRV904X_API_ENTRY(&device->common);
+
+	/* Send command and receive response */
+	recoveryAction = adi_adrv904x_DfeAppConfigSet(device,
+		                                          ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+		                                          offset,
+		                                          configDataSet,
+		                                          sizeof(configDataSet));
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		goto cleanup;
+	}
+
+cleanup :
+	ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_WBBufSegConfigGet( adi_adrv904x_Device_t* const    device,
+	                                                             adi_adrv904x_DfeAppCalDpdWbRegBufSeg_e* wbBufNum)
+{
+		adi_adrv904x_ErrAction_e            recoveryAction                                      = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+	const uint16_t                  offset = 0;
+	uint8_t                         configDataGetPvt[4] = { 0x00, 0x00, 0x00, 0x00 };
+	/* Check device pointer is not null */
+	ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+	ADI_ADRV904X_API_ENTRY(&device->common);
+	
+	/* Send command and receive response */
+	recoveryAction = adi_adrv904x_DfeAppConfigGet(device,
+		                                          ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+		                                          offset,
+		                                          configDataGetPvt,
+		                                          sizeof(configDataGetPvt));
+	if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+	{
+		goto cleanup;
+	}
+	*wbBufNum = (adi_adrv904x_DfeAppCalDpdWbRegBufSeg_e)configDataGetPvt[0] ;
+
+cleanup :
+	ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+
+static adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigSet(adi_adrv904x_Device_t* const                  device,
+                                                              const uint32_t                                dpdTxChannelMask,
+                                                              adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg)
+{
+    const uint16_t DPD_CTRL_TRACK_CONFIG_SET = 1 | DPD_CTRL_SET_CMD_FLAG;
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     uint32_t lengthResp = 0;
     uint32_t i = 0;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdTrackCfg, cleanup);
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, dpdTrackCfg);
 
-    recoveryAction = adrv904x_DpdTrackingConfigSetRangeCheck(device, dpdTxChannelMask, dpdTrackCfg);
-    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "dpdTrackCfg range check failed.");
-        goto cleanup;
-    }
-
-    ADI_LIBRARY_MEMCPY((void *)&tmpDpdTrackCfg, dpdTrackCfg, sizeof(adi_adrv904x_DfeAppCalDpdTrackCfg_t));
-
-    tmpDpdTrackCfg.adapt.numDpdSamples = ADRV904X_HTOCS(tmpDpdTrackCfg.adapt.numDpdSamples);
+    dpdTrackCfg->adapt.numDpdSamples = ADRV904X_HTOCS(dpdTrackCfg->adapt.numDpdSamples);
     for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_COEFFICIENTS; i++)
     {
-        tmpDpdTrackCfg.filterCoef[i] = ADRV904X_HTOCS(tmpDpdTrackCfg.filterCoef[i]);
+        dpdTrackCfg->filterCoef[i] = ADRV904X_HTOCS(dpdTrackCfg->filterCoef[i]);
     }
-    tmpDpdTrackCfg.mThresholdDB         = ADRV904X_HTOCL(tmpDpdTrackCfg.mThresholdDB);
-    tmpDpdTrackCfg.cThresholdDB         = ADRV904X_HTOCL(tmpDpdTrackCfg.cThresholdDB);
-    tmpDpdTrackCfg.thresholdOverlapDB   = ADRV904X_HTOCS(tmpDpdTrackCfg.thresholdOverlapDB);
-    tmpDpdTrackCfg.numberOfMultiFrames  = ADRV904X_HTOCL(tmpDpdTrackCfg.numberOfMultiFrames);
-    tmpDpdTrackCfg.estSizeOfCoefBias    = ADRV904X_HTOCS(tmpDpdTrackCfg.estSizeOfCoefBias);
-    tmpDpdTrackCfg.ctc1StatsSampleNum   = ADRV904X_HTOCL(tmpDpdTrackCfg.ctc1StatsSampleNum);
-    tmpDpdTrackCfg.bwDetCfg.corrLagMax  = ADRV904X_HTOCS(tmpDpdTrackCfg.bwDetCfg.corrLagMax);
+    dpdTrackCfg->mThresholdDB                 = ADRV904X_HTOCL(dpdTrackCfg->mThresholdDB);
+    dpdTrackCfg->cThresholdDB                 = ADRV904X_HTOCL(dpdTrackCfg->cThresholdDB);
+    dpdTrackCfg->thresholdOverlapDB           = ADRV904X_HTOCS(dpdTrackCfg->thresholdOverlapDB);
+    dpdTrackCfg->numberOfMultiFrames          = ADRV904X_HTOCL(dpdTrackCfg->numberOfMultiFrames);
+    dpdTrackCfg->wbRegAlpha_e6                = ADRV904X_HTOCL(dpdTrackCfg->wbRegAlpha_e6);
+    dpdTrackCfg->wbRegBeta_e6                 = ADRV904X_HTOCL(dpdTrackCfg->wbRegBeta_e6);
+    dpdTrackCfg->estSizeOfCoefBias            = ADRV904X_HTOCS(dpdTrackCfg->estSizeOfCoefBias);
+    dpdTrackCfg->ctc2EstSizeOfCoefBias        = ADRV904X_HTOCS(dpdTrackCfg->ctc2EstSizeOfCoefBias);
+    dpdTrackCfg->ctc1StatsSampleNum           = ADRV904X_HTOCL(dpdTrackCfg->ctc1StatsSampleNum);
+    dpdTrackCfg->bwDetCfg.corrLagMax          = ADRV904X_HTOCS(dpdTrackCfg->bwDetCfg.corrLagMax);
+    dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6   = ADRV904X_HTOCL(dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6);
+    dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6   = ADRV904X_HTOCL(dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6);
+    dpdTrackCfg->bwDetCfg.alphaTrack_e6       = ADRV904X_HTOCL(dpdTrackCfg->bwDetCfg.alphaTrack_e6);
+    dpdTrackCfg->muPwrBasedCfg.pwrRangeHighDB = ADRV904X_HTOCL(dpdTrackCfg->muPwrBasedCfg.pwrRangeHighDB);
+    dpdTrackCfg->muPwrBasedCfg.pwrRangeLowDB  = ADRV904X_HTOCL(dpdTrackCfg->muPwrBasedCfg.pwrRangeLowDB);
+
+    for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; i++)
+    {
+        dpdTrackCfg->capScreenCfg.parThreshDB[i] = ADRV904X_HTOCS(dpdTrackCfg->capScreenCfg.parThreshDB[i]);
+    }
+    dpdTrackCfg->txPfirFracDelAdjustThr = ADRV904X_HTOCL(dpdTrackCfg->txPfirFracDelAdjustThr);
+    dpdTrackCfg->ctc2EnvPwrRatioThrDB   = ADRV904X_HTOCL(dpdTrackCfg->ctc2EnvPwrRatioThrDB);
 
     for (i = 0; i < ADI_ADRV904X_MAX_TXCHANNELS; i++)
     {
@@ -585,35 +739,33 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet(adi_adrv904x_
                                                                ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
                                                                DPD_CTRL_TRACK_CONFIG_SET,
                                                                (adi_adrv904x_Channels_e)txChan,
-                                                               (const uint8_t*)&tmpDpdTrackCfg,
-                                                               sizeof(tmpDpdTrackCfg),
+                                                               (const uint8_t*)dpdTrackCfg,
+                                                               sizeof(*dpdTrackCfg),
                                                                &lengthResp,
                                                                NULL,
                                                                0);
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
             {
                 ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChan, "Failed to send request");
-                goto cleanup;
+                return recoveryAction;
             }
         }
     }
-
-cleanup:
-    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+    return recoveryAction;
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet(adi_adrv904x_Device_t* const               device,
-                                                                   const adi_adrv904x_TxChannels_e            dpdTxChannelSel,
-                                                                   adi_adrv904x_DfeAppCalDpdTrackCfg_t* const dpdTrackCfg)
+static adi_adrv904x_ErrAction_e adrv904x_DpdTrackingConfigGet(adi_adrv904x_Device_t* const            device,
+                                                              const adi_adrv904x_TxChannels_e         dpdTxChannelSel,
+                                                              adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg)
 {
-        const uint16_t DPD_CTRL_TRACK_CONFIG_GET = 1;
+    const uint16_t DPD_CTRL_TRACK_CONFIG_GET = 1;
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     uint32_t lengthResp = 0;
     uint32_t i = 0;
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdTrackCfg, cleanup);
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, dpdTrackCfg);
 
     /*Check that if requested Tx Channel valid*/
     /* Channel must contain a single channel number (0-7) */
@@ -621,7 +773,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet(adi_adrv904x_
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdTxChannelSel, "channel parameter is invalid.");
-        goto cleanup;
+        return recoveryAction;
     }
 
     recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
@@ -643,13 +795,145 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet(adi_adrv904x_
             dpdTrackCfg->filterCoef[i] = ADRV904X_CTOHS(dpdTrackCfg->filterCoef[i]);
         }
 
-        dpdTrackCfg->mThresholdDB         = ADRV904X_CTOHL(dpdTrackCfg->mThresholdDB);
-        dpdTrackCfg->cThresholdDB         = ADRV904X_CTOHL(dpdTrackCfg->cThresholdDB);
-        dpdTrackCfg->numberOfMultiFrames  = ADRV904X_CTOHL(dpdTrackCfg->numberOfMultiFrames);
-        dpdTrackCfg->estSizeOfCoefBias    = ADRV904X_CTOHS(dpdTrackCfg->estSizeOfCoefBias);
-        dpdTrackCfg->thresholdOverlapDB   = ADRV904X_CTOHS(dpdTrackCfg->thresholdOverlapDB);
+        dpdTrackCfg->mThresholdDB                 = ADRV904X_CTOHL(dpdTrackCfg->mThresholdDB);
+        dpdTrackCfg->cThresholdDB                 = ADRV904X_CTOHL(dpdTrackCfg->cThresholdDB);
+        dpdTrackCfg->numberOfMultiFrames          = ADRV904X_CTOHL(dpdTrackCfg->numberOfMultiFrames);
+        dpdTrackCfg->estSizeOfCoefBias            = ADRV904X_CTOHS(dpdTrackCfg->estSizeOfCoefBias);
+        dpdTrackCfg->ctc2EstSizeOfCoefBias        = ADRV904X_CTOHS(dpdTrackCfg->ctc2EstSizeOfCoefBias);
+        dpdTrackCfg->thresholdOverlapDB           = ADRV904X_CTOHS(dpdTrackCfg->thresholdOverlapDB);
+        dpdTrackCfg->ctc1StatsSampleNum           = ADRV904X_CTOHL(dpdTrackCfg->ctc1StatsSampleNum);
+        dpdTrackCfg->bwDetCfg.corrLagMax          = ADRV904X_CTOHS(dpdTrackCfg->bwDetCfg.corrLagMax);
+	    dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6   = ADRV904X_CTOHL(dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6);
+	    dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6   = ADRV904X_CTOHL(dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6);
+	    dpdTrackCfg->bwDetCfg.alphaTrack_e6       = ADRV904X_CTOHL(dpdTrackCfg->bwDetCfg.alphaTrack_e6);
+	    dpdTrackCfg->wbRegAlpha_e6                = ADRV904X_CTOHL(dpdTrackCfg->wbRegAlpha_e6);
+	    dpdTrackCfg->wbRegBeta_e6                 = ADRV904X_CTOHL(dpdTrackCfg->wbRegBeta_e6);
+        dpdTrackCfg->muPwrBasedCfg.pwrRangeHighDB = ADRV904X_CTOHL(dpdTrackCfg->muPwrBasedCfg.pwrRangeHighDB);
+        dpdTrackCfg->muPwrBasedCfg.pwrRangeLowDB  = ADRV904X_CTOHL(dpdTrackCfg->muPwrBasedCfg.pwrRangeLowDB);
+        for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; i++)
+        {
+            dpdTrackCfg->capScreenCfg.parThreshDB[i] = ADRV904X_CTOHS(dpdTrackCfg->capScreenCfg.parThreshDB[i]);
+        }
+        dpdTrackCfg->txPfirFracDelAdjustThr   = ADRV904X_CTOHL(dpdTrackCfg->txPfirFracDelAdjustThr);
+        dpdTrackCfg->ctc2EnvPwrRatioThrDB     = ADRV904X_CTOHL(dpdTrackCfg->ctc2EnvPwrRatioThrDB);
     }
 
+    return recoveryAction;
+}
+
+
+#ifndef ADI_LIBRARY_RM_FLOATS
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet(adi_adrv904x_Device_t* const                     device,
+                                                                   const uint32_t                                   dpdTxChannelMask,
+                                                                   const adi_adrv904x_DfeAppCalDpdTrackCfg_t* const dpdTrackCfg)
+{
+        adi_adrv904x_DfeAppCalDpdTrackCfg_t tmpDpdTrackCfg;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdTrackCfg, cleanup);
+
+    recoveryAction = adrv904x_DpdTrackingConfigSetRangeCheckFloat(device, dpdTxChannelMask, dpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "dpdTrackCfg range check failed.");
+        goto cleanup;
+    }
+
+    ADI_LIBRARY_MEMCPY((void *)&tmpDpdTrackCfg, dpdTrackCfg, sizeof(adi_adrv904x_DfeAppCalDpdTrackCfg_t));
+
+    recoveryAction = adrv904x_DpdTrackingConfigSet(device,
+                                                   dpdTxChannelMask,
+                                                   (adi_adrv904x_DfeAppCalDpdTrackCfgInt_t*)&tmpDpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "dpdTrackingCfgSet failed");
+        goto cleanup;
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet(adi_adrv904x_Device_t* const               device,
+                                                                   const adi_adrv904x_TxChannels_e            dpdTxChannelSel,
+                                                                   adi_adrv904x_DfeAppCalDpdTrackCfg_t* const dpdTrackCfg)
+{
+        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdTrackCfg, cleanup);
+
+    recoveryAction = adrv904x_DpdTrackingConfigGet(device, dpdTxChannelSel, (adi_adrv904x_DfeAppCalDpdTrackCfgInt_t*)dpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdTxChannelSel, "DpdTrackingConfigGet failed");
+        goto cleanup;
+    }
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigSet_int(adi_adrv904x_Device_t* const                       device,
+                                                                       const uint32_t                                     dpdTxChannelMask,
+                                                                       const adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg)
+{
+    adi_adrv904x_DfeAppCalDpdTrackCfgInt_t tmpDpdTrackCfg;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdTrackCfg, cleanup);
+
+    recoveryAction = adrv904x_DpdTrackingConfigSetRangeCheckInt(device, dpdTxChannelMask, dpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "dpdTrackCfg range check failed.");
+        goto cleanup;
+    }
+
+    ADI_LIBRARY_MEMCPY((void *)&tmpDpdTrackCfg, dpdTrackCfg, sizeof(adi_adrv904x_DfeAppCalDpdTrackCfgInt_t));
+
+    adi_library_scaledIntToFp32(tmpDpdTrackCfg.wbRegAlpha_e6, 1000000, (uint32_t *)&tmpDpdTrackCfg.wbRegAlpha_e6);
+    adi_library_scaledIntToFp32(tmpDpdTrackCfg.wbRegBeta_e6, 1000000, (uint32_t *)&tmpDpdTrackCfg.wbRegBeta_e6);
+    adi_library_scaledIntToFp32(tmpDpdTrackCfg.bwDetCfg.loBwBeta2Thres_e6, 1000000, (uint32_t *)&tmpDpdTrackCfg.bwDetCfg.loBwBeta2Thres_e6);
+    adi_library_scaledIntToFp32(tmpDpdTrackCfg.bwDetCfg.hiBwBeta2Thres_e6, 1000000, (uint32_t *)&tmpDpdTrackCfg.bwDetCfg.hiBwBeta2Thres_e6);
+    adi_library_scaledIntToFp32(tmpDpdTrackCfg.bwDetCfg.alphaTrack_e6, 1000000, (uint32_t *)&tmpDpdTrackCfg.bwDetCfg.alphaTrack_e6);
+
+    recoveryAction = adrv904x_DpdTrackingConfigSet(device, dpdTxChannelMask, &tmpDpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "dpdTrackingCfgSet failed");
+        goto cleanup;
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTrackingConfigGet_int(adi_adrv904x_Device_t* const                 device,
+                                                                      const adi_adrv904x_TxChannels_e               dpdTxChannelSel,
+                                                                      adi_adrv904x_DfeAppCalDpdTrackCfgInt_t* const dpdTrackCfg)
+{
+	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdTrackCfg, cleanup);
+
+    recoveryAction = adrv904x_DpdTrackingConfigGet(device, dpdTxChannelSel, dpdTrackCfg);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdTxChannelSel, "DpdTrackingConfigGet failed");
+        goto cleanup;
+    }
+
+    adi_library_fp32ToScaledInt(dpdTrackCfg->wbRegAlpha_e6             , 1000000, &dpdTrackCfg->wbRegAlpha_e6);
+    adi_library_fp32ToScaledInt(dpdTrackCfg->wbRegBeta_e6              , 1000000, &dpdTrackCfg->wbRegBeta_e6);
+    adi_library_fp32ToScaledInt(dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6, 1000000, &dpdTrackCfg->bwDetCfg.loBwBeta2Thres_e6);
+    adi_library_fp32ToScaledInt(dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6, 1000000, &dpdTrackCfg->bwDetCfg.hiBwBeta2Thres_e6);
+    adi_library_fp32ToScaledInt(dpdTrackCfg->bwDetCfg.alphaTrack_e6    , 1000000, &dpdTrackCfg->bwDetCfg.alphaTrack_e6);
 
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -742,9 +1026,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdPowerMeterConfigGet(adi_adrv904
         dpdPowerMeterCfg->dpdInOutQualLim = ADRV904X_CTOHL(dpdPowerMeterCfg->dpdInOutQualLim);
         dpdPowerMeterCfg->dpdInOutMinGainLim = ADRV904X_CTOHL(dpdPowerMeterCfg->dpdInOutMinGainLim);
         dpdPowerMeterCfg->dpdInOutMaxGainLim = ADRV904X_CTOHL(dpdPowerMeterCfg->dpdInOutMaxGainLim);
-        dpdPowerMeterCfg->dpdInOutPwrMeasDuration = ADRV904X_CTOHS(dpdPowerMeterCfg->dpdInOutPwrMeasDuration);
         dpdPowerMeterCfg->dpdInOutPwrMeasContDlyCntr = ADRV904X_CTOHS(dpdPowerMeterCfg->dpdInOutPwrMeasContDlyCntr);
-        dpdPowerMeterCfg->dpdInOutPwrMeasEn = ADRV904X_CTOHS(dpdPowerMeterCfg->dpdInOutPwrMeasEn);
     }
 
     cleanup:
@@ -809,7 +1091,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdActSatStatusGet(adi_adrv904x
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     const adi_adrv904x_DfeAppFrameworkTrackingCalibrationMask_e calId = ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKINGCAL_TX_DPD_MASK;
-    adi_adrv904x_DfeAppCalDpdStatus_t specificCalStatus;
+    adi_adrv904x_DfeAppCalDpdStatusInt_t specificCalStatus;
 
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
@@ -850,7 +1132,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdActiveModelTableGet(adi_adrv
 {
         adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     const adi_adrv904x_DfeAppFrameworkTrackingCalibrationMask_e calId = ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKINGCAL_TX_DPD_MASK;
-    adi_adrv904x_DfeAppCalDpdStatus_t specificCalStatus;
+    adi_adrv904x_DfeAppCalDpdStatusInt_t specificCalStatus;
 
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
@@ -895,7 +1177,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCaptureDataFromBufMemGet(adi
     adrv904x_Bf_CapBufMmr_Ch2SrcSel_e ch2SrcSel = ADRV904X_BF_CAP_BUF_MMR_CH2_SRC_SEL_RSVD;
     adrv904x_Bf_CapBufMmr_CapEnSrc_e capEnSrc = ADRV904X_BF_CAP_BUF_MMR_CAP_EN_SRC_CAP_EN_NONE;
     adrv904x_Bf_CapBufMmr_CapPauseSrc_e capPauseSrc = ADRV904X_BF_CAP_BUF_MMR_CAP_PAUSE_SRC_CAP_PAUSE_SLICE;
-    uint32_t captureBuffer[ADI_ADRV904X_DFE_APP_CAL_DPD_CAPTURE_SAMPLES_NUM] = { 0U };
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint32_t, captureBuffer, ADI_ADRV904X_DFE_APP_CAL_DPD_CAPTURE_SAMPLES_NUM);
     adrv904x_BfCapBufMmrChanAddr_e capBufMmrRegisterBankBaseAddr = ADRV904X_BF_PROC_DFE_PERIP_CAPBUF_0_;
     uint32_t captureBufferAddr[ADI_ADRV904X_DFE_SVC_DFE_CAPTURE_NUM_OF_CH_SRC_SEL] = { 0U };
     uint32_t capBufMmrRamBaseAddr = CAPBUFF0_ADDR;
@@ -912,6 +1194,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCaptureDataFromBufMemGet(adi
     /* Check device pointer is not null */
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, captureBuffer, cleanup);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dpdCaptureData, cleanup);
 
     ADI_LIBRARY_MEMSET(dpdCaptureData, 0, sizeof(adi_adrv904x_DfeAppDpdCaptureData_t));
@@ -1196,17 +1479,17 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCaptureDataFromBufMemGet(adi
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet(adi_adrv904x_Device_t* const               device,
-                                                                         const adi_adrv904x_Channels_e              channel,
-                                                                         adi_adrv904x_DfeAppCalDpdStatus_t* const   calDpdSpecStatus)
-{
-        adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    const adi_adrv904x_DfeAppFrameworkTrackingCalibrationMask_e calId = ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKINGCAL_TX_DPD_MASK;
-    adi_adrv904x_DfeAppCalDpdStatus_t specificCalStatus;
 
-    ADI_ADRV904X_API_ENTRY(&device->common);
+static adi_adrv904x_ErrAction_e adrv904x_DfeDpdCalSpecificStatusGet(adi_adrv904x_Device_t* const                device,
+                                                                    const adi_adrv904x_Channels_e               channel,
+                                                                    adi_adrv904x_DfeAppCalDpdStatusInt_t* const calDpdSpecStatus)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    const adi_adrv904x_DfeAppFrameworkTrackingCalibrationMask_e calId = ADI_ADRV904X_DFE_APP_FRAMEWORK_TRACKINGCAL_TX_DPD_MASK;
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, calDpdSpecStatus, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, calDpdSpecStatus);
 
     /*Check that if requested Tx Channel valid*/
     /* Channel must contain a single channel number (0-7) */
@@ -1214,107 +1497,206 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet(adi_adr
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, channel, "channel parameter is invalid.");
-        goto cleanup;
+        return recoveryAction;
     }
 
     /* Use the common cal status get handler to get the data from the CPU */
     recoveryAction = adi_adrv904x_DfeCalSpecificStatusGet(device,
                                                           channel,
                                                           adrv904x_DfeTrackingCalToObjId(calId),
-                                                          (uint8_t *)&specificCalStatus,
-                                                          sizeof(specificCalStatus));
+                                                          (uint8_t *)calDpdSpecStatus,
+                                                          sizeof(*calDpdSpecStatus));
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error getting tracking cal status.");
+        return recoveryAction;
+    }
+
+    /* Translate the response from the CPU */
+    calDpdSpecStatus->hdr.errorCode = ADRV904X_CTOHL(calDpdSpecStatus->hdr.errorCode);
+    calDpdSpecStatus->hdr.iterCount = ADRV904X_CTOHL(calDpdSpecStatus->hdr.iterCount);
+    calDpdSpecStatus->hdr.percentComplete = ADRV904X_CTOHL(calDpdSpecStatus->hdr.percentComplete);
+    calDpdSpecStatus->hdr.performanceMetric = ADRV904X_CTOHL(calDpdSpecStatus->hdr.performanceMetric);
+    calDpdSpecStatus->hdr.updateCount = ADRV904X_CTOHL(calDpdSpecStatus->hdr.updateCount);
+
+    calDpdSpecStatus->dpdPathDlyStatus.intActDelay  = ADRV904X_CTOHL(calDpdSpecStatus->dpdPathDlyStatus.intActDelay);
+    calDpdSpecStatus->dpdPathDlyStatus.intExtDelay  = ADRV904X_CTOHL(calDpdSpecStatus->dpdPathDlyStatus.intExtDelay);
+    calDpdSpecStatus->dpdPathDlyStatus.fracExtDelay = ADRV904X_CTOHL(calDpdSpecStatus->dpdPathDlyStatus.fracExtDelay);
+
+    calDpdSpecStatus->dfeActSatStatus.dinsqCalcCmulSat = ADRV904X_CTOHL(calDpdSpecStatus->dfeActSatStatus.dinsqCalcCmulSat);
+    calDpdSpecStatus->dfeActSatStatus.gmpDdrDpSat = ADRV904X_CTOHL(calDpdSpecStatus->dfeActSatStatus.gmpDdrDpSat);
+    calDpdSpecStatus->dfeActSatStatus.magnitudeGainSat = ADRV904X_CTOHL(calDpdSpecStatus->dfeActSatStatus.magnitudeGainSat);
+
+    calDpdSpecStatus->activeModel = ADRV904X_CTOHL(calDpdSpecStatus->activeModel);
+    calDpdSpecStatus->updatedModel = ADRV904X_CTOHL(calDpdSpecStatus->updatedModel);    
+    calDpdSpecStatus->powerR = ADRV904X_CTOHL(calDpdSpecStatus->powerR);
+    calDpdSpecStatus->txPower = ADRV904X_CTOHL(calDpdSpecStatus->txPower);
+    calDpdSpecStatus->copiedModelMask = calDpdSpecStatus->copiedModelMask;
+
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_PARTIAL_GRP; i++)
+    {
+        calDpdSpecStatus->powerM[i] = ADRV904X_CTOHL(calDpdSpecStatus->powerM[i]);
+        calDpdSpecStatus->powerC[i] = ADRV904X_CTOHL(calDpdSpecStatus->powerC[i]);
+    }
+
+    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_METRICS_LEN; i++)
+    {
+        calDpdSpecStatus->stability_int[i] = ADRV904X_CTOHL(calDpdSpecStatus->stability_int[i]);
+    }
+    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_ERR_WORD_LEN; i++)
+    {
+        calDpdSpecStatus->errStatWord[i] = ADRV904X_CTOHS(calDpdSpecStatus->errStatWord[i]);
+    }
+    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_ERR_WORD_LEN; i++)
+    {
+        calDpdSpecStatus->actionWord[i] = ADRV904X_CTOHS(calDpdSpecStatus->actionWord[i]);
+    }
+    calDpdSpecStatus->capStartRetryCount     = ADRV904X_CTOHL(calDpdSpecStatus->capStartRetryCount);
+    calDpdSpecStatus->capAbortRetryCount     = ADRV904X_CTOHL(calDpdSpecStatus->capAbortRetryCount);
+    calDpdSpecStatus->capInvalidRetryCount   = ADRV904X_CTOHL(calDpdSpecStatus->capInvalidRetryCount);
+    calDpdSpecStatus->maxFracEstErrorCount   = ADRV904X_CTOHL(calDpdSpecStatus->maxFracEstErrorCount);
+    calDpdSpecStatus->cholSolverErrorCount   = ADRV904X_CTOHL(calDpdSpecStatus->cholSolverErrorCount);
+    calDpdSpecStatus->appExitRequestCount    = ADRV904X_CTOHL(calDpdSpecStatus->appExitRequestCount);
+    calDpdSpecStatus->lutEntrySatErrorCount  = ADRV904X_CTOHL(calDpdSpecStatus->lutEntrySatErrorCount);
+    calDpdSpecStatus->flutEntrySatErrorCount = ADRV904X_CTOHL(calDpdSpecStatus->flutEntrySatErrorCount);
+    calDpdSpecStatus->stabilityErrorCount    = ADRV904X_CTOHL(calDpdSpecStatus->stabilityErrorCount);
+    calDpdSpecStatus->lowPowerErrorCount     = ADRV904X_CTOHL(calDpdSpecStatus->lowPowerErrorCount);
+    calDpdSpecStatus->highPowerErrorCount    = ADRV904X_CTOHL(calDpdSpecStatus->highPowerErrorCount);
+    calDpdSpecStatus->saturationErrorCount   = ADRV904X_CTOHL(calDpdSpecStatus->saturationErrorCount);
+    calDpdSpecStatus->lowPeakErrorCount      = ADRV904X_CTOHL(calDpdSpecStatus->lowPeakErrorCount);
+    calDpdSpecStatus->capAbortErrorCount     = ADRV904X_CTOHL(calDpdSpecStatus->capAbortErrorCount);
+    calDpdSpecStatus->pathDelayErrorCount    = ADRV904X_CTOHL(calDpdSpecStatus->pathDelayErrorCount);
+    calDpdSpecStatus->capInvalidErrorCount   = ADRV904X_CTOHL(calDpdSpecStatus->capInvalidErrorCount);
+    calDpdSpecStatus->noLutUpdateCount       = ADRV904X_CTOHL(calDpdSpecStatus->noLutUpdateCount);
+    calDpdSpecStatus->noFlutUpdateCount      = ADRV904X_CTOHL(calDpdSpecStatus->noFlutUpdateCount);
+    
+    calDpdSpecStatus->capStartErrorCount    = ADRV904X_CTOHL(calDpdSpecStatus->capStartErrorCount);
+    calDpdSpecStatus->periodEndedErrorCount = ADRV904X_CTOHL(calDpdSpecStatus->periodEndedErrorCount);
+    calDpdSpecStatus->lutUpdDmaNotTrigCount = ADRV904X_CTOHL(calDpdSpecStatus->lutUpdDmaNotTrigCount);
+    calDpdSpecStatus->tooFewBatchesCount    = ADRV904X_CTOHL(calDpdSpecStatus->tooFewBatchesCount);
+    calDpdSpecStatus->ctc2FlutSwapFailedCount = ADRV904X_CTOHL(calDpdSpecStatus->ctc2FlutSwapFailedCount);
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; i++)
+    {
+        calDpdSpecStatus->lutSaturationMask[i]  = ADRV904X_CTOHLL(calDpdSpecStatus->lutSaturationMask[i]);
+    }
+    
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_CTC2_MODEL_COUNT; i++)
+    {
+        calDpdSpecStatus->flutSaturationMask[i] = ADRV904X_CTOHLL(calDpdSpecStatus->flutSaturationMask[i]);
+    }
+    
+    calDpdSpecStatus->lastIterationType = ADRV904X_CTOHL(calDpdSpecStatus->lastIterationType);
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_CAP_BATCHES; i++)
+    {
+        calDpdSpecStatus->ctc1UpThresVals[i] =  ADRV904X_CTOHLL(calDpdSpecStatus->ctc1UpThresVals[i]); 
+        calDpdSpecStatus->ctc1LowThresVals[i] =  ADRV904X_CTOHLL(calDpdSpecStatus->ctc1LowThresVals[i]);      
+    }
+
+    calDpdSpecStatus->ctc1MaxPeakVal = ADRV904X_CTOHLL(calDpdSpecStatus->ctc1MaxPeakVal);                              
+    calDpdSpecStatus->ctc1MinPeakVal = ADRV904X_CTOHLL(calDpdSpecStatus->ctc1MinPeakVal);                               
+
+    calDpdSpecStatus->bwDetStatus.beta2Curr_e6      = ADRV904X_CTOHL(calDpdSpecStatus->bwDetStatus.beta2Curr_e6);
+    calDpdSpecStatus->bwDetStatus.beta2Prev_e6      = ADRV904X_CTOHL(calDpdSpecStatus->bwDetStatus.beta2Prev_e6);
+    calDpdSpecStatus->bwDetStatus.beta2Min_e6       = ADRV904X_CTOHL(calDpdSpecStatus->bwDetStatus.beta2Min_e6);
+    calDpdSpecStatus->bwDetStatus.beta2Max_e6       = ADRV904X_CTOHL(calDpdSpecStatus->bwDetStatus.beta2Max_e6);
+    calDpdSpecStatus->bwDetStatus.extDelayTrack_e6  = ADRV904X_CTOHLL(calDpdSpecStatus->bwDetStatus.extDelayTrack_e6);
+    calDpdSpecStatus->bwDetStatus.bwDetStateCurr = calDpdSpecStatus->bwDetStatus.bwDetStateCurr;
+    calDpdSpecStatus->bwDetStatus.bwDetStateBest = calDpdSpecStatus->bwDetStatus.bwDetStateBest;
+    calDpdSpecStatus->learningModeCurr           = calDpdSpecStatus->learningModeCurr;
+    calDpdSpecStatus->mu                         = calDpdSpecStatus->mu;
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_CAP_BATCHES; i++)
+    {
+        calDpdSpecStatus->capBatchInfo[i].avgPwrDB = ADRV904X_CTOHS(calDpdSpecStatus->capBatchInfo[i].avgPwrDB);
+        calDpdSpecStatus->capBatchInfo[i].parDB = ADRV904X_CTOHS(calDpdSpecStatus->capBatchInfo[i].parDB);
+        calDpdSpecStatus->capBatchInfo[i].selectedModel = calDpdSpecStatus->capBatchInfo[i].selectedModel;
+        calDpdSpecStatus->capBatchInfo[i].status = calDpdSpecStatus->capBatchInfo[i].status;
+    }
+    calDpdSpecStatus->ctc2GainCalcErrorCount     = ADRV904X_CTOHL(calDpdSpecStatus->ctc2GainCalcErrorCount);
+    calDpdSpecStatus->ctc2CaptureErrorCount      = ADRV904X_CTOHL(calDpdSpecStatus->ctc2CaptureErrorCount);
+    calDpdSpecStatus->ctc2CapDelayValid          = calDpdSpecStatus->ctc2CapDelayValid;
+    calDpdSpecStatus->ctc2FracDelayNormPfir_e6      = ADRV904X_CTOHL(calDpdSpecStatus->ctc2FracDelayNormPfir_e6);
+    calDpdSpecStatus->ctc2PreDpdToOrxPathDelay   = ADRV904X_CTOHL(calDpdSpecStatus->ctc2PreDpdToOrxPathDelay); 
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_ROW; i++)
+    {
+        calDpdSpecStatus->maxIIROutput[i] = ADRV904X_CTOHL(calDpdSpecStatus->maxIIROutput[i]);
+        calDpdSpecStatus->minIIROutput[i] = ADRV904X_CTOHL(calDpdSpecStatus->minIIROutput[i]);
+        calDpdSpecStatus->minIIRState[i] = ADRV904X_CTOHL(calDpdSpecStatus->minIIRState[i]);
+        calDpdSpecStatus->ctc2FlutOutput[i].flutMaxReal = ADRV904X_CTOHL(calDpdSpecStatus->ctc2FlutOutput[i].flutMaxReal);
+        calDpdSpecStatus->ctc2FlutOutput[i].flutMaxImag = ADRV904X_CTOHL(calDpdSpecStatus->ctc2FlutOutput[i].flutMaxImag);
+        calDpdSpecStatus->ctc2FlutOutput[i].flutMinReal = ADRV904X_CTOHL(calDpdSpecStatus->ctc2FlutOutput[i].flutMinReal);
+        calDpdSpecStatus->ctc2FlutOutput[i].flutMinImag = ADRV904X_CTOHL(calDpdSpecStatus->ctc2FlutOutput[i].flutMinImag);
+        calDpdSpecStatus->ctc2RowOutput[i].rowMaxReal   = ADRV904X_CTOHL(calDpdSpecStatus->ctc2RowOutput[i].rowMaxReal);
+        calDpdSpecStatus->ctc2RowOutput[i].rowMaxImag   = ADRV904X_CTOHL(calDpdSpecStatus->ctc2RowOutput[i].rowMaxImag);
+        calDpdSpecStatus->ctc2RowOutput[i].rowMinReal   = ADRV904X_CTOHL(calDpdSpecStatus->ctc2RowOutput[i].rowMinReal);
+        calDpdSpecStatus->ctc2RowOutput[i].rowMinImag   = ADRV904X_CTOHL(calDpdSpecStatus->ctc2RowOutput[i].rowMinImag);	
+    }
+
+    calDpdSpecStatus->ctc2FlutSatRowMap = calDpdSpecStatus->ctc2FlutSatRowMap;
+    calDpdSpecStatus->magGainSatErrorCount = ADRV904X_CTOHL(calDpdSpecStatus->magGainSatErrorCount); 
+    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; i++)
+    {
+        calDpdSpecStatus->gmpUpdateCount[i] = ADRV904X_CTOHL(calDpdSpecStatus->gmpUpdateCount[i]);
+    }
+    calDpdSpecStatus->ctc2EnvPwrRtViolCount = ADRV904X_CTOHL(calDpdSpecStatus->ctc2EnvPwrRtViolCount);
+    calDpdSpecStatus->ctc2EnvPwrRatioDB     = ADRV904X_CTOHL(calDpdSpecStatus->ctc2EnvPwrRatioDB);
+    calDpdSpecStatus->ctc2EnvPwrAllZeroCount     = ADRV904X_CTOHL(calDpdSpecStatus->ctc2EnvPwrAllZeroCount);
+
+    return recoveryAction;
+}
+
+
+#ifndef ADI_LIBRARY_RM_FLOATS
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet(adi_adrv904x_Device_t* const               device,
+                                                                         const adi_adrv904x_Channels_e              channel,
+                                                                         adi_adrv904x_DfeAppCalDpdStatus_t* const   calDpdSpecStatus)
+{
+    	adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, calDpdSpecStatus, cleanup);
+
+    recoveryAction = adrv904x_DfeDpdCalSpecificStatusGet(device,
+                                                         channel,
+                                                         (adi_adrv904x_DfeAppCalDpdStatusInt_t*)calDpdSpecStatus);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error getting tracking cal status.");
         goto cleanup;
     }
 
-    /* Translate the response from the CPU */
-    calDpdSpecStatus->hdr.errorCode = ADRV904X_CTOHL(specificCalStatus.hdr.errorCode);
-    calDpdSpecStatus->hdr.iterCount = ADRV904X_CTOHL(specificCalStatus.hdr.iterCount);
-    calDpdSpecStatus->hdr.percentComplete = ADRV904X_CTOHL(specificCalStatus.hdr.percentComplete);
-    calDpdSpecStatus->hdr.performanceMetric = ADRV904X_CTOHL(specificCalStatus.hdr.performanceMetric);
-    calDpdSpecStatus->hdr.updateCount = ADRV904X_CTOHL(specificCalStatus.hdr.updateCount);
+    cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+#endif /* ADI_LIBRARY_RM_FLOATS */
 
-    calDpdSpecStatus->dpdPathDlyStatus.intActDelay  = ADRV904X_CTOHL(specificCalStatus.dpdPathDlyStatus.intActDelay);
-    calDpdSpecStatus->dpdPathDlyStatus.intExtDelay  = ADRV904X_CTOHL(specificCalStatus.dpdPathDlyStatus.intExtDelay);
-    calDpdSpecStatus->dpdPathDlyStatus.fracExtDelay = ADRV904X_CTOHL(specificCalStatus.dpdPathDlyStatus.fracExtDelay);
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DfeDpdCalSpecificStatusGet_int(adi_adrv904x_Device_t* const                  device,
+                                                                             const adi_adrv904x_Channels_e                 channel,
+                                                                             adi_adrv904x_DfeAppCalDpdStatusInt_t* const   calDpdSpecStatus)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
 
-    calDpdSpecStatus->dfeActSatStatus.dinsqCalcCmulSat = ADRV904X_CTOHL(specificCalStatus.dfeActSatStatus.dinsqCalcCmulSat);
-    calDpdSpecStatus->dfeActSatStatus.gmpDdrDpSat = ADRV904X_CTOHL(specificCalStatus.dfeActSatStatus.gmpDdrDpSat);
-    calDpdSpecStatus->dfeActSatStatus.magnitudeGainSat = ADRV904X_CTOHL(specificCalStatus.dfeActSatStatus.magnitudeGainSat);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, calDpdSpecStatus, cleanup);
 
-    calDpdSpecStatus->activeModel = ADRV904X_CTOHL(specificCalStatus.activeModel);
-    calDpdSpecStatus->updatedModel = ADRV904X_CTOHL(specificCalStatus.updatedModel);    
-    calDpdSpecStatus->powerR = ADRV904X_CTOHL(specificCalStatus.powerR);
-    calDpdSpecStatus->txPower = ADRV904X_CTOHL(specificCalStatus.txPower);
-    calDpdSpecStatus->copiedModelMask = specificCalStatus.copiedModelMask;
-	for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_MAX_NUM_PARTIAL_GRP; i++)
-	{
-		calDpdSpecStatus->powerM[i] = ADRV904X_CTOHL(specificCalStatus.powerM[i]);
-		calDpdSpecStatus->powerC[i] = ADRV904X_CTOHL(specificCalStatus.powerC[i]);
-	}
-
-    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_LEN; i++)
+    recoveryAction = adrv904x_DfeDpdCalSpecificStatusGet(device, channel, calDpdSpecStatus);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
     {
-        calDpdSpecStatus->stability[i] = ADRV904X_CTOHL(specificCalStatus.stability[i]);
-    }
-    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_ERR_WORD_LEN; i++)
-    {
-        calDpdSpecStatus->errStatWord[i] = ADRV904X_CTOHS(specificCalStatus.errStatWord[i]);
-    }
-    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_ERR_WORD_LEN; i++)
-    {
-        calDpdSpecStatus->actionWord[i] = ADRV904X_CTOHS(specificCalStatus.actionWord[i]);
-    }
-    calDpdSpecStatus->capStartRetryCount    = ADRV904X_CTOHL(specificCalStatus.capStartRetryCount);
-    calDpdSpecStatus->capAbortRetryCount    = ADRV904X_CTOHL(specificCalStatus.capAbortRetryCount);
-    calDpdSpecStatus->capInvalidRetryCount  = ADRV904X_CTOHL(specificCalStatus.capInvalidRetryCount);
-    calDpdSpecStatus->maxFracEstErrorCount  = ADRV904X_CTOHL(specificCalStatus.maxFracEstErrorCount);
-    calDpdSpecStatus->cholSolverErrorCount  = ADRV904X_CTOHL(specificCalStatus.cholSolverErrorCount);
-    calDpdSpecStatus->appExitRequestCount   = ADRV904X_CTOHL(specificCalStatus.appExitRequestCount);
-    calDpdSpecStatus->lutEntrySatErrorCount = ADRV904X_CTOHL(specificCalStatus.lutEntrySatErrorCount);
-    calDpdSpecStatus->stabilityErrorCount   = ADRV904X_CTOHL(specificCalStatus.stabilityErrorCount);
-    calDpdSpecStatus->lowPowerErrorCount    = ADRV904X_CTOHL(specificCalStatus.lowPowerErrorCount);
-    calDpdSpecStatus->highPowerErrorCount   = ADRV904X_CTOHL(specificCalStatus.highPowerErrorCount);
-    calDpdSpecStatus->saturationErrorCount  = ADRV904X_CTOHL(specificCalStatus.saturationErrorCount);
-    calDpdSpecStatus->lowPeakErrorCount     = ADRV904X_CTOHL(specificCalStatus.lowPeakErrorCount);
-    calDpdSpecStatus->capAbortErrorCount    = ADRV904X_CTOHL(specificCalStatus.capAbortErrorCount);
-    calDpdSpecStatus->pathDelayErrorCount   = ADRV904X_CTOHL(specificCalStatus.pathDelayErrorCount);
-    calDpdSpecStatus->capInvalidErrorCount  = ADRV904X_CTOHL(specificCalStatus.capInvalidErrorCount);
-    calDpdSpecStatus->noLutUpdateCount      = ADRV904X_CTOHL(specificCalStatus.noLutUpdateCount);
-    calDpdSpecStatus->noFlutUpdateCount     = ADRV904X_CTOHL(specificCalStatus.noFlutUpdateCount);
-    
-    calDpdSpecStatus->capStartErrorCount    = ADRV904X_CTOHL(specificCalStatus.capStartErrorCount);
-    calDpdSpecStatus->periodEndedErrorCount = ADRV904X_CTOHL(specificCalStatus.periodEndedErrorCount);
-    calDpdSpecStatus->lutUpdDmaNotTrigCount = ADRV904X_CTOHL(specificCalStatus.lutUpdDmaNotTrigCount);
-    for (uint8_t i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; i++)
-    {
-        calDpdSpecStatus->lutSaturationMask[i] = ADRV904X_CTOHLL(specificCalStatus.lutSaturationMask[i]);
-    }
-    
-    for (uint8_t i = 0; i < 8; i++)
-    {
-        calDpdSpecStatus->ctc1UpThresVals[i] =  ADRV904X_CTOHLL(specificCalStatus.ctc1UpThresVals[i]); 
-        calDpdSpecStatus->ctc1LowThresVals[i] =  ADRV904X_CTOHLL(specificCalStatus.ctc1LowThresVals[i]);      
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error getting tracking cal status.");
+        goto cleanup;
     }
 
-    calDpdSpecStatus->ctc1MaxPeakVal = ADRV904X_CTOHLL(specificCalStatus.ctc1MaxPeakVal);                              
-    calDpdSpecStatus->ctc1MinPeakVal = ADRV904X_CTOHLL(specificCalStatus.ctc1MinPeakVal);                               
-
-    /*
-     * TODO: revist defs for ADRV904X_CTOHL and ADRV904X_CTOHLL with big endian hosts.
-     * Currently they do NOT appear to work for float and double types in this case.
-     */
-    calDpdSpecStatus->bwDetStatus.beta2Curr      = ADRV904X_CTOHL(specificCalStatus.bwDetStatus.beta2Curr);
-    calDpdSpecStatus->bwDetStatus.beta2Prev      = ADRV904X_CTOHL(specificCalStatus.bwDetStatus.beta2Prev);
-    calDpdSpecStatus->bwDetStatus.beta2Min       = ADRV904X_CTOHL(specificCalStatus.bwDetStatus.beta2Min);
-    calDpdSpecStatus->bwDetStatus.beta2Max       = ADRV904X_CTOHL(specificCalStatus.bwDetStatus.beta2Max);
-    calDpdSpecStatus->bwDetStatus.extDelayTrack  = ADRV904X_CTOHLL(specificCalStatus.bwDetStatus.extDelayTrack);
-    calDpdSpecStatus->bwDetStatus.bwDetStateCurr = specificCalStatus.bwDetStatus.bwDetStateCurr;
-    calDpdSpecStatus->bwDetStatus.bwDetStateBest = specificCalStatus.bwDetStatus.bwDetStateBest;
-    calDpdSpecStatus->learningModeCurr           = specificCalStatus.learningModeCurr;
-
+    for (int i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_METRICS_LEN; i++)
+    {
+        adi_library_fp32ToScaledInt(calDpdSpecStatus->stability_int[i], 1, &calDpdSpecStatus->stability_int[i]);
+    }
+    adi_library_fp32ToScaledInt(calDpdSpecStatus->bwDetStatus.beta2Curr_e6     ,1000000, &calDpdSpecStatus->bwDetStatus.beta2Curr_e6);
+    adi_library_fp32ToScaledInt(calDpdSpecStatus->bwDetStatus.beta2Prev_e6     ,1000000, &calDpdSpecStatus->bwDetStatus.beta2Prev_e6);
+    adi_library_fp32ToScaledInt(calDpdSpecStatus->bwDetStatus.beta2Min_e6      ,1000000, &calDpdSpecStatus->bwDetStatus.beta2Min_e6);
+    adi_library_fp32ToScaledInt(calDpdSpecStatus->bwDetStatus.beta2Max_e6      ,1000000, &calDpdSpecStatus->bwDetStatus.beta2Max_e6);
+    adi_library_fp64ToScaledInt(calDpdSpecStatus->bwDetStatus.extDelayTrack_e6 ,1000000, &calDpdSpecStatus->bwDetStatus.extDelayTrack_e6);
+    adi_library_fp32ToScaledInt(calDpdSpecStatus->ctc2FracDelayNormPfir_e6     ,1000000, &calDpdSpecStatus->ctc2FracDelayNormPfir_e6);
 
     cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
@@ -1346,7 +1728,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdStabilityCfgSet(adi_adrv904x_De
 
     ADI_LIBRARY_MEMSET(&dpdStabilityCfgTmp, 0, sizeof(adi_adrv904x_DfeAppCalDpdStabilityCfg_t));
 
-    for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_LEN; i++)
+	for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_CHECK_LEN; i++)
     {
         dpdStabilityCfgTmp.bit[i].LTGT = ADRV904X_HTOCS(dpdStabilityCfg->bit[i].LTGT);
         dpdStabilityCfgTmp.bit[i].persistentCnt = ADRV904X_HTOCS(dpdStabilityCfg->bit[i].persistentCnt);
@@ -1427,7 +1809,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdStabilityCfgGet(adi_adrv904x_De
         goto cleanup;
     }
 
-    for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_LEN; i++)
+	for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_STABILITY_CHECK_LEN; i++)
     {
         dpdStabilityCfg->bit[i].LTGT = ADRV904X_CTOHS(dpdStabilityCfgTmp.bit[i].LTGT);
         dpdStabilityCfg->bit[i].persistentCnt = ADRV904X_CTOHS(dpdStabilityCfgTmp.bit[i].persistentCnt);
@@ -1509,7 +1891,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_WbRegBufferWrite(adi_adrv904x_Devi
     
     for (i = dfeAppWbReg.wbRegStartAddress; i < (dfeAppWbReg.wbRegStartAddress + dfeAppWbReg.wbRegBufferSize); i += 2U)
     {
-        recoveryAction = adi_adrv904x_Register32Write(device, (adi_adrv904x_SpiCache_t* const)&spiCache, i, ADRV904X_HTOCS(*DfeAppWbRegDataTmp++), 0x0000FFFFu);
+        uint16_t val = *DfeAppWbRegDataTmp++;
+        recoveryAction = adi_adrv904x_Register32Write(device, (adi_adrv904x_SpiCache_t* const)&spiCache, i, ADRV904X_HTOCS(val), 0x0000FFFFu);
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, 0, "Failed to write WBReg data");
@@ -1551,13 +1934,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTddLutSwitchCfgSet(adi_adrv904x
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, tddLutSwitchConfig, cleanup);
 
     ADI_LIBRARY_MEMSET(&tmpTddLutSwitchConfig, 0, sizeof(adi_adrv904x_DfeAppDpdActTddLutSwitch_t));
-    tmpTddLutSwitchConfig.txOnMdl0SwitchEn = ADRV904X_HTOCS(tddLutSwitchConfig->txOnMdl0SwitchEn);
-    tmpTddLutSwitchConfig.txOnMdl1SwitchEn = ADRV904X_HTOCS(tddLutSwitchConfig->txOnMdl1SwitchEn);
-    tmpTddLutSwitchConfig.txOnMdlSwitchDlyCnt = ADRV904X_HTOCS(tddLutSwitchConfig->txOnMdlSwitchDlyCnt);
+    tmpTddLutSwitchConfig.txOnMdl0SwitchEn = tddLutSwitchConfig->txOnMdl0SwitchEn;
+    tmpTddLutSwitchConfig.txOnMdl1SwitchEn = tddLutSwitchConfig->txOnMdl1SwitchEn;
+    tmpTddLutSwitchConfig.txOnMdlSwitchDlyCnt = ADRV904X_HTOCL(tddLutSwitchConfig->txOnMdlSwitchDlyCnt);
     
     for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_TDD_LUT_SWITCH_CAP_NUM; i++)
     {
-        tmpTddLutSwitchConfig.capDelay[i] = ADRV904X_HTOCS(tddLutSwitchConfig->capDelay[i]);
+        tmpTddLutSwitchConfig.capDelay[i] = ADRV904X_HTOCL(tddLutSwitchConfig->capDelay[i]);
     }
     
     for (i = 0; i < ADI_ADRV904X_MAX_TXCHANNELS; i++)
@@ -1626,13 +2009,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdTddLutSwitchCfgGet(adi_adrv904x
         goto cleanup;
     }
 
-    tddLutSwitchConfig->txOnMdl0SwitchEn = ADRV904X_CTOHS(tmpTddLutSwitchConfig.txOnMdl0SwitchEn);
-    tddLutSwitchConfig->txOnMdl1SwitchEn = ADRV904X_CTOHS(tmpTddLutSwitchConfig.txOnMdl1SwitchEn);
-    tddLutSwitchConfig->txOnMdlSwitchDlyCnt = ADRV904X_CTOHS(tmpTddLutSwitchConfig.txOnMdlSwitchDlyCnt);
+    tddLutSwitchConfig->txOnMdl0SwitchEn = tmpTddLutSwitchConfig.txOnMdl0SwitchEn;
+    tddLutSwitchConfig->txOnMdl1SwitchEn = tmpTddLutSwitchConfig.txOnMdl1SwitchEn;
+    tddLutSwitchConfig->txOnMdlSwitchDlyCnt = ADRV904X_CTOHL(tmpTddLutSwitchConfig.txOnMdlSwitchDlyCnt);
     
     for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_TDD_LUT_SWITCH_CAP_NUM; i++)
     {
-        tddLutSwitchConfig->capDelay[i] = ADRV904X_CTOHS(tmpTddLutSwitchConfig.capDelay[i]);
+        tddLutSwitchConfig->capDelay[i] = ADRV904X_CTOHL(tmpTddLutSwitchConfig.capDelay[i]);
     }
 
     cleanup:
@@ -1919,3 +2302,513 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdPathdelayResetSeed(adi_adrv904x
 cleanup:
     ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
 }
+
+#ifndef ADI_LIBRARY_RM_FLOATS
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigSet(adi_adrv904x_Device_t* const                      device,
+                                                                 const uint32_t                                    txChannelMask,
+                                                                 const adi_adrv904x_DfeAppCalCtc2ModelDesc_t* const modelDesc)
+{
+        const uint16_t CTC2_CTRL_MODEL_CONFIG = 11U;
+    const uint16_t CTC2_CTRL_MODEL_CONFIG_SET = CTC2_CTRL_MODEL_CONFIG | DPD_CTRL_SET_CMD_FLAG;
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cpuCtrlData, sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_t));
+    uint32_t svcErr = 0U;
+    adi_adrv904x_DfeAppCalCtc2ModelDesc_t *pTmpModelDesc = (adi_adrv904x_DfeAppCalCtc2ModelDesc_t *)(cpuCtrlData);
+
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0U;
+    uint32_t i = 0U;
+    uint16_t numOfFeatures = 0U;
+    
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, cpuCtrlData, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+
+    if (((txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (txChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               txChannelMask,
+                               "Invalid Tx channel is selected. Valid values are any combinations of Tx0/1/2/3/4/5/6/7");
+        goto cleanup;
+    }
+    
+    ADI_LIBRARY_MEMCPY((void*)(cpuCtrlData), (const void * const)modelDesc, sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_t));
+
+    /* Assign to a uint16 so that we can range check here, in case partials implemented to allow more than 255 features */
+    numOfFeatures = pTmpModelDesc->numOfFeats;
+    if (numOfFeatures > ADI_ADRV904X_DFE_APP_CAL_CTC2_DPD_MAX_NUM_FEATURES)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numOfFeatures, "adi_adrv904x_Ctc2ModelConfigSet failed. Max number of features exceeded ");
+        goto cleanup;
+    }
+    /* Note that all the integer fields of *pTmpModelDesc and it's sub-strucutures are uint8_t so require no endianess
+     * corrections. */
+
+    pTmpModelDesc->ctcInputSel = ADRV904X_HTOCL(pTmpModelDesc->ctcInputSel);
+    pTmpModelDesc->modelSel = ADRV904X_HTOCL(pTmpModelDesc->modelSel);
+    for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_DEC; ++i)
+    {
+        pTmpModelDesc->decConfig[i].kLutAddrScale = ADRV904X_HTOCD(pTmpModelDesc->decConfig[i].kLutAddrScale);
+        pTmpModelDesc->decConfig[i].absScale = ADRV904X_HTOCD(pTmpModelDesc->decConfig[i].absScale);
+        pTmpModelDesc->decConfig[i].absOffset = ADRV904X_HTOCD(pTmpModelDesc->decConfig[i].absOffset);
+    }
+    
+    for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_ROW; ++i)
+    {
+        pTmpModelDesc->rowCfg[i].fLutAddrScale = ADRV904X_HTOCD(pTmpModelDesc->rowCfg[i].fLutAddrScale);
+        pTmpModelDesc->rowCfg[i].tau = ADRV904X_HTOCD(pTmpModelDesc->rowCfg[i].tau);
+        pTmpModelDesc->rowCfg[i].decSelect = ADRV904X_HTOCL(pTmpModelDesc->rowCfg[i].decSelect);
+    }
+    
+    for (i = 0U; i < pTmpModelDesc->numOfFeats; ++i)
+    {
+        pTmpModelDesc->feature[i].a.real = ADRV904X_HTOCD(pTmpModelDesc->feature[i].a.real);
+        pTmpModelDesc->feature[i].a.imag = ADRV904X_HTOCD(pTmpModelDesc->feature[i].a.imag);
+    }
+
+    for (i = 0U; i < ADI_ADRV904X_MAX_TXCHANNELS; ++i)
+    {
+        uint32_t txChan = (1 << i);
+        if (txChannelMask & txChan)
+        {
+            recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                               ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                               CTC2_CTRL_MODEL_CONFIG_SET,
+                                                               (adi_adrv904x_Channels_e)txChan,
+                                                               cpuCtrlData,
+                                                               sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_t),
+                                                               &lengthResp,
+                                                               (uint8_t*)&svcErr,
+                                                               sizeof(uint32_t));
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                svcErr = ADRV904X_CTOHL(svcErr);
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, svcErr, "Service error, check model configuration parameters");
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error when configuring CTC2 model");
+
+                goto cleanup;
+            }
+        }
+    }
+    
+    cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigGet(adi_adrv904x_Device_t* const                      device,
+                                                                 const adi_adrv904x_TxChannels_e                   txChannelSel,
+                                                                 adi_adrv904x_DfeAppCalCtc2ModelType_e             ctc2ModelType,
+                                                                 adi_adrv904x_DfeAppCalCtc2ModelDesc_t* const      modelDesc)
+{
+            const uint16_t CTC2_CTRL_MODEL_CONFIG = 11U;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0;
+    uint32_t i = 0;
+    uint16_t numOfFeatures = 0U;
+    uint32_t modelSel = ADRV904X_HTOCL((uint32_t)ctc2ModelType);
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+
+    /*Check that if requested Tx Channel valid*/
+    /* Channel must contain a single channel number (0-7) */
+    recoveryAction = adrv904x_DfeVerifyChannel((adi_adrv904x_Channels_e)txChannelSel);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChannelSel, "Tx channel parameter is invalid.");
+        goto cleanup;
+    }
+    
+    if (ctc2ModelType != ADI_ADRV904X_DFE_APP_CAL_CTC2_MODEL_TYPE_0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, ctc2ModelType, "Invalid CTC2 model type selected.");
+        goto cleanup;
+    }
+
+    recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                       ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                       CTC2_CTRL_MODEL_CONFIG,
+                                                       (adi_adrv904x_Channels_e)txChannelSel,
+                                                       (const uint8_t*)&modelSel,
+                                                       sizeof(modelSel),
+                                                       &lengthResp,
+                                                       (uint8_t *)modelDesc,
+                                                       sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_t));
+
+    if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        /* Assign to a uint16 so that we can range check here, in case partials implemented to allow more than 255 features */
+        numOfFeatures = modelDesc->numOfFeats;
+        if (numOfFeatures > ADI_ADRV904X_DFE_APP_CAL_CTC2_DPD_MAX_NUM_FEATURES)
+        {
+            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, numOfFeatures, "The number of features is greater than maximum allowed");
+            goto cleanup;
+        }
+    }
+    else
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "DpdModelConfigDpdGet failed.");
+        goto cleanup;
+    }
+
+    if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        modelDesc->ctcInputSel = ADRV904X_CTOHL(modelDesc->ctcInputSel);
+        modelDesc->modelSel  = ADRV904X_CTOHL(modelDesc->modelSel);
+        for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_DEC; ++i)
+        {
+            modelDesc->decConfig[i].kLutAddrScale = ADRV904X_CTOHD(modelDesc->decConfig[i].kLutAddrScale);
+            modelDesc->decConfig[i].absScale = ADRV904X_CTOHD(modelDesc->decConfig[i].absScale);
+            modelDesc->decConfig[i].absOffset = ADRV904X_CTOHD(modelDesc->decConfig[i].absOffset);
+        }
+    
+        for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_ROW; ++i)
+        {
+            modelDesc->rowCfg[i].fLutAddrScale = ADRV904X_CTOHD(modelDesc->rowCfg[i].fLutAddrScale);
+            modelDesc->rowCfg[i].tau = ADRV904X_CTOHD(modelDesc->rowCfg[i].tau);
+            modelDesc->rowCfg[i].decSelect = ADRV904X_CTOHL(modelDesc->rowCfg[i].decSelect);
+        }
+    
+        for (i = 0U; i < ADI_ADRV904X_DFE_APP_CAL_CTC2_DPD_MAX_NUM_FEATURES; ++i)
+        {
+            modelDesc->feature[i].a.real = ADRV904X_CTOHD(modelDesc->feature[i].a.real);
+            modelDesc->feature[i].a.imag = ADRV904X_CTOHD(modelDesc->feature[i].a.imag);
+        }
+    }
+
+    cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+    
+}
+
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigSet_v2(adi_adrv904x_Device_t* const                          device,
+                                                                    const uint32_t                                        txChannelMask,
+                                                                    const adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t* const modelDesc)
+{
+        const uint16_t CTC2_CTRL_MODEL_CONFIG_V2 = 13U;
+    const uint16_t CTC2_CTRL_MODEL_CONFIG_SET_V2 = CTC2_CTRL_MODEL_CONFIG_V2 | DPD_CTRL_SET_CMD_FLAG;
+    uint8_t cpuCtrlData[ sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t)];
+    uint32_t svcErr = 0U;
+    adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t *pTmpModelDesc = (adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t *)(cpuCtrlData);
+
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0U;
+    uint32_t i = 0U;
+    
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+
+    if (((txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (txChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               txChannelMask,
+                               "Invalid Tx channel is selected. Valid values are any combinations of Tx0/1/2/3/4/5/6/7");
+        goto cleanup;
+    }
+    
+    ADI_LIBRARY_MEMCPY((void*)(cpuCtrlData), (const void * const)modelDesc, sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t));        
+
+    if (pTmpModelDesc->ctcInputSel >= ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_NUM_INPUTS)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               pTmpModelDesc->ctcInputSel,
+                               "Invalid CTCM2 input select");
+        goto cleanup;
+    }
+
+    if ((pTmpModelDesc->modelSel >= ADI_ADRV904X_DFE_APP_CAL_CTC2_MODEL_COUNT) && (pTmpModelDesc->modelSel != ADI_ADRV904X_DFE_APP_CAL_CTC2_MODEL_TYPE_HARDCODED))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               pTmpModelDesc->modelSel,
+                               "Invalid model selection");
+        goto cleanup;
+    }
+    
+	/* ctcInputSel, modelSel are uint8_t */
+    for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_DEC; ++i)
+    {
+        pTmpModelDesc->decConfig[i].kLutAddrScale = ADRV904X_HTOCD(pTmpModelDesc->decConfig[i].kLutAddrScale);
+        /* decRatio is uint8_t */
+    }
+    
+    for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_ROW; ++i)
+    {
+        pTmpModelDesc->rowCfg[i].fLutAddrScale  = ADRV904X_HTOCD(pTmpModelDesc->rowCfg[i].fLutAddrScale);
+        pTmpModelDesc->rowCfg[i].absScale       = ADRV904X_HTOCD(pTmpModelDesc->rowCfg[i].absScale);
+        pTmpModelDesc->rowCfg[i].absOffset      = ADRV904X_HTOCD(pTmpModelDesc->rowCfg[i].absOffset);
+        /* kLut is uint8 */
+    }
+    
+	for (i = 0U; i < ADI_ADRV904X_DFE_APP_CAL_CTC2_DPD_MAX_NUM_TAU; ++i)
+    {
+        pTmpModelDesc->timeConstants[i].tau             = ADRV904X_HTOCD(pTmpModelDesc->timeConstants[i].tau);
+	    /* modelStructure, decSelect are uint8_t */
+    }    
+    
+    for (i = 0U; i < ADI_ADRV904X_MAX_TXCHANNELS; ++i)
+    {
+        uint32_t txChan = (1 << i);
+        if (txChannelMask & txChan)
+        {
+            recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                               ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                               CTC2_CTRL_MODEL_CONFIG_SET_V2,
+                                                               (adi_adrv904x_Channels_e)txChan,
+                                                               cpuCtrlData,
+                                                               sizeof(cpuCtrlData),
+                                                               &lengthResp,
+                                                               (uint8_t*)&svcErr,
+                                                               sizeof(uint32_t));
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                svcErr = ADRV904X_CTOHL(svcErr);
+                ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, svcErr, "Service error, check model configuration parameters");
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error when configuring CTC2 model");
+
+                goto cleanup;
+            }
+        }
+    }
+    
+    cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_Ctc2ModelConfigGet_v2(adi_adrv904x_Device_t* const                     device,
+                                                                    const adi_adrv904x_TxChannels_e                  txChannelSel,
+                                                                    adi_adrv904x_DfeAppCalCtc2ModelType_e            ctc2ModelType,
+                                                                    adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t* const  modelDesc)
+{
+            const uint16_t CTC2_CTRL_MODEL_CONFIG_V2 = 13U;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0;
+    uint32_t i = 0;
+    uint32_t modelSel = ADRV904X_HTOCL((uint32_t)ctc2ModelType);
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, modelDesc, cleanup);
+
+    /*Check that if requested Tx Channel valid*/
+    /* Channel must contain a single channel number (0-7) */
+    recoveryAction = adrv904x_DfeVerifyChannel((adi_adrv904x_Channels_e)txChannelSel);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChannelSel, "Tx channel parameter is invalid.");
+        goto cleanup;
+    }
+    
+    if (ctc2ModelType != ADI_ADRV904X_DFE_APP_CAL_CTC2_MODEL_TYPE_0)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, ctc2ModelType, "Invalid CTC2 model type selected.");
+        goto cleanup;
+    }
+
+    recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                       ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                       CTC2_CTRL_MODEL_CONFIG_V2,
+                                                       (adi_adrv904x_Channels_e)txChannelSel,
+                                                       (const uint8_t*)&modelSel,
+                                                       sizeof(modelSel),
+                                                       &lengthResp,
+                                                       (uint8_t *)modelDesc,
+                                                       sizeof(adi_adrv904x_DfeAppCalCtc2ModelDesc_v2_t));
+
+    if (recoveryAction == ADI_ADRV904X_ERR_ACT_NONE)
+    {
+	    /* ctcInputSel, modelSel are uint8_t */
+	    for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_DEC; ++i)
+        {
+            modelDesc->decConfig[i].kLutAddrScale = ADRV904X_CTOHD(modelDesc->decConfig[i].kLutAddrScale);
+        }
+    
+        for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_ROW; ++i)
+        {
+            modelDesc->rowCfg[i].fLutAddrScale  = ADRV904X_CTOHD(modelDesc->rowCfg[i].fLutAddrScale);
+            modelDesc->rowCfg[i].absScale       = ADRV904X_HTOCD(modelDesc->rowCfg[i].absScale);
+            modelDesc->rowCfg[i].absOffset      = ADRV904X_HTOCD(modelDesc->rowCfg[i].absOffset);
+            /* kPower is uint8 */
+        }
+    
+        for (i = 0U; i < ADI_ADRV904X_DFE_SVC_DFE_CTC_ACT_MAX_NUM_DEC; ++i)
+        {
+            modelDesc->timeConstants[i].tau             = ADRV904X_HTOCD(modelDesc->timeConstants[i].tau);
+	        /* decRatio, modelStructure, decSelect are uint8_t */
+	}    
+    }
+
+    cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+    
+}
+#endif /* ADI_LIBRARY_RM_FLOATS */
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdGainSet(adi_adrv904x_Device_t* const                    device,
+                                                         const uint32_t                                  txChannelMask,
+                                                         const adi_adrv904x_DfeAppCalDpdGainCfg_t* const gainCfg)
+{
+        const uint16_t DPD_CTRL_DPD_GAIN_CONFIG = 15U;
+    const uint16_t DPD_CTRL_DPD_GAIN_CONFIG_SET = DPD_CTRL_DPD_GAIN_CONFIG | DPD_CTRL_SET_CMD_FLAG;
+    adi_adrv904x_DfeAppCalDpdGainCfg_t gainCfgTmp;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0U;
+    uint32_t i = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, gainCfg, cleanup);
+
+    if (((txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (txChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               txChannelMask,
+                               "Invalid Tx channel is selected. Valid values are any combinations of Tx0/1/2/3/4/5/6/7");
+        goto cleanup;
+    }
+
+    for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; ++i)
+    {
+        if (gainCfg->lutResolution[i] > 2u)
+        {
+            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_PARAM_ERROR_REPORT(&device->common,
+                                    recoveryAction,
+                                    gainCfg->lutResolution[i],
+                                    "Invalid lutResolution. Valid value is <= 2");
+            goto cleanup;
+        }
+        /* Min Q2.6 (0x01) linear values converts into -36.124dB, max (0xFF) converts into 12.007 */
+        if ((gainCfg->magGain_mdB[i] < -36124) || (gainCfg->magGain_mdB[i] > 12007))
+        {
+            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+            ADI_PARAM_ERROR_REPORT(&device->common,
+                                    recoveryAction,
+                                    gainCfg->magGain_mdB[i],
+                                    "Invalid magGain_mdB. Valid value is -36124 to 12007");
+            goto cleanup;
+        }
+    }
+
+    /* Min Q2.6 (0x01) linear values converts into -36.124dB, max (0xFF) converts into 12.007 */
+    if ((gainCfg->postCfrGain_mdB < -36124) || (gainCfg->postCfrGain_mdB > 12007))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               gainCfg->postCfrGain_mdB,
+                               "Invalid postCfrGain_mdB. Valid value is -32768 to 12007");
+        goto cleanup;
+    }
+    /* Min Q0.12 (0x001) linear values converts into -72.247dB, max (0xFFF) is -0.002dB. 0Db means feature is disabled */
+    if ((gainCfg->postDpdGain_mdB != 0) && ((gainCfg->postDpdGain_mdB < -72247) || (gainCfg->postDpdGain_mdB > -2)))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               gainCfg->postDpdGain_mdB,
+                               "Invalid postDpdGain_mdB. Valid value is -72247 to -2, or 0");
+        goto cleanup;
+    }
+
+    /* Handle endianness */
+    ADI_LIBRARY_MEMCPY(&gainCfgTmp, gainCfg, sizeof(gainCfgTmp));
+    for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; ++i)
+    {
+        gainCfgTmp.magGain_mdB[i] = ADRV904X_HTOCL(gainCfgTmp.magGain_mdB[i]);
+    }
+    gainCfgTmp.postCfrGain_mdB = ADRV904X_HTOCL(gainCfgTmp.postCfrGain_mdB);
+    gainCfgTmp.postDpdGain_mdB = ADRV904X_HTOCL(gainCfgTmp.postDpdGain_mdB);
+
+    for (i = 0U; i < ADI_ADRV904X_MAX_TXCHANNELS; ++i)
+    {
+        uint32_t txChan = (1 << i);
+        if (txChannelMask & txChan)
+        {
+            recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                               ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                               DPD_CTRL_DPD_GAIN_CONFIG_SET,
+                                                               (adi_adrv904x_Channels_e)txChan,
+                                                               (const uint8_t *)&gainCfgTmp,
+                                                               sizeof(gainCfgTmp),
+                                                               &lengthResp,
+                                                               NULL,
+                                                               0);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error in DPD GAIN CONFIG set command");
+                goto cleanup;
+            }
+        }
+    }
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_DpdGainGet(adi_adrv904x_Device_t* const              device,
+                                                         const adi_adrv904x_TxChannels_e           txChannelSel,
+                                                         adi_adrv904x_DfeAppCalDpdGainCfg_t* const gainCfg)
+{
+        const uint16_t DPD_CTRL_DPD_GAIN_CONFIG = 15U;
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t lengthResp = 0;
+    uint32_t i = 0;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_API_ENTRY(&device->common);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, gainCfg, cleanup);
+
+    /* Channel must contain a single channel number (0-7) */
+    recoveryAction = adrv904x_DfeVerifyChannel((adi_adrv904x_Channels_e)txChannelSel);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, txChannelSel, "Tx channel parameter is invalid.");
+        goto cleanup;
+    }
+
+    /* DFE command to get magGain and lutResolution arrays */
+    recoveryAction = adi_adrv904x_DfeAppControlCmdExec(device,
+                                                       ADI_ADRV904X_DFE_APP_FRAMEWORK_OBJID_CAL_DPD,
+                                                       DPD_CTRL_DPD_GAIN_CONFIG,
+                                                       (adi_adrv904x_Channels_e)txChannelSel,
+                                                       NULL,
+                                                       0,
+                                                       &lengthResp,
+                                                       (uint8_t *)gainCfg,
+                                                       sizeof(*gainCfg));
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error in DPD GAIN CONFIG get command");
+        goto cleanup;
+    }
+
+    /* Handle endianness */
+    for (i = 0; i < ADI_ADRV904X_DFE_APP_CAL_DPD_GMP_POWER_MODELS; ++i)
+    {
+        gainCfg->magGain_mdB[i] = ADRV904X_CTOHL(gainCfg->magGain_mdB[i]);
+    }
+    gainCfg->postCfrGain_mdB = ADRV904X_CTOHL(gainCfg->postCfrGain_mdB);
+    gainCfg->postDpdGain_mdB = ADRV904X_CTOHL(gainCfg->postDpdGain_mdB);
+
+cleanup:
+    ADI_ADRV904X_API_EXIT(&device->common, recoveryAction);
+}
+

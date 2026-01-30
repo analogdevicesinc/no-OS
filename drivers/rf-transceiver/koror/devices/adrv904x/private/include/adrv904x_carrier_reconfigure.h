@@ -1,14 +1,13 @@
 /**
- * Copyright 2015 - 2022 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file adrv904x_carrier_reconfigure.h
  * \brief Contains ADRV904x Carrier Reconfigure function declarations
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */ 
 
 #ifndef _ADRV904X_CARRIER_RECONFIGURE_H_
@@ -72,6 +71,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayConfigurationCalculate(  adi_
 * \param[in] device Pointer to the ADRV904X device data structure
 * \param[in] inJesdCfg User input of jesd config. To be copied to soln struct
 * \param[in] inProfileCfgs User input of carrier radio input configs (array size = inNumProfiles). To be copied to soln struct
+* \param[in] infwCmdsFilterCfg User input of channel filter configs neededby FW CMD sequence (array size = inNumProfiles). To be copied to soln struct
 * \param[in] inNumProfiles Number of carrier radio profiles contained in inProfileCfgs
 * \param[in,out] soln holds the calculated values during reconfiguration.
 *
@@ -80,6 +80,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayConfigurationCalculate(  adi_
 ADI_API adi_adrv904x_ErrAction_e adrv904x_ReconfigSolutionInit( adi_adrv904x_Device_t* const                device,
                                                                 const adi_adrv904x_CarrierJesdCfg_t* const  inJesdCfg,
                                                                 const adi_adrv904x_CarrierRadioCfg_t        inProfileCfgs[],
+                                                                const adi_adrv904x_ChannelFilterCfg_t       infwCmdsFilterCfg[],
                                                                 uint32_t                                    inNumProfiles,
                                                                 adi_adrv904x_CarrierReconfigSoln_t* const   soln);
 
@@ -453,6 +454,40 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ChannelFilterCoefsGet(    adi_adrv904x
                                                                     const uint8_t rxFlag);
 
 /**
+* \brief    Performs the required FW Command Sequence for 
+*               1) loading a CDUC or CDDC Channel Filter coefficient set to FW
+*               2) returning the solved HW settings for desired coefficients, and 
+*               3) optionally applying the HW settings to target CDUCs or CDDCs in the device (determined by rxFlag input)
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in] device Pointer to the ADRV904X device data structure
+* \param[in] rxFlag if 1, select rx cddc tables, tx cduc otherwise
+* \param[in] apply if 1, choose to apply solved HW settings to device. Otherwise make no HW setting changes.
+* \param[in] pCarrierRadioConfig Pointer to new carrier radio settings for a reconfig
+* \param[in] pChannelFilterCfg Pointer to the Channel Filter configuration to pass into FW command Sequence
+* \param[out] pChFilterOutput Pointer to the Channel Filter Output configuration returned by FW commands Sequence
+
+
+* \param[in] slotShufflingLoopsMax number of loops through slot shuffling algo before ending
+*
+* \param[in] carrierCfg carrier settings for the current carrier
+
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+          
+adi_adrv904x_ErrAction_e adrv904x_CarrierChanFilterCfgCmdSequence(  adi_adrv904x_Device_t* const                    device,
+                                                                    uint8_t                                         rxFlag,
+                                                                    uint8_t                                         apply,
+                                                                    const adi_adrv904x_CarrierRadioCfg_t * const    pCarrierRadioConfig,
+                                                                    const adi_adrv904x_ChannelFilterCfg_t * const   pChannelFilterCfg,
+                                                                    adi_adrv904x_ChannelFilterOutputCfg_t * const   pChFilterOutput);
+
+
+/**
 * \brief    Performs Slot Shuffling algorithm that targets carrier delayMismatch to below desired threshold
 *
 * \dep_begin
@@ -464,6 +499,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ChannelFilterCoefsGet(    adi_adrv904x
 * \param[out] carrierConfigsOut holds the reconfiguration settings for a single profile to be written to the device
 * \param[in] carrierChannelFilter hold the Channel Filter configuration
 * \param[in] rxFlag if 1, select rx cddc tables, tx cduc otherwise
+* \param[in] slotShufflingLoopsMax number of loops through slot shuffling algo before ending
 *
 * \param[in] carrierCfg carrier settings for the current carrier
 
@@ -471,11 +507,12 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ChannelFilterCoefsGet(    adi_adrv904x
 * \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
 */
                                                                         
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv904x_Device_t* const                            device,
-                                                                        const adi_adrv904x_CarrierRadioCfg_t* const             carrierConfigs,
-                                                                        const adi_adrv904x_ChannelFilterOutputCfg_t* const      carrierChannelFilter,
-                                                                        adi_adrv904x_CarrierReconfigProfileCfgOut_t* const      carrierConfigsOut,
-                                                                        const uint8_t                                           rxFlag);
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(adi_adrv904x_Device_t* const                            device,
+                                                                     const adi_adrv904x_CarrierRadioCfg_t* const             carrierConfigs,
+                                                                     const adi_adrv904x_ChannelFilterOutputCfg_t* const      carrierChannelFilter,
+                                                                     adi_adrv904x_CarrierReconfigProfileCfgOut_t* const      carrierConfigsOut,
+                                                                     const uint8_t                                           rxFlag,
+                                                                     const uint32_t                                          slotShufflingLoopsMax);
 
 #endif //CLIENT_IGNORE
 #endif

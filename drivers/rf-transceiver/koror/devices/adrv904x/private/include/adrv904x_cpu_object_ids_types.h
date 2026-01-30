@@ -1,8 +1,7 @@
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
  
  /**
@@ -12,13 +11,16 @@
  *
  * \details Contains CPU Object ID definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef __ADRV904X_CPU_OBJECT_IDS_TYPES_H__
 #define __ADRV904X_CPU_OBJECT_IDS_TYPES_H__
 
-#include <stdint.h>
+
+#include "adi_library_types.h"
+
+
 
 typedef enum adrv904x_CpuObjectId
 {
@@ -56,7 +58,8 @@ typedef enum adrv904x_CpuObjectId
     ADRV904X_CPU_OBJID_TC_RX_ADC                    = 0x34u, /*!< Rx ADC                 */
     ADRV904X_CPU_OBJID_TC_TXLB_ADC                  = 0x35u, /*!< TxLb ADC               */
     ADRV904X_CPU_OBJID_TC_ORX_ADC                   = 0x36u, /*!< ORx ADC                */
-    ADRV904X_CPU_OBJID_TC_END                       = 0x36u, /*!< End of Tracking Calibration OBJID */
+    ADRV904X_CPU_OBJID_TC_RXSPUR                    = 0x37u, /*!< RxSpur                 */
+    ADRV904X_CPU_OBJID_TC_END                       = 0x37u, /*!< End of Tracking Calibration OBJID */
     ADRV904X_CPU_OBJID_TC_NUM_CALS                  = (ADRV904X_CPU_OBJID_TC_END - ADRV904X_CPU_OBJID_TC_START + 1u), /*!< number of tracking cals */
     
     /* Configuration objects */

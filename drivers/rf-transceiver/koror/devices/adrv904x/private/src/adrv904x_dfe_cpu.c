@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
  * \file adrv904x_dfe_cpu.c
  * \brief Contains ADRV904X DFE CPU related private function implementations
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 #include "adi_library_types.h"
 #include "adi_adrv904x_cpu_sys_types.h"
@@ -531,9 +530,10 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeSvcCmdSend(adi_adrv904x_Device_t* c
     adrv904x_CpuCmdResp_t *rxRsp = NULL;
     adrv904x_CpuCmdId_t rspCmdId;
     adrv904x_CpuCmdStatus_e cmdStatus;
-    uint8_t cmdBuf[SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cmdBuf, SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE);
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, cmdBuf);
 
     /* Initialize the caller's status parameter, if applicable. */
     if (status != NULL)
@@ -577,7 +577,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeSvcCmdSend(adi_adrv904x_Device_t* c
     }
 
     /* Verify command payload size is acceptable */
-    if (cmdPayloadSz > (sizeof(cmdBuf) - sizeof(adrv904x_CpuCmd_t)))
+    if (cmdPayloadSz > (SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE - sizeof(adrv904x_CpuCmd_t)))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cmdPayloadSz, "cmdPayloadSz is too large for command buffer.");
@@ -585,7 +585,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeSvcCmdSend(adi_adrv904x_Device_t* c
     }
 
     /* Verify response payload size is acceptable */
-    if (respPayloadSz > (sizeof(cmdBuf) - sizeof(adrv904x_CpuCmdResp_t)))
+    if (respPayloadSz > (SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE - sizeof(adrv904x_CpuCmdResp_t)))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, respPayloadSz, "respPayloadSz is too large for command buffer.");
@@ -697,12 +697,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeAppCmdSend(adi_adrv904x_Device_t* c
     adrv904x_CpuCmdResp_t *rxRsp = NULL;
     adrv904x_CpuCmdId_t rspCmdId;
     adrv904x_DfeSvcCmdStatus_t cmdStatus;
-    uint8_t cmdBuf[SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint8_t, cmdBuf, SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE);
 
     adrv904x_DfeAppFrameworkCmdAppCmd_t *appCmd = NULL;  // Application cmd header
     adrv904x_DfeAppFrameworkCmdGenericResp_t *appRsp = NULL; // Application rsp header
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, cmdBuf);
 
     /* Initialize the caller's status parameter, if applicable. */
     if (status != NULL)
@@ -746,7 +747,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeAppCmdSend(adi_adrv904x_Device_t* c
     }
 
     /* Verify command payload size is acceptable */
-    if (cmdPayloadSz > (sizeof(cmdBuf) - sizeof(adrv904x_CpuCmd_t) - sizeof(adrv904x_DfeAppFrameworkCmdAppCmd_t)))
+    if (cmdPayloadSz > (SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE - sizeof(adrv904x_CpuCmd_t) - sizeof(adrv904x_DfeAppFrameworkCmdAppCmd_t)))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, cmdPayloadSz, "cmdPayloadSz is too large for command buffer.");
@@ -754,7 +755,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeAppCmdSend(adi_adrv904x_Device_t* c
     }
 
     /* Verify response payload size is acceptable */
-    if (respPayloadSz > (sizeof(cmdBuf) - sizeof(adrv904x_CpuCmdResp_t)))
+    if (respPayloadSz > (SVC_BBIC_BRIDGE_MAX_MAILBOX_LINK_SIZE - sizeof(adrv904x_CpuCmdResp_t)))
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, respPayloadSz, "respPayloadSz is too large for command buffer.");
@@ -1065,7 +1066,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeExceptionDataGet(adi_adrv904x_Devic
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue during Reading DFE exception flag, Core:0");
         goto cleanup;
     }
-    dfeExceptionData->ExceptionFlag[0] = (adrv904x_DfePlatformExceptionFlag_e)adrv904x_CpuIntFromBytesGet(exceptionData,4);
+	dfeExceptionData->ExceptionFlag[0] = (adrv904x_DfePlatformExceptionFlag_e)(int32_t)adrv904x_CpuIntFromBytesGet(exceptionData, 4);
 
     address = baseAddress + ADI_LIBRARY_OFFSETOF(adrv904x_DfePlatformExceptionData_t,ExceptionRegs[0].sp_el1);
     recoveryAction = adi_adrv904x_RegistersByteRead(device, NULL, address, exceptionData, NULL, 8);
@@ -1371,7 +1372,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeExceptionDataGet(adi_adrv904x_Devic
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue during Reading DFE exception flag, Core:1");
         goto cleanup;
     }
-    dfeExceptionData->ExceptionFlag[1] = (adrv904x_DfePlatformExceptionFlag_e)adrv904x_CpuIntFromBytesGet(exceptionData,4);
+	dfeExceptionData->ExceptionFlag[1] = (adrv904x_DfePlatformExceptionFlag_e)(int32_t)adrv904x_CpuIntFromBytesGet(exceptionData, 4);
 
     address = baseAddress + ADI_LIBRARY_OFFSETOF(adrv904x_DfePlatformExceptionData_t,ExceptionRegs[1].sp_el1);
     recoveryAction = adi_adrv904x_RegistersByteRead(device, NULL, address, exceptionData, NULL, 8);
@@ -1677,7 +1678,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeExceptionDataGet(adi_adrv904x_Devic
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue during Reading DFE exception flag, Core:2");
         goto cleanup;
     }
-    dfeExceptionData->ExceptionFlag[2] = (adrv904x_DfePlatformExceptionFlag_e)adrv904x_CpuIntFromBytesGet(exceptionData,4);
+	dfeExceptionData->ExceptionFlag[2] = (adrv904x_DfePlatformExceptionFlag_e)(int32_t)adrv904x_CpuIntFromBytesGet(exceptionData, 4);
 
     address = baseAddress + ADI_LIBRARY_OFFSETOF(adrv904x_DfePlatformExceptionData_t,ExceptionRegs[2].sp_el1);
     recoveryAction = adi_adrv904x_RegistersByteRead(device, NULL, address, exceptionData, NULL, 8);
@@ -1983,8 +1984,8 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DfeExceptionDataGet(adi_adrv904x_Devic
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Issue during Reading DFE exception flag, Core:3");
         goto cleanup;
     }
-    dfeExceptionData->ExceptionFlag[3] = (adrv904x_DfePlatformExceptionFlag_e)adrv904x_CpuIntFromBytesGet(exceptionData,4);
-
+	dfeExceptionData->ExceptionFlag[3] = (adrv904x_DfePlatformExceptionFlag_e)(int32_t)adrv904x_CpuIntFromBytesGet(exceptionData, 4);
+	
     address = baseAddress + ADI_LIBRARY_OFFSETOF(adrv904x_DfePlatformExceptionData_t,ExceptionRegs[3].sp_el1);
     recoveryAction = adi_adrv904x_RegistersByteRead(device, NULL, address, exceptionData, NULL, 8);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
@@ -2434,7 +2435,7 @@ adi_adrv904x_ErrAction_e adrv904x_DfeSendSysStatusCmd(adi_adrv904x_Device_t* con
     adrv904x_CpuCmd_t* Cmd = NULL;
     adi_adrv904x_CpuType_e cpuType = ADI_ADRV904X_CPU_TYPE_DFE;
     (void)type; /* (void) used here because the type (public/private) is hardcoded to public for the public function (adrv904x_DfeSysStatusGet) */
-                /* and private for the private function (adi_adrv904x_DfeSysPvtStatusGet).  This is consistent with Palau.  */
+                /* and private for the private function (adi_adrv904x_DfeSysPvtStatusGet). */
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);

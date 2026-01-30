@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_utilities_types.h
 * \brief Contains ADRV904X API Utilities data types
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADI_ADRV904X_UTILITIES_TYPES_H_
@@ -156,5 +155,23 @@ typedef struct adi_adrv904x_PostMcsInit
     adi_adrv904x_GpIntPinMaskCfg_t gpIntPostInit;               /*!< Holds the setup for GP Interrupt Pin Mask Config to be applied after initialization*/
     adi_adrv904x_InitCals_t initCals;                           /*!< Holds the setup for Cals Initialization configuration */
 } adi_adrv904x_PostMcsInit_t;
+
+/**
+* \brief Standby mode recover data structure
+*/
+typedef struct adi_adrv904x_StandbyRecover
+{
+    adi_adrv904x_TrackingCalEnableMasks_t tcEnableMasks;            /*!< Tracking cals to be re-enabled on Power up */
+    uint32_t                              orxEnabledMask;           /*!< Corresponds to the enabled ORX channels to Recover */
+    uint32_t                              rxEnabledMask;            /*!< Corresponds to the enabled RX channels to Recover */
+    uint32_t                              txEnabledMask;            /*!< Corresponds to the enabled TX channels to Recover */
+    uint32_t                              lo0PllPowerDownCfg;       /*!< RF LO0 PLL Power Down Recover Config */
+    uint32_t                              lo1PllPowerDownCfg;       /*!< RF LO1 PLL Power Down Recover Config */
+    uint32_t                              serdesPllPowerDownCfg;    /*!< Serdes PLL Power Down Recover Config */
+    uint32_t                              clkPllPowerDownCfg;       /*!< Clk PLL Power Down Recover Config */
+    uint32_t                              rxAdcPowerDownCtrl;       /*!< Rx ADC Power Down Recover Config */
+    uint32_t                              txLbAdcTrmPowerDownCtrl;  /*!< Tx Loopback ADC Power Down Recover Config */
+    uint16_t                              deserializerPowerDownReg; /*!< Deserializer Power Down Recover Config */
+} adi_adrv904x_StandbyRecover_t;
 
 #endif /* _ADI_ADRV904X_TX_TYPES_H_ */

@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains ADRV904X function prototypes for
 *    adi_adrv904x_radioctrl.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 
@@ -944,6 +943,34 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalConfigGet(adi_adrv9
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalErrorGet(adi_adrv904x_Device_t* const device,
                                                                       const uint32_t channelSel,
                                                                       uint8_t * const errStatus);
+
+/**
+* \brief Function to clear error bits for selected channels - not supported in customer code
+*
+* For safe operation, this function must only be called when TX and/or Ant Cal state are not toggling, and also when an
+* external alarm event is not active.
+*
+* \pre errClearMask fields:  0b: Clear Tx Low Stream Error  (Tx antenna cal pin de-asserted when Tx channel is enabled)
+*                            1b: Clear Tx High Stream Error (Tx antenna cal pin asserted when Tx channel is enabled)
+*                            2b: Clear Tx Low Stream Error  (Tx Low stream is triggered when antenna cal is ongoing for this channel)
+*                            3b: Clear Tx High Stream Error (Tx High stream is triggered when antenna cal is ongoing for this channel)
+*                            4b: Clear Rx Low Stream Error  (Rx antenna cal pin de-asserted when Rx channel is enabled)
+*                            5b: Clear Rx High Stream Error (Rx antenna cal pin asserted when Rx channel is enabled)
+*                            6b: Clear Rx Low Stream Error  (Rx Low stream is triggered when antenna cal is ongoing for this channel)
+*                            7b: Clear Rx High Stream Error (Rx High stream is triggered when antenna cal is ongoing for this channel)
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+* \param[in] channelMask Mask to select the channel to clear error bits
+* \param[in] errClearMask Error clear mask
+*
+* \retval adi_adrv904x_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalErrorClear(adi_adrv904x_Device_t* const device,
+                                                                        const uint32_t channelMask,
+                                                                        const uint8_t errClearMask);
 
 /**
 * \brief Sweeps through all 20 stream processors and checks for failures and errors. 

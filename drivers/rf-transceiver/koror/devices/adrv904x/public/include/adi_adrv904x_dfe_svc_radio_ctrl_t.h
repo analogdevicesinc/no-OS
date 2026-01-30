@@ -1,14 +1,13 @@
 /**
- * Copyright 2020 - 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2020 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file
  * \brief Radio Control SDK Service API types
  *
- * SDK API Version: 2.10.0.4
+ * SDK API Version: 2.15.0.4
  */
 
 #ifndef ADRV904X_DFE_SVC_RADIOCTRL_T_H_

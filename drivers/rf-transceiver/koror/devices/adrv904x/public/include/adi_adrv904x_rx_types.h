@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
  */
 
 /**
  * \file adi_adrv904x_rx_types.h
  * \brief Contains ADRV904X API Rx datapath data types
  *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_RX_TYPES_H_
@@ -17,6 +16,7 @@
 #include "adi_library_types.h"
 #include "adi_adrv904x_gpio_types.h"
 #include "adi_adrv904x_rx_nco.h"
+#include "adi_adrv904x_cpu_error_codes_types.h"
 
 #define ADI_ADRV904X_RX_GAIN_TABLE_SIZE_ROWS 256
 #define ADI_ADRV904X_RX_MAX_GAIN_INDEX       255
@@ -184,9 +184,9 @@ typedef enum adi_adrv904x_FpNanEncode
 typedef enum adi_adrv904x_SignalMonitorSrc
 {
 
-	ADI_ADRV904X_SIG_MON_SRC_HB2_OUTPUT,   /*!< Use Hb2 block output as input signal */
-	ADI_ADRV904X_SIG_MON_SRC_HB2_INPUT,    /*!< Use Hb2 block input as input signal */
-	ADI_ADRV904X_MAX_SIG_MON_SRC_INVALID   /*!< Max number of signal monitor input source */
+    ADI_ADRV904X_SIG_MON_SRC_HB2_OUTPUT,   /*!< Use Hb2 block output as input signal */
+    ADI_ADRV904X_SIG_MON_SRC_HB2_INPUT,    /*!< Use Hb2 block input as input signal */
+    ADI_ADRV904X_MAX_SIG_MON_SRC_INVALID   /*!< Max number of signal monitor input source */
 } adi_adrv904x_SignalMonitorSrc_e;
 
 
@@ -352,7 +352,6 @@ typedef struct adi_adrv904x_RxGain
     uint32_t rxChannelMask; /*!< Rx Channels for which gain index needs to be updated. Bits 0-7 correspond to Rx0-Rx7 respectively */
     uint8_t gainIndex;      /*!< Gain Index for the channels selected in rxChannelMask */
 } adi_adrv904x_RxGain_t;
-
 
 /**
 *  \brief Data structure to hold ADRV904X Floating Point Formatter Configuration

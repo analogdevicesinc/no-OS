@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_dfe_vswr.c
 * \brief Contains VSWR feature related function implementations
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #include "adi_adrv904x_dfe_vswr.h"
 #include "adi_adrv904x_tx.h"
@@ -98,7 +97,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_VswrPlaybackDataRead(adi_adrv904x_
     uint32_t baseAddrToRead    = 0U;
     uint8_t playbackEnableRead = 0U;
     adrv904x_BfTxDfeDigRegsChanAddr_e txDfeDigBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_DFE_TX_DFE_DIG_REGS;
-    uint32_t dataToReadArr[ADI_ADRV904X_VSWR_PLAYBACK_DATA_MAX_NUM_SAMPLES];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint32_t, dataToReadArr, ADI_ADRV904X_VSWR_PLAYBACK_DATA_MAX_NUM_SAMPLES);
     
     uint32_t vswrPlaybackBaseAddressArr[ADI_ADRV904X_MAX_TXCHANNELS] = {
         ADI_ADVRV904X_TX0_VSWR_PLAYBACK_RAM_BASEADDR,
@@ -113,7 +112,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_VswrPlaybackDataRead(adi_adrv904x_
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
-    ADI_LIBRARY_MEMSET(&dataToReadArr[0U], 0, sizeof(dataToReadArr));
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, dataToReadArr, cleanup);
+    ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, playbackData, cleanup);
     
     /*Check that if requested Tx Channel valid*/
     switch (txChannelSel) 
@@ -535,7 +535,7 @@ static adi_adrv904x_ErrAction_e adrv904x_TxVswrPlaybackDataWrite(adi_adrv904x_De
     uint32_t origEccState      = 0U;
     uint8_t initEcc            = ADI_FALSE;
     adrv904x_BfTxDfeDigRegsChanAddr_e txDfeDigBaseAddr = ADRV904X_BF_SLICE_TX_0__TX_DFE_TX_DFE_DIG_REGS;
-    uint32_t dataToWriteArr[ADI_ADRV904X_VSWR_PLAYBACK_DATA_MAX_NUM_SAMPLES];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(uint32_t, dataToWriteArr, ADI_ADRV904X_VSWR_PLAYBACK_DATA_MAX_NUM_SAMPLES);
     uint32_t vswrPlaybackBaseAddressArr[ADI_ADRV904X_MAX_TXCHANNELS] = {
         ADI_ADVRV904X_TX0_VSWR_PLAYBACK_RAM_BASEADDR,
         ADI_ADVRV904X_TX1_VSWR_PLAYBACK_RAM_BASEADDR,
@@ -548,8 +548,8 @@ static adi_adrv904x_ErrAction_e adrv904x_TxVswrPlaybackDataWrite(adi_adrv904x_De
     };
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+    ADI_ADRV904X_NULL_PTR_RETURN(dataToWriteArr);
     ADI_ADRV904X_NULL_PTR_RETURN(playbackData);
-    ADI_LIBRARY_MEMSET(&dataToWriteArr[0U], 0, sizeof(dataToWriteArr));
                               
     /*Check that if requested Tx Channel valid*/
     if (((txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) ||

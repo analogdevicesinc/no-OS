@@ -47,4 +47,13 @@ struct adrv904x_hal_cfg {
 	int32_t logLevel;         /*!< valid 0 - 0xFF */
 };
 
+/**
+ * \brief File I/O abstraction for profile loading
+ * Required by no_os_platform.c for HAL implementation
+ */
+typedef struct no_os_hal_fileio {
+	char *data;
+	char *ptr, *start, *end;
+} CUSTOM_FILE;
+
 #endif

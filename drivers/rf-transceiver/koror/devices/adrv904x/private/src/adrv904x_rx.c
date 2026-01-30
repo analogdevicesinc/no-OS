@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
  * \file adrv904x_rx.c
  * \brief Contains ADRV904X Rx related private function implementations
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #include "../../private/include/adrv904x_rx.h"
@@ -7211,7 +7210,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ORxAttenDbToRegValues(adi_adrv904x_Dev
     
     /* Requested ORx atten to bitfield value mappings */
     /* TODO - yoda provides a mapping from attenDb to corresponding trmAtten bitfield value by way of the adrv904x_Bf_ActrlOrxWestRegmap_TrmAtten_e enumeration. 
-     * Unfortunately that mapping is currently incorrect. See TPGRADSWL-10152 and the 'Palau ORX Atten Users Guide'. */    
+     * Unfortunately that mapping is currently incorrect. See TPGRADSWL-10152. */    
 
     /* NOTE: The FW has these LUTs too. So, any LUT changes must be made in both places. */
     const uint8_t orxAttenDbToTrmAtten[ADI_ADRV904X_MAX_ORX_ATTEN_DB + 1] = {0x00, 0x01, 0x02, 0x03,
@@ -7254,7 +7253,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ORxTrmAttenToDb(adi_adrv904x_Device_t*
 
     /* TODO - yoda provides a mapping from attenDb to corresponding trmAtten bitfield value by way of the
      * adrv904x_Bf_ActrlOrxWestRegmap_TrmAtten_e enumeration. Unfortunately that mapping is currently incorrect. See
-     * TPGRADSWL-10152 and the 'Palau ORX Atten Users Guide'.
+     * TPGRADSWL-10152.
      */
         
     /* 

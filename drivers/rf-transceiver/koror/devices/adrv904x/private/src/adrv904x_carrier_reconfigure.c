@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
  * \file adrv904x_carrier_reconfigure.c
  * \brief Contains ADRV904X Rx related private function implementations
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #include "../../private/bf/adrv904x_bf_cddc_funcs.h"
@@ -19,6 +18,7 @@
 #include "../../private/include/adrv904x_carrier_reconfigure.h"
 #include "../../private/include/adrv904x_rx.h"
 #include "../../private/include/adrv904x_tx.h"
+#include "../../private/include/adrv904x_cpu.h"
 
 #define ADRV904X_SLOTS_PER_REGISTER  (8U)
 #define ADRV904X_LAST_VALID_SLOT_SELECT_IN_CARRIER_MODE (31U)
@@ -647,7 +647,7 @@ static uint32_t adrv904x_CarrierRateCalculate(const uint32_t hsDigRate_kHz, cons
     return carrierRateRatio;
 }
 
-static void swap(uint16_t* const a, uint16_t* const b)
+static void adrv904x_swap(uint16_t* const a, uint16_t* const b)
 {
     uint16_t tmp = *a;
 
@@ -709,9 +709,9 @@ static adi_adrv904x_ErrAction_e adrv904x_CarrierJesdSlotTableCalculate( adi_adrv
         }
 
         /* Swap */
-        swap(&ratios[minIdx], &ratios[carrierIdx]);
-        swap(&count[minIdx], &count[carrierIdx]);
-        swap(&indexMap[minIdx], &indexMap[carrierIdx]);
+        adrv904x_swap(&ratios[minIdx], &ratios[carrierIdx]);
+        adrv904x_swap(&count[minIdx], &count[carrierIdx]);
+        adrv904x_swap(&indexMap[minIdx], &indexMap[carrierIdx]);
     }
 
     /* Build Slot Table. Start from clean slate */
@@ -779,10 +779,10 @@ static adi_adrv904x_ErrAction_e adrv904x_CarrierJesdSlotTableCalculate( adi_adrv
             }
         }
 
-        /* Swap */
-        swap(&ratios[minIdx], &ratios[carrierIdx]);
-        swap(&count[minIdx], &count[carrierIdx]);
-        swap(&indexMap[minIdx], &indexMap[carrierIdx]);
+        /* adrv904x_swap */
+        adrv904x_swap(&ratios[minIdx], &ratios[carrierIdx]);
+        adrv904x_swap(&count[minIdx], &count[carrierIdx]);
+        adrv904x_swap(&indexMap[minIdx], &indexMap[carrierIdx]);
     }
 
     /* Calculate f_jesd/f_jesd_sample_rate ratio for each carrier after reordering based on sample rate */
@@ -849,16 +849,15 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateRxSampleXbarSlotConfig(  adi_
     uint16_t jesdL = 0U;
     uint16_t profIdx = 0U;
     uint16_t mReal = 0U;
-    
-    adi_adrv904x_JesdComponentCarrierXbarOutput_t tempSlot[ADI_ADRV904X_MAX_CARRIER_SLOTS];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(adi_adrv904x_JesdComponentCarrierXbarOutput_t, tempSlot, ADI_ADRV904X_MAX_CARRIER_SLOTS);
     uint32_t slotMapped[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
 
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, tempSlot);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, inJesdCfg);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, out);
 
-    ADI_LIBRARY_MEMSET(&tempSlot, 0, sizeof(tempSlot));
     ADI_LIBRARY_MEMSET(&slotMapped, 0, sizeof(slotMapped));
 
     for (linkIdx = 0U; linkIdx < ADI_ADRV904X_MAX_CARRIER_LINKS; linkIdx++)
@@ -1016,7 +1015,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateTxSampleXbarSlotConfig(  adi_
     uint16_t mReal = 0U;
     
     uint32_t slotMapped[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
-    adi_adrv904x_JesdComponentCarrierXbarOutput_t tempSlot[ADI_ADRV904X_MAX_CARRIER_SLOTS];
+    ADI_PLATFORM_LARGE_ARRAY_ALLOC(adi_adrv904x_JesdComponentCarrierXbarOutput_t, tempSlot, ADI_ADRV904X_MAX_CARRIER_SLOTS);
     uint16_t ipOrdering[ADI_ADRV904X_MAX_CARRIER_SLOTS];
     uint16_t xbarOrdering[ADI_ADRV904X_MAX_CARRIER_SLOTS];
 
@@ -1024,9 +1023,9 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateTxSampleXbarSlotConfig(  adi_
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, inJesdCfg);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, out);
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, tempSlot);
 
     ADI_LIBRARY_MEMSET(&slotMapped, 0, sizeof(slotMapped));
-    ADI_LIBRARY_MEMSET(&tempSlot, 0, sizeof(tempSlot));
     ADI_LIBRARY_MEMSET(&ipOrdering, 0, sizeof(ipOrdering));
     ADI_LIBRARY_MEMSET(&xbarOrdering, 0xFF, sizeof(xbarOrdering));
 
@@ -1104,7 +1103,8 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CalculateTxSampleXbarSlotConfig(  adi_
         {
             recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
 
-            if ((mReal * sizeof(adi_adrv904x_JesdComponentCarrierXbarOutput_t)) > sizeof(tempSlot))
+            if ((mReal * sizeof(adi_adrv904x_JesdComponentCarrierXbarOutput_t)) >
+                (sizeof(adi_adrv904x_JesdComponentCarrierXbarOutput_t) * ADI_ADRV904X_MAX_CARRIER_SLOTS))
             {
                 recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
                 ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, mReal, "Invalid Configuration Parameter");
@@ -1239,8 +1239,8 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCommonDelayParameters(adi_adrv
                                                                         adi_adrv904x_CarrierDelayParameters_t* const                prms)
 {
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    int diff_max = INT16_MIN;
-    int diff_min = INT16_MAX;
+    int32_t diff_max = INT16_MIN;
+    int32_t diff_min = INT16_MAX;
     
     uint8_t compensation_used = 0u;
     uint16_t tmp = 0u;
@@ -1255,7 +1255,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCommonDelayParameters(adi_adrv
     ADI_LIBRARY_MEMSET(&prms->bufferCfg, 0, sizeof(adi_adrv904x_CarrierHwDelayBufferConfig_t));
     
     /* Calculate number of carrier samples to add to get close to target, total delays after adding buffers, and remaining delay errors */
-    for (int i = 0; i < prms->noOfCarriers; i++)
+    for (int32_t i = 0; i < prms->noOfCarriers; i++)
     {
         if (carrierConfigsOut->carrierCfgs.carrierEnable[i] > 0)
         {
@@ -1409,14 +1409,13 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
                                     uint32_t                                            jesdClkPeriod,
                                     uint8_t                                             carr_to_check)
 {
-    long int max_carr_period = 0;
-    int carr_arrival_slot[ADI_ADRV904X_MAX_CARRIERS];
-    int carr_slot_allocation[ADRV904X_NO_OF_RSD_CARRIER_SLOTS];
-    int carr_slot_in[ADRV904X_NO_OF_RSD_CARRIER_SLOTS][ADI_ADRV904X_MAX_CARRIERS];
-    int carr_slot_out[ADRV904X_NO_OF_RSD_CARRIER_SLOTS];
-    int carr_first_in_slot[ADI_ADRV904X_MAX_CARRIERS];
-    int carr_first_out_slot[ADI_ADRV904X_MAX_CARRIERS];
-    long int carr_delay[ADI_ADRV904X_MAX_CARRIERS];
+    int64_t max_carr_period = 0;
+    int32_t carr_arrival_slot[ADI_ADRV904X_MAX_CARRIERS];
+    int32_t carr_slot_allocation[ADRV904X_NO_OF_RSD_CARRIER_SLOTS];
+    int32_t carr_slot_out[ADRV904X_NO_OF_RSD_CARRIER_SLOTS];
+    int32_t carr_first_in_slot[ADI_ADRV904X_MAX_CARRIERS];
+    int32_t carr_first_out_slot[ADI_ADRV904X_MAX_CARRIERS];
+    int64_t carr_delay[ADI_ADRV904X_MAX_CARRIERS];
     
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
@@ -1426,39 +1425,31 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
 
     ADI_LIBRARY_MEMSET(&carr_arrival_slot, 0, sizeof(carr_arrival_slot));
     ADI_LIBRARY_MEMSET(&carr_slot_allocation, 0, sizeof(carr_slot_allocation));
-    ADI_LIBRARY_MEMSET(&carr_slot_in, 0, sizeof(carr_slot_in));
     ADI_LIBRARY_MEMSET(&carr_slot_out, 0, sizeof(carr_slot_out));
     ADI_LIBRARY_MEMSET(&carr_first_in_slot, 0, sizeof(carr_first_in_slot));
     ADI_LIBRARY_MEMSET(&carr_first_out_slot, 0, sizeof(carr_first_out_slot));
     ADI_LIBRARY_MEMSET(&carr_first_out_slot, 0, sizeof(carr_first_out_slot));
     ADI_LIBRARY_MEMSET(&carr_delay, 0, sizeof(carr_delay));
     
-    for (int i = 0; i < num_carr; i++)
+    for (int32_t i = 0; i < num_carr; i++)
     {
         if ((all_carr_enable & (1 << i)) > 0)
         {
-            max_carr_period = (max_carr_period > (long int) prms->clkPeriod[i]) ? max_carr_period : (long int)prms->clkPeriod[i] ;
+            max_carr_period = (max_carr_period > (int64_t) prms->clkPeriod[i]) ? max_carr_period : (int64_t)prms->clkPeriod[i] ;
         }
     }
-    int max_slots = max_carr_period / jesdClkPeriod;
+    int32_t max_slots = max_carr_period / jesdClkPeriod;
     
-    for (int i = 0; i < max_slots; i++)
+    for (int32_t i = 0; i < max_slots; i++)
     {
         carr_slot_allocation[i] = num_carr;
     }
 
-    for (int i = 0; i < max_slots; i++)
-    {
-        for (int j = 0; j < num_carr; j++)
-        {
-            carr_slot_in[i][j] = 0;
-        }
-    }
-    int slot_step_size = max_slots + 1;
-    int first_enabled_carr = 1;
-    int first_carr_num = 0;
+    int32_t slot_step_size = max_slots + 1;
+    int32_t first_enabled_carr = 1;
+    int32_t first_carr_num = 0;
     uint32_t min_carr_delay = UINT32_MAX;
-    for (int i = 0; i < num_carr; i++)
+    for (int32_t i = 0; i < num_carr; i++)
     {
         if ((all_carr_enable & (1 << i)) > 0)
         {
@@ -1474,7 +1465,7 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
         }
     }
     first_enabled_carr = 1;
-    for (int i = 0; i < num_carr; i++)
+    for (int32_t i = 0; i < num_carr; i++)
     {
         if ((min_carr_delay == prms->dlyPrev[i]) && (first_enabled_carr == 1))
         {
@@ -1483,11 +1474,11 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
         }
     }
     
-    for (int i = 0; i < num_carr; i++)
+    for (int32_t i = 0; i < num_carr; i++)
     {
         if ((all_carr_enable & (1 << i)) > 0)
         {
-            carr_arrival_slot[i] = ((int)(prms->dlyPrev[i] - prms->dlyPrev[first_carr_num]) / jesdClkPeriod) % max_slots;
+            carr_arrival_slot[i] = ((int32_t)(prms->dlyPrev[i] - prms->dlyPrev[first_carr_num]) / jesdClkPeriod) % max_slots;
             slot_step_size = prms->clkPeriod[i] / jesdClkPeriod;
         }
         else
@@ -1496,7 +1487,7 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
             slot_step_size = max_slots + 1;
         }
         /* allocating slots based on priority (lowest carrier highest priority) */
-        int j = carr_arrival_slot[i];
+        int32_t j = carr_arrival_slot[i];
         while (j >= 0) {
             j = j - slot_step_size;
         }
@@ -1528,23 +1519,22 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
         
         while (j < max_slots)
         {
-            carr_slot_in[j][i] = 1;
             j = j + slot_step_size;
         }
     }
     /* Rotating once due to delay difference between data and valids
-     * int carr_slot_out[ADRV904X_NO_OF_RSD_CARRIER_SLOTS];
+     * int32_t carr_slot_out[ADRV904X_NO_OF_RSD_CARRIER_SLOTS];
      */
     carr_slot_out[0] = carr_slot_allocation[max_slots - 1];
-    for (int i = 1; i < max_slots; i++)
+    for (int32_t i = 1; i < max_slots; i++)
     {
         carr_slot_out[i] = carr_slot_allocation[i - 1];
     }
     
-    for (int i = 0; i < num_carr; i++)
+    for (int32_t i = 0; i < num_carr; i++)
     {
         carr_first_out_slot[i] = max_slots;
-        for (int j = 0; j < max_slots; j++)
+        for (int32_t j = 0; j < max_slots; j++)
         {
             if ((carr_slot_out[j] == i) && (carr_first_out_slot[i] > j))
             {
@@ -1553,16 +1543,16 @@ static uint32_t resourceShareDelay( adi_adrv904x_Device_t* const                
         }
     }
     
-    for (int i = 0; i < num_carr; i++)
+    for (int32_t i = 0; i < num_carr; i++)
     {
-        carr_delay[i] = (carr_first_out_slot[i] - carr_first_in_slot[i]) * jesdClkPeriod;
+	    carr_delay[i] = (carr_first_out_slot[i] - carr_first_in_slot[i]) * (int32_t)jesdClkPeriod;
         if (carr_delay[i] < 0)
         {
-            carr_delay[i] = carr_delay[i] + max_slots*jesdClkPeriod;
+	        carr_delay[i] = carr_delay[i] + max_slots * (int32_t)jesdClkPeriod;
         }
-        while (carr_delay[i] > (long int) prms->clkPeriod[i])
+        while (carr_delay[i] > (int64_t) prms->clkPeriod[i])
         {
-            carr_delay[i] = carr_delay[i] - prms->clkPeriod[i];
+	        carr_delay[i] = carr_delay[i] - (int32_t)prms->clkPeriod[i];
         }
     }
     return (uint32_t)carr_delay[carr_to_check];
@@ -1611,15 +1601,15 @@ static adi_adrv904x_ErrAction_e transferJesdConfigToOutputCfg(  adi_adrv904x_Dev
     pProfileCfgOut->internalJesdCfg.slotValid = prms->slotValid;
     pProfileCfgOut->internalJesdCfg.ifaceMaxSlot = prms->ifaceMaxSlot;
 
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_TXCHANNELS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_TXCHANNELS; i++)
     {
         pProfileCfgOut->internalJesdCfg.dummyIfaceSlotsRemoved[i] = 0;
     }
 
     /* Taking the slot table as it is from configurator instead of making the invalid slots as 0 */
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
-        if (i < (int)pProfileCfgOut->internalJesdCfg.maxSlot)
+        if (i < (int32_t)pProfileCfgOut->internalJesdCfg.maxSlot)
         {
             pProfileCfgOut->internalJesdCfg.slotTable[i] = prms->slotTable[i];
         }
@@ -1629,7 +1619,7 @@ static adi_adrv904x_ErrAction_e transferJesdConfigToOutputCfg(  adi_adrv904x_Dev
         }
     }
 
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; i++)
     {
         pProfileCfgOut->internalJesdCfg.ifaceSlotTable[i] = prms->ifaceSlotTable[i];
     }
@@ -1653,7 +1643,7 @@ static adi_adrv904x_ErrAction_e transferJesdConfigShuffleToJesd(adi_adrv904x_Dev
 
     /* Copy over carrier slot table and carrier valid array[64] to single 64bit word */
     pProfileCfgOut->internalJesdCfg.slotValid = 0u;
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         if (prms->jesdSlotValid[i] > 0u)
         {
@@ -1666,7 +1656,7 @@ static adi_adrv904x_ErrAction_e transferJesdConfigShuffleToJesd(adi_adrv904x_Dev
     /* Convert carrier slot table --> iface slot table */
 
     /* initialize cduc iface slot table to all ADRV904X_SLOT_TABLE_UNUSED and invalid */
-    for (int i = 0u; i < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; i++)
+    for (int32_t i = 0u; i < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; i++)
     {
 
         pProfileCfgOut->internalJesdCfg.ifaceSlotTable[i] = ADRV904X_SLOT_TABLE_UNUSED;
@@ -1674,9 +1664,9 @@ static adi_adrv904x_ErrAction_e transferJesdConfigShuffleToJesd(adi_adrv904x_Dev
     }
 
     /* Iterate through all carrier slots, and apply to iface table element [i % iface_size]. Check for overwrites */
-    for (int i = 0u; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0u; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
-        int iface_idx = i % pProfileCfgOut->internalJesdCfg.ifaceMaxSlot;
+        int32_t iface_idx = i % pProfileCfgOut->internalJesdCfg.ifaceMaxSlot;
 
         /* Check if carrier table slot a value other than UNUSED */
         if (prms->jesdSlotTable[i] != ADRV904X_SLOT_TABLE_UNUSED)
@@ -1725,7 +1715,7 @@ static adi_adrv904x_ErrAction_e transferSlotTableConfig(adi_adrv904x_Device_t* c
 
     //* Create carriers enabled mask based on the sample rate to accomodate dummy carriers */
     prms->carriersEnabled = 0u;
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         prms->carrierClkPeriod[i] = (1u << pProfileCfgOut->carrierCfgs.carrierRateRatio[i]);
         prms->carrierSlots[i] = 0;
@@ -1746,11 +1736,11 @@ static adi_adrv904x_ErrAction_e transferSlotTableConfig(adi_adrv904x_Device_t* c
 
     prms->jesdClkPeriod = 1u << pProfileCfgOut->internalJesdCfg.divide;
     prms->jesdMaxSlot = pProfileCfgOut->internalJesdCfg.maxSlot;
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         prms->jesdSlotTable[i] = pProfileCfgOut->internalJesdCfg.slotTable[i];
     }
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         prms->jesdSlotValid[i] = (pProfileCfgOut->internalJesdCfg.slotValid & slot_valid_mask) != 0;
         slot_valid_mask <<= 1u;
@@ -1766,14 +1756,14 @@ static adi_adrv904x_ErrAction_e transferDelayMismatch(  adi_adrv904x_Device_t* c
                                                         const adi_adrv904x_CarrierReconfigProfileCfgOut_t * const   pProfileCfgOut, 
                                                         adrv904x_SlotTableShuffleParams_t * const                   prms)
 {
-    int i = 0;
+    int32_t i = 0;
     
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, pProfileCfgOut);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, prms);
     
-    for (i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {   
         prms->carrierDelayMismatch[i] = pProfileCfgOut->delayCfg.delayDiffPerCarrier_cc[i];
     }
@@ -1794,11 +1784,11 @@ static adi_adrv904x_ErrAction_e removeDummyCarriers(    adi_adrv904x_Device_t* c
      */
 
     /* iface table removal */
-    for (int s = 0; s < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; s++)
+    for (int32_t s = 0; s < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; s++)
     {
-        int cc = pProfileCfgOut->internalJesdCfg.ifaceSlotTable[s];
+        int32_t cc = pProfileCfgOut->internalJesdCfg.ifaceSlotTable[s];
         if ((cc >= 0) &&
-            (cc < (int)ADI_ADRV904X_MAX_CARRIERS) &&
+            (cc < (int32_t)ADI_ADRV904X_MAX_CARRIERS) &&
             ((pProfileCfgOut->carriersEnabled & (1 << cc)) == 0))
         {
             /* If this cc is in range 0-7, appears in the slot table but not in the enabled mask, then its a dummy carrier
@@ -1810,9 +1800,9 @@ static adi_adrv904x_ErrAction_e removeDummyCarriers(    adi_adrv904x_Device_t* c
     }
 
     /* carrier table removal */
-    for (int s = 0; s < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; s++)
+    for (int32_t s = 0; s < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; s++)
     {
-        int cc = pProfileCfgOut->internalJesdCfg.slotTable[s];
+        int32_t cc = pProfileCfgOut->internalJesdCfg.slotTable[s];
         if ((cc != ADRV904X_SLOT_TABLE_UNUSED) &&
             ((pProfileCfgOut->carriersEnabled & (1 << cc)) == 0))
         {
@@ -1839,17 +1829,17 @@ static adi_adrv904x_ErrAction_e reinsertDummyCarriers(  adi_adrv904x_Device_t* c
     /* For shuffling algorithm purposes, dummy carrier slots have to be marked as UNUSED temporarily
      * This function is to reinsert the required dummy carriers to first empty slots found
      */
-    for (int cc = 0; cc < (int)ADI_ADRV904X_MAX_CARRIERS; cc++)
+    for (int32_t cc = 0; cc < (int32_t)ADI_ADRV904X_MAX_CARRIERS; cc++)
     {
         /* Check if We have dummy carrier (i.e. carrier sample rate > 0 and carrier is not enabled) */
         if ((pProfileCfgOut->internalJesdCfg.jesdSampleRate_kHz[cc] > 0u) &&
             ((pProfileCfgOut->carriersEnabled & (1 << cc)) == 0))
         {
             /* iface table: insert carrier  into first UNUSED slots found until all removed slots have been reinserted */
-            int s = 0;
+            int32_t s = 0;
             while (
                 (pProfileCfgOut->internalJesdCfg.dummyIfaceSlotsRemoved[cc] > 0) &&
-                (s < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS))
+                (s < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS))
             {
                 if (pProfileCfgOut->internalJesdCfg.ifaceSlotTable[s] == ADRV904X_SLOT_TABLE_UNUSED)
                 {
@@ -1882,13 +1872,13 @@ static adi_adrv904x_ErrAction_e reinsertDummyCarriers(  adi_adrv904x_Device_t* c
 }
 
 
-static int calcDelayMismatch(   const adrv904x_SlotTableShuffleParams_t * const     slot_table_params,
+static int32_t calcDelayMismatch(   const adrv904x_SlotTableShuffleParams_t * const     slot_table_params,
                                 int16_t * const                                     max_mismatch, 
                                 int16_t * const                                     min_mismatch)
 {
     *max_mismatch = slot_table_params->carrierDelayMismatch[0];
     *min_mismatch = slot_table_params->carrierDelayMismatch[0];
-    for (int i = 1; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (int32_t i = 1; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         if (*max_mismatch < slot_table_params->carrierDelayMismatch[i])
         {
@@ -1913,12 +1903,12 @@ static adi_adrv904x_ErrAction_e calcFirstCarrierSlot(   adi_adrv904x_Device_t* c
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, slot_table_params);
     
-    for (int i = 0; i < 8; i++)
+    for (int32_t i = 0; i < 8; i++)
     {
         slot_table_params->carrierSlots[i] = 0;
         if (slot_table_params->carriersEnabled & (1 << i))
         {
-            for (int j = 0; j < slot_table_params->jesdMaxSlot; j++)
+            for (int32_t j = 0; j < slot_table_params->jesdMaxSlot; j++)
             {
                 if (slot_table_params->jesdSlotValid[j] == 1)
                 {
@@ -1940,12 +1930,12 @@ static adi_adrv904x_ErrAction_e calcFirstCarrierSlot(   adi_adrv904x_Device_t* c
 static adi_adrv904x_ErrAction_e swapSimilarCarriers(adi_adrv904x_Device_t* const                device, 
                                                     adrv904x_SlotTableShuffleParams_t * const   slot_table_params)
 {
-    int jesd_to_carr_ratio;
-    int exchange_done[ADI_ADRV904X_MAX_CARRIERS];
-    int prev_min_diff[ADI_ADRV904X_MAX_CARRIERS];                           /* Has the carrier delay */
-    int prev_min_diff_carr[ADI_ADRV904X_MAX_CARRIERS];                      /* Has the carrier number */
-    int atleast_one_carr_found[ADI_ADRV904X_MAX_CARRIERS];
-    int delay_diff_bw_cc[ADI_ADRV904X_MAX_CARRIERS][ADI_ADRV904X_MAX_CARRIERS];
+    int32_t jesd_to_carr_ratio;
+    int32_t exchange_done[ADI_ADRV904X_MAX_CARRIERS];
+    int32_t prev_min_diff[ADI_ADRV904X_MAX_CARRIERS];                           /* Has the carrier delay */
+    int32_t prev_min_diff_carr[ADI_ADRV904X_MAX_CARRIERS];                      /* Has the carrier number */
+    int32_t atleast_one_carr_found[ADI_ADRV904X_MAX_CARRIERS];
+    int32_t delay_diff_bw_cc[ADI_ADRV904X_MAX_CARRIERS][ADI_ADRV904X_MAX_CARRIERS];
 
     uint16_t carr_deinterleaver_slot_mod[ADI_ADRV904X_MAX_CARRIERS];        /* tmp table for swapped carrier first-slots */
     uint16_t tmp_table[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
@@ -1956,24 +1946,24 @@ static adi_adrv904x_ErrAction_e swapSimilarCarriers(adi_adrv904x_Device_t* const
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, slot_table_params);
 
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         exchange_done[i] = 0;
         prev_min_diff_carr[i] = 0;
         carr_deinterleaver_slot_mod[i] = 0;
-        for (int c = 0; c < (int)ADI_ADRV904X_MAX_CARRIERS; c++) {
+        for (int32_t c = 0; c < (int32_t)ADI_ADRV904X_MAX_CARRIERS; c++) {
             delay_diff_bw_cc[i][c] = 0;
         }
     }
 
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         tmp_table[i] = slot_table_params->jesdSlotTable[i];
         tmp_valid[i] = 0u;
     }
 
     /* Re-ordering(swapping similar carr) slot table according to delay values */
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++) {
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++) {
         if (exchange_done[i] == 0) {
             carr_deinterleaver_slot_mod[i] = slot_table_params->carrierSlots[i];
         }
@@ -1983,7 +1973,7 @@ static adi_adrv904x_ErrAction_e swapSimilarCarriers(adi_adrv904x_Device_t* const
             (exchange_done[i] == 0) && 
             (abs(slot_table_params->carrierDelayMismatch[i]) > (ADRV904X_HALF_MAX_DELAY_CC / 2))) 
         {
-            for (int j = 0; j < (int)ADI_ADRV904X_MAX_CARRIERS; j++) {
+            for (int32_t j = 0; j < (int32_t)ADI_ADRV904X_MAX_CARRIERS; j++) {
                 if ((slot_table_params->carriersEnabled & (1 << j)) && 
                     (j != i) && 
                     (exchange_done[j] == 0)) 
@@ -2011,11 +2001,11 @@ static adi_adrv904x_ErrAction_e swapSimilarCarriers(adi_adrv904x_Device_t* const
         }
     }
 
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++) {
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++) {
         if (slot_table_params->carriersEnabled & (1 << i))
         {
             jesd_to_carr_ratio = slot_table_params->carrierClkPeriod[i] / slot_table_params->jesdClkPeriod;
-            for (int j = carr_deinterleaver_slot_mod[i]; j < slot_table_params->jesdMaxSlot; j = j + jesd_to_carr_ratio) {
+            for (int32_t j = carr_deinterleaver_slot_mod[i]; j < slot_table_params->jesdMaxSlot; j = j + jesd_to_carr_ratio) {
                 tmp_table[j] = i;
                 tmp_valid[j] = 1;
             }
@@ -2054,7 +2044,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, slot_table_params);
 
     /* Initialize tmp slot table and tmp valid arrays (size 64) with shuffle params values*/
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         tmp_jesd_slot_table[i] = slot_table_params->jesdSlotTable[i];
         tmp_jesd_slot_valid_calc[i] = slot_table_params->jesdSlotValid[i];
@@ -2065,7 +2055,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
     avg_mismatch = (max_mismatch + min_mismatch) / 2;
 
     /* For enabled carriers, Calc delay_mismatch_rel */
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         if (slot_table_params->carriersEnabled & (1 << i))
         {
@@ -2075,7 +2065,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
     }
 
     /* Iterate through carriers (i), searching for slots which are available to move carrier i into */
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         /* Reset invalid_slot_found to 0 */
         invalid_slot_found = 0u;
@@ -2084,13 +2074,13 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
         tmp_carrier_slots[i] = slot_table_params->carrierSlots[i];
 
         /* Clear tmp valid bits for all 16 iface slots */
-        for (int s = 0; s < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; s++)
+        for (int32_t s = 0; s < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; s++)
         {
             iface_table_valid[s] = 0;
         }
 
         /* Finding slots occupied by carriers in interface slot table eventhough it is not a valid slot in cduc slot table */
-        for (int j = 0; j < (int)ADI_ADRV904X_MAX_CARRIERS; j++)
+        for (int32_t j = 0; j < (int32_t)ADI_ADRV904X_MAX_CARRIERS; j++)
         {
             if (slot_table_params->carriersEnabled & (1 << j))
             {
@@ -2121,7 +2111,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
             (delay_mismatch_rel[i] < (int16_t)-ADRV904X_HALF_MAX_DELAY_CC)))
         {
             jesd_to_carrier_ratio = slot_table_params->carrierClkPeriod[i] / slot_table_params->jesdClkPeriod;
-            for (int s = 0; s < slot_table_params->jesdMaxSlot; s++)
+            for (int32_t s = 0; s < slot_table_params->jesdMaxSlot; s++)
             {
                 if ((tmp_jesd_slot_valid_calc[s] == 0) &&
                     (s < tmp_carrier_slots[i]) &&
@@ -2140,12 +2130,12 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
             /* if invalid_slot_found == 1, we found a candidate first slot to move to. But we must ALSO verify all slots that follow it, at jesd_to_carrier_ratio intervals, are also "invalid" */
             if (invalid_slot_found == 1)
             {
-                for (int s = slot_table_params->carrierSlots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                for (int32_t s = slot_table_params->carrierSlots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                 {
                     tmp_jesd_slot_valid_calc[s] = 0;
                 }
                 all_follow_slots_invalid = 1;
-                for (int s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                for (int32_t s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                 {
                     all_follow_slots_invalid = all_follow_slots_invalid && (tmp_jesd_slot_valid_calc[s] == 0);
                 }
@@ -2155,12 +2145,12 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
                  */
                 if (all_follow_slots_invalid == 1)
                 {
-                    for (int s = 0; s < (slot_table_params->jesdMaxSlot / jesd_to_carrier_ratio); s = s + 1)
+                    for (int32_t s = 0; s < (slot_table_params->jesdMaxSlot / jesd_to_carrier_ratio); s = s + 1)
                     {
                         /* Swapping the slots which are occupied carrier previously & the slots which are going to be occupied by carrier */
                         tmp_jesd_slot_table[tmp_carrier_slots[i] + (s * jesd_to_carrier_ratio)] = tmp_jesd_slot_table[invalid_slot + (s * jesd_to_carrier_ratio)];
                     }
-                    for (int s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                    for (int32_t s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                     {
                         tmp_jesd_slot_valid_calc[s] = 1;
                         tmp_jesd_slot_table[s] = i;
@@ -2169,7 +2159,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
                 }
                 else
                 {
-                    for (int s = tmp_carrier_slots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                    for (int32_t s = tmp_carrier_slots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                     {
                         tmp_jesd_slot_valid_calc[s] = 1;
                         tmp_jesd_slot_table[s] = i;
@@ -2184,7 +2174,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
             (delay_mismatch_rel[i] > (int16_t)ADRV904X_HALF_MAX_DELAY_CC)))
         {
             jesd_to_carrier_ratio = slot_table_params->carrierClkPeriod[i] / slot_table_params->jesdClkPeriod;
-            for (int s = 0; s < slot_table_params->jesdMaxSlot; s++)
+            for (int32_t s = 0; s < slot_table_params->jesdMaxSlot; s++)
             {
                 if ((tmp_jesd_slot_valid_calc[s] == 0) &&
                     (s > tmp_carrier_slots[i]) &&
@@ -2203,12 +2193,12 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
             /* if invalid_slot_found == 1, we found a candidate first slot to move to. But we must ALSO verify all slots that follow it, at jesd_to_carrier_ratio intervals, are also "invalid" */
             if (invalid_slot_found == 1)
             {
-                for (int s = slot_table_params->carrierSlots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                for (int32_t s = slot_table_params->carrierSlots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                 {
                     tmp_jesd_slot_valid_calc[s] = 0;
                 }
                 all_follow_slots_invalid = 1;
-                for (int s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                for (int32_t s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                 {
                     all_follow_slots_invalid = all_follow_slots_invalid && (tmp_jesd_slot_valid_calc[s] == 0);
                 }
@@ -2221,12 +2211,12 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
                  */
                 if (all_follow_slots_invalid == 1)
                 {
-                    for (int s = 0; s < (slot_table_params->jesdMaxSlot / jesd_to_carrier_ratio); s = s + 1)
+                    for (int32_t s = 0; s < (slot_table_params->jesdMaxSlot / jesd_to_carrier_ratio); s = s + 1)
                     {
                         /* Swapping the slots which are occupied carrier previously & the slots which are going to be occupied by carrier */
                         tmp_jesd_slot_table[tmp_carrier_slots[i] + (s * jesd_to_carrier_ratio)] = tmp_jesd_slot_table[invalid_slot + (s * jesd_to_carrier_ratio)];
                     }
-                    for (int s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                    for (int32_t s = invalid_slot; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                     {
                         tmp_jesd_slot_valid_calc[s] = 1;
                         tmp_jesd_slot_table[s] = i;
@@ -2235,7 +2225,7 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
                 }
                 else
                 {
-                    for (int s = tmp_carrier_slots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
+                    for (int32_t s = tmp_carrier_slots[i]; s < slot_table_params->jesdMaxSlot; s = s + jesd_to_carrier_ratio)
                     {
                         tmp_jesd_slot_valid_calc[s] = 1;
                         tmp_jesd_slot_table[s] = i;
@@ -2246,12 +2236,12 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
 
     } /* end of i forloop */
 
-    for (unsigned int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (uint32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         if (slot_table_params->carriersEnabled & (1 << i))
         {
             jesd_to_carrier_ratio = slot_table_params->carrierClkPeriod[i] / slot_table_params->jesdClkPeriod;
-            for (unsigned int j = tmp_carrier_slots[i]; j < slot_table_params->jesdMaxSlot; j = j + jesd_to_carrier_ratio)
+            for (uint32_t j = tmp_carrier_slots[i]; j < slot_table_params->jesdMaxSlot; j = j + jesd_to_carrier_ratio)
             {
                 tmp_jesd_slot_table[j] = i;
                 tmp_jesd_slot_valid_calc[j] = 1u;
@@ -2260,11 +2250,11 @@ static adi_adrv904x_ErrAction_e moveCarrierPositions(   adi_adrv904x_Device_t* c
     }
 
     /* Update Slot Shuffle params with the calculated tmp vars */
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
     {
         slot_table_params->carrierSlots[i] = tmp_carrier_slots[i];
     }
-    for (int s = 0; s < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; s++)
+    for (int32_t s = 0; s < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; s++)
     {
         slot_table_params->jesdSlotTable[s] = tmp_jesd_slot_table[s];
         slot_table_params->jesdSlotValid[s] = tmp_jesd_slot_valid_calc[s];
@@ -2291,14 +2281,14 @@ static adi_adrv904x_ErrAction_e reorderSlotTable(   adi_adrv904x_Device_t* const
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, slot_table_params);
 
     /* Init */
-    for (int i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         slotTable[i] = ADI_ADRV904X_CARRIER_UNUSED_CC_XBAR;
         slot_valid_arr[i] = 0;
     }
-    for (int i = 0; i < 8; i++)
+    for (int32_t i = 0; i < 8; i++)
     {
-        for (int j = 0; j < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; j++)
+        for (int32_t j = 0; j < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; j++)
         {
             if (slot_table_params->jesdSlotTable[j] == i)
             {
@@ -2316,16 +2306,16 @@ static adi_adrv904x_ErrAction_e reorderSlotTable(   adi_adrv904x_Device_t* const
 
     max_carrier_slot_ratio = slot_table_params->jesdMaxSlot / max_carrier_slot;
 
-    for (int i = 0; i < max_carrier_slot_ratio; i++)
+    for (int32_t i = 0; i < max_carrier_slot_ratio; i++)
     {
-        for (int j = 0; j < max_carrier_slot; j++)
+        for (int32_t j = 0; j < max_carrier_slot; j++)
         {
             slotTable[i * max_carrier_slot + j] = slot_table_params->jesdSlotTable[(i + 1) * max_carrier_slot - 1 - j];
             slot_valid_arr[i * max_carrier_slot + j] = slot_table_params->jesdSlotValid[(i + 1) * max_carrier_slot - 1 - j];
         }
     }
 
-    for (int i = 0; i < 64; i++)
+    for (int32_t i = 0; i < 64; i++)
     {
         slot_table_params->jesdSlotTable[i] = slotTable[i];
         slot_table_params->jesdSlotValid[i] = slot_valid_arr[i];
@@ -2375,7 +2365,7 @@ static void printfCmodelStats(  adi_adrv904x_Device_t* const                    
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG,
         "number \t: tap  \t: period  : tap del\t: pipe del\t: delay \t: delay  \t: delay        \t: extra delay \t: share delay\t: delay     \t: delay      \t: delay      \t: delay      \t: delay      \t: delay      ", 0);
 
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; ++i)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; ++i)
     {
         if (profile->carriersEnabled & (1u << i))
         {
@@ -2408,16 +2398,16 @@ static void printfCmodelStats(  adi_adrv904x_Device_t* const                    
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Carrier number\t: Difference \t: Delay match \t: Delay match \t: Delay    ", 0);
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "              \t:            \t: value       \t: enabled     \t: mismatch ", 0);
 
-    for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; ++i)
+    for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; ++i)
     {
         if(profile->carrierCfgs.carrierEnable[i] > 0)
         {
             ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Carrier %d\t: %10d\t: %10d\t:   %d\t\t\t:  %d",
-                        (int) i,                                                                /* Carrier Number */
-                        (int)profile->delayCfg.uncompOffset_cc[i],                             /* Difference between target and actual group delay before accounting for Delay Buffer Compensation */
-                        (int)profile->delayCfg.compIntSamples[i],                             /* Delay match value (e.g. Buffer Delay count) */
-                        (int)(profile->delayCfg.carrierComponents[i].matchEnabled != 0 ? 1 : 0), /* Delay match enabled */
-                        (int)profile->delayCfg.delayDiffPerCarrier_cc[i]);                   /* Delay mismatch */
+                        (int32_t) i,                                                                /* Carrier Number */
+                        (int32_t)profile->delayCfg.uncompOffset_cc[i],                             /* Difference between target and actual group delay before accounting for Delay Buffer Compensation */
+                        (int32_t)profile->delayCfg.compIntSamples[i],                             /* Delay match value (e.g. Buffer Delay count) */
+                        (int32_t)(profile->delayCfg.carrierComponents[i].matchEnabled != 0 ? 1 : 0), /* Delay match enabled */
+                        (int32_t)profile->delayCfg.delayDiffPerCarrier_cc[i]);                   /* Delay mismatch */
         }
     }
 }
@@ -2431,13 +2421,13 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
     uint8_t bPrintDelays = 1U;
     uint8_t bPrintSlotMatrix = 2U;
 
-    int N_iface = profile->internalJesdCfg.ifaceMaxSlot;
-    int N_carrier = profile->internalJesdCfg.maxSlot;
-    int N_mod = N_carrier / N_iface;
+    int32_t N_iface = profile->internalJesdCfg.ifaceMaxSlot;
+    int32_t N_carrier = profile->internalJesdCfg.maxSlot;
+    int32_t N_mod = N_carrier / N_iface;
     
-    const int MAXLEN = 512;
+    const int32_t MAXLEN = 512;
     char msg[MAXLEN];
-    int len = 0;
+    int32_t len = 0;
 
     /* Compact Slot Tables */
     if (bPrintSlotTablesCompact == 1U)
@@ -2450,9 +2440,9 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
         ADI_LIBRARY_MEMSET(&msg[0], 0, sizeof(msg));
         len = 0;
         len += ADI_LIBRARY_SNPRINTF(msg+len, MAXLEN-len, "    Carr Slots[%d]:   \t[ ", N_carrier);
-        for (int i = 0; i < N_carrier; i++)
+        for (int32_t i = 0; i < N_carrier; i++)
         {
-            int slot_val = profile->internalJesdCfg.slotTable[i];
+            int32_t slot_val = profile->internalJesdCfg.slotTable[i];
             if (slot_val == ADRV904X_SLOT_TABLE_UNUSED)
             {
                 len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "-");
@@ -2474,9 +2464,9 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
         ADI_LIBRARY_MEMSET(&msg[0], 0, sizeof(msg));
         len = 0;
         len += ADI_LIBRARY_SNPRINTF(msg+len, MAXLEN-len, "    Iface Slots[%d]:  \t[ ", N_iface);
-        for (int i = 0; i < N_iface; i++)
+        for (int32_t i = 0; i < N_iface; i++)
         {
-            int slot_val = profile->internalJesdCfg.ifaceSlotTable[i];
+            int32_t slot_val = profile->internalJesdCfg.ifaceSlotTable[i];
             if (slot_val == ADRV904X_SLOT_TABLE_UNUSED)
             {
                 len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "-");
@@ -2499,13 +2489,13 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
     if (bPrintSlotTablesFull == 1U)
     {
         ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "    Iface Slot Table:", 0);
-        for (int i = 0; i < N_iface; i++)
+        for (int32_t i = 0; i < N_iface; i++)
         {
             ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "      s[%d]\t = %d", i, profile->internalJesdCfg.ifaceSlotTable[i]);
         }
 
         ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Carrier Slot Table:", 0);
-        for (int i = 0; i < N_carrier; i++)
+        for (int32_t i = 0; i < N_carrier; i++)
         {
             ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "      s[%d]\t = %d", i, profile->internalJesdCfg.slotTable[i]);
         }
@@ -2516,18 +2506,18 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
     {
         ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "      |-----------------------------------------------------------------------------------------------------------", 0);
         /* Cslot rows (count = N_mod) */
-        for (int i = 0; i < N_mod; i++)
+        for (int32_t i = 0; i < N_mod; i++)
         {
             ADI_LIBRARY_MEMSET(&msg[0], 0, sizeof(msg));
             len = 0;
             
-            int carrStartIdx = i * N_iface;
-            int carrEndIdx = carrStartIdx + N_iface;
+            int32_t carrStartIdx = i * N_iface;
+            int32_t carrEndIdx = carrStartIdx + N_iface;
 
             len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "      | Carr Slot[%d-%d]   \t | ", carrStartIdx, carrEndIdx - 1);
-            for (int j = carrStartIdx; j < carrEndIdx; j++)
+            for (int32_t j = carrStartIdx; j < carrEndIdx; j++)
             {
-                int slot_val = profile->internalJesdCfg.slotTable[j];
+                int32_t slot_val = profile->internalJesdCfg.slotTable[j];
                 if (slot_val == ADRV904X_SLOT_TABLE_UNUSED)
                 {
                     len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "-- | ");
@@ -2545,9 +2535,9 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
         ADI_LIBRARY_MEMSET(&msg[0], 0, sizeof(msg));
         len = 0;
         len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "      | Iface Slot[%d-%d]   \t | ", 0, N_iface-1);
-        for (int i = 0; i < N_iface; i++)
+        for (int32_t i = 0; i < N_iface; i++)
         {
-            int slot_val = profile->internalJesdCfg.ifaceSlotTable[i];
+            int32_t slot_val = profile->internalJesdCfg.ifaceSlotTable[i];
             if (slot_val == ADRV904X_SLOT_TABLE_UNUSED)
             {
                 len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "-- | ");
@@ -2568,10 +2558,10 @@ static void printfCducState(adi_adrv904x_Device_t* const                        
         ADI_LIBRARY_MEMSET(&msg[0], 0, sizeof(msg));
         len = 0;
         len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "Delay Diff per Carrier : [");
-        for (int i = 0; i < (int)ADI_ADRV904X_MAX_CARRIERS; i++)
+        for (int32_t i = 0; i < (int32_t)ADI_ADRV904X_MAX_CARRIERS; i++)
         {
             len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, "%d", profile->delayCfg.delayDiffPerCarrier_cc[i]);
-            if (i < (int)ADI_ADRV904X_MAX_CARRIERS - 1)
+            if (i < (int32_t)ADI_ADRV904X_MAX_CARRIERS - 1)
             {
                 len += ADI_LIBRARY_SNPRINTF(msg + len, MAXLEN - len, ", ");
             }
@@ -2610,10 +2600,10 @@ static uint16_t adiLfsrShift(adi_adrv904x_Device_t* const device)
 }
 
 
-static int adiRandInt(adi_adrv904x_Device_t* const device)
+static int32_t adiRandInt(adi_adrv904x_Device_t* const device)
 {
     uint16_t tmp = adiLfsrShift(device);
-    int ret = (int)tmp;
+    int32_t ret = (int32_t)tmp;
     return (ret);
 }
 
@@ -2627,12 +2617,22 @@ static int adiRandInt(adi_adrv904x_Device_t* const device)
  *      - random slot selected
  */
 
-static int randomSlotGet(adi_adrv904x_Device_t* const device, int lower, int upper)
+static int32_t randomSlotGet(adi_adrv904x_Device_t* const device, int32_t lower, int32_t upper)
 {
-    int num = (adiRandInt(device) % (upper - lower + 1)) + lower;
+    int32_t num = (adiRandInt(device) % (upper - lower + 1)) + lower;
     return num;
 }
 
+/* Note: returns 0 for undefined value of log2(0)! */
+static uint32_t adiLog2Int(uint32_t n)
+{
+    uint32_t result = 0u;
+    while (n >>= 1u)
+    {
+        result++;
+    }
+    return result;
+}
 
 /* function: randomTableGenCmodel() -- port of cmodel function "random_table_gen"
  * inputs:
@@ -2647,37 +2647,37 @@ static int randomSlotGet(adi_adrv904x_Device_t* const device, int lower, int upp
  *      - jesd_slot_valid_calc[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS]
  *      - error_struct
  * return:
- *      - int (nonzero return indicates an error occurred)
+ *      - int32_t (nonzero return indicates an error occurred)
  */
 
 static adi_adrv904x_ErrAction_e randomTableGenCmodel( adi_adrv904x_Device_t* const device,
-    const int carr_enable[ADI_ADRV904X_MAX_TXCHANNELS], const int carr_clk_period[ADI_ADRV904X_MAX_TXCHANNELS], const int jesdClkPeriod, const int jesdMaxSlot, const int ifaceMaxSlots,
-    int carr_deinterleaver_slot[ADI_ADRV904X_MAX_TXCHANNELS], int jesdSlotTable[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS], int jesd_slot_valid_calc[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS])
+    const int32_t carr_enable[ADI_ADRV904X_MAX_TXCHANNELS], const int32_t carr_clk_period[ADI_ADRV904X_MAX_TXCHANNELS], const int32_t jesdClkPeriod, const int32_t jesdMaxSlot, const int32_t ifaceMaxSlots,
+    int32_t carr_deinterleaver_slot[ADI_ADRV904X_MAX_TXCHANNELS], int32_t jesdSlotTable[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS], int32_t jesd_slot_valid_calc[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS])
 {
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    int log2_jesd_max_slot = 0;
-    int array_size = 0;
-    int log2_carr_rate = 0;
-    int index = 0;
-    int array_size_per_rate[ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES] = { 1, 2, 4, 8, 16, 32, 64 };
+    int32_t log2_jesd_max_slot = 0;
+    int32_t array_size = 0;
+    int32_t log2_carr_rate = 0;
+    int32_t index = 0;
+    int32_t array_size_per_rate[ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES] = { 1, 2, 4, 8, 16, 32, 64 };
 
-    int jesd_to_carr_ratio[ADI_ADRV904X_MAX_TXCHANNELS];
-    int carr_rand[ADI_ADRV904X_MAX_TXCHANNELS];
-    int slot_found[ADI_ADRV904X_MAX_TXCHANNELS];
-    int iface_table_valid[ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS];
-    int slot_array[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
-    int slot_array_copy[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
-    int array_size_per_rate_copy[ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES];
+    int32_t jesd_to_carr_ratio[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t carr_rand[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t slot_found[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t iface_table_valid[ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS];
+    int32_t slot_array[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
+    int32_t slot_array_copy[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
+    int32_t array_size_per_rate_copy[ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES];
 
     /* Initialize Outputs and lcl vars */
-    for (int c = 0; c < (int)ADI_ADRV904X_MAX_TXCHANNELS; c++)
+    for (int32_t c = 0; c < (int32_t)ADI_ADRV904X_MAX_TXCHANNELS; c++)
     {
         jesd_to_carr_ratio[c] = carr_clk_period[c] / jesdClkPeriod;
         carr_rand[c] = 0;
         slot_found[c] = 0;
         carr_deinterleaver_slot[c] = 0;
     }
-    for (int c = 0; c < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; c++)
+    for (int32_t c = 0; c < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; c++)
     {
         jesdSlotTable[c] = ADRV904X_SLOT_TABLE_UNUSED;
         jesd_slot_valid_calc[c] = 0;
@@ -2686,37 +2686,37 @@ static adi_adrv904x_ErrAction_e randomTableGenCmodel( adi_adrv904x_Device_t* con
     }
 
     /* Initialize lcl vars */
-    for (int v = 0; v < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; v++)
+    for (int32_t v = 0; v < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; v++)
     {
         iface_table_valid[v] = 0;
     }
 
-    for (int j = 0; j < ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES; j++)
+    for (int32_t j = 0; j < ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES; j++)
     {
         array_size_per_rate_copy[j] = 0u;
     }
 
-    log2_jesd_max_slot = log2(jesdMaxSlot);
+    log2_jesd_max_slot = (int32_t)adiLog2Int((uint32_t)jesdMaxSlot);
 
     /* Get random starting slots for each carrier */
-    for (int c = 0; c < (int)ADI_ADRV904X_MAX_TXCHANNELS; c++)
+    for (int32_t c = 0; c < (int32_t)ADI_ADRV904X_MAX_TXCHANNELS; c++)
     {
         slot_found[c] = 0;
         if (carr_enable[c])
         {
-            for (int s = 0; s < jesdMaxSlot; s++)
+            for (int32_t s = 0; s < jesdMaxSlot; s++)
             {
                 slot_array_copy[s] = slot_array[s];
             }
-            for (int j = 0; j < ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES; j++)
+            for (int32_t j = 0; j < ADRV904X_RAND_TABLE_NUM_ARRAY_SIZES; j++)
             {
                 array_size_per_rate_copy[j] = array_size_per_rate[j];
             }
-            log2_carr_rate = log2(jesd_to_carr_ratio[c]);
+            log2_carr_rate = (int32_t)adiLog2Int((uint32_t)jesd_to_carr_ratio[c]);
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
             ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "log2_carr_rate %d = %d", c, log2_carr_rate);
 #endif
-            for (int i = 0; i < jesd_to_carr_ratio[c]; i++)
+            for (int32_t i = 0; i < jesd_to_carr_ratio[c]; i++)
             {
                 if (i == 0)
                 {
@@ -2737,41 +2737,41 @@ static adi_adrv904x_ErrAction_e randomTableGenCmodel( adi_adrv904x_Device_t* con
                 {
                     slot_found[c] = 1;
                 }
-                for (int s = carr_rand[c]; s < jesdMaxSlot; s = s + jesd_to_carr_ratio[c])
+                for (int32_t s = carr_rand[c]; s < jesdMaxSlot; s = s + jesd_to_carr_ratio[c])
                 {
                     slot_found[c] = slot_found[c] && (jesd_slot_valid_calc[s] == 0);
                 }
                 if (slot_found[c] == 1)
                 {
                     iface_table_valid[carr_rand[c] % ifaceMaxSlots] = 1;
-                    for (int s = 0; s < jesdMaxSlot; s = s + 1)
+                    for (int32_t s = 0; s < jesdMaxSlot; s = s + 1)
                     {
                         if (((slot_array[s] - carr_rand[c]) % jesd_to_carr_ratio[c]) == 0)
                         {
-                            for (int k = s; k < jesdMaxSlot; k++)
+                            for (int32_t k = s; k < jesdMaxSlot; k++)
                             {
                                 slot_array[k] = slot_array[k + 1];
                             }
                         }
                     }
-                    for (int s = log2_carr_rate; s <= log2_jesd_max_slot; s++)
+                    for (int32_t s = log2_carr_rate; s <= log2_jesd_max_slot; s++)
                     {
                     }
                     break;
                 }
                 else
                 {
-                    for (int s = index; s < jesdMaxSlot; s = s + 1)
+                    for (int32_t s = index; s < jesdMaxSlot; s = s + 1)
                     {
                         if (((slot_array_copy[s] - carr_rand[c]) % jesd_to_carr_ratio[c]) == 0)
                         {
-                            for (int k = s; k < jesdMaxSlot; k++)
+                            for (int32_t k = s; k < jesdMaxSlot; k++)
                             {
                                 slot_array_copy[k] = slot_array_copy[k + 1];
                             }
                         }
                     }
-                    for (int s = log2_carr_rate; s <= log2_jesd_max_slot; s++)
+                    for (int32_t s = log2_carr_rate; s <= log2_jesd_max_slot; s++)
                     {
                         array_size_per_rate_copy[s] = array_size_per_rate_copy[s] - (1 << (s - log2_carr_rate));
                     }
@@ -2787,7 +2787,7 @@ static adi_adrv904x_ErrAction_e randomTableGenCmodel( adi_adrv904x_Device_t* con
             }
             else
             {
-                for (int s = carr_rand[c]; s < jesdMaxSlot; s = s + jesd_to_carr_ratio[c])
+                for (int32_t s = carr_rand[c]; s < jesdMaxSlot; s = s + jesd_to_carr_ratio[c])
                 {
                     jesdSlotTable[s] = c;
                     jesd_slot_valid_calc[s] = 1;
@@ -2822,21 +2822,21 @@ static adi_adrv904x_ErrAction_e randomTableGenWrapper(  adi_adrv904x_Device_t* c
                                                         adrv904x_CarrierJesdParameters_t* const     jesd_prm)
 {
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    unsigned int hsdig_rate_in_kHz = 0;
+    uint32_t hsdig_rate_in_kHz = 0;
 
     /* ------------------------------------------------------------------------------------------------- */
     /* Glue logic to convert input args into into args required by randomTableGenCmodel */
-    int jesdClkPeriod = 1 << jesd_prm->divide;
-    int jesdMaxSlot = jesd_prm->maxSlot;
-    int ifaceMaxSlots = jesd_prm->ifaceMaxSlot;
-    int carr_enable[ADI_ADRV904X_MAX_TXCHANNELS];
-    int carr_clk_period[ADI_ADRV904X_MAX_TXCHANNELS];
-    int dummy_iface_slot_count[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t jesdClkPeriod = 1 << jesd_prm->divide;
+    int32_t jesdMaxSlot = jesd_prm->maxSlot;
+    int32_t ifaceMaxSlots = jesd_prm->ifaceMaxSlot;
+    int32_t carr_enable[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t carr_clk_period[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t dummy_iface_slot_count[ADI_ADRV904X_MAX_TXCHANNELS];
 
 
     /* Extract required info from cduc */
     hsdig_rate_in_kHz = (1 << jesd_prm->divide) * jesd_prm->frequency_kHz;
-    for (int c = 0; c < (int)ADI_ADRV904X_MAX_TXCHANNELS; c++)
+    for (int32_t c = 0; c < (int32_t)ADI_ADRV904X_MAX_TXCHANNELS; c++)
     {
         /* Extract "carr_enable" info from cduc. This will EXCLUDE dummy carriers from rand table generation */
         carr_enable[c] = cduc->carriers[c].enable;
@@ -2857,7 +2857,7 @@ static adi_adrv904x_ErrAction_e randomTableGenWrapper(  adi_adrv904x_Device_t* c
         if ((cduc->carriers[c].enable == 0) &&
             (cduc->carriers[c].sampleRate_kHz > 0u))
         {
-            for (int s = 0; s < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; s++)
+            for (int32_t s = 0; s < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; s++)
             {
                 if (jesd_prm->ifaceSlotTable[s] == c)
                 {
@@ -2868,9 +2868,9 @@ static adi_adrv904x_ErrAction_e randomTableGenWrapper(  adi_adrv904x_Device_t* c
     }
 
     /* Uninitialized "output" vars to be returned */
-    int carr_deinterleaver_slot[ADI_ADRV904X_MAX_TXCHANNELS];
-    int jesdSlotTable[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
-    int jesd_slot_valid_calc[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
+    int32_t carr_deinterleaver_slot[ADI_ADRV904X_MAX_TXCHANNELS];
+    int32_t jesdSlotTable[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
+    int32_t jesd_slot_valid_calc[ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS];
     
     /* ------------------------------------------------------------------------------------------------- */
 
@@ -2896,18 +2896,18 @@ static adi_adrv904x_ErrAction_e randomTableGenWrapper(  adi_adrv904x_Device_t* c
     (void)carr_deinterleaver_slot;
 
     jesd_prm->slotValid = 0u;                                                      /* Re-Initialize 64bit slotValid word to 0 until filled later */
-    for (int s = 0; s < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; s++)
+    for (int32_t s = 0; s < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; s++)
     {
         jesd_prm->slotValid |= ((1ull & jesd_slot_valid_calc[s]) << s);            /* bitwise-OR this carrier-slot's valid bit into 64bit word */
         jesd_prm->slotTable[s] = jesdSlotTable[s];                               /* direct-copy of carrier-slot table */
     }
 
-    for (int i = 0; i < jesd_prm->ifaceMaxSlot; i++)
+    for (int32_t i = 0; i < jesd_prm->ifaceMaxSlot; i++)
     {
         jesd_prm->ifaceSlotTable[i] = ADRV904X_SLOT_TABLE_UNUSED;                 /* Re-Initialize all Iface slots as UNUSED until filled later */
 
         unsigned short tmp = ADRV904X_SLOT_TABLE_UNUSED;
-        for (int c = i; c < jesd_prm->numSlots; c = c + jesd_prm->ifaceMaxSlot)
+        for (int32_t c = i; c < jesd_prm->numSlots; c = c + jesd_prm->ifaceMaxSlot)
         {
             unsigned short cval = jesd_prm->slotTable[c];
             if (cval != ADRV904X_SLOT_TABLE_UNUSED)
@@ -2936,14 +2936,14 @@ static adi_adrv904x_ErrAction_e randomTableGenWrapper(  adi_adrv904x_Device_t* c
     } /* end of iface-slot forloop */
 
     /* Place dummy carriers into the Iface slot table, in the first empty slots found */
-    for (int c = 0; c < (int)ADI_ADRV904X_MAX_TXCHANNELS; c++)
+    for (int32_t c = 0; c < (int32_t)ADI_ADRV904X_MAX_TXCHANNELS; c++)
     {
         /* Check if We have dummy carrier (i.e. carrier sample rate > 0 and carrier is not enabled) */
         if ((cduc->carriers[c].enable == 0) &&
             (cduc->carriers[c].sampleRate_kHz > 0u))
         {
             /* iface table: insert carrier  into first UNUSED slots found until all removed slots have been reinserted */
-            int s = 0;
+            int32_t s = 0;
             while (
                 (dummy_iface_slot_count[c] > 0) &&
                 (s < jesd_prm->ifaceMaxSlot))
@@ -2997,8 +2997,8 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCducDelayMatch(   adi_adrv904x
                                                                     const adi_adrv904x_ChannelFilterOutputCfg_t* const          carrierChannelFilter,
                                                                     adi_adrv904x_CarrierDelayParameters_t* const                prms)
 {
-    const int num_carr = (int)ADI_ADRV904X_MAX_CARRIERS;
-    const int NUM_DELAY_ESTIMATE_LOOPS = 3;
+    const int32_t num_carr = (int32_t)ADI_ADRV904X_MAX_CARRIERS;
+    const int32_t NUM_DELAY_ESTIMATE_LOOPS = 3;
     const uint64_t hsdigclk_limit = 1000000u; /* 1 GHz max rate for hsdig clk */
     
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
@@ -3124,7 +3124,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCducDelayMatch(   adi_adrv904x
      * Second pass of the loop is to calculate each carrier delay with the delay matching component included.
      * Third pass of the loop is to turn off delay matching for carriers that resolved to matching = on but num buffers = 0 in 2nd loop
      */
-    for (int k = 0; k < NUM_DELAY_ESTIMATE_LOOPS; k++)
+    for (int32_t k = 0; k < NUM_DELAY_ESTIMATE_LOOPS; k++)
     {
         /* initialize parameters altered by the loop operation */
         for (i = 0u; i < num_carr; i++)
@@ -3180,9 +3180,9 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCducDelayMatch(   adi_adrv904x
         }
 
         /* Band offset delays */
-        for (int b = 0; b < (int)ADI_ADRV904X_NO_OF_BANDS; b++)
+        for (int32_t b = 0; b < (int32_t)ADI_ADRV904X_NO_OF_BANDS; b++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int32_t j = 0; j < 10; j++)
             {
                 band_en_offset[b] = (band_clk_period[b] - 1) - (j * jesdClkPeriod);
                 if (band_en_offset[b] < 0)
@@ -3217,7 +3217,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCducDelayMatch(   adi_adrv904x
                     deint_pipe +
                     additional_pipe_delay;
                 
-                int tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
+                int32_t tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
                 if (((prms->groupDelayCarr_cc[i] + band_en_cntr_val_jesd_sync + pipe_on_sync_jesd + ft_del_on_sync) % band_clk_period[tmp_band_select]) == 0)
                 {
                     prms->carrierComponents[i].bandAlignDelay = 0;
@@ -3258,10 +3258,10 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCducDelayMatch(   adi_adrv904x
         /* Calculate hsdigclk from sample rate */
         uint64_t hsdigclk_calc_kHz = 0;
         uint64_t max_hsdigclk_kHz = 0;
-        for (int cc = 0; cc < prms->noOfCarriers; cc++)
+        for (int32_t cc = 0; cc < prms->noOfCarriers; cc++)
         {
             
-            for (int n = 0; hsdigclk_calc_kHz < hsdigclk_limit; ++n)
+            for (int32_t n = 0; hsdigclk_calc_kHz < hsdigclk_limit; ++n)
             {
                 hsdigclk_calc_kHz = carrierConfigsOut->internalJesdCfg.jesdSampleRate_kHz[cc] * (1 << n);
                 max_hsdigclk_kHz = hsdigclk_calc_kHz < hsdigclk_limit ? hsdigclk_calc_kHz : max_hsdigclk_kHz;
@@ -3352,7 +3352,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCddcDelayMatch(   adi_adrv904x
                                                                     const adi_adrv904x_ChannelFilterOutputCfg_t* const          carrierChannelFilter,
                                                                     adi_adrv904x_CarrierDelayParameters_t* const                prms)
 {
-    const int num_carr = (int)ADI_ADRV904X_MAX_CARRIERS;
+    const int32_t num_carr = (int32_t)ADI_ADRV904X_MAX_CARRIERS;
     const uint64_t hsdigclk_limit = 1000000u; /* 1 GHz max rate for hsdig clk */
     
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
@@ -3440,7 +3440,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCddcDelayMatch(   adi_adrv904x
         /* Assuming cddc_clk_period is 1 sample
          * powermeas_period is 2 samples (clock rate is 491.52Mhz)
          */
-        int tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
+        int32_t tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
         prms->carrierComponents[i].halfBand.pipe = cddcHbSlotGenDelay(i, 1u, band_clk_period[tmp_band_select], 2u) + dds_cmul_delay;
     }
 
@@ -3450,7 +3450,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCddcDelayMatch(   adi_adrv904x
         pre_stage_carr_en = 0u;
         for (i = 0u; i < num_carr; i++)
         {
-            int tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
+            int32_t tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
             resrc_prm.dlyPrev[i]   = prms->carrierComponents[i].halfBand.pipe;
             resrc_prm.clkPeriod[i] = (carr_num_hb[i] > hb) ? (resrc_prm.clkPeriod[i] << 1u) : (band_clk_period[tmp_band_select] << 1u);
             pre_stage_carr_en |= (carr_num_hb[i] >= hb) ? (carrierConfigsOut->carriersEnabled & (1u << i)) : 0u;
@@ -3482,7 +3482,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCddcDelayMatch(   adi_adrv904x
     {
         if (carrierConfigsOut->carrierCfgs.carrierEnable[i] > 0u)
         {
-            prms->carrierComponents[i].gainResrc = resourceShareDelay(device, &resrc_prm, (int)carrierConfigsOut->carriersEnabled, jesdClkPeriod, i);
+            prms->carrierComponents[i].gainResrc = resourceShareDelay(device, &resrc_prm, (int32_t)carrierConfigsOut->carriersEnabled, jesdClkPeriod, i);
         }
     }
 
@@ -3510,7 +3510,7 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCddcDelayMatch(   adi_adrv904x
                 1u;
 
             /* Sum of (BandDDC + CDDC) to get combined group delay, which determines starting points when matching/minimizing skew between carriers */
-            int tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
+            int32_t tmp_band_select = carrierConfigsOut->carrierCfgs.bandSelect[i];
             prms->groupDelayBand_cc[i] = band_latencies_cc[tmp_band_select];
             prms->groupDelayComb_cc[i] = prms->groupDelayBand_cc[i] + prms->groupDelayCarr_cc[i];
 
@@ -3530,10 +3530,10 @@ static adi_adrv904x_ErrAction_e adrv904x_CalculateCddcDelayMatch(   adi_adrv904x
     /* Calculate hsdigclk from sample rate */
     uint64_t hsdigclk_calc_kHz = 0;
     uint64_t max_hsdigclk_kHz = 0;
-    for (int cc = 0; cc < prms->noOfCarriers; cc++)
+    for (int32_t cc = 0; cc < prms->noOfCarriers; cc++)
     {
             
-        for (int n = 0; hsdigclk_calc_kHz < hsdigclk_limit; ++n)
+        for (int32_t n = 0; hsdigclk_calc_kHz < hsdigclk_limit; ++n)
         {
             hsdigclk_calc_kHz = carrierConfigsOut->internalJesdCfg.jesdSampleRate_kHz[cc] * (1 << n);
             max_hsdigclk_kHz = hsdigclk_calc_kHz < hsdigclk_limit ? hsdigclk_calc_kHz : max_hsdigclk_kHz;
@@ -3651,17 +3651,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CducDelayConfigurationCalculate(  adi_
         if ((carrierConfigs->channelMask & (1U << txIdx)) > 0U)
         {
             /* TPGSWE-7944: Store calculated latency into device profile */
-            uint32_t clkCddcCducInkHz = tmpDly.jesdFrequency_kHz * pow(2, tmpDly.clkToJesdRatioLog2);
+            uint32_t clkCddcCducInkHz = tmpDly.jesdFrequency_kHz * (1 << tmpDly.clkToJesdRatioLog2);
             device->devStateInfo.txCarrierLatencySolved.channel[txIdx].clkCddcCducInkHz = clkCddcCducInkHz;
 
             for (uint8_t carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
             {
                 device->devStateInfo.txCarrierLatencySolved.channel[txIdx].groupDelay[carrierIdx] = tmpDly.groupDelayComb_cc[carrierIdx];
             }
-        }
-        else
-        {
-            ADI_LIBRARY_MEMSET(&device->devStateInfo.txCarrierLatencySolved.channel[txIdx], 0, sizeof(adi_adrv904x_CarrierReconfigLatencyCfg_t));
         }
     }
 
@@ -3728,7 +3724,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayConfigurationCalculate(  adi_
         if ((carrierConfigs->channelMask & (1U << rxIdx)) > 0U)
         {
             /* TPGSWE-7944: Store calculated latency into device profile */
-            uint32_t clkCddcCducInkHz = tmpDly.jesdFrequency_kHz * pow(2, tmpDly.clkToJesdRatioLog2);
+            uint32_t clkCddcCducInkHz = tmpDly.jesdFrequency_kHz * (1 << tmpDly.clkToJesdRatioLog2);
             device->devStateInfo.rxCarrierLatencySolved.channel[rxIdx].clkCddcCducInkHz = clkCddcCducInkHz;
 
             for (uint8_t carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
@@ -3748,6 +3744,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CddcDelayConfigurationCalculate(  adi_
 ADI_API adi_adrv904x_ErrAction_e adrv904x_ReconfigSolutionInit( adi_adrv904x_Device_t* const                device,
                                                                 const adi_adrv904x_CarrierJesdCfg_t* const  inJesdCfg,
                                                                 const adi_adrv904x_CarrierRadioCfg_t        inProfileCfgs[],
+                                                                const adi_adrv904x_ChannelFilterCfg_t       infwCmdsFilterCfg[],
                                                                 uint32_t                                    inNumProfiles,
                                                                 adi_adrv904x_CarrierReconfigSoln_t* const   soln)
 {    
@@ -3777,10 +3774,13 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_ReconfigSolutionInit( adi_adrv904x_Dev
     /* Copy input data into solution structure */
     ADI_LIBRARY_MEMCPY(&soln->inputs.jesdCfg, inJesdCfg, sizeof(adi_adrv904x_CarrierJesdCfg_t));
     soln->inputs.numProfiles = inNumProfiles;
-    for (int i = 0U; i < (int)soln->inputs.numProfiles; i++)
+    for (int32_t t = 0U; t < (int32_t)soln->inputs.numProfiles; t++)
     {
         /* Copy the single profile if caller indicated it was populated */
-        ADI_LIBRARY_MEMCPY(&soln->inputs.profileCfgs[i], &inProfileCfgs[i], sizeof(adi_adrv904x_CarrierRadioCfg_t));
+        ADI_LIBRARY_MEMCPY(&soln->inputs.profileCfgs[t], &inProfileCfgs[t], sizeof(adi_adrv904x_CarrierRadioCfg_t));
+        
+        /* Copy the Channel Filter coeff data needed as input to FW CMD sequence */
+        ADI_LIBRARY_MEMCPY(&soln->inputs.fwCmdsFilterCfg[t], &infwCmdsFilterCfg[t], sizeof(adi_adrv904x_ChannelFilterCfg_t));
     }
     
     /* Initialize output data for JESD and carrier profiles */
@@ -3911,22 +3911,21 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierJesdParametersCalculate(   adi_
     
     
     /* Configurator changed to use input arg 8/16 instead of hardcoded 8 (for Tx Slot shuffling to manipulate the JESD clk rate to improve slot resolution (4ns --> 2ns)
-     * API was using initialCfg value. Need to change minNumSLots before calling into this function
-     */
-    if (rxFlag == 1u)
-    {
-        numSlotComp = initialCfg->maxSlot;
-    }
-    else
-    {
-        /* only need to look at minNumSlots passed into this function in the case of forcing from 8 --> 16 for increasing JESD rate from 245M --> 491M
-         * numSlotComp = carrierConfigsOut->internalJesdCfg.minNumSlots; 
-         */
-        
-        /* Until we need that functionality, continue to use maxSlot from the initital cfg */
-        numSlotComp = initialCfg->maxSlot;
-    }
-    
+      * API was using initialCfg value. Need to change minNumSLots before calling into this function
+      *
+      * if (rxFlag == 1u)
+      * {
+      *    numSlotComp = initialCfg->maxSlot;
+      * }
+      * else
+      * {
+          * only need to look at minNumSlots passed into this function in the case of forcing from 8 --> 16 for increasing JESD rate from 245M --> 491M
+          * numSlotComp = carrierConfigsOut->internalJesdCfg.minNumSlots;
+          * Until we need that functionality, continue to use maxSlot from the initital cfg
+          * numSlotComp = initialCfg->maxSlot;
+      * }
+    */
+	numSlotComp = initialCfg->maxSlot;
     /* Logs for seeing interface slots used (8 vs 16) by initCfg vs.  calculated value required here */
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "adrv904x_CarrierJesdParametersCalculate() :: Initital Cfg JESD Iface Max Slots (8 or 16) = %d", initialCfg->maxSlot);
@@ -7163,28 +7162,197 @@ static adi_adrv904x_ErrAction_e cduc_assign_coefs(  adi_adrv904x_Device_t* const
     return recoveryAction;
 }
 
-ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv904x_Device_t* const                            device,
-                                                                        const adi_adrv904x_CarrierRadioCfg_t* const             carrierConfigs,
-                                                                        const adi_adrv904x_ChannelFilterOutputCfg_t* const      carrierChannelFilter,
-                                                                        adi_adrv904x_CarrierReconfigProfileCfgOut_t* const      carrierConfigsOut,
-                                                                        const uint8_t                                           rxFlag)
+
+adi_adrv904x_ErrAction_e adrv904x_CarrierChanFilterCfgCmdSequence(  adi_adrv904x_Device_t* const                    device,
+                                                                    uint8_t                                         rxFlag,
+                                                                    uint8_t                                         apply,
+                                                                    const adi_adrv904x_CarrierRadioCfg_t * const    pCarrierRadioConfig,
+                                                                    const adi_adrv904x_ChannelFilterCfg_t * const   pChannelFilterCfg,
+                                                                    adi_adrv904x_ChannelFilterOutputCfg_t * const   pChFilterOutput)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
+    uint32_t carrierIdx = 0U;
+    uint32_t coeffAddressOffset = 0U;
+    uint32_t coeffIdx = 0U;
+    uint32_t coeffLoadIdx = 0U;
+    adrv904x_CpuCmdId_t finalFwCmdId = 0U;
+    adrv904x_CpuCmdStatus_e cmdStatus = ADRV904X_CPU_CMD_STATUS_GENERIC;
+    adrv904x_CpuErrorCode_e cpuErrorCode = ADRV904X_CPU_SYSTEM_SIMULATED_ERROR;
+    
+    char coeffLoadBuf[sizeof(adi_adrv904x_ChannelFilterLoadMaxSize_t)];
+    adi_adrv904x_ChannelFilterLoad_t* const channelFilterLoad = (adi_adrv904x_ChannelFilterLoad_t*)&coeffLoadBuf;
+    adi_adrv904x_CarrierRadioCfgCmd_t chFilterCmd;
+    adi_adrv904x_ChannelFilterResp_t chFilterCmdRsp;
+    adi_adrv904x_ChannelFilterCarrierCfg_t tmpCarrierFilterCfg;
+    adi_adrv904x_ChannelFilterLoadResp_t chFilterLoadCmdRsp;
+
+    
+    ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
+    ADI_LIBRARY_MEMSET(&chFilterLoadCmdRsp, 0, sizeof(chFilterLoadCmdRsp));
+    ADI_LIBRARY_MEMSET(&chFilterCmd, 0, sizeof(chFilterCmd));
+    ADI_LIBRARY_MEMSET(&tmpCarrierFilterCfg, 0, sizeof(tmpCarrierFilterCfg));
+    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
+    
+    /* Last FW CMD in the sequence is different for RX vs TX. 
+     * All other FW Commands in this sequence are common to Rx and Tx 
+     */
+    if (rxFlag == 1u)
+    {
+        finalFwCmdId = ADRV904X_CPU_CMD_ID_RX_CARRIER_RECONFIGURE;
+        
+    }
+    else
+    {
+        finalFwCmdId = ADRV904X_CPU_CMD_ID_TX_CARRIER_RECONFIGURE;
+    }
+        
+    /* ----------------------------------------------------------
+     * FW COMMAND #1: Load 648 Coefficients, chunk by chunk 
+     * ----------------------------------------------------------
+     */
+    /* Perform endianness correction and load channel filter coefficients */
+    channelFilterLoad->coeffIdx = 0U;
+    for (coeffIdx = 0U; coeffIdx < ADI_ADRV904X_NUM_CF_COEFFICIENTS; coeffIdx++)
+    {
+        coeffAddressOffset = coeffLoadIdx * sizeof(int16_t);
+        ADI_LIBRARY_MEMCPY((void*)((uint8_t*)channelFilterLoad + sizeof(adi_adrv904x_ChannelFilterLoad_t) + coeffAddressOffset), (void*)(&pChannelFilterCfg->coeffs[coeffIdx]), sizeof(int16_t));
+        coeffLoadIdx++;
+        
+        /* Once we fill up enough coefficients or we're on the last coefficient send to fw and clear out the buffer */
+        if ((coeffLoadIdx == ADI_ADRV904X_CHAN_FILTER_COEFF_LOAD_LEN) || (coeffIdx == (ADI_ADRV904X_NUM_CF_COEFFICIENTS - 1U)))
+        {
+            /* Using coeffLoadIdx after incremented to give us the number of coefficients actually loaded */
+            channelFilterLoad->coeffNum = (uint16_t)ADRV904X_HTOCL(coeffLoadIdx);
+    
+            /* Send command and receive response */
+            recoveryAction = adrv904x_CpuCmdSend(   device,
+                                                    ADI_ADRV904X_CPU_TYPE_0,
+                                                    ADRV904X_LINK_ID_0,
+                                                    ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_COEFFS,
+                                                    (void*)channelFilterLoad,
+                                                    sizeof(coeffLoadBuf),
+                                                    (void*)&chFilterLoadCmdRsp,
+                                                    sizeof(chFilterLoadCmdRsp),
+                                                    &cmdStatus);
+            if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+            {
+                ADI_ADRV904X_CPU_CMD_RESP_CHECK_RETURN((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction);
+            }
+            
+            ADI_LIBRARY_MEMSET(&coeffLoadBuf, 0, sizeof(coeffLoadBuf));
+            
+            channelFilterLoad->coeffIdx = coeffIdx + 1;
+            coeffLoadIdx = 0U;
+        }
+    }
+
+    /* ----------------------------------------------------------
+     * FW COMMAND #2: Load Carrier Filter Configuration metadata
+     * ----------------------------------------------------------
+     */
+    
+    /* Perform endianness correction and load channel filter configs */
+    for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
+    {
+        tmpCarrierFilterCfg.numberOfFilterTaps[carrierIdx] = ADRV904X_HTOCS(pChannelFilterCfg->carrierFilterCfg.numberOfFilterTaps[carrierIdx]);
+        tmpCarrierFilterCfg.asymmetricFilterTaps[carrierIdx] = pChannelFilterCfg->carrierFilterCfg.asymmetricFilterTaps[carrierIdx];
+    }
+    
+    recoveryAction = adrv904x_CpuCmdSend(   device,
+                                            ADI_ADRV904X_CPU_TYPE_0,
+                                            ADRV904X_LINK_ID_0,
+                                            ADRV904X_CPU_CMD_ID_LOAD_CHANNEL_FILTER_CFG,
+                                            (void*)&(tmpCarrierFilterCfg),
+                                            sizeof(tmpCarrierFilterCfg),
+                                            (void*)&chFilterLoadCmdRsp,
+                                            sizeof(chFilterLoadCmdRsp),
+                                            &cmdStatus);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_ADRV904X_CPU_CMD_RESP_CHECK_RETURN((adrv904x_CpuErrorCode_e)chFilterLoadCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction);
+    }
+        
+    
+    /* ----------------------------------------------------------
+     * FW COMMAND #3: Solve for and return HW settings. 
+     *                Optionally apply to HW
+     * ----------------------------------------------------------
+     */
+
+    /* Create local cmd data with Endianness correction */
+    chFilterCmd.carrierRadioCfg.channelMask = (uint32_t)ADRV904X_HTOCL(pCarrierRadioConfig->channelMask);
+    
+    for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
+    {
+        chFilterCmd.carrierRadioCfg.carriers[carrierIdx].enable = pCarrierRadioConfig->carriers[carrierIdx].enable;
+        chFilterCmd.carrierRadioCfg.carriers[carrierIdx].sampleRate_kHz = (uint32_t)ADRV904X_HTOCL(pCarrierRadioConfig->carriers[carrierIdx].sampleRate_kHz);
+        chFilterCmd.carrierRadioCfg.carriers[carrierIdx].ibw_kHz = (uint32_t)ADRV904X_HTOCL(pCarrierRadioConfig->carriers[carrierIdx].ibw_kHz);
+        chFilterCmd.carrierRadioCfg.carriers[carrierIdx].centerFrequency_kHz = (uint32_t)ADRV904X_HTOCL(pCarrierRadioConfig->carriers[carrierIdx].centerFrequency_kHz);
+    }
+    chFilterCmd.apply = apply;
+        
+    /* Reset for each profile */
+    ADI_LIBRARY_MEMSET(&chFilterCmdRsp, 0, sizeof(chFilterCmdRsp));
+        
+    /* Send command and receive response */
+    recoveryAction = adrv904x_CpuCmdSend(   device,
+                                            ADI_ADRV904X_CPU_TYPE_0,
+                                            ADRV904X_LINK_ID_0,
+                                            finalFwCmdId,
+                                            (void*)&chFilterCmd,
+                                            sizeof(chFilterCmd),
+                                            (void*)&chFilterCmdRsp,
+                                            sizeof(chFilterCmdRsp),
+                                            &cmdStatus);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_ADRV904X_CPU_CMD_RESP_CHECK_RETURN((adrv904x_CpuErrorCode_e)chFilterCmdRsp.status, cmdStatus, cpuErrorCode, recoveryAction);
+    }
+        
+    /* Pull out necessary results from response with Endianness correction */
+    for (carrierIdx = 0U; carrierIdx < ADI_ADRV904X_MAX_CARRIERS; carrierIdx++)
+    {
+        pChFilterOutput->numberOfFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.numberOfFilterTaps[carrierIdx]);
+        pChFilterOutput->dataPipeStop[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.dataPipeStop[carrierIdx]);
+        pChFilterOutput->bypassFilter[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.bypassFilter[carrierIdx]);
+        pChFilterOutput->oddFilterTaps[carrierIdx] = ADRV904X_CTOHS(chFilterCmdRsp.carrierFilterOutCfg.oddFilterTaps[carrierIdx]);
+    }
+
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, ADI_NO_ERROR_MESSAGE);
+        return recoveryAction;
+    }
+    return recoveryAction;
+}
+
+
+
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(adi_adrv904x_Device_t* const                            device,
+                                                                     const adi_adrv904x_CarrierRadioCfg_t* const             carrierConfigs,
+                                                                     const adi_adrv904x_ChannelFilterOutputCfg_t* const      carrierChannelFilter,
+                                                                     adi_adrv904x_CarrierReconfigProfileCfgOut_t* const      carrierConfigsOut,
+                                                                     const uint8_t                                           rxFlag,
+																	 const uint32_t                                          slotShufflingLoopsMax)
+
 {
     
     adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-    int ziter = 0;
-    int miter = 0;
-    int citer = 0;
-    int move_iter = 0;
-    int i = 0;
+    int32_t ziter = 0;
+    int32_t miter = 0;
+    int32_t citer = 0;
+    int32_t move_iter = 0;
+    int32_t i = 0;
     uint8_t bStopSearchOnConvergence = 1u;
-    
-    adi_adrv904x_CarrierReconfigProfileCfgOut_t cducStateMinDelay;
+
+    ADI_PLATFORM_LARGE_VAR_ALLOC(adi_adrv904x_CarrierReconfigProfileCfgOut_t, cducStateMinDelayPtr);
     adrv904x_CarrierJesdParameters_t default_jesd_prm;
     adrv904x_CarrierJesdParameters_t jesd_prm;
     adrv904x_SlotTableShuffleParams_t slot_prm;
     adrv904x_SlotTableShuffleParams_t slot_prm_copy;
     adrv904x_ShuffleDiag_t diag;
-    
+	
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
     ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, carrierConfigs);
@@ -7195,8 +7363,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
     (void)rxFlag;
         
     /* Initialize cducStateMinDelay solution with MAXIMUM delay value */
-    ADI_LIBRARY_MEMSET(&cducStateMinDelay, 0, sizeof(adi_adrv904x_CarrierReconfigProfileCfgOut_t));
-    cducStateMinDelay.delayCfg.delayMismatch_cc = __INT16_MAX__;
+    cducStateMinDelayPtr->delayCfg.delayMismatch_cc = __INT16_MAX__;
     
     ADI_LIBRARY_MEMSET(&default_jesd_prm, 0, sizeof(adrv904x_CarrierJesdParameters_t));
     ADI_LIBRARY_MEMSET(&jesd_prm, 0, sizeof(adrv904x_CarrierJesdParameters_t));
@@ -7211,11 +7378,11 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
     default_jesd_prm.ifaceMaxSlot = carrierConfigsOut->internalJesdCfg.ifaceMaxSlot;
     default_jesd_prm.initSlot = carrierConfigsOut->internalJesdCfg.initSlot;
     default_jesd_prm.slotValid = carrierConfigsOut->internalJesdCfg.slotValid;
-    for (i = 0; i < (int)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
+    for (i = 0; i < (int32_t)ADI_ADRV904X_NO_OF_JESD_CARRIER_SLOTS; i++)
     {
         default_jesd_prm.slotTable[i] = carrierConfigsOut->internalJesdCfg.slotTable[i];
     }
-    for (i = 0; i < (int)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; i++)
+    for (i = 0; i < (int32_t)ADI_ADRV904X_MAX_NO_OF_JESD_IFACE_SLOTS; i++)
     {
         default_jesd_prm.ifaceSlotTable[i] = carrierConfigsOut->internalJesdCfg.ifaceSlotTable[i];
     }
@@ -7231,7 +7398,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
     diag.enabled = 1u;
     diag.converged = 0u;
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
-    int default_iface_table_size = (int)carrierConfigsOut->internalJesdCfg.ifaceMaxSlot;
+    int32_t default_iface_table_size = (int32_t)carrierConfigsOut->internalJesdCfg.ifaceMaxSlot;
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Default iface slot table size = %d", default_iface_table_size);
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Default carrier slot table size = %d", carrierConfigsOut->internalJesdCfg.numSlots);
 #endif
@@ -7242,7 +7409,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
      *  - 0:    Default jesd_prm table
      *  - else: Randomly generated jesd_prm table
      */
-    for (ziter = 0; ziter < (int)ADI_SLOT_SHUFFLE_RAND_ITERATIONS; ziter++)
+	for (ziter = 0; ziter < (int32_t)slotShufflingLoopsMax; ziter++)
     {
         if ((bStopSearchOnConvergence == 1u) && (diag.converged == 1u))
         {
@@ -7370,7 +7537,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
                     recoveryAction = adrv904x_CducDelayConfigurationCalculate(device, carrierConfigs, carrierChannelFilter, carrierConfigsOut);
                     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) { return recoveryAction; }
                     
-                    recoveryAction = updateMinDelayCducSolution(device, carrierConfigsOut, &cducStateMinDelay);
+                    recoveryAction = updateMinDelayCducSolution(device, carrierConfigsOut, cducStateMinDelayPtr);
                     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) { return recoveryAction; }
 
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
@@ -7404,7 +7571,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
                         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) { return recoveryAction; }
 
                         /* Check that a carrier moved. If not --> break out of move_carrier loop */
-                        int bMoveDeadEnd = !ADI_LIBRARY_MEMCMP(&slot_prm_copy, &slot_prm, sizeof(slot_prm_copy));
+                        int32_t bMoveDeadEnd = !ADI_LIBRARY_MEMCMP(&slot_prm_copy, &slot_prm, sizeof(slot_prm_copy));
                         if (bMoveDeadEnd)
                         {
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
@@ -7448,19 +7615,20 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
 #endif
     
     /* Update final cduc structure to use cduc state of Min Delay Solution */
-    ADI_LIBRARY_MEMCPY(carrierConfigsOut, &cducStateMinDelay, sizeof(adi_adrv904x_CarrierReconfigProfileCfgOut_t));
+    ADI_LIBRARY_MEMCPY(carrierConfigsOut, cducStateMinDelayPtr, sizeof(adi_adrv904x_CarrierReconfigProfileCfgOut_t));
 
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
     /* Debug Final print cduc state info */
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Final Slot Table Result:", 0);
     printfCducState(device, carrierConfigsOut);
     printfCmodelStats(device, carrierConfigsOut, carrierChannelFilter);
+#endif
 
-    /* One last calculation of delay for debug */
+    /* Run adrv904x_CducDelayConfigurationCalculate() one last time to handle case where the last call to adrv904x_CducDelayConfigurationCalculate()
+     * did not find the minimum value AND there is a minimum value that is not <= (ADRV904X_HALF_MAX_DELAY_CC * 2)
+     */
     recoveryAction = adrv904x_CducDelayConfigurationCalculate(device, carrierConfigs, carrierChannelFilter, carrierConfigsOut);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE) { return recoveryAction; }
-
-#endif
     
     /* Stop Timer for Shuffling Here: */
     end = ADI_LIBRARY_CLOCK();
@@ -7468,7 +7636,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_CarrierDelaySlotShuffleSet(   adi_adrv
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Diagnositic timer end = %d clocks", end);
 #endif 
     /* Convert timer to us and store */
-    diag.procTime_us = (uint32_t)((end - start) * 1e6 / ADI_LIBRARY_CLOCKS_PER_SEC);
+    diag.procTime_us = (uint32_t)((end - start) * 1000000U / ADI_LIBRARY_CLOCKS_PER_SEC);
 #if (ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS == 1)
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "---------------------------------------------------------------", 0);
     ADI_VARIABLE_LOG(&device->common, ADI_HAL_LOG_MSG, "Delay Matching Done:", 0);

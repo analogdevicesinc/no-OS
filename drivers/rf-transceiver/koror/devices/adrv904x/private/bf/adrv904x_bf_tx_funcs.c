@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #include "../../private/bf/adrv904x_bf_tx_funcs.h"
@@ -615,76 +615,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionAveragePower_BfGet
     }
 
     *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
-
-    return recoveryAction;
-}
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionAverageThreshold_BfSet(adi_adrv904x_Device_t* const device,
-                                                                                     adi_adrv904x_SpiCache_t* const spiCache,
-                                                                                     const adrv904x_BfTxFuncsChanAddr_e baseAddr,
-                                                                                     const uint16_t bfValue)
-{
-    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-
-    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
-
-#if ADRV904X_BITFIELD_VALUE_CHECK > 0
-    if ((bfValue < 0) ||
-        (bfValue > 65535U))
-    {
-        ADI_ERROR_REPORT(&device->common, 
-                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
-                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
-                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
-                         bfValue,
-                         "Invalid BitField Value in adrv904x_TxFuncs_PaProtectionAverageThreshold_BfSet");
-        return recoveryAction;
-    }
-#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
-
-#if ADRV904X_BITFIELD_ADDR_CHECK > 0
-    if ((baseAddr != ADRV904X_BF_SLICE_TX_0__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_1__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_2__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_3__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_4__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_5__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_6__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_7__TX_FUNCS))
-    {
-        ADI_ERROR_REPORT(&device->common, 
-                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
-                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
-                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
-                         baseAddr, 
-                         "Invalid adrv904x_TxFuncs_PaProtectionAverageThreshold_BfSet Address");
-        return recoveryAction;
-    }
-#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
-
-    recoveryAction = adi_adrv904x_Register32Write(device,
-                                                  spiCache,
-                                                  ((uint32_t) baseAddr + 0x32),
-                                                  bfValue,
-                                                  0xFF);
-    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
-        return recoveryAction;
-    }
-
-    recoveryAction = adi_adrv904x_Register32Write(device,
-                                                  spiCache,
-                                                  ((uint32_t) baseAddr + 0x33),
-                                                  bfValue >> 8,
-                                                  0xFF);
-    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
-        return recoveryAction;
-    }
 
     return recoveryAction;
 }
@@ -2626,76 +2556,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionPeakPower_BfGet(ad
     }
 
     *bfValue = (uint16_t) ((uint64_t)(*bfValue) | (((uint64_t)bfValueTmp) << 8));
-
-    return recoveryAction;
-}
-
-ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncs_PaProtectionPeakThreshold_BfSet(adi_adrv904x_Device_t* const device,
-                                                                                  adi_adrv904x_SpiCache_t* const spiCache,
-                                                                                  const adrv904x_BfTxFuncsChanAddr_e baseAddr,
-                                                                                  const uint16_t bfValue)
-{
-    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
-
-    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
-
-    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
-
-#if ADRV904X_BITFIELD_VALUE_CHECK > 0
-    if ((bfValue < 0) ||
-        (bfValue > 65535U))
-    {
-        ADI_ERROR_REPORT(&device->common, 
-                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
-                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
-                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
-                         bfValue,
-                         "Invalid BitField Value in adrv904x_TxFuncs_PaProtectionPeakThreshold_BfSet");
-        return recoveryAction;
-    }
-#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
-
-#if ADRV904X_BITFIELD_ADDR_CHECK > 0
-    if ((baseAddr != ADRV904X_BF_SLICE_TX_0__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_1__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_2__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_3__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_4__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_5__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_6__TX_FUNCS) &&
-            (baseAddr != ADRV904X_BF_SLICE_TX_7__TX_FUNCS))
-    {
-        ADI_ERROR_REPORT(&device->common, 
-                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
-                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
-                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
-                         baseAddr, 
-                         "Invalid adrv904x_TxFuncs_PaProtectionPeakThreshold_BfSet Address");
-        return recoveryAction;
-    }
-#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
-
-    recoveryAction = adi_adrv904x_Register32Write(device,
-                                                  spiCache,
-                                                  ((uint32_t) baseAddr + 0x36),
-                                                  bfValue,
-                                                  0xFF);
-    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
-        return recoveryAction;
-    }
-
-    recoveryAction = adi_adrv904x_Register32Write(device,
-                                                  spiCache,
-                                                  ((uint32_t) baseAddr + 0x37),
-                                                  bfValue >> 8,
-                                                  0xFF);
-    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
-    {
-        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
-        return recoveryAction;
-    }
 
     return recoveryAction;
 }

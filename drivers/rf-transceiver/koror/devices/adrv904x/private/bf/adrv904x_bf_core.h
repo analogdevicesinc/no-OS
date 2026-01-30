@@ -7,9 +7,9 @@
  * 
  * Disclaimer Legal Disclaimer
  * 
- * Copyright 2015 - 2021 Analog Devices Inc.
+ * Copyright 2015 - 2025 Analog Devices Inc.
  * 
- * Released under the ADRV904X API license, for more information see the "LICENSE.PDF" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef _ADRV904X_BF_CORE_H_
@@ -1844,15 +1844,15 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_StreamProcGpioPinMask_BfGet(adi_a
                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                            uint32_t* const bfValue);
 
-ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInCmosSchmittTrigEnable_BfGet(adi_adrv904x_Device_t* const device,
-                                                                                 adi_adrv904x_SpiCache_t* const spiCache,
-                                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
-                                                                                 uint8_t* const bfValue);
-
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInLvdsPnInvert_BfGet(adi_adrv904x_Device_t* const device,
                                                                         adi_adrv904x_SpiCache_t* const spiCache,
                                                                         const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                         uint8_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncInLvdsSelectCmosUnselect_BfGet(adi_adrv904x_Device_t* const device,
+                                                                                  adi_adrv904x_SpiCache_t* const spiCache,
+                                                                                  const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                                  uint8_t* const bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncOut0CmosTxDriveStrength_BfGet(adi_adrv904x_Device_t* const device,
                                                                                  adi_adrv904x_SpiCache_t* const spiCache,
@@ -1873,6 +1873,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_SyncOutLvdsPnInvert_BfGet(adi_adr
                                                                          adi_adrv904x_SpiCache_t* const spiCache,
                                                                          const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                          uint8_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
@@ -1904,6 +1914,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx0AttenUpdateS1_BfSet(adi_adrv90
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -1933,6 +1953,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx1AttenUpdateS1_BfSet(adi_adrv90
                                                                       adi_adrv904x_SpiCache_t* const spiCache,
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
@@ -1964,6 +1994,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx2AttenUpdateS1_BfSet(adi_adrv90
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -1993,6 +2033,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx3AttenUpdateS1_BfSet(adi_adrv90
                                                                       adi_adrv904x_SpiCache_t* const spiCache,
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
@@ -2024,6 +2074,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx4AttenUpdateS1_BfSet(adi_adrv90
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -2054,6 +2114,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx5AttenUpdateS1_BfSet(adi_adrv90
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
 
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
+
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,
                                                                 const adrv904x_BfCoreChanAddr_e baseAddr,
@@ -2083,6 +2153,16 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx6AttenUpdateS1_BfSet(adi_adrv90
                                                                       adi_adrv904x_SpiCache_t* const spiCache,
                                                                       const adrv904x_BfCoreChanAddr_e baseAddr,
                                                                       const uint8_t bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx7AttenuationReadback_BfGet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            uint16_t* const bfValue);
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx7AttenReadbackUpdate_BfSet(adi_adrv904x_Device_t* const device,
+                                                                            adi_adrv904x_SpiCache_t* const spiCache,
+                                                                            const adrv904x_BfCoreChanAddr_e baseAddr,
+                                                                            const uint8_t bfValue);
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_Core_Tx7AttenS0_BfSet(adi_adrv904x_Device_t* const device,
                                                                 adi_adrv904x_SpiCache_t* const spiCache,

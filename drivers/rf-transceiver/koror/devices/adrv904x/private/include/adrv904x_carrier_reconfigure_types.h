@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 *
 * \brief Contains ADRV904X data types for private carrier reconfigure features
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADRV904X_CARRIER_RECONFIGURE_TYPES_H_
@@ -31,7 +30,7 @@
 #define ADI_LFSR_START_SEED                             (0x4321u)
 #define ADI_SLOT_SHUFFLE_RAND_ITERATIONS                (50u)
 #define ADI_SLOT_SHUFFLE_USE_ONLY_RAND                  (0u)
-#define ADI_ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS        (0u)
+#define ADI_ENABLE_DELAY_MATCHING_LOG_PRINTS            (0u)
 
 
 typedef struct adrv904x_CarrierJesdParameters

@@ -1,13 +1,12 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adrv904x_tx.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #include "../../private/include/adrv904x_tx.h"
 #include "../../private/bf/adrv904x_bf_pll_mem_map.h"
@@ -67,6 +66,7 @@ ADI_API uint32_t adrv904x_txAttenAddrLookup(const adi_adrv904x_TxChannels_e txCh
 
     return retval;
 }
+
 
 ADI_API uint8_t adrv904x_TxChannelsToId(const adi_adrv904x_TxChannels_e txChannel)
 {
@@ -254,6 +254,80 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxFuncsBitfieldAddressGet(adi_adrv904x
                 "Invalid txChannel parameter ");
             return recoveryAction;
         }
+    }
+    
+    /* No error, set recovery outside switch statement to save code */
+    recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;    
+    
+    return recoveryAction;
+}
+
+
+ADI_API adi_adrv904x_ErrAction_e adrv904x_TxDatapathBitfieldAddressGet(adi_adrv904x_Device_t* const device,
+                                                                       const adi_adrv904x_TxChannels_e txChannel,
+                                                                       adrv904x_BfTxDatapathChanAddr_e* const txDatapathChannelBitfieldAddr)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_API_PRIV);
+
+    /* Check rx bitfield channel address pointer is not null */
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, txDatapathChannelBitfieldAddr);
+    
+    if (((device->devStateInfo.initializedChannels >> ADI_ADRV904X_TX_INITIALIZED_CH_OFFSET) & (uint32_t)txChannel) == 0U)
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common,
+                               recoveryAction,
+                               device->devStateInfo.initializedChannels,
+                               "Selected Tx channel is not initialized for this device.");
+        return recoveryAction;
+    }
+    
+    switch (txChannel)
+    {
+        case ADI_ADRV904X_TX0:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_0__TX_DATAPATH;
+            break;
+            
+        case ADI_ADRV904X_TX1:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_1__TX_DATAPATH;
+            break;
+            
+        case ADI_ADRV904X_TX2:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_2__TX_DATAPATH;
+            break;
+        case ADI_ADRV904X_TX3:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_3__TX_DATAPATH;
+            break;
+            
+        case ADI_ADRV904X_TX4:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_4__TX_DATAPATH;
+            break;
+            
+        case ADI_ADRV904X_TX5:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_5__TX_DATAPATH;
+            break;
+            
+        case ADI_ADRV904X_TX6:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_6__TX_DATAPATH;
+            break;
+            
+        case ADI_ADRV904X_TX7:
+            *txDatapathChannelBitfieldAddr = ADRV904X_BF_SLICE_TX_7__TX_DATAPATH;
+            break;
+            
+        default:
+            {
+                recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+                ADI_PARAM_ERROR_REPORT(&device->common,
+                                       recoveryAction,
+                                       txChannel,
+                                       "Invalid txChannel parameter ");
+                return recoveryAction;
+            }
     }
     
     /* No error, set recovery outside switch statement to save code */
@@ -658,7 +732,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxDecPowerCfgRangeCheck(adi_adrv904x_D
     static const uint8_t MAX_MEASUREMENT_DURATION_AX = 24U;
     static const uint8_t MAX_MEASUREMENT_DURATION_B0 = 25U;
     
-	uint8_t deviceRev = 0U;
+    uint8_t deviceRev = 0U;
 
     if (((decPowerCfg->txChannelMask & (~(uint32_t)ADI_ADRV904X_TXALL)) != 0U) || (decPowerCfg->txChannelMask == (uint32_t)ADI_ADRV904X_TXOFF))
     {
@@ -746,6 +820,49 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_TxDecPowerCfgRangeCheck(adi_adrv904x_D
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;
     return recoveryAction;
 }
+
+ADI_API uint8_t adrv904x_TxCarrierToId(const adi_adrv904x_TxCarrier_e txCarrier)
+{
+    switch (txCarrier)
+    {
+    case ADI_ADRV904X_TX_CARRIER_0:
+        return 0;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_1:
+        return 1;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_2:
+        return 2;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_3:
+        return 3;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_4:
+        return 4;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_5:
+        return 5;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_6:
+        return 6;
+        break;
+
+    case ADI_ADRV904X_TX_CARRIER_7:
+        return 7;
+        break;
+
+    default:
+        return ADI_ADRV904X_TX_CARRIER_ID_MAX + 1;
+        break;
+    }
+}
+
 
 ADI_API adi_adrv904x_ErrAction_e adrv904x_ValidateMask(uint32_t maskVal, uint8_t allowOnlyOne)
 {
@@ -1183,5 +1300,148 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_DpdActMmrBitfieldAddressGet(adi_adrv90
     /* No error, set recovery outside switch statement to save code */
     recoveryAction = ADI_ADRV904X_ERR_ACT_NONE;    
     
+    return recoveryAction;
+}
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierNGain_Get(adi_adrv904x_Device_t* const device,
+                                                                       adi_adrv904x_SpiCache_t* const spiCache,
+                                                                       const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
+                                                                       const uint32_t carrierIdx,
+                                                                       uint32_t* const bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+    uint32_t bfValueTmp = 0U;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+#if ADRV904X_BITFIELD_NULL_CHECK > 0
+    ADI_ADRV904X_NULL_PTR_REPORT_RETURN(&device->common, bfValue);
+#endif /* ADRV904X_BITFIELD_NULL_CHECK */
+
+    *bfValue = (uint32_t) 0;
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_SLICE_TX_0__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_1__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_2__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_3__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_4__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_5__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_6__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_7__TX_CDUC_TX_CDUC_HB_DPATH))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_CducHbDpath_CarrierNGain_Get Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+    if (carrierIdx > ADI_ADRV904X_MAX_TX_CARRIERS)
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid carrierNum Value in adrv904x_CducHbDpath_CarrierNGain_Get");
+
+        return recoveryAction;
+    }
+
+    recoveryAction = adi_adrv904x_Register32Read(device,
+                                                 spiCache,
+                                                 (uint32_t)(baseAddr + 0x160U + carrierIdx * 4),
+                                                 &bfValueTmp,
+                                                 0xFFFFFFFFU);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Read Issue");
+        return recoveryAction;
+    }
+
+    /* Gain is 23 bits */
+    *bfValue = (uint32_t)(bfValueTmp & 0x007FFFFFU);
+
+    return recoveryAction;
+}
+ADI_API adi_adrv904x_ErrAction_e adrv904x_CducHbDpath_CarrierNGain_Set(adi_adrv904x_Device_t* const device,
+                                                                       adi_adrv904x_SpiCache_t* const spiCache,
+                                                                       const adrv904x_BfCducHbDpathChanAddr_e baseAddr,
+                                                                       const uint32_t carrierIdx,
+                                                                       const uint32_t bfValue)
+{
+    adi_adrv904x_ErrAction_e recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+
+    uint32_t bfValueTmp;
+
+    ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
+
+    ADI_FUNCTION_ENTRY_LOG(&device->common, ADI_HAL_LOG_BF);
+
+    if (carrierIdx > ADI_ADRV904X_MAX_TX_CARRIERS)
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid carrierNum Value in adrv904x_CducHbDpath_CarrierNGain_Set");
+        return recoveryAction;
+    }
+
+#if ADRV904X_BITFIELD_VALUE_CHECK > 0
+    if ((bfValue < 0) ||
+        (bfValue > 8388607U))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM, 
+                         bfValue,
+                         "Invalid BitField Value in adrv904x_CducHbDpath_CarrierNGain_Set");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_VALUE_CHECK */
+
+#if ADRV904X_BITFIELD_ADDR_CHECK > 0
+    if ((baseAddr != ADRV904X_BF_SLICE_TX_0__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_1__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_2__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_3__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_4__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_5__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_6__TX_CDUC_TX_CDUC_HB_DPATH) &&
+        (baseAddr != ADRV904X_BF_SLICE_TX_7__TX_CDUC_TX_CDUC_HB_DPATH))
+    {
+        ADI_ERROR_REPORT(&device->common, 
+                         ADI_ADRV904X_ERRSRC_DEVICEBF, 
+                         ADI_COMMON_ERRCODE_INVALID_PARAM, 
+                         ADI_ADRV904X_ERR_ACT_CHECK_PARAM,
+                         baseAddr, 
+                         "Invalid adrv904x_CducHbDpath_CarrierNGain_Set Address");
+        return recoveryAction;
+    }
+#endif /* ADRV904X_BITFIELD_ADDR_CHECK */ 
+
+
+    /* Gain is 23bits */
+    bfValueTmp = bfValue & 0x007FFFFFU;
+
+    recoveryAction = adi_adrv904x_Register32Write(device,
+                                                  spiCache,
+                                                  ((uint32_t) baseAddr + 0x160 + carrierIdx * 4),
+                                                  bfValueTmp,
+                                                  0xFFFFFFFF);
+    if (ADI_ADRV904X_ERR_ACT_NONE != recoveryAction)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Register32Write Issue");
+        return recoveryAction;
+    }
+
     return recoveryAction;
 }

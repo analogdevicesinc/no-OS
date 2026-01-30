@@ -5,22 +5,24 @@
  *
  * \details Contains platform pack define
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADI_ADRV904X_PLATFORM_PACK_H__
 #define __ADI_ADRV904X_PLATFORM_PACK_H__
 
-#ifndef ADI_ADRV904X_FW
+
 #include "adi_adrv904x_user.h"
-#endif
+#include "adi_library_types.h"
+
+
+
 
 
 #if (!defined(ADI_ADRV904X_PACK_START) || !defined(ADI_ADRV904X_PACK_FINISH))

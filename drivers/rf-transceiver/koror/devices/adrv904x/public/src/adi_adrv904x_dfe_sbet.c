@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_dfe_cfr.c
 * \brief Contains CFR features related function implementations
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 #include "adi_adrv904x_dfe_sbet.h"
 #include "adi_adrv904x_dfe_cfr.h"
@@ -350,6 +349,51 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SbetCfrMappingSet(adi_adrv904x_Dev
         goto cleanup;
     }
 
+    //for dpd model index 0
+    recoveryAction = adrv904x_Core_ScratchReg_BfGet(device,
+                                                    NULL,
+                                                    ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                    ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_0,
+                                                    &cfrPowerIndex[0]);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading sbet mapping for dpd model 0");
+        goto cleanup;
+    }
+    //for dpd model index 1
+    recoveryAction = adrv904x_Core_ScratchReg_BfGet(device,
+                                                    NULL,
+                                                    ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                    ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_1,
+                                                    &cfrPowerIndex[1]);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading sbet mapping for dpd model 1");
+        goto cleanup;
+    }
+    //for dpd model index 2
+    recoveryAction = adrv904x_Core_ScratchReg_BfGet(device,
+                                                    NULL,
+                                                    ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                    ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_2,
+                                                    &cfrPowerIndex[2]);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading sbet mapping for dpd model 2");
+        goto cleanup;
+    }
+    //for dpd model index 3
+    recoveryAction = adrv904x_Core_ScratchReg_BfGet(device,
+                                                    NULL,
+                                                    ADRV904X_BF_DIGITAL_CORE_SPI_ONLY_REGS,
+                                                    ADRV904X_SBET_DPD_TO_CFR_TRANSLATION_TBL_3,
+                                                    &cfrPowerIndex[3]);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error reading sbet mapping for dpd model 3");
+        goto cleanup;
+    }
+
     for (dpdPowerIndex = 0; dpdPowerIndex < 4; dpdPowerIndex++)
     {
         switch (dpdPowerIndex)
@@ -378,8 +422,12 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_SbetCfrMappingSet(adi_adrv904x_Dev
                 }
                 break;
             case 3:
-            cfrPowIdxPerChan = 1;
+                cfrPowIdxPerChan = 1;
                 break;
+            default:
+	            recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+			    ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, dpdPowerIndex, "Invalid DPD Power Index selected. Valid values are 0..3");
+	            goto cleanup;
         }
         for (chanIdx = 0U; chanIdx < ADI_ADRV904X_MAX_TXCHANNELS; ++chanIdx)
         {

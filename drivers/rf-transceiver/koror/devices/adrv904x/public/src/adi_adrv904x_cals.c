@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains Calibration features related function implementation defined in
 * adi_adrv904x_cals.h
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #include "adi_adrv904x_cals.h"
@@ -233,7 +232,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_InitCalsDetailedStatusGet_v2( adi_
     adi_adrv904x_ErrAction_e calRecoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
     adrv904x_CpuCmd_RunInitGetDetailedStatusResp_t runInitStatusRsp = { { { 0U }, { 0U }, 0U, { 0U }, { 0U } } };
     adi_adrv904x_InitCalStatus_t initCalStatus;
-    adi_adrv904x_ErrorInfo_t error = { 0, NULL, NULL, ADI_ADRV904X_ERR_ACT_NONE, NULL };
+    adi_adrv904x_ErrorInfo_t err = { 0, NULL, NULL, ADI_ADRV904X_ERR_ACT_NONE, NULL };
     uint32_t idx = 0U;
     uint32_t cpuTypeIdx = 0U;
 
@@ -301,15 +300,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_InitCalsDetailedStatusGet_v2( adi_
                                     initCalStatus.initErrCodes[idx],
                                     ADI_NO_VARIABLE,
                                     calRecoveryAction,
-                                    error);
+                                    err);
 
         /* Populate Cal Error Information Structure */
         initCalErrData->channel[idx].initErrCals = initCalStatus.initErrCals[idx];
         initCalErrData->channel[idx].errCode = initCalStatus.initErrCodes[idx];
-        (void) ADI_LIBRARY_STRNCPY((char*) &initCalErrData->channel[idx].errMsg[0U], error.errMsg, ADI_ADRV904X_CHAR_ARRAY_MAX);
-        (void) ADI_LIBRARY_STRNCPY((char*) &initCalErrData->channel[idx].errCause[0U], error.errCause, ADI_ADRV904X_CHAR_ARRAY_MAX);
-        initCalErrData->channel[idx].action = (int64_t) error.actionCode;
-        (void) ADI_LIBRARY_STRNCPY((char*) &initCalErrData->channel[idx].actionMsg[0U], error.actionMsg, ADI_ADRV904X_CHAR_ARRAY_MAX);
+        (void) ADI_LIBRARY_STRNCPY((char*) &initCalErrData->channel[idx].errMsg[0U], err.errMsg, ADI_ADRV904X_CHAR_ARRAY_MAX);
+        (void) ADI_LIBRARY_STRNCPY((char*) &initCalErrData->channel[idx].errCause[0U], err.errCause, ADI_ADRV904X_CHAR_ARRAY_MAX);
+        initCalErrData->channel[idx].action = (int64_t) err.actionCode;
+        (void) ADI_LIBRARY_STRNCPY((char*) &initCalErrData->channel[idx].actionMsg[0U], err.actionMsg, ADI_ADRV904X_CHAR_ARRAY_MAX);
         initCalErrData->channel[idx].calsSincePowerUp = initCalStatus.calsSincePowerUp[idx];
         initCalErrData->channel[idx].calsLastRun = initCalStatus.calsLastRun[idx];
     }
@@ -697,7 +696,7 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TrackingCalsEnableSet_v2(adi_adrv9
     ADI_ADRV904X_NULL_DEVICE_PTR_RETURN(device);
     ADI_ADRV904X_API_ENTRY(&device->common);
     ADI_ADRV904X_NULL_PTR_REPORT_GOTO(&device->common, channelMask, cleanup);
-    ADI_LIBRARY_MEMSET(&setTrackingCalCmd, 0, sizeof(adrv904x_CpuCmd_SetEnabledTrackingCals_t));
+    ADI_LIBRARY_MEMSET(&setTrackingCalCmd, 0, sizeof(adrv904x_CpuCmd_SetEnabledTrackingCals_v2_t));
     ADI_LIBRARY_MEMSET(&setTrackingCalCmdRsp, 0, sizeof(adrv904x_CpuCmd_SetEnabledTrackingCalsResp_t));
     
     if ((enableDisableFlag != ADI_ADRV904X_TRACKING_CAL_DISABLE) && (enableDisableFlag != ADI_ADRV904X_TRACKING_CAL_ENABLE))
@@ -1224,7 +1223,7 @@ static adi_adrv904x_ErrAction_e adrv904x_GetCalStatusCmdResp(adi_adrv904x_Device
 
 static adrv904x_CpuObjectId_e adrv904x_InitCalToObjId(const adi_adrv904x_InitCalibrations_e calId)
 {
-    return (adrv904x_CpuObjectId_e)adrv904x_GetBitPosition((uint32_t)calId);
+	return (adrv904x_CpuObjectId_e)(int32_t)adrv904x_GetBitPosition((uint32_t)calId);
 }
 
 static adrv904x_CpuObjectId_e adrv904x_TrackingCalToObjId(const adi_adrv904x_TrackingCalibrationMask_e calId)
@@ -1319,6 +1318,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CalPvtStatusGet(adi_adrv904x_Devic
         goto cleanup;
     }
 
+    if ((length + sizeof(adrv904x_CpuCmd_GetCalStatusResp_t) + sizeof(adrv904x_CpuCmdResp_t)) > sizeof(rxBuf))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length exceeds maximum response size.");
+        goto cleanup;
+    }
+
     /* Send the cal status get command to the CPU */
     recoveryAction = adrv904x_SendCalStatusCmd(device, ADRV904X_CPU_CMD_CAL_STATUS_PRIVATE, (adrv904x_CpuObjectId_e)objId, channel);
     if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
@@ -1389,6 +1395,13 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_CalSpecificStatusGet(adi_adrv904x_
     {
         recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
         ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length is zero.");
+        goto cleanup;
+    }
+
+    if ((length + sizeof(adrv904x_CpuCmd_GetCalStatusResp_t) + sizeof(adrv904x_CpuCmdResp_t)) > sizeof(rxBuf))
+    {
+        recoveryAction = ADI_ADRV904X_ERR_ACT_CHECK_PARAM;
+        ADI_PARAM_ERROR_REPORT(&device->common, recoveryAction, length, "Length exceeds maximum response size.");
         goto cleanup;
     }
 

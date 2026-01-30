@@ -1,7 +1,6 @@
 /**
- * Copyright 2015 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * Copyright 2015 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -9,7 +8,7 @@
  * \brief Contains top level ADRV904X related function prototypes for
  *        adi_adrv904x_tx.c
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 #ifndef _ADI_ADRV904X_TX_H_
@@ -676,8 +675,8 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCducNcoGet(adi_adrv904x_Device_t
 * \brief Set Fractional Delay via pFIR (Used in CTC Mode 2)
 * 
 * \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
-* \param[in]  txChan  - Tx channel
-* \param[in]  fracDelay - fractional Delay (0:63)
+* \param[in]  txChan Single Tx channel: 0 = ADI_ADRV904X_TX0, 1 = ADI_ADRV904X_TX1, 2 = ADI_ADRV904X_TX2 etc.
+* \param[in]  fracDelay fractional Delay (0:63)
 *  
 * \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
 */ 
@@ -685,6 +684,20 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxCducNcoGet(adi_adrv904x_Device_t
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPfirFracDelaySet(adi_adrv904x_Device_t* const device,
                                                                  const uint8_t txChan,
                                                                  const uint8_t fracDelay);
+
+/** 
+* \brief Set Fractional Delay via pFIR (Used in CTC Mode 2)
+* 
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+* \param[in]  txChannelMask Tx channels (mask of adi_adrv904x_TxChannels_e)
+* \param[in]  fracDelay fractional Delay (0:63)
+*  
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
+*/ 
+
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPfirFracDelaySet_v2(adi_adrv904x_Device_t* const device,
+                                                                    const uint32_t txChannelMask,
+                                                                    const uint8_t fracDelay);
 /**
  * \brief Sets the specified Tx Test NCO to the given frequency, band number, attenuation control, and enable state 
  *  in the adi_adrv904x_TxTestNcoConfig_t structure.
@@ -1615,14 +1628,14 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackStop(adi_adrv904x_Device
                                                              const adi_adrv904x_TxChannels_e txChannelSel,
                                                              const uint8_t  bandSelect);
 
-/** 
+/**
 * \brief Reconfigure Tx carriers dynamically without reinitialization - Solving without applying solution to HW
-* 
-* \dep_begin 
-* \dep{device->common.devHalInfo} 
-* \dep_end 
-* 
-* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
 * \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
 * \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
 * \param[in] txCarrierChannelFilterApplicationSel - Tx Carrier Channel Filter application select for each carrier in each profile. The carriers here are applied to the corresponding channelMask in txCarrierConfigs.
@@ -1630,17 +1643,44 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxPlaybackStop(adi_adrv904x_Device
 * \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
 * \param[in] useCustomFilters Select option to use custom filters or ADI presets: 0: Use txCarrierChannelFilterApplicationSel, 1: Use txCarrierChannelFilter
 *
-* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
-*/ 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_adrv904x_Device_t* const                                device,
-                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
-                                                                            adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
-                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
-                                                                            adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
-                                                                            const uint32_t                                              numCarrierProfiles,
-                                                                            const uint8_t                                               useCustomFilters);
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(adi_adrv904x_Device_t* const                                device,
+    adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+    const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+    adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
+    const uint32_t                                              numCarrierProfiles,
+    const uint8_t                                               useCustomFilters);
 
-/** 
+/**
+* \brief Reconfigure Tx carriers dynamically without reinitialization - Solving without applying solution to HW - Extended version
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+* \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
+* \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] txCarrierChannelFilterApplicationSel - Tx Carrier Channel Filter application select for each carrier in each profile. The carriers here are applied to the corresponding channelMask in txCarrierConfigs.
+* \param[in] txCarrierChannelFilter - Tx Carrier Channel Filter Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] txCarrierConfigsExtended - Extended Tx Carrier Reconfigure Settings.
+* \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
+* \param[in] useCustomFilters Select option to use custom filters or ADI presets: 0: Use txCarrierChannelFilterApplicationSel, 1: Use txCarrierChannelFilter
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculateExtended(adi_adrv904x_Device_t* const                                device,
+	adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+	adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+	const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+	adi_adrv904x_ChannelFilterCfg_t                             txCarrierChannelFilter[],
+	adi_adrv904x_CarrierRadioCfgExtended_t                      txCarrierConfigsExtended[],
+	const uint32_t                                              numCarrierProfiles,
+	const uint8_t                                               useCustomFilters);
+
+/**
 * \brief Reconfigure Tx carriers dynamically without reinitialization - Apply previously solved configuration
 * 
 * \dep_begin 
@@ -1653,76 +1693,152 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierCalculate(    adi_
 */ 
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierWrite(adi_adrv904x_Device_t* const device);
 
-/** 
+/**
 * \brief Reconfigure Tx carriers dynamically without reinitialization. Wrapper for adi_adrv904x_TxDynamicCarrierReconfigure to select channel filter coefficients
 *           provided by ADI
-* 
+*
 *           Note: The API currently only uses the first profile in txCarrierConfigs.carrierCfgs input struct.
-* 
+*
 * \pre Part must be put in the appropriate state for this function to work as intendend. At a minimum the following steps must have been performed:
 *           Disable tracking cals
 *           Disable PAs
 *           Disable Tx/Rx/ORx channels. GPIOs are not toggling
-* 
-* 
+*
+*
 * \post After this function is called at a minimum the following steps must be performed before the device can be used as intended:
 *           Provide new CFR pulse/config thru API
 *           Change RFLO
 *           Re- Enable channels then tracking cals
 *           Re-Enable PAs
-*           
-* \dep_begin 
-* \dep{device->common.devHalInfo} 
-* \dep_end 
-* 
-* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
 * \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
 * \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
 * \param[in] txCarrierChannelFilterApplicationSel - Tx Carrier Channel Filter application select for each carrier in each profile
 * \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
 *
-* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
-*/ 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelect(  adi_adrv904x_Device_t* const                                device,
-                                                                                            adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
-                                                                                            adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
-                                                                                            const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
-                                                                                            const uint32_t                                              numCarrierProfiles );
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelect(adi_adrv904x_Device_t* const                                device,
+    adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+    const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+    const uint32_t                                              numCarrierProfiles);
 
-/** 
-* \brief    Reconfigure Tx carriers dynamically without reinitialization. 
-* 
+/**
+* \brief Reconfigure Tx carriers dynamically without reinitialization - extended version. Wrapper for adi_adrv904x_TxDynamicCarrierReconfigure to select channel filter coefficients
+*           provided by ADI
+*
 *           Note: The API currently only uses the first profile in txCarrierConfigs.carrierCfgs input struct.
-* 
+*
 * \pre Part must be put in the appropriate state for this function to work as intendend. At a minimum the following steps must have been performed:
 *           Disable tracking cals
 *           Disable PAs
 *           Disable Tx/Rx/ORx channels. GPIOs are not toggling
-* 
-* 
+*
+*
 * \post After this function is called at a minimum the following steps must be performed before the device can be used as intended:
 *           Provide new CFR pulse/config thru API
 *           Change RFLO
 *           Re- Enable channels then tracking cals
 *           Re-Enable PAs
-*           
-* \dep_begin 
-* \dep{device->common.devHalInfo} 
-* \dep_end 
-* 
-* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings 
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+* \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
+* \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] txCarrierChannelFilterApplicationSel - Tx Carrier Channel Filter application select for each carrier in each profile
+* \param[in] txCarrierConfigsExtended - Extended Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
+*
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureWithFilterSelectExtended(adi_adrv904x_Device_t* const                                device,
+    adi_adrv904x_CarrierJesdCfg_t* const                        jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                              txCarrierConfigs[],
+    const adi_adrv904x_CarrierChannelFilterApplicationSel_t     txCarrierChannelFilterApplicationSel[],
+    adi_adrv904x_CarrierRadioCfgExtended_t                      txCarrierConfigsExtended[],
+    const uint32_t                                              numCarrierProfiles);
+
+/**
+* \brief    Reconfigure Tx carriers dynamically without reinitialization.
+*
+*           Note: The API currently only uses the first profile in txCarrierConfigs.carrierCfgs input struct.
+*
+* \pre Part must be put in the appropriate state for this function to work as intendend. At a minimum the following steps must have been performed:
+*           Disable tracking cals
+*           Disable PAs
+*           Disable Tx/Rx/ORx channels. GPIOs are not toggling
+*
+*
+* \post After this function is called at a minimum the following steps must be performed before the device can be used as intended:
+*           Provide new CFR pulse/config thru API
+*           Change RFLO
+*           Re- Enable channels then tracking cals
+*           Re-Enable PAs
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
+* \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
+* \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] txCarrierChannelFilter - Tx Carrier Channel Filter Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] txCarrierConfigsExtended - Extended Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
+* \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
+*
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigureExtended(adi_adrv904x_Device_t* const                    device,
+    adi_adrv904x_CarrierJesdCfg_t* const            jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                  txCarrierConfigs[],
+    adi_adrv904x_ChannelFilterCfg_t                 txCarrierChannelFilter[],
+    adi_adrv904x_CarrierRadioCfgExtended_t          txCarrierConfigsExtended[],
+    const uint32_t                                  numCarrierProfiles);
+
+/**
+* \brief    Reconfigure Tx carriers dynamically without reinitialization.
+*
+*           Note: The API currently only uses the first profile in txCarrierConfigs.carrierCfgs input struct.
+*
+* \pre Part must be put in the appropriate state for this function to work as intendend. At a minimum the following steps must have been performed:
+*           Disable tracking cals
+*           Disable PAs
+*           Disable Tx/Rx/ORx channels. GPIOs are not toggling
+*
+*
+* \post After this function is called at a minimum the following steps must be performed before the device can be used as intended:
+*           Provide new CFR pulse/config thru API
+*           Change RFLO
+*           Re- Enable channels then tracking cals
+*           Re-Enable PAs
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X device data structure containing settings
 * \param[in] jesdCfg - Pointer that holds the updated JESD settings to accomdate the new carrier settings
 * \param[in] txCarrierConfigs - Tx Carrier Reconfigure Settings. Struct may be modified by API for endianness before being passed to firmware.
 * \param[in] txCarrierChannelFilter - Tx Carrier Channel Filter Settings. Struct may be modified by API for endianness before being passed to firmware.
 * \param[in] numCarrierProfiles number of profiles passed in the arrays. Max is four.
 *
-* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful 
-*/ 
-ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigure(  adi_adrv904x_Device_t* const                    device,
-                                                                            adi_adrv904x_CarrierJesdCfg_t* const            jesdCfg,
-                                                                            adi_adrv904x_CarrierRadioCfg_t                  txCarrierConfigs[],
-                                                                            adi_adrv904x_ChannelFilterCfg_t                 txCarrierChannelFilter[],
-                                                                            const uint32_t                                  numCarrierProfiles);
+* \retval adi_common_ErrAction_e - ADI_ADRV904X_ERR_ACT_NONE if Successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_TxDynamicCarrierReconfigure(adi_adrv904x_Device_t* const                    device,
+    adi_adrv904x_CarrierJesdCfg_t* const            jesdCfg,
+    adi_adrv904x_CarrierRadioCfg_t                  txCarrierConfigs[],
+    adi_adrv904x_ChannelFilterCfg_t                 txCarrierChannelFilter[],
+    const uint32_t                                  numCarrierProfiles);
 
 /** 
 * \brief Retrieve the current tx Carrier settings for the selected channel

@@ -5,22 +5,22 @@
  *
  * \details Contains device command interface definition
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADRV904X_CPU_CMD_INTF_H__
 #define __ADRV904X_CPU_CMD_INTF_H__
 
-#include <stdint.h>
 #include "adi_adrv904x_platform_pack.h"
+#ifndef ADI_ADRV904X_FW
 #include "adrv904x_platform_byte_order.h"
+#endif
 
 /** \var CPU command ID type */
 typedef uint16_t adrv904x_CpuCmdId_t;

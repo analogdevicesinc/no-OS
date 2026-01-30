@@ -1,7 +1,6 @@
 /**
-* Copyright 2015 - 2021 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
@@ -9,7 +8,7 @@
 * \brief Contains top level ADRV904X related function prototypes for
 *        adi_adrv904x_utilities.c
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADI_ADRV904X_UTILITIES_H_
@@ -193,6 +192,15 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_PreMcsInit_NonBroadcast(adi_adrv90
                                                                       const adi_adrv904x_Init_t* const        init);
 
 /**
+* ignore cflag 'Wshadow' for these functions if compiled by GCC
+* adi_adrv904x_PostMcsInit - shadows structure adi_adrv904x_PostMcsInit_t
+* adi_adrv904x_StandbyRecover - shadows structure adi_adrv904x_StandbyRecover_t
+*/
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif /* __GNUC__ */
+/**
 * \brief This Utility Function executes ADRV904X Post-MCS Initialization Sequence
 *
 * \dep_begin
@@ -206,6 +214,77 @@ ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_PreMcsInit_NonBroadcast(adi_adrv90
 */
 ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_PostMcsInit(adi_adrv904x_Device_t* const            device,
                                                           const adi_adrv904x_PostMcsInit_t* const utilityInit);
+
+/**
+* \brief This Utility function executes ADRV904X Standby Enter/Power Down Sequence
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X Device data structure
+* \param[in,out] standbyRecover            Pointer to the output ADRV904X Standby Recover data structure.
+*
+* \retval adi_adrv904x_ErrAction_e, ADI_ADRV904X_ERR_ACT_NONE if successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StandbyEnter(adi_adrv904x_Device_t* const         device,
+                                                           adi_adrv904x_StandbyRecover_t* const standbyRecover);
+
+/**
+* \brief This Utility function executes ADRV904X Power up Sequence, recovering from the power down mode.
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X Device data structure
+* \param[in,out] standbyRecover            Pointer to the output ADRV904X Standby Recover data structure
+*
+* \retval adi_adrv904x_ErrAction_e, ADI_ADRV904X_ERR_ACT_NONE if successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StandbyRecover(adi_adrv904x_Device_t* const         device,
+                                                             adi_adrv904x_StandbyRecover_t* const standbyRecover);
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif /* __GNUC__ */
+
+
+/**
+* \brief This Utility function executes ADRV904X Standby Exit Sequence, clearing the Standby state.
+*        It must be called after StandbyRecover and after MCS/JESD link bring up.
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X Device data structure
+* \param[in,out] standbyRecover            Pointer to the ADRV904X Standby Recover data structure
+*
+* \retval adi_adrv904x_ErrAction_e, ADI_ADRV904X_ERR_ACT_NONE if successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StandbyExit(adi_adrv904x_Device_t* const            device,
+                                                          adi_adrv904x_StandbyRecover_t* const    standbyRecover);
+
+/**
+* \brief This Utility function queries the device if the ADRV904X Standby Exit Sequence has finished
+*        It must be called after StandbyExit using a polling operation waiting for done to be '1'
+*
+* \dep_begin
+* \dep{device->common.devHalInfo}
+* \dep_end
+*
+* \param[in,out] device Context variable - Pointer to the ADRV904X Device data structure
+* \param[in,out] standbyRecover            Pointer to the ADRV904X Standby Recover data structure
+* \param[out]    done                      '1', if the Standby Exit had finished
+*                                          '0', otherwise
+*
+* \retval adi_adrv904x_ErrAction_e, ADI_ADRV904X_ERR_ACT_NONE if successful
+*/
+ADI_API adi_adrv904x_ErrAction_e adi_adrv904x_StandbyExitStatusGet(adi_adrv904x_Device_t* const         device,
+                                                                   adi_adrv904x_StandbyRecover_t* const standbyRecover,
+                                                                   uint8_t * const                      done);
+
 
 /**
 * \brief This function is used to query for the Deserializer Lanes SwC status

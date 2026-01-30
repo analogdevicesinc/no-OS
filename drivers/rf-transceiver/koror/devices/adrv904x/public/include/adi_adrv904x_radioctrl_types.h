@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2022 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
 * \file adi_adrv904x_radioctrl_types.h
 * \brief Contains ADRV904X data types for radio ctrl features
 *
-* ADRV904X API Version: 2.10.0.4
+* ADRV904X API Version: 2.15.0.4
 */
 
 #ifndef _ADI_ADRV904X_RADIOCTRL_TYPES_H_
@@ -671,9 +670,9 @@ typedef struct adi_adrv904x_RadioCtrlAlarmGpioConfig
 typedef struct adi_adrv904x_RadioCtrlAntCalCarrierCfgInit
 {
     uint32_t    commonRxMask;                                          /*!< Common Rx channels mask. It should be 0 if there is no common Rx channel.
-                                                                            It can have multiple bits set, Koror can have multiple Rx channels as common Rx channel */
+                                                                            It can have multiple bits set, ADRV904X can have multiple Rx channels as common Rx channel */
     uint32_t    commonTxMask;                                          /*!< Common Tx channels mask. It should be 0 if there is no common Tx channel. 
-                                                                            It can have multiple bits set, Koror can have multiple Tx channels as common Tx channel */
+                                                                            It can have multiple bits set, ADRV904X can have multiple Tx channels as common Tx channel */
 } adi_adrv904x_RadioCtrlAntCalCarrierCfgInit_t;
 
 /**

@@ -1,7 +1,6 @@
 /**
  * Copyright 2021 Analog Devices Inc.
- * Released under the ADRV904X Software license, for more information
- * see the "LICENSE.pdf" file in this zip file.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -9,7 +8,7 @@
  * \brief   This file contains the platform specific definitions for the DFE
  *          exception handler.
  *
- * DFE SDK API Version: 2.10.0.4
+ * DFE SDK API Version: 2.15.0.4
  */
 #include "adi_adrv904x_platform_pack.h"
 

@@ -1,14 +1,13 @@
 /**
-* Copyright 2015 - 2023 Analog Devices Inc.
-* Released under the ADRV904X API license, for more information
-* see the "LICENSE.pdf" file in this zip file.
+* Copyright 2015 - 2025 Analog Devices Inc.
+* SPDX-License-Identifier: Apache-2.0
 */
 
 /**
  * \file adrv904x_radioctrl.c
  * \brief Contains ADRV904X radio control related private function implementations.
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 #include "../../private/include/adrv904x_radioctrl.h"
 #include "../../private/include/adrv904x_rx.h"
@@ -825,6 +824,7 @@ adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierConfigSet(adi_adrv90
     uint32_t globalPatternId = 0U;
     uint8_t sequencerId = 0U;
     uint32_t patternAddr = 0U;
+    uint16_t patternAddr16 = 0U;
     int32_t carrierGain = 0;
     uint32_t carrierGainReg = 0U;
     uint32_t i = 0U;
@@ -878,7 +878,7 @@ adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierConfigSet(adi_adrv90
                                                                           NULL, 
                                                                           ADRV904X_BF_DIGITAL_CORE_SEQUENCER_REGS, 
                                                                           sequencerId,
-                                                                          (uint16_t* const)&patternAddr);
+                                                                          &patternAddr16);
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
             {
                 ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Failed to get Radio Sequencer pattern address");
@@ -886,6 +886,7 @@ adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierConfigSet(adi_adrv90
             }
 
             /* Shift to the location expected in the scratchpad */
+            patternAddr = (uint32_t)patternAddr16;
             patternAddr = patternAddr << 4;
         }
         else
@@ -1072,8 +1073,7 @@ adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierConfigSet(adi_adrv90
         }
 
         /* Convert from mdB to 7.16. (reg value = 10**(value in mdB/1000/20)) * 2^16) */
-        //carrierGainReg = (uint32_t)((double)pow(10, (double)carrierGain / 1000U / 20U) * DIG_GAIN_MULT);
-        carrierGainReg = (uint32_t)int_20db_to_mag(DIG_GAIN_MULT, carrierGain);
+        carrierGainReg = adi_library_millidBVoltToLinear(carrierGain, DIG_GAIN_MULT);
         carrierGainReg &= 0x003FFFFF; /* Mask 23 bits of gain */
         tempAddress = extendedCoreScratchRegBaseAddress + 4U * (ADRV904X_ANTENNA_CAL_RX_CARRIER_0_GAIN + i);
         recoveryAction = adi_adrv904x_Register32Write(device, NULL, tempAddress, carrierGainReg, 0xFFFFFFFF);
@@ -1097,8 +1097,7 @@ adi_adrv904x_ErrAction_e adi_adrv904x_RadioCtrlAntCalCarrierConfigSet(adi_adrv90
         }
 
         /* Convert from mdB to 7.16. (reg value = 10**(value in mdB/1000/20)) * 2^16) */
-        //carrierGainReg = (uint32_t)((double)pow(10, (double)carrierGain / 1000U / 20U) * DIG_GAIN_MULT);
-        carrierGainReg = (uint32_t)int_20db_to_mag(DIG_GAIN_MULT, carrierGain);
+        carrierGainReg = adi_library_millidBVoltToLinear(carrierGain, DIG_GAIN_MULT);
         carrierGainReg &= 0x003FFFFF; /* Mask 23 bits of gain */
         
         tempAddress = extendedCoreScratchRegBaseAddress + 4U * (ADRV904X_ANTENNA_CAL_TX_CARRIER_0_GAIN + i);
@@ -1473,7 +1472,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_LoFrequencySetRangeCheck(adi_adrv904x_
     {
         loSelect = ADI_ADRV904X_LOSEL_LO1;
     }
-        /* Find the greatest TX Input Rates value of the same LO */
+        /* Find the largest bandwidth of all the initialized Tx or Rx chans driven by the LO. */
     maxRfBandwidth_kHz = 0U;
     if ((device->devStateInfo.profilesValid & ADI_ADRV904X_TX_PROFILE_VALID) == ADI_ADRV904X_TX_PROFILE_VALID)
     {
@@ -1481,19 +1480,23 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_LoFrequencySetRangeCheck(adi_adrv904x_
         {
             /* convert the index to matching the channel */
             txChannel = (adi_adrv904x_TxChannels_e)((uint8_t)(1U << i));
-            if (((device->devStateInfo.initializedChannels >> ADI_ADRV904X_TX_INITIALIZED_CH_OFFSET) & (uint32_t)txChannel) == (uint32_t)txChannel)
+            if (((device->devStateInfo.initializedChannels >> ADI_ADRV904X_TX_INITIALIZED_CH_OFFSET) & (uint32_t)txChannel)
+                  == (uint32_t)txChannel)
             {
+                /* Tx chan i is initialized. */
                 recoveryAction = adrv904x_TxLoSourceGet(device, txChannel, &loSelectGet);
                 if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
                 {
                     ADI_API_ERROR_REPORT(&device->common, recoveryAction, "TxLoSourceGet Issue");
                     return recoveryAction;
                 }
+                
                 if (loSelectGet == loSelect)
                 {
-                    /* Now check if matching LO then compare to get max value */
+                    /* Tx chan i is driven by the lo whose freq is being changed */
                     if (device->initExtract.tx.txChannelCfg[i].rfBandwidth_kHz > maxRfBandwidth_kHz)
                     {
+                        /* This Tx chan has the largest bandwidth so far; Update max. */
                         maxRfBandwidth_kHz = device->initExtract.tx.txChannelCfg[i].rfBandwidth_kHz;
                     }
                 }
@@ -2542,6 +2545,18 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioSequencerApplyImmediately(adi_adr
         ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting Radio Sequencer apply_now. \n");
         goto cleanup;
     }
+
+    /* Clear the apply_now */
+    recoveryAction = adrv904x_Sequencer_ApplyNow_BfSet(device,
+        NULL,
+        sequencerBaseAddr,
+        0U);
+    if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+    {
+        ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while clearing Radio Sequencer apply_now. \n");
+        goto cleanup;
+    }
+
 cleanup:
     return recoveryAction;
 }
@@ -2718,6 +2733,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioSequencerStart(adi_adrv904x_Devic
     const uint32_t DBG_PROGRAM_COUNTER_BITM = 0x0000FFFFU;
     const uint32_t RS_START_WAIT_INTERVAL_US = 1000U;
     const uint32_t RS_START_WAIT_CNT = 1000U;
+    const uint32_t DELAY_US = 10000U;
 
     uint32_t pointerInit = 0x0U;
     uint8_t resetHold = 0x0U;
@@ -2967,6 +2983,14 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioSequencerStart(adi_adrv904x_Devic
         if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
         {
             ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting RS Apply.\n");
+            goto cleanup;
+        }
+
+        /* Wait a bit before running the check again */
+        recoveryAction = (adi_adrv904x_ErrAction_e)adi_common_hal_Wait_us(&device->common, DELAY_US);
+        if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+        {
+            ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while waiting ...");
             goto cleanup;
         }
 
@@ -3621,26 +3645,6 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioCtrlDbgGpioOutputSet( adi_adrv904
                 return recoveryAction;
             }
 
-            /* Set the gpioMode to the correct GPIO Source Control register nibble based on gpioPin */
-            if (isDigital == ADI_TRUE)
-            {
-                recoveryAction = adrv904x_GpioPinmuxStg3Set(device, (adi_adrv904x_GpioPinSel_e)gpioPin, gpioMode);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting the GPIO Source Control bitfield.");
-                    return recoveryAction;
-                }
-            }
-            else
-            {
-                recoveryAction = adrv904x_GpioAnalogPinmuxSet(device, (adi_adrv904x_GpioAnaPinSel_e)gpioPin, gpioMode);
-                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
-                {
-                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting the GPIO Analog Source Control bitfield.");
-                    return recoveryAction;
-                }
-            }
-
             if ((gpioSigType == ADI_ADRV904X_OUT_GPIO_SIG_TYPE_FB_SW_EN) || (gpioSigType == ADI_ADRV904X_OUT_GPIO_SIG_TYPE_FB_SW_EXT_EN))
             {
                 /* The bit position 0,1,2,3 is uses to configure pins assigned to TX-to-ORx0 mapping
@@ -3839,6 +3843,26 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioCtrlDbgGpioOutputSet( adi_adrv904
                     return recoveryAction;
                 }
             }
+
+            /* Set the gpioMode to the correct GPIO Source Control register nibble based on gpioPin */
+            if (isDigital == ADI_TRUE)
+            {
+                recoveryAction = adrv904x_GpioPinmuxStg3Set(device, (adi_adrv904x_GpioPinSel_e)gpioPin, gpioMode);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting the GPIO Source Control bitfield.");
+                    return recoveryAction;
+                }
+            }
+            else
+            {
+                recoveryAction = adrv904x_GpioAnalogPinmuxSet(device, (adi_adrv904x_GpioAnaPinSel_e)gpioPin, gpioMode);
+                if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
+                {
+                    ADI_API_ERROR_REPORT(&device->common, recoveryAction, "Error while setting the GPIO Analog Source Control bitfield.");
+                    return recoveryAction;
+                }
+            }
         }
     }
     
@@ -3857,6 +3881,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioCtrlDbgGpioOutputGet( adi_adrv904
     uint8_t gpioMode = 0U;
     uint8_t regByte = 0U;
     uint32_t fromMaster = 0U;
+    uint16_t fromMaster16 = 0U;
     uint16_t channelId = 0U;
 	uint32_t mask = 0U;
 
@@ -3913,7 +3938,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioCtrlDbgGpioOutputGet( adi_adrv904
             recoveryAction = adrv904x_Core_GpioAnalogFromMaster_BfGet(device,
                                                                       NULL,
                                                                       (adrv904x_BfCoreChanAddr_e)ADRV904X_BF_CORE_ADDR,
-                                                                      (uint16_t*)&fromMaster);
+                                                                      &fromMaster16);
             if (recoveryAction != ADI_ADRV904X_ERR_ACT_NONE)
             {
                 ADI_API_ERROR_REPORT(&device->common, 
@@ -3921,6 +3946,7 @@ ADI_API adi_adrv904x_ErrAction_e adrv904x_RadioCtrlDbgGpioOutputGet( adi_adrv904
                                      "Error while reading back GPIO Analog Manual Mode Input Word values.");
                 return recoveryAction;
             }
+            fromMaster = (uint32_t)fromMaster16;
         }
     }
 

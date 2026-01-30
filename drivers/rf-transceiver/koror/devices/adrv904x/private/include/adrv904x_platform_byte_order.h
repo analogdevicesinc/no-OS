@@ -5,20 +5,20 @@
  *
  * \details Contains platform byte order (endianness) conversion macros
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADRV904X_PLATFORM_BYTE_ORDER_H__
 #define __ADRV904X_PLATFORM_BYTE_ORDER_H__
 
 #ifndef ADI_ADRV904X_FW
+#include "adi_library_types.h"
 #include "adi_adrv904x_user.h"
 #ifdef ADI_ADRV904X_LITTLE_ENDIAN
 #define ADRV904X_LITTLE_ENDIAN ADI_ADRV904X_LITTLE_ENDIAN
@@ -93,6 +93,54 @@
 #else
 #error "ADRV904X_LITTLE_ENDIAN value not recognized. Must be either 0 or 1."
 #endif /* ADRV904X_LITTLE_ENDIAN */
+
+
+
+#ifndef ADI_LIBRARY_RM_FLOATS
+static inline float ADRV904X_BYTESWAP_F(float x)
+{
+    float ret;
+    char *pX = (char *)&x;
+    char *pRet = (char *)&ret;
+
+    pRet[0] = pX[3];
+    pRet[1] = pX[2];
+    pRet[2] = pX[1];
+    pRet[3] = pX[0];
+
+   return ret;
+}
+
+static inline double ADRV904X_BYTESWAP_D(double x)
+{
+    double ret;
+    char *pX = (char *)&x;
+    char *pRet = (char *)&ret;
+
+    pRet[0] = pX[7];
+    pRet[1] = pX[6];
+    pRet[2] = pX[5];
+    pRet[3] = pX[4];
+    pRet[4] = pX[3];
+    pRet[5] = pX[2];
+    pRet[6] = pX[1];
+    pRet[7] = pX[0];
+
+    return ret;
+}
+#endif
+
+#if ADRV904X_LITTLE_ENDIAN == 1
+#define ADRV904X_HTOCF( x )  ( x )
+#define ADRV904X_CTOHF( x )  ( x )
+#define ADRV904X_HTOCD( x )  ( x )
+#define ADRV904X_CTOHD( x )  ( x )
+#elif ADRV904X_LITTLE_ENDIAN == 0
+#define ADRV904X_HTOCF( x )  ADRV904X_BYTESWAP_F((x))
+#define ADRV904X_CTOHF( x )  ADRV904X_BYTESWAP_F((x))
+#define ADRV904X_HTOCD( x )  ADRV904X_BYTESWAP_D((x))
+#define ADRV904X_CTOHD( x )  ADRV904X_BYTESWAP_D((x))
+#endif
 
 #endif /* __ADRV904X_PLATFORM_BYTE_ORDER_H__ */
 

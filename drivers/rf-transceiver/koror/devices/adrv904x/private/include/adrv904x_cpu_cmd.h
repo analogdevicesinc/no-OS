@@ -5,14 +5,13 @@
  *
  * \details Contains device-specific command definitions
  *
- * ADRV904X API Version: 2.10.0.4
+ * ADRV904X API Version: 2.15.0.4
  */
 
 /**
  * Disclaimer Legal Disclaimer
- * Copyright 2019 - 2021 Analog Devices Inc.
- * Released under the ADRV904X API license, for more information
- * see the "LICENSE.PDF" file in this zip file.
+ * Copyright 2019 - 2025 Analog Devices Inc.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 #ifndef __ADRV904X_CPU_CMD_H__
@@ -180,8 +179,7 @@ typedef enum adrv904x_CpuCmdId
     
     ADRV904X_CPU_CMD_ID_JESD_TX_LANE_POWER = 0x3Fu,                /*!< Power up or down Serdes lanes */
 
-
-    /* CDUC/CDDC NCO commands (Koror only) */
+    /* CDUC/CDDC NCO commands */
     ADRV904X_CPU_CMD_ID_SET_RX_CDDC_NCO = 0x40u,               /*!< SET_RX_CDDC_NCO: Set/Configure the Rx CDDC NCO */
     ADRV904X_CPU_CMD_ID_GET_RX_CDDC_NCO = 0x41u,               /*!< GET_RX_CDDC_NCO: Get configuration from the Rx CDDC NCO */
 
@@ -200,8 +198,10 @@ typedef enum adrv904x_CpuCmdId
     ADRV904X_CPU_CMD_ID_START_MCS_CARRIER_RECONFIG = 0x49u,    /*!< START_MCS: Start Multichip Sync procedure */
     ADRV904X_CPU_CMD_ID_MCS_CARRIER_RECONFIG_COMPLETE  = 0x4Au,/*!< MCS_COMPLETE: Notification that MCS is complete */
 
-    ADRV904X_CPU_CMD_ID_NUM_CMDS = 0x4Bu                       /*!< Number of command IDs. Must be last. */
+    ADRV904X_CPU_CMD_ID_JESD_GET_RX_LANE_SINT_CODES = 0x4Bu,   /*!< Get Serdes lane SINT Codes */    
+    ADRV904X_CPU_CMD_ID_SET_ORX_ALT_NCO = 0x4Cu,               /*!< SET_ORX_ALT_NCO: Set Alternative frequencies for ORx NCO */
 
+    ADRV904X_CPU_CMD_ID_NUM_CMDS = 0x4Du                       /*!< Number of command IDs. Must be last. */
 } adrv904x_CpuCmdId_e;
 
 /**
@@ -242,6 +242,7 @@ typedef union adrgven6_CpuCmdPayloadMaxSize
     adrv904x_CpuCmd_SetTxAttenPhase_t         getTxAttenPhase;
     adrv904x_CpuCmd_GetTxAttenPhase_t         setTxAttenPhase;
     adrv904x_CpuCmd_RunEyeSweep_t             runEyeSweepCmd;
+    adrv904x_CpuCmd_GetSintCodes_t            getSintCodesCmd;
     adrv904x_CpuCmd_SetTxToOrxPresetAtten_t   setTxToOrxPresetAttenCmd;
     adrv904x_CpuCmd_SetTxToOrxPresetNco_t     setTxToOrxPresetNcoCmd;
     adrv904x_CpuCmd_GetJesdSerLaneCfg_t       getJesdSerLaneCfgCmd;
