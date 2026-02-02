@@ -41,7 +41,7 @@ int init_lcd(void)
 {
 	int status;
 	char buff[50];
-	struct no_os_gpio_sec *spi_cs;
+	struct no_os_gpio_desc *spi_cs;
 	struct nhd_c12832a1z_dev *nhd_c12832a1z_device;
 
 	struct max_gpio_init_param gpio_extra_ip_cs = {
