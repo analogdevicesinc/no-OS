@@ -336,6 +336,9 @@ static int32_t ad9172_spi_xfer(void *user_data, uint8_t *wbuf,
 	struct no_os_spi_desc *spi = user_data;
 	uint8_t * buffer = (uint8_t *) no_os_malloc(len);
 
+	if (!buffer)
+		return -ENOMEM;
+
 	memcpy(buffer, wbuf, 3);
 	ret = no_os_spi_write_and_read(spi, buffer, len);
 	if (ret < 0) {
