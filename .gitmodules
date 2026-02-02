@@ -25,3 +25,6 @@
 [submodule "libraries/tmc/TMC-API"]
 	path = libraries/tmc/TMC-API
 	url = https://github.com/analogdevicesinc/TMC-API.git
+[submodule "libraries/precision-converters-library"]
+	path = libraries/precision-converters-library
+	url = https://github.com/analogdevicesinc/precision-converters-library.git
