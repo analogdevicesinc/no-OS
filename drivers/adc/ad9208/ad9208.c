@@ -54,6 +54,9 @@ static int ad9208_spi_xfer(void *user_data, uint8_t *wbuf,
 	uint8_t * buffer = (uint8_t *) no_os_malloc(len);
 	int32_t ret;
 
+	if (!buffer)
+		return -ENOMEM;
+
 	memcpy(buffer, wbuf, 3);
 
 	ret = no_os_spi_write_and_read(spi, buffer, len);
