@@ -553,6 +553,8 @@ int32_t ad713x_init(struct ad713x_dev **device,
 			goto error_dev;
 	} else {
 		dev->spi_desc = no_os_calloc(1, sizeof * dev->spi_desc);
+		if (!dev->spi_desc)
+			goto error_dev;
 		dev->spi_desc->chip_select = init_param->spi_init_prm.chip_select;
 		dev->spi_desc->extra = init_param->spi_common_dev->extra;
 		dev->spi_desc->max_speed_hz = init_param->spi_init_prm.max_speed_hz;
