@@ -249,10 +249,8 @@ int32_t xil_spi_init(struct no_os_spi_desc **desc,
 	}
 
 	*desc = no_os_malloc(sizeof(**desc));
-	if (! *desc) {
-		no_os_free(*desc);
+	if (!*desc)
 		return -1;
-	}
 
 	spi_type = param->extra;
 
