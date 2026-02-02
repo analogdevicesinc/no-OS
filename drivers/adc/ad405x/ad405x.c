@@ -1413,37 +1413,45 @@ static int ad405x_init_gpios(struct ad405x_dev *dev,
 	if (dev->gpio_gpio0) {
 		ret = no_os_gpio_direction_input(dev->gpio_gpio0);
 		if (ret)
-			return ret;
+			goto err_gpio0;
 	}
 
 	/* GPIO1 */
 	ret = no_os_gpio_get_optional(&dev->gpio_gpio1, init_param->gpio_gpio1);
-	if (ret < 0)
-		return ret;
+	if (ret)
+		goto err_gpio0;
 
 	if (dev->gpio_gpio1) {
 		ret = no_os_gpio_direction_input(dev->gpio_gpio1);
 		if (ret)
-			return ret;
+			goto err_gpio1;
 	}
 
 	/* Only SPI has CNV pin */
 	if (dev->comm_type != AD405X_SPI_COMM)
-		return ret;
+		return 0;
 
 	/* CNV */
 	ret = no_os_gpio_get_optional(&dev->extra.spi_extra.gpio_cnv,
 				      init_param->gpio_cnv);
-	if (ret < 0)
-		return ret;
+	if (ret)
+		goto err_gpio1;
 
 	if (dev->extra.spi_extra.gpio_cnv) {
 		ret = no_os_gpio_direction_output(dev->extra.spi_extra.gpio_cnv,
 						  NO_OS_GPIO_LOW);
 		if (ret)
-			return ret;
+			goto err_cnv;
 	}
 
+	return 0;
+
+err_cnv:
+	no_os_gpio_remove(dev->extra.spi_extra.gpio_cnv);
+err_gpio1:
+	no_os_gpio_remove(dev->gpio_gpio1);
+err_gpio0:
+	no_os_gpio_remove(dev->gpio_gpio0);
 	return ret;
 }
 
