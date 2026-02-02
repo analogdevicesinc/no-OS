@@ -118,7 +118,7 @@ static int ad7091r8_iio_read_reg(struct ad7091r8_iio_dev *dev, uint32_t reg,
 	uint16_t read_data;
 	int ret;
 
-	return ad7091r8_spi_reg_read(dev->ad7091r8_dev, reg, &read_data);
+	ret = ad7091r8_spi_reg_read(dev->ad7091r8_dev, reg, &read_data);
 	if (ret)
 		return ret;
 
