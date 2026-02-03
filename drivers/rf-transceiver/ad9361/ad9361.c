@@ -51,7 +51,6 @@
 
 /* Used for static code size optimization: please see app_config.h */
 const bool has_split_gt = HAVE_SPLIT_GAIN_TABLE;
-const bool have_tdd_tables = HAVE_TDD_SYNTH_TABLE;
 
 #define SYNTH_LUT_SIZE	53
 
@@ -1766,13 +1765,11 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 		else
 			phy->current_rx_use_tdd_table = false;
 	} else {
-		if (have_tdd_tables) {
-			tab = &SynthLUT_TDD[range][0];
-			if (tx)
-				phy->current_tx_use_tdd_table = true;
-			else
-				phy->current_rx_use_tdd_table = true;
-		}
+		tab = &SynthLUT_TDD[range][0];
+		if (tx)
+			phy->current_tx_use_tdd_table = true;
+		else
+			phy->current_rx_use_tdd_table = true;
 	}
 
 	if (tx)
