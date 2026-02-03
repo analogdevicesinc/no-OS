@@ -42,7 +42,7 @@ append_to_dox () {
         echo "$1" >> ${TOP_DIR}/doc/doxygen/$2
 }
 
-#.dox file generic header 
+#.dox file generic header
 HEADER="/**"
 
 #.dox file generic footer
