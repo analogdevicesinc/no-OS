@@ -2,15 +2,15 @@
 //
 // The surpression format:
 // [error id]:[filename]
-// 
+//
 // Example where all the warnings under the "drivers" folder are suppressed:
 // *:drivers/*
-// 
+//
 // Please use ".cppcheckignore" only for files/folders that are included
-// as libraries/modules and are outside of the scope of this repository. 
+// as libraries/modules and are outside of the scope of this repository.
 //
 // Another alternative is using inline suppressions. Please see Cppcheck manual
-// for further information: https://cppcheck.sourceforge.net/manual.pdf 
+// for further information: https://cppcheck.sourceforge.net/manual.pdf
 
 *:drivers/adc/ad9081/api/*
 *:drivers/rf-transceiver/navassa/common/*
