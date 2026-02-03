@@ -1,3 +1,4 @@
+
 VSCODE_SUPPORT = yes
 
 ifndef MAXIM_LIBRARIES
