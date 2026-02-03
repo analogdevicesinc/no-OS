@@ -5,6 +5,7 @@ SKIPDIR = -path ./platform -prune -o \
 	-path ./rf-transceiver/navassa -prune -o \
 	-path ./adc/ad9081 -prune -o \
 	-path ./rf-transceiver/madura -prune -o	\
+	-path ./rf-transceiver/koror -prune -o	\
 	-path ./net/oa_tc6 -prune -o
 
 INCLUDES = -I../include/ \
