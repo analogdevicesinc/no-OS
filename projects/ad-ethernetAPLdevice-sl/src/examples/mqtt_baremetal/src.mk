@@ -32,7 +32,7 @@ ifndef MQTT_SERVER_PORT
 MQTT_SERVER_PORT=8883
 endif
 # Include mbedtls configuration & certs
-INCS += $(NO-OS)/network/noos_mbedtls_config.h
+INCS += $(PROJECT)/src/common/noos_mbedtls_config.h
 INCS +=$(PROJECT)/src/common/certs.h
 # Tell mbed TLS where to find the config (if your build expects this variable)
 MBED_TLS_CONFIG_FILE = $(PROJECT)/src/common/noos_mbedtls_config.h
