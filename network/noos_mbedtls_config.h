@@ -1,3 +1,4 @@
+
 /***************************************************************************//**
  *   @file   noos_mbedtls_config.h
  *   @brief  Config to build mbedtls library
@@ -72,7 +73,7 @@
  * If not defined, only DER format can be used.
  * On ADuCM3029 DER is recommended due to memmory limitations
  */
-#define ENABLE_PEM_CERT
+//#define ENABLE_PEM_CERT
 
 /*
  * Maximum length (in bytes) of incoming and outgoing plaintext fragments.

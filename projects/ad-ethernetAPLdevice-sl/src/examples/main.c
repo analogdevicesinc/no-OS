@@ -46,39 +46,7 @@
 #elif defined(HP_MQTT_BAREMETAL)
 #include "mqtt_baremetal.h"
 #elif defined(HP_MQTT_FREERTOS)
-#include "FreeRTOS.h"
-#include "task.h"
-#include "FreeRTOSConfig.h"
-#include "stack_macros.h"
 #include "mqtt_freertos.h"
-
-int ret;
-
-TaskHandle_t mqtt_task_handle = NULL;
-
-void mqtt_task(){
-	mqtt_freertos_main(); 
-	vTaskDelete(NULL);
-}
-
-int create_tasks(void){
-	int ret;
-
-	ret = xTaskCreate(mqtt_task, (const char *)"FreeRTOS MQTT Task", configIIO_APP_STACK_SIZE,
-				NULL, tskIDLE_PRIORITY + 1, &mqtt_task_handle);
-	if (ret != pdPASS) {
-		printf("xTaskCreate() failed to create FreeRTOS MQTT task.\n");
-		goto error_mqtt_task;
-	}
-
-	vTaskStartScheduler();
-
-	error_mqtt_task:
-		if (mqtt_task_handle != NULL){
-			vTaskDelete(mqtt_task_handle);
-			}
-	return -1;
-	}
 #elif defined(HP_PING_EXAMPLE)
 #include "ping_example.h"
 #endif
@@ -103,8 +71,8 @@ int main()
 #elif defined(HP_MQTT_BAREMETAL)
 	return mqtt_baremetal_main();
 #elif defined(HP_MQTT_FREERTOS)
-	int ret;
-	ret = create_tasks();
+	// int ret;
+	return create_tasks();
 #elif defined(HP_PING_EXAMPLE)
 	return ping_example_main();
 #endif

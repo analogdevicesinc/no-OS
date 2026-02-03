@@ -33,6 +33,6 @@
 #ifndef __MQTT_FREERTOS_H__
 #define __MQTT_FREERTOS_H__
 
-int mqtt_freertos_main();
+int create_tasks(void);
 
 #endif /* __MQTT_FREERTOS_H__V */

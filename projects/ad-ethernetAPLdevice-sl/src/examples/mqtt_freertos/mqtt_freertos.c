@@ -62,6 +62,12 @@
 #include "maxim_trng.h"
 #include "maxim_timer.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "FreeRTOSConfig.h"
+#include "stack_macros.h"
+#include "mqtt_freertos.h"
+
 const struct max_spi_init_param spi_extra = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
@@ -255,4 +261,30 @@ int mqtt_freertos_main()
 	}
 
 	return 0;
+}
+
+TaskHandle_t mqtt_task_handle = NULL;
+
+void mqtt_task(){
+	mqtt_freertos_main(); 
+	vTaskDelete(NULL);
+}
+
+int create_tasks(void){
+	int ret;
+
+	ret = xTaskCreate(mqtt_task, (const char *)"FreeRTOS MQTT Task", configIIO_APP_STACK_SIZE,
+				NULL, tskIDLE_PRIORITY + 1, &mqtt_task_handle);
+	if (ret != pdPASS) {
+		printf("xTaskCreate() failed to create FreeRTOS MQTT task.\n");
+		goto error_mqtt_task;
+	}
+
+	vTaskStartScheduler();
+
+	error_mqtt_task:
+		if (mqtt_task_handle != NULL){
+			vTaskDelete(mqtt_task_handle);
+			}
+	return -1;
 }
