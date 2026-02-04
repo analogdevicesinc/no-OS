@@ -37,3 +37,4 @@ __pycache__/
 
 local_variables.mk
 *generated*
+"projects/ad-ethernetAPLdevice-sl/session.txt.log" 
