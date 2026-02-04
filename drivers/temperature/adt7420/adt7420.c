@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 #include "adt7420.h"
 
 const struct adt7420_chip_info chip_info[] = {
@@ -91,11 +92,12 @@ int adt7420_reg_read(struct adt7420_dev *dev,
 int adt7420_reg_update_bits(struct adt7420_dev *dev,
 			    uint16_t register_address, uint8_t mask, uint8_t value)
 {
-
+	int ret;
 	uint16_t regval;
 
-	if (adt7420_reg_read(dev, register_address, &regval))
-		return -1;
+	ret = adt7420_reg_read(dev, register_address, &regval);
+	if (ret)
+		return ret;
 
 	regval &= ~mask;
 	regval |= value;
@@ -205,7 +207,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 
 	dev = (struct adt7420_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	dev->active_device = init_param.active_device;
 
@@ -332,12 +334,15 @@ int adt7420_set_resolution(struct adt7420_dev *dev,
 *******************************************************************************/
 int32_t adt7420_reset(struct adt7420_dev *dev)
 {
+	int ret;
+
 	if (adt7420_is_spi(dev)) {
 		uint8_t data_buffer[] = { 0xFF, 0xFF, 0xFF, 0xFF };
-		if (no_os_spi_write_and_read(dev->spi_desc,
-					     data_buffer,
-					     sizeof(data_buffer)))
-			return -1;
+		ret = no_os_spi_write_and_read(dev->spi_desc,
+					       data_buffer,
+					       sizeof(data_buffer));
+		if (ret)
+			return ret;
 	} else {
 		uint8_t register_address = ADT7420_REG_RESET;
 		if (no_os_i2c_write(dev->i2c_desc,

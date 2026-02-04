@@ -32,6 +32,9 @@
 *******************************************************************************/
 
 #include "max31889.h"
+#include "no_os_alloc.h"
+#include "no_os_delay.h"
+#include "no_os_util.h"
 
 int32_t max31889_write_reg(struct max31889_desc *desc, uint8_t reg_addr,
 			   uint8_t *data, uint8_t length)
@@ -62,12 +65,6 @@ int32_t max31889_read_reg(struct max31889_desc *desc, uint8_t reg_addr,
 	i2c_desc = desc->i2c_desc;
 
 	ret = no_os_i2c_write(i2c_desc, &reg_addr, 1, 0);
-	return -EINVAL;
-
-	i2c_desc = desc->i2c_desc;
-
-	ret = no_os_i2c_write(i2c_desc, &reg_addr, 1, 0);
-
 	if (ret)
 		return ret;
 
@@ -108,9 +105,12 @@ int32_t max31889_trig_and_read_temp(struct max31889_desc *desc,
 		if (ret)
 			return ret;
 		++step_counter;
-		no_os_udelay(
+		no_os_mdelay(
 			TEMP_MEAS_WAIT_UNTIL_ERROR_MS); // Delay to allow the conversion to complete
 	} while (!(reg_tmp & NO_OS_BIT(1)) && step_counter < MAX31889_MAX_CONV_STEPS);
+
+	if (!(reg_tmp & NO_OS_BIT(1)))
+		return -ETIMEDOUT;
 
 	ret = max31889_read_reg(desc, MAX31889_REG_FIFO_DATA, data, 2);
 	if (ret < 0)
@@ -137,12 +137,14 @@ int32_t max31889_init(struct max31889_desc **desc,
 		return -ENOMEM;
 
 	ret = no_os_i2c_init(&max31889_desc_tmp->i2c_desc, param->i2c_ip);
-	if (ret)
+	if (ret) {
 		no_os_free(max31889_desc_tmp);
-	return ret;
+		return ret;
+	}
 
 	*desc = max31889_desc_tmp;
-	return ret;
+
+	return 0;
 }
 
 int32_t max31889_remove(struct max31889_desc *desc)

@@ -59,3 +59,36 @@ download_common_scripts() {
 			-O build/$script
 	done
 }
+
+#################################################################
+# Parse commit range - shared implementation for CI scripts
+#################################################################
+parse_commit_range() {
+	local operation_name="${1:-check}"
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		COMMIT_RANGE="${COMMIT_RANGE}"
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
+	then
+		git fetch --depth=50 origin $TARGET_BRANCH
+		git branch $TARGET_BRANCH origin/$TARGET_BRANCH
+		COMMIT_RANGE="${TARGET_BRANCH}.."
+	fi
+
+	if [ -z "$COMMIT_RANGE" ]
+	then
+		echo_green "Using only latest commit, since there is no Pull Request"
+		COMMIT_RANGE=HEAD~1
+	fi
+
+	echo_green "Running $operation_name on commit range '$COMMIT_RANGE'"
+	echo_green "Commits should be:"
+	if ! git rev-parse $COMMIT_RANGE ; then
+		echo_red "Failed to parse commit range '$COMMIT_RANGE'"
+		echo_green "Using only latest commit"
+		COMMIT_RANGE=HEAD~1
+	fi
+}

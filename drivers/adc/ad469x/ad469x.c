@@ -294,10 +294,10 @@ int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
 
 	if (dev->ch_sequence == AD469x_single_cycle ||
 	    dev->ch_sequence == AD469x_two_cycle)
-		return -1;
+		return -EINVAL;
 
 	if (ch >= dev->num_data_ch)
-		return -1;
+		return -EINVAL;
 
 	ret = ad469x_spi_write_mask(dev,
 				    AD469x_REG_CONFIG_IN(ch),
@@ -350,7 +350,7 @@ int32_t ad469x_std_seq_osr(struct ad469x_dev *dev, enum ad469x_osr_ratios ratio)
 
 	if (dev->ch_sequence == AD469x_single_cycle ||
 	    dev->ch_sequence == AD469x_two_cycle)
-		return -1;
+		return -EINVAL;
 
 	ret = ad469x_spi_write_mask(dev,
 				    AD469x_REG_CONFIG_IN(0),
@@ -479,7 +479,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		break;
 
 	default:
-		return -1;
+		return -EINVAL;
 	}
 
 	dev->ch_sequence = seq;
@@ -800,7 +800,7 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 	else if (channel == dev->num_data_ch)
 		commands_data[0] = AD469x_CMD_SEL_TEMP_SNSOR_CH << 8;
 	else
-		return -1;
+		return -EINVAL;
 
 	no_os_pwm_enable(dev->trigger_pwm_desc);
 
@@ -855,7 +855,7 @@ int32_t ad469x_reset_dev(struct ad469x_dev *dev)
 		return ret;
 
 	if (!((reset_status & AD469x_REG_STATUS_RESET_MASK) >> 5))
-		return -1;
+		return -EIO;
 
 	return 0;
 }
@@ -1063,7 +1063,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 
 	dev = (struct ad469x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 #if !defined(USE_STANDARD_SPI)
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
@@ -1173,7 +1173,7 @@ error_clkgen:
 error_dev:
 	no_os_free(dev);
 
-	return -1;
+	return ret;
 }
 
 /**
@@ -1186,7 +1186,7 @@ int32_t ad469x_remove(struct ad469x_dev *dev)
 	int32_t ret;
 
 	if (!dev)
-		return -1;
+		return -EINVAL;
 
 #if !defined(USE_STANDARD_SPI)
 	ret = no_os_pwm_remove(dev->trigger_pwm_desc);

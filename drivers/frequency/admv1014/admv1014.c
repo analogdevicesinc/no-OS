@@ -284,7 +284,7 @@ int admv1014_get_if_amp_gain(struct admv1014_dev *dev, uint8_t *i_coarse_gain,
 	if (ret)
 		return ret;
 
-	*i_coarse_gain = no_os_field_get(ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK, data);
+	*q_coarse_gain = no_os_field_get(ADMV1014_IF_AMP_COARSE_GAIN_Q_MSK, data);
 
 	return 0;
 }

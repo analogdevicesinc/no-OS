@@ -137,6 +137,7 @@ uint32_t no_os_find_first_set_bit(uint32_t word);
 uint64_t no_os_find_first_set_bit_u64(uint64_t word);
 /* Find last set bit in word. */
 uint32_t no_os_find_last_set_bit(uint32_t word);
+uint64_t no_os_find_last_set_bit_u64(uint64_t word);
 /* Locate the closest element in an array. */
 uint32_t no_os_find_closest(int32_t val,
 			    const int32_t *array,

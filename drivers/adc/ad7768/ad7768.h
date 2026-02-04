@@ -102,7 +102,7 @@
 #define AD7768_INTERFACE_CFG_CRC_SEL(x)			(((x) & 0x3) << 2)
 #define AD7768_INTERFACE_CFG_DCLK_DIV(x)		(((x) & 0x3) << 0)
 #define AD7768_INTERFACE_CFG_DCLK_DIV_MSK		NO_OS_GENMASK(1, 0)
-#define AD7768_INTERFACE_CFG_DCLK_DIV_MODE(x)		(4 - no_os_find_first_set_bit(x))
+#define AD7768_INTERFACE_CFG_DCLK_DIV_MODE(x)		(3 - no_os_find_first_set_bit(x))
 #define AD7768_MAX_DCLK_DIV				8
 
 #define AD7768_RESOLUTION				24

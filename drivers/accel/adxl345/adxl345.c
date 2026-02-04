@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include "adxl345.h"
 #include "no_os_alloc.h"
+#include "no_os_error.h"
 
 static const uint8_t adxl345_part_id[] = {
 	[ID_ADXL345] = ADXL345_ID,
@@ -126,7 +127,7 @@ int32_t adxl345_init(struct adxl345_dev **device,
 
 	dev = (struct adxl345_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
-		return -1;
+		return -ENOMEM;
 
 	dev->communication_type = init_param.communication_type;
 

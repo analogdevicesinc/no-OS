@@ -203,7 +203,7 @@ int32_t ad7768_set_mode_pins(ad7768_dev *dev,
 					    ((state & 0x08) >> 3));
 	} else {
 		printf("MODE GPIOs are not defined.");
-		ret = -1;
+		ret = -EINVAL;
 	}
 
 	return ret;
@@ -242,7 +242,7 @@ int32_t ad7768_set_power_mode(ad7768_dev *dev,
 		} else {
 			printf("Invalid Power Mode for the current configuration.");
 
-			return -1;
+			return -EINVAL;
 		}
 	}
 
@@ -332,7 +332,7 @@ int32_t ad7768_set_dclk_div(ad7768_dev *dev,
 		} else {
 			printf("Invalid DCLK_DIV for the current configuration.");
 
-			return -1;
+			return -EINVAL;
 		}
 	}
 
@@ -386,7 +386,7 @@ int32_t ad7768_set_conv_op(ad7768_dev *dev,
 		} else {
 			printf("Invalid Conversion Operation for the current configuration.");
 
-			return -1;
+			return -EINVAL;
 		}
 	}
 
@@ -654,7 +654,7 @@ int32_t ad7768_setup_begin(ad7768_dev **device,
 
 	dev = (ad7768_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev) {
-		return -1;
+		return -ENOMEM;
 	}
 
 	ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
@@ -914,6 +914,9 @@ int ad7768_set_power_mode_and_sampling_freq(ad7768_dev *dev,
  */
 int ad7768_remove(ad7768_dev *dev)
 {
+	if (!dev)
+		return -EINVAL;
+
 	no_os_spi_remove(dev->spi_desc);
 
 	no_os_gpio_remove(dev->gpio_reset);

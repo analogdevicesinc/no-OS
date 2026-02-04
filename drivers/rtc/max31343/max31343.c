@@ -190,12 +190,7 @@ int max31343_set_time_stamp(struct max31343_dev *dev,
 	if (ret)
 		return ret;
 
-	data = no_os_bin2bcd(ts.year);
-	if (century)
-		data -= 2100;
-	else
-		data -= 2000;
-
+	data = no_os_bin2bcd(ts.year - (century ? 2100 : 2000));
 	ret = max31343_reg_write(dev, MAX31343_R_YEAR, data);
 	if (ret)
 		return ret;

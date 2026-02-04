@@ -37,6 +37,11 @@
 #include <stdbool.h>
 #include "no_os_gpio.h"
 
+enum adg1736_type {
+	ADG736,
+	ADG1736,
+};
+
 enum adg1736_switch {
 	ADG1736_SW1,
 	ADG1736_SW2,
@@ -48,13 +53,17 @@ enum adg1736_state {
 };
 
 struct adg1736_dev {
+	enum adg1736_type type;
 	struct no_os_gpio_desc *gpio_in1;
 	struct no_os_gpio_desc *gpio_in2;
+	struct no_os_gpio_desc *gpio_en;
 };
 
 struct adg1736_init_param {
+	enum adg1736_type type;
 	struct no_os_gpio_init_param gpio_in1;
 	struct no_os_gpio_init_param gpio_in2;
+	struct no_os_gpio_init_param *gpio_en;
 };
 
 /** Set the state of a specific switch. */
@@ -73,5 +82,11 @@ int adg1736_init(struct adg1736_dev **device,
 
 /** Free resources allocated by adg1736_init(). */
 int adg1736_remove(struct adg1736_dev *dev);
+
+/** Enable the mux (ADG1736 only, requires EN pin). */
+int adg1736_enable(struct adg1736_dev *dev);
+
+/** Disable the mux (ADG1736 only, requires EN pin). */
+int adg1736_disable(struct adg1736_dev *dev);
 
 #endif // ADG1736_H_

@@ -44,10 +44,7 @@ int max14919_set_out(struct max14919_desc *desc, enum max14919_out_state *state)
 {
 	int ret, i;
 
-	if (!desc)
-		return -ENODEV;
-
-	if (!desc->in_desc || !desc->out_state)
+	if (!desc || !state)
 		return -EINVAL;
 
 	for (i = 0; i < MAX14919_OUT_CHANNELS; i++) {
