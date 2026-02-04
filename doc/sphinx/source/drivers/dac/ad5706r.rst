@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/dac/ad5706r/README.rst
