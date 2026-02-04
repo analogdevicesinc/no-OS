@@ -105,17 +105,19 @@ INCLUDE_DIR_TMP += /Include/$(TARGET_UCASE)
 endif
 
 INCS += $(foreach dir,$(DRIVER_INCLUDE_DIR), $(wildcard $(dir)/*.h))
+
 ifeq ($(SBT),1)
 $(info **********************************************************************)
-$(info ********     max32690_sla.ld been called    **************************)
+$(info ********     $(TARGET_LCASE)_sla.ld been called    *******************)
 $(info **********************************************************************)
 $(info TARGET_LCASE is set to: $(TARGET_LCASE))
 $(info TARGET_UCASE is set to: $(TARGET_UCASE))
 LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE)_sla.ld
-SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/MAX32690/Source/sla_header_MAX32690.c
+SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/sla_header_$(TARGET_UCASE).c
 CFLAGS += -D__SLA_FWK__
 else
 LSCRIPT += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/$(TARGET_LCASE).ld
+endif
 
 ASM_SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/GCC/startup_$(TARGET_LCASE).S
 SRCS += $(MAXIM_LIBRARIES)/CMSIS/Device/Maxim/$(TARGET_UCASE)/Source/heap.c
