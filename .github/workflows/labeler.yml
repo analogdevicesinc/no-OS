@@ -3,6 +3,7 @@ name: PR Labeler
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 jobs:
   label:
