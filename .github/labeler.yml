@@ -1,0 +1,32 @@
+drivers:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'drivers/**'
+          - 'include/**'
+      - all-globs-to-all-files:
+          - '!**/*.md'
+          - '!**/*.rst'
+
+projects:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'projects/**'
+      - all-globs-to-all-files:
+          - '!**/*.md'
+          - '!**/*.rst'
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'doc/**'
+          - '**/*.md'
+          - '**/*.rst'
+
+CI:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'tools/scripts/**'
+          - 'ci/**'
+          - '.github/**'
+          - 'azure-pipelines.yml'
+          - 'build_projects.yml'
