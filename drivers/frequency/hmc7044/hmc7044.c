@@ -1093,7 +1093,7 @@ static int hmc7044_lmfc_lemc_validate(struct hmc7044_dev *hmc,
 	no_os_div_u64_rem(dividend, divisor - 1, &rem_l);
 	no_os_div_u64_rem(dividend, divisor + 1, &rem_u);
 
-	if ((rem_l > rem) && (rem_u > rem)) {
+	if ((rem_l >= rem) && (rem_u >= rem)) {
 		if (hmc->jdev_lmfc_lemc_gcd)
 			hmc->jdev_lmfc_lemc_gcd = no_os_min(hmc->jdev_lmfc_lemc_gcd, divisor);
 		else
