@@ -1,19 +1,25 @@
 drivers:
   - changed-files:
       - any-glob-to-any-file:
-          - 'drivers/**'
-          - 'include/**'
-      - all-globs-to-all-files:
-          - '!**/*.md'
-          - '!**/*.rst'
+          - 'drivers/**/*.c'
+          - 'drivers/**/*.h'
+          - 'drivers/**/*.cpp'
+          - 'drivers/**/*.json'
+          - 'drivers/**/Makefile'
+          - 'include/**/*.h'
 
 projects:
   - changed-files:
       - any-glob-to-any-file:
-          - 'projects/**'
-      - all-globs-to-all-files:
-          - '!**/*.md'
-          - '!**/*.rst'
+          - 'projects/**/*.c'
+          - 'projects/**/*.h'
+          - 'projects/**/*.mk'
+          - 'projects/**/Makefile'
+          - 'projects/**/*.ld'
+          - 'projects/**/*.tcl'
+          - 'projects/**/*.xdc'
+          - 'projects/**/*.json'
+          - 'projects/**/*.ioc'
 
 documentation:
   - changed-files:
