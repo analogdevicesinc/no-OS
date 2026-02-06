@@ -64,6 +64,7 @@ TARGETSVD=$(TARGET)
 VSCODE_CMSISCFG_FILE="interface/cmsis-dap.cfg","target/$(TARGET).cfg"
 
 LDFLAGS += -mcpu=cortex-m4 	\
+	-mthumb			\
 	-Wl,--gc-sections 	\
 	--specs=nosys.specs	\
 	-mfloat-abi=$(CFLAGS_MFLOAT_TYPE) 	\
@@ -85,7 +86,8 @@ CFLAGS += -mthumb                                                               
 	-g3									\
 	-c	
 
-ASFLAGS += -x assembler-with-cpp
+ASFLAGS += -x assembler-with-cpp	\
+	-mthumb
 
 ASFLAGS += $(PROJ_AFLAGS)
 CFLAGS += -DTARGET_REV=$(TARGET_REV) \
