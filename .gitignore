@@ -20,6 +20,7 @@ dfp_drivers
 aducm_project
 aducm_build
 .vscode
+.cubeide
 .Xil
 .github/CODEOWNERS
 .github/PULL_REQUEST_TEMPLATE.md

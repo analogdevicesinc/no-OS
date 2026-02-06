@@ -1,5 +1,6 @@
 include(FlashTools)
 include(ColoredOutput)
+include(stm32cubeide_config)
 
 set(GENERATED_SOURCES_CMAKE "${CMAKE_CURRENT_BINARY_DIR}/generated_sources.cmake")
 include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
@@ -112,7 +113,7 @@ function(post_build_config PROJECT_TARGET)
                 COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex
                 COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.bin
                 COMMAND ${CMAKE_COMMAND} -E echo "Binary size:"
-                COMMAND ${CMAKE_SIZE} --format=Berkeley $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex || ${CMAKE_COMMAND} -E true
+                COMMAND ${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex || ${CMAKE_COMMAND} -E true
                 COMMAND ${CMAKE_COMMAND}
                         -DELF_PATH=$<TARGET_FILE:${PROJECT_TARGET}>
                         -DNO_OS_DIR=${NO_OS_DIR}
@@ -180,5 +181,8 @@ function(config_platform_sdk BUILD_TARGET)
                 target_link_libraries(no-os STM32_Drivers)
                 target_compile_definitions(no-os PRIVATE -DSTM32_PLATFORM=1)
                 target_link_options(${BUILD_TARGET} PRIVATE -T${LINKER_SCRIPT_FILE})
+
+                # Generate STM32CubeIDE project files
+                generate_stm32cubeide_project(${BUILD_TARGET})
         endif()
 endfunction()
