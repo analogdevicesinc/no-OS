@@ -71,10 +71,6 @@
 #include "tcp_socket.h"
 #endif
 
-#ifdef NO_OS_LWIP_NETWORKING
-#include "lwip_socket.h"
-#endif
-
 // The default baudrate iio_app will use to print messages to console.
 #define UART_BAUDRATE_DEFAULT	115200
 #define UART_STOPBITS_DEFAULT	NO_OS_UART_STOP_1_BIT
@@ -154,37 +150,6 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 					   message, msglen);
 #endif
 }
-
-#if defined(NO_OS_LWIP_NETWORKING)
-static int32_t lwip_network_setup(struct iio_app_desc *app,
-				  struct iio_app_init_param param,
-				  struct iio_init_param *iio_init_param)
-{
-	static struct tcp_socket_init_param socket_param;
-	static struct lwip_network_desc lwip_desc;
-	static bool is_initialized = false;
-	int ret;
-
-	if (NO_OS_LWIP_INIT_ONETIME && is_initialized) {
-		socket_param.net = &lwip_desc.no_os_net;
-	} else {
-		ret = no_os_lwip_init(&app->lwip_desc, &param.lwip_param);
-		if (ret)
-			return ret;
-
-		socket_param.net = &app->lwip_desc->no_os_net;
-		memcpy(&lwip_desc, app->lwip_desc, sizeof(lwip_desc));
-	}
-
-	is_initialized = true;
-	socket_param.max_buff_size = 0;
-
-	iio_init_param->phy_type = USE_NETWORK;
-	iio_init_param->tcp_socket_init_param = &socket_param;
-
-	return 0;
-}
-#endif
 
 #if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 static int32_t network_setup(struct iio_init_param *iio_init_param,
@@ -340,22 +305,24 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 
 	application->uart_desc = uart_desc;
-#if defined(NO_OS_LWIP_NETWORKING)
-	status = lwip_network_setup(application, app_init_param, &iio_init_param);
-	if (status)
-		goto error;
-#elif defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
+#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
 	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
 	if (status < 0)
 		goto error;
-#elif defined(NO_OS_W5500_NETWORKING)
+#elif defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
 	static struct tcp_socket_init_param socket_param;
 
-	socket_param.net = &app_init_param.net_dev->net_if;
+	status = no_os_net_init(&application->net_desc,
+				&app_init_param.net_init_params);
+	if (status)
+		goto error;
+
+	socket_param.net = application->net_desc->net_if;
 	socket_param.max_buff_size = 0;
 
 	iio_init_param.phy_type = USE_NETWORK;
 	iio_init_param.tcp_socket_init_param = &socket_param;
+	iio_init_param.net_desc = application->net_desc;
 #else
 	iio_init_param.phy_type = USE_UART;
 	iio_init_param.uart_desc = uart_desc;
@@ -470,6 +437,12 @@ int iio_app_remove(struct iio_app_desc *app)
 		if (ret)
 			return ret;
 	}
+
+#if defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+	ret = no_os_net_remove(app->net_desc);
+	if (ret)
+		return ret;
+#endif
 
 	ret = iio_remove(app->iio_desc);
 	if (ret)

@@ -38,6 +38,7 @@
 #include "max14906.h"
 #include "adin1110.h"
 #include "adt75.h"
+#include "lwip_socket.h"
 
 #ifdef SWIOT1L_DEFAULT_FW
 #include "iio_trigger.h"
@@ -48,6 +49,8 @@
 
 extern struct no_os_uart_init_param uart_ip;
 extern struct adin1110_init_param adin1110_ip;
+extern struct lwip_network_param lwip_ip;
+extern struct no_os_net_init_param lwip_net_init_params;
 extern const struct no_os_spi_init_param adin1110_spi_ip;
 extern const struct no_os_spi_init_param ad74413r_spi_ip;
 extern struct no_os_spi_init_param max14906_spi_ip;

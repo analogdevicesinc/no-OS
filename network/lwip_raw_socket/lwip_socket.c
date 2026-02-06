@@ -934,4 +934,104 @@ static void lwip_config_if(struct lwip_network_desc *desc)
 
 	net->net = desc;
 }
+
+/***************************************************************************//**
+ * @brief Initialize LWIP network backend for no_os_net interface
+ *
+ * Called by no_os_net_init() with an already-allocated descriptor.
+ * Wraps no_os_lwip_init() and fills in desc->net_if and desc->extra.
+ * Supports NO_OS_LWIP_INIT_ONETIME caching.
+ *
+ * @param desc  - Pre-allocated network descriptor to be filled
+ * @param param - Init params (extra points to lwip_network_param)
+ *
+ * @return 0 in case of success, negative error code otherwise
+ ******************************************************************************/
+static int lwip_net_init(struct no_os_net_desc *desc,
+			 struct no_os_net_init_param *param)
+{
+	static struct lwip_network_desc *cached_lwip_desc;
+	static bool is_initialized;
+	struct lwip_network_param *lwip_param;
+	struct lwip_network_desc *lwip_desc;
+	int ret;
+
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
+
+	lwip_param = (struct lwip_network_param *)param->extra;
+
+	if (NO_OS_LWIP_INIT_ONETIME && is_initialized && cached_lwip_desc) {
+		desc->net_if = &cached_lwip_desc->no_os_net;
+		desc->extra = cached_lwip_desc;
+		return 0;
+	}
+
+	ret = no_os_lwip_init(&lwip_desc, lwip_param);
+	if (ret)
+		return ret;
+
+	cached_lwip_desc = lwip_desc;
+	is_initialized = true;
+
+	desc->net_if = &lwip_desc->no_os_net;
+	desc->extra = lwip_desc;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Remove LWIP network backend resources
+ *
+ * Called by no_os_net_remove(). Frees lwip_network_desc but NOT the
+ * descriptor itself (that's handled by the generic layer).
+ * Respects NO_OS_LWIP_INIT_ONETIME - won't free if caching is enabled.
+ *
+ * @param desc - Network descriptor (do not free, only free extra)
+ *
+ * @return 0 in case of success, negative error code otherwise
+ ******************************************************************************/
+static int lwip_net_remove(struct no_os_net_desc *desc)
+{
+	if (!desc)
+		return -EINVAL;
+
+	/* Don't remove if caching is enabled */
+	if (NO_OS_LWIP_INIT_ONETIME)
+		return 0;
+
+	if (!desc->extra)
+		return -EINVAL;
+
+	return no_os_lwip_remove((struct lwip_network_desc *)desc->extra);
+}
+
+/***************************************************************************//**
+ * @brief Execute LWIP network processing step
+ *
+ * Wraps no_os_lwip_step() for the no_os_net interface.
+ * Must be called periodically to process timers and packets.
+ *
+ * @param desc - Network descriptor
+ * @param arg  - Optional argument passed to underlying step function
+ *
+ * @return 0 in case of success, negative error code otherwise
+ ******************************************************************************/
+static int lwip_net_step(struct no_os_net_desc *desc, void *arg)
+{
+	if (!desc || !desc->extra)
+		return -EINVAL;
+
+	return no_os_lwip_step((struct lwip_network_desc *)desc->extra, arg);
+}
+
+/**
+ * @brief LWIP network operations for generic no_os_net interface
+ */
+const struct no_os_net_ops lwip_net_ops = {
+	.init = lwip_net_init,
+	.remove = lwip_net_remove,
+	.step = lwip_net_step,
+};
+
 #endif
