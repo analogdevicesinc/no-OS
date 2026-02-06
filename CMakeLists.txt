@@ -231,8 +231,9 @@ add_custom_command(
     ${NO_OS_NATIVE_BUILD_MODE}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
+    --update
 
-    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py ${ALL_KCONFIG_FILES}
+    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py ${ALL_KCONFIG_FILES} projects/${PROJECT_DEFCONFIG}
     COMMENT "Generating CMake config variables and C header from .config"
 )
 
