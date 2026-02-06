@@ -10,6 +10,8 @@ include(source_util)
 # Check whether the build was started from the No-OS root or the library was included as a module
 cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Auto-detect build context and set toolchain paths for unified presets
 if(${NATIVE_BUILD})
     # In-tree build (full no-OS repo)

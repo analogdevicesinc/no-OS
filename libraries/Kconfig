@@ -8,6 +8,16 @@ config FREERTOS_CONF_PATH
 	depends on FREERTOS
 	string "Path to the FreeRTOSConfig.h file"
 
+config FREERTOS_VERSION
+	string "FreeRTOS version tag"
+	default "V11.2.0"
+	depends on FREERTOS
+	help
+	  Git tag or branch name for FreeRTOS-Kernel.
+	  Examples: V11.2.0, V10.4.3, main
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
+
 config FREERTOS_HEAP_ALLOCATOR
 	int "Select the FreeRTOS heap memory allocator implementation"
 	default 2
@@ -17,6 +27,16 @@ config FREERTOS_HEAP_ALLOCATOR
 config LWIP
 	bool "Enable LWIP"
 	default n
+
+config LWIP_VERSION
+	string "lwIP version tag"
+	default "STABLE-2_2_1_RELEASE"
+	depends on LWIP
+	help
+	  Git tag or branch name for lwIP.
+	  Examples: STABLE-2_2_1_RELEASE, STABLE-2_1_0_RELEASE, master
+	  This version will be checked against the submodule,
+	  then the global cache, then fetched if not found.
 
 config CORDIO
 	bool "Enable CORDIO"
