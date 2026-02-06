@@ -5,6 +5,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Enable colored output globally
 include(ColoredOutput)
+include(source_util)
 
 # Check whether the build was started from the No-OS root or the library was included as a module
 cmake_path(COMPARE ${CMAKE_SOURCE_DIR} EQUAL ${CMAKE_CURRENT_SOURCE_DIR} NATIVE_BUILD)
@@ -95,20 +96,6 @@ else()
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
   set(NO_OS_NATIVE_BUILD_MODE "")
 endif()
-
-function(no_os_sources_ifdef feature_toggle source)
-  if(${feature_toggle})
-    message(STATUS "Adding ${source}")
-    target_sources(no-os PRIVATE ${source} ${ARGN})
-  endif()
-endfunction()
-
-function(no_os_include_dir_ifdef feature_toggle include_dir)
-  if(${feature_toggle})
-    message(STATUS "Adding ${include_dir}")
-    target_include_directories(no-os PUBLIC ${include_dir})
-  endif()
-endfunction()
 
 # Board specific defconfig
 list(APPEND CONFIG_FILES ${DEFAULT_DEFCONFIG})

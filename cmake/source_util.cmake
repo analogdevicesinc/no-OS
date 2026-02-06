@@ -1,0 +1,13 @@
+function(no_os_sources_ifdef feature_toggle source)
+  if(${feature_toggle})
+    message(STATUS "Adding ${source}")
+    target_sources(no-os PRIVATE ${source} ${ARGN})
+  endif()
+endfunction()
+
+function(no_os_include_dir_ifdef feature_toggle include_dir)
+  if(${feature_toggle})
+    message(STATUS "Adding ${include_dir}")
+    target_include_directories(no-os PUBLIC ${include_dir})
+  endif()
+endfunction()
