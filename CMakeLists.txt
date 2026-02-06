@@ -88,10 +88,12 @@ if(${NATIVE_BUILD})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
+  set(NO_OS_NATIVE_BUILD_MODE "--native")
 else()
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build PARENT_SCOPE)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
+  set(NO_OS_NATIVE_BUILD_MODE "")
 endif()
 
 function(no_os_sources_ifdef feature_toggle source)
@@ -175,7 +177,6 @@ if (DEFINED PROJECT_DEFCONFIG)
   message(STATUS "Adding project defconfig: ${PROJECT_DEFCONFIG}")
   if(${NATIVE_BUILD})
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_CURRENT_SOURCE_DIR}/projects/${PROJECT_DEFCONFIG})
-    list(APPEND GENERATE_CONFIG_ARGS "--native")
   else()
     list(APPEND GENERATE_CONFIG_ARGS ${CMAKE_SOURCE_DIR}/${PROJECT_DEFCONFIG})
   endif()
@@ -215,6 +216,7 @@ if(NOT EXISTS "${CONFIG_FILE}")
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
         ${GENERATE_CONFIG_ARGS}
+        ${NO_OS_NATIVE_BUILD_MODE}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
         --update
@@ -225,18 +227,7 @@ else()
       KCONFIG_CONFIG=${CONFIG_FILE}
       srctree=${CMAKE_CURRENT_SOURCE_DIR}
       ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
-        --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
-        --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
-  )
-endif()
-
-if(NOT EXISTS "${CONFIG_FILE}")
-  execute_process(
-    COMMAND ${CMAKE_COMMAND} -E env
-      srctree=${CMAKE_CURRENT_SOURCE_DIR}
-      KCONFIG_CONFIG=${CONFIG_FILE}
-      ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
-        ${GENERATE_CONFIG_ARGS}
+        ${NO_OS_NATIVE_BUILD_MODE}
         --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
         --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
   )
@@ -250,6 +241,7 @@ add_custom_command(
     KCONFIG_CONFIG=${CONFIG_FILE}
     ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
+    ${NO_OS_NATIVE_BUILD_MODE}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
 
@@ -280,6 +272,7 @@ add_custom_target(
     srctree=${CMAKE_CURRENT_SOURCE_DIR}
     ${VENV_PYTHON_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py
     ${GENERATE_CONFIG_ARGS}
+    ${NO_OS_NATIVE_BUILD_MODE}
     --root_dir ${CMAKE_CURRENT_SOURCE_DIR}
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
   USES_TERMINAL
