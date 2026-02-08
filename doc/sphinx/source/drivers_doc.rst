@@ -28,6 +28,12 @@ ANALOG TO DIGITAL CONVERTERS
 
    drivers/adc/*
 
+   drivers/adm1177
+
+   drivers/pulsar_adc
+   
+   drivers/ad9081
+
 ADC / DAC
 ==========
 .. toctree::
@@ -107,6 +113,8 @@ MUX
 
    drivers/mux/*
 
+   drivers/ade9113
+
 RF TRANSCEIVER
 ==============
 .. toctree::
@@ -130,6 +138,10 @@ TEMPERATURE
    :glob:
 
    drivers/temperature/*
+
+   drivers/max31827
+
+   drivers/max31855
 
 POWER MANAGEMENT
 ================
