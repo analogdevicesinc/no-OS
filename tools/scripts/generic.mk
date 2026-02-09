@@ -174,6 +174,19 @@ ifeq (y,$(strip $(RELEASE)))
 CFLAGS += -O2
 endif
 
+#------------------------------------------------------------------------------
+#                            DEBUG MODE SUPPORT
+#------------------------------------------------------------------------------
+ifeq (1,$(strip $(DEBUG)))
+$(info Building in DEBUG mode: -O0 optimization, full debug symbols)
+# Disable RELEASE mode to prevent -O2 being added
+RELEASE := 0
+# Add debug symbols and path remapping
+CFLAGS += -g3
+CFLAGS += -fdebug-prefix-map=$(BUILD_DIR)/app/$(PROJECT_NAME)=$(PROJECT)
+# Note: -O0 is added in pre_build after filtering out other -O flags
+endif
+
 ifeq (y,$(strip $(NETWORKING)))
 CFLAGS += -DNO_OS_NETWORKING
 endif
@@ -344,7 +357,11 @@ endef
 PHONY += pre_build
 pre_build:
 	$(call print,Generating build flags)
+ifeq (1,$(strip $(DEBUG)))
+	$(call generate_flags_file,$(CFLAGS_FILE),$(filter-out -O0 -O1 -O2 -O3 -Os -Og,$(CFLAGS)) -O0,generate_cflags_func)
+else
 	$(call generate_flags_file,$(CFLAGS_FILE),$(CFLAGS),generate_cflags_func)
+endif
 	$(call generate_flags_file,$(CPPFLAGS_FILE),$(CPPFLAGS),generate_cppflags_func)
 	$(call generate_flags_file,$(ASFLAGS_FILE),$(ASFLAGS),generate_asflags_func)
 	$(call generate_flags_file,$(OBJS_FILE),$(OBJS),generate_objs_func)
