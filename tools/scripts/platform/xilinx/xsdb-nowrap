@@ -1,0 +1,24 @@
+#!/bin/bash
+# xsdb wrapper that bypasses rlwrap (which causes segfault on WSL2)
+# This enables Vitis IDE debugging to work properly on WSL2
+#
+# Installation (one-time, system-wide):
+#   sudo cp /path/to/Vitis/bin/xsdb /path/to/Vitis/bin/xsdb.original
+#   sudo cp xsdb-nowrap /path/to/Vitis/bin/xsdb
+#   sudo chmod +x /path/to/Vitis/bin/xsdb
+
+# Dynamically determine Vitis installation paths
+# This script is installed as xsdb, so resolve its directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Set Xilinx environment variables (with defaults)
+: "${RDI_BINROOT:=$SCRIPT_DIR}"
+: "${RDI_APPROOT:=$(dirname "$SCRIPT_DIR")}"
+: "${RDI_PLATFORM:=lnx64}"
+
+export RDI_BINROOT
+export RDI_APPROOT
+export RDI_PLATFORM
+
+# Call xsdb directly without rlwrap
+"$RDI_BINROOT"/loader -exec xsdb "$@"
