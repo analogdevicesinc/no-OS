@@ -112,7 +112,7 @@ int pqm_start_measurement(bool waitingForSync)
 	return status;
 }
 
-int pqm_one_cycle(void)
+int pqm_one_cycle(void *)
 {
 	/* Check for calibration request first */
 	if (pqlibExample.calibrationRequested || calibration_is_active()) {
