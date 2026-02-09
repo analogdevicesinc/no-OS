@@ -154,7 +154,7 @@ function(config_platform_sdk BUILD_TARGET)
                         )
 
                         execute_process(
-                                COMMAND ${STM32CUBEMX_JAVA} -jar ${STM32CUBEMX_EXECUTABLE} -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
+                                COMMAND ${STM32CUBEMX_JAVA} -Djava.awt.headless=true -jar ${STM32CUBEMX_EXECUTABLE} -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
                                 COMMENT "Generating STM32CubeMX project..."
                         )
 
