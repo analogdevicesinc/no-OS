@@ -157,7 +157,7 @@ int adt7420_i2c_reg_write(struct adt7420_dev *dev, uint16_t register_address,
 		data_buffer[1] = data;
 	}
 
-	data_buffer[0] = register_address;
+	data_buffer[0] = register_address & ~ADT7320_L16;
 
 	return no_os_i2c_write(dev->i2c_desc, data_buffer, num_bytes,
 			       1); //no repeat start
@@ -448,7 +448,7 @@ int adt7420_i2c_reg_read(struct adt7420_dev *dev, uint16_t register_address,
 	else
 		num_bytes = 1;
 
-	reg_addr = (uint8_t)register_address;
+	reg_addr = (uint8_t)(register_address & ~ADT7320_L16);
 	if (no_os_i2c_write(dev->i2c_desc, &reg_addr, 1,
 			    0)) //add a repeat start
 		return -1;
