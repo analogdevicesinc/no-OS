@@ -46,3 +46,10 @@ MAC
 
     build_guides/build_mac
 
+XILINX VITIS 2025.1
+===================
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_xilinx_vitis2025
+
