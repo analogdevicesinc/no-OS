@@ -370,17 +370,17 @@ int ade7913_init(struct ade7913_dev **device,
 	dev->burst_mode = init_param.burst_mode;
 
 	// allocate memory for the waveforms depending on the number of dev
-	i_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(i_wav));
+	i_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*i_wav));
 	if (!i_wav)
 		goto err_alloc_i_wav;
-	v1_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(v2_wav));
+	v1_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v1_wav));
 	if (!v1_wav)
 		goto err_alloc_v1_wav;
-	v2_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(v2_wav));
+	v2_wav = (int32_t *)no_os_calloc(dev->no_devs, sizeof(*v2_wav));
 	if (!v2_wav)
 		goto err_alloc_v2_wav;
 
-	v_product = (uint8_t *)no_os_calloc(dev->no_devs, sizeof(v_product));
+	v_product = (uint8_t *)no_os_calloc(dev->no_devs, sizeof(*v_product));
 	if (!v_product)
 		goto err_alloc_v_product;
 
