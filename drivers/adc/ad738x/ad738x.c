@@ -395,7 +395,7 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	struct ad738x_dev *dev;
 	int32_t ret;
 
-	dev = (struct ad738x_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct ad738x_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -457,23 +457,15 @@ err:
  */
 int32_t ad738x_remove(struct ad738x_dev *dev)
 {
-	int32_t ret;
-
-	ret = no_os_spi_remove(dev->spi_desc);
-	if (ret)
-		goto out;
+	no_os_spi_remove(dev->spi_desc);
 
 #ifdef XILINX_PLATFORM
-	ret = axi_clkgen_remove(dev->clkgen);
-	if (ret)
-		goto out;
+	axi_clkgen_remove(dev->clkgen);
 #endif
 
-	ret = no_os_pwm_remove(dev->pwm_desc);
-	if (ret)
-		goto out;
+	no_os_pwm_remove(dev->pwm_desc);
 
 	no_os_free(dev);
-out:
-	return ret;
+
+	return 0;
 }
