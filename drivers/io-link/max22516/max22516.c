@@ -172,9 +172,9 @@ void max22516_build_tcyc(int16_t t, uint8_t *tmr)
  * @param t
  * @param tmr
  */
-void max22516_rebuild_min_cyct_to_us(int16_t t, uint8_t *tmr)
+void max22516_rebuild_min_cyct_to_us(int16_t t, uint32_t *tmr)
 {
-	uint8_t temp = 0;
+	uint32_t temp = 0;
 
 	if ((t & 0xc0) == 0x00) {      // then time is stored in 100µs increments
 		temp = t * 100;
