@@ -260,7 +260,7 @@ int max22516_burst_read_register(struct max22516_dev *dev, uint8_t reg_addr,
 void max22516_build_tcyc(int16_t t, uint8_t *tmr);
 
 /* MAX22516 rebuild min cyct to microseconds */
-void max22516_rebuild_min_cyct_to_us(int16_t t, uint8_t *tmr);
+void max22516_rebuild_min_cyct_to_us(int16_t t, uint32_t *tmr);
 
 /* MAX22516 set min ctmr */
 int max22516_set_min_ctmr(struct max22516_dev *dev, uint16_t min_t);
