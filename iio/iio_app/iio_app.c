@@ -151,48 +151,6 @@ static int32_t print_uart_error_message(struct no_os_uart_desc **uart_desc,
 #endif
 }
 
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
-static int32_t network_setup(struct iio_init_param *iio_init_param,
-			     struct no_os_uart_desc *uart_desc,
-			     void *irq_desc)
-{
-	static struct tcp_socket_init_param socket_param;
-
-#ifdef LINUX_PLATFORM
-	socket_param.net = &linux_net;
-#endif
-#ifdef ADUCM_PLATFORM
-	int32_t status;
-	static struct wifi_desc *wifi;
-	struct wifi_init_param wifi_param = {
-		.irq_desc = irq_desc,
-		.uart_desc = uart_desc,
-		.uart_irq_conf = uart_desc,
-		.uart_irq_id = UART_IRQ_ID,
-		.sw_reset_en = true
-	};
-	status = wifi_init(&wifi, &wifi_param);
-	if (status < 0)
-		return status;
-
-	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
-	if (status < 0)
-		return status;
-
-	char buff[100];
-	wifi_get_ip(wifi, buff, 100);
-	printf("iiod ip is: %s\n", buff);
-
-	wifi_get_network_interface(wifi, &socket_param.net);
-#endif
-
-	socket_param.max_buff_size = 0;
-	iio_init_param->phy_type = USE_NETWORK;
-	iio_init_param->tcp_socket_init_param = &socket_param;
-
-	return 0;
-}
-#endif
 
 static int32_t uart_setup(struct no_os_uart_desc **uart_desc,
 			  struct no_os_uart_init_param *uart_init_par)
@@ -305,11 +263,8 @@ int iio_app_init(struct iio_app_desc **app,
 		goto error;
 
 	application->uart_desc = uart_desc;
-#if defined(NO_OS_NETWORKING) || defined(LINUX_PLATFORM)
-	status = network_setup(&iio_init_param, uart_desc, application->irq_desc);
-	if (status < 0)
-		goto error;
-#elif defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+	application->irq_desc = irq_desc;
+#ifdef NO_OS_NETWORKING
 	static struct tcp_socket_init_param socket_param;
 
 	status = no_os_net_init(&application->net_desc,
@@ -438,7 +393,7 @@ int iio_app_remove(struct iio_app_desc *app)
 			return ret;
 	}
 
-#if defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING)
+#ifdef NO_OS_NETWORKING
 	ret = no_os_net_remove(app->net_desc);
 	if (ret)
 		return ret;
