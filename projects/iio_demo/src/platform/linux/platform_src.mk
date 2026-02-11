@@ -3,10 +3,12 @@ CFLAGS += -DNO_OS_NETWORKING \
 
 LIBRARIES += iio
 
-SRCS += $(NO-OS)/network/linux_socket/linux_socket.c \
+SRCS += $(DRIVERS)/api/no_os_net.c \
+	$(NO-OS)/network/linux_socket/linux_socket.c \
 	$(NO-OS)/network/tcp_socket.c
-	
-INCS += $(NO-OS)/network/linux_socket/linux_socket.h \
+
+INCS += $(INCLUDE)/no_os_net.h \
+	$(NO-OS)/network/linux_socket/linux_socket.h \
 	$(NO-OS)/network/tcp_socket.h                \
 	$(NO-OS)/network/network_interface.h         \
 	$(NO-OS)/network/noos_mbedtls_config.h
