@@ -39,6 +39,7 @@
 #include "network_interface.h"
 #include "no_os_uart.h"
 #include "no_os_irq.h"
+#include "no_os_net.h"
 
 /**
  * @struct wifi_desc
@@ -63,6 +64,27 @@ struct wifi_init_param {
 	bool			sw_reset_en;
 };
 
+/**
+ * @struct wifi_net_init_param
+ * @brief Parameters for WiFi network backend (for no_os_net interface)
+ */
+struct wifi_net_init_param {
+	/** UART descriptor for ESP8266 communication */
+	struct no_os_uart_desc		*uart_desc;
+	/** IRQ controller descriptor */
+	struct no_os_irq_ctrl_desc	*irq_desc;
+	/** UART interrupt ID */
+	uint32_t			uart_irq_id;
+	/** UART IRQ configuration */
+	void				*uart_irq_conf;
+	/** Enable software reset */
+	bool				sw_reset_en;
+	/** WiFi SSID to connect to */
+	const char			*ssid;
+	/** WiFi password */
+	const char			*password;
+};
+
 /* Wifi init */
 int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param);
 /* Wifi remove */
@@ -77,5 +99,8 @@ int32_t wifi_get_network_interface(struct wifi_desc *desc,
 				   struct network_interface **net);
 /* Wifi get ip interface */
 int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size);
+
+/** WiFi network ops for generic no_os_net interface */
+extern const struct no_os_net_ops wifi_net_ops;
 
 #endif
