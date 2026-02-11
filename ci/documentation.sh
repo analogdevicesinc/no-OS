@@ -37,7 +37,8 @@ check_new_components_readme() {
 	echo_green "Checking for new drivers/projects and their README.rst files..."
 
 	# Excluded driver categories that don't require README.rst
-	local excluded_categories=("api" "platform")
+	# Note: "imu" uses a flat structure with a single shared README.rst
+	local excluded_categories=("api" "platform" "imu")
 
 	# Get all added files only
 	git diff --name-only --diff-filter=A $COMMIT_RANGE | while read -r file; do
@@ -100,6 +101,11 @@ check_sphinx_doc() {
                         local sphinx_path="doc/sphinx/source"
                         local top_dir=$(echo "$file" | cut -d'/' -f1)
                         local second_dir=$(echo "$file" | cut -d'/' -f2)
+
+                        # Skip imu category - uses flat structure with single shared README.rst
+                        if [ "$top_dir" = "drivers" ] && [ "$second_dir" = "imu" ]; then
+                                continue
+                        fi
 
                         # Handle different directory structures for drivers vs projects
                         if [ "$top_dir" = "projects" ]; then
