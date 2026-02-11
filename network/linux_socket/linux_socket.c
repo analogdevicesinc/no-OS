@@ -267,4 +267,51 @@ struct network_interface linux_net = {
 	.socket_accept = (int32_t (*)(void *, uint32_t, uint32_t*))linux_socket_accept
 };
 
+/***************************************************************************//**
+ * @brief Initialize Linux network backend for no_os_net interface
+ *
+ * Linux uses kernel sockets, no special initialization needed.
+ * Simply assigns the existing linux_net socket operations to the descriptor.
+ *
+ * @param desc  - Pre-allocated network descriptor to be filled
+ * @param param - Init params (unused for Linux)
+ *
+ * @return 0 in case of success
+ ******************************************************************************/
+static int linux_net_init(struct no_os_net_desc *desc,
+			  struct no_os_net_init_param *param)
+{
+	if (!desc)
+		return -EINVAL;
+
+	(void)param;
+	desc->net_if = &linux_net;
+	desc->extra = NULL;  /* No backend-specific state needed */
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Remove Linux network backend resources
+ *
+ * Linux kernel manages all socket resources, so this is a no-op.
+ *
+ * @param desc - Network descriptor (unused)
+ *
+ * @return 0 always
+ ******************************************************************************/
+static int linux_net_remove(struct no_os_net_desc *desc)
+{
+	(void)desc;
+	return 0;
+}
+
+/**
+ * @brief Linux network operations for generic no_os_net interface
+ */
+const struct no_os_net_ops linux_net_ops = {
+	.init = linux_net_init,
+	.remove = linux_net_remove,
+	.step = NULL,  /* Linux kernel handles networking, no polling needed */
+};
+
 #endif
