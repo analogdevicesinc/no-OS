@@ -37,6 +37,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/**
+ * Auto-define NO_OS_NETWORKING when any network backend is included.
+ * This allows application code to use a single macro guard for all backends.
+ */
+#if defined(NO_OS_LWIP_NETWORKING) || defined(NO_OS_W5500_NETWORKING) || \
+    defined(NO_OS_WIFI_NETWORKING) || defined(LINUX_PLATFORM)
+#ifndef NO_OS_NETWORKING
+#define NO_OS_NETWORKING
+#endif
+#endif
+
 struct no_os_net_desc;
 struct no_os_net_init_param;
 struct network_interface;
