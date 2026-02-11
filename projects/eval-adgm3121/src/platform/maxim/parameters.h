@@ -58,6 +58,16 @@
 #define GPIO_RESET_PIN_NUM   19
 #define GPIO_RESET_PORT_NUM  0
 
+/* GPIO pins for parallel mode switch control (P1_6, P1_7, P1_8, P1_9) */
+#define GPIO_SW1_PORT_NUM    1
+#define GPIO_SW1_PIN_NUM     6
+#define GPIO_SW2_PORT_NUM    1
+#define GPIO_SW2_PIN_NUM     7
+#define GPIO_SW3_PORT_NUM    1
+#define GPIO_SW3_PIN_NUM     8
+#define GPIO_SW4_PORT_NUM    1
+#define GPIO_SW4_PIN_NUM     9
+
 extern struct max_uart_init_param adgm3121_uart_extra_ip;
 extern struct max_spi_init_param adgm3121_spi_extra_ip;
 extern struct max_gpio_init_param adgm3121_gpio_extra_ip;
