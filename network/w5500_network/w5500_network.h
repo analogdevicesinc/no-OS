@@ -74,25 +74,12 @@ struct w5500_network_init_param {
 
 /**
  * @brief Initialize W5500 network backend
- *
- * Called by no_os_net_init() with an already-allocated descriptor.
- * Allocates w5500_network_dev and sets desc->net_if and desc->extra.
- *
- * @param desc - Pre-allocated network descriptor to be filled
- * @param param - Init params (extra points to w5500_network_init_param)
- * @return 0 on success, negative error code otherwise
  */
 int w5500_network_init(struct no_os_net_desc *desc,
 		       struct no_os_net_init_param *param);
 
 /**
  * @brief Remove W5500 network backend resources
- *
- * Called by no_os_net_remove(). Frees w5500_network_dev but NOT the
- * descriptor itself (that's handled by the generic layer).
- *
- * @param desc - Network descriptor (do not free, only free extra)
- * @return 0 on success, negative error code otherwise
  */
 int w5500_network_remove(struct no_os_net_desc *desc);
 
