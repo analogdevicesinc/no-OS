@@ -70,7 +70,7 @@ update_release_tag() {
 		git push origin :refs/tags/$RELEASE_TAG
 	fi
 	# add last_commit tag locally
-	git tag -f $RELEASE_TAG HEAD
+	git tag -f $RELEASE_TAG $BUILD_SOURCEVERSION
 	# add last_commit tag remotely
 	git push -f --tags
 }
