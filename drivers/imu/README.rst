@@ -22,6 +22,7 @@ Supported Devices
 * `ADIS16575 <https://www.analog.com/ADIS16575>`_
 * `ADIS16576 <https://www.analog.com/ADIS16576>`_
 * `ADIS16577 <https://www.analog.com/ADIS16577>`_
+* `ADIS16607 <https://www.analog.com/ADIS16607>`_
 
 Overview
 --------
@@ -123,6 +124,16 @@ Supported devices with ADIS1657X files:
 * `ADIS16576 <https://www.analog.com/ADIS16576>`_
 * `ADIS16577 <https://www.analog.com/ADIS16577>`_
 
+ADIS16607 Driver Source Code:
+
+* `Header file of ADIS16607 Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis16607.h>`_
+* `Implementation of ADIS16607 Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/adis16607.c>`_
+
+Supported devices with ADIS16607 files:
+
+* `ADIS16607-2 <https://www.analog.com/ADIS16607>`_
+* `ADIS16607-3 <https://www.analog.com/ADIS16607>`_
+
 ADIS Driver Usage Outside of No-OS
 -----------------------------------
 
@@ -184,6 +195,7 @@ existing example projects:
 * `ADIS1654X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1654x>`_
 * `ADIS1655X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1655x>`_
 * `ADIS1657X Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis1657x>`_
+* `ADIS16607 Example Projects <https://github.com/analogdevicesinc/no-OS/tree/main/projects/eval-adis16607>`_
 
 ADIS Device Initialization
 --------------------------
@@ -388,6 +400,14 @@ ADIS1657X
 * **adis_read_diag_y_axis_accl_failure** - to obtain the Y-Axis Accelerometer failure flag value
 * **adis_read_diag_z_axis_accl_failure** - to obtain the Z-Axis Accelerometer failure flag value
 * **adis_read_diag_aduc_mcu_fault** - to obtain the ADuC microcontroller fault flag value
+
+ADIS16607
+^^^^^^^^^
+
+* **adis_read_diag_gyro1_failure** - to obtain the gyroscope self test error flag value
+* **adis_read_diag_accl_failure** - to obtain the accelerometer self test error flag value
+* **adis_read_diag_power_supply_failure** - to obtain the power supply failure flag value
+* **adis_read_diag_boot_memory_failure** - to obtain the boot memory failure flag value
 
 ADIS Identification Data
 ------------------------
@@ -993,6 +1013,74 @@ ADIS1657X
 		pr_info("Error!\n");
 	...
 
+ADIS16607
+^^^^^^^^^
+
+.. code-block:: c
+
+	struct no_os_spi_init_param adis16607_spi_ip = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = SPI_BAUDRATE,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = SPI_OPS,
+		.chip_select = SPI_CS,
+		.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis16607_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis16607_ip = {
+		.info = &adis16607_chip_info,
+		.spi_init = &adis16607_spi_ip,
+		.gpio_reset = &adis16607_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_DEFAULT,
+		.dev_id = ADIS16607_3,
+		.duplex_type = ADIS_SPI_HALF_DUPLEX,
+		.comm_type = ADIS_SPI_COMM,
+	};
+
+	struct adis_dev *adis16607_desc;
+	int ret;
+	int val[7];
+
+	ret = adis_init(&adis16607_desc, &adis16607_ip);
+	if (ret)
+		goto error;
+
+	ret = adis_read_x_gyro(adis16607_desc, &val[0]);
+	if (ret)
+		goto error;
+	ret = adis_read_y_gyro(adis16607_desc, &val[1]);
+	if (ret)
+		goto error;
+	ret = adis_read_z_gyro(adis16607_desc, &val[2]);
+	if (ret)
+		goto error;
+	ret = adis_read_x_accl(adis16607_desc, &val[3]);
+	if (ret)
+		goto error;
+	ret = adis_read_y_accl(adis16607_desc, &val[4]);
+	if (ret)
+		goto error;
+	ret = adis_read_z_accl(adis16607_desc, &val[5]);
+	if (ret)
+		goto error;
+	ret = adis_read_temp_out(adis16607_desc, &val[6]);
+	if (ret)
+		goto error;
+
+	error:
+		adis_remove(adis16607_desc);
+		pr_info("Error!\n");
+	...
+
 ADIS IIO Driver Source Code
 ---------------------------
 
@@ -1069,6 +1157,16 @@ Supported devices with ADIS1657X files:
 * `ADIS16575 <https://www.analog.com/ADIS16575>`_
 * `ADIS16576 <https://www.analog.com/ADIS16576>`_
 * `ADIS16577 <https://www.analog.com/ADIS16577>`_
+
+ADIS16607 IIO Driver Source Code:
+
+* `Header file of ADIS16607 IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis16607.h>`_
+* `Implementation of ADIS16607 IIO Driver <https://github.com/analogdevicesinc/no-OS/blob/main/drivers/imu/iio_adis16607.c>`_
+
+Supported devices with ADIS16607 files:
+
+* `ADIS16607-2 <https://www.analog.com/ADIS16607>`_
+* `ADIS16607-3 <https://www.analog.com/ADIS16607>`_
 
 IIO ADIS Device Configuration
 -----------------------------
@@ -1456,6 +1554,24 @@ Burst data selection = 1:
   * deltavelocity_x
   * deltavelocity_y
   * deltavelocity_z
+  * temp0
+
+**ADIS16607**:
+
+The ADIS16607 burst read returns all data in a single burst:
+
+  * accel_x
+  * accel_y
+  * accel_z
+  * anglvel_x
+  * anglvel_y
+  * anglvel_z
+  * deltavelocity_x
+  * deltavelocity_y
+  * deltavelocity_z
+  * deltaangl_x
+  * deltaangl_y
+  * deltaangl_z
   * temp0
 
 
@@ -2196,6 +2312,136 @@ ADIS1657X
 		iio_hw_trig_remove(adis1657x_trig_desc);
 		no_os_irq_ctrl_remove(adis1657x_irq_desc);
 		adis1657x_iio_remove(adis1657x_iio_desc);
+		if (ret)
+			pr_info("Error!\n");
+		return ret;
+
+ADIS16607
+^^^^^^^^^
+
+.. code-block:: c
+
+	#define DATA_BUFFER_SIZE 40
+
+	uint8_t iio_data_buffer[DATA_BUFFER_SIZE * 13 * sizeof(int)];
+
+	struct no_os_spi_init_param adis16607_spi_ip = {
+		.device_id = SPI_DEVICE_ID,
+		.max_speed_hz = SPI_BAUDRATE,
+		.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
+		.mode = NO_OS_SPI_MODE_3,
+		.platform_ops = SPI_OPS,
+		.chip_select = SPI_CS,
+		.extra = SPI_EXTRA,
+	};
+
+	struct no_os_gpio_init_param adis16607_gpio_reset_ip = {
+		.port = GPIO_RESET_PORT_NUM,
+		.number = GPIO_RESET_PIN_NUM,
+		.pull = NO_OS_PULL_NONE,
+		.platform_ops = GPIO_OPS,
+		.extra = GPIO_EXTRA
+	};
+
+	struct adis_init_param adis16607_ip = {
+		.info = &adis16607_chip_info,
+		.spi_init = &adis16607_spi_ip,
+		.gpio_reset = &adis16607_gpio_reset_ip,
+		.sync_mode = ADIS_SYNC_DEFAULT,
+		.dev_id = ADIS16607_3,
+		.duplex_type = ADIS_SPI_HALF_DUPLEX,
+		.comm_type = ADIS_SPI_COMM,
+		.use_fifo = true,
+	};
+
+	struct no_os_irq_init_param adis16607_gpio_irq_ip = {
+		.irq_ctrl_id = GPIO_IRQ_ID,
+		.platform_ops = GPIO_IRQ_OPS,
+		.extra = GPIO_IRQ_EXTRA,
+	};
+
+	struct iio_hw_trig_init_param adis16607_gpio_trig_ip = {
+		.irq_id = ADIS16607_GPIO_TRIG_IRQ_ID,
+		.irq_trig_lvl = NO_OS_IRQ_EDGE_RISING,
+		.cb_info.event = NO_OS_EVT_GPIO,
+		.cb_info.peripheral = NO_OS_GPIO_IRQ,
+		.cb_info.handle = ADIS16607_GPIO_CB_HANDLE,
+		.name = ADIS16607_GPIO_TRIG_NAME,
+	};
+
+	struct adis_iio_dev *adis16607_iio_desc;
+	struct iio_hw_trig *adis16607_trig_desc;
+	struct no_os_irq_ctrl_desc *adis16607_irq_desc;
+	struct iio_app_desc *app;
+	struct iio_app_init_param app_init_param = { 0 };
+	int ret;
+
+	struct iio_data_buffer data_buff = {
+		.buff = (void *)iio_data_buffer,
+		.size = DATA_BUFFER_SIZE * 13 * sizeof(int)
+	};
+
+	ret = adis16607_iio_init(&adis16607_iio_desc, &adis16607_ip, NULL);
+	if (ret)
+		goto exit;
+
+	/* Initialize interrupt controller */
+	ret = no_os_irq_ctrl_init(&adis16607_irq_desc, &adis16607_gpio_irq_ip);
+	if (ret)
+		goto exit;
+
+	ret = no_os_irq_set_priority(adis16607_irq_desc, adis16607_gpio_trig_ip.irq_id, 1);
+	if (ret)
+		goto exit;
+
+	adis16607_gpio_trig_ip.irq_ctrl = adis16607_irq_desc;
+
+	/* Initialize hardware trigger */
+	ret = iio_hw_trig_init(&adis16607_trig_desc, &adis16607_gpio_trig_ip);
+	if (ret)
+		goto exit;
+
+	adis16607_iio_desc->hw_trig_desc = adis16607_trig_desc;
+
+	/* List of devices */
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adis16607",
+			.dev = adis16607_iio_desc,
+			.dev_descriptor = adis16607_iio_desc->iio_dev,
+			.read_buff = &data_buff,
+			.default_trigger_id = "trigger0",
+		}
+	};
+
+	/* List of triggers */
+	struct iio_trigger_init trigs[] = {
+		IIO_APP_TRIGGER(ADIS16607_GPIO_TRIG_NAME, adis16607_trig_desc,
+				&adis_iio_trig_desc)
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = adis16607_uart_ip;
+	app_init_param.trigs = trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(trigs);
+	app_init_param.irq_desc = adis16607_irq_desc;
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto exit;
+
+	/* Update the reference to iio_desc */
+	adis16607_trig_desc->iio_desc = app->iio_desc;
+
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+
+	exit:
+		iio_hw_trig_remove(adis16607_trig_desc);
+		no_os_irq_ctrl_remove(adis16607_irq_desc);
+		adis16607_iio_remove(adis16607_iio_desc);
 		if (ret)
 			pr_info("Error!\n");
 		return ret;
