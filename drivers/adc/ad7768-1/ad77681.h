@@ -189,6 +189,7 @@
 #define AD77681_GPIO_WRITE_0(x)					(((x) & 0x1) << 0)
 #define AD77681_GPIO_WRITE_ALL_MSK				(0xF << 0)
 #define AD77681_GPIO_WRITE_ALL(x)				(((x) & 0xF))
+#define AD77681_GPIO_PGIA_EN 					(AD77681_GPIO_CNTRL_UGPIO_EN_MSK | (0x7 << 0))
 
 /* AD77681_REG_GPIO_READ */
 #define AD77681_GPIO_READ_3_MSK					(0x1 << 3)
@@ -321,6 +322,25 @@
 #define INITIAL_CRC_XOR							0x6C
 #define INITIAL_CRC								0x00
 
+//Other Macros
+#define AD77681_VOLTAGE_REF						4096
+#define AD77681_MCLK 							16384
+#define AD77681_DECIMATION_RATE					32
+#define AD77681_DEFAULT_MCLK_DIV 				8
+#define AD77681_ODR_CONV_SCALER					(AD77681_DECIMATION_RATE * AD77681_DEFAULT_MCLK_DIV)
+#define AD77681_DEFAULT_SAMPLING_FREQ			((AD77681_MCLK * 1000) / AD77681_ODR_CONV_SCALER)
+#define AD77681_SAMPLE_DATA_BUFF_LEN			6
+#define AD77681_24_BITS_SIGN_EXTENSION			0xFFFFFF
+#define	AD77681_2_BYTES_SHIFT					16
+#define	AD77681_1_BYTE_SHIFT					8
+#define ADC_RESOLUTION							24
+#define AD77681_SCALE_FACTOR					(1 << ADC_RESOLUTION)
+#define AD77681_DEFAULT_SCALE					((((float)(AD77681_VOLTAGE_REF / 1000.00) * 2) / AD77681_SCALE_FACTOR) * 1000)
+#define AD77681_NUM_CHANNELS					1
+#define ADAQ776X_MAX_GAIN_MODES					8
+#define ADAQ776X_GAIN_MAX_NANO					(128 * NANO)
+
+
 #define CRC_DEBUG
 
 /* AD7768-1 */
@@ -335,6 +355,54 @@
 
 #define ENABLE		1
 #define DISABLE		0
+
+enum {
+	AD7768_PGA_GAIN_0,
+	AD7768_PGA_GAIN_1,
+	AD7768_PGA_GAIN_2,
+	AD7768_PGA_GAIN_3,
+	AD7768_PGA_GAIN_4,
+	AD7768_PGA_GAIN_5,
+	AD7768_PGA_GAIN_6,
+	AD7768_PGA_GAIN_7,
+	AD7768_MAX_PGA_GAIN,
+};
+
+enum {
+	AD7768_AAF_IN1,
+	AD7768_AAF_IN2,
+	AD7768_AAF_IN3,
+};
+
+/*
+ * Gains computed as fractions of 1000 so they can be expressed by integers.
+ */
+static const int adaq7768_gains[7] = {
+	[AD7768_PGA_GAIN_0] = 325,
+	[AD7768_PGA_GAIN_1] = 650,
+	[AD7768_PGA_GAIN_2] = 1300,
+	[AD7768_PGA_GAIN_3] = 2600,
+	[AD7768_PGA_GAIN_4] = 5200,
+	[AD7768_PGA_GAIN_5] = 10400,
+	[AD7768_PGA_GAIN_6] = 20800
+};
+
+static const int adaq7769_gains[8] = {
+	[AD7768_PGA_GAIN_0] = 1000,
+	[AD7768_PGA_GAIN_1] = 2000,
+	[AD7768_PGA_GAIN_2] = 4000,
+	[AD7768_PGA_GAIN_3] = 8000,
+	[AD7768_PGA_GAIN_4] = 16000,
+	[AD7768_PGA_GAIN_5] = 32000,
+	[AD7768_PGA_GAIN_6] = 64000,
+	[AD7768_PGA_GAIN_7] = 128000
+};
+
+static const int ad7768_aaf_gains[3] = {
+	[AD7768_AAF_IN1] = 1000,
+	[AD7768_AAF_IN2] = 364,
+	[AD7768_AAF_IN3] = 143
+};
 
 enum ad77681_power_mode {
 	AD77681_ECO = 0,
@@ -537,6 +605,15 @@ struct ad77681_dev {
 	uint16_t                        mclk;               /* Mater clock*/
 	uint32_t                        sample_rate;        /* Sample rate*/
 	uint8_t                         data_frame_byte;    /* SPI 8bit frames*/
+	bool 							has_variable_aaf;
+	bool 							has_pga;
+	int 							num_pga_modes;
+	int 							default_pga_mode;
+	int 							pgia_mode2pin_offset;
+	const int 						*pga_gains;
+	int 							pga_gain_mode;
+	int 							aaf_gain;
+	int 							scale_tbl[ADAQ776X_MAX_GAIN_MODES][2];
 };
 
 struct ad77681_init_param {
@@ -562,6 +639,16 @@ struct ad77681_init_param {
 	uint16_t                        vref;
 	uint16_t                        mclk;
 	uint32_t                        sample_rate;
+	uint8_t                         data_frame_byte;
+	bool 							has_variable_aaf;
+	bool 							has_pga;
+	int 							num_pga_modes;
+	int 							default_pga_mode;
+	int 							pgia_mode2pin_offset;
+	const int						*pga_gains;
+	int 							pga_gain_mode;
+	int 							aaf_gain;
+	int 							scale_tbl[ADAQ776X_MAX_GAIN_MODES][2];
 };
 
 uint8_t ad77681_compute_crc8(uint8_t *data,
@@ -605,6 +692,11 @@ int32_t ad77681_initiate_sync(struct ad77681_dev *dev);
 int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
 				    const float *coeffs,
 				    uint8_t num_coeffs);
+int32_t ad77681_set_sinc3_dec_rate(struct ad77681_dev *dev,
+				   uint32_t dec_rate);
+int32_t ad77681_calc_pga_gain(struct ad77681_dev *dev, int gain_int,
+			      int gain_fract, int precision);
+int32_t ad77681_set_pga_gain(struct ad77681_dev *dev, int gain_mode);
 int32_t ad77681_gpio_read(struct ad77681_dev *dev,
 			  uint8_t *value,
 			  enum ad77681_gpios gpio_number);
