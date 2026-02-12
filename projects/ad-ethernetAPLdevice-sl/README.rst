@@ -149,3 +149,12 @@ The microcontroller may be programmed in 2 ways:
 	** Resetting Target **
 	shutdown command invoked
 	[11:27:42] ad-ethernetAPLdevice-sl.elf uploaded to board
+
+Using CodeFusion Studio
+-----------------------
+
+    * Create a new CFS workspace (the board doesn't matter). APARD32690 + the "MSDK Single Core Hello World" template works well.
+    * Import the No-OS project in your workspace.
+    * Run "make maxim_project IDE=CFS" in a terminal (from the No-OS project's root).
+    * Change the CFS workspace context from "m4" to your No-OS project.
+    * Use the CFS actions to build, flash and debug the project.
