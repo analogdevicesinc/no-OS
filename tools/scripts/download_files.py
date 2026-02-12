@@ -4,8 +4,7 @@ import os
 import requests
 import re
 import ast
-from bs4 import BeautifulSoup
-from artifactory import ArtifactoryPath
+from cloudsmith_helper_1 import *
 
 TYELLOW = '\033[33m'  # Yellow Text
 TWHITE = '\033[39m' # White text
@@ -43,47 +42,46 @@ timestamp_match = re.search(pattern, HDL_SERVER_BASE_PATH)
 
 if timestamp_match:
     for hardware in unique_hardware_list:
-        file_path = HDL_SERVER_BASE_PATH + '/' + hardware + '/system_top.xsa'
-        if requests.get(file_path, stream=True).status_code == 200:
+        file_path = HDL_SERVER_BASE_PATH + hardware + '/'
+        print(file_path)
+        if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
             os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-            os.system("wget -q -nv -P %s %s" % (str(new_harware_dir) + '/' + hardware, file_path))
+            get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
+            os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
         else:
             log_warn("Missing " + hardware + " from specific timestamp " + timestamp_match.group())
 else:
-    soup = BeautifulSoup(requests.get(HDL_SERVER_BASE_PATH).content, 'html.parser')
-    latest = str(soup).split("\n")[-3].split(" ")[1].split('/">')[1].split('/')[0]
-    release_link = HDL_SERVER_BASE_PATH + "/" + latest + "/"
-    
+    timestamp_folders = get_subfolders(package_version='hdl/main/hdl_output/', repo='sdg-hdl')
+    timestamp_folders = (timestamp_folders[len(timestamp_folders) - FOLDERS_NR:])
+    timestamp_folders.reverse()
+    latest = timestamp_folders[0]
+    release_link = HDL_SERVER_BASE_PATH + latest + "/"
+
     for hardware in unique_hardware_list:
         FOUND = False
-        file_path = release_link + hardware + "/system_top.xsa"
-        if requests.get(file_path, stream=True).status_code == 200:
+        file_path = release_link + hardware + "/"
+        if 'system_top.xsa' in get_files(package_version=file_path, repo='sdg-hdl'):
             os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-            os.system("wget -q -nv -P %s %s" % (str(new_harware_dir) + '/' + hardware, file_path))
+            get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
+            os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
             FOUND = True
         else:
             log_warn("Missing " + hardware + " from latest timestamp " + latest)
-            artifactory_lines = str(soup).split("\n")
-            for line_number in range(-4, -FOLDERS_NR-4, -1) :
-                line = artifactory_lines[line_number]
-                if 'href=' in line and '<pre>' not in line:
-                    timestamp_folder = line.split(" ")[1].split('/">')[1].split('/')[0]
-                    d_path = HDL_SERVER_BASE_PATH + "/" + timestamp_folder + "/" + hardware + "/system_top.xsa"
-                    if requests.get(d_path, stream=True).status_code == 200:
-                        os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
-                        os.system("wget -q -nv -P %s %s" % (str(new_harware_dir) + '/' + hardware, d_path))
-                        if sys.version_info[:2] <= (3, 8):
-                            #get_properties works just with python3.8 or older versions
-                            timestamp_folder_info = str(ArtifactoryPath(HDL_SERVER_BASE_PATH + "/" + timestamp_folder).properties)
-                            folder_git_sha = timestamp_folder_info.split('[')[2].split(']')[0]
-                            folder_commit_date = timestamp_folder_info.split('[')[1].split(']')[0]
-                            log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder + " with next properties git sha: " + \
-                                str(folder_git_sha) + " commit date: " + str(folder_commit_date))
-                        else:
-                            log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder)
-                        FOUND = True
-                        break
-                else:
+            for timestamp_folder in timestamp_folders[1:]:
+                d_path = HDL_SERVER_BASE_PATH + "/" + timestamp_folder + "/" + hardware + "/"
+                if 'system_top.xsa' in get_files(package_version=d_path, repo='sdg-hdl'):
+                    os.system("mkdir -p %s" % (str(new_harware_dir) + '/' + hardware))
+                    get_artifacts_from_location(package_version=file_path, package_name= 'system_top.xsa', repo='sdg-hdl')
+                    os.system("mv ./system_top.xsa %s" % (str(new_harware_dir) + '/' + hardware))
+                    file_properties = get_item_properties(package_version=d_path, package_name= 'system_top.xsa', repo='sdg-hdl')
+                    if file_properties and len(file_properties) >= 2:
+                        commit_date = file_properties[0].split('-', 1)[1]
+                        git_sha = file_properties[1].split('-', 1)[1]
+                        log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder + " with next properties git sha: " + \
+                            str(git_sha) + " commit date: " + str(commit_date))
+                    else:
+                        log_warn("Hardware " + hardware + " found on next timestamp " + timestamp_folder)
+                    FOUND = True
                     break
         if FOUND is False:
             log_warn("Project " + hardware + " was not found on server")
