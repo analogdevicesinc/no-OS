@@ -40,6 +40,8 @@ jobs:
   - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
     displayName: 'Show Xilinx version'
   - script: |
+      wget -P ./tools/scripts/ \
+        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
       export BRANCH=$(branch)
       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
         -export_dir $(RELEASE_DIR) \
@@ -78,12 +80,15 @@ jobs:
       echo "Using STM32CubeIDE version: $(STM32CUBEIDE_VERSION)"
       echo "Using STM32CubeMX version: $(STM32CUBEMX_VERSION)"
     displayName: 'Show SDK versions'
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform stm32
-               -hdl_branch $(HDL_BRANCH)'
+  - script: |
+      wget -P ./tools/scripts/ \
+        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+        -export_dir $(RELEASE_DIR) \
+        -log_dir $(LOG_DIR) \
+        -builds_dir /no-OS_builds/builds \
+        -platform stm32 \
+        -hdl_branch $(HDL_BRANCH)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -113,12 +118,15 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Maxim SDK version: $(MAXIM_SDK_VERSION)"'
     displayName: 'Show Maxim SDK version'
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform maxim
-               -hdl_branch $(HDL_BRANCH)'
+  - script: |
+      wget -P ./tools/scripts/ \
+        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+        -export_dir $(RELEASE_DIR) \
+        -log_dir $(LOG_DIR) \
+        -builds_dir /no-OS_builds/builds \
+        -platform maxim \
+        -hdl_branch $(HDL_BRANCH)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -148,12 +156,15 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Mbed version: $(MBED_VERSION)"'
     displayName: 'Show Mbed version'
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform mbed
-               -hdl_branch $(HDL_BRANCH)'
+  - script: |
+      wget -P ./tools/scripts/ \
+        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+        -export_dir $(RELEASE_DIR) \
+        -log_dir $(LOG_DIR) \
+        -builds_dir /no-OS_builds/builds \
+        -platform mbed \
+        -hdl_branch $(HDL_BRANCH)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -183,12 +194,15 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Pico SDK version: $(PICO_SDK_VERSION)"'
     displayName: 'Show Pico SDK version'
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform pico
-               -hdl_branch $(HDL_BRANCH)'
+  - script: |
+      wget -P ./tools/scripts/ \
+        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+        -export_dir $(RELEASE_DIR) \
+        -log_dir $(LOG_DIR) \
+        -builds_dir /no-OS_builds/builds \
+        -platform pico \
+        -hdl_branch $(HDL_BRANCH)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -221,12 +235,15 @@ jobs:
       echo "Using CCES IDE version: $(CCES_VERSION)"
       echo "Using ARM CMSIS version: $(ARM_CMSIS_VERSION)"
     displayName: 'Show SDK versions'
-  - script: 'python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath)
-               -export_dir $(RELEASE_DIR)
-               -log_dir $(LOG_DIR)
-               -builds_dir /no-OS_builds/builds
-               -platform aducm3029
-               -hdl_branch $(HDL_BRANCH)'
+  - script: |
+      wget -P ./tools/scripts/ \
+        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+        -export_dir $(RELEASE_DIR) \
+        -log_dir $(LOG_DIR) \
+        -builds_dir /no-OS_builds/builds \
+        -platform aducm3029 \
+        -hdl_branch $(HDL_BRANCH)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
