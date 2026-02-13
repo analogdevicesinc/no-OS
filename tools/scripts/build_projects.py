@@ -9,6 +9,9 @@ import sys
 import filecmp
 import requests
 import re
+# This file can be downloaded from the wiki-scripts repository
+# https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+from cloudsmith_helper import *
 
 TGREEN =  '\033[32m' # Green Text	
 TBLUE =  '\033[34m' # Green Text	
@@ -54,6 +57,7 @@ LOG_START = " -> "
 TOKEN = os.environ.get('TOKEN')
 BRANCH = os.environ.get('BRANCH')
 blacklist_url = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
+environment_path_files = os.environ.get('ENVIRONMENT_PATH_FILES')
 
 def log(msg):
 	print(TGREEN + LOG_START + TWHITE + msg)
@@ -164,14 +168,8 @@ def process_blacklist():
 	return blacklist
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
-	try:
-		with open(os.path.expanduser('~') + '/configure_hdl_new.txt') as configure_file:
-			lines = configure_file.readlines()
-			server_base_path = lines[0].rstrip()
-			environment_path_files = lines[1].rstrip()
-	except OSError:
-		print("Configuration file needed")
-
+	server_base_path="hdl/"
+	hdl_repo = 'sdg-hdl'
 	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 	blacklist = []
 	timestamp_match = re.search(pattern, hdl_branch)
@@ -180,19 +178,19 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		timestamp_folder = timestamp_match.group()
 
 	if hdl_branch == "main":
-		hdl_branch_path = hdl_branch + '/hdl_output'
+		hdl_branch_path = hdl_branch + '/hdl_output/'
 	else:
-		if requests.get(server_base_path + 'releases/' + hdl_branch, stream=True).status_code == 200:
-			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output'
-		elif requests.get(server_base_path + 'dev/' + hdl_branch, stream=True).status_code == 200:
-			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output'
+		if check_path(package_version=server_base_path + 'releases/' + hdl_branch + '/', repo=hdl_repo):
+			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output/'
+		elif check_path(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
+			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output/'
 		else:
 			print("Error related to hdl branch name: " + hdl_branch)
 			exit()
 
 	if timestamp_match:
-		if requests.get(server_base_path + hdl_branch_path + '/' + timestamp_folder, stream=True).status_code == 200:
-			hdl_branch_path += '/' + timestamp_folder
+		if check_path(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
+			hdl_branch_path += timestamp_folder + '/'
 		else:
 			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
 			exit()
@@ -200,7 +198,7 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	builds_dir = _builds_dir + '_' + hdl_branch
 	run_cmd(create_dir_cmd.format(builds_dir))
 	if SKIP_DOWNLOAD == 1:
-		return (environment_path_files, builds_dir)
+		return (builds_dir)
 	hardwares = os.path.join(builds_dir, HW_DIR_NAME)
 	run_cmd(create_dir_cmd.format(hardwares))
 	server_full_path = server_base_path + hdl_branch_path
@@ -208,11 +206,11 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 		blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 		run_cmd(create_dir_cmd.format(new_hardwares))
-		err = os.system("python {}/tools/scripts/download_files.py {} {} {} \"{}\""
+		err = os.system("python3 {}/tools/scripts/download_files.py {} {} {} \"{}\""
 				  .format(noos, noos, builds_dir, server_full_path, blacklist))
 		if err != 0:
 			return
-	return (environment_path_files, builds_dir, blacklist)
+	return (builds_dir, blacklist)
 
 def get_hardware(hardware, platform, builds_dir):
 	if platform == 'xilinx':
@@ -345,7 +343,7 @@ def main():
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
-	(environment_path_files, builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
+	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
 	for project in os.listdir(projets):
 		binary_created = False
 		if _project is not None:
