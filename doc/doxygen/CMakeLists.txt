@@ -27,6 +27,7 @@ set(EXCLUDE_FILES
     "${SOURCES_DIR}/drivers/rf-transceiver/talise \\
     ${SOURCES_DIR}/drivers/rf-transceiver/navassa \\
     ${SOURCES_DIR}/drivers/rf-transceiver/madura \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/koror \\
     ${SOURCES_DIR}/drivers/adc/ad9081/api \\
     ${SOURCES_DIR}/drivers/adc/ad9083/ad9083_api \\
     ${SOURCES_DIR}/drivers/afe/ad5940 \\
