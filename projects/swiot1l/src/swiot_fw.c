@@ -301,7 +301,7 @@ int swiot_firmware()
 		}
 
 		swiot_iio_desc->ad74413r = ad74413r_iio_desc;
-		swiot_iio_desc->max14906 = max14906_iio_desc;
+		swiot_iio_desc->max14906 = (struct max149x6_iio_desc *)max14906_iio_desc;
 		swiot_iio_desc->mode = SWIOT_RUNTIME;
 
 		app_init_param.devices = iio_devices;
