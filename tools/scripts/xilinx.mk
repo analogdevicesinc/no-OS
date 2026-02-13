@@ -169,7 +169,38 @@ CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
 $(PLATFORM)_sdkopen:
 ifeq '' '$(filter %.hdf, $(HARDWARE))'
-	vitis -workspace=$(WORKSPACE)
+	@# Detect Vitis version at runtime (when vitis is in PATH)
+	@VITIS_VERSION=$$(vitis -version 2>&1 | sed -n 's/.*[vV]\([0-9]\{4\}\)\.\([0-9]\+\).*/\1.\2/p' | head -1); \
+	if [ -z "$$VITIS_VERSION" ]; then \
+		echo "Error: Could not detect Vitis version."; \
+		echo "Please ensure:"; \
+		echo "  1. Vitis is installed"; \
+		echo "  2. Vitis is in your PATH (try: source /path/to/Vitis/settings64.sh)"; \
+		echo "  3. The 'vitis' command is executable"; \
+		exit 1; \
+	fi; \
+	VITIS_YEAR=$$(echo "$$VITIS_VERSION" | cut -d. -f1); \
+	VITIS_MINOR=$$(echo "$$VITIS_VERSION" | cut -d. -f2); \
+	if [ -n "$$VITIS_YEAR" ] && [ "$$VITIS_YEAR" -ge 2025 ]; then \
+		echo "Detected Vitis Unified IDE ($$VITIS_VERSION)"; \
+		if [ -d "$(WORKSPACE)/.metadata" ]; then \
+			echo "Removing incompatible Eclipse workspace metadata from build/..."; \
+			rm -rf "$(WORKSPACE)/.metadata"; \
+		fi; \
+		if [ -d "$(PROJECT)/.metadata" ]; then \
+			echo "Removing incompatible Eclipse workspace metadata from project root..."; \
+			rm -rf "$(PROJECT)/.metadata"; \
+		fi; \
+		echo "Opening workspace at project root: $(PROJECT)"; \
+		vitis -w $(PROJECT); \
+	elif [ -n "$$VITIS_YEAR" ] && { { [ "$$VITIS_YEAR" -eq 2023 ] && [ "$$VITIS_MINOR" -ge 2 ]; } || [ "$$VITIS_YEAR" -eq 2024 ]; }; then \
+		echo "Detected Vitis $$VITIS_VERSION with Unified IDE support"; \
+		echo "Using classic Eclipse IDE mode for better stability"; \
+		vitis -classic -workspace=$(WORKSPACE); \
+	else \
+		echo "Detected Eclipse-based Vitis ($$VITIS_VERSION)"; \
+		vitis -workspace=$(WORKSPACE); \
+	fi
 else
 	xsdk -workspace=$(WORKSPACE)
 endif
