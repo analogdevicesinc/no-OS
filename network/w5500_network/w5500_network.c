@@ -598,18 +598,27 @@ static int32_t w5500_net_socket_accept(void *net, uint32_t sock_id,
 }
 
 /***************************************************************************//**
- * @brief Initialize the W5500 network interface
+ * @brief Initialize the W5500 network backend
  *
- * @param net_dev    - Double pointer to store the created network device
- * @param init_param - Initialization parameters
+ * Called by no_os_net_init() with an already-allocated descriptor.
+ * Allocates w5500_network_dev and fills in desc->net_if and desc->extra.
+ *
+ * @param desc  - Pre-allocated network descriptor to be filled
+ * @param param - Init params (extra points to w5500_network_init_param)
  *
  * @return 0 in case of success, negative error code otherwise
 *******************************************************************************/
-int w5500_network_init(struct w5500_network_dev **net_dev,
-		       struct w5500_network_init_param *init_param)
+int w5500_network_init(struct no_os_net_desc *desc,
+		       struct no_os_net_init_param *param)
 {
+	struct w5500_network_init_param *init_param;
 	struct w5500_network_dev *dev;
 	int32_t ret;
+
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
+
+	init_param = (struct w5500_network_init_param *)param->extra;
 
 	dev = (struct w5500_network_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
@@ -670,7 +679,8 @@ int w5500_network_init(struct w5500_network_dev **net_dev,
 
 	dev->next_virtual_id = W5500_MAX_SOCK_NUMBER + 1;
 
-	*net_dev = dev;
+	desc->net_if = &dev->net_if;
+	desc->extra = dev;
 
 	return 0;
 
@@ -683,20 +693,38 @@ free_dev:
 }
 
 /***************************************************************************//**
- * @brief Remove a W5500 network device and free resources
+ * @brief Remove W5500 network backend resources
  *
- * @param dev - The device descriptor to remove
+ * Called by no_os_net_remove(). Frees w5500_network_dev but NOT the
+ * descriptor itself (that's handled by the generic layer).
+ *
+ * @param desc - Network descriptor (do not free, only free extra)
  *
  * @return 0 in case of success, negative error code otherwise
 *******************************************************************************/
-int w5500_network_remove(struct w5500_network_dev *dev)
+int w5500_network_remove(struct no_os_net_desc *desc)
 {
-	if (!dev)
+	struct w5500_network_dev *dev;
+
+	if (!desc)
 		return -EINVAL;
 
-	no_os_free(dev);
+	dev = (struct w5500_network_dev *)desc->extra;
+	if (dev) {
+		if (dev->mac_dev)
+			w5500_remove(dev->mac_dev);
+		no_os_free(dev);
+	}
 
 	return 0;
 }
+
+/**
+ * @brief W5500 network operations for generic no_os_net interface
+ */
+const struct no_os_net_ops w5500_net_ops = {
+	.init = w5500_network_init,
+	.remove = w5500_network_remove,
+};
 
 #endif /* NO_OS_W5500_NETWORKING */

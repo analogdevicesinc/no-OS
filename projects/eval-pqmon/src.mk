@@ -9,6 +9,7 @@ SRCS += $(DRIVERS)/api/no_os_uart.c     			\
 	$(DRIVERS)/api/no_os_irq.c     				\
 	$(DRIVERS)/api/no_os_dma.c     				\
 	$(DRIVERS)/api/no_os_gpio.c     			\
+	$(DRIVERS)/api/no_os_net.c     				\
         $(NO-OS)/util/no_os_fifo.c      			\
         $(NO-OS)/util/no_os_list.c      			\
         $(NO-OS)/util/no_os_lf256fifo.c 			\
@@ -24,6 +25,7 @@ INCS += $(INCLUDE)/no_os_delay.h     				\
         $(INCLUDE)/no_os_lf256fifo.h 				\
         $(INCLUDE)/no_os_list.h      				\
         $(INCLUDE)/no_os_uart.h      				\
+        $(INCLUDE)/no_os_net.h      				\
         $(INCLUDE)/no_os_spi.h      				\
         $(INCLUDE)/no_os_i2c.h      				\
         $(INCLUDE)/no_os_dma.h      				\
@@ -82,11 +84,13 @@ ifeq ($(INTERFACE), ethernet_t1l)
 	INCS += $(NO-OS)/network/tcp_socket.h			\
 		$(NO-OS)/network/noos_mbedtls_config.h		\
 		$(NO-OS)/network/network_interface.h		\
+		$(NO-OS)/network/lwip_raw_socket/lwip_socket.h	\
 		$(INCLUDE)/no_os_crc8.h				\
 		$(DRIVERS)/net/adin1110/adin1110.h		\
 		$(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h
 
-	SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c	\
+	SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c				\
+		$(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c	\
 		$(DRIVERS)/net/adin1110/adin1110.c					\
 		$(NO-OS)/util/no_os_crc8.c						\
 		$(NO-OS)/network/tcp_socket.c

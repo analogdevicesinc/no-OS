@@ -811,3 +811,107 @@ static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 
 	return -EAGAIN;
 }
+
+/***************************************************************************//**
+ * @brief Initialize WiFi network backend for no_os_net interface
+ *
+ * Called by no_os_net_init() with an already-allocated descriptor.
+ * Initializes WiFi hardware, connects to the network, and populates
+ * desc->net_if and desc->extra.
+ *
+ * @param desc  - Pre-allocated network descriptor to be filled
+ * @param param - Init params (extra points to wifi_net_init_param)
+ *
+ * @return 0 in case of success, negative error code otherwise
+ ******************************************************************************/
+static int wifi_net_init(struct no_os_net_desc *desc,
+			 struct no_os_net_init_param *param)
+{
+	struct wifi_net_init_param *wifi_param;
+	struct wifi_init_param init_param;
+	struct wifi_desc *wifi;
+	int ret;
+
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
+
+	wifi_param = (struct wifi_net_init_param *)param->extra;
+
+	/* Initialize WiFi hardware */
+	init_param.uart_desc = wifi_param->uart_desc;
+	init_param.irq_desc = wifi_param->irq_desc;
+	init_param.uart_irq_id = wifi_param->uart_irq_id;
+	init_param.uart_irq_conf = wifi_param->uart_irq_conf;
+	init_param.sw_reset_en = wifi_param->sw_reset_en;
+
+	ret = wifi_init(&wifi, &init_param);
+	if (ret)
+		return ret;
+
+	/* Connect to network */
+	ret = wifi_connect(wifi, wifi_param->ssid, wifi_param->password);
+	if (ret) {
+		wifi_remove(wifi);
+		return ret;
+	}
+
+	/* Get network interface */
+	ret = wifi_get_network_interface(wifi, &desc->net_if);
+	if (ret) {
+		wifi_remove(wifi);
+		return ret;
+	}
+
+	desc->extra = wifi;
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Remove WiFi network backend resources
+ *
+ * Called by no_os_net_remove(). Frees wifi_desc but NOT the descriptor
+ * itself (that's handled by the generic layer).
+ *
+ * @param desc - Network descriptor (do not free, only free extra)
+ *
+ * @return 0 in case of success, negative error code otherwise
+ ******************************************************************************/
+static int wifi_net_remove(struct no_os_net_desc *desc)
+{
+	struct wifi_desc *wifi;
+
+	if (!desc || !desc->extra)
+		return -EINVAL;
+
+	wifi = (struct wifi_desc *)desc->extra;
+	return wifi_remove(wifi);
+}
+
+/***************************************************************************//**
+ * @brief Execute WiFi network processing step
+ *
+ * WiFi AT parser is interrupt-driven and asynchronous, so no polling needed.
+ * This is a no-op function for interface compliance.
+ *
+ * @param desc - Network descriptor
+ * @param arg  - Optional argument (unused)
+ *
+ * @return 0 always
+ ******************************************************************************/
+static int wifi_net_step(struct no_os_net_desc *desc, void *arg)
+{
+	/* AT parser uses interrupt-driven async, no polling needed */
+	(void)desc;
+	(void)arg;
+	return 0;
+}
+
+/**
+ * @brief WiFi network operations for generic no_os_net interface
+ */
+const struct no_os_net_ops wifi_net_ops = {
+	.init = wifi_net_init,
+	.remove = wifi_net_remove,
+	.step = wifi_net_step,
+};
