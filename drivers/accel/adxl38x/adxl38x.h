@@ -422,8 +422,7 @@ int adxl38x_get_deviceID(struct adxl38x_dev *dev,
 int adxl38x_set_self_test_registers(struct adxl38x_dev *dev, bool st_mode,
 				    bool st_force, bool st_dir);
 
-int adxl38x_get_sts_reg(struct adxl38x_dev *dev,
-			union adxl38x_sts_reg_flags *status_flags);
+int adxl38x_clear_self_test_registers(struct adxl38x_dev *dev);
 
 int adxl38x_get_raw_xyz(struct adxl38x_dev *dev, uint16_t *raw_x,
 			uint16_t *raw_y, uint16_t *raw_z);
