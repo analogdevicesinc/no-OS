@@ -61,11 +61,11 @@ int adg2404_select_channel(struct adg2404_dev *dev,
 	if (ret)
 		return ret;
 
-	ret = no_os_gpio_set_value(dev->gpio_a0, (channel - 1) & 0x01);
+	ret = no_os_gpio_set_value(dev->gpio_a0, (channel-1) & 0x01);
 	if (ret)
 		return ret;
 
-	return no_os_gpio_set_value(dev->gpio_a1, ((channel - 1) >> 1) & 0x01);
+	return no_os_gpio_set_value(dev->gpio_a1, ((channel-1) >> 1) & 0x01);
 }
 
 /**
