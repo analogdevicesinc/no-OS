@@ -1232,7 +1232,7 @@ int adxl367_int_map(struct adxl367_dev *dev, struct adxl367_int_map *map,
 		  map->data_ready;
 
 	return adxl367_set_register_value(dev, reg_val,
-					  pin == 1 ? ADXL367_REG_INTMAP1_LWR : ADXL367_REG_INTMAP1_LWR);
+					  pin == 1 ? ADXL367_REG_INTMAP1_LWR : ADXL367_REG_INTMAP2_LWR);
 }
 
 /***************************************************************************//**
