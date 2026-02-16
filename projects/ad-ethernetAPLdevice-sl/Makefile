@@ -2,6 +2,7 @@ EXAMPLE ?= mqtt_baremetal
 BOARD_REV ?= HP_NON_IS
 HP_STATIC_IP ?= y
 CONNECTION_TYPE ?= PLAIN_CONNECTION #If running an MQTT example, must select a connection type i.e. PLAIN_CONNECTION or SECURE_CONNECTION
+SBT=1 # Firmware signing is enabled by default, set this to 0 to disable it.
 
 CFLAGS += -D$(BOARD_REV)=1
 PLATFORM=maxim
