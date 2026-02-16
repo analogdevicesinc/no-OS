@@ -106,6 +106,8 @@ int adxl38x_write_device_data(struct adxl38x_dev *dev, uint8_t base_address,
 						size + 1);
 	} else {
 		dev->comm_buff[0] = base_address;
+		for (idx = 0; idx < size; idx++)
+			dev->comm_buff[1 + idx] = write_data[idx];
 		return no_os_i2c_write(dev->com_desc.i2c_desc, dev->comm_buff, size + 1, 1);
 	}
 }
