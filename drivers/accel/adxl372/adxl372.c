@@ -396,7 +396,7 @@ int32_t adxl372_interrupt_config(struct adxl372_dev *dev,
 	int2_config = (ADXL372_INT2_MAP_DATA_RDY_MODE(int2.data_rdy) |
 		       ADXL372_INT2_MAP_FIFO_RDY_MODE(int2.fifo_rdy) |
 		       ADXL372_INT2_MAP_FIFO_FULL_MODE(int2.fifo_full) |
-		       ADXL372_INT2_MAP_FIFO_OVR_MODE(int1.fifo_ovr) |
+		       ADXL372_INT2_MAP_FIFO_OVR_MODE(int2.fifo_ovr) |
 		       ADXL372_INT2_MAP_INACT_MODE(int2.inactivity) |
 		       ADXL372_INT2_MAP_ACT_MODE(int2.activity) |
 		       ADXL372_INT2_MAP_AWAKE_MODE(int2.awake) |
