@@ -1434,7 +1434,7 @@ int adrv9009_setup(struct adrv9009_rf_phy *phy)
 	TALISE_getApiVersion(phy->talDevice,
 			     &api_vers[0], &api_vers[1], &api_vers[2], &api_vers[3]);
 
-	pr_info("Talise: Device Revision %d, API %lu.%lu.%lu.%lu\n",
+	pr_info("Talise: Device Revision %d, API %u.%u.%u.%u\n",
 		rev, api_vers[0], api_vers[1], api_vers[2], api_vers[3]);
 
 	/* Close Talise Hw Device*/
