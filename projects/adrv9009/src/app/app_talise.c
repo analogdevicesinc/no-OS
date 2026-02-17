@@ -235,7 +235,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	TALISE_getApiVersion(pd,
 			     &api_vers[0], &api_vers[1], &api_vers[2], &api_vers[3]);
 
-	printf("talise: Device Revision %d, Firmware %u.%u.%u, API %lu.%lu.%lu.%lu\n",
+	printf("talise: Device Revision %d, Firmware %u.%u.%u, API %u.%u.%u.%u\n",
 	       rev, talArmVersionInfo.majorVer,
 	       talArmVersionInfo.minorVer, talArmVersionInfo.rcVer,
 	       api_vers[0], api_vers[1], api_vers[2], api_vers[3]);
