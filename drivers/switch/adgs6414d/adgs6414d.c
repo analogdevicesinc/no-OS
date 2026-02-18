@@ -36,6 +36,9 @@
 #include "adgs6414d.h"
 #include "no_os_error.h"
 #include "no_os_alloc.h"
+#include "no_os_crc8.h"
+
+NO_OS_DECLARE_CRC8_TABLE(adgs6414d_crc8);
 
 /**
  * SPI write operation.
@@ -47,7 +50,8 @@
 int adgs6414d_spi_write(struct adgs6414d_dev *dev, uint8_t reg_addr,
 			uint8_t data)
 {
-	uint8_t buf[2];
+	uint8_t buf[3];
+	uint8_t len = 2;
 
 	if (!dev)
 		return -EINVAL;
@@ -55,7 +59,12 @@ int adgs6414d_spi_write(struct adgs6414d_dev *dev, uint8_t reg_addr,
 	buf[0] = ADGS6414D_CMD_WRITE | (reg_addr & 0x7F);
 	buf[1] = data;
 
-	return no_os_spi_write_and_read(dev->spi_desc, buf, 2);
+	if (dev->crc_en) {
+		buf[2] = no_os_crc8(adgs6414d_crc8, buf, 2, 0);
+		len = 3;
+	}
+
+	return no_os_spi_write_and_read(dev->spi_desc, buf, len);
 }
 
 /**
@@ -68,7 +77,9 @@ int adgs6414d_spi_write(struct adgs6414d_dev *dev, uint8_t reg_addr,
 int adgs6414d_spi_read(struct adgs6414d_dev *dev, uint8_t reg_addr,
 		       uint8_t *data)
 {
-	uint8_t buf[2];
+	uint8_t buf[3];
+	uint8_t crc_data[2];
+	uint8_t len = 2;
 	int ret;
 
 	if (!dev || !data)
@@ -76,14 +87,108 @@ int adgs6414d_spi_read(struct adgs6414d_dev *dev, uint8_t reg_addr,
 
 	buf[0] = ADGS6414D_CMD_READ | (reg_addr & 0x7F);
 	buf[1] = 0x00;
+	buf[2] = 0x00;
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, 2);
+	if (dev->crc_en)
+		len = 3;
+
+	ret = no_os_spi_write_and_read(dev->spi_desc, buf, len);
 	if (ret)
 		return ret;
+
+	if (dev->crc_en) {
+		/* CRC is computed over 16-bit payload: command byte + data byte */
+		crc_data[0] = ADGS6414D_CMD_READ | (reg_addr & 0x7F);
+		crc_data[1] = buf[1];
+		if (buf[2] != no_os_crc8(adgs6414d_crc8, crc_data, 2, 0))
+			return -EIO;
+	}
 
 	*data = buf[1];
 
 	return 0;
+}
+
+/**
+ * Update the error configuration register.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int adgs6414d_update_err_config(struct adgs6414d_dev *dev)
+{
+	return adgs6414d_spi_write(dev, ADGS6414D_REG_ERR_CONFIG,
+				   dev->err_config);
+}
+
+/**
+ * Enable or disable CRC error detection.
+ * @param dev - The device structure.
+ * @param enable - true to enable, false to disable.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adgs6414d_crc_enable(struct adgs6414d_dev *dev, bool enable)
+{
+	uint8_t old_err_config;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	old_err_config = dev->err_config;
+
+	if (enable)
+		dev->err_config |= ADGS6414D_ERR_CFG_CRC_EN;
+	else
+		dev->err_config &= ~ADGS6414D_ERR_CFG_CRC_EN;
+
+	ret = adgs6414d_update_err_config(dev);
+	if (ret) {
+		dev->err_config = old_err_config;
+		return ret;
+	}
+
+	dev->crc_en = enable;
+
+	return 0;
+}
+
+/**
+ * Read the error flags register.
+ * @param dev - The device structure.
+ * @param flags - Pointer to store error flags.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adgs6414d_get_err_flags(struct adgs6414d_dev *dev, uint8_t *flags)
+{
+	if (!dev || !flags)
+		return -EINVAL;
+
+	return adgs6414d_spi_read(dev, ADGS6414D_REG_ERR_FLAGS, flags);
+}
+
+/**
+ * Clear the error flags register.
+ * Sends special command 0x6CA9 to clear all error flags.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adgs6414d_clear_err_flags(struct adgs6414d_dev *dev)
+{
+	uint8_t buf[3];
+	uint8_t len = 2;
+
+	if (!dev)
+		return -EINVAL;
+
+	buf[0] = ADGS6414D_ERR_CLR_CMD_MSB;
+	buf[1] = ADGS6414D_ERR_CLR_CMD_LSB;
+
+	if (dev->crc_en) {
+		buf[2] = no_os_crc8(adgs6414d_crc8, buf, 2, 0);
+		len = 3;
+	}
+
+	return no_os_spi_write_and_read(dev->spi_desc, buf, len);
 }
 
 /**
@@ -109,6 +214,8 @@ int adgs6414d_soft_reset(struct adgs6414d_dev *dev)
 		return ret;
 
 	dev->switch_state = 0x00;
+	dev->crc_en = false;
+	dev->err_config = ADGS6414D_ERR_CFG_DEFAULT;
 
 	return 0;
 }
@@ -234,6 +341,8 @@ int adgs6414d_init(struct adgs6414d_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
+	no_os_crc8_populate_msb(adgs6414d_crc8, ADGS6414D_CRC8_POLYNOMIAL);
+
 	dev = (struct adgs6414d_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
@@ -242,7 +351,33 @@ int adgs6414d_init(struct adgs6414d_dev **device,
 	if (ret)
 		goto error_spi;
 
+	dev->crc_en = false;
+	dev->err_config = ADGS6414D_ERR_CFG_DEFAULT;
 	dev->switch_state = init_param->initial_state;
+
+	if (init_param->sclk_err_en)
+		dev->err_config |= ADGS6414D_ERR_CFG_SCLK_EN;
+	else
+		dev->err_config &= ~ADGS6414D_ERR_CFG_SCLK_EN;
+
+	if (init_param->rw_err_en)
+		dev->err_config |= ADGS6414D_ERR_CFG_RW_EN;
+	else
+		dev->err_config &= ~ADGS6414D_ERR_CFG_RW_EN;
+
+	ret = adgs6414d_update_err_config(dev);
+	if (ret)
+		goto error_config;
+
+	if (init_param->crc_en) {
+		ret = adgs6414d_crc_enable(dev, true);
+		if (ret)
+			goto error_config;
+	}
+
+	ret = adgs6414d_clear_err_flags(dev);
+	if (ret)
+		goto error_config;
 
 	ret = adgs6414d_set_switches(dev, init_param->initial_state);
 	if (ret)
