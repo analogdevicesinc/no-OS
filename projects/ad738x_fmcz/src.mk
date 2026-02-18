@@ -17,10 +17,6 @@ SRCS += $(DRIVERS)/api/no_os_spi.c \
 	$(DRIVERS)/api/no_os_pwm.c \
 	$(DRIVERS)/api/no_os_irq.c
 
-INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_spi.h \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_uart.h \
-	$(PLATFORM_DRIVERS)/$(PLATFORM)_gpio.h
 
 SRCS += $(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
@@ -50,7 +46,8 @@ INCS +=	$(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_list.h \
 	$(INCLUDE)/no_os_lf256fifo.h \
 	$(INCLUDE)/no_os_irq.h \
-	$(INCLUDE)/no_os_fifo.h
+	$(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_init.h
 
 SRCS +=	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c \
@@ -61,5 +58,4 @@ INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
-	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \
-	$(DRIVERS)/platform/xilinx/xilinx_spi.h
+	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h

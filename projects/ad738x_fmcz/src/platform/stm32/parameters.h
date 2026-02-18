@@ -3,8 +3,9 @@
  *   @brief  Definitions specific to STM32 platform used by eval-ad738x
  *           project.
  *   @author Axel Haslam (ahaslam@baylibre.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2024-2026(c) Analog Devices, Inc.
  * Copyright 2024(c) BayLibre, SAS.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +57,7 @@ extern TIM_HandleTypeDef htim8;
 #define STR(x) #x
 
 #define UART_IRQ_ID		UART5_IRQn
+#define UART_ASYNC_RX	true
 
 #define UART_DEVICE_ID		5
 #define UART_BAUDRATE		115200
