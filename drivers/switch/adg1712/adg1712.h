@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adg1712.h
- *   @brief  Header file of ADG1712 Driver.
+ *   @brief  Header file of ADG1712/ADG2712 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -37,6 +37,11 @@
 #include <stdbool.h>
 #include "no_os_gpio.h"
 
+enum adg1712_chip_id {
+	ID_ADG1712,
+	ID_ADG2712,
+};
+
 enum adg1712_switch {
 	ADG1712_SW1,
 	ADG1712_SW2,
@@ -45,6 +50,7 @@ enum adg1712_switch {
 };
 
 struct adg1712_dev {
+	enum adg1712_chip_id chip_id;
 	struct no_os_gpio_desc *gpio_in1;
 	struct no_os_gpio_desc *gpio_in2;
 	struct no_os_gpio_desc *gpio_in3;
@@ -52,6 +58,7 @@ struct adg1712_dev {
 };
 
 struct adg1712_init_param {
+	enum adg1712_chip_id chip_id;
 	struct no_os_gpio_init_param gpio_in1;
 	struct no_os_gpio_init_param gpio_in2;
 	struct no_os_gpio_init_param gpio_in3;
