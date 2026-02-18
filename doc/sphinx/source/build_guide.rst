@@ -53,3 +53,10 @@ XILINX VITIS 2025.1
 
     build_guides/build_xilinx_vitis2025
 
+LATTICE PROPEL SDK
+===================
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_lattice
+
