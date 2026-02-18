@@ -1,9 +1,9 @@
 # Lattice Propel Toolchain Environment #########################################
 
-# Tested with Lattice Propel SDK version: 2024.2 ###############################
+# Tested with Lattice Propel SDK version: 2025.2 ###############################
 
-# Tested with RISCV-RX core; VLNV: latticesemi.com:ip:riscv_rtos:2.5.0 #########
-# Supported RISC-V extentions: M, A, C #########################################
+# Tested with RISCV-RX core; VLNV: latticesemi.com:ip:riscv_rtos:2.8.0 #########
+# Supported RISC-V extentions: M, A ############################################
 
 # Reference HDL project:
 https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx
