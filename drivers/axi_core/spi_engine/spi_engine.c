@@ -2,8 +2,9 @@
  *   @file   spi_engine.c
  *   @brief  Core implementation of the SPI Engine Driver.
  *   @author Sergiu Cuciurean (sergiu.cuciurean@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2019-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +42,7 @@ significant delays */
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sleep.h>
+#include "no_os_delay.h"
 #include <inttypes.h>
 
 #include "axi_dmac.h"
@@ -651,7 +652,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 
 	/* Perform a reset */
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x01);
-	usleep(1000);
+	no_os_udelay(1000);
 	spi_engine_write(eng_desc, SPI_ENGINE_REG_RESET, 0x00);
 
 	/* Get current data width */
@@ -692,8 +693,10 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 	int32_t 		ret;
 	struct spi_engine_msg	msg;
 	struct spi_engine_desc	*desc_extra;
+	uint8_t		prev_offload_config;
 
 	desc_extra = desc->extra;
+	prev_offload_config = desc_extra->offload_config;
 
 	/* If we want to access SPI interface and SPI engine offload module was
 	 * activated, we need to disable it
@@ -737,6 +740,8 @@ int32_t spi_engine_write_and_read(struct no_os_spi_desc *desc,
 	spi_engine_queue_no_os_free(&msg.cmds);
 	no_os_free(msg.tx_buf);
 	no_os_free(msg.rx_buf);
+
+	desc_extra->offload_config = prev_offload_config;
 
 	return ret;
 }
@@ -876,7 +881,7 @@ int32_t spi_engine_offload_transfer(struct no_os_spi_desc *desc,
 			goto error;
 	}
 
-	usleep(1000);
+	no_os_udelay(1000);
 
 error:
 	spi_engine_queue_no_os_free(&transfer.cmds);
