@@ -3,8 +3,9 @@
  *   @brief  Definition of xilinx platform data used by ad463x_fmcz project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *   @author Axel Haslam (ahaslam@baylibre.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright 2024-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -53,7 +54,6 @@ struct spi_engine_init_param spi_eng_init_param  = {
 	.data_width = 32,
 };
 
-#ifdef XILINX_PLATFORM
 struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 	.offload_config = OFFLOAD_RX_EN,
 	.rx_dma_baseaddr = DMA_BASEADDR,
@@ -70,5 +70,3 @@ struct axi_pwm_init_param axi_pwm_init_param = {
 	.ref_clock_Hz = 100000000,
 	.channel = 0
 };
-#endif
-
