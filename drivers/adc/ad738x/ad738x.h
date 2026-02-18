@@ -3,8 +3,9 @@
  *   @brief  Header file for AD738x Driver.
  *   @author SPopa (stefan.popa@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -54,6 +55,8 @@
 /*
  * AD738X_REG_CONFIG1
  */
+#define AD738X_CONFIG1_CH_SEQ_MSK      	NO_OS_GENMASK(11, 10)
+#define AD738X_CONFIG1_CH_SEQ(x)       	(((x) & 0x3) << 10)
 #define AD738X_CONFIG1_OS_MODE_MSK      NO_OS_BIT(9)
 #define AD738X_CONFIG1_OS_MODE(x)       (((x) & 0x1) << 9)
 #define AD738X_CONFIG1_OSR_MSK          NO_OS_GENMASK(8, 6)
@@ -100,9 +103,21 @@
 
 #define AD738X_FLAG_STANDARD_SPI_DMA    NO_OS_BIT(0)
 #define AD738X_FLAG_OFFLOAD             NO_OS_BIT(1)
+#define AD738X_FLAG_NO_PWM              NO_OS_BIT(2)
+
 enum ad738x_conv_mode {
 	TWO_WIRE_MODE,
-	ONE_WIRE_MODE
+	ONE_WIRE_MODE,
+	FOUR_WIRE_MODE
+};
+
+enum ad738x_ch_seq_sel {
+	/* 0b00 (CH=0, SEQ=0): select CH0 pair (AINA0/AINB0) */
+	FIRST_FOUR,
+	/* 0b01 (CH=0, SEQ=1): sequencer enabled, cycles AINx0 and AINx1 */
+	ALL,
+	/* 0b10 (CH=1, SEQ=0): select CH1 pair (AINA1/AINB1) */
+	SECOND_FOUR
 };
 
 enum ad738x_os_mode {
@@ -142,15 +157,15 @@ enum ad738x_ref_sel {
 struct ad738x_dev {
 	/* SPI */
 	struct no_os_spi_desc		*spi_desc;
+
 #ifdef XILINX_PLATFORM
-	/** SPI module offload init */
-	struct spi_engine_offload_init_param *offload_init_param;
 	struct axi_clkgen *clkgen;
 #endif
 	struct no_os_pwm_desc *pwm_desc;
 
 	/* Device Settings */
 	enum ad738x_conv_mode 	conv_mode;
+	enum ad738x_ch_seq_sel	ch_seq_sel;
 	enum ad738x_ref_sel		ref_sel;
 	uint32_t		ref_voltage_mv;
 	enum ad738x_resolution 	resolution;
@@ -165,13 +180,15 @@ struct ad738x_init_param {
 #ifdef XILINX_PLATFORM
 	struct axi_clkgen_init *clkgen_init;
 	uint32_t axi_clkgen_rate;
-	/** SPI module offload init */
+#endif
+#if !defined(USE_STANDARD_SPI)
 	struct spi_engine_offload_init_param *offload_init_param;
 #endif
 	struct no_os_pwm_init_param *pwm_init;
 
 	/* Device Settings */
 	enum ad738x_conv_mode	conv_mode;
+	enum ad738x_ch_seq_sel	ch_seq_sel;
 	enum ad738x_ref_sel		ref_sel;
 	uint32_t		ref_voltage_mv;
 	/** Invalidate the Data cache for the given address range */
@@ -217,6 +234,9 @@ int32_t ad738x_power_down_mode(struct ad738x_dev *dev,
 /** Enable internal or external reference. */
 int32_t ad738x_reference_sel(struct ad738x_dev *dev,
 			     enum ad738x_ref_sel ref_sel);
+/** Select the channels to be used. */
+int32_t ad738x_ch_seq_sel(struct ad738x_dev *dev,
+			  enum ad738x_ch_seq_sel ch_seq_sel);
 /** Read data from device. */
 int32_t ad738x_read_data(struct ad738x_dev *dev,
 			 uint32_t *buf,

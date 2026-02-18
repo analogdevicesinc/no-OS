@@ -3,8 +3,9 @@
  *   @brief  Implementation of AD738x Driver.
  *   @author SPopa (stefan.popa@analog.com)
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2020-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,7 +36,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#ifdef XILINX_PLATFORM
+#if !defined(USE_STANDARD_SPI)
 #include "spi_engine.h"
 #endif
 #include "ad738x.h"
@@ -132,10 +133,35 @@ int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
 int32_t ad738x_set_conversion_mode(struct ad738x_dev *dev,
 				   enum ad738x_conv_mode mode)
 {
+	if (FOUR_WIRE_MODE == mode) {
+		return ad738x_spi_write_mask(dev,
+					     AD738X_REG_CONFIG2,
+					     AD738X_CONFIG2_SDO4_MSK,
+					     AD738X_CONFIG2_SDO4(mode));
+	}
 	return ad738x_spi_write_mask(dev,
 				     AD738X_REG_CONFIG2,
 				     AD738X_CONFIG2_SDO2_MSK,
 				     AD738X_CONFIG2_SDO2(mode));
+}
+
+/**
+ * Mapping (enum ad738x_ch_seq_sel):
+ *   FIRST_FOUR  -> 0b00 (CH=0, SEQ=0): Channel 0 pair (AINA0/AINB0)
+ *   ALL         -> 0b01 (CH=0, SEQ=1): sequencer enabled, cycles AINx0, AINx1
+ *   SECOND_FOUR -> 0b10 (CH=1, SEQ=0): Channel 1 pair (AINA1/AINB1)
+ * @param dev - The device structure.
+ * @param ch - Channel/sequencer select configuration.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad738x_ch_seq_sel(struct ad738x_dev *dev,
+			  enum ad738x_ch_seq_sel ch)
+{
+	int32_t ret = ad738x_spi_write_mask(dev,
+					    AD738X_REG_CONFIG1,
+					    AD738X_CONFIG1_CH_SEQ_MSK,
+					    AD738X_CONFIG1_CH_SEQ(ch));
+	return ret;
 }
 
 /**
@@ -313,11 +339,11 @@ out:
  * @return 0 in case of success, -1 otherwise.
  */
 
+#if !defined(USE_STANDARD_SPI)
 static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 					uint32_t *buf,
 					uint16_t samples)
 {
-#ifdef XILINX_PLATFORM
 	int32_t ret;
 	uint32_t commands_data[2] = {0, 0};
 	struct spi_engine_offload_message msg;
@@ -326,14 +352,13 @@ static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 		WRITE_READ(2),
 		CS_HIGH,
 	};
+	struct spi_engine_desc *spi_local = dev->spi_desc->extra;
 
-	ret = no_os_pwm_enable(dev->pwm_desc);
-	if (ret != 0)
-		return ret;
-
-	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
-	if (ret != 0)
-		return ret;
+	if ((dev->flags & AD738X_FLAG_NO_PWM) == 0) {
+		ret = no_os_pwm_enable(dev->pwm_desc);
+		if (ret != 0)
+			return ret;
+	}
 
 	msg.commands_data = commands_data;
 	msg.commands = spi_eng_msg_cmds;
@@ -344,12 +369,18 @@ static int32_t ad738x_read_data_offload(struct ad738x_dev *dev,
 	if (ret != 0)
 		return ret;
 
-	if (dev->dcache_invalidate_range)
-		dev->dcache_invalidate_range(msg.rx_addr, samples * 4);
+	if (dev->dcache_invalidate_range && spi_local->offload_rx_dma->width_src)
+		dev->dcache_invalidate_range(msg.rx_addr,
+					     samples * spi_local->offload_rx_dma->width_src);
+	if ((dev->flags & AD738X_FLAG_NO_PWM) == 0) {
+		ret = no_os_pwm_disable(dev->pwm_desc);
+		if (ret != 0)
+			return ret;
+	}
 
-#endif
 	return 0;
 }
+#endif
 
 /**
  * @brief Read from device.
@@ -366,8 +397,10 @@ int32_t ad738x_read_data(struct ad738x_dev *dev,
 	int32_t ret;
 	int i;
 
+#if !defined(USE_STANDARD_SPI)
 	if (dev->flags & AD738X_FLAG_OFFLOAD)
 		return ad738x_read_data_offload(dev, buf, samples);
+#endif
 
 	if (dev->flags & AD738X_FLAG_STANDARD_SPI_DMA)
 		return ad738x_read_data_dma(dev, buf, samples);
@@ -393,18 +426,20 @@ int32_t ad738x_init(struct ad738x_dev **device,
 		    struct ad738x_init_param *init_param)
 {
 	struct ad738x_dev *dev;
-	int32_t ret;
+	int32_t ret = 0;
 
 	dev = (struct ad738x_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
 		return -1;
 
 	dev->flags = init_param->flags;
+	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+	dev->conv_mode = init_param->conv_mode;
+	dev->ch_seq_sel = init_param->ch_seq_sel;
+	dev->ref_sel = init_param->ref_sel;
+	dev->ref_voltage_mv = init_param->ref_voltage_mv;
 
 #ifdef XILINX_PLATFORM
-	dev->offload_init_param = init_param->offload_init_param;
-	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
-
 	ret = axi_clkgen_init(&dev->clkgen, init_param->clkgen_init);
 	if (ret)
 		goto err;
@@ -414,17 +449,22 @@ int32_t ad738x_init(struct ad738x_dev **device,
 		goto err;
 #endif
 
-	ret = no_os_pwm_init(&dev->pwm_desc, init_param->pwm_init);
+	if ((dev->flags & AD738X_FLAG_NO_PWM) == 0)
+		ret = no_os_pwm_init(&dev->pwm_desc, init_param->pwm_init);
 	if (ret)
 		goto err;
-
-	dev->conv_mode = init_param->conv_mode;
-	dev->ref_sel = init_param->ref_sel;
-	dev->ref_voltage_mv = init_param->ref_voltage_mv;
 
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_param);
 	if (ret)
 		goto err;
+
+#if !defined(USE_STANDARD_SPI)
+	if (dev->flags & AD738X_FLAG_OFFLOAD)
+		ret = spi_engine_offload_init(dev->spi_desc,
+					      init_param->offload_init_param);
+	if (ret != 0)
+		goto err;
+#endif
 
 	ret = ad738x_reset(dev, HARD_RESET);
 	if (ret)
@@ -433,6 +473,10 @@ int32_t ad738x_init(struct ad738x_dev **device,
 	no_os_mdelay(1000);
 	/* 1-wire or 2-wire mode */
 	ret = ad738x_set_conversion_mode(dev, dev->conv_mode);
+	if (ret)
+		goto err;
+
+	ret = ad738x_ch_seq_sel(dev, dev->ch_seq_sel);
 	if (ret)
 		goto err;
 
