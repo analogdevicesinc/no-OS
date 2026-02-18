@@ -2,8 +2,9 @@
  *   @file   axi_dmac.c
  *   @brief  Driver for the Analog Devices AXI-DMAC core.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -438,7 +439,7 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 			dmac->init_addr = dmac->next_dest_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_ADDRESS, dmac->next_dest_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_DEST_STRIDE, 0x0);
-			if (dmac->transfer.dest_addr % (dmac->width_dst / 8)) {
+			if (dmac->transfer.dest_addr % dmac->width_dst) {
 				printf("Destination address should be aligned with destination data path width.\n\n");
 				return -1;
 			}
@@ -447,7 +448,7 @@ int32_t axi_dmac_transfer_start(struct axi_dmac *dmac,
 			dmac->init_addr = dmac->next_src_addr;
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_ADDRESS, dmac->next_src_addr);
 			axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
-			if (dmac->transfer.src_addr % (dmac->width_src / 8)) {
+			if (dmac->transfer.src_addr % dmac->width_src) {
 				printf("Source address should be aligned with source data path width.\n");
 				return -1;
 			}
