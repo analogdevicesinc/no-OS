@@ -41,6 +41,7 @@
 
 /* ADGS6414D Register Map */
 #define ADGS6414D_REG_SW_DATA		0x01
+#define ADGS6414D_REG_ERR_CONFIG	0x02
 #define ADGS6414D_REG_ERR_FLAGS		0x03
 #define ADGS6414D_REG_BURST_EN		0x05
 #define ADGS6414D_REG_SOFT_RESETB	0x0B
@@ -52,6 +53,19 @@
 /* Soft Reset Values */
 #define ADGS6414D_SOFT_RESET_VAL1	0xA3
 #define ADGS6414D_SOFT_RESET_VAL2	0x05
+
+/* Error Flags Clear Command */
+#define ADGS6414D_ERR_CLR_CMD_MSB	0x6C
+#define ADGS6414D_ERR_CLR_CMD_LSB	0xA9
+
+/* ERR_CONFIG Register Bits */
+#define ADGS6414D_ERR_CFG_CRC_EN	0x01
+#define ADGS6414D_ERR_CFG_SCLK_EN	0x02
+#define ADGS6414D_ERR_CFG_RW_EN		0x04
+#define ADGS6414D_ERR_CFG_DEFAULT	0x06
+
+/* CRC Polynomial: x^8 + x^2 + x + 1 */
+#define ADGS6414D_CRC8_POLYNOMIAL	0x07
 
 /* ADGS6414D Switch Channels */
 #define ADGS6414D_SW1		0
@@ -70,6 +84,8 @@
 struct adgs6414d_dev {
 	struct no_os_spi_desc	*spi_desc;
 	uint8_t			switch_state;
+	bool			crc_en;
+	uint8_t			err_config;
 };
 
 /**
@@ -79,6 +95,9 @@ struct adgs6414d_dev {
 struct adgs6414d_init_param {
 	struct no_os_spi_init_param	*spi_init;
 	uint8_t				initial_state;
+	bool				crc_en;
+	bool				sclk_err_en;
+	bool				rw_err_en;
 };
 
 /* SPI write operation. */
@@ -88,6 +107,15 @@ int adgs6414d_spi_write(struct adgs6414d_dev *dev, uint8_t reg_addr,
 /* SPI read operation. */
 int adgs6414d_spi_read(struct adgs6414d_dev *dev, uint8_t reg_addr,
 		       uint8_t *data);
+
+/* Read the error flags register. */
+int adgs6414d_get_err_flags(struct adgs6414d_dev *dev, uint8_t *flags);
+
+/* Clear the error flags register. */
+int adgs6414d_clear_err_flags(struct adgs6414d_dev *dev);
+
+/* Enable or disable CRC error detection. */
+int adgs6414d_crc_enable(struct adgs6414d_dev *dev, bool enable);
 
 /* Perform software reset. */
 int adgs6414d_soft_reset(struct adgs6414d_dev *dev);

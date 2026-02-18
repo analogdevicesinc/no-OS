@@ -18,6 +18,18 @@ The device features:
 * Daisy-chain capability for multiple devices
 * Pin-for-pin replacement for ADGS1414D and ADGS2414D
 
+Error Detection
+---------------
+
+The driver supports the ADGS6414D's built-in error detection mechanisms:
+
+* **CRC Error Detection**: 8-bit CRC (polynomial x^8 + x^2 + x + 1) appended to
+  SPI transactions for data integrity verification
+* **SCLK Count Error**: Detects incorrect number of SCLK pulses during a frame
+* **Read/Write Error**: Detects invalid register access attempts
+
+Error detection features can be enabled via initialization parameters or at runtime.
+
 Control Interface
 -----------------
 
@@ -71,9 +83,22 @@ API Functions
 
 **Device Reset**
   ``int adgs6414d_soft_reset(struct adgs6414d_dev *dev)``
-  
-  Perform software reset by writing the sequence 0xA3 followed by 0x05 
+
+  Perform software reset by writing the sequence 0xA3 followed by 0x05
   to the SOFT_RESETB register.
+
+**Error Detection**
+  ``int adgs6414d_crc_enable(struct adgs6414d_dev *dev, bool enable)``
+
+  Enable or disable CRC error detection at runtime.
+
+  ``int adgs6414d_get_err_flags(struct adgs6414d_dev *dev, uint8_t *flags)``
+
+  Read the error flags register to check for detected errors.
+
+  ``int adgs6414d_clear_err_flags(struct adgs6414d_dev *dev)``
+
+  Clear all error flags by sending the special command sequence (0x6CA9).
 
 **Cleanup**
   ``int adgs6414d_remove(struct adgs6414d_dev *dev)``
@@ -88,7 +113,10 @@ Usage Example
    struct adgs6414d_dev *dev;
    struct adgs6414d_init_param init_param = {
        .spi_init = &spi_init_param,
-       .initial_state = 0x00  // All switches open initially
+       .initial_state = 0x00,  // All switches open initially
+       .crc_en = true,         // Enable CRC error detection
+       .sclk_err_en = true,    // Enable SCLK count error detection
+       .rw_err_en = true       // Enable read/write error detection
    };
    
    // Initialize the device
@@ -130,3 +158,5 @@ Dependencies
 * no_os_spi.h
 * no_os_error.h
 * no_os_alloc.h
+* no_os_crc8.h
+
