@@ -16,4 +16,7 @@ INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/spi_engine/spi_engine_private.h \
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
 	$(DRIVERS)/axi_core/axi_pwmgen/axi_pwm_extra.h \
+	$(PLATFORM_DRIVERS)/xilinx_spi.h \
+	$(PLATFORM_DRIVERS)/xilinx_irq.h \
+	$(PLATFORM_DRIVERS)/xilinx_uart.h \
 	$(PLATFORM_DRIVERS)/xilinx_gpio.h
