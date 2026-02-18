@@ -21,16 +21,19 @@ page for details:
 Scope
 =====
 Bare-minimum steps to build and run a Lattice RISC-V RX design. Tested with the
-build tools provided in Propel SDK 2024.2 and the RISCV-RX
-``latticesemi.com:ip:riscv_rtos:2.5.0`` core used by ``projects/ad738x_fmcz``.
+build tools provided in Propel SDK 2025.2 and the RISCV-RX
+``latticesemi.com:ip:riscv_rtos:2.8.0`` core used by ``projects/ad738x_fmcz``.
 
 Install & Inputs
 ================
 1. Install the `Propel SDK <https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel>`_
    (includes GCC, srec_cat, OpenOCD).
-2. Export a hardware package from your HDL project (``sge`` directory or
+2. Install the `Lattice Radiant Programmer
+   <https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant>`_
+   and ensure its ``pgrcmd`` binary is available in ``PATH``.
+3. Export a hardware package from your HDL project (``sge`` directory or
    ``sge.zip``). Drop it next to the project ``Makefile``.
-3. *(Optional but recommended)* Generate the FPGA bitstream (``*.bit``)
+4. *(Optional but recommended)* Generate the FPGA bitstream (``*.bit``)
    separately via Propel Builder/Radiant from the matching HDL design hosted at
    the `HDL repository <https://github.com/analogdevicesinc/hdl>`_ so it is
    ready for programming time.
@@ -42,9 +45,14 @@ the three tool directories explicitly:
 
 .. code-block:: bash
 
-  export PATH="/opt/lscc/propel/2024.2/sdk/riscv-none-embed-gcc/bin":$PATH
-  export PATH="/opt/lscc/propel/2024.2/sdk/tools/bin":$PATH
-  export PATH="/opt/lscc/propel/2024.2/openocd/bin":$PATH
+  export PATH="/opt/lscc/propel/2025.2/sdk/riscv-none-embed-gcc/bin":$PATH
+  export PATH="/opt/lscc/propel/2025.2/sdk/tools/bin":$PATH
+  export PATH="/opt/lscc/propel/2025.2/openocd/bin":$PATH
+
+  # On Windows the Lattice programmer binary path:
+  export PATH="/opt/lscc/programmer/radiant/2025.2/bin/nt64":$PATH
+  # On Linux, the Lattice programmer binary path:
+  export PATH="/opt/lscc/programmer/radiant/2025.2/bin/lin64":$PATH
 
 Verify with ``which riscv-none-embed-gcc srec_cat openocd`` to ensure the tools
 are visible.
@@ -82,26 +90,32 @@ for subsequent runs.
 
 Build & Program
 ===============
-1. Use `Lattice Radiant Programmer <https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant>`_
-   to load the FPGA bitstream (``*.bit``) generated from the matching HDL design
-   (for reference see the no-OS companion
-   `HDL repository <https://github.com/analogdevicesinc/hdl>`_).
-   This must happen before loading the CPU binary.
-2. Run ``make run`` to upload the ``.elf`` with OpenOCD. The plain command
-   works only when the project root contains the ``sge`` folder (or an
-   auto-unpacked ``sge.zip``). Otherwise point ``HARDWARE`` to the folder that
-   holds the exported BSP (``sge`` directory or ``sge.zip``).
+Run ``make run`` to upload the ``.elf`` with OpenOCD. The plain command
+works only when the project root contains the ``sge`` folder (or an
+auto-unpacked ``sge.zip``). Otherwise point ``HARDWARE`` to the folder that
+holds the exported BSP (``sge`` directory or ``sge.zip``).
 
-   .. code-block:: bash
+.. note::
+   When using ``make run``, if the bitstream (``*.bit``) is available in the
+   project root, it is automatically downloaded to the FPGA before loading the
+   ELF by OpenOCD; Otherwise use `Lattice Radiant Programmer
+   <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant>`__
+   GUI or command line to load the ``*.bit`` bitstream to the ``LFCPNX-EVN``
+   board before running the software. You can also disable the automatic
+   bitstream download by the setting the ``BITSTREAM=n`` make variable.
 
-     # when the sge assets already live in the project root
-     make run PLATFORM=lattice
-     # automatic platform when the sge assets already live in the project root
-     make run
-     # explicitly point to BSP assets that live elsewhere
-     make run HARDWARE=/path/to/your/sge
+.. code-block:: bash
 
-   Both recipes halt the CPU, load the ELF, and resume execution.
+   # when the sge assets already live in the project root
+   make run PLATFORM=lattice
+   # automatic platform when the sge assets already live in the project root
+   make run
+   # explicitly point to BSP assets that live elsewhere
+   make run HARDWARE=/path/to/your/sge
+   # to disable automatic bitstream download when bit file is available in the project root
+   make run BITSTREAM=n
+
+Both recipes halt the CPU, load the ELF, and resume execution.
 
 Clean
 =====
