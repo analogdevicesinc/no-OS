@@ -1,6 +1,6 @@
 /**************************************************************************//**
-*   @file   AD7172_2_regs.h
-*   @brief  AD7172_2 Registers Definitions.
+*   @file   AD7177_2_regs.h
+*   @brief  AD7177_2 Registers Definitions.
 *   @author dnechita (dan.nechita@analog.com)
 *
 *******************************************************************************
@@ -31,13 +31,13 @@
 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*****************************************************************************/
 
-#ifndef __AD7172_2_REGS_H__
-#define __AD7172_2_REGS_H__
+#ifndef __AD7177_2_REGS_H__
+#define __AD7177_2_REGS_H__
 
 #include "ad717x.h"
 
 #ifdef AD7177_2_INIT
-/*! Array holding the info for the AD7172_2 registers - address, initial value, size */
+/*! Array holding the info for the AD7177_2 registers - address, initial value, size */
 ad717x_st_reg ad7177_2_regs[] = {
 	{ AD717X_STATUS_REG, 0x00, 1 },
 	{ AD717X_ADCMODE_REG, 0x8000, 2	},
@@ -93,6 +93,6 @@ ad717x_st_reg ad7177_2_regs[] = {
 };
 #endif
 
-#define AD7172_2_SLAVE_ID    1
+#define AD7177_2_SLAVE_ID    1
 
-#endif /*__AD7172_2_REGS_H__ */
+#endif /*__AD7177_2_REGS_H__ */
