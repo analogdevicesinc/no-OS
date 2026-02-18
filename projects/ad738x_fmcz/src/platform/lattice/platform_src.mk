@@ -2,9 +2,6 @@ ifeq (y,$(strip $(SIMULATION)))
 CFLAGS += -DNO_OS_LATTICE_SIMULATION
 endif
 
-LATTICE_IGNORE_ARCH_CHECK ?= y
-LATTICE_RISCV_ARCH  ?= rv32imc
-
 SRCS += $(PLATFORM_DRIVERS)/riscvrx_init.c \
 	$(PLATFORM_DRIVERS)/riscvrx_delay.c \
 	$(PLATFORM_DRIVERS)/riscvrx_gpio.c \

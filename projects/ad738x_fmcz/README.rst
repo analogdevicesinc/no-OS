@@ -326,12 +326,11 @@ plugged into the FMC slot on the LFCPNX-EVN carrier board.
 Build Command
 ^^^^^^^^^^^^^
 
-The reference HDL project for the Lattice platform is available at:
-`hdl/projects/ad738x_fmc/lfcpnx <https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx>`__
+The reference HDL project for the Lattice platform (``LFCPNX-EVN``) is available
+at: `hdl/projects/ad738x_fmc/lfcpnx
+<https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx>`__
 
-Use the `Lattice Radiant Programmer <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant>`__
-to load the ``*.bit`` bitstream to the LFCPNX-EVN board before running the
-software. The Propel SDK command-line tools and the bundled RISC-V GCC toolchain
+The Propel SDK command-line tools and the bundled RISC-V GCC toolchain
 must be on your ``PATH``:
 
 .. code-block:: bash
@@ -339,6 +338,10 @@ must be on your ``PATH``:
    export PATH="<your_path>/lscc/propel/<version>/sdk/tools/bin":$PATH
    export PATH="<your_path>/lscc/propel/<version>/sdk/riscv-none-embed-gcc/bin":$PATH
    export PATH="<your_path>/lscc/propel/<version>/sdk/openocd/bin":$PATH
+   # On Windows Cygwin, the Lattice programmer binary path:
+   export PATH="/<your_path>/lscc/programmer/radiant/2025.2/bin/nt64":$PATH
+   # On Linux, the Lattice programmer binary path:
+   export PATH="/<your_path>/lscc/programmer/radiant/2025.2/bin/lin64":$PATH
 
 The hardware package exported by Propel Builder can be provided as an ``sge``
 directory or an ``sge.zip`` file. Place it in the project root, or pass its
@@ -348,9 +351,24 @@ location with ``HARDWARE=/path/to/your/sge``.
 
    # copy the hardware package folder or zip file to the project directory
    cp -r <your_path>/sge .
+   # optionally copy the bitstream file to the project directory
+   cp <your_path>/*.bit .
    # to delete current build
    make reset
    # to build the project
    make PLATFORM=lattice
    # to flash and run the code (requires openocd)
    make run
+
+.. note::
+   In default when using ``make run``, if the bitstream (``*.bit``) is available
+   in the project root, it is automatically downloaded to the FPGA before
+   loading the ELF by OpenOCD; Otherwise use `Lattice Radiant Programmer
+   <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant>`__
+   GUI or command line to load the ``*.bit`` bitstream to the ``LFCPNX-EVN``
+   board before running the software. You can also disable the automatic
+   bitstream download by:
+
+   .. code-block:: bash
+
+      make run BITSTREAM=n
