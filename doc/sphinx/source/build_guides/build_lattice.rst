@@ -5,8 +5,8 @@ Lattice Propel (RISC-V RX) Build Guide
 Scope
 =====
 Bare-minimum steps to build and run a Lattice RX design. Tested with the build
-tools provided in Propel SDK 2024.2 and the RISCV-RX
-``latticesemi.com:ip:riscv_rtos:2.5.0`` core used by ``projects/ad738x_fmcz``.
+tools provided in Propel SDK 2025.2 and the RISCV-RX
+``latticesemi.com:ip:riscv_rtos:2.8.0`` core used by ``projects/ad738x_fmcz``.
 
 Install & Inputs
 ================
@@ -24,9 +24,9 @@ the three tool directories explicitly:
 
 .. code-block:: bash
 
-  export PATH="/opt/lscc/propel/2024.2/sdk/riscv-none-embed-gcc/bin":$PATH
-  export PATH="/opt/lscc/propel/2024.2/sdk/tools/bin":$PATH
-  export PATH="/opt/lscc/propel/2024.2/openocd/bin":$PATH
+  export PATH="/opt/lscc/propel/2025.2/sdk/riscv-none-embed-gcc/bin":$PATH
+  export PATH="/opt/lscc/propel/2025.2/sdk/tools/bin":$PATH
+  export PATH="/opt/lscc/propel/2025.2/openocd/bin":$PATH
 
 Verify with ``which riscv-none-embed-gcc`` to ensure the tools are visible.
 
