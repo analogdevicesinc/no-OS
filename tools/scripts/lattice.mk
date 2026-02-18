@@ -2,10 +2,10 @@
 # Lattice RISC-V RX platform integration                                       #
 ################################################################################
 
-# Tested with Lattice Propel SDK version: 2024.2 ###############################
+# Tested with Lattice Propel SDK version: 2025.2 ###############################
 
-# Tested with RISCV-RX core; VLNV: latticesemi.com:ip:riscv_rtos:2.5.0 #########
-# Supported RISC-V extentions: M, A, C #########################################
+# Tested with RISCV-RX core; VLNV: latticesemi.com:ip:riscv_rtos:2.8.0 #########
+# Supported RISC-V extentions: M, A ############################################
 
 # Toolchain prefix (can be overridden by the user)
 RISCV_PREFIX          ?= riscv-none-embed-
@@ -68,7 +68,7 @@ endif
 #                            Compiler / Linker flags                           #
 ################################################################################
 
-LATTICE_ARCH_FLAGS   ?= -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore
+LATTICE_ARCH_FLAGS   ?= -march=rv32ima -mabi=ilp32 -msmall-data-limit=8 -mno-save-restore
 LATTICE_DEBUG        ?= y
 LATTICE_OPT_FLAGS    ?= -Os
 ifeq (y,$(strip $(LATTICE_DEBUG)))
