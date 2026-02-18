@@ -11,9 +11,13 @@ Overview
 
 The ADG1712 is a low voltage, 2.4 Ω quad SPST (Single Pole Single Throw) switch
 designed for applications requiring high performance switching with low on-resistance.
-The device operates from a single +1.8 V to +5.5 V supply and is controlled via
-four digital inputs (IN1, IN2, IN3, IN4) that control the corresponding switch pairs
-(S1-D1, S2-D2, S3-D3, S4-D4).
+
+The ADG2712 is a pin-compatible ultra-low leakage variant with 9.3 Ω typical
+on-resistance and picoamp-level leakage currents (7 pA typical at 25°C).
+
+Both devices operate from a single +1.08 V to +5.5 V supply or dual ±1.08 V to
+±2.75 V supply and are controlled via four digital inputs (IN1, IN2, IN3, IN4) that
+control the corresponding switch pairs (S1-D1, S2-D2, S3-D3, S4-D4).
 
 Applications
 ------------
@@ -21,8 +25,8 @@ Applications
 * Audio and video signal routing
 * Communications systems
 * Test and measurement equipment
-* Industrial control systems
-* Battery-powered equipment
+* Data acquisition systems
+* Instrumentation
 
 ADG1712 Device Configuration
 ----------------------------
@@ -39,7 +43,7 @@ that the driver was initialized correctly.
 Switch Control
 ~~~~~~~~~~~~~~
 
-The ADG1712 driver provides functions to control individual switches:
+The driver provides functions to control individual switches:
 
 * **adg1712_set_switch_state** - Enable or disable a specific switch
 * **adg1712_get_switch_state** - Read the current state of a specific switch
@@ -52,6 +56,7 @@ ADG1712 Driver Initialization Example
 	struct adg1712_dev *dev;
 	struct adg1712_init_param init_param;
 	
+	init_param.chip_id = ID_ADG1712; // or ID_ADG2712
 	init_param.gpio_in1.number = 1;
 	init_param.gpio_in1.platform_ops = &gpio_ops;
 	init_param.gpio_in2.number = 2;
