@@ -53,7 +53,6 @@ static struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 
 static struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = AD7606X_REF_CLK_HZ,
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = AD7606X_CORE_BASEADDR,
 	.cs_delay = 1,
 	.data_width = 16,

@@ -112,7 +112,6 @@ int main()
 #endif
 	struct no_os_spi_desc *spi_eng_desc;
 	struct spi_engine_init_param spi_eng_init_param  = {
-		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = CN0561_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
 		.data_width = 32,
