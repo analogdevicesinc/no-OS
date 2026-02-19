@@ -48,7 +48,6 @@ struct axi_pwm_init_param pwm_extra_ip = {
 };
 struct spi_engine_init_param spi_eng_extra_ip = {
 	.ref_clk_hz = SPI_ENG_REF_CLK_FREQ_HZ,
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
 	.cs_delay = 0,
 	.data_width = 16,

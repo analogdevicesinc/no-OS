@@ -49,7 +49,6 @@
 uint32_t spi_msg_cmds[6] = {CS_LOW, CS_HIGH, CS_LOW, WRITE_READ(1), CS_HIGH};
 
 struct spi_engine_init_param spi_eng_init_param  = {
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = AD77681_SPI1_ENGINE_BASEADDR,
 	.cs_delay = 0,
 	.data_width = 32,
