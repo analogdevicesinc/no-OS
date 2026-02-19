@@ -61,7 +61,6 @@ struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 
 struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = 100000000,
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = AD7616_SPI_ENGINE_BASEADDR,
 	.cs_delay = 1,
 	.data_width = 16,
