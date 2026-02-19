@@ -82,6 +82,9 @@ static int32_t _max_uart_pins_config(uint32_t device_id, mxc_gpio_vssel_t vssel)
 	case 2:
 		uart_pins = gpio_cfg_uart2;
 		break;
+	case 3:
+		uart_pins = gpio_cfg_uart3;
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -331,7 +334,11 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
+	if (descriptor->device_id == 3) {
+		ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_IBRO_CLK);
+	} else {
+		ret = MXC_UART_Init(uart_regs, descriptor->baud_rate, MXC_UART_APB_CLK);
+	}
 	if (ret != E_NO_ERROR) {
 		ret = -EINVAL;
 		goto error;
@@ -359,10 +366,12 @@ static int32_t max_uart_init(struct no_os_uart_desc **desc,
 		goto error;
 	}
 
-	ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
-	if (ret != E_NO_ERROR) {
-		ret = -EINVAL;
-		goto error;
+	if (descriptor->device_id != 3) {
+		ret = MXC_UART_SetFlowCtrl(uart_regs, flow, 8);
+		if (ret != E_NO_ERROR) {
+			ret = -EINVAL;
+			goto error;
+		}
 	}
 
 	*desc = descriptor;
