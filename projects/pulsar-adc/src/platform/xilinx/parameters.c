@@ -50,7 +50,6 @@ struct axi_pwm_init_param pulsar_adc_axi_pwm_init = {
 
 struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = SPI_ENG_REF_CLK_FREQ_HZ,
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
 	.cs_delay = 1,
 	.sdo_idle_state = 1,

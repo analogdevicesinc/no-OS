@@ -56,7 +56,6 @@ int main(void)
 
 	struct spi_engine_init_param spi_eng_init_param  = {
 		.ref_clk_hz = 100000000,
-		.type = SPI_ENGINE,
 		.spi_engine_baseaddr = AD5766_SPI_ENGINE_BASEADDR,
 		.cs_delay = 0,
 		.data_width = 24,

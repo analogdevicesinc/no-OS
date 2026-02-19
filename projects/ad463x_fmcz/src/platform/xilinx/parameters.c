@@ -51,7 +51,6 @@ struct axi_pwm_init_param ad4630_axi_pwm_init = {
 
 struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = 160000000,
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
 	.cs_delay = 0,
 	.data_width = 32,

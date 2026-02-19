@@ -47,7 +47,6 @@ struct xil_uart_init_param uart_extra_ip = {
 
 struct spi_engine_init_param spi_eng_init_param  = {
 	.ref_clk_hz = 100000000,
-	.type = SPI_ENGINE,
 	.spi_engine_baseaddr = SPI_ENGINE_BASEADDR,
 	.cs_delay = 0,
 	.data_width = 32,
