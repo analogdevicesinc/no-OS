@@ -2,7 +2,7 @@
 *   @file    AD717X.h
 *   @brief   AD717X header file.
 *   	     Devices: AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2,
-*            AD7177-2, AD4111, AD4112, AD4114, AD4115, AD4116
+*            AD7177-2, AD4111, AD4112, AD4113, AD4114, AD4115, AD4116
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)
 *******************************************************************************
@@ -137,6 +137,7 @@ union ad717x_analog_inputs {
 enum ad717x_device_type {
 	ID_AD4111,
 	ID_AD4112,
+	ID_AD4113,
 	ID_AD4114,
 	ID_AD4115,
 	ID_AD4116,
@@ -492,8 +493,8 @@ typedef struct {
 #define AD7177_2_ID_REG_VALUE 0x4FD0
 /* AD4111, AD4112 IDs */
 #define AD411X_ID_REG_VALUE   0x30D0
-/* AD4114, AD4115 IDs */
-#define AD4114_5_ID_REG_VALUE   0x31D0
+/* AD4113, AD4114, AD4115 IDs */
+#define AD4113_4_5_ID_REG_VALUE   0x31D0
 /* AD4116 ID */
 #define AD4116_ID_REG_VALUE   0x34D0
 
