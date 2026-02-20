@@ -31,8 +31,8 @@
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************/
 
-#ifndef AD4111_CFG_H_
-#define AD4111_CFG_H_
+#ifndef __AD411X_REGS_H__
+#define __AD411X_REGS_H__
 
 #include "ad717x.h"
 
@@ -118,4 +118,4 @@ ad717x_st_reg ad4111_regs[] = {
 	{AD717X_GAIN7_REG, 0, 3 },
 };
 
-#endif /* AD4111_CFG_H_ */
+#endif /* __AD411X_REGS_H__ */
