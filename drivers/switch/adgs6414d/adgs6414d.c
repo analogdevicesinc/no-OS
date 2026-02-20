@@ -155,13 +155,21 @@ int adgs6414d_set_switch(struct adgs6414d_dev *dev, uint8_t channel, bool state)
 int adgs6414d_get_switch(struct adgs6414d_dev *dev, uint8_t channel,
 			 bool *state)
 {
+	uint8_t mask;
+	int ret;
+
 	if (!dev || !state)
 		return -EINVAL;
 
 	if (channel >= ADGS6414D_NUM_SWITCHES)
 		return -EINVAL;
 
-	*state = (dev->switch_state & (1 << channel)) ? true : false;
+	ret = adgs6414d_spi_read(dev, ADGS6414D_REG_SW_DATA, &mask);
+	if (ret)
+		return ret;
+
+	dev->switch_state = mask;
+	*state = (mask & (1 << channel)) ? true : false;
 
 	return 0;
 }
@@ -196,10 +204,16 @@ int adgs6414d_set_switches(struct adgs6414d_dev *dev, uint8_t mask)
  */
 int adgs6414d_get_switches(struct adgs6414d_dev *dev, uint8_t *mask)
 {
+	int ret;
+
 	if (!dev || !mask)
 		return -EINVAL;
 
-	*mask = dev->switch_state;
+	ret = adgs6414d_spi_read(dev, ADGS6414D_REG_SW_DATA, mask);
+	if (ret)
+		return ret;
+
+	dev->switch_state = *mask;
 
 	return 0;
 }
