@@ -48,7 +48,6 @@ int adg1712_set_switch_state(struct adg1712_dev *dev,
 			     bool enable)
 {
 	struct no_os_gpio_desc *gpio;
-	uint8_t value;
 
 	if (!dev)
 		return -EINVAL;
