@@ -107,6 +107,14 @@ METER
 
    drivers/meter/*
 
+MOTOR
+=====
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/motor/*
+
 MUX
 ===
 .. toctree::
