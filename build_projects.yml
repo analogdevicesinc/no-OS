@@ -49,6 +49,9 @@ jobs:
         -builds_dir /no-OS_builds/builds \
         -platform xilinx \
         -hdl_branch $(HDL_BRANCH)
+    env:
+      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+      TOKEN: $(TOKEN)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -89,6 +92,9 @@ jobs:
         -builds_dir /no-OS_builds/builds \
         -platform stm32 \
         -hdl_branch $(HDL_BRANCH)
+    env:
+      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+      TOKEN: $(TOKEN)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -127,6 +133,9 @@ jobs:
         -builds_dir /no-OS_builds/builds \
         -platform maxim \
         -hdl_branch $(HDL_BRANCH)
+    env:
+      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+      TOKEN: $(TOKEN)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -165,6 +174,9 @@ jobs:
         -builds_dir /no-OS_builds/builds \
         -platform mbed \
         -hdl_branch $(HDL_BRANCH)
+    env:
+      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+      TOKEN: $(TOKEN)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -203,6 +215,9 @@ jobs:
         -builds_dir /no-OS_builds/builds \
         -platform pico \
         -hdl_branch $(HDL_BRANCH)
+    env:
+      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+      TOKEN: $(TOKEN)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
@@ -244,6 +259,9 @@ jobs:
         -builds_dir /no-OS_builds/builds \
         -platform aducm3029 \
         -hdl_branch $(HDL_BRANCH)
+    env:
+      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+      TOKEN: $(TOKEN)
     displayName: 'Run project build'
   - task: PublishPipelineArtifact@1
     timeoutInMinutes: 10
