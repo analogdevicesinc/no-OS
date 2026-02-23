@@ -4,9 +4,16 @@ trigger:
 - 20*
 
 pr:
-- main
-- next_stable
-- 20*
+  branches:
+    include:
+    - main
+    - next_stable
+    - 20*
+  paths:
+    exclude:
+    - doc/**
+    - '**/*.md'
+    - '**/*.rst'
 
 variables:
 - group: noos_releases_group_variables
