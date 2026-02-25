@@ -8,10 +8,15 @@ CFLAGS += -D$(BOARD_REV)=1
 PLATFORM=maxim
 TARGET=max32690
 
+SBT := $(strip $(SBT))
+CONNECTION_TYPE := $(strip $(CONNECTION_TYPE))
+HP_STATIC_IP := $(strip $(HP_STATIC_IP))
+BOARD_REV := $(strip $(BOARD_REV))
+
 LIB_FLAGS += -lm
 LDFLAGS += -u_printf_float
 
-ifeq (y,$(strip $(HP_STATIC_IP)))
+ifeq (y,$(HP_STATIC_IP))
 NO_OS_IP=192.168.97.60
 NO_OS_NETMASK=255.255.255.0
 NO_OS_GATEWAY=0.0.0.0
