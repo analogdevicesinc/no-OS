@@ -1,5 +1,6 @@
 IIOD ?= n
 QUAD_MXFE = n
+MCS_CONTINUOUS_SYSREF = n
 
 # Uncomment to select the profile:
 #PROFILE = vcu118_quad_ad9081_204c_txmode_11_rxmode_4_revc
