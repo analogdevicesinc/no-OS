@@ -26,7 +26,7 @@ HEAP_SIZE = 0x80000
 STACK_SIZE = 0xFFFF
 
 ifeq ($(SBT), 1)
-MAXIM_SBT_DIR ?= $(MAXIM_PATH)/Tools/SBT
+MAXIM_SBT_DIR ?= $(abspath $(MAXIM_LIBRARIES)/../Tools/SBT)
 MAXIM_SBT_DIR := $(subst \,/,$(MAXIM_SBT_DIR))
 # ^ Must sanitize path for \ on Windows, since this may come from an environment
 # variable.
