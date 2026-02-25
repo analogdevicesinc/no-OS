@@ -466,6 +466,17 @@ int main(void)
 	sampling_freq = phy.curr_profile->rx.rxChannelCfg[0].profile.rxOutputRate_Hz;
 
 #ifdef DMA_EXAMPLE
+	/* For TDD profiles, TX channels are left in PRIMED after adrv9002_setup().
+	 * Explicitly transition to RF_ENABLED to activate the RF output path. */
+	if (phy.curr_profile->sysConfig.duplexMode == ADI_ADRV9001_TDD_MODE) {
+		adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_TX,
+						   ADI_CHANNEL_1,
+						   ADI_ADRV9001_CHANNEL_RF_ENABLED);
+		adi_adrv9001_Radio_Channel_ToState(phy.adrv9001, ADI_TX,
+						   ADI_CHANNEL_2,
+						   ADI_ADRV9001_CHANNEL_RF_ENABLED);
+	}
+
 	axi_dac_load_custom_data(phy.tx1_dac, sine_lut_iq,
 				 NO_OS_ARRAY_SIZE(sine_lut_iq),
 				 (uintptr_t)dac_buffers[0]);
