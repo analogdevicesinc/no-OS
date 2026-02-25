@@ -37,6 +37,7 @@
 #include <stdbool.h>
 #include "no_os_spi.h"
 #include "no_os_gpio.h"
+#include "no_os_util.h"
 
 /* ADGM3121 Register Addresses */
 #define ADGM3121_REG_SWITCH_DATA	0x20
