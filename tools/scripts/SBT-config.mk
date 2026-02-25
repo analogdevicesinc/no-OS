@@ -13,6 +13,10 @@ $(info **********************************************************************)
 $(info Loaded SBT-config.mk)
 $(info **********************************************************************)
  
+TARGET?=max32660
+TARGET_NUMBER:=$(word 2,$(subst x, ,$(subst X, ,$(TARGET))))
+TARGET_UCASE=$(addprefix MAX,$(TARGET_NUMBER))
+
 ifeq "$(TARGET_UCASE)" "MAX32650"
 TARGET_SEC ?= MAX32651
 else ifeq "$(TARGET_UCASE)" "MAX32665"
