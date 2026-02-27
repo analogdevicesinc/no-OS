@@ -85,7 +85,7 @@ with:
 
 .. code-block:: bash
 
-   NEW_CFLAGS = -DDAC_DMA_EXAMPLE
+   make DMA_EXAMPLE=y
 
 IIO Example
 ~~~~~~~~~~~~
@@ -180,3 +180,30 @@ Build Command
    make
    # to flash the code
    make run
+
+The following build flags are supported:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Flag
+     - Default
+     - Description
+   * - ``IIOD=y``
+     - ``n``
+     - Enable IIO daemon for use with IIO Oscilloscope
+   * - ``DMA_EXAMPLE=y``
+     - ``n``
+     - Enable the DMA loopback example (sine wave TX, capture RX)
+   * - ``LVDS=y``
+     - ``n``
+     - Use the LVDS SSI profile instead of the default CMOS profile
+   * - ``RX2TX2=y``
+     - ``n``
+     - Enable RX2TX2 mode (combined RX1+RX2 and TX1+TX2 AXI cores)
+
+Example:
+
+.. code-block:: bash
+
+   make DMA_EXAMPLE=y LVDS=y
