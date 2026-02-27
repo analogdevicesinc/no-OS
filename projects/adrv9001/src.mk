@@ -93,3 +93,11 @@ CFLAGS = -DADI_DYNAMIC_PROFILE_LOAD \
 ifeq (y,$(strip $(LVDS)))
 CFLAGS += -DLVDS
 endif
+
+ifeq (y,$(strip $(DMA_EXAMPLE)))
+CFLAGS += -DDMA_EXAMPLE
+endif
+
+ifeq (y,$(strip $(RX2TX2)))
+CFLAGS += -DADRV9002_RX2TX2
+endif
