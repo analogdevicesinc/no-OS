@@ -63,7 +63,7 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
 #if defined (STM32F2) || defined (STM32F4) || defined (STM32F7)
 	sdma_ch->hdma->Init.Channel = sdma_ch->ch_num;
 #else
-	sdma_ch->hdma->Instance = sdma_ch->ch_num;
+	sdma_ch->hdma->Instance = (DMA_Channel_TypeDef *)sdma_ch->ch_num;
 #endif
 	sdma_ch->hdma->Init.MemInc = sdma_ch->mem_increment ? DMA_MINC_ENABLE :
 				     DMA_MINC_DISABLE;
@@ -142,7 +142,7 @@ int stm32_dma_config_xfer(struct no_os_dma_ch *channel,
  * 	   -ENOMEM if there is not enough free memory
  */
 int stm32_dma_init(struct no_os_dma_desc** desc,
-		   const struct no_os_dma_init_param* param)
+		   struct no_os_dma_init_param* param)
 {
 	struct no_os_dma_desc* descriptor;
 	int ret;
