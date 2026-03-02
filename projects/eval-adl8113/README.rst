@@ -4,7 +4,7 @@ EVAL-ADL8113 no-OS Example Project
 .. no-os-doxygen::
 
 .. contents::
-	:depth: 3
+    :depth: 3
 
 Supported Evaluation Boards
 ---------------------------
@@ -34,19 +34,19 @@ Board Connector and Jumper Settings
 
 **Pin Description**
 
-	Please see the following table for the pin assignments:
+    Please see the following table for the pin assignments:
 
-	+----------+-------------------------------------------+
-	| Name     | Description                               |
-	+----------+-------------------------------------------+
-	| VDD      | Connect to supply voltage                 |
-	+----------+-------------------------------------------+
-	| GND      | Connect to Ground                         |
-	+----------+-------------------------------------------+
-	| VA       | Data bit 0 (GPIO controlled)              |
-	+----------+-------------------------------------------+
-	| VB       | Data bit 1 (GPIO controlled)              |
-	+----------+-------------------------------------------+
+    +----------+-------------------------------------------+
+    | Name     | Description                               |
+    +----------+-------------------------------------------+
+    | VDD      | Connect to supply voltage                 |
+    +----------+-------------------------------------------+
+    | GND      | Connect to Ground                         |
+    +----------+-------------------------------------------+
+    | VA       | Data bit 0 (GPIO controlled)              |
+    +----------+-------------------------------------------+
+    | VB       | Data bit 1 (GPIO controlled)              |
+    +----------+-------------------------------------------+
 
 No-OS Build Setup
 -----------------
@@ -70,6 +70,34 @@ This is a simple example that:
 * Initializes the ADL8113
 * Cycles through every mode of the chip, through button 1 on MAX32655FTHR, using a state machine
 * Demonstrates gain control and switch control via GPIO pins
+
+IIO Example
+^^^^^^^^^^^
+
+This example uses the ADL8113 IIO driver to expose the device over libiio via
+a serial (UART) backend. The IIO driver maps gain values to signal paths,
+allowing mode selection through the standard hardwaregain attribute.
+
+The example supports:
+
+* Internal amplifier mode (14 dB gain)
+* Internal bypass mode (-2 dB insertion loss)
+* External bypass A and B modes (optional, user-configurable gain)
+
+To enable external bypass paths, set the following in iio_example.c:
+
+.. code-block:: c
+
+    adl8113_iio_ip.has_external_bypass_a = true;
+    adl8113_iio_ip.external_bypass_a_gain_db = 0;
+    adl8113_iio_ip.has_external_bypass_b = true;
+    adl8113_iio_ip.external_bypass_b_gain_db = 0;
+
+To build the IIO example:
+
+.. code-block:: bash
+
+    make EXAMPLE=iio_example PLATFORM=maxim TARGET=max32655
 
 No-OS Supported Platforms
 -------------------------
@@ -104,9 +132,9 @@ Maxim Platform
 
 .. code-block:: bash
 
-	# to delete current build
-	make reset PLATFORM=maxim TARGET=max32655
-	# to build the project
-	make PLATFORM=maxim TARGET=max32655
-	# to flash the code
-	make run PLATFORM=maxim TARGET=max32655
+    # to delete current build
+    make reset PLATFORM=maxim TARGET=max32655
+    # to build the project
+    make PLATFORM=maxim TARGET=max32655
+    # to flash the code
+    make run PLATFORM=maxim TARGET=max32655
