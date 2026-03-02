@@ -71,6 +71,34 @@ This is a simple example that:
 * Cycles through every mode of the chip, through button 1 on MAX32655FTHR, using a state machine
 * Demonstrates gain control and switch control via GPIO pins
 
+IIO Example
+^^^^^^^^^^^
+
+This example uses the ADL8113 IIO driver to expose the device over libiio via
+a serial (UART) backend. The IIO driver maps gain values to signal paths,
+allowing mode selection through the standard hardwaregain attribute.
+
+The example supports:
+
+* Internal amplifier mode (14 dB gain)
+* Internal bypass mode (-2 dB insertion loss)
+* External bypass A and B modes (optional, user-configurable gain)
+
+To enable external bypass paths, set the following in iio_example.c:
+
+.. code-block:: c
+
+    adl8113_iio_ip.has_external_bypass_a = true;
+    adl8113_iio_ip.external_bypass_a_gain_db = 0;
+    adl8113_iio_ip.has_external_bypass_b = true;
+    adl8113_iio_ip.external_bypass_b_gain_db = 0;
+
+To build the IIO example:
+
+.. code-block:: bash
+
+    make EXAMPLE=iio_example PLATFORM=maxim TARGET=max32655
+
 No-OS Supported Platforms
 -------------------------
 
