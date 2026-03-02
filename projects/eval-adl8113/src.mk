@@ -12,3 +12,4 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_lf256fifo.c
 
 SRCS += $(DRIVERS)/amplifiers/adl8113/adl8113.c
+
