@@ -3,6 +3,8 @@ SRCS += $(PLATFORM_DRIVERS)/aducm3029_delay.c \
 
 ifeq (y,$(strip $(NO_OS_NETWORKING)))
 DISABLE_SECURE_SOCKET ?= y
+SRCS += $(DRIVERS)/api/no_os_net.c
+INCS += $(INCLUDE)/no_os_net.h
 SRC_DIRS += $(NO-OS)/network
 endif
 

@@ -35,7 +35,11 @@
 #define LINUX_SOCKET_H_
 
 #include "network_interface.h"
+#include "no_os_net.h"
 
 extern struct network_interface linux_net;
+
+/** Linux network ops for generic no_os_net interface */
+extern const struct no_os_net_ops linux_net_ops;
 
 #endif /* LINUX_SOCKET_H_ */
