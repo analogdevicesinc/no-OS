@@ -101,10 +101,9 @@ def generate_zynq_init(fsbl_path, xsa_basename):
                 "fsblExitSymbol": "FsblExit",
                 "fsblFile": f"${{workspaceFolder}}/{fsbl_path}"
             },
-            "usingPsInit": {
-                "runPsInit": True,
-                "plPowerup": True,
-                "psInitTclFile": f"${{workspaceFolder}}/_ide/{xsa_basename}/ps_init.tcl"
+            "usingPs7Init": {
+                "runPs7Init": True,
+                "ps7InitTclFile": f"${{workspaceFolder}}/_ide/{xsa_basename}/ps7_init.tcl"
             }
         }
     }
