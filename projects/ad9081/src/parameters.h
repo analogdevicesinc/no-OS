@@ -39,9 +39,11 @@
 
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET		78
+#define PHY_SYNC		(GPIO_OFFSET + 31)
 #else
 #ifdef PLATFORM_ZYNQ
 #define GPIO_OFFSET		54
+#define PHY_SYNC		(GPIO_OFFSET + 12)
 #else
 #define GPIO_OFFSET		0
 #endif
@@ -63,7 +65,6 @@
 
 #else
 #define PHY_RESET		(GPIO_OFFSET + 55)
-#define PHY_SYNC		(GPIO_OFFSET + 31)
 #endif
 
 #if defined(PLATFORM_MB)

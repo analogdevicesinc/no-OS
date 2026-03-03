@@ -91,14 +91,15 @@ int main(void)
 	};
 
 #ifdef MCS_CONTINUOUS_SYSREF
+	printf("MCS Continuous SysRef is enabled!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	struct no_os_gpio_init_param gpio_lf_output_pin_init = {
-		.number = 108,
+		.number = 78,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
 
 	struct no_os_gpio_init_param gpio_lf_input_pin_init = {
-		.number = 107,
+		.number = 77,
 		.platform_ops = &xil_gpio_ops,
 		.extra = &xil_gpio_param
 	};
@@ -229,7 +230,7 @@ int main(void)
 #ifdef MCS_CONTINUOUS_SYSREF
 		.master_slave_sync_gpio_num = 4,
 		.leader_follower_sync = true,
-		.leader = false,
+		.leader = true,
 		.nco_test = true,
 #else
 		.leader_follower_sync = false,
