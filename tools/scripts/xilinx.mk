@@ -278,6 +278,7 @@ vitis_launch_config: $(TEMP_DIR)/arch.txt
 	@mkdir -p $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))
 	@unzip -q -o $(HARDWARE) '*.bit' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/
 	@unzip -q -o $(HARDWARE) 'psu_init.tcl' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null || \
+	 unzip -q -o $(HARDWARE) 'ps7_init.tcl' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null || \
 	 unzip -q -o $(HARDWARE) 'ps_init.tcl' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null || true
 	@python3 $(NO-OS)/tools/scripts/platform/xilinx/generate_vitis_launch.py \
 		--arch "$(ARCH)" \
