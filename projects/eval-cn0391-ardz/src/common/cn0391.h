@@ -87,5 +87,7 @@ int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 			    double *cold_junction_temp,
 			    double *thermocouple_voltage,
 			    double *rtd_resistance);
+int cn0391_read_tc_raw(struct cn0391_dev *dev, uint8_t ch_idx,
+		       int32_t *raw);
 
 #endif /* __CN0391_H__ */

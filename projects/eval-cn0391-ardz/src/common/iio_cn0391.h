@@ -38,4 +38,8 @@
 
 extern struct iio_device iio_cn0391_device;
 
+/* Custom AD7124-8 IIO device exposing the same 4 thermocouple channels
+ * (CH0..CH3) backed by the cn0391_dev descriptor — used for demo purposes. */
+extern struct iio_device iio_ad7124_cn0391_device;
+
 #endif /* __IIO_CN0391_H__ */

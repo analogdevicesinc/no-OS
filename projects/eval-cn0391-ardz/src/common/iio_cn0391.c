@@ -159,3 +159,87 @@ struct iio_device iio_cn0391_device = {
 	.post_disable = NULL,
 	.read_dev = NULL,
 };
+
+/**
+ * @brief Read hot junction temperature as a float string for the "raw" attribute.
+ *        Matches the Zephyr convention for demo project: raw = temperature [°C],
+ *        scale = "1000" (fixed).
+ * @param device  - CN0391 device descriptor.
+ * @param buf     - Output buffer.
+ * @param len     - Output buffer length.
+ * @param channel - IIO channel info; ch_num selects the IIO channel (0..3).
+ * @param priv    - Unused.
+ * @return Number of bytes written, or negative error code.
+ */
+static int cn0391_iio_read_raw_tc(void *device, char *buf, uint32_t len,
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
+{
+	struct cn0391_dev *dev = (struct cn0391_dev *)device;
+	uint8_t ch_idx = (uint8_t)channel->ch_num;
+	int ret;
+
+	if (dev->cache_ch != (int8_t)ch_idx) {
+		ret = cn0391_read_temperature(dev, ch_idx,
+					      &dev->cache.hot_junction_temp,
+					      &dev->cache.cold_junction_temp,
+					      &dev->cache.tc_voltage,
+					      &dev->cache.rtd_resistance);
+		if (ret)
+			return ret;
+		dev->cache_ch = (int8_t)ch_idx;
+	}
+
+	return snprintf(buf, len, "%.5f", dev->cache.hot_junction_temp);
+}
+
+/**
+ * @brief Return the fixed scale factor for the custom ad7124-8 channels.
+ *        Matches the Zephyr convention for demo project (scale = "1000").
+ */
+static int cn0391_iio_read_scale_tc(void *device, char *buf, uint32_t len,
+				    const struct iio_ch_info *channel,
+				    intptr_t priv)
+{
+	return snprintf(buf, len, "1000");
+}
+
+static struct iio_attribute cn0391_ad7124_ch_attrs[] = {
+	{
+		.name = "raw",
+		.show = cn0391_iio_read_raw_tc,
+		.store = NULL,
+	},
+	{
+		.name = "scale",
+		.show = cn0391_iio_read_scale_tc,
+		.store = NULL,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
+static struct iio_channel cn0391_ad7124_channels[] = {
+	{ .name = "CH0", .ch_type = IIO_VOLTAGE, .channel = 0,
+	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
+	{ .name = "CH1", .ch_type = IIO_VOLTAGE, .channel = 1,
+	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
+	{ .name = "CH2", .ch_type = IIO_VOLTAGE, .channel = 2,
+	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
+	{ .name = "CH3", .ch_type = IIO_VOLTAGE, .channel = 3,
+	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
+};
+
+/* Custom AD7124-8 IIO device for demo purposes.
+ * Exposes 4 thermocouple channels (voltage0..voltage3) with raw (hot junction
+ * temperature as float [°C]) and scale ("1000") attributes, matching the
+ * Zephyr CN0391 convention for demo project. Device is backed by cn0391_dev. */
+struct iio_device iio_ad7124_cn0391_device = {
+	.num_ch = NO_OS_ARRAY_SIZE(cn0391_ad7124_channels),
+	.channels = cn0391_ad7124_channels,
+	.attributes = NULL,
+	.debug_attributes = NULL,
+	.buffer_attributes = NULL,
+	.pre_enable = NULL,
+	.post_disable = NULL,
+	.read_dev = NULL,
+};

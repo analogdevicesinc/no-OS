@@ -1,6 +1,5 @@
 #include "iio_example.h"
 #include "common_data.h"
-#include "iio_ad7124.h"
 #include "iio_cn0391.h"
 #include "iio_app.h"
 #include "no_os_util.h"
@@ -20,10 +19,12 @@ int iio_example_main(void)
 	}
 
 	struct iio_app_device iio_devices[] = {
+		IIO_APP_DEVICE("ad7124-8", dev,
+			       &iio_ad7124_cn0391_device, NULL, NULL, NULL),
+#ifdef CN0391_IIO_SUPPORT
 		IIO_APP_DEVICE("cn0391", dev,
 			       &iio_cn0391_device, NULL, NULL, NULL),
-		IIO_APP_DEVICE("ad7124-8", dev->ad7124_dev,
-			       &iio_ad7124_device, NULL, NULL, NULL),
+#endif
 	};
 
 	app_init_param.devices = iio_devices;

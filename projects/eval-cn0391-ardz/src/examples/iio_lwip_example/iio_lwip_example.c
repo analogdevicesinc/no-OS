@@ -1,6 +1,5 @@
 #include "iio_lwip_example.h"
 #include "common_data.h"
-#include "iio_ad7124.h"
 #include "iio_cn0391.h"
 #include "iio_app.h"
 #include "lwip_socket.h"
@@ -48,10 +47,12 @@ int iio_lwip_example_main(void)
 		return ret;
 
 	struct iio_app_device iio_devices[] = {
+		IIO_APP_DEVICE("ad7124-8", dev,
+			       &iio_ad7124_cn0391_device, NULL, NULL, NULL),
+#ifdef CN0391_IIO_SUPPORT
 		IIO_APP_DEVICE("cn0391", dev,
 			       &iio_cn0391_device, NULL, NULL, NULL),
-		IIO_APP_DEVICE("ad7124-8", dev->ad7124_dev,
-			       &iio_ad7124_device, NULL, NULL, NULL),
+#endif
 	};
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);

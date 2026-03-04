@@ -8,11 +8,13 @@ NO_OS_NETMASK ?= 255.255.0.0
 NO_OS_GATEWAY ?= 0.0.0.0
 endif
 
-INCS += $(DRIVERS)/adc/ad7124/iio_ad7124.h
-SRCS += $(DRIVERS)/adc/ad7124/iio_ad7124.c
 
 INCS += $(PROJECT)/src/common/iio_cn0391.h
 SRCS += $(PROJECT)/src/common/iio_cn0391.c
+
+ifdef CN0391_IIO_SUPPORT
+CFLAGS += -DCN0391_IIO_SUPPORT
+endif
 
 INCS += $(INCLUDE)/no_os_crc8.h
 SRCS += $(NO-OS)/util/no_os_crc8.c

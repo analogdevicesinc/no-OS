@@ -11,11 +11,12 @@ CFLAGS += -DIIO_SUPPORT
 SRCS += $(PROJECT)/src/examples/iio_example/iio_example.c
 INCS += $(PROJECT)/src/examples/iio_example/iio_example.h
 
-SRCS += $(DRIVERS)/adc/ad7124/iio_ad7124.c
-INCS += $(DRIVERS)/adc/ad7124/iio_ad7124.h
-
 SRCS += $(PROJECT)/src/common/iio_cn0391.c
 INCS += $(PROJECT)/src/common/iio_cn0391.h
+
+ifdef CN0391_IIO_SUPPORT
+CFLAGS += -DCN0391_IIO_SUPPORT
+endif
 
 IIOD=y
 
