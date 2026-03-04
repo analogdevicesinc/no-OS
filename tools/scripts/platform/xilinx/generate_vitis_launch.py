@@ -219,6 +219,40 @@ def generate_launch_json(args):
     return config
 
 
+def generate_build_json(project_name, project_dir):
+    """Generate build.json for Vitis 2025.1 Unified IDE.
+
+    Reads builds.json from the project directory to generate one configuration
+    per xilinx build variant. Falls back to a single 'make DEBUG=1' entry if
+    builds.json is absent or has no 'xilinx' section.
+    """
+    configurations = []
+
+    builds_json_path = Path(project_dir) / 'builds.json'
+    if builds_json_path.exists():
+        with open(builds_json_path) as f:
+            builds = json.load(f)
+        for variant_name, variant in builds.get('xilinx', {}).items():
+            flags = variant.get('flags', '').strip()
+            build_cmd = f"make DEBUG=1 {flags}".strip() if flags else "make DEBUG=1"
+            configurations.append({
+                "name": f"{project_name}_{variant_name}",
+                "build_command": build_cmd,
+                "clean_command": "make clean",
+                "cwd": "${workspaceFolder}"
+            })
+
+    if not configurations:
+        configurations.append({
+            "name": f"{project_name}_app",
+            "build_command": "make DEBUG=1",
+            "clean_command": "make clean",
+            "cwd": "${workspaceFolder}"
+        })
+
+    return {"configurations": configurations}
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Generate Vitis 2025.1+ launch.json for no-OS projects'
@@ -237,6 +271,8 @@ def main():
                         help='Project directory (absolute path)')
     parser.add_argument('--output', required=True,
                         help='Output path for launch.json')
+    parser.add_argument('--build-output', required=False,
+                        help='Output path for build.json (optional)')
 
     args = parser.parse_args()
 
@@ -253,11 +289,20 @@ def main():
         f.write('\n')  # Add trailing newline
 
     print(f"Generated Vitis launch configuration: {output_path}")
-    print(f"  Architecture: {args.arch}")
     arch_config = detect_arch_config(args.arch)
+    print(f"  Architecture: {args.arch}")
     print(f"  Debug type: {arch_config['debugType']}")
     print(f"  Target CPU: {arch_config['targetCpu']}")
     print(f"  Uses FSBL: {arch_config['useFsbl']}")
+
+    if args.build_output:
+        build_config = generate_build_json(args.project_name, args.project_dir)
+        build_output_path = Path(args.build_output)
+        build_output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(build_output_path, 'w') as f:
+            json.dump(build_config, f, indent='\t')
+            f.write('\n')
+        print(f"Generated Vitis build configuration: {build_output_path}")
 
 
 if __name__ == '__main__':
