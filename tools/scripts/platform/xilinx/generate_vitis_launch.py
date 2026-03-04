@@ -98,7 +98,7 @@ def generate_zynq_init(fsbl_path, xsa_basename):
             "isFsbl": True,
             "usingFSBL": {
                 "initWithFSBL": True,
-                "fsblExitSymbol": "FsblExit",
+                "fsblExitSymbol": "FsblHandoffJtagExit",
                 "fsblFile": f"${{workspaceFolder}}/{fsbl_path}"
             },
             "usingPs7Init": {
