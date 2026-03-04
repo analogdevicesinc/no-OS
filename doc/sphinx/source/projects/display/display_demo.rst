@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/gyro/display_demo/README.rst
