@@ -107,6 +107,7 @@ int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 	double v_tc, v_r5, current, v_r1, r_rtd;
 	double t_cold, v_cj, v_total;
 	const struct cn0391_adc_ch_map *map;
+	uint8_t i;
 
 	if (ch_idx >= CN0391_NUM_IIO_CHANNELS)
 		return -EINVAL;
@@ -114,13 +115,42 @@ int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 	map = &cn0391_adc_map[ch_idx];
 
 	/* Switch IOUT0 to the RTD excitation pin for this channel.
-	 * The TC conversion that follows provides settling time before
-	 * the RTD and R5 are read. */
+	 * The Sinc4 settling time of the TC conversion that follows provides
+	 * adequate settling time for the RTD current source. */
 	dev->ad7124_dev->regs[AD7124_IOCon1].value =
 		AD7124_IO_CTRL1_REG_IOUT0(5) |
 		AD7124_IO_CTRL1_REG_IOUT_CH0(map->iout_ain);
 	ret = ad7124_write_register(dev->ad7124_dev,
 				    dev->ad7124_dev->regs[AD7124_IOCon1]);
+	if (ret)
+		return ret;
+
+	/* Pause any ongoing conversion before reconfiguring channels */
+	ret = ad7124_set_adc_mode(dev->ad7124_dev, AD7124_IDLE);
+	if (ret)
+		return ret;
+
+	/*
+	 * Enable only the 3 ADC channels needed for this IIO channel and
+	 * disable all others. This avoids waiting through the full 12-channel
+	 * rotation in continuous mode.
+	 */
+	for (i = 0; i < CN0391_NUM_IIO_CHANNELS * CN0391_ADC_CHANNELS_PER_IIO_CH; i++) {
+		ret = ad7124_set_channel_status(dev->ad7124_dev, i,
+						i == map->tc ||
+						i == map->r5  ||
+						i == map->rtd);
+		if (ret)
+			return ret;
+	}
+
+	/*
+	 * Single conversion mode: the ADC converts each enabled channel exactly
+	 * once in ascending channel-number order (tc < r5 < rtd), then returns
+	 * to standby automatically. No retries are needed in cn0391_read_channel
+	 * since the results arrive in the expected sequence.
+	 */
+	ret = ad7124_set_adc_mode(dev->ad7124_dev, AD7124_SINGLE);
 	if (ret)
 		return ret;
 
@@ -195,6 +225,12 @@ int cn0391_init(struct cn0391_dev **dev,
 		AD7124_IO_CTRL1_REG_IOUT_CH0(cn0391_adc_map[CN0391_CH0_ID].iout_ain);
 	ret = ad7124_write_register(d->ad7124_dev,
 				    d->ad7124_dev->regs[AD7124_IOCon1]);
+	if (ret)
+		goto error_ad7124;
+
+	/* Stop the continuous conversion started by ad7124_setup; measurements
+	 * are triggered on demand via single conversion in cn0391_read_temperature. */
+	ret = ad7124_set_adc_mode(d->ad7124_dev, AD7124_IDLE);
 	if (ret)
 		goto error_ad7124;
 
