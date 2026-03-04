@@ -1,0 +1,1 @@
+.. include:: ../../../../../projects/adf5902_sdz/README.rst
