@@ -1,0 +1,10 @@
+{
+  "xilinx": {
+    "zynq": {
+      "flags": ""
+    },
+    "zynqmp": {
+      "flags": ""
+    }
+  }
+}
