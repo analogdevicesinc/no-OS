@@ -8,7 +8,6 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c \
 
 INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/cn0391.h \
-	$(PROJECT)/src/platform/platform_includes.h \
 	$(PROJECT)/src/platform/$(PLATFORM)/parameters.h
 
 SRCS += $(DRIVERS)/adc/ad7124/ad7124.c

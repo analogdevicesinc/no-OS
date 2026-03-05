@@ -34,13 +34,6 @@
 #include <math.h>
 #include "no_os_rtd.h"
 
-/**
- * @brief Callendar-Van Dusen equation for Pt1000 RTD (IEC 60751).
- *        Converts RTD resistance to temperature. For T < 0°C a Newton-Raphson
- *        refinement loop is applied to account for the cubic C term.
- * @param resistance - Measured RTD resistance in Ohms.
- * @return Temperature in degrees Celsius, or -999.0 on domain error.
- */
 double no_os_pt1000_resistance_to_temp(double resistance)
 {
 	const double R0 = 1000.0;

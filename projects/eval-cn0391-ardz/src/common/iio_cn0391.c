@@ -36,6 +36,8 @@
 #include "cn0391.h"
 #include "no_os_error.h"
 
+#ifdef CN0391_IIO_SUPPORT
+
 /* Private attribute IDs used as priv in iio_attribute */
 enum cn0391_iio_attr_id {
 	CN0391_ATTR_HOT_JUNCTION_TEMP,
@@ -65,17 +67,16 @@ static int cn0391_iio_read_processed(void *device, char *buf, uint32_t len,
 	/*
 	 * Each IIO channel exposes 4 attributes (hot_junction_temp,
 	 * cold_junction_temp, tc_voltage, rtd_resistance), all derived from a
-	 * single cn0391_read_temperature() call that reads 3 ADC channels.
-	 * Without caching, every attribute read would trigger a full ADC
-	 * measurement cycle, spending up to ~2.5 s per channel waiting in the
-	 * 12-channel continuous-mode rotation — unacceptable latency when
-	 * multiple attributes are read in sequence.
+	 * single cn0391_read_temperature() call that reads 3 ADC channels in
+	 * single conversion mode (~300 ms per cycle at FS=384). Without
+	 * caching, every attribute read would trigger a full measurement cycle,
+	 * adding ~1.2 s of latency when all 4 attributes are read in sequence.
 	 *
 	 * The cache is keyed on ch_idx: if the same IIO channel is queried
 	 * again (consecutive attribute reads), the cached result is returned
 	 * directly. A new measurement is only triggered when a different
-	 * channel is requested, reducing ADC activity from 16 to 4 measurement
-	 * cycles per full client read of all four IIO channels.
+	 * channel is requested, reducing measurement cycles from 4 to 1 per
+	 * full client read of all attributes on a single channel.
 	 */
 	if (dev->cache_ch != (int8_t)ch_idx) {
 		ret = cn0391_read_temperature(dev, ch_idx,
@@ -138,15 +139,20 @@ static struct iio_attribute cn0391_ch_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
+#define CN0391_IIO_TEMP_CHANNEL(idx) { \
+		.name = "CH"#idx, \
+		.ch_type = IIO_TEMP, \
+		.channel = idx, \
+		.attributes = cn0391_ch_attrs, \
+		.ch_out = false, \
+		.indexed = true, \
+	}
+
 static struct iio_channel cn0391_channels[] = {
-	{ .name = "CH0", .ch_type = IIO_TEMP, .channel = 0,
-	  .attributes = cn0391_ch_attrs, .ch_out = false, .indexed = true },
-	{ .name = "CH1", .ch_type = IIO_TEMP, .channel = 1,
-	  .attributes = cn0391_ch_attrs, .ch_out = false, .indexed = true },
-	{ .name = "CH2", .ch_type = IIO_TEMP, .channel = 2,
-	  .attributes = cn0391_ch_attrs, .ch_out = false, .indexed = true },
-	{ .name = "CH3", .ch_type = IIO_TEMP, .channel = 3,
-	  .attributes = cn0391_ch_attrs, .ch_out = false, .indexed = true },
+	CN0391_IIO_TEMP_CHANNEL(0),
+	CN0391_IIO_TEMP_CHANNEL(1),
+	CN0391_IIO_TEMP_CHANNEL(2),
+	CN0391_IIO_TEMP_CHANNEL(3),
 };
 
 struct iio_device iio_cn0391_device = {
@@ -159,6 +165,8 @@ struct iio_device iio_cn0391_device = {
 	.post_disable = NULL,
 	.read_dev = NULL,
 };
+
+#endif /* CN0391_IIO_SUPPORT */
 
 /**
  * @brief Read hot junction temperature as a float string for the "raw" attribute.
@@ -196,6 +204,12 @@ static int cn0391_iio_read_raw_tc(void *device, char *buf, uint32_t len,
 /**
  * @brief Return the fixed scale factor for the custom ad7124-8 channels.
  *        Matches the Zephyr convention for demo project (scale = "1000").
+ * @param device  - Unused.
+ * @param buf     - Output buffer.
+ * @param len     - Output buffer length.
+ * @param channel - Unused.
+ * @param priv    - Unused.
+ * @return Number of bytes written.
  */
 static int cn0391_iio_read_scale_tc(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,
@@ -218,15 +232,20 @@ static struct iio_attribute cn0391_ad7124_ch_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
+#define CN0391_IIO_VOLTAGE_CHANNEL(idx) { \
+		.name = "CH"#idx, \
+		.ch_type = IIO_VOLTAGE, \
+		.channel = idx, \
+		.attributes = cn0391_ad7124_ch_attrs, \
+		.ch_out = false, \
+		.indexed = true, \
+	}
+
 static struct iio_channel cn0391_ad7124_channels[] = {
-	{ .name = "CH0", .ch_type = IIO_VOLTAGE, .channel = 0,
-	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
-	{ .name = "CH1", .ch_type = IIO_VOLTAGE, .channel = 1,
-	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
-	{ .name = "CH2", .ch_type = IIO_VOLTAGE, .channel = 2,
-	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
-	{ .name = "CH3", .ch_type = IIO_VOLTAGE, .channel = 3,
-	  .attributes = cn0391_ad7124_ch_attrs, .ch_out = false, .indexed = true },
+	CN0391_IIO_VOLTAGE_CHANNEL(0),
+	CN0391_IIO_VOLTAGE_CHANNEL(1),
+	CN0391_IIO_VOLTAGE_CHANNEL(2),
+	CN0391_IIO_VOLTAGE_CHANNEL(3),
 };
 
 /* Custom AD7124-8 IIO device for demo purposes.

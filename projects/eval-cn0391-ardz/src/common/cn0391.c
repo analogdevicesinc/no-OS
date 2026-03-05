@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   cn0391.c
- *   @brief  Implementation of CN0391 driver.
+ *   @brief  Implementation of CN0391 board support.
  *   @author Mircea Vlasin (mircea.vlasin@analog.com)
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
@@ -39,42 +39,44 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
-/**
- * @brief Read a single ADC channel via single conversion mode.
- * @param dev - AD7124 device descriptor.
- * @param channel - Channel number to read.
- * @param code - Pointer to store the raw ADC code.
- * @return 0 on success, negative error code otherwise.
- */
 /* ADC channel triplets indexed by IIO channel (CH0=0 .. CH3=3) */
-static const struct cn0391_adc_ch_map cn0391_adc_map[CN0391_NUM_IIO_CHANNELS] = {
+static const struct cn0391_adc_ch_map cn0391_adc_map[CN0391_NUM_IIO_CHANNELS] =
+{
 	[0] = { .tc = 9,  .r5 = 10, .rtd = 11, .iout_ain = 7 }, /* IIO CH0: AIN6, AIN8, AIN7 */
 	[1] = { .tc = 6,  .r5 = 7,  .rtd = 8,  .iout_ain = 5 }, /* IIO CH1: AIN4, AIN8, AIN5 */
 	[2] = { .tc = 3,  .r5 = 4,  .rtd = 5,  .iout_ain = 3 }, /* IIO CH2: AIN2, AIN8, AIN3 */
 	[3] = { .tc = 0,  .r5 = 1,  .rtd = 2,  .iout_ain = 1 }, /* IIO CH3: AIN0, AIN8, AIN1 */
 };
 
+/**
+ * @brief Read the next conversion result and verify it belongs to the
+ *        expected channel. Called after single conversion mode is started
+ *        with only 3 channels enabled (tc, r5, rtd) in ascending order,
+ *        so each call is guaranteed to return the next channel in sequence.
+ * @param dev - AD7124 device descriptor.
+ * @param channel - Expected channel number.
+ * @param code - Pointer to store the raw ADC code.
+ * @return 0 on success, -EINVAL if the result is from an unexpected channel,
+ *         or negative error code otherwise.
+ */
 static int cn0391_read_channel(struct ad7124_dev *dev, uint8_t channel,
 			       int32_t *code)
 {
 	int ret;
 	int32_t read_data;
 	uint32_t status;
-	int retries = CN0391_NUM_IIO_CHANNELS * CN0391_ADC_CHANNELS_PER_IIO_CH;
 
-	do {
-		ret = ad7124_wait_for_conv_ready(dev, 10000);
-		if (ret)
-			return ret;
+	ret = ad7124_wait_for_conv_ready(dev, 10000);
+	if (ret)
+		return ret;
 
-		ret = ad7124_read_data(dev, &read_data);
-		if (ret)
-			return ret;
+	ret = ad7124_read_data(dev, &read_data);
+	if (ret)
+		return ret;
 
-		ret = ad7124_get_read_chan_id(dev, &status);
-		if (ret)
-			return ret;
-	} while (status != channel && --retries > 0);
+	ret = ad7124_get_read_chan_id(dev, &status);
+	if (ret)
+		return ret;
 
 	if (status != channel)
 		return -EINVAL;
@@ -84,18 +86,61 @@ static int cn0391_read_channel(struct ad7124_dev *dev, uint8_t channel,
 	return 0;
 }
 
-/**
- * @brief Perform a full temperature measurement cycle.
- *        Reads all 3 ADC channels (thermocouple, reference resistor, CJC RTD),
- *        computes cold junction temperature, cold junction compensation voltage,
- *        and hot junction temperature.
- * @param dev - CN0391 device descriptor.
- * @param hot_junction_temp - Pointer to store hot junction temperature (°C).
- * @param cold_junction_temp - Pointer to store cold junction temperature (°C).
- * @param thermocouple_voltage - Pointer to store thermocouple voltage (mV).
- * @param rtd_resistance - Pointer to store measured RTD resistance (Ohms).
- * @return 0 on success, negative error code otherwise.
- */
+int cn0391_init(struct cn0391_dev **dev,
+		struct cn0391_init_param *init_param)
+{
+	struct cn0391_dev *d;
+	int ret;
+
+	d = (struct cn0391_dev *)no_os_calloc(1, sizeof(*d));
+	if (!d)
+		return -ENOMEM;
+
+	ret = ad7124_setup(&d->ad7124_dev, init_param->ad7124_init);
+	if (ret)
+		goto error_free;
+
+	/* Configure IOUT0 = 750µA; pin is switched per-channel at read time */
+	d->ad7124_dev->regs[AD7124_IOCon1].value =
+		AD7124_IO_CTRL1_REG_IOUT0(5) |
+		AD7124_IO_CTRL1_REG_IOUT_CH0(cn0391_adc_map[CN0391_CH0_ID].iout_ain);
+	ret = ad7124_write_register(d->ad7124_dev,
+				    d->ad7124_dev->regs[AD7124_IOCon1]);
+	if (ret)
+		goto error_ad7124;
+
+	/* Stop the continuous conversion started by ad7124_setup; measurements
+	 * are triggered on demand via single conversion in cn0391_read_temperature. */
+	ret = ad7124_set_adc_mode(d->ad7124_dev, AD7124_IDLE);
+	if (ret)
+		goto error_ad7124;
+
+	d->cache_ch = -1;
+	*dev = d;
+
+	return 0;
+
+error_ad7124:
+	ad7124_remove(d->ad7124_dev);
+error_free:
+	no_os_free(d);
+
+	return ret;
+}
+
+int cn0391_remove(struct cn0391_dev *dev)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = ad7124_remove(dev->ad7124_dev);
+	no_os_free(dev);
+
+	return ret;
+}
+
 int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 			    double *hot_junction_temp,
 			    double *cold_junction_temp,
@@ -197,70 +242,4 @@ int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 	*rtd_resistance = r_rtd;
 
 	return 0;
-}
-
-/**
- * @brief Initialize CN0391 device: set up AD7124 and configure IOUT.
- * @param dev - Pointer to pointer to CN0391 device descriptor.
- * @param init_param - Initialization parameters.
- * @return 0 on success, negative error code otherwise.
- */
-int cn0391_init(struct cn0391_dev **dev,
-		struct cn0391_init_param *init_param)
-{
-	struct cn0391_dev *d;
-	int ret;
-
-	d = (struct cn0391_dev *)no_os_calloc(1, sizeof(*d));
-	if (!d)
-		return -ENOMEM;
-
-	ret = ad7124_setup(&d->ad7124_dev, init_param->ad7124_init);
-	if (ret)
-		goto error_free;
-
-	/* Configure IOUT0 = 750µA; pin is switched per-channel at read time */
-	d->ad7124_dev->regs[AD7124_IOCon1].value =
-		AD7124_IO_CTRL1_REG_IOUT0(5) |
-		AD7124_IO_CTRL1_REG_IOUT_CH0(cn0391_adc_map[CN0391_CH0_ID].iout_ain);
-	ret = ad7124_write_register(d->ad7124_dev,
-				    d->ad7124_dev->regs[AD7124_IOCon1]);
-	if (ret)
-		goto error_ad7124;
-
-	/* Stop the continuous conversion started by ad7124_setup; measurements
-	 * are triggered on demand via single conversion in cn0391_read_temperature. */
-	ret = ad7124_set_adc_mode(d->ad7124_dev, AD7124_IDLE);
-	if (ret)
-		goto error_ad7124;
-
-	d->cache_ch = -1;
-	*dev = d;
-
-	return 0;
-
-error_ad7124:
-	ad7124_remove(d->ad7124_dev);
-error_free:
-	no_os_free(d);
-
-	return ret;
-}
-
-/**
- * @brief Remove CN0391 device and free resources.
- * @param dev - CN0391 device descriptor.
- * @return 0 on success, negative error code otherwise.
- */
-int cn0391_remove(struct cn0391_dev *dev)
-{
-	int ret;
-
-	if (!dev)
-		return -EINVAL;
-
-	ret = ad7124_remove(dev->ad7124_dev);
-	no_os_free(dev);
-
-	return ret;
 }

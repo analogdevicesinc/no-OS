@@ -1,4 +1,4 @@
-EXAMPLE ?= iio_example
+EXAMPLE ?= iio_lwip_example
 
 include ../../tools/scripts/generic_variables.mk
 
