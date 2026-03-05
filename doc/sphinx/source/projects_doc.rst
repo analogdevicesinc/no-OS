@@ -107,3 +107,11 @@ LED
    :glob:
 
    projects/led/*
+
+EXAMPLES
+========
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/examples/*
