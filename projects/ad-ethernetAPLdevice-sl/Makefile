@@ -5,6 +5,7 @@ CONNECTION_TYPE ?= PLAIN_CONNECTION #If running an MQTT example, must select a c
 SBT=1 # Firmware signing is enabled by default, set this to 0 to disable it.
 
 CFLAGS += -D$(BOARD_REV)=1
+CFLAGS += -Wno-error=implicit-function-declaration
 PLATFORM=maxim
 TARGET=max32690
 
