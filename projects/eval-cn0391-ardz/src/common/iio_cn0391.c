@@ -36,6 +36,8 @@
 #include "cn0391.h"
 #include "no_os_error.h"
 
+#ifdef CN0391_IIO_SUPPORT
+
 /* Private attribute IDs used as priv in iio_attribute */
 enum cn0391_iio_attr_id {
 	CN0391_ATTR_HOT_JUNCTION_TEMP,
@@ -160,6 +162,8 @@ struct iio_device iio_cn0391_device = {
 	.read_dev = NULL,
 };
 
+#endif /* CN0391_IIO_SUPPORT */
+
 /**
  * @brief Read hot junction temperature as a float string for the "raw" attribute.
  *        Matches the Zephyr convention for demo project: raw = temperature [°C],
@@ -196,6 +200,12 @@ static int cn0391_iio_read_raw_tc(void *device, char *buf, uint32_t len,
 /**
  * @brief Return the fixed scale factor for the custom ad7124-8 channels.
  *        Matches the Zephyr convention for demo project (scale = "1000").
+ * @param device  - Unused.
+ * @param buf     - Output buffer.
+ * @param len     - Output buffer length.
+ * @param channel - Unused.
+ * @param priv    - Unused.
+ * @return Number of bytes written.
  */
 static int cn0391_iio_read_scale_tc(void *device, char *buf, uint32_t len,
 				    const struct iio_ch_info *channel,

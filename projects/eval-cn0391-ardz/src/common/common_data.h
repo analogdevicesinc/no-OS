@@ -34,7 +34,7 @@
 #ifndef __COMMON_DATA_H__
 #define __COMMON_DATA_H__
 
-#include "platform_includes.h"
+#include "parameters.h"
 #include "ad7124.h"
 #include "cn0391.h"
 

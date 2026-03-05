@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   cn0391.c
- *   @brief  Implementation of CN0391 driver.
+ *   @brief  Implementation of CN0391 board support.
  *   @author Mircea Vlasin (mircea.vlasin@analog.com)
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
@@ -39,13 +39,6 @@
 #include "no_os_error.h"
 #include "no_os_print_log.h"
 
-/**
- * @brief Read a single ADC channel via single conversion mode.
- * @param dev - AD7124 device descriptor.
- * @param channel - Channel number to read.
- * @param code - Pointer to store the raw ADC code.
- * @return 0 on success, negative error code otherwise.
- */
 /* ADC channel triplets indexed by IIO channel (CH0=0 .. CH3=3) */
 static const struct cn0391_adc_ch_map cn0391_adc_map[CN0391_NUM_IIO_CHANNELS] = {
 	[0] = { .tc = 9,  .r5 = 10, .rtd = 11, .iout_ain = 7 }, /* IIO CH0: AIN6, AIN8, AIN7 */
@@ -54,6 +47,13 @@ static const struct cn0391_adc_ch_map cn0391_adc_map[CN0391_NUM_IIO_CHANNELS] = 
 	[3] = { .tc = 0,  .r5 = 1,  .rtd = 2,  .iout_ain = 1 }, /* IIO CH3: AIN0, AIN8, AIN1 */
 };
 
+/**
+ * @brief Read a single ADC channel via single conversion mode.
+ * @param dev - AD7124 device descriptor.
+ * @param channel - Channel number to read.
+ * @param code - Pointer to store the raw ADC code.
+ * @return 0 on success, negative error code otherwise.
+ */
 static int cn0391_read_channel(struct ad7124_dev *dev, uint8_t channel,
 			       int32_t *code)
 {
@@ -84,18 +84,6 @@ static int cn0391_read_channel(struct ad7124_dev *dev, uint8_t channel,
 	return 0;
 }
 
-/**
- * @brief Perform a full temperature measurement cycle.
- *        Reads all 3 ADC channels (thermocouple, reference resistor, CJC RTD),
- *        computes cold junction temperature, cold junction compensation voltage,
- *        and hot junction temperature.
- * @param dev - CN0391 device descriptor.
- * @param hot_junction_temp - Pointer to store hot junction temperature (°C).
- * @param cold_junction_temp - Pointer to store cold junction temperature (°C).
- * @param thermocouple_voltage - Pointer to store thermocouple voltage (mV).
- * @param rtd_resistance - Pointer to store measured RTD resistance (Ohms).
- * @return 0 on success, negative error code otherwise.
- */
 int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 			    double *hot_junction_temp,
 			    double *cold_junction_temp,
@@ -199,12 +187,6 @@ int cn0391_read_temperature(struct cn0391_dev *dev, uint8_t ch_idx,
 	return 0;
 }
 
-/**
- * @brief Initialize CN0391 device: set up AD7124 and configure IOUT.
- * @param dev - Pointer to pointer to CN0391 device descriptor.
- * @param init_param - Initialization parameters.
- * @return 0 on success, negative error code otherwise.
- */
 int cn0391_init(struct cn0391_dev **dev,
 		struct cn0391_init_param *init_param)
 {
@@ -247,11 +229,6 @@ error_free:
 	return ret;
 }
 
-/**
- * @brief Remove CN0391 device and free resources.
- * @param dev - CN0391 device descriptor.
- * @return 0 on success, negative error code otherwise.
- */
 int cn0391_remove(struct cn0391_dev *dev)
 {
 	int ret;

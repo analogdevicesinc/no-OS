@@ -34,7 +34,13 @@
 #ifndef __NO_OS_RTD_H__
 #define __NO_OS_RTD_H__
 
-/* Callendar-Van Dusen (IEC 60751): resistance (Ohms) to temperature (°C) */
+/**
+ * @brief Callendar-Van Dusen equation for Pt1000 RTD (IEC 60751).
+ *        Converts RTD resistance (Ohms) to temperature (°C). For T < 0°C a
+ *        Newton-Raphson refinement loop is applied to account for the cubic C term.
+ * @param resistance - Measured RTD resistance in Ohms.
+ * @return Temperature in degrees Celsius, or -999.0 on domain error.
+ */
 double no_os_pt1000_resistance_to_temp(double resistance);
 
 #endif /* __NO_OS_RTD_H__ */

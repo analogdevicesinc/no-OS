@@ -55,13 +55,6 @@ static double eval_polynomial(const double *coeffs, size_t n, double x)
 	return result;
 }
 
-/**
- * @brief ITS-90 Type K thermocouple forward polynomial.
- *        Converts temperature (°C) to equivalent EMF voltage (mV).
- *        Valid for 0°C to 1372°C range.
- * @param temp_celsius - Temperature in degrees Celsius.
- * @return Equivalent thermocouple voltage in mV.
- */
 double no_os_typek_temp_to_voltage(double temp_celsius)
 {
 	const double c[] = {
@@ -81,13 +74,6 @@ double no_os_typek_temp_to_voltage(double temp_celsius)
 	return eval_polynomial(c, sizeof(c) / sizeof(c[0]), temp_celsius);
 }
 
-/**
- * @brief ITS-90 Type K thermocouple inverse polynomial.
- *        Converts thermocouple voltage (mV) to temperature (°C).
- *        Uses separate polynomial ranges for negative and positive voltages.
- * @param voltage_mv - Thermocouple voltage in millivolts.
- * @return Temperature in degrees Celsius.
- */
 double no_os_typek_voltage_to_temp(double voltage_mv)
 {
 	/* -5.891 mV to 0 mV (-200°C to 0°C) */
