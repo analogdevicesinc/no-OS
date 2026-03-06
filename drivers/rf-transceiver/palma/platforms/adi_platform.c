@@ -25,8 +25,11 @@
 #include "../platforms/common/tls.h"
 #include "../platforms/common/adi_logging.h"
 
+#if 0
 /*
  * Function pointer assignment for default configuration
+ * Disabled for no-OS: all adi_hal_* function pointers are defined in
+ * projects/adrv903x/src/common/hal/no_os_platform.c
  */
 
 /* Initialization interface to open, init, close drivers and pointers to resources */
@@ -186,3 +189,4 @@ ADI_API adi_hal_Err_e adi_hal_PlatformSetup(const adi_hal_Platforms_e platform)
 
     return error;
 }
+#endif /* 0 - disabled for no-OS: see no_os_platform.c */
