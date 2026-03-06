@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 #include "capi_uart.h"
 #include "maxim_uart.h"

@@ -1,4 +1,0 @@
-{
-        "cortex-debug.gdbPath": "gdb-multiarch",
-        "cortex-debug.openocdPath": "@OPENOCD_PATH@"
-}

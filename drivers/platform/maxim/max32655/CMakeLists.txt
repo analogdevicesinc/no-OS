@@ -56,7 +56,13 @@ target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Source/
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Source/SEMA)
 
 # target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Include)
-target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/5.9.0/Core/Include)
+if (DEFINED CFS)
+	target_include_directories(no-os PUBLIC ${CFS}/SDK/zephyr/modules/hal/cmsis_6/CMSIS/Core/Include)
+	target_include_directories(no-os PUBLIC ${CFS}/SDK/zephyr/modules/hal/cmsis_6/CMSIS/Core/Include/m-profile)
+else()
+	target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/5.9.0/Core/Include)
+endif()
+
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include/MAX32655)
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX32655/Include)
 

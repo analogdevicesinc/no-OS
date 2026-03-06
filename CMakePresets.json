@@ -85,7 +85,7 @@
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "adin1110ebz",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
+                                "USE_VENDOR_TOOLCHAIN": "OFF",
                                 "PLATFORM": "stm32",
                                 "TARGET": "stm32l4",
                                 "TARGET_NUM": "stm32l4",

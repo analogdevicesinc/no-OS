@@ -70,6 +70,6 @@ target_compile_definitions(no-os PUBLIC -DTARGET_REV=0x4131)
 
 # OpenOCD configuration
 configure_file(
-    "${NO_OS_DIR}/cmake/templates/openocd.in"
+    "${NO_OS_DIR}/cmake/ide/templates/openocd.in"
     "${CMAKE_BINARY_DIR}/openocd.cfg"
   )

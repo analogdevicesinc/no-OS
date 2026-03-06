@@ -37,12 +37,12 @@ config_platform_sdk(eval-adxl355-pmdz-iio)
 config_platform_sdk(eval-adxl355-pmdz-iio-trigger)
 
 add_flash_target(eval-adxl355-pmdz-dummy)
-add_flash_target(eval-adxl355-pmdz-iio)
-add_flash_target(eval-adxl355-pmdz-iio-trigger)
+# add_flash_target(eval-adxl355-pmdz-iio)
+# add_flash_target(eval-adxl355-pmdz-iio-trigger)
 
 post_build_config(eval-adxl355-pmdz-dummy)
-post_build_config(eval-adxl355-pmdz-iio)
-post_build_config(eval-adxl355-pmdz-iio-trigger)
+# post_build_config(eval-adxl355-pmdz-iio)
+# post_build_config(eval-adxl355-pmdz-iio-trigger)
 
 # add_custom_command(
 #     TARGET eval-adxl355-pmdz-dummy

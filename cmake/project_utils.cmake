@@ -1,6 +1,6 @@
 include(FlashTools)
 include(ColoredOutput)
-include(stm32cubeide_config)
+include(${NO_OS_DIR}/cmake/ide/ide_config.cmake)
 
 set(GENERATED_SOURCES_CMAKE "${CMAKE_CURRENT_BINARY_DIR}/generated_sources.cmake")
 include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
@@ -22,10 +22,9 @@ function(generate_openocd_config)
                 else()
                         # Fallback to board-named .ioc file
                         set(IOC_FILE "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/${BOARD}.ioc" PARENT_SCOPE)
+                        set(IOC_FILE "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/${BOARD}.ioc")
                         message(STATUS "DEBUG: Using fallback IOC_FILE=${IOC_FILE}")
                 endif()
-
-                # message(FATAL_ERROR "IOC file: ${IOC_FILE}")
 
                 if(EXISTS "${IOC_FILE}")
                         message(STATUS "Found .ioc file: ${IOC_FILE}")
@@ -91,7 +90,7 @@ function(generate_openocd_config)
         # Generate OpenOCD configuration file for debugging
         if(DEFINED OPENOCD_INTERFACE AND DEFINED OPENOCD_CHIPNAME AND DEFINED OPENOCD_TARGETCFG)
                 configure_file(
-                        "${NO_OS_DIR}/cmake/templates/openocd.in"
+                        "${NO_OS_DIR}/cmake/ide/templates/openocd.in"
                         "${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg"
                         @ONLY
                 )
@@ -102,11 +101,10 @@ function(generate_openocd_config)
 endfunction()
 
 function(post_build_config PROJECT_TARGET)
-        set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
-        
         # Generate OpenOCD config file
         generate_openocd_config()
-        
+
+        # Binary generation (hex/bin/size)
         add_custom_command(
                 TARGET ${PROJECT_TARGET}
                 POST_BUILD
@@ -114,17 +112,12 @@ function(post_build_config PROJECT_TARGET)
                 COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.bin
                 COMMAND ${CMAKE_COMMAND} -E echo "Binary size:"
                 COMMAND ${CMAKE_SIZE} --format=berkeley $<TARGET_FILE:${PROJECT_TARGET}> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_TARGET}.hex || ${CMAKE_COMMAND} -E true
-                COMMAND ${CMAKE_COMMAND}
-                        -DELF_PATH=$<TARGET_FILE:${PROJECT_TARGET}>
-                        -DNO_OS_DIR=${NO_OS_DIR}
-                        -DPROJECT_HOME=${PROJECT_DIR}
-                        -DTARGET=${TARGET}
-                        -DPLATFORM=${PLATFORM}
-                        -DOPENOCD_PATH=${OPENOCD_PATH}
-                        -DOPENOCD_SCRIPTS=${OPENOCD_SCRIPTS}
-                        -P "${NO_OS_DIR}/cmake/vscode_config.cmake"
                 COMMENT "Generating ${PROJECT_TARGET}.hex"
         )
+
+        # IDE project file generation (replaces cmake -P vscode_config.cmake
+        # and generate_stm32cubeide_project calls)
+        ide_generate(${PROJECT_TARGET})
 endfunction()
 
 function(config_platform_sdk BUILD_TARGET)
@@ -154,7 +147,7 @@ function(config_platform_sdk BUILD_TARGET)
                         )
 
                         execute_process(
-                                COMMAND ${STM32CUBEMX_JAVA} -Djava.awt.headless=true -jar ${STM32CUBEMX_EXECUTABLE} -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
+                                COMMAND ${STM32CUBEMX_JAVA} -jar ${STM32CUBEMX_EXECUTABLE} -q "${CMAKE_CURRENT_BINARY_DIR}/stm32cubemx_config.cubemx"
                                 COMMENT "Generating STM32CubeMX project..."
                         )
 
@@ -181,8 +174,5 @@ function(config_platform_sdk BUILD_TARGET)
                 target_link_libraries(no-os STM32_Drivers)
                 target_compile_definitions(no-os PRIVATE -DSTM32_PLATFORM=1)
                 target_link_options(${BUILD_TARGET} PRIVATE -T${LINKER_SCRIPT_FILE})
-
-                # Generate STM32CubeIDE project files
-                generate_stm32cubeide_project(${BUILD_TARGET})
         endif()
 endfunction()
