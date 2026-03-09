@@ -592,6 +592,22 @@ int adf4030_get_temperature(struct adf4030_dev *dev, int16_t *temperature);
 
 int adf4030_set_chip_address(struct adf4030_dev *dev, uint8_t addr);
 
+int adf4030_set_rdiv(struct adf4030_dev *dev, uint8_t rdiv);
+
+int adf4030_get_rdiv(struct adf4030_dev *dev, uint8_t *rdiv);
+
+int adf4030_set_ndiv(struct adf4030_dev *dev, uint8_t ndiv);
+
+int adf4030_get_ndiv(struct adf4030_dev *dev, uint8_t *ndiv);
+
+int adf4030_set_odiva(struct adf4030_dev *dev, uint16_t odiva);
+
+int adf4030_get_odiva(struct adf4030_dev *dev, uint16_t *odiva);
+
+int adf4030_set_odivb(struct adf4030_dev *dev, uint16_t odivb);
+
+int adf4030_get_odivb(struct adf4030_dev *dev, uint16_t *odivb);
+
 int adf4030_set_ref_clk(struct adf4030_dev *dev, uint32_t val);
 
 int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq);

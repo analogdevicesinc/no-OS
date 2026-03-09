@@ -160,6 +160,34 @@ static int adf4030_iio_read_device_attr(void *dev, char *buf, uint32_t len,
 		ret = adf4030_get_temperature(adf4030, &val);
 		break;
 
+	case ADF4030_IIO_DEV_ATTR_NDIV: {
+		uint8_t ndiv;
+		ret = adf4030_get_ndiv(adf4030, &ndiv);
+		val = ndiv;
+		break;
+	}
+
+	case ADF4030_IIO_DEV_ATTR_RDIV: {
+		uint8_t rdiv;
+		ret = adf4030_get_rdiv(adf4030, &rdiv);
+		val = rdiv;
+		break;
+	}
+
+	case ADF4030_IIO_DEV_ATTR_ODIVA: {
+		uint16_t odiva;
+		ret = adf4030_get_odiva(adf4030, &odiva);
+		val = odiva;
+		break;
+	}
+
+	case ADF4030_IIO_DEV_ATTR_ODIVB: {
+		uint16_t odivb;
+		ret = adf4030_get_odivb(adf4030, &odivb);
+		val = odivb;
+		break;
+	}
+
 	default:
 		return -EINVAL;
 	};
@@ -255,6 +283,22 @@ static int adf4030_iio_write_device_attr(void *dev, char *buf, uint32_t len,
 
 	case ADF4030_IIO_DEV_ATTR_TEMP:
 		ret = adf4030_set_temperature(adf4030, val);
+		break;
+
+	case ADF4030_IIO_DEV_ATTR_NDIV:
+		ret = adf4030_set_ndiv(adf4030, (uint8_t)val);
+		break;
+
+	case ADF4030_IIO_DEV_ATTR_RDIV:
+		ret = adf4030_set_rdiv(adf4030, (uint8_t)val);
+		break;
+
+	case ADF4030_IIO_DEV_ATTR_ODIVA:
+		ret = adf4030_set_odiva(adf4030, (uint16_t)val);
+		break;
+
+	case ADF4030_IIO_DEV_ATTR_ODIVB:
+		ret = adf4030_set_odivb(adf4030, (uint16_t)val);
 		break;
 
 	default:
@@ -499,6 +543,34 @@ static struct iio_attribute adf4030_iio_attrs[] = {
 		.name = "temperature",
 		.shared = IIO_SHARED_BY_ALL,
 		.priv = ADF4030_IIO_DEV_ATTR_TEMP,
+		.show = adf4030_iio_read_device_attr,
+		.store = adf4030_iio_write_device_attr,
+	},
+	{
+		.name = "ndiv",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4030_IIO_DEV_ATTR_NDIV,
+		.show = adf4030_iio_read_device_attr,
+		.store = adf4030_iio_write_device_attr,
+	},
+	{
+		.name = "rdiv",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4030_IIO_DEV_ATTR_RDIV,
+		.show = adf4030_iio_read_device_attr,
+		.store = adf4030_iio_write_device_attr,
+	},
+	{
+		.name = "odiva",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4030_IIO_DEV_ATTR_ODIVA,
+		.show = adf4030_iio_read_device_attr,
+		.store = adf4030_iio_write_device_attr,
+	},
+	{
+		.name = "odvib",
+		.shared = IIO_SHARED_BY_ALL,
+		.priv = ADF4030_IIO_DEV_ATTR_ODIVB,
 		.show = adf4030_iio_read_device_attr,
 		.store = adf4030_iio_write_device_attr,
 	},

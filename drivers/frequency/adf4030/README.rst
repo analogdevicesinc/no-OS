@@ -92,6 +92,16 @@ will have to be expressed in Hz. The frequency range is between 650 kHz and
 can be selected with the argument **odivb_sel** in the function
 **adf4030_set_bsync_freq**. 
 
+Direct Divider Configuration
+------------------------------
+
+The dividers can be set using the functions **adf4030_set_rdiv**, **adf4030_set_ndiv**
+and **adf4030_set_odiva**, **adf4030_set_odivb**. The current divider values 
+can be read out using **adf4030_get_rdiv**, **adf4030_get_ndiv**, 
+**adf4030_get_odiva**, **adf4030_get_odivb**. Direct divider control is mostly 
+necessary when frequencies are not integer numbers and the driver has problems finding
+the correct divider values for the given frequencies. 
+
 TDC Configuration
 ------------------
 
