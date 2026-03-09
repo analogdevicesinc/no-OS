@@ -40,6 +40,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "adi_adrv903x_types.h"
+#include "adi_adrv903x_utilities_types.h"
+#include "adi_adrv903x_core.h"
 #include "no_os_clk.h"
 #include "no_os_platform.h"
 
@@ -60,9 +62,9 @@ struct adrv903x_rf_phy {
 	adi_adrv903x_Device_t		adi_adrv903x_device;
 	adi_adrv903x_Device_t		*palmaDevice;
 	adi_adrv903x_SpiConfigSettings_t spiSettings;
-	adi_adrv903x_SpiOptions_t	spiOptions;
+	adi_adrv903x_TrxFileInfo_t	trxBinaryInfoPtr;
 	adi_adrv903x_Init_t		deviceInitStruct;
-	adi_adrv903x_PostMcsInit_t	postMcsInitStruct;
+	adi_adrv903x_PostMcsInit_t	utilityInit;
 	struct adrv903x_hal_cfg		hal;
 
 	struct no_os_clk_desc		*dev_clk;
@@ -76,13 +78,17 @@ struct adrv903x_rf_phy {
  * @brief  ADRV903X initialization parameters.
  */
 struct adrv903x_init_param {
-	struct adrv903x_hal_cfg		hal;
 	struct no_os_clk_desc		*dev_clk;
 };
 
 /******************************************************************************/
 /************************** Functions Declarations ****************************/
 /******************************************************************************/
+
+/* Accessor functions defined in platform/xilinx/main.c */
+adi_adrv903x_SpiConfigSettings_t *adrv903x_spi_settings_get(void);
+adi_adrv903x_SpiOptions_t *adrv903x_spi_options_get(void);
+
 int adrv903x_init(struct adrv903x_rf_phy **phy,
 		  const struct adrv903x_init_param *init_param);
 int adrv903x_remove(struct adrv903x_rf_phy *phy);

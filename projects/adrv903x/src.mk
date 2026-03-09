@@ -15,7 +15,11 @@ SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/app_config.h \
-	$(PROJECT)/src/common/hal/no_os_platform.h
+	$(PROJECT)/src/common/hal/no_os_platform.h \
+	$(PROJECT)/src/common/firmware/ADRV9030_FW.h \
+	$(PROJECT)/src/common/firmware/ADRV9030_stream_image.h \
+	$(PROJECT)/src/common/firmware/ADRV9030_DeviceProfileTest.h \
+	$(PROJECT)/src/common/firmware/ADRV9030_RxGainTable.h
 
 SRCS += $(PROJECT)/src/common/common_data.c \
 	$(PROJECT)/src/common/hal/no_os_platform.c

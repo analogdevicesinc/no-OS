@@ -8,6 +8,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "ADRV9030_FW.h"
+#include "ADRV9030_stream_image.h"
+#include "ADRV9030_DeviceProfileTest.h"
+#include "ADRV9030_RxGainTable.h"
 #include "adi_common_error.h"
 #include "no_os_print_log.h"
 #include "no_os_platform.h"
@@ -17,6 +21,7 @@
 #include "common_data.h"
 #include "no_os_alloc.h"
 #include "parameters.h"
+#include "app_config.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 #include <stdlib.h>
@@ -340,7 +345,7 @@ adi_hal_Err_e no_os_HwOpen(void *devHalCfg)
 		goto error_gpio;
 
 	sip.device_id = SPI_DEVICE_ID;
-	sip.max_speed_hz = 5000000u;
+	sip.max_speed_hz = ADRV903X_SPI_SPEED_HZ;
 	sip.mode = NO_OS_SPI_MODE_0;
 	sip.chip_select = ADRV903X_CS;
 	sip.platform_ops = ad9528_spi_param.platform_ops;
@@ -516,33 +521,93 @@ adi_hal_Err_e(*adi_hal_BoardIdentify)(char** boardNames,
 /******************************************************************************/
 /*************************** File I/O Abstraction *****************************/
 /*                                                                            */
-/* Firmware and profile files are not yet embedded. fopen() returns NULL for  */
-/* all filenames, which will cause the API to report an error if it tries to  */
-/* load firmware. Full file I/O will be added in Step 2.                      */
+/* fopen() maps the filename strings (defined in app_config.h) to embedded   */
+/* C arrays generated from the firmware binaries in linux-adi/firmware/.      */
+/* fread/fseek/fclose/fgets operate on an in-memory CUSTOM_FILE handle.       */
 /******************************************************************************/
 
 long int ftell(FILE *stream)
 {
-	/* Placeholder - profile not loaded yet */
-	return 0;
+	CUSTOM_FILE *p = (CUSTOM_FILE *)stream;
+
+	if (!p || !p->ptr || !p->start)
+		return -1;
+	return (long int)(p->ptr - p->start);
 }
 
-FILE* fopen(const char *filename, const char *mode)
+FILE *fopen(const char *filename, const char *mode)
 {
-	/* Firmware not yet embedded - return NULL */
-	pr_warning("ADRV903X HAL: fopen(\"%s\") - firmware not embedded yet\n",
-		   filename);
-	return NULL;
+	CUSTOM_FILE *p;
+
+	if (!filename)
+		return NULL;
+
+	p = no_os_calloc(1, sizeof(*p));
+	if (!p)
+		return NULL;
+
+	if (strcmp(filename, ADRV903X_PROFILE_FILE) == 0) {
+		p->data  = (char *)ADRV9030_DeviceProfileTest_M4_bin;
+		p->start = p->data;
+		p->ptr   = p->data;
+		p->end   = p->data + ADRV9030_DeviceProfileTest_M4_bin_len;
+	} else if (strcmp(filename, ADRV903X_CPU_FW_FILE) == 0) {
+		p->data  = (char *)ADRV9030_FW_bin;
+		p->start = p->data;
+		p->ptr   = p->data;
+		p->end   = p->data + ADRV9030_FW_bin_len;
+	} else if (strcmp(filename, ADRV903X_STREAM_FILE) == 0) {
+		p->data  = (char *)ADRV9030_stream_image_bin;
+		p->start = p->data;
+		p->ptr   = p->data;
+		p->end   = p->data + ADRV9030_stream_image_bin_len;
+	} else if (strcmp(filename, ADRV903X_RX_GAIN_TABLE_FILE) == 0) {
+		p->data  = (char *)ADRV9030_RxGainTable_text;
+		p->start = p->data;
+		p->ptr   = p->data;
+		p->end   = p->data + strlen(ADRV9030_RxGainTable_text);
+	} else {
+		pr_warning("ADRV903X HAL: fopen(\"%s\") - unknown file\n",
+			   filename);
+		no_os_free(p);
+		return NULL;
+	}
+
+	return (FILE *)p;
 }
 
 int __wrap_fseek(FILE *stream, long int offset, int origin)
 {
-	return -EINVAL;
+	CUSTOM_FILE *p = (CUSTOM_FILE *)stream;
+	char *new_ptr;
+
+	if (!p || !p->start || !p->end)
+		return -EINVAL;
+
+	switch (origin) {
+	case SEEK_SET:
+		new_ptr = p->start + offset;
+		break;
+	case SEEK_CUR:
+		new_ptr = p->ptr + offset;
+		break;
+	case SEEK_END:
+		new_ptr = p->end + offset;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	if (new_ptr < p->start || new_ptr > p->end)
+		return -EINVAL;
+
+	p->ptr = new_ptr;
+	return 0;
 }
 
 int __wrap_fclose(FILE *stream)
 {
-	if (stream == NULL)
+	if (!stream)
 		return -ENODEV;
 	no_os_free(stream);
 	return 0;
@@ -550,12 +615,39 @@ int __wrap_fclose(FILE *stream)
 
 char *fgets(char *dst, int num, FILE *stream)
 {
-	return NULL;
+	CUSTOM_FILE *p = (CUSTOM_FILE *)stream;
+	char *out = dst;
+	int i;
+
+	if (!p || !p->ptr || p->ptr >= p->end || !dst || num <= 0)
+		return NULL;
+
+	for (i = 0; i < num - 1 && p->ptr < p->end; i++) {
+		*out++ = *p->ptr++;
+		if (*(out - 1) == '\n')
+			break;
+	}
+	*out = '\0';
+	return dst;
 }
 
 size_t fread(void *ptr, size_t size, size_t count, FILE *stream)
 {
-	return 0;
+	CUSTOM_FILE *p = (CUSTOM_FILE *)stream;
+	size_t bytes = size * count;
+	size_t available;
+
+	if (!p || !p->ptr || !ptr || size == 0)
+		return 0;
+
+	available = (size_t)(p->end - p->ptr);
+	if (bytes > available)
+		bytes = available;
+
+	memcpy(ptr, p->ptr, bytes);
+	p->ptr += bytes;
+
+	return bytes / size;
 }
 
 size_t fwrite(const void *ptr, size_t size, size_t count, FILE *stream)
