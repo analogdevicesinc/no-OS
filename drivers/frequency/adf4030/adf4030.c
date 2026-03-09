@@ -488,6 +488,206 @@ int adf4030_set_chip_address(struct adf4030_dev *dev, uint8_t addr)
 }
 
 /**
+ * @brief Set the reference divider (RDIV) value.
+ * @param dev  - The device structure.
+ * @param rdiv - The desired reference divider value.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_set_rdiv(struct adf4030_dev *dev, uint8_t rdiv)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_update_bits(dev, 0x57, ADF4030_RDIV,
+				      no_os_field_prep(ADF4030_RDIV, rdiv));
+	if (ret)
+		return ret;
+
+	ret = adf4030_spi_write(dev, 0x56, dev->ndiv);
+	if (ret)
+		return ret;
+
+	dev->ref_div = rdiv;
+
+	return adf4030_get_vco_freq(dev, &dev->vco_freq);
+}
+
+/**
+ * @brief Get the reference divider (RDIV) value.
+ * @param dev  - The device structure.
+ * @param rdiv - Read RDIV value.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_get_rdiv(struct adf4030_dev *dev, uint8_t *rdiv)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_read(dev, 0x57, &tmp);
+	if (ret)
+		return ret;
+
+	dev->ref_div = no_os_field_get(ADF4030_RDIV, tmp);
+	*rdiv = dev->ref_div;
+
+	return 0;
+}
+
+/**
+ * @brief Set the N divider (NDIV) value.
+ * @param dev  - The device structure.
+ * @param ndiv - The desired N divider value.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_set_ndiv(struct adf4030_dev *dev, uint8_t ndiv)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_write(dev, 0x56, ndiv);
+	if (ret)
+		return ret;
+
+	dev->ndiv = ndiv;
+
+	return adf4030_get_vco_freq(dev, &dev->vco_freq);
+}
+
+/**
+ * @brief Get the N divider (NDIV) value.
+ * @param dev  - The device structure.
+ * @param ndiv - Read NDIV value.
+ * @return     - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_get_ndiv(struct adf4030_dev *dev, uint8_t *ndiv)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_read(dev, 0x56, &tmp);
+	if (ret)
+		return ret;
+
+	dev->ndiv = no_os_field_get(ADF4030_NDIV, tmp);
+	*ndiv = dev->ndiv;
+
+	return 0;
+}
+
+/**
+ * @brief Set the output divider A (ODIVA) value.
+ * @param dev   - The device structure.
+ * @param odiva - The desired output divider A value (12-bit).
+ * @return      - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_set_odiva(struct adf4030_dev *dev, uint16_t odiva)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_write(dev, 0x53,
+				no_os_field_prep(ADF4030_ODIVA_LSB, odiva & 0xFF));
+	if (ret)
+		return ret;
+
+	return adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVA_MSB,
+				       no_os_field_prep(ADF4030_ODIVA_MSB, (odiva >> 8)));
+}
+
+/**
+ * @brief Get the output divider A (ODIVA) value.
+ * @param dev   - The device structure.
+ * @param odiva - Read ODIVA value (12-bit).
+ * @return      - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_get_odiva(struct adf4030_dev *dev, uint16_t *odiva)
+{
+	uint8_t tmp;
+	uint16_t odiv_val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_read(dev, 0x53, &tmp);
+	if (ret)
+		return ret;
+	odiv_val = tmp;
+
+	ret = adf4030_spi_read(dev, 0x54, &tmp);
+	if (ret)
+		return ret;
+	odiv_val |= (no_os_field_get(ADF4030_ODIVA_MSB, tmp) << 8);
+
+	*odiva = odiv_val;
+
+	return 0;
+}
+
+/**
+ * @brief Set the output divider B (ODIVB) value.
+ * @param dev   - The device structure.
+ * @param odivb - The desired output divider B value (12-bit).
+ * @return      - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_set_odivb(struct adf4030_dev *dev, uint16_t odivb)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_update_bits(dev, 0x54, ADF4030_ODIVB_LSB,
+				      no_os_field_prep(ADF4030_ODIVB_LSB, odivb & 0x0F));
+	if (ret)
+		return ret;
+
+	return adf4030_spi_write(dev, 0x55, (odivb >> 4));
+}
+
+/**
+ * @brief Get the output divider B (ODIVB) value.
+ * @param dev   - The device structure.
+ * @param odivb - Read ODIVB value (12-bit).
+ * @return      - 0 in case of success or negative error code otherwise.
+ */
+int adf4030_get_odivb(struct adf4030_dev *dev, uint16_t *odivb)
+{
+	uint8_t tmp;
+	uint16_t odiv_val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4030_spi_read(dev, 0x54, &tmp);
+	if (ret)
+		return ret;
+	odiv_val = no_os_field_get(ADF4030_ODIVB_LSB, tmp);
+
+	ret = adf4030_spi_read(dev, 0x55, &tmp);
+	if (ret)
+		return ret;
+	odiv_val |= (tmp << 4);
+
+	*odivb = odiv_val;
+
+	return 0;
+}
+
+/**
  * @brief Set the desired reference frequency and reset everything over to maximum
  * supported value of 250MHz to the max. value and everything under the minimum
  * supported value of 10MHz to the min.
@@ -572,7 +772,8 @@ int adf4030_set_vco_freq(struct adf4030_dev *dev, uint32_t vco_freq)
 	// Wait for Lock Detect
 	ret = adf4030_poll(dev, 0x90, ADF4030_PLL_LD, true);
 	if (ret)
-		return -EIO;
+		pr_warning("%s:%d PLL failed to lock within the expected time. %x", __FILE__,
+			   __LINE__, ret);
 
 	return adf4030_set_vco_cal(dev, false);
 }
@@ -1206,7 +1407,7 @@ int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 {
 
 	int64_t vco_period_fs;
-	uint16_t tdc_offset;
+	int16_t tdc_offset;
 	uint16_t reg;
 	int ret;
 
@@ -1214,8 +1415,7 @@ int adf4030_set_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 		return -EINVAL;
 
 	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(1000000000000000ULL, dev->vco_freq);
-	vco_period_fs = NO_OS_DIV_ROUND_CLOSEST(vco_period_fs, 512);
-	tdc_offset = NO_OS_DIV_ROUND_CLOSEST(delay_fs, vco_period_fs);
+	tdc_offset = NO_OS_DIV_ROUND_CLOSEST(delay_fs * 512, vco_period_fs);
 
 	reg = 0x1D + (channel * 2);
 
@@ -1245,7 +1445,7 @@ int adf4030_get_channel_delay(struct adf4030_dev *dev, uint8_t channel,
 			      int64_t *delay_fs)
 {
 	int64_t vco_period_fs;
-	uint16_t tdc_offset;
+	int16_t tdc_offset;
 	uint16_t reg;
 	uint8_t tmp;
 	int ret;
