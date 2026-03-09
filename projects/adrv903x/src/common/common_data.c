@@ -35,11 +35,12 @@
 *******************************************************************************/
 #include "common_data.h"
 #include "parameters.h"
+#include "app_config.h"
 
 /* SPI init params for AD9528 clock synthesizer */
 const struct no_os_spi_init_param ad9528_spi_param = {
 	.device_id = SPI_DEVICE_ID,
-	.max_speed_hz = 10000000u,
+	.max_speed_hz = AD9528_SPI_SPEED_HZ,
 	.chip_select = AD9528_CS,
 	.mode = NO_OS_SPI_MODE_0,
 	.platform_ops = &xil_spi_ops,
