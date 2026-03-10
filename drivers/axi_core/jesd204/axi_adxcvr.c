@@ -52,6 +52,13 @@
 #define ADXCVR_STATUS			(1 << 0)
 #define ADXCVR_BUFSTATUS_UNDERFLOW		NO_OS_BIT(5)
 #define ADXCVR_BUFSTATUS_OVERFLOW		NO_OS_BIT(6)
+/*
+ * Maximum elastic-buffer alignment retries in adxcvr_clk_enable() (1 ms each).
+ * The elastic buffer aligns on SYSREF, which fires after adxcvr_clk_enable()
+ * returns (via the JESD204 FSM post_state_sysref callback at LINK_ENABLE).
+ * Buffer underflow during this retry loop is therefore expected and non-fatal.
+ */
+#define ADXCVR_BUFSTATUS_RETRIES		100
 
 #define ADXCVR_REG_CONTROL		0x0020
 #define ADXCVR_LPM_DFE_N		(1 << 12)
@@ -472,7 +479,7 @@ static int adxcvr_reset(struct adxcvr *xcvr)
  */
 int adxcvr_clk_enable(struct adxcvr *xcvr)
 {
-	int ret, retry = 100;
+	int ret, retry = ADXCVR_BUFSTATUS_RETRIES;
 	unsigned int status;
 	int bufstatus_err;
 
@@ -510,6 +517,7 @@ int adxcvr_clk_enable(struct adxcvr *xcvr)
 			       adxcvr_sys_clock_sel_names[xcvr->sys_clk_sel],
 			       xcvr->tx_enable ? "TX" : "RX",
 			       "buffer overflow", status);
+
 	}
 
 	return ret;

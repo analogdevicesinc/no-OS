@@ -73,6 +73,8 @@ struct axi_jesd204_rx {
 	struct no_os_clk_desc *lane_clk;
 	/** JESD204 FSM device */
 	struct jesd204_dev *jdev;
+	/** Delay after link enable before returning (ms); 0 = no delay */
+	uint32_t link_enable_delay_ms;
 };
 
 /**
@@ -96,6 +98,8 @@ struct jesd204_rx_init {
 	uint32_t lane_clk_khz;
 	/** Lane Clock */
 	struct no_os_clk_desc *lane_clk;
+	/** Delay after link enable before returning (ms); 0 = no delay */
+	uint32_t link_enable_delay_ms;
 };
 
 /** JESD204 RX Lane Clock Enable */
