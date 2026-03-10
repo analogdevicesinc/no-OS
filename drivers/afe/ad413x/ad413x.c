@@ -831,7 +831,7 @@ int32_t ad413x_continuous_conv(struct ad413x_dev *dev, uint32_t *buffer,
 			if (ret)
 				timeout = 0;
 			timeout--;
-		} while (pin_val);// && timeout);
+		} while (pin_val && timeout);
 		if (timeout) {
 			ret = ad413x_reg_read(dev, AD413X_REG_DATA, ctx.buffer);
 			if (ret)
