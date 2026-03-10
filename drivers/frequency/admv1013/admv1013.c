@@ -329,6 +329,7 @@ int admv1013_init(struct admv1013_dev **device,
 	data = no_os_field_get(ADMV1013_CHIP_ID_MSK, data);
 	if (data != ADMV1013_CHIP_ID) {
 		ret = -EINVAL;
+		goto error_spi;
 	}
 
 	/* 0xE700 - Datasheet Value for Temperature Compensation */
