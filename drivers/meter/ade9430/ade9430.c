@@ -307,8 +307,10 @@ int ade9430_init(struct ade9430_dev **device,
 	if (ret)
 		goto error_spi;
 
-	if (chip_id != ADE9430_CHIP_ID)
+	if (chip_id != ADE9430_CHIP_ID) {
+		ret = -ENODEV;
 		goto error_spi;
+	}
 
 	/* Enable Temperature Sensor */
 	ret = ade9430_update_bits(dev, ADE9430_REG_TEMP_CFG, ADE9430_TEMP_EN,
