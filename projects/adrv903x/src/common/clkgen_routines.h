@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by ADRV903X examples.
+ *   @file   clkgen_routines.h
+ *   @brief  AXI clkgen setup for ADRV903X project.
  *   @author Analog Devices Inc.
 ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
@@ -33,14 +33,13 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef __CLKGEN_ROUTINES_H__
+#define __CLKGEN_ROUTINES_H__
 
-#include "platform_includes.h"
-#include "no_os_gpio.h"
-#include "no_os_spi.h"
+#include "no_os_print_log.h"
+#include "clk_axi_clkgen.h"
 
-extern const struct no_os_spi_init_param ad9528_spi_param;
-extern struct no_os_gpio_init_param clkchip_gpio_init_param;
+int clkgen_setup(struct axi_clkgen **rx_clkgen, struct axi_clkgen **tx_clkgen);
+int clkgen_remove(struct axi_clkgen *rx_clkgen, struct axi_clkgen *tx_clkgen);
 
-#endif /* __COMMON_DATA_H__ */
+#endif /* __CLKGEN_ROUTINES_H__ */

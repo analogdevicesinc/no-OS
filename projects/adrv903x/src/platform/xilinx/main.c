@@ -3,7 +3,7 @@
  *   @brief  Main file for Xilinx platform of ADRV903X project.
  *   @author Analog Devices Inc.
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
