@@ -367,7 +367,7 @@ int adf4377_get_en_ref_doubler(struct adf4377_dev *dev, bool *en)
 	if (ret)
 		return ret;
 
-	dev->ref_doubler_en = no_os_field_get(tmp, ADF4377_EN_RDBLR_MSK);
+	dev->ref_doubler_en = no_os_field_get(ADF4377_EN_RDBLR_MSK, tmp);
 	*en = dev->ref_doubler_en;
 
 	return 0;
@@ -527,9 +527,9 @@ int adf4377_get_en_chan(struct adf4377_dev *dev, uint8_t ch, bool *en)
 		return ret;
 
 	if (!ch)
-		enable = no_os_field_get(tmp, ADF4377_PD_CLKOUT1_MSK);
+		enable = no_os_field_get(ADF4377_PD_CLKOUT1_MSK, tmp);
 	else
-		enable = no_os_field_get(tmp, ADF4377_PD_CLKOUT2_MSK);
+		enable = no_os_field_get(ADF4377_PD_CLKOUT2_MSK, tmp);
 
 	*en = !enable;
 
@@ -713,7 +713,7 @@ int adf4377_set_freq(struct adf4377_dev *dev)
 	if (ret)
 		return ret;
 
-	locked = no_os_field_get(val, ADF4377_LOCKED_MSK);
+	locked = no_os_field_get(ADF4377_LOCKED_MSK, val);
 	if (!locked)
 		return -EIO;
 
