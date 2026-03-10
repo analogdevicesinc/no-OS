@@ -3,7 +3,7 @@
  *   @brief  ADRV903X (ADRV9030/ADRV9032) no-OS driver header.
  *   @author Analog Devices Inc.
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,10 +45,16 @@
 #include "no_os_clk.h"
 #include "no_os_platform.h"
 
+struct jesd204_dev;
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define NUM_ADRV903X_CLKS	3
+
+/* JESD204 link IDs — must match the topology in the basic_example */
+#define DEFRAMER0_LINK_TX	0
+#define FRAMER0_LINK_RX		2
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -64,9 +70,10 @@ struct adrv903x_rf_phy {
 	adi_adrv903x_SpiConfigSettings_t spiSettings;
 	adi_adrv903x_TrxFileInfo_t	trxBinaryInfoPtr;
 	adi_adrv903x_Init_t		deviceInitStruct;
-	adi_adrv903x_PostMcsInit_t	utilityInit;
+	adi_adrv903x_PostMcsInit_t	postMcsInitInst;
 	struct adrv903x_hal_cfg		hal;
 
+	struct jesd204_dev		*jdev;
 	struct no_os_clk_desc		*dev_clk;
 	struct no_os_clk_desc		*clks[NUM_ADRV903X_CLKS];
 
