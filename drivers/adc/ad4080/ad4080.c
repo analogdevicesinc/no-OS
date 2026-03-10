@@ -445,7 +445,7 @@ int ad4080_get_strict_reg_access(struct ad4080_dev *dev,
 	if (ret)
 		return ret;
 
-	*strict_reg = no_os_field_get(AD4080_SHORT_INST_MSK, reg_val);
+	*strict_reg = no_os_field_get(AD4080_STRICT_REG_ACCESS_MSK, reg_val);
 
 	return 0;
 }
