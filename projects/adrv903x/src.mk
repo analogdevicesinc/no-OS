@@ -13,6 +13,7 @@ include $(PROJECT)/src/platform/$(PLATFORM)/platform_src.mk
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/main.c
 
 INCS += $(PROJECT)/src/common/common_data.h \
+	$(PROJECT)/src/common/clkgen_routines.h \
 	$(PROJECT)/src/common/app_config.h \
 	$(PROJECT)/src/common/initdata.h \
 	$(PROJECT)/src/common/hal/no_os_platform.h \
@@ -22,8 +23,9 @@ INCS += $(PROJECT)/src/common/common_data.h \
 	$(PROJECT)/src/common/firmware/ADRV9030_RxGainTable.h
 
 SRCS += $(PROJECT)/src/common/common_data.c \
-	$(PROJECT)/src/common/hal/no_os_platform.c
-	$(PROJECT)/src/common/initdata.c
+	$(PROJECT)/src/common/hal/no_os_platform.c \
+	$(PROJECT)/src/common/initdata.c \
+	$(PROJECT)/src/common/clkgen_routines.c
 
 INCS += $(PROJECT)/src/platform/platform_includes.h \
 	$(PROJECT)/src/platform/$(PLATFORM)/parameters.h
