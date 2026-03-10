@@ -79,6 +79,30 @@
 #define ADRV903X_RX_GAIN_TABLE_MASK		0xFF
 
 /******************************************************************************/
+/* ADXCVR and JESD204 configuration                                           */
+/* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
+/******************************************************************************/
+#define ADRV903X_ADXCVR_REF_RATE_KHZ			491520	/* AD9528 ch13 REF_CLK0 */
+
+/* TX JESD204 parameters */
+#define ADRV903X_TX_JESD_SUBCLASS			1
+#define ADRV903X_TX_JESD_CONVS_PER_DEVICE		4
+#define ADRV903X_TX_JESD_CONV_RESOLUTION		16
+#define ADRV903X_TX_JESD_BITS_PER_SAMPLE		16
+#define ADRV903X_TX_JESD_HIGH_DENSITY			0
+#define ADRV903X_TX_JESD_CTRL_BITS_PER_SAMPLE		0
+
+/* RX JESD204 parameters */
+#define ADRV903X_RX_JESD_SUBCLASS			1
+/*
+ * CDR settle delay after RX link enable (ms).
+ * In no-OS, adxcvr_clk_enable() runs at LINK_ENABLE (no parent clock chain),
+ * so the CDR has not locked when the FSM fires SYSREF. 100 ms is sufficient
+ * for CDR lock and LEMC stabilisation on ADRV903X.
+ */
+#define ADRV903X_RX_JESD_LINK_ENABLE_DELAY_MS		100
+
+/******************************************************************************/
 /* AD9528 Clock Synthesizer configuration                                     */
 /* From DTS: zynqmp-zcu102-rev10-adrv9032r-nls.dts                           */
 /******************************************************************************/
