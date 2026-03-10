@@ -3,7 +3,7 @@
  *   @brief  Platform dependent parameters for ADRV903X project (Xilinx).
  *   @author Analog Devices Inc.
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -79,6 +79,8 @@
 #define RX_DMA_BASEADDR			XPAR_AXI_ADRV903X_RX_DMA_BASEADDR
 #define TX_DMA_BASEADDR			XPAR_AXI_ADRV903X_TX_DMA_BASEADDR
 
+#define RX_DATA_OFFLOAD_BASEADDR	0x9C450000UL
+
 #define RX_CLKGEN_BASEADDR		XPAR_AXI_ADRV903X_RX_CLKGEN_BASEADDR
 #define TX_CLKGEN_BASEADDR		XPAR_AXI_ADRV903X_TX_CLKGEN_BASEADDR
 
@@ -86,7 +88,7 @@
 /***  Buffer sizes for DMA/IIO examples                                     ***/
 /******************************************************************************/
 #if defined(DMA_EXAMPLE) || defined(IIO_EXAMPLE)
-#define DAC_BUFFER_SAMPLES		8192
+#define DAC_BUFFER_SAMPLES		65536
 #define ADC_BUFFER_SAMPLES		32768
 #define ADC_CHANNELS			8
 #endif
