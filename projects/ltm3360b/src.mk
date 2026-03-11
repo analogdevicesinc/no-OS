@@ -5,7 +5,6 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/util/no_os_list.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_alloc.c \
-	$(NO-OS)/util/no_os_delay.c \
 	$(NO-OS)/util/no_os_lf256fifo.c \
 	$(NO-OS)/util/no_os_mutex.c \
 	$(NO-OS)/util/no_os_crc8.c
