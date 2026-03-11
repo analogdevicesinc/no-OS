@@ -14,12 +14,8 @@ function(get_no_os_cache_dir OUT_VAR)
     if(DEFINED ENV{NO_OS_CACHE_DIR})
         set(${OUT_VAR} "$ENV{NO_OS_CACHE_DIR}" PARENT_SCOPE)
     else()
-        # Default to ~/.no-os-cache
-        if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-            set(${OUT_VAR} "$ENV{USERPROFILE}/.no-os-cache" PARENT_SCOPE)
-        else()
-            set(${OUT_VAR} "$ENV{HOME}/.no-os-cache" PARENT_SCOPE)
-        endif()
+        # Default to .cache/ in the no-OS root directory
+        set(${OUT_VAR} "${NO_OS_DIR}/.cache" PARENT_SCOPE)
     endif()
 endfunction()
 
