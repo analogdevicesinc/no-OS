@@ -2,8 +2,9 @@
 *   @file   no_os_timer.c
 *   @brief  Implementation of the timer Interface
 *   @author RBolboac (ramona.bolboaca@analog.com)
+*   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
-* Copyright 2022(c) Analog Devices, Inc.
+* Copyright 2022-2026(c) Analog Devices, Inc.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are met:
@@ -210,4 +211,24 @@ int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 		return -ENOSYS;
 
 	return desc->platform_ops->get_elapsed_time_nsec(desc, elapsed_time);
+}
+
+/**
+ * @brief Register timer callback and context.
+ * @param [in] desc    - Pointer to the device handler.
+ * @param [in] handler - Callback function pointer.
+ * @param [in] ctx     - Callback context.
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t no_os_timer_set_callback(struct no_os_timer_desc *desc,
+				 void (*handler)(void *),
+				 void *ctx)
+{
+	if (!desc || !desc->platform_ops || !handler)
+		return -EINVAL;
+
+	if (!desc->platform_ops->set_callback)
+		return -ENOSYS;
+
+	return desc->platform_ops->set_callback(desc, handler, ctx);
 }

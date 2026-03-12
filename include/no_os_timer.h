@@ -2,8 +2,9 @@
 *   @file   no_os_timer.h
 *   @brief  Timer control module header.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
+*   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
-* Copyright 2019(c) Analog Devices, Inc.
+* Copyright 2019-2026(c) Analog Devices, Inc.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are met:
@@ -90,6 +91,10 @@ struct no_os_timer_platform_ops {
 	/** timer initialization function pointer */
 	int32_t (*init)(struct no_os_timer_desc **,
 			const struct no_os_timer_init_param *);
+	/** timer callback registration function pointer */
+	int32_t (*set_callback)(struct no_os_timer_desc *,
+				void (*handler)(void *),
+				void *ctx);
 	/** timer start function pointer */
 	int32_t (*start)(struct no_os_timer_desc *);
 	/** timer stop function pointer */
@@ -141,5 +146,10 @@ int32_t no_os_timer_count_clk_set(struct no_os_timer_desc *desc,
 /* Get the elapsed time in nsec for the timer. */
 int32_t no_os_timer_get_elapsed_time_nsec(struct no_os_timer_desc *desc,
 		uint64_t *elapsed_time);
+
+/* Register timer callback and context. */
+int32_t no_os_timer_set_callback(struct no_os_timer_desc *desc,
+				 void (*handler)(void *),
+				 void *ctx);
 
 #endif // _NO_OS_SRC_TIMER_H_
