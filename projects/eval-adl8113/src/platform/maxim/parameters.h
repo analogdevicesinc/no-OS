@@ -45,6 +45,10 @@
 #define UART_EXTRA      &adl8113_uart_extra_ip
 #define UART_OPS        &max_uart_ops
 
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#endif
+
 /* GPIO Port and Pin definitions for ADL8113 */
 #define GPIO_VA_PORT		1
 #define GPIO_VA_PIN		6
