@@ -110,6 +110,7 @@ extern struct no_os_gpio_init_param reset_gpio_ip;
 extern struct no_os_gpio_init_param intr_gpio_ip;
 extern struct no_os_irq_init_param afe_callback_ctrl_ip;
 extern struct no_os_callback_desc afe0_callback_desc;
+extern struct no_os_uart_init_param uart_export_ip;
 
 static const char *const pqm_v_consel_available[] = {
 	[VCONSEL_4W_WYE] = "4W_WYE",

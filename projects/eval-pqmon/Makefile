@@ -41,6 +41,11 @@ NO_OS_NETMASK=255.255.0.0
 NO_OS_GATEWAY=0.0.0.0
 endif
 
+UART_EXPORT ?= y
+ifeq ($(UART_EXPORT), y)
+CFLAGS += -DUART_EXPORT_ENABLED
+endif
+
 ifndef PQLIB_PATH
 $(error 'No PQM library path defined')
 endif

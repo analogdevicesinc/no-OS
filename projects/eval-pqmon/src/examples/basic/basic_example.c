@@ -35,6 +35,10 @@
 #include "basic_example.h"
 #endif
 
+#ifdef UART_EXPORT_ENABLED
+#include "uart_export.h"
+#endif
+
 int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
 {
 	struct pqm_desc *d;
@@ -206,6 +210,12 @@ int basic_pqm_firmware()
 		goto exit;
 	}
 	printf("Mesurements started \n\r");
+
+#ifdef UART_EXPORT_ENABLED
+	status = uart_export_init();
+	if (status)
+		printf("UART export init failed: %d \n\r", status);
+#endif
 
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("pqm", pqm_desc, &pqm_iio_descriptor, &buff, NULL, NULL)
