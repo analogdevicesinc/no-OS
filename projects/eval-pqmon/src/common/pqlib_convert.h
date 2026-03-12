@@ -50,6 +50,13 @@ typedef enum {
 } EVENT_TYPE;
 
 /**
+ * @brief Converts ADI_AFE_ANGLE_TYPE to degrees
+ * @param[in] angleRaw - Raw angle value from AFE
+ * @return angle in degrees
+ */
+ADI_AFE_ANGLE_TYPE convert_angle_type(ADI_AFE_ANGLE_TYPE angleRaw);
+
+/**
  * @brief Converts ADI_AFE_RMS_TYPE to voltage/current magnitude
  * @param[in] mag - Magnitude code from the library
  * @param[in] scale - Magnitude of full range RMS

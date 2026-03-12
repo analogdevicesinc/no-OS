@@ -309,3 +309,14 @@ struct no_os_callback_desc afe0_callback_desc = {
 	.ctx = NULL,
 	.handle = NULL,
 };
+
+struct no_os_uart_init_param uart_export_ip = {
+	.device_id = 2,
+	.asynchronous_rx = false,
+	.baud_rate = 460800,
+	.size = NO_OS_UART_CS_8,
+	.parity = NO_OS_UART_PAR_NO,
+	.stop = NO_OS_UART_STOP_1_BIT,
+	.extra = UART_STDIO_EXT,
+	.platform_ops = &max_uart_ops
+};

@@ -35,6 +35,9 @@
 #include "iio_pqm.h"
 #include "afe_calibration.h"
 #include "flash_storage.h"
+#ifdef UART_EXPORT_ENABLED
+#include "uart_export.h"
+#endif
 
 PQLIB_EXAMPLE pqlibExample;
 extern volatile uint8_t newSyncTimeAvailable = 0;
@@ -304,6 +307,9 @@ int process_and_prepare_output()
 			if (status != 0) {
 				break;
 			}
+#ifdef UART_EXPORT_ENABLED
+			uart_export_send();
+#endif
 		}
 
 		status = SYS_STATUS_PQLIB_RUNNING;
