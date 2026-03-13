@@ -1,0 +1,18 @@
+menuconfig TEMPERATURE
+    bool "Temperature Drivers"
+    default n
+    help
+      Enable support for temperature sensor drivers.
+
+if TEMPERATURE
+
+config TEMPERATURE_ADT75
+    bool "Enable ADT75 driver"
+    default n
+
+config TEMPERATURE_IIO_ADT75
+    select TEMPERATURE_ADT75
+    bool "Enable ADT75 IIO driver"
+    default n
+
+endif

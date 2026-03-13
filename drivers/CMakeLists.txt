@@ -39,6 +39,14 @@ if(CONFIG_DISPLAY)
     add_subdirectory(display)
 endif()
 
+if(CONFIG_DIGITAL_IO)
+    add_subdirectory(digital-io)
+endif()
+
+if(CONFIG_TEMPERATURE)
+    add_subdirectory(temperature)
+endif()
+
 # add_subdirectory(accel)
 # add_subdirectory(afe)
 # add_subdirectory(amplifiers)

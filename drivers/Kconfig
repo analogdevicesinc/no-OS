@@ -9,6 +9,8 @@ source "drivers/dac/Kconfig"
 source "drivers/imu/Kconfig"
 source "drivers/net/Kconfig"
 source "drivers/display/Kconfig"
+source "drivers/digital-io/Kconfig"
+source "drivers/temperature/Kconfig"
 
 endmenu
 
