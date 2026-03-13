@@ -759,6 +759,25 @@ static int axi_jesd204_rx_jesd204_link_enable(struct jesd204_dev *jdev,
 	else
 		enable_irq(jesd->irq);
 #endif
+
+	/*
+	 * Wait for CDR lock and LEMC stabilisation before returning.
+	 *
+	 * The FSM fires SYSREF (via post_state_sysref) immediately after
+	 * this callback returns.  Without this delay, SYSREF fires while
+	 * the CDR is still acquiring lock from the adxcvr_clk_enable()
+	 * reset loop above, causing SYSREF alignment error.
+	 *
+	 * In Linux, the parent clock chain triggers adxcvr_clk_enable()
+	 * at CLOCKS_ENABLE, and by LINK_ENABLE the CDR has had ~5 s
+	 * (TX InitCals) to lock.  In no-OS, no_os_clk has no parent
+	 * chain, so adxcvr_clk_enable() runs here at LINK_ENABLE.
+	 * This delay gives the CDR time to lock and the LEMC time to
+	 * stabilise with the link actively processing data.
+	 */
+	if (jesd->link_enable_delay_ms)
+		no_os_mdelay(jesd->link_enable_delay_ms);
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -955,6 +974,7 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 	jesd->config.subclass_version = init->subclass;
 
 	jesd->lane_clk = init->lane_clk;
+	jesd->link_enable_delay_ms = init->link_enable_delay_ms;
 
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_rx_init);
 	if (ret)
