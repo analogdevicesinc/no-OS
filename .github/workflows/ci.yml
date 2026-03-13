@@ -1,0 +1,85 @@
+on:
+  push:
+    branches:
+      - main
+      - staging/*
+      - next_stable
+      - '20*'
+  pull_request:
+    branches:
+      - main
+      - next_stable
+      - '20*'
+
+jobs:
+  astyle:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 50
+    - name: Run astyle
+      env:
+        BUILD_TYPE: astyle
+        TARGET_BRANCH: ${{ github.base_ref }}
+      run: ./ci/run_build.sh
+
+  cppcheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 50
+    - name: Run cppcheck
+      env:
+        BUILD_TYPE: cppcheck
+      run: ./ci/run_build.sh
+
+  drivers:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build drivers
+      env:
+        BUILD_TYPE: drivers
+      run: ./ci/run_build.sh
+
+  build-doc:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 50
+    - name: Build documentation
+      env:
+        BUILD_TYPE: documentation
+        UPDATE_GH_DOCS: 0
+        TARGET_BRANCH: ${{ github.base_ref }}
+      run: ./ci/run_build.sh
+
+    - name: Prepare documentation artifact
+      run: |
+        mkdir -p _site/doxygen
+        cp -R doc/sphinx/build/html/* _site/
+        cp -R doc/doxygen/build/doxygen_doc/html/* _site/doxygen/
+        touch _site/.nojekyll
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: html
+        path: _site
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-doc]
+    permissions:
+      contents: write
+    if: >
+      github.ref == 'refs/heads/main' ||
+      github.event_name == 'pull_request'
+
+    steps:
+    - uses: analogdevicesinc/doctools/gh-pages-deploy@action
+      with:
+        name: html

@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  clean-gh-pages:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: analogdevicesinc/doctools/gh-pages-rm-path@action
+      with:
+        path: pull/${{ github.event.number }}
