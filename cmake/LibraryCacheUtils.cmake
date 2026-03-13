@@ -150,7 +150,10 @@ function(resolve_library_source LIB_NAME REQUESTED_VERSION SUBMODULE_PATH GIT_RE
         # Create cache directory structure
         file(MAKE_DIRECTORY "${CACHE_DIR}/${LIB_NAME}")
 
-        # Declare the library to be fetched to the cache location
+        # Use FetchContent_Populate (not MakeAvailable) to download only,
+        # without calling add_subdirectory on the library's CMakeLists.txt.
+        # This avoids processing third-party build systems that may create
+        # unwanted targets or fail for cross-compilation.
         FetchContent_Declare(
             ${LIB_NAME}
             GIT_REPOSITORY ${GIT_REPO_URL}
@@ -159,10 +162,10 @@ function(resolve_library_source LIB_NAME REQUESTED_VERSION SUBMODULE_PATH GIT_RE
             SOURCE_DIR "${CACHED_LIB_DIR}"
         )
 
-        FetchContent_MakeAvailable(${LIB_NAME})
+        FetchContent_Populate(${LIB_NAME})
 
         set(${OUT_SOURCE_DIR} "${CACHED_LIB_DIR}" PARENT_SCOPE)
-        set(${OUT_BINARY_DIR} "${${LIB_NAME}_BINARY_DIR}" PARENT_SCOPE)
+        set(${OUT_BINARY_DIR} "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}-build" PARENT_SCOPE)
     else()
         message(STATUS "[${LIB_NAME}] → Fetching ${REQUESTED_VERSION} to build directory (cache not writable)")
 
@@ -173,7 +176,7 @@ function(resolve_library_source LIB_NAME REQUESTED_VERSION SUBMODULE_PATH GIT_RE
             GIT_SHALLOW TRUE
         )
 
-        FetchContent_MakeAvailable(${LIB_NAME})
+        FetchContent_Populate(${LIB_NAME})
 
         # Get the actual source/binary dirs from FetchContent
         string(TOLOWER "${LIB_NAME}" LIB_NAME_LOWER)

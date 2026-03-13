@@ -62,11 +62,11 @@ config MQTT
 
 config MQTT_VERSION
 	string "Paho MQTT version tag"
-	default "v1.1.0"
+	default "master"
 	depends on MQTT
 	help
 	  Git tag or branch name for paho.mqtt.embedded-c.
-	  Examples: v1.1.0, master
+	  Examples: master, v1.1.0
 	  This version will be checked against the submodule,
 	  then the global cache, then fetched if not found.
 

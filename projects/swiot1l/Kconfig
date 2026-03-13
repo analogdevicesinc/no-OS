@@ -18,6 +18,16 @@ config SWIOT1L_MQTT_EXAMPLE
 
 endchoice
 
+config SWIOT1L_MQTT_SERVER_IP
+	string "MQTT broker IP address"
+	default "192.168.97.1"
+	depends on SWIOT1L_MQTT_EXAMPLE
+
+config SWIOT1L_MQTT_SERVER_PORT
+	int "MQTT broker port"
+	default 1883
+	depends on SWIOT1L_MQTT_EXAMPLE
+
 config SWIOT1L_STATIC_IP
 	bool "Use static IP address"
 	default n

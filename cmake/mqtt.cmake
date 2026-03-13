@@ -6,7 +6,7 @@
 include(LibraryCacheUtils)
 
 if(NOT DEFINED CONFIG_MQTT_VERSION OR "${CONFIG_MQTT_VERSION}" STREQUAL "")
-    set(CONFIG_MQTT_VERSION "v1.1.0")
+    set(CONFIG_MQTT_VERSION "master")
 endif()
 
 message(STATUS "MQTT requested version: ${CONFIG_MQTT_VERSION}")
@@ -44,7 +44,11 @@ target_include_directories(no-os PUBLIC
 )
 
 target_compile_definitions(no-os PUBLIC
-    MQTTCLIENT_PLATFORM_HEADER="mqtt_noos_support.h"
+    MQTTCLIENT_PLATFORM_HEADER=mqtt_noos_support.h
 )
+
+# Paho sources are missing #include <string.h> for strcmp/memset/etc.
+# GCC 14+ treats implicit function declarations as errors.
+target_compile_options(no-os PRIVATE $<$<COMPILE_LANGUAGE:C>:-include string.h>)
 
 message(STATUS "MQTT configured from: ${PAHO_SOURCE_DIR}")
