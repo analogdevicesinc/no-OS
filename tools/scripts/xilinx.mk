@@ -287,7 +287,8 @@ vitis_launch_config: $(TEMP_DIR)/arch.txt
 		--elf-path "$(realpath $(BINARY))" \
 		--fsbl-path "$(patsubst $(PROJECT)/%,%,$(FSBL_PATH))" \
 		--project-dir "$(PROJECT)" \
-		--output "$(PROJECT)/_ide/launch.json"
+		--output "$(PROJECT)/_ide/launch.json" \
+		--build-output "$(PROJECT)/_ide/build.json"
 
 $(PLATFORM)_project: $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
