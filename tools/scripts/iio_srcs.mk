@@ -10,5 +10,6 @@ SRC_DIRS += $(NO-OS)/util
 
 ifeq (y,$(strip $(NETWORKING)))
 DISABLE_SECURE_SOCKET ?= y
+SRCS += $(DRIVERS)/api/no_os_net.c
 SRC_DIRS += $(NO-OS)/network
 endif

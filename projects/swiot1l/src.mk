@@ -66,10 +66,14 @@ INCS += $(DRIVERS)/temperature/adt75/adt75.h
 SRCS += $(DRIVERS)/temperature/adt75/adt75.c
 
 INCS += $(INCLUDE)/no_os_crc8.h
+INCS += $(INCLUDE)/no_os_net.h
 INCS += $(DRIVERS)/net/adin1110/adin1110.h
+INCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.h
 INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.h
+SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1110/lwip_adin1110.c
 SRCS += $(DRIVERS)/net/adin1110/adin1110.c
+SRCS += $(DRIVERS)/api/no_os_net.c
 SRCS += $(NO-OS)/util/no_os_crc8.c
 
 INCS += $(DRIVERS)/net/oa_tc6/oa_tc6.h

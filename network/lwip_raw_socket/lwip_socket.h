@@ -39,6 +39,7 @@
 #include "lwip/netif.h"
 #include "network_interface.h"
 #include "tcp_socket.h"
+#include "no_os_net.h"
 
 #define NO_OS_LWIP_BUFF_SIZE	1530
 #define NO_OS_MTU_SIZE		1500
@@ -119,6 +120,9 @@ int32_t no_os_lwip_remove(struct lwip_network_desc *);
 int32_t no_os_lwip_step(struct lwip_network_desc *, void *);
 
 extern struct network_interface lwip_socket_ops;
+
+/** LWIP network ops for generic no_os_net interface */
+extern const struct no_os_net_ops lwip_net_ops;
 
 #endif /* NO_OS_LWIP_NETWORKING */
 #endif
