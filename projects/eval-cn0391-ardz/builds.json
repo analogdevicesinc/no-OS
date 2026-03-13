@@ -1,0 +1,10 @@
+{
+  "stm32": {
+    "basic_example": {
+      "flags": "EXAMPLE=basic_example"
+    },
+"iio_lwip_example": {
+      "flags": "EXAMPLE=iio_lwip_example"
+    }
+  }
+}
