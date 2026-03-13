@@ -3,8 +3,9 @@
  *   @brief  Implementation of iio.
  *   @author Cristian Pop (cristian.pop@analog.com)
  *   @author Mihail Chindris (mihail.chindris@analog.com)
+ *   @author Vilmos-Csaba Jozsa (vilmoscsaba.jozsa@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2019-2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -1849,6 +1850,10 @@ static int32_t iio_init_trigs(struct iio_desc *desc,
 	struct iio_trigger_init *trig_init_iter;
 
 	desc->nb_trigs = n;
+	if (n == 0) {
+		desc->trigs = NULL;
+		return 0;
+	}
 	desc->trigs = (struct iio_trig_priv *)no_os_calloc(desc->nb_trigs,
 			sizeof(*desc->trigs));
 	if (!desc->trigs)
