@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/motor/tmc5240/README.rst
