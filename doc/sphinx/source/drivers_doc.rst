@@ -60,6 +60,14 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/dac/*
 
+FILTER
+======
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/filter/*
+
 FREQUENCY GENERATORS
 ====================
 .. toctree::
