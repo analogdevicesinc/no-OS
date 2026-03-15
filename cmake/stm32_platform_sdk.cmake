@@ -1,4 +1,61 @@
+# Resolve the .ioc file path from CONFIG_STM32_IOC_PATH or fall back to ${BOARD}.ioc.
+# Sets IOC_FILE in the caller's scope.
+function(resolve_stm32_ioc_file)
+        if(DEFINED CONFIG_STM32_IOC_PATH AND NOT "${CONFIG_STM32_IOC_PATH}" STREQUAL "")
+                if(IS_ABSOLUTE "${CONFIG_STM32_IOC_PATH}")
+                        set(IOC_FILE "${CONFIG_STM32_IOC_PATH}" PARENT_SCOPE)
+                else()
+                        set(IOC_FILE "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/${CONFIG_STM32_IOC_PATH}" PARENT_SCOPE)
+                endif()
+        else()
+                set(IOC_FILE "${CMAKE_SOURCE_DIR}/projects/${NO_OS_PROJECT_NAME}/${BOARD}.ioc" PARENT_SCOPE)
+        endif()
+endfunction()
+
+# Derive OPENOCD variables from the .ioc file, falling back to the TARGET
+# variable when the .ioc is unavailable or incomplete.
+# Sets OPENOCD_INTERFACE, OPENOCD_CHIPNAME, and OPENOCD_TARGETCFG in the
+# caller's scope.
+function(resolve_stm32_openocd_config IOC_FILE)
+        # Default interface for all STM32 boards
+        if(NOT DEFINED OPENOCD_INTERFACE)
+                set(OPENOCD_INTERFACE "interface/stlink.cfg" PARENT_SCOPE)
+        endif()
+
+        # Primary: parse the .ioc file
+        if(EXISTS "${IOC_FILE}")
+                file(READ "${IOC_FILE}" IOC_CONTENT)
+
+                string(REGEX MATCH "Mcu\\.CPN=([^\r\n]+)" _match "${IOC_CONTENT}")
+                if(_match)
+                        set(_chipname "${CMAKE_MATCH_1}")
+                        set(OPENOCD_CHIPNAME "${_chipname}" PARENT_SCOPE)
+                endif()
+
+                string(REGEX MATCH "Mcu\\.Family=([^\r\n]+)" _match "${IOC_CONTENT}")
+                if(_match)
+                        string(TOLOWER "${CMAKE_MATCH_1}" _family)
+                        set(OPENOCD_TARGETCFG "target/${_family}x.cfg" PARENT_SCOPE)
+                        message(STATUS "Extracted OpenOCD config from .ioc: chip=${_chipname}, target=target/${_family}x.cfg")
+                        return()
+                endif()
+        endif()
+
+        # Fallback: derive from TARGET (e.g. "stm32f756" → "stm32f7")
+        set(OPENOCD_CHIPNAME "${TARGET}" PARENT_SCOPE)
+        string(REGEX MATCH "^(stm32[a-z][0-9])" _family "${TARGET}")
+        if(_family)
+                set(OPENOCD_TARGETCFG "target/${_family}x.cfg" PARENT_SCOPE)
+                message(STATUS "Using fallback OpenOCD config: chip=${TARGET}, target=target/${_family}x.cfg")
+        else()
+                set(OPENOCD_TARGETCFG "target/${TARGET}.cfg" PARENT_SCOPE)
+                message(STATUS "Using fallback OpenOCD config: chip=${TARGET}, target=target/${TARGET}.cfg")
+        endif()
+endfunction()
+
 function(config_stm32_sdk BUILD_TARGET)
+        resolve_stm32_ioc_file()
+        resolve_stm32_openocd_config("${IOC_FILE}")
         generate_openocd_config()
 
         # Extract IOC name without extension for directory naming
