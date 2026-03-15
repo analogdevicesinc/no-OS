@@ -2,5 +2,6 @@ menu "Project-Specific Configuration"
 
 source "projects/ftc_workshop_capi/Kconfig"
 source "projects/swiot1l/Kconfig"
+source "projects/iio_demo/Kconfig"
 
 endmenu

@@ -1,6 +1,6 @@
 file(READ ${STM32_TEMPLATE_FILE} OLD_CONTENT)
 
-set(STM32_IOC_PATH "adin1110ebz.ioc")
+set(STM32_IOC_PATH "stm32f756_nucleo.ioc")
 
 if(STM32_IOC_PATH)
         if(IS_ABSOLUTE ${STM32_IOC_PATH})

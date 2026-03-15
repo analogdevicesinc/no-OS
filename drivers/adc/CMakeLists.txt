@@ -178,6 +178,7 @@ target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adaq8092)
 # ADC Demo
 no_os_sources_ifdef(CONFIG_ADC_DEMO ${CMAKE_CURRENT_SOURCE_DIR}/adc_demo/adc_demo.c)
 no_os_sources_ifdef(CONFIG_ADC_IIO_DEMO ${CMAKE_CURRENT_SOURCE_DIR}/adc_demo/iio_adc_demo.c)
+no_os_sources_ifdef(CONFIG_ADC_IIO_DEMO ${CMAKE_CURRENT_SOURCE_DIR}/adc_demo/iio_adc_demo_trig.c)
 target_include_directories(no-os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/adc_demo)
 
 # ADM1177
