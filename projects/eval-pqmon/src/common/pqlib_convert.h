@@ -38,6 +38,10 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
+
+#define ADI_PQLIB_POWER_MAX_VALUE 20694066
+#define ENERGY_ACCUMULATION_FACTOR 3515.625f
+
 /**
  * @brief Enumeration for possible event types for iio output preparation
  *
@@ -122,5 +126,9 @@ uint32_t convert_to_time_ms(float timesec);
  * @return int Length of the prepared string
  */
 int prepara_string(EVENT_TYPE event_type, int event_value, char *buf);
+
+float convert_power_type(int32_t power, float scale);
+float convert_energy_type(int32_t energy_hi, float scale);
+float compute_power_factor(int32_t watthr, int32_t varhr);
 
 #endif /* __PQLIB_CONVERT_H__ */

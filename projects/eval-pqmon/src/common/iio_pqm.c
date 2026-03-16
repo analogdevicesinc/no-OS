@@ -801,6 +801,53 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			return snprintf(buf, len, "%" PRIu16 "",
 					pqlibExample.output->msvMagnitude[channel->ch_num].maxMagnitude);
 
+		case CHAN_ACTIVE_POWER:
+			return snprintf(buf, len, "%.4f",
+					convert_power_type(
+						pqlibExample.powerEnergy.activePower[channel->ch_num],
+						pqlibExample.exampleConfig.voltageScale *
+						pqlibExample.exampleConfig.currentScale));
+		case CHAN_ACTIVE_ENERGY:
+			return snprintf(buf, len, "%.6f",
+					convert_energy_type(
+						pqlibExample.powerEnergy.activeEnergyHi[channel->ch_num],
+						pqlibExample.exampleConfig.voltageScale *
+						pqlibExample.exampleConfig.currentScale));
+		case CHAN_REACTIVE_ENERGY:
+			return snprintf(buf, len, "%.6f",
+					convert_energy_type(
+						pqlibExample.powerEnergy.reactiveEnergyHi[channel->ch_num],
+						pqlibExample.exampleConfig.voltageScale *
+						pqlibExample.exampleConfig.currentScale));
+		case CHAN_POWER_FACTOR:
+			return snprintf(buf, len, "%.4f",
+					compute_power_factor(
+						pqlibExample.powerEnergy.activeEnergyHi[channel->ch_num],
+						pqlibExample.powerEnergy.reactiveEnergyHi[channel->ch_num]));
+		case CHAN_FUND_ACTIVE_POWER:
+			return snprintf(buf, len, "%.4f",
+					convert_power_type(
+						pqlibExample.powerEnergy.fundActivePower[channel->ch_num],
+						pqlibExample.exampleConfig.voltageScale *
+						pqlibExample.exampleConfig.currentScale));
+		case CHAN_FUND_ACTIVE_ENERGY:
+			return snprintf(buf, len, "%.6f",
+					convert_energy_type(
+						pqlibExample.powerEnergy.fundActiveEnergyHi[channel->ch_num],
+						pqlibExample.exampleConfig.voltageScale *
+						pqlibExample.exampleConfig.currentScale));
+		case CHAN_FUND_REACTIVE_ENERGY:
+			return snprintf(buf, len, "%.6f",
+					convert_energy_type(
+						pqlibExample.powerEnergy.fundReactiveEnergyHi[channel->ch_num],
+						pqlibExample.exampleConfig.voltageScale *
+						pqlibExample.exampleConfig.currentScale));
+		case CHAN_DISPLACEMENT_PF:
+			return snprintf(buf, len, "%.4f",
+					compute_power_factor(
+						pqlibExample.powerEnergy.fundActiveEnergyHi[channel->ch_num],
+						pqlibExample.powerEnergy.fundReactiveEnergyHi[channel->ch_num]));
+
 		default:
 			return snprintf(buf, len, "%" PRIu32 "",
 					desc->pqm_ch_attr[channel->ch_num][attr_id]);
@@ -1086,7 +1133,46 @@ struct iio_attribute voltage_pqm_attributes[] = {
 		.show = read_ch_attr,
 		.priv = CHAN_VOLTAGE_MAX_MAGNITUDE,
 	},
-
+	{
+		.name = "active_power",
+		.show = read_ch_attr,
+		.priv = CHAN_ACTIVE_POWER,
+	},
+	{
+		.name = "active_energy",
+		.show = read_ch_attr,
+		.priv = CHAN_ACTIVE_ENERGY,
+	},
+	{
+		.name = "reactive_energy",
+		.show = read_ch_attr,
+		.priv = CHAN_REACTIVE_ENERGY,
+	},
+	{
+		.name = "power_factor",
+		.show = read_ch_attr,
+		.priv = CHAN_POWER_FACTOR,
+	},
+	{
+		.name = "fund_active_power",
+		.show = read_ch_attr,
+		.priv = CHAN_FUND_ACTIVE_POWER,
+	},
+	{
+		.name = "fund_active_energy",
+		.show = read_ch_attr,
+		.priv = CHAN_FUND_ACTIVE_ENERGY,
+	},
+	{
+		.name = "fund_reactive_energy",
+		.show = read_ch_attr,
+		.priv = CHAN_FUND_REACTIVE_ENERGY,
+	},
+	{
+		.name = "displacement_pf",
+		.show = read_ch_attr,
+		.priv = CHAN_DISPLACEMENT_PF,
+	},
 
 	END_ATTRIBUTES_ARRAY,
 }; // voltage channel attributes

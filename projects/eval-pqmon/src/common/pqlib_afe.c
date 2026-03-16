@@ -76,6 +76,10 @@ int get_afe_input()
 		}
 	}
 
+	if ((status == 0) && (pOneCycle->STATUS0 & BITM_STATUS0_EGYRDY)) {
+		status = afe_read_power_energy(&pqlibExample.powerEnergy);
+	}
+
 	if ((status == 0) && (pOneCycle->STATUS0 & BITM_STATUS0_COH_PAGE_RDY)) {
 		status = afe_read_waveform(
 				 (uint16_t *) & (pqlibExample.inputWaveform.waveform),
