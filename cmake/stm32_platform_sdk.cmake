@@ -22,6 +22,17 @@ function(resolve_stm32_openocd_config IOC_FILE)
                 set(OPENOCD_INTERFACE "interface/stlink.cfg" PARENT_SCOPE)
         endif()
 
+        # STM32-specific OpenOCD settings (standard OpenOCD, not CubeIDE)
+        set(OPENOCD_EXTRA_COMMANDS "\
+transport select hla_swd\n\
+adapter speed 8000\n\
+reset_config srst_only srst_nogate connect_assert_srst\n\
+gdb_port ${GDB_PORT}" PARENT_SCOPE)
+
+        # Reset-halt on GDB attach so the target is in a known state
+        set(OPENOCD_POST_COMMANDS "\
+$_TARGETNAME configure -event gdb-attach { reset halt }" PARENT_SCOPE)
+
         # Primary: parse the .ioc file
         if(EXISTS "${IOC_FILE}")
                 file(READ "${IOC_FILE}" IOC_CONTENT)
@@ -144,7 +155,18 @@ function(config_stm32_sdk BUILD_TARGET)
 
         target_sources(no-os PRIVATE ${EXTI_GEN_FILE})
         file(GLOB LINKER_SCRIPT_FILE ${BOARD_BUILD_DIR}/*/*_FLASH.ld)
-        target_link_libraries(no-os STM32_Drivers)
+
+        # STM32_Drivers is an OBJECT library containing the HAL drivers
+        # (with weak HAL_*_MspInit / interrupt handler stubs) and, after
+        # patching, the CubeMX application sources (with the strong
+        # overrides).  Link it directly to the project executable so that
+        # all objects land unconditionally on the final link line — strong
+        # symbols then reliably override the weak stubs.
+        #
+        # no-os only needs the stm32cubemx INTERFACE library (include paths
+        # and compile definitions) so its own sources compile correctly.
+        target_link_libraries(${BUILD_TARGET} STM32_Drivers)
+        target_link_libraries(no-os stm32cubemx)
         target_compile_definitions(no-os PRIVATE -DSTM32_PLATFORM=1)
         target_link_options(${BUILD_TARGET} PRIVATE -T${LINKER_SCRIPT_FILE})
 endfunction()

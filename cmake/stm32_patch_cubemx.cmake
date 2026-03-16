@@ -17,6 +17,30 @@ string(REPLACE "\${CMAKE_PROJECT_NAME}" "no-os"
 
 file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
 
+# Remove syscalls.c to avoid duplicate symbol conflicts with
+# stm32_uart_stdio.c (matches the make build behavior in stm32.mk).
+file(READ ${CMAKE_FILE_TO_PATCH} FILE_CONTENTS)
+string(REGEX REPLACE "[^\n]*syscalls\\.c[^\n]*\n" ""
+     PATCHED_CONTENTS "${FILE_CONTENTS}")
+file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
+
+# Move CubeMX application sources (hal_msp, interrupt handlers, startup)
+# from no-os into the STM32_Drivers OBJECT library.
+#
+# The HAL defines weak stubs for HAL_UART_MspInit, SysTick_Handler etc.
+# in the same OBJECT library.  With both the weak stubs and the strong
+# overrides in the same OBJECT library, all objects land unconditionally
+# on the final link line, and the strong symbols reliably win.
+#
+# Keeping these files in no-os (a static archive when built as STATIC, or
+# an OBJECT library that may not propagate through the dependency chain)
+# caused the linker to use the weak stubs instead.
+file(READ ${CMAKE_FILE_TO_PATCH} FILE_CONTENTS)
+string(REPLACE "target_sources(no-os PRIVATE \${MX_Application_Src})"
+               "target_sources(STM32_Drivers PRIVATE \${MX_Application_Src})"
+     PATCHED_CONTENTS "${FILE_CONTENTS}")
+file(WRITE ${CMAKE_FILE_TO_PATCH} "${PATCHED_CONTENTS}")
+
 file(READ "${STM32_PROJECT_BUILD}/Core/Src/main.c" MAIN_FILE_CONTENTS)
 
 # Replace main function name with stm32_init

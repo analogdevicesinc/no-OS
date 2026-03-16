@@ -72,7 +72,7 @@
                         "inherits": "default",
                         "cacheVariables": {
                                 "BOARD": "stm32f756_nucleo",
-                                "USE_VENDOR_TOOLCHAIN": "OFF",
+                                "USE_VENDOR_TOOLCHAIN": "ON",
                                 "PLATFORM": "stm32",
                                 "TARGET": "stm32f756",
                                 "TARGET_NUM": "stm32f756",

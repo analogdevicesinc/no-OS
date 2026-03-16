@@ -10,6 +10,15 @@ if(USE_VENDOR_TOOLCHAIN)
     find_package(STM32CubeIDE REQUIRED)
 endif()
 
+find_program(OPENOCD_PATH
+        NAMES openocd
+        HINTS ${OPENOCD_SEARCH_PATH}
+        PATH_SUFFIXES bin
+        DOC "Path to OpenOCD executable"
+    )
+
+cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "/usr/share/openocd/scripts")
+
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
 set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)

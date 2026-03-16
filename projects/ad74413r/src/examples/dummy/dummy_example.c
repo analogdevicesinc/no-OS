@@ -65,6 +65,8 @@ int example_main()
 
 	no_os_uart_stdio(uart_desc);
 
+	printf("UART!\n");
+
 	ret = ad74413r_init(&ad74413r_desc, &ad74413r_ip);
 	if (ret)
 		goto error;

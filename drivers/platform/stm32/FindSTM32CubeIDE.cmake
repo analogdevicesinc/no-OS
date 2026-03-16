@@ -23,7 +23,7 @@ find_program(
     "/usr/local/bin"
     "/usr/bin"
     "/opt/st"
-    "$ENV{HOME}/st"
+    "$ENV{HOME}/st/stm32cubeide_1.16.0"
     "$ENV{HOME}/STMicroelectronics"
     "C:/ST"
     "$ENV{ProgramFiles}/STMicroelectronics"

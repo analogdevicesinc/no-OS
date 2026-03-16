@@ -7,6 +7,12 @@ include(${GENERATED_SOURCES_CMAKE} OPTIONAL)
 
 function(generate_openocd_config)
         if(DEFINED OPENOCD_INTERFACE AND DEFINED OPENOCD_CHIPNAME AND DEFINED OPENOCD_TARGETCFG)
+                if(NOT DEFINED OPENOCD_EXTRA_COMMANDS)
+                        set(OPENOCD_EXTRA_COMMANDS "")
+                endif()
+                if(NOT DEFINED OPENOCD_POST_COMMANDS)
+                        set(OPENOCD_POST_COMMANDS "")
+                endif()
                 configure_file(
                         "${NO_OS_DIR}/cmake/ide/templates/openocd.in"
                         "${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg"
