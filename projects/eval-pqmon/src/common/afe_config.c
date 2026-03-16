@@ -32,6 +32,7 @@
  *******************************************************************************/
 
 #include "afe_config.h"
+#include "pqlib_example.h"
 
 struct no_os_spi_desc *hSPI;
 struct no_os_spi_msg spiMsg;
@@ -179,6 +180,7 @@ int afe_init(void)
 			status = SYS_STATUS_AFE_MASK0_FAILED;
 		}
 	}
+
 	if (status == 0) {
 		config = 1;
 		status = afe_write_16bit_reg(REG_RUN, (uint16_t *)&config);
@@ -186,10 +188,6 @@ int afe_init(void)
 			status = SYS_STATUS_AFE_RUN_FAILED;
 		}
 	}
-
-	uint16_t pTest[10];
-	afe_read_16bit_buff(0x4A4, 1, pTest);
-	printf("ID register: %d\n\r", pTest[0]);
 
 	return status;
 }
@@ -589,6 +587,44 @@ int afe_set_acc_mode(uint16_t frequency, uint16_t vconsel,
 	return status;
 }
 
+int afe_read_power_energy(POWER_ENERGY_DATA *pData)
+{
+	int status = SYS_STATUS_SUCCESS;
+	static const uint16_t watt_regs[] = {REG_AWATT, REG_BWATT, REG_CWATT};
+	static const uint16_t watthr_hi_regs[] = {REG_AWATTHR_HI, REG_BWATTHR_HI, REG_CWATTHR_HI};
+	static const uint16_t varhr_hi_regs[] = {REG_AVARHR_HI, REG_BVARHR_HI, REG_CVARHR_HI};
+	static const uint16_t fwatt_regs[] = {REG_AFWATT, REG_BFWATT, REG_CFWATT};
+	static const uint16_t fwatthr_hi_regs[] = {REG_AFWATTHR_HI, REG_BFWATTHR_HI, REG_CFWATTHR_HI};
+	static const uint16_t fvarhr_hi_regs[] = {REG_AFVARHR_HI, REG_BFVARHR_HI, REG_CFVARHR_HI};
+
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		status = afe_read_32bit_buff(watt_regs[i], 1,
+					     (uint32_t *)&pData->activePower[i]);
+	}
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		status = afe_read_32bit_buff(watthr_hi_regs[i], 1,
+					     (uint32_t *)&pData->activeEnergyHi[i]);
+	}
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		status = afe_read_32bit_buff(varhr_hi_regs[i], 1,
+					     (uint32_t *)&pData->reactiveEnergyHi[i]);
+	}
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		status = afe_read_32bit_buff(fwatt_regs[i], 1,
+					     (uint32_t *)&pData->fundActivePower[i]);
+	}
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		status = afe_read_32bit_buff(fwatthr_hi_regs[i], 1,
+					     (uint32_t *)&pData->fundActiveEnergyHi[i]);
+	}
+	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+		status = afe_read_32bit_buff(fvarhr_hi_regs[i], 1,
+					     (uint32_t *)&pData->fundReactiveEnergyHi[i]);
+	}
+
+	return status;
+}
+
 int afe_set_ref_channel(uint16_t refChannel)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -607,5 +643,6 @@ int afe_set_ref_channel(uint16_t refChannel)
 	if (status != 0) {
 		status = SYS_STATUS_AFE_ZX_LP_SEL_FAILED;
 	}
+
 	return status;
 }

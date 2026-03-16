@@ -161,6 +161,7 @@ int open_pqlib(PQLIB_EXAMPLE *pExample)
 int config_measurement(PQLIB_EXAMPLE *pExample)
 {
 	int status = 0;
+	uint32_t config = 0;
 
 	ADI_PQLIB_RESULT pqlibStatus = ADI_PQLIB_RESULT_SUCCESS;
 	ADI_PQLIB_CONFIG *pLibConfig = &pqlibExample.config;
@@ -177,6 +178,30 @@ int config_measurement(PQLIB_EXAMPLE *pExample)
 
 	if (status == 0) {
 		status = afe_set_ref_channel(pExampleConfig->refChannel);
+	}
+
+	/* Configure VLEVEL for headroom above nominal voltage */
+	if (status == 0) {
+		config = 2 * (uint32_t)1144084;
+		status = afe_write_32bit_reg(REG_VLEVEL, (uint32_t *)&config);
+	}
+
+	/* Energy accumulation time: 100 half-cycles at 50Hz, 120 at 60Hz = ~1 second */
+	if (status == 0) {
+		config = (pExampleConfig->nominalFrequency == 50) ? 99 : 119;
+		status = afe_write_16bit_reg(REG_EGY_TIME, (uint16_t *)&config);
+	}
+
+	/* Enable energy comparison for all 3 phases */
+	if (status == 0) {
+		config = 0x0007;
+		status = afe_write_16bit_reg(REG_COMPMODE, (uint16_t *)&config);
+	}
+
+	/* Energy/power accumulation: EGY_POW_EN + zero-crossing + accumulation done */
+	if (status == 0) {
+		config = 0x0013;
+		status = afe_write_16bit_reg(REG_EP_CFG, (uint16_t *)&config);
 	}
 
 	if (status == 0) {

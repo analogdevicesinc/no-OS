@@ -53,6 +53,32 @@ float convert_rms_type(ADI_AFE_RMS_TYPE mag, float scale)
 	return rms;
 }
 
+float convert_power_type(int32_t power, float scale)
+{
+	float real_power;
+	real_power = power * scale / ((float)ADI_PQLIB_POWER_MAX_VALUE);
+	real_power = real_power / 2.0f;
+
+	return real_power;
+}
+
+float convert_energy_type(int32_t energy_hi, float scale)
+{
+	return convert_power_type(energy_hi, scale) / ENERGY_ACCUMULATION_FACTOR;
+}
+
+float compute_power_factor(int32_t watthr, int32_t varhr)
+{
+	int64_t w = (int64_t)watthr;
+	int64_t v = (int64_t)varhr;
+	int64_t denom_sq = w * w + v * v;
+
+	if (denom_sq == 0)
+		return 0.0f;
+
+	return (float)w / sqrtf((float)denom_sq);
+}
+
 float convert_fract_type(ADI_PQLIB_FRACT_TYPE fractValue)
 {
 	return (float)fractValue / (float)(1 << ADI_PQLIB_FRACT_BITS);

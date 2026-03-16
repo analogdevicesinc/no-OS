@@ -44,11 +44,24 @@
 #include <stddef.h>
 #include "no_os_circular_buffer.h"
 
+#define POWER_ENERGY_NUM_PHASES 3
 #define PQLIB_MAX_CHANNELS 7
 #define ADI_PQLIB_NUM_WAVEFORM_BLOCKS 4
 #define PQLIB_MAX_HARMONICS 50
 #define PQLIB_MAX_INTER_HARMONICS 50
 #define SIZE_OF_INPUT_RTC 19
+
+/**
+ * @brief Power and energy data read from ADE9430 accumulation registers
+ */
+typedef struct power_energy_data {
+	int32_t activePower[POWER_ENERGY_NUM_PHASES];
+	int32_t activeEnergyHi[POWER_ENERGY_NUM_PHASES];
+	int32_t reactiveEnergyHi[POWER_ENERGY_NUM_PHASES];
+	int32_t fundActivePower[POWER_ENERGY_NUM_PHASES];
+	int32_t fundActiveEnergyHi[POWER_ENERGY_NUM_PHASES];
+	int32_t fundReactiveEnergyHi[POWER_ENERGY_NUM_PHASES];
+} POWER_ENERGY_DATA;
 
 /**
  * @brief PQLIB Example states
@@ -154,6 +167,7 @@ typedef struct {
 	ADI_PQLIB_PHASE_MAP channelMap;
 	PQLIB_STATE state;
 	struct no_os_circular_buffer *no_os_cb_desc;
+	POWER_ENERGY_DATA powerEnergy;
 
 } PQLIB_EXAMPLE; // pqlib example struct
 
