@@ -38,3 +38,4 @@ __pycache__/
 
 local_variables.mk
 *generated*
+CMakeUserPresets.json

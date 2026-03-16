@@ -1,96 +1,21 @@
 {
-        "version": 6,
-        "cmakeMinimumRequired": {
-                "major": 3,
-                "minor": 28,
-                "patch": 0
-        },
+	"version": 7,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 28,
+		"patch": 0
+	},
 
-        "configurePresets": [
-                {
-                        "name": "default",
-                        "description": "Default config",
-                        "generator": "Ninja"
-                },
-                {
-                        "name": "max78000_fthr",
-                        "description": "MAX78000 feather board",
-                        "inherits": "default",
-                        "cacheVariables": {
-                                "BOARD": "max78000_fthr",
-                                "USE_VENDOR_TOOLCHAIN": "OFF",
-                                "PLATFORM": "maxim",
-                                "TARGET": "max78000",
-                                "TARGET_NUM": "78000",
-                                "BOARD_CONFIG_FILE": "max78000_fthr_defconfig"
-                        }
-                },
-                {
-                        "name": "max32650_fthr",
-                        "description": "MAX32650 feather board",
-                        "inherits": "default",
-                        "cacheVariables": {
-                                "BOARD": "max32650_fthr",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
-                                "PLATFORM": "maxim",
-                                "TARGET": "max32650",
-                                "TARGET_NUM": "32650",
-                                "BOARD_CONFIG_FILE": "max32650_fthr_defconfig"
-                        }
-                },
-                {
-                        "name": "apard32690",
-                        "description": "APARD32690 board",
-                        "binaryDir": "${sourceDir}/build",
-                        "inherits": "default",
-                        "cacheVariables": {
-                                "BOARD": "apard32690",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
-                                "PLATFORM": "maxim",
-                                "TARGET": "max32690",
-                                "TARGET_NUM": "32690",
-                                "BOARD_CONFIG_FILE": "apard32690_defconfig"
-                        }
-                },
-                {
-                        "name": "max32655_fthr",
-                        "description": "MAX32655 FTHR board",
-                        "binaryDir": "${sourceDir}/build",
-                        "inherits": "default",
-                        "cacheVariables": {
-                                "BOARD": "max32655_fthr",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
-                                "PLATFORM": "maxim",
-                                "TARGET": "max32655",
-                                "TARGET_NUM": "32655",
-                                "BOARD_CONFIG_FILE": "max32655_fthr_defconfig"
-                        }
-                },
-                {
-                        "name": "stm32f756_nucleo",
-                        "description": "STM32F756 Nucleo board",
-                        "inherits": "default",
-                        "cacheVariables": {
-                                "BOARD": "stm32f756_nucleo",
-                                "USE_VENDOR_TOOLCHAIN": "ON",
-                                "PLATFORM": "stm32",
-                                "TARGET": "stm32f756",
-                                "TARGET_NUM": "stm32f756",
-                                "BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
-                        }
-                },
-                {
-                        "name": "adin1110ebz",
-                        "description": "ADIN1110-EBZ board",
-                        "inherits": "default",
-                        "cacheVariables": {
-                                "BOARD": "adin1110ebz",
-                                "USE_VENDOR_TOOLCHAIN": "OFF",
-                                "PLATFORM": "stm32",
-                                "TARGET": "stm32l4",
-                                "TARGET_NUM": "stm32l4",
-                                "BOARD_CONFIG_FILE": "adin1110ebz_defconfig"
-                        }
-                }
-        ]
+	"include": [
+		"board_configs/maxim/CMakePresets.json",
+		"board_configs/stm32/CMakePresets.json"
+	],
+
+	"configurePresets": [
+		{
+			"name": "default",
+			"description": "Default config",
+			"generator": "Ninja"
+		}
+	]
 }

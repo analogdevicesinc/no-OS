@@ -1,0 +1,37 @@
+{
+	"version": 7,
+	"configurePresets": [
+		{
+			"name": "stm32-base",
+			"hidden": true,
+			"description": "Base config for STM32 boards",
+			"generator": "Ninja"
+		},
+		{
+			"name": "stm32f756_nucleo",
+			"description": "STM32F756 Nucleo board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "stm32f756_nucleo",
+				"USE_VENDOR_TOOLCHAIN": "ON",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32f756",
+				"TARGET_NUM": "stm32f756",
+				"BOARD_CONFIG_FILE": "stm32f756_nucleo_defconfig"
+			}
+		},
+		{
+			"name": "adin1110ebz",
+			"description": "ADIN1110-EBZ board",
+			"inherits": "stm32-base",
+			"cacheVariables": {
+				"BOARD": "adin1110ebz",
+				"USE_VENDOR_TOOLCHAIN": "OFF",
+				"PLATFORM": "stm32",
+				"TARGET": "stm32l4",
+				"TARGET_NUM": "stm32l4",
+				"BOARD_CONFIG_FILE": "adin1110ebz_defconfig"
+			}
+		}
+	]
+}
