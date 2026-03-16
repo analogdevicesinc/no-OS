@@ -74,12 +74,13 @@ static char header[] =
 	"<!DOCTYPE context ["
 	"<!ELEMENT context (device | context-attribute)*>"
 	"<!ELEMENT context-attribute EMPTY>"
-	"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
+	"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute | buffer)*>"
 	"<!ELEMENT channel (scan-element?, attribute*)>"
 	"<!ELEMENT attribute EMPTY>"
 	"<!ELEMENT scan-element EMPTY>"
 	"<!ELEMENT debug-attribute EMPTY>"
 	"<!ELEMENT buffer-attribute EMPTY>"
+	"<!ELEMENT buffer (attribute)*>"
 	"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
 	"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
 	"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
@@ -88,6 +89,7 @@ static char header[] =
 	"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
 	"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
 	"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
+	"<!ATTLIST buffer index CDATA #REQUIRED>"
 	"]>"
 	"<context name=\"xml\" description=\"no-OS/projects/"
 	NO_OS_TOSTRING(NO_OS_PROJECT)" "
@@ -1733,12 +1735,29 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		i += snprintf(buff + i, no_os_max(n - i, 0),
 			      "<debug-attribute name=\""REG_ACCESS_ATTRIBUTE"\" />");
 
-	/* Write buffer attributes */
-	if (device->buffer_attributes)
-		for (j = 0; device->buffer_attributes[j].name; j++)
+	/*
+	 * Write buffer element (required by libiio v1.x to create buffer).
+	 * buffer_attributes, if set, are emitted as <attribute> children of
+	 * <buffer index="0">.  Devices that have buffer_attributes but none of
+	 * the DMA callbacks below do not receive a <buffer> element; no such
+	 * device exists in-tree (all set buffer_attributes = NULL).
+	 */
+	if (device->read_dev || device->write_dev || device->submit ||
+	    device->trigger_handler) {
+		if (device->buffer_attributes) {
 			i += snprintf(buff + i, no_os_max(n - i, 0),
-				      "<buffer-attribute name=\"%s\" />",
-				      device->buffer_attributes[j].name);
+				      "<buffer index=\"0\">");
+			for (j = 0; device->buffer_attributes[j].name; j++)
+				i += snprintf(buff + i, no_os_max(n - i, 0),
+					      "<attribute name=\"%s\" />",
+					      device->buffer_attributes[j].name);
+			i += snprintf(buff + i, no_os_max(n - i, 0),
+				      "</buffer>");
+		} else {
+			i += snprintf(buff + i, no_os_max(n - i, 0),
+				      "<buffer index=\"0\" />");
+		}
+	}
 
 	i += snprintf(buff + i, no_os_max(n - i, 0), "</device>");
 
