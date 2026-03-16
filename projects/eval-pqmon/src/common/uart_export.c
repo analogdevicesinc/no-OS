@@ -176,6 +176,71 @@ int uart_export_send(void)
 	off += n;
 	rem -= n;
 
+	/* Power, energy, and power factor per phase (A, B, C) */
+	{
+		POWER_ENERGY_DATA *pe = &pqlibExample.powerEnergy;
+		float pscale = vscale * iscale;
+
+		/* Active Power: AP_A, AP_B, AP_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.4f",
+				     convert_power_type(pe->activePower[i], pscale));
+			off += n;
+			rem -= n;
+		}
+		/* Active Energy: AE_A, AE_B, AE_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.6f",
+				     convert_energy_type(pe->activeEnergyHi[i], pscale));
+			off += n;
+			rem -= n;
+		}
+		/* Reactive Energy: RE_A, RE_B, RE_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.6f",
+				     convert_energy_type(pe->reactiveEnergyHi[i], pscale));
+			off += n;
+			rem -= n;
+		}
+		/* Power Factor: PF_A, PF_B, PF_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.4f",
+				     compute_power_factor(pe->activeEnergyHi[i],
+							  pe->reactiveEnergyHi[i]));
+			off += n;
+			rem -= n;
+		}
+		/* Fundamental Active Power: FAP_A, FAP_B, FAP_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.4f",
+				     convert_power_type(pe->fundActivePower[i], pscale));
+			off += n;
+			rem -= n;
+		}
+		/* Fundamental Active Energy: FAE_A, FAE_B, FAE_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.6f",
+				     convert_energy_type(pe->fundActiveEnergyHi[i], pscale));
+			off += n;
+			rem -= n;
+		}
+		/* Fundamental Reactive Energy: FRE_A, FRE_B, FRE_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.6f",
+				     convert_energy_type(pe->fundReactiveEnergyHi[i], pscale));
+			off += n;
+			rem -= n;
+		}
+		/* Displacement Power Factor: DPF_A, DPF_B, DPF_C */
+		for (i = 0; i < 3; i++) {
+			n = snprintf(uart_export_buf + off, rem, ",%.4f",
+				     compute_power_factor(pe->fundActiveEnergyHi[i],
+							  pe->fundReactiveEnergyHi[i]));
+			off += n;
+			rem -= n;
+		}
+	}
+
 	/* Line terminator */
 	n = snprintf(uart_export_buf + off, rem, "\r\n");
 	off += n;
