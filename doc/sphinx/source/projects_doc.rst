@@ -52,6 +52,14 @@ INERTIAL MEASUREMENT UNITS
 
    projects/imu/*
 
+NET
+===
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   projects/net/*
+
 METER
 =====
 .. toctree::
