@@ -60,6 +60,14 @@ DIGITAL TO ANALOG CONVERTERS
 
    drivers/dac/*
 
+ECG
+===
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/ecg/*
+
 FILTER
 ======
 .. toctree::
