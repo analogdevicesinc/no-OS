@@ -5,7 +5,10 @@
 			"name": "maxim-base",
 			"hidden": true,
 			"description": "Base config for Maxim boards",
-			"generator": "Ninja"
+			"generator": "Ninja",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
 		},
 		{
 			"name": "max78000_fthr",
