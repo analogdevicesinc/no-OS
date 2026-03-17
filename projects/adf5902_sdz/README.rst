@@ -148,7 +148,7 @@ Connections
 +---------------+----------------------+---------------------+-----------+------------------------------------------------------+
 | LE            | Load Enable          | Signal control for  | 3.3V ± 5% | Manages internal register communication; set in      |
 |               |                      | device registers    |           | ``adf5902_init_param`` with                          |
-|               |                      |                     |           | ``le_sel = ADF5902_LE_FROM_PIN`                      |
+|               |                      |                     |           | ``le_sel = ADF5902_LE_FROM_PIN``                     |
 +---------------+----------------------+---------------------+-----------+------------------------------------------------------+
 
 Build Command
