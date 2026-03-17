@@ -505,6 +505,42 @@ struct ad9361_rf_phy *ad9361_phy;
 struct ad9361_rf_phy *ad9361_phy_b;
 #endif
 
+#ifdef IIO_SUPPORT
+/**
+ * @brief Get RX sampling frequency callback for iio_axi_adc.
+ * @param dev - The AXI ADC device (unused, uses global ad9361_phy).
+ * @param chan - Channel number (unused, AD9361 has single RX sample rate).
+ * @param sampling_freq_hz - Output sampling frequency in Hz.
+ * @return 0.
+ */
+static int ad9361_iio_axi_adc_get_sampling_freq(struct axi_adc *dev,
+		uint32_t chan,
+		uint64_t *sampling_freq_hz)
+{
+	uint32_t freq;
+	struct ad9361_rf_phy *phy;
+	int ret;
+
+	if (!dev || !sampling_freq_hz)
+		return -EINVAL;
+
+#ifdef FMCOMMS5
+	if (dev == ad9361_phy_b->rx_adc)
+		phy = ad9361_phy_b;
+	else
+#endif
+		phy = ad9361_phy;
+
+	ret = ad9361_get_rx_sampling_freq(phy, &freq);
+
+	if (ret < 0)
+		return ret;
+
+	*sampling_freq_hz = freq;
+	return 0;
+}
+
+#endif /* IIO_SUPPORT */
 
 /***************************************************************************//**
  * @brief main
@@ -922,6 +958,7 @@ int main(void)
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9361_phy->rx_adc,
 		.rx_dmac = rx_dmac,
+		.get_sampling_frequency = ad9361_iio_axi_adc_get_sampling_freq,
 #ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
@@ -941,6 +978,7 @@ int main(void)
 #ifdef FMCOMMS5
 	iio_axi_adc_b_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9361_phy_b->rx_adc,
+		.get_sampling_frequency = ad9361_iio_axi_adc_get_sampling_freq,
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_b_desc, &iio_axi_adc_b_init_par);
