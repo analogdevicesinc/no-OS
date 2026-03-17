@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "@PLATFORM@-@TARGET@",
+            "compileCommands": "${workspaceFolder}/@CMAKE_BUILD_DIR@/compile_commands.json",
+            "compilerPath": "@CMAKE_C_COMPILER@",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "@INTELLISENSE_MODE@",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,6 @@
+{
+	"cortex-debug.gdbPath": "gdb-multiarch",
+	"cortex-debug.openocdPath": "@OPENOCD_PATH@",
+	"cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+	"C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+}
