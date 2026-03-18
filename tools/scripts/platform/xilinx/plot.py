@@ -26,11 +26,16 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import matplotlib.pyplot as plt
+import matplotlib
 import csv
 import os
-import pandas as pd
 import sys
+
+# Use non-interactive backend when no display is available (WSL, SSH, headless)
+if not os.environ.get('DISPLAY') and sys.platform != 'win32':
+    matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 
 def main():
     if len(sys.argv) != 2:
@@ -41,29 +46,29 @@ def main():
         num_channels = int(sys.argv[1])
     except ValueError:
         print("Error: Invalid number format")
+        return
 
-    fig, axs = plt.subplots(num_channels, 1, sharex=True, sharey=True)
-    for ch in range(0, num_channels):
+    fig, axs = plt.subplots(num_channels, 1, sharex=True, sharey=True,
+                            figsize=(14, 2 * num_channels + 2))
+    for ch in range(num_channels):
         y = []
-        csvpath = os.getcwd() + "/" + "capture_ch{}.csv".format(ch+1)
-        with open(csvpath, 'r') as file:
-          csvreader = csv.reader(file)
-          for row in csvreader:
-            res = [eval(i) for i in row]
-            if (res[0] > 32768):
-              res[0] = res[0] - 65535
-            y.append(res[0])
-
-        results = pd.read_csv(csvpath)
-
-        x = list(range(len(results)+1))
+        csvpath = os.path.join(os.getcwd(), "capture_ch{}.csv".format(ch + 1))
+        with open(csvpath, 'r') as f:
+            for row in csv.reader(f):
+                v = int(row[0])
+                y.append(v - 65536 if v >= 32768 else v)
 
         axsch = axs if num_channels == 1 else axs[ch]
-        axsch.set_ylabel("rx{}{}".format(ch // 2 + 1, 'i' if ch % 2 == 0 else 'q' ))
-        axsch.plot(x, y)
+        axsch.set_ylabel("rx{}{}".format(ch // 2 + 1, 'i' if ch % 2 == 0 else 'q'))
+        axsch.plot(y)
+        axsch.grid(True)
 
-    plt.show()
+    plt.tight_layout()
+    outfile = os.path.join(os.getcwd(), 'capture.png')
+    plt.savefig(outfile, dpi=100)
+    print("Saved {}".format(outfile))
+    if matplotlib.get_backend().lower() != 'agg':
+        plt.show()
 
 if __name__ == "__main__":
     main()
-
