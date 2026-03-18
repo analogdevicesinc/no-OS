@@ -38,12 +38,13 @@ if not os.environ.get('DISPLAY') and sys.platform != 'win32':
 import matplotlib.pyplot as plt
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python plot.py <num_channels>")
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print("Usage: python plot.py <num_channels> [num_samples]")
         return
 
     try:
         num_channels = int(sys.argv[1])
+        num_samples = int(sys.argv[2]) if len(sys.argv) == 3 else None
     except ValueError:
         print("Error: Invalid number format")
         return
@@ -58,11 +59,16 @@ def main():
                 v = int(row[0])
                 y.append(v - 65536 if v >= 32768 else v)
 
+        if num_samples is not None:
+            y = y[:num_samples]
+
         axsch = axs if num_channels == 1 else axs[ch]
         axsch.set_ylabel("rx{}{}".format(ch // 2 + 1, 'i' if ch % 2 == 0 else 'q'))
         axsch.plot(y)
         axsch.grid(True)
 
+    title = "First {} samples".format(num_samples) if num_samples is not None else "All samples"
+    plt.suptitle(title)
     plt.tight_layout()
     outfile = os.path.join(os.getcwd(), 'capture.png')
     plt.savefig(outfile, dpi=100)
@@ -72,3 +78,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
