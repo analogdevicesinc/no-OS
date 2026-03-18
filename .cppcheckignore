@@ -22,6 +22,9 @@
 *:drivers/rf-transceiver/koror/common/*
 *:drivers/rf-transceiver/koror/devices/*
 *:drivers/rf-transceiver/koror/platforms/*
+*:drivers/rf-transceiver/palma/common/*
+*:drivers/rf-transceiver/palma/devices/*
+*:drivers/rf-transceiver/palma/platforms/*
 *:drivers/adc/ad9083/ad9083_api
 *:libraries/fatfs/*
 *:libraries/mbedtls/*
