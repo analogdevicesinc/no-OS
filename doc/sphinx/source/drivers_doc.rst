@@ -107,6 +107,14 @@ LED
 
    drivers/led/*
 
+MCS
+===
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/mcs/*
+
 METER
 =====
 .. toctree::
