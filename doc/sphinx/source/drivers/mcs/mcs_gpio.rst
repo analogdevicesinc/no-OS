@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/mcs/mcs_gpio/README.rst
