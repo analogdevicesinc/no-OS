@@ -108,7 +108,7 @@ Maxim Platform
 
 **Used hardware**
 
-* `ADGM3121 <https://www.analog.com/en/products/adgm3121.html>`_
+* `ADGM3121 <https://www.analog.com/en/products/adgm3121.html>`__
 * `MAX32655 <https://www.analog.com/en/products/max32655.html>`_
 
 **Connections**:
