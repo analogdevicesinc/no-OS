@@ -170,6 +170,7 @@ int main()
 	cn0561_init_param.gpio_mode = NULL;
 	cn0561_init_param.gpio_resetn = NULL;
 #endif
+	cn0561_init_param.gpio_cs_sync = NULL;
 	cn0561_init_param.mode_master_nslave = false;
 	cn0561_init_param.dclkmode_free_ngated = false;
 	cn0561_init_param.dclkio_out_nin = false;
