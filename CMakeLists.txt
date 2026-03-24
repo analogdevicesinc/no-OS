@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.27)
 
-# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Enable colored output globally
@@ -93,6 +92,9 @@ if(${NATIVE_BUILD})
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
   set(NO_OS_NATIVE_BUILD_MODE "--native")
 else()
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build PARENT_SCOPE)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib PARENT_SCOPE)
@@ -135,6 +137,7 @@ endif()
 
 if(NOT ${NATIVE_BUILD})
   set(VENV_PYTHON_EXE ${VENV_PYTHON_EXE} PARENT_SCOPE)
+  # Variable already set in current scope above; PARENT_SCOPE propagates to including project
 endif()
 
 add_library(no-os STATIC)

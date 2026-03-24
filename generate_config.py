@@ -16,7 +16,6 @@ parser.add_argument("--native", action='store_true', help="Is No-OS the top dire
 parser.add_argument("--verbose", type=bool, help="Enable verbose output", default=False)
 
 args = parser.parse_args(sys.argv[1:])
-print(args.update)
 
 src_dir = Path(args.root_dir)
 build_dir = Path(args.build_dir)
@@ -30,7 +29,7 @@ if not os.path.exists(main_config):
 kconf.load_config(main_config)
 
 if args.update:
-        if args.defconfig != None:
+        if args.defconfig is not None:
                 for defconfig in args.defconfig:
                         kconf.load_config(src_dir.joinpath(defconfig), replace=False)
         kconf.write_config(build_dir.joinpath(".config"))
@@ -47,9 +46,9 @@ try:
                                 value = sym.str_value
                         elif sym.orig_type is kconfiglib.INT:
                                 value = sym.str_value
-                        elif sym.tri_value == 2:
+                        elif sym.tri_value == 2:  # y
                                 value = "ON"
-                        elif sym.tri_value == 0:
+                        else:  # n (0) or m (1)
                                 value = "OFF"
 
                         cmake_file.write(f"set(CONFIG_{sym.name} {value})\n")
@@ -59,7 +58,8 @@ try:
                 print("Generated config.cmake")
 
 except Exception as e:
-        print(e)
+        print(f"Error generating config.cmake: {e}", file=sys.stderr)
+        sys.exit(1)
 
 # Generate C header file with CONFIG_ defines using kconfiglib's built-in function
 try:
@@ -69,11 +69,12 @@ try:
         print(f"Generated no_os_config.h: {result}")
 
 except Exception as e:
-        print(f"Error generating no_os_config.h: {e}")
+        print(f"Error generating no_os_config.h: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
-if True:
+if args.verbose:
         print("Config files used:")
-        if args.defconfig != None:
+        if args.defconfig is not None:
                 for defconfig in args.defconfig:
-                        print("{}".format(defconfig))
+                        print(f"  {defconfig}")
