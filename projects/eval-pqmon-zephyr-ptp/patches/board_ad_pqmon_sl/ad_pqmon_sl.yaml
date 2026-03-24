@@ -1,0 +1,15 @@
+identifier: ad_pqmon_sl
+name: ad_pqmon_sl
+vendor: adi
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+supported:
+  - gpio
+  - serial
+  - spi
+  - i2c
+ram: 32
+flash: 3072

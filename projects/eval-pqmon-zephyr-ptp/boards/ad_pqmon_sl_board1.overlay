@@ -1,0 +1,202 @@
+/*
+ * Device tree overlay for AD-PQMON-SL - BOARD 1
+ * ADIN1110 T1L (SPI2) + ADE9430 AFE (SPI1) + MAX31343 RTC (I2C1)
+ * Configured as 192.0.2.1/24 for direct T1L connection
+ */
+
+&spi2 {
+	status = "okay";
+	pinctrl-0 = <&spi2_miso_p2_3 &spi2_mosi_p2_4 &spi2_sck_p2_2 &spi2_ss0_p2_5>;
+	pinctrl-names = "default";
+	cs-gpios = <&gpio2 5 257>;  /* P2.5 - ACTIVE_LOW(1) | VDDIOH(256) */
+
+	/* ADIN1110 10BASE-T1L MAC-PHY - BOARD 1 */
+	adin1110: adin1110@0 {
+		compatible = "adi,adin1110";
+		reg = <0>;
+		spi-max-frequency = <15000000>;
+		int-gpios = <&gpio2 6 273>;  /* P2.6 - ACTIVE_LOW(1) | PULL_UP(16) | VDDIOH(256) */
+		reset-gpios = <&gpio2 1 257>;  /* P2.1 - ACTIVE_LOW(1) | VDDIOH(256) */
+		status = "okay";
+
+		/* Single port configuration - BOARD 1 MAC */
+		port1 {
+			local-mac-address = [00 E0 22 FE DA 01];
+		};
+
+		/* MDIO for integrated PHY */
+		mdio {
+			compatible = "adi,adin2111-mdio";
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			ethernet-phy@1 {
+				reg = <0x1>;
+				compatible = "adi,adin2111-phy";
+				status = "okay";
+			};
+		};
+
+		/* PTP Clock for hardware timestamping */
+		ptp_clock {
+			compatible = "adi,adin1110-ptp-clock";
+			status = "okay";
+		};
+	};
+};
+
+/* Override SPI1 pinctrl to set VDDIOH (3.3V) for ADE9430 I/O levels.
+ * Without this, pins default to VDDIO (1.8V) and ADE9430 won't respond. */
+&pinctrl {
+	spi1_miso_p1_28: spi1_miso_p1_28 {
+		pinmux = <MAX32_PINMUX(1, 28, AF1)>;
+		power-source = <MAX32_VSEL_VDDIOH>;
+	};
+	spi1_mosi_p1_29: spi1_mosi_p1_29 {
+		pinmux = <MAX32_PINMUX(1, 29, AF1)>;
+		power-source = <MAX32_VSEL_VDDIOH>;
+	};
+	spi1_sck_p1_26: spi1_sck_p1_26 {
+		pinmux = <MAX32_PINMUX(1, 26, AF1)>;
+		power-source = <MAX32_VSEL_VDDIOH>;
+	};
+	spi1_ss0_p1_23: spi1_ss0_p1_23 {
+		pinmux = <MAX32_PINMUX(1, 23, AF1)>;
+		power-source = <MAX32_VSEL_VDDIOH>;
+	};
+	uart2_rx_p1_9_vddioh: uart2_rx_p1_9_vddioh {
+		pinmux = <MAX32_PINMUX(1, 9, AF1)>;
+		power-source = <MAX32_VSEL_VDDIOH>;
+	};
+	uart2_tx_p1_10_vddioh: uart2_tx_p1_10_vddioh {
+		pinmux = <MAX32_PINMUX(1, 10, AF1)>;
+		power-source = <MAX32_VSEL_VDDIOH>;
+	};
+};
+
+/* UART2 for CSV data export (P1.9=RX, P1.10=TX, 460800 baud) */
+&uart2 {
+	status = "okay";
+	current-speed = <460800>;
+	pinctrl-0 = <&uart2_rx_p1_9_vddioh &uart2_tx_p1_10_vddioh>;
+	pinctrl-names = "default";
+};
+
+/* SPI1 for ADE9430 Power Quality AFE
+ * use hardware SS (SPI peripheral drives P1.23 via AF1).*/
+&spi1 {
+	status = "okay";
+	pinctrl-0 = <&spi1_miso_p1_28 &spi1_mosi_p1_29 &spi1_sck_p1_26 &spi1_ss0_p1_23>;
+	pinctrl-names = "default";
+
+	ade9430: ade9430@0 {
+		compatible = "adi,ade9430";
+		reg = <0>;
+		spi-max-frequency = <6000000>;
+		reset-gpios = <&gpio1 27 273>;  /* P1.27 - ACTIVE_LOW(1) | PULL_UP(16) | VDDIOH(256) */
+		status = "okay";
+	};
+};
+
+/* Configure additional ADIN1110 control pins */
+/ {
+	/* Add additional RAM - use 256KB sram4 region */
+	chosen {
+		zephyr,sram = &sram4;
+	};
+
+	adin1110_cfg {
+		compatible = "gpio-leds";
+
+		adin_swpd: adin_swpd {
+			gpios = <&gpio2 25 272>;  /* P2.25 - ACTIVE_HIGH(0) | PULL_UP(16) | VDDIOH(256) */
+			label = "ADIN1110_SWPD";
+		};
+
+		adin_tx2p4: adin_tx2p4 {
+			gpios = <&gpio2 10 289>;  /* P2.10 - ACTIVE_LOW(1) | PULL_DOWN(32) | VDDIOH(256) */
+			label = "ADIN1110_TX2P4";
+		};
+
+		adin_mssel: adin_mssel {
+			gpios = <&gpio2 9 256>;  /* P2.9 - ACTIVE_HIGH(0) | VDDIOH(256) */
+			label = "ADIN1110_MSSEL";
+		};
+
+		adin_cfg0: adin_cfg0 {
+			gpios = <&gpio2 3 256>;  /* P2.3 - ACTIVE_HIGH(0) | VDDIOH(256) */
+			label = "ADIN1110_CFG0";
+		};
+
+		adin_cfg1: adin_cfg1 {
+			gpios = <&gpio2 0 272>;  /* P2.0 - ACTIVE_HIGH(0) | PULL_UP(16) | VDDIOH(256) */
+			label = "ADIN1110_CFG1";
+		};
+
+		adin_ts_capt: adin_ts_capt {
+			gpios = <&gpio2 30 256>;  /* P2.30 - ACTIVE_HIGH(0) | VDDIOH(256) */
+			label = "ADIN1110_TS_CAPT";
+		};
+	};
+};
+
+/* I2C1 for MAX31343 RTC */
+&i2c1 {
+	status = "okay";
+	pinctrl-0 = <&i2c1_sda_p2_17 &i2c1_scl_p2_18>;
+	pinctrl-names = "default";
+	clock-frequency = <200000>;
+
+	max31343: max31343@68 {
+		compatible = "adi,max31343";
+		reg = <0x68>;
+		status = "okay";
+	};
+};
+
+/* Extend SRAM region: sram4 (256KB) + sram5 (256KB) are contiguous
+ * at 0x20040000..0x200BFFFF = 512KB total */
+&sram4 {
+	reg = <0x20040000 DT_SIZE_K(512)>;
+	status = "okay";
+};
+
+/* Flash partition for NVS calibration storage.
+ * MAX32650 flash: 3MB at 0x10000000, erase block = 16KB.
+ * Use last 32KB (2 sectors) for NVS. */
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		storage_partition: partition@2f8000 {
+			label = "storage";
+			reg = <0x2f8000 0x8000>;
+		};
+	};
+};
+
+/* USB HS peripheral for CDC/ACM (IIO transport) */
+/ {
+	soc {
+		zephyr_udc0: usbhs@400b1000 {
+			compatible = "adi,max32-usbhs";
+			reg = <0x400b1000 0x1000>;
+			clocks = <&gcr ADI_MAX32_CLOCK_BUS0 3>;
+			interrupts = <2 0>;  /* USB_IRQn = 2 (NOT 18, which is SPI2!) */
+			num-bidir-endpoints = <1>;
+			num-in-endpoints = <6>;
+			num-out-endpoints = <6>;
+			maximum-speed = "high-speed";
+			status = "okay";
+
+			cdc_acm_uart0: cdc_acm_uart0 {
+				compatible = "zephyr,cdc-acm-uart";
+				tx-fifo-size = <16384>;
+				rx-fifo-size = <2048>;
+			};
+		};
+	};
+};

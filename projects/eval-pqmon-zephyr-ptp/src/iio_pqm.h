@@ -1,0 +1,170 @@
+/*******************************************************************************
+ *   @file   iio_pqm.h
+ *   @brief  IIO PQM interfacing header file
+ *   @author Radu Etz (radu.etz@analog.com)
+ ********************************************************************************
+ * Copyright (c) 2026 Analog Devices, Inc.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************/
+
+#ifndef __IIO_PQM_H__
+#define __IIO_PQM_H__
+
+#include "iio_types.h"
+#include "pqlib_example.h"
+#include "pqlib_convert.h"
+#include "afe_calibration.h"
+#include "status.h"
+#include <inttypes.h>
+#include <stdlib.h>
+
+/* Device specific attributes */
+#define NEG_UNB_VOLTAGE_RATIO           0
+#define ZERO_UNB_VOLTAGE_RATIO          1
+#define SNEG_VOLTAGE                    2
+#define SPOS_VOLTAGE                    3
+#define SZRO_VOLTAGE                    4
+#define NEG_UNB_CURRENT_RATIO           5
+#define ZERO_UNB_CURRENT_RATIO          6
+#define SNEG_CURRENT                    7
+#define SPOS_CURRENT                    8
+#define SZRO_CURRENT                    9
+#define NOMINAL_VOLTAGE                 10
+#define VOLTAGE_SCALE                   11
+#define CURRENT_SCALE                   12
+#define I_CONSEL_ENABLE                 13
+#define DIP_THRESHOLD                   14
+#define DIP_HYSTERESIS                  15
+#define SWELL_THRESHOLD                 16
+#define SWELL_HYSTERESIS                17
+#define INTERP_THRESHOLD                18
+#define INTERP_HYSTERESIS               19
+#define RVC_THRESHOLD                   20
+#define RVC_HYSTERESIS                  21
+#define MSV_CARRIER_FREQUENCY           22
+#define MSV_RECORDING_LENGTH            23
+#define MSV_THRESHOLD                   24
+#define SAMPLING_FREQUENCY              25
+#define V_CONSEL                        26
+#define V_CONSEL_AVAILABLE              27
+#define FLICKER_MODEL                   28
+#define FLICKER_MODEL_AVAILABLE         29
+#define NOMINAL_FREQUENCY               30
+#define NOMINAL_FREQUENCY_AVAILABLE     31
+#define PROCESS_DATA                    32
+#define FW_VERSION_NR                   33
+#define SNEG_VOLTAGE_ANGLE              34
+#define SPOS_VOLTAGE_ANGLE              35
+#define SZRO_VOLTAGE_ANGLE              36
+#define SNEG_CURRENT_ANGLE              37
+#define SPOS_CURRENT_ANGLE              38
+#define SZRO_CURRENT_ANGLE              39
+
+/* Calibration attributes */
+#define CAL_TYPE                        40
+#define CAL_TYPE_AVAILABLE              41
+#define CAL_STATUS                      42
+#define CAL_PHASE                       43
+#define CAL_NOMINAL_CURRENT             44
+#define CAL_NOMINAL_VOLTAGE             45
+#define CAL_OFFSET_CURRENT              46
+#define CAL_OFFSET_VOLTAGE              47
+#define CAL_PHASE_AVAILABLE             48
+#define CAL_START                       49
+/* Gain calibration errors */
+#define CAL_GAIN_I_ERROR_BEFORE         50
+#define CAL_GAIN_V_ERROR_BEFORE         51
+#define CAL_GAIN_I_ERROR_AFTER          52
+#define CAL_GAIN_V_ERROR_AFTER          53
+/* Offset calibration errors */
+#define CAL_OFFSET_I_ERROR_BEFORE       54
+#define CAL_OFFSET_V_ERROR_BEFORE       55
+#define CAL_OFFSET_I_ERROR_AFTER        56
+#define CAL_OFFSET_V_ERROR_AFTER        57
+
+/* Flash storage attributes */
+#define FLASH_CAL_SAVE                  58
+#define FLASH_CAL_LOAD                  59
+#define FLASH_CAL_ERASE                 60
+#define FLASH_STAT                      61
+#define FLASH_CAL_DATA                  62
+
+/* PTP status attributes (read-only) */
+#define PTP_STATE                       63
+#define PTP_OFFSET_NS                   64
+#define PTP_MEAN_DELAY_NS               65
+#define PTP_CONVERGED                   66
+
+/* Measurement PTP timestamp attributes (read-only) */
+#define MEASUREMENT_PTP_TIMESTAMP       67  /* 1-cycle: "sec.nsec" */
+#define MEASUREMENT_1012_PTP_TIMESTAMP  68  /* 10/12-cycle: "sec.nsec" */
+#define EVENT_TIME_BASE                 69  /* documents event time reference */
+#define CLEAR_EVENTS                    70  /* write 1 to clear accumulated events */
+
+/* Channel specific attributes */
+#define CHAN_RMS                        0
+#define CHAN_ANGLE                      1
+#define CHAN_HARMONICS                  2
+#define CHAN_INTER_HARMONICS            3
+#define CHAN_SCALE                      4
+#define CHAN_OFFSET                     5
+#define CHAN_THD                        6
+#define CHAN_RAW                        7
+#define CHAN_VOLTAGE_UNDER_DEV          8
+#define CHAN_VOLTAGE_OVER_DEV           9
+#define CHAN_VOLTAGE_PINST              10
+#define CHAN_VOLTAGE_PST                11
+#define CHAN_VOLTAGE_PLT                12
+#define CHAN_EVENT_COUNT                13
+#define CHAN_EVENT_START_TIME           14
+#define CHAN_EVENT_END_TIME             15
+#define CHAN_EVENT_DURATION_IN_CYCL     16
+#define CHAN_EVENT_MIN_MAG              17
+#define CHAN_EVENT_MAX_MAG              18
+#define CHAN_EVENT_DELTA_U_MAX          19
+#define CHAN_EVENT_DELTA_U_SS           20
+#define CHAN_VOLTAGE_MAGNITUDE1012      21
+#define CHAN_VOLTAGE_MAX_MAGNITUDE      22
+#define CHAN_ACTIVE_POWER               23
+#define CHAN_REACTIVE_ENERGY            24
+#define CHAN_ACTIVE_ENERGY              25
+#define CHAN_POWER_FACTOR               26
+#define CHAN_FUND_ACTIVE_POWER          27
+#define CHAN_FUND_REACTIVE_ENERGY       28
+#define CHAN_FUND_ACTIVE_ENERGY         29
+#define CHAN_DISPLACEMENT_PF            30
+
+#define RESAMPLED_WAVEFORM_FULL_SCALE   18196
+
+extern struct iio_device pqm_iio_descriptor;
+extern volatile bool configChanged;
+extern volatile bool processData;
+
+/* PQM device instance (allocated by iio_server) */
+extern struct pqm_desc *pqm_desc_inst;
+
+#endif /* __IIO_PQM_H__ */

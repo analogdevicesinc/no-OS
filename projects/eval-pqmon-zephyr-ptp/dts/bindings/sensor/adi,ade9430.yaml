@@ -1,0 +1,11 @@
+description: Analog Devices ADE9430 Power Quality AFE
+
+compatible: "adi,ade9430"
+
+include: spi-device.yaml
+
+properties:
+  reset-gpios:
+    type: phandle-array
+    required: true
+    description: GPIO connected to ADE9430 reset pin (active low)

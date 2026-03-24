@@ -1,0 +1,17 @@
+mainmenu "PQMON IIO Application"
+
+source "Kconfig.zephyr"
+
+choice IIO_TRANSPORT
+	prompt "IIO transport"
+	default IIO_TRANSPORT_USB
+
+config IIO_TRANSPORT_USB
+	bool "USB CDC/ACM"
+	depends on USB_DEVICE_STACK_NEXT && USBD_CDC_ACM_CLASS
+
+config IIO_TRANSPORT_TCP
+	bool "TCP over T1L (port 30431)"
+	depends on NET_TCP && NET_SOCKETS
+
+endchoice

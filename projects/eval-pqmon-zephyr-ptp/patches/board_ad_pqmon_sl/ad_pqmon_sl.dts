@@ -1,0 +1,88 @@
+/*
+ * Copyright (c) 2025 Analog Devices, Inc.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+
+#include <adi/max32/max32650.dtsi>
+#include <adi/max32/max32650-pinctrl.dtsi>
+#include <zephyr/dt-bindings/gpio/adi-max32-gpio.h>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+	model = "Analog Devices AD-PQMON-SL";
+	compatible = "adi,ad_pqmon_sl";
+
+	chosen {
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led1: led_1 {
+			gpios = <&gpio2 23 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP | MAX32_GPIO_VSEL_VDDIOH)>;
+			label = "LED0 P2.23";
+		};
+
+		led2: led_2 {
+			gpios = <&gpio3 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP | MAX32_GPIO_VSEL_VDDIOH)>;
+			label = "LED1 P3.0";
+		};
+	};
+
+	/* These aliases are provided for compatibility with samples */
+	aliases {
+		led0 = &led1;
+		led1 = &led2;
+	};
+};
+
+/* UART0 for console (based on no-os parameters.h) */
+&uart0 {
+	pinctrl-0 = <&uart0_tx_p2_12 &uart0_rx_p2_11>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	data-bits = <8>;
+	parity = "none";
+	status = "okay";
+};
+
+/* SPI1 for AFE (Power Quality Monitor IC) - to be configured later */
+/* &spi1 {
+	pinctrl-0 = <&spi1_miso_p1_28 &spi1_mosi_p1_29 &spi1_sck_p1_26 &spi1_ss0_p1_23>;
+	pinctrl-names = "default";
+	status = "okay";
+	cs-gpios = <&gpio1 23 GPIO_ACTIVE_LOW>;
+}; */
+
+/* SPI2 for Ethernet/T1L - to be configured later */
+/* &spi2 {
+	status = "disabled";
+}; */
+
+&clk_ipo {
+	status = "okay";
+};
+
+/* Enable all GPIO banks for flexibility */
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+&gpio2 {
+	status = "okay";
+};
+
+&gpio3 {
+	status = "okay";
+};

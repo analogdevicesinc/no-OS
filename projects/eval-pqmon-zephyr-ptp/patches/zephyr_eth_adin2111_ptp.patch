@@ -1,0 +1,386 @@
+diff --git a/drivers/ethernet/eth_adin2111.c b/drivers/ethernet/eth_adin2111.c
+index f778204c089..79bf310831e 100644
+--- a/drivers/ethernet/eth_adin2111.c
++++ b/drivers/ethernet/eth_adin2111.c
+@@ -23,6 +23,20 @@ LOG_MODULE_REGISTER(eth_adin2111, CONFIG_ETHERNET_LOG_LEVEL);
+ #include "phy/phy_adin2111_priv.h"
+ #include "eth_adin2111_priv.h"
+ 
++/* ADIN1110 PTP timestamp configuration bits */
++#define ADIN1110_CONFIG0_FTSE		BIT(7)   /* Frame Timestamp Enable */
++#define ADIN1110_CONFIG0_FTSS		BIT(6)   /* Frame Timestamp Size (1=8B) */
++
++/* RX Timestamp header size when FTSE && FTSS are enabled */
++#define ADIN1110_RX_TIMESTAMP_SIZE	8
++
++/* Global storage for last RX timestamp - accessible by application */
++uint64_t g_last_rx_timestamp_ns = 0;
++bool g_rx_timestamp_valid = false;
++
++/* PTP clock driver time update - called on every RX/TX timestamp capture */
++extern void adin1110_ptp_update_hw_time(uint32_t sec, uint32_t nsec);
++
+ #define DT_DRV_COMPAT adi_adin2111
+ 
+ /* SPI Communication check retry delay */
+@@ -540,6 +554,111 @@ int eth_adin2111_reg_write(const struct device *dev, const uint16_t reg,
+ 	return rval;
+ }
+ 
++/**
++ * @brief Check if RX timestamps are enabled in ADIN1110 configuration
++ *
++ * @param dev ADIN2111 device
++ * @return true if RX timestamps are enabled (FTSE && FTSS both set)
++ * @return false if RX timestamps are disabled or read failed
++ */
++static bool adin2111_rx_timestamps_enabled(const struct device *dev)
++{
++	uint32_t config0_val;
++	int ret;
++
++	ret = eth_adin2111_reg_read(dev, ADIN2111_CONFIG0, &config0_val);
++	if (ret < 0) {
++		LOG_ERR("Failed to read CONFIG0 for timestamp check: %d", ret);
++		return false;
++	}
++
++	bool ftse_enabled = !!(config0_val & ADIN1110_CONFIG0_FTSE);
++	bool ftss_enabled = !!(config0_val & ADIN1110_CONFIG0_FTSS);
++
++	LOG_DBG("CONFIG0=0x%08X, FTSE=%d, FTSS=%d", config0_val, ftse_enabled, ftss_enabled);
++
++	return ftse_enabled;  /* Allow both FTSS=0 (32-bit) and FTSS=1 (64-bit) modes */
++}
++
++/**
++ * @brief Parse 8-byte RX timestamp from ADIN1110 frame header
++ *
++ * @param frame_data Pointer to frame data (timestamp at beginning)
++ * @param timestamp_ns Pointer to store extracted timestamp in nanoseconds
++ * @return 0 on success, negative error code on failure
++ */
++static int adin2111_parse_rx_timestamp(const uint8_t *frame_data, uint64_t *timestamp_ns)
++{
++	uint64_t ts_raw;
++	uint32_t seconds, nanoseconds;
++
++	if (!frame_data || !timestamp_ns) {
++		return -EINVAL;
++	}
++
++	/* BREAKTHROUGH: CORRECT SYNTONIZED COUNTER FORMAT DISCOVERED!
++	 * Bytes 0-3: Seconds (big-endian)
++	 * Bytes 4-7: Nanoseconds (big-endian)
++	 */
++
++	/* Extract seconds from bytes 0-3 (big-endian) */
++	seconds = ((uint32_t)frame_data[0] << 24) |
++	         ((uint32_t)frame_data[1] << 16) |
++	         ((uint32_t)frame_data[2] << 8)  |
++	         ((uint32_t)frame_data[3]);
++
++	/* Extract nanoseconds from bytes 4-7 (big-endian)
++	 * IEEE 1588 PTP format: bits 31:30 reserved, bits 29:0 = nanoseconds
++	 */
++	nanoseconds = (((uint32_t)frame_data[4] << 24) |
++		       ((uint32_t)frame_data[5] << 16) |
++		       ((uint32_t)frame_data[6] << 8)  |
++		       ((uint32_t)frame_data[7])) & 0x3FFFFFFF;
++
++	*timestamp_ns = (uint64_t)seconds * NSEC_PER_SEC + nanoseconds;
++
++	return 0;
++}
++
++/**
++ * @brief Parse 4-byte RX timestamp from ADIN1110 frame header (32-bit free running counter)
++ *
++ * Format: 4 bytes = 32-bit tick count from 120MHz free running counter
++ * Conversion: ticks * (1000000000 / 120000000) = nanoseconds
++ */
++static int adin2111_parse_rx_timestamp_32bit(const uint8_t *frame_data, uint64_t *timestamp_ns)
++{
++	if (!frame_data || !timestamp_ns) {
++		return -EINVAL;
++	}
++
++	/* Extract 4-byte timestamp (32-bit free running counter, little-endian) */
++	uint32_t ticks = ((uint32_t)frame_data[3] << 24) |
++	                 ((uint32_t)frame_data[2] << 16) |
++	                 ((uint32_t)frame_data[1] << 8)  |
++	                 ((uint32_t)frame_data[0]);
++
++	/* Convert 120MHz ticks to nanoseconds: ticks * (1000000000 / 120000000) */
++	*timestamp_ns = (ticks * 1000000000ULL) / 120000000ULL;
++
++	return 0;
++}
++
++/**
++ * @brief Get the last captured RX timestamp
++ * @param timestamp_ns Pointer to store timestamp in nanoseconds
++ * @return 0 if valid timestamp available, -ENODATA if no timestamp
++ */
++int adin2111_get_last_rx_timestamp(uint64_t *timestamp_ns)
++{
++	if (!g_rx_timestamp_valid || !timestamp_ns) {
++		return -ENODATA;
++	}
++	*timestamp_ns = g_last_rx_timestamp_ns;
++	g_rx_timestamp_valid = false;  /* Clear after read */
++	return 0;
++}
++
+ static int adin2111_read_fifo(const struct device *dev, const uint16_t port_idx)
+ {
+ 	const struct adin2111_config *cfg = dev->config;
+@@ -549,6 +668,9 @@ static int adin2111_read_fifo(const struct device *dev, const uint16_t port_idx)
+ 	uint16_t fsize_reg = ((port_idx == 0U) ? ADIN2111_P1_RX_FSIZE : ADIN2111_P2_RX_FSIZE);
+ 	uint16_t rx_reg = ((port_idx == 0U) ? ADIN2111_P1_RX : ADIN2111_P2_RX);
+ 	uint32_t fsize;
++	uint64_t rx_timestamp_ns = 0;
++	uint32_t timestamp_offset = 0;
++	bool timestamps_enabled;
+ 	uint32_t fsize_real;
+ 	uint32_t padding_len;
+ #if CONFIG_ETH_ADIN2111_SPI_CFG0
+@@ -560,6 +682,9 @@ static int adin2111_read_fifo(const struct device *dev, const uint16_t port_idx)
+ 
+ 	iface = ((struct adin2111_port_data *)ctx->port[port_idx]->data)->iface;
+ 
++	/* Check if RX timestamps are enabled before processing frame */
++	timestamps_enabled = adin2111_rx_timestamps_enabled(dev);
++
+ 	/* get received frame size in bytes */
+ 	ret = eth_adin2111_reg_read(dev, fsize_reg, &fsize);
+ 	if (ret < 0) {
+@@ -603,8 +728,56 @@ static int adin2111_read_fifo(const struct device *dev, const uint16_t port_idx)
+ 		return ret;
+ 	}
+ 
+-	/* remove CRC32 and pass to the stack */
+-	fsize_real = fsize - sizeof(uint32_t);
++	/* TIMESTAMP EXTRACTION - Support both 32-bit and 64-bit modes */
++	if (timestamps_enabled) {
++		uint32_t config0_val;
++		ret = eth_adin2111_reg_read(dev, ADIN2111_CONFIG0, &config0_val);
++		bool ftss_enabled = !!(config0_val & ADIN1110_CONFIG0_FTSS);
++
++		if (ftss_enabled) {
++			/* FTSS=1: 8-byte timestamp (PTP seconds+nanoseconds) */
++			ret = adin2111_parse_rx_timestamp(ctx->buf, &rx_timestamp_ns);
++			if (ret == 0) {
++				timestamp_offset = 8;  /* Skip 8 bytes */
++			}
++		} else {
++			/* FTSS=0: 4-byte timestamp (32-bit free running counter) */
++			ret = adin2111_parse_rx_timestamp_32bit(ctx->buf, &rx_timestamp_ns);
++			if (ret == 0) {
++				timestamp_offset = 4;  /* Skip 4 bytes */
++			}
++		}
++
++		if (ret == 0) {
++			/* Store timestamp for application access */
++			g_last_rx_timestamp_ns = rx_timestamp_ns;
++			g_rx_timestamp_valid = true;
++
++			uint32_t rx_sec = (uint32_t)(rx_timestamp_ns / NSEC_PER_SEC);
++			uint32_t rx_nsec = (uint32_t)(rx_timestamp_ns % NSEC_PER_SEC);
++
++			/* Update PTP clock driver with latest hardware time */
++			adin1110_ptp_update_hw_time(rx_sec, rx_nsec);
++		} else {
++			LOG_ERR("Failed to parse RX timestamp: %d", ret);
++			timestamp_offset = 0; /* Continue without timestamp */
++		}
++	}
++
++	/* Calculate real frame size: remove CRC32 and timestamp header (if present) */
++	fsize_real = fsize - sizeof(uint32_t) - timestamp_offset;
++
++	/* Validate frame size after timestamp adjustment */
++	if (fsize_real == 0 || fsize_real > CONFIG_ETH_ADIN2111_BUFFER_SIZE) {
++		eth_stats_update_errors_rx(iface);
++		LOG_ERR("Port %u invalid frame size after timestamp processing: %u (offset=%u)",
++			port_idx, fsize_real, timestamp_offset);
++		return -EINVAL;
++	}
++
++	LOG_DBG("Port %u: fsize=%u, timestamp_offset=%u, fsize_real=%u, timestamps=%s",
++		port_idx, fsize, timestamp_offset, fsize_real,
++		timestamps_enabled ? "enabled" : "disabled");
+ 
+ 	pkt = net_pkt_rx_alloc_with_buffer(iface, fsize_real, NET_AF_UNSPEC, 0,
+ 					   K_MSEC(CONFIG_ETH_ADIN2111_TIMEOUT));
+@@ -615,7 +788,8 @@ static int adin2111_read_fifo(const struct device *dev, const uint16_t port_idx)
+ 		return -ENOMEM;
+ 	}
+ 
+-	ret = net_pkt_write(pkt, ctx->buf, fsize_real);
++	/* Write frame data to packet, skipping timestamp header if present */
++	ret = net_pkt_write(pkt, ctx->buf + timestamp_offset, fsize_real);
+ 	if (ret < 0) {
+ 		eth_stats_update_errors_rx(iface);
+ 		net_pkt_unref(pkt);
+@@ -623,6 +797,14 @@ static int adin2111_read_fifo(const struct device *dev, const uint16_t port_idx)
+ 		return ret;
+ 	}
+ 
++	/* ATTACH TIMESTAMP TO PACKET */
++#if defined(CONFIG_NET_PKT_TIMESTAMP)
++	if (timestamps_enabled && timestamp_offset > 0) {
++		net_pkt_set_timestamp_ns(pkt, rx_timestamp_ns);
++	}
++#endif /* CONFIG_NET_PKT_TIMESTAMP */
++
++	/* Send packet to network stack */
+ 	ret = net_recv_data(iface, pkt);
+ 	if (ret < 0) {
+ 		eth_stats_update_errors_rx(iface);
+@@ -891,8 +1073,18 @@ static int adin2111_port_send(const struct device *dev, struct net_pkt *pkt)
+ 	++header_size;
+ #endif /* CONFIG_ETH_ADIN2111_SPI_CFG0 */
+ 
+-	/* frame header */
+-	*(uint16_t *)(ctx->buf + header_size) = net_htons(cfg->port_idx);
++	/* frame header
++	 * Bits 7-6: EGRESS_CAPTURE (01 = capture TX timestamp to TTSCAH/TTSCAL)
++	 * Bits 1-0: Port index
++	 * Only request TX timestamp for packets that need it (PTP event messages).
++	 */
++	uint16_t frame_header = cfg->port_idx;
++#if defined(CONFIG_NET_PKT_TIMESTAMP)
++	if (net_pkt_is_tx_timestamping(pkt)) {
++		frame_header |= (0x01 << 6);  /* EGRESS_CAPTURE = 01 */
++	}
++#endif
++	*(uint16_t *)(ctx->buf + header_size) = net_htons(frame_header);
+ 
+ 	/* read pkt into tx buffer */
+ 	ret = net_pkt_read(pkt,
+@@ -932,6 +1124,68 @@ end_check:
+ 	eth_stats_update_bytes_tx(data->iface, pkt_len);
+ 	eth_stats_update_pkts_tx(data->iface);
+ 
++#if defined(CONFIG_NET_PKT_TIMESTAMP)
++	/* Capture TX timestamp from TTSCAH/TTSCAL when EGRESS_CAPTURE was set */
++	if (frame_header & (0x01 << 6)) {
++		/*
++		 * Wait for the frame to actually leave the MAC (TX_RDY in STATUS1).
++		 * At 10BASE-T1L (10 Mbps) a ~100 byte PTP frame takes ~80us to
++		 * transmit, plus MAC processing overhead.  Polling TX_RDY is far
++		 * more reliable than a blind delay.
++		 */
++		uint32_t status1 = 0;
++		int poll_tries = 100; /* max ~1ms at 10us per poll */
++
++		do {
++			k_usleep(10);
++			eth_adin2111_reg_read(adin, ADIN2111_STATUS1, &status1);
++		} while (!(status1 & ADIN2111_STATUS1_TX_RDY) && --poll_tries > 0);
++
++		if (!(status1 & ADIN2111_STATUS1_TX_RDY)) {
++			LOG_WRN("TX_RDY timeout after %d polls", 100 - poll_tries);
++		}
++
++		/* Clear TX_RDY status bit (write-1-to-clear) */
++		eth_adin2111_reg_write(adin, ADIN2111_STATUS1, ADIN2111_STATUS1_TX_RDY);
++
++		/* Now the timestamp should be captured - read TTSCAH/TTSCAL */
++		uint32_t ttscah = 0, ttscal = 0;
++
++		if ((eth_adin2111_reg_read(adin, 0x10, &ttscah) == 0) &&
++		    (eth_adin2111_reg_read(adin, 0x11, &ttscal) == 0)) {
++
++			if (ttscah != 0 || ttscal != 0) {
++				/* IEEE 1588 PTP format: upper 32b = seconds,
++				 * lower 30b = nanoseconds (bits 31:30 reserved)
++				 */
++				uint64_t raw_64bit = ((uint64_t)ttscah << 32) | ttscal;
++				uint32_t seconds = (uint32_t)(raw_64bit >> 32);
++				uint32_t nanoseconds = (uint32_t)(raw_64bit & 0x3FFFFFFF);
++				uint64_t tx_ts_ns = (uint64_t)seconds * NSEC_PER_SEC
++						  + nanoseconds;
++
++				net_pkt_set_timestamp_ns(pkt, tx_ts_ns);
++				net_if_add_tx_timestamp(pkt);
++
++				LOG_DBG("HW TX TS: %u.%09u (polls=%d)",
++					seconds, nanoseconds, 100 - poll_tries);
++
++				/* Update PTP clock driver with latest hardware time */
++				adin1110_ptp_update_hw_time(seconds, nanoseconds);
++
++				/* Clear capture registers for next frame */
++				eth_adin2111_reg_write(adin, 0x10, 0);
++				eth_adin2111_reg_write(adin, 0x11, 0);
++			} else {
++				LOG_WRN("TX TS EMPTY (polls=%d, STATUS1=0x%08X)",
++					100 - poll_tries, status1);
++			}
++		} else {
++			LOG_ERR("Failed to read TTSCAH/TTSCAL registers");
++		}
++	}
++#endif /* CONFIG_NET_PKT_TIMESTAMP */
++
+ end_unlock:
+ 	eth_adin2111_unlock(adin);
+ 	return ret;
+@@ -1223,6 +1477,9 @@ static enum ethernet_hw_caps adin2111_port_get_capabilities(const struct device
+ 		ETHERNET_HW_FILTERING
+ #if defined(CONFIG_NET_LLDP)
+ 		| ETHERNET_LLDP
++#endif
++#if defined(CONFIG_PTP_CLOCK)
++		| ETHERNET_PTP
+ #endif
+ 		| ETHERNET_PROMISC_MODE;
+ }
+@@ -1507,6 +1764,34 @@ static int adin2111_init(const struct device *dev)
+ 	return ret;
+ }
+ 
++#if defined(CONFIG_PTP_CLOCK)
++static const struct device *adin2111_get_ptp_clock(const struct device *dev)
++{
++	LOG_INF("🔍 adin2111_get_ptp_clock() called for device: %s", dev->name);
++
++	/* Find PTP clock device by compatible string */
++	const struct device *ptp_dev = device_get_binding("adi,adin1110-ptp-clock-0");
++	LOG_INF("🔍 device_get_binding result: %p", ptp_dev);
++
++	if (ptp_dev && device_is_ready(ptp_dev)) {
++		LOG_INF("✅ Found PTP device via binding: %s", ptp_dev->name);
++		return ptp_dev;
++	}
++
++	/* Alternative: try direct device tree lookup */
++	ptp_dev = DEVICE_DT_GET_OR_NULL(DT_INST(0, adi_adin1110_ptp_clock));
++	LOG_INF("🔍 DEVICE_DT_GET_OR_NULL result: %p", ptp_dev);
++
++	if (ptp_dev && device_is_ready(ptp_dev)) {
++		LOG_INF("✅ Found PTP device via DT: %s", ptp_dev->name);
++		return ptp_dev;
++	}
++
++	LOG_ERR("❌ No PTP clock device found");
++	return NULL;
++}
++#endif /* CONFIG_PTP_CLOCK */
++
+ static const struct ethernet_api adin2111_port_api = {
+ 	.iface_api.init = adin2111_port_iface_init,
+ 	.get_capabilities = adin2111_port_get_capabilities,
+@@ -1515,6 +1800,9 @@ static const struct ethernet_api adin2111_port_api = {
+ #if defined(CONFIG_NET_STATISTICS_ETHERNET)
+ 	.get_stats = adin2111_port_get_stats,
+ #endif /* CONFIG_NET_STATISTICS_ETHERNET */
++#if defined(CONFIG_PTP_CLOCK)
++	.get_ptp_clock = adin2111_get_ptp_clock,
++#endif /* CONFIG_PTP_CLOCK */
+ };
+ 
+ #define ADIN2111_STR(x)		#x
