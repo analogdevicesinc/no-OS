@@ -2917,7 +2917,7 @@ struct gain_control {
 
 	uint16_t lmt_overload_high_thresh; /* 16..800 mV, 0x107 */
 	uint16_t lmt_overload_low_thresh; /* 16..800 mV, 0x108 */
-	uint16_t dec_pow_measuremnt_duration; /* Samples, 0x15C */
+	uint32_t dec_pow_measuremnt_duration; /* Samples, 0x15C */
 	uint8_t low_power_thresh; /* -64..0 dBFS, 0x114 */
 	bool use_rx_fir_out_for_dec_pwr_meas; /* clears 0x15C:6 USE_HB1_OUT_FOR_DEC_PWR_MEAS */
 
@@ -3001,7 +3001,7 @@ struct gain_control {
 
 	enum f_agc_target_gain_index_type
 	f_agc_rst_gla_if_en_agc_pulled_high_mode; /* 0x0FB, 0x111 */
-	uint8_t f_agc_power_measurement_duration_in_state5; /* 0x109, 0x10a RX samples 0..524288*/
+	uint32_t f_agc_power_measurement_duration_in_state5; /* 0x109, 0x10a RX samples 0..524288*/
 	uint8_t f_agc_large_overload_inc_steps; /* 0x106 [D6:D4] 0..7 */
 };
 
