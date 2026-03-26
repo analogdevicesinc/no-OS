@@ -2,10 +2,10 @@
 # Lattice RISC-V RX platform integration                                       #
 ################################################################################
 
-# Tested with Lattice Propel SDK version: 2024.2 ###############################
+# Tested with Lattice Propel SDK version: 2025.2 ###############################
 
-# Tested with RISCV-RX core; VLNV: latticesemi.com:ip:riscv_rtos:2.5.0 #########
-# Supported RISC-V extentions: M, A, C #########################################
+# Tested with RISCV-RX core; VLNV: latticesemi.com:ip:riscv_rtos:2.8.0 #########
+# Supported RISC-V extentions: M, A ############################################
 
 # Toolchain prefix (can be overridden by the user)
 RISCV_PREFIX          ?= riscv-none-embed-
@@ -67,9 +67,9 @@ endif
 ################################################################################
 #                            Compiler / Linker flags                           #
 ################################################################################
-LATTICE_RISCV_ARCH  ?= rv32imac
-LATTICE_PROPEL_VERSION ?= 2024.2
-LATTICE_RISCV_RTOS_VERSION ?= 2.5.0
+LATTICE_RISCV_ARCH  ?= rv32ima
+LATTICE_PROPEL_VERSION ?= 2025.2
+LATTICE_RISCV_RTOS_VERSION ?= 2.8.0
 LATTICE_IGNORE_ARCH_CHECK ?= n
 LATTICE_IGNORE_VERSION_CHECK ?= n
 LATTICE_IGNORE_CPU_VERSION_CHECK ?= n
