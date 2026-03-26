@@ -325,7 +325,7 @@ static int stm32_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc
 	if (!desc || !cb || !IS_EXTI_GPIO_PIN(desc->irq_ctrl_id))
 		return -EINVAL;
 
-	ret = no_os_list_read_find(actions, (void **)&discard_action, &action_key);
+	ret = no_os_list_get_find(actions, (void **)&discard_action, &action_key);
 	if (ret)
 		return -ENODEV;
 
