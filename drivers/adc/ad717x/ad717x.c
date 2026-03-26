@@ -763,6 +763,7 @@ int32_t ad717x_configure_device_odr(ad717x_dev *dev,
 	if (ret) {
 		return ret;
 	}
+	dev->filter_configuration[filtcon_id].odr = odr_sel;
 
 	return 0;
 }
