@@ -290,15 +290,15 @@ int ad717x_set_reference_source(ad717x_dev* device,
 }
 
 /***************************************************************************//**
- * @brief Enable Input Buffer
+ * @brief Enable input and reference buffers
  * @param device - AD717x Device Descriptor
  * @param inbuf_en - Enable Inpur Buffer
  * @param refbuf_en - Enable referece Buffer
  * @param setup_id - Setup ID (Number)
  * @return Returns 0 for success or negative error code in case of failure.
 ******************************************************************************/
-int ad717x_enable_input_buffer(ad717x_dev* device,
-			       bool inbuf_en, bool refbuf_en, uint8_t setup_id)
+int ad717x_enable_buffers(ad717x_dev* device,
+			  bool inbuf_en, bool refbuf_en, uint8_t setup_id)
 {
 	ad717x_st_reg* setup_reg;
 
@@ -856,10 +856,10 @@ int32_t AD717X_Init(ad717x_dev **device,
 			return ret;
 
 		/* Enable reference and input buffers */
-		ret = ad717x_enable_input_buffer(dev,
-						 init_param.setups[setup_index].input_buff,
-						 init_param.setups[setup_index].ref_buff,
-						 setup_index);
+		ret = ad717x_enable_buffers(dev,
+					    init_param.setups[setup_index].input_buff,
+					    init_param.setups[setup_index].ref_buff,
+					    setup_index);
 		if (ret < 0)
 			return ret;
 
