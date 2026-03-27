@@ -2,20 +2,12 @@ menu "Hardware Interface Drivers"
 
 comment "Communication Interfaces"
 
-config CAPI
-	bool "Enable CAPI"
-	default n
-	help
-	  Enable the Common API instead of the no-OS one.
-
 config SPI
-	select DMA
 	bool "Enable SPI"
 	default n
 	help
 	  Enable Serial Peripheral Interface (SPI) support.
 	  API: drivers/api/no_os_spi.c, include/no_os_spi.h
-	  Automatically enables DMA support as SPI often requires it.
 
 config I2C
 	bool "Enable I2C"
@@ -44,16 +36,6 @@ config TDM
 	help
 	  Enable Time Division Multiplexing (TDM) interface support.
 	  API: drivers/api/no_os_tdm.c, include/no_os_tdm.h
-
-config MDIO
-	bool "Enable MDIO"
-	default n
-	help
-	  Enable Management Data Input/Output (MDIO) interface support.
-	  API: drivers/api/no_os_mdio.c, include/no_os_mdio.h
-	  Used for managing Ethernet PHY devices.
-
-comment "Control and Timing"
 
 config GPIO
 	bool "Enable GPIO"
@@ -93,8 +75,6 @@ config CLK
 	  API: include/no_os_clk.h
 	  Used for clock tree configuration and frequency management.
 
-comment "Memory and Storage"
-
 config DMA
 	bool "Enable DMA"
 	default n
@@ -110,34 +90,6 @@ config EEPROM
 	  Enable EEPROM interface support.
 	  API: drivers/api/no_os_eeprom.c, include/no_os_eeprom.h
 	  For Electrically Erasable Programmable Read-Only Memory devices.
-
-config FLASH
-	bool "Enable Flash"
-	default n
-	help
-	  Enable flash memory interface support.
-	  API: include/no_os_flash.h
-	  Used for external flash memory devices.
-
-comment "Analog and Mixed-Signal"
-
-config AIN
-	bool "Enable Analog Input"
-	default n
-	help
-	  Enable analog input interface support.
-	  API: include/no_os_ain.h
-	  For reading analog voltage/current values.
-
-config AOUT
-	bool "Enable Analog Output"
-	default n
-	help
-	  Enable analog output interface support.
-	  API: include/no_os_aout.h
-	  For generating analog voltage/current values.
-
-comment "System and Security"
 
 config RTC
 	bool "Enable RTC"

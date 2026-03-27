@@ -5,6 +5,7 @@
         "minor": 28,
         "patch": 0
     },
+    "comment": "FTC Workshop project presets",
 
     "configurePresets": [
         {
@@ -15,7 +16,7 @@
         {
             "name": "max78000_fthr",
             "displayName": "MAX78000 Feather (Maxim)",
-            "description": "MAX78000 feather board - auto-detects FetchContent vs local no-OS",
+            "description": "MAX78000 feather board",
             "inherits": "default",
             "cacheVariables": {
                 "BOARD": "MAX78000_FTHR",
@@ -29,7 +30,7 @@
         {
             "name": "max32650_fthr",
             "displayName": "MAX32650 Feather (Maxim)",
-            "description": "MAX32650 feather board - auto-detects FetchContent vs local no-OS",
+            "description": "MAX32650 feather board",
             "inherits": "default",
             "cacheVariables": {
                 "BOARD": "MAX32650_FTHR",
@@ -43,7 +44,7 @@
         {
             "name": "apard32690",
             "displayName": "APARD32690 (Maxim)",
-            "description": "APARD32690 board - auto-detects FetchContent vs local no-OS",
+            "description": "APARD32690 board",
             "inherits": "default",
             "cacheVariables": {
                 "BOARD": "APARD32690",

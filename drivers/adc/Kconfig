@@ -10,18 +10,26 @@ menuconfig ADC
 if ADC
 
 config ADC_AD405X
+    depends on SPI
+    select GPIO
     bool "Enable AD405X ADC driver"
     default n
 
 config ADC_AD4080
+    depends on SPI
+    select GPIO
     bool "Enable AD4080 ADC driver"
     default n
 
 config ADC_AD4170
+    depends on SPI
+    select GPIO
     bool "Enable AD4170 ADC driver"
     default n
 
 config ADC_AD463X
+    depends on SPI
+    select GPIO
     bool "Enable AD463X ADC driver"
     default n
 
@@ -31,30 +39,37 @@ config ADC_IIO_AD463X
     default n
 
 config ADC_AD469X
+    depends on SPI
     bool "Enable AD469X ADC driver"
     default n
 
 config ADC_AD4858
+    depends on SPI
     bool "Enable AD4858 ADC driver"
     default n
 
 config ADC_AD6673
+    depends on SPI
     bool "Enable AD6673 ADC driver"
     default n
 
 config ADC_AD6676
+    depends on SPI
     bool "Enable AD6676 ADC driver"
     default n
 
 config ADC_AD7091R
+    depends on SPI
     bool "Enable AD7091R ADC driver"
     default n
 
 config ADC_AD7091R5
+    depends on I2C
     bool "Enable AD7091R5 ADC driver"
     default n
 
 config ADC_AD7091R8
+    depends on SPI
     bool "Enable AD7091R8 ADC driver"
     default n
 
@@ -64,6 +79,7 @@ config ADC_IIO_AD7091R8
     default n
 
 config ADC_AD7124
+    depends on SPI
     bool "Enable AD7124 ADC driver"
     default n
 
@@ -73,6 +89,7 @@ config ADC_IIO_AD7124
     default n
 
 config ADC_AD713X
+    depends on SPI
     bool "Enable AD713X ADC driver"
     default n
 
@@ -82,18 +99,22 @@ config ADC_IIO_AD713X
     default n
 
 config ADC_AD717X
+    depends on SPI
     bool "Enable AD717X ADC driver"
     default n
 
 config ADC_AD719X
+    depends on SPI
     bool "Enable AD719X ADC driver"
     default n
 
 config ADC_AD7280A
+    depends on SPI
     bool "Enable AD7280A ADC driver"
     default n
 
 config ADC_AD738X
+    depends on SPI
     bool "Enable AD738X ADC driver"
     default n
 
@@ -103,10 +124,13 @@ config ADC_IIO_AD738X
     default n
 
 config ADC_AD74XX
+    depends on SPI
     bool "Enable AD74XX ADC driver"
     default n
 
 config ADC_AD7606
+    depends on SPI
+    select GPIO
     bool "Enable AD7606 ADC driver"
     default n
 
@@ -116,6 +140,7 @@ config ADC_IIO_AD7606
     default n
 
 config ADC_AD7616
+    depends on SPI
     bool "Enable AD7616 ADC driver"
     default n
 
@@ -125,26 +150,33 @@ config ADC_IIO_AD7616
     default n
 
 config ADC_AD7689
+    depends on SPI
     bool "Enable AD7689 ADC driver"
     default n
 
 config ADC_AD7768
+    depends on SPI
+    select GPIO
     bool "Enable AD7768 ADC driver"
     default n
 
 config ADC_AD7768_1
+    depends on SPI
     bool "Enable AD7768-1 ADC driver"
     default n
 
 config ADC_AD7779
+    depends on SPI
     bool "Enable AD7779 ADC driver"
     default n
 
 config ADC_AD7780
+    depends on SPI
     bool "Enable AD7780 ADC driver"
     default n
 
 config ADC_AD7799
+    depends on SPI
     bool "Enable AD7799 ADC driver"
     default n
 
@@ -154,22 +186,28 @@ config ADC_IIO_AD7799
     default n
 
 config ADC_AD796X
+    depends on SPI
     bool "Enable AD796X ADC driver"
     default n
 
 config ADC_AD7980
+    depends on SPI
     bool "Enable AD7980 ADC driver"
     default n
 
 config ADC_AD799X
+    depends on I2C
     bool "Enable AD799X ADC driver"
     default n
 
 config ADC_AD9081
+    depends on SPI
+    select GPIO
     bool "Enable AD9081 ADC driver"
     default n
 
 config ADC_AD9083
+    depends on SPI
     bool "Enable AD9083 ADC driver"
     default n
 
@@ -179,34 +217,42 @@ config ADC_IIO_AD9083
     default n
 
 config ADC_AD9208
+    depends on SPI
     bool "Enable AD9208 ADC driver"
     default n
 
 config ADC_AD9250
+    depends on SPI
     bool "Enable AD9250 ADC driver"
     default n
 
 config ADC_AD9265
+    depends on SPI
     bool "Enable AD9265 ADC driver"
     default n
 
 config ADC_AD9434
+    depends on SPI
     bool "Enable AD9434 ADC driver"
     default n
 
 config ADC_AD9467
+    depends on SPI
     bool "Enable AD9467 ADC driver"
     default n
 
 config ADC_AD9625
+    depends on SPI
     bool "Enable AD9625 ADC driver"
     default n
 
 config ADC_AD9656
+    depends on SPI
     bool "Enable AD9656 ADC driver"
     default n
 
 config ADC_AD9680
+    depends on SPI
     bool "Enable AD9680 ADC driver"
     default n
 
@@ -216,10 +262,12 @@ config ADC_IIO_AD9680
     default n
 
 config ADC_ADAQ7980
+    depends on SPI
     bool "Enable ADAQ7980 ADC driver"
     default n
 
 config ADC_ADAQ8092
+    depends on SPI
     bool "Enable ADAQ8092 ADC driver"
     default n
 
@@ -233,6 +281,7 @@ config ADC_IIO_DEMO
     default n
 
 config ADC_ADM1177
+    depends on I2C
     bool "Enable ADM1177 ADC driver"
     default n
 
@@ -242,14 +291,17 @@ config ADC_IIO_ADM1177
     default n
 
 config ADC_LTC2312
+    depends on SPI
     bool "Enable LTC2312 ADC driver"
     default n
 
 config ADC_LTC2358
+    depends on SPI
     bool "Enable LTC2358 ADC driver"
     default n
 
 config ADC_MAX11205
+    depends on SPI
     bool "Enable MAX11205 ADC driver"
     default n
 
@@ -259,14 +311,17 @@ config ADC_IIO_MAX11205
     default n
 
 config ADC_MAX14001
+    depends on SPI
     bool "Enable MAX14001 ADC driver"
     default n
 
 config ADC_MAX9611PMB
+    depends on I2C
     bool "Enable MAX9611PMB ADC driver"
     default n
 
 config ADC_PULSAR_ADC
+    depends on SPI
     bool "Enable Pulsar ADC driver"
     default n
 

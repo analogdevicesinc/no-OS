@@ -7,6 +7,9 @@ Usage:
     python3 scripts/check_board_compatibility.py --list-matrix
     python3 scripts/check_board_compatibility.py --validate-project ftc_workshop max32650_fthr
     python3 scripts/check_board_compatibility.py --generate-docs
+    python3 scripts/check_board_compatibility.py --list-configs
+    python3 scripts/check_board_compatibility.py --list-configs --board apard32690
+    python3 scripts/check_board_compatibility.py --list-configs --project swiot1l
 """
 
 import argparse
@@ -32,6 +35,17 @@ class BoardCompatibilityChecker:
             board_name = board_file.stem
             boards.append(board_name)
         return sorted(boards)
+
+    def load_project_defconfigs(self, project_name: str) -> List[str]:
+        """Load defconfig variants for a project from its root .conf files."""
+        project_dir = self.projects_dir / project_name
+        if not project_dir.exists():
+            return []
+
+        variants = []
+        for conf_file in project_dir.glob("*.conf"):
+            variants.append(conf_file.stem)
+        return sorted(variants)
 
     def get_all_projects(self) -> List[str]:
         """Get all project directories."""
@@ -66,7 +80,7 @@ class BoardCompatibilityChecker:
         matrix = self.generate_compatibility_matrix()
         all_boards = sorted(self.get_all_boards())
 
-        print("📋 Board Compatibility Matrix")
+        print(" Board Compatibility Matrix")
         print("=" * 80)
         print()
 
@@ -80,7 +94,7 @@ class BoardCompatibilityChecker:
                 boards_str = ", ".join(boards)
                 print(f"{project:<25} | {boards_str}")
             else:
-                print(f"{project:<25} | ⚠️  No boards/ directory (accepts any)")
+                print(f"{project:<25} |   No boards/ directory (accepts any)")
 
         print()
         print(f"Available boards: {', '.join(all_boards)}")
@@ -109,7 +123,7 @@ class BoardCompatibilityChecker:
                 boards_str = ", ".join(boards)
                 md.append(f"| {project} | {boards_str} | {len(boards)} |")
             else:
-                md.append(f"| {project} | ⚠️ Any (no restrictions) | ∞ |")
+                md.append(f"| {project} |  Any (no restrictions) | ∞ |")
 
         md.append("")
 
@@ -144,6 +158,50 @@ class BoardCompatibilityChecker:
 
         return "\n".join(md)
 
+    def print_configs(self, project_filter: str = None, board_filter: str = None):
+        """Print projects with their defconfig variants and supported boards."""
+        filters = []
+        if project_filter:
+            filters.append(f"project: {project_filter}")
+        if board_filter:
+            filters.append(f"board: {board_filter}")
+        filter_str = f" ({', '.join(filters)})" if filters else ""
+
+        title = f"Available configurations{filter_str}:"
+        print(title)
+        print("=" * len(title))
+
+        projects = [project_filter] if project_filter else self.get_all_projects()
+        found = False
+
+        for project in projects:
+            project_dir = self.projects_dir / project
+            if not project_dir.is_dir():
+                if project_filter:
+                    print(f"\nProject '{project}' not found.")
+                continue
+
+            boards = self.load_project_boards(project)
+            defconfigs = self.load_project_defconfigs(project)
+
+            if not defconfigs:
+                continue
+
+            if board_filter and boards and board_filter not in boards:
+                continue
+
+            found = True
+            print(f"\n{project}")
+            print(f"  defconfigs: {', '.join(defconfigs)}")
+            if boards:
+                print(f"  boards:     {', '.join(boards)}")
+            else:
+                print(f"  boards:     (any)")
+            print(f"  usage: cmake --preset <board> -DPROJECT_DEFCONFIG={project}/{defconfigs[0]}.conf")
+
+        if not found:
+            print("\nNo matching configurations found.")
+
 def main():
     parser = argparse.ArgumentParser(description="Board Compatibility Checker")
     parser.add_argument("--no-os-root", default=".", help="Path to no-OS repository root")
@@ -151,6 +209,10 @@ def main():
     parser.add_argument("--validate-project", nargs=2, metavar=("PROJECT", "BOARD"),
                        help="Validate if PROJECT supports BOARD")
     parser.add_argument("--generate-docs", action="store_true", help="Generate markdown documentation")
+    parser.add_argument("--list-configs", action="store_true",
+                       help="List projects with defconfig variants and supported boards")
+    parser.add_argument("--project", metavar="NAME", help="Filter to a single project (use with --list-configs)")
+    parser.add_argument("--board", metavar="NAME", help="Filter to projects supporting this board (use with --list-configs)")
 
     args = parser.parse_args()
 
@@ -163,11 +225,11 @@ def main():
         project, board = args.validate_project
         is_valid = checker.validate_project_board(project, board)
         if is_valid:
-            print(f"✅ {project} supports {board}")
+            print(f" {project} supports {board}")
             sys.exit(0)
         else:
             supported = checker.load_project_boards(project)
-            print(f"❌ {project} does not support {board}")
+            print(f" {project} does not support {board}")
             if supported:
                 print(f"Supported boards: {', '.join(supported)}")
             else:
@@ -181,7 +243,10 @@ def main():
             f.write(docs)
         print(f"Generated documentation: {output_file}")
 
-    if not any([args.list_matrix, args.validate_project, args.generate_docs]):
+    if args.list_configs:
+        checker.print_configs(args.project, args.board)
+
+    if not any([args.list_matrix, args.validate_project, args.generate_docs, args.list_configs]):
         parser.print_help()
 
 if __name__ == "__main__":

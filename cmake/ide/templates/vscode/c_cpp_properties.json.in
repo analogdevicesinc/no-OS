@@ -3,11 +3,17 @@
         {
             "name": "@PLATFORM@-@TARGET@",
             "compileCommands": "${workspaceFolder}/@CMAKE_BUILD_DIR@/compile_commands.json",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/drivers/**",
+                "${workspaceFolder}/iio/**",
+                "${workspaceFolder}/libraries/**",
+                "${workspaceFolder}/@CMAKE_BUILD_DIR@/build"@PLATFORM_INCLUDE_PATHS@
+            ],
             "compilerPath": "@CMAKE_C_COMPILER@",
             "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "@INTELLISENSE_MODE@",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "intelliSenseMode": "@INTELLISENSE_MODE@"
         }
     ],
     "version": 4

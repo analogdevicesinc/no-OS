@@ -57,7 +57,7 @@ function(load_board_config PROJECT_NAME BOARD_NAME)
                 endif()
             endif()
         endforeach()
-        message(STATUS "📋 Loaded board configuration: ${PROJECT_NAME}/${BOARD_NAME}")
+        message(STATUS " Loaded board configuration: ${PROJECT_NAME}/${BOARD_NAME}")
     endif()
 endfunction()
 
@@ -72,7 +72,7 @@ function(check_board_compatibility PROJECT_NAME BOARD_NAME)
 
     # If no boards.conf found, allow any board (for legacy projects)
     if("${SUPPORTED_BOARDS}" STREQUAL "")
-        message(STATUS "⚠️  No board restrictions for project '${PROJECT_NAME}'")
+        message(STATUS "  No board restrictions for project '${PROJECT_NAME}'")
         return()
     endif()
 
@@ -81,13 +81,13 @@ function(check_board_compatibility PROJECT_NAME BOARD_NAME)
         # Board not supported - show helpful error
         string(REPLACE ";" ", " BOARDS_LIST "${SUPPORTED_BOARDS}")
         message(FATAL_ERROR
-            "❌ Board compatibility error!\n"
+            " Board compatibility error!\n"
             "   Project: ${PROJECT_NAME}\n"
             "   Board: ${BOARD_NAME}\n"
             "   Platform: ${PLATFORM}\n\n"
             "Project '${PROJECT_NAME}' does not support board '${BOARD_NAME}'.\n"
             "Supported boards: ${BOARDS_LIST}\n\n"
-            "💡 Tips:\n"
+            " Tips:\n"
             "   • Check projects/${PROJECT_NAME}/boards/ directory for supported board files\n"
             "   • Each supported board has a ${BOARD_NAME}.conf file in that directory\n"
             "   • Use 'cmake --list-presets=configure' to see available boards\n"
@@ -96,7 +96,7 @@ function(check_board_compatibility PROJECT_NAME BOARD_NAME)
             "   cmake --preset <supported_board> -DPROJECT_DEFCONFIG=${PROJECT_NAME}/project.conf\n"
         )
     else()
-        message(STATUS "✅ Board compatibility: '${PROJECT_NAME}' supports board '${BOARD_NAME}'")
+        message(STATUS " Board compatibility: '${PROJECT_NAME}' supports board '${BOARD_NAME}'")
         # Load board-specific configuration
         load_board_config("${PROJECT_NAME}" "${BOARD_NAME}")
     endif()

@@ -2,7 +2,19 @@ import kconfiglib
 import sys
 import os
 import argparse
+import filecmp
+import shutil
 from pathlib import Path
+
+
+def write_if_changed(tmp_path, final_path):
+        """Replace final_path only if content differs from tmp_path.
+        Preserves timestamps when content is unchanged, avoiding
+        unnecessary CMake reconfigures."""
+        if final_path.exists() and filecmp.cmp(tmp_path, final_path, shallow=False):
+                tmp_path.unlink()
+        else:
+                shutil.move(str(tmp_path), str(final_path))
 
 print("Running generate_config.py")
 
@@ -35,8 +47,9 @@ if args.update:
         kconf.write_config(build_dir.joinpath(".config"))
 
 try:
-        print("Opening config.cmake")
-        with open(build_dir.joinpath("config.cmake"), "w") as cmake_file:
+        cmake_tmp = build_dir.joinpath("config.cmake.tmp")
+        cmake_final = build_dir.joinpath("config.cmake")
+        with open(cmake_tmp, "w") as cmake_file:
                 cmake_file.write("#Generated based on .config\n")
                 if len(kconf.unique_defined_syms) == 0:
                         print("Empty .config?")
@@ -55,7 +68,8 @@ try:
                         if args.native == False:
                                 cmake_file.write(f"set(CONFIG_{sym.name} {value} PARENT_SCOPE)\n")
 
-                print("Generated config.cmake")
+        write_if_changed(cmake_tmp, cmake_final)
+        print("Generated config.cmake")
 
 except Exception as e:
         print(f"Error generating config.cmake: {e}", file=sys.stderr)
@@ -63,10 +77,12 @@ except Exception as e:
 
 # Generate C header file with CONFIG_ defines using kconfiglib's built-in function
 try:
-        header_path = build_dir.joinpath("no_os_config.h")
+        header_tmp = build_dir.joinpath("no_os_config.h.tmp")
+        header_final = build_dir.joinpath("no_os_config.h")
         header_comment = "/* Auto-generated configuration header */\n"
-        result = kconf.write_autoconf(filename=str(header_path), header=header_comment)
-        print(f"Generated no_os_config.h: {result}")
+        kconf.write_autoconf(filename=str(header_tmp), header=header_comment)
+        write_if_changed(header_tmp, header_final)
+        print("Generated no_os_config.h")
 
 except Exception as e:
         print(f"Error generating no_os_config.h: {e}", file=sys.stderr)

@@ -7,6 +7,8 @@ menuconfig DIGITAL_IO
 if DIGITAL_IO
 
 config DIGITAL_IO_MAX14906
+    depends on SPI
+    select GPIO
     bool "Enable MAX14906 driver"
     default n
 

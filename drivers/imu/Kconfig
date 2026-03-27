@@ -10,6 +10,8 @@ menuconfig IMU
 if IMU
 
 config IMU_ADIS
+    depends on SPI
+    select GPIO
     bool "Enable ADIS core driver"
     default n
     help

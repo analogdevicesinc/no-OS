@@ -10,10 +10,13 @@ menuconfig ADC_DAC
 if ADC_DAC
 
 config ADC_DAC_AD5592R
+    depends on SPI
     bool "Enable AD5592R ADC-DAC driver"
     default n
 
 config ADC_DAC_AD74413R
+    depends on SPI
+    select GPIO
     bool "Enable AD74413R ADC-DAC driver"
     default n
 
@@ -23,6 +26,7 @@ config ADC_DAC_IIO_AD74413R
     default n
 
 config ADC_DAC_AD74416H
+    depends on SPI
     bool "Enable AD74416H ADC-DAC driver"
     default n
 

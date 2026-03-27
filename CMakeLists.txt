@@ -238,13 +238,15 @@ add_custom_command(
     --build_dir ${CMAKE_CURRENT_BINARY_DIR}/build
     --update
 
-    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py ${ALL_KCONFIG_FILES} projects/${PROJECT_DEFCONFIG}
+    DEPENDS ${CONFIG_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/generate_config.py ${ALL_KCONFIG_FILES} $<$<BOOL:${PROJECT_DEFCONFIG}>:projects/${PROJECT_DEFCONFIG}>
     COMMENT "Generating CMake config variables and C header from .config"
 )
 
 include(${KCONFIG_VARS_FILE})
 
-add_subdirectory(projects)
+if(NATIVE_BUILD)
+    add_subdirectory(projects)
+endif()
 add_subdirectory(libraries)
 add_subdirectory(network)
 add_subdirectory(util)

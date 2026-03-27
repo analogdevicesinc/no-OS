@@ -1,11 +1,12 @@
+# CFS path can be set via -DCFS_PATH=..., the CFS_PATH environment variable, or auto-detected
 find_path(CFS
           NAMES
             cfs.json
           PATHS
-            "/mnt/drive/downloads/cfs_2.0.0"
+            "${CFS_PATH}" "$ENV{CFS_PATH}" "$ENV{HOME}/cfs"
 )
 
-if (DEFINED CFS)
+if (CFS)
     set(MAXIM_LIBRARIES ${CFS}/SDK/MAX/Libraries)
 elseif(DEFINED ENV{MAXIM_LIBRARIES})
     set(MAXIM_LIBRARIES $ENV{MAXIM_LIBRARIES})
@@ -23,7 +24,7 @@ if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/max${TARGET_NUM}/memory_layout.cmake")
 endif()
 
 if(USE_VENDOR_TOOLCHAIN)
-    if(DEFINED CFS)
+    if(CFS)
         cmake_path(SET CROSS_COMPILER_BIN NORMALIZE "${CFS}/Tools/gcc/arm-none-eabi/bin")
     else()
         cmake_path(SET CROSS_COMPILER_BIN NORMALIZE "${MAXIM_LIBRARIES}/../Tools/GNUTools/*/bin")
@@ -79,7 +80,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} -specs=nosys.specs -Wl,--gc-sect
     -T${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC/${TARGET}.ld --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
 # Find OpenOCD - handles different names on Linux (openocd) and Windows (openocd.exe)
-if (DEFINED CFS)
+if (CFS)
     cmake_path(SET OPENOCD_SEARCH_PATH NORMALIZE "${CFS}/Tools/openocd")
 else()
     cmake_path(SET OPENOCD_SEARCH_PATH NORMALIZE "${MAXIM_LIBRARIES}/../Tools/OpenOCD")
@@ -93,7 +94,7 @@ find_program(OPENOCD_PATH
 )
 
 if(OPENOCD_PATH)
-    if (DEFINED CFS)
+    if (CFS)
         cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "${CFS}/Tools/openocd/share/openocd/scripts")
     else()
         cmake_path(SET OPENOCD_SCRIPTS NORMALIZE "${MAXIM_LIBRARIES}/../Tools/OpenOCD/scripts")

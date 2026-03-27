@@ -1,7 +1,3 @@
-cmake_minimum_required(VERSION 3.28)
-
-project(eval-adxl355-pmdz C ASM)
-
 add_library(eval-adxl355-pmdz-common STATIC)
 
 add_executable(eval-adxl355-pmdz-dummy ${CMAKE_CURRENT_SOURCE_DIR}/src/examples/dummy/dummy_example.c)

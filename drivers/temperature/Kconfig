@@ -7,6 +7,7 @@ menuconfig TEMPERATURE
 if TEMPERATURE
 
 config TEMPERATURE_ADT75
+    depends on I2C
     bool "Enable ADT75 driver"
     default n
 

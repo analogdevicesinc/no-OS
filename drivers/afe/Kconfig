@@ -10,10 +10,16 @@ menuconfig AFE
 if AFE
 
 config AFE_AD4110
+    depends on SPI
+    select GPIO
+    select IRQ
     bool "Enable AD4110 AFE driver"
     default n
 
 config AFE_AD413X
+    depends on SPI
+    select GPIO
+    select IRQ
     bool "Enable AD413X AFE driver"
     default n
 
@@ -23,6 +29,8 @@ config AFE_IIO_AD413X
     default n
 
 config AFE_AD5940
+    depends on SPI
+    select GPIO
     bool "Enable AD5940 AFE driver"
     default n
 

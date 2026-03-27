@@ -51,10 +51,18 @@ function(ide_vscode_configure PROJECT_TARGET)
     # --- Relative build directory for compile_commands.json ---
     file(RELATIVE_PATH CMAKE_BUILD_DIR "${PROJECT_HOME}" "${CMAKE_BINARY_DIR}")
 
+    # --- Platform SDK include paths for IntelliSense fallback ---
+    # Files not in compile_commands.json use includePath as fallback.
+    set(PLATFORM_INCLUDE_PATHS "")
+    if(DEFINED MAXIM_LIBRARIES)
+        set(PLATFORM_INCLUDE_PATHS ",\n                \"${MAXIM_LIBRARIES}/**\"")
+    endif()
+
     # --- Generate settings.json and c_cpp_properties.json (no genex needed) ---
     configure_file(
         "${VSCODE_TEMPLATES_DIR}/settings.json.in"
         "${VSCODE_DIR}/settings.json"
+        @ONLY
     )
 
     configure_file(

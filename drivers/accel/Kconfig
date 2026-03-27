@@ -8,6 +8,7 @@ if ACCEL
 
 config ACCEL_ADXL355
     depends on SPI
+    select GPIO
     bool "Enable the ADXL355 driver"
     default n
 

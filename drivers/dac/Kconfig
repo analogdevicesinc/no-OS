@@ -10,10 +10,13 @@ menuconfig DAC
 if DAC
 
 config DAC_AD3530R
+    depends on SPI
     bool "Enable AD3530R DAC driver"
     default n
 
 config DAC_AD3552R
+    depends on SPI
+    select GPIO
     bool "Enable AD3552R DAC driver"
     default n
 
@@ -23,58 +26,73 @@ config DAC_IIO_AD3552R
     default n
 
 config DAC_AD5421
+    depends on SPI
     bool "Enable AD5421 DAC driver"
     default n
 
 config DAC_AD5446
+    depends on SPI
     bool "Enable AD5446 DAC driver"
     default n
 
 config DAC_AD5449
+    depends on SPI
     bool "Enable AD5449 DAC driver"
     default n
 
 config DAC_AD5460
+    depends on SPI
     bool "Enable AD5460 DAC driver"
     default n
 
 config DAC_AD5628
+    depends on SPI
     bool "Enable AD5628 DAC driver"
     default n
 
 config DAC_AD5629R
+    depends on SPI || I2C
     bool "Enable AD5629R DAC driver"
     default n
 
 config DAC_AD5686
+    depends on SPI || I2C
     bool "Enable AD5686 DAC driver"
     default n
 
 config DAC_AD5754R
+    depends on SPI
     bool "Enable AD5754R DAC driver"
     default n
 
 config DAC_AD5755
+    depends on SPI
     bool "Enable AD5755 DAC driver"
     default n
 
 config DAC_AD5758
+    depends on SPI
     bool "Enable AD5758 DAC driver"
     default n
 
 config DAC_AD5761R
+    depends on SPI
     bool "Enable AD5761R DAC driver"
     default n
 
 config DAC_AD5766
+    depends on SPI
     bool "Enable AD5766 DAC driver"
     default n
 
 config DAC_AD5770R
+    depends on SPI
+    select GPIO
     bool "Enable AD5770R DAC driver"
     default n
 
 config DAC_AD5791
+    depends on SPI
     bool "Enable AD5791 DAC driver"
     default n
 
@@ -84,14 +102,17 @@ config DAC_IIO_AD5791
     default n
 
 config DAC_AD7293
+    depends on SPI
     bool "Enable AD7293 DAC driver"
     default n
 
 config DAC_AD7303
+    depends on SPI
     bool "Enable AD7303 DAC driver"
     default n
 
 config DAC_AD8460
+    depends on SPI
     bool "Enable AD8460 DAC driver"
     default n
 
@@ -101,6 +122,7 @@ config DAC_IIO_AD8460
     default n
 
 config DAC_AD9144
+    depends on SPI
     bool "Enable AD9144 DAC driver"
     default n
 
@@ -110,6 +132,7 @@ config DAC_IIO_AD9144
     default n
 
 config DAC_AD9152
+    depends on SPI
     bool "Enable AD9152 DAC driver"
     default n
 
@@ -119,10 +142,12 @@ config DAC_IIO_AD9152
     default n
 
 config DAC_AD917X
+    depends on SPI
     bool "Enable AD917X DAC driver"
     default n
 
 config DAC_AD9739A
+    depends on SPI
     bool "Enable AD9739A DAC driver"
     default n
 
@@ -136,14 +161,17 @@ config DAC_IIO_DEMO
     default n
 
 config DAC_LTC2672
+    depends on SPI
     bool "Enable LTC2672 DAC driver"
     default n
 
 config DAC_LTC268X
+    depends on SPI
     bool "Enable LTC268X DAC driver"
     default n
 
 config DAC_MAX22017
+    depends on SPI
     bool "Enable MAX22017 DAC driver"
     default n
 
@@ -153,6 +181,7 @@ config DAC_IIO_MAX22017
     default n
 
 config DAC_MAX538X
+    depends on I2C
     bool "Enable MAX538X DAC driver"
     default n
 
