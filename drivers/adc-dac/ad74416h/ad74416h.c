@@ -367,10 +367,10 @@ int ad74416h_set_adc_range(struct ad74416h_desc *desc, uint32_t ch,
 {
 	if (desc->id == ID_AD74414H) {
 		switch (val) {
+		case AD74416H_RNG_0_12_V:
 		case AD74416H_RNG_NEG12_12_V:
 		case AD74416H_RNG_0_0P625V:
 		case AD74416H_RNG_NEG104_104MV:
-		case AD74416H_RNG_NEG2P5_2P5V:
 			return -EINVAL;
 		default:
 			break;
