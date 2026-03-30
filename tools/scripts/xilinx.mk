@@ -270,12 +270,17 @@ $(TEMP_DIR)/arch.txt: $(HARDWARE)
 
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(MAKE) --no-print-directory all
+else
 	xsct -nodisp $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
+endif
 
 PHONY += $(PLATFORM)_sdkclean
 $(PLATFORM)_sdkclean:
 	$(call print,[Delete] SDK artefacts from $(BUILD_DIR))
 	$(call tcl_util, clean_build) $(HIDE)
+	$(call remove_file, $(BUILD_DIR)/.project.target)
 
 PHONY += vitis_launch_config
 vitis_launch_config: $(TEMP_DIR)/arch.txt
