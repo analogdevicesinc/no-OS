@@ -852,8 +852,17 @@ int32_t ad9361_set_rx_sampling_freq(struct ad9361_rf_phy *phy,
 int32_t ad9361_get_rx_sampling_freq(struct ad9361_rf_phy *phy,
 				    uint32_t *sampling_freq_hz)
 {
-	*sampling_freq_hz = (uint32_t)clk_get_rate(phy,
-			    phy->ref_clk_scale[RX_SAMPL_CLK]);
+	uint32_t freq;
+
+	if (!phy || !sampling_freq_hz)
+		return -EINVAL;
+
+	freq = (uint32_t)clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]);
+
+	if (freq == 0)
+		return -ENODEV;
+
+	*sampling_freq_hz = freq;
 
 	return 0;
 }
