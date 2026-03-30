@@ -447,16 +447,6 @@ int ad74416h_get_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
 int ad74416h_set_adc_conv_mux(struct ad74416h_desc *desc, uint32_t ch,
 			      enum ad74416h_adc_conv_mux val)
 {
-	if (desc->id == ID_AD74414H) {
-		switch (val) {
-		case AD74416H_MUX_VSENSEN_TO_AGND:
-		case AD74416H_MUX_LF_TO_VSENSEN:
-			return -EINVAL;
-		default:
-			break;
-		}
-	}
-
 	return ad74416h_reg_update(desc, AD74416H_ADC_CONFIG(ch),
 				   AD74416H_CONV_MUX_MSK, val);
 }
