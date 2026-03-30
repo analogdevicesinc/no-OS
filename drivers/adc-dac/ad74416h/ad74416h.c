@@ -613,6 +613,9 @@ int ad74416h_set_channel_vout_range(struct ad74416h_desc *desc, uint32_t ch,
 {
 	int ret;
 
+	if (desc->id == ID_AD74414H)
+		return -EINVAL;
+
 	ret = ad74416h_reg_update(desc, AD74416H_OUTPUT_CONFIG(ch),
 				  AD74416H_VOUT_RANGE_MSK, vout_range);
 	if (ret)
