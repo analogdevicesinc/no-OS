@@ -74,7 +74,89 @@ proc _project_config {cmd {arg}} {
 	}
 }
 
-proc _vitis_project {} {
+# HSI-only project creation (Vitis 2025+ / Embedded Kit compatible)
+proc _vitis_hsi_project {} {
+	openhw $::hw
+	set cpu [_get_processor]
+
+	# Create bsp
+	hsi::generate_bsp						\
+		-dir bsp						\
+		-proc $cpu						\
+		-os standalone						\
+		-compile
+
+	# Create app directory structure
+	file mkdir app/src
+
+	# Generate linker script using the HSI linker generator API
+	# (lg_init/lg_get_sections/lg_set_section_memory/lg_generate from
+	#  $XILINX_VITIS/scripts/xsct/hsi/hsiutils.tcl)
+	set mss_path [file normalize bsp/system.mss]
+	set hw_path [file normalize $::hw]
+	::hsi::utils::lg_init $hw_path $mss_path
+
+	# Assign each section to an appropriate memory region
+	# (replicates what 'lscript generate' does internally)
+	set sections [::hsi::utils::lg_get_sections]
+	dict for {sec_type value} $sections {
+		foreach sec [split $value "."] {
+			set parts [split $sec :]
+			set name [lindex $parts 0]
+			if {$name == ""} continue
+			set size [lindex $parts 1]
+			set assigned_mem [lindex $parts 2]
+			if {$assigned_mem != ""} continue
+
+			# Find the best memory for this section type
+			set best_mem ""
+			set best_size 0
+			set mem_json [::hsi::utils::lg_get_memories -json]
+			set mem_dict [::json::json2dict $mem_json]
+			dict for {mkey mval} $mem_dict {
+				# Check if this memory is valid for this section
+				set mem_valid [lsearch $parts "*$mkey*"]
+				if {$mem_valid != -1} {
+					set msize [dict get $mval size]
+					if {$best_mem == "" || $msize > $best_size} {
+						set best_mem $mkey
+						set best_size $msize
+					}
+				}
+			}
+
+			if {$best_mem != ""} {
+				if {$sec_type == "stack_section" || $sec_type == "heap_section"} {
+					::hsi::utils::lg_set_section_memory -sec $name -mem $best_mem -size $size
+				} else {
+					::hsi::utils::lg_set_section_memory -sec .$name -mem $best_mem -size $size
+				}
+			}
+		}
+	}
+
+	::hsi::utils::lg_generate [file normalize app/src/lscript.ld]
+	::hsi::utils::lg_delete
+
+	# For Zynq (cortexa9), copy Xilinx.spec needed by the linker
+	if {[string first "cortexa9" $cpu] != -1} {
+		set vitis_dir $::env(XILINX_VITIS)
+		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		if {[file exists $spec_src]} {
+			file copy -force $spec_src app/src/Xilinx.spec
+		} else {
+			error "Xilinx.spec not found at $spec_src"
+		}
+	}
+
+	closehw $::hw
+
+	# Increase heap size
+	_replace_heap
+}
+
+# Classic Eclipse-based project creation (Vitis 2019-2024)
+proc _vitis_classic_project {} {
 	openhw $::hw
 	set cpu [_get_processor]
 
@@ -157,20 +239,34 @@ proc _get_vitis_year {} {
 
 proc create_project {} {
 	cd $::ws
-	setws ./
 
 	if {[_file_is_xsa] == 1} {
-		_vitis_project
+		set vitis_year [_get_vitis_year]
+		if {$vitis_year >= 2025} {
+			_vitis_hsi_project
+		} else {
+			setws ./
+			_vitis_classic_project
+		}
 	} else {
+		setws ./
 		_xsdk_project
 	}
 }
 
 proc clean_build {} {
 	cd $::ws
-	setws ./
 
-	app clean -name app
+	set vitis_year [_get_vitis_year]
+	if {$vitis_year >= 2025} {
+		# Vitis 2025+: direct file cleanup (no Eclipse dependency)
+		file delete -force app/src
+		file mkdir app/src
+	} else {
+		# Vitis 2019-2024: Eclipse-based cleanup
+		setws ./
+		app clean -name app
+	}
 }
 
 set pl_dict [dict create					\
