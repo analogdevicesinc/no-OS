@@ -77,14 +77,14 @@ proc _project_config {cmd {arg}} {
 proc _vitis_project {} {
 	openhw $::hw
 	set cpu [_get_processor]
-	
+
 	# Create bsp
 	hsi::generate_bsp						\
 		-dir bsp						\
 		-proc $cpu						\
 		-os standalone						\
 		-compile
-	
+
 	# Create app
 	app create							\
 		-name app						\
@@ -115,7 +115,7 @@ proc _xsdk_project {} {
 		-name bsp						\
 		-hwproject hw						\
 		-proc $cpu						\
-		-os standalone  
+		-os standalone
 	# Create app
 	sdk createapp							\
 		-name app						\
@@ -125,7 +125,7 @@ proc _xsdk_project {} {
 		-lang C							\
 		-app [string trimright $::template (C)]			\
 		-bsp bsp
-	
+
 	closehw $::hw
 
 	# Increase heap size
@@ -190,7 +190,7 @@ proc _cpu_reset {cpu} {
 	targets -set -filter {name =~ "APU*" && jtag_cable_name =~ "*$::jtagtarget*"}
 	stop
 	if {$cpu == "ps7_cortexa9_0"} {
-		rst 
+		rst
 	} elseif {$cpu == "psu_cortexa53_0"} {
 		rst -system
 	}

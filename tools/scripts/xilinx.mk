@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-#                           ENVIRONMENT VARIABLES                              
+#                           ENVIRONMENT VARIABLES
 #------------------------------------------------------------------------------
 
 TEMP_DIR	= $(BUILD_DIR)/tmp
@@ -60,7 +60,7 @@ TARGET_CPU ?= 0
 PROJECT_BUILD = $(BUILD_DIR)/app
 
 ################|--------------------------------------------------------------
-################|                   Zynq                                       
+################|                   Zynq
 ################|--------------------------------------------------------------
 ifneq (,$(findstring cortexa9,$(strip $(ARCH))))
 
@@ -83,7 +83,7 @@ LDFLAGS += -specs=$(BUILD_DIR)/app/src/Xilinx.spec 			\
 endif
 
 ################|--------------------------------------------------------------
-################|                   ZynqMP                                     
+################|                   ZynqMP
 ################|--------------------------------------------------------------
 ifneq (,$(findstring cortexa53,$(strip $(ARCH))))
 
@@ -96,7 +96,7 @@ endif
 
 ifneq (,$(findstring cortexr5,$(strip $(ARCH))))
 
-CC := armr5-none-eabi-gcc 
+CC := armr5-none-eabi-gcc
 AR := armr5-none-eabi-ar
 SIZE := armr5-none-eabi-size
 
@@ -113,7 +113,7 @@ LDFLAGS += -mcpu=cortex-r5						\
 endif
 
 ################|--------------------------------------------------------------
-################|                   Versal                                     
+################|                   Versal
 ################|--------------------------------------------------------------
 ifneq (,$(findstring cortexa72,$(strip $(ARCH))))
 
@@ -125,7 +125,7 @@ LD := $(CC)
 endif
 
 ################|--------------------------------------------------------------
-################|                  Microblaze                                  
+################|                  Microblaze
 ################|--------------------------------------------------------------
 ifneq (,$(findstring sys_mb,$(strip $(ARCH))))
 
@@ -162,7 +162,7 @@ LDFLAGS += -Xlinker --defsym=_HEAP_SIZE=0x100000 			\
 	   -mno-xl-soft-mul						\
 	   -mxl-multiply-high 						\
 	   -Wl,--no-relax 						\
-	   -Wl,--gc-sections 
+	   -Wl,--gc-sections
 
 endif
 
