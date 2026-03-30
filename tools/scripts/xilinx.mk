@@ -175,45 +175,18 @@ CFLAGS += -I$(BUILD_DIR)/app/src
 CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
 $(PLATFORM)_sdkopen:
+ifeq ($(XILINX_VITIS),)
+	$(error XILINX_VITIS is not set. Please source settings64.sh from your Vitis installation)
+endif
 ifeq '' '$(filter %.hdf, $(HARDWARE))'
-	@# Detect Vitis version at runtime (when vitis is in PATH)
-	@VITIS_VERSION=$$(vitis -version 2>&1 | sed -n 's/.*[vV]\([0-9]\{4\}\)\.\([0-9]\+\).*/\1.\2/p' | head -1); \
-	if [ -z "$$VITIS_VERSION" ]; then \
-		echo "Error: Could not detect Vitis version."; \
-		echo "Please ensure:"; \
-		echo "  1. Vitis is installed"; \
-		echo "  2. Vitis is in your PATH (try: source /path/to/Vitis/settings64.sh)"; \
-		echo "  3. The 'vitis' command is executable"; \
-		exit 1; \
-	fi; \
-	VITIS_YEAR=$$(echo "$$VITIS_VERSION" | cut -d. -f1); \
-	VITIS_MINOR=$$(echo "$$VITIS_VERSION" | cut -d. -f2); \
-	if [ -n "$$VITIS_YEAR" ] && [ "$$VITIS_YEAR" -ge 2025 ]; then \
-		echo "Detected Vitis Unified IDE ($$VITIS_VERSION)"; \
-		if [ -z "$(WORKSPACE)" ] || [ -z "$(PROJECT)" ]; then \
-			echo "Error: WORKSPACE and PROJECT variables must be defined."; \
-			echo "These are typically set by the build system."; \
-			exit 1; \
-		fi; \
-		if [ -d "$(WORKSPACE)/.metadata" ]; then \
-			echo "Removing incompatible Eclipse workspace metadata from build/..."; \
-			rm -rf "$(WORKSPACE)/.metadata"; \
-		fi; \
-		if [ -d "$(PROJECT)/.metadata" ]; then \
-			echo "Removing incompatible Eclipse workspace metadata from project root..."; \
-			rm -rf "$(PROJECT)/.metadata"; \
-		fi; \
-		$(MAKE) --no-print-directory vitis_launch_config; \
-		echo "Opening workspace at project root: $(PROJECT)"; \
-		vitis -w $(PROJECT); \
-	elif [ -n "$$VITIS_YEAR" ] && { { [ "$$VITIS_YEAR" -eq 2023 ] && [ "$$VITIS_MINOR" -ge 2 ]; } || [ "$$VITIS_YEAR" -eq 2024 ]; }; then \
-		echo "Detected Vitis $$VITIS_VERSION with Unified IDE support"; \
-		echo "Using classic Eclipse IDE mode for better stability"; \
-		vitis -classic -workspace=$(WORKSPACE); \
-	else \
-		echo "Detected Eclipse-based Vitis ($$VITIS_VERSION)"; \
-		vitis -workspace=$(WORKSPACE); \
-	fi
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(MAKE) --no-print-directory vitis_launch_config
+	vitis -w $(PROJECT)
+else ifeq ($(shell test $(VITIS_YEAR) -ge 2023 && echo y),y)
+	vitis -classic -workspace=$(WORKSPACE)
+else
+	vitis -workspace=$(WORKSPACE)
+endif
 else
 	xsdk -workspace=$(WORKSPACE)
 endif
