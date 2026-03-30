@@ -667,16 +667,6 @@ int ad74416h_set_channel_dac_code(struct ad74416h_desc *desc, uint32_t ch,
 int ad74416h_set_diag(struct ad74416h_desc *desc, uint32_t ch,
 		      enum ad74416h_diag_mode diag_code)
 {
-	if (desc->id == ID_AD74414H) {
-		switch (diag_code) {
-		case AD74416H_DIAG_LVIN:
-		case AD74416H_VSENSEN_C:
-			return -EINVAL;
-		default:
-			break;
-		}
-	}
-
 	return ad74416h_reg_update(desc, AD74416H_DIAG_ASSIGN,
 				   AD74416H_DIAG_ASSIGN_MSK(ch), diag_code);
 }
