@@ -637,7 +637,11 @@ int ad74416h_set_channel_i_limit(struct ad74416h_desc *desc,
 				 uint32_t ch, enum ad74416h_i_limit i_limit)
 {
 	int ret;
-	ret = ad74416h_reg_update(desc, AD74416H_CH_FUNC_SETUP(ch),
+
+	if (desc->id == ID_AD74414H)
+		return -EINVAL;
+
+	ret = ad74416h_reg_update(desc, AD74416H_OUTPUT_CONFIG(ch),
 				  AD74416H_I_LIMIT_MSK, i_limit);
 	if (ret)
 		return ret;
