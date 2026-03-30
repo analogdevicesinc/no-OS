@@ -144,6 +144,17 @@ proc get_arch {} {
 	closehw $::hw
 }
 
+proc _get_vitis_year {} {
+	if {[info exists ::env(XILINX_VITIS)]} {
+		# Extract year from path like /tools/Xilinx/Vitis/2025.1
+		regexp {(\d{4})\.\d+} $::env(XILINX_VITIS) match year
+		if {[info exists year]} {
+			return $year
+		}
+	}
+	return 0
+}
+
 proc create_project {} {
 	cd $::ws
 	setws ./

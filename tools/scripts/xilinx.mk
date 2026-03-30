@@ -11,6 +11,13 @@ FSBL_PATH_RUN	= $(TEMP_DIR_RUN)/output/hw0/export/hw0/sw/hw0/boot/fsbl.elf
 FILE := $(wildcard *.elf)
 comma	:= ,
 
+# Extract Vitis version from XILINX_VITIS env var (set by settings64.sh)
+# e.g. /tools/Xilinx/Vitis/2025.1 -> VITIS_VERSION=2025.1, VITIS_YEAR=2025
+ifneq ($(XILINX_VITIS),)
+VITIS_VERSION := $(shell echo $(XILINX_VITIS) | grep -oP '\d{4}\.\d+')
+VITIS_YEAR := $(shell echo $(VITIS_VERSION) | cut -d. -f1)
+endif
+
 ifeq (y,$(strip $(NETWORKING)))
 TEMPLATE	= "lwIP Echo Server"
 else
