@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package capi;
+import "nanopb.proto";
+
+// I2C Service
+service I2CService {
+  // capi_i2c_init(struct capi_i2c_controller_handle **handle, const struct capi_i2c_config *config)
+  rpc Init (I2CInitParams) returns (I2CInitResponse) {}
+  // capi_i2c_transmit(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer)
+  rpc Transmit (I2CTransferParams) returns (I2CTransferResponse) {}
+  // capi_i2c_receive(struct capi_i2c_device *device, struct capi_i2c_transfer *transfer)
+  rpc Receive (I2CTransferParams) returns (I2CTransferResponse) {}
+  // capi_i2c_deinit(struct capi_i2c_controller_handle *handle)
+  rpc Deinit (I2CDeinitParams) returns (I2CDeinitResponse) {}
+  // Server streams async events to client (for callbacks)
+  rpc SubscribeEvents (I2CDeinitParams) returns (stream I2CEvent) {}
+}
+
+// Matches struct capi_i2c_controller_handle
+// Note: ops excluded - initialized locally on client/server
+message I2CHandle {
+  bool init_allocated = 1;
+  uint64 lock = 2;
+  uint64 priv = 3;
+
+  // + Address pointer
+  uint64 pointer_address = 4;
+}
+
+// Matches struct capi_dma_handle
+// Note: ops excluded - initialized locally on client/server
+message DMAHandle {
+  bool owned_by_app = 1;
+  bool init_allocated = 2;
+  uint64 lock = 3;
+  uint64 user_data = 4;
+  uint64 extra = 5;
+
+  // + Address pointer
+  uint64 pointer_address = 6;
+}
+
+// Matches struct capi_i2c_config
+// Note: ops excluded - initialized locally on client/server
+message I2CConfig {
+  uint64 identifier = 1;
+  uint32 clk_freq_hz = 2;
+  bool initiator = 3;
+  uint32 address = 4;
+  uint64 device = 5;
+  DMAHandle dma_handle = 6;
+  uint64 extra = 7;
+}
+
+// Matches struct capi_i2c_device
+message I2CDevice {
+  I2CHandle controller = 1;   // I2C controller handle (uses pointer_address)
+  uint32 address = 2;         // uint16_t - device address on the bus
+  bool b10addr = 3;           // 10-bit (true) or 7-bit (false) addressing
+  int32 speed = 4;            // capi_i2c_speed - cast on server side
+  uint32 duty_cycle = 5;      // uint8_t - SCLK duty cycle (numerator / 256)
+  int32 clk_stretch = 6;      // clock stretching: 0=none, -1=infinite, [1,n]=bit times
+  uint64 extra = 7;           // optional platform specific extra
+
+  // + Address pointer
+  uint64 pointer_address = 8;
+}
+
+// Matches struct capi_i2c_transfer
+message I2CTransfer {
+  bool repeated_start = 1;    // issue repeated start before sub-address
+  bytes sub_address = 2;      // sub-address (register) buffer
+  bytes buf = 3;              // data buffer (in/out)
+  bool no_stop = 4;           // don't issue stop condition after transfer
+}
+
+// Request: contains handle and config
+message I2CInitParams {
+  I2CHandle handle = 1;
+  I2CConfig config = 2;
+}
+
+// Response: contains I2CInitParams + status code
+message I2CInitResponse {
+  I2CInitParams params = 1;
+  int32 status = 2;
+}
+
+// Request for Transmit/Receive: contains device and transfer
+message I2CTransferParams {
+  I2CDevice device = 1;
+  I2CTransfer transfer = 2;
+}
+
+// Response for Transmit/Receive: contains transfer (with data) + status
+message I2CTransferResponse {
+  I2CTransfer transfer = 1;
+  int32 status = 2;
+}
+
+// Request for Deinit: contains handle
+message I2CDeinitParams {
+  I2CHandle handle = 1;
+}
+
+// Response for Deinit: status only
+message I2CDeinitResponse {
+  int32 status = 1;
+}
+
+message I2CEvent {
+  uint64 handle_pointer_address = 1;  // Which handle triggered the event
+  int32 event = 2;                     // capi_i2c_async_event (cast on client)
+  int32 event_extra = 3;               // Extra data from server
+  bool is_ack = 4;                     // True if this is acknowledgment (callback registered)
+  int32 status = 5;                    // Status code (used with is_ack)
+}
+
+message RPC {
+  uint64 FUNCTION_CMD = 1;
+  oneof functionParam {
+    I2CInitParams init_param = 2;
+    I2CTransferParams transfer_param = 3;
+    I2CDeinitParams deinit_param = 4;
+  }
+}
+
+message ItemSchedule {
+    uint32 t = 1;
+    bytes cmd = 2 [(nanopb).max_size = 64];
+}

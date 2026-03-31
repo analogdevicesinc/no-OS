@@ -1,0 +1,6 @@
+# Nanopb options for capi.proto
+# Adjust max_size values based on your application needs
+
+# I2CTransfer bytes fields
+capi.I2CTransfer.sub_address  max_size:16
+capi.I2CTransfer.buf          max_size:256
