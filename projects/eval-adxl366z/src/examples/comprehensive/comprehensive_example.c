@@ -263,7 +263,8 @@ static int test_status(struct adxl366_dev *dev)
 	pr_info("Status: 0x%02X\n", status);
 	pr_info("  DATA_RDY:     %d\n", (status & ADXL366_STATUS_DATA_RDY) ? 1 : 0);
 	pr_info("  FIFO_RDY:     %d\n", (status & ADXL366_STATUS_FIFO_RDY) ? 1 : 0);
-	pr_info("  FIFO_WM:      %d\n", (status & ADXL366_STATUS_FIFO_WATERMARK) ? 1 : 0);
+	pr_info("  FIFO_WM:      %d\n",
+		(status & ADXL366_STATUS_FIFO_WATERMARK) ? 1 : 0);
 	pr_info("  FIFO_OVR:     %d\n", (status & ADXL366_STATUS_FIFO_OVERRUN) ? 1 : 0);
 	pr_info("  ACT:          %d\n", (status & ADXL366_STATUS_ACT) ? 1 : 0);
 	pr_info("  INACT:        %d\n", (status & ADXL366_STATUS_INACT) ? 1 : 0);

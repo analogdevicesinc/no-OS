@@ -87,7 +87,7 @@ int adxl366_reg_read(struct adxl366_dev *dev, uint8_t reg_addr,
  * @brief Read multiple device registers via SPI.
  */
 int adxl366_reg_read_multiple(struct adxl366_dev *dev, uint8_t reg_addr,
-			       uint8_t *reg_data, uint16_t count)
+			      uint8_t *reg_data, uint16_t count)
 {
 	uint8_t buf[258];  /* Max: 2 cmd bytes + 256 data bytes */
 	int ret;
@@ -591,7 +591,7 @@ int adxl366_set_inactivity_detection(struct adxl366_dev *dev, bool enable)
  * @brief Configure interrupt mapping.
  */
 int adxl366_set_interrupt_map(struct adxl366_dev *dev, uint8_t int_pin,
-			       uint8_t int_mask)
+			      uint8_t int_mask)
 {
 	uint8_t reg_addr;
 
