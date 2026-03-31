@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adg1736.h
- *   @brief  Header file of ADG1736 Driver.
+ *   @brief  Header file of ADG1736/ADG2736 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -40,6 +40,7 @@
 enum adg1736_type {
 	ADG736,
 	ADG1736,
+	ADG2736,
 };
 
 enum adg1736_switch {
@@ -83,10 +84,10 @@ int adg1736_init(struct adg1736_dev **device,
 /** Free resources allocated by adg1736_init(). */
 int adg1736_remove(struct adg1736_dev *dev);
 
-/** Enable the mux (ADG1736 only, requires EN pin). */
+/** Enable the mux (ADG1736/ADG2736 only, requires EN pin). */
 int adg1736_enable(struct adg1736_dev *dev);
 
-/** Disable the mux (ADG1736 only, requires EN pin). */
+/** Disable the mux (ADG1736/ADG2736 only, requires EN pin). */
 int adg1736_disable(struct adg1736_dev *dev);
 
 #endif // ADG1736_H_

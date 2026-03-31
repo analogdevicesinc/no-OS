@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adg1736.c
- *   @brief  Implementation of ADG1736 Driver.
+ *   @brief  Implementation of ADG1736/ADG2736 Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2025(c) Analog Devices, Inc.
@@ -128,7 +128,8 @@ int adg1736_init(struct adg1736_dev **device,
 	if (!device || !init_param)
 		return -EINVAL;
 
-	if (init_param->type == ADG736 && init_param->gpio_en)
+	if (init_param->type != ADG1736 && init_param->type != ADG2736 &&
+	    init_param->gpio_en)
 		return -EINVAL;
 
 	dev = no_os_calloc(1, sizeof(*dev));
@@ -153,7 +154,7 @@ int adg1736_init(struct adg1736_dev **device,
 	if (ret)
 		goto error_gpio2;
 
-	if (dev->type == ADG1736) {
+	if (dev->type == ADG1736 || dev->type == ADG2736) {
 		ret = no_os_gpio_get_optional(&dev->gpio_en, init_param->gpio_en);
 		if (ret)
 			goto error_gpio2;
@@ -193,7 +194,7 @@ int adg1736_remove(struct adg1736_dev *dev)
 
 	no_os_gpio_remove(dev->gpio_in1);
 	no_os_gpio_remove(dev->gpio_in2);
-	if (dev->type == ADG1736 && dev->gpio_en)
+	if ((dev->type == ADG1736 || dev->type == ADG2736) && dev->gpio_en)
 		no_os_gpio_remove(dev->gpio_en);
 	no_os_free(dev);
 
@@ -201,7 +202,7 @@ int adg1736_remove(struct adg1736_dev *dev)
 }
 
 /**
- * @brief Enable the mux (ADG1736 only, requires EN pin).
+ * @brief Enable the mux (ADG1736/ADG2736 only, requires EN pin).
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -210,7 +211,7 @@ int adg1736_enable(struct adg1736_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	if (dev->type != ADG1736)
+	if (dev->type != ADG1736 && dev->type != ADG2736)
 		return -ENOTSUP;
 
 	if (!dev->gpio_en)
@@ -220,7 +221,7 @@ int adg1736_enable(struct adg1736_dev *dev)
 }
 
 /**
- * @brief Disable the mux (ADG1736 only, requires EN pin).
+ * @brief Disable the mux (ADG1736/ADG2736 only, requires EN pin).
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -229,7 +230,7 @@ int adg1736_disable(struct adg1736_dev *dev)
 	if (!dev)
 		return -EINVAL;
 
-	if (dev->type != ADG1736)
+	if (dev->type != ADG1736 && dev->type != ADG2736)
 		return -ENOTSUP;
 
 	if (!dev->gpio_en)
