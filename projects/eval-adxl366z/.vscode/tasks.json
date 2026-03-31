@@ -1,0 +1,92 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // MAX32655 Tasks
+        {
+            "label": "Build MAX32655",
+            "type": "shell",
+            "command": "export MAXIM_LIBRARIES=${env:HOME}/analog/cfs/2.1.0/SDK/MAX/Libraries && make PLATFORM=maxim TARGET=max32655",
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "Clean MAX32655",
+            "type": "shell",
+            "command": "make clean",
+            "problemMatcher": []
+        },
+        {
+            "label": "Flash MAX32655",
+            "type": "shell",
+            "command": "${env:HOME}/analog/cfs/2.1.0/Tools/openocd/bin/openocd -f interface/cmsis-dap.cfg -f target/max32655.cfg -c 'program build/eval-adxl366z.elf verify reset exit'",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "Build and Flash MAX32655",
+            "dependsOn": ["Build MAX32655", "Flash MAX32655"],
+            "dependsOrder": "sequence",
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean Build and Flash MAX32655",
+            "dependsOn": ["Clean MAX32655", "Build MAX32655", "Flash MAX32655"],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        // nRF54L15 Tasks (for future use)
+        {
+            "label": "Build nRF54L15",
+            "type": "shell",
+            "command": "make PLATFORM=nrf TARGET=nrf54l15",
+            "problemMatcher": ["$gcc"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "Flash nRF54L15",
+            "type": "shell",
+            "command": "nrfjprog --family NRF54L --program build/eval-adxl366z.hex --chiperase --verify --reset",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "Build and Flash nRF54L15",
+            "dependsOn": ["Build nRF54L15", "Flash nRF54L15"],
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        }
+    ]
+}

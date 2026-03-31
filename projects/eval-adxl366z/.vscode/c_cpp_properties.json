@@ -1,0 +1,65 @@
+{
+    "configurations": [
+        {
+            "name": "MAX32655",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/src/common",
+                "${workspaceFolder}/src/platform",
+                "${workspaceFolder}/src/platform/maxim",
+                "${workspaceFolder}/src/examples",
+                "${workspaceFolder}/src/examples/basic",
+                "${workspaceFolder}/src/examples/comprehensive",
+                "${workspaceFolder}/../..",
+                "${workspaceFolder}/../../include",
+                "${workspaceFolder}/../../drivers",
+                "${workspaceFolder}/../../drivers/accel/adxl366",
+                "${workspaceFolder}/../../drivers/platform/maxim",
+                "${env:HOME}/analog/cfs/2.1.0/SDK/MAX/Libraries/CMSIS/Core/Include",
+                "${env:HOME}/analog/cfs/2.1.0/SDK/MAX/Libraries/CMSIS/Device/Maxim/MAX32655/Include"
+            ],
+            "defines": [
+                "MAX32655",
+                "TARGET_MAX32655"
+            ],
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm"
+        },
+        {
+            "name": "nRF54L15",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/src/common",
+                "${workspaceFolder}/src/platform",
+                "${workspaceFolder}/src/platform/nrf",
+                "${workspaceFolder}/src/examples",
+                "${workspaceFolder}/src/examples/basic",
+                "${workspaceFolder}/src/examples/comprehensive",
+                "${workspaceFolder}/../..",
+                "${workspaceFolder}/../../include",
+                "${workspaceFolder}/../../drivers",
+                "${workspaceFolder}/../../drivers/accel/adxl366",
+                "${workspaceFolder}/../../drivers/platform/nrf",
+                "${env:HOME}/nordic/nrfx",
+                "${env:HOME}/nordic/nrfx/bsp/stable",
+                "${env:HOME}/nordic/nrfx/bsp/stable/mdk",
+                "${env:HOME}/nordic/nrfx/drivers/include",
+                "${env:HOME}/nordic/nrfx/hal",
+                "${env:HOME}/nordic/nrfx/haly",
+                "${env:HOME}/nordic/CMSIS_5/CMSIS/Core/Include"
+            ],
+            "defines": [
+                "NRF54L15_XXAA",
+                "NRF54L15",
+                "NRF_APPLICATION"
+            ],
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4
+}

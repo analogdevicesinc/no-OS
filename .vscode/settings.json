@@ -1,0 +1,6 @@
+{
+    "no-os.root": "${workspaceFolder}",
+    "no-os.drivers": "${workspaceFolder}/drivers",
+    "no-os.include": "${workspaceFolder}/include",
+    "no-os.platform": "${workspaceFolder}/drivers/platform"
+}
