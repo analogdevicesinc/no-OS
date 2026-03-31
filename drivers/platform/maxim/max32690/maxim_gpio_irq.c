@@ -238,8 +238,8 @@ static int max_gpio_irq_unregister_callback(struct no_os_irq_ctrl_desc *desc,
 	if (!desc || !callback_desc || irq_id >= MXC_CFG_GPIO_PINS_PORT)
 		return -EINVAL;
 
-	ret = no_os_list_read_find(actions[desc->irq_ctrl_id], (void **)&discard_action,
-				   &action_key);
+	ret = no_os_list_get_find(actions[desc->irq_ctrl_id], (void **)&discard_action,
+				  &action_key);
 	if (ret)
 		return -ENODEV;
 
