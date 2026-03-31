@@ -1,11 +1,12 @@
-ADG736/ADG1736 no-OS driver
-===========================
+ADG736/ADG1736/ADG2736 no-OS driver
+====================================
 
 Supported Devices
 -----------------
 
 - `ADG736 <https://www.analog.com/en/products/adg736.html>`_
 - `ADG1736 <https://www.analog.com/en/products/adg1736.html>`_
+- `ADG2736 <https://www.analog.com/en/products/adg2736.html>`_
 
 Overview
 --------
@@ -14,25 +15,29 @@ The ADG736 and ADG1736 are monolithic devices comprising two independently
 selectable CMOS single pole, double throw (SPDT) switches. Each switch can
 connect its input to one of two outputs (A or B) based on the control signal.
 
-The devices operate from 1.8 V to 5.5 V single supply and feature:
-- Low on resistance (2.5 Ω typical)
-- Fast switching times (tON: 16 ns, tOFF: 8 ns)
+The ADG2736 is a pin-compatible ultra-low leakage variant with picoamp-level
+leakage currents. It shares the same GPIO-based control interface, pinout,
+and truth table as the ADG1736, including EN pin support.
+
+All devices operate from 1.8 V to 5.5 V single supply and feature:
+- Low on resistance
+- Fast switching times
 - Break-before-make switching action
 - TTL-/CMOS-compatible control inputs
 
 **Key Difference:**
 
 - **ADG736**: Control via IN1 and IN2 pins only
-- **ADG1736**: Adds optional EN pin for enabling/disabling the mux logic
+- **ADG1736/ADG2736**: Adds optional EN pin for enabling/disabling the mux logic
 
 Applications
 ------------
 
 - Audio and video switching
-- USB 1.1 signal switching
+- Data acquisition systems
 - Sample-and-hold systems
 - Communications systems
-- Mechanical reed relay replacement
+- Instrumentation
 
 Device Configuration
 --------------------
@@ -43,8 +48,8 @@ Driver Initialization
 In order to be able to use the device, you will have to provide the support
 for the communication protocol (GPIO for the control pins IN1 and IN2).
 
-For **ADG1736**, you can optionally provide an EN pin to enable/disable the
-mux logic. If not provided, the EN pin is assumed to be tied high externally.
+For **ADG1736/ADG2736**, you can optionally provide an EN pin to enable/disable
+the mux logic. If not provided, the EN pin is assumed to be tied high externally.
 
 For **ADG736**, the EN pin is not available and must not be specified.
 
@@ -54,16 +59,17 @@ which means that the driver was initialized correctly.
 Switch Control
 ~~~~~~~~~~~~~~
 
-Use **adg1736_set_switch_state()** to control which output each switch connects to:
+The driver provides functions to control which output each switch connects to:
 - ADG1736_CONNECT_A: Connect to output A (IN = HIGH)
 - ADG1736_CONNECT_B: Connect to output B (IN = LOW)
 
-Use **adg1736_get_switch_state()** to read the current switch position.
+Use **adg1736_set_switch_state()** and **adg1736_get_switch_state()** to
+control and read the current switch position.
 
-Enable/Disable Control (ADG1736 only)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enable/Disable Control (ADG1736/ADG2736 only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If using ADG1736 with EN pin configured, use:
+If using ADG1736 or ADG2736 with EN pin configured, use:
 - **adg1736_enable()**: Enable the mux logic (EN = HIGH)
 - **adg1736_disable()**: Disable the mux logic (EN = LOW)
 
