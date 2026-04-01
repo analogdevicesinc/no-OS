@@ -1269,7 +1269,12 @@ int adrv904x_remove(struct adrv904x_rf_phy *phy)
 {
 	no_os_clk_disable(phy->dev_clk);
 
-	adrv904x_shutdown(phy);
+	/* jesd204_fsm_stop() already called HwClose and zeroed devStateInfo
+	 * via the link_setup UNINIT callback. Calling adi_adrv904x_Shutdown
+	 * after that fails with "API Enter Issue" because the API state is
+	 * already reset. Only shut down if the device is still initialized. */
+	if (phy->is_initialized)
+		adrv904x_shutdown(phy);
 
 	no_os_free(phy);
 
