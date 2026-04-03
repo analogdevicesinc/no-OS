@@ -1,0 +1,140 @@
+/***************************************************************************//**
+ *   @file   iio_lwip_example.c
+ *   @brief  IIO over Ethernet (lwIP / XEmacPs) example for Xilinx Zynq boards.
+ *
+ *   Exposes virtual ADC and DAC demo devices over the iiod TCP protocol
+ *   on port 30431. Connect from a host running libiio:
+ *
+ *     iio_info -n ip:<board-ip>
+ *
+ *   @author Nicolae-Daniel Deaconescu (Nicolae-daniel.Deaconescu@analog.com)
+********************************************************************************
+ * Copyright 2025(c) Analog Devices, Inc.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
+
+#include <string.h>
+#include "no_os_error.h"
+#include "no_os_util.h"
+#include "iio_app.h"
+#include "lwip_xemacps.h"
+#include "adc_demo.h"
+#include "iio_adc_demo.h"
+#include "dac_demo.h"
+#include "iio_dac_demo.h"
+#include "common_data.h"
+#include "parameters.h"
+#include "iio_lwip_example.h"
+
+/*
+ * MAC address for this board. Must be unique on the local network.
+ * Change the last three bytes (OUI 00:0A:35 is assigned to Xilinx/AMD).
+ */
+static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
+
+/* IIO data buffers */
+#define DATA_BUFFER_SAMPLES	SAMPLES_PER_CHANNEL_PLATFORM
+static uint8_t adc_data_buffer[DATA_BUFFER_SAMPLES * TOTAL_ADC_CHANNELS *
+						   sizeof(uint16_t)];
+static uint8_t dac_data_buffer[DATA_BUFFER_SAMPLES * TOTAL_DAC_CHANNELS *
+						   sizeof(uint16_t)];
+
+/***************************************************************************//**
+ * @brief Run the IIO over Ethernet demo.
+ *
+ * Initialises the virtual ADC/DAC IIO demo devices, configures the XEmacPs
+ * MAC driver as the lwIP network backend, and enters the iio_app_run() loop.
+ * This function does not return under normal operation.
+ *
+ * @return 0 on success, negative error code on initialisation failure.
+*******************************************************************************/
+int iio_lwip_example_main(void)
+{
+	struct adc_demo_desc *adc_desc;
+	struct dac_demo_desc *dac_desc;
+	struct iio_app_desc *app;
+	int ret;
+
+	/* --- Initialise virtual IIO devices --- */
+	ret = adc_demo_init(&adc_desc, &adc_init_par);
+	if (ret)
+		return ret;
+
+	ret = dac_demo_init(&dac_desc, &dac_init_par);
+	if (ret)
+		goto remove_adc;
+
+	/* --- IIO device + buffer descriptors --- */
+	struct iio_data_buffer adc_buff = {
+		.buff = adc_data_buffer,
+		.size = sizeof(adc_data_buffer),
+	};
+
+	struct iio_data_buffer dac_buff = {
+		.buff = dac_data_buffer,
+		.size = sizeof(dac_data_buffer),
+	};
+
+	struct iio_app_device iio_devices[] = {
+		IIO_APP_DEVICE("adc_demo", adc_desc,
+			       &adc_demo_iio_descriptor, &adc_buff, NULL, NULL),
+		IIO_APP_DEVICE("dac_demo", dac_desc,
+			       &dac_demo_iio_descriptor, NULL, &dac_buff, NULL),
+	};
+
+	/* --- XEmacPs GEM init params --- */
+	struct xemacps_init_param gem_ip = {
+		.device_id = GEM_DEVICE_ID,
+	};
+	memcpy(gem_ip.hwaddr, mac_addr, sizeof(mac_addr));
+
+	/* --- iio_app init --- */
+	struct iio_app_init_param app_init_param = {0};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = xilinx_lwip_uart_ip;
+	app_init_param.lwip_param.platform_ops = &xemacps_lwip_ops;
+	app_init_param.lwip_param.mac_param    = &gem_ip;
+	memcpy(app_init_param.lwip_param.hwaddr, mac_addr, sizeof(mac_addr));
+
+	ret = iio_app_init(&app, app_init_param);
+	if (ret)
+		goto remove_dac;
+
+	/* Loops indefinitely, serving iiod connections on TCP port 30431 */
+	ret = iio_app_run(app);
+
+	iio_app_remove(app);
+
+remove_dac:
+	dac_demo_remove(dac_desc);
+remove_adc:
+	adc_demo_remove(adc_desc);
+
+	return ret;
+}
