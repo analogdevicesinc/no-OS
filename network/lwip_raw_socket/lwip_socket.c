@@ -63,9 +63,8 @@
 
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 #include "tcp_socket.h"
-
-#include "adin1110.h"
 
 static bool mdns_result;
 static bool mdns_is_conflict;
@@ -276,7 +275,6 @@ static int _lwip_start_mdns(struct lwip_network_desc *desc, struct netif *netif)
 int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 			struct lwip_network_param *param)
 {
-	struct network_interface *network_descriptor;
 	struct lwip_network_desc *descriptor;
 	struct netif *netif_descriptor;
 	ip4_addr_t ipaddr, netmask, gw;
@@ -286,17 +284,11 @@ int32_t no_os_lwip_init(struct lwip_network_desc **desc,
 	int ret;
 	int i;
 
-	network_descriptor = calloc(1, sizeof(*network_descriptor));
-	if (!network_descriptor)
+	netif_descriptor = no_os_calloc(1, sizeof(*netif_descriptor));
+	if (!netif_descriptor)
 		return -ENOMEM;
 
-	netif_descriptor = calloc(1, sizeof(*netif_descriptor));
-	if (!netif_descriptor) {
-		ret = -ENOMEM;
-		goto free_network_descriptor;
-	}
-
-	descriptor = calloc(1, sizeof(*descriptor));
+	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor) {
 		ret = -ENOMEM;
 		goto free_netif_descriptor;
@@ -392,11 +384,9 @@ platform_remove:
 free_netif:
 	netif_remove(netif_descriptor);
 free_descriptor:
-	free(descriptor);
+	no_os_free(descriptor);
 free_netif_descriptor:
-	free(netif_descriptor);
-free_network_descriptor:
-	free(network_descriptor);
+	no_os_free(netif_descriptor);
 
 	return ret;
 }
@@ -457,9 +447,9 @@ static int32_t lwip_socket_close(void *net, uint32_t sock_id)
 		pbuf_free(sock->p);
 	}
 
-	tcp_close(sock->pcb);
 	tcp_recv(sock->pcb, NULL);
 	tcp_err(sock->pcb, NULL);
+	tcp_close(sock->pcb);
 
 	sock->p_idx = 0;
 	sock->pcb = NULL;
