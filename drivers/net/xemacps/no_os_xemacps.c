@@ -302,7 +302,8 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 
 		nwcfg = XEmacPs_ReadReg(cfg->BaseAddress,
 					XEMACPS_NWCFG_OFFSET);
-		nwcfg |= XEMACPS_NWCFG_MCASTHASHEN_MASK
+		nwcfg |= XEMACPS_NWCFG_FDEN_MASK
+			 | XEMACPS_NWCFG_MCASTHASHEN_MASK
 			 | XEMACPS_NWCFG_RXCHKSUMEN_MASK
 			 | XEMACPS_NWCFG_PAUSEEN_MASK;
 		XEmacPs_WriteReg(cfg->BaseAddress,

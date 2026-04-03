@@ -186,6 +186,7 @@ ETHERNET
    :glob:
 
    drivers/ethernet/*
+   drivers/net/*
 
 GYROSCOPES
 ============
