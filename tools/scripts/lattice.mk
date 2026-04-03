@@ -148,16 +148,6 @@ ifneq ($(strip $(LATTICE_OPENOCD_PROGRAM_CMD)),)
 LATTICE_OPENOCD_PROGRAM_OPT := -c "$(LATTICE_OPENOCD_PROGRAM_CMD)"
 endif
 
-# Preload cable configuration variables before sourcing interface scripts
-LATTICE_OPENOCD_PRESET_CMDS := \
-	-c "echo \"DEBUG_ENABLE=$(LATTICE_OPENOCD_DEBUG_ENABLE)\"" \
-	-c "set target $(LATTICE_OPENOCD_DEVICE)" \
-	-c "set tck $(LATTICE_OPENOCD_TCKDIV)" \
-	-c "set port $(LATTICE_OPENOCD_PORT)" \
-	-c "set channel $(LATTICE_OPENOCD_CHANNEL)" \
-	-c "set cmdlength $(LATTICE_OPENOCD_CMD_LENGTH)" \
-	-c "set loc $(LATTICE_OPENOCD_LOCATION)"
-
 CFLAGS  += $(LATTICE_ARCH_FLAGS) $(LATTICE_COMMON_FLAGS) $(LATTICE_CSTD) \
 	   $(LATTICE_DEFINES) $(LIBC_DEFINES) $(LIBC_SPECS)
 ASFLAGS += $(LATTICE_ARCH_FLAGS) $(LATTICE_COMMON_FLAGS) $(LATTICE_ASFLAGS) \
@@ -217,7 +207,7 @@ endif
 LATTICE_SYS_ENV ?= $(LATTICE_SGE_DIR)/sys_env.xml
 
 # Generated make fragment containing parsed values (versions, JTAG channel, etc.).
-LATTICE_SYS_ENV_VARS := $(BUILD_DIR)/lattice_sys_env.mk
+LATTICE_SYS_ENV_VARS := $(BUILD_DIR)/sys_env_parsed.tmp
 
 # Resolve parser script path relative to generic.mk location.
 LATTICE_MK_FILE := $(lastword $(filter %generic.mk,$(MAKEFILE_LIST)))
@@ -225,9 +215,9 @@ ifeq ($(strip $(LATTICE_MK_FILE)),)
 $(error [lattice] generic.mk not found in MAKEFILE_LIST; include tools/scripts/generic.mk before lattice.mk)
 endif
 LATTICE_MK_DIR := $(dir $(LATTICE_MK_FILE))
-# Script that parses sys_env.xml and generates $(LATTICE_SYS_ENV_VARS).
-LATTICE_PARSE_SYS_ENV := $(abspath \
-	$(LATTICE_MK_DIR)/platform/lattice/parse_sys_env.sh)
+
+# Use make-based sys_env parser fragment.
+include $(LATTICE_MK_DIR)/platform/lattice/sys_env_parse.mk
 
 ################################################################################
 #                          Convenience platform targets                        #
@@ -260,50 +250,45 @@ $(LATTICE_BSP_PATH): $(LATTICE_SGE_DIR)
 $(LATTICE_SYS_ENV): $(LATTICE_SGE_DIR)
 	@test -f "$@"
 
-$(LATTICE_SYS_ENV_VARS): $(LATTICE_SYS_ENV)
-	$(call mk_dir,$(BUILD_DIR))
-	bash "$(LATTICE_PARSE_SYS_ENV)" "$(LATTICE_SYS_ENV)" \
-		"$(LATTICE_RISCV_ARCH)" "$(LATTICE_PROPEL_VERSION)" \
-		"$(LATTICE_RISCV_RTOS_VERSION)" \
-		"$(LATTICE_IGNORE_ARCH_CHECK)" \
-		"$(LATTICE_IGNORE_VERSION_CHECK)" \
-		"$(LATTICE_IGNORE_CPU_VERSION_CHECK)" > "$(LATTICE_SYS_ENV_VARS).tmp"
-	@mv -f "$(LATTICE_SYS_ENV_VARS).tmp" "$(LATTICE_SYS_ENV_VARS)"
-
-# Import generated sys_env.xml values close to the rule that creates them.
--include $(LATTICE_SYS_ENV_VARS)
-
-ifneq ($(strip $(JTAG_CHANNEL)),)
-# Prefer the JTAG channel exported by sys_env.xml when it is available.
-LATTICE_OPENOCD_CHANNEL := $(JTAG_CHANNEL)
-endif
+# Bitstream programming support (template.xcf flow).
+include $(LATTICE_MK_DIR)/platform/lattice/bitstream.mk
 
 # Reuse an existing ELF for `make run`; otherwise fall back to `all` so the
 # full build flow runs when no binary has been produced yet.
 ifneq ($(wildcard $(BINARY)),)
+$(info $(shell $(call print, [Using existing binary: $(BINARY)])))
 LATTICE_RUN_DEP := $(BINARY)
 else
 LATTICE_RUN_DEP := all
 endif
 
 # Optional hook for programming a bitstream before run.
-# Default is enabled; the target is intentionally a no-op placeholder for now.
-LATTICE_PROGRAM_BITSTREAM ?= y
-ifneq (,$(filter y Y yes YES 1 true TRUE,$(strip $(LATTICE_PROGRAM_BITSTREAM))))
-LATTICE_RUN_DEP += lattice_program_bitstream
+# Default is enabled; set BITSTREAM=n to disable.
+BITSTREAM ?= y
+ifneq (,$(filter y Y yes YES 1 true TRUE,$(strip $(BITSTREAM))))
+ifneq ($(strip $(LATTICE_BIT)),)
+LATTICE_RUN_DEP += program
+else
+$(info $(shell $(call print, WARNING: BITSTREAM=y but no .bit file found)))
+endif
 endif
 
 PHONY += lattice_run
-lattice_run: $(LATTICE_RUN_DEP)
-	$(call print,[lattice] Uploading $(notdir $(BINARY)) via OpenOCD)
+lattice_run: $(LATTICE_RUN_DEP) $(LATTICE_SYS_ENV_VARS)
+	$(call print,[lattice] [Uploading $(BINARY) via OpenOCD])
+	@. "$(LATTICE_SYS_ENV_VARS)"; \
+	channel=$${JTAG_CHANNEL:-$(LATTICE_OPENOCD_CHANNEL)}; \
 	$(LATTICE_OPENOCD) $(LATTICE_OPENOCD_SCRIPT_OPT) \
-		$(LATTICE_OPENOCD_PRESET_CMDS) $(LATTICE_OPENOCD_CPU_CMD) \
+		-c "echo \"DEBUG_ENABLE=$(LATTICE_OPENOCD_DEBUG_ENABLE)\"" \
+		-c "set target $(LATTICE_OPENOCD_DEVICE)" \
+		-c "set tck $(LATTICE_OPENOCD_TCKDIV)" \
+		-c "set port $(LATTICE_OPENOCD_PORT)" \
+		-c "set channel $$channel" \
+		-c "set cmdlength $(LATTICE_OPENOCD_CMD_LENGTH)" \
+		-c "set loc $(LATTICE_OPENOCD_LOCATION)" \
+		$(LATTICE_OPENOCD_CPU_CMD) \
 		$(LATTICE_OPENOCD_INTERFACE_OPT) $(LATTICE_OPENOCD_TARGET_OPT) \
 		$(LATTICE_OPENOCD_EXTRA_ARGS) $(LATTICE_OPENOCD_PROGRAM_OPT)
-
-PHONY += lattice_program_bitstream
-lattice_program_bitstream:
-	@true
 
 PHONY += lattice_sdkbuild lattice_sdkclean lattice_sdkopen
 lattice_sdkbuild lattice_sdkclean lattice_sdkopen:
@@ -311,20 +296,28 @@ lattice_sdkbuild lattice_sdkclean lattice_sdkopen:
 
 
 $(LATTICE_LST): $(BINARY)
+	$(call print,[Creating $(LATTICE_LST) ...])
 	$(OBJDUMP) --source --all-headers --demangle --line-numbers --wide $(BINARY) > $(LATTICE_LST)
+	$(call print,[$(LATTICE_LST) created])
 
 $(LATTICE_SIZ): $(BINARY)
+	$(call print,[Creating $(LATTICE_SIZ) ...])
 	$(SIZE) --format=berkeley $(BINARY) > $(LATTICE_SIZ)
+	$(call print,[$(LATTICE_SIZ) created])
 
 $(LATTICE_BIN): $(BINARY)
+	$(call print,[Creating $(LATTICE_BIN) ...])
 	$(OC) -O binary --gap-fill 0 $(BINARY) $(LATTICE_BIN)
+	$(call print,[$(LATTICE_BIN) created])
 
 $(LATTICE_MEM): $(LATTICE_BIN)
+	$(call print,[Creating $(LATTICE_MEM) ...])
 	$(SREC_CAT) $(LATTICE_BIN) -Binary -byte-swap 4 -DISable Header -Output $(LATTICE_MEM) -MEM 32
+	$(call print,[$(LATTICE_MEM) created ])
 
 PHONY += lattice_post_build
 lattice_post_build: $(LATTICE_LST) $(LATTICE_SIZ) $(LATTICE_BIN) $(LATTICE_MEM)
 
 PHONY += lattice_project
-lattice_project: $(LATTICE_BSP_PATH) $(LATTICE_SYS_ENV_VARS)
+lattice_project: $(LATTICE_BSP_PATH) sys-env sys-env-check
 	$(call mk_dir,$(BUILD_DIR))
