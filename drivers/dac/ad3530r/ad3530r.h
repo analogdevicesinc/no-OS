@@ -2,7 +2,7 @@
  *   @file   ad3530r.c
  *   @author Sai Kiran Gudla (Saikiran.Gudla@analog.com)
 ********************************************************************************
- * Copyright (c) 2025 Analog Devices, Inc.
+ * Copyright (c) 2025-26 Analog Devices, Inc.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -158,7 +158,7 @@
 #define AD3530R_CRC_ENABLE_VALUE			    (NO_OS_BIT(6) | NO_OS_BIT(1))
 #define AD3530R_CRC_DISABLE_VALUE			    (NO_OS_BIT(1) | NO_OS_BIT(0))
 #define AD3530R_NUM_MUX_OUT_SELECTS				27
-#define AD3530R_NUM_REGS			45  // Number of valid registers (mb regs considered a single entity)
+#define AD3530R_NUM_REGS                        116 // Number of valid registers (mb regs considered a single entity)
 #define AD3530R_CH_GRP(x)						((x) / 8)
 
 /* Useful defines for AD3531R */
@@ -167,13 +167,31 @@
 #define AD3531R_REG_ADDR_MAX	                0xE9
 #define AD3531R_CH_REG_OFFSET					8
 
+/* Useful defines for AD3532R */
+#define AD3532R_MASK_MUX_GRP_SELECT             NO_OS_GENMASK(1, 0)
+#define AD3532R_NUM_CH					        16
+#define AD3532R_NUM_MUX_OUT_SELECTS				54
+#define AD3532R_CH_REG_OFFSET					8
+#define AD3532R_REG_ADDR_MAX	                0x30F9
+
+/* Register set 1 */
+#define AD3532R_RS1 (1ul<<12)
+/* Register set 2 */
+#define AD3532R_RS2 (3ul<<12)
+
+#define AD3532R_REG_ADDR_MUX_OUT_GROUP_SELECT		(AD3530R_R1B | 0x1092)
+#define AD3532R_REG_ADDR_MUX_OUT_GROUP_SELECT_SET2 	(AD3530R_R1B | 0x3092)
+
+#define AD353XR_MAX_NUM_CH						16
+
 /**
  * @enum ad3530r_id
  * @brief Device IDs
  */
 enum ad3530r_id {
 	AD3530R_ID,
-	AD3531R_ID
+	AD3531R_ID,
+	AD3532R_ID
 };
 
 /**
@@ -183,6 +201,15 @@ enum ad3530r_id {
 enum ad3530r_ch_sel {
 	CH_0_TO_7,
 	CH_8_TO_15
+};
+
+/**
+ * @enum ad3532r_mux_out_grp_select
+ * @brief Mux out group select options
+ */
+enum ad3532r_mux_out_grp_select {
+	GRP_SELECT_0,
+	GRP_SELECT_1
 };
 
 /**
@@ -317,13 +344,16 @@ struct ad3530r_desc {
 	struct no_os_gpio_desc *ldac;
 	struct no_os_gpio_desc *reset;
 	enum ad3530r_ch_vref_select vref_enable;
-	enum ad3530r_operating_mode chn_op_mode[AD3530R_NUM_CH];
+	enum ad3530r_operating_mode chn_op_mode[AD3532R_NUM_CH];
 	enum ad3530r_ch_output_range range;
 	uint16_t hw_ldac_mask;
 	uint16_t sw_ldac_mask;
 	uint8_t crc_en;
 	uint8_t crc_table[NO_OS_CRC8_TABLE_SIZE];
 	enum ad3530r_mux_out_select mux_out_sel;
+	uint8_t num_reg_sets;
+	uint8_t num_chans;
+	uint32_t reg_offset[2];
 };
 
 struct ad3530r_init_param {
@@ -336,7 +366,7 @@ struct ad3530r_init_param {
 	struct no_os_gpio_init_param *ldac_gpio_param_optional;
 	/* If set, uses internal reference and outputs internal Vref on Vref pin */
 	enum ad3530r_ch_vref_select vref_enable;
-	enum ad3530r_operating_mode chn_op_mode[AD3530R_NUM_CH];
+	enum ad3530r_operating_mode chn_op_mode[AD3532R_NUM_CH];
 	enum ad3530r_ch_output_range range;
 	uint16_t hw_ldac_mask;
 	uint16_t sw_ldac_mask;
@@ -369,8 +399,10 @@ int ad3530r_set_operating_mode(struct ad3530r_desc *desc,
 			       uint8_t chn_num,
 			       enum ad3530r_operating_mode chn_op_mode);
 int ad3530r_set_output_range(struct ad3530r_desc *desc,
-			     enum ad3530r_ch_output_range range_sel);
+			     enum ad3530r_ch_output_range range_sel, enum ad3530r_ch_sel chan_sel);
 int ad3530r_set_crc_enable(struct ad3530r_desc *desc, bool en_di);
+int ad3532r_set_mux_out_grp_select(struct ad3530r_desc* desc,
+				   enum ad3532r_mux_out_grp_select grp_sel);
 int ad3530r_set_mux_out_select(struct ad3530r_desc *desc,
 			       enum ad3530r_mux_out_select mux_output_sel);
 int ad3530r_set_hw_ldac(struct ad3530r_desc *desc, uint16_t mask_hw_ldac);
@@ -389,7 +421,7 @@ int ad3530r_reset(struct ad3530r_desc *desc);
 int ad3530r_init(struct ad3530r_desc **desc,
 		 struct ad3530r_init_param *init_param);
 int ad3530r_remove(struct ad3530r_desc *desc);
-uint32_t get_reg_addr(uint32_t addr, enum ad3530r_id chip_id,
+uint32_t get_reg_addr(struct ad3530r_desc *desc, uint32_t addr,
 		      enum ad3530r_ch_sel ch_sel);
 
 #endif /* _AD3530R_H_ */
