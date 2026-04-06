@@ -222,8 +222,8 @@ static int ad413x_iio_store_scale(void *device, char *buf, uint32_t len,
 
 	polarity = buf[11];
 
-	//delete last char
-	strcpy(&buf[11], &buf[12]);
+	/* Remove polarity char by null-terminating */
+	buf[11] = '\0';
 
 	switch (polarity) {
 	case 'U':
