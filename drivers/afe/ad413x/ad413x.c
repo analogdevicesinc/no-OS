@@ -400,6 +400,9 @@ int32_t ad413x_set_ch_preset(struct ad413x_dev *dev, uint8_t ch_nb,
 {
 	int32_t ret;
 
+	if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch))
+		return -EINVAL;
+
 	ret = ad413x_reg_write_msk(dev,
 				   AD413X_REG_CHN(ch_nb),
 				   AD413X_SETUP_M(preset_nb),
@@ -428,6 +431,9 @@ int32_t ad413x_ch_exc_input(struct ad413x_dev *dev, uint8_t ch_nb,
 {
 	int32_t ret;
 
+	if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch))
+		return -EINVAL;
+
 	ret = ad413x_reg_write_msk(dev,
 				   AD413X_REG_CHN(ch_nb),
 				   AD413X_I_OUT0_CH_M(iout0_exc_inp) |
@@ -455,6 +461,9 @@ int32_t ad413x_ch_en(struct ad413x_dev *dev, uint8_t ch_nb, uint8_t enable)
 {
 	int32_t ret;
 
+	if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch))
+		return -EINVAL;
+
 	ret = ad413x_reg_write_msk(dev,
 				   AD413X_REG_CHN(ch_nb),
 				   enable ? AD413X_ENABLE_M : 0x0U,
@@ -479,6 +488,9 @@ int32_t ad413x_ch_en(struct ad413x_dev *dev, uint8_t ch_nb, uint8_t enable)
 int32_t ad413x_pdsw_en(struct ad413x_dev *dev, uint8_t ch_nb, bool pdsw_en)
 {
 	int32_t ret;
+
+	if (ch_nb >= NO_OS_ARRAY_SIZE(dev->ch))
+		return -EINVAL;
 
 	ret = ad413x_reg_write_msk(dev,
 				   AD413X_REG_CHN(ch_nb),
