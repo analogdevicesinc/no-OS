@@ -84,6 +84,14 @@ FREQUENCY GENERATORS
 
    drivers/frequency/*
 
+GNSS-GPS
+========
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   drivers/gnss-gps/*
+
 INERTIAL MEASUREMENT UNITS
 ==========================
 .. toctree::
