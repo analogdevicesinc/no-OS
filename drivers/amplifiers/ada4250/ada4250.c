@@ -551,7 +551,7 @@ int32_t ada4250_init(struct ada4250_dev **device,
 		/* SPI */
 		ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 		if (ret != 0)
-			goto error_dev;
+			goto error_slp;
 
 		ret = ada4250_read(dev, ADA4250_REG_CHIP_ID2, &data);
 		if (ret != 0)
@@ -572,11 +572,11 @@ int32_t ada4250_init(struct ada4250_dev **device,
 
 		ret = ada4250_soft_reset(dev);
 		if (ret != 0)
-			return -1;
+			goto error_spi;
 	} else {
 		ret = no_os_gpio_get(&dev->gpio_g2, init_param->gpio_g2_param);
 		if (ret != 0)
-			goto error_dev;
+			goto error_slp;
 
 		ret = no_os_gpio_direction_output(dev->gpio_g2, NO_OS_GPIO_LOW);
 		if (ret != 0)
@@ -609,23 +609,29 @@ int32_t ada4250_init(struct ada4250_dev **device,
 	/* Initialize gpio bandwidth and pull it to high */
 	ret = no_os_gpio_get_optional(&dev->gpio_bw, init_param->gpio_bw_param);
 	if (ret != 0)
-		return -1;
+		goto error_config;
 
 	ret = no_os_gpio_direction_output(dev->gpio_bw, NO_OS_GPIO_HIGH);
 	if (ret != 0)
-		return -1;
+		goto error_bw;
 
 	ret = ada4250_set_config(dev);
 	if (ret != 0)
-		return -1;
+		goto error_bw;
 
 	*device = dev;
 
 	return ret;
 
+error_bw:
+	no_os_gpio_remove(dev->gpio_bw);
+error_config:
+	if (dev->device_id == ADA4250)
+		goto error_spi;
+	goto error_bufen;
 error_spi:
 	no_os_spi_remove(dev->spi_desc);
-	goto error_dev;
+	goto error_slp;
 error_bufen:
 	no_os_gpio_remove(dev->gpio_bufen);
 error_g0:
