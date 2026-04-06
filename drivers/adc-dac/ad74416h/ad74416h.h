@@ -718,7 +718,7 @@ int ad74416h_set_adc_conv_mux(struct ad74416h_desc *, uint32_t,
 int ad74416h_set_adc_conv_seq(struct ad74416h_desc *, enum ad74416h_conv_seq);
 
 /** Get a single ADC raw value for a specific channel, then power down the ADC */
-int ad74416h_get_adc_single(struct ad74416h_desc *, uint32_t, uint16_t *);
+int ad74416h_get_adc_single(struct ad74416h_desc *, uint32_t, uint32_t *);
 
 /** Read the die's temperature from the diagnostic register */
 int ad74416h_get_temp(struct ad74416h_desc *, uint32_t, uint16_t *);
