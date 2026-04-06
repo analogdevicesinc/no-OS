@@ -416,44 +416,52 @@ int32_t ad7799_init(struct ad7799_dev **device,
 
 	ret = ad7799_reset(dev);
 	if (ret)
-		return ret;
+		goto error_spi;
 
 	/* Check Chip ID */
 	ret = ad7799_read(dev, AD7799_REG_ID, &chip_id);
 	if (ret)
-		return ret;
+		goto error_spi;
 
 	switch (dev->chip_type) {
 	case ID_AD7798:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7798) {
 			printf("Invalid AD7798 Chip ID");
-			return -ENODEV;
+			ret = -ENODEV;
+			goto error_spi;
 		}
 		break;
 	case ID_AD7799:
 		if ((chip_id & AD7799_ID_MASK) != ID_AD7799) {
 			printf("Invalid AD7799 Chip ID");
-			return -ENODEV;
+			ret = -ENODEV;
+			goto error_spi;
 		}
 		break;
 	default:
 		printf("Invalid AD7798 Chip ID");
-		return -EINVAL;
+		ret = -EINVAL;
+		goto error_spi;
 	}
 
 	/* Initially set gain to 1 */
 	ret = ad7799_set_gain(dev, dev->gain);
 	if (ret)
-		return ret;
+		goto error_spi;
 
 	/* Enable unipolar coding */
 	ret = ad7799_set_polarity(dev, dev->polarity);
 	if (ret)
-		return ret;
+		goto error_spi;
 
 	*device = dev;
 
 	return 0;
+
+error_spi:
+	no_os_spi_remove(dev->spi_desc);
+	no_os_free(dev);
+	return ret;
 }
 
 /**
