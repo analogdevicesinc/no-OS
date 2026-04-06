@@ -493,7 +493,7 @@ int ad74416h_set_adc_conv_seq(struct ad74416h_desc *desc,
  * @return 0 in case of success, negative error code otherwise.
  */
 int ad74416h_get_adc_single(struct ad74416h_desc *desc, uint32_t ch,
-			    uint16_t *val)
+			    uint32_t *val)
 {
 	int ret;
 	uint32_t delay;
