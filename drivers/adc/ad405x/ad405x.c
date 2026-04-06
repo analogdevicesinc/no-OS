@@ -117,7 +117,7 @@ int ad405x_init(struct ad405x_dev **device,
 				     init_param.comm_init.i3c_init);
 	}
 	if (ret)
-		goto error_dev;
+		goto error_gpio;
 
 	dev->dev_type = init_param.dev_type;
 
@@ -168,6 +168,11 @@ error_com:
 		no_os_spi_remove(dev->com_desc.spi_desc);
 	else
 		no_os_i3c_remove(dev->com_desc.i3c_desc);
+error_gpio:
+	no_os_gpio_remove(dev->gpio_gpio0);
+	no_os_gpio_remove(dev->gpio_gpio1);
+	if (dev->comm_type == AD405X_SPI_COMM)
+		no_os_gpio_remove(dev->extra.spi_extra.gpio_cnv);
 error_dev:
 	no_os_free(dev);
 	return ret;
