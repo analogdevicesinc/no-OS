@@ -100,7 +100,7 @@ int ad5460_dac_current_to_code(struct ad5460_desc *desc, uint32_t uamps,
 		offset = 0;
 		break;
 	case AD5460_IOUT_RANGE_0_20MA:
-		if (uamps > AD5460_DAC_RANGE || uamps < -AD5460_DAC_RANGE)
+		if (uamps > AD5460_DAC_CURRENT_RANGE_20MA)
 			return -EINVAL;
 		range = AD5460_DAC_CURRENT_RANGE_20MA;
 		offset = 0;
