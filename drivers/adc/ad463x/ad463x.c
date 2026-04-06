@@ -825,22 +825,22 @@ int32_t ad463x_init(struct ad463x_dev **device,
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES, AD463X_LANE_MODE_MSK,
 					  dev->lane_mode);
 	if (ret != 0)
-		return ret;
+		goto error_spi;
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES, AD463X_CLK_MODE_MSK,
 					  dev->clock_mode);
 	if (ret != 0)
-		return ret;
+		goto error_spi;
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES, AD463X_DDR_MODE_MSK,
 					  dev->data_rate);
 	if (ret != 0)
-		return ret;
+		goto error_spi;
 
 	ret = ad463x_spi_reg_write_masked(dev, AD463X_REG_MODES,
 					  AD463X_OUT_DATA_MODE_MSK, dev->output_mode);
 	if (ret != 0)
-		return ret;
+		goto error_spi;
 
 	if (dev->spi_dma_enable || dev->offload_enable) {
 		ret = no_os_pwm_init(&dev->trigger_pwm_desc,
