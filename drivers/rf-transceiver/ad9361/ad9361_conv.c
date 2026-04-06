@@ -595,6 +595,7 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	struct axi_adc *rx_adc = phy->rx_adc;
 	int32_t rx2tx2 = phy->pdata->rx2tx2;
 	uint32_t tmp, num_chan, flags, id, i;
+	uint8_t saved_skipmode = phy->pdata->dig_interface_tune_skipmode;
 	int32_t ret;
 
 	num_chan = ad9361_num_phy_chan(conv);
@@ -602,15 +603,22 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	axi_adc_write(rx_adc, AXI_ADC_REG_CNTRL, rx2tx2 ? 0 : AXI_ADC_R1_MODE);
 	axi_adc_read(rx_adc, 0x4048, &tmp);
 
+	bool half_rate = phy->pdata->axi_half_dac_rate_en;
+	bool lvds      = !!(phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE);
+
 	if (!rx2tx2) {
 		axi_adc_write(rx_adc, 0x4048, tmp | NO_OS_BIT(5)); /* R1_MODE */
-		axi_adc_write(rx_adc, 0x404c,
-			      (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 1 : 0); /* RATE */
+		if (!half_rate)
+			axi_adc_write(rx_adc, 0x404c, lvds ? 1 : 0); /* RATE */
+		else
+			axi_adc_write(rx_adc, 0x404c, 0);
 	} else {
 		tmp &= ~NO_OS_BIT(5);
 		axi_adc_write(rx_adc, 0x4048, tmp);
-		axi_adc_write(rx_adc, 0x404c,
-			      (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 3 : 1); /* RATE */
+		if (!half_rate)
+			axi_adc_write(rx_adc, 0x404c, lvds ? 3 : 1); /* RATE */
+		else
+			axi_adc_write(rx_adc, 0x404c, 1);
 	}
 
 #ifdef ALTERA_PLATFORM
@@ -629,16 +637,25 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 
 	flags = 0x0;
 
+	/*
+	 * when bb_clk_change_dig_tune_en is set, force SKIP_ALL during
+	 * post_setup so that the dig_tune call here acts only as an initial
+	 * baseline and the real re-tune happens each time the BB clock changes.
+	 */
+	if (phy->pdata->bb_clk_change_dig_tune_en)
+		phy->pdata->dig_interface_tune_skipmode = 2; /* SKIP_ALL */
+
 	axi_adc_read(rx_adc, ADI_REG_ID, &id);
 	ret = ad9361_dig_tune(phy, 61440000, (id) ? flags | RESTORE_DEFAULT : flags);
 	if (ret < 0)
-		return ret;
+		goto out;
 
 	if (flags & (DO_IDELAY | DO_ODELAY)) {
 		ret = ad9361_dig_tune(phy, 61440000,
-				      (id) ? flags | RESTORE_DEFAULT | BE_VERBOSE : flags | BE_VERBOSE);
+				      (id) ? flags | RESTORE_DEFAULT | BE_VERBOSE
+				      : flags | BE_VERBOSE);
 		if (ret < 0)
-			return ret;
+			goto out;
 	}
 
 	ret = ad9361_set_trx_clock_chain(phy,
@@ -647,6 +664,11 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 
 	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
 	ad9361_ensm_restore_prev_state(phy);
+
+out:
+	/* restore skipmode so subsequent BB clock changes tune correctly */
+	if (phy->pdata->bb_clk_change_dig_tune_en)
+		phy->pdata->dig_interface_tune_skipmode = saved_skipmode;
 
 	return ret;
 }
