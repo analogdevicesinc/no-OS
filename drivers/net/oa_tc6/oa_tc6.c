@@ -499,8 +499,6 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 				/* Flags valid when EV=1 Only */
 				frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
-				frame_buffer->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
-				frame_buffer->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
 
 				/* Now get a new buffer for the second frame */
 				ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
@@ -529,6 +527,11 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			       ebo - sbo + 1);
 			frame_buffer->index += ebo - sbo + 1;
 			frame_buffer->len = frame_buffer->index;
+
+			//Flags valid when SV=1
+			frame_buffer->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
+			frame_buffer->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
+
 			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
 
 			if (frame_buffer->state == OA_BUFF_RX_COMPLETE) {
@@ -552,8 +555,6 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 
 			/* Flags valid when EV=1 Only */
 			frame_buffer->frame_drop = !!(footer & OA_DATA_FOOTER_FD_MASK);
-			frame_buffer->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
-			frame_buffer->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
 
 			/* Get a new buffer for the next iteration */
 			ret = oa_tc6_get_empty_rx_buff(desc, &frame_buffer, true);
@@ -574,6 +575,11 @@ static int oa_tc6_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
 			frame_buffer->index += OA_CHUNK_SIZE - sbo;
 			frame_buffer->len = frame_buffer->index;
 			frame_buffer->state = OA_BUFF_RX_IN_PROGRESS;
+
+			//Flags valid when SV=1
+			frame_buffer->rtsa = !!(footer & OA_DATA_FOOTER_RTSA_MASK);
+			frame_buffer->rtsp = !!(footer & OA_DATA_FOOTER_RTSP_MASK);
+
 			frame_buffer->vs = no_os_field_get(OA_DATA_FOOTER_VS_MASK, footer);
 			chunks += OA_CHUNK_SIZE + OA_FOOTER_LEN;
 			continue;
