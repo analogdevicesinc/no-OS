@@ -107,6 +107,7 @@
 #define OA_DATA_HEADER_SWO_MASK		NO_OS_GENMASK(19, 16)
 #define OA_DATA_HEADER_EV_MASK		NO_OS_BIT(14)
 #define OA_DATA_HEADER_EBO_MASK		NO_OS_GENMASK(13, 8)
+#define OA_DATA_HEADER_TSC_MASK		NO_OS_GENMASK(7, 6)
 #define OA_DATA_HEADER_P_MASK		NO_OS_BIT(0)
 
 /* Standard control and status registers (MMS 0) */
@@ -187,8 +188,8 @@ struct oa_tc6_frame_buffer {
 	uint32_t len;
 	uint8_t data[CONFIG_OA_CHUNK_BUFFER_SIZE];
 	enum oa_tc6_user_buffer_state state;
-	uint8_t vs;
-
+	uint8_t vs;      /**< Vendor Specific. Tx or Rx */
+	uint8_t tsc;     /**< Timestamp capture. 2-bits. Tx Only */
 	bool frame_drop; /**< Frame should be dropped (is invalid). Rx Only */
 	bool rtsa;       /**< Timestamp added. Rx Only */
 	bool rtsp;       /**< Timestamp parity. Rx Only */
