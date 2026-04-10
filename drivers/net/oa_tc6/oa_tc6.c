@@ -397,8 +397,10 @@ static int oa_tc6_tx_frame_to_chunks(struct oa_tc6_desc *desc,
 			header |= no_os_field_prep(OA_DATA_HEADER_DV_MASK, 1);
 			header |= no_os_field_prep(OA_DATA_HEADER_VS_MASK, frame_buffer->vs);
 
-			if (!i)
-				header |= no_os_field_prep(OA_DATA_FOOTER_SV_MASK, 1);
+			if (!i) {
+				header |= no_os_field_prep(OA_DATA_HEADER_SV_MASK, 1);
+				header |= no_os_field_prep(OA_DATA_HEADER_TSC_MASK, frame_buffer->tsc);
+			}
 
 			if (i == tx_frame_num_chunks - 1) {
 				header |= no_os_field_prep(OA_DATA_HEADER_EV_MASK, 1);
