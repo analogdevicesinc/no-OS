@@ -34,7 +34,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "max31343.h"
-#include "no_os_delay.h"
 #include "no_os_alloc.h"
 
 /**
