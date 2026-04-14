@@ -85,7 +85,7 @@ int max31343_update_bits(struct max31343_dev *dev, uint8_t reg_addr,
 			 uint8_t mask, uint8_t reg_data)
 {
 	int ret;
-	uint32_t data;
+	uint8_t data;
 
 	ret = max31343_reg_read(dev, reg_addr, &data);
 	if (ret)
