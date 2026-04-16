@@ -150,6 +150,7 @@ static int max_gpio_irq_ctrl_remove(struct no_os_irq_ctrl_desc *desc)
 		no_os_free(discard);
 
 	no_os_list_remove(actions[desc->irq_ctrl_id]);
+	actions[desc->irq_ctrl_id] = NULL;
 	no_os_free(desc);
 
 	return 0;
