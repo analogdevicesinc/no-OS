@@ -13,6 +13,7 @@ SRCS += $(PROJECT)/src/main.c
 SRCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361_api.c \
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361.c \
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_conv.c \
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361_ext_band_ctrl.c \
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_util.c
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
@@ -59,6 +60,7 @@ INCS += $(DRIVERS)/rf-transceiver/ad9361/common.h \
 INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h \
 	$(PROJECT)/src/parameters.h \
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_util.h \
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361_ext_band_ctrl.h \
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_api.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
