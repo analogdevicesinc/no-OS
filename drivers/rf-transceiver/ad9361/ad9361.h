@@ -35,6 +35,7 @@
 #include <stdint.h>
 #include "no_os_gpio.h"
 #include "common.h"
+#include "ad9361_ext_band_ctrl.h"
 
 #define REG_SPI_CONF				 0x000 /* SPI Configuration */
 #define REG_MULTICHIP_SYNC_AND_TX_MON_CTRL	 0x001 /* Multi-Chip Sync and Tx Mon Control */
@@ -2949,6 +2950,7 @@ struct gain_control {
 	uint8_t adc_large_overload_inc_steps; /* 0..15, 0x106 */
 
 	bool adc_lmt_small_overload_prevent_gain_inc; /* 0x120 */
+	bool agc_dig_sat_ovrg_en;  /* 0x101:7 ENABLE_DIG_SAT_OVRG */
 
 	uint8_t lmt_overload_large_exceed_counter; /* 0..15, 0x121 */
 	uint8_t lmt_overload_small_exceed_counter; /* 0..15, 0x121 */
@@ -3173,12 +3175,14 @@ struct ad9361_phy_platform_data {
 	uint8_t			rf_dc_offset_count_high;
 	uint8_t			rf_dc_offset_count_low;
 	uint8_t			dig_interface_tune_skipmode;
-	uint8_t			dig_interface_tune_fir_disable;
+	bool			dig_interface_tune_fir_disable;
 	uint8_t			lo_powerdown_managed_en;
 	uint32_t			dcxo_coarse;
 	uint32_t			dcxo_fine;
 	uint32_t			rf_rx_input_sel;
 	uint32_t			rf_tx_output_sel;
+	bool			rf_rx_input_sel_lock;
+	bool			rf_tx_output_sel_lock;
 	uint32_t		rx1tx1_mode_use_rx_num;
 	uint32_t		rx1tx1_mode_use_tx_num;
 	uint32_t		rx_path_clks[NUM_RX_CLOCKS];
@@ -3193,6 +3197,14 @@ struct ad9361_phy_platform_data {
 	uint32_t			rx_fastlock_delay_ns;
 	uint32_t			tx_fastlock_delay_ns;
 	bool			trx_fastlock_pinctrl_en[2];
+	bool			bb_clk_change_dig_tune_en;
+	bool			axi_half_dac_rate_en;
+
+	/* RSSI gain-step error factory calibration tables */
+	uint32_t		rssi_lna_err_tbl[4];
+	uint32_t		rssi_mixer_err_tbl[16];
+	uint32_t		rssi_gain_step_calib_reg_val[5];
+	bool			rssi_skip_calib; /* skip live RSSI calib if tables pre-loaded */
 
 	enum ad9361_clkout	ad9361_clkout_mode;
 
@@ -3403,6 +3415,7 @@ struct ad9361_rf_phy {
 	uint32_t				bist_tone_level_dB;
 	uint32_t				bist_tone_mask;
 	bool			bbpll_initialized;
+	struct ad9361_ext_band_ctl	*ext_band_ctl;
 };
 
 struct refclk_scale {
@@ -3554,4 +3567,28 @@ int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
 			      enum synth_pd_ctrl rx,
 			      enum synth_pd_ctrl tx);
 void ad9361_clear_state(struct ad9361_rf_phy *phy);
+
+struct ad9361_dig_tune_data {
+	uint8_t  skip_mode;      /* current dig_interface_tune_skipmode */
+	uint8_t  rx_clk_delay;   /* tuned RX CLK delay value */
+	uint8_t  rx_data_delay;  /* tuned RX DATA delay value */
+	uint8_t  tx_clk_delay;   /* tuned TX CLK delay value */
+	uint8_t  tx_data_delay;  /* tuned TX DATA delay value */
+};
+int32_t ad9361_get_dig_tune_data(struct ad9361_rf_phy *phy,
+				 struct ad9361_dig_tune_data *data);
+
+int32_t ad9361_write_clock_data_delays(struct ad9361_rf_phy *phy);
+int32_t ad9361_read_clock_data_delays(struct ad9361_rf_phy *phy);
+
+int32_t ad9361_write_bist_reg(struct ad9361_rf_phy *phy, uint32_t val);
+
+int32_t ad9361_ensm_mode_disable_pinctrl(struct ad9361_rf_phy *phy);
+int32_t ad9361_ensm_mode_restore_pinctrl(struct ad9361_rf_phy *phy);
+
+int32_t ad9361_rssi_program_lna_gain(struct ad9361_rf_phy *phy);
+int32_t ad9361_rssi_write_err_tbl(struct ad9361_rf_phy *phy);
+
+int32_t ad9361_set_cal_sw(struct ad9361_rf_phy *phy, uint32_t val);
+
 #endif
