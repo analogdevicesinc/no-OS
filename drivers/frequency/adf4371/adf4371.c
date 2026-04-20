@@ -2,6 +2,8 @@
  *   @file   adf4371.c
  *   @brief  Implementation of ADF4371 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Jude Osemene (jude.osemene@analog.com)
+ *   @author Sirac Kucukarabacioglu (sirac.kucukarabacioglu@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -36,134 +38,9 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include "no_os_error.h"
-#include "no_os_util.h"
 #include "no_os_alloc.h"
 #include "no_os_clk.h"
 #include "adf4371.h"
-
-#define ADF4371_WRITE			(0 << 15)
-#define ADF4371_READ			(1 << 15)
-#define ADF4371_ADDR(x)			((x) & 0x7FFF)
-
-/* Registers address macro */
-#define ADF4371_REG(x)			(x)
-
-/* ADF4371_REG0 */
-#define ADF4371_ADDR_ASC_MSK		NO_OS_BIT(2)
-#define ADF4371_ADDR_ASC(x)		no_os_field_prep(ADF4371_ADDR_ASC_MSK, x)
-#define ADF4371_ADDR_ASC_R_MSK		NO_OS_BIT(5)
-#define ADF4371_ADDR_ASC_R(x)		no_os_field_prep(ADF4371_ADDR_ASC_R_MSK, x)
-#define ADF4371_SDO_ACT_MSK		NO_OS_BIT(3)
-#define ADF4371_SDO_ACT(x)		no_os_field_prep(ADF4371_SDO_ACT_MSK, x)
-#define ADF4371_SDO_ACT_R_MSK		NO_OS_BIT(4)
-#define ADF4371_SDO_ACT_R(x)		no_os_field_prep(ADF4371_SDO_ACT_R_MSK, x)
-#define ADF4371_RESET_CMD		0x81
-
-/* ADF4371_REG17 */
-#define ADF4371_FRAC2WORD_L_MSK		NO_OS_GENMASK(7, 1)
-#define ADF4371_FRAC2WORD_L(x)		no_os_field_prep(ADF4371_FRAC2WORD_L_MSK, x)
-#define ADF4371_FRAC1WORD_MSK		NO_OS_BIT(0)
-#define ADF4371_FRAC1WORD(x)		no_os_field_prep(ADF4371_FRAC1WORD_MSK, x)
-
-/* ADF4371_REG18 */
-#define ADF4371_FRAC2WORD_H_MSK		NO_OS_GENMASK(6, 0)
-#define ADF4371_FRAC2WORD_H(x)		no_os_field_prep(ADF4371_FRAC2WORD_H_MSK, x)
-
-/* ADF4371_REG1A */
-#define ADF4371_MOD2WORD_MSK		NO_OS_GENMASK(5, 0)
-#define ADF4371_MOD2WORD(x)		no_os_field_prep(ADF4371_MOD2WORD_MSK, x)
-
-/* ADF4371_REG1E */
-#define ADF4371_CP_CURRENT_MSK		NO_OS_GENMASK(7, 4)
-#define ADF4371_CP_CURRENT(x)		no_os_field_prep(ADF4371_CP_CURRENT_MSK, x)
-#define ADF4371_PD_POL_MSK		NO_OS_BIT(3)
-#define ADF4371_PD_POL(x)		no_os_field_prep(ADF4371_PD_POL_MSK, x)
-
-/* ADF4371_REG20 */
-#define ADF4371_MUXOUT_MSK		NO_OS_GENMASK(7, 4)
-#define ADF4371_MUXOUT(x)		no_os_field_prep(ADF4371_MUXOUT_MSK, x)
-#define ADF4371_MUXOUT_LVL_MSK		NO_OS_BIT(2)
-#define ADF4371_MUXOUT_LVL(x)		no_os_field_prep(ADF4371_MUXOUT_LVL_MSK, x)
-#define ADF4371_MUXOUT_EN_MSK		NO_OS_BIT(3)
-#define ADF4371_MUXOUT_EN(x)		no_os_field_prep(ADF4371_MUXOUT_EN_MSK, x)
-
-/* ADF4371_REG22 */
-#define ADF4371_REFIN_MODE_MASK		NO_OS_BIT(6)
-#define ADF4371_REFIN_MODE(x)		no_os_field_prep(ADF4371_REFIN_MODE_MASK, x)
-
-/* ADF4371_REG24 */
-#define ADF4371_RF_DIV_SEL_MSK		NO_OS_GENMASK(6, 4)
-#define ADF4371_RF_DIV_SEL(x)		no_os_field_prep(ADF4371_RF_DIV_SEL_MSK, x)
-
-/* ADF4371_REG25 */
-#define ADF4371_MUTE_LD_MSK		NO_OS_BIT(7)
-#define ADF4371_MUTE_LD(x)		no_os_field_prep(ADF4371_MUTE_LD_MSK, x)
-
-/* ADF4371_REG32 */
-#define ADF4371_TIMEOUT_MSK		NO_OS_GENMASK(1, 0)
-#define ADF4371_TIMEOUT(x)		no_os_field_prep(ADF4371_TIMEOUT_MSK, x)
-
-/* ADF4371_REG34 */
-#define ADF4371_VCO_ALC_TOUT_MSK	NO_OS_GENMASK(4, 0)
-#define ADF4371_VCO_ALC_TOUT(x)		no_os_field_prep(ADF4371_VCO_ALC_TOUT_MSK, x)
-
-/* Specifications */
-#define ADF4371_MIN_VCO_FREQ		4000000000ULL /* 4000 MHz */
-#define ADF4371_MAX_VCO_FREQ		8000000000ULL /* 8000 MHz */
-#define ADF4371_MAX_OUT_RF8_FREQ	ADF4371_MAX_VCO_FREQ /* Hz */
-#define ADF4371_MIN_OUT_RF8_FREQ	(ADF4371_MIN_VCO_FREQ / 64) /* Hz */
-#define ADF4371_MAX_OUT_RF16_FREQ	(ADF4371_MAX_VCO_FREQ * 2) /* Hz */
-#define ADF4371_MIN_OUT_RF16_FREQ	(ADF4371_MIN_VCO_FREQ * 2) /* Hz */
-#define ADF4371_MAX_OUT_RF32_FREQ	(ADF4371_MAX_VCO_FREQ * 4) /* Hz */
-#define ADF4371_MIN_OUT_RF32_FREQ	(ADF4371_MIN_VCO_FREQ * 4) /* Hz */
-
-#define ADF4371_MAX_FREQ_PFD		250000000UL /* Hz */
-#define ADF4371_MAX_FREQ_REFIN		600000000UL /* Hz */
-
-/* MOD1 is a 24-bit primary modulus with fixed value of 2^25 */
-#define ADF4371_MODULUS1		33554432ULL
-/* MOD2 is the programmable, 14-bit auxiliary fractional modulus */
-#define ADF4371_MAX_MODULUS2		NO_OS_BIT(14)
-
-#define ADF4371_CHECK_RANGE(freq, range) \
-	((freq > ADF4371_MAX_ ## range) || (freq < ADF4371_MIN_ ## range))
-
-enum {
-	ADF4371_FREQ,
-	ADF4371_POWER_DOWN,
-	ADF4371_CHANNEL_NAME,
-	ADF4371_MUXOUT_ENABLE
-};
-
-enum {
-	ADF4371_CH_RF8,
-	ADF4371_CH_RFAUX8,
-	ADF4371_CH_RF16,
-	ADF4371_CH_RF32
-};
-
-enum adf4371_variant {
-	ADF4371,
-	ADF4372
-};
-
-enum adf4371_muxout {
-	ADF4371_TRISTATE = 0x00,
-	ADF4371_DIG_LOCK = 0x01,
-	ADF4371_CH_PUMP_UP = 0x02,
-	ADF4371_CH_PUMP_DOWN = 0x03,
-	ADF4371_RDIV2 = 0x04,
-	ADF4371_N_DIV_OUT = 0x05,
-	ADF4371_VCO_TEST = 0x06,
-	ADF4371_HIGH = 0x08,
-	ADF4371_VCO_CALIB_R_BAND = 0x09,
-	ADF4371_VCO_CALIB_N_BAND = 0x0A
-};
-
-struct adf4371_pwrdown {
-	uint32_t reg;
-	uint32_t bit;
-};
 
 static const int32_t adf4371_cp_current_microamp[] = {
 	350, 700, 1050, 1400, 1750, 2100, 2450, 2800,
@@ -175,11 +52,6 @@ static const struct adf4371_pwrdown adf4371_pwrdown_ch[4] = {
 	[ADF4371_CH_RFAUX8] = { ADF4371_REG(0x72), 3 },
 	[ADF4371_CH_RF16] = { ADF4371_REG(0x25), 3 },
 	[ADF4371_CH_RF32] = { ADF4371_REG(0x25), 4 },
-};
-
-struct reg_sequence {
-	uint16_t reg;
-	uint8_t val;
 };
 
 static const struct reg_sequence adf4371_reg_defaults[] = {
@@ -221,9 +93,9 @@ static const struct reg_sequence adf4371_reg_defaults[] = {
  * @param val - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_write(struct adf4371_dev *dev,
-			     uint16_t reg,
-			     uint8_t val)
+int adf4371_write(struct adf4371_dev *dev,
+		  uint16_t reg,
+		  uint8_t val)
 {
 	uint8_t buf[3];
 	uint16_t cmd;
@@ -244,10 +116,10 @@ static int32_t adf4371_write(struct adf4371_dev *dev,
  * @param size - The buffer size.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_write_bulk(struct adf4371_dev *dev,
-				  uint16_t reg,
-				  uint8_t *val,
-				  uint8_t size)
+int adf4371_write_bulk(struct adf4371_dev *dev,
+		       uint16_t reg,
+		       uint8_t *val,
+		       uint8_t size)
 {
 	uint8_t buf[10];
 	uint16_t cmd;
@@ -263,15 +135,38 @@ static int32_t adf4371_write_bulk(struct adf4371_dev *dev,
 }
 
 /**
+ * SPI register write a sequence of register-value pairs to device.
+ * @param dev - The device structure.
+ * @param regs - The array of register-value pairs.
+ * @param count - The number of entries in the array.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_write_regs(struct adf4371_dev *dev,
+		       const struct reg_sequence *regs,
+		       uint32_t count)
+{
+	uint32_t i;
+	int ret;
+
+	for (i = 0; i < count; i++) {
+		ret = adf4371_write(dev, regs[i].reg, regs[i].val);
+		if (ret < 0)
+			return ret;
+	}
+
+	return 0;
+}
+
+/**
  * SPI register read from device.
  * @param dev - The device structure.
  * @param reg - The register address.
  * @param val - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_read(struct adf4371_dev *dev,
-			    uint16_t reg,
-			    uint8_t *val)
+int adf4371_read(struct adf4371_dev *dev,
+		 uint16_t reg,
+		 uint8_t *val)
 {
 	uint8_t buf[3];
 	uint16_t cmd;
@@ -295,210 +190,273 @@ static int32_t adf4371_read(struct adf4371_dev *dev,
  * SPI register update.
  * @param dev - The device structure.
  * @param reg - The register address.
- * @param reg - The register address.
+ * @param mask - The bitmask selecting the field to update.
  * @param val - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_update(struct adf4371_dev *dev,
-			      uint16_t reg,
-			      uint8_t mask,
-			      uint8_t val)
+int adf4371_update(struct adf4371_dev *dev,
+		   uint16_t reg,
+		   uint8_t mask,
+		   uint8_t val)
 {
 	uint8_t read_val;
-	int32_t ret = 0;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = adf4371_read(dev, reg, &read_val);
+	if (ret)
+		return ret;
+
 	read_val &= ~mask;
 	read_val |= val;
-	ret |= adf4371_write(dev, reg, read_val);
 
-	return ret;
+	return adf4371_write(dev, reg, read_val);
 }
 
 /**
- * Get the output frequency of one channel.
+ * @brief Set the desired reference frequency and reset everything over to maximum
+ * supported value of 600MHz to the max. value and everything under the minimum
+ * supported value of 10MHz to the min. value. This should also update the
+ * frequency and the VCO calibration values.
  * @param dev - The device structure.
- * @param channel - The selected channel.
- * @return The ouput frequency.
- */
-static uint64_t adf4371_pll_fract_n_get_rate(struct adf4371_dev *dev,
-		uint32_t channel)
-{
-	uint64_t val, tmp;
-	uint32_t ref_div_sel;
-
-	if (dev->mod2 == 0)
-		return 0;
-
-	val = (((uint64_t)dev->integer * ADF4371_MODULUS1) + dev->fract1) * dev->fpfd;
-	tmp = (uint64_t)dev->fract2 * dev->fpfd;
-	no_os_do_div(&tmp, dev->mod2);
-	val += tmp + ADF4371_MODULUS1 / 2;
-
-	if (channel == ADF4371_CH_RF8 || channel == ADF4371_CH_RFAUX8)
-		ref_div_sel = dev->rf_div_sel;
-	else
-		ref_div_sel = 0;
-
-	no_os_do_div(&val, ADF4371_MODULUS1 * (1 << ref_div_sel));
-
-	if (channel == ADF4371_CH_RF16)
-		val <<= 1;
-	else if (channel == ADF4371_CH_RF32)
-		val <<= 2;
-
-	return val;
-}
-
-/**
- * Compute PLL parameters.
- * @param vco - The VCO frequency.
- * @param pfd - The PFD frequency.
- * @param integer - The integer division factor.
- * @param fract1 - The fractionality.
- * @param fract2 - The auxiliary fractionality.
- * @param mod2 - The auxiliary modulus.
- */
-static void adf4371_pll_fract_n_compute(uint64_t vco,
-					uint64_t pfd,
-					uint32_t *integer,
-					uint32_t *fract1,
-					uint32_t *fract2,
-					uint32_t *mod2)
-{
-	uint64_t tmp;
-	uint32_t gcd_div;
-
-	tmp = no_os_do_div(&vco, pfd);
-	tmp = tmp * ADF4371_MODULUS1;
-	*fract2 = no_os_do_div(&tmp, pfd);
-
-	*integer = vco;
-	*fract1 = tmp;
-
-	*mod2 = pfd;
-
-	while (*mod2 > ADF4371_MAX_MODULUS2) {
-		*mod2 >>= 1;
-		*fract2 >>= 1;
-	}
-
-	gcd_div = no_os_greatest_common_divisor(*fract2, *mod2);
-	*mod2 /= gcd_div;
-	*fract2 /= gcd_div;
-}
-
-/**
- * Set the output frequency for one channel.
- * @param dev - The device structure.
- * @param freq - The output frequency.
- * @param channel - The selected channel.
+ * @param val - The reference frequency.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_set_freq(struct adf4371_dev *dev,
-				uint64_t freq,
-				uint32_t channel)
+int adf4371_set_ref_clk(struct adf4371_dev *dev, uint64_t val)
 {
-	uint32_t cp_bleed;
-	uint8_t int_mode = 0;
-	int32_t ret;
+	if (!dev)
+		return -EINVAL;
 
-	switch (channel) {
-	case ADF4371_CH_RF8:
-	case ADF4371_CH_RFAUX8:
-		if (ADF4371_CHECK_RANGE(freq, OUT_RF8_FREQ))
-			return -1;
+	dev->clkin_freq = val;
 
-		dev->rf_div_sel = 0;
+	if (val > ADF4371_MAX_FREQ_REFIN)
+		dev->clkin_freq = ADF4371_MAX_FREQ_REFIN;
 
-		while (freq < ADF4371_MIN_VCO_FREQ) {
-			freq <<= 1;
-			dev->rf_div_sel++;
-		}
-		break;
-	case ADF4371_CH_RF16:
-		/* ADF4371 RF16 8000...16000 MHz */
-		if (ADF4371_CHECK_RANGE(freq, OUT_RF16_FREQ))
-			return -1;
+	if (val < ADF4371_MIN_FREQ_REFIN)
+		dev->clkin_freq = ADF4371_MIN_FREQ_REFIN;
 
-		freq >>= 1;
-		break;
-	case ADF4371_CH_RF32:
-		/* ADF4371 RF32 16000...32000 MHz */
-		if (ADF4371_CHECK_RANGE(freq, OUT_RF32_FREQ))
-			return -1;
+	return adf4371_set_frequency(dev);
 
-		freq >>= 2;
-		break;
-	default:
-		return -1;
-	}
-
-	adf4371_pll_fract_n_compute(freq, dev->fpfd, &dev->integer, &dev->fract1,
-				    &dev->fract2, &dev->mod2);
-
-	dev->buf[0] = dev->integer >> 8;
-	dev->buf[1] = 0x40; /* REG12 default */
-	dev->buf[2] = 0x00;
-	dev->buf[3] = dev->fract1 & 0xFF;
-	dev->buf[4] = dev->fract1 >> 8;
-	dev->buf[5] = dev->fract1 >> 16;
-	dev->buf[6] = ADF4371_FRAC2WORD_L(dev->fract2 & 0x7F) |
-		      ADF4371_FRAC1WORD(dev->fract1 >> 24);
-	dev->buf[7] = ADF4371_FRAC2WORD_H(dev->fract2 >> 7);
-	dev->buf[8] = dev->mod2 & 0xFF;
-	dev->buf[9] = ADF4371_MOD2WORD(dev->mod2 >> 8);
-
-	ret = adf4371_write_bulk(dev, ADF4371_REG(0x11), dev->buf, 10);
-	if (ret < 0)
-		return ret;
-	/*
-	 * The R counter allows the input reference frequency to be
-	 * divided down to produce the reference clock to the PFD
-	 */
-	ret = adf4371_write(dev, ADF4371_REG(0x1F), dev->ref_div_factor);
-	if (ret < 0)
-		return ret;
-
-	ret = adf4371_update(dev, ADF4371_REG(0x24),
-			     ADF4371_RF_DIV_SEL_MSK,
-			     ADF4371_RF_DIV_SEL(dev->rf_div_sel));
-	if (ret < 0)
-		return ret;
-
-	/*
-	 * The optimum bleed current is set by ((4/N) × ICP)/3.75,
-	 * where ICP is the charge pump current in μA
-	 */
-	cp_bleed = NO_OS_DIV_ROUND_UP(400 * dev->cp_settings.icp, dev->integer * 375);
-	cp_bleed = no_os_clamp(cp_bleed, 1U, 255U);
-	ret = adf4371_write(dev, ADF4371_REG(0x26), cp_bleed);
-	if (ret < 0)
-		return ret;
-	/*
-	 * Set to 1 when in INT mode (when FRAC1 = FRAC2 = 0),
-	 * and set to 0 when in FRAC mode.
-	 */
-	if (dev->fract1 == 0 && dev->fract2 == 0)
-		int_mode = 0x01;
-
-	ret = adf4371_write(dev, ADF4371_REG(0x2B), int_mode);
-	if (ret < 0)
-		return ret;
-
-	return adf4371_write(dev, ADF4371_REG(0x10), dev->integer & 0xFF);
 }
 
 /**
- * Power down one channel.
+ * Get the reference clock frequency.
+ * @param dev - The device structure.
+ * @param val - The reference clock frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_ref_clk(struct adf4371_dev *dev, uint64_t *val)
+{
+	if (!dev)
+		return -EINVAL;
+
+	*val = dev->clkin_freq;
+
+	return 0;
+}
+
+/**
+ * @brief Set the charge pump current. This should also update the bleed current
+ * value.
+ * @param dev - The device structure.
+ * @param val - The charge pump current in microamperes.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_set_charge_pump_current(struct adf4371_dev *dev, uint32_t val)
+{
+	if (!dev)
+		return -EINVAL;
+
+	dev->cp_settings.regval = val;
+
+	if (val > ADF4371_CPI_VAL_MAX)
+		dev->cp_settings.regval = ADF4371_CPI_VAL_MAX;
+
+	return adf4371_update(dev, ADF4371_REG(0x1E), ADF4371_CP_CURRENT_MSK,
+			      ADF4371_CP_CURRENT(dev->cp_settings.regval));
+}
+
+/**
+ * Get the charge pump current.
+ * @param dev - The device structure.
+ * @param val - The charge pump current in microamperes.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_charge_pump_current(struct adf4371_dev *dev, uint32_t *val)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_read(dev, ADF4371_REG(0x1E), &tmp);
+	if (ret)
+		return ret;
+
+	dev->cp_settings.regval = no_os_field_get(ADF4371_CP_CURRENT_MSK, tmp);
+	*val = dev->cp_settings.regval;
+
+	return 0;
+}
+
+/**
+ * @brief Set the reference doubler to enable or disable based on the passed
+ * parameter. If the parameter is different then 0 it will set the doubler to
+ * enable. This should also update the frequency and the VCO calibration values.
+ * @param dev 		- The device structure.
+ * @param en	 	- The enable or disable value of the reference doubler.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4371_set_ref_doubler(struct adf4371_dev *dev, bool en)
+{
+	if (!dev)
+		return -EINVAL;
+
+	dev->ref_doubler_en = en;
+
+	return adf4371_set_frequency(dev);
+}
+
+/**
+ * Get the reference doubler enable status.
+ * @param dev - The device structure.
+ * @param en - The enable or disable value of the reference doubler.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_ref_doubler(struct adf4371_dev *dev, bool *en)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_read(dev, ADF4371_REG(0x22), &tmp);
+	if (ret)
+		return ret;
+
+	dev->ref_doubler_en = no_os_field_get(ADF4371_REF_DOUBLER_EN_MSK, tmp);
+	*en = dev->ref_doubler_en;
+
+	return 0;
+}
+
+/**
+ * @brief Set the RDIV2 enable to enable or disable based on the passed
+ * parameter. If the parameter is different then 0 it will set the RDIV2 to
+ * enable. This should also update the frequency and the VCO calibration values.
+ * @param dev 		- The device structure.
+ * @param en	 	- The enable or disable value of the RDIV2.
+ * @return    		- 0 in case of success or negative error code.
+ */
+int adf4371_set_rdiv2_enable(struct adf4371_dev *dev, bool en)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	dev->ref_div2_en = en;
+	ret = adf4371_update(dev, ADF4371_REG(0x22), ADF4371_RDIV2_EN_MSK,
+			     ADF4371_RDIV2_EN(dev->ref_div2_en));
+	if (ret)
+		return ret;
+	return adf4371_set_frequency(dev);;
+}
+
+/**
+ * Get the RDIV2 enable status.
+ * @param dev - The device structure.
+ * @param en - The enable or disable value of the RDIV2.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_rdiv2_enable(struct adf4371_dev *dev, bool *en)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_read(dev, ADF4371_REG(0x22), &tmp);
+	if (ret)
+		return ret;
+	dev->ref_div2_en = no_os_field_get(ADF4371_RDIV2_EN_MSK, tmp);
+	*en = dev->ref_div2_en;
+	return 0;
+}
+
+/**
+ * @brief Set the R div word. This should also update the frequency and the
+ * VCO calibration values.
+ * @param dev - The device structure.
+ * @param val - The R div word value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_set_r_word(struct adf4371_dev *dev, uint32_t val)
+{
+	if (!dev)
+		return -EINVAL;
+
+	dev->ref_div_factor = val;
+
+	return adf4371_set_frequency(dev);
+}
+
+/**
+ * Get the R div word value.
+ * @param dev - The device structure.
+ * @param val - The R div word value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_r_word(struct adf4371_dev *dev, uint32_t *val)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_read(dev, ADF4371_REG(0x1F), &tmp);
+	if (ret)
+		return ret;
+
+	dev->ref_div_factor = no_os_field_get(ADF4371_R_WORD_MSK, tmp);
+	*val = dev->ref_div_factor;
+
+	return 0;
+}
+
+/**
+ * @brief Set the output divider for one channel. This should also update the
+ * frequency and the VCO calibration values.
+ * @param dev - The device structure.
+ * @param val - The output divider value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_set_output_divider(struct adf4371_dev *dev, uint32_t val)
+{
+	if (!dev)
+		return -EINVAL;
+
+	dev->rf_div_sel = val;
+
+	return adf4371_write(dev, ADF4371_REG(0x25), ADF4371_RF_DIV_SEL(val));
+}
+
+/**
+ * @brief Set power down state for one channel.
  * @param dev - The device structure.
  * @param channel - The selected channel.
  * @param power_down - The power down state.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_channel_power_down(struct adf4371_dev *dev,
-		uint32_t channel,
-		bool power_down)
+int adf4371_set_channel_power_down(struct adf4371_dev *dev,
+				   uint32_t channel,
+				   bool power_down)
 {
 	uint32_t bit, reg;
 	uint8_t readval;
@@ -517,45 +475,479 @@ static int32_t adf4371_channel_power_down(struct adf4371_dev *dev,
 }
 
 /**
- * Configure the channels.
+ * @brief Get power down state for one channel.
  * @param dev - The device structure.
+ * @param channel - The selected channel.
+ * @param power_down - The power down state.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_channel_config(struct adf4371_dev *dev)
+int adf4371_get_channel_power_down(struct adf4371_dev *dev,
+				   uint32_t channel,
+				   bool *power_down)
 {
-	uint64_t rate;
-	int32_t i, ret;
+	uint32_t bit, reg;
+	uint8_t readval;
+	int32_t ret;
 
-	for (i = 0; i < dev->num_channels; i++) {
-		if (dev->channel_cfg[i].freq == 0)
-			continue;
+	reg = adf4371_pwrdown_ch[channel].reg;
+	bit = adf4371_pwrdown_ch[channel].bit;
+	ret = adf4371_read(dev, reg, &readval);
+	if (ret < 0)
+		return ret;
 
-		rate = adf4371_pll_fract_n_get_rate(dev, i);
-		if (rate == 0) {
-			ret = adf4371_set_freq(dev, dev->channel_cfg[i].freq, i);
-			if (ret < 0)
-				return ret;
-		} else if (rate != dev->channel_cfg[i].freq) {
-			printf("Clock rate for chanel %"PRId32" is not in sync\n", i);
-			return -1;
+	*power_down = !(readval & NO_OS_BIT(bit));
+
+	return 0;
+}
+
+/**
+ * @brief Compute the PFD frequency of the device.
+ * @param dev - The device structure.
+ * @return The calculated PFD frequency.
+ */
+static uint64_t adf4371_pfd_freq_compute(struct adf4371_dev *dev)
+{
+	uint64_t reference_freq;
+	uint64_t pfd_freq;
+
+	if (!dev)
+		return -EINVAL;
+
+	reference_freq = dev->clkin_freq;
+
+	if (dev->ref_doubler_en)
+		reference_freq *= 2;
+
+	pfd_freq = NO_OS_DIV_ROUND_CLOSEST(reference_freq, dev->ref_div_factor);
+
+	if (dev->ref_div2_en)
+		pfd_freq /= 2;
+
+	return pfd_freq;
+}
+
+/**
+ * @brief Get the output frequency for one channel.
+ * @param dev - The device structure.
+ * @param value - The output frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_rfout(struct adf4371_dev *dev, uint64_t *value)
+{
+	uint64_t pfd_freq;
+	uint64_t freq;
+	uint16_t n_int;
+	uint32_t frac1_word;
+	uint32_t frac2_word;
+	uint32_t mod2_word;
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	pfd_freq = adf4371_pfd_freq_compute(dev);
+
+	// Read N_INT from register
+	ret = adf4371_read(dev, ADF4371_REG(0x11), &tmp);
+	if (ret)
+		return ret;
+	n_int = (tmp & ADF4371_NINT_M_MSK) << 8;
+	ret = adf4371_read(dev, ADF4371_REG(0x10), &tmp);
+	if (ret)
+		return ret;
+	n_int |= tmp & ADF4371_NINT_L_MSK;
+
+	// Read FRAC1_WORD from register
+	ret = adf4371_read(dev, ADF4371_REG(0x14), &tmp);
+	if (ret)
+		return ret;
+	frac1_word = tmp & ADF4371_FRAC1WORD_L_MSK;
+	ret = adf4371_read(dev, ADF4371_REG(0x15), &tmp);
+	if (ret)
+		return ret;
+	frac1_word |= (tmp & ADF4371_FRAC1WORD_M_MSK) << 8;
+	ret = adf4371_read(dev, ADF4371_REG(0x16), &tmp);
+	if (ret)
+		return ret;
+	frac1_word |= (tmp & ADF4371_FRAC1WORD_MM_MSK) << 16;
+	ret = adf4371_read(dev, ADF4371_REG(0x17), &tmp);
+	if (ret)
+		return ret;
+	frac1_word |= (tmp & ADF4371_FRAC1WORD_H_MSK) << 24;
+
+	// Read FRAC2_WORD from register
+	ret = adf4371_read(dev, ADF4371_REG(0x17), &tmp);
+	if (ret)
+		return ret;
+	frac2_word = tmp & ADF4371_FRAC2WORD_L_MSK;
+	ret = adf4371_read(dev, ADF4371_REG(0x18), &tmp);
+	if (ret)
+		return ret;
+	frac2_word |= (tmp & ADF4371_FRAC2WORD_H_MSK) << 8;
+
+	// Read MOD2_WORD from register
+	ret = adf4371_read(dev, ADF4371_REG(0x19), &tmp);
+	if (ret)
+		return ret;
+	mod2_word = tmp & ADF4371_MOD2WORD_L_MSK;
+	ret = adf4371_read(dev, ADF4371_REG(0x1A), &tmp);
+	if (ret)
+		return ret;
+	mod2_word |= (tmp & ADF4371_MOD2WORD_H_MSK) << 8;
+
+	if (mod2_word) {
+		freq = frac2_word * pfd_freq;
+		freq = no_os_div_u64(freq, mod2_word);
+	} else
+		freq = 0;
+
+	freq += frac1_word * pfd_freq;
+	freq = no_os_div_u64(freq, ADF4371_MODULUS1);
+	freq += n_int * pfd_freq;
+
+	dev->vco_freq = freq;
+	dev->rfout8_freq = dev->vco_freq / (1 << dev->rf_div_sel);
+	dev->rfout16_freq = dev->vco_freq << 1;
+	dev->rfout32_freq = dev->vco_freq << 2;
+	*value = dev->rfout8_freq;
+	return 0;
+}
+
+/**
+ * @brief Get the output frequency for RFOUT16 channel.
+ * @param dev - The device structure.
+ * @param value - The output frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_rfout16(struct adf4371_dev *dev, uint64_t *value)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_get_rfout(dev, value);
+	if (ret)
+		return ret;
+
+	*value = dev->vco_freq << 1;
+
+	return 0;
+}
+
+/**
+ * @brief Get the output frequency for RFOUT32 channel.
+ * @param dev - The device structure.
+ * @param value - The output frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_rfout32(struct adf4371_dev *dev, uint64_t *value)
+{
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_get_rfout(dev, value);
+	if (ret)
+		return ret;
+
+	*value = dev->vco_freq << 2;
+
+	return 0;
+}
+
+/**
+ * @brief Get the output frequency for RFAUX8 channel.
+ * @param dev - The device structure.
+ * @param value - The output frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_rfout8aux(struct adf4371_dev *dev, uint64_t *value)
+{
+	if (!dev)
+		return -EINVAL;
+
+	*value = dev->rfout8_freq;
+
+	return 0;
+}
+
+/**
+ * @brief Compute the integer and fractional values for the desired output frequency.
+ * @param f_vco - The desired VCO frequency.
+ * @param pfd_freq - The PFD frequency.
+ * @param n_int - The integer word value.
+ * @param frac1_word - The fractional 1 word value.
+ * @param frac2_word - The fractional 2 word value.
+ * @param mod2_word - The MOD2 word value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int adf4371_frac_compute(uint64_t f_vco, uint64_t pfd_freq,
+				uint16_t *n_int,
+				uint32_t *frac1_word, uint32_t *frac2_word,
+				uint32_t *mod2_word)
+{
+	uint64_t res;
+	uint64_t rem;
+	uint32_t channel_spacing;
+	uint32_t chsp_freq;
+	uint32_t mod2_tmp;
+	uint32_t mod2_max;
+	uint32_t mod2_wd;
+	uint32_t gcd;
+	channel_spacing = 1;
+	mod2_wd = 1;
+
+	mod2_max = ADF4371_MAX_MODULUS2;
+
+	do {
+
+		chsp_freq = channel_spacing * ADF4371_MODULUS1;
+		gcd = no_os_greatest_common_divisor(chsp_freq, pfd_freq);
+		mod2_tmp = NO_OS_DIV_ROUND_UP(pfd_freq, gcd);
+
+		if (mod2_tmp > mod2_max) {
+			channel_spacing *= 5;
+		} else {
+			mod2_wd = mod2_tmp;
+			break;
 		}
-		/* Powerup channel */
-		if (dev->channel_cfg[i].enable) {
-			ret = adf4371_channel_power_down(dev, i, false);
-			if (ret < 0)
-				return ret;
-		}
+
+	} while (channel_spacing < ADF4371_CHANNEL_SPACING_MAX);
+
+	*n_int = no_os_div64_u64_rem(f_vco, pfd_freq, &rem);
+	res = rem * ADF4371_MODULUS1;
+	*frac1_word = no_os_div64_u64_rem(res, pfd_freq, &rem);
+	*frac2_word = 0;
+	*mod2_word = 1;
+
+	if (rem > 0) {
+		res = rem * mod2_wd;
+		*frac2_word = no_os_div64_u64_rem(res, pfd_freq, &rem);
+		*mod2_word = mod2_wd;
 	}
 
 	return 0;
 }
 
 /**
- * Setup the device.
+ * @brief Set the output frequency for RFOUT8 channel.
+ * @param dev - The device structure.
+ * @param freq - The output frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_set_rf8_freq(struct adf4371_dev *dev, uint64_t freq)
+{
+
+	if (!dev)
+		return -EINVAL;
+
+	dev->rfout8_freq = freq;
+	return adf4371_set_frequency(dev);
+}
+
+/**
+ * @brief Set the output frequency for one channel.
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t adf4371_setup(struct adf4371_dev *dev)
+int adf4371_set_frequency(struct adf4371_dev *dev)
+{
+	uint32_t frac2_word;
+	uint32_t frac1_word;
+	uint32_t mod2_word;
+	uint64_t pfd_freq;
+	uint16_t output_divider;
+	uint8_t int_mode;
+	uint64_t freq;
+	uint8_t en_bleed;
+	uint16_t n_int;
+	uint8_t val;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	freq = dev->rfout8_freq;
+
+	while (freq < ADF4371_MIN_OUT_RF8_FREQ) {
+		freq <<= 1;
+		dev->rf_div_sel++;
+	}
+
+	output_divider = 1 << dev->rf_div_sel;
+	dev->vco_freq = freq * output_divider;
+	dev->rfout16_freq = dev->vco_freq << 1;
+	dev->rfout32_freq = dev->vco_freq << 2;
+
+	// Write Reference Divider to register
+	val = dev->ref_div_factor & ADF4371_R_WORD_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x1F), val);
+	if (ret)
+		return ret;
+
+	// Write Reference Doubler to register
+	val = ADF4371_REF_DOUBLER_EN(dev->ref_doubler_en);
+	ret = adf4371_update(dev, ADF4371_REG(0x22), ADF4371_REF_DOUBLER_EN_MSK, val);
+	if (ret)
+		return ret;
+
+	// compute PFD frequency
+	pfd_freq = adf4371_pfd_freq_compute(dev);
+
+	// Write Charge Pump current to register
+	val = ADF4371_CP_CURRENT(dev->cp_settings.regval);
+	ret = adf4371_update(dev, ADF4371_REG(0x1E), ADF4371_CP_CURRENT_MSK, val);
+	if (ret)
+		return ret;
+
+	// compute integer and fractional values
+	ret = adf4371_frac_compute(dev->vco_freq, pfd_freq, &n_int, &frac1_word,
+				   &frac2_word, &mod2_word);
+	if (ret)
+		return ret;
+
+	if (frac1_word || frac2_word) {
+		int_mode = 0;
+		en_bleed = 1;
+	} else {
+		int_mode = 1;
+		en_bleed = 0;
+	}
+
+	dev->integer = (uint32_t)n_int;
+
+	// Write INT_MODE to register
+	val = ADF4371_VAR_MOD(int_mode);
+	ret = adf4371_update(dev, ADF4371_REG(0x2B), ADF4371_VAR_MOD_MSK, val);
+	if (ret)
+		return ret;
+
+	ret = adf4371_update(dev, ADF4371_REG(0x24),
+			     ADF4371_RF_DIV_SEL_MSK,
+			     ADF4371_RF_DIV_SEL(dev->rf_div_sel));
+	if (ret < 0)
+		return ret;
+
+	// Write EN_BLEED to register
+	val = ADF4371_BLEED_EN(en_bleed);
+	ret = adf4371_update(dev, ADF4371_REG(0x27), ADF4371_BLEED_EN_MSK, val);
+	if (ret)
+		return ret;
+
+	/*
+	 * The optimum bleed current is set by ((4/N) × ICP)/3.75,
+	 * where ICP is the charge pump current in μA
+	 */
+	dev->cp_settings.bleed_icp = NO_OS_DIV_ROUND_UP(400 *
+				     dev->cp_settings.icp,
+				     dev->integer * 375);
+	dev->cp_settings.bleed_icp = no_os_clamp(dev->cp_settings.bleed_icp,
+				     1U, 255U);
+	ret = adf4371_write(dev, ADF4371_REG(0x26), ADF4371_BLEED_ICP
+			    (dev->cp_settings.bleed_icp));
+	if (ret < 0)
+		return ret;
+
+	// Write MOD2_WORD to register
+	val = mod2_word & ADF4371_MOD2WORD_L_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x19), val);
+	if (ret)
+		return ret;
+	val = (mod2_word >> 8) & ADF4371_MOD2WORD_H_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x1A), val);
+	if (ret)
+		return ret;
+
+	// Write FRAC2_WORD to register
+	val = (frac2_word >> 7) & ADF4371_FRAC2WORD_H_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x18), val);
+	if (ret)
+		return ret;
+
+	// Write FRAC1_WORD to register
+	val = frac1_word & ADF4371_FRAC1WORD_L_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x14), val);
+	if (ret)
+		return ret;
+	val = (frac1_word >> 8) & ADF4371_FRAC1WORD_M_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x15), val);
+	if (ret)
+		return ret;
+	val = (frac1_word >> 16) & ADF4371_FRAC1WORD_MM_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x16), val);
+	if (ret)
+		return ret;
+	val = (frac2_word & ADF4371_FRAC2WORD_L_MSK) |
+	      ((frac1_word >> 24) & ADF4371_FRAC1WORD_H_MSK);
+	ret = adf4371_write(dev, ADF4371_REG(0x17), val);
+	if (ret)
+		return ret;
+
+	// Write N_INT to register
+	val = (n_int >> 8) & ADF4371_NINT_M_MSK;
+	ret = adf4371_write(dev, ADF4371_REG(0x11), val);
+	if (ret)
+		return ret;
+	val = n_int & ADF4371_NINT_L_MSK;
+	return adf4371_write(dev, ADF4371_REG(0x10), val);
+}
+
+/**
+ * @brief Set bleed current for the charge pump.
+ * @param dev - The device structure.
+ * @param val - The bleed word value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_set_bleed_icp(struct adf4371_dev *dev, uint32_t val)
+{
+	uint32_t regval;
+
+	if (!dev)
+		return -EINVAL;
+
+	if (val > ADF4371_BLEED_ICP_MAX)
+		dev->cp_settings.bleed_icp = ADF4371_BLEED_ICP_MAX;
+	else
+		dev->cp_settings.bleed_icp = val;
+
+	regval = no_os_field_prep(ADF4371_BLEED_ICP_MSK, dev->cp_settings.bleed_icp);
+
+	return adf4371_write(dev, ADF4371_REG(0x26), regval);
+}
+
+/**
+ * Get bleed current for the charge pump.
+ * @param dev - The device structure.
+ * @param val - The bleed word value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4371_get_bleed_icp(struct adf4371_dev *dev, uint32_t *val)
+{
+	uint8_t tmp;
+	int ret;
+
+	if (!dev)
+		return -EINVAL;
+
+	ret = adf4371_read(dev, ADF4371_REG(0x26), &tmp);
+	if (ret)
+		return ret;
+
+	dev->cp_settings.bleed_icp = no_os_field_get(ADF4371_BLEED_ICP_MSK, tmp);
+	*val = dev->cp_settings.bleed_icp;
+
+	return 0;
+}
+
+/**
+ * Setup the ADF4371 device.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int adf4371_setup(struct adf4371_dev *dev)
 {
 	uint32_t vco_alc_timeout = 1;
 	uint32_t synth_timeout = 2;
@@ -566,7 +958,10 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
 	uint8_t mask;
 	uint8_t val;
 	int32_t ret;
-	int32_t i;
+	uint32_t i;
+
+	if (!dev)
+		return -EINVAL;
 
 	ret = adf4371_write(dev, ADF4371_REG(0x0), ADF4371_RESET_CMD);
 	if (ret < 0)
@@ -677,103 +1072,12 @@ static int32_t adf4371_setup(struct adf4371_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	return adf4371_channel_config(dev);
-}
+	ret = adf4371_update(dev, ADF4371_REG(0x25), ADF4371_RF_EN_MSK,
+			     ADF4371_RF_EN(1));
+	if (ret < 0)
+		return ret;
 
-/**
- * Recalculate rate corresponding to a channel.
- * @param dev - The device structure.
- * @param chan - Channel number.
- * @param rate - Channel rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t adf4371_clk_recalc_rate_chan(struct adf4371_dev *dev, uint32_t chan,
-				     uint64_t *rate)
-{
-	uint64_t tmp = 0;
-	if (chan > dev->num_channels)
-		return -1;
-
-	tmp = adf4371_pll_fract_n_get_rate(dev, chan);
-	*rate = tmp;
-
-	return 0;
-}
-
-/**
- * Recalculate rate corresponding to a channel.
- * @param desc - The no_os_clk device structure.
- * @param rate - Channel rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-static int32_t adf4371_clk_recalc_rate(struct no_os_clk_desc *desc,
-				       uint64_t *rate)
-{
-	uint64_t tmp = 0;
-
-	tmp = adf4371_pll_fract_n_get_rate(desc->dev_desc, desc->hw_ch_num);
-	*rate = tmp;
-
-	return 0;
-}
-
-/**
- * Calculate closest possible rate
- * @param dev - The device structure
- * @param rate - The desired rate.
- * @param rounded_rate - The closest possible rate of desired rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t adf4371_clk_round_rate_dev(struct adf4371_dev *dev, uint64_t rate,
-				   uint64_t *rounded_rate)
-{
-	*rounded_rate = rate;
-
-	return 0;
-}
-
-/**
- * Calculate closest possible rate
- * @param desc - The no_os_clk device structure.
- * @param rate - The desired rate.
- * @param rounded_rate - The closest possible rate of desired rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-static int32_t adf4371_clk_round_rate(struct no_os_clk_desc *desc,
-				      uint64_t rate,
-				      uint64_t *rounded_rate)
-{
-	*rounded_rate = rate;
-
-	return 0;
-}
-
-/**
- * Set channel rate.
- * @param dev - The device structure.
- * @param chan - Channel number.
- * @param rate - Channel rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t adf4371_clk_set_rate_chan(struct adf4371_dev *dev, uint32_t chan,
-				  uint64_t rate)
-{
-	if (chan >= dev->num_channels)
-		return -1;
-
-	return adf4371_set_freq(dev, rate, chan);
-}
-
-/**
- * Set channel rate.
- * @param desc - The no_os_clk device structure.
- * @param rate - Channel rate.
- * @return 0 in case of success, negative error code otherwise.
- */
-static int32_t adf4371_clk_set_rate(struct no_os_clk_desc *desc,
-				    uint64_t rate)
-{
-	return adf4371_set_freq(desc->dev_desc, rate, desc->hw_ch_num);
+	return adf4371_set_frequency(dev);
 }
 
 /**
@@ -783,8 +1087,8 @@ static int32_t adf4371_clk_set_rate(struct no_os_clk_desc *desc,
  * 		       parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adf4371_init(struct adf4371_dev **device,
-		     const struct adf4371_init_param *init_param)
+int adf4371_init(struct adf4371_dev **device,
+		 const struct adf4371_init_param *init_param)
 {
 	struct adf4371_dev *dev;
 	int32_t ret;
@@ -797,6 +1101,17 @@ int32_t adf4371_init(struct adf4371_dev **device,
 	ret = no_os_spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
+
+	/* GPIO Chip Enable */
+	ret = no_os_gpio_get_optional(&dev->gpio_ce, init_param->gpio_ce_param);
+	if (ret < 0)
+		goto error;
+
+	if (dev->gpio_ce) {
+		ret = no_os_gpio_direction_output(dev->gpio_ce, NO_OS_GPIO_HIGH);
+		if (ret < 0)
+			goto error_gpio_ce;
+	}
 
 	dev->spi_3wire_en = init_param->spi_3wire_enable;
 
@@ -833,13 +1148,9 @@ int32_t adf4371_init(struct adf4371_dev **device,
 
 	dev->muxout_1v8_en = init_param->muxout_level_1v8_enable;
 
-	dev->num_channels = 4;
+	dev->rf_div_sel = init_param->rf_div_sel;
 
-	for (i = 0; i < init_param->num_channels; i++) {
-		dev->channel_cfg[init_param->channels[i].num].enable = true;
-		dev->channel_cfg[init_param->channels[i].num].freq =
-			init_param->channels[i].power_up_frequency;
-	}
+	dev->rfout8_freq = init_param->rfout8_freq;
 
 	ret = adf4371_setup(dev);
 	if (ret < 0)
@@ -849,6 +1160,8 @@ int32_t adf4371_init(struct adf4371_dev **device,
 
 	return 0;
 
+error_gpio_ce:
+	no_os_gpio_remove(dev->gpio_ce);
 error:
 	no_os_spi_remove(dev->spi_desc);
 	no_os_free(dev);
@@ -861,23 +1174,14 @@ error:
  * @param device - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adf4371_remove(struct adf4371_dev *device)
+int adf4371_remove(struct adf4371_dev *device)
 {
-	int32_t ret = 0;
+	int ret;
 
-	if (device->spi_desc)
-		ret = no_os_spi_remove(device->spi_desc);
+	ret = no_os_spi_remove(device->spi_desc);
 
+	no_os_gpio_remove(device->gpio_ce);
 	no_os_free(device);
 
 	return ret;
 }
-
-/**
- * @brief adf4371 clock ops
- */
-const struct no_os_clk_platform_ops adf4371_clk_ops = {
-	.clk_recalc_rate = &adf4371_clk_recalc_rate,
-	.clk_round_rate = &adf4371_clk_round_rate,
-	.clk_set_rate = &adf4371_clk_set_rate,
-};
