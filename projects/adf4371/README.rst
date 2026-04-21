@@ -339,6 +339,30 @@ configuration in the Makefile
 	# Select the example you want to enable by choosing y for enabling and n for disabling
 	EXAMPLE ?= basic
 
+IIO example
+^^^^^^^^^^^
+
+This project provide an IIOD demo for the ADF4371. It launches an IIOD server on
+the mother platform it runs on allowing the user to connect via an IIOD client. 
+Using IIO-Oscilloscope, the user can configure the ADF4371. 
+
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+
+The No-OS IIO Application together with the No-OS IIO ADF4371 driver take care
+of all the back-end logic needed to setup the IIO server.
+
+This example initializes the IIO device and calls the IIO app as shown in:
+`IIO Example <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4371/src/examples/iio_example>`_
+
+In order to build the IIO project make sure you have the following configuration in:
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/master/projects/adf4371/Makefile>`_
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	IIO_EXAMPLE ?= y
+
 No-OS Supported Platforms
 -------------------------
 
@@ -372,3 +396,33 @@ or to VSUPPL (the SMA interface).
 	make PLATFORM=stm32
 	# to flash the code
 	make run
+
+Mbed Platform
+^^^^^^^^^^^^^
+
+**Used hardware**
+
+* `EVAL-ADF4371 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adf4371.html>`_
+* `SDP-K1 <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/sdp-k1.html>`_
+
+**Connections**:
+
+The SDP connector of the SDP-K1 needs to be connected to P5 of the EVAL-ADF4371
+board. Additionally a 6V power supply needs to be connected to either P2 - P4
+or to VSUPPL (the SMA interface).
+
+**Build Command**
+
+.. code-block:: bash
+
+	# add the arm gcc to the PATH variable
+	export PATH=</path/to/arm/gcc/bin>:$PATH
+	# to delete current build
+	make reset
+	# to build the project
+	make PLATFORM=mbed
+	# to flash the code
+	make
+	# copy the adf4371.bin to the mounted SDP-K1
+	cp build/adf4371.bin </path/to/SDP-K1/mounted/folder>
+	
