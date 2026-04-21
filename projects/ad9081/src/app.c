@@ -361,7 +361,7 @@ int main(void)
 	status = mcs_gpio_init(&mcs_dev, &mcs_gpio_init_params);
 	if (status) {
 		printf("mcs_gpio_init() error: %" PRId32 "\n", status);
-		return ret;
+		return status;
 	}
 #endif
 
