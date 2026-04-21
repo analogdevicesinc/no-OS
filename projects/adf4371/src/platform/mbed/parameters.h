@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   common_data.h
- *   @brief  Defines common data to be used by adf4371 examples.
- *   @author Radu Sabau (radu.sabau@analog.com)
+ *   @file   parameters.h
+ *   @brief  Definitions specific to Mbed platform used by ADF4371 project.
+ *   @author Jude Osemene (jude.osemene@analog.com)
 ********************************************************************************
- * Copyright 2025(c) Analog Devices, Inc.
+ * Copyright 2023(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,20 +30,39 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __COMMON_DATA_H__
-#define __COMMON_DATA_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
-#include "parameters.h"
-#include "adf4371.h"
-#include "no_os_spi.h"
+#include <PinNames.h>
+#include "mbed_uart.h"
+#include "mbed_gpio.h"
+#include "mbed_spi.h"
 #include "no_os_uart.h"
-#include "no_os_util.h"
 #include "no_os_gpio.h"
 
+#define UART_TX_PIN	                CONSOLE_TX
+#define	UART_RX_PIN	                CONSOLE_RX
+#define UART_DEVICE_ID                  5
+#define UART_IRQ_ID                     53
+#define UART_BAUDRATE                   115200
+#define UART_EXTRA	                &adf4371_uart_extra_ip
+#define UART_OPS                        &mbed_uart_ops
 
-extern struct no_os_gpio_init_param	adf4371_ce_ip;
-extern struct no_os_uart_init_param	adf4371_uart_ip;
-extern struct no_os_spi_init_param	adf4371_spi_ip;
-extern struct adf4371_init_param 	adf4371_ip;
+#define SPI_BAUDRATE                    4000000
+#define SPI_OPS                         &mbed_spi_ops
+#define SPI_EXTRA                       &adf4371_spi_extra
+#define SPI_DEVICE_ID                    5
+#define SPI_CS                          SDP_SPI_CS_A
 
-#endif /* __COMMON_DATA_H__ */
+// SDP GPIO Configuration
+#define GPIO_OPS			&mbed_gpio_ops
+#define GPIO_EXTRA                      &adf4371_gpio_extra_ip
+// #define GPIO_CE_PORT_NUM		9
+#define GPIO_CE_PIN_NUM			SDP_GPIO_2
+#define GPIO_LE_PIN_NUM			SDP_GPIO_4
+
+extern struct no_os_gpio_init_param	adf4371_gpio_extra_ip;
+extern struct mbed_uart_init_param      adf4371_uart_extra_ip;
+extern struct mbed_spi_init_param       adf4371_spi_extra;
+
+#endif /* __PARAMETERS_H__ */
