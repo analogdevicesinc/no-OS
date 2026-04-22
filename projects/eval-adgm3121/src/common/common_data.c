@@ -45,6 +45,7 @@ struct no_os_uart_init_param adgm3121_uart_ip = {
 };
 
 struct adgm3121_init_param adgm3121_ip = {
+	.type = ID_ADGM3121,
 	.gpio_pin_spi = {
 		.port = GPIO_PIN_SPI_PORT_NUM,
 		.number = GPIO_PIN_SPI_PIN_NUM,
