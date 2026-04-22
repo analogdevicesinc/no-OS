@@ -1,28 +1,30 @@
-ADGM3144/ADGM3121 MEMS Switch Driver
-====================================
+ADGM3144/ADGM3121/ADGM3053 MEMS Switch Driver
+===============================================
 
 Supported Devices
 -----------------
 
 * `ADGM3144 <https://www.analog.com/ADGM3144>`_ - SP4T Switch
 * `ADGM3121 <https://www.analog.com/ADGM3121>`_ - DPDT Switch
+* `ADGM3053 <https://www.analog.com/ADGM3053>`_ - 4-Channel Crossover Switch
 
 Overview
 --------
 
-The ADGM3144 and ADGM3121 are 3mm x 3mm MEMS switches operating from DC to 23 GHz:
+The ADGM3144, ADGM3121, and ADGM3053 are 3mm x 3mm MEMS switches:
 
-* **ADGM3144**: Single-Pole Four-Throw (SP4T) switch with RF1-4 ports connected to RFC
-* **ADGM3121**: Dual-Pole Dual-Throw (DPDT) switch with RF1A/1B, RF2A/2B ports connected to RFCA/RFCB
+* **ADGM3144**: Single-Pole Four-Throw (SP4T) switch with RF1-4 ports connected to RFC, DC to 23 GHz
+* **ADGM3121**: Dual-Pole Dual-Throw (DPDT) switch with RF1A/1B, RF2A/2B ports connected to RFCA/RFCB, DC to 23 GHz
+* **ADGM3053**: 4-Channel Crossover switch with S1-S4/D1-D4 port switch paths and S-to-S crossover paths, DC to 14 GHz
 
-This driver supports both devices and control modes:
+This driver supports all devices and control modes:
 
 1. **Parallel GPIO Mode**: Direct control via IN1-IN4 GPIO pins
 2. **SPI Mode**: Control via SPI interface with register access
 
 Key Features:
-- DC to 23 GHz frequency range
-- Low insertion loss: -0.5 dB (typical) at 6 GHz  
+- DC to 14/23 GHz frequency range (device dependent)
+- Low insertion loss: -0.5 dB (typical) at 6 GHz
 - High isolation: -22 dB (typical) at 6 GHz
 - Fast switching time: 200 µs (typical)
 - On resistance: 1.9 Ω (typical)
@@ -42,6 +44,7 @@ The driver supports two operating modes, selected via the PIN/SPI control pin:
 
     struct adgm3121_dev *dev;
     struct adgm3121_init_param init_param = {
+        .type = ID_ADGM3144,
         .mode = ADGM3121_MODE_PARALLEL,
         .gpio_pin_spi = {
             .number = PIN_SPI_GPIO_NUM,
@@ -78,6 +81,7 @@ The driver supports two operating modes, selected via the PIN/SPI control pin:
 
     struct adgm3121_dev *dev;
     struct adgm3121_init_param init_param = {
+        .type = ID_ADGM3121,
         .mode = ADGM3121_MODE_SPI,
         .gpio_pin_spi = {
             .number = PIN_SPI_GPIO_NUM,
@@ -105,11 +109,13 @@ Basic Usage
 .. code-block:: c
 
     // ADGM3144: Enable switch 1 (RF1 to RFC)
-    // ADGM3121: Enable switch 1 (RF1A to RFCA) 
+    // ADGM3121: Enable switch 1 (RF1A to RFCA)
+    // ADGM3053: Enable switch 1 (S1 to D1)
     ret = adgm3121_set_switch_state(dev, ADGM3121_SW1, ADGM3121_ENABLE);
-    
+
     // ADGM3144: Disable switch 2 (RF2 to RFC)
-    // ADGM3121: Disable switch 2 (RF1B to RFCA)
+    // ADGM3121: Disable switch 2 (RF2A to RFCA)
+    // ADGM3053: Disable switch 2 (S2 to D2)
     ret = adgm3121_set_switch_state(dev, ADGM3121_SW2, ADGM3121_DISABLE);
     
     // Check switch state
@@ -168,31 +174,31 @@ Hardware Configuration
 
 **Pin Connections:**
 
-+----------+----------------------------------+------------------------------------+
-| Pin      | ADGM3144                         | ADGM3121                           |
-+==========+==================================+====================================+
-| VDD      | 3.0V to 3.6V power supply       | 3.0V to 3.6V power supply           |
-+----------+----------------------------------+------------------------------------+
-| VCP      | 80V charge pump output           | 80V charge pump output             |
-+----------+----------------------------------+------------------------------------+
-| GND      | Ground                           | Ground                             |
-+----------+----------------------------------+------------------------------------+
-| RF Ports | RF1-RF4 (SP4T)                   | RF1A, RF1B, RF2A, RF2B (DPDT)      |
-+----------+----------------------------------+------------------------------------+
-| RFC Port | RFC (common)                     | RFCA, RFCB (dual common)           |
-+----------+----------------------------------+------------------------------------+
-| PIN/SPI  | Mode select (Parallel, SPI)      | Mode select (Parallel, SPI)        |
-+----------+----------------------------------+------------------------------------+
-| IN1-IN4  | Parallel control pins            | Parallel control pins              |
-+----------+----------------------------------+------------------------------------+
-| SDI      | SPI data input                   | SPI data input                     |
-+----------+----------------------------------+------------------------------------+
-| SDO      | SPI data output                  | SPI data output                    |
-+----------+----------------------------------+------------------------------------+
-| SCLK     | SPI clock                        | SPI clock                          |
-+----------+----------------------------------+------------------------------------+
-| CS       | SPI chip select                  | SPI chip select                    |
-+----------+----------------------------------+------------------------------------+
++----------+----------------------------------+------------------------------------+------------------------------------+
+| Pin      | ADGM3144                         | ADGM3121                           | ADGM3053                           |
++==========+==================================+====================================+====================================+
+| VDD      | 3.0V to 3.6V power supply        | 3.0V to 3.6V power supply          | 3.0V to 3.6V power supply          |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| VCP      | 80V charge pump output           | 80V charge pump output             | 80V charge pump output             |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| GND      | Ground                           | Ground                             | AGND, RFGND                        |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| RF Ports | RF1-RF4 (SP4T)                   | RF1A, RF1B, RF2A, RF2B (DPDT)      | S1-S4, D1-D4 (crossover)           |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| RFC Port | RFC (common)                     | RFCA, RFCB (dual common)           | N/A (crossover paths S-to-S)       |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| PIN/SPI  | Mode select (Parallel, SPI)      | Mode select (Parallel, SPI)        | Mode select (Parallel, SPI)        |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| IN1-IN4  | Parallel control pins            | Parallel control pins              | Parallel control pins              |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| SDI      | SPI data input                   | SPI data input                     | SPI data input                     |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| SDO      | SPI data output                  | SPI data output                    | SPI data output                    |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| SCLK     | SPI clock                        | SPI clock                          | SPI clock                          |
++----------+----------------------------------+------------------------------------+------------------------------------+
+| CS       | SPI chip select                  | SPI chip select                    | SPI chip select                    |
++----------+----------------------------------+------------------------------------+------------------------------------+
 
 **External Components:**
 
@@ -203,29 +209,25 @@ Hardware Configuration
 Performance Specifications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-+---------------------------+------------------+----------+
-| Parameter                 | Typical          | Unit     |
-+===========================+==================+==========+
-| Frequency Range           | DC to 23         | GHz      |
-+---------------------------+------------------+----------+
-| Insertion Loss @ 6GHz     | -0.5             | dB       |
-+---------------------------+------------------+----------+
-| Isolation @ 6GHz          | -22              | dB       |
-+---------------------------+------------------+----------+
-| Return Loss @ 6GHz        | -24.5            | dB       |
-+---------------------------+------------------+----------+
-| On Resistance             | 1.9              | Ω        |
-+---------------------------+------------------+----------+
-| Switching Time            | 200              | µs       |
-+---------------------------+------------------+----------+
-| Power-up Time             | 45               | ms       |
-+---------------------------+------------------+----------+
-| Max RF Power              | 33               | dBm      |
-+---------------------------+------------------+----------+
-| Max DC Current            | 200              | mA       |
-+---------------------------+------------------+----------+
-| Cycle Lifetime            | 100M             | cycles   |
-+---------------------------+------------------+----------+
++---------------------------+---------------------+---------------------+----------+
+| Parameter                 | ADGM3144/ADGM3121   | ADGM3053            | Unit     |
++===========================+=====================+=====================+==========+
+| Frequency Range           | DC to 23            | DC to 14            | GHz      |
++---------------------------+---------------------+---------------------+----------+
+| Insertion Loss            | -0.5 @ 6 GHz        | -0.25 @ 3.2 GHz     | dB       |
++---------------------------+---------------------+---------------------+----------+
+| On Resistance (port)      | 1.9                 | 1.9                 | Ω        |
++---------------------------+---------------------+---------------------+----------+
+| On Resistance (crossover) | N/A                 | 3.8                 | Ω        |
++---------------------------+---------------------+---------------------+----------+
+| Switching Time            | 200                 | 200                 | µs       |
++---------------------------+---------------------+---------------------+----------+
+| Power-up Time             | 45                  | 5                   | ms       |
++---------------------------+---------------------+---------------------+----------+
+| Max RF Power              | 33                  | 33                  | dBm      |
++---------------------------+---------------------+---------------------+----------+
+| Max DC Current            | 200                 | 200                 | mA       |
++---------------------------+---------------------+---------------------+----------+
 
 API Reference
 ~~~~~~~~~~~~~
@@ -255,7 +257,7 @@ Troubleshooting
 
 **Common Issues:**
 
-1. **Switch not responding:** Check VDD supply (3.0-3.6V) and wait 45ms after power-up
+1. **Switch not responding:** Check VDD supply (3.0-3.6V) and wait for power-up (45 ms for ADGM3144/ADGM3121, 5 ms for ADGM3053)
 2. **SPI communication failure:** Verify SPI mode, speed (≤10MHz), and CS timing
 3. **High insertion loss:** Check for proper grounding and 50Ω terminations
 4. **Internal errors:** Use ``adgm3121_check_internal_error()`` to diagnose
