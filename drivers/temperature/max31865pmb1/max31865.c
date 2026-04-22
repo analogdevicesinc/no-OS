@@ -152,14 +152,14 @@ int max31865_read(struct max31865_dev *device, uint8_t reg_addr,
 		.cs_change = 1,
 	};
 
-	raw_array[0] = reg_addr;
-	raw_array[1] = reg_addr;
-
 	if ((reg_addr & MAX31865_READ_MASK) != reg_addr)
 		reg_addr &= MAX31865_READ_MASK;
 
 	if (reg_addr < MAX31865_CONFIG_REG || reg_addr > MAX31865_FAULTSTAT_REG)
 		return -EINVAL;
+
+	raw_array[0] = reg_addr;
+	raw_array[1] = reg_addr;
 
 	ret = no_os_spi_transfer(device->comm_desc, &temp_xfer, 1);
 	if (ret)
