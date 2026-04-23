@@ -9,6 +9,7 @@
  *******************************************************************************/
 
 #include "pqlib_example.h"
+#include "pqlib_afe.h"
 #include "iio_pqm.h"
 #include "afe_calibration.h"
 #include "flash_storage.h"
@@ -275,6 +276,8 @@ int process_and_prepare_output()
 			break;
 		}
 
+		service_waveform_isr();
+
 		if (pWaveform->isDataProcessed == false) {
 			ADI_PQLIB_PROFBEG(ADI_PQLIB_PROFILE_ID_WAVEFORM);
 			pqlibStatus =
@@ -286,6 +289,8 @@ int process_and_prepare_output()
 			}
 		}
 
+		service_waveform_isr();
+
 		if (p1012CyclesInput->isDataProcessed == 0 && processData) {
 			ADI_PQLIB_PROFBEG(ADI_PQLIB_PROFILE_ID_1012CYCLES);
 			pqlibStatus =
@@ -296,6 +301,9 @@ int process_and_prepare_output()
 				break;
 			}
 		}
+
+		service_waveform_isr();
+
 		pqlibStatus = adi_pqlib_GetOutputStatus(hDevice, &outputStatus);
 
 		status = process_pqlib_error(&pqlibExample, pqlibStatus);
