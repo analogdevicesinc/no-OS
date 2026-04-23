@@ -404,6 +404,9 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 		case WAVEFORM_ONESHOT_BLOCKS:
 			return snprintf(buf, len, "%" PRIu32,
 					desc->oneshot_blocks_remaining);
+		case WAVEFORM_BLOCK_COUNT:
+			return snprintf(buf, len, "%" PRIu32,
+					desc->waveform_block_count);
 
 		case FLASH_CAL_DATA: {
 			FLASH_CALIBRATION_DATA flash_data;
@@ -1652,6 +1655,11 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.store = write_pqm_attr,
 		.priv = WAVEFORM_ONESHOT_BLOCKS,
+	},
+	{
+		.name = "waveform_block_count",
+		.show = read_pqm_attr,
+		.priv = WAVEFORM_BLOCK_COUNT,
 	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device

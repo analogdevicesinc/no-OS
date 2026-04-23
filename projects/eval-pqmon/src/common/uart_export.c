@@ -68,9 +68,10 @@ int uart_export_send(void)
 	vscale = cfg->voltageScale;
 	iscale = cfg->currentScale;
 
-	/* HEADER + sequence ID for waveform/metrology correlation */
-	n = snprintf(uart_export_buf + off, rem, "PQM,%" PRIu32 "",
-		     pqlibExample.input1012Cycles.sequenceNumber);
+	/* HEADER + sequence ID + waveform block count for correlation */
+	n = snprintf(uart_export_buf + off, rem, "PQM,%" PRIu32 ",%" PRIu32,
+		     pqlibExample.input1012Cycles.sequenceNumber,
+		     pqm_desc_global ? pqm_desc_global->waveform_block_count : 0);
 	off += n;
 	rem -= n;
 

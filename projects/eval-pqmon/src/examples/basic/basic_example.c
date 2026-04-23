@@ -55,6 +55,7 @@ int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
 	d->oneshot_blocks_remaining = DEFAULT_ONESHOT_BLOCKS;
 	d->waveform_streaming_active = false;
 	d->oneshot_running = false;
+	d->waveform_block_count = 0;
 	pqm_desc_global = d;
 	for (int i = 0; i < TOTAL_PQM_CHANNELS; i++) {
 		for (int j = 0; j < MAX_CH_ATTRS; j++) {

@@ -74,7 +74,7 @@
 #define TOTAL_PQM_CHANNELS 11
 #define VOLTAGE_CH_NUMBER 3
 #define MAX_CH_ATTRS 31
-#define PQM_DEVICE_ATTR_NUMBER 67
+#define PQM_DEVICE_ATTR_NUMBER 68
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 #define MAX_EVENT_NUMBER 6
 #define DEFAULT_ONESHOT_BLOCKS 4
@@ -166,6 +166,7 @@ struct pqm_desc {
 	uint32_t oneshot_blocks_remaining;
 	bool waveform_streaming_active;
 	bool oneshot_running;
+	uint32_t waveform_block_count;
 };
 
 struct pqm_init_para {

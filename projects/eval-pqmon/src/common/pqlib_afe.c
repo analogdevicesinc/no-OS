@@ -51,6 +51,7 @@ static struct no_os_irq_ctrl_desc *afe_irq_desc = NULL;
 static void waveform_cb_write_and_oneshot(uint8_t *data, uint16_t len)
 {
 	no_os_cb_write(pqlibExample.no_os_cb_desc, data, len);
+	pqm_desc_global->waveform_block_count++;
 
 	if (pqm_desc_global->waveform_capture_mode ==
 	    WAVEFORM_CAPTURE_ONESHOT) {
@@ -255,6 +256,8 @@ int get_afe_input()
 				ADI_PQLIB_WAVEFORM_BLOCK_SIZE
 				* ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
 				* sizeof(uint16_t));
+			if (pqm_desc_global)
+				pqm_desc_global->waveform_block_count++;
 		}
 	}
 

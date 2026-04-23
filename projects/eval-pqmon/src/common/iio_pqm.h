@@ -117,6 +117,7 @@
 #define WAVEFORM_CAPTURE_MODE_AVAILABLE 64
 #define WAVEFORM_SEQ_ID                 65
 #define WAVEFORM_ONESHOT_BLOCKS         66
+#define WAVEFORM_BLOCK_COUNT            67
 
 // Channel specific attributes
 #define CHAN_RMS                        0
