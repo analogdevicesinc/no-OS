@@ -38,6 +38,7 @@
 #include "no_os_uart.h"
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 #define UART_EXPORT_BUF_SIZE 6144
 
@@ -67,8 +68,9 @@ int uart_export_send(void)
 	vscale = cfg->voltageScale;
 	iscale = cfg->currentScale;
 
-	/* HEADER */
-	n = snprintf(uart_export_buf + off, rem, "PQM");
+	/* HEADER + sequence ID for waveform/metrology correlation */
+	n = snprintf(uart_export_buf + off, rem, "PQM,%" PRIu32 "",
+		     pqlibExample.input1012Cycles.sequenceNumber);
 	off += n;
 	rem -= n;
 

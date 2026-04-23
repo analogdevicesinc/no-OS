@@ -62,16 +62,22 @@
 
 #define IIO_BUFF_TYPE int16_t
 #define SAMPLES_PER_CHANNEL_PLATFORM 256
-#define MAX_SIZE_BASE_ADDR (SAMPLES_PER_CHANNEL_PLATFORM * TOTAL_PQM_CHANNELS)
+/* IIO buffer sized to hold 32 waveform blocks (256 samples x 7 channels each).
+ * At 50Hz with 128 resampled pts/cycle, COH_PAGE_RDY fires every 40ms (25/sec).
+ * 32 blocks = 1.28s buffer, sufficient for serial IIO readout latency. */
+#define WAVEFORM_IIO_BLOCKS 32
+#define WAVEFORM_BLOCK_SAMPLES (256 * 7)
+#define MAX_SIZE_BASE_ADDR (WAVEFORM_IIO_BLOCKS * WAVEFORM_BLOCK_SAMPLES)
 #define MAX_SIZE_BASE_ADDR_WITH_SIZE                                           \
   (MAX_SIZE_BASE_ADDR * sizeof(IIO_BUFF_TYPE))
 
 #define TOTAL_PQM_CHANNELS 11
 #define VOLTAGE_CH_NUMBER 3
 #define MAX_CH_ATTRS 31
-#define PQM_DEVICE_ATTR_NUMBER 63
+#define PQM_DEVICE_ATTR_NUMBER 67
 #define WAVEFORM_BUFFER_LENGTH (256 * 7)
 #define MAX_EVENT_NUMBER 6
+#define DEFAULT_ONESHOT_BLOCKS 4
 
 extern IIO_BUFF_TYPE iio_data_buffer_loc[MAX_SIZE_BASE_ADDR];
 
@@ -143,6 +149,12 @@ static const char *const pqm_nominal_frequency_available[] = {
 	[ADI_PQLIB_NOMINAL_FREQUENCY_60HZ] = "60",
 };
 
+static const char *const pqm_waveform_capture_mode_available[] = {
+	[WAVEFORM_CAPTURE_DISABLED] = "disabled",
+	[WAVEFORM_CAPTURE_CONTINUOUS] = "continuous",
+	[WAVEFORM_CAPTURE_ONESHOT] = "oneshot",
+};
+
 struct pqm_desc {
 	uint8_t reg[TOTAL_PQM_CHANNELS];
 	float pqm_global_attr[PQM_DEVICE_ATTR_NUMBER];
@@ -150,6 +162,10 @@ struct pqm_desc {
 	uint32_t active_ch;
 	uint32_t ext_buff_len;
 	int16_t *ext_buff;
+	uint8_t waveform_capture_mode;
+	uint32_t oneshot_blocks_remaining;
+	bool waveform_streaming_active;
+	bool oneshot_running;
 };
 
 struct pqm_init_para {

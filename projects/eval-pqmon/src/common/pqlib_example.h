@@ -64,6 +64,15 @@ typedef struct power_energy_data {
 } POWER_ENERGY_DATA;
 
 /**
+ * @brief Waveform capture mode
+ */
+typedef enum {
+	WAVEFORM_CAPTURE_DISABLED = 0,
+	WAVEFORM_CAPTURE_CONTINUOUS = 1,
+	WAVEFORM_CAPTURE_ONESHOT = 2,
+} WAVEFORM_CAPTURE_MODE;
+
+/**
  * @brief PQLIB Example states
  *
  */

@@ -112,6 +112,12 @@
 #define FLASH_STAT                      61
 #define FLASH_CAL_DATA                  62
 
+// Waveform streaming attributes
+#define WAVEFORM_CAPTURE_MODE_ATTR      63
+#define WAVEFORM_CAPTURE_MODE_AVAILABLE 64
+#define WAVEFORM_SEQ_ID                 65
+#define WAVEFORM_ONESHOT_BLOCKS         66
+
 // Channel specific attributes
 #define CHAN_RMS                        0
 #define CHAN_ANGLE                      1
@@ -150,5 +156,6 @@
 extern struct iio_device pqm_iio_descriptor;
 extern volatile bool configChanged;
 extern volatile bool processData;
+extern struct pqm_desc *pqm_desc_global;
 
 #endif

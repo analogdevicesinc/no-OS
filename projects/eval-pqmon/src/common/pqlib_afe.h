@@ -58,4 +58,17 @@
  */
 int get_afe_input();
 
+/**
+ * @details Initialize waveform IRQ on ADE9430 IRQ0 (P0.30).
+ *          Registers falling-edge GPIO interrupt for COH_PAGE_RDY.
+ * @return 0 on Success
+ */
+int waveform_irq_init(void);
+
+/**
+ * @details Service ISR-staged waveform data and deferred reads.
+ *          Call from main loop between PQLib processing steps.
+ */
+void service_waveform_isr(void);
+
 #endif /* __PQLIB_AFE_H__ */

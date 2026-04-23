@@ -35,6 +35,8 @@
 #include "basic_example.h"
 #endif
 
+#include "pqlib_afe.h"
+
 #ifdef UART_EXPORT_ENABLED
 #include "uart_export.h"
 #endif
@@ -49,6 +51,11 @@ int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
 
 	d->ext_buff = param->ext_buff;
 	d->ext_buff_len = param->ext_buff_len;
+	d->waveform_capture_mode = WAVEFORM_CAPTURE_DISABLED;
+	d->oneshot_blocks_remaining = DEFAULT_ONESHOT_BLOCKS;
+	d->waveform_streaming_active = false;
+	d->oneshot_running = false;
+	pqm_desc_global = d;
 	for (int i = 0; i < TOTAL_PQM_CHANNELS; i++) {
 		for (int j = 0; j < MAX_CH_ATTRS; j++) {
 			d->pqm_ch_attr[i][j] = 0;
@@ -81,6 +88,23 @@ int32_t update_pqm_channels(void *dev, uint32_t mask)
 	desc = dev;
 	desc->active_ch = mask;
 
+	/* Activate waveform streaming if capture mode is enabled */
+	if (mask != 0 && desc->waveform_capture_mode != WAVEFORM_CAPTURE_DISABLED) {
+		/* Flush circular buffer so host gets only fresh data */
+		if (pqlibExample.no_os_cb_desc) {
+			pqlibExample.no_os_cb_desc->read.idx = 0;
+			pqlibExample.no_os_cb_desc->read.spin_count = 0;
+			pqlibExample.no_os_cb_desc->write.idx = 0;
+			pqlibExample.no_os_cb_desc->write.spin_count = 0;
+		}
+		desc->waveform_streaming_active = true;
+		if (desc->waveform_capture_mode == WAVEFORM_CAPTURE_ONESHOT) {
+			if (desc->oneshot_blocks_remaining == 0)
+				desc->oneshot_blocks_remaining = DEFAULT_ONESHOT_BLOCKS;
+			desc->oneshot_running = true;
+		}
+	}
+
 	return 0;
 }
 
@@ -93,6 +117,8 @@ int32_t close_pqm_channels(void *dev)
 
 	desc = dev;
 	desc->active_ch = 0;
+	desc->waveform_streaming_active = false;
+	desc->oneshot_running = false;
 
 	return 0;
 }
@@ -210,6 +236,10 @@ int basic_pqm_firmware()
 		goto exit;
 	}
 	printf("Mesurements started \n\r");
+
+	status = waveform_irq_init();
+	if (status)
+		printf("Waveform IRQ init failed: %d \n\r", status);
 
 #ifdef UART_EXPORT_ENABLED
 	status = uart_export_init();

@@ -80,6 +80,7 @@
 
 volatile bool configChanged = false;
 volatile bool processData = true;
+struct pqm_desc *pqm_desc_global = NULL;
 
 /**
  * @brief utility function for computing next upcoming channel.
@@ -383,6 +384,27 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 			}
 		}
 
+		case WAVEFORM_CAPTURE_MODE_ATTR:
+			if (desc->waveform_capture_mode < NO_OS_ARRAY_SIZE(
+				    pqm_waveform_capture_mode_available))
+				return snprintf(buf, len, "%s",
+						pqm_waveform_capture_mode_available[desc->waveform_capture_mode]);
+			return snprintf(buf, len, "disabled");
+		case WAVEFORM_CAPTURE_MODE_AVAILABLE:
+			strcpy(buf, "");
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available); i++) {
+				strcat(buf, pqm_waveform_capture_mode_available[i]);
+				if (i != NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available) - 1)
+					strcat(buf, " ");
+			}
+			return strlen(buf);
+		case WAVEFORM_SEQ_ID:
+			return snprintf(buf, len, "%" PRIu32,
+					pqlibExample.input1012Cycles.sequenceNumber);
+		case WAVEFORM_ONESHOT_BLOCKS:
+			return snprintf(buf, len, "%" PRIu32,
+					desc->oneshot_blocks_remaining);
+
 		case FLASH_CAL_DATA: {
 			FLASH_CALIBRATION_DATA flash_data;
 			int ret;
@@ -550,17 +572,25 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				processData = true;
 			else {
 				processData = false;
-				// Empty waveform iio buffer
-				int tmp_ret;
-				uint8_t tmp_buff[ADI_PQLIB_WAVEFORM_BLOCK_SIZE
-						 * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
-						 * sizeof(uint16_t)];
-				do {
-					tmp_ret = no_os_cb_read(pqlibExample.no_os_cb_desc, tmp_buff,
-								ADI_PQLIB_WAVEFORM_BLOCK_SIZE
-								* ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
-								* sizeof(uint16_t));
-				} while (!tmp_ret);
+				/*
+				 * Only drain the IIO circular buffer if waveform
+				 * streaming is not active (to avoid discarding
+				 * waveform data that the host expects to read).
+				 */
+				if (!desc->waveform_streaming_active &&
+				    pqlibExample.no_os_cb_desc) {
+					int tmp_ret;
+					uint8_t tmp_buff[ADI_PQLIB_WAVEFORM_BLOCK_SIZE
+							 * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
+							 * sizeof(uint16_t)];
+					do {
+						tmp_ret = no_os_cb_read(
+								  pqlibExample.no_os_cb_desc, tmp_buff,
+								  ADI_PQLIB_WAVEFORM_BLOCK_SIZE
+								  * ADI_PQLIB_TOTAL_WAVEFORM_CHANNELS
+								  * sizeof(uint16_t));
+					} while (!tmp_ret);
+				}
 			}
 			break;
 		case CAL_TYPE:
@@ -672,6 +702,36 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 				}
 			}
 			break;
+		case WAVEFORM_CAPTURE_MODE_ATTR:
+			configChanged = false;
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available); i++) {
+				if (strcmp(buf, pqm_waveform_capture_mode_available[i]) == 0) {
+					/* Reject new oneshot request while one is running */
+					if (i == WAVEFORM_CAPTURE_ONESHOT &&
+					    desc->oneshot_running)
+						return -EBUSY;
+					desc->waveform_capture_mode = i;
+					if (i == WAVEFORM_CAPTURE_ONESHOT)
+						desc->oneshot_blocks_remaining = DEFAULT_ONESHOT_BLOCKS;
+					if (i == WAVEFORM_CAPTURE_DISABLED) {
+						desc->waveform_streaming_active = false;
+						desc->oneshot_running = false;
+					} else {
+						/* Update streaming state if channels are active */
+						desc->waveform_streaming_active =
+							(desc->active_ch != 0);
+					}
+					return len;
+				}
+			}
+			return -EINVAL;
+		case WAVEFORM_ONESHOT_BLOCKS:
+			configChanged = false;
+			if ((int)value > 0) {
+				desc->oneshot_blocks_remaining = (uint32_t)value;
+				return len;
+			}
+			return -EINVAL;
 		default:
 			desc->pqm_global_attr[attr_id] = value;
 		}
@@ -1571,6 +1631,28 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.priv = FLASH_CAL_DATA,
 	},
+	{
+		.name = "waveform_capture_mode",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = WAVEFORM_CAPTURE_MODE_ATTR,
+	},
+	{
+		.name = "waveform_capture_mode_available",
+		.show = read_pqm_attr,
+		.priv = WAVEFORM_CAPTURE_MODE_AVAILABLE,
+	},
+	{
+		.name = "waveform_seq_id",
+		.show = read_pqm_attr,
+		.priv = WAVEFORM_SEQ_ID,
+	},
+	{
+		.name = "waveform_oneshot_blocks",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = WAVEFORM_ONESHOT_BLOCKS,
+	},
 	END_ATTRIBUTES_ARRAY,
 }; // global attributes for device
 
@@ -1619,7 +1701,7 @@ struct scan_type pqm_scan_type = {.sign = 's',
 	.storagebits = 16,
 	.shift = 0,
 	.is_big_endian =
-		true
+		false
 }; // generic waveform channel definition
 
 static struct iio_channel iio_pqm_channels[] = {
