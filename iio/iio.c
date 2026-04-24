@@ -70,7 +70,7 @@
 
 static char uart_buff[IIOD_CONN_BUFFER_SIZE];
 
-static char header[] =
+static const char header[] =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	"<!DOCTYPE context ["
 	"<!ELEMENT context (device | context-attribute)*>"
@@ -95,7 +95,7 @@ static char header[] =
 	"<context name=\"xml\" description=\"no-OS/projects/"
 	NO_OS_TOSTRING(NO_OS_PROJECT)" "
 	NO_OS_TOSTRING(NO_OS_VERSION)"\" >";
-static char header_end[] = "</context>";
+static const char header_end[] = "</context>";
 
 static const char * const iio_chan_type_string[] = {
 	[IIO_VOLTAGE] = "voltage",
