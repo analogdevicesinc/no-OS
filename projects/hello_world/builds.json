@@ -1,10 +1,16 @@
 {
   "xilinx": {
     "zynq": {
-      "flags": ""
+      "flags": "",
+      "hardware": [
+        "adv7511_zed"
+      ]
     },
     "zynqmp": {
-      "flags": ""
+      "flags": "",
+      "hardware": [
+        "adv7511_zed"
+      ]
     }
   }
 }
