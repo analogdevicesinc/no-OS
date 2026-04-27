@@ -93,10 +93,29 @@ enum capi_uart_stop_bits {
 };
 
 /**
+ * @brief uart flow control options
+ */
+enum capi_uart_flow_control {
+	CAPI_UART_FLOW_CONTROL_NONE,  /**< no flow control */
+	CAPI_UART_FLOW_CONTROL_RTS,   /**< RTS flow control */
+	CAPI_UART_FLOW_CONTROL_CTS,   /**< CTS flow control */
+	CAPI_UART_FLOW_CONTROL_RTSCTS /**< RTS/CTS flow control */
+};
+
+/**
+ * @brief uart address mode for multi-drop communication
+ */
+enum capi_uart_address_mode {
+	CAPI_UART_ADDRESS_MODE_DISABLED, /**< normal 8-bit mode */
+	CAPI_UART_ADDRESS_MODE_9BIT,     /**< 9-bit address mode */
+	CAPI_UART_ADDRESS_MODE_MULTIDROP /**< multi-drop mode with address detection */
+};
+
+/**
  * @brief UART line configuration
  */
 struct capi_uart_line_config {
-	/** UART baudrate in bps. */
+	/** UART baudrate in bps. Valid range: 300 - 4000000 */
 	uint32_t baudrate;
 	/** UART number of data bits. */
 	enum capi_uart_data_bits size;
@@ -104,6 +123,12 @@ struct capi_uart_line_config {
 	enum capi_uart_parity parity;
 	/** UART number of stop bits */
 	enum capi_uart_stop_bits stop_bits;
+	/** Flow control configuration */
+	enum capi_uart_flow_control flow_control;
+	/** Address mode for multi-drop communication */
+	enum capi_uart_address_mode address_mode;
+	/** Device address for multi-drop mode (0-255) */
+	uint8_t device_address;
 	/** Sticky parity enable/disable */
 	bool sticky_parity;
 	/** Loopback mode enable/disable */
@@ -130,7 +155,7 @@ struct capi_uart_config {
 	void *extra;
 	/** Platform specific implementation of the API. (Mandatory field, but can be NULL and we'll
 	 * make sure it gets auto populated when using our build system.) */
-	struct capi_uart_ops *ops;
+	const struct capi_uart_ops *ops;
 };
 
 /**
@@ -140,10 +165,10 @@ struct capi_uart_config {
  * Driver developer shall declare this as the first field of private handle structure.
  */
 struct capi_uart_handle {
-	bool init_allocated;	// TODO
-	struct capi_uart_ops *ops; /**< set and used by capi thin layer */
-	void *lock;                /**< set and used by capi thin layer if locking is available */
-	void *priv;                /**< set and used by user optionally */
+	const struct capi_uart_ops *ops; /**< set and used by capi thin layer */
+	bool init_allocated;             /**< If true, the driver is owner of handle memory. */
+	void *lock; /**< set and used by capi thin layer if locking is available */
+	void *priv; /**< set and used by user optionally */
 };
 
 /**
@@ -175,7 +200,7 @@ int capi_uart_init(struct capi_uart_handle **handle, const struct capi_uart_conf
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_deinit(struct capi_uart_handle **handle);
+int capi_uart_deinit(struct capi_uart_handle *handle);
 
 /**
  * @brief Get line config of UART.
@@ -282,7 +307,7 @@ int capi_uart_receive(struct capi_uart_handle *handle, uint8_t *buf, uint32_t le
  *
  * @return int 0 for success or error code.
  */
-int capi_uart_register_callback(struct capi_uart_handle *handle, capi_uart_callback *const callback,
+int capi_uart_register_callback(struct capi_uart_handle *handle, capi_uart_callback const callback,
 				void *const callback_arg);
 
 /**
@@ -332,6 +357,52 @@ int capi_uart_get_interrupt_reason(struct capi_uart_handle *handle,
 int capi_uart_get_line_status(struct capi_uart_handle *handle, uint32_t *status_flags);
 
 /**
+ * @brief Send 9-bit data for multi-drop communication
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [in] data 9-bit data to transmit (only lower 9 bits used)
+ * @param [in] is_address true if this is an address byte, false for data
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_transmit_9bit(struct capi_uart_handle *handle, uint16_t data, bool is_address);
+
+/**
+ * @brief Receive 9-bit data for multi-drop communication
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] data received 9-bit data (only lower 9 bits valid)
+ * @param [out] is_address true if this is an address byte, false for data
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_receive_9bit(struct capi_uart_handle *handle, uint16_t *data, bool *is_address);
+
+/**
+ * @brief Set flow control state manually
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [in] rts_state RTS signal state (true = asserted, false = deasserted)
+ * @param [in] cts_state CTS signal state (true = asserted, false = deasserted)
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_set_flow_control_state(struct capi_uart_handle *handle, bool rts_state,
+				     bool cts_state);
+
+/**
+ * @brief Get flow control state
+ *
+ * @param [in] handle Points to the UART controller context.
+ * @param [out] rts_state RTS signal state (true = asserted, false = deasserted)
+ * @param [out] cts_state CTS signal state (true = asserted, false = deasserted)
+ *
+ * @return int 0 for success or error code.
+ */
+int capi_uart_get_flow_control_state(struct capi_uart_handle *handle, bool *rts_state,
+				     bool *cts_state);
+
+/**
  * @brief UART Driver Interrupt handler. If interrupt vectors are managed and implemented by user,
  * then user shall call this function in the relevant interrupt vector function.
  *
@@ -344,26 +415,53 @@ void capi_uart_isr(void *handle);
  * specific function. See API functions for relevant descriptions.
  */
 struct capi_uart_ops {
+	/** See capi_uart_init() */
 	int (*init)(struct capi_uart_handle **handle, const struct capi_uart_config *config);
-	int (*deinit)(struct capi_uart_handle **handle);
+	/** See capi_uart_deinit() */
+	int (*deinit)(struct capi_uart_handle *handle);
+	/** See capi_uart_get_line_config() */
 	int (*get_line_config)(struct capi_uart_handle *handle,
 			       struct capi_uart_line_config *line_config);
+	/** See capi_uart_set_line_config() */
 	int (*set_line_config)(struct capi_uart_handle *handle,
 			       struct capi_uart_line_config *line_config);
+	/** See capi_uart_enable_fifo() */
 	int (*enable_fifo)(struct capi_uart_handle *handle, bool enable);
+	/** See capi_uart_flush_tx_fifo() */
 	int (*flush_tx_fifo)(struct capi_uart_handle *handle);
+	/** See capi_uart_flush_rx_fifo() */
 	int (*flush_rx_fifo)(struct capi_uart_handle *handle);
+	/** See capi_uart_get_rx_fifo_count() */
 	int (*get_rx_fifo_count)(struct capi_uart_handle *handle, uint16_t *count);
+	/** See capi_uart_get_tx_fifo_count() */
 	int (*get_tx_fifo_count)(struct capi_uart_handle *handle, uint16_t *count);
+	/** See capi_uart_transmit() */
 	int (*transmit)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+	/** See capi_uart_receive() */
 	int (*receive)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
-	int (*register_callback)(struct capi_uart_handle *handle,
-				 capi_uart_callback *const callback, void *const callback_arg);
+	/** See capi_uart_register_callback() */
+	int (*register_callback)(struct capi_uart_handle *handle, capi_uart_callback const callback,
+				 void *const callback_arg);
+	/** See capi_uart_transmit_async() */
 	int (*transmit_async)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+	/** See capi_uart_receive_async() */
 	int (*receive_async)(struct capi_uart_handle *handle, uint8_t *buf, uint32_t len);
+	/** See capi_uart_get_interrupt_reason() */
 	int (*get_interrupt_reason)(struct capi_uart_handle *handle,
 				    enum capi_uart_interrupt_reason *reason);
+	/** See capi_uart_get_line_status() */
 	int (*get_line_status)(struct capi_uart_handle *handle, uint32_t *status_flags);
+	/** See capi_uart_transmit_9bit() */
+	int (*transmit_9bit)(struct capi_uart_handle *handle, uint16_t data, bool is_address);
+	/** See capi_uart_receive_9bit() */
+	int (*receive_9bit)(struct capi_uart_handle *handle, uint16_t *data, bool *is_address);
+	/** See capi_uart_set_flow_control_state() */
+	int (*set_flow_control_state)(struct capi_uart_handle *handle, bool rts_state,
+				      bool cts_state);
+	/** See capi_uart_get_flow_control_state() */
+	int (*get_flow_control_state)(struct capi_uart_handle *handle, bool *rts_state,
+				      bool *cts_state);
+	/** See capi_uart_isr() */
 	void (*isr)(void *handle);
 };
 
