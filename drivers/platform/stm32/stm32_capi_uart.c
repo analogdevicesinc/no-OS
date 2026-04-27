@@ -65,7 +65,7 @@ int stm32_capi_uart_init(struct capi_uart_handle **handle,
 	};
 
 	uart_priv_handle->huart->Init.StopBits =
-		config->line_config->stop_bits = CAPI_UART_STOP_1_BIT ?
+		config->line_config->stop_bits == CAPI_UART_STOP_1_BIT ?
 			UART_STOPBITS_1 : UART_STOPBITS_2;
 
 	uart_priv_handle->huart->Init.Mode = uart_extra_config->huart->Init.Mode;
@@ -88,17 +88,22 @@ error:
 	return ret;
 }
 
-// TODO: double pointer for handle is needed
-int stm32_capi_uart_deinit(struct capi_uart_handle **handle)
+int stm32_capi_uart_deinit(struct capi_uart_handle *handle)
 {
-	if (!handle)
-		return -ENOMEM;
+	struct stm32_uart_priv_handle *uart_priv_handle;
 
-	if ((*handle)->init_allocated) {
-		no_os_free((*handle)->priv);
-		no_os_free(*handle);
-		*handle = NULL;
+	if (!handle)
+		return -EINVAL;
+
+	uart_priv_handle = handle->priv;
+
+	if (uart_priv_handle) {
+		HAL_UART_DeInit(uart_priv_handle->huart);
+		no_os_free(uart_priv_handle);
 	}
+
+	if (handle->init_allocated)
+		no_os_free(handle);
 
 	return 0;
 }
@@ -108,6 +113,12 @@ int stm32_capi_uart_transmit(struct capi_uart_handle *handle,
 {
 	struct stm32_uart_priv_handle *uart_priv_handle;
 	int ret;
+
+	if (!handle || !handle->priv || !buf)
+		return -EINVAL;
+
+	if (!len)
+		return 0;
 
 	uart_priv_handle = handle->priv;
 
@@ -129,6 +140,29 @@ int stm32_capi_uart_transmit(struct capi_uart_handle *handle,
 int stm32_capi_uart_receive(struct capi_uart_handle *handle,
 			    uint8_t *buf, uint32_t len)
 {
+	struct stm32_uart_priv_handle *uart_priv_handle;
+	int ret;
+
+	if (!handle || !handle->priv || !buf)
+		return -EINVAL;
+
+	if (!len)
+		return 0;
+
+	uart_priv_handle = handle->priv;
+
+	ret = HAL_UART_Receive(uart_priv_handle->huart, buf, len, HAL_MAX_DELAY);
+	switch (ret) {
+	case HAL_OK:
+		break;
+	case HAL_BUSY:
+		return -EBUSY;
+	case HAL_TIMEOUT:
+		return -ETIMEDOUT;
+	default:
+		return -EIO;
+	};
+
 	return 0;
 }
 
