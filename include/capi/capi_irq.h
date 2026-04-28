@@ -71,7 +71,7 @@ int capi_irq_deinit(void);
  *
  * @return int 0 for success or error code.
  */
-int capi_irq_global_enalbe(void);
+int capi_irq_global_enable(void);
 
 /**
  * @brief Disable the interrupt controller.
