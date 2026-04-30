@@ -27,6 +27,8 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
+// #define DMA_CYCLIC_PASS
+
 #include "basic_example.h"
 #include "common_data.h"
 #include "parameters.h"
@@ -46,6 +48,7 @@
 #include "axi_dmac.h"
 #include "jesd204.h"
 #include "xil_cache.h"
+#include "xil_io.h"
 
 static uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 
@@ -59,7 +62,7 @@ static uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024))
  * Shifted left by 2 as a 512-bit integer, then bit 0 set to 1.
  * test_vector[15] = MSW, test_vector[0] = LSW.
  */
-static const uint32_t test_vector[16] = {
+static uint32_t test_vector[16] = {
 	0x44444445, /* [0]  from 0x11111111 */
 	0x88888888, /* [1]  from 0x22222222 */
 	0xCCCCCCCC, /* [2]  from 0x33333333 */
@@ -77,6 +80,21 @@ static const uint32_t test_vector[16] = {
 	0xFFFFFFFF, /* [14] from 0xFFFFFFFF */
 	0x00000005, /* [15] from 0x00000001 */
 };
+
+/* 512-bit test vector: all 0xFFs */
+static uint32_t test_vector_allf[16] = {
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+};
+
+/* 64-bit test vector: 0x0000000002540100 */
+static uint32_t test_vector_2[2] = {
+	0x02540100, /* [0] LSW */
+	0x00000000, /* [1] MSW */
+};
+
 
 int example_main()
 {
@@ -280,7 +298,7 @@ int example_main()
 		.base = TX_CORE_BASEADDR,
 		.num_channels = AD9081K_TX_JESD_CONVS_PER_DEVICE,
 		.channels = NULL,
-		.rate = 3,
+		.rate = 1,
 	};
 
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
@@ -443,34 +461,84 @@ int example_main()
 	axi_jesd204_rx_status_read(rx_jesd);
 	no_os_mdelay(100);
 
+	printf("Press Enter to start cmd transfer...\n");
+		getchar();
+
+	/* Set bit 1 at AXI DAC base + 0xC8 (read-modify-write) */
+	{
+		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC8);
+		Xil_Out32(TX_CORE_BASEADDR + 0xC8, reg | (1 << 1));
+	}
+
 	/*
 	 * ----------------------------------------------------------------
-	 * TX DMA transfer — load sine LUT into buffer and start DMA.
+	 * TX CMD DMA transfer (test_vector_2).
 	 * ----------------------------------------------------------------
 	 */
-	axi_dac_load_custom_data(tx_dac, test_vector,
-				 NO_OS_ARRAY_SIZE(test_vector),
-				 (uintptr_t)dac_buffer_dma);
+	{
+		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
+			__attribute__((aligned(1024)));
 
-	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector),
-		tx_dac->num_channels,
-		8 * sizeof(test_vector[0]));
+		axi_dac_load_custom_data(tx_dac, test_vector_2,
+					 NO_OS_ARRAY_SIZE(test_vector_2),
+					 (uintptr_t)cmd_buffer_dma);
+
+		struct axi_dma_transfer cmd_transfer = {
+			.size = sizeof(test_vector_2),
+			.transfer_done = 0,
+			.cyclic = NO,
+			.src_addr = (uintptr_t)cmd_buffer_dma,
+			.dest_addr = 0,
+		};
+
+		Xil_DCacheFlush();
+
+		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
+		if (ret)
+			pr_err("axi_dmac_transfer_start(tx_cmd) failed: %d\n", ret);
+		else
+			pr_info("TX CMD DMA transfer started\n");
+	}
+
+	/* Clear bit 1 at AXI DAC base + 0xC8 (restore) */
+	{
+		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC8);
+		Xil_Out32(TX_CORE_BASEADDR + 0xC8, reg & ~(1 << 1));
+	}
+
+	/*
+	 * ----------------------------------------------------------------
+	 * TX DMA transfer.
+	 * ----------------------------------------------------------------
+	 */
+#ifdef DMA_CYCLIC_PASS
+	test_vector[0] = 0x44444447;
+	test_vector[15] = 0x00000007;
+#endif
+
+	axi_dac_load_custom_data(tx_dac, test_vector_allf,
+				 NO_OS_ARRAY_SIZE(test_vector_allf),
+				 (uintptr_t)dac_buffer_dma);
 
 	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	if (ret)
 		pr_err("axi_dac_set_datasel(DMA) failed: %d\n", ret);
 
 	struct axi_dma_transfer transfer = {
-		.size = sizeof(test_vector),
+		.size = sizeof(test_vector_allf),
 		.transfer_done = 0,
-		.cyclic = CYCLIC,
+		.cyclic = NO,
 		.src_addr = (uintptr_t)dac_buffer_dma,
 		.dest_addr = 0,
 	};
 
-	printf("Press Enter to start transfer...\n");
+	printf("Press Enter to start stream transfer...\n");
 	getchar();
+
+	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector_allf),
+		tx_dac->num_channels,
+		8 * sizeof(test_vector_allf[0]));
 
 	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
 	if (ret)
@@ -479,6 +547,44 @@ int example_main()
 		pr_info("TX DMA transfer started\n");
 
 	Xil_DCacheFlush();
+
+#ifdef DMA_CYCLIC_PASS
+	/* RX DMA read — same length as TX transfer */
+	uint32_t adc_buffer_dma[NO_OS_ARRAY_SIZE(test_vector)]
+		__attribute__((aligned(1024)));
+
+	struct axi_dma_transfer read_transfer = {
+		.size = sizeof(test_vector),
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = 0,
+		.dest_addr = (uintptr_t)adc_buffer_dma,
+	};
+
+	printf("Press Enter to start Rx transfer...\n");
+	getchar();
+
+	ret = axi_dmac_transfer_start(rx_dmac, &read_transfer);
+	if (ret) {
+		pr_err("axi_dmac_transfer_start(rx) failed: %d\n", ret);
+	} else {
+		ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+		if (ret)
+			pr_err("RX DMA transfer timeout: %d\n", ret);
+	}
+
+	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma,
+				  sizeof(adc_buffer_dma));
+
+	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)adc_buffer_dma, NO_OS_ARRAY_SIZE(adc_buffer_dma),
+		rx_adc->num_channels,
+		8 * sizeof(adc_buffer_dma[0]));
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(adc_buffer_dma); i++)
+		printf("  adc_buffer_dma[%2u] = 0x%08lX\n", i,
+		       (unsigned long)adc_buffer_dma[i]);
+#endif
 
 	pr_info("Done. Halting.\n");
 	while (1)
