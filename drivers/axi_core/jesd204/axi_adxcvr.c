@@ -462,6 +462,9 @@ static int adxcvr_reset(struct adxcvr *xcvr)
 		ret = adxcvr_status_error(xcvr);
 	} while (ret < 0 && retry--);
 
+	printf("ADXCVR reset. Press enter to go further...\n");
+	getchar();
+
 	return ret;
 }
 
