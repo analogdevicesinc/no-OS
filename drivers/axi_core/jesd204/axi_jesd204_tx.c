@@ -634,6 +634,9 @@ static int axi_jesd204_tx_jesd204_clks_enable(struct jesd204_dev *jdev,
 	axi_jesd204_tx_write(jesd, JESD204_TX_REG_SYSREF_STATUS, 0x3);
 	axi_jesd204_tx_write(jesd, JESD204_TX_REG_LINK_DISABLE, 0x0);
 
+	printf("Tx was enabled. Press enter to go further...\n");
+	getchar();
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
