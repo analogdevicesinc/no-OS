@@ -49,6 +49,35 @@
 
 static uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 
+/*
+ * 512-bit base sequence (MSW..LSW):
+ *   0x00000001 FFFFFFFF EEEEEEEE DDDDDDDD
+ *   CCCCCCCC BBBBBBBB AAAAAAAA 99999999
+ *   88888888 77777777 66666666 55555555
+ *   44444444 33333333 22222222 11111111
+ *
+ * Shifted left by 2 as a 512-bit integer, then bit 0 set to 1.
+ * test_vector[15] = MSW, test_vector[0] = LSW.
+ */
+static const uint32_t test_vector[16] = {
+	0x44444445, /* [0]  from 0x11111111 */
+	0x88888888, /* [1]  from 0x22222222 */
+	0xCCCCCCCC, /* [2]  from 0x33333333 */
+	0x11111110, /* [3]  from 0x44444444 */
+	0x55555555, /* [4]  from 0x55555555 */
+	0x99999999, /* [5]  from 0x66666666 */
+	0xDDDDDDDD, /* [6]  from 0x77777777 */
+	0x22222221, /* [7]  from 0x88888888 */
+	0x66666666, /* [8]  from 0x99999999 */
+	0xAAAAAAAA, /* [9]  from 0xAAAAAAAA */
+	0xEEEEEEEE, /* [10] from 0xBBBBBBBB */
+	0x33333332, /* [11] from 0xCCCCCCCC */
+	0x77777777, /* [12] from 0xDDDDDDDD */
+	0xBBBBBBBB, /* [13] from 0xEEEEEEEE */
+	0xFFFFFFFF, /* [14] from 0xFFFFFFFF */
+	0x00000005, /* [15] from 0x00000001 */
+};
+
 int example_main()
 {
 	static struct si5391_init_param si5391_param = { 0 };
@@ -66,6 +95,7 @@ int example_main()
 	struct axi_dmac *tx_dmac = NULL;
 	struct axi_dmac *rx_cmd_dmac = NULL;
 	struct axi_dmac *tx_cmd_dmac = NULL;
+	unsigned int i;
 	int ret;
 
 	printf("\nAD9081K (K) basic example - JESD204 link bring-up.\n");
@@ -250,7 +280,7 @@ int example_main()
 		.base = TX_CORE_BASEADDR,
 		.num_channels = AD9081K_TX_JESD_CONVS_PER_DEVICE,
 		.channels = NULL,
-		.rate = 1,
+		.rate = 3,
 	};
 
 	ret = axi_dac_init(&tx_dac, &tx_dac_init);
@@ -261,9 +291,14 @@ int example_main()
 	pr_info("AXI DAC initialized (%d channels)\n",
 		tx_dac->num_channels);
 
+	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	if (ret)
+		pr_err("axi_dac_set_datasel(DDS) failed: %d\n", ret);
+
 	/*
 	 * ----------------------------------------------------------------
 	 * AXI ADC core initialization (RX TPL).
+	 * Uses init_begin + manual reset + post_setup (adrv904x pattern).
 	 * ----------------------------------------------------------------
 	 */
 	struct axi_adc_init rx_adc_init = {
@@ -272,13 +307,28 @@ int example_main()
 		.num_channels = ADC_CHANNELS,
 	};
 
-	ret = axi_adc_init(&rx_adc, &rx_adc_init);
+	ret = axi_adc_init_begin(&rx_adc, &rx_adc_init);
 	if (ret) {
-		pr_err("axi_adc_init() failed: %d\n", ret);
+		pr_err("axi_adc_init_begin() failed: %d\n", ret);
 		goto error_tx_dac;
 	}
-	pr_info("AXI ADC initialized (%d channels, clock %lu Hz)\n",
-		rx_adc->num_channels, (unsigned long)rx_adc->clock_hz);
+
+	axi_adc_write(rx_adc, AXI_ADC_REG_RSTN, 0);
+	axi_adc_write(rx_adc, AXI_ADC_REG_RSTN,
+		      AXI_ADC_MMCM_RSTN | AXI_ADC_RSTN);
+
+	/* ADC post-setup: channel config per adrv904x_post_setup() */
+	axi_adc_write(rx_adc, AXI_ADC_REG_CNTRL, 0);
+	for (i = 0; i < rx_adc->num_channels; i++) {
+		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL_1(i),
+			      AXI_ADC_DCFILT_OFFSET(0));
+		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL_2(i),
+			      (i & 1) ? 0x00004000 : 0x40000000);
+		axi_adc_write(rx_adc, AXI_ADC_REG_CHAN_CNTRL(i),
+			      AXI_ADC_FORMAT_SIGNEXT | AXI_ADC_FORMAT_ENABLE |
+			      AXI_ADC_ENABLE | AXI_ADC_IQCOR_ENB);
+	}
+	pr_info("AXI ADC initialized (%d channels)\n", rx_adc->num_channels);
 
 	/*
 	 * ----------------------------------------------------------------
@@ -398,21 +448,29 @@ int example_main()
 	 * TX DMA transfer — load sine LUT into buffer and start DMA.
 	 * ----------------------------------------------------------------
 	 */
-	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
-				 NO_OS_ARRAY_SIZE(sine_lut_iq),
+	axi_dac_load_custom_data(tx_dac, test_vector,
+				 NO_OS_ARRAY_SIZE(test_vector),
 				 (uintptr_t)dac_buffer_dma);
+
+	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector),
+		tx_dac->num_channels,
+		8 * sizeof(test_vector[0]));
 
 	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	if (ret)
 		pr_err("axi_dac_set_datasel(DMA) failed: %d\n", ret);
 
 	struct axi_dma_transfer transfer = {
-		.size = sizeof(sine_lut_iq),
+		.size = sizeof(test_vector),
 		.transfer_done = 0,
-		.cyclic = NO,
+		.cyclic = CYCLIC,
 		.src_addr = (uintptr_t)dac_buffer_dma,
 		.dest_addr = 0,
 	};
+
+	printf("Press Enter to start transfer...\n");
+	getchar();
 
 	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
 	if (ret)
