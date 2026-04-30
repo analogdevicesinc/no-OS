@@ -403,17 +403,27 @@ int32_t xil_i2c_write(struct no_os_i2c_desc *desc,
 		if (ret != 0)
 			return -1;
 
-		ret = XIicPs_SetOptions(xdesc->instance,
-					stop_bit ? 0 : XIICPS_REP_START_OPTION);
+		if (stop_bit)
+			XIicPs_ClearOptions(xdesc->instance,
+					    XIICPS_REP_START_OPTION);
+		else
+			XIicPs_SetOptions(xdesc->instance,
+					  XIICPS_REP_START_OPTION);
+
+		ret = XIicPs_MasterSendPolled(xdesc->instance,
+					      data,
+					      bytes_number,
+					      desc->slave_address);
 		if (ret != 0)
 			goto error;
 
-		XIicPs_MasterSend(xdesc->instance,
-				  data,
-				  bytes_number,
-				  desc->slave_address);
-		if (ret != 0)
-			goto error;
+		{
+			int timeout = 10000;
+			while (XIicPs_BusIsBusy(xdesc->instance) && --timeout)
+				;
+			if (!timeout)
+				goto error;
+		}
 
 		break;
 #endif
@@ -471,17 +481,27 @@ int32_t xil_i2c_read(struct no_os_i2c_desc *desc,
 		if (ret != 0)
 			return -1;
 
-		ret = XIicPs_SetOptions(xdesc->instance,
-					stop_bit ? 0 : XIICPS_REP_START_OPTION);
+		if (stop_bit)
+			XIicPs_ClearOptions(xdesc->instance,
+					    XIICPS_REP_START_OPTION);
+		else
+			XIicPs_SetOptions(xdesc->instance,
+					  XIICPS_REP_START_OPTION);
+
+		ret = XIicPs_MasterRecvPolled(xdesc->instance,
+					      data,
+					      bytes_number,
+					      desc->slave_address);
 		if (ret != 0)
 			goto error;
 
-		XIicPs_MasterRecv(xdesc->instance,
-				  data,
-				  bytes_number,
-				  desc->slave_address);
-		if (ret != 0)
-			goto error;
+		{
+			int timeout = 10000;
+			while (XIicPs_BusIsBusy(xdesc->instance) && --timeout)
+				;
+			if (!timeout)
+				goto error;
+		}
 
 		break;
 #endif
