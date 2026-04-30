@@ -166,6 +166,16 @@ config POWER_IIO_LTM4686
 	bool "Enable LTM4686 IIO driver"
 	default n
 
+config POWER_LTM4700
+	depends on I2C
+	bool "Enable LTM4700 power driver"
+	default n
+
+config POWER_IIO_LTM4700
+	select POWER_LTM4700
+	bool "Enable LTM4700 IIO driver"
+	default n
+
 config POWER_LTP8800
 	depends on I2C
 	bool "Enable LTP8800 power driver"
