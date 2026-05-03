@@ -1,0 +1,15 @@
+menuconfig MOTOR
+	bool "Motor Control Drivers"
+	default n
+	help
+	  Enable support for motor control drivers.
+
+if MOTOR
+
+config MOTOR_TMC7300
+	depends on UART
+	select GPIO
+	bool "Enable TMC7300 motor driver"
+	default n
+
+endif # MOTOR

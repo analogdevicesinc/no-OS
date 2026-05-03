@@ -1,0 +1,25 @@
+menuconfig GYRO
+	bool "Gyroscope Drivers"
+	default n
+	help
+	  Enable support for gyroscope drivers.
+
+if GYRO
+
+config GYRO_ADXRS290
+	depends on SPI
+	select GPIO
+	bool "Enable ADXRS290 gyroscope driver"
+	default n
+
+config GYRO_IIO_ADXRS290
+	select GYRO_ADXRS290
+	bool "Enable ADXRS290 IIO driver"
+	default n
+
+config GYRO_ADXRS453
+	depends on SPI
+	bool "Enable ADXRS453 gyroscope driver"
+	default n
+
+endif # GYRO

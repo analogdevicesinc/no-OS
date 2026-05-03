@@ -1,0 +1,24 @@
+menuconfig CDC
+	bool "Capacitance-to-Digital Converter Drivers"
+	default n
+	help
+	  Enable support for capacitance-to-digital converter (CDC) drivers.
+
+if CDC
+
+config CDC_AD7156
+	depends on I2C
+	bool "Enable AD7156 CDC driver"
+	default n
+
+config CDC_AD7746
+	depends on I2C
+	bool "Enable AD7746 CDC driver"
+	default n
+
+config CDC_IIO_AD7746
+	select CDC_AD7746
+	bool "Enable AD7746 IIO driver"
+	default n
+
+endif # CDC

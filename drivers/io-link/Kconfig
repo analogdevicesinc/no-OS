@@ -1,0 +1,15 @@
+menuconfig IO_LINK
+	bool "IO-Link Drivers"
+	default n
+	help
+	  Enable support for IO-Link device drivers.
+
+if IO_LINK
+
+config IO_LINK_MAX22516
+	depends on SPI
+	select GPIO
+	bool "Enable MAX22516 IO-Link driver"
+	default n
+
+endif # IO_LINK

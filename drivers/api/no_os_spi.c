@@ -192,7 +192,7 @@ int32_t no_os_spi_transfer(struct no_os_spi_desc *desc,
 	if (!desc || !desc->platform_ops)
 		return -EINVAL;
 
-	if (desc->platform_ops->transfer)
+	if (desc->platform_ops->transfer){
 		return desc->platform_ops->transfer(desc, msgs, len);
 
 	no_os_mutex_lock(desc->bus->mutex);

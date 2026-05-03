@@ -1,0 +1,35 @@
+menuconfig SWITCH
+	bool "Switch/Crosspoint Drivers"
+	default n
+	help
+	  Enable support for analog switch and crosspoint switch drivers.
+
+if SWITCH
+
+config SWITCH_ADG1712
+	depends on GPIO
+	bool "Enable ADG1712 switch driver"
+	default n
+
+config SWITCH_ADG1736
+	depends on GPIO
+	bool "Enable ADG1736 switch driver"
+	default n
+
+config SWITCH_IIO_ADG2128
+	depends on I2C
+	bool "Enable ADG2128 IIO switch driver"
+	default n
+
+config SWITCH_ADGM3121
+	depends on SPI
+	select GPIO
+	bool "Enable ADGM3121 switch driver"
+	default n
+
+config SWITCH_ADGS6414D
+	depends on SPI
+	bool "Enable ADGS6414D switch driver"
+	default n
+
+endif # SWITCH
