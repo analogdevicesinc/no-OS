@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/eval-adxl355-pmdz/no-os-setup
+
 EVAL-ADXL355-PMDZ no-OS Example Project
 ========================================
 

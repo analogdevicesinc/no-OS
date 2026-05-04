@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/max31855
+
 MAX31855 no-OS Driver
 =====================
 

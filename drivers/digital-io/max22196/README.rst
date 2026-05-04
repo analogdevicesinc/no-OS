@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/max22196
+
 MAX22196 no-OS driver
 =====================
 

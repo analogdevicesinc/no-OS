@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/adxl355
+
 ADXL355 no-OS driver
 ====================
 

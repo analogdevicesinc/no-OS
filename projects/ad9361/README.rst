@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/no-os-setup
+
 AD9361 no-OS Example Project
 ============================
 

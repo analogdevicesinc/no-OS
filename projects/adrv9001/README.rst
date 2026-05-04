@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/adrv9002/no-os-setup
+
 ADRV9001 no-OS Example Project
 ==============================
 

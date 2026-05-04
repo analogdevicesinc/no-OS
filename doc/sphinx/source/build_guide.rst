@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/no-os/build
+
 *****************
 No-OS Build Guide
 *****************
@@ -59,4 +61,3 @@ LATTICE PROPEL SDK
     :maxdepth: 1
 
     build_guides/build_lattice
-

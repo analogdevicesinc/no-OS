@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/eval-adf5902/software/no-os-setup
+
 ADF5902 no-OS Example Project
 =============================
 

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/mykonos/no-os-setup
+
 AD9371 no-OS Example Project
 ============================
 

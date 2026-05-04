@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/adp1050
+
 ADP1050 no-OS driver
 ====================
 
