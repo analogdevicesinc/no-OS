@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/eval-adt7420-pmdz
+
 ADT7420-PMDZ no-OS Example Project
 ==================================
 

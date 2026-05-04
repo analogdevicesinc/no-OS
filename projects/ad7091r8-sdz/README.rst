@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/ad7091r8
+
 AD7091R-2/-4/-8 no-OS Example Project
 =====================================
 

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/eval-ad7124-8-pmdz
+
 AD7124-8-PMDZ no-OS Example Project
 ====================================
 

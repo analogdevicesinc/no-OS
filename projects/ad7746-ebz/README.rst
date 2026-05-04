@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/ad7746
+
 AD7746-EBZ no-OS Example Project
 ================================
 

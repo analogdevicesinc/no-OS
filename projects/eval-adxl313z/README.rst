@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/eval-adxl313z/no-os-setup
+
 EVAL-ADXL313Z no-OS Example Project
 ===================================
 

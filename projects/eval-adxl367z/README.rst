@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/inertial-mems/accelerometers/adxl367
+
 EVAL-ADXL367Z no-OS Example Project
 =====================================
 

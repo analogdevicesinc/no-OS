@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad7768-1
+
 AD7768-1 no-OS Example Project
 ==============================
 

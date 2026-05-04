@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/ad5766
+
 AD5766-SDZ no-OS Example Project
 ==================================
 

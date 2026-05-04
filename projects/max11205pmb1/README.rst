@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/max11205pmb1/no-os-setup
+
 MAX11205PMB1 no-OS Example Project
 ==================================
 

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/ad7293
+
 AD7293 no-OS Driver
 ====================
 

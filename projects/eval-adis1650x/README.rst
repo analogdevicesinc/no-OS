@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/inertial-mems/imu/adis1650x-pcb
+
 ADIS1650X Family no-OS Example Project
 ======================================
 

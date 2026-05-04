@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/eval-adf4377/software/no-os-setup
+
 Evaluating the ADF4377 Wideband Synthesizer
 ===========================================
 

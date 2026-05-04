@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/ad713x
+
 AD713x FMCZ no-OS Example Project
 ==================================
 

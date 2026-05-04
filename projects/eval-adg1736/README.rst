@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/adgs5412
+
 Evaluating the EVAL-ADG1736
 ===========================
 

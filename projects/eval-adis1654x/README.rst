@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/adis165xx
+
 ADIS1654X Family no-OS Example Project
 ======================================
 

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/eval-adxrs290-pmdz
+
 ADXRS290-PMDZ no-OS Project
 ===========================
 

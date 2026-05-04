@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0565
+
 CN0565 no-OS Example Project
 ============================
 

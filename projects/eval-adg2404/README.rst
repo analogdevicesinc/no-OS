@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/adgs1408
+
 EVAL-ADG2404 no-OS Example Project
 ==================================
 

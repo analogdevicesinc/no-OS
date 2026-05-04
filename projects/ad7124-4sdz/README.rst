@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/ad7124-x
+
 AD7124-4SDZ no-OS Example Project
 ==================================
 

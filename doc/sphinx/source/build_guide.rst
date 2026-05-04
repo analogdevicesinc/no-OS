@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/no-os/build
+
 *****************
 No-OS Build Guide
 *****************

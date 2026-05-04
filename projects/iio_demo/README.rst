@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/eval/user-guides/iio_demo/no-os-setup
+
 IIO Demo no-OS Example Project
 ================================
 

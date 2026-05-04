@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/adgs5412
+
 ADGS6414D Family no-OS Example Project
 ======================================
 

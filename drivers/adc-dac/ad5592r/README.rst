@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/tools-software/uc-drivers/ad5592r
+
 AD5592R no-OS Driver
 ======================
 
