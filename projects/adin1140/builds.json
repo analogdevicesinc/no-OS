@@ -1,0 +1,7 @@
+{
+  "maxim": {
+    "frame_rx_tx": {
+      "flags" : "EXAMPLE=frame_rx_tx TARGET=max78000"
+    }
+   }
+}
