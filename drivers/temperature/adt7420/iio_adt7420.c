@@ -133,6 +133,8 @@ int adt7420_iio_init(struct adt7420_iio_dev **iio_dev,
 	ret = adt7420_init(&desc->adt7420_dev, *(init_param->adt7420_dev_init));
 	if (ret)
 		goto error_init;
+
+	no_os_mdelay(100);
 	ret = adt7420_reset(desc->adt7420_dev);
 	if (ret)
 		goto error_init;

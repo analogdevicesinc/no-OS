@@ -591,6 +591,8 @@ int adin1140_init(struct adin1140_desc **desc,
 	if (ret)
 		goto free_oa;
 
+	adin1140_set_promisc(d, true);
+
 	*desc = d;
 
 	return 0;

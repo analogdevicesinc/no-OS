@@ -37,6 +37,7 @@
 #include <string.h>
 
 #include "no_os_alloc.h"
+#include "no_os_delay.h"
 #include "oa_tc6.h"
 
 int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
@@ -731,6 +732,7 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 {
 	struct oa_tc6_desc *descriptor;
+	int ret;
 
 	descriptor = no_os_calloc(1, sizeof(*descriptor));
 	if (!descriptor)
@@ -739,21 +741,31 @@ int oa_tc6_init(struct oa_tc6_desc **desc, struct oa_tc6_init_param *param)
 	descriptor->comm_desc = param->comm_desc;
 	descriptor->prote_spi = param->prote_spi;
 
+	ret = oa_tc6_reg_write(descriptor, OA_TC6_RESET_REG,
+			       OA_TC6_RESET_SWRESET);
+	if (ret)
+		goto free_desc;
+
+	/* Boot delay */
+	no_os_mdelay(10);
+
 #if CONFIG_OA_ZERO_SWO_ONLY
 	/* For now, we'll only support receiving frames with SWO = 0 */
-	int ret = oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
-				    OA_TC6_CONFIG0_ZARFE_MASK,
-				    OA_TC6_CONFIG0_ZARFE_MASK);
-	if (ret) {
-		no_os_free(descriptor);
-
-		return ret;
-	}
+	oa_tc6_reg_update(descriptor, OA_TC6_CONFIG0_REG,
+			  OA_TC6_CONFIG0_ZARFE_MASK,
+			  OA_TC6_CONFIG0_ZARFE_MASK);
+	if (ret)
+		goto free_desc;
 #endif
 
 	*desc = descriptor;
 
 	return 0;
+
+free_desc:
+	no_os_free(descriptor);
+
+	return ret;
 }
 
 /**

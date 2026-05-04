@@ -33,6 +33,7 @@
 #ifdef NO_OS_LWIP_NETWORKING
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
 #include <errno.h>
 
@@ -63,9 +64,8 @@
 
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include "no_os_util.h"
 #include "tcp_socket.h"
-
-#include "adin1110.h"
 
 static bool mdns_result;
 static bool mdns_is_conflict;
