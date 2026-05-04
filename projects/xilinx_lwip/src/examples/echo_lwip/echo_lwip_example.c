@@ -39,6 +39,7 @@
 #include "tcpecho_raw.h"
 #include "parameters.h"
 #include "echo_lwip_example.h"
+#include "capi_marvell_88e1510.h"
 
 /* MAC address - must be unique on the local network */
 static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
@@ -54,8 +55,21 @@ static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
 int echo_lwip_example_main(void)
 {
 	struct lwip_network_desc *lwip_desc;
+	struct mrvl_88e1510_extra_config mrvl_cfg = {
+		.rgmii = { .rx_delay_en = true, .tx_delay_en = true },
+		.downshift_en = true,
+		.downshift_retries = 3,
+	};
 	struct xemacps_init_param gem_ip = {
 		.device_id = GEM_DEVICE_ID,
+		.phy_ops   = &mrvl_88e1510_ops,
+		.phy_extra = &mrvl_cfg,
+		.phy_mode  = {
+			.speed          = CAPI_ETH_PHY_SPEED_1G,
+			.duplex         = CAPI_ETH_PHY_DUPLEX_FULL,
+			.auto_negotiate = true,
+			.mdix           = CAPI_ETH_MDIX_AUTO,
+		},
 	};
 	struct lwip_network_param lwip_param = {
 		.platform_ops = &xemacps_lwip_ops,

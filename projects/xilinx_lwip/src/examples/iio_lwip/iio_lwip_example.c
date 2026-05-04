@@ -49,6 +49,7 @@
 #include "common_data.h"
 #include "parameters.h"
 #include "iio_lwip_example.h"
+#include "capi_marvell_88e1510.h"
 
 /*
  * MAC address for this board. Must be unique on the local network.
@@ -107,8 +108,21 @@ int iio_lwip_example_main(void)
 	};
 
 	/* --- XEmacPs GEM init params --- */
+	struct mrvl_88e1510_extra_config mrvl_cfg = {
+		.rgmii = { .rx_delay_en = true, .tx_delay_en = true },
+		.downshift_en = true,
+		.downshift_retries = 3,
+	};
 	struct xemacps_init_param gem_ip = {
 		.device_id = GEM_DEVICE_ID,
+		.phy_ops   = &mrvl_88e1510_ops,
+		.phy_extra = &mrvl_cfg,
+		.phy_mode  = {
+			.speed          = CAPI_ETH_PHY_SPEED_1G,
+			.duplex         = CAPI_ETH_PHY_DUPLEX_FULL,
+			.auto_negotiate = true,
+			.mdix           = CAPI_ETH_MDIX_AUTO,
+		},
 	};
 	memcpy(gem_ip.hwaddr, mac_addr, sizeof(mac_addr));
 

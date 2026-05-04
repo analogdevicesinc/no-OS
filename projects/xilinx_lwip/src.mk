@@ -3,7 +3,7 @@ LIBRARIES += lwip
 # slipif.c requires sio_* functions which we don't implement.
 ALL_IGNORED_FILES += $(NO-OS)/libraries/lwip/lwip/src/netif/slipif.c
 
-CFLAGS += -DGEM_INSTANCE=0
+CFLAGS += -DGEM_INSTANCE=1
 CFLAGS += -DSSIZE_MAX=INT_MAX
 
 SRCS += $(PROJECT)/src/platform/xilinx/main.c
@@ -36,6 +36,14 @@ INCS += $(DRIVERS)/adc/adc_demo/adc_demo.h \
         $(DRIVERS)/dac/dac_demo/dac_demo.h \
         $(DRIVERS)/dac/dac_demo/iio_dac_demo.h
 endif
+
+# CAPI Ethernet PHY common layer
+INCS += $(NO-OS)/capi/include/capi_eth_phy.h
+SRCS += $(NO-OS)/capi/src/capi_eth_phy.c
+
+# Marvell 88E1510 PHY driver (CAPI)
+INCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.h
+SRCS += $(DRIVERS)/net/phy/mrvl_88e1510/capi_marvell_88e1510.c
 
 # XEmacPs MAC driver (PS GEM)
 INCS += $(DRIVERS)/net/xemacps/no_os_xemacps.h
