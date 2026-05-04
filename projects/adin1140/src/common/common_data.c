@@ -43,7 +43,7 @@ struct no_os_uart_init_param adin1140_uart_ip = {
 	.extra = UART_EXTRA,
 };
 
-struct no_os_spi_init_param adin1140_spi_ip = {
+const struct no_os_spi_init_param adin1140_spi_ip = {
 	.device_id = SPI_DEVICE_ID,
 	.max_speed_hz = SPI_BAUDRATE,
 	.bit_order = NO_OS_SPI_BIT_ORDER_MSB_FIRST,

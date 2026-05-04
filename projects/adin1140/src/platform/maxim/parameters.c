@@ -43,3 +43,7 @@ struct max_spi_init_param adin1140_spi_extra_ip = {
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
+
+struct max_i2c_init_param adin1140_i2c_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};

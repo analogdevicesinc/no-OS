@@ -38,6 +38,6 @@
 #include "no_os_uart.h"
 
 extern struct no_os_uart_init_param adin1140_uart_ip;
-extern struct no_os_spi_init_param adin1140_spi_ip;
+extern const struct no_os_spi_init_param adin1140_spi_ip;
 
 #endif /* __COMMON_DATA_H__ */

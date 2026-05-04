@@ -2,6 +2,9 @@
   "maxim": {
     "frame_rx_tx": {
       "flags" : "EXAMPLE=frame_rx_tx TARGET=max78000"
+    },
+    "iio_lwip_example": {
+      "flags" : "EXAMPLE=iio_lwip_example TARGET=max78000"
     }
    }
 }

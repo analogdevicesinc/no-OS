@@ -37,8 +37,13 @@
 #include "maxim_irq.h"
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
+#include "maxim_i2c.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
+
+#ifdef IIO_SUPPORT
+#define INTC_DEVICE_ID  0
+#endif
 
 #define UART_DEVICE_ID  0
 #define UART_BAUDRATE   57600
@@ -46,12 +51,18 @@
 #define UART_EXTRA      &adin1140_uart_extra_ip
 
 #define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    1000000
+#define SPI_BAUDRATE    30000000
 #define SPI_CS          1
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adin1140_spi_extra_ip
 
+#define I2C_DEVICE_ID   1
+#define I2C_CLK_SPEED   100000
+#define I2C_OPS         &max_i2c_ops
+#define I2C_EXTRA       &adin1140_i2c_extra_ip
+
 extern struct max_uart_init_param adin1140_uart_extra_ip;
 extern struct max_spi_init_param adin1140_spi_extra_ip;
+extern struct max_i2c_init_param adin1140_i2c_extra_ip;
 
 #endif /* __PARAMETERS_H__ */
