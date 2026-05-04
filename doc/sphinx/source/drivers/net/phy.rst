@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/net/phy/README.rst
