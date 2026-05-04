@@ -35,7 +35,8 @@ INCLUDES = -I../include/ \
 	 -I./gmsl/common \
 	 -I./gmsl/serializer \
 	 -I./gmsl/deserializer \
-	 -I./gmsl/gmsl_dbg
+	 -I./gmsl/gmsl_dbg \
+	 -I../capi/include
 
 IIOD_FLAGS += -DIIO_SUPPORT
 
