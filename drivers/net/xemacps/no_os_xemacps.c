@@ -58,6 +58,7 @@
 #include "no_os_xemacps.h"
 #include "no_os_delay.h"
 #include "no_os_alloc.h"
+#include <capi_eth_phy.h>
 
 #define XGEM_BD_TO_INDEX(ringptr, bdptr) \
 	(((UINTPTR)(bdptr) - (UINTPTR)(ringptr)->BaseBdAddr) / (ringptr)->Separation)
@@ -86,9 +87,31 @@ struct xemacps_desc {
 	uint32_t rx_bd_len;
 
 	uint32_t last_rx_frms_cntr;
-	uint8_t phy_addr;
 	bool     link_up;
+
+	struct capi_eth_phy_handle *phy;
 };
+
+/* Single-instance XEmacPs reference for MDIO callbacks */
+static XEmacPs *xgem_mdio_emac;
+
+static int xgem_mdio_read(uint8_t phy_addr, uint8_t reg_addr, uint16_t *data)
+{
+	if (!xgem_mdio_emac)
+		return -EINVAL;
+	if (XEmacPs_PhyRead(xgem_mdio_emac, phy_addr, reg_addr, data) != XST_SUCCESS)
+		return -EIO;
+	return 0;
+}
+
+static int xgem_mdio_write(uint8_t phy_addr, uint8_t reg_addr, uint16_t data)
+{
+	if (!xgem_mdio_emac)
+		return -EINVAL;
+	if (XEmacPs_PhyWrite(xgem_mdio_emac, phy_addr, reg_addr, data) != XST_SUCCESS)
+		return -EIO;
+	return 0;
+}
 
 /**
  * @brief Detect PHY address by scanning MDIO addresses 0-31.
@@ -124,114 +147,18 @@ static int8_t xgem_detect_phy(XEmacPs *emac)
 	return -ENODEV;
 }
 
-/**
- * @brief Configure RGMII TX/RX delays on a Marvell 88E151x PHY.
- *
- * @param emac     - XEmacPs instance.
- * @param phy_addr - MDIO address of the PHY.
- * @return 0 on success, negative error code on MDIO failure.
- */
-static int32_t xgem_marvell_rgmii_delays(XEmacPs *emac, uint8_t phy_addr)
+static uint16_t xgem_capi_speed_to_mbps(enum capi_eth_phy_speed speed)
 {
-	uint16_t phyid1, phyid2, bmcr;
-	uint32_t oui;
-	int ret;
-
-	/* Verify this is a Marvell PHY */
-	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_PHYID1, &phyid1);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_PHYID2, &phyid2);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	oui = ((uint32_t)phyid1 << 6) | ((phyid2 >> 10) & 0x3F);
-	if (oui != MARVELL_PHY_ID) {
-		printf("xemacps: PHY OUI 0x%06x is not Marvell, "
-		       "skipping RGMII delay config\n", oui);
+	switch (speed) {
+	case CAPI_ETH_PHY_SPEED_1G:
+		return 1000;
+	case CAPI_ETH_PHY_SPEED_100M:
+		return 100;
+	case CAPI_ETH_PHY_SPEED_10M:
+		return 10;
+	default:
 		return 0;
 	}
-
-	printf("xemacps: Found Marvell OUI 0x%06x, "
-	       "model: 0X%02X\n", oui, (phyid2 >> 4) & 0x3F);
-
-	/* Switch to page 2 */
-	ret = XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_PAGE, 0x02);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	ret = XEmacPs_PhyWrite(emac, phy_addr, MRVL_PAGE2_RGMII_CTRL,
-			       0x0030);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	/* Switch back to page 0 */
-	ret = XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_PAGE, 0x00);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	/* Soft-reset the PHY so new timing takes effect */
-	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_BMCR, &bmcr);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	bmcr |= PHY_REG_BMCR_RESET;
-	ret = XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_BMCR, bmcr);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	/* Wait for reset to complete (bit self-clears) */
-	no_os_mdelay(100);
-
-	printf("xemacps: Marvell PHY RGMII delays configured\n");
-	return 0;
-}
-
-/**
- * @brief Restart auto-negotiation on the PHY.
- * @param emac     - XEmacPs instance.
- * @param phy_addr - MDIO address of the PHY.
- * @return 0 on success, negative error code on MDIO failure.
- */
-static int32_t xgem_phy_start_autonegotiation(XEmacPs *emac, uint8_t phy_addr)
-{
-	uint16_t bmcr;
-	int32_t ret;
-
-	ret = XEmacPs_PhyRead(emac, phy_addr, PHY_REG_BMCR, &bmcr);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	bmcr |= PHY_REG_BMCR_ANEGEN | PHY_REG_BMCR_RSTANEG;
-	ret = XEmacPs_PhyWrite(emac, phy_addr, PHY_REG_BMCR, bmcr);
-	if (ret != XST_SUCCESS)
-		return -EIO;
-
-	return 0;
-}
-
-/**
- * @brief Read the negotiated link speed from PHY registers.
- *
- * Must only be called after auto-negotiation has completed.
- *
- * @param emac     - XEmacPs instance.
- * @param phy_addr - MDIO address of the PHY.
- * @return Link speed in Mbps (10, 100, or 1000).
- */
-static int16_t xgem_phy_get_speed(XEmacPs *emac, uint8_t phy_addr)
-{
-	uint16_t stat1000, anlpar;
-
-	XEmacPs_PhyRead(emac, phy_addr, PHY_REG_1000STAT, &stat1000);
-	if (stat1000 & (PHY_REG_1000STAT_LP_FD | PHY_REG_1000STAT_LP_HD))
-		return 1000;
-
-	XEmacPs_PhyRead(emac, phy_addr, PHY_REG_ANLPAR, &anlpar);
-	if (anlpar & (PHY_REG_ANLPAR_100FD | PHY_REG_ANLPAR_100HD))
-		return 100;
-
-	return 10;
 }
 
 /**
@@ -277,17 +204,12 @@ static int32_t xgem_rx_submit(struct xemacps_desc *d, uint32_t count,
  */
 static void xgem_resetrx_on_no_rxdata(struct xemacps_desc *d, uint32_t rxsr)
 {
-#ifndef PLATFORM_ZYNQ
-	(void)d;
-	(void)rxsr;
-	return;
-#else
 	uint32_t rxcnt, regctrl;
 
 	/*
-	 * Flush RX packet on every resource error to free
-	 * space in the packet buffer
-	 */
+	* Flush RX packet on every resource error to free
+	* space in the packet buffer
+	*/
 	if (rxsr & XEMACPS_RXSR_BUFFNA_MASK) {
 		regctrl = XEmacPs_ReadReg(d->emac.Config.BaseAddress,
 					  XEMACPS_NWCTRL_OFFSET);
@@ -298,11 +220,11 @@ static void xgem_resetrx_on_no_rxdata(struct xemacps_desc *d, uint32_t rxsr)
 	}
 
 	/*
-	 * Monitor the frame counter for inactivity. If
-	 * BUFFNA is set and the counter has not incremented for two
-	 * consecutive reads, the RX data path is locked. Toggle
-	 * RXEN to reset it.
-	 */
+	* Monitor the frame counter for inactivity. If
+	* BUFFNA is set and the counter has not incremented for two
+	* consecutive reads, the RX data path is locked. Toggle
+	* RXEN to reset it.
+	*/
 	rxcnt = XEmacPs_ReadReg(d->emac.Config.BaseAddress,
 				XEMACPS_RXCNT_OFFSET);
 
@@ -327,7 +249,6 @@ static void xgem_resetrx_on_no_rxdata(struct xemacps_desc *d, uint32_t rxsr)
 
 out:
 	d->last_rx_frms_cntr = rxcnt;
-#endif /* PLATFORM_ZYNQ */
 }
 
 
@@ -462,21 +383,40 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 	XEmacPs_SetMacAddress(&d->emac, param->hwaddr, 1);
 	XEmacPs_SetMdioDivisor(&d->emac, MDC_DIV_224);
 
-	int8_t phy = xgem_detect_phy(&d->emac);
+	xgem_mdio_emac = &d->emac;
 
-	if (phy < 0) {
-		printf("xemacps: no PHY found on GEM 0x%lx\n",
-		       (unsigned long)cfg->BaseAddress);
-		ret = -ENODEV;
+	/* Detect or use caller-provided PHY address */
+	uint8_t phy_addr = param->phy_addr;
+	if (!phy_addr) {
+		int8_t detected = xgem_detect_phy(&d->emac);
+		if (detected < 0) {
+			printf("xemacps: no PHY found on GEM 0x%lx\n",
+			       (unsigned long)cfg->BaseAddress);
+			ret = -ENODEV;
+			goto free_desc;
+		}
+		phy_addr = (uint8_t)detected;
+	}
+
+	/* Initialize PHY through the CAPI layer */
+	struct capi_eth_phy_init_config phy_cfg = {
+		.phy_addr = phy_addr,
+		.fn_read  = xgem_mdio_read,
+		.fn_write = xgem_mdio_write,
+		.extra    = param->phy_extra,
+		.ops      = param->phy_ops,
+	};
+
+	ret = capi_eth_phy_init(&d->phy, &phy_cfg);
+	if (ret) {
+		printf("xemacps: PHY init failed (%d)\n", ret);
 		goto free_desc;
 	}
-	d->phy_addr = phy;
 
-	/* Configure RGMII delays on the PHY before starting autoneg */
-	ret = xgem_marvell_rgmii_delays(&d->emac, d->phy_addr);
+	ret = capi_eth_phy_set_interface(d->phy, CAPI_ETH_INTERFACE_RGMII);
 	if (ret) {
-		printf("xemacps: RGMII delay config failed (%d)\n", ret);
-		goto free_desc;
+		printf("xemacps: PHY set_interface failed (%d)\n", ret);
+		goto free_phy;
 	}
 
 	/* Allocate BD space */
@@ -514,14 +454,14 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 	if (ret != XST_SUCCESS) {
 		printf("xemacps: RX BdRingCreate failed (%d)\n", ret);
 		ret = -EIO;
-		goto free_desc;
+		goto free_phy;
 	}
 
 	XEmacPs_BdClear(&bd_template);
 	ret = XEmacPs_BdRingClone(rx_ring, &bd_template, XEMACPS_RECV);
 	if (ret != XST_SUCCESS) {
 		ret = -EIO;
-		goto free_desc;
+		goto free_phy;
 	}
 
 	/* Allocate and write buffer address to RX BDs */
@@ -534,13 +474,13 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 			ret = XEmacPs_BdRingAlloc(rx_ring, 1, &rxbd);
 			if (ret != XST_SUCCESS) {
 				ret = -EIO;
-				goto free_desc;
+				goto free_phy;
 			}
 
 			ret = XEmacPs_BdRingToHw(rx_ring, 1, rxbd);
 			if (ret != XST_SUCCESS) {
 				ret = -EIO;
-				goto free_desc;
+				goto free_phy;
 			}
 
 			bdindex = XGEM_BD_TO_INDEX(rx_ring, rxbd);
@@ -570,13 +510,13 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 	if (ret != XST_SUCCESS) {
 		printf("xemacps: TX BdRingCreate failed (%d)\n", ret);
 		ret = -EIO;
-		goto free_desc;
+		goto free_phy;
 	}
 
 	ret = XEmacPs_BdRingClone(tx_ring, &bd_template, XEMACPS_SEND);
 	if (ret != XST_SUCCESS) {
 		ret = -EIO;
-		goto free_desc;
+		goto free_phy;
 	}
 
 	/* Program queue base registers */
@@ -605,8 +545,14 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 	}
 	dsb();
 
-	printf("xemacps: starting autonegotiation\n");
-	xgem_phy_start_autonegotiation(&d->emac, d->phy_addr);
+	printf("xemacps: configuring PHY mode\n");
+	ret = capi_eth_phy_set_mode(d->phy, &param->phy_mode);
+	if (ret)
+		printf("xemacps: PHY set_mode failed (%d)\n", ret);
+
+	ret = capi_eth_phy_power_control(d->phy, CAPI_ETH_PHY_POWER_FULL);
+	if (ret)
+		printf("xemacps: PHY power_control failed (%d)\n", ret);
 
 	XEmacPs_Start(&d->emac);
 
@@ -614,6 +560,8 @@ int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param)
 	*desc = d;
 	return 0;
 
+free_phy:
+	capi_eth_phy_deinit(d->phy);
 free_desc:
 	no_os_free(d);
 	return ret;
@@ -627,6 +575,8 @@ free_desc:
 int xemacps_remove(struct xemacps_desc *desc)
 {
 	XEmacPs_Stop(&desc->emac);
+	capi_eth_phy_deinit(desc->phy);
+	xgem_mdio_emac = NULL;
 	no_os_free(desc);
 
 	return 0;
@@ -719,37 +669,46 @@ int xemacps_recv(struct xemacps_desc *desc, uint8_t *buf, uint32_t *len)
 }
 
 /**
- * @brief Poll PHY link state via BMSR.
+ * @brief Poll PHY link state via CAPI PHY layer.
  *
  * @param d - Driver descriptor.
  */
 static int xgem_poll_link(struct xemacps_desc *d)
 {
-	uint16_t bmsr;
-	int32_t speed;
+	struct capi_eth_link_info info;
 	bool was_up = d->link_up, is_up;
+	uint16_t speed_mbps;
 	int ret;
 
-	ret = XEmacPs_PhyRead(&d->emac, d->phy_addr, PHY_REG_BMSR, &bmsr);
-	if (ret != XST_SUCCESS || bmsr == 0xFFFF)
-		return -ENODEV;
+	ret = capi_eth_phy_get_link_info(d->phy, &info);
+	if (ret)
+		return ret;
 
-	is_up = (bmsr & PHY_REG_BMSR_LSTATUS) && (bmsr & PHY_REG_BMSR_ANEGCMPL);
+	is_up = (info.state == CAPI_ETH_LINK_UP);
 
 	if (is_up == was_up)
 		return 0;
 
 	if (is_up) {
-		speed = xgem_phy_get_speed(&d->emac, d->phy_addr);
-		if (speed < 0)
-			return speed;
-		printf("xemacps: PHY link up at %dMbps\n", speed);
-		XEmacPs_SetOperatingSpeed(&d->emac, (uint16_t)speed);
+		uint32_t nwcfg;
+
+		speed_mbps = xgem_capi_speed_to_mbps(info.speed);
+		printf("xemacps: PHY link up at %uMbps %s-duplex\n",
+		       speed_mbps,
+		       info.duplex == CAPI_ETH_PHY_DUPLEX_FULL ? "full" : "half");
+		if (speed_mbps)
+			XEmacPs_SetOperatingSpeed(&d->emac, speed_mbps);
+
+		nwcfg = XEmacPs_ReadReg(d->emac.Config.BaseAddress,
+					XEMACPS_NWCFG_OFFSET);
+		if (info.duplex == CAPI_ETH_PHY_DUPLEX_FULL)
+			nwcfg |= XEMACPS_NWCFG_FDEN_MASK;
+		else
+			nwcfg &= ~XEMACPS_NWCFG_FDEN_MASK;
+		XEmacPs_WriteReg(d->emac.Config.BaseAddress,
+				 XEMACPS_NWCFG_OFFSET, nwcfg);
 	} else {
 		printf("xemacps: PHY link down\n");
-		ret = xgem_phy_start_autonegotiation(&d->emac, d->phy_addr);
-		if (ret)
-			return ret;
 	}
 
 	d->link_up = is_up;
@@ -781,7 +740,9 @@ int xemacps_poll(struct xemacps_desc *desc)
 	rxsr = XEmacPs_ReadReg(desc->emac.Config.BaseAddress,
 			       XEMACPS_RXSR_OFFSET);
 
-	xgem_resetrx_on_no_rxdata(desc, rxsr);
+	if (desc->emac.Version == 2) {
+		xgem_resetrx_on_no_rxdata(desc, rxsr);
+	}
 
 	if (rxsr)
 		XEmacPs_WriteReg(desc->emac.Config.BaseAddress,

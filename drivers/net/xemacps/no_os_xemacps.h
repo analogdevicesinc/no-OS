@@ -41,6 +41,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "no_os_util.h"
+#include <capi_eth_phy.h>
 
 /* Number of RX buffer descriptors pre-posted to hardware */
 #define XGEM_RX_BD_COUNT		64
@@ -56,31 +57,9 @@
 #define XGEM_BUFF_SIZE	no_os_align(XEMACPS_MAX_FRAME_SIZE, XGEM_CACHE_LINE_SIZE)
 
 
-/* PHY register definitions (IEEE 802.3) */
-#define PHY_REG_BMCR				0x00
-#define PHY_REG_BMSR				0x01
+/* PHY ID register addresses — used by xgem_detect_phy() */
 #define PHY_REG_PHYID1				0x02
 #define PHY_REG_PHYID2				0x03
-#define PHY_REG_BMSR_LSTATUS		NO_OS_BIT(2)
-#define PHY_REG_BMSR_ANEGCMPL		NO_OS_BIT(5)
-#define PHY_REG_BMCR_RESET			NO_OS_BIT(15)
-#define PHY_REG_BMCR_ANEGEN			NO_OS_BIT(12)
-#define PHY_REG_BMCR_RSTANEG		NO_OS_BIT(9)
-#define PHY_REG_ANLPAR				0x05
-#define PHY_REG_ANLPAR_100FD		NO_OS_BIT(8)
-#define PHY_REG_ANLPAR_100HD		NO_OS_BIT(7)
-#define PHY_REG_1000STAT			0x0A
-#define PHY_REG_1000STAT_LP_FD		NO_OS_BIT(11)
-#define PHY_REG_1000STAT_LP_HD		NO_OS_BIT(10)
-
-/* Marvell 88E1510/88E1512 page and register definitions */
-#define MARVELL_PHY_ID				0x005043
-#define PHY_REG_PAGE				22
-#define MRVL_PAGE2_RGMII_CTRL			21
-/* Page 2 Reg 21 values: enable RGMII TX and RX delays per speed */
-#define MRVL_RGMII_1000_DELAYS			0x0070
-#define MRVL_RGMII_100_DELAYS			0x2030
-#define MRVL_RGMII_10_DELAYS			0x0030
 
 /* Maximum Ethernet frame size, rounded up to a 32-byte cache-line multiple. */
 #ifndef XEMACPS_MAX_FRAME_SIZE
@@ -97,13 +76,6 @@
 #define GEM_NWCFG_PROMISC	XEMACPS_NWCFG_COPYALLEN_MASK
 #else
 #define GEM_NWCFG_PROMISC	0
-#endif
-
-/* Full duplex (enabled by default) */
-#ifndef GEM_HALF_DUPLEX
-#define GEM_NWCFG_DUPLEX	XEMACPS_NWCFG_FDEN_MASK
-#else
-#define GEM_NWCFG_DUPLEX	0
 #endif
 
 /* Reject broadcast frames */
@@ -158,7 +130,7 @@
 #endif
 
 /* Combined feature mask */
-#define GEM_NWCFG_FEATURES	(GEM_NWCFG_PROMISC | GEM_NWCFG_DUPLEX | \
+#define GEM_NWCFG_FEATURES	(GEM_NWCFG_PROMISC | \
 				 GEM_NWCFG_BCAST | GEM_NWCFG_FCS | \
 				 GEM_NWCFG_RXCHKSUM | GEM_NWCFG_PAUSE | \
 				 GEM_NWCFG_MCAST | GEM_NWCFG_UCAST | \
@@ -176,10 +148,16 @@ struct xemacps_desc;
 struct xemacps_init_param {
 	/** XEmacPs device ID from xparameters.h (e.g. XPAR_XEMACPS_0_DEVICE_ID) */
 	uint16_t device_id;
-	/** MDIO address of the on-board PHY */
+	/** MDIO address of the on-board PHY (0 = auto-detect) */
 	uint8_t phy_addr;
 	/** Ethernet MAC address for this interface */
 	uint8_t hwaddr[XEMACPS_ETH_ALEN];
+	/** CAPI PHY driver ops table */
+	const struct capi_eth_phy_ops *phy_ops;
+	/** Optional PHY-specific extra configuration (passed to capi_eth_phy_init_config.extra) */
+	void *phy_extra;
+	/** PHY mode configuration (speed, duplex, autoneg, mdix, loopback, isolate) */
+	struct capi_eth_phy_mode_config phy_mode;
 };
 
 int xemacps_init(struct xemacps_desc **desc, struct xemacps_init_param *param);
