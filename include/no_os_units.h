@@ -65,6 +65,10 @@
 #define MICROWATT_PER_MILLIWATT	1000UL
 #define MICROWATT_PER_WATT	1000000UL
 
+#define MILLIOHM_PER_OHM	1000UL
+#define MICROOHM_PER_MILLIOHM	1000UL
+#define MICROOHM_PER_OHM	1000000UL
+
 #define MILLIDEGREE_PER_DEGREE	1000UL
 
 /* Returns the given value converted from degree to rad */
