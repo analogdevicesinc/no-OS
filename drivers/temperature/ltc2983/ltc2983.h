@@ -50,6 +50,10 @@
 #define LTC2983_CUST_SENS_TBL_START_REG 0x0250
 #define LTC2983_CUST_SENS_TBL_END_REG 	0x03CF
 
+#define ADT7604_RES_RES_START_REG	0x0060
+#define ADT7604_RES_RES_ADDR(chan) \
+			(((chan) - 1) * 4 + ADT7604_RES_RES_START_REG)
+
 #define LTC2983_CUST_SENS_TBL_SIZE LTC2983_CUST_SENS_TBL_END_REG - \
 				    LTC2983_CUST_SENS_TBL_START_REG + 1
 #define LTC2983_SPI_READ_BYTE			0x3
@@ -144,6 +148,7 @@ enum ltc298x_id {
 	ID_LTC2983,
 	ID_LTC2984,
 	ID_LTC2986,
+	ID_ADT7604,
 };
 
 /**
@@ -252,6 +257,8 @@ struct ltc2983_desc {
 	uint16_t custom_addr_ptr;
 	/** max number of channels */
 	uint8_t max_channels_nr;
+	/** ADT7604: enables copper trace and leak detector paths */
+	bool has_copper_trace;
 };
 
 /**
@@ -306,6 +313,8 @@ struct ltc2983_rtd {
 	uint32_t excitation_current;
 	/** RTD Curve selector */
 	uint32_t rtd_curve;
+	/** ADT7604 copper trace: sub-ohm variant (bits 17:0 must be zero) */
+	bool sub_ohm;
 };
 
 /**
@@ -408,15 +417,19 @@ int ltc2983_reg_update_bits(struct ltc2983_desc *, uint16_t, uint8_t, uint8_t);
 /** Device setup */
 int ltc2983_setup(struct ltc2983_desc *);
 
-/** Read channel data / temperature */
+/** Read channel data / temperature or coverage */
 int ltc2983_chan_read(struct ltc2983_desc *, const int, int *);
 
 /** Read raw channel data / temperature */
 int ltc2983_chan_read_raw(struct ltc2983_desc *, const int, uint32_t *);
 
-/** Set scale of raw channel data / temperature */
+/** Get scale of raw channel data / temperature or coverage */
 int ltc2983_chan_read_scale(struct ltc2983_desc *, const int, uint32_t *,
 			    uint32_t *);
+
+/** Get resistance scale for copper trace or leak detector channels */
+int ltc2983_chan_read_scale_resistance(struct ltc2983_desc *, const int,
+				       uint32_t *, uint32_t *);
 
 /** Channel assignment for thermocouple sensors */
 int ltc2983_thermocouple_assign_chan(struct ltc2983_desc *,
@@ -445,6 +458,9 @@ int ltc2983_adc_assign_chan(struct ltc2983_desc *,
 /** Channel assignment for analog temp sensor */
 int ltc2983_temp_assign_chan(struct ltc2983_desc *,
 			     const struct ltc2983_sensor *);
+
+/** Read raw resistance from ADT7604 resistance result bank (0x0060) */
+int ltc2983_chan_read_resistance(struct ltc2983_desc *, const int, uint32_t *);
 
 /** Fault handling of thermocouple sensors */
 int ltc2983_thermocouple_fault_handler(const uint32_t);
