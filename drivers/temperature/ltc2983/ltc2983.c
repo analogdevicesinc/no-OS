@@ -448,30 +448,42 @@ static int __ltc2983_chan_custom_sensor_assign(struct ltc2983_desc *device,
 		struct ltc2983_custom_sensor *custom,
 		uint32_t *chan_val)
 {
-	int ret;
-	uint32_t i;
-	uint8_t raw_array[6];
+	uint8_t raw_array[3 + LTC2983_CUST_SENS_TBL_SIZE];
+	/* Steinhart: 4-byte coefficients; resistance/temp pairs: 3 bytes each */
 	uint8_t step = custom->is_steinhart ? 4 : 3;
+	/* An addressable unit in CUSTOM_ADDR is one pair (R+T) for non-Steinhart */
+	uint8_t entry_size = custom->is_steinhart ? step : step * 2;
+	size_t data_len = (size_t)custom->len * step;
+	uint32_t i;
 
-	if (device->custom_addr_ptr + (custom->len * step) >
-	    LTC2983_CUST_SENS_TBL_SIZE)
+	if (device->custom_addr_ptr + data_len > LTC2983_CUST_SENS_TBL_SIZE)
 		return -EINVAL;
 
-	*chan_val |= LTC2983_CUSTOM_LEN(custom->len - 1);
-	*chan_val |= LTC2983_CUSTOM_ADDR(device->custom_addr_ptr);
+	/*
+	 * CUSTOM_LEN: number of pairs minus 1 (Steinhart is fixed at 4
+	 * coefficients so the field is 0). custom->len counts individual
+	 * 3-byte entries, so pairs = len / 2.
+	 *
+	 * CUSTOM_ADDR: pair index from the start of the custom table region,
+	 * not a byte offset. Divide the byte offset by entry_size to get it.
+	 */
+	*chan_val |= LTC2983_CUSTOM_LEN(custom->is_steinhart ? 0 :
+					custom->len / 2 - 1);
+	*chan_val |= LTC2983_CUSTOM_ADDR(device->custom_addr_ptr / entry_size);
 
+	/*
+	 * Pack header + all table entries into one buffer and write in a single
+	 * SPI transaction.
+	 */
 	raw_array[0] = LTC2983_SPI_WRITE_BYTE;
-	for (i = 0; i < custom->len; i++, device->custom_addr_ptr += step) {
-		no_os_put_unaligned_be16(device->custom_addr_ptr,
-					 raw_array + 1);
-		no_os_put_unaligned_be24(custom->table[i], raw_array + 3);
-		ret = no_os_spi_write_and_read(device->comm_desc, raw_array,
-					       NO_OS_ARRAY_SIZE(raw_array));
-		if (ret)
-			return ret;
-	}
+	no_os_put_unaligned_be16(LTC2983_CUST_SENS_TBL_START_REG +
+				 device->custom_addr_ptr, raw_array + 1);
+	for (i = 0; i < custom->len; i++)
+		no_os_put_unaligned_be24(custom->table[i], raw_array + 3 + i * step);
 
-	return 0;
+	device->custom_addr_ptr += data_len;
+	return no_os_spi_write_and_read(device->comm_desc, raw_array,
+					3 + data_len);
 }
 
 /**
