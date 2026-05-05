@@ -14,6 +14,8 @@ Supported Devices
 
 `LTM2983 <https://www.analog.com/LTM2985>`_
 
+ADT7604
+
 Overview
 --------
 
@@ -147,7 +149,6 @@ LTC2983 Driver Initialization Example
 		.sensors[17] = NULL,
 		.sensors[18] = NULL,
 		.sensors[19] = NULL,
-		.custom_addr_ptr = LTC2983_CUST_SENS_TBL_START_REG,
 		.dev_type = ID_LTC2983,
 	};
 
@@ -253,3 +254,124 @@ LTC2983 IIO Driver Initialization Example
 		goto remove_iio_ltc2983;
 
 	return iio_app_run(app);
+
+ADT7604 Support
+---------------
+
+The ADT7604 is a 20-channel temperature and leak detection IC that extends the
+LTC2983 with dedicated copper trace resistance measurement and liquid leak
+detection capabilities. It uses the same SPI register interface and is
+supported through the same driver by setting ``dev_type = ID_ADT7604`` in the
+init parameters.
+
+Thermocouple, diode, and direct ADC sensor types are not supported on the
+ADT7604 and will be rejected during initialization.
+
+ADT7604 Sensor Types
+^^^^^^^^^^^^^^^^^^^^
+
+Two sensor types are used for ADT7604-specific measurements:
+
+* ``LTC2983_RTD_CUSTOM`` — Copper trace channel. Exists in two variants:
+
+  * **Sub-ohm** (``sub_ohm = true``): for traces with resistance below 1Ω.
+    Custom lookup tables and excitation current are not allowed; bits 17:0
+    of the channel word must be zero.
+
+  * **Above 1Ω** (``sub_ohm = false``): excitation current is required.
+    A custom resistance-to-temperature lookup table
+    (``struct ltc2983_custom_sensor``) is optional. When provided, the
+    device also writes a converted result (e.g. temperature) to the
+    temperature result bank, readable with **ltc2983_chan_read**.
+
+  The primary output for both variants is raw resistance from the ADT7604
+  resistance result bank (0x0060), readable with
+  **ltc2983_chan_read_resistance**.
+
+* ``LTC2983_THERMISTOR_CUSTOM`` — Leak detector channel. Measures the
+  resistance of a leak detector element. A resistance-to-coverage lookup
+  table (``struct ltc2983_custom_sensor``) is optional; when provided, a
+  coverage percentage result is written to the temperature bank and
+  readable with **ltc2983_chan_read** (output in milli-percent).
+
+ADT7604 Resistance Measurement
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In addition to the temperature result bank (0x0010), the ADT7604 provides a
+dedicated resistance result bank at register 0x0060. Use
+**ltc2983_chan_read_resistance** to read from it:
+
+* Copper trace (``LTC2983_RTD_CUSTOM``): result in 1/1024 mΩ per LSB
+  (IIO scale: 1/1024000 Ω/LSB).
+* Leak detector (``LTC2983_THERMISTOR_CUSTOM``): result in 1/1024 Ω per LSB
+  (IIO scale: 1/1024 Ω/LSB).
+
+The IIO scale factors are returned by **ltc2983_chan_read_scale_resistance**.
+
+.. note::
+
+   Applying the copper trace IIO scale (1/1024000 Ω/LSB) in integer
+   arithmetic causes precision loss (result rounds to zero). Read the raw
+   value with **ltc2983_chan_read_resistance** and scale in the application
+   as needed.
+
+ADT7604 Initialization Example
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+	struct ltc2983_desc *dev;
+
+	/* 100Ω sense resistor for copper trace channels 4/6/8 (value in mΩ) */
+	struct ltc2983_rsense ltc2983_rsense_2 = {
+		.sensor = { .chan = 2, .type = LTC2983_RSENSE },
+		.r_sense_val = { .r_sense_val_int = 100000 },
+	};
+
+	/* Sub-ohm copper trace channel — no custom table, no excitation */
+	struct ltc2983_rtd ltc2983_copper_4 = {
+		.sensor = { .chan = 4, .type = LTC2983_RTD_CUSTOM },
+		.r_sense_chan = 2,
+		.sub_ohm = true,
+	};
+
+	/* Leak detector with resistance-to-coverage lookup table */
+	static uint32_t leak_table[20] = {
+		       0, 382106,  /* P0:      0 Ohm -> 100% */
+		    3232, 381082,  /* P1: 202.02 Ohm ->  99% */
+		/* ... */
+		16000000, 279706,  /* P9:   1 MOhm ->   0% */
+	};
+	struct ltc2983_custom_sensor leak_custom = {
+		.table = leak_table, .len = 20, .is_steinhart = false,
+	};
+	struct ltc2983_thermistor ltc2983_leak_14 = {
+		.sensor = { .chan = 14, .type = LTC2983_THERMISTOR_CUSTOM },
+		.r_sense_chan = 12,
+		.excitation_current = 3,
+		.custom = &leak_custom,
+	};
+
+	struct ltc2983_init_param ltc2983_ip = {
+		.spi_init = ltc2983_spi_ip,
+		.gpio_rstn = ltc2983_gpio_rstn,
+		.mux_delay_config_us = 1000,
+		.filter_notch_freq = 0,
+		.sensors[1]  = &ltc2983_rsense_2.sensor,
+		.sensors[3]  = &ltc2983_copper_4.sensor,
+		.sensors[13] = &ltc2983_leak_14.sensor,
+		/* ... */
+		.dev_type = ID_ADT7604,
+	};
+
+	ret = ltc2983_init(&dev, &ltc2983_ip);
+	if (ret)
+		goto error;
+
+	/* Read copper trace raw resistance (raw / 1024 = mΩ) */
+	uint32_t raw;
+	ret = ltc2983_chan_read_resistance(dev, 4, &raw);
+
+	/* Read leak detector coverage from temperature bank (milli-percent) */
+	int coverage;
+	ret = ltc2983_chan_read(dev, 14, &coverage);
