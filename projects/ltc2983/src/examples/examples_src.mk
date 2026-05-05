@@ -11,6 +11,19 @@ SRCS += $(PROJECT)/src/examples/basic/basic_example.c
 INCS += $(PROJECT)/src/examples/basic/basic_example.h
 endif
 
+ifeq (y,$(strip $(ADT7604_BASIC_EXAMPLE)))
+CFLAGS += -DADT7604_BASIC_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/adt7604_basic/adt7604_basic_example.c
+INCS += $(PROJECT)/src/examples/adt7604_basic/adt7604_basic_example.h
+endif
+
+ifeq (y,$(strip $(ADT7604_IIO_EXAMPLE)))
+IIOD=y
+CFLAGS += -DADT7604_IIO_EXAMPLE=1
+SRCS += $(PROJECT)/src/examples/adt7604_iio_example/adt7604_iio_example.c
+INCS += $(PROJECT)/src/examples/adt7604_iio_example/adt7604_iio_example.h
+endif
+
 ifeq (y,$(strip $(IIOD)))
 SRC_DIRS += $(NO-OS)/iio/iio_app
 INCS += $(DRIVERS)/temperature/ltc2983/iio_ltc2983.h

@@ -1,7 +1,6 @@
-/********************************************************************************
- *   @file   main.c
- *   @brief  Main file for Maxim platform of ltc2983 project.
- *   @author John Erasmus Mari Geronimo (johnerasmusmari.geronimo@analog.com)
+/*******************************************************************************
+ *   @file   adt7604_iio_example.c
+ *   @brief  IIO example for the EVAL-ADT7604-AZ evaluation board
  ********************************************************************************
  * Copyright 2024(c) Analog Devices, Inc.
  *
@@ -19,7 +18,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -31,80 +30,52 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "platform_includes.h"
-#include "common_data.h"
-
-#ifdef IIO_EXAMPLE
-#include "iio_example.h"
-#endif
-
-#ifdef BASIC_EXAMPLE
-#include "basic_example.h"
-#endif
-
-#ifdef ADT7604_BASIC_EXAMPLE
-#include "adt7604_basic_example.h"
-#endif
-
-#ifdef ADT7604_IIO_EXAMPLE
 #include "adt7604_iio_example.h"
-#endif
+#include "common_data.h"
+#include "iio_ltc2983.h"
+#include "no_os_print_log.h"
 
-/*******************************************************************************
- * @brief Main function execution for LTC2983 platform.
+/*****************************************************************************
+ * @brief EVAL-ADT7604-AZ IIO example main execution.
  *
- * @return ret - Result of the enabled examples execution.
+ * @return ret - Result of the example execution. If working correctly, will
+ *               execute continuously function iio_app_run and will not return.
  *******************************************************************************/
-int main()
+int adt7604_iio_example_main()
 {
-#ifdef BASIC_EXAMPLE
+	struct ltc2983_iio_desc *ltc2983_iio_dev;
+	struct ltc2983_iio_desc_init_param ltc2983_iio_ip;
+	struct iio_app_init_param app_init_param = {0};
+	struct iio_app_desc *app;
 	int ret;
-	struct no_os_uart_desc *uart;
 
-	ret = no_os_uart_init(&uart, &uip);
+	ltc2983_iio_ip.ltc2983_desc_init_param = &ltc2983_ip;
+	ret = ltc2983_iio_init(&ltc2983_iio_dev, &ltc2983_iio_ip);
+	if (ret)
+		return ret;
+
+	struct iio_app_device iio_devices[] = {
+		{
+			.name = "adt7604",
+			.dev = ltc2983_iio_dev,
+			.dev_descriptor = ltc2983_iio_dev->iio_dev,
+		},
+	};
+
+	app_init_param.devices = iio_devices;
+	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(iio_devices);
+	app_init_param.uart_init_params = uip;
+
+	ret = iio_app_init(&app, app_init_param);
 	if (ret)
 		goto error;
 
-	no_os_uart_stdio(uart);
-	ret = basic_example_main();
+	ret = iio_app_run(app);
 	if (ret)
-		goto error;
-#endif
+		pr_info("Error: iio_app_run: %d\r\n", ret);
 
-#ifdef IIO_EXAMPLE
-	return iio_example_main();
-#endif
-
-#ifdef ADT7604_BASIC_EXAMPLE
-	int ret;
-	struct no_os_uart_desc *uart;
-
-	ret = no_os_uart_init(&uart, &uip);
-	if (ret)
-		goto adt7604_basic_error;
-
-	no_os_uart_stdio(uart);
-	ret = adt7604_basic_example_main();
-	if (ret)
-		goto adt7604_basic_error;
-#endif
-
-#ifdef ADT7604_IIO_EXAMPLE
-	return adt7604_iio_example_main();
-#endif
-
-#if (IIO_EXAMPLE + BASIC_EXAMPLE + ADT7604_BASIC_EXAMPLE + ADT7604_IIO_EXAMPLE != 1)
-#error Selected example projects cannot be enabled at the same time. \
-Please enable only one example and rebuild the project.
-#endif
-
-#ifdef BASIC_EXAMPLE
+	iio_app_remove(app);
 error:
-	no_os_uart_remove(uart);
-#endif
-#ifdef ADT7604_BASIC_EXAMPLE
-adt7604_basic_error:
-	no_os_uart_remove(uart);
-#endif
-	return 0;
+	ltc2983_iio_remove(ltc2983_iio_dev);
+	return ret;
 }
