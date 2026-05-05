@@ -49,6 +49,17 @@
 	__chan; \
 })
 
+#define LTC2983_RESISTANCE_CHAN(_index) ({ \
+	struct iio_channel __chan = { \
+		.ch_type = IIO_RESISTANCE, \
+		.indexed = true, \
+		.channel = _index, \
+		.attributes = ltc2983_res_iio_attrs, \
+		.address = _index, \
+	}; \
+	__chan; \
+})
+
 static int ltc2983_iio_read_raw(void *dev, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv);
@@ -76,12 +87,45 @@ static struct iio_attribute ltc2983_iio_attrs[] = {
 	END_ATTRIBUTES_ARRAY
 };
 
+static struct iio_attribute ltc2983_res_iio_attrs[] = {
+	{
+		.name = "raw",
+		.shared = IIO_SEPARATE,
+		.show = ltc2983_iio_read_raw,
+		.store = NULL,
+	},
+	{
+		.name = "scale",
+		.shared = IIO_SEPARATE,
+		.show = ltc2983_iio_read_scale,
+		.store = NULL,
+	},
+	END_ATTRIBUTES_ARRAY
+};
+
 static struct iio_device ltc2983_iio_dev = {
 	.debug_reg_read = (int32_t (*)())ltc2983_iio_reg_read,
 	.debug_reg_write = (int32_t (*)())ltc2983_iio_reg_write,
 };
 
 /******************************************************************************/
+
+/**
+ * @brief Check if a sensor has a custom lookup table programmed.
+ * @param dev - LTC2983 descriptor.
+ * @param i   - Zero-based sensor index into dev->sensors[].
+ * @return true if the sensor has a custom table, false otherwise.
+ */
+static bool ltc2983_sensor_has_custom(struct ltc2983_desc *dev, int i)
+{
+	uint8_t type = dev->sensors[i]->type;
+
+	if (type == LTC2983_RTD_CUSTOM)
+		return !!to_rtd(dev->sensors[i])->custom;
+	if (type == LTC2983_THERMISTOR_CUSTOM)
+		return !!to_thermistor(dev->sensors[i])->custom;
+	return false;
+}
 
 /**
  * @brief Initializes the LTC2983 IIO driver
@@ -92,10 +136,11 @@ static struct iio_device ltc2983_iio_dev = {
 int ltc2983_iio_init(struct ltc2983_iio_desc **iio_dev,
 		     struct ltc2983_iio_desc_init_param *init_param)
 {
-	int ret, i, chan = 0;
+	int ret, i, chan = 0, iio_chan_count = 0;
 	struct ltc2983_iio_desc *descriptor;
+	struct ltc2983_desc *dev;
 	struct iio_channel *ltc2983_channels;
-	enum iio_chan_type ch_type;
+	uint8_t type;
 
 	if (!init_param || !init_param->ltc2983_desc_init_param)
 		return -EINVAL;
@@ -110,29 +155,56 @@ int ltc2983_iio_init(struct ltc2983_iio_desc **iio_dev,
 		goto free_desc;
 
 	descriptor->iio_dev = &ltc2983_iio_dev;
+	dev = descriptor->ltc2983_dev;
 
-	ltc2983_channels = no_os_calloc(descriptor->ltc2983_dev->num_channels,
-					sizeof(*ltc2983_channels));
+	for (i = 0; i < dev->max_channels_nr; i++) {
+		if (!dev->sensors[i] || dev->sensors[i]->type == LTC2983_RSENSE)
+			continue;
+
+		type = dev->sensors[i]->type;
+		iio_chan_count++;
+
+		/*
+		 * On ADT7604, sensors with a custom table emit both an IIO_TEMP
+		 * channel (interpolated result from temperature bank) and an
+		 * IIO_RESISTANCE channel (raw resistance from resistance bank).
+		 */
+		if (dev->has_copper_trace &&
+		    (type == LTC2983_RTD_CUSTOM || type == LTC2983_THERMISTOR_CUSTOM) &&
+		    ltc2983_sensor_has_custom(dev, i))
+			iio_chan_count++;
+	}
+
+	ltc2983_channels = no_os_calloc(iio_chan_count, sizeof(*ltc2983_channels));
 	if (!ltc2983_channels) {
 		ret = -ENOMEM;
 		goto free_dev;
 	}
 
-	for (i = 0; i < descriptor->ltc2983_dev->max_channels_nr; i++) {
-		if (descriptor->ltc2983_dev->sensors[i] &&
-		    descriptor->ltc2983_dev->sensors[i]->type !=
-		    LTC2983_RSENSE) {
-			if (descriptor->ltc2983_dev->sensors[i]->type ==
-			    LTC2983_DIRECT_ADC)
-				ch_type = IIO_VOLTAGE;
-			else
-				ch_type = IIO_TEMP;
+	for (i = 0; i < dev->max_channels_nr; i++) {
+		if (!dev->sensors[i] || dev->sensors[i]->type == LTC2983_RSENSE)
+			continue;
 
-			ltc2983_channels[chan++] = LTC2983_CHAN(ch_type, i + 1);
+		type = dev->sensors[i]->type;
+
+		if (dev->has_copper_trace &&
+		    (type == LTC2983_RTD_CUSTOM || type == LTC2983_THERMISTOR_CUSTOM)) {
+			if (ltc2983_sensor_has_custom(dev, i)) {
+				/* Custom table: temp (coverage) + resistance */
+				ltc2983_channels[chan++] = LTC2983_CHAN(IIO_TEMP, i + 1);
+				ltc2983_channels[chan++] = LTC2983_RESISTANCE_CHAN(i + 1);
+			} else {
+				/* No custom table: resistance only */
+				ltc2983_channels[chan++] = LTC2983_RESISTANCE_CHAN(i + 1);
+			}
+		} else if (type == LTC2983_DIRECT_ADC) {
+			ltc2983_channels[chan++] = LTC2983_CHAN(IIO_VOLTAGE, i + 1);
+		} else {
+			ltc2983_channels[chan++] = LTC2983_CHAN(IIO_TEMP, i + 1);
 		}
 	}
 
-	descriptor->iio_dev->num_ch = descriptor->ltc2983_dev->num_channels;
+	descriptor->iio_dev->num_ch = iio_chan_count;
 	descriptor->iio_dev->channels = ltc2983_channels;
 
 	*iio_dev = descriptor;
@@ -176,17 +248,26 @@ static int ltc2983_iio_read_raw(void *dev, char *buf, uint32_t len,
 				const struct iio_ch_info *channel,
 				intptr_t priv)
 {
-	int ret;
+	struct ltc2983_iio_desc *ltc2983_iio = dev;
+	struct ltc2983_desc *ltc2983_dev = ltc2983_iio->ltc2983_dev;
 	uint32_t uval;
 	int32_t val;
-	struct ltc2983_iio_desc *ltc2983_iio = dev;
+	int ret;
 
-	ret = ltc2983_chan_read_raw(ltc2983_iio->ltc2983_dev, channel->address,
-				    &uval);
-	if (ret)
-		return ret;
+	if (channel->type == IIO_RESISTANCE) {
+		ret = ltc2983_chan_read_resistance(ltc2983_dev, channel->address,
+						   &uval);
+		if (ret)
+			return ret;
 
-	val = no_os_sign_extend32(uval, 23);
+		val = (int32_t)uval;
+	} else {
+		ret = ltc2983_chan_read_raw(ltc2983_dev, channel->address, &uval);
+		if (ret)
+			return ret;
+
+		val = no_os_sign_extend32(uval, 23);
+	}
 
 	return iio_format_value(buf, len, IIO_VAL_INT, 1, &val);
 }
@@ -204,17 +285,24 @@ static int ltc2983_iio_read_scale(void *dev, char *buf, uint32_t len,
 				  const struct iio_ch_info *channel,
 				  intptr_t priv)
 {
-	int ret;
-	uint32_t val[2];
 	struct ltc2983_iio_desc *ltc2983_iio = dev;
+	struct ltc2983_desc *ltc2983_dev = ltc2983_iio->ltc2983_dev;
+	int32_t val[2];
+	int ret;
 
-	ret = ltc2983_chan_read_scale(ltc2983_iio->ltc2983_dev,
-				      channel->address, &val[0], &val[1]);
+	if (channel->type == IIO_RESISTANCE)
+		ret = ltc2983_chan_read_scale_resistance(ltc2983_dev,
+				channel->address,
+				(uint32_t *)&val[0],
+				(uint32_t *)&val[1]);
+	else
+		ret = ltc2983_chan_read_scale(ltc2983_dev, channel->address,
+					      (uint32_t *)&val[0],
+					      (uint32_t *)&val[1]);
 	if (ret)
 		return ret;
 
-	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1,
-				(int32_t *)&val);
+	return iio_format_value(buf, len, IIO_VAL_FRACTIONAL, 1, val);
 }
 
 /**
