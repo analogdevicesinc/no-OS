@@ -328,7 +328,7 @@ int ltc2983_chan_read(struct ltc2983_desc *device, const int chan, int *val)
 	if (ret)
 		return ret;
 
-	ltc2983_chan_read_scale(device, chan, &scale_val, &scale_val2);
+	ret = ltc2983_chan_read_scale(device, chan, &scale_val, &scale_val2);
 	if (ret)
 		return ret;
 
