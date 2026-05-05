@@ -87,7 +87,6 @@ struct ltc2983_init_param ltc2983_ip = {
 	.sensors[17] = NULL,
 	.sensors[18] = NULL,
 	.sensors[19] = NULL,
-	.custom_addr_ptr = LTC2983_CUST_SENS_TBL_START_REG,
 	.dev_type = ID_LTC2983,
 };
 

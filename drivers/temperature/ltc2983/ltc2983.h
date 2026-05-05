@@ -228,8 +228,6 @@ struct ltc2983_init_param {
 	enum ltc2983_filter_notch_freq filter_notch_freq;
 	/** Sensors */
 	struct ltc2983_sensor *sensors[20];
-	/** Custom address pointer */
-	uint16_t custom_addr_ptr;
 	/** Device type*/
 	enum ltc298x_id dev_type;
 };
