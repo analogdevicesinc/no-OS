@@ -1,5 +1,5 @@
-Evaluating the LTC2983
-======================
+Evaluating the LTC2983 / ADT7604
+=================================
 
 .. no-os-doxygen::
 
@@ -12,6 +12,7 @@ Supported Evaluation Boards
 * `DC2296A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2296a.html>`_
 * `DC2420A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2420a.html>`_
 * `DC2531A <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/dc2531a.html>`_
+* EVAL-ADT7604-AZ
 
 Overview
 --------
@@ -169,3 +170,150 @@ Maxim Platform
 	make PLATFORM=maxim TARGET=max32665 reset
 	# to build the project and flash the code
 	make PLATFORM=maxim TARGET=max32665 run
+
+EVAL-ADT7604-AZ
+---------------
+
+Overview
+^^^^^^^^
+
+The **EVAL-ADT7604-AZ** is the evaluation board for the **ADT7604**, a
+20-channel temperature measurement and liquid leak detection IC based on the
+LTC2983 architecture. The board configures three copper trace resistance
+channels, two liquid leak detector channels with a resistance-to-coverage
+lookup table, and one PT100 RTD temperature channel.
+
+Hardware Specifications
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Power Supply Requirements
+"""""""""""""""""""""""""
+
+The EVAL-ADT7604-AZ is powered by the 3V3 supply from the MAX78000FTHR.
+
+**Pin Description**
+
+	+----------+-------------------------------------------+
+	| Name     | Description                               |
+	+----------+-------------------------------------------+
+	| VDD      | Connect to 3V3 supply                     |
+	+----------+-------------------------------------------+
+	| GND      | Connect to Ground                         |
+	+----------+-------------------------------------------+
+	| SCK      | Connect to SPI Clock (SCK)                |
+	+----------+-------------------------------------------+
+	| SDO      | Connect to SPI Master In Slave Out (MISO) |
+	+----------+-------------------------------------------+
+	| CS       | Connect to SPI Chip Select (CS)           |
+	+----------+-------------------------------------------+
+	| SDI      | Connect to SPI Master Out Slave In (MOSI) |
+	+----------+-------------------------------------------+
+	| RESET    | Connect to GPIO pin (RESET)               |
+	+----------+-------------------------------------------+
+
+**Channel Configuration**
+
+	+-------+-------------------------------+---------------------+
+	| CH    | Sensor                        | Sense Resistor      |
+	+-------+-------------------------------+---------------------+
+	| CH2   | 100Ω rsense (R4)              | — (rsense)          |
+	+-------+-------------------------------+---------------------+
+	| CH4   | Copper trace (sub-ohm)        | CH2                 |
+	+-------+-------------------------------+---------------------+
+	| CH6   | Copper trace (sub-ohm)        | CH2                 |
+	+-------+-------------------------------+---------------------+
+	| CH8   | Copper trace (sub-ohm)        | CH2                 |
+	+-------+-------------------------------+---------------------+
+	| CH12  | 1kΩ rsense (R6)               | — (rsense)          |
+	+-------+-------------------------------+---------------------+
+	| CH14  | Leak detector (custom table)  | CH12                |
+	+-------+-------------------------------+---------------------+
+	| CH16  | Leak detector (custom table)  | CH12                |
+	+-------+-------------------------------+---------------------+
+	| CH18  | PT100 2-wire RTD              | CH12                |
+	+-------+-------------------------------+---------------------+
+
+No-OS Supported Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ADT7604 Basic example
+"""""""""""""""""""""
+
+This example initializes the ADT7604, reads copper trace resistance, leak
+detector coverage, and PT100 temperature, and prints results over UART.
+
+In order to build the ADT7604 basic example make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/Makefile>`_
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	BASIC_EXAMPLE = n
+	IIO_EXAMPLE = n
+	ADT7604_BASIC_EXAMPLE = y
+	ADT7604_IIO_EXAMPLE = n
+
+ADT7604 IIO example
+""""""""""""""""""""
+
+This project is an IIOD demo for the EVAL-ADT7604-AZ board. The project
+launches a IIOD server on the board so that the user may connect to it via an
+IIO client. Copper trace channels are exposed as ``IIO_RESISTANCE`` channels,
+leak detector channels as ``IIO_RESISTANCE`` (raw) and ``IIO_TEMP`` (coverage
+in milli-percent), and the PT100 as an ``IIO_TEMP`` channel.
+
+If you are not familiar with ADI IIO Application, please take a look at:
+`IIO No-OS <https://wiki.analog.com/resources/tools-software/no-os-software/iio>`_
+
+In order to build the ADT7604 IIO example make sure you have the following
+configuration in the
+`Makefile <https://github.com/analogdevicesinc/no-OS/tree/main/projects/ltc2983/Makefile>`_
+
+.. code-block:: bash
+
+	# Select the example you want to enable by choosing y for enabling and n for disabling
+	BASIC_EXAMPLE = n
+	IIO_EXAMPLE = n
+	ADT7604_BASIC_EXAMPLE = n
+	ADT7604_IIO_EXAMPLE = y
+
+No-OS Supported Platforms
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Maxim Platform
+""""""""""""""
+
+**Used hardware**
+
+* EVAL-ADT7604-AZ
+* `MAX78000FTHR <https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/max78000fthr.html>`_
+
+**Connections**:
+
++---------------------+----------------------------------------------+------------------+
+| EVAL-ADT7604-AZ Pin | Function                                     | MAX78000FTHR Pin |
++---------------------+----------------------------------------------+------------------+
+| VDD                 | VDD                                          | 3V3              |
++---------------------+----------------------------------------------+------------------+
+| SCK                 | SPI Clock (SCK)                              | P0_7             |
++---------------------+----------------------------------------------+------------------+
+| SDO                 | SPI Master In Slave Out (MISO)               | P0_6             |
++---------------------+----------------------------------------------+------------------+
+| CS                  | SPI Chip Select (CS)                         | P0_11            |
++---------------------+----------------------------------------------+------------------+
+| SDI                 | SPI Master Out Slave In (MOSI)               | P0_5             |
++---------------------+----------------------------------------------+------------------+
+| RESET               | GPIO (RESET Pin)                             | P0_27            |
++---------------------+----------------------------------------------+------------------+
+| GND                 | Ground (GND)                                 | GND              |
++---------------------+----------------------------------------------+------------------+
+
+**Build Command**
+
+.. code-block:: bash
+
+	# to delete current build
+	make PLATFORM=maxim TARGET=max78000 reset
+	# to build the project and flash the code
+	make PLATFORM=maxim TARGET=max78000 run
