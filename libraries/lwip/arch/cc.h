@@ -44,6 +44,11 @@
 #include <string.h>
 #include <sys/time.h>
 
+/* Prevent lwip/arch.h from redefining ssize_t (already in toolchain headers) */
+#ifndef SSIZE_MAX
+#define SSIZE_MAX INT_MAX
+#endif
+
 typedef uint8_t     u8_t;
 typedef int8_t      s8_t;
 typedef uint16_t    u16_t;

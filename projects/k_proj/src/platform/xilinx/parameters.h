@@ -31,6 +31,7 @@
 #define _PARAMETERS_H_
 
 #include "xparameters.h"
+#include "xilinx_uart.h"
 #include "xilinx_gpio.h"
 #include "xilinx_i2c.h"
 #include "app_config.h"
@@ -84,7 +85,45 @@
 /******************************************************************************/
 #define AD9081K_RESET_B			(GPIO_OFFSET + 55)	/* GPIO 133 = rstb */
 
+/******************************************************************************/
+/***  UART                                                                  ***/
+/******************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
+#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
+#else
+#define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
+#ifdef XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#else
+#define UART_IRQ_ID			0
+#endif
+#endif
+
+#define UART_EXTRA		&xilinx_lwip_uart_extra_ip
+#define UART_OPS		&xil_uart_ops
+
+/******************************************************************************/
+/***  GEM instance selection                                                ***/
+/******************************************************************************/
+#ifndef GEM_INSTANCE
+#define GEM_INSTANCE	0
+#endif
+
+#if GEM_INSTANCE == 0 && defined(XPAR_XEMACPS_0_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_0_DEVICE_ID
+#elif GEM_INSTANCE == 1 && defined(XPAR_XEMACPS_1_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_1_DEVICE_ID
+#elif GEM_INSTANCE == 2 && defined(XPAR_XEMACPS_2_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_2_DEVICE_ID
+#elif GEM_INSTANCE == 3 && defined(XPAR_XEMACPS_3_DEVICE_ID)
+#define GEM_DEVICE_ID	XPAR_XEMACPS_3_DEVICE_ID
+#else
+#error "GEM_INSTANCE not available - check your .xsa / BSP configuration"
+#endif
+
 extern struct xil_i2c_init_param i2c_extra;
 extern struct xil_gpio_init_param xil_gpio_param;
+extern struct xil_uart_init_param xilinx_lwip_uart_extra_ip;
 
 #endif /* _PARAMETERS_H_ */

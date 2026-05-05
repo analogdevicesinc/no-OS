@@ -42,3 +42,12 @@ struct xil_gpio_init_param xil_gpio_param = {
 #endif
 	.device_id = GPIO_DEVICE_ID,
 };
+
+struct xil_uart_init_param xilinx_lwip_uart_extra_ip = {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+	.type = UART_PL,
+#else
+	.type = UART_PS,
+	.irq_id = UART_IRQ_ID,
+#endif
+};

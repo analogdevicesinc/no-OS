@@ -30,6 +30,8 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
+#define NO_OS_LWIP_NETWORKING
+
 /******************************************************************************/
 /* Clock and lane rate configuration                                          */
 /*                                                                            */
@@ -77,5 +79,10 @@
 /* PLL M: 54 MHz × (8000/30) = 14.4 GHz VCO */
 #define SI5391_PLL_M_NUM_VAL			8000
 #define SI5391_PLL_M_DEN_VAL			30
+
+/******************************************************************************/
+/* UART                                                                       */
+/******************************************************************************/
+#define UART_BAUDRATE				921600
 
 #endif /* APP_CONFIG_H_ */

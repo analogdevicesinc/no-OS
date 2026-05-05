@@ -32,7 +32,10 @@
 
 #include "platform_includes.h"
 #include "no_os_i2c.h"
+#include "no_os_uart.h"
 
 extern const struct no_os_i2c_init_param si5391_i2c_param;
+
+extern struct no_os_uart_init_param xilinx_lwip_uart_ip;
 
 #endif /* __COMMON_DATA_H__ */

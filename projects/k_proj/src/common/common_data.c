@@ -39,3 +39,16 @@ const struct no_os_i2c_init_param si5391_i2c_param = {
 	.platform_ops = &xil_i2c_ops,
 	.extra = &i2c_extra
 };
+
+struct no_os_uart_init_param xilinx_lwip_uart_ip = {
+	.device_id = UART_DEVICE_ID,
+	.irq_id    = UART_IRQ_ID,
+	.asynchronous_rx = true,
+	.baud_rate = UART_BAUDRATE,
+	.size      = NO_OS_UART_CS_8,
+	.parity    = NO_OS_UART_PAR_NO,
+	.stop      = NO_OS_UART_STOP_1_BIT,
+	.extra     = UART_EXTRA,
+	.platform_ops = UART_OPS,
+};
+

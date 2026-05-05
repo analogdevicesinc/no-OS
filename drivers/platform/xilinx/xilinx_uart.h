@@ -34,6 +34,7 @@
 #ifndef XILINX_UART_H_
 #define XILINX_UART_H_
 
+#include <stdint.h>
 
 #define UART_BUFF_LENGTH 256
 

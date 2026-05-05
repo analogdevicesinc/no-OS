@@ -48,6 +48,28 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/frequency/si5391/si5391.h \
 	$(DRIVERS)/rf-transceiver/k/ad9081k.h
 INCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.h
+LIBRARIES += lwip
+ALL_IGNORED_FILES += $(NO-OS)/libraries/lwip/lwip/src/netif/slipif.c
+
+SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.c \
+	$(NO-OS)/network/lwip_raw_socket/lwip_socket.c \
+	$(DRIVERS)/net/xemacps/no_os_xemacps.c
+INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.h \
+	$(NO-OS)/network/lwip_raw_socket/lwip_socket.h \
+	$(DRIVERS)/net/xemacps/no_os_xemacps.h
+
+ifeq (y,$(strip $(IIOD)))
+LIBRARIES += iio
+SRCS += $(NO-OS)/util/no_os_lf256fifo.c \
+	$(NO-OS)/util/no_os_fifo.c \
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
+	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.c \
+	$(NO-OS)/iio/iio_app/iio_app.c \
+	$(DRIVERS)/api/no_os_uart.c \
+	$(DRIVERS)/api/no_os_irq.c
+endif
+
 INCS += $(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_i2c.h \
@@ -63,3 +85,12 @@ INCS += $(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_list.h \
 	$(INCLUDE)/jesd204.h \
 	$(NO-OS)/jesd204/jesd204-priv.h
+ifeq (y,$(strip $(IIOD)))
+INCS += $(INCLUDE)/no_os_fifo.h \
+	$(INCLUDE)/no_os_uart.h \
+	$(INCLUDE)/no_os_lf256fifo.h \
+	$(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \
+	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h \
+	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.h \
+	$(NO-OS)/iio/iio_app/iio_app.h
+endif
