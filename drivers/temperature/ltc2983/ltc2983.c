@@ -319,7 +319,7 @@ int ltc2983_chan_read(struct ltc2983_desc *device, const int chan, int *val)
 	uint32_t raw_val, scale_val, scale_val2;
 	int ret;
 
-	if (device->sensors[chan]->type == LTC2983_RSENSE) {
+	if (device->sensors[chan - 1]->type == LTC2983_RSENSE) {
 		*val = -1;
 		return 0;
 	}
@@ -376,7 +376,7 @@ int ltc2983_chan_read_raw(struct ltc2983_desc *device, const int chan,
 		return -EIO;
 	}
 
-	if (device->sensors[chan]->type <= LTC2983_THERMOCOUPLE_CUSTOM)
+	if (device->sensors[chan - 1]->type <= LTC2983_THERMOCOUPLE_CUSTOM)
 		ret = ltc2983_thermocouple_fault_handler(*val);
 	else
 		ret = ltc2983_common_fault_handler(*val);
@@ -399,7 +399,7 @@ int ltc2983_chan_read_raw(struct ltc2983_desc *device, const int chan,
 int ltc2983_chan_read_scale(struct ltc2983_desc *device, const int chan,
 			    uint32_t *val, uint32_t *val2)
 {
-	if (device->sensors[chan]->type == LTC2983_DIRECT_ADC) {
+	if (device->sensors[chan - 1]->type == LTC2983_DIRECT_ADC) {
 		/* value in millivolt */
 		*val = 1000;
 		/* 2^21 */
