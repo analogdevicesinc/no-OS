@@ -89,7 +89,7 @@ uint32_t get_reg_addr(struct ad3530r_desc *desc, uint32_t addr,
 		if (ch_sel)
 			return -EINVAL;
 
-		if (AD3530R_ADDR(addr) > AD3531R_REG_ADDR_MAX)
+		if (AD3530R_ADDR(addr) > AD3531R_REG_ADDR_MAX + AD3531R_CH_REG_OFFSET)
 			return -EINVAL;
 
 		if (AD3530R_ADDR(addr) >= AD3530R_ADDR(AD3530R_REG_ADDR_MULTI_DAC_CH)
