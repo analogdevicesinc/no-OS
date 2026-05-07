@@ -421,7 +421,7 @@ int ad3530r_reset(struct ad3530r_desc *desc);
 int ad3530r_init(struct ad3530r_desc **desc,
 		 struct ad3530r_init_param *init_param);
 int ad3530r_remove(struct ad3530r_desc *desc);
-uint32_t get_reg_addr(struct ad3530r_desc *desc, uint32_t addr,
-		      enum ad3530r_ch_sel ch_sel);
+uint32_t ad3530r_get_reg_addr(struct ad3530r_desc *desc, uint32_t addr,
+			      enum ad3530r_ch_sel ch_sel);
 
 #endif /* _AD3530R_H_ */
