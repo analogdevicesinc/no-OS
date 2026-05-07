@@ -5,6 +5,12 @@
     },
     "iio_example_max32665": {
       "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=y TARGET=max32665"
+    },
+    "adt7604_basic_example_max78000": {
+      "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n ADT7604_BASIC_EXAMPLE=y ADT7604_IIO_EXAMPLE=n TARGET=max78000"
+    },
+    "adt7604_iio_example_max78000": {
+      "flags" : "BASIC_EXAMPLE=n IIO_EXAMPLE=n ADT7604_BASIC_EXAMPLE=n ADT7604_IIO_EXAMPLE=y TARGET=max78000"
     }
   }
 }
