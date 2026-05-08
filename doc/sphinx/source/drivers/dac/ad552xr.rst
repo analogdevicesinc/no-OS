@@ -1,0 +1,1 @@
+.. include:: ../../../../../drivers/dac/ad552xr/README.rst
