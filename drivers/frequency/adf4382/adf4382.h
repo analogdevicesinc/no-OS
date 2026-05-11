@@ -39,6 +39,7 @@
 #include "no_os_units.h"
 #include "no_os_util.h"
 #include "no_os_spi.h"
+#include "no_os_clk.h"
 
 /* ADF4382 REG0000 Map */
 #define ADF4382_SOFT_RESET_R_MSK		NO_OS_BIT(7)
@@ -683,6 +684,8 @@ static const struct reg_sequence adf4382_reg_defaults[] = {
 	{ 0x011, 0x00 },
 	{ 0x010, 0x50 },
 };
+/** ADF4382 specific CLK platform ops structure */
+extern const struct no_os_clk_platform_ops adf4382_clk_ops;
 
 /** ADF4382 SPI write */
 int adf4382_spi_write(struct adf4382_dev *dev, uint16_t reg_addr, uint8_t data);

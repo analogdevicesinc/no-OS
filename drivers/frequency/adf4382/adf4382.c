@@ -1985,6 +1985,116 @@ static int adf4383_update_core_bias_table(struct adf4382_dev *dev)
 }
 
 /**
+ * @brief Recalculate the clock rate.
+ *
+ * @param desc - The CLK descriptor.
+ * @param rate - The desired rate.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4382_recalc_rate(struct no_os_clk_desc *desc, uint64_t *rate)
+{
+	struct adf4382_dev *dev = desc->dev_desc;
+
+	return adf4382_get_rfout(dev, rate);
+}
+
+/**
+ * @brief Round the desired rate.
+ *
+ * @param desc - The CLK descriptor.
+ * @param rate - The desired rate.
+ * @param rounded_rate - The rounded rate.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4382_round_rate(struct no_os_clk_desc *desc,
+			   uint64_t rate, uint64_t *rounded_rate)
+{
+	struct adf4382_dev *dev = desc->dev_desc;
+	uint64_t freq = rate;
+	uint8_t div_rate;
+	uint64_t tmp;
+
+	for (div_rate = 0; div_rate <= dev->clkout_div_reg_val_max; div_rate++) {
+		tmp = (1 << div_rate) * freq;
+		if (tmp >= dev->vco_min)
+			break;
+	}
+
+	div_rate = no_os_clamp_t(uint8_t, div_rate, 0U, dev->clkout_div_reg_val_max);
+	freq = no_os_clamp_t(uint64_t, tmp, dev->vco_min, dev->vco_max);
+	*rounded_rate = no_os_div_u64(freq, 1 << div_rate);
+
+	return 0;
+}
+
+/**
+ * @brief Set the clock rate.
+ *
+ * @param desc - The CLK descriptor.
+ * @param rate - The desired rate.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4382_set_rate(struct no_os_clk_desc *desc,
+			 uint64_t rate)
+{
+	struct adf4382_dev *dev = desc->dev_desc;
+
+	return adf4382_set_rfout(dev, rate);
+}
+
+/**
+ * @brief Enable the clock.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4382_enable(struct no_os_clk_desc *desc)
+{
+	struct adf4382_dev *dev = desc->dev_desc;
+	int ret;
+
+	ret = adf4382_set_en_chan(dev, 0, true);
+	if (ret)
+		return ret;
+
+	return adf4382_set_en_chan(dev, 1, true);
+}
+
+/**
+ * @brief Disable the clock.
+ *
+ * @param desc - The CLK descriptor.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adf4382_disable(struct no_os_clk_desc *desc)
+{
+	struct adf4382_dev *dev = desc->dev_desc;
+	int ret;
+
+	ret = adf4382_set_en_chan(dev, 0, false);
+	if (ret)
+		return ret;
+
+	return adf4382_set_en_chan(dev, 1, false);
+}
+
+/**
+ * @brief adf4382 clock ops
+ */
+const struct no_os_clk_platform_ops adf4382_clk_ops = {
+	.clk_recalc_rate = &adf4382_recalc_rate,
+	.clk_round_rate = &adf4382_round_rate,
+	.clk_set_rate = &adf4382_set_rate,
+	.clk_enable = &adf4382_enable,
+	.clk_disable = &adf4382_disable,
+};
+
+/**
  * @brief Initializes the ADF4382.
  * @param dev	     - The device structure.
  * @param init_param - The structure containing the device initial parameters.
