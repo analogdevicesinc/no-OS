@@ -77,6 +77,7 @@ ifneq (,$(findstring cortexa9,$(strip $(ARCH))))
 CC := arm-none-eabi-gcc
 AR := arm-none-eabi-ar
 SIZE := arm-none-eabi-size
+OBJCOPY := arm-none-eabi-objcopy
 
 LD := $(CC)
 
@@ -100,6 +101,7 @@ ifneq (,$(findstring cortexa53,$(strip $(ARCH))))
 CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
 SIZE := aarch64-none-elf-size
+OBJCOPY := aarch64-none-elf-objcopy
 
 LD := $(CC)
 endif
@@ -130,6 +132,7 @@ ifneq (,$(findstring cortexa72,$(strip $(ARCH))))
 CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
 SIZE := aarch64-none-elf-size
+OBJCOPY := aarch64-none-elf-objcopy
 
 LD := $(CC)
 endif

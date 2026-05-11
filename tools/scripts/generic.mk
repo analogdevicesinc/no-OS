@@ -34,8 +34,10 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 # Convert full path to relative path
 # $(PROJECT)/something <-> srcs/something
 # $(NO-OS)/something <-> noos/something
+RELATIVE_PATH_SHORT = $(patsubst $(NO-OS)/%,%,$(patsubst $(PROJECT)%,$(PROJECT_NAME)%,$1))
 RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(PROJECT_NAME)%,$1))
 FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(PROJECT_NAME)%,$(PROJECT)%,$1))
+get_relative_path_short = $(patsubst $(ROOT_DRIVE)%,root/%,$(RELATIVE_PATH_SHORT))
 get_relative_path = $(patsubst $(ROOT_DRIVE)%,root/%,$(RELATIVE_PATH))
 get_full_path = $(patsubst root/%,$(ROOT_DRIVE)%,$(FULL_PATH))
 
@@ -208,6 +210,7 @@ SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.cpp))
 ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.S))
 ASM_SRCS += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.s))
+FW_SRCS  += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.bin))
 INCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.h))
 INCS     += $(foreach dir, $(NO_OS_INC_DIRS), $(call rwildcard, $(dir),*.h))
 
@@ -219,9 +222,10 @@ ALL_IGNORED_FILES += $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*
 SRCS     := $(filter-out $(ALL_IGNORED_FILES),$(SRCS))
 INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 ASM_SRCS := $(filter-out $(ALL_IGNORED_FILES),$(ASM_SRCS))
+FW_SRCS  := $(filter-out $(ALL_IGNORED_FILES),$(FW_SRCS))
 
 # Get all src files that are not in SRC_DRIS
-FILES_OUT_OF_DIRS := $(filter-out $(foreach source_directory_name,$(sort $(SRC_DIRS)),$(wildcard $(source_directory_name)/*)),$(SRCS) $(INCS) $(ASM_SRCS))
+FILES_OUT_OF_DIRS := $(filter-out $(foreach source_directory_name,$(sort $(SRC_DIRS)),$(wildcard $(source_directory_name)/*)),$(SRCS) $(INCS) $(ASM_SRCS) $(FW_SRCS))
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
 OBJS = $(patsubst %.cpp,%.cpp.o,$(patsubst %.c,%.c.o,$(REL_SRCS)))
@@ -229,12 +233,16 @@ OBJS = $(patsubst %.cpp,%.cpp.o,$(patsubst %.c,%.c.o,$(REL_SRCS)))
 REL_ASM_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(ASM_SRCS)))
 ASM_OBJS = $(patsubst %.s,%.s.o,$(patsubst %.S,%.S.o,$(REL_ASM_SRCS)))
 
+REL_FW_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(FW_SRCS)))
+FW_OBJS = $(REL_FW_SRCS:.bin=.o)
+
 # Will be used to add these flags to sdk project
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
 # Remove duplicates
 SRCS := $(sort $(SRCS))
 ASM_SRCS := $(sort $(ASM_SRCS))
+FW_SRCS := $(sort $(FW_SRCS))
 INCS := $(sort $(INCS))
 
 CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
@@ -255,6 +263,7 @@ CPPFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS)) $(PLATFORM_INCS)
 # Text files containing build pre-requisite names.
 OBJS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-objs.txt
 CFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cflags.txt
+FW_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-fwflags.txt
 CPPFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-cppflags.txt
 ASFLAGS_FILE = $(BUILD_DIR)/$(PROJECT_NAME)-asflags.txt
 
@@ -317,6 +326,12 @@ $(OBJECTS_DIR)/%.S.o: $$(call get_full_path, %).S | $$(@D)/.
 	$(call print,[AS] $(notdir $<))
 	$(AS) -c @$(ASFLAGS_FILE) $< -o $@
 
+$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).bin | $$(@D)/.
+	$(call print,[OBJC] $<)
+	cd $(NO-OS) && \
+	$(OBJCOPY) -I binary -O elf64-littleaarch64 -B aarch64 $(call get_relative_path_short,$<) $@ && \
+	cd -
+
 ifneq ($(strip $(LSCRIPT)),)
 # Handle multiple linker scripts by prepending -T to each one
 LSCRIPT_FLAG = $(foreach script,$(LSCRIPT),-T$(script))
@@ -363,9 +378,9 @@ endif
 	$(call generate_flags_file,$(ASFLAGS_FILE),$(ASFLAGS),generate_asflags_func)
 	$(call generate_flags_file,$(OBJS_FILE),$(OBJS),generate_objs_func)
 
-$(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT) $(BOOTOBJ)
-	$(call print,[LD] $(notdir $(OBJS) $(notdir $(ASM_OBJS))))
-	$(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
+$(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(FW_OBJS) $(LSCRIPT) $(BOOTOBJ) $(FW_BINARY)
+	$(call print,[LD] $(notdir $(OBJS)))
+	$(CC) $(LSCRIPT_FLAG) $(LDFLAGS) $(LIB_PATHS) $(FW_OBJS) -o $(BINARY) @$(OBJS_FILE) $(EXTRA_FILES) $(BOOTOBJ)\
 			 $(ASM_OBJS) $(LIB_FLAGS)
 	$(MAKE) --no-print-directory post_build
 
@@ -437,8 +452,8 @@ sdkopen: $(PLATFORM)_sdkopen
 # Remove build artefacts
 PHONY += clean
 clean:
-	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
-	$(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS))
+	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS) $(FW_OBJS)))
+	$(call remove_file,$(BINARY) $(OBJS) $(ASM_OBJS) $(FW_OBJS))
 
 # Remove the whole build directory
 PHONY += reset
