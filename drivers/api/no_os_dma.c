@@ -88,7 +88,7 @@ static void default_sg_callback(void *context)
  * @return 0 in case of success, negative error code otherwise.
  */
 int no_os_dma_init(struct no_os_dma_desc **desc,
-		   struct no_os_dma_init_param *param)
+		   const struct no_os_dma_init_param *param)
 {
 	int ret;
 	uint32_t i, j;

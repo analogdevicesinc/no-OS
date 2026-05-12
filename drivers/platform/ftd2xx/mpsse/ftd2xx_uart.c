@@ -43,7 +43,7 @@
  * @return 0 in case of success, error code otherwise.
  */
 static int ftd2xx_uart_init(struct no_os_uart_desc **desc,
-			    struct no_os_uart_init_param *param)
+			    const struct no_os_uart_init_param *param)
 {
 	*desc = no_os_calloc(1, sizeof(struct no_os_uart_desc));
 	if (!desc)

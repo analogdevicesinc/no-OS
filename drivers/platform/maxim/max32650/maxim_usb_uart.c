@@ -154,7 +154,7 @@ static int32_t max_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @return 0 in case of success, errno codes otherwise.
  */
 static int32_t max_uart_init(struct no_os_uart_desc **desc,
-			     struct no_os_uart_init_param *param)
+			     const struct no_os_uart_init_param *param)
 {
 	int32_t ret;
 	struct max_usb_uart_init_param *eparam;

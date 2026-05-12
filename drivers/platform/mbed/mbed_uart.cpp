@@ -364,7 +364,7 @@ static int32_t mbed_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @param uart[in] - Mbed UART instance
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t mbed_uart_set_format(struct no_os_uart_init_param *param,
+static int32_t mbed_uart_set_format(const struct no_os_uart_init_param *param,
 				    mbed::BufferedSerial *uart)
 {
 	mbed::BufferedSerial::Parity Parity;
@@ -435,7 +435,7 @@ static int32_t mbed_uart_set_format(struct no_os_uart_init_param *param,
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t mbed_uart_init(struct no_os_uart_desc **desc,
-			      struct no_os_uart_init_param *param)
+			      const struct no_os_uart_init_param *param)
 {
 	mbed::BufferedSerial *uart;	// Pointer to new BufferedSerial/UART instance
 	struct mbed_uart_desc *mbed_uart_desc;	// Pointer to mbed uart descriptor
@@ -458,8 +458,8 @@ static int32_t mbed_uart_init(struct no_os_uart_desc **desc,
 
 	// Create and configure a new instance of BufferedSerial/UART port
 	uart = new BufferedSerial(
-		(PinName)(((struct mbed_uart_init_param *)param->extra)->uart_tx_pin),
-		(PinName)(((struct mbed_uart_init_param *)param->extra)->uart_rx_pin),
+		(PinName)(((const struct mbed_uart_init_param *)param->extra)->uart_tx_pin),
+		(PinName)(((const struct mbed_uart_init_param *)param->extra)->uart_rx_pin),
 		(int)param->baud_rate);
 
 	if (!uart)
@@ -501,7 +501,7 @@ err_mbed_uart_desc:
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t mbed_virtual_com_init(struct no_os_uart_desc **desc,
-				     struct no_os_uart_init_param *param)
+				     const struct no_os_uart_init_param *param)
 {
 	platform_usbcdc *usb_cdc_dev;	// Pointer to usb cdc device class instance
 	struct mbed_uart_desc *mbed_uart_desc;	// Pointer to mbed uart descriptor
@@ -524,9 +524,9 @@ static int32_t mbed_virtual_com_init(struct no_os_uart_desc **desc,
 
 	// Create a new instance of platform_usbcdc class
 	usb_cdc_dev = new platform_usbcdc(false,
-					  ((struct mbed_uart_init_param *)param->extra)->vendor_id,
-					  ((struct mbed_uart_init_param *)param->extra)->product_id,
-					  ((struct mbed_uart_init_param *)param->extra)->serial_number);
+					  ((const struct mbed_uart_init_param *)param->extra)->vendor_id,
+					  ((const struct mbed_uart_init_param *)param->extra)->product_id,
+					  ((const struct mbed_uart_init_param *)param->extra)->serial_number);
 	if (!usb_cdc_dev)
 		goto err_serial_port;
 

@@ -55,7 +55,7 @@ struct win_uart_desc {
  * @return 0 in case of success, error code otherwise.
  */
 static int32_t win_uart_init(struct no_os_uart_desc **desc,
-			     struct no_os_uart_init_param *param)
+			     const struct no_os_uart_init_param *param)
 {
 	struct win_uart_init_param *win_init;
 	struct win_uart_desc *win_desc;

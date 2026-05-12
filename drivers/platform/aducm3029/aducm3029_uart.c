@@ -315,7 +315,7 @@ static int32_t aducm3029_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @return 0 in case of success, -1 otherwise.
  */
 static int32_t aducm3029_uart_init(struct no_os_uart_desc **desc,
-				   struct no_os_uart_init_param *param)
+				   const struct no_os_uart_init_param *param)
 {
 	int ret;
 	ADI_UART_RESULT			uart_ret;

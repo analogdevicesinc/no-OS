@@ -87,7 +87,7 @@ static void uart_rx_callback(void *context)
  * @return 0 in case of success, error code otherwise.
  */
 static int32_t latt_ip_uart_init(struct no_os_uart_desc **desc,
-				 struct no_os_uart_init_param *param)
+				 const struct no_os_uart_init_param *param)
 {
 	struct latt_ip_uart_desc *latt_uart;
 	struct latt_ip_uart_init_param *latt_uart_ip;

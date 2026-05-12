@@ -89,12 +89,12 @@ int32_t mbed_spi_init(struct no_os_spi_desc **desc,
 		goto err_mbed_spi_desc;
 
 	/* Configure and instantiate SPI peripheral */
-	if (((struct mbed_spi_init_param *)param->extra)->use_sw_csb) {
+	if (((const struct mbed_spi_init_param *)param->extra)->use_sw_csb) {
 		/* CSB pin toggled explicitly (s/w controlled) during SPI transaction */
 		spi = new SPI(
-			(PinName)(((struct mbed_spi_init_param *)param->extra)->spi_mosi_pin),
-			(PinName)(((struct mbed_spi_init_param *)param->extra)->spi_miso_pin),
-			(PinName)(((struct mbed_spi_init_param *)param->extra)->spi_clk_pin));
+			(PinName)(((const struct mbed_spi_init_param *)param->extra)->spi_mosi_pin),
+			(PinName)(((const struct mbed_spi_init_param *)param->extra)->spi_miso_pin),
+			(PinName)(((const struct mbed_spi_init_param *)param->extra)->spi_clk_pin));
 
 		if (spi) {
 			/* Configure and instantiate chip select pin */
@@ -109,9 +109,9 @@ int32_t mbed_spi_init(struct no_os_spi_desc **desc,
 	} else {
 		/* CSB pin toggled implicitly (through HAL layer) during SPI transaction */
 		spi = new SPI(
-			(PinName)(((struct mbed_spi_init_param *)param->extra)->spi_mosi_pin),
-			(PinName)(((struct mbed_spi_init_param *)param->extra)->spi_miso_pin),
-			(PinName)(((struct mbed_spi_init_param *)param->extra)->spi_clk_pin),
+			(PinName)(((const struct mbed_spi_init_param *)param->extra)->spi_mosi_pin),
+			(PinName)(((const struct mbed_spi_init_param *)param->extra)->spi_miso_pin),
+			(PinName)(((const struct mbed_spi_init_param *)param->extra)->spi_clk_pin),
 			(PinName)(param->chip_select),
 			use_gpio_ssel);
 
@@ -138,7 +138,7 @@ int32_t mbed_spi_init(struct no_os_spi_desc **desc,
 	return 0;
 
 err_spi:
-	if (((struct mbed_spi_init_param *)param->extra)->use_sw_csb) {
+	if (((const struct mbed_spi_init_param *)param->extra)->use_sw_csb) {
 		if (csb)
 			free(csb);
 	}

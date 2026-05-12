@@ -347,7 +347,7 @@ static int32_t irq_setup(struct no_os_irq_ctrl_desc **irq_desc)
  * @return 0 in case of success, -1 otherwise.
  */
 static int32_t xil_uart_init(struct no_os_uart_desc **desc,
-			     struct no_os_uart_init_param *param)
+			     const struct no_os_uart_init_param *param)
 {
 	struct no_os_uart_desc *descriptor;
 	struct xil_uart_init_param *xil_uart_init_param;

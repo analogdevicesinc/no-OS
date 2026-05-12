@@ -60,7 +60,7 @@ void uart_rx_callback(void *context)
  * @return 0 in case of success, error code otherwise.
  */
 static int32_t pico_uart_init(struct no_os_uart_desc **desc,
-			      struct no_os_uart_init_param *param)
+			      const struct no_os_uart_init_param *param)
 {
 	struct pico_uart_desc *pico_uart;
 	struct pico_uart_init_param *pico_uart_ip;
