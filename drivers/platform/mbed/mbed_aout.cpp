@@ -123,7 +123,7 @@ int32_t no_os_mbed_aout_init(struct no_os_aout_desc **desc,
 	if (!mbed_analog_out_desc)
 		goto err_mbed_analog_out_desc;
 
-	if (((struct mbed_aout_init_param *)param->extra)->number) {
+	if (((const struct mbed_aout_init_param *)param->extra)->number) {
 		/* Create and initialize mbed analog output object */
 		analog_output = new AnalogOut((PinName)((struct mbed_aout_init_param *)
 							param->extra)->number);

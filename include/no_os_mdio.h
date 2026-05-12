@@ -89,7 +89,7 @@ struct no_os_mdio_desc {
  */
 struct no_os_mdio_ops {
 	/** MDIO initialization op */
-	int (*init)(struct no_os_mdio_desc **, struct no_os_mdio_init_param *);
+	int (*init)(struct no_os_mdio_desc **, const struct no_os_mdio_init_param *);
 	/** MDIO write register op */
 	int (*write)(struct no_os_mdio_desc *, uint32_t, uint16_t);
 	/** MDIO read register op */
@@ -99,7 +99,7 @@ struct no_os_mdio_ops {
 };
 
 int no_os_mdio_init(struct no_os_mdio_desc **desc,
-		    struct no_os_mdio_init_param *param);
+		    const struct no_os_mdio_init_param *param);
 int no_os_mdio_remove(struct no_os_mdio_desc *desc);
 int no_os_mdio_write(struct no_os_mdio_desc *desc, uint32_t reg, uint16_t val);
 int no_os_mdio_read(struct no_os_mdio_desc *desc, uint32_t reg, uint16_t *val);

@@ -142,7 +142,8 @@ struct no_os_uart_desc {
  */
 struct no_os_uart_platform_ops {
 	/** UART initialization function pointer */
-	int32_t (*init)(struct no_os_uart_desc **, struct no_os_uart_init_param *);
+	int32_t (*init)(struct no_os_uart_desc **,
+			const struct no_os_uart_init_param *);
 	/** UART read function pointer */
 	int32_t (*read)(struct no_os_uart_desc *, uint8_t *, uint32_t);
 	/** UART write function pointer */
@@ -177,7 +178,7 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
 
 /* Initialize the UART communication peripheral. */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param);
+			const struct no_os_uart_init_param *param);
 
 /* Free the resources allocated by no_os_uart_init(). */
 int32_t no_os_uart_remove(struct no_os_uart_desc *desc);

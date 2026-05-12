@@ -55,7 +55,7 @@ static struct no_os_dma_desc *dma_descriptor;
  * 	   -ENOMEM if there is not enough free memory
  */
 static int maxim_dma_init(struct no_os_dma_desc **desc,
-			  struct no_os_dma_init_param *param)
+			  const struct no_os_dma_init_param *param)
 {
 	struct no_os_dma_desc *descriptor;
 	uint32_t i;

@@ -78,8 +78,8 @@ int32_t mbed_i2c_init(struct no_os_i2c_desc **desc,
 
 	/* Configure and instantiate I2C protocol */
 	i2c = new I2C(
-		(PinName)(((struct mbed_i2c_init_param *)param->extra)->i2c_sda_pin),
-		(PinName)(((struct mbed_i2c_init_param *)param->extra)->i2c_scl_pin));
+		(PinName)(((const struct mbed_i2c_init_param *)param->extra)->i2c_sda_pin),
+		(PinName)(((const struct mbed_i2c_init_param *)param->extra)->i2c_scl_pin));
 	if (!i2c)
 		goto err_i2c;
 

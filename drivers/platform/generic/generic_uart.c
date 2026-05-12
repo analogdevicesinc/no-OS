@@ -115,7 +115,7 @@ int32_t no_os_uart_write_nonblocking(struct no_os_uart_desc *desc,
  * @return 0 in case of success, -1 otherwise.
  */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+			const struct no_os_uart_init_param *param)
 {
 	NO_OS_UNUSED_PARAM(desc);
 	NO_OS_UNUSED_PARAM(param);
