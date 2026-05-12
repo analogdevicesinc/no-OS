@@ -330,7 +330,7 @@ int stm32_gpdma_config_xfer(struct no_os_dma_ch *channel,
  * 	   -ENOMEM if there is not enough free memory
  */
 int stm32_gpdma_init(struct no_os_dma_desc** desc,
-		     struct no_os_dma_init_param* param)
+		     const struct no_os_dma_init_param* param)
 {
 	struct no_os_dma_desc* descriptor;
 	int ret;

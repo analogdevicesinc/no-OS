@@ -44,7 +44,7 @@ struct mdio_bitbang_extra {
 };
 
 int mdio_bitbang_init(struct no_os_mdio_desc **dev,
-		      struct no_os_mdio_init_param *ip)
+		      const struct no_os_mdio_init_param *ip)
 {
 	int ret;
 	struct mdio_bitbang_init_param *mbip = ip->extra;

@@ -144,7 +144,7 @@ static int8_t CDC_TransmitCplt(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
  * @return 0 in case of success, error code otherwise.
  */
 static int32_t stm32_usb_uart_init(struct no_os_uart_desc **desc,
-				   struct no_os_uart_init_param *param)
+				   const struct no_os_uart_init_param *param)
 {
 	int ret;
 	struct stm32_usb_uart_init_param *suip;

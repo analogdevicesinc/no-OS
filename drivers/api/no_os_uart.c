@@ -50,7 +50,7 @@ static void *uart_mutex_table[UART_MAX_NUMBER + 1];
  * @return 0 in case of success, error code otherwise.
  */
 int32_t no_os_uart_init(struct no_os_uart_desc **desc,
-			struct no_os_uart_init_param *param)
+			const struct no_os_uart_init_param *param)
 {
 	int32_t ret;
 

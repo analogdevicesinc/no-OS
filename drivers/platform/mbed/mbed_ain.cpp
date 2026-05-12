@@ -110,7 +110,7 @@ int32_t no_os_ain_init(struct no_os_ain_desc **desc,
 	if (!mbed_analog_in_desc)
 		goto err_mbed_ain_desc;
 
-	if (((struct mbed_ain_init_param *)param->extra)->number) {
+	if (((const struct mbed_ain_init_param *)param->extra)->number) {
 		/* Create and initialize mbed analog input object */
 		analog_input = new AnalogIn((PinName)((struct mbed_ain_init_param *)
 						      param->extra)->number, param->vref);

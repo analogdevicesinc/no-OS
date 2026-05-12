@@ -45,7 +45,7 @@
  * @return 0 in case of success, error code otherwise.
  */
 static int32_t chibios_uart_init(struct no_os_uart_desc **desc,
-				 struct no_os_uart_init_param *param)
+				 const struct no_os_uart_init_param *param)
 {
 	struct chibios_uart_desc *chibios_uart;
 	struct no_os_uart_desc *descriptor;

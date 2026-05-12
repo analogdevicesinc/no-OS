@@ -40,7 +40,7 @@
  * @return 0 in case of success, error code otherwise.
  */
 int no_os_mdio_init(struct no_os_mdio_desc **desc,
-		    struct no_os_mdio_init_param *param)
+		    const struct no_os_mdio_init_param *param)
 {
 	int ret;
 

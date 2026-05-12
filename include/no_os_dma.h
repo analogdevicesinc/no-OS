@@ -192,7 +192,7 @@ struct no_os_dma_init_param {
 
 /** Initialize a DMA controller. */
 int no_os_dma_init(struct no_os_dma_desc **,
-		   struct no_os_dma_init_param *);
+		   const struct no_os_dma_init_param *);
 
 /** Free the resources allocated by the DMA layer. Disables the DMA controller. */
 int no_os_dma_remove(struct no_os_dma_desc *);
@@ -240,7 +240,7 @@ int no_os_dma_release_channel(struct no_os_dma_desc *, struct no_os_dma_ch *);
  */
 struct no_os_dma_platform_ops {
 	/** Initialize platform specific resources for the DMA controller. */
-	int (*dma_init)(struct no_os_dma_desc **, struct no_os_dma_init_param *);
+	int (*dma_init)(struct no_os_dma_desc **, const struct no_os_dma_init_param *);
 	/** Remove resources allocated for the DMA controller. */
 	int (*dma_remove)(struct no_os_dma_desc *desc);
 	/** Get a free channel and set it as busy. */
