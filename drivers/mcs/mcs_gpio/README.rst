@@ -1,5 +1,7 @@
 .. no-os-doxygen::
 
+MCS GPIO no-OS driver
+=====================
 
 Overview
 --------
