@@ -40,6 +40,7 @@
 #include "maxim_i2c.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
+#include "maxim_dma.h"
 
 #ifdef IIO_SUPPORT
 #define INTC_DEVICE_ID  0
@@ -64,5 +65,6 @@
 extern struct max_uart_init_param adin1140_uart_extra_ip;
 extern struct max_spi_init_param adin1140_spi_extra_ip;
 extern struct max_i2c_init_param adin1140_i2c_extra_ip;
+extern struct no_os_dma_init_param adin1140_dma_ip;
 
 #endif /* __PARAMETERS_H__ */

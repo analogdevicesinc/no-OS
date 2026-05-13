@@ -38,10 +38,17 @@ struct max_uart_init_param adin1140_uart_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
 
+struct no_os_dma_init_param adin1140_dma_ip = {
+	.id = 0,
+	.num_ch = 2,
+	.platform_ops = &max_dma_ops,
+};
+
 struct max_spi_init_param adin1140_spi_extra_ip = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	.dma_param = &adin1140_dma_ip,
 };
 
 struct max_i2c_init_param adin1140_i2c_extra_ip = {
