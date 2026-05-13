@@ -53,10 +53,12 @@
 #include "lwip_xemacps.h"
 
 #include "xilinx_uart.h"
+#ifdef IIOD
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_ad9081k.h"
 #include "iio_app.h"
+#endif
 
 static uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
 static uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
@@ -100,9 +102,9 @@ static uint32_t test_vector_allf[16] = {
 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
 };
 
-/* 64-bit test vector: 0x0000000002540100 */
+/* 64-bit test vector: 0x0000000002580100 */
 static uint32_t test_vector_2[2] = {
-	0x02540100, /* [0] LSW */
+	0x02580100, /* [0] LSW */
 	0x00000000, /* [1] MSW */
 };
 
@@ -475,17 +477,26 @@ int example_main()
 	printf("Press Enter to start cmd transfer...\n");
 		getchar();
 
-	/* Set bit 1 at AXI DAC base + 0xC8 (read-modify-write) */
-	{
-		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC8);
-		Xil_Out32(TX_CORE_BASEADDR + 0xC8, reg | (1 << 1));
-	}
-
 	/*
 	 * ----------------------------------------------------------------
 	 * TX CMD DMA transfer (test_vector_2).
+	 *
+	 * tx_generator_regmap_cmd (byte addresses):
+	 *   0xC0 = CMD_DATA  (word 0x30)
+	 *   0xC4 = CMD_CTRL  (word 0x31):
+	 *          [31:16] cmd_addr
+	 *          [15:10] cmd_numwords
+	 *          [ 9: 8] cmd_op
+	 *          [    1] cmd_stream_source (0=register, 1=DMA)
+	 *          [    0] cmd_start (only when source=0)
 	 * ----------------------------------------------------------------
 	 */
+	/* Set cmd_stream_source=1 (DMA), preserve other fields */
+	{
+		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC4);
+		Xil_Out32(TX_CORE_BASEADDR + 0xC4, reg | (1 << 1));
+	}
+
 	{
 		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
 			__attribute__((aligned(1024)));
@@ -511,10 +522,10 @@ int example_main()
 			pr_info("TX CMD DMA transfer started\n");
 	}
 
-	/* Clear bit 1 at AXI DAC base + 0xC8 (restore) */
+	/* Clear cmd_stream_source, restore to register mode */
 	{
-		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC8);
-		Xil_Out32(TX_CORE_BASEADDR + 0xC8, reg & ~(1 << 1));
+		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC4);
+		Xil_Out32(TX_CORE_BASEADDR + 0xC4, reg & ~(1 << 1));
 	}
 
 	/*
@@ -597,23 +608,19 @@ int example_main()
 		       (unsigned long)adc_buffer_dma[i]);
 #endif
 
+#ifndef IIOD
+	pr_info("Basic example finished. Entering idle loop.\n");
+	while (1)
+		no_os_mdelay(1000);
+#endif
+
+#ifdef IIOD
 	/*
 	 * ----------------------------------------------------------------
 	 * IIO application setup (UART transport).
 	 * ----------------------------------------------------------------
 	 */
-	struct xil_uart_init_param platform_uart_init_par = {
-#ifdef XPAR_XUARTLITE_NUM_INSTANCES
-		.type = UART_PL,
-#else
-		.type = UART_PS,
-		.irq_id = UART_IRQ_ID
-#endif
-	};
-
 	struct iio_app_desc *app;
-
-	/* --- XEmacPs GEM init params --- */
 
 	static uint8_t mac_addr[6] = {0x00, 0x0A, 0x35, 0x00, 0x01, 0x02};
 
@@ -711,6 +718,7 @@ error_iio_dac:
 	iio_axi_dac_remove(iio_axi_dac_desc);
 error_iio_adc:
 	iio_axi_adc_remove(iio_axi_adc_desc);
+#endif /* IIOD */
 error_fsm:
 error_ad9081k:
 	ad9081k_remove(ad9081k_device);
