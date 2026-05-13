@@ -51,6 +51,14 @@
 #define MAX_DELAY_SCLK	255
 #define NS_PER_US	1000
 
+#ifndef CONFIG_SPI_DMA
+#define CONFIG_SPI_DMA		0
+#endif
+
+#ifndef CONFIG_SPI_DMA_SYNC
+#define CONFIG_SPI_DMA_SYNC	1
+#endif
+
 struct max_dma_spi_xfer_data {
 	struct no_os_spi_desc *spi;
 	struct no_os_dma_ch *tx_ch;
@@ -262,6 +270,129 @@ err_init:
 	return ret;
 }
 
+static int32_t max_spi_dma_config_single(struct no_os_spi_desc *desc,
+					  struct no_os_spi_msg *msgs,
+					  uint32_t len)
+{
+	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
+	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
+	struct max_dma_spi_xfer_data *sync_xfer_data;
+	struct max_spi_state *max_spi = desc->extra;
+	struct no_os_dma_xfer_desc *rx_ch_xfer;
+	struct no_os_dma_xfer_desc *tx_ch_xfer;
+	struct no_os_dma_ch *tx_ch;
+	struct no_os_dma_ch *rx_ch;
+	uint32_t slave_id;
+	int32_t ret;
+
+	slave_id = desc->chip_select;
+	if (slave_id != last_slave_id[desc->device_id]) {
+		ret = _max_spi_config(desc);
+		if (ret)
+			return ret;
+
+		last_slave_id[desc->device_id] = slave_id;
+	}
+
+	spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_ACTIVE;
+	spi->ctrl0 |= no_os_field_prep(MXC_F_SPI_CTRL0_SS_ACTIVE,
+					NO_OS_BIT(desc->chip_select));
+
+	rx_ch_xfer = no_os_calloc(len, sizeof(*rx_ch_xfer));
+	if (!rx_ch_xfer)
+		return -ENOMEM;
+
+	tx_ch_xfer = no_os_calloc(len, sizeof(*tx_ch_xfer));
+	if (!tx_ch_xfer) {
+		ret = -ENOMEM;
+		goto free_rx_ch_xfer;
+	}
+
+	sync_xfer_data = no_os_calloc(1, sizeof(*sync_xfer_data));
+	if (!sync_xfer_data) {
+		ret = -ENOMEM;
+		goto free_tx_ch_xfer;
+	}
+
+	spi->dma |= MXC_F_SPI_DMA_RX_FLUSH | MXC_F_SPI_DMA_TX_FLUSH;
+	spi->intfl |= MXC_F_SPI_INTFL_MST_DONE;
+
+	if (msgs[0].cs_change)
+		spi->ctrl0 &= ~MXC_F_SPI_CTRL0_SS_CTRL;
+	else
+		spi->ctrl0 |= MXC_F_SPI_CTRL0_SS_CTRL;
+
+	spi->ctrl1 = msgs[0].bytes_number;
+	spi->dma |= MXC_F_SPI_DMA_TX_FIFO_EN;
+	spi->ctrl1 |= no_os_field_prep(MXC_F_SPI_CTRL1_RX_NUM_CHAR,
+					msgs[0].bytes_number);
+	spi->dma |= MXC_F_SPI_DMA_RX_FIFO_EN;
+	spi->dma |= MXC_F_SPI_DMA_DMA_RX_EN | MXC_F_SPI_DMA_DMA_TX_EN;
+
+	ret = no_os_dma_acquire_channel(max_spi->dma, &tx_ch);
+	if (ret)
+		goto free_sync_xfer_data;
+
+	ret = no_os_dma_acquire_channel(max_spi->dma, &rx_ch);
+	if (ret)
+		goto release_tx_ch;
+
+	sync_xfer_data->spi = desc;
+	sync_xfer_data->rx_ch = rx_ch;
+	sync_xfer_data->tx_ch = tx_ch;
+	sync_xfer_data->first_xfer_tx = tx_ch_xfer;
+	sync_xfer_data->first_xfer_rx = rx_ch_xfer;
+
+	tx_ch_xfer->src = msgs[0].tx_buff;
+	tx_ch_xfer->dst = (uint8_t *)max_spi->dma_req_tx;
+	tx_ch_xfer->length = msgs[0].bytes_number;
+	tx_ch_xfer->periph = NO_OS_DMA_IRQ;
+	tx_ch_xfer->xfer_type = MEM_TO_DEV;
+	tx_ch_xfer->irq_priority = max_spi->init_param->dma_tx_priority;
+
+	rx_ch_xfer->dst = msgs[0].rx_buff;
+	rx_ch_xfer->src = (uint8_t *)max_spi->dma_req_rx;
+	rx_ch_xfer->length = msgs[0].bytes_number;
+	rx_ch_xfer->periph = NO_OS_DMA_IRQ;
+	rx_ch_xfer->xfer_type = DEV_TO_MEM;
+	rx_ch_xfer->irq_priority = max_spi->init_param->dma_rx_priority;
+
+	ret = no_os_dma_config_xfer(max_spi->dma, rx_ch_xfer, len, rx_ch);
+	if (ret)
+		goto release_rx_ch;
+
+	ret = no_os_dma_config_xfer(max_spi->dma, tx_ch_xfer, len, tx_ch);
+	if (ret)
+		goto abort_rx_tx;
+
+	max_spi->rx_cached_xfer = rx_ch_xfer;
+	max_spi->tx_cached_xfer = tx_ch_xfer;
+	max_spi->tx_cached_xfer->xfer_complete_ctx = sync_xfer_data;
+
+	if (!CONFIG_SPI_DMA_SYNC) {
+		no_os_irq_enable(max_spi->dma->irq_ctrl, rx_ch->irq_num);
+		no_os_irq_enable(max_spi->dma->irq_ctrl, tx_ch->irq_num);
+	}
+
+	return 0;
+
+abort_rx_tx:
+	no_os_dma_xfer_abort(max_spi->dma, tx_ch);
+	no_os_dma_xfer_abort(max_spi->dma, rx_ch);
+release_rx_ch:
+	no_os_dma_release_channel(max_spi->dma, rx_ch);
+release_tx_ch:
+	no_os_dma_release_channel(max_spi->dma, tx_ch);
+free_sync_xfer_data:
+	no_os_free(sync_xfer_data);
+free_tx_ch_xfer:
+	no_os_free(tx_ch_xfer);
+free_rx_ch_xfer:
+	no_os_free(rx_ch_xfer);
+
+	return ret;
+}
+
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
@@ -275,6 +406,14 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	struct max_spi_state *st;
 	struct no_os_spi_desc *descriptor;
 	struct max_spi_init_param *eparam;
+	uint8_t dm[4] = {0x0};
+
+	struct no_os_spi_msg dummy_xfer = {
+		.cs_change = 1,
+		.tx_buff = dm,
+		.rx_buff = dm,
+		.bytes_number = 4,
+	};
 
 	if (!param || !param->extra)
 		return -EINVAL;
@@ -308,23 +447,15 @@ int32_t max_spi_init(struct no_os_spi_desc **desc,
 	if (ret)
 		goto err;
 
-	if (eparam->dma_param) {
-		/*
-		 * The RX complete interrupt needs to have higher priority,
-		 * otherwise there is race condition, since for short transfers, the TX
-		 * channel will start a transfer which will finish before the RX has chance
-		 * to start.
-		 */
-		if (eparam->dma_rx_priority >= eparam->dma_tx_priority) {
-			ret = -EINVAL;
-			goto err;
-		}
-
+	if (CONFIG_SPI_DMA && eparam->dma_param) {
 		ret = no_os_dma_init(&st->dma, eparam->dma_param);
 		if (ret)
 			goto err;
 
 		_max_dma_set_req(descriptor);
+		ret = max_spi_dma_config_single(descriptor, &dummy_xfer, 1);
+		if (ret)
+			goto err;
 	}
 
 	*desc = descriptor;
@@ -553,6 +684,40 @@ static int32_t max_spi_transfer_dma_async(struct no_os_spi_desc *desc,
 	return max_config_dma_and_start(desc, msgs, len, callback, ctx, true);
 }
 
+static int32_t max_spi_dma_start_single(struct no_os_spi_desc *desc,
+					 struct no_os_spi_msg *msgs,
+					 uint32_t len)
+{
+	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
+	struct max_dma_spi_xfer_data *sync_xfer_data;
+	struct max_spi_state *max_spi = desc->extra;
+	struct max_dma_ch_regs *rx_dma_ch;
+	struct max_dma_ch_regs *tx_dma_ch;
+
+	sync_xfer_data = max_spi->tx_cached_xfer->xfer_complete_ctx;
+	rx_dma_ch = sync_xfer_data->rx_ch->extra;
+	tx_dma_ch = sync_xfer_data->tx_ch->extra;
+
+	while ((spi->stat & 1) || (tx_dma_ch->st & 1) || (rx_dma_ch->st & 1));
+
+	spi->ctrl1 = msgs[0].bytes_number | (msgs[0].bytes_number << 16);
+
+	rx_dma_ch->dst = (uintptr_t)msgs[0].rx_buff;
+	rx_dma_ch->cnt = msgs[0].bytes_number;
+
+	tx_dma_ch->src = (uintptr_t)msgs[0].tx_buff;
+	tx_dma_ch->cnt = msgs[0].bytes_number;
+
+	tx_dma_ch->cfg |= MAX_DMA_ENABLE;
+	rx_dma_ch->cfg |= MAX_DMA_ENABLE;
+	spi->ctrl0 |= MXC_F_SPI_CTRL0_START;
+
+	if (CONFIG_SPI_DMA_SYNC)
+		while ((spi->stat & 1) || (tx_dma_ch->st & 1) || (rx_dma_ch->st & 1));
+
+	return 0;
+}
+
 /**
  * @brief Write/read multiple messages to/from SPI.
  * @param desc - The SPI descriptor.
@@ -560,9 +725,9 @@ static int32_t max_spi_transfer_dma_async(struct no_os_spi_desc *desc,
  * @param len - Number of messages.
  * @return 0 in case of success, errno codes otherwise.
  */
-int32_t max_spi_transfer(struct no_os_spi_desc *desc,
-			 struct no_os_spi_msg *msgs,
-			 uint32_t len)
+static int32_t max_spi_transfer_cpu(struct no_os_spi_desc *desc,
+				     struct no_os_spi_msg *msgs,
+				     uint32_t len)
 {
 	mxc_spi_regs_t *spi = MXC_SPI_GET_SPI(desc->device_id);
 	static uint32_t last_slave_id[MXC_SPI_INSTANCES];
@@ -656,6 +821,16 @@ int32_t max_spi_transfer(struct no_os_spi_desc *desc,
 	}
 
 	return 0;
+}
+
+int32_t max_spi_transfer(struct no_os_spi_desc *desc,
+			 struct no_os_spi_msg *msgs,
+			 uint32_t len)
+{
+	if (CONFIG_SPI_DMA)
+		return max_spi_dma_start_single(desc, msgs, len);
+
+	return max_spi_transfer_cpu(desc, msgs, len);
 }
 
 /**
