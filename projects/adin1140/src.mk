@@ -5,6 +5,7 @@ INCS += $(INCLUDE)/no_os_delay.h		\
 		$(INCLUDE)/no_os_print_log.h	\
 		$(INCLUDE)/no_os_spi.h		\
 		$(INCLUDE)/no_os_irq.h		\
+		$(INCLUDE)/no_os_init.h		\
 		$(INCLUDE)/no_os_i2c.h		\
 		$(INCLUDE)/no_os_list.h		\
 		$(INCLUDE)/no_os_dma.h		\

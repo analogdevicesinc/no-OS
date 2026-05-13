@@ -107,7 +107,7 @@ int example_main()
 	/* Keep the application running */
 	while (1) {
 		no_os_lwip_step(lwip_desc, NULL);
-		no_os_mdelay(10);
+		// oa_tc6_thread(adin1140->oa_desc);
 	}
 
 	return 0;
