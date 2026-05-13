@@ -105,10 +105,8 @@ int example_main()
 	pr_info("iperf server started. Network is ready for iperf testing.\n");
 
 	/* Keep the application running */
-	while (1) {
+	while (1)
 		no_os_lwip_step(lwip_desc, NULL);
-		no_os_mdelay(10);
-	}
 
 	return 0;
 }
