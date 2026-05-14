@@ -52,3 +52,22 @@ const struct no_os_spi_init_param adin1140_spi_ip = {
 	.chip_select = SPI_CS,
 	.extra = SPI_EXTRA,
 };
+
+struct no_os_gpio_init_param adin1140_int_gpio_ip = {
+	.port = ADIN1140_INT_PORT,
+	.number = ADIN1140_INT_PIN,
+	.platform_ops = GPIO_OPS,
+	.extra = &adin1140_int_gpio_extra_ip,
+};
+
+struct no_os_irq_init_param adin1140_nvic_irq_ip = {
+	.irq_ctrl_id = 0,
+	.platform_ops = IRQ_OPS,
+	.extra = NULL,
+};
+
+struct no_os_irq_init_param adin1140_gpio_irq_ip = {
+	.irq_ctrl_id = ADIN1140_INT_PORT,
+	.platform_ops = GPIO_IRQ_OPS,
+	.extra = &adin1140_gpio_irq_extra_ip,
+};

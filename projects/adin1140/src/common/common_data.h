@@ -36,8 +36,13 @@
 #include "parameters.h"
 #include "no_os_spi.h"
 #include "no_os_uart.h"
+#include "no_os_gpio.h"
+#include "no_os_irq.h"
 
 extern struct no_os_uart_init_param adin1140_uart_ip;
 extern const struct no_os_spi_init_param adin1140_spi_ip;
+extern struct no_os_gpio_init_param adin1140_int_gpio_ip;
+extern struct no_os_irq_init_param adin1140_nvic_irq_ip;
+extern struct no_os_irq_init_param adin1140_gpio_irq_ip;
 
 #endif /* __COMMON_DATA_H__ */

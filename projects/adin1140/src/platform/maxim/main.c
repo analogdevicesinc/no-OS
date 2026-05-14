@@ -48,10 +48,15 @@ int main()
 
 	struct no_os_uart_desc *uart_desc;
 
+	/* Platform dependent temporary code */
+	MXC_SYS_Clock_Select(MXC_SYS_CLOCK_IPO);
+	SystemCoreClockUpdate();
+
 	ret = no_os_uart_init(&uart_desc, &adin1140_uart_ip);
 	if (ret)
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+
 	return example_main();
 }

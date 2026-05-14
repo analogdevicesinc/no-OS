@@ -37,6 +37,7 @@
 #include "maxim_irq.h"
 #include "maxim_spi.h"
 #include "maxim_gpio.h"
+#include "maxim_gpio_irq.h"
 #include "maxim_i2c.h"
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
@@ -50,9 +51,9 @@
 #define UART_OPS        &max_uart_ops
 #define UART_EXTRA      &adin1140_uart_extra_ip
 
-#define SPI_DEVICE_ID   1
-#define SPI_BAUDRATE    30000000
-#define SPI_CS          1
+#define SPI_DEVICE_ID   0
+#define SPI_BAUDRATE    25000000
+#define SPI_CS          0
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adin1140_spi_extra_ip
 
@@ -61,8 +62,17 @@
 #define I2C_OPS         &max_i2c_ops
 #define I2C_EXTRA       &adin1140_i2c_extra_ip
 
+#define ADIN1140_INT_PORT   1
+#define ADIN1140_INT_PIN    6
+#define ADIN1140_INT_IRQn   GPIO1_IRQn
+#define GPIO_OPS            &max_gpio_ops
+#define GPIO_IRQ_OPS        &max_gpio_irq_ops
+#define IRQ_OPS             &max_irq_ops
+
 extern struct max_uart_init_param adin1140_uart_extra_ip;
 extern struct max_spi_init_param adin1140_spi_extra_ip;
 extern struct max_i2c_init_param adin1140_i2c_extra_ip;
+extern struct max_gpio_init_param adin1140_int_gpio_extra_ip;
+extern struct max_gpio_irq_param adin1140_gpio_irq_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

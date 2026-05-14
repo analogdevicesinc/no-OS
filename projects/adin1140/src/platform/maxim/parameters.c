@@ -47,3 +47,11 @@ struct max_spi_init_param adin1140_spi_extra_ip = {
 struct max_i2c_init_param adin1140_i2c_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
 };
+
+struct max_gpio_init_param adin1140_int_gpio_extra_ip = {
+	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+struct max_gpio_irq_param adin1140_gpio_irq_extra_ip = {
+	.parent = NULL, /* Will be set during runtime */
+};

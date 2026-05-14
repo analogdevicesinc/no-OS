@@ -15,6 +15,8 @@ INCS += $(DRIVERS)/net/oa_tc6/oa_tc6.h
 INCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.h
 INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1140/lwip_adin1140.h
 INCS += $(INCLUDE)/no_os_crc8.h
+INCS += $(INCLUDE)/no_os_gpio.h
+INCS += $(INCLUDE)/no_os_irq.h
 
 SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/netdevs/adin1140/lwip_adin1140.c
