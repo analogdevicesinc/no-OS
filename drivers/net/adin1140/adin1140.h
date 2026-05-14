@@ -141,6 +141,7 @@ struct adin1140_desc {
 	struct no_os_spi_desc *comm_desc;
 	uint8_t mac_address[ADIN1140_ETH_ALEN];
 	struct oa_tc6_desc *oa_desc;
+	volatile bool irq_pending;
 };
 
 /**
@@ -173,6 +174,11 @@ struct adin1140_plca_cfg {
 	uint8_t burst_cnt;
 	uint8_t burst_tmr;
 };
+
+static bool adin1140_irq_triggered(struct adin1140_desc *desc)
+{
+	return desc->irq_pending;
+}
 
 /* Write a register */
 int adin1140_reg_write(struct adin1140_desc *desc, uint32_t addr, uint32_t data);
@@ -223,6 +229,12 @@ int adin1140_plca_get_cfg(struct adin1140_desc *desc,
 
 /* Get the PLCA status */
 int adin1140_plca_get_status(struct adin1140_desc *desc, bool *active);
+
+/* Signal that an interrupt has occurred (call from ISR context) */
+void adin1140_set_irq_flag(struct adin1140_desc *desc);
+
+/* Process pending data if an interrupt has fired */
+int adin1140_poll(struct adin1140_desc *desc);
 
 /* Get the link state */
 int adin1140_link_state(struct adin1140_desc *desc, uint32_t *state);

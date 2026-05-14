@@ -333,8 +333,6 @@ int adin1140_read_fifo(struct adin1140_desc *desc,
 	uint32_t field_offset = 0;
 	int ret;
 
-	oa_tc6_thread(desc->oa_desc);
-
 	ret = oa_tc6_get_rx_frame(desc->oa_desc, &frame);
 	if (ret)
 		return ret;
@@ -350,6 +348,21 @@ int adin1140_read_fifo(struct adin1140_desc *desc,
 	oa_tc6_put_rx_frame(desc->oa_desc, frame);
 
 	return 0;
+}
+
+void adin1140_set_irq_flag(struct adin1140_desc *desc)
+{
+	desc->irq_pending = true;
+}
+
+int adin1140_poll(struct adin1140_desc *desc)
+{
+	if (!desc->irq_pending)
+		return 0;
+
+	desc->irq_pending = false;
+
+	return oa_tc6_thread(desc->oa_desc);
 }
 
 /**

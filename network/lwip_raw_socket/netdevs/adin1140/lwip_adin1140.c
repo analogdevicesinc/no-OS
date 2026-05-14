@@ -109,6 +109,10 @@ static int32_t adin1140_step(struct lwip_network_desc *desc, void *data)
 	netif_desc = desc->lwip_netif;
 	mac_desc = desc->mac_desc;
 
+	ret = adin1140_poll(mac_desc);
+	if (ret)
+		return ret;
+
 	do {
 		ret = adin1140_read_frames(mac_desc, &p, &len);
 		if (ret)

@@ -41,24 +41,19 @@
 #include "lwip/ip_addr.h"
 #include "no_os_delay.h"
 #include "no_os_print_log.h"
+#include "no_os_irq.h"
 
 static uint8_t adin1140_mac_address[6] = {0x00, 0x18, 0x80, 0x03, 0x25, 0x80};
 
 static struct adin1140_init_param adin1140_ip;
 
-/***************************************************************************//**
- * @brief iperf report callback function
- *
- * @param arg        User-defined argument (unused)
- * @param report_type Type of the report
- * @param local_addr  Local IP address
- * @param local_port  Local port
- * @param remote_addr Remote IP address
- * @param remote_port Remote port
- * @param bytes_transferred Total bytes transferred
- * @param ms_duration Test duration in milliseconds
- * @param bandwidth_kbitpsec Bandwidth in kbits/sec
- *******************************************************************************/
+static void adin1140_irq_cb(void *ctx)
+{
+	struct adin1140_desc *desc = ctx;
+
+	adin1140_set_irq_flag(desc);
+}
+
 static void
 lwiperf_report(void *arg, enum lwiperf_report_type report_type,
                const ip_addr_t* local_addr, u16_t local_port,
@@ -75,17 +70,14 @@ lwiperf_report(void *arg, enum lwiperf_report_type report_type,
 	        bytes_transferred, ms_duration, bandwidth_kbitpsec);
 }
 
-/***************************************************************************//**
- * @brief iperf LWIP example main execution.
- *
- * @return ret - Result of the example execution. If working correctly, will
- *               execute continuously and provide iperf server functionality.
- *******************************************************************************/
 int example_main()
 {
-	int ret;
+	struct no_os_irq_ctrl_desc *nvic_desc;
+	struct no_os_irq_ctrl_desc *gpio_irq_desc;
 	struct lwip_network_param lwip_param = { 0 };
 	struct lwip_network_desc *lwip_desc;
+	struct adin1140_desc *adin1140;
+	int ret;
 
 	adin1140_ip.comm_param = adin1140_spi_ip;
 	memcpy(adin1140_ip.mac_address, adin1140_mac_address, NETIF_MAX_HWADDR_LEN);
@@ -99,15 +91,61 @@ int example_main()
 	if (ret)
 		return ret;
 
+	adin1140 = lwip_desc->mac_desc;
+
+	struct no_os_irq_init_param nvic_ip = {
+		.irq_ctrl_id = ADIN1140_NVIC_IRQ_ID,
+		.platform_ops = ADIN1140_NVIC_IRQ_OPS,
+		.extra = NULL,
+	};
+
+	ret = no_os_irq_ctrl_init(&nvic_desc, &nvic_ip);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(nvic_desc, ADIN1140_INT_GPIO_IRQn);
+	if (ret)
+		return ret;
+
+	struct no_os_irq_init_param gpio_irq_ip = {
+		.irq_ctrl_id = ADIN1140_INT_IRQ_ID,
+		.platform_ops = ADIN1140_INT_IRQ_OPS,
+		.extra = NULL,
+	};
+
+	ret = no_os_irq_ctrl_init(&gpio_irq_desc, &gpio_irq_ip);
+	if (ret)
+		return ret;
+
+	struct no_os_callback_desc gpio_cb = {
+		.callback = adin1140_irq_cb,
+		.ctx = adin1140,
+		.event = NO_OS_EVT_GPIO,
+		.peripheral = NO_OS_GPIO_IRQ,
+	};
+
+	ret = no_os_irq_register_callback(gpio_irq_desc, ADIN1140_INT_PIN,
+					   &gpio_cb);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_trigger_level_set(gpio_irq_desc, ADIN1140_INT_PIN,
+					   NO_OS_IRQ_EDGE_FALLING);
+	if (ret)
+		return ret;
+
+	ret = no_os_irq_enable(gpio_irq_desc, ADIN1140_INT_PIN);
+	if (ret)
+		return ret;
+
 	pr_info("Starting lwiperf server on port %d\n", LWIPERF_TCP_PORT_DEFAULT);
 	lwiperf_start_tcp_server_default(lwiperf_report, NULL);
 
 	pr_info("iperf server started. Network is ready for iperf testing.\n");
 
-	/* Keep the application running */
 	while (1) {
-		no_os_lwip_step(lwip_desc, NULL);
-		// oa_tc6_thread(adin1140->oa_desc);
+		if (adin1140_irq_triggered(adin1140))
+			no_os_lwip_step(lwip_desc, NULL);
 	}
 
 	return 0;

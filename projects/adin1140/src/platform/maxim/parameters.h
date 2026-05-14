@@ -62,6 +62,14 @@
 #define I2C_OPS         &max_i2c_ops
 #define I2C_EXTRA       &adin1140_i2c_extra_ip
 
+#define ADIN1140_NVIC_IRQ_ID	0
+#define ADIN1140_NVIC_IRQ_OPS	&max_irq_ops
+
+#define ADIN1140_INT_IRQ_ID	1
+#define ADIN1140_INT_PIN	6
+#define ADIN1140_INT_IRQ_OPS	&max_gpio_irq_ops
+#define ADIN1140_INT_GPIO_IRQn	GPIO1_IRQn
+
 extern struct max_uart_init_param adin1140_uart_extra_ip;
 extern struct max_spi_init_param adin1140_spi_extra_ip;
 extern struct max_i2c_init_param adin1140_i2c_extra_ip;
