@@ -22,7 +22,7 @@ INCS += $(PROJECT)/src/platform/platform_includes.h \
 SRCS += $(PROJECT)/src/platform/$(PLATFORM)/parameters.c
 
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
-	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c \
+	$(DRIVERS)/axi_core/tx_generator/tx_generator.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
@@ -43,7 +43,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c
 
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
-	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h \
+	$(DRIVERS)/axi_core/tx_generator/tx_generator.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
@@ -66,11 +66,9 @@ SRCS += $(NO-OS)/util/no_os_lf256fifo.c \
 ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
-	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.c \
 	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.c \
 	$(NO-OS)/iio/iio_app/iio_app.c
 INCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \
-	$(DRIVERS)/axi_core/iio_axi_dac/iio_axi_dac.h \
 	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.h \
 	$(NO-OS)/iio/iio_app/iio_app.h
 endif

@@ -44,18 +44,16 @@
 #include "axi_jesd204_tx.h"
 #include "axi_adxcvr.h"
 #include "axi_adc_core.h"
-#include "axi_dac_core.h"
+#include "tx_generator.h"
 #include "axi_dmac.h"
 #include "jesd204.h"
 #include "xil_cache.h"
-#include "xil_io.h"
 
 #include "lwip_xemacps.h"
 
 #include "xilinx_uart.h"
 #ifdef IIOD
 #include "iio_axi_adc.h"
-#include "iio_axi_dac.h"
 #include "iio_ad9081k.h"
 #include "iio_app.h"
 #endif
@@ -121,7 +119,7 @@ int example_main()
 	struct adxcvr *tx_adxcvr = NULL;
 	struct adxcvr *rx_adxcvr = NULL;
 	struct axi_adc *rx_adc = NULL;
-	struct axi_dac *tx_dac = NULL;
+	struct tx_generator_dev *tx_gen = NULL;
 	struct axi_dmac *rx_dmac = NULL;
 	struct axi_dmac *tx_dmac = NULL;
 	struct axi_dmac *rx_cmd_dmac = NULL;
@@ -303,28 +301,22 @@ int example_main()
 
 	/*
 	 * ----------------------------------------------------------------
-	 * AXI DAC core initialization (TX TPL).
+	 * TX generator initialization (TX TPL).
 	 * ----------------------------------------------------------------
 	 */
-	struct axi_dac_init tx_dac_init = {
-		.name = "tx_dac",
+	struct tx_generator_init_param tx_gen_init = {
+		.name = "tx_generator",
 		.base = TX_CORE_BASEADDR,
 		.num_channels = AD9081K_TX_JESD_CONVS_PER_DEVICE,
-		.channels = NULL,
-		.rate = 1,
 	};
 
-	ret = axi_dac_init(&tx_dac, &tx_dac_init);
+	ret = tx_generator_init(&tx_gen, &tx_gen_init);
 	if (ret) {
-		pr_err("axi_dac_init() failed: %d\n", ret);
+		pr_err("tx_generator_init() failed: %d\n", ret);
 		goto error_rx_jesd;
 	}
-	pr_info("AXI DAC initialized (%d channels)\n",
-		tx_dac->num_channels);
-
-	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
-	if (ret)
-		pr_err("axi_dac_set_datasel(DDS) failed: %d\n", ret);
+	pr_info("TX generator initialized (%d channels)\n",
+		tx_gen->num_channels);
 
 	/*
 	 * ----------------------------------------------------------------
@@ -341,7 +333,7 @@ int example_main()
 	ret = axi_adc_init_begin(&rx_adc, &rx_adc_init);
 	if (ret) {
 		pr_err("axi_adc_init_begin() failed: %d\n", ret);
-		goto error_tx_dac;
+		goto error_tx_gen;
 	}
 
 	axi_adc_write(rx_adc, AXI_ADC_REG_RSTN, 0);
@@ -480,30 +472,17 @@ int example_main()
 	/*
 	 * ----------------------------------------------------------------
 	 * TX CMD DMA transfer (test_vector_2).
-	 *
-	 * tx_generator_regmap_cmd (byte addresses):
-	 *   0xC0 = CMD_DATA  (word 0x30)
-	 *   0xC4 = CMD_CTRL  (word 0x31):
-	 *          [31:16] cmd_addr
-	 *          [15:10] cmd_numwords
-	 *          [ 9: 8] cmd_op
-	 *          [    1] cmd_stream_source (0=register, 1=DMA)
-	 *          [    0] cmd_start (only when source=0)
 	 * ----------------------------------------------------------------
 	 */
-	/* Set cmd_stream_source=1 (DMA), preserve other fields */
-	{
-		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC4);
-		Xil_Out32(TX_CORE_BASEADDR + 0xC4, reg | (1 << 1));
-	}
+	tx_generator_cmd_set_stream_source(tx_gen, true);
 
 	{
 		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
 			__attribute__((aligned(1024)));
 
-		axi_dac_load_custom_data(tx_dac, test_vector_2,
-					 NO_OS_ARRAY_SIZE(test_vector_2),
-					 (uintptr_t)cmd_buffer_dma);
+		tx_generator_load_custom_data(tx_gen, test_vector_2,
+					      NO_OS_ARRAY_SIZE(test_vector_2),
+					      (uintptr_t)cmd_buffer_dma);
 
 		struct axi_dma_transfer cmd_transfer = {
 			.size = sizeof(test_vector_2),
@@ -522,11 +501,7 @@ int example_main()
 			pr_info("TX CMD DMA transfer started\n");
 	}
 
-	/* Clear cmd_stream_source, restore to register mode */
-	{
-		uint32_t reg = Xil_In32(TX_CORE_BASEADDR + 0xC4);
-		Xil_Out32(TX_CORE_BASEADDR + 0xC4, reg & ~(1 << 1));
-	}
+	tx_generator_cmd_set_stream_source(tx_gen, false);
 
 	/*
 	 * ----------------------------------------------------------------
@@ -538,13 +513,9 @@ int example_main()
 	test_vector[15] = 0x00000007;
 #endif
 
-	axi_dac_load_custom_data(tx_dac, test_vector_allf,
-				 NO_OS_ARRAY_SIZE(test_vector_allf),
-				 (uintptr_t)dac_buffer_dma);
-
-	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	if (ret)
-		pr_err("axi_dac_set_datasel(DMA) failed: %d\n", ret);
+	tx_generator_load_custom_data(tx_gen, test_vector_allf,
+				     NO_OS_ARRAY_SIZE(test_vector_allf),
+				     (uintptr_t)dac_buffer_dma);
 
 	struct axi_dma_transfer transfer = {
 		.size = sizeof(test_vector_allf),
@@ -559,7 +530,7 @@ int example_main()
 
 	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
 		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector_allf),
-		tx_dac->num_channels,
+		tx_gen->num_channels,
 		8 * sizeof(test_vector_allf[0]));
 
 	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
@@ -632,11 +603,9 @@ int example_main()
 	struct iio_app_init_param app_init_param = { 0 };
 
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
-	struct iio_axi_dac_init_param iio_axi_dac_init_par;
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
-	struct iio_axi_dac_desc *iio_axi_dac_desc;
 	struct iio_ad9081k_desc *iio_ad9081k_desc;
-	struct iio_device *adc_dev_desc, *dac_dev_desc, *ad9081k_dev_desc;
+	struct iio_device *adc_dev_desc, *ad9081k_dev_desc;
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
@@ -659,38 +628,16 @@ int example_main()
 	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 
-	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
-		.tx_dac = tx_dac,
-		.tx_dmac = tx_dmac,
-#ifndef PLATFORM_MB
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
-#endif
-	};
-
-	ret = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
-	if (ret) {
-		pr_err("iio_axi_dac_init() failed: %d\n", ret);
-		goto error_iio_adc;
-	}
-
-	struct iio_data_buffer write_buff = {
-		.buff = (void *)dac_buffer,
-		.size = sizeof(dac_buffer),
-	};
-	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
-
 	ret = iio_ad9081k_init(&iio_ad9081k_desc);
 	if (ret) {
 		pr_err("iio_ad9081k_init() failed: %d\n", ret);
-		goto error_iio_dac;
+		goto error_iio_adc;
 	}
 	iio_ad9081k_get_dev_descriptor(iio_ad9081k_desc, &ad9081k_dev_desc);
 
 	struct iio_app_device iio_devices[] = {
 		IIO_APP_DEVICE("cf-ad9081k-lpc", iio_axi_adc_desc,
 			       adc_dev_desc, &read_buff, NULL, NULL),
-		IIO_APP_DEVICE("cf-ad9081k-dds-core-lpc", iio_axi_dac_desc,
-			       dac_dev_desc, NULL, &write_buff, NULL),
 		IIO_APP_DEVICE("ad9081k", iio_ad9081k_desc,
 			       ad9081k_dev_desc, NULL, NULL, NULL),
 	};
@@ -714,8 +661,6 @@ int example_main()
 
 error_iio_ad9081k:
 	iio_ad9081k_remove(iio_ad9081k_desc);
-error_iio_dac:
-	iio_axi_dac_remove(iio_axi_dac_desc);
 error_iio_adc:
 	iio_axi_adc_remove(iio_axi_adc_desc);
 #endif /* IIOD */
@@ -732,8 +677,8 @@ error_tx_dmac:
 	axi_dmac_remove(tx_dmac);
 error_rx_adc:
 	axi_adc_remove(rx_adc);
-error_tx_dac:
-	axi_dac_remove(tx_dac);
+error_tx_gen:
+	tx_generator_remove(tx_gen);
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_tx_jesd:
