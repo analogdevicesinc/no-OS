@@ -261,7 +261,8 @@ vitis_launch_config: $(TEMP_DIR)/arch.txt
 	@mkdir -p $(PROJECT)/_ide
 	@echo "Extracting bitstream and initialization files from XSA..."
 	@mkdir -p $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))
-	@unzip -q -o $(HARDWARE) '*.bit' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/
+	@unzip -q -o $(HARDWARE) '*.bit' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null; \
+	 unzip -q -o $(HARDWARE) '*.pdi' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null; true
 	@unzip -q -o $(HARDWARE) 'psu_init.tcl' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null || \
 	 unzip -q -o $(HARDWARE) 'ps7_init.tcl' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null || \
 	 unzip -q -o $(HARDWARE) 'ps_init.tcl' -d $(PROJECT)/_ide/$(basename $(notdir $(HARDWARE)))/ 2>/dev/null || true
