@@ -541,6 +541,39 @@ int example_main()
 
 	Xil_DCacheFlush();
 
+	/*
+	 * ----------------------------------------------------------------
+	 * TX DMA transfer (test_vector, streamid=1).
+	 * ----------------------------------------------------------------
+	 */
+	tx_generator_load_custom_data(tx_gen, test_vector,
+				      NO_OS_ARRAY_SIZE(test_vector),
+				      (uintptr_t)dac_buffer_dma);
+
+	struct axi_dma_transfer vec_transfer = {
+		.size = sizeof(test_vector),
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = (uintptr_t)dac_buffer_dma,
+		.dest_addr = 0,
+	};
+
+	printf("Press Enter to start test_vector stream (streamid=1)...\n");
+	getchar();
+
+	pr_info("DMA_EXAMPLE Tx vec: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector),
+		tx_gen->num_channels,
+		8 * sizeof(test_vector[0]));
+
+	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
+	if (ret)
+		pr_err("axi_dmac_transfer_start(tx vec) failed: %d\n", ret);
+	else
+		pr_info("TX DMA vec transfer started\n");
+
+	Xil_DCacheFlush();
+
 #ifdef DMA_CYCLIC_PASS
 	/* RX DMA read — same length as TX transfer */
 	uint32_t adc_buffer_dma[NO_OS_ARRAY_SIZE(test_vector)]
