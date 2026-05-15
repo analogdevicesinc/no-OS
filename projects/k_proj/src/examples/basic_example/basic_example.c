@@ -3,7 +3,7 @@
  *   @brief  Basic example for K (AD9081K) project.
  *   @author Analog Devices Inc.
  ********************************************************************************
- * Copyright 2024(c) Analog Devices, Inc.
+ * Copyright (C) 2026 Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -72,9 +72,9 @@ static uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
  *   44444444 33333333 22222222 11111111
  *
  * Shifted left by 2 as a 512-bit integer, then bit 0 set to 1.
- * test_vector[15] = MSW, test_vector[0] = LSW.
+ * tx_vector[15] = MSW, tx_vector[0] = LSW.
  */
-static uint32_t test_vector[16] = {
+static uint32_t tx_vector[16] = {
 	0x44444445, /* [0]  from 0x11111111 */
 	0x88888888, /* [1]  from 0x22222222 */
 	0xCCCCCCCC, /* [2]  from 0x33333333 */
@@ -93,38 +93,78 @@ static uint32_t test_vector[16] = {
 	0x00000005, /* [15] from 0x00000001 */
 };
 
-/* 512-bit test vector: all 0xFFs */
-static uint32_t test_vector_allf[16] = {
+/* 512-bit test PASS stream: */
+static uint32_t tx_passthrough[16] = {
 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
 };
 
-/* 64-bit test vector: 0x0000000002580100 */
-static uint32_t test_vector_2[2] = {
+/* 64-bit test CMD READ: 0x00000000_02580100 */
+static uint32_t tx_cmd_read[2] = {
 	0x02580100, /* [0] LSW */
 	0x00000000, /* [1] MSW */
+};
+
+/* 
+ * 64-bit test CMD STREAMING READ: 0x00000000_02540E00 
+ * Read from NUMWORDS=3 registers starting from address 0x0254,
+ * meaning 0x0254, 0x0258, 0x025C.
+ * 3 streams should be expected on RX.
+ */
+static uint32_t tx_cmd_streaming_read[2] = {
+	0x02540E00, /* [0] LSW */
+	0x00000000, /* [1] MSW */
+};
+
+/* 
+ * 64-bit test CMD WRITE: 0x12345678_00900300 
+ * Write value 0x12345678 at address 0x0090.
+ * Nothing should be expected on RX.
+ */
+static uint32_t tx_cmd_write[2] = {
+	0x00900300, /* [0] LSW */
+	0x12345678, /* [1] MSW */
 };
 
 
 int example_main()
 {
+	// Si5391
 	static struct si5391_init_param si5391_param = { 0 };
 	struct si5391_dev *si5391_device = NULL;
+
+	// JESD204-related
 	static struct ad9081k_init_param ad9081k_param = { 0 };
 	struct ad9081k_dev *ad9081k_device = NULL;
 	struct jesd204_topology *topology = NULL;
-	struct axi_jesd204_rx *rx_jesd = NULL;
+
+	// TX LINK layer
 	struct axi_jesd204_tx *tx_jesd = NULL;
+	// RX LINK layer
+	struct axi_jesd204_rx *rx_jesd = NULL;
+
+	// TX part of JESD204 PHY layer
 	struct adxcvr *tx_adxcvr = NULL;
+	// RX part of JESD204 PHY layer
 	struct adxcvr *rx_adxcvr = NULL;
+
+	// TX GENERATOR - TX TPL IP from HDL
+	struct tx_generator_dev *tx_generator = NULL;
+	// RX ANALYZER - RX TPL IP from HDL
 	struct axi_adc *rx_adc = NULL;
-	struct tx_generator_dev *tx_gen = NULL;
-	struct axi_dmac *rx_dmac = NULL;
+
+	// TX DMA for VEC/PASS streams (L*64b wide)
 	struct axi_dmac *tx_dmac = NULL;
-	struct axi_dmac *rx_cmd_dmac = NULL;
+	// RX DMA for PATT/ASYNC/PASS streams (L*64b wide)
+	struct axi_dmac *rx_dmac = NULL;
+
+	// TX CMD DMA for CMD streams (64b wide)
 	struct axi_dmac *tx_cmd_dmac = NULL;
+	// RX CMD DMA for CMD streams (64b wide)
+	struct axi_dmac *rx_cmd_dmac = NULL;
+
 	unsigned int i;
 	int ret;
 
@@ -209,8 +249,8 @@ int example_main()
 		pr_err("si5391_setup() failed: %d\n", ret);
 		return ret;
 	}
-	pr_info("Si5391 locked and running. press enter to continue....\n");
-	getchar();
+	pr_info("Si5391 locked and running. Continuing....\n");
+	//getchar();
 
 	/*
 	 * ----------------------------------------------------------------
@@ -311,13 +351,13 @@ int example_main()
 		.num_channels = AD9081K_TX_JESD_CONVS_PER_DEVICE,
 	};
 
-	ret = tx_generator_init(&tx_gen, &tx_gen_init);
+	ret = tx_generator_init(&tx_generator, &tx_gen_init);
 	if (ret) {
 		pr_err("tx_generator_init() failed: %d\n", ret);
 		goto error_rx_jesd;
 	}
 	pr_info("TX generator initialized (%d channels)\n",
-		tx_gen->num_channels);
+		tx_generator->num_channels);
 
 	/*
 	 * ----------------------------------------------------------------
@@ -467,26 +507,27 @@ int example_main()
 	axi_jesd204_rx_status_read(rx_jesd);
 	no_os_mdelay(100);
 
-	printf("Press Enter to start cmd transfer...\n");
-		getchar();
-
 	/*
 	 * ----------------------------------------------------------------
-	 * TX CMD DMA transfer (test_vector_2).
+	 * TX CMD DMA transfer (tx_cmd_read).
 	 * ----------------------------------------------------------------
 	 */
-	tx_generator_cmd_set_stream_source(tx_gen, true);
+
+	printf("Press Enter to start TX CMD DMA transfer of CMD READ command...\n");
+	getchar();
+
+	tx_generator_cmd_set_stream_source(tx_generator, true);
 
 	{
 		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
 			__attribute__((aligned(1024)));
 
-		tx_generator_load_custom_data(tx_gen, test_vector_2,
-					      NO_OS_ARRAY_SIZE(test_vector_2),
+		tx_generator_load_custom_data(tx_generator, tx_cmd_read,
+					      NO_OS_ARRAY_SIZE(tx_cmd_read),
 					      (uintptr_t)cmd_buffer_dma);
 
 		struct axi_dma_transfer cmd_transfer = {
-			.size = sizeof(test_vector_2),
+			.size = sizeof(tx_cmd_read),
 			.transfer_done = 0,
 			.cyclic = NO,
 			.src_addr = (uintptr_t)cmd_buffer_dma,
@@ -497,101 +538,143 @@ int example_main()
 
 		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
 		if (ret)
-			pr_err("axi_dmac_transfer_start(tx_cmd) failed: %d\n", ret);
+			pr_err("axi_dmac_transfer_start(tx_cmd_read) failed: %d\n", ret);
 		else
-			pr_info("TX CMD DMA transfer started\n");
+			pr_info("TX CMD DMA transfer of CMD READ started\n");
 	}
 
-	tx_generator_cmd_set_stream_source(tx_gen, false);
+	tx_generator_cmd_set_stream_source(tx_generator, false);
 
 	/*
 	 * ----------------------------------------------------------------
-	 * TX DMA transfer.
+	 * TX CMD DMA transfer (tx_cmd_streaming_read).
 	 * ----------------------------------------------------------------
 	 */
-#ifdef DMA_CYCLIC_PASS
-	test_vector[0] = 0x44444447;
-	test_vector[15] = 0x00000007;
-#endif
 
-	tx_generator_load_custom_data(tx_gen, test_vector_allf,
-				     NO_OS_ARRAY_SIZE(test_vector_allf),
+	no_os_mdelay(100);
+	printf("Press Enter to start TX CMD DMA transfer of CMD STREAMING READ command...\n");
+	getchar();
+
+	tx_generator_cmd_set_stream_source(tx_generator, true);
+
+	{
+		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
+			__attribute__((aligned(1024)));
+
+		tx_generator_load_custom_data(tx_generator, tx_cmd_streaming_read,
+					      NO_OS_ARRAY_SIZE(tx_cmd_streaming_read),
+					      (uintptr_t)cmd_buffer_dma);
+
+		struct axi_dma_transfer cmd_transfer = {
+			.size = sizeof(tx_cmd_streaming_read),
+			.transfer_done = 0,
+			.cyclic = NO,
+			.src_addr = (uintptr_t)cmd_buffer_dma,
+			.dest_addr = 0,
+		};
+
+		Xil_DCacheFlush();
+
+		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
+		if (ret)
+			pr_err("axi_dmac_transfer_start(tx_cmd_streaming_read) failed: %d\n", ret);
+		else
+			pr_info("TX CMD DMA transfer of CMD STREAMING READ started\n");
+	}
+
+	tx_generator_cmd_set_stream_source(tx_generator, false);
+
+	/*
+	 * ----------------------------------------------------------------
+	 * TX CMD DMA transfer (tx_cmd_write).
+	 * ----------------------------------------------------------------
+	 */
+	
+	no_os_mdelay(100);
+	printf("Press Enter to start TX CMD DMA transfer of CMD WRITE command...\n");
+	getchar();
+
+	tx_generator_cmd_set_stream_source(tx_generator, true);
+
+	{
+		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
+			__attribute__((aligned(1024)));
+
+		tx_generator_load_custom_data(tx_generator, tx_cmd_write,
+					      NO_OS_ARRAY_SIZE(tx_cmd_write),
+					      (uintptr_t)cmd_buffer_dma);
+
+		struct axi_dma_transfer cmd_transfer = {
+			.size = sizeof(tx_cmd_write),
+			.transfer_done = 0,
+			.cyclic = NO,
+			.src_addr = (uintptr_t)cmd_buffer_dma,
+			.dest_addr = 0,
+		};
+
+		Xil_DCacheFlush();
+
+		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
+		if (ret)
+			pr_err("axi_dmac_transfer_start(tx_cmd_write) failed: %d\n", ret);
+		else
+			pr_info("TX CMD DMA transfer of CMD WRITE started\n");
+	}
+
+	tx_generator_cmd_set_stream_source(tx_generator, false);
+
+	/*
+	 * ----------------------------------------------------------------
+	 * TX DMA transfer (tx_passthrough, streamid=3).
+	 * ----------------------------------------------------------------
+	 */
+
+	no_os_mdelay(100);
+	printf("Press Enter to start TX DMA transfer of PASS stream...\n");
+	getchar();
+
+	tx_generator_load_custom_data(tx_generator, tx_passthrough,
+				     NO_OS_ARRAY_SIZE(tx_passthrough),
 				     (uintptr_t)dac_buffer_dma);
 
 	struct axi_dma_transfer transfer = {
-		.size = sizeof(test_vector_allf),
+		.size = sizeof(tx_passthrough),
 		.transfer_done = 0,
 		.cyclic = NO,
 		.src_addr = (uintptr_t)dac_buffer_dma,
 		.dest_addr = 0,
 	};
 
-	printf("Press Enter to start stream transfer...\n");
-	getchar();
-
-	pr_info("DMA_EXAMPLE Tx: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector_allf),
-		tx_gen->num_channels,
-		8 * sizeof(test_vector_allf[0]));
+	pr_info("DMA_EXAMPLE Tx PASS: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(tx_passthrough),
+		tx_generator->num_channels,
+		8 * sizeof(tx_passthrough[0]));
 
 	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
 	if (ret)
-		pr_err("axi_dmac_transfer_start(tx) failed: %d\n", ret);
+		pr_err("axi_dmac_transfer_start(tx_passthrough) failed: %d\n", ret);
 	else
-		pr_info("TX DMA transfer started\n");
-
-	Xil_DCacheFlush();
-
-	/*
-	 * ----------------------------------------------------------------
-	 * TX DMA transfer (test_vector, streamid=1).
-	 * ----------------------------------------------------------------
-	 */
-	tx_generator_load_custom_data(tx_gen, test_vector,
-				      NO_OS_ARRAY_SIZE(test_vector),
-				      (uintptr_t)dac_buffer_dma);
-
-	struct axi_dma_transfer vec_transfer = {
-		.size = sizeof(test_vector),
-		.transfer_done = 0,
-		.cyclic = NO,
-		.src_addr = (uintptr_t)dac_buffer_dma,
-		.dest_addr = 0,
-	};
-
-	printf("Press Enter to start test_vector stream (streamid=1)...\n");
-	getchar();
-
-	pr_info("DMA_EXAMPLE Tx vec: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(test_vector),
-		tx_gen->num_channels,
-		8 * sizeof(test_vector[0]));
-
-	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
-	if (ret)
-		pr_err("axi_dmac_transfer_start(tx vec) failed: %d\n", ret);
-	else
-		pr_info("TX DMA vec transfer started\n");
+		pr_info("TX DMA transfer of PASS stream started\n");
 
 	Xil_DCacheFlush();
 
 #ifdef DMA_CYCLIC_PASS
 	/* RX DMA read — same length as TX transfer */
-	uint32_t adc_buffer_dma[NO_OS_ARRAY_SIZE(test_vector)]
+	uint32_t adc_pass_buffer_dma[NO_OS_ARRAY_SIZE(tx_vector)]
 		__attribute__((aligned(1024)));
 
-	struct axi_dma_transfer read_transfer = {
-		.size = sizeof(test_vector),
+	struct axi_dma_transfer read_pass_transfer = {
+		.size = sizeof(tx_vector),
 		.transfer_done = 0,
 		.cyclic = NO,
 		.src_addr = 0,
-		.dest_addr = (uintptr_t)adc_buffer_dma,
+		.dest_addr = (uintptr_t)adc_pass_buffer_dma,
 	};
 
-	printf("Press Enter to start Rx transfer...\n");
-	getchar();
+	//printf("Press Enter to start Rx transfer...\n");
+	//getchar();
 
-	ret = axi_dmac_transfer_start(rx_dmac, &read_transfer);
+	ret = axi_dmac_transfer_start(rx_dmac, &read_pass_transfer);
 	if (ret) {
 		pr_err("axi_dmac_transfer_start(rx) failed: %d\n", ret);
 	} else {
@@ -600,24 +683,90 @@ int example_main()
 			pr_err("RX DMA transfer timeout: %d\n", ret);
 	}
 
-	Xil_DCacheInvalidateRange((uintptr_t)adc_buffer_dma,
-				  sizeof(adc_buffer_dma));
+	Xil_DCacheInvalidateRange((uintptr_t)adc_pass_buffer_dma,
+				  sizeof(adc_pass_buffer_dma));
 
 	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)adc_buffer_dma, NO_OS_ARRAY_SIZE(adc_buffer_dma),
+		(uintptr_t)adc_pass_buffer_dma, NO_OS_ARRAY_SIZE(adc_pass_buffer_dma),
 		rx_adc->num_channels,
-		8 * sizeof(adc_buffer_dma[0]));
+		8 * sizeof(adc_pass_buffer_dma[0]));
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(adc_buffer_dma); i++)
-		printf("  adc_buffer_dma[%2u] = 0x%08lX\n", i,
-		       (unsigned long)adc_buffer_dma[i]);
+	for (i = 0; i < NO_OS_ARRAY_SIZE(adc_pass_buffer_dma); i++)
+		printf("  adc_pass_buffer_dma[%2u] = 0x%08lX\n", i,
+		       (unsigned long)adc_pass_buffer_dma[i]);
 #endif
 
-//#ifndef IIOD
-//	pr_info("Basic example finished. Entering idle loop.\n");
-//	while (1)
-//		no_os_mdelay(1000);
-//#endif
+	/*
+	 * ----------------------------------------------------------------
+	 * TX DMA transfer (tx_vector, streamid=1).
+	 * ----------------------------------------------------------------
+	 */
+	tx_generator_load_custom_data(tx_generator, tx_vector,
+				      NO_OS_ARRAY_SIZE(tx_vector),
+				      (uintptr_t)dac_buffer_dma);
+
+	struct axi_dma_transfer vec_transfer = {
+		.size = sizeof(tx_vector),
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = (uintptr_t)dac_buffer_dma,
+		.dest_addr = 0,
+	};
+
+	printf("Press Enter to start TX DMA transfer of VEC stream...\n");
+	getchar();
+
+	pr_info("DMA_EXAMPLE Tx VEC: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(tx_vector),
+		tx_generator->num_channels,
+		8 * sizeof(tx_vector[0]));
+
+	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
+	if (ret)
+		pr_err("axi_dmac_transfer_start(tx_vector) failed: %d\n", ret);
+	else
+		pr_info("TX DMA transfer of VEC stream started\n");
+
+	Xil_DCacheFlush();
+
+#ifdef DMA_CYCLIC_PASS
+	/* RX DMA read — same length as TX transfer */
+	uint32_t adc_vec_buffer_dma[NO_OS_ARRAY_SIZE(tx_vector)]
+		__attribute__((aligned(1024)));
+
+	struct axi_dma_transfer read_vec_transfer = {
+		.size = sizeof(tx_vector),
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = 0,
+		.dest_addr = (uintptr_t)adc_vec_buffer_dma,
+	};
+
+	//printf("Press Enter to start Rx transfer...\n");
+	//getchar();
+
+	ret = axi_dmac_transfer_start(rx_dmac, &read_vec_transfer);
+	if (ret) {
+		pr_err("axi_dmac_transfer_start(rx) failed: %d\n", ret);
+	} else {
+		ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+		if (ret)
+			pr_err("RX DMA transfer timeout: %d\n", ret);
+	}
+
+	Xil_DCacheInvalidateRange((uintptr_t)adc_vec_buffer_dma,
+				  sizeof(adc_vec_buffer_dma));
+
+	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
+		(uintptr_t)adc_vec_buffer_dma, NO_OS_ARRAY_SIZE(adc_vec_buffer_dma),
+		rx_adc->num_channels,
+		8 * sizeof(adc_vec_buffer_dma[0]));
+
+	for (i = 0; i < NO_OS_ARRAY_SIZE(adc_vec_buffer_dma); i++)
+		printf("  adc_vec_buffer_dma[%2u] = 0x%08lX\n", i,
+		       (unsigned long)adc_vec_buffer_dma[i]);
+#endif
+
 
 #ifdef IIOD
 	/*
@@ -712,7 +861,7 @@ error_tx_dmac:
 error_rx_adc:
 	axi_adc_remove(rx_adc);
 error_tx_gen:
-	tx_generator_remove(tx_gen);
+	tx_generator_remove(tx_generator);
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_tx_jesd:
