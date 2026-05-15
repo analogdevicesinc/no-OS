@@ -119,22 +119,30 @@ def generate_mb_init():
 
 
 def generate_versal_init():
-    """Generate Versal initialization section (uses PLM, not FSBL)."""
+    """Generate Versal-specific targetSetup fields (zuTraceOptions only)."""
     return {
-        "versalInitialization": {
-            "usePLM": True,
-            "plmFile": ""  # Typically extracted from PDI
+        "zuTraceOptions": {
+            "isSelected": False,
+            "scratchAddress": "0xfffc0000",
+            "scratchSize": "0x40000",
+            "traceOutputPath": ""
         }
     }
 
 
-def generate_download_elf(target_cpu, elf_path):
+def generate_download_elf(target_cpu, elf_path, project_dir):
     """Generate downloadElf section."""
+    # Make ELF path workspace-relative if possible
+    try:
+        rel = os.path.relpath(elf_path, project_dir)
+        ws_elf = f"${{workspaceFolder}}/{rel}"
+    except ValueError:
+        ws_elf = elf_path
     return [
         {
             "core": target_cpu,
-            "resetProcessor": False,
-            "elfFile": elf_path,
+            "resetProcessor": True,
+            "elfFile": ws_elf,
             "stopAtEntry": False,
             "isSelfRelocatingApp": False,
             "relativeAddress": ""
@@ -151,8 +159,20 @@ def generate_launch_json(args):
     # Extract XSA basename (e.g., "system_top" from "system_top.xsa")
     xsa_basename = Path(args.xsa_path).stem
 
-    # Generate bitstream path
-    bitstream_path = f"_ide/{xsa_basename}/{xsa_basename}.bit"
+    # Generate bitstream/PDI path.
+    # For Versal the PDI inside the XSA may not match the XSA filename,
+    # so search for the extracted .pdi file.
+    if arch_config['initType'] == 'versal':
+        # Match Vitis expected PDI location
+        ide_dir = Path(args.project_dir) / '_ide' / xsa_basename
+        pdi_files = list(ide_dir.glob('*.pdi')) if ide_dir.exists() else []
+        if pdi_files:
+            pdi_name = pdi_files[0].name
+        else:
+            pdi_name = "system_top.pdi"
+        bitstream_path = f"_ide/{xsa_basename}/{pdi_name}"
+    else:
+        bitstream_path = f"_ide/{xsa_basename}/{xsa_basename}.bit"
 
     # Generate configuration name
     config_name = f"{args.project_name}_app_hw_1"
@@ -169,51 +189,70 @@ def generate_launch_json(args):
     else:
         init_section = {}
 
-    # Build the complete configuration
+    is_versal = arch_config['initType'] == 'versal'
+
+    # Build the base configuration entry
+    launch_entry = {
+        "type": "tcf-debug",
+        "request": "launch",
+        "name": config_name,
+        "debugType": arch_config['debugType'],
+    }
+
+    launch_entry["xsaPath"] = f"${{workspaceFolder}}/{args.xsa_path}"
+
+    setup_mode = "standalone"
+    exec_script = True
+    script_path = ""
+    launch_entry.update({
+        "attachToRunningTargetOptions": {
+            "targetSetupMode": setup_mode,
+            "executeScript": exec_script,
+            "scriptPath": script_path
+        },
+        "autoAttachProcessChildren": False,
+        "target": {
+            "targetConnectionId": "Local",
+            "peersIniPath": ".peers.ini",
+            "context": "Versal" if is_versal else "Device"
+        },
+        "pathMap": [],
+    })
+
+    # Build targetSetup
+    target_setup = {
+        "resetSystem": True,
+        "programDevice": True,
+        "partialBitstream": False,
+        "skipRevisionCheck": False,
+        "device": {
+            "plDevice": "Auto Detect",
+            "psDevice": "Auto Detect"
+        },
+        "enableRPUSplitMode": False,
+    }
+    if is_versal:
+        target_setup["pdiFile"] = f"${{workspaceFolder}}/{bitstream_path}"
+        target_setup["supportsSegPdi"] = False
+    else:
+        target_setup["resetAPU"] = False
+        target_setup["resetRPU"] = False
+        target_setup["bitstreamFile"] = f"${{workspaceFolder}}/{bitstream_path}"
+
+    target_setup.update(init_section)
+    target_setup["downloadElf"] = generate_download_elf(
+        arch_config['targetCpu'], args.elf_path, args.project_dir)
+    target_setup["crossTriggerBreakpoints"] = {
+        "isSelected": False,
+        "breakpoints": []
+    }
+
+    launch_entry["targetSetup"] = target_setup
+    launch_entry["internalConsoleOptions"] = "openOnSessionStart"
+
     config = {
         "version": "0.2.0",
-        "configurations": [
-            {
-                "type": "tcf-debug",
-                "request": "launch",
-                "name": config_name,
-                "debugType": arch_config['debugType'],
-                "xsaPath": f"${{workspaceFolder}}/{args.xsa_path}",
-                "attachToRunningTargetOptions": {
-                    "targetSetupMode": "standalone",
-                    "executeScript": True,
-                    "scriptPath": ""
-                },
-                "autoAttachProcessChildren": False,
-                "target": {
-                    "targetConnectionId": "Local",
-                    "peersIniPath": "../_ide/.peers.ini",
-                    "context": "Device"
-                },
-                "pathMap": [],
-                "targetSetup": {
-                    "resetSystem": True,
-                    "programDevice": True,
-                    "partialBitstream": False,
-                    "skipRevisionCheck": False,
-                    "device": {
-                        "plDevice": "Auto Detect",
-                        "psDevice": "Auto Detect"
-                    },
-                    "enableRPUSplitMode": False,
-                    "resetAPU": False,
-                    "resetRPU": False,
-                    "bitstreamFile": f"${{workspaceFolder}}/{bitstream_path}",
-                    **init_section,
-                    "downloadElf": generate_download_elf(arch_config['targetCpu'], args.elf_path),
-                    "crossTriggerBreakpoints": {
-                        "isSelected": False,
-                        "breakpoints": []
-                    }
-                },
-                "internalConsoleOptions": "openOnSessionStart"
-            }
-        ]
+        "configurations": [launch_entry]
     }
 
     return config
@@ -288,8 +327,8 @@ def main():
         json.dump(launch_config, f, indent='\t')
         f.write('\n')  # Add trailing newline
 
-    print(f"Generated Vitis launch configuration: {output_path}")
     arch_config = detect_arch_config(args.arch)
+    print(f"Generated Vitis launch configuration: {output_path}")
     print(f"  Architecture: {args.arch}")
     print(f"  Debug type: {arch_config['debugType']}")
     print(f"  Target CPU: {arch_config['targetCpu']}")
