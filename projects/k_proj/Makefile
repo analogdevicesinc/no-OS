@@ -1,4 +1,5 @@
 EXAMPLE ?= basic_example
+IIOD=y
 
 # Uncomment to use the desired platform
 PLATFORM = xilinx
