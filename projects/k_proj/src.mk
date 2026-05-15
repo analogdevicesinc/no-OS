@@ -63,7 +63,6 @@ INCS += $(NO-OS)/network/lwip_raw_socket/netdevs/xemacps/lwip_xemacps.h \
 SRCS += $(NO-OS)/util/no_os_lf256fifo.c \
 	$(NO-OS)/util/no_os_fifo.c
 
-ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.c \
@@ -71,7 +70,6 @@ SRCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.c \
 INCS += $(DRIVERS)/axi_core/iio_axi_adc/iio_axi_adc.h \
 	$(DRIVERS)/rf-transceiver/k/iio_ad9081k.h \
 	$(NO-OS)/iio/iio_app/iio_app.h
-endif
 
 INCS += $(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \

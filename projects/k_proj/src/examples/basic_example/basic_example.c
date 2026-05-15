@@ -50,7 +50,8 @@
 #include "xil_cache.h"
 
 #include "lwip_xemacps.h"
-
+#define IIOD
+#define DMA_CYCLIC_PASS
 #include "xilinx_uart.h"
 #ifdef IIOD
 #include "iio_axi_adc.h"
@@ -612,11 +613,11 @@ int example_main()
 		       (unsigned long)adc_buffer_dma[i]);
 #endif
 
-#ifndef IIOD
-	pr_info("Basic example finished. Entering idle loop.\n");
-	while (1)
-		no_os_mdelay(1000);
-#endif
+//#ifndef IIOD
+//	pr_info("Basic example finished. Entering idle loop.\n");
+//	while (1)
+//		no_os_mdelay(1000);
+//#endif
 
 #ifdef IIOD
 	/*
