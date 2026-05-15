@@ -93,12 +93,12 @@ static uint32_t tx_vector[16] = {
 	0x00000005, /* [15] from 0x00000001 */
 };
 
-/* 512-bit test PASS stream: */
+/* 512-bit test PASS stream (bits[1:0] of word[0] = 0b11 → streamid=3): */
 static uint32_t tx_passthrough[16] = {
-	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
-	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
-	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
-	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+	0xDEAD0003, 0xBEEF0001, 0xCAFE0002, 0xFACE0003,
+	0x12340004, 0x56780005, 0x9ABC0006, 0xDEF00007,
+	0xA5A50008, 0x5A5A0009, 0xC0DE000A, 0xF00D000B,
+	0xBABE000C, 0xD00D000D, 0xFEED000E, 0xF00F000F,
 };
 
 /* 64-bit test CMD READ: 0x00000000_02580100 */
@@ -522,9 +522,20 @@ int example_main()
 		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
 			__attribute__((aligned(1024)));
 
-		tx_generator_load_custom_data(tx_generator, tx_cmd_read,
-					      NO_OS_ARRAY_SIZE(tx_cmd_read),
-					      (uintptr_t)cmd_buffer_dma);
+		/*
+		 * Write CMD data word-by-word via no_os_axi_io_write
+		 * instead of tx_generator_load_custom_data, which
+		 * replicates each word across num_channels/2 lanes and
+		 * corrupts the 64-bit CMD value.  We must use
+		 * no_os_axi_io_write (not memcpy) because
+		 * axi_dma_transfer.src_addr is uint32_t and truncates
+		 * 64-bit pointers — no_os_axi_io_write truncates the
+		 * same way, keeping write and DMA read consistent.
+		 */
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_read); i++)
+			no_os_axi_io_write((uintptr_t)cmd_buffer_dma,
+					   i * sizeof(uint32_t),
+					   tx_cmd_read[i]);
 
 		struct axi_dma_transfer cmd_transfer = {
 			.size = sizeof(tx_cmd_read),
@@ -561,9 +572,11 @@ int example_main()
 		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
 			__attribute__((aligned(1024)));
 
-		tx_generator_load_custom_data(tx_generator, tx_cmd_streaming_read,
-					      NO_OS_ARRAY_SIZE(tx_cmd_streaming_read),
-					      (uintptr_t)cmd_buffer_dma);
+		/* See CMD READ comment — same channel-replication issue. */
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_streaming_read); i++)
+			no_os_axi_io_write((uintptr_t)cmd_buffer_dma,
+					   i * sizeof(uint32_t),
+					   tx_cmd_streaming_read[i]);
 
 		struct axi_dma_transfer cmd_transfer = {
 			.size = sizeof(tx_cmd_streaming_read),
@@ -600,9 +613,11 @@ int example_main()
 		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
 			__attribute__((aligned(1024)));
 
-		tx_generator_load_custom_data(tx_generator, tx_cmd_write,
-					      NO_OS_ARRAY_SIZE(tx_cmd_write),
-					      (uintptr_t)cmd_buffer_dma);
+		/* See CMD READ comment — same channel-replication issue. */
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_write); i++)
+			no_os_axi_io_write((uintptr_t)cmd_buffer_dma,
+					   i * sizeof(uint32_t),
+					   tx_cmd_write[i]);
 
 		struct axi_dma_transfer cmd_transfer = {
 			.size = sizeof(tx_cmd_write),
@@ -650,13 +665,13 @@ int example_main()
 		tx_generator->num_channels,
 		8 * sizeof(tx_passthrough[0]));
 
+	Xil_DCacheFlush();
+
 	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
 	if (ret)
 		pr_err("axi_dmac_transfer_start(tx_passthrough) failed: %d\n", ret);
 	else
 		pr_info("TX DMA transfer of PASS stream started\n");
-
-	Xil_DCacheFlush();
 
 #ifdef DMA_CYCLIC_PASS
 	/* RX DMA read — same length as TX transfer */
@@ -721,13 +736,13 @@ int example_main()
 		tx_generator->num_channels,
 		8 * sizeof(tx_vector[0]));
 
+	Xil_DCacheFlush();
+
 	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
 	if (ret)
 		pr_err("axi_dmac_transfer_start(tx_vector) failed: %d\n", ret);
 	else
 		pr_info("TX DMA transfer of VEC stream started\n");
-
-	Xil_DCacheFlush();
 
 #ifdef DMA_CYCLIC_PASS
 	/* RX DMA read — same length as TX transfer */
