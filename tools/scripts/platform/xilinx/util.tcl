@@ -272,15 +272,21 @@ proc clean_build {} {
 set pl_dict [dict create					\
 	"ps7_cortexa9_0" "xc7z*"				\
 	"psu_cortexa53_0" "PSU"					\
+	"sys_cips_pspmc_0_psv_cortexa72_0" "Versal*"		\
 	"sys_mb" "xc*"]
 
 set ps_dict [dict create					\
 	"ps7_cortexa9_0" "*Cortex-A9 MPCore #0*"		\
 	"psu_cortexa53_0" "*Cortex-A53 #0*"			\
+	"sys_cips_pspmc_0_psv_cortexa72_0" "*Cortex-A72 #0*"	\
 	"sys_mb" "*MicroBlaze #*"]
 
 proc _cpu_reset {cpu} {
 	if {$cpu == "sys_mb"} {
+		return
+	}
+	if {$cpu == "sys_cips_pspmc_0_psv_cortexa72_0"} {
+		# Versal: PLM handles reset; just select the A72 core
 		return
 	}
 	targets -set -filter {name =~ "APU*" && jtag_cable_name =~ "*$::jtagtarget*"}
@@ -292,7 +298,40 @@ proc _cpu_reset {cpu} {
 	}
 }
 
+proc _write_pl_versal {pdi_path} {
+	# Versal PDI programming requires Vivado hardware manager (cs_server).
+	# xsct + hw_server alone cannot program Versal devices.
+	set pdi [file normalize $pdi_path]
+	set tmp_script "/tmp/_noos_versal_pdi_[pid].tcl"
+	set fd [open $tmp_script w]
+	puts $fd "open_hw_manager"
+	puts $fd "connect_hw_server -url TCP:localhost:3121"
+	puts $fd "open_hw_target"
+	puts $fd "current_hw_device \[lindex \[get_hw_devices xcv*\] 0\]"
+	puts $fd "set_property PROGRAM.FILE \{$pdi\} \[current_hw_device\]"
+	puts $fd "program_hw_devices \[current_hw_device\]"
+	puts $fd "close_hw_manager"
+	puts $fd "exit"
+	close $fd
+
+	puts "INFO: Programming Versal PDI via Vivado..."
+	set result ""
+	if {[catch {set result [exec vivado -mode tcl -nolog -nojournal -source $tmp_script 2>@1]} err]} {
+		set result $err
+	}
+	file delete -force $tmp_script
+	if {[string first "Successfully programmed PDI" $result] == -1} {
+		error "ERROR: Vivado PDI programming failed:\n$result"
+	}
+	puts "INFO: PDI programmed successfully. Waiting for PLM..."
+	after 5000
+}
+
 proc _write_pl {cpu {bitstream}} {
+	if {$cpu == "sys_cips_pspmc_0_psv_cortexa72_0"} {
+		# Versal: handled separately in upload via _write_pl_versal
+		return
+	}
 	set name [dict get $::pl_dict $cpu]
 	targets -set -filter {name =~ "$name" && jtag_cable_name =~ "*$::jtagtarget*"}
 	fpga -file [file normalize $bitstream]
@@ -325,6 +364,15 @@ proc _init_ps {cpu} {
 			psu_ps_pl_reset_config
 			targets -set -filter {name =~ "Cortex-R5 #0" && jtag_cable_name =~ "*$::jtagtarget*"}
 		}
+		"sys_cips_pspmc_0_psv_cortexa72_0" {
+			# Versal: release the A72 from reset after PDI programming.
+			targets -set -nocase -filter {name =~ "*A72*#0" && jtag_cable_name =~ "*$::jtagtarget*"}
+			rst -processor -clear-registers
+			after 2000
+			# Versal requires forced memory access for dow since
+			# the XSA memory map may not reflect the PDI runtime state.
+			configparams force-mem-accesses 1
+		}
 		"sys_mb" {
 			set name [dict get $::pl_dict $cpu]
 			targets -set -filter {name =~ "$name" && jtag_cable_name =~ "*$::jtagtarget*"}
@@ -344,26 +392,62 @@ proc _write_ps {cpu} {
 
 proc upload {} {
 	openhw $::hw
-	set bitstream [file rootname $::hw]
-	append bitstream ".bit"
 	set cpu [_get_processor]
 
-	# Connect to the fpga
-  if { [info exists ::env(XSCT_REMOTE_HOST)] && [info exists ::env(XSCT_REMOTE_PORT)] } {
-    connect -host "$::env(XSCT_REMOTE_HOST)" -port "$::env(XSCT_REMOTE_PORT)"
-  } else {
-    connect
-  }
+	if {$cpu == "sys_cips_pspmc_0_psv_cortexa72_0"} {
+		# Versal flow: PDI via Vivado (requires cs_server), then
+		# ELF download via xsct.
+		set xsa_dir [file dirname [file normalize $::hw]]
+		set pdi_path [file join $xsa_dir "system_top.pdi"]
+		if {![file exists $pdi_path]} {
+			exec unzip -o -q [file normalize $::hw] "*.pdi" -d $xsa_dir
+		}
 
-	# Reset and stop the ARM CPU before we re-program the FPGA if we are on a ZYNQ.
-	# Otherwise undefined behavior can occur.
-	_cpu_reset $cpu
+		# 1. Start hw_server (Vivado and xsct will both connect to it)
+		catch {exec pkill -x hw_server}
+		catch {exec pkill -x cs_server}
+		after 2000
+		exec hw_server &
+		after 3000
 
-	_write_pl $cpu $bitstream
+		# 2. Program PDI via Vivado (auto-launches cs_server)
+		_write_pl_versal $pdi_path
 
-	_init_ps $cpu
+		# 3. Ensure cs_server is running for debug target enumeration
+		if {[catch {exec pgrep -x cs_server}]} {
+			puts "INFO: Starting cs_server..."
+			exec cs_server &
+			after 3000
+		}
 
-	_write_ps $cpu
+		# 4. Connect xsct to the running hw_server
+		if { [info exists ::env(XSCT_REMOTE_HOST)] && [info exists ::env(XSCT_REMOTE_PORT)] } {
+			connect -host "$::env(XSCT_REMOTE_HOST)" -port "$::env(XSCT_REMOTE_PORT)"
+		} else {
+			connect -host localhost -port 3121
+		}
+		after 5000
+
+		# 5. Init PS and download ELF
+		_init_ps $cpu
+		_write_ps $cpu
+	} else {
+		set bitstream [file rootname $::hw]
+		append bitstream ".bit"
+
+		# Connect to the fpga
+		if { [info exists ::env(XSCT_REMOTE_HOST)] && [info exists ::env(XSCT_REMOTE_PORT)] } {
+			connect -host "$::env(XSCT_REMOTE_HOST)" -port "$::env(XSCT_REMOTE_PORT)"
+		} else {
+			connect
+		}
+
+		# Reset and stop the ARM CPU before we re-program the FPGA
+		_cpu_reset $cpu
+		_write_pl $cpu $bitstream
+		_init_ps $cpu
+		_write_ps $cpu
+	}
 }
 
 set function	[lindex $argv 0]
