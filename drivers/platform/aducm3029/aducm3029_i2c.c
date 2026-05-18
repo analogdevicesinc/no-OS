@@ -232,7 +232,7 @@ static int32_t aducm3029_i2c_write(struct no_os_i2c_desc *desc,
 		return 0;
 	}
 
-	trans->bRepeatStart = false;
+	trans->bRepeatStart = stop_bit ? false : true;
 	trans->pPrologue = 0;
 	trans->nPrologueSize = 0;
 	trans->pData = data;
