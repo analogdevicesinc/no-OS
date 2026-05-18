@@ -36,6 +36,9 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c \
+	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c \
+	$(DRIVERS)/frequency/hmc7044/hmc7044.c \
 	$(DRIVERS)/frequency/ad9528/ad9528.c \
 	$(NO-OS)/util/no_os_util.c \
 	$(NO-OS)/util/no_os_clk.c \
@@ -45,8 +48,6 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c \
 	$(DRIVERS)/api/no_os_gpio.c \
 	$(NO-OS)/jesd204/jesd204-core.c \
 	$(NO-OS)/jesd204/jesd204-fsm.c
-SRCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.c \
-	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c
 ifeq (y,$(strip $(IIOD)))
 LIBRARIES += iio
 SRCS += $(NO-OS)/util/no_os_lf256fifo.c \
@@ -67,9 +68,10 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h \
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h \
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h \
+	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h \
+	$(DRIVERS)/frequency/hmc7044/hmc7044.h \
 	$(DRIVERS)/frequency/ad9528/ad9528.h
-INCS += $(DRIVERS)/axi_core/jesd204/axi_adxcvr.h \
-	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h
 INCS += $(INCLUDE)/no_os_axi_io.h \
 	$(INCLUDE)/no_os_spi.h \
 	$(INCLUDE)/no_os_irq.h \

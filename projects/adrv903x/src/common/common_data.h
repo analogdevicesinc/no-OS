@@ -37,10 +37,15 @@
 #define __COMMON_DATA_H__
 
 #include "platform_includes.h"
+#include "parameters.h"
 #include "no_os_gpio.h"
 #include "no_os_spi.h"
 
+#ifdef PLATFORM_VERSAL
+extern const struct no_os_spi_init_param hmc7044_spi_param;
+#else
 extern const struct no_os_spi_init_param ad9528_spi_param;
+#endif
 extern struct no_os_gpio_init_param clkchip_gpio_init_param;
 
 #endif /* __COMMON_DATA_H__ */
