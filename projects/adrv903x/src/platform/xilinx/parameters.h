@@ -37,6 +37,12 @@
 #define _PARAMETERS_H_
 
 #include "xparameters.h"
+
+/* Auto-detect Versal from BSP (covers both Makefile and Vitis IDE builds). */
+#if defined(XPAR_CPU_CORTEXA72_CORE_CLOCK_FREQ_HZ) && !defined(PLATFORM_VERSAL)
+#define PLATFORM_VERSAL
+#endif
+
 #include "xilinx_gpio.h"
 #include "app_config.h"
 #include "xilinx_spi.h"
@@ -45,45 +51,61 @@
 /*****  GPIO/SPI device IDs (from Xilinx BSP generated for system_top.xsa) ***/
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
-#ifdef XPS_BOARD_ZCU102
-#define GPIO_OFFSET			78
-#define GPIO_DEVICE_ID			XPAR_PSU_GPIO_0_DEVICE_ID
-#define SPI_DEVICE_ID			XPAR_PSU_SPI_0_DEVICE_ID
-#define UART_DEVICE_ID			XPAR_PSU_UART_0_DEVICE_ID
-#define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
+  #ifdef PLATFORM_VERSAL
+    /* Versal Tetra: PL GPIO via AXI GPIO, PS SPI1 */
+    #define GPIO_OFFSET			0
+    #define GPIO_DEVICE_ID		XPAR_GPIO_0_DEVICE_ID
+    #define SPI_DEVICE_ID		XPAR_XSPIPS_1_DEVICE_ID
+    #define UART_DEVICE_ID		XPAR_XUARTPSV_0_DEVICE_ID
+    #define UART_IRQ_ID			XPAR_PSV_SBSAUART_1_INTR
+  #elif defined(XPS_BOARD_ZCU102)
+    /* ZCU102: PS GPIO, PS SPI0 */
+    #define GPIO_OFFSET			78
+    #define GPIO_DEVICE_ID		XPAR_PSU_GPIO_0_DEVICE_ID
+    #define SPI_DEVICE_ID		XPAR_PSU_SPI_0_DEVICE_ID
+    #define UART_DEVICE_ID		XPAR_PSU_UART_0_DEVICE_ID
+    #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
+  #else
+    #define GPIO_OFFSET			54
+  #endif
+  #define DDR_MEM_BASEADDR		XPAR_DDR_MEM_BASEADDR
 #else
-#define GPIO_OFFSET			54
-#endif
-
-#define DDR_MEM_BASEADDR		XPAR_DDR_MEM_BASEADDR
-#else
-#define GPIO_OFFSET			0
-#define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
-#define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
-#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
-#define DDR_MEM_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR
+  /* MicroBlaze / PL-only */
+  #define GPIO_OFFSET			0
+  #define GPIO_DEVICE_ID		XPAR_GPIO_0_DEVICE_ID
+  #define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
+  #define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+  #define DDR_MEM_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR
 #endif
 
 /******************************************************************************/
-/*** AXI IP base addresses — TODO: update from system_top.xsa BSP output   ***/
+/*** AXI IP base addresses — platform-specific XPAR naming                  ***/
 /******************************************************************************/
+/* JESD204 and TPL — same XPAR names on both platforms */
 #define RX_JESD_BASEADDR		XPAR_AXI_JESD204_RX_0_BASEADDR
 #define TX_JESD_BASEADDR		XPAR_AXI_JESD204_TX_0_BASEADDR
-
-#define RX_XCVR_BASEADDR		XPAR_AXI_ADRV903X_RX_XCVR_BASEADDR
-#define TX_XCVR_BASEADDR		XPAR_AXI_ADRV903X_TX_XCVR_BASEADDR
-
 #define RX_CORE_BASEADDR		XPAR_AD_IP_JESD204_TPL_ADC_0_BASEADDR
 #define TX_CORE_BASEADDR		XPAR_AD_IP_JESD204_TPL_DAC_0_BASEADDR
 
-#define RX_DMA_BASEADDR			XPAR_AXI_ADRV903X_RX_DMA_BASEADDR
-#define TX_DMA_BASEADDR			XPAR_AXI_ADRV903X_TX_DMA_BASEADDR
-
-#define TX_DATA_OFFLOAD_BASEADDR	0x9C440000UL
-#define RX_DATA_OFFLOAD_BASEADDR	0x9C450000UL
-
-#define RX_CLKGEN_BASEADDR		XPAR_AXI_ADRV903X_RX_CLKGEN_BASEADDR
-#define TX_CLKGEN_BASEADDR		XPAR_AXI_ADRV903X_TX_CLKGEN_BASEADDR
+#ifdef PLATFORM_VERSAL
+  #define RX_DMA_BASEADDR		XPAR_AXI_JESD_RX_DMA_BASEADDR
+  #define TX_DMA_BASEADDR		XPAR_AXI_JESD_TX_DMA_BASEADDR
+  #define TX_DATA_OFFLOAD_BASEADDR	0xBC440000UL
+  #define RX_DATA_OFFLOAD_BASEADDR	0xBC450000UL
+  /* ORX path (Versal Tetra NLS) */
+  #define ORX_JESD_BASEADDR		XPAR_AXI_JESD204_RX_1_BASEADDR
+  #define ORX_DMA_BASEADDR		XPAR_AXI_RX_OS_DMA_BASEADDR
+  #define ORX_CORE_BASEADDR		XPAR_AD_IP_JESD204_TPL_ADC_1_BASEADDR
+#else
+  #define RX_DMA_BASEADDR		XPAR_AXI_ADRV903X_RX_DMA_BASEADDR
+  #define TX_DMA_BASEADDR		XPAR_AXI_ADRV903X_TX_DMA_BASEADDR
+  #define TX_DATA_OFFLOAD_BASEADDR	0x9C440000UL
+  #define RX_DATA_OFFLOAD_BASEADDR	0x9C450000UL
+  #define RX_XCVR_BASEADDR		XPAR_AXI_ADRV903X_RX_XCVR_BASEADDR
+  #define TX_XCVR_BASEADDR		XPAR_AXI_ADRV903X_TX_XCVR_BASEADDR
+  #define RX_CLKGEN_BASEADDR		XPAR_AXI_ADRV903X_RX_CLKGEN_BASEADDR
+  #define TX_CLKGEN_BASEADDR		XPAR_AXI_ADRV903X_TX_CLKGEN_BASEADDR
+#endif
 
 /******************************************************************************/
 /***  Buffer sizes for DMA/IIO examples                                     ***/
@@ -93,18 +115,23 @@
 #define ADC_CHANNELS			8
 
 /******************************************************************************/
-/***  SPI chip selects                                                       ***/
+/***  SPI chip selects and GPIO offsets                                      ***/
 /******************************************************************************/
-#define AD9528_CS			1
-#define ADRV903X_CS			0
-
-/******************************************************************************/
-/***  GPIO offsets — TODO: verify from system_top.xsa BSP output            ***/
-/******************************************************************************/
-#define DAC_GPIO_PLDDR_BYPASS		(GPIO_OFFSET + 70)
-#define AD9528_RESET_B			(GPIO_OFFSET + 69)
-#define AD9528_SYSREF_REQ		(GPIO_OFFSET + 68)
-#define ADRV903X_RESET_B		(GPIO_OFFSET + 56)
+#ifdef PLATFORM_VERSAL
+  /* Versal Tetra GPIO pins (from DTS axi_gpio offsets) */
+  #define ADRV903X_CS			0
+  #define HMC7044_CS			1
+  #define HMC7044_SPI_SPEED_HZ		1000000u
+  #define ADRV903X_RESET_B		(GPIO_OFFSET + 20)
+  #define HMC7044_RESET_B		(GPIO_OFFSET + 21)
+#else
+  #define AD9528_CS			1
+  #define ADRV903X_CS			0
+  #define DAC_GPIO_PLDDR_BYPASS		(GPIO_OFFSET + 70)
+  #define AD9528_RESET_B		(GPIO_OFFSET + 69)
+  #define AD9528_SYSREF_REQ		(GPIO_OFFSET + 68)
+  #define ADRV903X_RESET_B		(GPIO_OFFSET + 56)
+#endif
 
 extern struct xil_spi_init_param spi_extra;
 extern struct xil_gpio_init_param xil_gpio_param;
