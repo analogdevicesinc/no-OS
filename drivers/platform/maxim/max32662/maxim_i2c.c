@@ -260,7 +260,7 @@ static int32_t max_i2c_write(struct no_os_i2c_desc *desc,
 	/** Write transaction */
 	req.rx_len = 0;
 	req.rx_buf = data;
-	req.restart = 0;
+	req.restart = stop_bit ? 0 : 1;
 
 	return MXC_I2C_MasterTransaction(&req);
 }
