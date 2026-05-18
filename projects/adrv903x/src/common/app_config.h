@@ -44,7 +44,9 @@
 /******************************************************************************/
 /* SPI bus speeds                                                             */
 /******************************************************************************/
+#ifndef PLATFORM_VERSAL
 #define AD9528_SPI_SPEED_HZ			10000000u
+#endif
 #define ADRV903X_SPI_SPEED_HZ			5000000u
 
 /******************************************************************************/
@@ -79,11 +81,9 @@
 #define ADRV903X_RX_GAIN_TABLE_MASK		0xFF
 
 /******************************************************************************/
-/* ADXCVR and JESD204 configuration                                           */
+/* JESD204 configuration                                                      */
 /* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
 /******************************************************************************/
-#define ADRV903X_ADXCVR_REF_RATE_KHZ			491520	/* AD9528 ch13 REF_CLK0 */
-
 /* TX JESD204 parameters */
 #define ADRV903X_TX_JESD_SUBCLASS			1
 #define ADRV903X_TX_JESD_CONVS_PER_DEVICE		4
@@ -94,6 +94,26 @@
 
 /* RX JESD204 parameters */
 #define ADRV903X_RX_JESD_SUBCLASS			1
+
+#ifdef PLATFORM_VERSAL
+/******************************************************************************/
+/* HMC7044 Clock Synthesizer configuration                                    */
+/* From DTS: versal-tetra-15mhz-nls.dts                                      */
+/******************************************************************************/
+#define HMC7044_VCXO_FREQ_HZ			122880000
+#define HMC7044_PLL2_FREQ_HZ			2949120000UL
+#define HMC7044_DEV_CLK_DIV			6	/* ch0:  DEV_CLK */
+#define HMC7044_DEV_SYSREF_DIV			3072	/* ch1:  DEV_SYSREF */
+#define HMC7044_FPGA_CORE_REFCLK_DIV		12	/* ch6:  FPGA_CORE_REFCLK */
+#define HMC7044_FPGA_CORE_SYSREF_DIV		3072	/* ch7:  FPGA_CORE_SYSREF */
+#define HMC7044_FPGA_REFCLK_DIV		12	/* ch12: FPGA_REFCLK */
+#define HMC7044_SYSREF_TIMER_DIV		1024
+
+#else /* ZynqMP */
+/******************************************************************************/
+/* ADXCVR configuration (ZynqMP only)                                         */
+/******************************************************************************/
+#define ADRV903X_ADXCVR_REF_RATE_KHZ			491520	/* AD9528 ch13 REF_CLK0 */
 
 /******************************************************************************/
 /* AD9528 Clock Synthesizer configuration                                     */
@@ -119,5 +139,6 @@
 #define AD9528_REF_CLK1_DIV			2	/* ch11: REF_CLK1   */
 #define AD9528_FPGA_SYSREF_DIV			4	/* ch12: FPGA_SYSREF */
 #define AD9528_REF_CLK0_DIV			2	/* ch13: REF_CLK0   */
+#endif /* PLATFORM_VERSAL */
 
 #endif /* APP_CONFIG_H_ */

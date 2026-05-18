@@ -33,9 +33,13 @@
  * TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "clkgen_routines.h"
 #include "app_config.h"
 #include "parameters.h"
+
+/* On Versal, clkgen_setup/remove are inline no-ops in the header. */
+#ifndef PLATFORM_VERSAL
+
+#include "clkgen_routines.h"
 
 /**
  * @brief Initialize and set rates for RX and TX AXI clkgen instances.
@@ -115,3 +119,5 @@ int clkgen_remove(struct axi_clkgen *rx_clkgen, struct axi_clkgen *tx_clkgen)
 		axi_clkgen_remove(rx_clkgen);
 	return 0;
 }
+
+#endif /* !PLATFORM_VERSAL */

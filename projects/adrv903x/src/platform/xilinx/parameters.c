@@ -45,8 +45,8 @@ struct xil_spi_init_param spi_extra = {
 };
 
 struct xil_gpio_init_param xil_gpio_param = {
-#ifdef PLATFORM_MB
-	.type = GPIO_PL,
+#if defined(PLATFORM_MB) || defined(PLATFORM_VERSAL)
+	.type = GPIO_PL,   /* Versal Tetra uses AXI GPIO (PL) */
 #else
 	.type = GPIO_PS,
 #endif
