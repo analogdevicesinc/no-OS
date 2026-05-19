@@ -1098,8 +1098,12 @@ int adf4368_get_rfout(struct adf4368_dev *dev, uint64_t *val)
 		return ret;
 	mod2 |= tmp;
 
-	freq = frac2 * pfd;
-	freq = no_os_div_u64(freq, mod2);
+	if (mod2) {
+		freq = frac2 * pfd;
+		freq = no_os_div_u64(freq, mod2);
+	} else {
+		freq = 0;
+	}
 	freq = freq + (frac1 * pfd);
 	freq = no_os_div_u64(freq, ADF4368_MOD1WORD);
 	freq = freq + (n_value * pfd);
@@ -1633,7 +1637,7 @@ int adf4368_set_freq(struct adf4368_dev *dev)
 {
 	uint32_t frac2_word = 0;
 	uint32_t frac1_word = 0;
-	uint32_t mod2_word = 0;
+	uint32_t mod2_word = 1;
 	uint8_t ldwin_pw = 0;
 	uint8_t clkout_div;
 	uint8_t dclk_div1;
