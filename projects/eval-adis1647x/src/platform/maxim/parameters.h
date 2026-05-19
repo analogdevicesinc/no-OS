@@ -70,7 +70,6 @@ extern struct max_gpio_init_param adis1647x_gpio_extra_ip;
 #define GPIO_RESET_PORT_NUM  0
 
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #define GPIO_DRDY_PIN_NUM   6
 #define GPIO_DRDY_PORT_NUM  1
 
@@ -85,6 +84,5 @@ extern struct max_gpio_init_param adis1647x_gpio_extra_ip;
 
 extern struct no_os_gpio_init_param adis_gpio_drdy_ip;
 extern struct max_gpio_init_param adis_gpio_drdy_extra_ip;
-#endif
 
 #endif /* __PARAMETERS_H__ */
