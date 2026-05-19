@@ -588,8 +588,12 @@ int adf5611_get_rfout(struct adf5611_dev *dev, uint64_t *val)
 		return ret;
 	mod2 |= tmp;
 
-	freq = frac2 * pfd;
-	freq = no_os_div_u64(freq, mod2);
+	if (mod2) {
+		freq = frac2 * pfd;
+		freq = no_os_div_u64(freq, mod2);
+	} else {
+		freq = 0;
+	}
 	freq = freq + (frac1 * pfd);
 	freq = no_os_div_u64(freq, ADF5611_MOD1WORD);
 	freq = (freq + (n * pfd)) * ADF5611_OUTPUT_DOUBLER;
@@ -643,7 +647,7 @@ static int adf5611_frac_compute(uint64_t f_vco, uint64_t pfd_freq,
 	res = rem * ADF5611_MOD1WORD;
 	*frac1_word = (uint32_t)no_os_div64_u64_rem(res, pfd_freq, &rem);
 	*frac2_word = 0;
-	*mod2_word = 0;
+	*mod2_word = 1;
 
 	if (rem > 0) {
 		mod2_wd *= NO_OS_DIV_U64(mod2_max, mod2_wd);
