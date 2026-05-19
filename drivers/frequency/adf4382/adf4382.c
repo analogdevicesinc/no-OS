@@ -650,8 +650,12 @@ int adf4382_get_rfout(struct adf4382_dev *dev, uint64_t *val)
 		return ret;
 	mod2 |= tmp;
 
-	freq = frac2 * pfd;
-	freq = no_os_div_u64(freq, mod2);
+	if (mod2) {
+		freq = frac2 * pfd;
+		freq = no_os_div_u64(freq, mod2);
+	} else {
+		freq = 0;
+	}
 	freq = freq + (frac1 * pfd);
 	freq = no_os_div_u64(freq, ADF4382_MOD1WORD);
 	freq = freq + (n * pfd);
@@ -753,7 +757,7 @@ static int adf4382_pll_fract_n_compute(struct adf4382_dev *dev, uint64_t freq,
 	*frac1_word = (uint32_t)no_os_div64_u64_rem(res, pfd_freq, &rem);
 
 	*frac2_word = 0;
-	*mod2_word = 0;
+	*mod2_word = 1;
 
 	if (rem > 0)
 		return adf4382_frac2_compute(dev, rem, pfd_freq, frac2_word,
