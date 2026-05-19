@@ -35,7 +35,6 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-#include "common_data.h"
 #include "no_os_util.h"
 #include "pico_uart.h"
 #include "pico_spi.h"
@@ -67,7 +66,6 @@ extern struct pico_uart_init_param adis1647x_uart_extra_ip;
 #define GPIO_OPS            &pico_gpio_ops
 #define GPIO_EXTRA          NULL /* Not used for pico platform */
 
-#ifdef IIO_TRIGGER_EXAMPLE
 #define GPIO_DRDY_PIN_NUM   21
 #define GPIO_DRDY_PORT_NUM  0 /* Not used for pico platform */
 
@@ -77,6 +75,5 @@ extern struct pico_uart_init_param adis1647x_uart_extra_ip;
 #define GPIO_IRQ_ID             GPIO_DRDY_PIN_NUM
 #define GPIO_IRQ_OPS            &pico_gpio_irq_ops
 #define GPIO_IRQ_EXTRA          NULL /* Not used for pico platform */
-#endif
 
 #endif /* __PARAMETERS_H__ */
