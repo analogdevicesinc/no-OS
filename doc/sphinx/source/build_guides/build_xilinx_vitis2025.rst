@@ -442,6 +442,14 @@ Troubleshooting
 
 **Solution:** Install xsdb WSL2 fix (see above)
 
+Variables/Locals show "N/A" on Versal
+--------------------------------------
+
+When debugging on Versal (Cortex-A72) with Vitis 2025.1, the Variables and Locals
+views may show "N/A" instead of actual values. This is a known Vitis 2025.1 bug
+affecting Versal targets. Breakpoints, stepping, and continue all work normally.
+This does not affect Zynq or ZynqMP targets.
+
 Summary
 =======
 
