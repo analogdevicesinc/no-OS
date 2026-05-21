@@ -47,11 +47,17 @@ jobs:
   - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
     displayName: 'Show Xilinx version'
   - script: |
-      echo "Cleaning stale Eclipse .metadata directories..."
+      echo "Cleaning stale Eclipse state and build locks..."
       for dir in /no-OS_builds/builds_main/build_xilinx_*/; do
+        # Remove .metadata (corrupted Eclipse workspace state)
         if [ -d "$dir/.metadata" ]; then
           echo "Removing $dir/.metadata"
           rm -rf "$dir/.metadata"
+        fi
+        # Remove .project.target (build lock - forces project recreation)
+        if [ -f "$dir/.project.target" ]; then
+          echo "Removing $dir/.project.target"
+          rm -f "$dir/.project.target"
         fi
       done
       export BRANCH=$(branch)
