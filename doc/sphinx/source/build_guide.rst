@@ -94,3 +94,10 @@ LATTICE PROPEL SDK
 
     build_guides/build_lattice
 
+WSL2
+====
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_wsl
+
