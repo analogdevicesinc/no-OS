@@ -47,6 +47,18 @@ jobs:
   - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
     displayName: 'Show Xilinx version'
   - script: |
+      echo "=== Debug: Environment ==="
+      echo "XILINX_VITIS=$XILINX_VITIS"
+      echo "XILINX_VERSION=$(XILINX_VERSION)"
+      echo ""
+      echo "=== Debug: Searching for Xilinx.spec ==="
+      find /opt/Xilinx -name "Xilinx.spec" 2>/dev/null || echo "Not found in /opt/Xilinx"
+      find /tools/Xilinx -name "Xilinx.spec" 2>/dev/null || echo "Not found in /tools/Xilinx"
+      if [ -n "$XILINX_VITIS" ]; then
+        echo "Checking XILINX_VITIS path: $XILINX_VITIS"
+        ls -la "$XILINX_VITIS/../data/embeddedsw/scripts/specs/arm/" 2>/dev/null || echo "Path not found"
+      fi
+      echo ""
       echo "Cleaning stale Eclipse state and build locks..."
       for dir in /no-OS_builds/builds_main/build_xilinx_*/; do
         # Remove .metadata (corrupted Eclipse workspace state)
