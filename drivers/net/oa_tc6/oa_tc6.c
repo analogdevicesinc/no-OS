@@ -50,14 +50,13 @@ int oa_rx_chunk_to_frame(struct oa_tc6_desc *desc, uint8_t *chunks,
  */
 static uint8_t oa_tc6_crc1(uint32_t header)
 {
-	uint8_t p = 1;
+	header ^= header >> 16;
+	header ^= header >> 8;
+	header ^= header >> 4;
+	header ^= header >> 2;
+	header ^= header >> 1;
 
-	while (header) {
-		p ^= header & 0x1;
-		header >>= 1;
-	}
-
-	return p;
+	return 1 ^ (header & 1);
 }
 
 /**
