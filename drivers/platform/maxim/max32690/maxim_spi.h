@@ -65,6 +65,8 @@ struct max_spi_state {
 	struct no_os_dma_desc *dma;
 	uint32_t dma_req_rx;
 	uint32_t dma_req_tx;
+	struct no_os_dma_xfer_desc *rx_cached_xfer;
+	struct no_os_dma_xfer_desc *tx_cached_xfer;
 };
 
 #endif
