@@ -29,6 +29,61 @@ proc _get_processor {} {
 	}
 }
 
+# Generate linker script using HSI API (fallback when app create fails)
+proc _generate_lscript_hsi {cpu} {
+	file mkdir app/src
+
+	set mss_path [file normalize bsp/system.mss]
+	set hw_path [file normalize $::hw]
+	::hsi::utils::lg_init $hw_path $mss_path
+
+	set sections [::hsi::utils::lg_get_sections]
+	dict for {sec_type value} $sections {
+		foreach sec [split $value "."] {
+			set parts [split $sec :]
+			set name [lindex $parts 0]
+			if {$name == ""} continue
+			set size [lindex $parts 1]
+			set assigned_mem [lindex $parts 2]
+			if {$assigned_mem != ""} continue
+
+			set best_mem ""
+			set best_size 0
+			set mem_json [::hsi::utils::lg_get_memories -json]
+			set mem_dict [::json::json2dict $mem_json]
+			dict for {mkey mval} $mem_dict {
+				set mem_valid [lsearch $parts "*$mkey*"]
+				if {$mem_valid != -1} {
+					set msize [dict get $mval size]
+					if {$best_mem == "" || $msize > $best_size} {
+						set best_mem $mkey
+						set best_size $msize
+					}
+				}
+			}
+
+			if {$best_mem != ""} {
+				if {$sec_type == "stack_section" || $sec_type == "heap_section"} {
+					::hsi::utils::lg_set_section_memory -sec $name -mem $best_mem -size $size
+				} else {
+					::hsi::utils::lg_set_section_memory -sec .$name -mem $best_mem -size $size
+				}
+			}
+		}
+	}
+
+	::hsi::utils::lg_generate [file normalize app/src/lscript.ld]
+	::hsi::utils::lg_delete
+
+	if {[string first "cortexa9" $cpu] != -1} {
+		set vitis_dir $::env(XILINX_VITIS)
+		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		if {[file exists $spec_src]} {
+			file copy -force $spec_src app/src/Xilinx.spec
+		}
+	}
+}
+
 proc _replace_heap {} {
 	set file_name "$::ws/app/src/lscript.ld"
 	set temp_name "$file_name.tmp"
@@ -175,13 +230,37 @@ proc _vitis_classic_project {} {
 		-os standalone						\
 		-template  $::template
 
+	# Fallback: generate linker script using HSI if app create failed
+	# Check both lscript.ld AND .project - if Eclipse project wasn't created,
+	# _project_config will fail. A stale lscript.ld from cache doesn't mean success.
+	set used_hsi_fallback 0
+	if {![file exists "app/src/lscript.ld"] || ![file exists "app/.project"]} {
+		puts "Warning: app create did not generate valid Eclipse project, using HSI fallback"
+		_generate_lscript_hsi $cpu
+		set used_hsi_fallback 1
+	}
+
 	closehw $::hw
+
+	# For Zynq (cortexa9), ensure Xilinx.spec exists (needed by linker)
+	# Eclipse app create sometimes fails to copy it even when project creation succeeds
+	if {[string first "cortexa9" $cpu] != -1 && ![file exists "app/src/Xilinx.spec"]} {
+		set vitis_dir $::env(XILINX_VITIS)
+		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		if {[file exists $spec_src]} {
+			file copy -force $spec_src app/src/Xilinx.spec
+		} else {
+			puts "Warning: Xilinx.spec not found at $spec_src"
+		}
+	}
 
 	# Increase heap size
 	_replace_heap
 
-	# Configure the project
-	_project_config "app" "config"
+	# Configure the project (skip if HSI fallback was used - no Eclipse project exists)
+	if {!$used_hsi_fallback} {
+		_project_config "app" "config"
+	}
 }
 
 proc _xsdk_project {} {
@@ -208,13 +287,37 @@ proc _xsdk_project {} {
 		-app [string trimright $::template (C)]			\
 		-bsp bsp
 
+	# Fallback: generate linker script using HSI if sdk createapp failed
+	# Check both lscript.ld AND .project - if Eclipse project wasn't created,
+	# _project_config will fail. A stale lscript.ld from cache doesn't mean success.
+	set used_hsi_fallback 0
+	if {![file exists "app/src/lscript.ld"] || ![file exists "app/.project"]} {
+		puts "Warning: sdk createapp did not generate valid Eclipse project, using HSI fallback"
+		_generate_lscript_hsi $cpu
+		set used_hsi_fallback 1
+	}
+
 	closehw $::hw
+
+	# For Zynq (cortexa9), ensure Xilinx.spec exists (needed by linker)
+	# Eclipse sdk createapp sometimes fails to copy it even when project creation succeeds
+	if {[string first "cortexa9" $cpu] != -1 && ![file exists "app/src/Xilinx.spec"]} {
+		set vitis_dir $::env(XILINX_VITIS)
+		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		if {[file exists $spec_src]} {
+			file copy -force $spec_src app/src/Xilinx.spec
+		} else {
+			puts "Warning: Xilinx.spec not found at $spec_src"
+		}
+	}
 
 	# Increase heap size
 	_replace_heap
 
-	# Configure the project
-	_project_config "sdk" "configapp"
+	# Configure the project (skip if HSI fallback was used - no Eclipse project exists)
+	if {!$used_hsi_fallback} {
+		_project_config "sdk" "configapp"
+	}
 }
 
 proc get_arch {} {
