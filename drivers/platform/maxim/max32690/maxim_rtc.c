@@ -103,7 +103,10 @@ int32_t no_os_rtc_remove(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
 {
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	MXC_RTC_Start();
 
 	return 0;
@@ -116,7 +119,10 @@ int32_t no_os_rtc_start(struct no_os_rtc_desc *dev)
  */
 int32_t no_os_rtc_stop(struct no_os_rtc_desc *dev)
 {
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	MXC_RTC_Stop();
 
 	return 0;
@@ -150,19 +156,34 @@ int32_t no_os_rtc_set_cnt(struct no_os_rtc_desc *dev, uint32_t tmr_cnt)
 
 	rtc_regs = MXC_RTC;
 
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	rtc_regs->ctrl |= MXC_F_RTC_REVA_CTRL_WR_EN;
 
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	no_os_rtc_stop(dev);
 
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	rtc_regs->sec = tmr_cnt;
 
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	no_os_rtc_start(dev);
 
-	MXC_RTC_Wait_BusyToClear();
+	/* Wait for RTC to be ready */
+	while (MXC_RTC_GetBusyFlag() == E_BUSY) {
+		/* Wait for busy flag to clear */
+	}
 	rtc_regs->ctrl &= ~MXC_F_RTC_REVA_CTRL_WR_EN;
 
 	return 0;
