@@ -51,8 +51,13 @@
 #define UART_OPS        &max_uart_ops
 #define UART_EXTRA      &adin1140_uart_extra_ip
 
+#if TARGET_NUM == 32690
+#define SPI_DEVICE_ID   0
+#define SPI_BAUDRATE    25000000
+#else
 #define SPI_DEVICE_ID   1
 #define SPI_BAUDRATE    30000000
+#endif
 #define SPI_CS          1
 #define SPI_OPS         &max_spi_ops
 #define SPI_EXTRA       &adin1140_spi_extra_ip
@@ -65,10 +70,16 @@
 #define ADIN1140_NVIC_IRQ_ID	0
 #define ADIN1140_NVIC_IRQ_OPS	&max_irq_ops
 
+#if TARGET_NUM == 32690
+#define ADIN1140_INT_IRQ_ID	0
+#define ADIN1140_INT_PIN	8
+#define ADIN1140_INT_GPIO_IRQn	GPIO0_IRQn
+#else
 #define ADIN1140_INT_IRQ_ID	1
 #define ADIN1140_INT_PIN	6
-#define ADIN1140_INT_IRQ_OPS	&max_gpio_irq_ops
 #define ADIN1140_INT_GPIO_IRQn	GPIO1_IRQn
+#endif
+#define ADIN1140_INT_IRQ_OPS	&max_gpio_irq_ops
 
 extern struct max_uart_init_param adin1140_uart_extra_ip;
 extern struct max_spi_init_param adin1140_spi_extra_ip;
