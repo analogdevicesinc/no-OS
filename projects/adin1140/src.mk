@@ -1,3 +1,5 @@
+CFLAGS += -DEXAMPLE=$(EXAMPLE)
+
 INCS += $(INCLUDE)/no_os_delay.h		\
 		$(INCLUDE)/no_os_error.h	\
 		$(INCLUDE)/no_os_gpio.h		\

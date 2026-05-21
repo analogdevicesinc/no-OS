@@ -34,6 +34,10 @@
 #include "parameters.h"
 #include "common_data.h"
 #include "no_os_error.h"
+#include "no_os_print_log.h"
+
+#define _STR(x) #x
+#define STR(x)  _STR(x)
 
 extern int example_main();
 
@@ -53,5 +57,8 @@ int main()
 		return ret;
 
 	no_os_uart_stdio(uart_desc);
+
+	pr_info("Running " STR(EXAMPLE) " on " STR(TARGET) "\n");
+
 	return example_main();
 }
