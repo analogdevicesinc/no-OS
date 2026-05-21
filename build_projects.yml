@@ -33,7 +33,7 @@ variables:
 
 jobs:
 - job: Xilinx
-  timeoutInMinutes: 200
+  timeoutInMinutes: 600
   pool:
     name: Default
     demands:

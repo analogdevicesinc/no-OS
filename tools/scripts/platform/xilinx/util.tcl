@@ -246,11 +246,26 @@ proc _vitis_classic_project {} {
 	# Eclipse app create sometimes fails to copy it even when project creation succeeds
 	if {[string first "cortexa9" $cpu] != -1 && ![file exists "app/src/Xilinx.spec"]} {
 		set vitis_dir $::env(XILINX_VITIS)
-		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
-		if {[file exists $spec_src]} {
-			file copy -force $spec_src app/src/Xilinx.spec
-		} else {
-			puts "Warning: Xilinx.spec not found at $spec_src"
+		puts "DEBUG: XILINX_VITIS = $vitis_dir"
+		# Try multiple possible paths
+		set spec_paths [list \
+			"$vitis_dir/data/embeddedsw/scripts/specs/arm/Xilinx.spec" \
+			"$vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec" \
+			"$vitis_dir/gnu/aarch32/lin/gcc-arm-none-eabi/arm-xilinx-eabi/lib/Xilinx.spec" \
+		]
+		set found 0
+		foreach spec_src $spec_paths {
+			set spec_norm [file normalize $spec_src]
+			puts "DEBUG: Checking $spec_norm"
+			if {[file exists $spec_norm]} {
+				puts "DEBUG: Found Xilinx.spec at $spec_norm"
+				file copy -force $spec_norm app/src/Xilinx.spec
+				set found 1
+				break
+			}
+		}
+		if {!$found} {
+			puts "Warning: Xilinx.spec not found in any expected location"
 		}
 	}
 
@@ -303,11 +318,26 @@ proc _xsdk_project {} {
 	# Eclipse sdk createapp sometimes fails to copy it even when project creation succeeds
 	if {[string first "cortexa9" $cpu] != -1 && ![file exists "app/src/Xilinx.spec"]} {
 		set vitis_dir $::env(XILINX_VITIS)
-		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
-		if {[file exists $spec_src]} {
-			file copy -force $spec_src app/src/Xilinx.spec
-		} else {
-			puts "Warning: Xilinx.spec not found at $spec_src"
+		puts "DEBUG: XILINX_VITIS = $vitis_dir"
+		# Try multiple possible paths
+		set spec_paths [list \
+			"$vitis_dir/data/embeddedsw/scripts/specs/arm/Xilinx.spec" \
+			"$vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec" \
+			"$vitis_dir/gnu/aarch32/lin/gcc-arm-none-eabi/arm-xilinx-eabi/lib/Xilinx.spec" \
+		]
+		set found 0
+		foreach spec_src $spec_paths {
+			set spec_norm [file normalize $spec_src]
+			puts "DEBUG: Checking $spec_norm"
+			if {[file exists $spec_norm]} {
+				puts "DEBUG: Found Xilinx.spec at $spec_norm"
+				file copy -force $spec_norm app/src/Xilinx.spec
+				set found 1
+				break
+			}
+		}
+		if {!$found} {
+			puts "Warning: Xilinx.spec not found in any expected location"
 		}
 	}
 
