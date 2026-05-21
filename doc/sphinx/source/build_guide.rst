@@ -17,13 +17,26 @@ If however you've already cloned no-OS without the **--recursive** flag, you may
         git submodule update --recursive --init
 
 
+XILINX
+======
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_xilinx
+
+INTEL
+=====
+.. toctree::
+    :maxdepth: 1
+
+    build_guides/build_intel
+
 MAXIM
 ======
 .. toctree::
    :maxdepth: 1
-   
-   build_guides/build_maxim
 
+   build_guides/build_maxim
 
 FTD2XX
 ======
@@ -45,13 +58,6 @@ MAC
     :maxdepth: 1
 
     build_guides/build_mac
-
-XILINX VITIS 2025.1
-===================
-.. toctree::
-    :maxdepth: 1
-
-    build_guides/build_xilinx_vitis2025
 
 LATTICE PROPEL SDK
 ===================
