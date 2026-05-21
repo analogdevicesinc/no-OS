@@ -6,11 +6,16 @@ Prior to building a no-OS project, it is required to set up some environment var
 
 Use the following commands to prepare your environment for building no-OS projects:
 
-    You only need to do this once per Git Bash installation: 
-        - Open up a Git Bash as Administrator once and run the **no-os/tools/scripts/git-bash.sh** script.
-        - Close the window.
+.. important::
+   Open up a Git Bash as Administrator once and run the
+   **no-os/tools/scripts/git-bash.sh** script. Close the window.
+   You only need to do this once per Git Bash installation.
 
-    Use Git Bash (unelevated) for the rest of your development.
+.. important::
+   Activate `Windows Developer Mode <https://learn.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development#activate-developer-mode>`_.
+
+.. important::
+   Use Git Bash (unelevated) for the rest of your development.
 
 
 Install MSYS2 GCC
