@@ -57,7 +57,14 @@
 /* CONFIG0 bits */
 #define ADIN1140_CONFIG0_SYNC		NO_OS_BIT(15)
 #define ADIN1140_CONFIG0_TXFCSVE	NO_OS_BIT(14)
+#define ADIN1140_CONFIG0_CSARFE		NO_OS_BIT(13)
 #define ADIN1140_CONFIG0_ZARFE		NO_OS_BIT(12)
+#define ADIN1140_CONFIG0_TXCTHRESH_MASK	NO_OS_GENMASK(11, 10)
+#define ADIN1140_CONFIG0_TXCTE		NO_OS_BIT(9)
+#define ADIN1140_CONFIG0_RXCTE		NO_OS_BIT(8)
+#define ADIN1140_CONFIG0_FTSE		NO_OS_BIT(7)
+#define ADIN1140_CONFIG0_FTSS		NO_OS_BIT(6)
+#define ADIN1140_CONFIG0_CPS_MASK	NO_OS_GENMASK(2, 0)
 #define ADIN1140_CONFIG0_CPS_64		NO_OS_GENMASK(2, 1)
 
 /* CONFIG2 bits */
@@ -145,10 +152,27 @@ struct adin1140_desc {
 };
 
 /**
+ * @brief MAC CONFIG0 user-configurable bitfields.
+ *        TXFCSVE is always cleared so the MAC appends the FCS itself; SYNC,
+ *        PROTE, SEQE are managed internally and not exposed here.
+ */
+struct adin1140_mac_cfg {
+	uint8_t cps;       /**< Chunk Payload Size (3-bit raw value) */
+	uint8_t txcthresh; /**< TX cut-through threshold (2-bit raw value) */
+	bool    txcte;     /**< TX cut-through enable */
+	bool    rxcte;     /**< RX cut-through enable */
+	bool    csarfe;    /**< Cut-through Status Append RX Frame Enable */
+	bool    zarfe;     /**< Zero-align RX Frame Enable */
+	bool    ftse;      /**< Frame Timestamp Enable */
+	bool    ftss;      /**< Frame Timestamp Size */
+};
+
+/**
  * @brief Initialization parameter for the device descriptor.
  */
 struct adin1140_init_param {
 	struct no_os_spi_init_param comm_param;
+	struct adin1140_mac_cfg mac_cfg;
 	uint8_t mac_address[ADIN1140_ETH_ALEN];
 };
 
@@ -210,6 +234,14 @@ int adin1140_multicast_filter(struct adin1140_desc *desc, bool enabled);
 
 /* Set/clear promiscuous mode */
 int adin1140_set_promisc(struct adin1140_desc *desc, bool promisc);
+
+/* Set the MAC CONFIG0 bitfields exposed via struct adin1140_mac_cfg */
+int adin1140_mac_set_cfg(struct adin1140_desc *desc,
+			 const struct adin1140_mac_cfg *cfg);
+
+/* Get the MAC CONFIG0 bitfields */
+int adin1140_mac_get_cfg(struct adin1140_desc *desc,
+			 struct adin1140_mac_cfg *cfg);
 
 /* Write a frame to the TX FIFO */
 int adin1140_write_fifo(struct adin1140_desc *desc,

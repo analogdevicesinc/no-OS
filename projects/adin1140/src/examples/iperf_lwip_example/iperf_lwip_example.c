@@ -81,6 +81,10 @@ int example_main()
 
 	adin1140_ip.comm_param = adin1140_spi_ip;
 	memcpy(adin1140_ip.mac_address, adin1140_mac_address, NETIF_MAX_HWADDR_LEN);
+	adin1140_ip.mac_cfg = (struct adin1140_mac_cfg) {
+		.cps   = 0x6,
+		.zarfe = true,
+	};
 
 	lwip_param.platform_ops = &adin1140_lwip_ops;
 	lwip_param.mac_param = &adin1140_ip;

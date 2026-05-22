@@ -285,6 +285,77 @@ int adin1140_set_promisc(struct adin1140_desc *desc, bool promisc)
 }
 
 /**
+ * @brief Apply the MAC CONFIG0 bitfields exposed via struct adin1140_mac_cfg.
+ *        TXFCSVE is always cleared so the MAC appends the FCS itself.
+ *        SYNC is preserved (read-modify-write).
+ * @param desc - the device descriptor.
+ * @param cfg - configuration values to apply.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_mac_set_cfg(struct adin1140_desc *desc,
+			 const struct adin1140_mac_cfg *cfg)
+{
+	uint32_t mask;
+	uint32_t val;
+
+	mask = ADIN1140_CONFIG0_TXFCSVE |
+	       ADIN1140_CONFIG0_CSARFE |
+	       ADIN1140_CONFIG0_ZARFE |
+	       ADIN1140_CONFIG0_TXCTHRESH_MASK |
+	       ADIN1140_CONFIG0_TXCTE |
+	       ADIN1140_CONFIG0_RXCTE |
+	       ADIN1140_CONFIG0_FTSE |
+	       ADIN1140_CONFIG0_FTSS |
+	       ADIN1140_CONFIG0_CPS_MASK;
+
+	val = no_os_field_prep(ADIN1140_CONFIG0_TXCTHRESH_MASK, cfg->txcthresh) |
+	      no_os_field_prep(ADIN1140_CONFIG0_CPS_MASK, cfg->cps);
+
+	if (cfg->csarfe)
+		val |= ADIN1140_CONFIG0_CSARFE;
+	if (cfg->zarfe)
+		val |= ADIN1140_CONFIG0_ZARFE;
+	if (cfg->txcte)
+		val |= ADIN1140_CONFIG0_TXCTE;
+	if (cfg->rxcte)
+		val |= ADIN1140_CONFIG0_RXCTE;
+	if (cfg->ftse)
+		val |= ADIN1140_CONFIG0_FTSE;
+	if (cfg->ftss)
+		val |= ADIN1140_CONFIG0_FTSS;
+
+	return adin1140_reg_update(desc, ADIN1140_CONFIG0_REG, mask, val);
+}
+
+/**
+ * @brief Read back the MAC CONFIG0 bitfields into struct adin1140_mac_cfg.
+ * @param desc - the device descriptor.
+ * @param cfg - pointer to store the configuration values.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_mac_get_cfg(struct adin1140_desc *desc,
+			 struct adin1140_mac_cfg *cfg)
+{
+	uint32_t val;
+	int ret;
+
+	ret = adin1140_reg_read(desc, ADIN1140_CONFIG0_REG, &val);
+	if (ret)
+		return ret;
+
+	cfg->cps = no_os_field_get(ADIN1140_CONFIG0_CPS_MASK, val);
+	cfg->txcthresh = no_os_field_get(ADIN1140_CONFIG0_TXCTHRESH_MASK, val);
+	cfg->csarfe = !!(val & ADIN1140_CONFIG0_CSARFE);
+	cfg->zarfe = !!(val & ADIN1140_CONFIG0_ZARFE);
+	cfg->txcte = !!(val & ADIN1140_CONFIG0_TXCTE);
+	cfg->rxcte = !!(val & ADIN1140_CONFIG0_RXCTE);
+	cfg->ftse = !!(val & ADIN1140_CONFIG0_FTSE);
+	cfg->ftss = !!(val & ADIN1140_CONFIG0_FTSS);
+
+	return 0;
+}
+
+/**
  * @brief Write a frame to the TX FIFO via OA TC6.
  * @param desc - the device descriptor.
  * @param eth_buff - the frame to be transmitted.
@@ -483,25 +554,18 @@ int adin1140_link_state(struct adin1140_desc *desc, uint32_t *state)
 }
 
 /**
- * @brief Configure the MAC: set ZARFE, clear TXFCSVE, set CPS=64,
- *        disable loopback, and install default filters.
+ * @brief Configure the MAC: apply user CONFIG0 settings, disable loopback,
+ *        and install default filters.
  * @param desc - the device descriptor.
+ * @param cfg - MAC CONFIG0 settings to apply.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int adin1140_setup_mac(struct adin1140_desc *desc)
+static int adin1140_setup_mac(struct adin1140_desc *desc,
+			      const struct adin1140_mac_cfg *cfg)
 {
-	uint32_t val;
 	int ret;
 
-	ret = adin1140_reg_read(desc, ADIN1140_CONFIG0_REG, &val);
-	if (ret)
-		return ret;
-
-	val |= ADIN1140_CONFIG0_ZARFE;
-	val &= ~ADIN1140_CONFIG0_TXFCSVE;
-	val |= ADIN1140_CONFIG0_CPS_64;
-
-	ret = adin1140_reg_write(desc, ADIN1140_CONFIG0_REG, val);
+	ret = adin1140_mac_set_cfg(desc, cfg);
 	if (ret)
 		return ret;
 
@@ -592,7 +656,7 @@ int adin1140_init(struct adin1140_desc **desc,
 	if (ret)
 		goto free_spi;
 
-	ret = adin1140_setup_mac(d);
+	ret = adin1140_setup_mac(d, &param->mac_cfg);
 	if (ret)
 		goto free_oa;
 
