@@ -28,6 +28,84 @@ Applications
 - Multi-drop sensor and actuator networks
 - Industrial process monitoring
 
+Driver Architecture
+-------------------
+
+The ADIN1140 driver is layered: the device-specific code in
+``drivers/net/adin1140`` exposes the public API and translates it into
+MMS-encoded register accesses and Ethernet frame transfers, while the
+OPEN Alliance TC6 layer in ``drivers/net/oa_tc6`` implements the
+chunk-based MAC/host SPI protocol and rides on top of the no-OS SPI
+abstraction. Frames and control transactions share the same SPI link;
+the OA-TC6 layer multiplexes them into and out of the MAC-PHY's TX/RX
+FIFOs. Control register access and PLCA configuration go through the
+same protocol as data.
+
+::
+
+  +-----------------------------------------------------------+
+  |  Application  (lwIP / iperf / user code)                  |
+  +-----------------------------------------------------------+
+                            |
+                            v
+  +-----------------------------------------------------------+
+  |  ADIN1140 driver  (drivers/net/adin1140)                  |
+  |                                                           |
+  |   Control API                 Data path                   |
+  |   --------------------------  -------------------------   |
+  |   adin1140_init / _remove     adin1140_write_fifo         |
+  |   adin1140_mac_set_cfg/_get   adin1140_read_fifo          |
+  |   adin1140_plca_set_cfg/_get  adin1140_poll               |
+  |   adin1140_plca_reset                                     |
+  |   adin1140_plca_get_diag                                  |
+  |   adin1140_plca_get_status                                |
+  |   adin1140_set_mac_addr                                   |
+  |   adin1140_{broadcast,multicast}_filter                   |
+  |   adin1140_set_promisc                                    |
+  |   adin1140_mdio_{read,write}_c45                          |
+  |   adin1140_sw_reset                                       |
+  |   adin1140_link_state                                     |
+  |   adin1140_set_irq_flag        (called from GPIO ISR)     |
+  +-----------------------------------------------------------+
+                            |
+                            v
+  +-----------------------------------------------------------+
+  |  OPEN Alliance TC6 layer  (drivers/net/oa_tc6)            |
+  |                                                           |
+  |  - MMS-encoded register reads/writes (control chunks)     |
+  |  - Chunked frame transport (TX/RX over data chunks)       |
+  |  - Soft reset with STATUS0.RESETC polling                 |
+  |    (oa_tc6_sw_reset)                                      |
+  +-----------------------------------------------------------+
+                            |
+                            v
+  +-----------------------------------------------------------+
+  |  no_os_spi abstraction                                    |
+  +-----------------------------------------------------------+
+                            |
+                            v
+  +-----------------------------------------------------------+
+  |  Platform SPI driver  (e.g. MAX32690 SPI, optionally DMA) |
+  +-----------------------------------------------------------+
+                            |
+                            v   4-wire SPI (CS, SCLK, MOSI, MISO)
+                            |   + INT  (GPIO IRQ -> set_irq_flag)
+  +-----------------------------------------------------------+
+  |  ADIN1140 MAC-PHY                                         |
+  |  +------------------+    +---------------------------+    |
+  |  | MAC + RX filters |<-->| PLCA reconciliation sub-  |    |
+  |  |  (CONFIG0/2)     |    |  layer (CTRL0/1, STATUS,  |    |
+  |  +------------------+    |   TOTMR, BURST, DIAG)     |    |
+  |             |            +---------------------------+    |
+  |             v                          |                  |
+  |  +-----------------------------------------------------+  |
+  |  |  10BASE-T1S PHY  (single-pair, multi-drop)          |  |
+  |  +-----------------------------------------------------+  |
+  +-----------------------------------------------------------+
+                            |
+                            v
+                   Mixing segment (SPE bus)
+
 Device Configuration
 --------------------
 
