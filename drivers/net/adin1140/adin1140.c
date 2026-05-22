@@ -356,6 +356,25 @@ int adin1140_mac_get_cfg(struct adin1140_desc *desc,
 }
 
 /**
+ * @brief Trigger a MAC-PHY soft reset via OA-TC6 SWRESET, then re-assert
+ *        the CONFIG0.SYNC bit so the device is ready to handle traffic.
+ * @param desc - the device descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_sw_reset(struct adin1140_desc *desc)
+{
+	int ret;
+
+	ret = oa_tc6_sw_reset(desc->oa_desc);
+	if (ret)
+		return ret;
+
+	return adin1140_reg_update(desc, ADIN1140_CONFIG0_REG,
+				   ADIN1140_CONFIG0_SYNC,
+				   ADIN1140_CONFIG0_SYNC);
+}
+
+/**
  * @brief Write a frame to the TX FIFO via OA TC6.
  * @param desc - the device descriptor.
  * @param eth_buff - the frame to be transmitted.
@@ -603,28 +622,6 @@ static int adin1140_setup_phy(struct adin1140_desc *desc)
 }
 
 /**
- * @brief Complete the reset sequence by checking STATUS0 and setting SYNC.
- * @param desc - the device descriptor.
- * @return 0 in case of success, negative error code otherwise.
- */
-static int adin1140_check_reset(struct adin1140_desc *desc)
-{
-	uint32_t reg_val;
-	int ret;
-
-	ret = adin1140_reg_read(desc, ADIN1140_STATUS0_REG, &reg_val);
-	if (ret)
-		return ret;
-
-	if (!no_os_field_get(ADIN1140_STATUS0_RESETC, reg_val))
-		return -EBUSY;
-
-	return adin1140_reg_update(desc, ADIN1140_CONFIG0_REG,
-				   ADIN1140_CONFIG0_SYNC,
-				   ADIN1140_CONFIG0_SYNC);
-}
-
-/**
  * @brief Initialize the ADIN1140 device.
  * @param desc - pointer to the device descriptor to be initialized.
  * @param param - the device's initialization parameters.
@@ -664,7 +661,9 @@ int adin1140_init(struct adin1140_desc **desc,
 	if (ret)
 		goto free_oa;
 
-	ret = adin1140_check_reset(d);
+	ret = adin1140_reg_update(d, ADIN1140_CONFIG0_REG,
+				  ADIN1140_CONFIG0_SYNC,
+				  ADIN1140_CONFIG0_SYNC);
 	if (ret)
 		goto free_oa;
 

@@ -243,6 +243,9 @@ int adin1140_mac_set_cfg(struct adin1140_desc *desc,
 int adin1140_mac_get_cfg(struct adin1140_desc *desc,
 			 struct adin1140_mac_cfg *cfg);
 
+/* Trigger a MAC-PHY soft reset and re-assert SYNC */
+int adin1140_sw_reset(struct adin1140_desc *desc);
+
 /* Write a frame to the TX FIFO */
 int adin1140_write_fifo(struct adin1140_desc *desc,
 			struct adin1140_eth_buff *eth_buff);
