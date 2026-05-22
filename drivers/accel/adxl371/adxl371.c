@@ -453,8 +453,8 @@ int adxl371_interrupt_config(struct adxl37x_dev *dev,
 {
 	uint8_t int1_config, int2_config;
 	int ret;
-
-	int1_config = (ADXL371_INT1_MAP_DATA_RDY_MODE(int1.data_rdy) |
+	if(dev->adxl_type==ADXL372){
+		int1_config = (ADXL371_INT1_MAP_DATA_RDY_MODE(int1.data_rdy) |
 		       ADXL371_INT1_MAP_FIFO_RDY_MODE(int1.fifo_rdy) |
 		       ADXL371_INT1_MAP_FIFO_FULL_MODE(int1.fifo_full) |
 		       ADXL371_INT1_MAP_FIFO_OVR_MODE(int1.fifo_ovr) |
@@ -463,7 +463,7 @@ int adxl371_interrupt_config(struct adxl37x_dev *dev,
 		       ADXL371_INT1_MAP_AWAKE_MODE(int1.awake) |
 		       ADXL371_INT1_MAP_LOW_MODE(int1.low_operation));
 
-	int2_config = (ADXL371_INT2_MAP_DATA_RDY_MODE(int2.data_rdy) |
+		int2_config = (ADXL371_INT2_MAP_DATA_RDY_MODE(int2.data_rdy) |
 		       ADXL371_INT2_MAP_FIFO_RDY_MODE(int2.fifo_rdy) |
 		       ADXL371_INT2_MAP_FIFO_FULL_MODE(int2.fifo_full) |
 		       ADXL371_INT2_MAP_FIFO_OVR_MODE(int2.fifo_ovr) |
@@ -471,7 +471,20 @@ int adxl371_interrupt_config(struct adxl37x_dev *dev,
 		       ADXL371_INT2_MAP_ACT_MODE(int2.activity) |
 		       ADXL371_INT2_MAP_AWAKE_MODE(int2.awake) |
 		       ADXL371_INT2_MAP_LOW_MODE(int2.low_operation));
+	}
+	else{//INT1 and INT2 for adxl371 don't support flags for fifo:rdy,ovr,full
+		int1_config = (ADXL371_INT1_MAP_DATA_RDY_MODE(int1.data_rdy) |
+		       ADXL371_INT1_MAP_INACT_MODE(int1.inactivity) |
+		       ADXL371_INT1_MAP_ACT_MODE(int1.activity) |
+		       ADXL371_INT1_MAP_AWAKE_MODE(int1.awake) |
+		       ADXL371_INT1_MAP_LOW_MODE(int1.low_operation));
 
+		int2_config = (ADXL371_INT2_MAP_DATA_RDY_MODE(int2.data_rdy) |
+		       ADXL371_INT2_MAP_INACT_MODE(int2.inactivity) |
+		       ADXL371_INT2_MAP_ACT_MODE(int2.activity) |
+		       ADXL371_INT2_MAP_AWAKE_MODE(int2.awake) |
+		       ADXL371_INT2_MAP_LOW_MODE(int2.low_operation));
+	}
 	ret = adxl371_write_reg(dev, ADXL371_INT1_MAP, int1_config);
 	if (ret < 0)
 		return ret;
