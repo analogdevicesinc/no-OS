@@ -110,6 +110,7 @@
 #define ADIN1140_PLCA_STATUS_REG	OA_MMS_REG(0x4, 0xCA03)
 #define ADIN1140_PLCA_TOTMR_REG		OA_MMS_REG(0x4, 0xCA04)
 #define ADIN1140_PLCA_BURST_REG		OA_MMS_REG(0x4, 0xCA05)
+#define ADIN1140_PLCA_DIAG_REG		OA_MMS_REG(0x4, 0xCA06)
 
 /* PLCA CTRL0 bits */
 #define ADIN1140_PLCA_CTRL0_EN		NO_OS_BIT(15)
@@ -128,6 +129,11 @@
 /* PLCA BURST bits */
 #define ADIN1140_PLCA_BURST_MAXBC_MASK	NO_OS_GENMASK(15, 8)
 #define ADIN1140_PLCA_BURST_BTMR_MASK	NO_OS_GENMASK(7, 0)
+
+/* PLCA DIAG bits (all RO/W1C) */
+#define ADIN1140_PLCA_DIAG_RXINTO	NO_OS_BIT(2)
+#define ADIN1140_PLCA_DIAG_UNEXPB	NO_OS_BIT(1)
+#define ADIN1140_PLCA_DIAG_BCNBFTO	NO_OS_BIT(0)
 
 /* MMS 1: Statistics registers */
 #define ADIN1140_RX_FRAME_CNT_REG	OA_MMS_REG(0x1, 0xA1)
@@ -165,6 +171,17 @@ struct adin1140_mac_cfg {
 	bool    zarfe;     /**< Zero-align RX Frame Enable */
 	bool    ftse;      /**< Frame Timestamp Enable */
 	bool    ftss;      /**< Frame Timestamp Size */
+};
+
+/**
+ * @brief PLCA diagnostic latches read from the DIAG register. All bits are
+ *        sticky (W1C) on the device; pass clear=true to adin1140_plca_get_diag
+ *        to acknowledge after reading.
+ */
+struct adin1140_plca_diag {
+	bool rx_in_own_to;       /**< RXINTO: another node sharing this ID */
+	bool unexpected_beacon;  /**< UNEXPB: extra coordinator on the bus */
+	bool beacon_before_to;   /**< BCNBFTO: BEACON before local TO */
 };
 
 /**
@@ -268,6 +285,10 @@ int adin1140_plca_get_status(struct adin1140_desc *desc, bool *active);
 
 /* Reset the PLCA logic via CTRL0.PLCARST */
 int adin1140_plca_reset(struct adin1140_desc *desc);
+
+/* Read PLCA diagnostic latches; if clear=true, also W1C-acknowledge them */
+int adin1140_plca_get_diag(struct adin1140_desc *desc,
+			   struct adin1140_plca_diag *diag, bool clear);
 
 /* Signal that an interrupt has occurred (call from ISR context) */
 void adin1140_set_irq_flag(struct adin1140_desc *desc);

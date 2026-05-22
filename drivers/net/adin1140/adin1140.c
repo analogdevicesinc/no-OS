@@ -569,6 +569,38 @@ int adin1140_plca_reset(struct adin1140_desc *desc)
 }
 
 /**
+ * @brief Read the PLCA DIAG register and decode the three latched
+ *        diagnostic indicators. Bits are RO/W1C on the device; if clear is
+ *        true, write back any bits that were read as 1 to acknowledge them.
+ * @param desc - the device descriptor.
+ * @param diag - pointer to store the decoded diagnostic values.
+ * @param clear - true to W1C-clear the latches that were observed set.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_plca_get_diag(struct adin1140_desc *desc,
+			   struct adin1140_plca_diag *diag, bool clear)
+{
+	uint32_t val;
+	int ret;
+
+	ret = adin1140_reg_read(desc, ADIN1140_PLCA_DIAG_REG, &val);
+	if (ret)
+		return ret;
+
+	diag->rx_in_own_to = !!(val & ADIN1140_PLCA_DIAG_RXINTO);
+	diag->unexpected_beacon = !!(val & ADIN1140_PLCA_DIAG_UNEXPB);
+	diag->beacon_before_to = !!(val & ADIN1140_PLCA_DIAG_BCNBFTO);
+
+	if (!clear || !val)
+		return 0;
+
+	return adin1140_reg_write(desc, ADIN1140_PLCA_DIAG_REG,
+				  val & (ADIN1140_PLCA_DIAG_RXINTO |
+					 ADIN1140_PLCA_DIAG_UNEXPB |
+					 ADIN1140_PLCA_DIAG_BCNBFTO));
+}
+
+/**
  * @brief Get the link state.
  * @param desc - the device descriptor.
  * @param state - pointer to store the link state (1 = up, 0 = down).
