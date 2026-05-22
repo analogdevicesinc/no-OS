@@ -266,6 +266,9 @@ int adin1140_plca_get_cfg(struct adin1140_desc *desc,
 /* Get the PLCA status */
 int adin1140_plca_get_status(struct adin1140_desc *desc, bool *active);
 
+/* Reset the PLCA logic via CTRL0.PLCARST */
+int adin1140_plca_reset(struct adin1140_desc *desc);
+
 /* Signal that an interrupt has occurred (call from ISR context) */
 void adin1140_set_irq_flag(struct adin1140_desc *desc);
 

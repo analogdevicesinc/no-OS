@@ -554,6 +554,21 @@ int adin1140_plca_get_status(struct adin1140_desc *desc, bool *active)
 }
 
 /**
+ * @brief Reset the PLCA logic by setting CTRL0.PLCARST. The bit is
+ *        self-clearing once the PLCA state machines and counters have been
+ *        returned to their reset state. Other CTRL0 bits (notably PLCAEN)
+ *        are preserved.
+ * @param desc - the device descriptor.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_plca_reset(struct adin1140_desc *desc)
+{
+	return adin1140_reg_update(desc, ADIN1140_PLCA_CTRL0_REG,
+				   ADIN1140_PLCA_CTRL0_RST,
+				   ADIN1140_PLCA_CTRL0_RST);
+}
+
+/**
  * @brief Get the link state.
  * @param desc - the device descriptor.
  * @param state - pointer to store the link state (1 = up, 0 = down).
