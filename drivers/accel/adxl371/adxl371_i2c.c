@@ -44,7 +44,7 @@
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl371_i2c_reg_read(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl371_i2c_reg_read(struct adxl37x_dev *dev, uint8_t reg_addr,
 			     uint8_t *reg_data)
 {
 	uint8_t data;
@@ -72,7 +72,7 @@ int32_t adxl371_i2c_reg_read(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl371_i2c_reg_write(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl371_i2c_reg_write(struct adxl37x_dev *dev, uint8_t reg_addr,
 			      uint8_t reg_data)
 {
 	uint8_t buf[2];
@@ -92,7 +92,7 @@ int32_t adxl371_i2c_reg_write(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param count - Number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl371_i2c_reg_read_multiple(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl371_i2c_reg_read_multiple(struct adxl37x_dev *dev, uint8_t reg_addr,
 				      uint8_t *reg_data, uint16_t count)
 {
 	uint8_t buf[512];

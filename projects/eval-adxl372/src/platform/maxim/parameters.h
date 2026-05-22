@@ -28,25 +28,25 @@
 #define UART_DEVICE_ID  0
 #endif
 #define UART_BAUDRATE   57600
-#define UART_EXTRA      &adxl372_uart_extra
+#define UART_EXTRA      &adxl371_uart_extra
 #define UART_OPS        &max_uart_ops
 
-extern struct max_uart_init_param adxl372_uart_extra;
+extern struct max_uart_init_param adxl371_uart_extra;
 
-#define SPI_BAUDRATE    2000000
+#define SPI_BAUDRATE    100000
 #define SPI_OPS         &max_spi_ops
-#define SPI_EXTRA       &adxl372_spi_extra
+#define SPI_EXTRA       &adxl371_spi_extra
 
-extern struct max_spi_init_param adxl372_spi_extra;
+extern struct max_spi_init_param adxl371_spi_extra;
 
 #define GPIO_OPS        &max_gpio_ops
-#define GPIO_EXTRA      &adxl372_gpio_extra
+#define GPIO_EXTRA      &adxl371_gpio_extra
 
 #define GPIO_INT1_PORT  1
 #define GPIO_INT1_PIN   6
 #define GPIO_INT2_PORT  1
 #define GPIO_INT2_PIN   7
 
-extern struct max_gpio_init_param adxl372_gpio_extra;
+extern struct max_gpio_init_param adxl371_gpio_extra;
 
 #endif /* __PARAMETERS_H__ */

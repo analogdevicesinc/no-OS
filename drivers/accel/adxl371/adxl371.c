@@ -79,6 +79,23 @@ static const int32_t adxl371_th_reg_addr_l[3][3] = {
 	}
 };
 
+//array of chip info structs
+
+static const struct adxl37x_chip_info chip_info[] = {
+	[ADXL371] = {
+		.wur = ADXL371_WUR_65ms,
+		.odr = ADXL371_ODR_320HZ,
+		.bw = ADXL371_BW_320HZ,
+		.filter_settle = ADXL371_FILTER_SETTLE_462p5
+	},
+	[ADXL372] = {
+		.wur = ADXL372_WUR_104ms,
+		.odr = ADXL372_ODR_6400HZ,
+		.bw = ADXL372_BW_3200HZ,
+		.filter_settle = ADXL372_FILTER_SETTLE_370
+	}
+};
+
 /**
  * @brief Wrapper used to read device registers
  *
@@ -87,7 +104,7 @@ static const int32_t adxl371_th_reg_addr_l[3][3] = {
  * @param reg_data - The register data
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_read_reg(struct adxl371_dev *dev, uint8_t reg_addr,
+int adxl371_read_reg(struct adxl37x_dev *dev, uint8_t reg_addr,
 		     uint8_t *reg_data)
 {
 	return (int)dev->reg_read(dev, reg_addr, reg_data);
@@ -101,7 +118,7 @@ int adxl371_read_reg(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param reg_data - The register data
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_write_reg(struct adxl371_dev *dev, uint8_t reg_addr,
+int adxl371_write_reg(struct adxl37x_dev *dev, uint8_t reg_addr,
 		      uint8_t reg_data)
 {
 	return (int)dev->reg_write(dev, reg_addr, reg_data);
@@ -116,7 +133,7 @@ int adxl371_write_reg(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param count - Number of bytes to read
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_read_reg_multiple(struct adxl371_dev *dev, uint8_t reg_addr,
+int adxl371_read_reg_multiple(struct adxl37x_dev *dev, uint8_t reg_addr,
 			      uint8_t *reg_data, uint16_t count)
 {
 	return (int)dev->reg_read_multiple(dev, reg_addr, reg_data, count);
@@ -131,7 +148,7 @@ int adxl371_read_reg_multiple(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_write_mask(struct adxl371_dev *dev, uint8_t reg_addr, uint32_t mask,
+int adxl371_write_mask(struct adxl37x_dev *dev, uint8_t reg_addr, uint32_t mask,
 		       uint8_t data)
 {
 	uint8_t reg_data;
@@ -153,16 +170,16 @@ int adxl371_write_mask(struct adxl371_dev *dev, uint8_t reg_addr, uint32_t mask,
  * @param dev - The device structure.
  * @param act - Type of activity.
  *		Accepted values: ADXL371_ACTIVITY
- *				 ADXL371_ACTIVITY2
- *				 ADXL371_INACTIVITY
+ *				 ADXL37x_ACTIVITY2
+ *				 ADXL37x_INACTIVITY
  * @param thresh - 11-bit unsigned value sets the threshold for activity,
  * 		   activity2 or inactivity detection.
  * @param referenced - Selects referenced or absolute activity processing.
  * @param enable - Enable activity detection using all 3-axis data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_activity_threshold(struct adxl371_dev *dev,
-				   enum adxl371_th_activity act,
+int adxl371_set_activity_threshold(struct adxl37x_dev *dev,
+				   enum adxl37x_th_activity act,
 				   uint16_t thresh, bool referenced,
 				   bool enable)
 {
@@ -190,13 +207,13 @@ int adxl371_set_activity_threshold(struct adxl371_dev *dev,
  *
  * @param dev - The device structure
  * @param op_mode - Mode of operation
- *		Accepted values: ADXL371_STANDBY
+ *		Accepted values: ADXL37x_STANDBY
  *				 ADXL371_WAKE_UP
  *				 ADXL371_INSTANT_ON
  *				 ADXL371_FULL_BW_MEASUREMENT
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_op_mode(struct adxl371_dev *dev, enum adxl371_op_mode op_mode)
+int adxl371_set_op_mode(struct adxl37x_dev *dev, enum adxl37x_op_mode op_mode)
 {
 	return adxl371_write_mask(dev, ADXL371_POWER_CTL, ADXL371_POWER_CTL_MODE_MSK,
 				  ADXL371_POWER_CTL_MODE(op_mode));
@@ -207,12 +224,12 @@ int adxl371_set_op_mode(struct adxl371_dev *dev, enum adxl371_op_mode op_mode)
  * (standby, wakeup, instant on, full bandwidthw measurement)
  *
  * @param dev ADXL device data structure
- * @param op_mode pointer to an enum adxl371_op_mode which will be updated with
+ * @param op_mode pointer to an enum adxl37x_op_mode which will be updated with
  * 			the current operating mode of the device
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_get_op_mode(struct adxl371_dev *dev,
-			enum adxl371_op_mode *op_mode)
+int adxl371_get_op_mode(struct adxl37x_dev *dev,
+			enum adxl37x_op_mode *op_mode)
 {
 	uint8_t reg_data;
 	int ret;
@@ -222,7 +239,7 @@ int adxl371_get_op_mode(struct adxl371_dev *dev,
 		return ret;
 
 	reg_data &= ADXL371_POWER_CTL_MODE_MSK;
-	*op_mode = (enum adxl371_op_mode)reg_data;
+	*op_mode = (enum adxl37x_op_mode)reg_data;
 	return 0;
 }
 
@@ -235,7 +252,7 @@ int adxl371_get_op_mode(struct adxl371_dev *dev,
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_autosleep(struct adxl371_dev *dev, bool enable)
+int adxl371_set_autosleep(struct adxl37x_dev *dev, bool enable)
 {
 	return adxl371_write_mask(dev, ADXL371_MEASURE, ADXL371_MEASURE_AUTOSLEEP_MSK,
 				  ADXL371_MEASURE_AUTOSLEEP_MODE(enable));
@@ -253,7 +270,7 @@ int adxl371_set_autosleep(struct adxl371_dev *dev, bool enable)
  *				 ADXL371_BW_2560HZ
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_bandwidth(struct adxl371_dev *dev, enum adxl371_bandwidth bw)
+int adxl371_set_bandwidth(struct adxl37x_dev *dev, enum adxl37x_bandwidth bw)
 {
 	int ret;
 
@@ -277,8 +294,8 @@ int adxl371_set_bandwidth(struct adxl371_dev *dev, enum adxl371_bandwidth bw)
  *				 ADXL371_LOOPED
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_act_proc_mode(struct adxl371_dev *dev,
-			      enum adxl371_act_proc_mode mode)
+int adxl371_set_act_proc_mode(struct adxl37x_dev *dev,
+			      enum adxl37x_act_proc_mode mode)
 {
 	int ret;
 
@@ -304,7 +321,7 @@ int adxl371_set_act_proc_mode(struct adxl371_dev *dev,
  *				 ADXL371_ODR_5120HZ
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_odr(struct adxl371_dev *dev, enum adxl371_odr odr)
+int adxl371_set_odr(struct adxl37x_dev *dev, enum adxl37x_odr odr)
 {
 	int ret;
 
@@ -327,8 +344,8 @@ int adxl371_set_odr(struct adxl371_dev *dev, enum adxl371_odr odr)
  *				 ADXL371_INSTANT_ON_HIGH_TH
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_instant_on_th(struct adxl371_dev *dev,
-			      enum adxl371_instant_on_th_mode mode)
+int adxl371_set_instant_on_th(struct adxl37x_dev *dev,
+			      enum adxl37x_instant_on_th_mode mode)
 {
 	int ret;
 
@@ -359,8 +376,8 @@ int adxl371_set_instant_on_th(struct adxl371_dev *dev,
  *				 ADXL371_WUR_30720ms
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_wakeup_rate(struct adxl371_dev *dev,
-			    enum adxl371_wakeup_rate wur)
+int adxl371_set_wakeup_rate(struct adxl37x_dev *dev,
+			    enum adxl37x_wakeup_rate wur)
 {
 	int ret;
 
@@ -381,7 +398,7 @@ int adxl371_set_wakeup_rate(struct adxl371_dev *dev,
  * @param time - The value set in this register.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_set_activity_time(struct adxl371_dev *dev, uint8_t time)
+int adxl371_set_activity_time(struct adxl37x_dev *dev, uint8_t time)
 {
 	return adxl371_write_reg(dev, ADXL371_TIME_ACT, time);
 }
@@ -394,7 +411,7 @@ int adxl371_set_activity_time(struct adxl371_dev *dev, uint8_t time)
  * 		(eight LSBs) and the TIME_INACT_H register (eight MSBs)
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_set_inactivity_time(struct adxl371_dev *dev, uint16_t time)
+int adxl371_set_inactivity_time(struct adxl37x_dev *dev, uint16_t time)
 {
 	int ret;
 
@@ -414,8 +431,8 @@ int adxl371_set_inactivity_time(struct adxl371_dev *dev, uint16_t time)
  *				 ADXL371_FILTER_SETTLE_16
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_set_filter_settle(struct adxl371_dev *dev,
-			      enum adxl371_filter_settle mode)
+int adxl371_set_filter_settle(struct adxl37x_dev *dev,
+			      enum adxl37x_filter_settle mode)
 {
 	return adxl371_write_mask(dev, ADXL371_POWER_CTL,
 				  ADXL371_POWER_CTL_FIL_SETTLE_MSK,
@@ -430,9 +447,9 @@ int adxl371_set_filter_settle(struct adxl371_dev *dev,
  * @param int2 -  INT2 interrupt pins.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_interrupt_config(struct adxl371_dev *dev,
-			     struct adxl371_irq_config int1,
-			     struct adxl371_irq_config int2)
+int adxl371_interrupt_config(struct adxl37x_dev *dev,
+			     struct adxl37x_irq_config int1,
+			     struct adxl37x_irq_config int2)
 {
 	uint8_t int1_config, int2_config;
 	int ret;
@@ -472,7 +489,7 @@ int adxl371_interrupt_config(struct adxl371_dev *dev,
  *			 FIFO buffer (0 to 512)
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_get_status(struct adxl371_dev *dev, uint8_t *status1,
+int adxl371_get_status(struct adxl37x_dev *dev, uint8_t *status1,
 		       uint8_t *status2, uint16_t *fifo_entries)
 {
 	uint8_t buf[4];
@@ -496,11 +513,11 @@ int adxl371_get_status(struct adxl371_dev *dev, uint8_t *status1,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_reset(struct adxl371_dev *dev)
+int adxl371_reset(struct adxl37x_dev *dev)
 {
 	int ret;
 
-	ret = adxl371_set_op_mode(dev, ADXL371_STANDBY);
+	ret = adxl371_set_op_mode(dev, ADXL37x_STANDBY);
 	if (ret < 0)
 		return ret;
 
@@ -519,17 +536,12 @@ int adxl371_reset(struct adxl371_dev *dev)
  *
  * @param dev - The device structure.
  * @param mode - FIFO Mode. Specifies FIFO operating mode.
- *		Accepted values: ADXL371_FIFO_BYPASSED
+ *		Accepted values: ADXL37x_FIFO_BYPASSED
  *				 ADXL371_FIFO_STREAMED
  *				 ADXL371_FIFO_TRIGGERED
  *				 ADXL371_FIFO_OLD_SAVED
  * @param format - FIFO Format. Specifies which data is stored in the FIFO buffer.
-<<<<<<< HEAD
- *		Accepted values:
- 				 ADXL371_XYZ_FIFO
-=======
  *		Accepted values: ADXL371_XYZ_FIFO
->>>>>>> c08359952 (accel: adxl371: Add ADXL371 driver)
  *				 ADXL371_X_FIFO
  *				 ADXL371_Y_FIFO
  *				 ADXL371_XY_FIFO
@@ -540,23 +552,12 @@ int adxl371_reset(struct adxl371_dev *dev)
  * @param fifo_samples - FIFO Samples. Watermark number of FIFO samples that
  *			triggers a FIFO_FULL condition when reached.
  *			Values range from 0 to 512.
-<<<<<<< HEAD
- * @param op_mode - Device Operational Mode. Impacts sampling & power consumption.
- * 		Acceptable values:
- * 		 ADXL371_STANDBY,
- * 		 ADXL371_WAKE_UP,
- * 		 ADXL371_INSTANT_ON,
- * 		 ADXL371_FULL_BW_MEASUREMENT
- *
-=======
-
->>>>>>> c08359952 (accel: adxl371: Add ADXL371 driver)
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_configure_fifo(struct adxl371_dev *dev, enum adxl371_fifo_mode mode,
-			   enum adxl371_fifo_format format,
+int adxl371_configure_fifo(struct adxl37x_dev *dev, enum adxl37x_fifo_mode mode,
+			   enum adxl37x_fifo_format format,
 			   uint16_t fifo_samples,
-			   enum adxl371_op_mode op_mode)
+			   enum adxl37x_op_mode op_mode)
 {
 	uint8_t fifo_config;
 	int ret;
@@ -565,7 +566,7 @@ int adxl371_configure_fifo(struct adxl371_dev *dev, enum adxl371_fifo_mode mode,
 		return -EINVAL;
 
 	/* All FIFO modes must be configured while in standby mode. */
-	ret = adxl371_set_op_mode(dev, ADXL371_STANDBY);
+	ret = adxl371_set_op_mode(dev, ADXL37x_STANDBY);
 	if (ret < 0)
 		return ret;
 
@@ -596,7 +597,7 @@ int adxl371_configure_fifo(struct adxl371_dev *dev, enum adxl371_fifo_mode mode,
  * @param dev adxl371 device data structure
  * @return int 0 if success, else negative error code
  */
-int adxl371_set_external_sync(struct adxl371_dev *dev)
+int adxl371_set_external_sync(struct adxl37x_dev *dev)
 {
 	return adxl371_write_reg(dev, ADXL371_TIMING,
 				 ADXL371_TIMING_EXT_SYNC_MODE(1) |
@@ -609,7 +610,7 @@ int adxl371_set_external_sync(struct adxl371_dev *dev)
  * @param dev adxl371 device data structure
  * @return int 0 if success, else negative error code
  */
-int adxl371_set_internal_sync(struct adxl371_dev *dev)
+int adxl371_set_internal_sync(struct adxl37x_dev *dev)
 {
 	return adxl371_write_reg(dev, ADXL371_TIMING,
 				 ADXL371_TIMING_EXT_SYNC_MODE(0) |
@@ -626,7 +627,7 @@ int adxl371_set_internal_sync(struct adxl371_dev *dev)
  * otherwise.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_get_internal_sync(struct adxl371_dev *dev, bool *internal_sync)
+int adxl371_get_internal_sync(struct adxl37x_dev *dev, bool *internal_sync)
 {
 	uint8_t timing_reg = 0x0;
 	int ret = adxl371_read_reg(dev, ADXL371_TIMING, &timing_reg);
@@ -645,19 +646,20 @@ int adxl371_get_internal_sync(struct adxl371_dev *dev, bool *internal_sync)
  *		       parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_init(struct adxl371_dev **device,
-		 struct adxl371_init_param init_param)
+int adxl371_init(struct adxl37x_dev **device,
+		 struct adxl37x_init_param init_param)
 {
-	struct adxl371_dev *dev;
+	struct adxl37x_dev *dev;
 	uint8_t dev_id, part_id, rev_id;
 	int ret = 0;
 
-	dev = (struct adxl371_dev *)no_os_malloc(sizeof(*dev));
+	dev = (struct adxl37x_dev *)no_os_malloc(sizeof(*dev));
 	if (!dev)
 		return -ENOMEM;
 
+	dev->adxl_type=init_param.adxl_type;
 	dev->comm_type = init_param.comm_type;
-	if (dev->comm_type == ADXL371_SPI) {
+	if (dev->comm_type == ADXL37x_SPI) {
 		/* SPI */
 		ret = no_os_spi_init(&dev->spi_desc, &init_param.spi_init);
 		if (ret < 0)
@@ -684,6 +686,11 @@ int adxl371_init(struct adxl371_dev **device,
 			       "devices present on the bus\n");
 		}
 	}
+	//bw,odr,wur set in the dev structure
+	dev->bw=chip_info[dev->adxl_type].bw;
+	dev->odr=chip_info[dev->adxl_type].odr;
+	dev->wur=chip_info[dev->adxl_type].wur;
+
 	/* GPIO */
 	ret = no_os_gpio_get(&dev->gpio_int1, &init_param.gpio_int1);
 	if (ret < 0)
@@ -717,22 +724,22 @@ int adxl371_init(struct adxl371_dev **device,
 	}
 
 	/* Device settings */
-	ret = adxl371_set_op_mode(dev, ADXL371_STANDBY);
+	ret = adxl371_set_op_mode(dev, ADXL37x_STANDBY);
 	if (ret < 0)
 		goto error;
 	ret = adxl371_reset(dev);
 	if (ret < 0)
 		goto error;
 
-	ret = adxl371_set_bandwidth(dev, init_param.bw);
+	ret = adxl371_set_bandwidth(dev, dev->bw);
 	if (ret < 0)
 		goto error;
 
-	ret = adxl371_set_odr(dev, init_param.odr);
+	ret = adxl371_set_odr(dev, dev->odr);
 	if (ret < 0)
 		goto error;
 
-	ret = adxl371_set_wakeup_rate(dev, init_param.wur);
+	ret = adxl371_set_wakeup_rate(dev, dev->wur);
 	if (ret < 0)
 		goto error;
 	ret = adxl371_set_act_proc_mode(dev, init_param.act_proc_mode);
@@ -743,17 +750,17 @@ int adxl371_init(struct adxl371_dev **device,
 		goto error;
 
 	ret = adxl371_set_activity_threshold(
-		      dev, ADXL371_ACTIVITY, init_param.activity_th.thresh,
+		      dev, ADXL37x_ACTIVITY, init_param.activity_th.thresh,
 		      init_param.activity_th.referenced, init_param.activity_th.enable);
 	if (ret < 0)
 		goto error;
 	ret = adxl371_set_activity_threshold(
-		      dev, ADXL371_ACTIVITY2, init_param.activity2_th.thresh,
+		      dev, ADXL37x_ACTIVITY2, init_param.activity2_th.thresh,
 		      init_param.activity2_th.referenced, init_param.activity2_th.enable);
 	if (ret < 0)
 		goto error;
 	ret = adxl371_set_activity_threshold(
-		      dev, ADXL371_INACTIVITY, init_param.inactivity_th.thresh,
+		      dev, ADXL37x_INACTIVITY, init_param.inactivity_th.thresh,
 		      init_param.inactivity_th.referenced, init_param.inactivity_th.enable);
 	if (ret < 0)
 		goto error;
@@ -763,7 +770,7 @@ int adxl371_init(struct adxl371_dev **device,
 	ret = adxl371_set_inactivity_time(dev, init_param.inactivity_time);
 	if (ret < 0)
 		goto error;
-	ret = adxl371_set_filter_settle(dev, init_param.filter_settle);
+	ret = adxl371_set_filter_settle(dev, chip_info[dev->adxl_type].filter_settle);
 	if (ret < 0)
 		goto error;
 
@@ -805,11 +812,11 @@ error:
  * @param dev ADXL371 device data structure
  * @return int 0 if success; else negative error code
  */
-int adxl371_remove(struct adxl371_dev *dev)
+int adxl371_remove(struct adxl37x_dev *dev)
 {
 	int ret;
 
-	if (dev->comm_type == ADXL371_SPI) {
+	if (dev->comm_type == ADXL37x_SPI) {
 		ret = no_os_spi_remove(dev->spi_desc);
 	} else {
 		ret = no_os_i2c_remove(dev->i2c_desc);
@@ -838,8 +845,8 @@ int adxl371_remove(struct adxl371_dev *dev)
  * @param cnt - How many samples should be retrieved from the FIFO DATA reg
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_get_fifo_xyz_data_workaround(struct adxl371_dev *dev,
-		struct adxl371_xyz_accel_data *samples,
+int adxl371_get_fifo_xyz_data_workaround(struct adxl37x_dev *dev,
+		struct adxl37x_xyz_accel_data *samples,
 		uint16_t cnt)
 {
 	bool internal_sync = false;
@@ -847,7 +854,7 @@ int adxl371_get_fifo_xyz_data_workaround(struct adxl371_dev *dev,
 	uint16_t i;
 
 	/* Save FIFO mode to restore after bypassing the FIFO */
-	enum adxl371_fifo_mode fifo_mode = dev->fifo_config.fifo_mode;
+	enum adxl37x_fifo_mode fifo_mode = dev->fifo_config.fifo_mode;
 
 	if (cnt > 512)
 		return -EINVAL;
@@ -859,7 +866,7 @@ int adxl371_get_fifo_xyz_data_workaround(struct adxl371_dev *dev,
 	if (!internal_sync)
 		return -EFAULT;
 
-	enum adxl371_op_mode op_mode;
+	enum adxl37x_op_mode op_mode;
 	ret = adxl371_get_op_mode(dev, &op_mode);
 	if (ret < 0)
 		return ret;
@@ -867,14 +874,14 @@ int adxl371_get_fifo_xyz_data_workaround(struct adxl371_dev *dev,
 	/* @workaround Set the timing register to external sync along with odr */
 	adxl371_set_external_sync(dev);
 
-	/* Read samples from FIFO (samples are 2 bytes wide) */
+	/* Read samples from FIFO (samples are 6 bytes wide,2 bytes for every axis) */
 	ret =
-		adxl371_read_reg_multiple(dev, ADXL371_FIFO_DATA, dev->fifo_raw, cnt * 2);
+		adxl371_read_reg_multiple(dev, ADXL371_FIFO_DATA, dev->fifo_raw, cnt * 6);
 	if (ret < 0)
 		return ret;
 
 	/* Copy samples from buffer */
-	for (i = 0; i < cnt * 2; i += 6) {
+	for (i = 0; i < cnt * 6; i += 6) {
 		samples->x = ((dev->fifo_raw[i] << 4) | (dev->fifo_raw[i + 1] >> 4));
 		samples->y = ((dev->fifo_raw[i + 2] << 4) | (dev->fifo_raw[i + 3] >> 4));
 		samples->z = ((dev->fifo_raw[i + 4] << 4) | (dev->fifo_raw[i + 5] >> 4));
@@ -882,7 +889,7 @@ int adxl371_get_fifo_xyz_data_workaround(struct adxl371_dev *dev,
 	}
 
 	/* @workaround clear the fifo (bypass mode) */
-	ret = adxl371_configure_fifo(dev, ADXL371_FIFO_BYPASSED,
+	ret = adxl371_configure_fifo(dev, ADXL37x_FIFO_BYPASSED,
 				     dev->fifo_config.fifo_format,
 				     dev->fifo_config.fifo_samples, op_mode);
 	if (ret < 0)
@@ -908,8 +915,8 @@ int adxl371_get_fifo_xyz_data_workaround(struct adxl371_dev *dev,
  *				samples present in the FIFO buffer
  * @return 0 in case of success, negative error code otherwise
  */
-int adxl371_service_fifo_ev(struct adxl371_dev *dev,
-			    struct adxl371_xyz_accel_data *fifo_data,
+int adxl371_service_fifo_ev(struct adxl37x_dev *dev,
+			    struct adxl37x_xyz_accel_data *fifo_data,
 			    uint16_t *fifo_entries)
 {
 	uint8_t status1, status2;
@@ -924,7 +931,7 @@ int adxl371_service_fifo_ev(struct adxl371_dev *dev,
 		return -EFAULT;
 	}
 
-	if (dev->fifo_config.fifo_mode != ADXL371_FIFO_BYPASSED) {
+	if (dev->fifo_config.fifo_mode != ADXL37x_FIFO_BYPASSED) {
 		if ((ADXL371_STATUS_1_FIFO_RDY(status1)) ||
 		    (ADXL371_STATUS_1_FIFO_FULL(status1))) {
 			/*
@@ -952,8 +959,8 @@ int adxl371_service_fifo_ev(struct adxl371_dev *dev,
  *		      where (x, y, z) max values will be stored.
  * @return 0 in case of success, negative error code otherwise.
  */
-int adxl371_get_highest_peak_data(struct adxl371_dev *dev,
-				  struct adxl371_xyz_accel_data *max_peak)
+int adxl371_get_highest_peak_data(struct adxl37x_dev *dev,
+				  struct adxl37x_xyz_accel_data *max_peak)
 {
 	uint8_t buf[6];
 	uint8_t status1, status2;

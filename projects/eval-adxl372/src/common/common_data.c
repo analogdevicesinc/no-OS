@@ -1,6 +1,6 @@
 #include "common_data.h"
 
-struct no_os_uart_init_param adxl372_uart_ip = {
+struct no_os_uart_init_param adxl371_uart_ip = {
 	.device_id = UART_DEVICE_ID,
 	.irq_id    = UART_IRQ_ID,
 	.asynchronous_rx = true,
@@ -12,14 +12,13 @@ struct no_os_uart_init_param adxl372_uart_ip = {
 	.platform_ops = UART_OPS,
 };
 
-struct adxl372_init_param adxl372_init_param = {
-	.type      = ADXL372,
-	.comm_type = SPI,
+struct adxl37x_init_param adxl371_init_param = {
+	.adxl_type      = ADXL372,
 	.spi_init  = {
 		.device_id    = SPI_DEVICE_ID,
 		.max_speed_hz = SPI_BAUDRATE,
 		.bit_order    = NO_OS_SPI_BIT_ORDER_MSB_FIRST,
-		.mode         = NO_OS_SPI_MODE_3,
+		.mode         = NO_OS_SPI_MODE_0,
 		.platform_ops = SPI_OPS,
 		.chip_select  = SPI_CS,
 		.extra        = SPI_EXTRA,
@@ -38,23 +37,20 @@ struct adxl372_init_param adxl372_init_param = {
 		.platform_ops = GPIO_OPS,
 		.extra        = GPIO_EXTRA,
 	},
-	.op_mode        = ADXL372_FULL_BW_MEASUREMENT,
-	.odr            = ADXL372_ODR_400HZ,
-	.bw             = ADXL372_BW_200HZ,
-	.wur            = ADXL372_WUR_52ms,
-	.act_proc_mode  = ADXL372_DEFAULT,
-	.th_mode        = ADXL372_INSTANT_ON_LOW_TH,
+	.op_mode        = 	ADXL37x_FULL_BW_MEASUREMENT,
+	.act_proc_mode  = ADXL37x_DEFAULT,
+	.th_mode        = ADXL37x_INSTANT_ON_LOW_TH,
 	.activity_th    = { .thresh = 0, .referenced = false, .enable = false },
 	.activity2_th   = { .thresh = 0, .referenced = false, .enable = false },
 	.inactivity_th  = { .thresh = 0, .referenced = false, .enable = false },
 	.activity_time   = 0,
 	.inactivity_time = 0,
-	.filter_settle  = ADXL372_FILTER_SETTLE_370,
 	.fifo_config = {
-		.fifo_mode    = ADXL372_FIFO_STREAMED,
-		.fifo_format  = ADXL372_XYZ_FIFO,
+		.fifo_mode    = ADXL37x_FIFO_STREAMED,
+		.fifo_format  = ADXL37x_XYZ_FIFO,
 		.fifo_samples = 128,
 	},
-	.int1_config = { .fifo_full = true },
+	.int1_config = { .fifo_rdy = true },
 	.int2_config = { 0 },
+	.comm_type = ADXL37x_SPI
 };

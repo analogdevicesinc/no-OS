@@ -30,7 +30,7 @@ SRCS += $(DRIVERS)/api/no_os_gpio.c   \
 	$(NO-OS)/util/no_os_mutex.c   \
 	$(PROJECT)/src/examples/basic/basic_exmaple.c
 
-INCS += $(DRIVERS)/accel/adxl372/adxl372.h
-SRCS += $(DRIVERS)/accel/adxl372/adxl372.c     \
-	$(DRIVERS)/accel/adxl372/adxl372_spi.c  \
-	$(DRIVERS)/accel/adxl372/adxl372_i2c.c
+INCS += $(DRIVERS)/accel/adxl371/adxl371.h
+SRCS += $(DRIVERS)/accel/adxl371/adxl371.c     \
+	$(DRIVERS)/accel/adxl371/adxl371_spi.c  \
+	$(DRIVERS)/accel/adxl371/adxl371_i2c.c
