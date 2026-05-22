@@ -33,7 +33,7 @@ variables:
 
 jobs:
 - job: Xilinx
-  timeoutInMinutes: 400
+  timeoutInMinutes: 480
   pool:
     name: Default
     demands:
@@ -47,40 +47,19 @@ jobs:
   - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
     displayName: 'Show Xilinx version'
   - script: |
-      echo "Cleaning corrupted Xilinx build state..."
+      echo "Full rebuild: removing all Xilinx build artifacts..."
+      rm -rf /no-OS_builds/builds_main/build_xilinx_*/{app,bsp,tmp,.metadata,.Xil}
+      # Clean stale Eclipse state and build locks
       for dir in /no-OS_builds/builds_main/build_xilinx_*/; do
-        # If app/src/lscript.ld is missing but app/ exists, the project is corrupted
-        if [ -d "$dir/app" ] && [ ! -f "$dir/app/src/lscript.ld" ]; then
-          echo "Corrupted project detected: $dir (missing lscript.ld)"
-          echo "  Removing $dir/app"
-          rm -rf "$dir/app"
-          if [ -d "$dir/.metadata" ]; then
-            echo "  Removing $dir/.metadata"
-            rm -rf "$dir/.metadata"
-          fi
-          if [ -f "$dir/.project.target" ]; then
-            echo "  Removing $dir/.project.target"
-            rm -f "$dir/.project.target"
-          fi
+        if [ -d "$dir/.metadata" ]; then
+          rm -rf "$dir/.metadata"
         fi
-        # For Zynq projects (zed/zc702/zc706): check if Xilinx.spec is missing
-        if [ -f "$dir/app/src/lscript.ld" ] && [ ! -f "$dir/app/src/Xilinx.spec" ]; then
-          # Check if this is a Zynq project (cortexa9)
-          if [ -f "$dir/tmp/arch.txt" ] && grep -q "cortexa9" "$dir/tmp/arch.txt"; then
-            echo "Zynq project missing Xilinx.spec: $dir"
-            echo "  Copying Xilinx.spec from Vitis installation"
-            # Use XILINX_VERSION pipeline variable since XILINX_VITIS env is not set yet
-            SPEC_PATH="/tools/Xilinx/Vitis/$(XILINX_VERSION)/data/embeddedsw/scripts/specs/arm/Xilinx.spec"
-            if [ -f "$SPEC_PATH" ]; then
-              cp "$SPEC_PATH" "$dir/app/src/"
-              echo "  Copied Xilinx.spec successfully"
-            else
-              echo "  WARNING: Could not find Xilinx.spec at $SPEC_PATH"
-            fi
-          fi
+        if [ -f "$dir/.project.target" ]; then
+          rm -f "$dir/.project.target"
         fi
       done
-    displayName: 'Clean corrupted Xilinx projects'
+      echo "Done. All projects will be rebuilt from scratch."
+    displayName: 'Clean all Xilinx builds for full rebuild'
   - script: |
       export BRANCH=$(branch)
       wget -P ./tools/scripts/ \
