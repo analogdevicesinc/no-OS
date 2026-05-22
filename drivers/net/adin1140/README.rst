@@ -1,180 +1,163 @@
-ADIN1110 no-OS Driver
-======================
+ADIN1140 no-OS Driver
+=====================
 
 Supported Devices
 -----------------
 
-- :adi:`ADIN1110`
-- :adi:`ADIN2111`
+- :adi:`ADIN1140`
 
 Overview
 --------
 
-The ADIN1110 is an ultra-low-power, single-port, 10BASE-T1L transceiver
-designed for industrial Ethernet applications. It complies with the IEEE
-802.3cg-2019 Ethernet standard for long-reach, 10 Mbps single-pair
-Ethernet (SPE). It features an integrated media access control (MAC)
-interface with a 4-wire serial peripheral interface (SPI) that can be
-configured to use the Open Alliance SPI protocol or a generic SPI
-protocol, enabling direct connectivity with lower-power processors that
-lack an integrated MAC. The device supports programmable transmit
-levels, external termination resistors, and independent receive and
-transmit pins, making it ideally suited for intrinsic safety
-applications. Additionally, the ADIN1110 boasts integrated voltage
-supply monitoring, power-on reset circuitry, and is available in a
-compact 40-lead, 6 mm × 6 mm LFCSP, ensuring robust operation in
-industrial environments while maintaining low overall system-level power
-consumption.
+The ADIN1140 is a low-power, single-port 10BASE-T1S MAC/PHY designed for
+multi-drop industrial Ethernet applications. It complies with the IEEE
+802.3cg-2019 standard for 10 Mbps single-pair Ethernet (SPE) and
+implements the Physical Layer Collision Avoidance (PLCA) reconciliation
+sublayer so multiple nodes can share a single mixing segment without
+classic CSMA/CD overhead. The integrated MAC is accessed through a
+4-wire SPI interface using the OPEN Alliance TC6 (OA-TC6) protocol,
+allowing direct connectivity with host MCUs that lack an integrated
+Ethernet MAC.
 
 Applications
 ------------
 
-- Field instruments
-- Building automation and fire safety
-- Factory automation
-- Edge sensors and actuators
-- Condition monitoring and machine connectivity
+- Building and factory automation
+- HVAC and lighting control
+- Field instruments and edge sensors
+- Multi-drop sensor and actuator networks
+- Industrial process monitoring
 
 Device Configuration
 --------------------
 
-The ADIN1110 driver’s header file exposes a comprehensive set of public
-functions that enable complete configuration and management of the
-Ethernet device. The public functions are organized into several
-categories to ensure clarity and ease of use.
+The ADIN1140 driver exposes a set of public functions for configuring
+and managing the MAC/PHY device. The functions are organized into
+several categories.
 
 Initialization and Resource Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The initialization-related functions include ``adin1110_init()`` and
-``adin1110_remove()``. The ``adin1110_init()`` function allocates and
-configures the device descriptor, initializes the SPI (and optionally,
-GPIO) interfaces, and executes all required reset sequences and
-configuration setups. The ``adin1110_remove()`` function deallocates
-resources and cleans up the device descriptor, ensuring a safe removal
-of the device from the system.
+The ``adin1140_init()`` function allocates the device descriptor,
+initializes the SPI controller, performs the OA-TC6 software reset
+(``oa_tc6_sw_reset()`` polls ``STATUS0.RESETC`` to completion), applies
+the user-provided MAC ``CONFIG0`` and PLCA settings, installs the
+default broadcast and unicast filters, and asserts ``CONFIG0.SYNC``.
+The ``adin1140_remove()`` function tears the device down and releases
+all resources.
 
 Basic Register Access
 ~~~~~~~~~~~~~~~~~~~~~
 
-The basic register access functions provided in the header include
-``adin1110_reg_write()``, ``adin1110_reg_read()``, and
-``adin1110_reg_update()``. These functions allow for 32-bit register
-writes, register reads, and streamlined register modifications by
-reading a register’s current value, applying bitmasks, and writing the
-updated value back to the register.
+``adin1140_reg_write()``, ``adin1140_reg_read()``, and
+``adin1140_reg_update()`` provide direct 32-bit access to the device’s
+MMS-encoded register space, including read-modify-write helpers that
+preserve untouched bits.
 
 MDIO Operations
 ~~~~~~~~~~~~~~~
 
-For accessing PHY registers using MDIO protocols, the driver offers a
-set of functions: ``adin1110_mdio_read()``, ``adin1110_mdio_write()``,
-``adin1110_mdio_write_c45()``, and ``adin1110_mdio_read_c45()``. These
-functions support both standard clause 22 and extended clause 45 MDIO
-transactions, facilitating complete PHY register operations.
+``adin1140_mdio_read_c45()`` and ``adin1140_mdio_write_c45()`` provide
+clause 45 access to the PHY MMD register space (PMA/PMD, PCS, and
+vendor-specific PLCA), letting host code reach PHY-side controls
+without driving an external MDIO bus.
 
 MAC Address and Filter Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MAC address and filtering capabilities are managed by
-``adin1110_set_mac_addr()``, ``adin1110_clear_mac_addr()``, and
-``adin1110_broadcast_filter()``. These functions respectively program a
-MAC address filter, remove an existing MAC address filter, and toggle
-the broadcast address filter on the device.
+The MAC address filter slots are managed by ``adin1140_set_mac_addr()``
+(programs the unicast filter), ``adin1140_broadcast_filter()``,
+``adin1140_multicast_filter()``, and ``adin1140_set_promisc()`` for
+toggling promiscuous mode via ``CONFIG2.FWD_UNK2HOST``.
 
-FIFO Data Transfer Operations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+MAC Configuration
+~~~~~~~~~~~~~~~~~
 
-For managing data exchange via the device’s FIFO channels, the driver
-provides ``adin1110_write_fifo()`` and ``adin1110_read_fifo()``. The
-``adin1110_write_fifo()`` function is used to write Ethernet frame data
-into the TX FIFO with proper handling of frame length padding and
-alignment, while the ``adin1110_read_fifo()`` function handles reading
-from the RX FIFO and processing received data.
+``adin1140_mac_set_cfg()`` and ``adin1140_mac_get_cfg()`` operate on
+``struct adin1140_mac_cfg``, which exposes the user-configurable
+``CONFIG0`` bitfields: chunk payload size (``cps``), TX cut-through
+threshold (``txcthresh``), TX/RX cut-through enables, cut-through
+status append (``csarfe``), zero-align RX frame (``zarfe``), and frame
+timestamp enable/size (``ftse``/``ftss``). ``TXFCSVE`` is always
+cleared by the driver so the MAC appends the FCS on transmit; SYNC,
+PROTE, and SEQE are managed internally and not exposed.
 
-Reset and Link Status Operations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PLCA Configuration and Diagnostics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ensuring reliable operation includes robust reset and status monitoring
-functions. This group comprises ``adin1110_mac_reset()``,
-``adin1110_sw_reset()``, ``adin1110_link_state()``, and
-``adin1110_phy_reset()``. These functions perform hardware and software
-resets, verify link status, and reset the PHY component while ensuring
-correct operation per hardware specifications.
+PLCA is configured through ``struct adin1140_plca_cfg``
+(``enabled``, ``node_id``, ``node_cnt``, ``to_tmr``, ``burst_cnt``,
+``burst_tmr``) via ``adin1140_plca_set_cfg()`` /
+``adin1140_plca_get_cfg()``. ``adin1140_plca_get_status()`` reports
+whether PLCA is currently active. ``adin1140_plca_reset()`` issues a
+PLCA-only reset by setting ``CTRL0.PLCARST``.
+``adin1140_plca_get_diag()`` decodes the three ``DIAG`` latches
+(``RXINTO``, ``UNEXPB``, ``BCNBFTO``) into ``struct adin1140_plca_diag``
+and optionally writes them back to acknowledge (W1C).
 
-Device Feature Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FIFO Data Transfer
+~~~~~~~~~~~~~~~~~~
 
-Additional device-specific configuration is enabled through
-``adin1110_set_promisc()``, ``adin1110_setup_phy()``, and
-``adin1110_setup_mac()``. The ``adin1110_set_promisc()`` function
-toggles promiscuous mode, the ``adin1110_setup_phy()`` function handles
-PHY power management and autonegotiation, and the
-``adin1110_setup_mac()`` function configures the MAC settings including
-CRC operations, interrupt setup, and MAC address filtering.
+``adin1140_write_fifo()`` and ``adin1140_read_fifo()`` move Ethernet
+frames in and out of the MAC FIFOs through the underlying OA-TC6
+chunked SPI transactions, padding short frames to the 64-byte minimum
+on TX.
+
+Reset, Interrupts, and Link Status
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``adin1140_sw_reset()`` performs a full MAC-PHY reset (delegating to
+``oa_tc6_sw_reset()``) and re-asserts ``CONFIG0.SYNC``.
+``adin1140_set_irq_flag()`` is intended to be called from a GPIO ISR
+to record that the MAC-PHY has asserted its INT pin; the main loop
+then drains pending work via ``adin1140_poll()``. ``adin1140_link_state()``
+reads ``STATUS1`` to report the current link state.
 
 Driver Initialization Example
 -----------------------------
 
 .. code-block:: C
 
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <stdint.h>
     #include <string.h>
-    #include <stdbool.h>
-    #include "adin1110.h"
+    #include "adin1140.h"
     #include "no_os_spi.h"
-    #include "no_os_gpio.h"
-    #include "no_os_delay.h"
     #include "no_os_print_log.h"
-    #include "no_os_alloc.h"
-    #include "no_os_crc8.h"
-    #include "no_os_util.h"
 
     int main(void)
     {
-        struct adin1110_init_param init_param = {
-            .chip_type = ADIN1110,
+        struct adin1140_init_param init_param = {
             .comm_param = {
                 .device_id = 1,
                 .max_speed_hz = 15000000,
                 .chip_select = 0,
                 .mode = NO_OS_SPI_MODE_0,
                 .platform_ops = &max_spi_ops,
-                .extra = &adin1110_spi_extra_ip
+                .extra = &adin1140_spi_extra_ip,
             },
-            .reset_param = {
-                .number = 19,
-                .platform_ops = &max_gpio_ops,
-                .extra = &adin1110_reset_gpio_extra
+            .mac_cfg = {
+                .cps   = 0x6,   /* 64-byte chunk payload */
+                .zarfe = true,
             },
-            .mac_address = {0x00, 0x1A, 0x11, 0x22, 0x33, 0x44},
-            .append_crc = true
+            .plca_cfg = {
+                .enabled  = true,
+                .node_id  = 0,  /* 0 = PLCA coordinator */
+                .node_cnt = 2,
+            },
+            .mac_address = { 0x00, 0x18, 0x80, 0x03, 0x25, 0x80 },
         };
 
-        struct adin1110_desc *desc;
-        int32_t ret;
+        struct adin1140_desc *desc;
+        int ret;
 
-        no_os_print_log("Starting ADIN1110 initialization...\n");
-        ret = adin1110_init(&desc, &init_param);
+        ret = adin1140_init(&desc, &init_param);
         if (ret) {
-            no_os_print_log("ADIN1110 initialization failed with error: %d\n", ret);
-            goto error_exit;
+            pr_err("ADIN1140 init failed: %d\n", ret);
+            return ret;
         }
 
-        no_os_print_log("ADIN1110 initialization successful\n");
-        goto end;
+        /* ... use the device ... */
 
-    error_exit:
-        if (desc) {
-            int32_t remove_ret = adin1110_remove(desc);
-            if (remove_ret) {
-                no_os_print_log("Error during resource cleanup: %d\n", remove_ret);
-            }
-        }
-        no_os_print_log("Exiting due to initialization error\n");
+        adin1140_remove(desc);
 
-    end:
-        return ret;
+        return 0;
     }
