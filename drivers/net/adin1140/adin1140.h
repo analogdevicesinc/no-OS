@@ -232,6 +232,14 @@ int adin1140_reg_read(struct adin1140_desc *desc, uint32_t addr, uint32_t *data)
 int adin1140_reg_update(struct adin1140_desc *desc, uint32_t addr,
 			uint32_t mask, uint32_t data);
 
+/* Read a PHY register using clause 22 via MMS */
+int adin1140_mdio_read_c22(struct adin1140_desc *desc, uint16_t reg,
+			   uint16_t *data);
+
+/* Write a PHY register using clause 22 via MMS */
+int adin1140_mdio_write_c22(struct adin1140_desc *desc, uint16_t reg,
+			    uint16_t data);
+
 /* Read a PHY register using clause 45 via MMS */
 int adin1140_mdio_read_c45(struct adin1140_desc *desc, uint32_t devnum,
 			   uint16_t reg, uint16_t *data);

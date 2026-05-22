@@ -88,6 +88,48 @@ int adin1140_reg_update(struct adin1140_desc *desc, uint32_t addr,
 }
 
 /**
+ * @brief Read a PHY register using clause 22 via MMS.
+ * @param desc - the device descriptor.
+ * @param reg - register address (0..31).
+ * @param data - pointer to store the register value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_mdio_read_c22(struct adin1140_desc *desc, uint16_t reg,
+			   uint16_t *data)
+{
+	uint32_t val;
+	int ret;
+
+	if (reg > OA_TC6_PHY_STD_REG_MASK)
+		return -EINVAL;
+
+	ret = oa_tc6_reg_read(desc->oa_desc, OA_TC6_PHY_STD_REG(reg), &val);
+	if (ret)
+		return ret;
+
+	*data = (uint16_t)(val & 0xFFFF);
+
+	return 0;
+}
+
+/**
+ * @brief Write a PHY register using clause 22 via MMS.
+ * @param desc - the device descriptor.
+ * @param reg - register address (0..31).
+ * @param data - value to write.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int adin1140_mdio_write_c22(struct adin1140_desc *desc, uint16_t reg,
+			    uint16_t data)
+{
+	if (reg > OA_TC6_PHY_STD_REG_MASK)
+		return -EINVAL;
+
+	return oa_tc6_reg_write(desc->oa_desc, OA_TC6_PHY_STD_REG(reg),
+				(uint32_t)data);
+}
+
+/**
  * @brief Map a C45 MMD device number to the ADIN1140 MMS index.
  * @param devnum - MMD device number.
  * @return MMS index, or negative error code if unsupported.

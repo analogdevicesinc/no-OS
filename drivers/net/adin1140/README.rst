@@ -135,6 +135,10 @@ preserve untouched bits.
 MDIO Operations
 ~~~~~~~~~~~~~~~
 
+``adin1140_mdio_read_c22()`` and ``adin1140_mdio_write_c22()`` access
+the clause 22 PHY standard register window (32 registers exposed by the
+MAC-PHY at MMS 0, offsets 0xFF00..0xFF1F).
+
 ``adin1140_mdio_read_c45()`` and ``adin1140_mdio_write_c45()`` provide
 clause 45 access to the PHY MMD register space (PMA/PMD, PCS, and
 vendor-specific PLCA), letting host code reach PHY-side controls
