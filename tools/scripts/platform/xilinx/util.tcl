@@ -74,6 +74,73 @@ proc _project_config {cmd {arg}} {
 	}
 }
 
+# HSI fallback: generate lscript.ld when Eclipse app create fails
+proc _generate_lscript_hsi {cpu} {
+	puts ">>> HSI FALLBACK: Generating lscript.ld using HSI API <<<"
+
+	# Create app directory structure
+	file mkdir app/src
+
+	# Generate linker script using the HSI linker generator API
+	set mss_path [file normalize bsp/system.mss]
+	set hw_path [file normalize $::hw]
+	puts ">>> HSI: Initializing linker generator with hw=$hw_path mss=$mss_path"
+	::hsi::utils::lg_init $hw_path $mss_path
+
+	# Assign each section to an appropriate memory region
+	set sections [::hsi::utils::lg_get_sections]
+	dict for {sec_type value} $sections {
+		foreach sec [split $value "."] {
+			set parts [split $sec :]
+			set name [lindex $parts 0]
+			if {$name == ""} continue
+			set size [lindex $parts 1]
+			set assigned_mem [lindex $parts 2]
+			if {$assigned_mem != ""} continue
+
+			set best_mem ""
+			set best_size 0
+			set mem_json [::hsi::utils::lg_get_memories -json]
+			set mem_dict [::json::json2dict $mem_json]
+			dict for {mkey mval} $mem_dict {
+				set mem_valid [lsearch $parts "*$mkey*"]
+				if {$mem_valid != -1} {
+					set msize [dict get $mval size]
+					if {$best_mem == "" || $msize > $best_size} {
+						set best_mem $mkey
+						set best_size $msize
+					}
+				}
+			}
+
+			if {$best_mem != ""} {
+				if {$sec_type == "stack_section" || $sec_type == "heap_section"} {
+					::hsi::utils::lg_set_section_memory -sec $name -mem $best_mem -size $size
+				} else {
+					::hsi::utils::lg_set_section_memory -sec .$name -mem $best_mem -size $size
+				}
+			}
+		}
+	}
+
+	::hsi::utils::lg_generate [file normalize app/src/lscript.ld]
+	::hsi::utils::lg_delete
+	puts ">>> HSI: Generated lscript.ld successfully"
+
+	# For Zynq (cortexa9), copy Xilinx.spec needed by the linker
+	if {[string first "cortexa9" $cpu] != -1} {
+		set vitis_dir $::env(XILINX_VITIS)
+		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		puts ">>> HSI: Copying Xilinx.spec from $spec_src"
+		if {[file exists $spec_src]} {
+			file copy -force $spec_src app/src/Xilinx.spec
+			puts ">>> HSI: Xilinx.spec copied successfully"
+		} else {
+			puts ">>> HSI WARNING: Xilinx.spec not found at $spec_src"
+		}
+	}
+}
+
 # HSI-only project creation (Vitis 2025+ / Embedded Kit compatible)
 proc _vitis_hsi_project {} {
 	openhw $::hw
@@ -175,13 +242,26 @@ proc _vitis_classic_project {} {
 		-os standalone						\
 		-template  $::template
 
+	# Fallback: if Eclipse app create failed to generate lscript.ld, use HSI
+	if {![file exists "app/src/lscript.ld"]} {
+		puts ">>> Eclipse app create failed to generate lscript.ld"
+		puts ">>> Falling back to HSI linker script generation"
+		_generate_lscript_hsi $cpu
+	} else {
+		puts ">>> Eclipse app create succeeded - lscript.ld exists"
+	}
+
 	closehw $::hw
 
 	# Increase heap size
 	_replace_heap
 
-	# Configure the project
-	_project_config "app" "config"
+	# Configure the project (skip if HSI fallback was used - no Eclipse project)
+	if {[file exists "app/.project"]} {
+		_project_config "app" "config"
+	} else {
+		puts ">>> Skipping _project_config - no Eclipse project (HSI mode)"
+	}
 }
 
 proc _xsdk_project {} {
@@ -208,13 +288,26 @@ proc _xsdk_project {} {
 		-app [string trimright $::template (C)]			\
 		-bsp bsp
 
+	# Fallback: if SDK createapp failed to generate lscript.ld, use HSI
+	if {![file exists "app/src/lscript.ld"]} {
+		puts ">>> SDK createapp failed to generate lscript.ld"
+		puts ">>> Falling back to HSI linker script generation"
+		_generate_lscript_hsi $cpu
+	} else {
+		puts ">>> SDK createapp succeeded - lscript.ld exists"
+	}
+
 	closehw $::hw
 
 	# Increase heap size
 	_replace_heap
 
-	# Configure the project
-	_project_config "sdk" "configapp"
+	# Configure the project (skip if HSI fallback was used - no Eclipse project)
+	if {[file exists "app/.project"]} {
+		_project_config "sdk" "configapp"
+	} else {
+		puts ">>> Skipping _project_config - no Eclipse project (HSI mode)"
+	}
 }
 
 proc get_arch {} {
