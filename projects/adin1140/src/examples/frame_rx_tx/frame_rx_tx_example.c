@@ -72,6 +72,10 @@ int example_main()
 
 	struct adin1140_init_param adin1140_ip = {
 		.comm_param = adin1140_spi_ip,
+		.mac_cfg = {
+			.cps   = 0x6,
+			.zarfe = true,
+		},
 	};
 
 	struct adin1140_eth_buff eth_tx = {

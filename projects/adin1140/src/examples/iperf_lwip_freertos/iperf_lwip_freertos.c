@@ -150,6 +150,10 @@ static void net_task(void *param)
 	int ret;
 
 	adin1140_ip.comm_param = adin1140_spi_ip;
+	adin1140_ip.mac_cfg = (struct adin1140_mac_cfg) {
+		.cps   = 0x6,
+		.zarfe = true,
+	};
 	memcpy(adin1140_ip.mac_address, adin1140_mac_address,
 	       NETIF_MAX_HWADDR_LEN);
 

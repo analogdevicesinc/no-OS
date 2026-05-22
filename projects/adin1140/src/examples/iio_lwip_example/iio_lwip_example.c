@@ -75,6 +75,10 @@ int example_main()
 	struct iio_app_init_param app_init_param = { 0 };
 
 	adin1140_ip.comm_param = adin1140_spi_ip;
+	adin1140_ip.mac_cfg = (struct adin1140_mac_cfg) {
+		.cps   = 0x6,
+		.zarfe = true,
+	};
 
 	adt7420_iio_ip.adt7420_dev_init = &adt7420_ip;
 	ret = adt7420_iio_init(&adt7420_iio_desc, &adt7420_iio_ip);
