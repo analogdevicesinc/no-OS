@@ -168,11 +168,24 @@ struct adin1140_mac_cfg {
 };
 
 /**
+ * @brief PLCA (Physical Layer Collision Avoidance) configuration.
+ */
+struct adin1140_plca_cfg {
+	bool enabled;
+	uint8_t node_id;
+	uint8_t node_cnt;
+	uint8_t to_tmr;
+	uint8_t burst_cnt;
+	uint8_t burst_tmr;
+};
+
+/**
  * @brief Initialization parameter for the device descriptor.
  */
 struct adin1140_init_param {
 	struct no_os_spi_init_param comm_param;
 	struct adin1140_mac_cfg mac_cfg;
+	struct adin1140_plca_cfg plca_cfg;
 	uint8_t mac_address[ADIN1140_ETH_ALEN];
 };
 
@@ -185,18 +198,6 @@ struct adin1140_eth_buff {
 	uint8_t mac_source[ADIN1140_ETH_ALEN];
 	uint8_t ethertype[2];
 	uint8_t *payload;
-};
-
-/**
- * @brief PLCA (Physical Layer Collision Avoidance) configuration.
- */
-struct adin1140_plca_cfg {
-	bool enabled;
-	uint8_t node_id;
-	uint8_t node_cnt;
-	uint8_t to_tmr;
-	uint8_t burst_cnt;
-	uint8_t burst_tmr;
 };
 
 static bool adin1140_irq_triggered(struct adin1140_desc *desc)
@@ -256,7 +257,7 @@ int adin1140_read_fifo(struct adin1140_desc *desc,
 
 /* Set the PLCA configuration */
 int adin1140_plca_set_cfg(struct adin1140_desc *desc,
-			  struct adin1140_plca_cfg *cfg);
+			  const struct adin1140_plca_cfg *cfg);
 
 /* Get the PLCA configuration */
 int adin1140_plca_get_cfg(struct adin1140_desc *desc,

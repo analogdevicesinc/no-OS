@@ -462,7 +462,7 @@ int adin1140_poll(struct adin1140_desc *desc)
  * @return 0 in case of success, negative error code otherwise.
  */
 int adin1140_plca_set_cfg(struct adin1140_desc *desc,
-			  struct adin1140_plca_cfg *cfg)
+			  const struct adin1140_plca_cfg *cfg)
 {
 	uint32_t val;
 	int ret;
@@ -658,6 +658,10 @@ int adin1140_init(struct adin1140_desc **desc,
 		goto free_oa;
 
 	ret = adin1140_setup_phy(d);
+	if (ret)
+		goto free_oa;
+
+	ret = adin1140_plca_set_cfg(d, &param->plca_cfg);
 	if (ret)
 		goto free_oa;
 
