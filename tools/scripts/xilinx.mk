@@ -377,3 +377,7 @@ $(PLATFORM)_reset: xilinx_clean_all
 
 xilinx_clean_all:
 	$(call remove_dir,.Xil) $(HIDE)
+	$(call remove_dir,_ide) $(HIDE)
+	$(call remove_dir,.vscode) $(HIDE)
+	$(call remove_dir,.cache) $(HIDE)
+	$(call remove_file,compile_commands.json) $(HIDE)
