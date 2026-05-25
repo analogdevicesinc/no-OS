@@ -72,6 +72,8 @@
 #define RX_CMD_DMA_BASEADDR		XPAR_AXI_RX_CMD_DMA_BASEADDR
 #define TX_CMD_DMA_BASEADDR		XPAR_AXI_TX_CMD_DMA_BASEADDR
 
+#define TX_DATA_OFFLOAD_BASEADDR	XPAR_TX_DATA_OFFLOAD_I_DATA_OFFLOAD_BASEADDR
+
 
 /******************************************************************************/
 /***  Buffer sizes                                                          ***/
