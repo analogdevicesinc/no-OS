@@ -298,9 +298,10 @@ proc _cpu_reset {cpu} {
 	}
 }
 
-proc _write_pl_versal {pdi_path} {
-	# Versal PDI programming requires Vivado hardware manager (cs_server).
-	# xsct + hw_server alone cannot program Versal devices.
+proc _write_pl_versal_vivado {pdi_path} {
+	# Fallback: program Versal PDI via Vivado hardware manager.
+	# Required for Vitis versions before 2025 where device_program
+	# is not available in xsct.
 	set pdi [file normalize $pdi_path]
 	set tmp_script "/tmp/_noos_versal_pdi_[pid].tcl"
 	set fd [open $tmp_script w]
@@ -329,7 +330,7 @@ proc _write_pl_versal {pdi_path} {
 
 proc _write_pl {cpu {bitstream}} {
 	if {$cpu == "sys_cips_pspmc_0_psv_cortexa72_0"} {
-		# Versal: handled separately in upload via _write_pl_versal
+		# Versal: PDI programming handled separately in upload
 		return
 	}
 	set name [dict get $::pl_dict $cpu]
@@ -395,40 +396,44 @@ proc upload {} {
 	set cpu [_get_processor]
 
 	if {$cpu == "sys_cips_pspmc_0_psv_cortexa72_0"} {
-		# Versal flow: PDI via Vivado (requires cs_server), then
-		# ELF download via xsct.
+		# Versal flow: program PDI, then download ELF.
 		set xsa_dir [file dirname [file normalize $::hw]]
 		set pdi_path [file join $xsa_dir "system_top.pdi"]
 		if {![file exists $pdi_path]} {
 			exec unzip -o -q [file normalize $::hw] "*.pdi" -d $xsa_dir
 		}
 
-		# 1. Start hw_server (Vivado and xsct will both connect to it)
+		# 1. Start hw_server
 		catch {exec pkill -x hw_server}
 		catch {exec pkill -x cs_server}
 		after 2000
 		exec hw_server &
 		after 3000
 
-		# 2. Program PDI via Vivado (auto-launches cs_server)
-		_write_pl_versal $pdi_path
-
-		# 3. Ensure cs_server is running for debug target enumeration
-		if {[catch {exec pgrep -x cs_server}]} {
-			puts "INFO: Starting cs_server..."
-			exec cs_server &
-			after 3000
-		}
-
-		# 4. Connect xsct to the running hw_server
+		# 2. Connect xsct to hw_server
 		if { [info exists ::env(XSCT_REMOTE_HOST)] && [info exists ::env(XSCT_REMOTE_PORT)] } {
 			connect -host "$::env(XSCT_REMOTE_HOST)" -port "$::env(XSCT_REMOTE_PORT)"
 		} else {
 			connect -host localhost -port 3121
 		}
-		after 5000
+		after 3000
 
-		# 5. Init PS and download ELF
+		# 3. Program PDI: try device_program (Vitis 2025+), fall
+		#    back to Vivado batch mode for older versions.
+		set pdi [file normalize $pdi_path]
+		puts "INFO: Programming Versal PDI..."
+		if {[catch {
+			targets -set -filter {name =~ "*Versal*" && jtag_cable_name =~ "*$::jtagtarget*"}
+			device_program $pdi
+		} err]} {
+			puts "INFO: device_program not available ($err), trying Vivado..."
+			_write_pl_versal_vivado $pdi_path
+		} else {
+			puts "INFO: PDI programmed successfully. Waiting for PLM..."
+			after 5000
+		}
+
+		# 4. Init PS and download ELF
 		_init_ps $cpu
 		_write_ps $cpu
 	} else {
