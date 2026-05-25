@@ -130,7 +130,7 @@ proc _generate_lscript_hsi {cpu} {
 	# For Zynq (cortexa9), copy Xilinx.spec needed by the linker
 	if {[string first "cortexa9" $cpu] != -1} {
 		set vitis_dir $::env(XILINX_VITIS)
-		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		set spec_src [file normalize $vitis_dir/data/embeddedsw/scripts/specs/arm/Xilinx.spec]
 		puts ">>> HSI: Copying Xilinx.spec from $spec_src"
 		if {[file exists $spec_src]} {
 			file copy -force $spec_src app/src/Xilinx.spec
@@ -208,7 +208,7 @@ proc _vitis_hsi_project {} {
 	# For Zynq (cortexa9), copy Xilinx.spec needed by the linker
 	if {[string first "cortexa9" $cpu] != -1} {
 		set vitis_dir $::env(XILINX_VITIS)
-		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
+		set spec_src [file normalize $vitis_dir/data/embeddedsw/scripts/specs/arm/Xilinx.spec]
 		if {[file exists $spec_src]} {
 			file copy -force $spec_src app/src/Xilinx.spec
 		} else {
