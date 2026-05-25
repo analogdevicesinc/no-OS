@@ -74,6 +74,14 @@
 
 #define TX_DATA_OFFLOAD_BASEADDR	XPAR_TX_DATA_OFFLOAD_I_DATA_OFFLOAD_BASEADDR
 
+/******************************************************************************/
+/***  DMA buffer addresses in low DDR (must fit in 32-bit axi_dma_transfer) ***/
+/******************************************************************************/
+#define TX_DDR_BASEADDR			(DDR_MEM_BASEADDR + 0x1000000)
+#define TX_CMD_DDR_BASEADDR		(DDR_MEM_BASEADDR + 0x1100000)
+#define RX_DDR_BASEADDR			(DDR_MEM_BASEADDR + 0x1200000)
+#define RX_CMD_DDR_BASEADDR		(DDR_MEM_BASEADDR + 0x1300000)
+#define ADC_DDR_BASEADDR		(DDR_MEM_BASEADDR + 0x1400000)
 
 /******************************************************************************/
 /***  Buffer sizes                                                          ***/

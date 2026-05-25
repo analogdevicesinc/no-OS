@@ -59,10 +59,6 @@
 #include "iio_app.h"
 #endif
 
-static uint32_t dac_buffer_dma[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
-static uint32_t dac_buffer[DAC_BUFFER_SAMPLES] __attribute__((aligned(1024)));
-static uint16_t adc_buffer[ADC_BUFFER_SAMPLES * ADC_CHANNELS] __attribute__((
-			aligned(1024)));
 
 /*
  * 512-bit base sequence (MSW..LSW):
@@ -410,7 +406,11 @@ int example_main()
 		pr_err("axi_dmac_init(tx) failed: %d\n", ret);
 		goto error_rx_adc;
 	}
-	pr_info("TX DMA initialized\n");
+	printf("TX DMA: dir=%d src_w=%lu dst_w=%lu max_len=%lu\n",
+	       tx_dmac->direction,
+	       (unsigned long)tx_dmac->width_src,
+	       (unsigned long)tx_dmac->width_dst,
+	       (unsigned long)tx_dmac->max_length);
 
 	struct axi_dmac_init tx_cmd_dmac_init = {
 		.name = "tx_cmd_dmac",
@@ -423,7 +423,11 @@ int example_main()
 		pr_err("axi_dmac_init(tx_cmd) failed: %d\n", ret);
 		goto error_tx_dmac;
 	}
-	pr_info("TX CMD DMA initialized\n");
+	printf("TX CMD DMA: dir=%d src_w=%lu dst_w=%lu max_len=%lu\n",
+	       tx_cmd_dmac->direction,
+	       (unsigned long)tx_cmd_dmac->width_src,
+	       (unsigned long)tx_cmd_dmac->width_dst,
+	       (unsigned long)tx_cmd_dmac->max_length);
 
 	struct axi_dmac_init rx_dmac_init = {
 		.name = "rx_dmac",
@@ -522,10 +526,29 @@ int example_main()
 	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
 	no_os_mdelay(1);
 	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x01C,
+			   sizeof(tx_passthrough) - 1);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
 	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
 	{
-		uint32_t do_fsm;
+		uint32_t do_fsm, do_ver, do_cfg, do_mem_lo, do_mem_hi;
+		uint32_t do_tlen, do_sync_cfg;
 		int timeout = 100;
+
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x000, &do_ver);
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x010, &do_cfg);
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x014, &do_mem_lo);
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x018, &do_mem_hi);
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x01C, &do_tlen);
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x104, &do_sync_cfg);
+
+		printf("TX data offload: ver=0x%08lX cfg=0x%lX "
+		       "mem=%lu bytes tlen=0x%lX sync_cfg=%lu\n",
+		       (unsigned long)do_ver, (unsigned long)do_cfg,
+		       (unsigned long)do_mem_lo |
+		       ((unsigned long)do_mem_hi << 32),
+		       (unsigned long)do_tlen,
+		       (unsigned long)do_sync_cfg);
 
 		do {
 			no_os_mdelay(1);
@@ -548,24 +571,12 @@ int example_main()
 	getchar();
 
 	{
-		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
-			__attribute__((aligned(1024)));
-		uint32_t adc_cmd_buffer_dma[NO_OS_ARRAY_SIZE(tx_cmd_read)]
-			__attribute__((aligned(1024)));
+		volatile uint32_t *rx_cmd_buf =
+			(volatile uint32_t *)(uintptr_t)RX_CMD_DDR_BASEADDR;
 		int ch;
 
-		/*
-		 * Write CMD data word-by-word via no_os_axi_io_write
-		 * instead of tx_generator_load_custom_data, which
-		 * replicates each word across num_channels/2 lanes and
-		 * corrupts the 64-bit CMD value.  We must use
-		 * no_os_axi_io_write (not memcpy) because
-		 * axi_dma_transfer.src_addr is uint32_t and truncates
-		 * 64-bit pointers — no_os_axi_io_write truncates the
-		 * same way, keeping write and DMA read consistent.
-		 */
 		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_read); i++)
-			no_os_axi_io_write((uintptr_t)cmd_buffer_dma,
+			no_os_axi_io_write(TX_CMD_DDR_BASEADDR,
 					   i * sizeof(uint32_t),
 					   tx_cmd_read[i]);
 
@@ -573,26 +584,24 @@ int example_main()
 			.size = sizeof(tx_cmd_read),
 			.transfer_done = 0,
 			.cyclic = NO,
-			.src_addr = (uintptr_t)cmd_buffer_dma,
+			.src_addr = TX_CMD_DDR_BASEADDR,
 			.dest_addr = 0,
 		};
 
 		Xil_DCacheFlush();
 
-		/* Start RX CMD DMA before TX so it's ready to capture the response */
 		struct axi_dma_transfer read_cmd_transfer = {
 			.size = sizeof(tx_cmd_read),
 			.transfer_done = 0,
 			.cyclic = NO,
 			.src_addr = 0,
-			.dest_addr = (uintptr_t)adc_cmd_buffer_dma,
+			.dest_addr = RX_CMD_DDR_BASEADDR,
 		};
 
 		ret = axi_dmac_transfer_start(rx_cmd_dmac, &read_cmd_transfer);
 		if (ret)
 			pr_err("axi_dmac_transfer_start(rx_cmd) failed: %d\n", ret);
 
-		/* Now send the CMD READ */
 		tx_generator_cmd_set_stream_source(tx_generator, true);
 
 		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
@@ -603,17 +612,16 @@ int example_main()
 
 		tx_generator_cmd_set_stream_source(tx_generator, false);
 
-		/* Wait for the RX CMD response */
 		ret = axi_dmac_transfer_wait_completion(rx_cmd_dmac, 2000);
 		if (ret)
 			pr_err("RX CMD DMA transfer timeout: %d\n", ret);
 
-		Xil_DCacheInvalidateRange((uintptr_t)adc_cmd_buffer_dma,
-					  sizeof(adc_cmd_buffer_dma));
+		Xil_DCacheInvalidateRange(RX_CMD_DDR_BASEADDR,
+					  sizeof(tx_cmd_read));
 
-		for (i = 0; i < NO_OS_ARRAY_SIZE(adc_cmd_buffer_dma); i++)
-			printf("  adc_cmd_buffer_dma[%2u] = 0x%08lX\n", i,
-			       (unsigned long)adc_cmd_buffer_dma[i]);
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_read); i++)
+			printf("  rx_cmd[%2u] = 0x%08lX\n", i,
+			       (unsigned long)rx_cmd_buf[i]);
 
 		printf("\nRX CMD capture loop — Enter to exit, any key + Enter to re-capture.\n");
 		ch = getchar();
@@ -629,12 +637,12 @@ int example_main()
 					pr_err("RX CMD DMA transfer timeout: %d\n", ret);
 			}
 
-			Xil_DCacheInvalidateRange((uintptr_t)adc_cmd_buffer_dma,
-						  sizeof(adc_cmd_buffer_dma));
+			Xil_DCacheInvalidateRange(RX_CMD_DDR_BASEADDR,
+						  sizeof(tx_cmd_read));
 
-			for (i = 0; i < NO_OS_ARRAY_SIZE(adc_cmd_buffer_dma); i++)
-				printf("  adc_cmd_buffer_dma[%2u] = 0x%08lX\n", i,
-				       (unsigned long)adc_cmd_buffer_dma[i]);
+			for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_read); i++)
+				printf("  rx_cmd[%2u] = 0x%08lX\n", i,
+				       (unsigned long)rx_cmd_buf[i]);
 
 			printf("\n");
 			ch = getchar();
@@ -675,12 +683,8 @@ int example_main()
 	tx_generator_cmd_set_stream_source(tx_generator, true);
 
 	{
-		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
-			__attribute__((aligned(1024)));
-
-		/* See CMD READ comment — same channel-replication issue. */
 		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_streaming_read); i++)
-			no_os_axi_io_write((uintptr_t)cmd_buffer_dma,
+			no_os_axi_io_write(TX_CMD_DDR_BASEADDR,
 					   i * sizeof(uint32_t),
 					   tx_cmd_streaming_read[i]);
 
@@ -688,7 +692,7 @@ int example_main()
 			.size = sizeof(tx_cmd_streaming_read),
 			.transfer_done = 0,
 			.cyclic = NO,
-			.src_addr = (uintptr_t)cmd_buffer_dma,
+			.src_addr = TX_CMD_DDR_BASEADDR,
 			.dest_addr = 0,
 		};
 
@@ -716,12 +720,8 @@ int example_main()
 	tx_generator_cmd_set_stream_source(tx_generator, true);
 
 	{
-		static uint32_t cmd_buffer_dma[DAC_BUFFER_SAMPLES]
-			__attribute__((aligned(1024)));
-
-		/* See CMD READ comment — same channel-replication issue. */
 		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_write); i++)
-			no_os_axi_io_write((uintptr_t)cmd_buffer_dma,
+			no_os_axi_io_write(TX_CMD_DDR_BASEADDR,
 					   i * sizeof(uint32_t),
 					   tx_cmd_write[i]);
 
@@ -729,7 +729,7 @@ int example_main()
 			.size = sizeof(tx_cmd_write),
 			.transfer_done = 0,
 			.cyclic = NO,
-			.src_addr = (uintptr_t)cmd_buffer_dma,
+			.src_addr = TX_CMD_DDR_BASEADDR,
 			.dest_addr = 0,
 		};
 
@@ -755,67 +755,107 @@ int example_main()
 	printf("Press Enter to start TX DMA transfer of PASS stream...\n");
 	getchar();
 
-	tx_generator_load_custom_data(tx_generator, tx_passthrough,
-				     NO_OS_ARRAY_SIZE(tx_passthrough),
-				     (uintptr_t)dac_buffer_dma);
+	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_passthrough); i++)
+		no_os_axi_io_write(TX_DDR_BASEADDR,
+				   i * sizeof(uint32_t),
+				   tx_passthrough[i]);
+
+	{
+		uint32_t readback;
+
+		printf("TX PASS DDR readback:\n");
+		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_passthrough); i++) {
+			no_os_axi_io_read(TX_DDR_BASEADDR,
+					  i * sizeof(uint32_t), &readback);
+			printf("  [%2u] wrote=0x%08lX read=0x%08lX %s\n",
+			       i, (unsigned long)tx_passthrough[i],
+			       (unsigned long)readback,
+			       readback == tx_passthrough[i] ? "OK" : "MISMATCH");
+		}
+	}
 
 	struct axi_dma_transfer transfer = {
 		.size = sizeof(tx_passthrough),
 		.transfer_done = 0,
 		.cyclic = NO,
-		.src_addr = (uintptr_t)dac_buffer_dma,
+		.src_addr = TX_DDR_BASEADDR,
 		.dest_addr = 0,
 	};
 
-	pr_info("DMA_EXAMPLE Tx PASS: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(tx_passthrough),
-		tx_generator->num_channels,
-		8 * sizeof(tx_passthrough[0]));
+	{
+		uint32_t do_fsm;
+		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200, &do_fsm);
+		printf("Data offload before PASS DMA: wr=%lu rd=%lu\n",
+		       (unsigned long)(do_fsm & 0x1F),
+		       (unsigned long)((do_fsm >> 8) & 0xF));
+	}
+
+	pr_info("DMA_EXAMPLE Tx PASS: address=%#x size=%lu\n",
+		TX_DDR_BASEADDR, (unsigned long)sizeof(tx_passthrough));
 
 	Xil_DCacheFlush();
 
-	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
-	if (ret)
-		pr_err("axi_dmac_transfer_start(tx_passthrough) failed: %d\n", ret);
-	else
-		pr_info("TX DMA transfer of PASS stream started\n");
-
 #ifdef DMA_CYCLIC_PASS
-	/* RX DMA read — same length as TX transfer */
-	uint32_t adc_pass_buffer_dma[NO_OS_ARRAY_SIZE(tx_passthrough)]
-		__attribute__((aligned(1024)));
+	{
+	volatile uint32_t *rx_pass_buf =
+		(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
 
 	struct axi_dma_transfer read_pass_transfer = {
 		.size = sizeof(tx_passthrough),
 		.transfer_done = 0,
 		.cyclic = NO,
 		.src_addr = 0,
-		.dest_addr = (uintptr_t)adc_pass_buffer_dma,
+		.dest_addr = RX_DDR_BASEADDR,
 	};
 
-	//printf("Press Enter to start Rx transfer...\n");
-	//getchar();
-
 	ret = axi_dmac_transfer_start(rx_dmac, &read_pass_transfer);
+	if (ret)
+		pr_err("axi_dmac_transfer_start(rx_pass) failed: %d\n", ret);
+#endif
+
+	ret = axi_dmac_transfer_start(tx_dmac, &transfer);
 	if (ret) {
-		pr_err("axi_dmac_transfer_start(rx) failed: %d\n", ret);
+		pr_err("axi_dmac_transfer_start(tx_passthrough) failed: %d\n", ret);
 	} else {
-		ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+		pr_info("TX DMA transfer of PASS stream started\n");
+		ret = axi_dmac_transfer_wait_completion(tx_dmac, 2000);
 		if (ret)
-			pr_err("RX DMA transfer timeout: %d\n", ret);
+			pr_err("TX DMA PASS transfer timeout\n");
+		else
+			pr_info("TX DMA PASS transfer completed\n");
 	}
 
-	Xil_DCacheInvalidateRange((uintptr_t)adc_pass_buffer_dma,
-				  sizeof(adc_pass_buffer_dma));
+	{
+		uint32_t do_fsm;
+		int timeout = 200;
 
-	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)adc_pass_buffer_dma, NO_OS_ARRAY_SIZE(adc_pass_buffer_dma),
+		do {
+			no_os_mdelay(1);
+			no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200,
+					  &do_fsm);
+		} while (((do_fsm & 0x1F) != 1 ||
+			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
+		printf("Data offload after PASS: wr=%lu rd=%lu\n",
+		       (unsigned long)(do_fsm & 0x1F),
+		       (unsigned long)((do_fsm >> 8) & 0xF));
+	}
+
+#ifdef DMA_CYCLIC_PASS
+	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+	if (ret)
+		pr_err("RX PASS DMA transfer timeout\n");
+
+	Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_passthrough));
+
+	pr_info("DMA_EXAMPLE Rx: address=%#x samples=%lu channels=%u bits=%lu\n",
+		RX_DDR_BASEADDR, (unsigned long)NO_OS_ARRAY_SIZE(tx_passthrough),
 		rx_adc->num_channels,
-		8 * sizeof(adc_pass_buffer_dma[0]));
+		8 * sizeof(tx_passthrough[0]));
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(adc_pass_buffer_dma); i++)
-		printf("  adc_pass_buffer_dma[%2u] = 0x%08lX\n", i,
-		       (unsigned long)adc_pass_buffer_dma[i]);
+	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_passthrough); i++)
+		printf("  rx_pass[%2u] = 0x%08lX\n", i,
+		       (unsigned long)rx_pass_buf[i]);
+	}
 #endif
 
 	/*
@@ -825,6 +865,13 @@ int example_main()
 	 * then start the vec transfer normally.
 	 * ----------------------------------------------------------------
 	 */
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
+	no_os_mdelay(1);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x01C,
+			   sizeof(tx_vector) - 1);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
+	no_os_axi_io_write(TX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
 	{
 		uint32_t do_fsm;
 		int timeout = 200;
@@ -840,81 +887,88 @@ int example_main()
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
 
-	tx_generator_load_custom_data(tx_generator, tx_vector,
-				      NO_OS_ARRAY_SIZE(tx_vector),
-				      (uintptr_t)dac_buffer_dma);
+	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
+		no_os_axi_io_write(TX_DDR_BASEADDR,
+				   i * sizeof(uint32_t),
+				   tx_vector[i]);
 
 	struct axi_dma_transfer vec_transfer = {
 		.size = sizeof(tx_vector),
 		.transfer_done = 0,
 		.cyclic = NO,
-		.src_addr = (uintptr_t)dac_buffer_dma,
+		.src_addr = TX_DDR_BASEADDR,
 		.dest_addr = 0,
 	};
 
 	printf("Press Enter to start TX DMA transfer of VEC stream...\n");
 	getchar();
 
-	pr_info("DMA_EXAMPLE Tx VEC: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)dac_buffer_dma, NO_OS_ARRAY_SIZE(tx_vector),
-		tx_generator->num_channels,
-		8 * sizeof(tx_vector[0]));
+	pr_info("DMA_EXAMPLE Tx VEC: address=%#x size=%lu\n",
+		TX_DDR_BASEADDR, (unsigned long)sizeof(tx_vector));
 
 	Xil_DCacheFlush();
 
-	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
-	if (ret)
-		pr_err("axi_dmac_transfer_start(tx_vector) failed: %d\n", ret);
-	else
-		pr_info("TX DMA transfer of VEC stream started\n");
-
-	no_os_mdelay(10);
-
-	{
-		uint32_t do_fsm;
-
-		no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200, &do_fsm);
-		printf("TX data offload after VEC: wr=%lu rd=%lu\n",
-		       (unsigned long)(do_fsm & 0x1F),
-		       (unsigned long)((do_fsm >> 8) & 0xF));
-	}
-
 #ifdef DMA_CYCLIC_PASS
-	/* RX DMA read — same length as TX transfer */
-	uint32_t adc_vec_buffer_dma[NO_OS_ARRAY_SIZE(tx_vector)]
-		__attribute__((aligned(1024)));
+	{
+	volatile uint32_t *rx_vec_buf =
+		(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
 
 	struct axi_dma_transfer read_vec_transfer = {
 		.size = sizeof(tx_vector),
 		.transfer_done = 0,
 		.cyclic = NO,
 		.src_addr = 0,
-		.dest_addr = (uintptr_t)adc_vec_buffer_dma,
+		.dest_addr = RX_DDR_BASEADDR,
 	};
 
-	//printf("Press Enter to start Rx transfer...\n");
-	//getchar();
-
 	ret = axi_dmac_transfer_start(rx_dmac, &read_vec_transfer);
+	if (ret)
+		pr_err("axi_dmac_transfer_start(rx_vec) failed: %d\n", ret);
+#endif
+
+	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
 	if (ret) {
-		pr_err("axi_dmac_transfer_start(rx) failed: %d\n", ret);
+		pr_err("axi_dmac_transfer_start(tx_vector) failed: %d\n", ret);
 	} else {
-		ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+		pr_info("TX DMA transfer of VEC stream started\n");
+		ret = axi_dmac_transfer_wait_completion(tx_dmac, 2000);
 		if (ret)
-			pr_err("RX DMA transfer timeout: %d\n", ret);
+			pr_err("TX DMA VEC transfer timeout\n");
+		else
+			pr_info("TX DMA VEC transfer completed\n");
 	}
 
-	Xil_DCacheInvalidateRange((uintptr_t)adc_vec_buffer_dma,
-				  sizeof(adc_vec_buffer_dma));
+	{
+		uint32_t do_fsm;
+		int timeout = 200;
 
-	pr_info("DMA_EXAMPLE Rx: address=%#lx samples=%lu channels=%u bits=%lu\n",
-		(uintptr_t)adc_vec_buffer_dma, NO_OS_ARRAY_SIZE(adc_vec_buffer_dma),
+		do {
+			no_os_mdelay(1);
+			no_os_axi_io_read(TX_DATA_OFFLOAD_BASEADDR, 0x200,
+					  &do_fsm);
+		} while (((do_fsm & 0x1F) != 1 ||
+			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
+		printf("Data offload after VEC: wr=%lu rd=%lu\n",
+		       (unsigned long)(do_fsm & 0x1F),
+		       (unsigned long)((do_fsm >> 8) & 0xF));
+	}
+
+#ifdef DMA_CYCLIC_PASS
+	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
+	if (ret)
+		pr_err("RX VEC DMA transfer timeout\n");
+
+	Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_vector));
+
+	pr_info("DMA_EXAMPLE Rx: address=%#x samples=%lu channels=%u bits=%lu\n",
+		RX_DDR_BASEADDR, (unsigned long)NO_OS_ARRAY_SIZE(tx_vector),
 		rx_adc->num_channels,
-		8 * sizeof(adc_vec_buffer_dma[0]));
+		8 * sizeof(tx_vector[0]));
 
-	for (i = 0; i < NO_OS_ARRAY_SIZE(adc_vec_buffer_dma); i++)
-		printf("  adc_vec_buffer_dma[%2u] = 0x%08lX\n", i,
-		       (unsigned long)adc_vec_buffer_dma[i]);
+	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
+		printf("  rx_vec[%2u] = 0x%08lX\n", i,
+		       (unsigned long)rx_vec_buf[i]);
+	}
 #endif
 
 
@@ -956,8 +1010,8 @@ int example_main()
 	}
 
 	struct iio_data_buffer read_buff = {
-		.buff = (void *)adc_buffer,
-		.size = sizeof(adc_buffer),
+		.buff = (void *)(uintptr_t)ADC_DDR_BASEADDR,
+		.size = ADC_BUFFER_SAMPLES * ADC_CHANNELS * sizeof(uint16_t),
 	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 
