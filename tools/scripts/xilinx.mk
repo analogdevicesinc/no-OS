@@ -31,6 +31,17 @@ define tcl_util
 	     $(BINARY) $(TARGET_CPU) $(TEMPLATE)
 endef
 
+# Vitis 2025+: use Python API via 'vitis -s' for supported functions.
+# Falls back to xsct for functions not yet ported.
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+define py_util
+	vitis -s $(PLATFORM_TOOLS)/util.py					\
+	     $(1)							\
+	     $(WORKSPACE) $(WORKSPACE)/tmp $(notdir $(HARDWARE))	\
+	     $(BINARY) $(TARGET_CPU) $(TEMPLATE)
+endef
+endif
+
 ARCH = $(shell $(call read_file, $(TEMP_DIR)/arch.txt))
 ARCH_RUN = $(shell $(call read_file, $(TEMP_DIR_RUN)/arch.txt))
 
@@ -216,10 +227,17 @@ $(TEMP_DIR_RUN): $(HARDWARE)
 	$(call print,Creating tmp directory)
 	$(call mk_dir,$(TEMP_DIR_RUN)) $(HIDE)
 	$(call copy_file,$(HARDWARE),$(TEMP_DIR_RUN)) $(HIDE)
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	vitis -s $(PLATFORM_TOOLS)/util.py					\
+	     get_arch						\
+	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
+	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
+else
 	xsct -nodisp $(PLATFORM_TOOLS)/util.tcl					\
 	     get_arch						\
 	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
 	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
+endif
 	$(MAKE) --no-print-directory create_fsbl
 
 PHONY += create_fsbl
@@ -239,7 +257,13 @@ $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
 	$(call copy_file,$(HARDWARE),$(TEMP_DIR)) $(HIDE)
 	$(call print,Evaluating hardware: $(HARDWARE))
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(call print,Using Vitis Python API ($(VITIS_VERSION)))
+	$(call py_util, get_arch) $(HIDE)
+else
+	$(call print,Using xsct Tcl API)
 	$(call tcl_util, get_arch) $(HIDE)
+endif
 
 PHONY += $(PLATFORM)_sdkbuild
 $(PLATFORM)_sdkbuild:
