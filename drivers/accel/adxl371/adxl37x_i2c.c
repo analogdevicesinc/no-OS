@@ -1,8 +1,8 @@
 /*******************************************************************************
- *   @file   adxl371_spi.c
- *   @brief  Implementation of adxl371 SPI Driver.
- *   @author Brandon Hurst (brandon.hurst@analog.com)
- *******************************************************************************
+ *   @file   adxl37x_i2c.c
+ *   @brief  Implementation of adxl371 I2C Driver.
+ *   @author BHurst (brandon.hurst@analog.com)
+ ********************************************************************************
  * Copyright 2026(c) Analog Devices, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "adxl371.h"
+#include "adxl37x.h"
 #include "no_os_error.h"
 #include <stdbool.h>
 #include <stdlib.h>
@@ -44,20 +44,23 @@
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl371_spi_reg_read(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_i2c_reg_read(struct adxl37x_dev *dev, uint8_t reg_addr,
 			     uint8_t *reg_data)
 {
-	uint8_t buf[2];
+	uint8_t data;
 	int32_t ret;
 
-	buf[0] = ADXL371_REG_READ(reg_addr);
-	buf[1] = 0x00;
+	data = reg_addr;
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
+	ret = no_os_i2c_write(dev->i2c_desc, &data, 1, 0);
 	if (ret < 0)
 		return ret;
 
-	*reg_data = buf[1];
+	ret = no_os_i2c_read(dev->i2c_desc, &data, 1, 0);
+	if (ret < 0)
+		return ret;
+
+	*reg_data = data;
 
 	return ret;
 }
@@ -69,15 +72,15 @@ int32_t adxl371_spi_reg_read(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl371_spi_reg_write(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_i2c_reg_write(struct adxl37x_dev *dev, uint8_t reg_addr,
 			      uint8_t reg_data)
 {
 	uint8_t buf[2];
 
-	buf[0] = ADXL371_REG_WRITE(reg_addr);
+	buf[0] = reg_addr;
 	buf[1] = reg_data & 0xFF;
 
-	return no_os_spi_write_and_read(dev->spi_desc, buf, NO_OS_ARRAY_SIZE(buf));
+	return no_os_i2c_write(dev->i2c_desc, buf, NO_OS_ARRAY_SIZE(buf), 0);
 }
 
 /**
@@ -89,23 +92,27 @@ int32_t adxl371_spi_reg_write(struct adxl371_dev *dev, uint8_t reg_addr,
  * @param count - Number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl371_spi_reg_read_multiple(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_i2c_reg_read_multiple(struct adxl37x_dev *dev, uint8_t reg_addr,
 				      uint8_t *reg_data, uint16_t count)
 {
-	uint8_t buf[1025];
+	uint8_t buf[512];
 	int32_t ret;
 
-	if (count > 1024)
+	if (count > 512)
 		return -EINVAL;
 
-	buf[0] = ADXL371_REG_READ(reg_addr);
-	memset(&buf[1], 0x00, count);
+	buf[0] = reg_addr;
+	memset(&buf[1], 0x00, count - 1);
 
-	ret = no_os_spi_write_and_read(dev->spi_desc, buf, count + 1);
+	ret = no_os_i2c_write(dev->i2c_desc, buf, 1, 0);
 	if (ret < 0)
 		return ret;
 
-	memcpy(reg_data, &buf[1], count);
+	ret = no_os_i2c_read(dev->i2c_desc, buf, count, 0);
+	if (ret < 0)
+		return ret;
+
+	memcpy(reg_data, buf, count);
 
 	return ret;
 }

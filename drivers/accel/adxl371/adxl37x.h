@@ -1,5 +1,5 @@
 /***************************************************************************/ /**
-                                                                               *   @file   adxl371.h
+                                                                               *   @file   adxl37x.h
                                                                                *   @brief  Header file for adxl371 Driver.
                                                                                *   @author Brandon Hurst (brandon.hurst@analog.com)
                                                                                ********************************************************************************
@@ -172,12 +172,6 @@
 /* ADXL371_INT1_MAP */
 #define ADXL371_INT1_MAP_DATA_RDY_MSK NO_OS_BIT(0)
 #define ADXL371_INT1_MAP_DATA_RDY_MODE(x) (((x) & 0x1) << 0)
-#define ADXL371_INT1_MAP_FIFO_RDY_MSK NO_OS_BIT(1)
-#define ADXL371_INT1_MAP_FIFO_RDY_MODE(x) (((x) & 0x1) << 1)
-#define ADXL371_INT1_MAP_FIFO_FULL_MSK NO_OS_BIT(2)
-#define ADXL371_INT1_MAP_FIFO_FULL_MODE(x) (((x) & 0x1) << 2)
-#define ADXL371_INT1_MAP_FIFO_OVR_MSK NO_OS_BIT(3)
-#define ADXL371_INT1_MAP_FIFO_OVR_MODE(x) (((x) & 0x1) << 3)
 #define ADXL371_INT1_MAP_INACT_MSK NO_OS_BIT(4)
 #define ADXL371_INT1_MAP_INACT_MODE(x) (((x) & 0x1) << 4)
 #define ADXL371_INT1_MAP_ACT_MSK NO_OS_BIT(5)
@@ -205,102 +199,134 @@
 #define ADXL371_INT2_MAP_LOW_MSK NO_OS_BIT(7)
 #define ADXL371_INT2_MAP_LOW_MODE(x) (((x) & 0x1) << 7)
 
-enum adxl371_axis { ADXL371_X_AXIS, ADXL371_Y_AXIS, ADXL371_Z_AXIS };
+//specific for ADXL372 INT1 and INT2 registers
+#define ADXL371_INT1_MAP_FIFO_RDY_MSK NO_OS_BIT(1)
+#define ADXL371_INT1_MAP_FIFO_RDY_MODE(x) (((x) & 0x1) << 1)
+#define ADXL371_INT1_MAP_FIFO_FULL_MSK NO_OS_BIT(2)
+#define ADXL371_INT1_MAP_FIFO_FULL_MODE(x) (((x) & 0x1) << 2)
+#define ADXL371_INT1_MAP_FIFO_OVR_MSK NO_OS_BIT(3)
+#define ADXL371_INT1_MAP_FIFO_OVR_MODE(x) (((x) & 0x1) << 3)
 
-enum adxl371_op_mode {
-	ADXL371_STANDBY,
-	ADXL371_WAKE_UP,
-	ADXL371_INSTANT_ON,
-	ADXL371_FULL_BW_MEASUREMENT
+enum adxl37x_axis { ADXL37x_X_AXIS, ADXL37x_Y_AXIS, ADXL37x_Z_AXIS };
+
+enum adxl37x_op_mode {
+	ADXL37x_STANDBY,
+	ADXL37x_WAKE_UP,
+	ADXL37x_INSTANT_ON,
+	ADXL37x_FULL_BW_MEASUREMENT
 };
 
-enum adxl371_bandwidth {
-	ADXL371_BW_160HZ,
-	ADXL371_BW_320HZ,
-	ADXL371_BW_640HZ,
-	ADXL371_BW_1280HZ,
-	ADXL371_BW_2560HZ
+
+enum adxl37x_bandwidth {
+	ADXL371_BW_160HZ  = 0, ADXL372_BW_200HZ  = 0,
+	ADXL371_BW_320HZ  = 1, ADXL372_BW_400HZ  = 1,
+	ADXL371_BW_640HZ  = 2, ADXL372_BW_800HZ  = 2,
+	ADXL371_BW_1280HZ = 3, ADXL372_BW_1600HZ = 3,
+	ADXL371_BW_2560HZ = 4, ADXL372_BW_3200HZ = 4,
 };
 
-enum adxl371_act_proc_mode { ADXL371_DEFAULT, ADXL371_LINKED, ADXL371_LOOPED };
+enum adxl37x_act_proc_mode { ADXL37x_DEFAULT, ADXL37x_LINKED, ADXL37x_LOOPED };
 
-enum adxl371_odr {
-	ADXL371_ODR_320HZ,
-	ADXL371_ODR_640HZ,
-	ADXL371_ODR_1280HZ,
-	ADXL371_ODR_2560HZ,
-	ADXL371_ODR_5120HZ
+enum adxl37x_odr {
+	ADXL371_ODR_320HZ=0,
+	ADXL372_ODR_400HZ=0,
+
+	ADXL371_ODR_640HZ=1,
+	ADXL372_ODR_800HZ=1,
+
+	ADXL371_ODR_1280HZ=2,
+	ADXL372_ODR_1600HZ=2,
+
+	ADXL371_ODR_2560HZ=3,
+	ADXL372_ODR_3200HZ=3,
+
+	ADXL371_ODR_5120HZ=4,
+	ADXL372_ODR_6400HZ=4
+
 };
 
-enum adxl371_instant_on_th_mode {
-	ADXL371_INSTANT_ON_LOW_TH,
-	ADXL371_INSTANT_ON_HIGH_TH
+enum adxl37x_instant_on_th_mode {
+	ADXL37x_INSTANT_ON_LOW_TH,
+	ADXL37x_INSTANT_ON_HIGH_TH
 };
 
-enum adxl371_wakeup_rate {
-	ADXL371_WUR_65ms,
-	ADXL371_WUR_130ms,
-	ADXL371_WUR_260ms,
-	ADXL371_WUR_640ms,
-	ADXL371_WUR_2560ms,
-	ADXL371_WUR_5120ms,
-	ADXL371_WUR_10240ms,
-	ADXL371_WUR_30720ms
+enum adxl37x_wakeup_rate {
+	ADXL371_WUR_65ms    = 0, ADXL372_WUR_52ms    = 0,
+	ADXL371_WUR_130ms   = 1, ADXL372_WUR_104ms   = 1,
+	ADXL371_WUR_260ms   = 2, ADXL372_WUR_208ms   = 2,
+	ADXL371_WUR_640ms   = 3, ADXL372_WUR_512ms   = 3,
+	ADXL371_WUR_2560ms  = 4, ADXL372_WUR_2048ms  = 4,
+	ADXL371_WUR_5120ms  = 5, ADXL372_WUR_4096ms  = 5,
+	ADXL371_WUR_10240ms = 6, ADXL372_WUR_8192ms  = 6,
+	ADXL371_WUR_30720ms = 7, ADXL372_WUR_24576ms = 7,
 };
 
-enum adxl371_th_activity {
-	ADXL371_ACTIVITY,
-	ADXL371_ACTIVITY2,
-	ADXL371_INACTIVITY
+enum adxl37x_th_activity {
+	ADXL37x_ACTIVITY,
+	ADXL37x_ACTIVITY2,
+	ADXL37x_INACTIVITY
 };
 
-enum adxl371_filter_settle {
-	ADXL371_FILTER_SETTLE_462p5,
-	ADXL371_FILTER_SETTLE_4divODR
+enum adxl37x_filter_settle {
+	ADXL371_FILTER_SETTLE_462p5   = 0, ADXL372_FILTER_SETTLE_370 = 0,
+	ADXL371_FILTER_SETTLE_4divODR = 1, ADXL372_FILTER_SETTLE_16  = 1,
 };
 
-enum adxl371_fifo_format {
-	ADXL371_XYZ_FIFO,
-	ADXL371_X_FIFO,
-	ADXL371_Y_FIFO,
-	ADXL371_XY_FIFO,
-	ADXL371_Z_FIFO,
-	ADXL371_XZ_FIFO,
-	ADXL371_YZ_FIFO,
-	ADXL371_XYZ_PEAK_FIFO,
+enum adxl37x_fifo_format {
+	ADXL37x_XYZ_FIFO,
+	ADXL37x_X_FIFO,
+	ADXL37x_Y_FIFO,
+	ADXL37x_XY_FIFO,
+	ADXL37x_Z_FIFO,
+	ADXL37x_XZ_FIFO,
+	ADXL37x_YZ_FIFO,
+	ADXL37x_XYZ_PEAK_FIFO,
 };
 
-enum adxl371_fifo_mode {
-	ADXL371_FIFO_BYPASSED,
-	ADXL371_FIFO_STREAMED,
-	ADXL371_FIFO_TRIGGERED,
-	ADXL371_FIFO_OLD_SAVED
+enum adxl37x_fifo_mode {
+	ADXL37x_FIFO_BYPASSED,
+	ADXL37x_FIFO_STREAMED,
+	ADXL37x_FIFO_TRIGGERED,
+	ADXL37x_FIFO_OLD_SAVED
 };
 
-enum adxl371_comm_type {
-	ADXL371_SPI,
-	ADXL371_I2C,
+enum adxl37x_type {
+	ADXL371,
+	ADXL372
 };
 
-struct adxl371_fifo_config {
-	enum adxl371_fifo_mode fifo_mode;
-	enum adxl371_fifo_format fifo_format;
+struct adxl37x_chip_info {
+	int8_t wur;
+	int8_t odr;
+	int8_t bw;
+	int8_t filter_settle;
+};
+
+enum adxl37x_comm_type {
+	ADXL37x_SPI,
+	ADXL37x_I2C,
+};
+
+struct adxl37x_fifo_config {
+	enum adxl37x_fifo_mode   fifo_mode;
+	enum adxl37x_fifo_format fifo_format;
 	uint16_t fifo_samples;
 };
 
-struct adxl371_activity_threshold {
+struct adxl37x_activity_threshold {
 	uint16_t thresh;
 	bool referenced;
 	bool enable;
 };
 
-struct adxl371_xyz_accel_data {
+struct adxl37x_xyz_accel_data {
 	int16_t x;
 	int16_t y;
 	int16_t z;
 };
 
-struct adxl371_irq_config {
+struct adxl37x_irq_config {
+	/* fifo_rdy/full/ovr not used by adxl371 for INT1 and INT2 */
 	bool data_rdy;
 	bool fifo_rdy;
 	bool fifo_full;
@@ -311,18 +337,37 @@ struct adxl371_irq_config {
 	bool low_operation;
 };
 
-struct adxl371_dev;
+struct adxl37x_dev;
 
-typedef int32_t (*adxl371_reg_read_func)(struct adxl371_dev *dev,
+typedef int32_t (*adxl37x_reg_read_func)(struct adxl37x_dev *dev,
 		uint8_t reg_addr, uint8_t *reg_data);
-typedef int32_t (*adxl371_reg_write_func)(struct adxl371_dev *dev,
+typedef int32_t (*adxl37x_reg_write_func)(struct adxl37x_dev *dev,
 		uint8_t reg_addr, uint8_t reg_data);
-typedef int32_t (*adxl371_reg_read_multi_func)(struct adxl371_dev *dev,
+typedef int32_t (*adxl37x_reg_read_multi_func)(struct adxl37x_dev *dev,
 		uint8_t reg_addr,
 		uint8_t *reg_data,
 		uint16_t count);
 
-struct adxl371_dev {
+//array of chip info structs
+
+static const struct adxl37x_chip_info chip_info[] = {
+	[ADXL371] = {
+		.wur = ADXL371_WUR_65ms,
+		.odr = ADXL371_ODR_320HZ,
+		.bw = ADXL371_BW_320HZ,
+		.filter_settle = ADXL371_FILTER_SETTLE_462p5
+	},
+	[ADXL372] = {
+		.wur = ADXL372_WUR_104ms,
+		.odr = ADXL372_ODR_400HZ,
+		.bw = ADXL372_BW_200HZ,
+		.filter_settle = ADXL372_FILTER_SETTLE_370
+	}
+};
+
+struct adxl37x_dev {
+	/*ADXL37x*/
+	enum adxl37x_type adxl_type;
 	/* SPI */
 	struct no_os_spi_desc *spi_desc;
 	/* I2C */
@@ -331,21 +376,25 @@ struct adxl371_dev {
 	struct no_os_gpio_desc *gpio_int1;
 	struct no_os_gpio_desc *gpio_int2;
 	/* Device Settings */
-	adxl371_reg_read_func reg_read;
-	adxl371_reg_write_func reg_write;
-	adxl371_reg_read_multi_func reg_read_multiple;
-	enum adxl371_bandwidth bw;
-	enum adxl371_odr odr;
-	enum adxl371_wakeup_rate wur;
-	enum adxl371_act_proc_mode act_proc_mode;
-	enum adxl371_instant_on_th_mode th_mode;
-	struct adxl371_fifo_config fifo_config;
-	enum adxl371_comm_type comm_type;
+	adxl37x_reg_read_func reg_read;
+	adxl37x_reg_write_func reg_write;
+	adxl37x_reg_read_multi_func reg_read_multiple;
+	enum adxl37x_bandwidth bw;
+	enum adxl37x_odr odr;
+	enum adxl37x_wakeup_rate wur;
+	enum adxl37x_act_proc_mode act_proc_mode;
+	enum adxl37x_instant_on_th_mode th_mode;
+	struct adxl37x_fifo_config fifo_config;
+	enum adxl37x_comm_type comm_type;
 	/* FIFO Buffer */
 	uint8_t fifo_raw[1024]; // 512 samples * 2 bytes/sample = 1024 bytes
 };
 
-struct adxl371_init_param {
+
+
+struct adxl37x_init_param {
+	/*ADXL37x*/
+	enum adxl37x_type adxl_type;
 	/* SPI */
 	struct no_os_spi_init_param spi_init;
 	/* I2C */
@@ -354,83 +403,82 @@ struct adxl371_init_param {
 	struct no_os_gpio_init_param gpio_int1;
 	struct no_os_gpio_init_param gpio_int2;
 	/* Device Settings */
-	enum adxl371_bandwidth bw;
-	enum adxl371_odr odr;
-	enum adxl371_wakeup_rate wur;
-	enum adxl371_act_proc_mode act_proc_mode;
-	enum adxl371_instant_on_th_mode th_mode;
-	struct adxl371_activity_threshold activity_th;
-	struct adxl371_activity_threshold activity2_th;
-	struct adxl371_activity_threshold inactivity_th;
+	enum adxl37x_act_proc_mode act_proc_mode;
+
+	enum adxl37x_instant_on_th_mode th_mode;
+	struct adxl37x_activity_threshold activity_th;
+	struct adxl37x_activity_threshold activity2_th;
+	struct adxl37x_activity_threshold inactivity_th;
 	uint8_t activity_time;
 	uint16_t inactivity_time;
-	enum adxl371_filter_settle filter_settle;
-	struct adxl371_fifo_config fifo_config;
-	struct adxl371_irq_config int1_config;
-	struct adxl371_irq_config int2_config;
-	enum adxl371_op_mode op_mode;
-	enum adxl371_comm_type comm_type;
+	struct adxl37x_fifo_config fifo_config;
+	struct adxl37x_irq_config int1_config;
+	struct adxl37x_irq_config int2_config;
+	enum adxl37x_op_mode op_mode;
+	enum adxl37x_comm_type comm_type;
 };
 
-int adxl371_read_reg(struct adxl371_dev *dev, uint8_t reg_addr,
+int adxl37x_read_reg(struct adxl37x_dev *dev, uint8_t reg_addr,
 		     uint8_t *reg_data);
-int adxl371_write_reg(struct adxl371_dev *dev, uint8_t reg_addr,
+int adxl37x_write_reg(struct adxl37x_dev *dev, uint8_t reg_addr,
 		      uint8_t reg_data);
-int32_t adxl371_spi_reg_read(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_spi_reg_read(struct adxl37x_dev *dev, uint8_t reg_addr,
 			     uint8_t *reg_data);
-int32_t adxl371_spi_reg_read_multiple(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_spi_reg_read_multiple(struct adxl37x_dev *dev, uint8_t reg_addr,
 				      uint8_t *reg_data, uint16_t count);
-int32_t adxl371_spi_reg_write(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_spi_reg_write(struct adxl37x_dev *dev, uint8_t reg_addr,
 			      uint8_t reg_data);
-int32_t adxl371_i2c_reg_read(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_i2c_reg_read(struct adxl37x_dev *dev, uint8_t reg_addr,
 			     uint8_t *reg_data);
-int32_t adxl371_i2c_reg_write(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_i2c_reg_write(struct adxl37x_dev *dev, uint8_t reg_addr,
 			      uint8_t reg_data);
-int32_t adxl371_i2c_reg_read_multiple(struct adxl371_dev *dev, uint8_t reg_addr,
+int32_t adxl37x_i2c_reg_read_multiple(struct adxl37x_dev *dev, uint8_t reg_addr,
 				      uint8_t *reg_data, uint16_t count);
-int adxl371_write_mask(struct adxl371_dev *dev, uint8_t reg_addr, uint32_t mask,
+int adxl37x_write_mask(struct adxl37x_dev *dev, uint8_t reg_addr, uint32_t mask,
 		       uint8_t data);
-int adxl371_set_activity_threshold(struct adxl371_dev *dev,
-				   enum adxl371_th_activity act,
+int adxl37x_set_activity_threshold(struct adxl37x_dev *dev,
+				   enum adxl37x_th_activity act,
 				   uint16_t thresh, bool referenced,
 				   bool enable);
-int adxl371_get_op_mode(struct adxl371_dev *dev, enum adxl371_op_mode *op_mode);
-int adxl371_set_op_mode(struct adxl371_dev *dev, enum adxl371_op_mode op_mode);
-int adxl371_set_autosleep(struct adxl371_dev *dev, bool enable);
-int adxl371_set_bandwidth(struct adxl371_dev *dev, enum adxl371_bandwidth bw);
-int adxl371_set_act_proc_mode(struct adxl371_dev *dev,
-			      enum adxl371_act_proc_mode mode);
-int adxl371_set_odr(struct adxl371_dev *dev, enum adxl371_odr odr);
-int adxl371_set_instant_on_th(struct adxl371_dev *dev,
-			      enum adxl371_instant_on_th_mode mode);
-int adxl371_set_wakeup_rate(struct adxl371_dev *dev,
-			    enum adxl371_wakeup_rate wur);
-int adxl371_set_activity_time(struct adxl371_dev *dev, uint8_t time);
-int adxl371_set_inactivity_time(struct adxl371_dev *dev, uint16_t time);
-int adxl371_interrupt_config(struct adxl371_dev *dev,
-			     struct adxl371_irq_config int1,
-			     struct adxl371_irq_config int2);
-int adxl371_set_filter_settle(struct adxl371_dev *dev,
-			      enum adxl371_filter_settle mode);
-int adxl371_get_status(struct adxl371_dev *dev, uint8_t *status1,
+int adxl37x_get_op_mode(struct adxl37x_dev *dev, enum adxl37x_op_mode *op_mode);
+int adxl37x_set_op_mode(struct adxl37x_dev *dev, enum adxl37x_op_mode op_mode);
+int adxl37x_set_autosleep(struct adxl37x_dev *dev, bool enable);
+int adxl37x_set_bandwidth(struct adxl37x_dev *dev, enum adxl37x_bandwidth bw);
+int adxl37x_set_act_proc_mode(struct adxl37x_dev *dev,
+			      enum adxl37x_act_proc_mode mode);
+int adxl37x_set_odr(struct adxl37x_dev *dev, enum adxl37x_odr odr);
+int adxl37x_set_instant_on_th(struct adxl37x_dev *dev,
+			      enum adxl37x_instant_on_th_mode mode);
+int adxl37x_set_wakeup_rate(struct adxl37x_dev *dev,
+			    enum adxl37x_wakeup_rate wur);
+int adxl37x_set_activity_time(struct adxl37x_dev *dev, uint8_t time);
+int adxl37x_set_inactivity_time(struct adxl37x_dev *dev, uint16_t time);
+int adxl37x_interrupt_config(struct adxl37x_dev *dev,
+			     struct adxl37x_irq_config int1,
+			     struct adxl37x_irq_config int2);
+int adxl37x_set_filter_settle(struct adxl37x_dev *dev,
+			      enum adxl37x_filter_settle mode);
+int adxl37x_get_status(struct adxl37x_dev *dev, uint8_t *status1,
 		       uint8_t *status2, uint16_t *fifo_entries);
-int adxl371_reset(struct adxl371_dev *dev);
-int adxl371_configure_fifo(struct adxl371_dev *dev, enum adxl371_fifo_mode mode,
-			   enum adxl371_fifo_format format,
-			   uint16_t fifo_samples, enum adxl371_op_mode op_mode);
-int adxl371_init(struct adxl371_dev **device,
-		 struct adxl371_init_param init_param);
-int adxl371_remove(struct adxl371_dev *dev);
-int adxl371_set_external_sync(struct adxl371_dev *dev);
-int adxl371_set_internal_sync(struct adxl371_dev *dev);
-int adxl371_get_internal_sync(struct adxl371_dev *dev, bool *internal_sync);
-int adxl371_get_fifo_xyz_data_workaround(
-	struct adxl371_dev *dev, struct adxl371_xyz_accel_data *fifo_data,
+int adxl37x_reset(struct adxl37x_dev *dev);
+int adxl37x_configure_fifo(struct adxl37x_dev *dev,
+			   enum adxl37x_fifo_mode mode,
+			   enum adxl37x_fifo_format format,
+			   uint16_t fifo_samples,
+			   enum adxl37x_op_mode op_mode);
+int adxl37x_init(struct adxl37x_dev **device,
+		 struct adxl37x_init_param init_param);
+int adxl37x_remove(struct adxl37x_dev *dev);
+int adxl37x_set_external_sync(struct adxl37x_dev *dev);
+int adxl37x_set_internal_sync(struct adxl37x_dev *dev);
+int adxl37x_get_internal_sync(struct adxl37x_dev *dev, bool *internal_sync);
+int adxl37x_get_fifo_xyz_data_workaround(
+	struct adxl37x_dev *dev, struct adxl37x_xyz_accel_data *fifo_data,
 	uint16_t cnt);
-int adxl371_service_fifo_ev(struct adxl371_dev *dev,
-			    struct adxl371_xyz_accel_data *fifo_data,
+int adxl37x_service_fifo_ev(struct adxl37x_dev *dev,
+			    struct adxl37x_xyz_accel_data *fifo_data,
 			    uint16_t *fifo_entries);
-int adxl371_get_highest_peak_data(struct adxl371_dev *dev,
-				  struct adxl371_xyz_accel_data *max_peak);
+int adxl37x_get_highest_peak_data(struct adxl37x_dev *dev,
+				  struct adxl37x_xyz_accel_data *max_peak);
 
 #endif // ADXL371_H_
