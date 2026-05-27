@@ -124,6 +124,13 @@
   #define HMC7044_SPI_SPEED_HZ		1000000u
   #define ADRV903X_RESET_B		(GPIO_OFFSET + 20)
   #define HMC7044_RESET_B		(GPIO_OFFSET + 21)
+  /* GT reset GPIOs (from DTS: versal-tetra-15mhz.dts) */
+  #define RX_GT_RESET_DONE		(GPIO_OFFSET + 32)
+  #define TX_GT_RESET_DONE		(GPIO_OFFSET + 33)
+  #define RX_GT_PLL_RESET		(GPIO_OFFSET + 36)
+  #define TX_GT_PLL_RESET		(GPIO_OFFSET + 37)
+  #define RX_GT_DP_RESET		(GPIO_OFFSET + 38)
+  #define TX_GT_DP_RESET		(GPIO_OFFSET + 39)
 #else
   #define AD9528_CS			1
   #define ADRV903X_CS			0
