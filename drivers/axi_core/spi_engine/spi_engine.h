@@ -79,6 +79,10 @@ struct spi_engine_init_param {
 	uint8_t			data_width;
 	/**  output of SDO when CS is inactive or read-only transfers */
 	uint8_t			sdo_idle_state;
+	/** SDI lane mask for v2.0+ command config; 0 means auto from HW */
+	uint8_t			sdi_lane_mask;
+	/** SDO lane mask for v2.0+ command config; 0 means auto from HW */
+	uint8_t			sdo_lane_mask;
 };
 
 
@@ -117,6 +121,10 @@ struct spi_engine_desc {
 	uint8_t 		max_data_width;
 	/**  output of SDO when CS is inactive or read-only transfers */
 	uint8_t			sdo_idle_state;
+	/** Active SDI lane mask used by v2.0+ lane config command */
+	uint8_t			sdi_lane_mask;
+	/** Active SDO lane mask used by v2.0+ lane config command */
+	uint8_t			sdo_lane_mask;
 };
 
 

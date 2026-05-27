@@ -502,9 +502,19 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 		struct spi_engine_msg *msg)
 {
 	struct spi_engine_desc	*desc_extra;
+	bool			offload_en;
+	uint8_t			sdo_lane_mask;
+	uint8_t			sdi_lane_mask;
 	uint8_t cfg_reg;
 
 	desc_extra = desc->extra;
+	offload_en = (desc_extra->offload_config & OFFLOAD_TX_EN) |
+		     (desc_extra->offload_config & OFFLOAD_RX_EN);
+
+	/* In normal transfers keep single-lane behavior. For offload transfers
+	 * use the configured lane masks from the descriptor. */
+	sdo_lane_mask = offload_en ? desc_extra->sdo_lane_mask : 0x01;
+	sdi_lane_mask = offload_en ? desc_extra->sdi_lane_mask : 0x01;
 
 	/* Configure the prescaler */
 	spi_engine_queue_append_cmd(&msg->cmds,
@@ -532,6 +542,22 @@ static int32_t spi_engine_compile_message(struct no_os_spi_desc *desc,
 				    SPI_ENGINE_CMD_CONFIG(
 					    SPI_ENGINE_CMD_REG_CONFIG,
 					    cfg_reg));
+
+	/* v2.0+: configure SDO/SDI lane masks.
+	 * For normal transfers, force single-lane behavior. For offload,
+	 * use descriptor-configured masks. After reset the hardware
+	 * defaults both masks to ALL_ACTIVE = (2^NUM_OF_SDIO)-1, so for
+	 * multi-lane designs the SDO mask must be explicitly set to 0x01
+	 * otherwise the SDO data-assemble logic waits for N data words and
+	 * sdo_io_ready never asserts, preventing any SCLK activity. */
+	spi_engine_queue_append_cmd(&msg->cmds,
+				    SPI_ENGINE_CMD_CONFIG(
+					    SPI_ENGINE_CMD_REG_SDO_LANE_CONFIG,
+					    sdo_lane_mask));
+	spi_engine_queue_append_cmd(&msg->cmds,
+				    SPI_ENGINE_CMD_CONFIG(
+					    SPI_ENGINE_CMD_REG_SDI_LANE_CONFIG,
+					    sdi_lane_mask));
 
 	/* Add a sync command to signal that the transfer has finished */
 	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(_sync_id));
@@ -617,6 +643,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 {
 	uint32_t			data_width;
 	uint32_t			spi_engine_version;
+	uint8_t				num_of_sdio;
 	struct spi_engine_desc		*eng_desc;
 	struct spi_engine_init_param	*spi_engine_init;
 
@@ -646,6 +673,7 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 	eng_desc->spi_engine_baseaddr = spi_engine_init->spi_engine_baseaddr;
 	eng_desc->cs_delay = spi_engine_init->cs_delay;
 	eng_desc->ref_clk_hz = spi_engine_init->ref_clk_hz;
+	eng_desc->sdo_idle_state = spi_engine_init->sdo_idle_state;
 	eng_desc->clk_div =  eng_desc->ref_clk_hz /
 			     (2 * param->max_speed_hz) - 1;
 
@@ -659,6 +687,20 @@ int32_t spi_engine_init(struct no_os_spi_desc **desc,
 	/* Only the lower 16 bits are relevant for the actual data-width */
 	eng_desc->max_data_width = no_os_field_get(SPI_ENGINE_REG_DATA_WIDTH_MSK,
 				   data_width);
+
+	/* Compute default active SDI lane mask from hardware NUM_OF_SDIO field */
+	num_of_sdio = (uint8_t)no_os_field_get(SPI_ENGINE_REG_NUM_OF_SDIO_MSK,
+					       data_width);
+	eng_desc->sdi_lane_mask = num_of_sdio ? ((1 << num_of_sdio) - 1) : 0x01;
+
+	/* Allow init-time override; 0 keeps the hardware-derived default. */
+	if (spi_engine_init->sdi_lane_mask)
+		eng_desc->sdi_lane_mask = spi_engine_init->sdi_lane_mask;
+
+	/* SDO uses same HW-derived default; allow explicit init-time override. */
+	eng_desc->sdo_lane_mask = eng_desc->sdi_lane_mask;
+	if (spi_engine_init->sdo_lane_mask)
+		eng_desc->sdo_lane_mask = spi_engine_init->sdo_lane_mask;
 
 	spi_engine_set_transfer_width(*desc, spi_engine_init->data_width);
 

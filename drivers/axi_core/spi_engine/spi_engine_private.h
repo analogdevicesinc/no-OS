@@ -56,7 +56,7 @@
 #define SPI_ENGINE_REG_SDI_DATA_FIFO_PEEK	0xEC
 
 /* Bit definitions for SPI_ENGINE_REG_DATA_WIDTH register */
-#define SPI_ENGINE_REG_NUM_OF_SDI_MSK		NO_OS_GENMASK(23, 16)
+#define SPI_ENGINE_REG_NUM_OF_SDIO_MSK		NO_OS_GENMASK(23, 16)
 #define SPI_ENGINE_REG_DATA_WIDTH_MSK		NO_OS_GENMASK(15, 0)
 
 #define SPI_ENGINE_INST_TRANSFER		0x00
@@ -67,6 +67,11 @@
 #define SPI_ENGINE_CMD_REG_CLK_DIV		0x00
 #define SPI_ENGINE_CMD_REG_CONFIG		0x01
 #define SPI_ENGINE_CMD_DATA_TRANSFER_LEN	0x02
+
+/* v2.0+ lane configuration sub-registers */
+#define SPI_ENGINE_CMD_REG_SDI_LANE_CONFIG	0x03
+#define SPI_ENGINE_CMD_REG_SDO_LANE_CONFIG	0x04
+
 #define SPI_ENGINE_MISC_SYNC			0x00
 #define SPI_ENGINE_MISC_SLEEP			0x01
 #define SPI_ENGINE_SYNC_TRANSFER_BEGIN		NO_OS_BIT(1)
@@ -97,7 +102,7 @@
 
 #define SPI_ENGINE_CMD(inst, arg1, arg2) 				\
 			(((inst & 0x03) << 12) | 			\
-			((arg1 & 0x03) << 8) | arg2 )
+			((arg1 & 0x0F) << 8) | arg2 )
 
 #define SPI_ENGINE_CMD_TRANSFER(readwrite, n)				\
 	SPI_ENGINE_CMD(SPI_ENGINE_INST_TRANSFER,			\
