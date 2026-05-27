@@ -47,7 +47,7 @@
 #ifndef PLATFORM_VERSAL
 #define AD9528_SPI_SPEED_HZ			10000000u
 #endif
-#define ADRV903X_SPI_SPEED_HZ			5000000u
+#define ADRV903X_SPI_SPEED_HZ			1000000u
 
 /******************************************************************************/
 /* Clock and lane rate configuration                                          */
@@ -76,9 +76,9 @@
 #define ADRV903X_RX_GAIN_TABLE_FILE		"RxGainTable.csv"
 
 /******************************************************************************/
-/* Gain table channel mask: bit per RX channel (0xFF = all 8 channels)       */
+/* Gain table channel mask: bit per RX channel (0x0F = 4 channels per DTS)   */
 /******************************************************************************/
-#define ADRV903X_RX_GAIN_TABLE_MASK		0xFF
+#define ADRV903X_RX_GAIN_TABLE_MASK		0x0F
 
 /******************************************************************************/
 /* JESD204 configuration                                                      */
@@ -95,6 +95,11 @@
 /* RX JESD204 parameters */
 #define ADRV903X_RX_JESD_SUBCLASS			1
 
+/* ORX JESD204 parameters (Versal Tetra only) */
+#define ADRV903X_ORX_JESD_OCTETS_PER_FRAME		4
+#define ADRV903X_ORX_JESD_FRAMES_PER_MULTIFRAME		64
+#define ADRV903X_ORX_JESD_SUBCLASS			1
+
 #ifdef PLATFORM_VERSAL
 /******************************************************************************/
 /* HMC7044 Clock Synthesizer configuration                                    */
@@ -108,6 +113,8 @@
 #define HMC7044_FPGA_CORE_SYSREF_DIV		3072	/* ch7:  FPGA_CORE_SYSREF */
 #define HMC7044_FPGA_REFCLK_DIV		12	/* ch12: FPGA_REFCLK */
 #define HMC7044_SYSREF_TIMER_DIV		1024
+#define HMC7044_PFD1_LIMIT_HZ			30720000
+#define HMC7044_OSCIN_BUF_MODE			0x07
 
 #else /* ZynqMP */
 /******************************************************************************/

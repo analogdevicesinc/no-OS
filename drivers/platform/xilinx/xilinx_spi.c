@@ -46,6 +46,19 @@
 #include "no_os_alloc.h"
 #include "xilinx_spi.h"
 
+#if defined(PLATFORM_ZYNQ)
+#define SPI_CLK_FREQ_HZ(dev)	(XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
+#elif defined(PLATFORM_ZYNQMP)
+#define SPI_CLK_FREQ_HZ(dev)	(XPAR_PSU_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
+#elif defined(versal)
+#define SPI_CLK_FREQ_HZ(dev)	(XPAR_XSPIPS_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
+#else
+#define SPI_NUM_INSTANCES	0
+#endif
+
 #warning SPI delays are not supported on the xilinx platform
 
 /**
