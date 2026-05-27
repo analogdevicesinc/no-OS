@@ -53,6 +53,7 @@ struct jesd204_dev;
 /* JESD204 link IDs — must match the topology in the basic_example */
 #define DEFRAMER0_LINK_TX	0
 #define FRAMER0_LINK_RX		2
+#define FRAMER1_LINK_RX		3
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

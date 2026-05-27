@@ -48,12 +48,37 @@
 #include "hmc7044.h"
 #else
 #include "ad9528.h"
-#include "axi_adxcvr.h"
 #endif
+#include "axi_adxcvr.h"
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
 #include "jesd204.h"
 #include <string.h>
+
+#ifdef PLATFORM_VERSAL
+/*
+ * Versal GT lane clock stub — the GT transceiver is pre-configured by the
+ * Versal fabric (PDI).  The JESD204 driver calls set_rate / enable on
+ * lane_clk; these ops simply succeed without touching hardware.
+ */
+static int versal_lane_clk_enable(struct no_os_clk_desc *desc) { return 0; }
+static int versal_lane_clk_disable(struct no_os_clk_desc *desc) { return 0; }
+static int versal_lane_clk_set_rate(struct no_os_clk_desc *desc,
+				    uint64_t rate) { return 0; }
+static int versal_lane_clk_recalc_rate(struct no_os_clk_desc *desc,
+				       uint64_t *rate)
+{
+	*rate = (uint64_t)ADRV903X_LANE_RATE_KHZ * 1000ULL;
+	return 0;
+}
+
+static const struct no_os_clk_platform_ops versal_lane_clk_ops = {
+	.clk_enable = versal_lane_clk_enable,
+	.clk_disable = versal_lane_clk_disable,
+	.clk_set_rate = versal_lane_clk_set_rate,
+	.clk_recalc_rate = versal_lane_clk_recalc_rate,
+};
+#endif
 
 /**
  * @brief Basic example main function.
@@ -73,6 +98,9 @@ int example_main()
 	struct adrv903x_rf_phy *phy = NULL;
 	struct axi_jesd204_rx *rx_jesd = NULL;
 	struct axi_jesd204_tx *tx_jesd = NULL;
+#ifdef ORX_JESD_BASEADDR
+	struct axi_jesd204_rx *orx_jesd = NULL;
+#endif
 	int ret;
 
 #ifdef PLATFORM_VERSAL
@@ -80,6 +108,11 @@ int example_main()
 	struct hmc7044_chan_spec hmc7044_channels[5];
 	struct hmc7044_init_param hmc7044_param = { 0 };
 	struct hmc7044_dev *hmc7044_device = NULL;
+	struct no_os_clk_desc *tx_lane_clk = NULL;
+	struct no_os_clk_desc *rx_lane_clk = NULL;
+#ifdef ORX_JESD_BASEADDR
+	struct no_os_clk_desc *orx_lane_clk = NULL;
+#endif
 #else
 	struct no_os_gpio_init_param sysref_gip = { 0 };
 	struct no_os_gpio_desc *sysref_gpio = NULL;
@@ -104,12 +137,13 @@ int example_main()
 	 * ----------------------------------------------------------------
 	 */
 
-	/* De-assert HMC7044 hardware reset (RESET_B is active-low) */
+	/* HMC7044 hardware reset pulse (active-high reset) */
 	ret = no_os_gpio_get(&hmc7044_reset_gpio, &clkchip_gpio_init_param);
 	if (ret) {
 		pr_err("HMC7044 reset GPIO get failed: %d\n", ret);
 		return ret;
 	}
+	/* Assert reset (drive HIGH) */
 	ret = no_os_gpio_direction_output(hmc7044_reset_gpio, NO_OS_GPIO_HIGH);
 	if (ret) {
 		pr_err("HMC7044 reset GPIO set failed: %d\n", ret);
@@ -117,6 +151,14 @@ int example_main()
 		return ret;
 	}
 	no_os_mdelay(10);
+	/* De-assert reset (drive LOW) */
+	ret = no_os_gpio_set_value(hmc7044_reset_gpio, NO_OS_GPIO_LOW);
+	if (ret) {
+		pr_err("HMC7044 reset de-assert failed: %d\n", ret);
+		no_os_gpio_remove(hmc7044_reset_gpio);
+		return ret;
+	}
+	no_os_mdelay(20);
 
 	memset(hmc7044_channels, 0, sizeof(hmc7044_channels));
 
@@ -142,7 +184,6 @@ int example_main()
 	hmc7044_channels[3].num = 7;
 	hmc7044_channels[3].divider = HMC7044_FPGA_CORE_SYSREF_DIV;
 	hmc7044_channels[3].driver_mode = 2; /* LVDS */
-	hmc7044_channels[3].is_sysref = true;
 
 	/* Channel 12: FPGA_REFCLK */
 	hmc7044_channels[4].num = 12;
@@ -158,14 +199,14 @@ int example_main()
 	hmc7044_param.pll1_ref_prio_ctrl = 0xe4;
 	hmc7044_param.pll1_ref_autorevert_en = true;
 	hmc7044_param.pll1_cp_current = 1920;
-	hmc7044_param.pfd1_limit = 30900000;
+	hmc7044_param.pfd1_limit = HMC7044_PFD1_LIMIT_HZ;
 	hmc7044_param.sysref_timer_div = HMC7044_SYSREF_TIMER_DIV;
 	hmc7044_param.pulse_gen_mode = HMC7044_PULSE_GEN_8_PULSE;
-	hmc7044_param.sync_pin_mode = HMC7044_SYNC_PIN_SYNC_THEN_PULSE_GEN;
-	hmc7044_param.high_performance_mode_clock_dist_en = true;
+	hmc7044_param.sync_pin_mode = HMC7044_SYNC_PIN_SYNC;
+	hmc7044_param.high_performance_mode_clock_dist_en = false;
 	hmc7044_param.in_buf_mode[0] = 0x06;
 	hmc7044_param.in_buf_mode[1] = 0x06;
-	hmc7044_param.in_buf_mode[4] = 0x15; /* OSCIN */
+	hmc7044_param.in_buf_mode[4] = HMC7044_OSCIN_BUF_MODE;
 	hmc7044_param.gpo_ctrl[0] = 0x37;
 	hmc7044_param.gpo_ctrl[1] = 0x33;
 	hmc7044_param.jesd204_sysref_provider = true;
@@ -180,7 +221,49 @@ int example_main()
 		return ret;
 	}
 
-	pr_info("HMC7044 locked, DEVCLK on channel 0\n");
+	pr_info("HMC7044 init done, DEVCLK on channel 0\n");
+
+	/*
+	 * Reset the Versal GT PLL + datapath so the GT re-locks its PLL
+	 * to the HMC7044 reference clock that just became available.
+	 * Without this, the first cold boot often fails (GT CDR not locked).
+	 */
+	{
+		struct no_os_gpio_desc *gt_rst = NULL;
+		struct no_os_gpio_desc *gt_done = NULL;
+		struct no_os_gpio_init_param gt_gpio_param = {
+			.platform_ops = clkchip_gpio_init_param.platform_ops,
+			.extra = clkchip_gpio_init_param.extra,
+		};
+		uint32_t gt_pll_gpios[] = { TX_GT_PLL_RESET, RX_GT_PLL_RESET };
+		uint32_t gt_done_gpios[] = { TX_GT_RESET_DONE, RX_GT_RESET_DONE };
+		uint8_t done_val;
+
+		for (int i = 0; i < 2; i++) {
+			gt_gpio_param.number = gt_pll_gpios[i];
+			ret = no_os_gpio_get(&gt_rst, &gt_gpio_param);
+			if (ret)
+				continue;
+			no_os_gpio_direction_output(gt_rst, NO_OS_GPIO_HIGH);
+			no_os_mdelay(2);
+			no_os_gpio_set_value(gt_rst, NO_OS_GPIO_LOW);
+			no_os_gpio_remove(gt_rst);
+
+			/* Poll reset-done GPIO */
+			gt_gpio_param.number = gt_done_gpios[i];
+			ret = no_os_gpio_get(&gt_done, &gt_gpio_param);
+			if (!ret) {
+				no_os_gpio_direction_input(gt_done);
+				int timeout = 100;
+				do {
+					no_os_mdelay(5);
+					no_os_gpio_get_value(gt_done, &done_val);
+				} while (!done_val && --timeout);
+				no_os_gpio_remove(gt_done);
+			}
+		}
+		pr_info("GT PLL reset done\n");
+	}
 
 #else /* ZynqMP */
 	/*
@@ -388,7 +471,56 @@ int example_main()
 		.lane_clk_khz = ADRV903X_LANE_RATE_KHZ,
 	};
 
-#ifndef PLATFORM_VERSAL
+#ifdef ORX_JESD_BASEADDR
+	struct jesd204_rx_init orx_jesd_init = {
+		.name = "orx_jesd",
+		.base = ORX_JESD_BASEADDR,
+		.octets_per_frame = ADRV903X_ORX_JESD_OCTETS_PER_FRAME,
+		.frames_per_multiframe = ADRV903X_ORX_JESD_FRAMES_PER_MULTIFRAME,
+		.subclass = ADRV903X_ORX_JESD_SUBCLASS,
+		.device_clk_khz = ADRV903X_DEVICE_CLK_KHZ,
+		.lane_clk_khz = ADRV903X_LANE_RATE_KHZ,
+	};
+#endif
+
+#ifdef PLATFORM_VERSAL
+	struct no_os_clk_init_param tx_lane_clk_param = {
+		.name = "tx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+	struct no_os_clk_init_param rx_lane_clk_param = {
+		.name = "rx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+
+	ret = no_os_clk_init(&tx_lane_clk, &tx_lane_clk_param);
+	if (ret) {
+		pr_err("tx_lane_clk init failed: %d\n", ret);
+		goto error_clkchip;
+	}
+	ret = no_os_clk_init(&rx_lane_clk, &rx_lane_clk_param);
+	if (ret) {
+		pr_err("rx_lane_clk init failed: %d\n", ret);
+		no_os_clk_remove(tx_lane_clk);
+		goto error_clkchip;
+	}
+	tx_jesd_init.lane_clk = tx_lane_clk;
+	rx_jesd_init.lane_clk = rx_lane_clk;
+#ifdef ORX_JESD_BASEADDR
+	struct no_os_clk_init_param orx_lane_clk_param = {
+		.name = "orx_lane_clk",
+		.platform_ops = &versal_lane_clk_ops,
+	};
+	ret = no_os_clk_init(&orx_lane_clk, &orx_lane_clk_param);
+	if (ret) {
+		pr_err("orx_lane_clk init failed: %d\n", ret);
+		no_os_clk_remove(rx_lane_clk);
+		no_os_clk_remove(tx_lane_clk);
+		goto error_clkchip;
+	}
+	orx_jesd_init.lane_clk = orx_lane_clk;
+#endif
+#else
 	tx_jesd_init.lane_clk = tx_adxcvr->clk_out;
 	rx_jesd_init.lane_clk = rx_adxcvr->clk_out;
 #endif
@@ -408,6 +540,14 @@ int example_main()
 		pr_err("axi_jesd204_rx_init() failed: %d\n", ret);
 		goto error_tx_jesd;
 	}
+
+#ifdef ORX_JESD_BASEADDR
+	ret = axi_jesd204_rx_init(&orx_jesd, &orx_jesd_init);
+	if (ret) {
+		pr_err("axi_jesd204_rx_init(orx) failed: %d\n", ret);
+		goto error_rx_jesd;
+	}
+#endif
 
 	/*
 	 * ----------------------------------------------------------------
@@ -433,7 +573,11 @@ int example_main()
 	ret = adrv903x_init(&phy, &init_param);
 	if (ret) {
 		pr_err("adrv903x_init() failed: %d\n", ret);
+#ifdef ORX_JESD_BASEADDR
+		goto error_orx_jesd;
+#else
 		goto error_rx_jesd;
+#endif
 	}
 
 	pr_info("ADRV903X initialized successfully\n");
@@ -461,6 +605,7 @@ int example_main()
 	 * Link IDs:
 	 *   DEFRAMER0_LINK_TX (0) = FPGA TX → ADRV903X RX (deframer)
 	 *   FRAMER0_LINK_RX   (2) = ADRV903X TX → FPGA RX (framer)
+	 *   FRAMER1_LINK_RX   (3) = ADRV903X ORX → FPGA RX (framer, Versal)
 	 * ----------------------------------------------------------------
 	 */
 	struct jesd204_topology_dev devs[] = {
@@ -470,8 +615,14 @@ int example_main()
 #else
 			.jdev = ad9528_device->jdev,
 #endif
+#ifdef ORX_JESD_BASEADDR
+			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX,
+				      FRAMER1_LINK_RX },
+			.links_number = 3,
+#else
 			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX },
 			.links_number = 2,
+#endif
 			.is_sysref_provider = true,
 		},
 		{
@@ -484,10 +635,23 @@ int example_main()
 			.link_ids = { DEFRAMER0_LINK_TX },
 			.links_number = 1,
 		},
+#ifdef ORX_JESD_BASEADDR
+		{
+			.jdev = orx_jesd->jdev,
+			.link_ids = { FRAMER1_LINK_RX },
+			.links_number = 1,
+		},
+#endif
 		{
 			.jdev = phy->jdev,
+#ifdef ORX_JESD_BASEADDR
+			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX,
+				      FRAMER1_LINK_RX },
+			.links_number = 3,
+#else
 			.link_ids = { DEFRAMER0_LINK_TX, FRAMER0_LINK_RX },
 			.links_number = 2,
+#endif
 			.is_top_device = true,
 		},
 	};
@@ -509,6 +673,9 @@ int example_main()
 	/* Read JESD204 link status */
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
+#ifdef ORX_JESD_BASEADDR
+	axi_jesd204_rx_status_read(orx_jesd);
+#endif
 
 	jesd204_fsm_stop(topology, JESD204_LINKS_ALL);
 	/* TODO: jesd204_topology_remove(topology) once the API is available */
@@ -519,6 +686,10 @@ error_clkgen:
 error_phy:
 #endif
 	adrv903x_remove(phy);
+#ifdef ORX_JESD_BASEADDR
+error_orx_jesd:
+	axi_jesd204_rx_remove(orx_jesd);
+#endif
 error_rx_jesd:
 	axi_jesd204_rx_remove(rx_jesd);
 error_tx_jesd:
@@ -544,5 +715,6 @@ error_clkchip:
 #else
 	ad9528_remove(ad9528_device);
 #endif
+	pr_info("example_main exiting with code %d\n", ret);
 	return ret;
 }
