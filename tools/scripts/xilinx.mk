@@ -209,15 +209,29 @@ xilinx_run:
 ifneq (, $(wildcard *.elf))
 	$(call print,Elf exists $(FILE))
 	$(MAKE) --no-print-directory $(TEMP_DIR_RUN)
-	xsct -nodisp $(PLATFORM_TOOLS)/util.tcl					\
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(call print,Using Vitis Python API ($(VITIS_VERSION)))
+	vitis -s $(PLATFORM_TOOLS)/util.py					\
 	     upload							\
 	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
 	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE)       \
 		 $(FSBL_PATH_RUN) $(JTAG_CABLE_ID) $(HIDE)
 else
+	xsct -nodisp $(PLATFORM_TOOLS)/util.tcl					\
+	     upload							\
+	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
+	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE)       \
+		 $(FSBL_PATH_RUN) $(JTAG_CABLE_ID) $(HIDE)
+endif
+else
 ifneq (, $(wildcard build))
 	$(call print, build folder exists)
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(call print,Using Vitis Python API ($(VITIS_VERSION)))
+	$(call py_util, upload) $(FSBL_PATH) $(JTAG_CABLE_ID) $(HIDE)
+else
 	$(call tcl_util, upload) $(FSBL_PATH) $(JTAG_CABLE_ID) $(HIDE)
+endif
 else
 	$(call print,Can not perform make run command)
 endif
