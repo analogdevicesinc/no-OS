@@ -290,7 +290,11 @@ endif
 PHONY += $(PLATFORM)_sdkclean
 $(PLATFORM)_sdkclean:
 	$(call print,[Delete] SDK artefacts from $(BUILD_DIR))
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(call py_util, clean_build) $(HIDE)
+else
 	$(call tcl_util, clean_build) $(HIDE)
+endif
 	$(call remove_file, $(BUILD_DIR)/.project.target)
 
 PHONY += vitis_launch_config
