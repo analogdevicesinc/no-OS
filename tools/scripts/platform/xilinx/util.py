@@ -92,6 +92,19 @@ def get_arch(hw_path, hw_file, target):
 
 
 # ---------------------------------------------------------------------------
+# clean_build
+# ---------------------------------------------------------------------------
+
+def clean_build(ws):
+    """Remove and recreate app/src directory."""
+    import shutil
+    src_dir = os.path.join(ws, "app", "src")
+    if os.path.exists(src_dir):
+        shutil.rmtree(src_dir)
+    os.makedirs(src_dir, exist_ok=True)
+
+
+# ---------------------------------------------------------------------------
 # upload
 # ---------------------------------------------------------------------------
 
@@ -507,6 +520,7 @@ def main():
         "get_arch": lambda: get_arch(hw_path, hw_file, target),
         "upload": lambda: upload(hw_path, hw_file, binary, target,
                                  fsbl_file, jtagtarget),
+        "clean_build": lambda: clean_build(ws),
     }
 
     if function not in dispatch:
