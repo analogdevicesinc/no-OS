@@ -37,6 +37,7 @@
 #include <stdbool.h>
 #include "jesd204.h"
 #include "no_os_clk.h"
+#include "no_os_gpio.h"
 
 struct jesd204_rx_config {
 	uint8_t octets_per_frame;
@@ -73,6 +74,10 @@ struct axi_jesd204_rx {
 	struct no_os_clk_desc *lane_clk;
 	/** JESD204 FSM device */
 	struct jesd204_dev *jdev;
+	/** Optional GT reset GPIOs (Versal) */
+	struct no_os_gpio_desc *gt_reset_pll;
+	struct no_os_gpio_desc *gt_reset_dp;
+	struct no_os_gpio_desc *gt_reset_done;
 };
 
 /**
@@ -96,6 +101,10 @@ struct jesd204_rx_init {
 	uint32_t lane_clk_khz;
 	/** Lane Clock */
 	struct no_os_clk_desc *lane_clk;
+	/** Optional GT reset GPIO init params (Versal) */
+	struct no_os_gpio_init_param *gt_reset_pll;
+	struct no_os_gpio_init_param *gt_reset_dp;
+	struct no_os_gpio_init_param *gt_reset_done;
 };
 
 /** JESD204 RX Lane Clock Enable */
