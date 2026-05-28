@@ -58,11 +58,11 @@
 
 /******************************************************************************/
 /* JESD204 framer/deframer parameters                                        */
-/* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
+/* From profile: UC77_L4 (8T8R)                                              */
 /******************************************************************************/
-#define ADRV903X_TX_JESD_OCTETS_PER_FRAME	4
+#define ADRV903X_TX_JESD_OCTETS_PER_FRAME	8
 #define ADRV903X_TX_JESD_FRAMES_PER_MULTIFRAME	64
-#define ADRV903X_RX_JESD_OCTETS_PER_FRAME	4
+#define ADRV903X_RX_JESD_OCTETS_PER_FRAME	16
 #define ADRV903X_RX_JESD_FRAMES_PER_MULTIFRAME	64
 
 /******************************************************************************/
@@ -76,17 +76,17 @@
 #define ADRV903X_RX_GAIN_TABLE_FILE		"RxGainTable.csv"
 
 /******************************************************************************/
-/* Gain table channel mask: bit per RX channel (0x0F = 4 channels per DTS)   */
+/* Gain table channel mask: bit per RX channel (0xFF = 8 channels)           */
 /******************************************************************************/
-#define ADRV903X_RX_GAIN_TABLE_MASK		0x0F
+#define ADRV903X_RX_GAIN_TABLE_MASK		0xFF
 
 /******************************************************************************/
 /* JESD204 configuration                                                      */
-/* From profile: ADRV903X_UC101_204B_4T4R1OR_NLS                             */
+/* From profile: UC77_L4 (8T8R)                                              */
 /******************************************************************************/
 /* TX JESD204 parameters */
 #define ADRV903X_TX_JESD_SUBCLASS			1
-#define ADRV903X_TX_JESD_CONVS_PER_DEVICE		4
+#define ADRV903X_TX_JESD_CONVS_PER_DEVICE		16
 #define ADRV903X_TX_JESD_CONV_RESOLUTION		16
 #define ADRV903X_TX_JESD_BITS_PER_SAMPLE		16
 #define ADRV903X_TX_JESD_HIGH_DENSITY			0
