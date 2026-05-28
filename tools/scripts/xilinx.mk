@@ -151,9 +151,7 @@ endif
 
 LD := $(CC)
 
-CFLAGS += -mcpu=cortex-a9 						\
-	  -DXILINX -DMICROBLAZE						\
-	  -DXILINX_PLATFORM						\
+CFLAGS += -DXILINX -DMICROBLAZE						\
 	  -mlittle-endian						\
 	  -mxl-barrel-shift						\
 	  -mxl-pattern-compare 						\
