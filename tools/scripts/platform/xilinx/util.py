@@ -253,6 +253,58 @@ def create_project(ws, hw_path, hw_file, target):
 
 
 # ---------------------------------------------------------------------------
+# create_fsbl
+# ---------------------------------------------------------------------------
+
+def create_fsbl(ws, hw_path, hw_file, target):
+    """Generate FSBL using the Vitis 2025+ Python API.
+
+    Simplified version of create_project: only builds the platform
+    component to produce fsbl.elf, without BSP/linker copies.
+    Used by the 'make run' path.
+    """
+    import shutil
+    import vitis
+
+    arch_file = os.path.join(hw_path, "arch.txt")
+    with open(arch_file, "r") as f:
+        cpu = f.read().strip()
+
+    vcpu = _vitis_cpu_name(cpu)
+    xsa = os.path.join(hw_path, hw_file)
+    out_dir = os.path.join(ws, "tmp", "output")
+
+    if os.path.exists(out_dir):
+        shutil.rmtree(out_dir)
+
+    # Platform create + build (separate sessions — same gRPC workaround
+    # as create_project)
+    print(f"INFO: Creating platform component for FSBL (cpu={vcpu})...")
+    client = vitis.create_client(workspace=out_dir)
+    client.create_platform_component(
+        name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
+    vitis.dispose()
+
+    print("INFO: Building platform (FSBL)...")
+    client = vitis.create_client(workspace=out_dir)
+    platform = client.get_component(name="hw0")
+    platform.build()
+    vitis.dispose()
+
+    # Copy FSBL to Makefile-expected path
+    export_sw = os.path.join(out_dir, "hw0", "export", "hw0", "sw")
+    fsbl_src = os.path.join(export_sw, "boot", "fsbl.elf")
+    fsbl_dst_dir = os.path.join(export_sw, "hw0", "boot")
+    if os.path.exists(fsbl_src):
+        os.makedirs(fsbl_dst_dir, exist_ok=True)
+        shutil.copy2(fsbl_src, os.path.join(fsbl_dst_dir, "fsbl.elf"))
+        print("INFO: FSBL generated successfully")
+    else:
+        print(f"ERROR: FSBL not found at {fsbl_src}")
+        sys.exit(1)
+
+
+# ---------------------------------------------------------------------------
 # clean_build
 # ---------------------------------------------------------------------------
 
@@ -680,6 +732,7 @@ def main():
     dispatch = {
         "get_arch": lambda: get_arch(hw_path, hw_file, target),
         "create_project": lambda: create_project(ws, hw_path, hw_file, target),
+        "create_fsbl": lambda: create_fsbl(ws, hw_path, hw_file, target),
         "upload": lambda: upload(hw_path, hw_file, binary, target,
                                  fsbl_file, jtagtarget),
         "clean_build": lambda: clean_build(ws),

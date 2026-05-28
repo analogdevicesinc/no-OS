@@ -260,14 +260,28 @@ endif
 PHONY += create_fsbl
 create_fsbl:
 ifeq ($(findstring cortexa53,$(strip $(ARCH_RUN))),cortexa53)
-	$(call print,genera $(ARCH_RUN) fsbl)
+	$(call print,Creating $(ARCH_RUN) FSBL)
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	vitis -s $(PLATFORM_TOOLS)/util.py					\
+	     create_fsbl						\
+	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
+	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
+else
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
 	xsct -nodisp $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
 endif
+endif
 ifeq ($(findstring cortexr5,$(strip $(ARCH_RUN))),cortexr5)
-	$(call print,genera $(ARCH_RUN) fsbl)
+	$(call print,Creating $(ARCH_RUN) FSBL)
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	vitis -s $(PLATFORM_TOOLS)/util.py					\
+	     create_fsbl						\
+	     $(PROJECT) $(TEMP_DIR_RUN) $(notdir $(HARDWARE))	\
+	     $(PROJECT)/$(FILE) $(TARGET_CPU) $(TEMPLATE) $(HIDE)
+else
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR_RUN)) $(HIDE)
 	xsct -nodisp $(TEMP_DIR_RUN)/create_fsbl_project.tcl $(PROJECT) $(TEMP_DIR_RUN)/$(notdir $(HARDWARE)) $(HIDE)
+endif
 endif
 
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
