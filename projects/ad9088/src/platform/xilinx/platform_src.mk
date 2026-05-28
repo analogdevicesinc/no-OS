@@ -11,4 +11,4 @@ INCS +=	$(PLATFORM_DRIVERS)/$(PLATFORM)_irq.h			\
 
 SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c 	\
 	$(PLATFORM_DRIVERS)/xilinx_axi_io.c	
-INCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h 	\
+INCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h
