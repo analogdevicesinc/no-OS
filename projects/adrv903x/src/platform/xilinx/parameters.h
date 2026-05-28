@@ -112,7 +112,7 @@
 /******************************************************************************/
 #define DAC_BUFFER_SAMPLES		65536
 #define ADC_BUFFER_SAMPLES		32768
-#define ADC_CHANNELS			8
+#define ADC_CHANNELS			16
 
 /******************************************************************************/
 /***  SPI chip selects and GPIO offsets                                      ***/
