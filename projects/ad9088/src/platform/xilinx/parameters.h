@@ -59,7 +59,14 @@
 #define APOLLO_SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
 #define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
 #define UART_IRQ_ID			XPAR_XUARTPS_0_INTR
-#endif // _XPARAMETERS_PS_H_
+#elif defined(PLATFORM_MB)
+#define UART_DEVICE_ID			XPAR_AXI_UART_DEVICE_ID
+#define INTC_DEVICE_ID			XPAR_INTC_SINGLE_DEVICE_ID
+#define CLK_SPI_DEVICE_ID		XPAR_AXI_SPI_DEVICE_ID
+#define APOLLO_SPI_DEVICE_ID		XPAR_SPI_1_DEVICE_ID
+#define GPIO_DEVICE_ID			XPAR_AXI_GPIO_DEVICE_ID
+#define UART_IRQ_ID			XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
+#endif
 
 extern struct xil_uart_init_param	platform_uart_extra_ip;
 extern struct xil_spi_init_param	clk_spi_extra_ip;

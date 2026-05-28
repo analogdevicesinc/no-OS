@@ -329,7 +329,7 @@ $(OBJECTS_DIR)/%.S.o: $$(call get_full_path, %).S | $$(@D)/.
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).bin | $$(@D)/.
 	$(call print,[OBJC] $<)
 	cd $(NO-OS) && \
-	$(OBJCOPY) -I binary -O elf64-littleaarch64 -B aarch64 $(call get_relative_path_short,$<) $@ && \
+	$(OBJCOPY) -I binary -O $(OBJCOPY_BIN_FORMAT) -B $(OBJCOPY_BIN_ARCH) $(call get_relative_path_short,$<) $@ && \
 	cd -
 
 ifneq ($(strip $(LSCRIPT)),)

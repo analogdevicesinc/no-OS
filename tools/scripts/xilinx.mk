@@ -78,10 +78,12 @@ CC := arm-none-eabi-gcc
 AR := arm-none-eabi-ar
 SIZE := arm-none-eabi-size
 OBJCOPY := arm-none-eabi-objcopy
+OBJCOPY_BIN_FORMAT := elf32-littlearm
+OBJCOPY_BIN_ARCH := arm
 
 LD := $(CC)
 
-CFLAGS += -mcpu=cortex-a9 						\
+CFLAGS += -mcpu=cortex-a9						\
 	  -mfpu=vfpv3 							\
 	  -mfloat-abi=$(CFLAGS_MFLOAT_TYPE)
 
@@ -102,6 +104,8 @@ CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
 SIZE := aarch64-none-elf-size
 OBJCOPY := aarch64-none-elf-objcopy
+OBJCOPY_BIN_FORMAT := elf64-littleaarch64
+OBJCOPY_BIN_ARCH := aarch64
 
 LD := $(CC)
 endif
@@ -133,6 +137,8 @@ CC := aarch64-none-elf-gcc
 AR := aarch64-none-elf-ar
 SIZE := aarch64-none-elf-size
 OBJCOPY := aarch64-none-elf-objcopy
+OBJCOPY_BIN_FORMAT := elf64-littleaarch64
+OBJCOPY_BIN_ARCH := aarch64
 
 LD := $(CC)
 endif
@@ -146,11 +152,15 @@ ifeq ($(OS), Windows_NT)
 CC := mb-gcc
 AR := mb-ar
 SIZE := mb-size
+OBJCOPY := mb-objcopy
 else
 CC := microblaze-xilinx-elf-gcc
 AR := microblaze-xilinx-elf-ar
 SIZE := microblaze-xilinx-elf-size
+OBJCOPY := microblaze-xilinx-elf-objcopy
 endif
+OBJCOPY_BIN_FORMAT := elf32-microblazeel
+OBJCOPY_BIN_ARCH := microblaze
 
 LD := $(CC)
 
