@@ -71,6 +71,8 @@ SRCS += $(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c 	\
 SRC_DIRS += $(DRIVERS)/rf-transceiver/apollo			\
 	    $(DRIVERS)/rf-transceiver/apollo/firmware
 
+IGNORED_FILES += $(DRIVERS)/rf-transceiver/apollo/private/inc/bitfields/a0
+
 INCS += $(DRIVERS)/frequency/adf4382/adf4382.h			\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.h			\
 	$(DRIVERS)/rf-transceiver/apollo/ad9088.h
