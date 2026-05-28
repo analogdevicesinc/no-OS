@@ -63,6 +63,22 @@ def _get_processor(hw_design, target):
     return str(cells[0])
 
 
+def _vitis_cpu_name(cpu):
+    """Convert HSI cell name to Vitis API processor name.
+
+    For Versal, HSI returns the full CIPS hierarchy path
+    (e.g. 'sys_cips_pspmc_0_psv_cortexa72_0') but the Vitis
+    create_platform_component API expects the lopper-generated
+    short name ('psv_cortexa72_0').
+    Non-Versal names (psu_cortexa53_0, ps7_cortexa9_0, sys_mb)
+    pass through unchanged.
+    """
+    idx = cpu.find("_psv_")
+    if idx >= 0:
+        return cpu[idx + 1:]
+    return cpu
+
+
 def _build_filter(name_pattern, jtagtarget=None):
     """Build a targets() filter expression.
 
@@ -89,6 +105,151 @@ def get_arch(hw_path, hw_file, target):
     arch_file = os.path.join(hw_path, "arch.txt")
     with open(arch_file, "w") as f:
         f.write(cpu)
+
+
+# ---------------------------------------------------------------------------
+# create_project
+# ---------------------------------------------------------------------------
+
+def create_project(ws, hw_path, hw_file, target):
+    """Create BSP, FSBL, and linker script using the Vitis 2025+ Python API.
+
+    Uses vitis.create_platform_component() for BSP + FSBL generation,
+    then vitis.create_app_component() for linker script generation.
+    Copies outputs to the paths the Makefile expects (adapter pattern).
+    """
+    import shutil
+    import vitis
+
+    # Read CPU from arch.txt (written by get_arch).
+    # arch.txt has the full HSI cell name (e.g. sys_cips_pspmc_0_psv_cortexa72_0
+    # for Versal). The Makefile uses this for compiler selection and BSP paths.
+    arch_file = os.path.join(hw_path, "arch.txt")
+    with open(arch_file, "r") as f:
+        cpu = f.read().strip()
+
+    # The Vitis API needs the lopper-style short name (psv_cortexa72_0)
+    # rather than the full HSI hierarchy path.
+    vcpu = _vitis_cpu_name(cpu)
+
+    xsa = os.path.join(hw_path, hw_file)
+    out_dir = os.path.join(ws, "tmp", "output")
+
+    # Clean entire output workspace — Vitis refuses to create a platform
+    # if workspace metadata from a previous run exists.
+    if os.path.exists(out_dir):
+        shutil.rmtree(out_dir)
+
+    # --- Step 1: Platform build (BSP + FSBL) ---
+    print(f"INFO: Creating platform component (cpu={vcpu})...")
+    client = vitis.create_client(workspace=out_dir)
+    client.create_platform_component(
+        name="hw0", hw_design=xsa, cpu=vcpu, os="standalone")
+    vitis.dispose()
+
+    # Reconnect: building immediately after create_platform_component on
+    # the same gRPC session fails with "Application error processing RPC".
+    # A fresh client session avoids this.
+    print("INFO: Building platform (BSP + FSBL)...")
+    client = vitis.create_client(workspace=out_dir)
+    platform = client.get_component(name="hw0")
+    platform.build()
+
+    # --- Step 2: App component (linker script) ---
+    xpfm = os.path.join(out_dir, "hw0", "export", "hw0", "hw0.xpfm")
+    print("INFO: Creating app component for linker script...")
+    app = client.create_app_component(
+        name="app", platform=xpfm, template="empty_application")
+    ld = app.get_ld_script()
+    ld.set_heap_size('0x100000')
+
+    # --- Step 3: Copy BSP to Makefile-expected paths ---
+    # Platform output uses the short CPU name; Makefile expects arch.txt name.
+    export_sw = os.path.join(out_dir, "hw0", "export", "hw0", "sw")
+    bsp_export = os.path.join(export_sw, f"standalone_{vcpu}")
+    bsp_inc_src = os.path.join(bsp_export, "include")
+    bsp_lib_src = os.path.join(bsp_export, "lib")
+
+    bsp_inc_dst = os.path.join(ws, "bsp", cpu, "include")
+    bsp_lib_dst = os.path.join(ws, "bsp", cpu, "lib")
+
+    os.makedirs(bsp_inc_dst, exist_ok=True)
+    os.makedirs(bsp_lib_dst, exist_ok=True)
+    shutil.copytree(bsp_inc_src, bsp_inc_dst, dirs_exist_ok=True)
+    shutil.copytree(bsp_lib_src, bsp_lib_dst, dirs_exist_ok=True)
+
+    # Vitis 2025 BSP (cmake-based) drops xtime_l.h from the public include
+    # directory. The APIs moved to xiltimer.h. Create a compatibility shim
+    # so existing code that includes xtime_l.h still compiles.
+    xtime_shim = os.path.join(bsp_inc_dst, "xtime_l.h")
+    if not os.path.exists(xtime_shim):
+        with open(xtime_shim, "w") as f:
+            f.write("/* Compatibility shim: xtime_l.h APIs moved to "
+                    "xiltimer.h in Vitis 2025 */\n"
+                    "#ifndef XTIME_H\n"
+                    "#define XTIME_H\n"
+                    "#include \"xiltimer.h\"\n"
+                    "#endif\n")
+
+    # Patch xparameters.h to auto-include compat defines.  This ensures ALL
+    # projects get the Vitis 2025+ compatibility fallbacks (DEVICE_ID, interrupt
+    # renames, SPI clock frequency renames) without per-project changes.
+    compat_src = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..",
+                              "drivers", "platform", "xilinx",
+                              "xilinx_compat.h")
+    compat_dst = os.path.join(bsp_inc_dst, "xilinx_compat.h")
+    shutil.copy2(compat_src, compat_dst)
+    xpar_h = os.path.join(bsp_inc_dst, "xparameters.h")
+    if os.path.exists(xpar_h):
+        with open(xpar_h, "a") as f:
+            f.write('\n/* Vitis 2025+ compatibility defines */\n')
+            f.write('#include "xilinx_compat.h"\n')
+
+    print(f"INFO: BSP copied to bsp/{cpu}/")
+
+    # --- Step 4: Copy linker script ---
+    app_src_dir = os.path.join(ws, "app", "src")
+    os.makedirs(app_src_dir, exist_ok=True)
+
+    # Search for lscript.ld in the app component output
+    ld_src = os.path.join(out_dir, "app", "src", "lscript.ld")
+    if not os.path.exists(ld_src):
+        # Fallback: search recursively in output
+        for root, dirs, files in os.walk(os.path.join(out_dir, "app")):
+            if "lscript.ld" in files:
+                ld_src = os.path.join(root, "lscript.ld")
+                break
+    if os.path.exists(ld_src):
+        shutil.copy2(ld_src, os.path.join(app_src_dir, "lscript.ld"))
+        print("INFO: Linker script copied to app/src/lscript.ld")
+    else:
+        print("WARNING: lscript.ld not found in app component output")
+
+    # --- Step 5: Xilinx.spec (cortexa9 only) ---
+    if "cortexa9" in cpu:
+        vitis_dir = os.environ.get("XILINX_VITIS", "")
+        spec_src = os.path.join(vitis_dir, "..", "data", "embeddedsw",
+                                "scripts", "specs", "arm", "Xilinx.spec")
+        spec_src = os.path.normpath(spec_src)
+        if os.path.exists(spec_src):
+            shutil.copy2(spec_src, os.path.join(app_src_dir, "Xilinx.spec"))
+        else:
+            print(f"WARNING: Xilinx.spec not found at {spec_src}")
+
+    # --- Step 6: Copy FSBL to Makefile-expected path ---
+    # Vitis Python API generates FSBL at sw/boot/fsbl.elf but the Makefile
+    # expects it at sw/hw0/boot/fsbl.elf. Copy to match.
+    fsbl_src = os.path.join(export_sw, "boot", "fsbl.elf")
+    fsbl_dst_dir = os.path.join(export_sw, "hw0", "boot")
+    if os.path.exists(fsbl_src):
+        os.makedirs(fsbl_dst_dir, exist_ok=True)
+        shutil.copy2(fsbl_src, os.path.join(fsbl_dst_dir, "fsbl.elf"))
+        print("INFO: FSBL copied to Makefile-expected path")
+    else:
+        print(f"WARNING: FSBL not found at {fsbl_src}")
+
+    vitis.dispose()
+    print("INFO: Project created successfully")
 
 
 # ---------------------------------------------------------------------------
@@ -518,6 +679,7 @@ def main():
 
     dispatch = {
         "get_arch": lambda: get_arch(hw_path, hw_file, target),
+        "create_project": lambda: create_project(ws, hw_path, hw_file, target),
         "upload": lambda: upload(hw_path, hw_file, binary, target,
                                  fsbl_file, jtagtarget),
         "clean_build": lambda: clean_build(ws),
