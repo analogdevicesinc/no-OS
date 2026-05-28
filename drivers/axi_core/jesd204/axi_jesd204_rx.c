@@ -143,6 +143,38 @@ struct axi_jesd204_rx_jesd204_priv {
 };
 
 /**
+ * @brief Perform an optional external GT reset using GPIO signals.
+ * @param reset - GPIO descriptor for the reset pin (active high).
+ * @param done - GPIO descriptor for the reset-done pin.
+ * @return 0 on success, negative error code otherwise.
+ *
+ * Ported from Linux: analogdevicesinc/linux commit 719c71b.
+ */
+static int axi_jesd_ext_reset(struct no_os_gpio_desc *reset,
+			      struct no_os_gpio_desc *done)
+{
+	uint8_t val;
+	int count;
+
+	if (!reset || !done)
+		return 0;
+
+	no_os_gpio_set_value(reset, NO_OS_GPIO_HIGH);
+	no_os_udelay(20);
+	no_os_gpio_set_value(reset, NO_OS_GPIO_LOW);
+
+	for (count = 0; count < 32; count++) {
+		no_os_mdelay(1);
+		no_os_gpio_get_value(done, &val);
+		if (val)
+			return 0;
+	}
+
+	pr_err("GT reset-done timeout\n");
+	return -ETIMEDOUT;
+}
+
+/**
  * @brief JESD204 RX AXI Data Write.
  * @param jesd - The device structure.
  * @param reg_addr - The register address.
@@ -700,6 +732,8 @@ static int axi_jesd204_rx_jesd204_clks_enable(struct jesd204_dev *jdev,
 		enum jesd204_state_op_reason reason,
 		struct jesd204_link *lnk)
 {
+	struct axi_jesd204_rx_jesd204_priv *priv = jesd204_dev_priv(jdev);
+	struct axi_jesd204_rx *jesd = priv->jesd;
 
 	pr_debug("%s:%d link_num %u reason %s\n", __func__, __LINE__,
 		 lnk->link_id, jesd204_state_op_reason_str(reason));
@@ -712,6 +746,10 @@ static int axi_jesd204_rx_jesd204_clks_enable(struct jesd204_dev *jdev,
 	default:
 		return JESD204_STATE_CHANGE_DONE;
 	}
+
+	if (jesd->gt_reset_pll)
+		axi_jesd_ext_reset(jesd->gt_reset_pll, jesd->gt_reset_done);
+
 	return JESD204_STATE_CHANGE_DONE;
 }
 
@@ -744,6 +782,9 @@ static int axi_jesd204_rx_jesd204_link_enable(struct jesd204_dev *jdev,
 	default:
 		return JESD204_STATE_CHANGE_DONE;
 	}
+
+	if (jesd->gt_reset_dp)
+		axi_jesd_ext_reset(jesd->gt_reset_dp, jesd->gt_reset_done);
 
 	ret = no_os_clk_enable(jesd->lane_clk);
 	if (ret) {
@@ -955,6 +996,21 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 	jesd->config.subclass_version = init->subclass;
 
 	jesd->lane_clk = init->lane_clk;
+
+	/* Optional GT reset GPIOs (Versal) */
+	if (init->gt_reset_pll)
+		no_os_gpio_get_optional(&jesd->gt_reset_pll, init->gt_reset_pll);
+	if (init->gt_reset_dp)
+		no_os_gpio_get_optional(&jesd->gt_reset_dp, init->gt_reset_dp);
+	if (init->gt_reset_done)
+		no_os_gpio_get_optional(&jesd->gt_reset_done, init->gt_reset_done);
+
+	if (jesd->gt_reset_pll)
+		no_os_gpio_direction_output(jesd->gt_reset_pll, NO_OS_GPIO_LOW);
+	if (jesd->gt_reset_dp)
+		no_os_gpio_direction_output(jesd->gt_reset_dp, NO_OS_GPIO_LOW);
+	if (jesd->gt_reset_done)
+		no_os_gpio_direction_input(jesd->gt_reset_done);
 
 	ret = jesd204_dev_register(&jesd->jdev, &jesd204_axi_jesd204_rx_init);
 	if (ret)
