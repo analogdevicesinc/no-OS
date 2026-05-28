@@ -31,8 +31,7 @@ define tcl_util
 	     $(BINARY) $(TARGET_CPU) $(TEMPLATE)
 endef
 
-# Vitis 2025+: use Python API via 'vitis -s' for supported functions.
-# Falls back to xsct for functions not yet ported.
+# Vitis 2025+: use Python API via 'vitis -s' instead of xsct.
 ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
 define py_util
 	vitis -s $(PLATFORM_TOOLS)/util.py					\
@@ -178,7 +177,13 @@ LDFLAGS += -Xlinker --defsym=_HEAP_SIZE=0x100000 			\
 endif
 
 # Common xilinx libs
+# Vitis 2025+ splits BSP into libxil + libxilstandalone + libxiltimer;
+# older versions bundle everything in libxil.
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+LIB_FLAGS += -Wl,--start-group,-lxil,-lxilstandalone,-lxiltimer,-lgcc,-lc,--end-group
+else
 LIB_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+endif
 
 # Add the common include paths
 CFLAGS += -I$(BUILD_DIR)/app/src
@@ -320,6 +325,9 @@ vitis_launch_config: $(TEMP_DIR)/arch.txt
 
 $(PLATFORM)_project: $(TEMP_DIR)/arch.txt
 	$(call print,Creating and configuring the IDE project)
+ifeq ($(shell test $(VITIS_YEAR) -ge 2025 && echo y),y)
+	$(call py_util, create_project)  $(HIDE)
+else
 	$(call tcl_util, create_project)  $(HIDE)
 ifeq (y,$(strip $(NETWORKING)))
 	$(call remove_file,$(BUILD_DIR)/app/src/main.c $(BUILD_DIR)/app/src/echo.c) $(HIDE)
@@ -327,6 +335,7 @@ endif
 	$(call print,Creating fsbl.elf)
 	$(call copy_file,$(NO-OS)/tools/scripts/platform/xilinx/create_fsbl_project.tcl,$(TEMP_DIR)) $(HIDE)
 	xsct -nodisp $(TEMP_DIR)/create_fsbl_project.tcl $(BUILD_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
+endif
 
 PHONY += create_boot_bin
 create_boot_bin:
