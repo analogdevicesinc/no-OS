@@ -103,6 +103,26 @@ static void oa_tc6_prepare_tx_ctrl(struct oa_tc6_desc *desc, uint32_t addr,
 	desc->ctrl_tx_credit++;
 }
 
+static int oa_tc6_do_ctrl_transfer(struct oa_tc6_desc *desc)
+{
+	struct no_os_spi_msg xfer = {0};
+
+	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
+		xfer.tx_buff = desc->ctrl_chunks;
+		xfer.rx_buff = desc->ctrl_chunks;
+		xfer.cs_change = 1;
+
+		if (desc->prote_spi)
+			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
+		else
+			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
+
+		return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
+	}
+
+	return 0;
+}
+
 /**
  * @brief Read a register value.
  * @param desc - the OA TC6 descriptor.
@@ -119,7 +139,7 @@ int oa_tc6_reg_read(struct oa_tc6_desc *desc, uint32_t addr, uint32_t *val)
 		return -ENODEV;
 
 	oa_tc6_prepare_rx_ctrl(desc, addr);
-	ret = oa_tc6_thread(desc);
+	ret = oa_tc6_do_ctrl_transfer(desc);
 	if (ret)
 		return ret;
 
@@ -150,7 +170,7 @@ int oa_tc6_reg_write(struct oa_tc6_desc *desc, uint32_t addr, uint32_t val)
 		return -ENODEV;
 
 	oa_tc6_prepare_tx_ctrl(desc, addr, val);
-	ret = oa_tc6_thread(desc);
+	ret = oa_tc6_do_ctrl_transfer(desc);
 	if (ret)
 		return ret;
 
@@ -663,19 +683,6 @@ int oa_tc6_thread(struct oa_tc6_desc *desc)
 
 	struct oa_tc6_frame_buffer *frame_buffer;
 	struct no_os_spi_msg xfer = {0};
-
-	if (desc->ctrl_rx_credit || desc->ctrl_tx_credit) {
-		xfer.tx_buff = desc->ctrl_chunks;
-		xfer.rx_buff = desc->ctrl_chunks;
-		xfer.cs_change = 1;
-
-		if (desc->prote_spi)
-			xfer.bytes_number = 2 * (OA_HEADER_LEN + OA_REG_LEN);
-		else
-			xfer.bytes_number = 2 * OA_HEADER_LEN + OA_REG_LEN;
-
-		return no_os_spi_transfer(desc->comm_desc, &xfer, 1);
-	}
 
 	ret = oa_tc6_update_stats(desc);
 	if (ret)
