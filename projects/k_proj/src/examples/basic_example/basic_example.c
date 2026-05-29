@@ -567,6 +567,8 @@ int example_main()
 	 * ----------------------------------------------------------------
 	 */
 
+	tx_generator_cmd_set_stream_source(tx_generator, true);
+
 	printf("Press Enter to start TX CMD DMA transfer of CMD READ command...\n");
 	getchar();
 
@@ -602,15 +604,11 @@ int example_main()
 		if (ret)
 			pr_err("axi_dmac_transfer_start(rx_cmd) failed: %d\n", ret);
 
-		tx_generator_cmd_set_stream_source(tx_generator, true);
-
 		ret = axi_dmac_transfer_start(tx_cmd_dmac, &cmd_transfer);
 		if (ret)
 			pr_err("axi_dmac_transfer_start(tx_cmd_read) failed: %d\n", ret);
 		else
 			pr_info("TX CMD DMA transfer of CMD READ started\n");
-
-		tx_generator_cmd_set_stream_source(tx_generator, false);
 
 		ret = axi_dmac_transfer_wait_completion(rx_cmd_dmac, 2000);
 		if (ret)
@@ -680,8 +678,6 @@ int example_main()
 	printf("Press Enter to start TX CMD DMA transfer of CMD STREAMING READ command...\n");
 	getchar();
 
-	tx_generator_cmd_set_stream_source(tx_generator, true);
-
 	{
 		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_streaming_read); i++)
 			no_os_axi_io_write(TX_CMD_DDR_BASEADDR,
@@ -705,19 +701,15 @@ int example_main()
 			pr_info("TX CMD DMA transfer of CMD STREAMING READ started\n");
 	}
 
-	tx_generator_cmd_set_stream_source(tx_generator, false);
-
 	/*
 	 * ----------------------------------------------------------------
 	 * TX CMD DMA transfer (tx_cmd_write).
 	 * ----------------------------------------------------------------
 	 */
-	
+
 	no_os_mdelay(100);
 	printf("Press Enter to start TX CMD DMA transfer of CMD WRITE command...\n");
 	getchar();
-
-	tx_generator_cmd_set_stream_source(tx_generator, true);
 
 	{
 		for (i = 0; i < NO_OS_ARRAY_SIZE(tx_cmd_write); i++)
@@ -741,8 +733,6 @@ int example_main()
 		else
 			pr_info("TX CMD DMA transfer of CMD WRITE started\n");
 	}
-
-	tx_generator_cmd_set_stream_source(tx_generator, false);
 
 	/*
 	 * ----------------------------------------------------------------
