@@ -35,6 +35,7 @@
 
 #include "no_os_spi.h"
 #include "no_os_util.h"
+#include "no_os_mutex.h"
 #include <stdint.h>
 
 #ifndef CONFIG_OA_TX_FRAME_BUFF_NUM
@@ -224,6 +225,8 @@ struct oa_tc6_desc {
 	struct no_os_spi_desc *comm_desc;
 	uint8_t ctrl_chunks[OA_SPI_CTRL_LEN];
 	uint8_t data_chunks[OA_SPI_BUFF_LEN];
+	void *ctrl_lock;
+	void *data_lock;
 
 	struct oa_tc6_frame_buffer user_rx_frame_buffer[OA_RX_FRAME_BUFF_NUM];
 	struct oa_tc6_frame_buffer user_tx_frame_buffer[OA_TX_FRAME_BUFF_NUM];
