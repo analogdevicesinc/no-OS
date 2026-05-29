@@ -358,11 +358,66 @@ def _write_pl(session, cpu, hw_path, hw_file, jtagtarget):
     session.fpga(file=os.path.normpath(bitstream))
 
 
+def _run_init_sequence(session, init_data):
+    """Execute a PS init sequence, working around Vitis 2025.1 bugs.
+
+    Batches consecutive mask_write commands via init_ps() (fast, single
+    TCF transaction per batch) and handles mask_poll/mask_delay manually.
+    Monkey-patches mask_write to use -force, fixing write-only register
+    access errors.
+    """
+    import types
+
+    def _fixed_mask_write(self, address=None, mask=None, words=None):
+        if mask == 0xFFFFFFFF:
+            self.mwr('-f', address=address, words=[words])
+        else:
+            cur = self.mrd('-f', '-v', address=address)
+            if isinstance(cur, list):
+                cur = cur[0]
+            self.mwr('-f', address=address,
+                     words=[(cur & ~mask) | (words & mask)])
+
+    session.mask_write = types.MethodType(_fixed_mask_write, session)
+
+    # Split init_data into chunks: batch mask_write via init_ps,
+    # handle mask_poll/mask_delay individually.
+    write_batch = []
+    for line in init_data:
+        if line.startswith("mask_write "):
+            write_batch.append(line)
+        else:
+            # Flush pending writes
+            if write_batch:
+                session.init_ps(init_data=write_batch)
+                write_batch = []
+            # Handle poll/delay manually
+            parts = line.split()
+            if parts[0] == "mask_poll":
+                addr = int(parts[1], 0)
+                mask = int(parts[2], 0)
+                for _ in range(100):
+                    val = session.mrd('-f', '-v', address=addr)
+                    if isinstance(val, list):
+                        val = val[0]
+                    if val is not None and (val & mask):
+                        break
+                    time.sleep(0.1)
+            elif parts[0] == "mask_delay":
+                # mask_delay <addr> <val>: Tcl polls a hw timer.
+                # val is a small cycle count (typically 1); just sleep.
+                delay_val = int(parts[2]) if len(parts) > 2 else 1
+                time.sleep(delay_val / 1000)
+
+    # Flush remaining writes
+    if write_batch:
+        session.init_ps(init_data=write_batch)
+
+
 def _init_ps_zynq(session, hw_path, hw_file, jtagtarget):
     """Initialize PS for Zynq-7000 (cortexa9).
 
-    Parses ps7_init.tcl to extract mask_write/mask_poll sequences
-    and runs them via session.init_ps().
+    Parses ps7_init.tcl to extract mask_write/mask_poll sequences.
     """
     session.targets('-s', filter=_build_filter('APU*', jtagtarget))
 
@@ -376,12 +431,12 @@ def _init_ps_zynq(session, hw_path, hw_file, jtagtarget):
     if os.path.exists(init_tcl):
         init_data = _parse_ps_init_tcl(init_tcl, proc_name="ps7_init")
         if init_data:
-            session.init_ps(init_data=init_data)
+            _run_init_sequence(session, init_data)
         # ps7_post_config is a subset — typically just enables level
         # shifters. Extract and run separately if present.
         post_data = _parse_ps_init_tcl(init_tcl, proc_name="ps7_post_config")
         if post_data:
-            session.init_ps(init_data=post_data)
+            _run_init_sequence(session, post_data)
     else:
         print("WARNING: ps7_init.tcl not found, skipping PS initialization")
 
@@ -401,8 +456,7 @@ def _init_ps_zynqmp(session, fsbl_file, jtagtarget):
 def _init_ps_cortexr5(session, hw_path, hw_file, jtagtarget):
     """Initialize PS for Cortex-R5.
 
-    Parses psu_init.tcl to extract mask_write/mask_poll sequences
-    and runs them via session.init_ps().
+    Parses psu_init.tcl to extract mask_write/mask_poll sequences.
     """
     session.targets('-s', '--nocase',
                     filter=_build_filter('PSU', jtagtarget))
@@ -417,21 +471,21 @@ def _init_ps_cortexr5(session, hw_path, hw_file, jtagtarget):
         # psu_init
         init_data = _parse_ps_init_tcl(init_tcl, proc_name="psu_init")
         if init_data:
-            session.init_ps(init_data=init_data)
+            _run_init_sequence(session, init_data)
         time.sleep(1)
 
         # psu_ps_pl_isolation_removal
         iso_data = _parse_ps_init_tcl(init_tcl,
                                       proc_name="psu_ps_pl_isolation_removal")
         if iso_data:
-            session.init_ps(init_data=iso_data)
+            _run_init_sequence(session, iso_data)
         time.sleep(1)
 
         # psu_ps_pl_reset_config
         rst_data = _parse_ps_init_tcl(init_tcl,
                                       proc_name="psu_ps_pl_reset_config")
         if rst_data:
-            session.init_ps(init_data=rst_data)
+            _run_init_sequence(session, rst_data)
     else:
         print("WARNING: psu_init.tcl not found, skipping PS initialization")
 
