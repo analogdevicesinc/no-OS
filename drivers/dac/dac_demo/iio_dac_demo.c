@@ -270,17 +270,69 @@ static struct iio_channel iio_dac_channels[] = {
 	IIO_DEMO_DAC_CHANNEL(15)
 };
 
+/**
+ * @brief Wrapper function for update_dac_channels with correct signature for IIO
+ * @param dev - Device pointer
+ * @param mask - Channel mask (unsigned)
+ * @return 0 on success, negative error code otherwise
+ */
+static int32_t iio_update_dac_channels(void *dev, uint32_t mask)
+{
+	return update_dac_channels(dev, (int32_t)mask);
+}
+
+/**
+ * @brief Wrapper function for dac_demo_reg_read with correct signature for IIO
+ * @param dev - Device pointer (will be cast to dac_demo_desc)
+ * @param reg - Register address (32-bit)
+ * @param readval - Pointer to store read value (32-bit)
+ * @return 0 on success, negative error code otherwise
+ */
+static int32_t iio_dac_demo_reg_read(void *dev, uint32_t reg, uint32_t *readval)
+{
+	struct dac_demo_desc *desc = (struct dac_demo_desc *)dev;
+	uint8_t val8;
+	int32_t ret;
+
+	if (reg > 0xFF)
+		return -EINVAL;
+
+	ret = dac_demo_reg_read(desc, (uint8_t)reg, &val8);
+	if (ret == 0)
+		*readval = val8;
+
+	return ret;
+}
+
+/**
+ * @brief Wrapper function for dac_demo_reg_write with correct signature for IIO
+ * @param dev - Device pointer (will be cast to dac_demo_desc)
+ * @param reg - Register address (32-bit)
+ * @param writeval - Value to write (32-bit)
+ * @return 0 on success, negative error code otherwise
+ */
+static int32_t iio_dac_demo_reg_write(void *dev, uint32_t reg,
+				      uint32_t writeval)
+{
+	struct dac_demo_desc *desc = (struct dac_demo_desc *)dev;
+
+	if (reg > 0xFF || writeval > 0xFF)
+		return -EINVAL;
+
+	return dac_demo_reg_write(desc, (uint8_t)reg, (uint8_t)writeval);
+}
+
 struct iio_device dac_demo_iio_descriptor = {
 	.num_ch = TOTAL_DAC_CHANNELS,
 	.channels = iio_dac_channels,
 	.attributes = dac_global_attributes,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.pre_enable = (int32_t (*)())update_dac_channels,
+	.pre_enable = iio_update_dac_channels,
 	.post_disable = close_dac_channels,
-	.trigger_handler = (int32_t (*)())dac_demo_trigger_handler,
-	.submit = (int32_t (*)())dac_submit_samples,
-	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,
-	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write
+	.trigger_handler = dac_demo_trigger_handler,
+	.submit = dac_submit_samples,
+	.debug_reg_read = iio_dac_demo_reg_read,
+	.debug_reg_write = iio_dac_demo_reg_write
 };
 
