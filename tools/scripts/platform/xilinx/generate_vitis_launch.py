@@ -44,8 +44,8 @@ def detect_arch_config(arch):
         }
     elif 'microblaze' in arch_lower or 'sys_mb' in arch_lower:
         return {
-            'debugType': 'baremetal-mb',
-            'targetCpu': 'microblaze_0',
+            'debugType': 'baremetal-fpga',
+            'targetCpu': arch,
             'useFsbl': False,
             'initType': 'mb'
         }
@@ -109,15 +109,6 @@ def generate_zynq_init(fsbl_path, xsa_basename):
     }
 
 
-def generate_mb_init():
-    """Generate MicroBlaze initialization section (no FSBL)."""
-    return {
-        "mbInitialization": {
-            "initWithFSBL": False
-        }
-    }
-
-
 def generate_versal_init():
     """Generate Versal-specific targetSetup fields (zuTraceOptions only)."""
     return {
@@ -160,19 +151,18 @@ def generate_launch_json(args):
     xsa_basename = Path(args.xsa_path).stem
 
     # Generate bitstream/PDI path.
-    # For Versal the PDI inside the XSA may not match the XSA filename,
-    # so search for the extracted .pdi file.
+    # The filename inside the XSA may not match the XSA filename
+    # (e.g., system_top.bit inside system_top_vcu118.xsa), so search
+    # for the extracted file rather than assuming a name.
+    ide_dir = Path(args.project_dir) / '_ide' / xsa_basename
     if arch_config['initType'] == 'versal':
-        # Match Vitis expected PDI location
-        ide_dir = Path(args.project_dir) / '_ide' / xsa_basename
         pdi_files = list(ide_dir.glob('*.pdi')) if ide_dir.exists() else []
-        if pdi_files:
-            pdi_name = pdi_files[0].name
-        else:
-            pdi_name = "system_top.pdi"
-        bitstream_path = f"_ide/{xsa_basename}/{pdi_name}"
+        hw_name = pdi_files[0].name if pdi_files else "system_top.pdi"
+        bitstream_path = f"_ide/{xsa_basename}/{hw_name}"
     else:
-        bitstream_path = f"_ide/{xsa_basename}/{xsa_basename}.bit"
+        bit_files = list(ide_dir.glob('*.bit')) if ide_dir.exists() else []
+        hw_name = bit_files[0].name if bit_files else f"{xsa_basename}.bit"
+        bitstream_path = f"_ide/{xsa_basename}/{hw_name}"
 
     # Generate configuration name
     config_name = f"{args.project_name}_app_hw_1"
@@ -182,14 +172,13 @@ def generate_launch_json(args):
         init_section = generate_zu_init(args.fsbl_path, xsa_basename)
     elif arch_config['initType'] == 'zynq':
         init_section = generate_zynq_init(args.fsbl_path, xsa_basename)
-    elif arch_config['initType'] == 'mb':
-        init_section = generate_mb_init()
     elif arch_config['initType'] == 'versal':
         init_section = generate_versal_init()
     else:
         init_section = {}
 
     is_versal = arch_config['initType'] == 'versal'
+    is_mb = arch_config['initType'] == 'mb'
 
     # Build the base configuration entry
     launch_entry = {
@@ -214,7 +203,7 @@ def generate_launch_json(args):
         "target": {
             "targetConnectionId": "Local",
             "peersIniPath": ".peers.ini",
-            "context": "Versal" if is_versal else "Device"
+            "context": "Versal" if is_versal else ("fpga" if is_mb else "Device")
         },
         "pathMap": [],
     })
@@ -229,12 +218,14 @@ def generate_launch_json(args):
             "plDevice": "Auto Detect",
             "psDevice": "Auto Detect"
         },
-        "enableRPUSplitMode": False,
     }
     if is_versal:
         target_setup["pdiFile"] = f"${{workspaceFolder}}/{bitstream_path}"
         target_setup["supportsSegPdi"] = False
+    elif is_mb:
+        target_setup["bitstreamFile"] = f"${{workspaceFolder}}/{bitstream_path}"
     else:
+        target_setup["enableRPUSplitMode"] = False
         target_setup["resetAPU"] = False
         target_setup["resetRPU"] = False
         target_setup["bitstreamFile"] = f"${{workspaceFolder}}/{bitstream_path}"
@@ -242,10 +233,6 @@ def generate_launch_json(args):
     target_setup.update(init_section)
     target_setup["downloadElf"] = generate_download_elf(
         arch_config['targetCpu'], args.elf_path, args.project_dir)
-    target_setup["crossTriggerBreakpoints"] = {
-        "isSelected": False,
-        "breakpoints": []
-    }
 
     launch_entry["targetSetup"] = target_setup
     launch_entry["internalConsoleOptions"] = "openOnSessionStart"
