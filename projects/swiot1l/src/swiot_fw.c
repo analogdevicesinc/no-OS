@@ -84,6 +84,7 @@ int swiot_firmware()
 	struct adt75_iio_desc *adt75_iio_desc;
 	struct swiot_iio_desc *swiot_iio_desc;
 	struct iio_sw_trig *sw_trig;
+	struct no_os_net_desc *net_desc;
 	int ret;
 
 	struct no_os_gpio_desc *ad74413r_ldac_gpio;
@@ -159,8 +160,6 @@ int swiot_firmware()
 	}
 
 	memcpy(adin1110_ip.mac_address, adin1110_mac_address, NETIF_MAX_HWADDR_LEN);
-	memcpy(app_init_param.lwip_param.hwaddr, adin1110_mac_address,
-	       NETIF_MAX_HWADDR_LEN);
 
 	ret = no_os_irq_ctrl_init(&ad74413r_nvic, &ad74413r_nvic_ip);
 	if (ret)
@@ -195,6 +194,10 @@ int swiot_firmware()
 				&ad74413r_iio_trig_desc),
 	};
 
+	ret = no_os_net_init(&net_desc, &lwip_net_init_params);
+	if (ret)
+		return ret;
+
 	while (1) {
 		adt75_iio_ip.adt75_init_param = &adt75_ip;
 		max14906_iio_ip.max14906_init_param = &max14906_ip;
@@ -220,9 +223,7 @@ int swiot_firmware()
 		app_init_param.nb_trigs = 1;
 		app_init_param.uart_init_params = uart_ip;
 		app_init_param.post_step_callback = step_callback;
-		app_init_param.lwip_param.platform_ops = &adin1110_lwip_ops;
-		app_init_param.lwip_param.mac_param = &adin1110_ip;
-		app_init_param.lwip_param.extra = NULL;
+		app_init_param.net_desc = net_desc;
 
 		ret = iio_app_init(&app, app_init_param);
 		if (ret) {
@@ -230,7 +231,8 @@ int swiot_firmware()
 			goto free_swiot;
 		}
 
-		swiot_iio_desc->adin1110 = app->lwip_desc->mac_desc;
+		swiot_iio_desc->adin1110 = ((struct lwip_network_desc *)
+					    net_desc->extra)->mac_desc;
 		app->arg = swiot_iio_desc;
 
 		ret = iio_app_run(app);
@@ -319,7 +321,8 @@ int swiot_firmware()
 
 		sw_trig->iio_desc = app->iio_desc;
 		ad74413r_trig_desc->iio_desc = app->iio_desc;
-		swiot_iio_desc->adin1110 = app->lwip_desc->mac_desc;
+		swiot_iio_desc->adin1110 = ((struct lwip_network_desc *)
+					    net_desc->extra)->mac_desc;
 		app->arg = swiot_iio_desc;
 
 		no_os_gpio_set_value(max14906_en_gpio, 1);
