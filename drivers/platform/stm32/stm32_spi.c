@@ -672,16 +672,17 @@ int32_t stm32_spi_transfer_dma(struct no_os_spi_desc* desc,
 	sdesc->stm32_spi_dma_done = false;
 	stm32_config_dma_and_start(desc, msgs, len, stm32_spi_dma_callback, desc);
 	timeout = msgs->bytes_number;
-	while (timeout--) {
+	while (timeout > 0) {
 		no_os_mdelay(1);
 		if (sdesc->stm32_spi_dma_done)
 			break;
+		timeout--;
 	};
 
-	/* need some cleanup here? */
-	if (timeout == 0)
+	if (!sdesc->stm32_spi_dma_done) {
+		/* need some cleanup here? */
 		return -ETIME;
-
+	}
 	return 0;
 }
 
