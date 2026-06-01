@@ -31,8 +31,6 @@
 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifdef NO_OS_W5500_NETWORKING
-
 #include "w5500_network.h"
 #include "tcp_socket.h"
 
@@ -598,22 +596,33 @@ static int32_t w5500_net_socket_accept(void *net, uint32_t sock_id,
 }
 
 /***************************************************************************//**
- * @brief Initialize the W5500 network interface
+ * @brief Initialize the W5500 network device
  *
- * @param net_dev    - Double pointer to store the created network device
- * @param init_param - Initialization parameters
+ * @param desc - Double pointer to store the created network device
+ * @param param - Initialization parameters
  *
  * @return 0 in case of success, negative error code otherwise
 *******************************************************************************/
-int w5500_network_init(struct w5500_network_dev **net_dev,
-		       struct w5500_network_init_param *init_param)
+int32_t w5500_net_init(struct no_os_net_desc **desc,
+		       const struct no_os_net_init_param *param)
 {
+	struct no_os_net_desc *net_desc;
+	struct w5500_network_init_param *init_param;
 	struct w5500_network_dev *dev;
 	int32_t ret;
 
+	if (!desc || !param)
+		return -EINVAL;
+
+	net_desc = (struct no_os_net_desc *)no_os_calloc(1, sizeof(*net_desc));
+	if (!net_desc)
+		return -ENOMEM;
+
+	init_param = (struct w5500_network_init_param *)param->extra;
+
 	dev = (struct w5500_network_dev *)no_os_calloc(1, sizeof(*dev));
 	if (!dev)
-		return -ENOMEM;
+		goto free_net_desc;
 
 	if (init_param->mac_dev == NULL) {
 		if (init_param->w5500_ip == NULL) {
@@ -621,34 +630,30 @@ int w5500_network_init(struct w5500_network_dev **net_dev,
 			goto free_dev;
 		}
 
+		if (param->hwaddr)
+			memcpy(init_param->w5500_ip->mac_addr, param->hwaddr, 6);
+
 		ret = w5500_init(&dev->mac_dev, init_param->w5500_ip);
 		if (ret)
 			goto free_dev;
 	}
 
-#ifdef NO_OS_IP
-	sscanf(NO_OS_IP, "%hhu.%hhu.%hhu.%hhu", &dev->ip[0], &dev->ip[1], &dev->ip[2],
-	       &dev->ip[3]);
-	ret = w5500_set_ip(dev->mac_dev, dev->ip);
-	if (ret)
-		goto free_mac_dev;
-#endif
+	if (param->ip_config) {
+		memcpy(dev->ip, param->ip_config->ip, sizeof(dev->ip));
+		ret = w5500_set_ip(dev->mac_dev, dev->ip);
+		if (ret)
+			goto free_mac_dev;
 
-#ifdef NO_OS_NETMASK
-	sscanf(NO_OS_NETMASK, "%hhu.%hhu.%hhu.%hhu", &dev->netmask[0], &dev->netmask[1],
-	       &dev->netmask[2], &dev->netmask[3]);
-	ret = w5500_set_subnet(dev->mac_dev, dev->netmask);
-	if (ret)
-		goto free_mac_dev;
-#endif
+		memcpy(dev->netmask, param->ip_config->netmask, sizeof(dev->netmask));
+		ret = w5500_set_subnet(dev->mac_dev, dev->netmask);
+		if (ret)
+			goto free_mac_dev;
 
-#ifdef NO_OS_GATEWAY
-	sscanf(NO_OS_GATEWAY, "%hhu.%hhu.%hhu.%hhu", &dev->gateway[0], &dev->gateway[1],
-	       &dev->gateway[2], &dev->gateway[3]);
-	ret = w5500_set_gateway(dev->mac_dev, dev->gateway);
-	if (ret)
-		goto free_mac_dev;
-#endif
+		memcpy(dev->gateway, param->ip_config->gateway, sizeof(dev->gateway));
+		ret = w5500_set_gateway(dev->mac_dev, dev->gateway);
+		if (ret)
+			goto free_mac_dev;
+	}
 
 	dev->net_if.net = dev;
 
@@ -670,7 +675,10 @@ int w5500_network_init(struct w5500_network_dev **net_dev,
 
 	dev->next_virtual_id = W5500_MAX_SOCK_NUMBER + 1;
 
-	*net_dev = dev;
+	net_desc->extra = dev;
+	net_desc->net_if = &dev->net_if;
+
+	*desc = net_desc;
 
 	return 0;
 
@@ -678,6 +686,8 @@ free_mac_dev:
 	no_os_free(dev->mac_dev);
 free_dev:
 	no_os_free(dev);
+free_net_desc:
+	no_os_free(net_desc);
 
 	return ret;
 }
@@ -685,18 +695,42 @@ free_dev:
 /***************************************************************************//**
  * @brief Remove a W5500 network device and free resources
  *
- * @param dev - The device descriptor to remove
+ * @param desc - The device descriptor to remove
  *
  * @return 0 in case of success, negative error code otherwise
 *******************************************************************************/
-int w5500_network_remove(struct w5500_network_dev *dev)
+int w5500_net_remove(struct no_os_net_desc *desc)
 {
-	if (!dev)
+	if (!desc)
 		return -EINVAL;
 
-	no_os_free(dev);
+	if (desc->extra) {
+		w5500_remove(((struct w5500_network_dev *)desc->extra)->mac_dev);
+		no_os_free(desc->extra);
+	}
+
+	no_os_free(desc);
 
 	return 0;
 }
 
-#endif /* NO_OS_W5500_NETWORKING */
+static int32_t w5500_net_get_ip(struct no_os_net_desc *desc,
+			       struct no_os_net_ip_config *ip)
+{
+	struct w5500_network_dev *dev = desc->extra;
+
+	if (!dev)
+		return -EINVAL;
+
+	memcpy(ip->ip, dev->ip, sizeof(ip->ip));
+	memcpy(ip->netmask, dev->netmask, sizeof(ip->netmask));
+	memcpy(ip->gateway, dev->gateway, sizeof(ip->gateway));
+
+	return 0;
+}
+
+const struct no_os_net_platform_ops w5500_net_ops = {
+	.init = &w5500_net_init,
+	.remove = &w5500_net_remove,
+	.get_ip = &w5500_net_get_ip,
+};
