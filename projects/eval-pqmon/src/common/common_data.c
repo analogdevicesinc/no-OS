@@ -65,7 +65,6 @@ struct w5500_init_param w5500_ip = {
 	.spi_init = &w5500_spi_init_params,
 	.gpio_reset = &w5500_rst_gpio_ip,
 	.gpio_int = &w5500_int_gpio_ip,
-	.mac_addr = {0x00, 0x08, 0xDC, 0x01, 0x02, 0x03},
 	.retry_time = 2000,
 	.retry_count = 3,
 };
@@ -73,6 +72,21 @@ struct w5500_init_param w5500_ip = {
 struct w5500_network_init_param w5500_network_ip = {
 	.mac_dev = NULL,
 	.w5500_ip = &w5500_ip,
+};
+
+static uint8_t w5500_mac_addr[6] = {0x00, 0x08, 0xDC, 0x01, 0x02, 0x03};
+
+static struct no_os_net_ip_config net_ip_cfg = {
+	.ip      = {192, 168, 1, 110},
+	.netmask = {255, 255, 255, 0},
+	.gateway = {192, 168, 1, 1},
+};
+
+struct no_os_net_init_param net_init_params = {
+	.platform_ops = &w5500_net_ops,
+	.extra = &w5500_network_ip,
+	.ip_config = &net_ip_cfg,
+	.hwaddr = w5500_mac_addr,
 };
 
 #endif
@@ -178,6 +192,17 @@ struct adin1110_init_param adin1110_ip = {
 struct lwip_network_param lwip_ip = {
 	.platform_ops = &adin1110_lwip_ops,
 	.mac_param = &adin1110_ip,
+};
+static struct no_os_net_ip_config net_ip_cfg = {
+	.ip      = {192, 168, 97, 40},
+	.netmask = {255, 255, 0, 0},
+	.gateway = {0, 0, 0, 0},
+};
+struct no_os_net_init_param net_init_params = {
+	.platform_ops = &lwip_net_ops,
+	.extra = &lwip_ip,
+	.ip_config = &net_ip_cfg,
+	.hwaddr = adin1110_ip.mac_address,
 };
 #endif
 #endif
