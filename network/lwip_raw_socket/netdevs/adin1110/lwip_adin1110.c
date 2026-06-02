@@ -122,7 +122,7 @@ static int32_t adin1110_step(struct lwip_network_desc *desc, void *data)
 					pbuf_free(p);
 			}
 		}
-	} while(len);
+	} while (len);
 
 	return 0;
 }
