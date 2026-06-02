@@ -519,12 +519,13 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 		if (0 != wait_for_response(desc))
 			return -1;
 		/* Wait until '>' is received */
-		while (timeout--) {
+		while (timeout > 0) {
 			if (WAITING_SEND != desc->callback_operation)
 				break;
 			no_os_mdelay(1);
+			timeout--;
 		}
-		if (timeout == 0)
+		if (WAITING_SEND == desc->callback_operation)
 			return -1;
 		/* Write payload */
 		no_os_uart_write(desc->uart_desc, in_param->send_data.data.buff,
@@ -532,13 +533,14 @@ static int32_t send_cmd(struct at_desc *desc, enum at_cmd cmd,
 	} else if (cmd == AT_DISCONNECT_NETWORK) {
 		if (desc->is_wifi_connected) {
 			/* Wait for WIFI_DISCONNECT */
-			do {
+			while (timeout > 0) {
 				if (desc->is_wifi_connected == 0)
 					break;
 				no_os_mdelay(1);
-			} while (timeout--);
+				timeout--;
+			}
 
-			if (timeout == 0)
+			if (desc->is_wifi_connected)
 				return -1;
 
 			return 0;
