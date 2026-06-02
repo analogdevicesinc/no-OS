@@ -75,15 +75,15 @@ static int ad5940_iio_read_chan_raw(void *device, char *buf, uint32_t len,
 
 	AppBiaCtrl(iiodev->ad5940, BIACTRL_START, 0);
 
-	while (timeout--) {
+	while (timeout > 0) {
 		no_os_gpio_get_value(iiodev->ad5940->gp0_gpio, &gpio);
-		if (gpio)
-			no_os_mdelay(1);
-		else
+		if (!gpio)
 			break;
+		no_os_mdelay(1);
+		timeout--;
 	}
 
-	if (!timeout) {
+	if (gpio) {
 		AppBiaCtrl(iiodev->ad5940, BIACTRL_STOPNOW, 0);
 		return -ETIMEDOUT;
 	}
