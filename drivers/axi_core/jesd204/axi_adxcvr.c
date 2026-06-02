@@ -134,13 +134,14 @@ int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 	uint32_t val;
 	int32_t timeout = 20;
 
-	do {
+	while (timeout > 0) {
 		adxcvr_read(xcvr, ADXCVR_REG_DRP_STATUS(drp_addr), &val);
 		if (!(val & ADXCVR_DRP_STATUS_BUSY))
 			return ADXCVR_DRP_STATUS_RDATA(val);
 
 		no_os_mdelay(1);
-	} while (timeout--);
+		timeout--;
+	}
 
 	printf("%s: %s: Timeout!", xcvr->name, __func__);
 
