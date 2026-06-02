@@ -38,6 +38,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include "no_os_alloc.h"
 #include "no_os_error.h"
 #include "no_os_util.h"
 #include <unistd.h>
@@ -265,6 +266,38 @@ struct network_interface linux_net = {
 	.socket_bind = (int32_t (*)(void *, uint32_t, uint16_t))linux_socket_bind,
 	.socket_listen = (int32_t (*)(void *, uint32_t, uint32_t))linux_socket_listen,
 	.socket_accept = (int32_t (*)(void *, uint32_t, uint32_t*))linux_socket_accept
+};
+
+static int32_t linux_net_init(struct no_os_net_desc **desc,
+			      const struct no_os_net_init_param *param)
+{
+	struct no_os_net_desc *net_desc;
+
+	net_desc = (struct no_os_net_desc *)no_os_calloc(1, sizeof(*net_desc));
+	if (!net_desc)
+		return -ENOMEM;
+
+	net_desc->extra = NULL;
+	net_desc->net_if = &linux_net;
+
+	*desc = net_desc;
+
+	return 0;
+}
+
+static int32_t linux_net_remove(struct no_os_net_desc *desc)
+{
+	if (!desc)
+		return -EINVAL;
+
+	no_os_free(desc);
+
+	return 0;
+}
+
+const struct no_os_net_platform_ops linux_net_ops = {
+	.init = &linux_net_init,
+	.remove = &linux_net_remove,
 };
 
 #endif
