@@ -811,3 +811,65 @@ static int32_t wifi_socket_accept(struct wifi_desc *desc, uint32_t sock_id,
 
 	return -EAGAIN;
 }
+
+static int32_t wifi_net_init(struct no_os_net_desc **desc,
+			     const struct no_os_net_init_param *param)
+{
+	struct no_os_net_desc *net_desc;
+	struct wifi_network_param *wifi_net_param;
+	struct wifi_desc *wifi_desc;
+	int32_t ret;
+
+	if (!desc || !param || !param->extra)
+		return -EINVAL;
+
+	net_desc = (struct no_os_net_desc *)no_os_calloc(1, sizeof(*net_desc));
+	if (!net_desc)
+		return -ENOMEM;
+
+	wifi_net_param = (struct wifi_network_param *)param->extra;
+
+	ret = wifi_init(&wifi_desc, &wifi_net_param->wifi_param);
+	if (ret)
+		goto free_desc;
+
+	ret = wifi_connect(wifi_desc, wifi_net_param->ssid,
+			   wifi_net_param->pass);
+	if (ret)
+		goto free_wifi;
+
+	net_desc->extra = wifi_desc;
+	net_desc->net_if = &wifi_desc->interface;
+
+	*desc = net_desc;
+
+	return 0;
+
+free_wifi:
+	wifi_remove(wifi_desc);
+free_desc:
+	no_os_free(net_desc);
+
+	return ret;
+}
+
+static int32_t wifi_net_remove(struct no_os_net_desc *desc)
+{
+	int32_t ret;
+
+	if (!desc || !desc->extra)
+		return -EINVAL;
+
+	ret = wifi_remove((struct wifi_desc *)desc->extra);
+	if (ret)
+		return ret;
+
+	no_os_free(desc);
+
+	return 0;
+}
+
+const struct no_os_net_platform_ops wifi_net_ops = {
+	.init = &wifi_net_init,
+	.remove = &wifi_net_remove,
+};
