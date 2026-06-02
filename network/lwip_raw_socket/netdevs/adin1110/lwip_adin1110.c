@@ -31,7 +31,6 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifdef NO_OS_LWIP_NETWORKING
 
 #include <stdio.h>
 #include <string.h>
@@ -211,5 +210,3 @@ const struct no_os_lwip_ops adin1110_lwip_ops = {
 	.netif_output = adin1110_netif_output,
 	.step = adin1110_step,
 };
-
-#endif /* NO_OS_LWIP_NETWORKING */
