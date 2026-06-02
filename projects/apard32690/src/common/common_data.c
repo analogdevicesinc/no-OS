@@ -105,4 +105,19 @@ struct lwip_network_param lwip_ip = {
 	.platform_ops = &adin1110_lwip_ops,
 	.mac_param = &adin1110_ip,
 };
+
+static struct no_os_net_ip_config net_ip_cfg = {
+	.ip      = {192, 168, 97, 40},
+	.netmask = {255, 255, 0, 0},
+	.gateway = {0, 0, 0, 0},
+};
+
+struct no_os_net_init_param net_init_params = {
+	.platform_ops = &lwip_net_ops,
+	.extra = &lwip_ip,
+#ifdef NO_OS_STATIC_IP
+	.ip_config = &net_ip_cfg,
+#endif
+	.hwaddr = adin1110_ip.mac_address,
+};
 #endif

@@ -37,8 +37,10 @@
 #include "no_os_util.h"
 
 #if defined(APARD32690_ECHO_SERVER_EXAMPLE)
+#include "adin1110.h"
 #include "lwip_socket.h"
 #include "lwip_adin1110.h"
+#include "no_os_net.h"
 #endif
 
 #include "maxim_uart.h"
@@ -55,6 +57,7 @@ extern struct adin1110_init_param adin1110_ip;
 #if defined(APARD32690_ECHO_SERVER_EXAMPLE)
 extern struct lwip_network_param lwip_ip;
 extern struct adin1110_init_param adin1110_ip;
+extern struct no_os_net_init_param net_init_params;
 #endif
 
 #endif /* __COMMON_DATA_H__ */

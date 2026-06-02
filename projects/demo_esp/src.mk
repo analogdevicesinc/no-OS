@@ -44,8 +44,7 @@ SRCS += $(NO-OS)/util/no_os_lf256fifo.c		\
 	$(NO-OS)/util/no_os_alloc.c		\
 	$(NO-OS)/util/no_os_mutex.c
 
-SRC_DIRS += $(NO-OS)/network
-
+NETWORKING = y
 DISABLE_SECURE_SOCKET=y
 
-LIBRARIES += mqtt
+LIBRARIES += wifi mqtt

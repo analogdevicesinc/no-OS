@@ -34,11 +34,10 @@
 #include <stdio.h>
 #include "common_data.h"
 
-#include "lwip_socket.h"
-#include "lwip_adin1110.h"
 #include "tcp_socket.h"
 #include "no_os_error.h"
 #include "no_os_gpio.h"
+#include "no_os_net.h"
 #include "adin1110.h"
 #include "network_interface.h"
 
@@ -52,14 +51,9 @@
 
 int example_main()
 {
-	struct lwip_network_param lwip_ip = {
-		.platform_ops = &adin1110_lwip_ops,
-		.mac_param = &adin1110_ip,
-	};
-
 	struct tcp_socket_desc *server_socket;
 	struct tcp_socket_desc *client_socket;
-	struct lwip_network_desc *lwip_desc;
+	struct no_os_net_desc *net_desc;
 	struct tcp_socket_init_param tcp_ip = {
 		.max_buff_size = 0
 	};
@@ -91,13 +85,13 @@ int example_main()
 
 	pr_info("AD-APARDPFWD APARD COMMUNICATION EXAMPLE.\n");
 
-	memcpy(lwip_ip.hwaddr, adin1110_ip.mac_address, NETIF_MAX_HWADDR_LEN);
-
-	ret = no_os_lwip_init(&lwip_desc, &lwip_ip);
+	ret = no_os_net_init(&net_desc, &net_init_params);
 	if (ret) {
-		pr_err("LWIP initialization failed (%d)\n", ret);
+		pr_err("Network initialization failed (%d)\n", ret);
 		goto remove_uart;
 	}
+
+	struct lwip_network_desc *lwip_desc = net_desc->extra;
 
 	if (lwip_desc->mac_desc) {
 		printf("MAC address from mac_desc: %02X:%02X:%02X:%02X:%02X:%02X\n",
@@ -109,7 +103,7 @@ int example_main()
 		       ((struct adin1110_desc*) lwip_desc->mac_desc)->mac_address[5]);
 	} else {
 		pr_err("MAC address is NULL (%d)\n", ret);
-		goto remove_lwip;
+		goto remove_net;
 	}
 
 	ret = adin1110_reg_read((struct adin1110_desc*) lwip_desc->mac_desc,
@@ -117,17 +111,18 @@ int example_main()
 				&device_id);
 	if (ret) {
 		pr_err("Error reading the ADIN1110's device id (%d)\n", ret);
-		goto remove_lwip;
+		goto remove_net;
 	}
 
 	pr_info("Got device id 0x%X\n", device_id);
 
-	tcp_ip.net = &lwip_desc->no_os_net;
+	tcp_ip.net = net_desc->net_if;
+	tcp_ip.net_desc = net_desc;
 
 	ret = socket_init(&server_socket, &tcp_ip);
 	if (ret) {
 		pr_err("Socket initialization failed (%d)\n", ret);
-		goto remove_lwip;
+		goto remove_net;
 	}
 
 	ret = socket_bind(server_socket, SERVER_PORT);
@@ -146,7 +141,7 @@ int example_main()
 	uint8_t read_byte;
 
 	while (1) {
-		no_os_lwip_step(server_socket->net->net, NULL);
+		no_os_net_step(net_desc);
 
 		if (connected) {
 			ret = socket_recv(client_socket, &read_byte, 1);
@@ -179,8 +174,8 @@ int example_main()
 remove_server_socket:
 	socket_remove(server_socket);
 
-remove_lwip:
-	no_os_lwip_remove(lwip_desc);
+remove_net:
+	no_os_net_remove(net_desc);
 
 remove_uart:
 	no_os_uart_remove(uart_desc);

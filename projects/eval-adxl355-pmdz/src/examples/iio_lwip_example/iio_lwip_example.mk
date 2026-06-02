@@ -1,5 +1,5 @@
 IIOD = y
-CFLAGS += -DNO_OS_LWIP_NETWORKING
+NETWORKING = y
 LIBRARIES += lwip
 
 INCS += $(DRIVERS)/accel/adxl355/iio_adxl355.h

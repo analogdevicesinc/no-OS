@@ -37,6 +37,11 @@
 #include "no_os_util.h"
 #include "no_os_print_log.h"
 
+#ifdef NO_OS_NETWORKING
+#include "no_os_net.h"
+#include "lwip_socket.h"
+#endif
+
 #include "maxim_uart.h"
 #include "maxim_uart_stdio.h"
 #include "maxim_gpio.h"
@@ -44,6 +49,10 @@
 
 extern struct no_os_uart_init_param uart_ip;
 extern struct adin1110_init_param adin1110_ip;
+#ifdef NO_OS_NETWORKING
+extern struct lwip_network_param lwip_ip;
+extern struct no_os_net_init_param net_init_params;
+#endif
 extern struct no_os_gpio_init_param adin1110_spi_cfg_0;
 extern struct no_os_gpio_init_param port2_cfg_0;
 
