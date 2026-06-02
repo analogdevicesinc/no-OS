@@ -679,9 +679,8 @@ int32_t stm32_spi_transfer_dma(struct no_os_spi_desc* desc,
 		timeout--;
 	};
 
-  /* Fix: Check the actual completion flag instead of the counter */
 	if (!sdesc->stm32_spi_dma_done) {
-    /* Optional: Add HAL_DMA_Abort_IT() or similar cleanup here */
+    /* need some cleanup here? */
 		return -ETIME;
 	}
 	return 0;
