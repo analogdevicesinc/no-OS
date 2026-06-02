@@ -19,7 +19,7 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. “AS IS” AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES, INC. "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ANALOG DEVICES, INC. BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -39,6 +39,7 @@
 #include "afe_config.h"
 #include "pqlib_example.h"
 #include "status.h"
+#include "waveform_dma.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -46,29 +47,40 @@
 #include "basic_example.h"
 #endif
 
-/** @brief angle for voltage*/
 #define ANGLE_VOLTAGE 0
-/** @brief angle for current*/
 #define ANGLE_CURRENT 1
 
-/**
- * @details Get AFE input
- * @return 0 on Success
- *         1 on Failure
- */
-int get_afe_input();
+extern uint32_t wf_buf[WF_DMA_SINC4_TOTAL_SAMPLES];
+extern volatile bool waveform_streaming_active;
+extern volatile bool waveform_start_pending;
+extern volatile bool new_block_ready;
+extern volatile uint32_t waveform_block_count;
+extern volatile uint32_t dbg_isr_count;
+extern volatile uint32_t dbg_dma_kick_count;
+extern volatile uint32_t dbg_dma_done_count;
+extern volatile uint32_t dbg_svc_call_count;
 
 /**
- * @details Initialize waveform IRQ on ADE9430 IRQ0 (P0.30).
- *          Registers falling-edge GPIO interrupt for COH_PAGE_RDY.
- * @return 0 on Success
+ * @brief Callback from waveform DMA when a block is ready (half or full buffer).
+ * @param data Pointer to the block of data (size = num_samples * 4 bytes).
+ * @param num_samples Number of 32-bit samples in the block (half or full buffer).
+ */
+static void wf_block_ready(uint32_t *data, uint16_t num_samples);
+/**
+ * @brief Initialize the AFE and related resources
+ */
+int get_afe_input(void);
+/**
+ * @brief Start the AFE data acquisition and waveform streaming
  */
 int waveform_irq_init(void);
-
 /**
- * @details Service ISR-staged waveform data and deferred reads.
- *          Call from main loop between PQLib processing steps.
+ * @brief Stop the AFE data acquisition and waveform streaming
  */
-void service_waveform_isr(void);
+void service_waveform(void);
+/**
+ * @brief Drain any remaining data in the AFE FIFO and prepare for shutdown
+ */
+void waveform_drain_to_cb(void);
 
 #endif /* __PQLIB_AFE_H__ */

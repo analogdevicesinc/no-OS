@@ -511,15 +511,19 @@ static int32_t do_read_buff_delayed(struct iiod_desc *desc,
 	conn->nb_buf.buf = conn->payload_buf;
 	len = no_os_min(conn->payload_buf_len, conn->cmd_data.bytes_count);
 	max_to_read = len - conn->nb_buf.len;
-	ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
-				    conn->nb_buf.buf + conn->nb_buf.len, max_to_read);
-	if (ret < 0)
-		return ret;
 
-	conn->nb_buf.len += ret;
+	if (max_to_read > 0) {
+		ret = desc->ops.read_buffer(&ctx, conn->cmd_data.device,
+					    conn->nb_buf.buf + conn->nb_buf.len,
+					    max_to_read);
+		if (ret < 0)
+			return ret;
 
-	if (conn->nb_buf.len < conn->cmd_data.bytes_count)
-		return -EAGAIN;
+		conn->nb_buf.len += ret;
+
+		if (conn->nb_buf.len < conn->cmd_data.bytes_count)
+			return -EAGAIN;
+	}
 
 	ret = rw_iiod_buff(desc, conn, &conn->nb_buf, IIOD_WR);
 	if (ret < 0)

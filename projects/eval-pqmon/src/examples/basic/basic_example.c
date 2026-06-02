@@ -36,10 +36,22 @@
 #endif
 
 #include "pqlib_afe.h"
-
+#include "ade9430.h"
+#include <string.h>
+#ifdef PQM_CONN_USB
+#include "cdc_acm.h"
+#include "usb.h"
+#include "usb_raw_stream.h"
+#endif
 #ifdef UART_EXPORT_ENABLED
 #include "uart_export.h"
 #endif
+
+struct iio_desc *pqm_iio_desc = NULL;
+
+static struct iio_trigger_init pqm_trigs[] = {
+	IIO_APP_TRIGGER("pqm-waveform", NULL, &pqm_waveform_trig),
+};
 
 int32_t pqm_init(struct pqm_desc **desc, struct pqm_init_para *param)
 {
@@ -91,14 +103,24 @@ int32_t update_pqm_channels(void *dev, uint32_t mask)
 
 	/* Activate waveform streaming if capture mode is enabled */
 	if (mask != 0 && desc->waveform_capture_mode != WAVEFORM_CAPTURE_DISABLED) {
-		/* Flush circular buffer so host gets only fresh data */
-		if (pqlibExample.no_os_cb_desc) {
-			pqlibExample.no_os_cb_desc->read.idx = 0;
-			pqlibExample.no_os_cb_desc->read.spin_count = 0;
-			pqlibExample.no_os_cb_desc->write.idx = 0;
-			pqlibExample.no_os_cb_desc->write.spin_count = 0;
+		/* Allocate circular buffer if not yet done */
+		if (!pqlibExample.no_os_cb_desc) {
+			int ret = no_os_cb_init(&pqlibExample.no_os_cb_desc,
+						MAX_SIZE_BASE_ADDR_WITH_SIZE);
+			if (ret)
+				return ret;
 		}
+		/* Flush circular buffer so host gets only fresh data */
+		pqlibExample.no_os_cb_desc->read.idx = 0;
+		pqlibExample.no_os_cb_desc->read.spin_count = 0;
+		pqlibExample.no_os_cb_desc->write.idx = 0;
+		pqlibExample.no_os_cb_desc->write.spin_count = 0;
+
 		desc->waveform_streaming_active = true;
+		waveform_streaming_active = true;
+#ifdef PQM_CONN_USB
+		usb_raw_stream_start();
+#endif
 		if (desc->waveform_capture_mode == WAVEFORM_CAPTURE_ONESHOT) {
 			if (desc->oneshot_blocks_remaining == 0)
 				desc->oneshot_blocks_remaining = DEFAULT_ONESHOT_BLOCKS;
@@ -120,6 +142,10 @@ int32_t close_pqm_channels(void *dev)
 	desc->active_ch = 0;
 	desc->waveform_streaming_active = false;
 	desc->oneshot_running = false;
+	waveform_streaming_active = false;
+#ifdef PQM_CONN_USB
+	usb_raw_stream_stop();
+#endif
 
 	return 0;
 }
@@ -168,6 +194,10 @@ int basic_pqm_firmware()
 	memset(iio_data_buffer_loc, 0, MAX_SIZE_BASE_ADDR_WITH_SIZE);
 
 	int status = SYS_STATUS_SUCCESS;
+
+	status = MXC_SYS_Clock_Select(MXC_V_GCR_CLK_CTRL_SYSOSC_SEL_HIRC96);
+	if (status)
+		goto exit;
 
 	status = init_lcd();
 	if (status)
@@ -239,21 +269,29 @@ int basic_pqm_firmware()
 	printf("Mesurements started \n\r");
 
 	status = waveform_irq_init();
-	if (status)
+	if (status) {
 		printf("Waveform IRQ init failed: %d \n\r", status);
+		goto exit;
+	}
+	printf("Waveform IRQ init OK\n\r");
+
+#ifdef PQM_CONN_USB
+	usb_raw_stream_init();
+#endif
 
 #ifdef UART_EXPORT_ENABLED
-	status = uart_export_init();
-	if (status)
-		printf("UART export init failed: %d \n\r", status);
+	uart_export_init();
 #endif
 
 	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("pqm", pqm_desc, &pqm_iio_descriptor, &buff, NULL, NULL)
+		IIO_APP_DEVICE("pqm", pqm_desc, &pqm_iio_descriptor,
+			       &buff, NULL, "trigger0")
 	};
 
 	app_init_param.devices = devices;
 	app_init_param.nb_devices = NO_OS_ARRAY_SIZE(devices);
+	app_init_param.trigs = pqm_trigs;
+	app_init_param.nb_trigs = NO_OS_ARRAY_SIZE(pqm_trigs);
 
 #if defined(PQM_CONN_USB)
 	app_init_param.uart_init_params = iio_demo_usb_ip;
@@ -271,18 +309,38 @@ int basic_pqm_firmware()
 
 	status = w5500_network_init(&net_dev, &w5500_network_ip);
 	if (status)
-		return status;
+		goto exit;
 
 	app_init_param.net_dev = net_dev;
 #endif
 
-	app_init_param.post_step_callback = &(pqm_one_cycle);
 	status = iio_app_init(&app, app_init_param);
 
-	if (status)
+	if (status) {
+		printf("iio_app_init failed: %d\n\r", status);
 		goto exit;
+	}
+	pqm_iio_desc = app->iio_desc;
+	printf("IIO app initialized\n\r");
 
-	status = iio_app_run(app);
+#ifdef PQM_CONN_USB
+	while (1) {
+		pqm_one_cycle();
+		if (!waveform_streaming_active) {
+			iio_step(pqm_iio_desc);
+			if (waveform_start_pending) {
+				for (int i = 0; i < 50; i++)
+					iio_step(pqm_iio_desc);
+				waveform_start_pending = false;
+				pqm_desc->waveform_streaming_active = true;
+				waveform_streaming_active = true;
+				usb_raw_stream_start();
+			}
+		}
+	}
+#else
+	// status = iio_app_run(app);
+#endif
 
 	iio_app_remove(app);
 

@@ -74,9 +74,9 @@ static acm_cfg_t acm_cfg = {
 	3, /* EP IN */
 	MXC_USBHS_MAX_PACKET, /* IN max packet size */
 	4, /* EP Notify */
-	MXC_USBHS_MAX_PACKET, /* Notify max packet size */
+	64, /* Notify max packet size - interrupt EP FIFO is 64 bytes */
 };
-static int configured = 0;
+int configured = 0;
 static int suspended = 0;
 static int event_flags = 0;
 static int remote_wake_en = 0;
@@ -360,9 +360,9 @@ static int setconfig_callback(MXC_USB_SetupPkt *sud, void *cbdata)
 		MXC_SETBIT(&event_flags, EVENT_ENUM_COMP);
 
 		acm_cfg.out_ep = config_descriptor.endpoint_descriptor_4.bEndpointAddress & 0x7;
-		acm_cfg.out_maxpacket = config_descriptor.endpoint_descriptor_4.wMaxPacketSize;
+		acm_cfg.out_maxpacket = MXC_USBHS_MAX_PACKET;
 		acm_cfg.in_ep = config_descriptor.endpoint_descriptor_5.bEndpointAddress & 0x7;
-		acm_cfg.in_maxpacket = config_descriptor.endpoint_descriptor_5.wMaxPacketSize;
+		acm_cfg.in_maxpacket = MXC_USBHS_MAX_PACKET;
 		acm_cfg.notify_ep = config_descriptor.endpoint_descriptor_3.bEndpointAddress &
 				    0x7;
 		acm_cfg.notify_maxpacket =
@@ -448,6 +448,9 @@ static int event_callback(maxusb_event_t evt, void *data)
 		break;
 
 	case MAXUSB_EVENT_BRSTDN:
+		printf("POWER=0x%02X HS=%d CTUCH=0x%04X CTHSRTN=0x%04X\n\r",
+		       MXC_USBHS->power, !!(MXC_USBHS->power & 0x10),
+		       MXC_USBHS->ctuch, MXC_USBHS->cthsrtn);
 		if (MXC_USB_GetStatus() & MAXUSB_STATUS_HIGH_SPEED) {
 			enum_register_descriptor(ENUM_DESC_CONFIG, (uint8_t *)&config_descriptor_hs, 0);
 			enum_register_descriptor(ENUM_DESC_OTHER, (uint8_t *)&config_descriptor, 0);

@@ -60,13 +60,11 @@
 
 #define FW_VERSION 2.2
 
-#define IIO_BUFF_TYPE int16_t
-#define SAMPLES_PER_CHANNEL_PLATFORM 256
-/* IIO buffer sized to hold 32 waveform blocks (256 samples x 7 channels each).
- * At 50Hz with 128 resampled pts/cycle, COH_PAGE_RDY fires every 40ms (25/sec).
- * 32 blocks = 1.28s buffer, sufficient for serial IIO readout latency. */
+#define IIO_BUFF_TYPE int32_t
+#define SAMPLES_PER_CHANNEL_PLATFORM 128
+/* SINC4 32kSPS: 128 samples/ch x 7 channels x 32-bit per half-buffer.*/
 #define WAVEFORM_IIO_BLOCKS 32
-#define WAVEFORM_BLOCK_SAMPLES (256 * 7)
+#define WAVEFORM_BLOCK_SAMPLES (128 * 7)
 #define MAX_SIZE_BASE_ADDR (WAVEFORM_IIO_BLOCKS * WAVEFORM_BLOCK_SAMPLES)
 #define MAX_SIZE_BASE_ADDR_WITH_SIZE                                           \
   (MAX_SIZE_BASE_ADDR * sizeof(IIO_BUFF_TYPE))
@@ -75,7 +73,7 @@
 #define VOLTAGE_CH_NUMBER 3
 #define MAX_CH_ATTRS 31
 #define PQM_DEVICE_ATTR_NUMBER 68
-#define WAVEFORM_BUFFER_LENGTH (256 * 7)
+#define WAVEFORM_BUFFER_LENGTH (128 * 7)
 #define MAX_EVENT_NUMBER 6
 #define DEFAULT_ONESHOT_BLOCKS 4
 
@@ -107,6 +105,7 @@ extern struct adin1110_init_param adin1110_ip;
 extern struct lwip_network_param lwip_ip;
 #endif
 
+extern struct iio_desc *pqm_iio_desc;
 extern struct pqm_init_para pqm_ip;
 extern struct no_os_spi_init_param spi_egy_ip;
 extern struct no_os_i2c_init_param i2c_ip;
@@ -114,6 +113,7 @@ extern struct no_os_uart_init_param uart_ip_stdio;
 extern struct no_os_timer_init_param timer_ip;
 extern struct no_os_gpio_init_param reset_gpio_ip;
 extern struct no_os_gpio_init_param intr_gpio_ip;
+extern struct no_os_gpio_init_param led_gpio_ip;
 extern struct no_os_irq_init_param afe_callback_ctrl_ip;
 extern struct no_os_callback_desc afe0_callback_desc;
 extern struct no_os_uart_init_param uart_export_ip;

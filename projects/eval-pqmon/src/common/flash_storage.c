@@ -57,8 +57,9 @@ static bool flash_initialized = false;
 static uint32_t crc32_table[256];
 static bool crc32_table_initialized = false;
 
-static void crc32_init_table(void);
-
+/**
+ * @brief Initialize CRC32 lookup table
+ */
 static void crc32_init_table(void)
 {
 	uint32_t i, j, crc;
@@ -76,6 +77,12 @@ static void crc32_init_table(void)
 	crc32_table_initialized = true;
 }
 
+/**
+ * @brief Calculate CRC32 checksum for given data
+ * @param data Pointer to data buffer
+ * @param len Length of data in bytes
+ * @return Calculated CRC32 checksum
+ */
 uint32_t flash_calculate_crc32(const void *data, uint32_t len)
 {
 	const uint8_t *buf = (const uint8_t *)data;
@@ -91,6 +98,9 @@ uint32_t flash_calculate_crc32(const void *data, uint32_t len)
 	return crc ^ 0xFFFFFFFF;
 }
 
+/**
+ * @brief Initialize flash storage module
+ */
 int flash_storage_init(void)
 {
 	if (flash_initialized)
@@ -105,17 +115,28 @@ int flash_storage_init(void)
 	return FLASH_STATUS_OK;
 }
 
+/**
+ * @brief De-initialize flash storage module
+ */
 int flash_storage_remove(void)
 {
 	flash_initialized = false;
 	return FLASH_STATUS_OK;
 }
 
+/**
+ * @brief Check if flash storage is initialized
+ */
 bool flash_storage_is_initialized(void)
 {
 	return flash_initialized;
 }
 
+/**
+ * @brief Read calibration data from flash
+ * @param data Pointer to calibration data structure
+ * @return FLASH_STATUS_OK on success, error code otherwise
+ */
 int flash_read_calibration(FLASH_CALIBRATION_DATA *data)
 {
 	uint32_t calculated_crc;
@@ -150,6 +171,11 @@ int flash_read_calibration(FLASH_CALIBRATION_DATA *data)
 	return FLASH_STATUS_OK;
 }
 
+/**
+ * @brief Write calibration data to flash
+ * @param data Pointer to calibration data structure
+ * @return FLASH_STATUS_OK on success, error code otherwise
+ */
 int flash_write_calibration(const FLASH_CALIBRATION_DATA *data)
 {
 	FLASH_CALIBRATION_DATA write_data;
@@ -221,6 +247,10 @@ int flash_write_calibration(const FLASH_CALIBRATION_DATA *data)
 	return FLASH_STATUS_OK;
 }
 
+/**
+ * @brief Erase calibration data from flash
+ * @return FLASH_STATUS_OK on success, error code otherwise
+ */
 int flash_erase_calibration(void)
 {
 	int ret;
@@ -251,12 +281,20 @@ int flash_erase_calibration(void)
 	return FLASH_STATUS_OK;
 }
 
+/**
+ * @brief Check if valid calibration data exists in flash
+ * @return true if valid calibration data is present, false otherwise
+ */
 bool flash_has_valid_calibration(void)
 {
 	FLASH_CALIBRATION_DATA data;
 	return (flash_read_calibration(&data) == FLASH_STATUS_OK);
 }
 
+/**
+ * @brief Load calibration from flash and apply to AFE registers
+ * @return FLASH_STATUS_OK on success, error code otherwise
+ */
 int flash_load_and_apply_calibration(void)
 {
 	FLASH_CALIBRATION_DATA cal_data;
@@ -346,6 +384,11 @@ int flash_load_and_apply_calibration(void)
 	return FLASH_STATUS_OK;
 }
 
+/**
+ * @brief Save calibration results from current context to flash for a specific channel
+ * @param channel Channel index (0-based)
+ * @return FLASH_STATUS_OK on success, error code otherwise
+ */
 int flash_save_calibration_channel(uint8_t channel)
 {
 	FLASH_CALIBRATION_DATA cal_data;
@@ -391,6 +434,10 @@ int flash_save_calibration_channel(uint8_t channel)
 	return flash_write_calibration(&cal_data);
 }
 
+/**
+ * @brief Save calibration results from current context to flash for all channels
+ * @return FLASH_STATUS_OK on success, error code otherwise
+ */
 int flash_save_all_calibration(void)
 {
 	FLASH_CALIBRATION_DATA cal_data;
@@ -467,10 +514,11 @@ int flash_save_all_calibration(void)
 	return flash_write_calibration(&cal_data);
 }
 
-/*******************************************************************************
- * Public Functions - Utility
- ******************************************************************************/
-
+/**
+ * @brief Convert flash status code to human-readable string
+ * @param status FLASH_STATUS code
+ * @return String representation of the status
+ */
 const char *flash_status_to_string(FLASH_STATUS status)
 {
 	switch (status) {

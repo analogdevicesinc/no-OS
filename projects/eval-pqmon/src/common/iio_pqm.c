@@ -32,7 +32,13 @@
  *******************************************************************************/
 
 #include "iio_pqm.h"
+#include "iio.h"
 #include "flash_storage.h"
+#include "pqlib_afe.h"
+#include "no_os_circular_buffer.h"
+#ifdef PQM_CONN_USB
+#include "usb_raw_stream.h"
+#endif
 
 #define PQM_VOLTAGE_CHANNEL(_idx, _scan_idx, _name)                            \
   {                                                                            \
@@ -125,6 +131,16 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 	if (!device)
 		return -ENODEV;
 	desc = device;
+
+#ifdef PQM_CONN_USB
+	if (attr_id == RAW_STREAM_ENABLE)
+		return snprintf(buf, len, "%d",
+				usb_raw_stream_is_active() ? 1 : 0);
+	if (attr_id == RAW_STREAM_DROP_COUNT)
+		return snprintf(buf, len, "%" PRIu32,
+				usb_raw_stream_get_drop_count());
+#endif
+
 	if (attr_id < PQM_DEVICE_ATTR_NUMBER) {
 		switch (attr_id) {
 		case NOMINAL_VOLTAGE:
@@ -392,7 +408,8 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 			return snprintf(buf, len, "disabled");
 		case WAVEFORM_CAPTURE_MODE_AVAILABLE:
 			strcpy(buf, "");
-			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available); i++) {
+			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available);
+			     i++) {
 				strcat(buf, pqm_waveform_capture_mode_available[i]);
 				if (i != NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available) - 1)
 					strcat(buf, " ");
@@ -406,7 +423,7 @@ int read_pqm_attr(void *device, char *buf, uint32_t len,
 					desc->oneshot_blocks_remaining);
 		case WAVEFORM_BLOCK_COUNT:
 			return snprintf(buf, len, "%" PRIu32,
-					desc->waveform_block_count);
+					(uint32_t)waveform_block_count);
 
 		case FLASH_CAL_DATA: {
 			FLASH_CALIBRATION_DATA flash_data;
@@ -495,10 +512,25 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 {
 	struct pqm_desc *desc;
 	float value = atof(buf);
+	int i;
 
 	if (!device)
 		return -ENODEV;
 	desc = device;
+
+#ifdef PQM_CONN_USB
+	if (attr_id == RAW_STREAM_ENABLE) {
+		if ((int)value > 0) {
+			waveform_start_pending = true;
+		} else {
+			usb_raw_stream_stop();
+			desc->waveform_streaming_active = false;
+			waveform_streaming_active = false;
+		}
+		return len;
+	}
+#endif
+
 	if (attr_id < PQM_DEVICE_ATTR_NUMBER) {
 		configChanged = true;
 
@@ -598,7 +630,7 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 			break;
 		case CAL_TYPE:
 			/* Set calibration type without starting */
-			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_type_available); i++) {
+			for (i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_type_available); i++) {
 				if (strcmp(buf, pqm_calibration_type_available[i]) == 0) {
 					pqlibExample.exampleConfig.calibrationType = i;
 					configChanged = false;
@@ -632,7 +664,7 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 			}
 			return -EINVAL;
 		case CAL_PHASE:
-			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_phase_available); i++) {
+			for (i = 0; i < NO_OS_ARRAY_SIZE(pqm_calibration_phase_available); i++) {
 				if (strcmp(buf, pqm_calibration_phase_available[i]) == 0) {
 					calibrationCtx.phase = (CALIBRATION_PHASE)i;
 					configChanged = false;
@@ -707,7 +739,8 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 			break;
 		case WAVEFORM_CAPTURE_MODE_ATTR:
 			configChanged = false;
-			for (int i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available); i++) {
+			for (i = 0; i < NO_OS_ARRAY_SIZE(pqm_waveform_capture_mode_available);
+			     i++) {
 				if (strcmp(buf, pqm_waveform_capture_mode_available[i]) == 0) {
 					/* Reject new oneshot request while one is running */
 					if (i == WAVEFORM_CAPTURE_ONESHOT &&
@@ -720,7 +753,6 @@ int write_pqm_attr(void *device, char *buf, uint32_t len,
 						desc->waveform_streaming_active = false;
 						desc->oneshot_running = false;
 					} else {
-						/* Update streaming state if channels are active */
 						desc->waveform_streaming_active =
 							(desc->active_ch != 0);
 					}
@@ -760,6 +792,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 {
 	struct pqm_desc *desc;
 	char buffTmp[10];
+	int i;
 
 	if (!device)
 		return -ENODEV;
@@ -780,24 +813,24 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 							pqlibExample.exampleConfig.voltageScale));
 		case CHAN_ANGLE:
 			switch (channel->ch_num) {
-			case 0: // VA -> always 0
+			case 0: /* VA -> always 0 */
 				return snprintf(buf, len, "%" PRIu16 "", 0);
-			case 1: // VB -> ANGL_VA_VB
+			case 1: /* VB -> ANGL_VA_VB */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_VA_VB));
-			case 2: // VC -> ANGL_VA_VC
+			case 2: /* VC -> ANGL_VA_VC */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_VA_VC));
 			}
 
 		case CHAN_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 0% & 100% always
+			/* Adding fundamental waveform, 0% & 100% always */
 			sprintf(buffTmp, "%f %f", 0.0f, 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
 
-			for (int i = 0; i < PQLIB_MAX_HARMONICS - 1; i++) {
+			for (i = 0; i < PQLIB_MAX_HARMONICS - 1; i++) {
 				sprintf(buffTmp, "%f",
 					convert_pct_type(pqlibExample.output->params1012Cycles
 							 .voltageParams[channel->ch_num]
@@ -810,12 +843,12 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_INTER_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 0% & 100% always
+			/* Adding fundamental waveform, 0% & 100% always */
 			sprintf(buffTmp, "%f %f", 0.0f, 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
 
-			for (int i = 0; i < PQLIB_MAX_INTER_HARMONICS - 1; i++) {
+			for (i = 0; i < PQLIB_MAX_INTER_HARMONICS - 1; i++) {
 				sprintf(buffTmp, "%f",
 					convert_pct_type(pqlibExample.output->params1012Cycles
 							 .voltageParams[channel->ch_num]
@@ -928,12 +961,12 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_ANGLE:
 			switch (channel->ch_num) {
-			case 0: // IA -> always 0
+			case 0: /* IA -> always 0 */
 				return snprintf(buf, len, "%" PRIu16 "", 0);
-			case 1: // IB -> ANGL_IA_IB
+			case 1: /* IB -> ANGL_IA_IB */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_IA_IB));
-			case 2: // IC -> ANGLE_IA_IC
+			case 2: /* IC -> ANGLE_IA_IC */
 				return snprintf(buf, len, "%" PRIu16 "",
 						convert_angle_type(pqlibExample.inputCycle.ANGL_IA_IC));
 			default:
@@ -942,12 +975,12 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 0% & 100% always
+			/* Adding fundamental waveform, 0% & 100% always */
 			sprintf(buffTmp, "%f %f", 0.0f, 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
 
-			for (int i = 0; i < PQLIB_MAX_HARMONICS - 1; i++) {
+			for (i = 0; i < PQLIB_MAX_HARMONICS - 1; i++) {
 				sprintf(buffTmp, "%f",
 					convert_pct_type(pqlibExample.output->params1012Cycles
 							 .currentParams[channel->ch_num]
@@ -960,12 +993,12 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 
 		case CHAN_INTER_HARMONICS:
 			strcpy(buf, "");
-			// Adding fundamental waveform, 0% & 100% always
+			/* Adding fundamental waveform, 0% & 100% always */
 			sprintf(buffTmp, "%f %f", 0.0f, 100.0f);
 			strcat(buf, buffTmp);
 			strcat(buf, " ");
 
-			for (int i = 0; i < PQLIB_MAX_INTER_HARMONICS - 1; i++) {
+			for (i = 0; i < PQLIB_MAX_INTER_HARMONICS - 1; i++) {
 				sprintf(buffTmp, "%f",
 					convert_pct_type(pqlibExample.output->params1012Cycles
 							 .currentParams[channel->ch_num]
@@ -998,7 +1031,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 		}
 	case IIO_COUNT:
 		switch (channel->ch_num) {
-		case 0: // Dips
+		case 0: /* Dips */
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
 				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.dipCount);
@@ -1013,7 +1046,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			default:
 				return -EINVAL;
 			}
-		case 1: // Swells
+		case 1: /* Swells */
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
 				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.swellCount);
@@ -1028,7 +1061,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			default:
 				return -EINVAL;
 			}
-		case 2: // RVC
+		case 2: /* RVC */
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
 				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.rvcCount);
@@ -1045,7 +1078,7 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 			default:
 				return -EINVAL;
 			}
-		case 3: // Intrpt
+		case 3: /* Intrpt */
 			switch (attr_id) {
 			case CHAN_EVENT_COUNT:
 				return snprintf(buf, len, "%" PRIu8 "", pqlibExample.output->events.intrpCount);
@@ -1066,58 +1099,119 @@ int read_ch_attr(void *device, char *buf, uint32_t len,
 	}
 }
 
-/**
- * @brief function for reading samples from the device.
- * @param dev_data  - The iio device data structure.
- * @return the number of read samples.
- */
-int32_t read_samples(struct iio_device_data *dev_data)
-{
-	if (!dev_data)
-		return -ENODEV;
-	if (pqlibExample.no_os_cb_desc == NULL) {
-		pqlibExample.no_os_cb_desc = dev_data->buffer->buf;
-	}
+struct iio_trigger pqm_waveform_trig = {
+	.is_synchronous = false,
+	.attributes = NULL,
+	.enable = NULL,
+	.disable = NULL,
+};
 
-	return dev_data->buffer->size / dev_data->buffer->bytes_per_scan;
-}
-
-/**
- * @brief Handles trigger: reads one data-set and writes it to the buffer.
- *
- * @param dev_data  - The iio device data structure.
- *
- * @return ret - Result of the handling procedure. In case of success, the size
- * 				 of the written data is returned.
- */
-int32_t pqm_trigger_handler(struct iio_device_data *dev_data)
+static int32_t pqm_trigger_handler(struct iio_device_data *dev_data)
 {
 	struct pqm_desc *desc;
-	uint32_t k = 0;
-	uint32_t ch = -1;
+	uint32_t sample_set[WF_DMA_NUM_CHANNELS];
 	uint32_t buff[TOTAL_PQM_CHANNELS];
-	static uint32_t i = 0;
-	uint32_t *ch_buf_ptr;
+	uint32_t scan_bytes = WF_DMA_NUM_CHANNELS * sizeof(uint32_t);
+	uint32_t avail, ch, k;
+	int ret;
 
 	if (!dev_data)
 		return -EINVAL;
 
 	desc = (struct pqm_desc *)dev_data->dev;
 
-	if (desc->ext_buff == NULL) {
-		return iio_buffer_push_scan(dev_data->buffer, buff);
+	if (!desc->waveform_streaming_active || !pqlibExample.no_os_cb_desc)
+		return 0;
+
+	no_os_cb_size(pqlibExample.no_os_cb_desc, &avail);
+
+	while (avail >= scan_bytes) {
+		ret = no_os_cb_read(pqlibExample.no_os_cb_desc, sample_set,
+				    scan_bytes);
+		if (ret)
+			break;
+
+		k = 0;
+		ch = -1;
+		while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
+			if (ch < WF_DMA_NUM_CHANNELS)
+				buff[k] = sample_set[ch];
+			else
+				buff[k] = 0;
+			k++;
+		}
+		ret = iio_buffer_push_scan(dev_data->buffer, buff);
+		if (ret)
+			break;
+
+		avail -= scan_bytes;
 	}
 
-	while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
-		ch_buf_ptr = (uint32_t *)desc->ext_buff + (ch * desc->ext_buff_len);
-		buff[k++] = ch_buf_ptr[i];
-	}
-	if (i == (desc->ext_buff_len - 1))
-		i = 0;
-	else
-		i++;
+	return 0;
+}
 
-	return iio_buffer_push_scan(dev_data->buffer, buff);
+static int32_t pqm_submit(struct iio_device_data *dev_data)
+{
+	struct pqm_desc *desc;
+	uint32_t k, ch;
+	uint32_t buff[TOTAL_PQM_CHANNELS];
+	uint32_t sample_set[WF_DMA_NUM_CHANNELS];
+	uint32_t avail, scan_bytes, pushed = 0;
+	uint32_t target;
+	int ret;
+	uint32_t wait_loops = 0;
+
+	if (!dev_data)
+		return -EINVAL;
+
+	desc = (struct pqm_desc *)dev_data->dev;
+
+	if (!desc->waveform_streaming_active || !pqlibExample.no_os_cb_desc)
+		return 0;
+
+	scan_bytes = WF_DMA_NUM_CHANNELS * sizeof(uint32_t);
+	target = dev_data->buffer->samples;
+
+	no_os_cb_size(pqlibExample.no_os_cb_desc, &avail);
+
+	while (pushed < target) {
+		if (avail < scan_bytes) {
+			if (wait_loops++ > 5000000) {
+				printf("submit: TIMEOUT pushed=%lu/%lu\n\r",
+				       (unsigned long)pushed,
+				       (unsigned long)target);
+				break;
+			}
+			service_waveform();
+			no_os_cb_size(pqlibExample.no_os_cb_desc, &avail);
+			continue;
+		}
+
+		wait_loops = 0;
+
+		ret = no_os_cb_read(pqlibExample.no_os_cb_desc, sample_set,
+				    scan_bytes);
+		if (ret)
+			break;
+
+		k = 0;
+		ch = -1;
+		while (get_next_ch_idx(desc->active_ch, ch, &ch)) {
+			if (ch < WF_DMA_NUM_CHANNELS)
+				buff[k] = sample_set[ch];
+			else
+				buff[k] = 0;
+			k++;
+		}
+		ret = iio_buffer_push_scan(dev_data->buffer, buff);
+		if (ret)
+			break;
+
+		pushed++;
+		avail -= scan_bytes;
+	}
+
+	return 0;
 }
 
 struct iio_attribute voltage_pqm_attributes[] = {
@@ -1238,7 +1332,7 @@ struct iio_attribute voltage_pqm_attributes[] = {
 	},
 
 	END_ATTRIBUTES_ARRAY,
-}; // voltage channel attributes
+}; /* voltage channel attributes */
 
 struct iio_attribute current_pqm_attributes[] = {
 
@@ -1284,7 +1378,7 @@ struct iio_attribute current_pqm_attributes[] = {
 	},
 
 	END_ATTRIBUTES_ARRAY,
-}; // current channel attributes
+}; /* current channel attributes */
 
 struct iio_attribute global_pqm_attributes[] = {
 #if ADI_PQLIB_CFG_DISABLE_SYMM_COMP == 0
@@ -1661,8 +1755,21 @@ struct iio_attribute global_pqm_attributes[] = {
 		.show = read_pqm_attr,
 		.priv = WAVEFORM_BLOCK_COUNT,
 	},
+#ifdef PQM_CONN_USB
+	{
+		.name = "raw_stream_enable",
+		.show = read_pqm_attr,
+		.store = write_pqm_attr,
+		.priv = RAW_STREAM_ENABLE,
+	},
+	{
+		.name = "raw_stream_drop_count",
+		.show = read_pqm_attr,
+		.priv = RAW_STREAM_DROP_COUNT,
+	},
+#endif
 	END_ATTRIBUTES_ARRAY,
-}; // global attributes for device
+}; /* global attributes for device */
 
 struct iio_attribute event_pqm_dips_attribute[] = {
 	EVENT_COMMON_ATTR,
@@ -1672,7 +1779,7 @@ struct iio_attribute event_pqm_dips_attribute[] = {
 		.priv = CHAN_EVENT_MIN_MAG,
 	},
 	END_ATTRIBUTES_ARRAY,
-}; // event channel attribute for dips events
+}; /* event channel attribute for dips events */
 
 struct iio_attribute event_pqm_swell_attribute[] = {
 	EVENT_COMMON_ATTR,
@@ -1682,7 +1789,7 @@ struct iio_attribute event_pqm_swell_attribute[] = {
 		.priv = CHAN_EVENT_MAX_MAG,
 	},
 	END_ATTRIBUTES_ARRAY,
-}; // event channel attribute for swell events
+}; /* event channel attribute for swell events */
 
 struct iio_attribute event_pqm_rvc_attribute[] = {
 	EVENT_COMMON_ATTR,
@@ -1697,20 +1804,20 @@ struct iio_attribute event_pqm_rvc_attribute[] = {
 		.priv = CHAN_EVENT_DELTA_U_SS,
 	},
 	END_ATTRIBUTES_ARRAY,
-}; // event channel attribute for rvc events
+}; /* event channel attribute for rvc events */
 
 struct iio_attribute event_pqm_intrpr_attribute[] = {
 	EVENT_COMMON_ATTR,
 	END_ATTRIBUTES_ARRAY,
-}; // event channel attribute
+}; /* event channel attribute */
 
 struct scan_type pqm_scan_type = {.sign = 's',
-	.realbits = 16,
-	.storagebits = 16,
+	.realbits = 32,
+	.storagebits = 32,
 	.shift = 0,
 	.is_big_endian =
 		false
-}; // generic waveform channel definition
+};
 
 static struct iio_channel iio_pqm_channels[] = {
 	PQM_CURRENT_CHANNEL(0, 1, "ia"),
@@ -1724,7 +1831,7 @@ static struct iio_channel iio_pqm_channels[] = {
 	PQM_EVENT_CHANNEL(1, 9, "swells", event_pqm_swell_attribute),
 	PQM_EVENT_CHANNEL(2, 10, "rvc", event_pqm_rvc_attribute),
 	PQM_EVENT_CHANNEL(3, 11, "intrpt", event_pqm_intrpr_attribute),
-}; // channel definitions for device
+}; /* channel definitions for device */
 
 struct iio_device pqm_iio_descriptor = {
 	.num_ch = TOTAL_PQM_CHANNELS,
@@ -1734,6 +1841,6 @@ struct iio_device pqm_iio_descriptor = {
 	.buffer_attributes = NULL,
 	.pre_enable = update_pqm_channels,
 	.post_disable = close_pqm_channels,
-	.trigger_handler = (int32_t(*)())pqm_trigger_handler,
-	.submit = (int32_t(*)())read_samples,
-}; // pqm iio descriptor
+	.trigger_handler = pqm_trigger_handler,
+	.submit = (int32_t(*)())pqm_submit,
+}; /* pqm iio descriptor */

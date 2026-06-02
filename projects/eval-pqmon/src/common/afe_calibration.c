@@ -113,6 +113,9 @@ static const uint16_t vfrmsos_regs[] = {
 	REG_CVFRMSOS
 };
 
+/**
+ * @brief Initialize calibration context
+ */
 void calibration_init(void)
 {
 	memset(&calibrationCtx, 0, sizeof(CALIBRATION_CONTEXT));
@@ -128,28 +131,48 @@ void calibration_init(void)
 	calibrationCtx.input.voltage_pga_gain = 1.0f;
 }
 
+/**
+ * @brief Calculate expected IRMS value based on input parameters and nominal current
+ * @param input Pointer to calibration input parameters
+ * @param rms_value Nominal RMS current value
+ * @return Expected IRMS register value corresponding to the nominal current
+ */
 uint32_t calculate_expected_irms(const CALIBRATION_INPUT *input,
 				 float rms_value)
 {
+	float percentage;
 	if (input->current_scale == 0.0f)
 		return 0;
 
-	float percentage = (rms_value * SQRT_2 * input->current_pga_gain) /
-			   input->current_scale;
+	percentage = (rms_value * SQRT_2 * input->current_pga_gain) /
+		     input->current_scale;
 	return (uint32_t)(percentage * (float)ADI_PQLIB_MAX_RMS_VALUE_CAL);
 }
 
+/**
+ * @brief Calculate expected VRMS value based on input parameters and nominal voltage
+ * @param input Pointer to calibration input parameters
+ * @param rms_value Nominal RMS voltage value
+ * @return Expected VRMS register value corresponding to the nominal voltage
+ */
 uint32_t calculate_expected_vrms(const CALIBRATION_INPUT *input,
 				 float rms_value)
 {
+	float percentage;
 	if (input->voltage_scale == 0.0f)
 		return 0;
 
-	float percentage = (rms_value * SQRT_2 * input->voltage_pga_gain) /
-			   input->voltage_scale;
+	percentage = (rms_value * SQRT_2 * input->voltage_pga_gain) /
+		     input->voltage_scale;
 	return (uint32_t)(percentage * (float)ADI_PQLIB_MAX_RMS_VALUE_CAL);
 }
 
+/**
+ * @brief Calculate gain coefficient based on expected and measured RMS values
+ * @param expected Expected RMS register value
+ * @param measured Measured RMS register value without gain applied
+ * @return Gain coefficient to apply for calibration
+ */
 int32_t calculate_gain(int32_t expected, int32_t measured)
 {
 	int64_t diff, gain;
@@ -163,6 +186,12 @@ int32_t calculate_gain(int32_t expected, int32_t measured)
 	return (int32_t)gain;
 }
 
+/**
+ * @brief Calculate RMS value without gain applied
+ * @param measured Measured RMS register value with gain applied
+ * @param gain Gain coefficient currently applied
+ * @return RMS register value with gain removed
+ */
 int32_t calculate_rms_without_gain(int32_t measured, int32_t gain)
 {
 	int64_t rms, num, numi;
@@ -177,6 +206,12 @@ int32_t calculate_rms_without_gain(int32_t measured, int32_t gain)
 	return (int32_t)rms;
 }
 
+/**
+ * @brief Calculate RMS offset coefficient based on expected and measured RMS values
+ * @param expected Expected RMS register value
+ * @param measured Measured RMS register value without offset applied
+ * @return RMS offset coefficient to apply for calibration
+ */
 int32_t calculate_rmsos(int32_t expected, int32_t measured)
 {
 	int64_t offset, expected_sq, measured_sq;
@@ -194,6 +229,12 @@ int32_t calculate_rmsos(int32_t expected, int32_t measured)
 	return (int32_t)offset;
 }
 
+/**
+ * @brief Calculate RMS value without RMS offset applied
+ * @param measured Measured RMS register value with offset applied
+ * @param xrmsos RMS offset coefficient currently applied
+ * @return RMS register value with RMS offset removed
+ */
 int32_t calculate_rms_without_rmsos(int32_t measured, int32_t xrmsos)
 {
 	int64_t rms, measured_sq, xrmsos_int;
@@ -213,6 +254,12 @@ int32_t calculate_rms_without_rmsos(int32_t measured, int32_t xrmsos)
 	return (int32_t)rms;
 }
 
+/**
+ * @brief Calculate percentage error between measured and expected values
+ * @param measured Measured RMS register value
+ * @param expected Expected RMS register value
+ * @return Percentage error as a float (e.g., 0.05 for 5% error)
+ */
 float calculate_error(int32_t measured, int32_t expected)
 {
 	if (expected == 0)
@@ -221,6 +268,12 @@ float calculate_error(int32_t measured, int32_t expected)
 	return ((float)measured - (float)expected) / (float)expected;
 }
 
+/**
+ * @brief Start the calibration process for a given type and phase
+ * @param type Calibration type (gain or offset)
+ * @param phase Phase to calibrate (A, B, or C)
+ * @return 0 on success, error code otherwise
+ */
 int calibration_start(CALIBRATION_TYPE type, CALIBRATION_PHASE phase)
 {
 	if (calibrationCtx.state != CALIBRATION_STATE_IDLE &&
@@ -255,6 +308,10 @@ int calibration_start(CALIBRATION_TYPE type, CALIBRATION_PHASE phase)
 	return 0;
 }
 
+/**
+ * @brief Read RMS values from AFE registers and accumulate sums for mean calculation
+ * @return 0 on success, error code otherwise
+ */
 static int calibration_read_rms_values(void)
 {
 	int status;
@@ -308,6 +365,11 @@ static int calibration_read_rms_values(void)
 	return 0;
 }
 
+/**
+ * @brief Check for zero crossing event for the current phase
+ * @param zx_detected Pointer to boolean that will be set to true if zero crossing is detected
+ * @return 0 on success, error code otherwise
+ */
 static int calibration_check_zero_crossing(bool *zx_detected)
 {
 	uint32_t status1;
@@ -327,6 +389,9 @@ static int calibration_check_zero_crossing(bool *zx_detected)
 	return 0;
 }
 
+/**
+ * @brief Calculate mean RMS values after data collection is complete
+ */
 static void calibration_calculate_means(void)
 {
 	if (calibrationCtx.cycle_count == 0)
@@ -360,6 +425,10 @@ static void calibration_calculate_means(void)
 			calibrationCtx.cycle_count);
 }
 
+/**
+ * @brief Write calculated gain coefficients to AFE registers
+ * @return 0 on success, error code otherwise
+ */
 static int calibration_write_gain_registers(void)
 {
 	int status;
@@ -396,6 +465,10 @@ static int calibration_write_gain_registers(void)
 	return 0;
 }
 
+/**
+ * @brief Write calculated RMS offset coefficients to AFE registers
+ * @return 0 on success, error code otherwise
+ */
 static int calibration_write_offset_registers(void)
 {
 	int status;
@@ -443,6 +516,9 @@ static int calibration_write_offset_registers(void)
 	return 0;
 }
 
+/**
+ * @brief Calculate error after calibration based on measured values with gain/offset removed and expected values
+ */
 static void calibration_calculate_error_after(void)
 {
 	float i_error_after, v_error_after;
@@ -463,6 +539,11 @@ static void calibration_calculate_error_after(void)
 	}
 }
 
+/**
+ * @brief Main calibration process cycle function to be called periodically
+ *        Handles state machine for calibration process
+ * @return 0 on success, error code otherwise
+ */
 int calibration_process_cycle(void)
 {
 	int status = 0;
@@ -718,6 +799,10 @@ int calibration_process_cycle(void)
 	return status;
 }
 
+/**
+ * @brief Check if calibration process is currently active (not idle, done, or error)
+ * @return true if calibration is active, false otherwise
+ */
 bool calibration_is_active(void)
 {
 	return (calibrationCtx.state != CALIBRATION_STATE_IDLE &&
@@ -725,16 +810,27 @@ bool calibration_is_active(void)
 		calibrationCtx.state != CALIBRATION_STATE_ERROR);
 }
 
+/**
+ * @brief Check if calibration process has completed (either done or error)
+ * @return true if calibration is done, false otherwise
+ */
 bool calibration_is_done(void)
 {
 	return calibrationCtx.result.done;
 }
 
+/**
+ * @brief Clear the calibration done flag to allow for new calibration runs
+ */
 void calibration_clear_done(void)
 {
 	calibrationCtx.result.done = false;
 }
 
+/**
+ * @brief Get a string representation of the current calibration status
+ * @return String representing the current calibration state
+ */
 const char *calibration_get_status_string(void)
 {
 	switch (calibrationCtx.state) {

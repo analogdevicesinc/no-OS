@@ -201,4 +201,9 @@ const char *flash_status_to_string(FLASH_STATUS status);
  */
 uint32_t flash_calculate_crc32(const void *data, uint32_t len);
 
+/**
+ * @brief Internal function to initialize CRC32 lookup table (called once at startup)
+ */
+static void crc32_init_table(void);
+
 #endif /* __FLASH_STORAGE_H__ */

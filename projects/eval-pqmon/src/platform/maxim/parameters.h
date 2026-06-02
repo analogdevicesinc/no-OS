@@ -64,12 +64,12 @@
 
 #define SPI_CS 0
 #define SPI_DEVICE_ID 2
-#define SPI_BAUDRATE 15000000
+#define SPI_BAUDRATE 10000000
 #define SPI_OPS &max_spi_ops
 
 #define I2C_EXTRA &vddioh_i2c_extra
 #define SPI_PQM_DEVICE_ID 1
-#define SPI_PQM_BAUDRATE 6000000
+#define SPI_PQM_BAUDRATE 10000000
 #define SPI_PQM_EXTRA &spi_extra_ip
 #define UART_STDIO_EXT &uart_stdio_extra_ip
 
@@ -86,12 +86,14 @@
 #define RESET_GPIO_PIN_NUM 27
 #define RESET_GPIO_PORT_NUM 1
 #define GPIO_OPS &max_gpio_ops
-#define RESET_GPIO_EXTRA &max_reset_gpio_extra_ip
-#define GPIO_EXTRA &max_reset_gpio_extra_ip
+#define RESET_GPIO_EXTRA &max_gpio_extra_ip
+#define GPIO_EXTRA &max_gpio_extra_ip
 
 #define INTR_GPIO_PIN_NUM 30
 #define INTR_GPIO_PORT_NUM 0
-#define INTR_GPIO_EXTRA &max_reset_gpio_extra_ip
+#define LED_GPIO_PORT_NUM 3
+#define LED_GPIO_PIN_NUM 7
+#define INTR_GPIO_EXTRA &max_gpio_extra_ip
 #define INTR_GPIO_IRQ_ID 0
 #define INTR_OPS &max_gpio_irq_ops
 
@@ -100,7 +102,6 @@ extern struct max_spi_init_param spi_extra_ip;
 extern struct max_uart_init_param uart_stdio_extra_ip;
 extern struct max_uart_init_param iio_demo_uart_extra_ip;
 extern struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip;
-extern struct max_gpio_init_param max_reset_gpio_extra_ip;
-extern struct max_gpio_init_param max_intr_gpio_extra_ip;
+extern struct max_gpio_init_param max_gpio_extra_ip;
 
 #endif /* __PARAMETERS_H__ */

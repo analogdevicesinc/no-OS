@@ -32,15 +32,25 @@
  *******************************************************************************/
 
 #include "parameters.h"
+#include "maxim_dma.h"
 
 struct max_i2c_init_param vddioh_i2c_extra = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+};
+
+static struct no_os_dma_init_param spi_dma_ip = {
+	.id = 0,
+	.num_ch = 4,
+	.platform_ops = &max_dma_ops,
 };
 
 struct max_spi_init_param spi_extra_ip = {
 	.num_slaves = 1,
 	.polarity = SPI_SS_POL_LOW,
 	.vssel = MXC_GPIO_VSSEL_VDDIOH,
+	.dma_param = &spi_dma_ip,
+	.dma_rx_priority = 0,
+	.dma_tx_priority = 1,
 };
 
 struct max_uart_init_param uart_stdio_extra_ip = {.flow = MAX_UART_FLOW_DIS};
@@ -49,10 +59,6 @@ struct max_usb_uart_init_param iio_demo_usb_uart_extra_ip = {.vid = 0x0B6B,
 	       .pid = 0x003C
 };
 
-struct max_gpio_init_param max_reset_gpio_extra_ip = {
+struct max_gpio_init_param max_gpio_extra_ip = {
 	.vssel = MXC_GPIO_VSSEL_VDDIOH
-};
-
-struct max_gpio_init_param max_intr_gpio_extra_ip = {.vssel =
-		MXC_GPIO_VSSEL_VDDIOH
 };

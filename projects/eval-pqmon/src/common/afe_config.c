@@ -38,6 +38,10 @@ struct no_os_spi_desc *hSPI;
 struct no_os_spi_msg spiMsg;
 extern struct no_os_gpio_init_param reset_gpio_ip;
 
+/**
+ * @brief Initialize LCD display
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int init_lcd(void)
 {
 	int status;
@@ -119,6 +123,10 @@ int init_lcd(void)
 
 }
 
+/**
+ * @brief Initialize AFE by configuring necessary registers and settings
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_init(void)
 {
 	int status = 0;
@@ -192,11 +200,15 @@ int afe_init(void)
 	return status;
 }
 
+/**
+ * @brief Start AFE by enabling clearing status and setting RUN register
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_start(void)
 {
 	int status = SYS_STATUS_SUCCESS;
 	uint32_t status0 = BITM_STATUS0_RMS1012RDY | BITM_STATUS0_RMSONERDY |
-			   BITM_STATUS0_COH_PAGE_RDY;
+			   BITM_STATUS0_COH_PAGE_RDY | BITM_STATUS0_PAGE_FULL;
 	uint32_t config;
 
 	if (status == 0) {
@@ -220,13 +232,17 @@ int afe_start(void)
 	return status;
 }
 
+/**
+ * @brief Configure AFE interrupts by setting appropriate bits in MASK0 register
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int config_afe_irq(void)
 {
 	int status = SYS_STATUS_SUCCESS;
 	uint32_t config = 0;
 	status = afe_write_32bit_reg(REG_MASK0, (uint32_t *)&config);
 	if (status == 0) {
-		config = BITM_MASK0_RMSONERDY | BITM_MASK0_COH_PAGE_RDY;
+		config = BITM_MASK0_PAGE_FULL;
 		status = afe_write_32bit_reg(REG_MASK0, (uint32_t *)&config);
 		if (status != 0) {
 			status = SYS_STATUS_AFE_MASK0_FAILED;
@@ -235,6 +251,10 @@ int config_afe_irq(void)
 	return status;
 }
 
+/**
+ * @brief Configure waveform capture settings in WFB_CFG register
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int config_wfb(void)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -244,7 +264,7 @@ int config_wfb(void)
 
 	if (status == 0) {
 		config = BITM_WFB_CFG_WF_MODE | BITM_WFB_CFG_WF_SRC |
-			 BITM_WFB_CFG_WF_IN_EN | BITM_WFB_CFG_WF_CAP_RESAMPLED_SEL |
+			 BITM_WFB_CFG_WF_CAP_RESAMPLED_SEL |
 			 BITM_WFB_CFG_BURST_ALL_CHAN;
 		status = afe_write_16bit_reg(REG_WFB_CFG, (uint16_t *)&config);
 		if (status != 0) {
@@ -268,6 +288,12 @@ int config_wfb(void)
 	return status;
 }
 
+/**
+ * @brief Read waveform data from AFE based on current coherent page and store in provided buffer+
+ * @param pData Pointer to buffer where waveform data will be stored
+ * @param numSamples Number of samples to read
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_waveform(uint16_t *pData, uint16_t numSamples)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -292,6 +318,77 @@ int afe_read_waveform(uint16_t *pData, uint16_t numSamples)
 	return status;
 }
 
+/**
+ * @brief Configure AFE for SINC4 waveform capture mode by setting appropriate bits in WFB_CFG register
+ * @return int 0 in case of success, negative error code otherwise
+ */
+int config_wfb_sinc4(void)
+{
+	int status = SYS_STATUS_SUCCESS;
+	uint16_t config = 0;
+	uint16_t run_reg;
+	uint32_t clr;
+
+	/* Stop DSP — WFB_CFG changes only take effect when RUN=0 */
+	run_reg = 0;
+	status = afe_write_16bit_reg(REG_RUN, &run_reg);
+	if (status != 0)
+		return SYS_STATUS_AFE_WFB_CFG_FAILED;
+
+	/* Disable capture first */
+	status = afe_write_16bit_reg(REG_WFB_CFG, (uint16_t *)&config);
+	if (status != 0)
+		goto restart;
+
+	/* WF_SRC=00 (SINC4), WF_MODE=11 (continuous fill + event addr),
+	 * WF_CAP_SEL=1 (continuous), WF_IN_EN=0 (6 ch, no neutral),
+	 * BURST_CHAN=0000 (all channels in burst) */
+	config = BITM_WFB_CFG_WF_SRC_SINC4 | BITM_WFB_CFG_WF_MODE_CONT |
+		 BITM_WFB_CFG_WF_CAP_SEL | BITM_WFB_CFG_BURST_ALL_CHAN;
+	status = afe_write_16bit_reg(REG_WFB_CFG, (uint16_t *)&config);
+	if (status != 0) {
+		status = SYS_STATUS_AFE_WFB_CFG_FAILED;
+		goto restart;
+	}
+
+	/* Read back and enable capture */
+	status = afe_read_16bit_buff(REG_WFB_CFG, 1, &config);
+	if (status != 0) {
+		status = SYS_STATUS_AFE_WFB_CFG_FAILED;
+		goto restart;
+	}
+
+	config |= BITM_WFB_CFG_WF_CAP_EN;
+	status = afe_write_16bit_reg(REG_WFB_CFG, (uint16_t *)&config);
+	if (status != 0) {
+		status = SYS_STATUS_AFE_WFB_CFG_FAILED;
+		goto restart;
+	}
+
+	/* Enable page interrupts at half-buffer boundaries (pages 7 and 15) */
+	config = WFB_PG_IRQEN_HALF_BUF;
+	status = afe_write_16bit_reg(REG_WFB_PG_IRQEN, (uint16_t *)&config);
+	if (status != 0)
+		status = SYS_STATUS_AFE_WFB_CFG_FAILED;
+
+restart:
+	/* Restart DSP and clear stale status */
+	{
+		clr = BITM_STATUS0_PAGE_FULL;
+		afe_write_32bit_reg(REG_STATUS0, &clr);
+	}
+	run_reg = 1;
+	afe_write_16bit_reg(REG_RUN, &run_reg);
+
+	return status;
+}
+
+/**
+ * @brief Read period data from AFE for specified number of periods and store in provided buffer
+ * @param pPeriod Pointer to buffer where period data will be stored
+ * @param numPeriods Number of periods to read
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_period(uint32_t *pPeriod, uint16_t numPeriods)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -305,6 +402,12 @@ int afe_read_period(uint32_t *pPeriod, uint16_t numPeriods)
 	return status;
 }
 
+/**
+ * @brief Read RMS data from AFE for specified number of RMS values and store in provided buffer
+ * @param pRMS Pointer to buffer where RMS data will be stored
+ * @param numRMS Number of RMS values to read
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_rms_one(uint32_t *pRMS, uint16_t numRMS)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -315,6 +418,12 @@ int afe_read_rms_one(uint32_t *pRMS, uint16_t numRMS)
 	return status;
 }
 
+/**
+ * @brief Read RMS data from AFE for specified number of RMS values and store in provided buffer
+ * @param pRMS Pointer to buffer where RMS data will be stored
+ * @param numRMS Number of RMS values to read
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_rms_1012(uint32_t *pRMS, uint16_t numRMS)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -325,17 +434,26 @@ int afe_read_rms_1012(uint32_t *pRMS, uint16_t numRMS)
 	return status;
 }
 
+/**
+ * @brief Read angle data from AFE for specified number of angles and store in provided buffer
+ * @param pAngle Pointer to buffer where angle data will be stored
+ * @param numAngles Number of angles to read
+ * @param angleVolCur Flag indicating whether to read voltage angles (0) or current angles (1)
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_angle(uint16_t *pAngle, uint16_t numAngles,
 		   uint16_t angleVolCur)
 {
 	int status = SYS_STATUS_SUCCESS;
 	uint16_t angleAddress = 0;
+	uint16_t i;
+
 	if (angleVolCur == 0) {
 		angleAddress = REG_ANGL_VA_VB;
 	} else {
 		angleAddress = REG_ANGL_IA_IB;
 	}
-	for (uint16_t i = 0; i < numAngles; i++) {
+	for (i = 0; i < numAngles; i++) {
 		status = afe_read_16bit_buff(angleAddress + i, 1, (uint16_t *)&pAngle[i]);
 	}
 	if (status != 0) {
@@ -344,6 +462,11 @@ int afe_read_angle(uint16_t *pAngle, uint16_t numAngles,
 	return status;
 }
 
+/**
+ * @brief Read status from AFE STATUS1 register and clear ZXVA bit if set
+ * @param pSTATUS1 Pointer to variable where STATUS1 value will be stored
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_status_1(uint32_t *pSTATUS1)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -360,11 +483,18 @@ int afe_read_status_1(uint32_t *pSTATUS1)
 	return status;
 }
 
+/**
+ * @brief Read status from AFE STATUS1 register and clear ZX bit for specified phase if set
+ * @param pSTATUS1 Pointer to variable where STATUS1 value will be stored
+ * @param phase Phase for which ZX bit should be cleared (0 for A, 1 for B, 2 for C)
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_status_1_clear_zx(uint32_t *pSTATUS1, uint8_t phase)
 {
 	int status = SYS_STATUS_SUCCESS;
 	uint32_t status1 = 0;
 	uint32_t zx_mask;
+	uint32_t clear_mask;
 
 	/* Select ZX mask based on phase */
 	switch (phase) {
@@ -391,7 +521,7 @@ int afe_read_status_1_clear_zx(uint32_t *pSTATUS1, uint8_t phase)
 
 	/* Clear ZX bit for the specified phase by writing 1 to it */
 	if (status1 & zx_mask) {
-		uint32_t clear_mask = zx_mask;
+		clear_mask = zx_mask;
 		status = afe_write_32bit_reg(REG_STATUS1, &clear_mask);
 		if (status != 0) {
 			return SYS_STATUS_AFE_STATUS1_FAILED;
@@ -401,6 +531,11 @@ int afe_read_status_1_clear_zx(uint32_t *pSTATUS1, uint8_t phase)
 	return status;
 }
 
+/**
+ * @brief Read AFE version information from REG_VERSION2 register and store in provided variable
+ * @param pVersion Pointer to variable where version information will be stored
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_version(uint32_t *pVersion)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -411,6 +546,13 @@ int afe_read_version(uint32_t *pVersion)
 	}
 	return status;
 }
+
+/**
+ * @brief Write a 32-bit value to a specified AFE register address
+ * @param addr Register address to write to
+ * @param pData Pointer to 32-bit data to be written
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_write_32bit_reg(uint16_t addr, uint32_t *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -429,6 +571,12 @@ int afe_write_32bit_reg(uint16_t addr, uint32_t *pData)
 	return status;
 }
 
+/**
+ * @brief Write a 16-bit value to a specified AFE register address
+ * @param addr Register address to write to
+ * @param pData Pointer to 16-bit data to be written
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_write_16bit_reg(uint16_t addr, uint16_t *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
@@ -447,6 +595,13 @@ int afe_write_16bit_reg(uint16_t addr, uint16_t *pData)
 	return status;
 }
 
+/**
+ * @brief Read a block of 32-bit data from AFE starting at a specified register address
+ * @param addr Starting register address to read from
+ * @param numSamples Number of 32-bit samples to read
+ * @param pData Pointer to buffer where read data will be stored
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_32bit_buff(uint16_t addr, uint16_t numSamples,
 			uint32_t *pData)
 {
@@ -467,6 +622,13 @@ int afe_read_32bit_buff(uint16_t addr, uint16_t numSamples,
 	return status;
 }
 
+/**
+ * @brief Read a block of 16-bit data from AFE starting at a specified register address
+ * @param addr Starting register address to read from
+ * @param numSamples Number of 16-bit samples to read
+ * @param pData Pointer to buffer where read data will be stored
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_16bit_buff(uint16_t addr, uint16_t numSamples,
 			uint16_t *pData)
 {
@@ -487,6 +649,10 @@ int afe_read_16bit_buff(uint16_t addr, uint16_t numSamples,
 	return status;
 }
 
+/**
+ * @brief Reset AFE by toggling the reset GPIO pin
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int reset_afe(void)
 {
 	int status = 0;
@@ -513,35 +679,38 @@ exit:
 	return status;
 }
 
+/**
+ * @brief Initialize SPI communication with AFE
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int spi_device_init(void)
 {
 	return no_os_spi_init(&hSPI, &spi_egy_ip);
 }
 
+/**
+ * @brief Read status from AFE STATUS0 register and store in provided variable
+ * @param pSTATUS0 Pointer to variable where STATUS0 value will be stored
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_status0(uint32_t *pSTATUS0)
 {
 	int status = SYS_STATUS_SUCCESS;
 
-	uint32_t status0 = 0;
 	*pSTATUS0 = 0;
 
 	status = afe_read_32bit_buff(REG_STATUS0, 1, pSTATUS0);
-	status0 = *pSTATUS0;
 	if (status != 0) {
 		status = SYS_STATUS_AFE_STATUS0_FAILED;
-	}
-
-	if (status == 0) {
-		status0 |= BITM_STATUS0_RMSONERDY;
-		status = afe_write_32bit_reg(REG_STATUS0, (uint32_t *)&status0);
-		if (status != 0) {
-			status = SYS_STATUS_AFE_STATUS0_FAILED;
-		}
 	}
 
 	return status;
 }
 
+/**
+ * @brief Wait for AFE to settle by continuously reading STATUS0 register for specified number of cycles
+ * @param cycles Number of cycles to wait for settling
+ */
 void afe_wait_settling(uint32_t cycles)
 {
 	int status = 0;
@@ -556,6 +725,13 @@ void afe_wait_settling(uint32_t cycles)
 	}
 }
 
+/**
+ * @brief Configure AFE acc mode
+ * @param frequency Desired frequency for acc mode (50 or 60 Hz)
+ * @param vconsel Voltage/current selection for acc mode
+ * @param iconsel Iconsel selection for acc mode
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_set_acc_mode(uint16_t frequency, uint16_t vconsel,
 		     uint16_t iconsel)
 {
@@ -587,9 +763,15 @@ int afe_set_acc_mode(uint16_t frequency, uint16_t vconsel,
 	return status;
 }
 
+/**
+ * @brief Read power and energy data from AFE for all phases and store in provided structure
+ * @param pData Pointer to structure where power and energy data will be stored
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_read_power_energy(POWER_ENERGY_DATA *pData)
 {
 	int status = SYS_STATUS_SUCCESS;
+	int i;
 	static const uint16_t watt_regs[] = {REG_AWATT, REG_BWATT, REG_CWATT};
 	static const uint16_t watthr_hi_regs[] = {REG_AWATTHR_HI, REG_BWATTHR_HI, REG_CWATTHR_HI};
 	static const uint16_t varhr_hi_regs[] = {REG_AVARHR_HI, REG_BVARHR_HI, REG_CVARHR_HI};
@@ -597,27 +779,27 @@ int afe_read_power_energy(POWER_ENERGY_DATA *pData)
 	static const uint16_t fwatthr_hi_regs[] = {REG_AFWATTHR_HI, REG_BFWATTHR_HI, REG_CFWATTHR_HI};
 	static const uint16_t fvarhr_hi_regs[] = {REG_AFVARHR_HI, REG_BFVARHR_HI, REG_CFVARHR_HI};
 
-	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+	for (i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(watt_regs[i], 1,
 					     (uint32_t *)&pData->activePower[i]);
 	}
-	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+	for (i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(watthr_hi_regs[i], 1,
 					     (uint32_t *)&pData->activeEnergyHi[i]);
 	}
-	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+	for (i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(varhr_hi_regs[i], 1,
 					     (uint32_t *)&pData->reactiveEnergyHi[i]);
 	}
-	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+	for (i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(fwatt_regs[i], 1,
 					     (uint32_t *)&pData->fundActivePower[i]);
 	}
-	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+	for (i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(fwatthr_hi_regs[i], 1,
 					     (uint32_t *)&pData->fundActiveEnergyHi[i]);
 	}
-	for (int i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
+	for (i = 0; i < POWER_ENERGY_NUM_PHASES && status == 0; i++) {
 		status = afe_read_32bit_buff(fvarhr_hi_regs[i], 1,
 					     (uint32_t *)&pData->fundReactiveEnergyHi[i]);
 	}
@@ -625,6 +807,11 @@ int afe_read_power_energy(POWER_ENERGY_DATA *pData)
 	return status;
 }
 
+/**
+ * @brief Configure AFE reference channel by setting appropriate bits in ZX_LP_SEL register
+ * @param refChannel Reference channel selection
+ * @return int 0 in case of success, negative error code otherwise
+ */
 int afe_set_ref_channel(uint16_t refChannel)
 {
 	int status = SYS_STATUS_SUCCESS;

@@ -46,11 +46,23 @@
 /*! WFB_CFG burst all channels */
 #define BITM_WFB_CFG_BURST_ALL_CHAN 0x00000000
 /*! WFB_CFG resampled data for waveform */
-#define BITM_WFB_CFG_WF_CAP_RESAMPLED_SEL 0x00000000
+#define BITM_WFB_CFG_WF_CAP_RESAMPLED_SEL 0x00000020
+/*! WFB_CFG SINC4 source selection (WF_SRC[9:8]=00) */
+#define BITM_WFB_CFG_WF_SRC_SINC4 0x00000000
+/*! WFB_CFG continuous fill mode (WF_CAP_SEL[5]=1) */
+#define BITM_WFB_CFG_WF_CAP_SEL 0x00000020
+/*! WFB_CFG continuous fill + save event addr (WF_MODE[7:6]=11) */
+#define BITM_WFB_CFG_WF_MODE_CONT 0x000000C0
 /*! Waveform buffer first half address */
-#define REG_WAVEFORM_FIRST_HALF_ADDRESS 0x801
+#define REG_WAVEFORM_FIRST_HALF_ADDRESS 0x800
 /*! Waveform buffer second half address */
-#define REG_WAVEFORM_SECOND_HALF_ADDRESS 0xC01
+#define REG_WAVEFORM_SECOND_HALF_ADDRESS 0xC00
+/*! WFB page IRQ enable: pages 7 and 15 (half-buffer boundaries) */
+#define WFB_PG_IRQEN_HALF_BUF 0x8080
+/*! PAGE_FULL status bit */
+#define BITM_STATUS0_PAGE_FULL 0x00020000
+/*! MASK0 bit for PAGE_FULL */
+#define BITM_MASK0_PAGE_FULL 0x00020000
 /*! 50Hz System nominal frequency */
 #define BITM_ACCMODE_SELFREQ_50HZ 0x0
 /*! 60Hz System nominal frequency */
@@ -292,5 +304,14 @@ int afe_write_16bit_reg(uint16_t addr, uint16_t *pData);
  * @return status - SYS_STATUS_SUCCESS on success, non-zero on failure.
  */
 int afe_read_power_energy(struct power_energy_data *pData);
+
+extern struct no_os_spi_desc *hSPI;
+extern struct no_os_irq_ctrl_desc *afe_irq_desc;
+
+/**
+ * @brief Configures WFB_CFB register for SINC4 waveform capture and starts filling.
+ * @return status - SYS_STATUS_SUCCESS on success, non-zero on failure.
+ */
+int config_wfb_sinc4(void);
 
 #endif /* __AFE_CONFIG_H__ */

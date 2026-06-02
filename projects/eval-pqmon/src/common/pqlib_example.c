@@ -44,6 +44,9 @@ PQLIB_EXAMPLE pqlibExample;
 extern volatile uint8_t newSyncTimeAvailable = 0;
 extern volatile bool configChanged;
 
+/**
+ * @brief Set default configuration values for the example application
+ */
 int pqm_measurement_init(void)
 {
 	int status = 0;
@@ -67,6 +70,13 @@ int pqm_measurement_init(void)
 	return status;
 }
 
+/**
+ * @brief Start the measurement process by configuring the AFE and PQLIB,
+ * then waiting for the first trigger (zero-crossing)
+ * @param waitingForSync If true, will wait for a synchronization event before starting;
+ * if false, will start immediately
+ * @return 0 on success, or an error code on failure
+ */
 int pqm_start_measurement(bool waitingForSync)
 {
 	int status = 0;
@@ -116,8 +126,15 @@ int pqm_start_measurement(bool waitingForSync)
 	return status;
 }
 
+/**
+ * @brief Main processing loop for the PQLIB example. This function should be called
+ * repeatedly (e.g. in a main loop) to process incoming data, handle calibration,
+ * and prepare output for display or export.
+ * @return 0 on success, or an error code on failure
+ */
 int pqm_one_cycle(void)
 {
+
 	/* Check for calibration request first */
 	if (pqlibExample.calibrationRequested || calibration_is_active()) {
 		if (pqlibExample.state != PQLIB_STATE_CALIBRATING) {
@@ -142,6 +159,11 @@ int pqm_one_cycle(void)
 	return 0;
 }
 
+/**
+ * @brief Open a connection to PQLIB and allocate necessary resources
+ * @param pExample Pointer to the example context structure
+ * @return 0 on success, or an error code on failure
+ */
 int open_pqlib(PQLIB_EXAMPLE *pExample)
 {
 	int status;
@@ -159,6 +181,11 @@ int open_pqlib(PQLIB_EXAMPLE *pExample)
 	return status;
 }
 
+/**
+ * @brief Configure the AFE and PQLIB with the desired settings for measurement
+ * @param pExample Pointer to the example context structure
+ * @return 0 on success, or an error code on failure
+ */
 int config_measurement(PQLIB_EXAMPLE *pExample)
 {
 	int status = 0;
@@ -183,7 +210,7 @@ int config_measurement(PQLIB_EXAMPLE *pExample)
 
 	/* Configure VLEVEL for headroom above nominal voltage */
 	if (status == 0) {
-		config = 2 * (uint32_t)1144084;
+		config = 3 * (uint32_t)1144084;
 		status = afe_write_32bit_reg(REG_VLEVEL, (uint32_t *)&config);
 	}
 
@@ -258,6 +285,10 @@ int config_measurement(PQLIB_EXAMPLE *pExample)
 	return status;
 }
 
+/**
+ * @brief Process one cycle of data from PQLIB, handle any errors, and prepare output for display or export
+ * @return 0 on success, or an error code on failure
+ */
 int process_and_prepare_output()
 {
 	int status = 0;
@@ -268,90 +299,71 @@ int process_and_prepare_output()
 	ADI_PQLIB_OUTPUT_STATUS outputStatus;
 	ADI_PQLIB_HANDLE hDevice = pqlibExample.hDevice;
 	bool done = false;
+	static uint32_t last_afe_isr = 0;
+	uint32_t isr = dbg_isr_count;
 
-	status = get_afe_input();
+	waveform_drain_to_cb();
+	if ((isr - last_afe_isr) >= 4 && !waveform_dma_is_busy()) {
+		last_afe_isr = isr;
+		status = get_afe_input();
+	}
 
-	while ((done == false) && (status == SYS_STATUS_SUCCESS)) {
-		if (pCycleInput->isDataProcessed == false) {
-			ADI_PQLIB_PROFBEG(ADI_PQLIB_PROFILE_ID_ONECYCLE);
-			pqlibStatus =
-				adi_pqlib_ProcessOneCycle(hDevice, &pqlibExample.inputCycle);
-			ADI_PQLIB_PROFEND(ADI_PQLIB_PROFILE_ID_ONECYCLE);
-			status = wait_for_zero_crossing(&pqlibExample, pqlibStatus);
+	if (pCycleInput->isDataProcessed == false) {
+		pqlibStatus =
+			adi_pqlib_ProcessOneCycle(hDevice, &pqlibExample.inputCycle);
+		status = wait_for_zero_crossing(&pqlibExample, pqlibStatus);
+		if (status != SYS_STATUS_SUCCESS)
+			return status;
 
-			if (status != SYS_STATUS_SUCCESS) {
-				break;
-			}
-			SyncLibTime(&pqlibExample, true);
-			SyncToDip(&pqlibExample, pqlibStatus);
-			pqlibExample.processedCycles++;
-
-			status = process_pqlib_error(&pqlibExample, pqlibStatus);
-			if (status != SYS_STATUS_SUCCESS) {
-				break;
-			}
-
-			pqlibStatus = adi_pqlib_GetOutput(hDevice, &pqlibExample.output);
-		}
-
-		if (pqlibExample.state == PQLIB_STATE_WAITING_FOR_TRIGGER) {
-			status = SYS_STATUS_PQLIB_RUNNING;
-			break;
-		}
-
-		service_waveform_isr();
-
-		if (pWaveform->isDataProcessed == false) {
-			ADI_PQLIB_PROFBEG(ADI_PQLIB_PROFILE_ID_WAVEFORM);
-			pqlibStatus =
-				adi_pqlib_ProcessWaveform(hDevice, &pqlibExample.inputWaveform);
-			ADI_PQLIB_PROFEND(ADI_PQLIB_PROFILE_ID_WAVEFORM);
-			status = process_pqlib_error(&pqlibExample, pqlibStatus);
-			if (status != SYS_STATUS_SUCCESS) {
-				break;
-			}
-		}
-
-		service_waveform_isr();
-
-		if (p1012CyclesInput->isDataProcessed == 0 && processData) {
-			ADI_PQLIB_PROFBEG(ADI_PQLIB_PROFILE_ID_1012CYCLES);
-			pqlibStatus =
-				adi_pqlib_Process1012Cycles(hDevice, &pqlibExample.input1012Cycles);
-			ADI_PQLIB_PROFEND(ADI_PQLIB_PROFILE_ID_1012CYCLES);
-			status = process_pqlib_error(&pqlibExample, pqlibStatus);
-			if (status != SYS_STATUS_SUCCESS) {
-				break;
-			}
-		}
-
-		service_waveform_isr();
-
-		pqlibStatus = adi_pqlib_GetOutputStatus(hDevice, &outputStatus);
+		SyncLibTime(&pqlibExample, true);
+		SyncToDip(&pqlibExample, pqlibStatus);
+		pqlibExample.processedCycles++;
 
 		status = process_pqlib_error(&pqlibExample, pqlibStatus);
-		if (status != SYS_STATUS_SUCCESS) {
-			break;
-		}
+		if (status != SYS_STATUS_SUCCESS)
+			return status;
 
-		if (outputStatus != 0u) {
-			pqlibStatus = adi_pqlib_GetOutput(hDevice, &pqlibExample.output);
-			status = process_pqlib_error(&pqlibExample, pqlibStatus);
-			if (status != 0) {
-				break;
-			}
+		pqlibStatus = adi_pqlib_GetOutput(hDevice, &pqlibExample.output);
+	}
+
+	if (pqlibExample.state == PQLIB_STATE_WAITING_FOR_TRIGGER)
+		return SYS_STATUS_PQLIB_RUNNING;
+
+	if (p1012CyclesInput->isDataProcessed == 0 && processData) {
+		waveform_drain_to_cb();
+		pqlibStatus =
+			adi_pqlib_Process1012Cycles(hDevice, &pqlibExample.input1012Cycles);
+		waveform_drain_to_cb();
+		status = process_pqlib_error(&pqlibExample, pqlibStatus);
+		if (status != SYS_STATUS_SUCCESS)
+			return status;
+	}
+
+	pqlibStatus = adi_pqlib_GetOutputStatus(hDevice, &outputStatus);
+	status = process_pqlib_error(&pqlibExample, pqlibStatus);
+	if (status != SYS_STATUS_SUCCESS)
+		return status;
+
+	if (outputStatus != 0u) {
+		pqlibStatus = adi_pqlib_GetOutput(hDevice, &pqlibExample.output);
+		status = process_pqlib_error(&pqlibExample, pqlibStatus);
+		if (status != 0)
+			return status;
 #ifdef UART_EXPORT_ENABLED
-			uart_export_send();
+		uart_export_send();
 #endif
-		}
-
-		status = SYS_STATUS_PQLIB_RUNNING;
-		done = true;
 	}
 
 	return status;
 }
 
+/**
+ * @brief Copy correction coefficients from the example configuration to the PQLIB configuration structure,
+ * converting to the appropriate fixed-point format
+ * @param nominalFrequency The nominal frequency (50Hz or 60Hz) to determine which set of coefficients to use
+ * @param pCorrCoef Pointer to the PQLIB correction coefficient structure to populate
+ * @return 0 on success, or 1 if there was a mismatch in the number of voltage and current coefficients
+ */
 int cpy_correction_coeffs(ADI_PQLIB_NOMINAL_FREQUENCY nominalFrequency,
 			  ADI_PQLIB_CORR_COEF *pCorrCoef)
 {
@@ -431,6 +443,11 @@ int cpy_correction_coeffs(ADI_PQLIB_NOMINAL_FREQUENCY nominalFrequency,
 	return status;
 }
 
+/**
+ * @brief Populate the PQLIB event configuration based on the example configuration settings,
+ * converting thresholds and hysteresis values to the appropriate fixed-point format
+ * @param pExampleConfig Pointer to the example configuration structure containing user-defined settings
+ */
 void populate_event_config(EXAMPLE_CONFIG *pExampleConfig)
 {
 	ADI_PQLIB_CONFIG *pLibConfig = &pqlibExample.config;
@@ -467,17 +484,27 @@ void populate_event_config(EXAMPLE_CONFIG *pExampleConfig)
 	pLibConfig->intrpThreshold.low = intrpLowThreshold;
 }
 
+/**
+ * @brief Handle the logic for waiting for zero-crossing triggers before starting the measurement,
+ * including handling timeouts and synchronization events
+ * @param pExample Pointer to the example context structure
+ * @param pqlibStatus The result code from the last PQLIB operation, used to determine if a timeout occurred
+ * @return SYS_STATUS_SUCCESS if ready to start measurement, SYS_STATUS_PQLIB_RUNNING if still waiting for trigger,
+ * or SYS_STATUS_NO_SIGNAL if a timeout occurred without detecting the required number of zero-crossings
+ */
 int wait_for_zero_crossing(PQLIB_EXAMPLE *pExample,
 			   ADI_PQLIB_RESULT pqlibStatus)
 {
 	int status = SYS_STATUS_SUCCESS;
+	const uint32_t timeOutcycles = 1000;
+	const uint16_t maxSyncCycles = 100;
+	bool clearTime = false;
 
 	if (pqlibExample.state == PQLIB_STATE_WAITING_FOR_TRIGGER) {
 		if (pqlibExample.exampleConfig.zeroCrossingCheck >
 		    pqlibExample.zeroCrossingCount) {
 			newSyncTimeAvailable = 0;
 			if (pqlibStatus == ADI_PQLIB_RESULT_REFZX_TIMEOUT) {
-				const uint32_t timeOutcycles = 1000;
 				pqlibExample.zeroCrossingCount = 0;
 				pqlibExample.timeOutCount++;
 
@@ -493,12 +520,12 @@ int wait_for_zero_crossing(PQLIB_EXAMPLE *pExample,
 				status = SYS_STATUS_PQLIB_RUNNING;
 			}
 		} else {
-			const uint16_t maxSyncCycles = 100;
+
 			if (pqlibExample.exampleConfig.enableRTCSync == false) {
 				newSyncTimeAvailable = 1;
 			}
 			if ((newSyncTimeAvailable) || (pqlibExample.syncCycles > maxSyncCycles)) {
-				bool clearTime = false;
+				clearTime = false;
 				pqlibExample.state = PQLIB_STATE_RUNNING;
 				adi_pqlib_Reset(pqlibExample.hDevice, clearTime);
 				pqlibExample.processedCycles = 0;
@@ -516,6 +543,13 @@ int wait_for_zero_crossing(PQLIB_EXAMPLE *pExample,
 	return status;
 }
 
+/**
+ * @brief Process the result code from a PQLIB operation and determine if there was an error,
+ * updating the example state accordingly
+ * @param pExample Pointer to the example context structure
+ * @param pqlibStatus The result code from the PQLIB operation to check for errors
+ * @return SYS_STATUS_SUCCESS if no error, or an appropriate error code if a configuration error occurred
+ */
 int process_pqlib_error(PQLIB_EXAMPLE *pExample,
 			ADI_PQLIB_RESULT pqlibStatus)
 {
@@ -533,6 +567,11 @@ int process_pqlib_error(PQLIB_EXAMPLE *pExample,
 	return status;
 }
 
+/**
+ * @brief Set default configuration values for the example application, including harmonic settings,
+ * channel names, thresholds, and other parameters
+ * @param pConfig Pointer to the example configuration structure to populate with default values
+ */
 void set_default_config(EXAMPLE_CONFIG *pConfig)
 {
 	int32_t i;
@@ -593,6 +632,15 @@ void set_default_config(EXAMPLE_CONFIG *pConfig)
 	pConfig->voltagePgaGain = 1.0f;         /* Default PGA gain */
 }
 
+/**
+ * @brief Synchronize the PQLIB internal time with an external RTC time if available,
+ * or with the system time if RTC sync is not enabled
+ * @param pExample Pointer to the example context structure
+ * @param checkRtcTime If true, will compare the RTC time with the system time and only
+ * update if they differ by more than 1 second;
+ * if false, will update the PQLIB time with the RTC time without checking
+ * @return 0 on success, or an error code on failure
+ */
 int SyncLibTime(PQLIB_EXAMPLE *pExample, bool checkRtcTime)
 {
 	ADI_PQLIB_RESULT pqlibStatus = ADI_PQLIB_RESULT_SUCCESS;
@@ -621,6 +669,13 @@ int SyncLibTime(PQLIB_EXAMPLE *pExample, bool checkRtcTime)
 	return status;
 }
 
+/**
+ * @brief If the example is configured to wait for synchronization, and a synchronization event has occurred
+ * (indicated by the PQLIB status), update the PQLIB time with the synchronization time from the example configuration
+ * @param pExample Pointer to the example context structure
+ * @param pqlibStatus The result code from the last PQLIB operation,
+ * used to determine if a synchronization event occurred
+ */
 void SyncToDip(PQLIB_EXAMPLE *pExample, ADI_PQLIB_RESULT pqlibStatus)
 {
 	bool applyImmediately = true;

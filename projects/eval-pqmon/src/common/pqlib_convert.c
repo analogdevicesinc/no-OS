@@ -34,8 +34,12 @@
 #include "pqlib_convert.h"
 #include "common_data.h"
 
-ADI_AFE_ANGLE_TYPE
-convert_angle_type(ADI_AFE_ANGLE_TYPE angleRaw)
+/**
+ * @brief Convert raw angle value to degrees
+ * @param angleRaw Raw angle value from the AFE
+ * @return Angle in degrees
+ */
+ADI_AFE_ANGLE_TYPE convert_angle_type(ADI_AFE_ANGLE_TYPE angleRaw)
 {
 	ADI_AFE_ANGLE_TYPE degree;
 	degree = (ADI_AFE_ANGLE_TYPE)((float)angleRaw * 0.017578125f);
@@ -43,6 +47,12 @@ convert_angle_type(ADI_AFE_ANGLE_TYPE angleRaw)
 	return degree;
 }
 
+/**
+ * @brief Convert raw RMS value to actual RMS voltage or current
+ * @param mag Raw magnitude value from the AFE
+ * @param scale Scale factor for voltage or current
+ * @return RMS voltage or current
+ */
 float convert_rms_type(ADI_AFE_RMS_TYPE mag, float scale)
 {
 	float rms;
@@ -53,6 +63,12 @@ float convert_rms_type(ADI_AFE_RMS_TYPE mag, float scale)
 	return rms;
 }
 
+/**
+ * @brief Convert raw power value to actual power
+ * @param power Raw power value from the AFE
+ * @param scale Scale factor
+ * @return Power in watts or vars
+ */
 float convert_power_type(int32_t power, float scale)
 {
 	float real_power;
@@ -62,11 +78,23 @@ float convert_power_type(int32_t power, float scale)
 	return real_power;
 }
 
+/**
+ * @brief Convert raw energy value to actual energy
+ * @param energy_hi High part of the raw energy value from the AFE
+ * @param scale Scale factor
+ * @return Energy in watt-hours or var-hours
+ */
 float convert_energy_type(int32_t energy_hi, float scale)
 {
 	return convert_power_type(energy_hi, scale) / ENERGY_ACCUMULATION_FACTOR;
 }
 
+/**
+ * @brief Compute power factor from active and reactive energy
+ * @param watthr Active energy in watt-hours
+ * @param varhr Reactive energy in var-hours
+ * @return Power factor (dimensionless)
+ */
 float compute_power_factor(int32_t watthr, int32_t varhr)
 {
 	int64_t w = (int64_t)watthr;
@@ -79,16 +107,31 @@ float compute_power_factor(int32_t watthr, int32_t varhr)
 	return (float)w / sqrtf((float)denom_sq);
 }
 
+/**
+ * @brief Convert fixed-point fractional value to floating-point
+ * @param fractValue Fixed-point fractional value
+ * @return Floating-point representation of the fractional value
+ */
 float convert_fract_type(ADI_PQLIB_FRACT_TYPE fractValue)
 {
 	return (float)fractValue / (float)(1 << ADI_PQLIB_FRACT_BITS);
 }
 
+/**
+ * @brief Convert fixed-point fractional angle value to radians
+ * @param angle Fixed-point fractional angle value
+ * @return Angle in radians
+ */
 float convert_fract_angle_type(ADI_PQLIB_FRACT_TYPE angle)
 {
 	return (float)angle * (2.0f * (float)M_PI / (float)0x7FFF);
 }
 
+/**
+ * @brief Convert percentage value to a fraction between 0 and 1
+ * @param val Percentage value (0-100)
+ * @return Fractional representation of the percentage (0.0-1.0)
+ */
 float convert_pct_type(ADI_PQLIB_PCT_TYPE val)
 {
 	float pct = (float)val / 100.0f;
@@ -98,30 +141,47 @@ float convert_pct_type(ADI_PQLIB_PCT_TYPE val)
 		return 0;
 }
 
-ADI_PQLIB_PCT_TYPE
-convert_to_pct_type(float val)
+/**
+ * @brief Convert frequency value from fixed-point to floating-point
+ * @param val Fixed-point frequency value
+ * @return Frequency in Hz
+ */
+ADI_PQLIB_PCT_TYPE convert_to_pct_type(float val)
 {
 	ADI_PQLIB_PCT_TYPE pctValue;
 	pctValue = (ADI_PQLIB_PCT_TYPE)(val * 100);
 	return pctValue;
 }
 
-ADI_PQLIB_FREQ_TYPE
-convert_to_freq_type(float val)
+/**
+ * @brief Convert frequency value from fixed-point to floating-point
+ * @param val Fixed-point frequency value
+ * @return Frequency in Hz
+ */
+ADI_PQLIB_FREQ_TYPE convert_to_freq_type(float val)
 {
 	ADI_PQLIB_FREQ_TYPE freqValue;
 	freqValue = (ADI_PQLIB_FREQ_TYPE)(val * 1000);
 	return freqValue;
 }
 
-ADI_PQLIB_COEF_TYPE
-convert_to_coef_fract_type(float val)
+/**
+ * @brief Convert coefficient value from fixed-point to floating-point
+ * @param val Fixed-point coefficient value
+ * @return Coefficient as a floating-point value
+ */
+ADI_PQLIB_COEF_TYPE convert_to_coef_fract_type(float val)
 {
 	ADI_PQLIB_COEF_TYPE corrCoef;
 	corrCoef = (ADI_PQLIB_COEF_TYPE)(val * (1 << ADI_PQLIB_COEF_FRACT_BITS));
 	return corrCoef;
 }
 
+/**
+ * @brief Convert time value from seconds to milliseconds
+ * @param timesec Time in seconds
+ * @return Time in milliseconds
+ */
 uint32_t convert_to_time_ms(float timesec)
 {
 	uint32_t timems;
@@ -129,6 +189,13 @@ uint32_t convert_to_time_ms(float timesec)
 	return timems;
 }
 
+/**
+ * @brief Prepare a string representation of event data for a given event type and value
+ * @param event_type Type of the event (e.g., dip, swell, rvc, intrp)
+ * @param event_value Specific value to extract (e.g., start time, end time, magnitude)
+ * @param buf Buffer to store the resulting string
+ * @return Length of the resulting string
+ */
 int prepara_string(EVENT_TYPE event_type, int event_value, char *buf)
 {
 	int max_event_number = 0;

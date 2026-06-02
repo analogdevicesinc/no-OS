@@ -88,7 +88,7 @@ struct no_os_uart_init_param iio_demo_usb_ip = {
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = UART_EXTRA,
 	.platform_ops = &max_usb_uart_ops,
-}; // USB initialization parameter for iio connection
+}; /* USB initialization parameter for iio connection */
 #elif defined(PQM_CONN_SERIAL) || defined(PQM_CONN_T1L)
 
 struct no_os_uart_init_param iio_demo_serial_ip = {
@@ -101,7 +101,7 @@ struct no_os_uart_init_param iio_demo_serial_ip = {
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = UART_EXTRA,
 	.platform_ops = &max_uart_ops,
-}; // SERIAL initialization parameter for iio connection
+}; /* SERIAL initialization parameter for iio connection */
 
 #if defined(PQM_CONN_T1L)
 
@@ -246,7 +246,7 @@ struct pqm_init_para pqm_ip = {
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	}
-}; // pqm init param
+}; /* pqm init param */
 
 struct max_i2c_init_param i2c_extra = {.vssel = MXC_GPIO_VSSEL_VDDIOH}; // I2C
 
@@ -256,7 +256,7 @@ struct no_os_i2c_init_param i2c_ip = {
 	.slave_address = 0x51,
 	.platform_ops = &max_i2c_ops,
 	.extra = &i2c_extra
-}; // I2C Initialization Parameters
+}; /* I2C Initialization Parameters */
 
 struct no_os_uart_init_param uart_ip_stdio = {
 	.device_id = 0,
@@ -267,7 +267,7 @@ struct no_os_uart_init_param uart_ip_stdio = {
 	.stop = NO_OS_UART_STOP_1_BIT,
 	.extra = UART_STDIO_EXT,
 	.platform_ops = &max_uart_ops
-}; // UART init param
+}; /* UART init param */
 
 struct no_os_spi_init_param spi_egy_ip = {
 	.device_id = SPI_PQM_DEVICE_ID,
@@ -277,7 +277,7 @@ struct no_os_spi_init_param spi_egy_ip = {
 	.platform_ops = SPI_OPS,
 	.chip_select = 0,
 	.extra = SPI_PQM_EXTRA,
-}; // SPI init param for ade9430
+}; /* SPI init param for ade9430 */
 
 struct no_os_gpio_init_param reset_gpio_ip = {
 	.port = RESET_GPIO_PORT_NUM,
@@ -285,7 +285,7 @@ struct no_os_gpio_init_param reset_gpio_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = RESET_GPIO_EXTRA,
 	.pull = NO_OS_PULL_UP
-}; // Software reset gpio pin
+}; /* Software reset gpio pin */
 
 struct no_os_gpio_init_param intr_gpio_ip = {
 	.port = INTR_GPIO_PORT_NUM,
@@ -293,7 +293,15 @@ struct no_os_gpio_init_param intr_gpio_ip = {
 	.platform_ops = GPIO_OPS,
 	.extra = INTR_GPIO_EXTRA,
 	.pull = NO_OS_PULL_NONE,
-}; // ADE9430 interrupt gpio pin
+}; /* ADE9430 interrupt gpio pin */
+
+struct no_os_gpio_init_param led_gpio_ip = {
+	.port = LED_GPIO_PORT_NUM,
+	.number = LED_GPIO_PIN_NUM,
+	.platform_ops = GPIO_OPS,
+	.extra = GPIO_EXTRA,
+	.pull = NO_OS_PULL_UP,
+}; /* ADE9430 interrupt gpio pin */
 
 // Configure IRQ controller
 struct no_os_irq_init_param afe_callback_ctrl_ip = {
@@ -302,7 +310,7 @@ struct no_os_irq_init_param afe_callback_ctrl_ip = {
 	.extra = NULL,
 };
 
-// Configure callback function
+/* Configure callback function */
 struct no_os_callback_desc afe0_callback_desc = {
 	.event = NO_OS_EVT_GPIO,
 	.peripheral = NO_OS_GPIO_IRQ,

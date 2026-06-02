@@ -35,8 +35,17 @@
 #ifndef __UART_EXPORT_H__
 #define __UART_EXPORT_H__
 
+/**
+ * @brief Initialize UART for CSV export
+ */
 int uart_export_init(void);
+/**
+ * @brief Format latest PQM data as CSV and send over UART
+ */
 int uart_export_send(void);
+/**
+ * @brief Deinitialize UART and free resources
+ */
 void uart_export_remove(void);
 
 #endif /* __UART_EXPORT_H__ */

@@ -62,7 +62,9 @@
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	10
 #define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
+#ifndef IIOD_CONN_BUFFER_SIZE
 #define IIOD_CONN_BUFFER_SIZE	0x1000
+#endif
 #define NO_TRIGGER				(uint32_t)-1
 
 #define NO_OS_STRINGIFY(x) #x
@@ -1509,7 +1511,9 @@ int iio_step(struct iio_desc *desc)
 		if (NO_OS_IS_ERR_VALUE(ret) && ret != -EAGAIN)
 			return ret;
 #if defined(NO_OS_LWIP_NETWORKING)
-		no_os_lwip_step(desc->server->net->net, desc->server->net->net);
+		for (int _i = 0; _i < 10; _i++)
+			no_os_lwip_step(desc->server->net->net,
+					desc->server->net->net);
 #endif
 	}
 #endif

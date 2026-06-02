@@ -10,6 +10,7 @@ ifeq ($(INTERFACE), usb)
 $(info Using USB as interface for IIO communication)
 CFLAGS += -DPQM_CONN_USB
 CFLAGS += -DNO_OS_USB_UART
+CFLAGS += -DMAXUSB_HS_CAPABLE
 endif
 
 ifeq ($(INTERFACE), serial)
@@ -54,6 +55,11 @@ include ../../tools/scripts/generic_variables.mk
 
 CFLAGS_MFLOAT_TYPE=soft
 CFLAGS += -DIIO_IGNORE_BUFF_OVERRUN_ERR
+ifeq ($(INTERFACE), usb)
+CFLAGS += -DIIOD_CONN_BUFFER_SIZE=2048
+else
+CFLAGS += -DIIOD_CONN_BUFFER_SIZE=0x10000
+endif
 
 include src.mk
 include ../../tools/scripts/generic.mk

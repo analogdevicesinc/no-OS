@@ -119,6 +119,10 @@
 #define WAVEFORM_ONESHOT_BLOCKS         66
 #define WAVEFORM_BLOCK_COUNT            67
 
+// USB raw stream attributes
+#define RAW_STREAM_ENABLE               68
+#define RAW_STREAM_DROP_COUNT           69
+
 // Channel specific attributes
 #define CHAN_RMS                        0
 #define CHAN_ANGLE                      1
@@ -155,6 +159,7 @@
 #define RESAMPLED_WAVEFORM_FULL_SCALE   18196
 
 extern struct iio_device pqm_iio_descriptor;
+extern struct iio_trigger pqm_waveform_trig;
 extern volatile bool configChanged;
 extern volatile bool processData;
 extern struct pqm_desc *pqm_desc_global;

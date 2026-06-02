@@ -35,6 +35,7 @@
 #include "common_data.h"
 #include "pqlib_example.h"
 #include "pqlib_convert.h"
+#include "pqlib_afe.h"
 #include "no_os_uart.h"
 #include <stdio.h>
 #include <string.h>
@@ -45,20 +46,51 @@
 static struct no_os_uart_desc *uart_export_desc;
 static char uart_export_buf[UART_EXPORT_BUF_SIZE];
 
+/**
+ * @brief Initialize UART for CSV export
+ */
 int uart_export_init(void)
 {
 	return no_os_uart_init(&uart_export_desc, &uart_export_ip);
 }
 
+/**
+ * @brief Format latest PQM data as CSV and send over UART
+ *
+ * CSV format:
+ * Preamble: "PQM,<sequenceNumber>,<waveformBlockCount>"
+ * Followed by comma-separated values for each parameter, in the following order:
+ * VA, VB, VC, IA, IB, IC, IN, THD_VA, THD_VB, THD_VC, THD_IA, THD_IB, THD_IC,
+ * ANGL_VA_VB, ANGL_VA_VC, ANGL_IA_IB, ANGL_IA_IC,
+ * H2..H50 for VA (49 values), VB (49 values), VC (49 values),
+ * H2..H50 for IA (49 values), IB (49 values), IC (49 values),
+ * [Symmetrical components if enabled],
+ * dipCount, swellCount, rvcCount, intrpCount,
+ * AP_A, AP_B, AP_C,
+ * AE_A, AE_B, AE_C,
+ * RE_A, RE_B, RE_C,
+ * PF_A, PF_B, PF_C,
+ * FAP_A, FAP_B, FAP_C,
+ * FAE_A, FAE_B, FAE_C,
+ * FRE_A, FRE_B, FRE_C,
+ * DPF_A, DPF_B, DPF_C
+ *
+ * Line terminator: "\r\n"
+ *
+ * @return Number of bytes sent over UART
+ */
 int uart_export_send(void)
 {
 	int off = 0;
 	int rem = UART_EXPORT_BUF_SIZE;
 	int n;
 	int i;
+	int h;
 	ADI_PQLIB_OUTPUT *out;
 	EXAMPLE_CONFIG *cfg;
 	float vscale, iscale;
+	POWER_ENERGY_DATA *pe = &pqlibExample.powerEnergy;
+	float pscale;
 
 	if (pqlibExample.state != PQLIB_STATE_RUNNING)
 		return 0;
@@ -67,11 +99,12 @@ int uart_export_send(void)
 	cfg = &pqlibExample.exampleConfig;
 	vscale = cfg->voltageScale;
 	iscale = cfg->currentScale;
+	pscale = vscale * iscale;
 
 	/* HEADER + sequence ID + waveform block count for correlation */
 	n = snprintf(uart_export_buf + off, rem, "PQM,%" PRIu32 ",%" PRIu32,
 		     pqlibExample.input1012Cycles.sequenceNumber,
-		     pqm_desc_global ? pqm_desc_global->waveform_block_count : 0);
+		     (uint32_t)waveform_block_count);
 	off += n;
 	rem -= n;
 
@@ -127,7 +160,7 @@ int uart_export_send(void)
 
 	/* Voltage harmonics H2..H50 for VA, VB, VC (49 values each) */
 	for (i = 0; i < 3; i++) {
-		for (int h = 0; h < PQLIB_MAX_HARMONICS - 1; h++) {
+		for (h = 0; h < PQLIB_MAX_HARMONICS - 1; h++) {
 			n = snprintf(uart_export_buf + off, rem, ",%.2f",
 				     convert_pct_type(
 					     out->params1012Cycles.voltageParams[i].harmonics[h]));
@@ -138,7 +171,7 @@ int uart_export_send(void)
 
 	/* Current harmonics H2..H50 for IA, IB, IC (49 values each) */
 	for (i = 0; i < 3; i++) {
-		for (int h = 0; h < PQLIB_MAX_HARMONICS - 1; h++) {
+		for (h = 0; h < PQLIB_MAX_HARMONICS - 1; h++) {
 			n = snprintf(uart_export_buf + off, rem, ",%.2f",
 				     convert_pct_type(
 					     out->params1012Cycles.currentParams[i].harmonics[h]));
@@ -181,9 +214,6 @@ int uart_export_send(void)
 
 	/* Power, energy, and power factor per phase (A, B, C) */
 	{
-		POWER_ENERGY_DATA *pe = &pqlibExample.powerEnergy;
-		float pscale = vscale * iscale;
-
 		/* Active Power: AP_A, AP_B, AP_C */
 		for (i = 0; i < 3; i++) {
 			n = snprintf(uart_export_buf + off, rem, ",%.4f",
@@ -251,6 +281,9 @@ int uart_export_send(void)
 	return no_os_uart_write(uart_export_desc, (uint8_t *)uart_export_buf, off);
 }
 
+/**
+ * @brief De-initialize UART export
+ */
 void uart_export_remove(void)
 {
 	if (uart_export_desc) {
