@@ -355,14 +355,15 @@ void adxcvr_finalize_lane_rate_change(struct adxcvr *xcvr)
 		return;
 
 	adxcvr_write(xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
-	do {
+	while (timeout > 0) {
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS, &status);
 		if (status == ADXCVR_STATUS)
 			break;
 		no_os_mdelay(1);
-	} while (timeout--);
+		timeout--;
+	}
 
-	if (timeout < 0) {
+	if (status != ADXCVR_STATUS) {
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS2, &status);
 		printf("%s: Link activation error:\n", xcvr->name);
 		printf("\tLink PLL %slocked\n",
