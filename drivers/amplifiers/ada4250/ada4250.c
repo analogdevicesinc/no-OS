@@ -163,7 +163,7 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 	ret = ada4250_update(dev, ADA4250_REG_RESET, ADA4250_RESET_MSK,
 			     ADA4250_RESET(ADA4250_RESET_ENABLE));
 
-	while (timeout--) {
+	while (timeout > 0) {
 		ret = ada4250_read(dev, ADA4250_REG_RESET, &data);
 		if (ret != 0)
 			return ret;
@@ -175,9 +175,10 @@ int32_t ada4250_soft_reset(struct ada4250_dev *dev)
 			else
 				break;
 		}
+		timeout--;
 	}
 
-	if (timeout < 1)
+	if (data & ADA4250_RESET(ADA4250_RESET_ENABLE))
 		ret = -ETIME;
 
 	return ret;
