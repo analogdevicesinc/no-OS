@@ -1299,7 +1299,7 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 	uint32_t timeout = 20000; /* RFDC_CAL can take long */
 	uint32_t state;
 
-	do {
+	while (timeout > 0) {
 		state = ad9361_spi_readf(phy->spi, reg, mask);
 		if (state == done_state)
 			return 0;
@@ -1308,7 +1308,8 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 			no_os_udelay(1200);
 		else
 			no_os_udelay(120);
-	} while (timeout--);
+		timeout--;
+	}
 
 	dev_err(&phy->spi->dev, "Calibration TIMEOUT (0x%"PRIX32", 0x%"PRIX32")", reg,
 		mask);
