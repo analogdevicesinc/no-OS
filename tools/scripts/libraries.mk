@@ -123,6 +123,11 @@ CFLAGS += -I$(AZURE_DIR)/sdk/inc
 
 endif
 
+#	WIFI
+ifneq ($(if $(findstring wifi, $(LIBRARIES)), 1),)
+include $(NO-OS)/tools/scripts/wifi.mk
+endif
+
 ifneq ($(if $(findstring lwip, $(LIBRARIES)), 1),)
 include $(NO-OS)/tools/scripts/lwip.mk
 INCS += $(NO-OS)/libraries/lwip/arch

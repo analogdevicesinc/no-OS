@@ -15,20 +15,10 @@ SRC_DIRS += $(LWIP_DIR)/src/apps/lwiperf
 INCS += $(NO-OS)/network/network_interface.h
 INCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.h
 INCS += $(NO-OS)/network/tcp_socket.h
+INCS += $(INCLUDE)/no_os_net.h
+SRCS += $(DRIVERS)/api/no_os_net.c
 SRCS += $(NO-OS)/network/tcp_socket.c
 SRCS += $(NO-OS)/network/lwip_raw_socket/lwip_socket.c
-
-ifdef NO_OS_IP
-CFLAGS += -DNO_OS_IP=\"$(NO_OS_IP)\"
-endif
-
-ifdef NO_OS_NETMASK
-CFLAGS += -DNO_OS_NETMASK=\"$(NO_OS_NETMASK)\"
-endif
-
-ifdef NO_OS_GATEWAY
-CFLAGS += -DNO_OS_GATEWAY=\"$(NO_OS_GATEWAY)\"
-endif
 
 ifdef NO_OS_DOMAIN_NAME
 CFLAGS += -DNO_OS_DOMAIN_NAME=\"$(NO_OS_DOMAIN_NAME)\"
