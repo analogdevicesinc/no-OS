@@ -153,6 +153,9 @@ struct ad463x_init_param ad463x_init_param = {
 #elif AD4030_DEV
 	.vref = 5000 * 1000UL,
 	.device_id = ID_AD4030, /* dev_id */
+#elif AD4630_20_DEV
+	.vref = 5000 * 1000UL,
+	.device_id = ID_AD4630_20, /* dev_id */
 #else
 	.vref = 5000 * 1000UL,
 	.device_id = ID_AD4630_24, /* dev_id */

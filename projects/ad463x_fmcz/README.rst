@@ -11,6 +11,7 @@ Supported Evaluation Boards
 
 * `EVAL-AD4030-24FMCZ <https://www.analog.com/EVAL-AD4030-24>`_
 * `EVAL-AD4630-16FMCZ <https://www.analog.com/EVAL-AD4630-16>`_
+* `EVAL-AD4630-20FMCZ <https://www.analog.com/EVAL-AD4630-20>`_
 * `EVAL-AD4630-24FMCZ <https://www.analog.com/EVAL-AD4630-24>`_
 * `EVAL-ADAQ4224-FMCZ <https://www.analog.com/ADAQ4224>`_
 * `EV-ISO-4224-FMCZ <https://www.analog.com/ADAQ4224>`_
