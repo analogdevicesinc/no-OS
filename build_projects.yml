@@ -15,6 +15,18 @@ pr:
     - '**/*.md'
     - '**/*.rst'
 
+schedules:
+- cron: '0 0 * * 6' # Every Saturday at midnight
+  displayName: Weekly Saturday Midnight Xilinx Rebuild
+  branches:
+    include:
+    - ci/xilinx-fresh-build-pipeline
+    # - main
+    # - next_stable
+    # - 20*
+  always: true
+  
+
 variables:
 - group: noos_releases_group_variables
 - name: isMain
@@ -46,6 +58,24 @@ jobs:
     persistCredentials: true
   - script: 'echo "Using Xilinx version: $(XILINX_VERSION)"'
     displayName: 'Show Xilinx version'
+  - task: CmdLine@2
+    displayName: 'Clean all Xilinx builds for full rebuild'
+    condition: eq(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+    inputs:
+      script: |
+        echo "Full rebuild: removing all Xilinx build artifacts..."
+        rm -rf /no-OS_builds/builds_main/build_xilinx_*/{app,bsp,tmp,.metadata,.Xil}
+        # Clean stale Eclipse state and build locks
+        for dir in /no-OS_builds/builds_main/build_xilinx_*/; do
+          if [ -d "$dir/.metadata" ]; then
+            rm -rf "$dir/.metadata"
+          fi
+          if [ -f "$dir/.project.target" ]; then
+            rm -f "$dir/.project.target"
+          fi
+        done
+        echo "Done. All projects will be rebuilt from scratch."
+
   - script: |
       export BRANCH=$(branch)
       wget -P ./tools/scripts/ \
@@ -75,6 +105,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: STM32
+  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -118,6 +149,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Maxim
+  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -159,6 +191,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Mbed
+  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -200,6 +233,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Pico
+  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -241,6 +275,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: ADuCM3029
+  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
   timeoutInMinutes: 200
   pool:
     name: Default
@@ -285,6 +320,7 @@ jobs:
       publishLocation: 'pipeline'
 
 - job: Unit_tests
+  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
   pool:
     vmImage: ubuntu-latest
   steps:
