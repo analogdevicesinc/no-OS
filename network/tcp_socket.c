@@ -252,6 +252,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 		return -1;
 
 	ldesc->net = param->net;
+	ldesc->net_desc = param->net_desc;
 
 	if (param->max_buff_size != 0)
 		buff_size = param->max_buff_size;
@@ -434,6 +435,7 @@ int32_t socket_accept(struct tcp_socket_desc *desc,
 		return -ENOMEM;
 	}
 	(*new_client)->net = desc->net;
+	(*new_client)->net_desc = desc->net_desc;
 	(*new_client)->id = new_cli_id;
 
 	return 0;

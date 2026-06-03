@@ -41,6 +41,8 @@
 #endif
 #include <stdint.h>
 
+struct no_os_net_desc;
+
 #define MAX_BACKLOG 0xFFFFFFFF
 
 /* Socket descriptor */
@@ -49,6 +51,8 @@ struct tcp_socket_desc {
 	uint32_t			id;
 	/* Reference to the network interface */
 	struct network_interface	*net;
+	/* Reference to the network device descriptor */
+	struct no_os_net_desc		*net_desc;
 #ifndef DISABLE_SECURE_SOCKET
 	/* Reference to secure descriptor */
 	struct secure_socket_desc	*secure;
@@ -107,6 +111,8 @@ struct secure_init_param {
 struct tcp_socket_init_param {
 	/** Reference to the network interface */
 	struct network_interface	*net;
+	/** Reference to the network device descriptor */
+	struct no_os_net_desc		*net_desc;
 	/**
 	 *  Max buffer size for incoming data.
 	 *  If set to 0, default value will be used:
