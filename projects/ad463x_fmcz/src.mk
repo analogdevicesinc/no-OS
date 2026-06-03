@@ -60,7 +60,9 @@ INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h \
 INCS += $(DRIVERS)/adc/ad463x/ad463x.h
 SRCS += $(DRIVERS)/adc/ad463x/ad463x.c
 
-ifeq (3,$(strip $(AD463X_ID)))
+ifeq (4,$(strip $(AD463X_ID)))
+CFLAGS += -DAD4630_20_DEV
+else ifeq (3,$(strip $(AD463X_ID)))
 CFLAGS += -DADAQ4216_DEV
 else ifeq (2,$(strip $(AD463X_ID)))
 CFLAGS += -DADAQ4224_DEV
