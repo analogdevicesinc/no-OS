@@ -61,40 +61,52 @@
 
 
 /*
- * 512-bit base sequence (MSW..LSW):
- *   0x00000001 FFFFFFFF EEEEEEEE DDDDDDDD
- *   CCCCCCCC BBBBBBBB AAAAAAAA 99999999
- *   88888888 77777777 66666666 55555555
- *   44444444 33333333 22222222 11111111
+ * 512-bit test VEC stream (MSW..LSW):
  *
- * Shifted left by 2 as a 512-bit integer, then bit 0 set to 1.
  * tx_vector[15] = MSW, tx_vector[0] = LSW.
+ * bits[1:0] of word[0] = 0b01 → streamid=1
  */
 static uint32_t tx_vector[16] = {
-	0x44444445, /* [0]  from 0x11111111 */
-	0x88888888, /* [1]  from 0x22222222 */
-	0xCCCCCCCC, /* [2]  from 0x33333333 */
-	0x11111110, /* [3]  from 0x44444444 */
-	0x55555555, /* [4]  from 0x55555555 */
-	0x99999999, /* [5]  from 0x66666666 */
-	0xDDDDDDDD, /* [6]  from 0x77777777 */
-	0x22222221, /* [7]  from 0x88888888 */
-	0x66666666, /* [8]  from 0x99999999 */
-	0xAAAAAAAA, /* [9]  from 0xAAAAAAAA */
-	0xEEEEEEEE, /* [10] from 0xBBBBBBBB */
-	0x33333332, /* [11] from 0xCCCCCCCC */
-	0x77777777, /* [12] from 0xDDDDDDDD */
-	0xBBBBBBBB, /* [13] from 0xEEEEEEEE */
-	0xFFFFFFFF, /* [14] from 0xFFFFFFFF */
-	0x00000005, /* [15] from 0x00000001 */
+	0x89ABCDE1, /* [0]  lane0[31: 0] from 0x44444445, */
+	0x01234567, /* [1]  lane0[63:32] from 0x88888888, */
+	0xABCDEF89, /* [2]  lane1[31: 0] from 0xCCCCCCCC, */
+	0x12345678, /* [3]  lane1[63:32] from 0x11111110, */
+	0xABCDEF01, /* [4]  lane2[31: 0] from 0x55555555, */
+	0x23456789, /* [5]  lane2[63:32] from 0x99999999, */
+	0xBCDEF012, /* [6]  lane3[31: 0] from 0xDDDDDDDD, */
+	0x3456789A, /* [7]  lane3[63:32] from 0x22222221, */
+	0xCDEF0123, /* [8]  lane4[31: 0] from 0x66666666, */
+	0x456789AB, /* [9]  lane4[63:32] from 0xAAAAAAAA, */
+	0xDEF01234, /* [10] lane5[31: 0] from 0xEEEEEEEE, */
+	0x56789ABC, /* [11] lane5[63:32] from 0x33333332, */
+	0xEF012345, /* [12] lane6[31: 0] from 0x77777777, */
+	0x6789ABCD, /* [13] lane6[63:32] from 0xBBBBBBBB, */
+	0xF0123456, /* [14] lane7[31: 0] from 0xFFFFFFFF, */
+	0x789ABCDE, /* [15] lane7[63:32] from 0x00000005, */
 };
 
-/* 512-bit test PASS stream (bits[1:0] of word[0] = 0b11 → streamid=3): */
+/* 512-bit test PASS stream (MSW..LSW):
+ *
+ * tx_passthrough[15] = MSW, tx_passthrough[0] = LSW.
+ * bits[1:0] of word[0] = 0b11 → streamid=3
+ */
 static uint32_t tx_passthrough[16] = {
-	0xDEAD0003, 0xBEEF0001, 0xCAFE0002, 0xFACE0003,
-	0x12340004, 0x56780005, 0x9ABC0006, 0xDEF00007,
-	0xA5A50008, 0x5A5A0009, 0xC0DE000A, 0xF00D000B,
-	0xBABE000C, 0xD00D000D, 0xFEED000E, 0xF00F000F,
+	0xDEAD0003, /* [0]  lane0[31: 0] */
+	0xBEEF0001, /* [1]  lane0[63:32] */
+	0xCAFE0002, /* [2]  lane1[31: 0] */
+	0xFACE0003, /* [3]  lane1[63:32] */
+	0x12340004, /* [4]  lane2[31: 0] */
+	0x56780005, /* [5]  lane2[63:32] */
+	0x9ABC0006, /* [6]  lane3[31: 0] */
+	0xDEF00007, /* [7]  lane3[63:32] */
+	0xA5A50008, /* [8]  lane4[31: 0] */
+	0x5A5A0009, /* [9]  lane4[63:32] */
+	0xC0DE000A, /* [10] lane5[31: 0] */
+	0xF00D000B, /* [11] lane5[63:32] */
+	0xBABE000C, /* [12] lane6[31: 0] */
+	0xD00D000D, /* [13] lane6[63:32] */
+	0xFEED000E, /* [14] lane7[31: 0] */
+	0xF00F000F, /* [15] lane7[63:32] */
 };
 
 /* 64-bit test CMD READ: 0x00000000_02580100 */
@@ -103,8 +115,8 @@ static uint32_t tx_cmd_read[2] = {
 	0x00000000, /* [1] MSW */
 };
 
-/* 
- * 64-bit test CMD STREAMING READ: 0x00000000_02540E00 
+/*
+ * 64-bit test CMD STREAMING READ: 0x00000000_02540E00
  * Read from NUMWORDS=3 registers starting from address 0x0254,
  * meaning 0x0254, 0x0258, 0x025C.
  * 3 streams should be expected on RX.
@@ -114,8 +126,8 @@ static uint32_t tx_cmd_streaming_read[2] = {
 	0x00000000, /* [1] MSW */
 };
 
-/* 
- * 64-bit test CMD WRITE: 0x12345678_00900300 
+/*
+ * 64-bit test CMD WRITE: 0x12345678_00900300
  * Write value 0x12345678 at address 0x0090.
  * Nothing should be expected on RX.
  */
@@ -825,7 +837,7 @@ int example_main()
 					  &do_fsm);
 		} while (((do_fsm & 0x1F) != 1 ||
 			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("Data offload after PASS: wr=%lu rd=%lu\n",
+		printf("TX data offload after PASS: wr=%lu rd=%lu\n",
 		       (unsigned long)(do_fsm & 0x1F),
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
@@ -938,7 +950,7 @@ int example_main()
 					  &do_fsm);
 		} while (((do_fsm & 0x1F) != 1 ||
 			  ((do_fsm >> 8) & 0xF) != 1) && --timeout);
-		printf("Data offload after VEC: wr=%lu rd=%lu\n",
+		printf("TX data offload after VEC: wr=%lu rd=%lu\n",
 		       (unsigned long)(do_fsm & 0x1F),
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
