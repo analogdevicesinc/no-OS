@@ -48,6 +48,7 @@
 #include "axi_dmac.h"
 #include "jesd204.h"
 #include "xil_cache.h"
+#include "no_os_axi_io.h"
 
 #include "lwip_xemacps.h"
 #define IIOD
@@ -573,6 +574,37 @@ int example_main()
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
 
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
+	no_os_mdelay(1);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
+    no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x01C,
+           sizeof(tx_passthrough) - 1);
+    no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x088, 0x01);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
+	{
+		uint32_t do_fsm, do_ver, do_cfg, do_mem_lo;
+		int timeout = 100;
+		printf("RX data offload: bypass mode\n");
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x000, &do_ver);
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x010, &do_cfg);
+		no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x014, &do_mem_lo);
+
+		printf("RX data offload: ver=0x%08lX cfg=0x%lX mem=%lu bytes\n",
+			(unsigned long)do_ver, (unsigned long)do_cfg,
+			(unsigned long)do_mem_lo);
+
+		do {
+			no_os_mdelay(1);
+			no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x200,
+				&do_fsm);
+		} while (((do_fsm & 0x1F) != 1 ||
+			((do_fsm >> 8) & 0xF) != 1) && --timeout);
+		printf("RX data offload: oneshot mode, wr=%lu rd=%lu\n",
+			(unsigned long)(do_fsm & 0x1F),
+			(unsigned long)((do_fsm >> 8) & 0xF));
+	}
+
 	/*
 	 * ----------------------------------------------------------------
 	 * TX CMD DMA transfer (tx_cmd_read).
@@ -841,6 +873,19 @@ int example_main()
 		       (unsigned long)(do_fsm & 0x1F),
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
+	{
+		uint32_t do_fsm;
+		int timeout = 200;
+		do {
+			no_os_mdelay(1);
+			no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x200,
+				&do_fsm);
+		} while (((do_fsm & 0x1F) != 1 ||
+			((do_fsm >> 8) & 0xF) != 1) && --timeout);
+		printf("RX data offload after PASS: wr=%lu rd=%lu\n",
+			(unsigned long)(do_fsm & 0x1F),
+			(unsigned long)((do_fsm >> 8) & 0xF));
+	}
 
 #ifdef DMA_CYCLIC_PASS
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
@@ -889,6 +934,14 @@ int example_main()
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
 
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x00);
+	no_os_mdelay(1);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x088, 0x02);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x01C,
+			sizeof(tx_vector) - 1);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x104, 0x00);
+	no_os_axi_io_write(RX_DATA_OFFLOAD_BASEADDR, 0x084, 0x01);
+
 	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
 		no_os_axi_io_write(TX_DDR_BASEADDR,
 				   i * sizeof(uint32_t),
@@ -909,24 +962,6 @@ int example_main()
 		TX_DDR_BASEADDR, (unsigned long)sizeof(tx_vector));
 
 	Xil_DCacheFlush();
-
-#ifdef DMA_CYCLIC_PASS
-	{
-	volatile uint32_t *rx_vec_buf =
-		(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
-
-	struct axi_dma_transfer read_vec_transfer = {
-		.size = sizeof(tx_vector),
-		.transfer_done = 0,
-		.cyclic = NO,
-		.src_addr = 0,
-		.dest_addr = RX_DDR_BASEADDR,
-	};
-
-	ret = axi_dmac_transfer_start(rx_dmac, &read_vec_transfer);
-	if (ret)
-		pr_err("axi_dmac_transfer_start(rx_vec) failed: %d\n", ret);
-#endif
 
 	ret = axi_dmac_transfer_start(tx_dmac, &vec_transfer);
 	if (ret) {
@@ -955,10 +990,50 @@ int example_main()
 		       (unsigned long)((do_fsm >> 8) & 0xF));
 	}
 
+	{
+		uint32_t do_fsm;
+		int timeout = 200;
+		do {
+			no_os_mdelay(1);
+			no_os_axi_io_read(RX_DATA_OFFLOAD_BASEADDR, 0x200,
+				&do_fsm);
+		} while (((do_fsm & 0x1F) != 1 ||
+			((do_fsm >> 8) & 0xF) != 1) && --timeout);
+		printf("RX data offload after VEC: wr=%lu rd=%lu\n",
+			(unsigned long)(do_fsm & 0x1F),
+			(unsigned long)((do_fsm >> 8) & 0xF));
+	}
+
+	/*
+	 * ----------------------------------------------------------------
+	 * RX DMA transfer, receiving what DT is sending (streamid=1/2).
+	 * Configure DT to send PATT/ASYNC data, then hit enter to capture.
+	 * ----------------------------------------------------------------
+	 */
+
+	printf("Press Enter to start RX DMA transfer of PATT/ASYNC stream from DT...\n");
+	getchar();
+
 #ifdef DMA_CYCLIC_PASS
+	{
+	volatile uint32_t *rx_stream =
+		(volatile uint32_t *)(uintptr_t)RX_DDR_BASEADDR;
+
+	struct axi_dma_transfer read_rx_stream_transfer = {
+		.size = sizeof(tx_vector),
+		.transfer_done = 0,
+		.cyclic = NO,
+		.src_addr = 0,
+		.dest_addr = RX_DDR_BASEADDR,
+	};
+
+	ret = axi_dmac_transfer_start(rx_dmac, &read_rx_stream_transfer);
+	if (ret)
+		pr_err("axi_dmac_transfer_start(rx_stream) failed: %d\n", ret);
+
 	ret = axi_dmac_transfer_wait_completion(rx_dmac, 2000);
 	if (ret)
-		pr_err("RX VEC DMA transfer timeout\n");
+		pr_err("RX stream DMA transfer timeout\n");
 
 	Xil_DCacheInvalidateRange(RX_DDR_BASEADDR, sizeof(tx_vector));
 
@@ -967,9 +1042,14 @@ int example_main()
 		rx_adc->num_channels,
 		8 * sizeof(tx_vector[0]));
 
+	if ((rx_stream[0] & 0x3) == 1) {
+		printf("RX PATT stream detected (streamID=0x1)\n");
+	} else if ((rx_stream[0] & 0x3) == 2) {
+		printf("RX ASYNC stream detected (streamID=0x2)\n");
+	}
 	for (i = 0; i < NO_OS_ARRAY_SIZE(tx_vector); i++)
-		printf("  rx_vec[%2u] = 0x%08lX\n", i,
-		       (unsigned long)rx_vec_buf[i]);
+		printf("  rx_stream[%2u] = 0x%08lX\n", i,
+		       (unsigned long)rx_stream[i]);
 	}
 #endif
 
