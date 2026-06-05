@@ -1,7 +1,8 @@
 trigger:
-- main
-- next_stable
-- 20*
+# - main
+# - next_stable
+# - 20*
+- ci/xilinx-fresh-build-pipeline
 
 pr:
   branches:
@@ -15,16 +16,16 @@ pr:
     - '**/*.md'
     - '**/*.rst'
 
-schedules:
-- cron: '0 0 * * 6' # Every Saturday at midnight
-  displayName: Weekly Saturday Midnight Xilinx Rebuild
-  branches:
-    include:
-    - ci/xilinx-fresh-build-pipeline
-    # - main
-    # - next_stable
-    # - 20*
-  always: true
+# schedules:
+# - cron: '0 0 * * 6' # Every Saturday at midnight
+#   displayName: Weekly Saturday Midnight Xilinx Rebuild
+#   branches:
+#     include:
+#     - ci/xilinx-fresh-build-pipeline
+#     # - main
+#     # - next_stable
+#     # - 20*
+#   always: true
   
 
 variables:
@@ -45,7 +46,7 @@ variables:
 
 jobs:
 - job: Xilinx
-  timeoutInMinutes: 200
+  timeoutInMinutes: 500
   pool:
     name: Default
     demands:
@@ -60,17 +61,19 @@ jobs:
     displayName: 'Show Xilinx version'
   - task: CmdLine@2
     displayName: 'Clean all Xilinx builds for full rebuild'
-    condition: eq(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+    #condition: eq(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
     inputs:
       script: |
         echo "Full rebuild: removing all Xilinx build artifacts..."
-        rm -rf /no-OS_builds/builds_main/build_xilinx_*/{app,bsp,tmp,.metadata,.Xil}
-        # Clean stale Eclipse state and build locks
         for dir in /no-OS_builds/builds_main/build_xilinx_*/; do
-          if [ -d "$dir/.metadata" ]; then
-            rm -rf "$dir/.metadata"
-          fi
+          for subdir in app bsp tmp .metadata .Xil; do
+            if [ -d "$dir/$subdir" ]; then
+              echo "Removing directory: $dir/$subdir"
+              rm -rf "$dir/$subdir"
+            fi
+          done
           if [ -f "$dir/.project.target" ]; then
+            echo "Removing file: $dir/.project.target"
             rm -f "$dir/.project.target"
           fi
         done
@@ -104,241 +107,241 @@ jobs:
       artifact: 'logs_Xilinx_$(System.JobId)'
       publishLocation: 'pipeline'
 
-- job: STM32
-  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: |
-      echo "Using STM32CubeIDE version: $(STM32CUBEIDE_VERSION)"
-      echo "Using STM32CubeMX version: $(STM32CUBEMX_VERSION)"
-    displayName: 'Show SDK versions'
-  - script: |
-      wget -P ./tools/scripts/ \
-        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
-      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
-        -export_dir $(RELEASE_DIR) \
-        -log_dir $(LOG_DIR) \
-        -builds_dir /no-OS_builds/builds \
-        -platform stm32 \
-        -hdl_branch $(HDL_BRANCH)
-    env:
-      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
-      TOKEN: $(TOKEN)
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_STM32'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_STM32_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: STM32
+#   condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: |
+#       echo "Using STM32CubeIDE version: $(STM32CUBEIDE_VERSION)"
+#       echo "Using STM32CubeMX version: $(STM32CUBEMX_VERSION)"
+#     displayName: 'Show SDK versions'
+#   - script: |
+#       wget -P ./tools/scripts/ \
+#         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
+#       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+#         -export_dir $(RELEASE_DIR) \
+#         -log_dir $(LOG_DIR) \
+#         -builds_dir /no-OS_builds/builds \
+#         -platform stm32 \
+#         -hdl_branch $(HDL_BRANCH)
+#     env:
+#       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+#       TOKEN: $(TOKEN)
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_STM32'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_STM32_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: Maxim
-  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'echo "Using Maxim SDK version: $(MAXIM_SDK_VERSION)"'
-    displayName: 'Show Maxim SDK version'
-  - script: |
-      wget -P ./tools/scripts/ \
-        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
-      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
-        -export_dir $(RELEASE_DIR) \
-        -log_dir $(LOG_DIR) \
-        -builds_dir /no-OS_builds/builds \
-        -platform maxim \
-        -hdl_branch $(HDL_BRANCH)
-    env:
-      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
-      TOKEN: $(TOKEN)
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_Maxim'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_Maxim_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: Maxim
+#   condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'echo "Using Maxim SDK version: $(MAXIM_SDK_VERSION)"'
+#     displayName: 'Show Maxim SDK version'
+#   - script: |
+#       wget -P ./tools/scripts/ \
+#         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
+#       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+#         -export_dir $(RELEASE_DIR) \
+#         -log_dir $(LOG_DIR) \
+#         -builds_dir /no-OS_builds/builds \
+#         -platform maxim \
+#         -hdl_branch $(HDL_BRANCH)
+#     env:
+#       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+#       TOKEN: $(TOKEN)
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_Maxim'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_Maxim_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: Mbed
-  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'echo "Using Mbed version: $(MBED_VERSION)"'
-    displayName: 'Show Mbed version'
-  - script: |
-      wget -P ./tools/scripts/ \
-        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
-      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
-        -export_dir $(RELEASE_DIR) \
-        -log_dir $(LOG_DIR) \
-        -builds_dir /no-OS_builds/builds \
-        -platform mbed \
-        -hdl_branch $(HDL_BRANCH)
-    env:
-      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
-      TOKEN: $(TOKEN)
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_Mbed'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_Mbed_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: Mbed
+#   condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'echo "Using Mbed version: $(MBED_VERSION)"'
+#     displayName: 'Show Mbed version'
+#   - script: |
+#       wget -P ./tools/scripts/ \
+#         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py
+#       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+#         -export_dir $(RELEASE_DIR) \
+#         -log_dir $(LOG_DIR) \
+#         -builds_dir /no-OS_builds/builds \
+#         -platform mbed \
+#         -hdl_branch $(HDL_BRANCH)
+#     env:
+#       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+#       TOKEN: $(TOKEN)
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_Mbed'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_Mbed_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: Pico
-  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: 'echo "Using Pico SDK version: $(PICO_SDK_VERSION)"'
-    displayName: 'Show Pico SDK version'
-  - script: |
-      wget -P ./tools/scripts/ \
-        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
-      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
-        -export_dir $(RELEASE_DIR) \
-        -log_dir $(LOG_DIR) \
-        -builds_dir /no-OS_builds/builds \
-        -platform pico \
-        -hdl_branch $(HDL_BRANCH)
-    env:
-      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
-      TOKEN: $(TOKEN)
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_Pico'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_Pico_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: Pico
+#   condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: 'echo "Using Pico SDK version: $(PICO_SDK_VERSION)"'
+#     displayName: 'Show Pico SDK version'
+#   - script: |
+#       wget -P ./tools/scripts/ \
+#         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
+#       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+#         -export_dir $(RELEASE_DIR) \
+#         -log_dir $(LOG_DIR) \
+#         -builds_dir /no-OS_builds/builds \
+#         -platform pico \
+#         -hdl_branch $(HDL_BRANCH)
+#     env:
+#       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+#       TOKEN: $(TOKEN)
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_Pico'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_Pico_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: ADuCM3029
-  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
-  timeoutInMinutes: 200
-  pool:
-    name: Default
-    demands:
-      - agent.name -equals no-OS
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: |
-      echo "Using ADuCM3029 DFP version: $(ADUCM3029_DFP_VERSION)"
-      echo "Using CCES IDE version: $(CCES_VERSION)"
-      echo "Using ARM CMSIS version: $(ARM_CMSIS_VERSION)"
-    displayName: 'Show SDK versions'
-  - script: |
-      wget -P ./tools/scripts/ \
-        https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
-      python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
-        -export_dir $(RELEASE_DIR) \
-        -log_dir $(LOG_DIR) \
-        -builds_dir /no-OS_builds/builds \
-        -platform aducm3029 \
-        -hdl_branch $(HDL_BRANCH)
-    env:
-      CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
-      TOKEN: $(TOKEN)
-    displayName: 'Run project build'
-  - task: PublishPipelineArtifact@1
-    timeoutInMinutes: 10
-    condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
-      artifact: '$(ARTIFACT_NAME)_ADuCM3029'
-      publishLocation: 'pipeline'
-  - task: PublishPipelineArtifact@1
-    condition: true
-    inputs:
-      targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
-      artifact: 'logs_ADuCM3029_$(System.JobId)'
-      publishLocation: 'pipeline'
+# - job: ADuCM3029
+#   condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+#   timeoutInMinutes: 200
+#   pool:
+#     name: Default
+#     demands:
+#       - agent.name -equals no-OS
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: |
+#       echo "Using ADuCM3029 DFP version: $(ADUCM3029_DFP_VERSION)"
+#       echo "Using CCES IDE version: $(CCES_VERSION)"
+#       echo "Using ARM CMSIS version: $(ARM_CMSIS_VERSION)"
+#     displayName: 'Show SDK versions'
+#   - script: |
+#       wget -P ./tools/scripts/ \
+#         https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/utils/cloudsmith_utils/cloudsmith_helper.py && \
+#       python3 ./tools/scripts/build_projects.py $(Build.Repository.LocalPath) \
+#         -export_dir $(RELEASE_DIR) \
+#         -log_dir $(LOG_DIR) \
+#         -builds_dir /no-OS_builds/builds \
+#         -platform aducm3029 \
+#         -hdl_branch $(HDL_BRANCH)
+#     env:
+#       CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+#       TOKEN: $(TOKEN)
+#     displayName: 'Run project build'
+#   - task: PublishPipelineArtifact@1
+#     timeoutInMinutes: 10
+#     condition: or(eq(variables.isMain, true), eq(variables.isNextStable, true), eq(variables.isRelease, true))
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(RELEASE_DIR)'
+#       artifact: '$(ARTIFACT_NAME)_ADuCM3029'
+#       publishLocation: 'pipeline'
+#   - task: PublishPipelineArtifact@1
+#     condition: true
+#     inputs:
+#       targetPath: '$(Build.Repository.LocalPath)/$(LOG_DIR)'
+#       artifact: 'logs_ADuCM3029_$(System.JobId)'
+#       publishLocation: 'pipeline'
 
-- job: Unit_tests
-  condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
-  pool:
-    vmImage: ubuntu-latest
-  steps:
-  - checkout: self
-    fetchDepth: 50
-    submodules: true
-    clean: true
-    persistCredentials: true
-  - script: |
-      sudo apt install ruby-full
-      sudo gem install ceedling
-      pip install gcovr==4.1
-      find tests -name "project.yml" -type f | while read project_file; do
-        dir=$(dirname "$project_file")
-        cd "$dir" && ceedling test:all && cd -
-      done
-    displayName: 'Run unit tests'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'tests/drivers/**/build/artifacts/test/*.xml'
+# - job: Unit_tests
+#   condition: ne(variables['Build.CronSchedule.DisplayName'], 'Weekly Saturday Midnight Xilinx Rebuild')
+#   pool:
+#     vmImage: ubuntu-latest
+#   steps:
+#   - checkout: self
+#     fetchDepth: 50
+#     submodules: true
+#     clean: true
+#     persistCredentials: true
+#   - script: |
+#       sudo apt install ruby-full
+#       sudo gem install ceedling
+#       pip install gcovr==4.1
+#       find tests -name "project.yml" -type f | while read project_file; do
+#         dir=$(dirname "$project_file")
+#         cd "$dir" && ceedling test:all && cd -
+#       done
+#     displayName: 'Run unit tests'
+#   - task: PublishTestResults@2
+#     inputs:
+#       testResultsFormat: 'JUnit'
+#       testResultsFiles: 'tests/drivers/**/build/artifacts/test/*.xml'

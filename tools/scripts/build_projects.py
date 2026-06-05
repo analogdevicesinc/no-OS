@@ -55,7 +55,9 @@ ERR = 0
 LOG_START = " -> "
 TOKEN = os.environ.get('TOKEN')
 BRANCH = os.environ.get('BRANCH')
-blacklist_url = str(os.environ.get('BLACKLIST_URL')).format(BRANCH)
+blacklist_url_template = os.environ.get('BLACKLIST_URL')
+blacklist_url = str(blacklist_url_template).format(BRANCH) if blacklist_url_template else None
+blacklist_url_main = str(blacklist_url_template).format('main') if blacklist_url_template else None
 environment_path_files = os.environ.get('ENVIRONMENT_PATH_FILES')
 
 def log(msg):
@@ -152,18 +154,62 @@ else:
 HW_DIR_NAME = 'hardware'
 NEW_HW_DIR_NAME = 'new_hardware'
 
+def download_blacklist_file(url):
+	"""Try to download blacklist from given URL. Returns file content or None on failure."""
+	curl_cmd = 'curl -L -f -s -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt 2>&1'.format(TOKEN, url)
+	err = os.system(curl_cmd)
+	if err != 0 or not os.path.isfile('blacklist.txt'):
+		return None
+	with open('blacklist.txt', 'r') as f:
+		content = f.read()
+	# Check for GitHub error responses
+	if '"message"' in content and ('"Not Found"' in content or '"404"' in content):
+		return None
+	if content.strip().startswith('{') or content.strip().startswith('['):
+		return None
+	return content
+
 def process_blacklist():
 	blacklist = []
-	err = os.system('curl -L -H "Accept: application/vnd.github.v3.raw" -H "Authorization: Bearer {}" \'{}\' -o blacklist.txt >> {} 2>&1'
-				.format(TOKEN, blacklist_url, log_file))
-	if err != 0 or (not os.path.isfile('blacklist.txt')):
-		log_err('Can not download blacklist file')
+	print("process_blacklist() called", flush=True)
+	print("  TOKEN set: %s" % ("yes" if TOKEN else "no"), flush=True)
+	print("  BLACKLIST_URL template: %s" % blacklist_url_template, flush=True)
+	print("  BRANCH env: %s" % BRANCH, flush=True)
+	print("  blacklist_url (branch): %s" % blacklist_url, flush=True)
+	print("  blacklist_url_main (fallback): %s" % blacklist_url_main, flush=True)
+
+	content = None
+
+	# Try branch-specific blacklist first
+	if blacklist_url:
+		print("  Trying branch-specific blacklist...", flush=True)
+		content = download_blacklist_file(blacklist_url)
+		if content:
+			print("  Successfully downloaded branch-specific blacklist", flush=True)
+		else:
+			print("  Branch-specific blacklist not found", flush=True)
+
+	# Fall back to main branch blacklist
+	if content is None and blacklist_url_main and blacklist_url_main != blacklist_url:
+		print("  Falling back to main branch blacklist...", flush=True)
+		content = download_blacklist_file(blacklist_url_main)
+		if content:
+			print("  Successfully downloaded main branch blacklist", flush=True)
+		else:
+			print("  Main branch blacklist also not found", flush=True)
+
+	if content is None:
+		log_err('Could not download blacklist file from any URL')
+		print("  Returning empty blacklist", flush=True)
 		return blacklist
-	file = open('blacklist.txt', 'r')
-	for line in file.readlines():
+
+	# Parse valid blacklist file
+	for line in content.splitlines():
 		project = line.split('#')[0].rstrip().replace('.', '_')
 		if project != '':
 			blacklist.append(project)
+
+	print("  Parsed %d blacklist entries" % len(blacklist), flush=True)
 	return blacklist
 
 def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
@@ -171,44 +217,67 @@ def configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch):
 	hdl_repo = 'sdg-hdl'
 	pattern = '\d{4}_\d{2}_\d{2}-\d{2}_\d{2}_\d{2}'
 	blacklist = []
+
+	print("configfile_and_download_all_hw called with:", flush=True)
+	print("  _platform: %s" % str(_platform), flush=True)
+	print("  noos: %s" % str(noos), flush=True)
+	print("  _builds_dir: %s" % str(_builds_dir), flush=True)
+	print("  hdl_branch: %s" % str(hdl_branch), flush=True)
+
 	timestamp_match = re.search(pattern, hdl_branch)
 	if timestamp_match:
 		hdl_branch = re.split('\/', hdl_branch)[0]
 		timestamp_folder = timestamp_match.group()
+		print("  Timestamp detected: %s, hdl_branch after split: %s" % (timestamp_folder, hdl_branch), flush=True)
 
 	if hdl_branch == "main":
 		hdl_branch_path = hdl_branch + '/hdl_output/'
+		print("  Using main branch path: %s" % hdl_branch_path, flush=True)
 	else:
 		if check_path(package_version=server_base_path + 'releases/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'releases/' + hdl_branch + '/hdl_output/'
+			print("  Found in releases, hdl_branch_path: %s" % hdl_branch_path, flush=True)
 		elif check_path(package_version=server_base_path + 'dev/' + hdl_branch + '/', repo=hdl_repo):
 			hdl_branch_path = 'dev/' + hdl_branch + '/hdl_output/'
+			print("  Found in dev, hdl_branch_path: %s" % hdl_branch_path, flush=True)
 		else:
-			print("Error related to hdl branch name: " + hdl_branch)
+			print("Error related to hdl branch name: " + hdl_branch, flush=True)
 			exit()
 
 	if timestamp_match:
 		if check_path(package_version=server_base_path + hdl_branch_path + timestamp_folder + '/', repo=hdl_repo):
 			hdl_branch_path += timestamp_folder + '/'
+			print("  Appended timestamp folder, hdl_branch_path: %s" % hdl_branch_path, flush=True)
 		else:
-			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch)
+			print("Error related to timestamp folder: " + timestamp_folder + " not existing in hdl_branch: " + hdl_branch, flush=True)
 			exit()
 
 	builds_dir = _builds_dir + '_' + hdl_branch
+	print("  builds_dir: %s" % builds_dir, flush=True)
 	run_cmd(create_dir_cmd.format(builds_dir))
 	if SKIP_DOWNLOAD == 1:
+		print("  SKIP_DOWNLOAD is set, returning early", flush=True)
 		return (builds_dir, [])
 	hardwares = os.path.join(builds_dir, HW_DIR_NAME)
 	run_cmd(create_dir_cmd.format(hardwares))
 	server_full_path = server_base_path + hdl_branch_path
+	print("  server_full_path: %s" % server_full_path, flush=True)
 	if (_platform is None or _platform == 'xilinx'):
 		blacklist = process_blacklist()
 		new_hardwares = os.path.join(builds_dir, NEW_HW_DIR_NAME)
 		run_cmd(create_dir_cmd.format(new_hardwares))
-		err = os.system("python3 {}/tools/scripts/download_files.py {} {} {} \"{}\""
-				  .format(noos, noos, builds_dir, server_full_path, blacklist))
+		print("  Downloading HW files from: %s" % server_full_path, flush=True)
+		download_cmd = "python3 {}/tools/scripts/download_files.py {} {} {} \"{}\"".format(
+			noos, noos, builds_dir, server_full_path, blacklist)
+		print("  Running download command: %s" % download_cmd, flush=True)
+		err = os.system(download_cmd)
+		print("  download_files.py exit code: %d" % err, flush=True)
 		if err != 0:
-			return
+			print("ERROR: download_files.py failed with exit code %d" % err, flush=True)
+			print("ERROR: configfile_and_download_all_hw returning None due to download failure", flush=True)
+			return None
+	print("  configfile_and_download_all_hw completed successfully", flush=True)
+	print("  Returning builds_dir=%s, blacklist=%s" % (builds_dir, blacklist), flush=True)
 	return (builds_dir, blacklist)
 
 def get_hardware(hardware, platform, builds_dir):
@@ -342,7 +411,23 @@ def main():
 	projets = os.path.join(noos,'projects')
 	run_cmd(create_dir_cmd.format(export_dir))
 	run_cmd(create_dir_cmd.format(log_dir))
-	(builds_dir, blacklist) = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
+	print("=" * 60, flush=True)
+	print("Calling configfile_and_download_all_hw...", flush=True)
+	print("  _platform: %s" % _platform, flush=True)
+	print("  noos: %s" % noos, flush=True)
+	print("  _builds_dir: %s" % _builds_dir, flush=True)
+	print("  hdl_branch: %s" % hdl_branch, flush=True)
+	print("=" * 60, flush=True)
+	result = configfile_and_download_all_hw(_platform, noos, _builds_dir, hdl_branch)
+	print("=" * 60, flush=True)
+	print("configfile_and_download_all_hw returned: %s" % str(result), flush=True)
+	print("=" * 60, flush=True)
+	if result is None:
+		print("ERROR: configfile_and_download_all_hw returned None!", flush=True)
+		print("This usually means download_files.py failed.", flush=True)
+		print("Check the logs above for the specific error.", flush=True)
+		sys.exit(1)
+	(builds_dir, blacklist) = result
 	for project in os.listdir(projets):
 		binary_created = False
 		if _project is not None:

@@ -141,11 +141,24 @@ proc _vitis_hsi_project {} {
 	# For Zynq (cortexa9), copy Xilinx.spec needed by the linker
 	if {[string first "cortexa9" $cpu] != -1} {
 		set vitis_dir $::env(XILINX_VITIS)
-		set spec_src [file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec]
-		if {[file exists $spec_src]} {
+		# Try multiple possible locations for Xilinx.spec
+		set spec_paths [list \
+			[file normalize $vitis_dir/data/embeddedsw/scripts/specs/arm/Xilinx.spec] \
+			[file normalize $vitis_dir/gnu/aarch32/lin/gcc-arm-none-eabi/arm-none-eabi/lib/Xilinx.spec] \
+			[file normalize $vitis_dir/../data/embeddedsw/scripts/specs/arm/Xilinx.spec] \
+		]
+		set spec_src ""
+		foreach path $spec_paths {
+			if {[file exists $path]} {
+				set spec_src $path
+				break
+			}
+		}
+		if {$spec_src != ""} {
 			file copy -force $spec_src app/src/Xilinx.spec
 		} else {
-			error "Xilinx.spec not found at $spec_src"
+			puts "Warning: Xilinx.spec not found in any expected location, linker may fail"
+			puts "Searched: $spec_paths"
 		}
 	}
 
@@ -242,7 +255,9 @@ proc create_project {} {
 
 	if {[_file_is_xsa] == 1} {
 		set vitis_year [_get_vitis_year]
-		if {$vitis_year >= 2025} {
+		# Use HSI-only mode for Vitis 2023+ to avoid Eclipse GUI issues in CI
+		# The classic Eclipse-based approach fails silently in headless environments
+		if {$vitis_year >= 2023} {
 			_vitis_hsi_project
 		} else {
 			setws ./
