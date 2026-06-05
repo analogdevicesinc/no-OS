@@ -1,5 +1,5 @@
-AD9361 no-OS Example Project
-============================
+AD9361/AD9364 no-OS Example Project
+====================================
 
 .. no-os-doxygen::
 
@@ -10,12 +10,16 @@ Supported Evaluation Boards
 ---------------------------
 
 * `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_
 * `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_
 
 Overview
 --------
 
-The `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_ and
+The `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_, 
+`AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_,
+`AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_ and 
 `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_ are high-speed
 analog FMC modules designed to showcase the
 `AD9361 <https://www.analog.com/AD9361>`_, a high-performance, highly
@@ -43,7 +47,8 @@ Hardware Specifications
 Power Supply Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The AD-FMCOMMS2-EBZ and AD-FMCOMMS5-EBZ boards are powered entirely
+The AD-FMCOMMS2-EBZ, AD-FMCOMMS3-EBZ, AD-FMCOMMS4-EBZ 
+and AD-FMCOMMS5-EBZ boards are powered entirely
 through the FMC connector from the host carrier board; no separate
 external power supply is needed for the FMC module itself. Internally,
 the AD9361 requires three supply rails: the analog supply at 1.3 V
@@ -142,7 +147,9 @@ Xilinx
 Used Hardware
 ^^^^^^^^^^^^^
 
-* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_ or
+* `AD-FMCOMMS2-EBZ <https://www.analog.com/AD-FMCOMMS2-EBZ>`_,
+  `AD-FMCOMMS3-EBZ <https://www.analog.com/AD-FMCOMMS3-EBZ>`_,
+  `AD-FMCOMMS4-EBZ <https://www.analog.com/AD-FMCOMMS4-EBZ>`_,
   `AD-FMCOMMS5-EBZ <https://www.analog.com/AD-FMCOMMS5-EBZ>`_
 * `ZC706 <https://www.xilinx.com/ZC706>`_,
   `ZCU102 <https://www.xilinx.com/ZCU102>`_,
@@ -182,3 +189,13 @@ IIO example:
 .. code-block:: bash
 
    IIOD=y NEW_CFLAGS=-DFMCOMMS5
+
+
+**For AD-FMCOMMS4-EBZ**, change app_config.h so it has 
+AD9361_DEVICE=0 and AD9364_DEVICE=1, because it uses 
+AD9634 instead of AD9361. 
+
+.. code-block:: bash
+
+   #define AD9361_DEVICE			1 /* set it 1 if AD9361 device is used, 0 otherwise */
+   #define AD9364_DEVICE			0 /* set it 1 if AD9364 device is used, 0 otherwise */
