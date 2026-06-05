@@ -37,7 +37,62 @@
 #include "no_os_irq.h"
 #include "xilinx_uart.h"
 #include "xilinx_irq.h"
-#ifdef XPAR_XUARTPS_NUM_INSTANCES
+/*
+ * Versal PSV UART (PL011-based) vs ZynqMP PSU UART (Cadence):
+ * The APIs are nearly identical — function names differ by Psv/Ps suffix.
+ * To avoid duplicating every UART_PS code path, include the right header
+ * and alias the Versal names to the ZynqMP names used throughout this file.
+ */
+#ifdef XPAR_XUARTPSV_NUM_INSTANCES
+#include "no_os_irq.h"
+#include "no_os_fifo.h"
+#include <xil_exception.h>
+#include <xuartpsv.h>
+/* Type aliases */
+typedef XUartPsv XUartPs;
+typedef XUartPsv_Config XUartPs_Config;
+/* Function aliases */
+#define XUartPs_LookupConfig      XUartPsv_LookupConfig
+#define XUartPs_CfgInitialize     XUartPsv_CfgInitialize
+#define XUartPs_SetOperMode       XUartPsv_SetOperMode
+#define XUartPs_SetBaudRate       XUartPsv_SetBaudRate
+/* Versal PL011 has hardware-managed receive timeout — no API needed */
+#define XUartPs_SetRecvTimeout(inst, val)  do {} while (0)
+#define XUartPs_SetHandler        XUartPsv_SetHandler
+#define XUartPs_SetInterruptMask  XUartPsv_SetInterruptMask
+#define XUartPs_InterruptHandler  XUartPsv_InterruptHandler
+#define XUartPs_Send              XUartPsv_Send
+/* XUartPsv_ReceiveDataHandler only calls the user callback when ALL
+ * requested bytes have been received — there is no partial-receive /
+ * timeout notification like the ZynqMP XUartPs driver provides via
+ * XUARTPS_EVENT_RECV_TOUT.  By always requesting 1 byte, every
+ * received byte triggers the callback so the no-OS FIFO layer works. */
+#define XUartPs_Recv(inst, buf, num) XUartPsv_Recv((inst), (buf), 1)
+/* Operating mode */
+#define XUARTPS_OPER_MODE_NORMAL  XUARTPSV_OPER_MODE_NORMAL
+/* Callback events (same numeric values, different prefixes) */
+#define XUARTPS_EVENT_RECV_DATA       XUARTPSV_EVENT_RECV_DATA
+#define XUARTPS_EVENT_RECV_TOUT       XUARTPSV_EVENT_RECV_TOUT
+#define XUARTPS_EVENT_RECV_ERROR      XUARTPSV_EVENT_RECV_ERROR
+#define XUARTPS_EVENT_PARE_FRAME_BRKE XUARTPSV_EVENT_PARE_FRAME_BRKE
+#define XUARTPS_EVENT_RECV_ORERR      XUARTPSV_EVENT_RECV_ORERR
+/* Interrupt mask bits (PL011 IMSC register vs Cadence IXR register).
+ * PL011 TXIM is level-triggered (fires while TX FIFO <= threshold),
+ * unlike the Cadence TXEMPTY which is edge-triggered.  Enabling TXIM
+ * at init time — when the FIFO is empty — causes an infinite IRQ storm.
+ * XUartPsv_Send() enables TXIM internally when it has data to send,
+ * so masking it here is safe. */
+#define XUARTPS_IXR_TOUT    XUARTPSV_UARTIMSC_RTIM
+#define XUARTPS_IXR_PARITY  XUARTPSV_UARTIMSC_PEIM
+#define XUARTPS_IXR_FRAMING XUARTPSV_UARTIMSC_FEIM
+#define XUARTPS_IXR_OVER    XUARTPSV_UARTIMSC_OEIM
+#define XUARTPS_IXR_TXEMPTY 0  /* level-triggered on PL011; Send() enables it */
+#define XUARTPS_IXR_RXFULL  XUARTPSV_UARTIMSC_RXIM
+#define XUARTPS_IXR_RXOVR   XUARTPSV_UARTIMSC_OEIM
+#define XUARTPS_IXR_RBRK    XUARTPSV_UARTIMSC_BEIM
+/* Enable the existing #ifdef XUARTPS_H code paths */
+#define XUARTPS_H
+#elif defined(XPAR_XUARTPS_NUM_INSTANCES)
 #include "no_os_irq.h"
 #include "no_os_fifo.h"
 #include <xil_exception.h>
@@ -240,18 +295,19 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 		 * what kind of errors occurred
 		 */
 		case XUARTPS_EVENT_RECV_ERROR:
-		/*
-		 * Data was received with an parity or frame or break error, keep the data
-		 * but determine what kind of errors occurred. Specific to Zynq Ultrascale+
-		 * MP.
-		 */
 		case XUARTPS_EVENT_PARE_FRAME_BRKE:
-		/*
-		 * Data was received with an overrun error, keep the data but determine
-		 * what kind of errors occurred. Specific to Zynq Ultrascale+ MP.
-		 */
 		case XUARTPS_EVENT_RECV_ORERR:
 			xil_uart_desc->total_error_count++;
+			/*
+			 * Keep any partial data that was received before the
+			 * error, and restart the receive so the UART doesn't
+			 * get permanently stuck.
+			 */
+			if (data_len)
+				xil_uart_desc->bytes_received = data_len;
+			XUartPs_Recv(xil_uart_desc->instance,
+				     (u8 *)(xil_uart_desc->buff),
+				     UART_BUFF_LENGTH);
 			break;
 		default:
 			break;
@@ -356,7 +412,7 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 	XUartPs_Config *config;
 #endif // XUARTPS_H
 #ifdef XUARTLITE_H
-	XUartLite_Config *config;
+	XUartLite_Config *lite_config;
 #endif // XUARTLITE_H
 	int32_t status;
 
@@ -447,8 +503,8 @@ static int32_t xil_uart_init(struct no_os_uart_desc **desc,
 		if (!config)
 			goto error_free_instance;
 
-		status = XUartLite_CfgInitialize(xil_uart_desc->instance, config,
-						 config->RegBaseAddr);
+		status = XUartLite_CfgInitialize(xil_uart_desc->instance, lite_config,
+						 lite_config->RegBaseAddr);
 		if (status != XST_SUCCESS)
 			goto error_free_instance;
 
