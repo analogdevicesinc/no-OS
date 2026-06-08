@@ -49,7 +49,7 @@ target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/PeriphDrivers/Include
 target_include_directories(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Include)
 
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/GCC/startup_max78000.S)
-target_sources(no-os PUBLIC ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/heap.c)
+target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/heap.c)
 target_sources(no-os PRIVATE ${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX78000/Source/system_max78000.c)
 
 target_compile_definitions(no-os PUBLIC -DTARGET_NUM=78000)

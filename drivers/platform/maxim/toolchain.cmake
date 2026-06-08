@@ -19,6 +19,11 @@ message(STATUS "MAXIM_LIBRARIES: ${MAXIM_LIBRARIES}")
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
+# For bare-metal toolchains, only compile (not link) during CMake's compiler test.
+# This avoids linker failures caused by missing startup files, linker scripts,
+# and syscall stubs (e.g. _sbrk needing 'end') during the detection phase.
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/max${TARGET_NUM}/memory_layout.cmake")
     include("${CMAKE_CURRENT_LIST_DIR}/max${TARGET_NUM}/memory_layout.cmake")
 endif()
@@ -76,7 +81,7 @@ set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG" CACHE STRING "C++ compiler flags f
 set(CMAKE_ASM_FLAGS_MINSIZEREL "" CACHE STRING "ASM compiler flags for MinSizeRel" FORCE)
 
 # Linker flags (common for all build types)
-set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} -specs=nosys.specs -Wl,--gc-sections ${MCU_LINKER_FLAGS} \
+set(CMAKE_EXE_LINKER_FLAGS "${COMMON_CPU_FLAGS} -specs=nosys.specs -Wl,--gc-sections,--undefined=_sbrk ${MCU_LINKER_FLAGS} \
     -T${MAXIM_LIBRARIES}/CMSIS/Device/Maxim/MAX${TARGET_NUM}/Source/GCC/${TARGET}.ld --entry=Reset_Handler" CACHE STRING "Linker flags for MCU" FORCE)
 
 # Find OpenOCD - handles different names on Linux (openocd) and Windows (openocd.exe)
