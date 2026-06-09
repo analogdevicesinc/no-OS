@@ -830,7 +830,6 @@ static struct iio_attribute ltp8800_global_attrs[] = {
 	{
 		.name = "sync_available",
 		.show = ltp8800_iio_read_sync_enable_available,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "vout_command",
@@ -913,7 +912,6 @@ static struct iio_attribute ltp8800_global_attrs[] = {
 		.name = "store_user_settings_available",
 		.show = ltp8800_iio_user_settings_available,
 		.priv = LTP8800_IIO_STORE_USER_ALL,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	{
 		.name = "restore_user_settings",
@@ -925,7 +923,6 @@ static struct iio_attribute ltp8800_global_attrs[] = {
 		.name = "restore_user_settings_available",
 		.show = ltp8800_iio_user_settings_available,
 		.priv = LTP8800_IIO_RESTORE_USER_ALL,
-		.shared = IIO_SHARED_BY_ALL
 	},
 	END_ATTRIBUTES_ARRAY
 };

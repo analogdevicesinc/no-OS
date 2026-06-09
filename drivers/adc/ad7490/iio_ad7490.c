@@ -324,28 +324,23 @@ static struct iio_attribute ad7490_global_attrs[] = {
 		.name = "polarity",
 		.show = ad7490_iio_read_polarity,
 		.store = ad7490_iio_write_polarity,
-		.shared = IIO_SHARED_BY_ALL,
 	},
 	{
 		.name = "polarity_available",
 		.show = ad7490_iio_read_polarity_avail,
-		.shared = IIO_SHARED_BY_ALL,
 	},
 	{
 		.name = "range",
 		.show = ad7490_iio_read_range,
 		.store = ad7490_iio_write_range,
-		.shared = IIO_SHARED_BY_ALL,
 	},
 	{
 		.name = "range_available",
 		.show = ad7490_iio_read_range_avail,
-		.shared = IIO_SHARED_BY_ALL,
 	},
 	{
 		.name = "sampling_frequency",
 		.show = ad7490_iio_read_sampling_freq,
-		.shared = IIO_SHARED_BY_ALL,
 	},
 	END_ATTRIBUTES_ARRAY
 };

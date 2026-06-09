@@ -1788,13 +1788,11 @@ trig_enable:
 struct iio_attribute adis_dev_attrs[] = {
 	{
 		.name   = "filter_low_pass_3db_frequency",
-		.shared = IIO_SHARED_BY_ALL,
 		.show   = adis_iio_read_lpf,
 		.store  = adis_iio_write_lpf,
 	},
 	{
 		.name   = "sampling_frequency",
-		.shared = IIO_SHARED_BY_ALL,
 		.show   = adis_iio_read_sampling_freq,
 		.store  = adis_iio_write_sampling_freq,
 	},
