@@ -46,6 +46,24 @@
 
 #define ADAQ4224_GAIN_MAX_NANO 6670000000ULL
 
+/**
+ * Lookup table for amount of precison bits on default output mode.
+ */
+static const uint8_t ad463x_chip_precision[] = {
+	[ID_AD4630_24] = 24,
+	[ID_AD4630_20] = 20,
+	[ID_AD4630_16] = 16,
+	[ID_AD4631_24] = 24,
+	[ID_AD4631_20] = 20,
+	[ID_AD4631_16] = 16,
+	[ID_AD4632_24] = 24,
+	[ID_AD4632_20] = 20,
+	[ID_AD4632_16] = 16,
+	[ID_AD4030] = 24,
+	[ID_ADAQ4216] = 16,
+	[ID_ADAQ4224] = 24,
+};
+
 /*
  * Gains computed as fractions of 1000 so they can be expressed by integers.
  */
@@ -759,13 +777,10 @@ int32_t ad463x_init(struct ad463x_dev **device,
 
 	switch (dev->output_mode) {
 	case AD463X_24_DIFF:
-		switch (dev->device_id) {
-		case ID_ADAQ4216:
-			dev->real_bits_precision = 16;
-			break;
-		default:
+		if (dev->device_id >= NO_OS_ARRAY_SIZE(ad463x_chip_precision))
 			dev->real_bits_precision = 24;
-		}
+		else
+			dev->real_bits_precision = ad463x_chip_precision[dev->device_id];
 		break;
 
 	case AD463X_16_DIFF_8_COM:
