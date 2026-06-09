@@ -324,10 +324,17 @@ int32_t iio_ad463x_init(struct iio_ad463x **desc,
 
 	iio_ad463x->ad463x_desc = dev;
 
-	if (dev->device_id <= ID_AD4632_16)
+	if (dev->device_id <= ID_AD4632_16) {
 		iio_ad463x->iio_dev_desc = ad463x_iio_desc_two_chn;
-	else
+		iio_ad463x->iio_dev_desc.channels[0].scan_type->realbits =
+			dev->real_bits_precision;
+		iio_ad463x->iio_dev_desc.channels[1].scan_type->realbits =
+			dev->real_bits_precision;
+	} else {
 		iio_ad463x->iio_dev_desc = ad463x_iio_desc_one_chn;
+		iio_ad463x->iio_dev_desc.channels[0].scan_type->realbits =
+			dev->real_bits_precision;
+	}
 
 	*desc = iio_ad463x;
 
