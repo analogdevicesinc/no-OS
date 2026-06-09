@@ -275,25 +275,62 @@ int ad74416h_nb_active_channels(struct ad74416h_desc *desc,
 int ad74416h_get_raw_adc_result(struct ad74416h_desc *desc, uint32_t ch,
 				uint32_t *val)
 {
-	uint32_t val_msb, val_lsb;
+	uint16_t val_lsb;
+	uint8_t expected_crc;
+	uint16_t val_msb;
 	int ret;
 
 	if (desc->id == ID_AD74416H) {
-		ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT_UPR(ch),
-					&val_msb);
+		uint8_t burst_buff[AD74416H_FRAME_SIZE + AD74416H_BURST_DATA_SIZE];
+
+		/* Request readback starting at ADC_RESULT_UPR */
+		ad74416h_format_reg_write(desc->dev_addr, AD74416H_READ_SELECT,
+					  AD74416H_ADC_RESULT_UPR(ch),
+					  desc->comm_buff);
+		ret = no_os_spi_write_and_read(desc->spi_desc, desc->comm_buff,
+					       AD74416H_FRAME_SIZE);
 		if (ret)
 			return ret;
-	}
 
-	ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT(ch), &val_lsb);
-	if (ret)
-		return ret;
+		/*
+		 * Burst read: NOP frame (40 bits) + one burst continuation
+		 * (24 bits) in a single SYNC assertion. This reads
+		 * ADC_RESULT_UPR and ADC_RESULT atomically.
+		 */
+		ad74416h_format_reg_write(desc->dev_addr, AD74416H_NOP,
+					  AD74416H_NOP, burst_buff);
+		memset(&burst_buff[AD74416H_FRAME_SIZE], 0,
+		       AD74416H_BURST_DATA_SIZE);
 
-	if (desc->id == ID_AD74416H)
+		ret = no_os_spi_write_and_read(desc->spi_desc, burst_buff,
+					       sizeof(burst_buff));
+		if (ret)
+			return ret;
+
+		expected_crc = no_os_crc8(_crc_table, burst_buff, 4, 0);
+		if (expected_crc != burst_buff[4])
+			return -EINVAL;
+
+		val_msb = no_os_get_unaligned_be16(&burst_buff[2]);
+
+		expected_crc = no_os_crc8(_crc_table,
+					  &burst_buff[AD74416H_FRAME_SIZE], 2,
+					  0);
+		if (expected_crc != burst_buff[AD74416H_FRAME_SIZE + 2])
+			return -EINVAL;
+
+		val_lsb = no_os_get_unaligned_be16(
+				  &burst_buff[AD74416H_FRAME_SIZE]);
+
 		*val = (no_os_field_get(AD74416H_CONV_RES_UPR_MSK, val_msb) << 16) |
 		       no_os_field_get(AD74416H_CONV_RESULT_MSK, val_lsb);
-	else
+	} else {
+		ret = ad74416h_reg_read(desc, AD74416H_ADC_RESULT(ch), &val_lsb);
+		if (ret)
+			return ret;
+
 		*val = no_os_field_get(AD74416H_CONV_RESULT_MSK, val_lsb);
+	}
 
 	return 0;
 }
